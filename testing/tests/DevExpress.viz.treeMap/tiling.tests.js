@@ -1,5 +1,5 @@
-var common = require("./commonParts/common.js"),
-    $ = require("jquery"),
+var common = require('./commonParts/common.js'),
+    $ = require('jquery'),
     environment = {
         beforeEach: common.environment.beforeEach,
 
@@ -20,19 +20,19 @@ var common = require("./commonParts/common.js"),
         checkLayout: function(assert, expected) {
             var tiles = this.renderer.simpleRect.returnValues;
             $.each(expected, function(i, data) {
-                assert.checkTile(tiles[i].attr.lastCall.args[0], data, "tile " + i);
+                assert.checkTile(tiles[i].attr.lastCall.args[0], data, 'tile ' + i);
             });
         }
     };
 
-require("viz/tree_map/tiling.squarified");
-require("viz/tree_map/tiling.strip");
-require("viz/tree_map/tiling.slice_and_dice");
-require("viz/tree_map/tiling.rotated_slice_and_dice");
+require('viz/tree_map/tiling.squarified');
+require('viz/tree_map/tiling.strip');
+require('viz/tree_map/tiling.slice_and_dice');
+require('viz/tree_map/tiling.rotated_slice_and_dice');
 
-QUnit.module("Algorithms", environment);
+QUnit.module('Algorithms', environment);
 
-QUnit.test("Squarified", function(assert) {
+QUnit.test('Squarified', function(assert) {
     this.create({
         dataSource: [{
             value: 4
@@ -62,7 +62,7 @@ QUnit.test("Squarified", function(assert) {
     ]);
 });
 
-QUnit.test("Squarified / marginal case when available space is empty", function(assert) {
+QUnit.test('Squarified / marginal case when available space is empty', function(assert) {
     this.create({
         dataSource: [{
             value: 1000
@@ -80,7 +80,7 @@ QUnit.test("Squarified / marginal case when available space is empty", function(
     ]);
 });
 
-QUnit.test("Squarified / some values are zeros", function(assert) {
+QUnit.test('Squarified / some values are zeros', function(assert) {
     this.create({
         dataSource: [{
             value: 1
@@ -99,9 +99,9 @@ QUnit.test("Squarified / some values are zeros", function(assert) {
     ]);
 });
 
-QUnit.test("Strip", function(assert) {
+QUnit.test('Strip', function(assert) {
     this.create({
-        layoutAlgorithm: "strip",
+        layoutAlgorithm: 'strip',
         dataSource: [{
             value: 4
         }, {
@@ -130,9 +130,9 @@ QUnit.test("Strip", function(assert) {
     ]);
 });
 
-QUnit.test("Strip / some values are zeros", function(assert) {
+QUnit.test('Strip / some values are zeros', function(assert) {
     this.create({
-        layoutAlgorithm: "strip",
+        layoutAlgorithm: 'strip',
         dataSource: [{
             value: 1
         }, {
@@ -150,7 +150,7 @@ QUnit.test("Strip / some values are zeros", function(assert) {
     ]);
 });
 
-QUnit.test("Custom", function(assert) {
+QUnit.test('Custom', function(assert) {
     this.create({
         layoutAlgorithm: function(data) {
             var y1 = data.rect[1] + 100,
@@ -189,9 +189,9 @@ QUnit.test("Custom", function(assert) {
     ]);
 });
 
-QUnit.test("Slice & dice algorithm. one level", function(assert) {
+QUnit.test('Slice & dice algorithm. one level', function(assert) {
     this.create({
-        layoutAlgorithm: "sliceAndDice",
+        layoutAlgorithm: 'sliceAndDice',
         dataSource: [{ value: 1 }, { value: 2 }, { value: 2 }]
     });
 
@@ -202,9 +202,9 @@ QUnit.test("Slice & dice algorithm. one level", function(assert) {
     ]);
 });
 
-QUnit.test("slice and dice algorithm. multiple levels 1", function(assert) {
+QUnit.test('slice and dice algorithm. multiple levels 1', function(assert) {
     this.create({
-        layoutAlgorithm: "sliceAndDice",
+        layoutAlgorithm: 'sliceAndDice',
         dataSource: [{
             value: 6
         }, {
@@ -231,9 +231,9 @@ QUnit.test("slice and dice algorithm. multiple levels 1", function(assert) {
     ]);
 });
 
-QUnit.test("slice and dice algorithm. multiple levels 2", function(assert) {
+QUnit.test('slice and dice algorithm. multiple levels 2', function(assert) {
     this.create({
-        layoutAlgorithm: "sliceAndDice",
+        layoutAlgorithm: 'sliceAndDice',
         dataSource: [{
             value: 2
         }, {
@@ -264,9 +264,9 @@ QUnit.test("slice and dice algorithm. multiple levels 2", function(assert) {
     ]);
 });
 
-QUnit.test("Slice and dice / some values are zeros", function(assert) {
+QUnit.test('Slice and dice / some values are zeros', function(assert) {
     this.create({
-        layoutAlgorithm: "sliceanddice",
+        layoutAlgorithm: 'sliceanddice',
         dataSource: [{
             value: 1
         }, {
@@ -284,10 +284,10 @@ QUnit.test("Slice and dice / some values are zeros", function(assert) {
     ]);
 });
 
-QUnit.test("Rotated sliceAndDice", function(assert) {
+QUnit.test('Rotated sliceAndDice', function(assert) {
     this.create({
-        layoutAlgorithm: "rotatedSliceAndDice",
-        dataSource: [{ name: "item_1", value: 2 }, { name: "item_2", value: 3 }]
+        layoutAlgorithm: 'rotatedSliceAndDice',
+        dataSource: [{ name: 'item_1', value: 2 }, { name: 'item_2', value: 3 }]
     });
 
     this.checkLayout(assert, [
@@ -296,13 +296,13 @@ QUnit.test("Rotated sliceAndDice", function(assert) {
     ]);
 });
 
-QUnit.module("algorithmDirections", environment);
+QUnit.module('algorithmDirections', environment);
 
-QUnit.test("leftBottomRightTop", function(assert) {
+QUnit.test('leftBottomRightTop', function(assert) {
     this.create({
         size: { width: 100, height: 100 },
         dataSource: [{ value: 10 }, { value: 7 }, { value: 3 }],
-        layoutDirection: "leftBottomRightTop"
+        layoutDirection: 'leftBottomRightTop'
     });
 
     this.checkLayout(assert, [
@@ -312,21 +312,21 @@ QUnit.test("leftBottomRightTop", function(assert) {
     ]);
 });
 
-QUnit.test("rightBottomLeftTop", function(assert) {
+QUnit.test('rightBottomLeftTop', function(assert) {
     this.create({
         size: { width: 100, height: 100 },
         dataSource: [{ value: 10 }, { value: 7 }, { value: 3 }],
-        layoutDirection: "rightBottomLeftTop"
+        layoutDirection: 'rightBottomLeftTop'
     });
 
     this.checkLayout(assert, [[50, 0, 100, 100], [0, 30, 50, 100], [0, 0, 50, 30]]);
 });
 
-QUnit.test("rightTopLeftBottom", function(assert) {
+QUnit.test('rightTopLeftBottom', function(assert) {
     this.create({
         size: { width: 100, height: 100 },
         dataSource: [{ value: 10 }, { value: 7 }, { value: 3 }],
-        layoutDirection: "rightTopLeftBottom"
+        layoutDirection: 'rightTopLeftBottom'
     });
 
     this.checkLayout(assert, [[50, 0, 100, 100], [0, 0, 50, 70], [0, 70, 50, 100]]);

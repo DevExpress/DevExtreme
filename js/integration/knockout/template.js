@@ -1,13 +1,13 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    ko = require("knockout"),
-    typeUtils = require("../../core/utils/type"),
-    TemplateBase = require("../../ui/widget/ui.template_base"),
-    domUtils = require("../../core/utils/dom"),
-    getClosestNodeWithContext = require("./utils").getClosestNodeWithContext;
+var $ = require('../../core/renderer'),
+    domAdapter = require('../../core/dom_adapter'),
+    ko = require('knockout'),
+    typeUtils = require('../../core/utils/type'),
+    TemplateBase = require('../../ui/widget/ui.template_base'),
+    domUtils = require('../../core/utils/dom'),
+    getClosestNodeWithContext = require('./utils').getClosestNodeWithContext;
 
 var getParentContext = function(data) {
-    var parentNode = domAdapter.createElement("div");
+    var parentNode = domAdapter.createElement('div');
 
     ko.applyBindingsToNode(parentNode, null, data);
     var parentContext = ko.contextFor(parentNode);
@@ -22,7 +22,7 @@ var KoTemplate = TemplateBase.inherit({
     ctor: function(element) {
         this._element = element;
 
-        this._template = $("<div>").append(domUtils.normalizeTemplateElement(element));
+        this._template = $('<div>').append(domUtils.normalizeTemplateElement(element));
         this._registerKoTemplate();
     },
 
@@ -56,14 +56,14 @@ var KoTemplate = TemplateBase.inherit({
             model.$index = options.index;
         }
 
-        var $placeholder = $("<div>").appendTo(options.container);
+        var $placeholder = $('<div>').appendTo(options.container);
 
         var $result;
         ko.renderTemplate(this._template.get(0), model, {
             afterRender: function(nodes) {
                 $result = $(nodes);
             }
-        }, $placeholder.get(0), "replaceNode");
+        }, $placeholder.get(0), 'replaceNode');
 
         return $result;
     },

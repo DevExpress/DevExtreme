@@ -1,15 +1,15 @@
-import $ from "jquery";
-import vizMocks from "../../helpers/vizMocks.js";
-import executeAsyncMock from "../../helpers/executeAsyncMock.js";
-import rendererModule from "viz/core/renderers/renderer";
-import legendModule from "viz/components/legend";
-import titleModule from "viz/core/title";
-import dxChart from "viz/chart";
-import dxPieChart from "viz/pie_chart";
-import dxPolarChart from "viz/polar_chart";
-import baseChartModule from "viz/chart_components/base_chart";
-import { setupSeriesFamily } from "../../helpers/chartMocks.js";
-import pointerMock from "../../helpers/pointerMock.js";
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import rendererModule from 'viz/core/renderers/renderer';
+import legendModule from 'viz/components/legend';
+import titleModule from 'viz/core/title';
+import dxChart from 'viz/chart';
+import dxPieChart from 'viz/pie_chart';
+import dxPolarChart from 'viz/polar_chart';
+import baseChartModule from 'viz/chart_components/base_chart';
+import { setupSeriesFamily } from '../../helpers/chartMocks.js';
+import pointerMock from '../../helpers/pointerMock.js';
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -18,16 +18,16 @@ QUnit.testStart(function() {
         <div id="containerForCheckingGroups" style="height: 150px"></div>\
         <div id="chartContainer" style="width: 300px; height: 150px;"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 var chartContainerCounter = 1,
     containerName,
     moduleSetup = {
         beforeEach: function() {
-            containerName = "chartContainer" + chartContainerCounter;
+            containerName = 'chartContainer' + chartContainerCounter;
             this.$container = $('<div id="" + containerName + "" style="width: 600px;height:400px;"></div>');
-            $("#container").append(this.$container);
+            $('#container').append(this.$container);
             chartContainerCounter++;
             executeAsyncMock.setup();
         },
@@ -35,8 +35,8 @@ var chartContainerCounter = 1,
             // terrible hack to remove our DOM elements which became global variables
             // http://stackoverflow.com/questions/3434278/ie-chrome-are-dom-tree-elements-global-variables-here
             this.$container.remove();
-            if(QUnit.config["noglobals"]) {
-                $("#" + containerName).remove();
+            if(QUnit.config['noglobals']) {
+                $('#' + containerName).remove();
                 executeAsyncMock.teardown();
             }
         },
@@ -55,12 +55,12 @@ var chartContainerCounter = 1,
     };
 
 function createChartInstance(options, chartContainer) {
-    return chartContainer.dxChart(options).dxChart("instance");
+    return chartContainer.dxChart(options).dxChart('instance');
 }
 
-QUnit.module("dxChart", moduleSetup);
+QUnit.module('dxChart', moduleSetup);
 
-QUnit.test("T244164", function(assert) {
+QUnit.test('T244164', function(assert) {
     var chart = this.createChart({});
     chart.option({
         argumentAxis: {
@@ -74,11 +74,11 @@ QUnit.test("T244164", function(assert) {
     assert.ok(true);
 });
 
-QUnit.test("MultiAxis with title and inverted axis", function(assert) {
-    var categories = ["first", "second", "third", "fourth", "fifth"],
+QUnit.test('MultiAxis with title and inverted axis', function(assert) {
+    var categories = ['first', 'second', 'third', 'fourth', 'fifth'],
         rotated = true;
 
-    this.$container.css({ width: "1000px", height: "600px" });
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -92,31 +92,31 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             }
         },
         commonSeriesSettings: {
-            point: { visible: true, size: 10, symbol: "cross", hoverStyle: { size: 20, border: { width: 10 } }, color: "blue" }
+            point: { visible: true, size: 10, symbol: 'cross', hoverStyle: { size: 20, border: { width: 10 } }, color: 'blue' }
         },
         argumentAxis: {
-            categories: categories, grid: { visible: true }, label: { rotationAngle: 10, font: { size: 30, color: "blue" } },
-            tick: { color: "red", visible: true },
+            categories: categories, grid: { visible: true }, label: { rotationAngle: 10, font: { size: 30, color: 'blue' } },
+            tick: { color: 'red', visible: true },
             title: {
-                text: "title test<br/>test test test<br/> test"
+                text: 'title test<br/>test test test<br/> test'
             },
         },
         dataSource: [
-            { arg: "first", val: 400, val1: 5, val2: 1 },
-            { arg: "second", val: 200, val1: 4, val2: 2 },
-            { arg: "third", val: 900, val1: 3, val2: 3 },
-            { arg: "fourth", val: 100, val1: 2, val2: 2 },
-            { arg: "fifth", val: 340, val1: 0, val2: 0 }],
+            { arg: 'first', val: 400, val1: 5, val2: 1 },
+            { arg: 'second', val: 200, val1: 4, val2: 2 },
+            { arg: 'third', val: 900, val1: 3, val2: 3 },
+            { arg: 'fourth', val: 100, val1: 2, val2: 2 },
+            { arg: 'fifth', val: 340, val1: 0, val2: 0 }],
         series: [{
-            axis: "axis2"
+            axis: 'axis2'
         }, {
-            axis: "axis1",
-            valueField: "val1"
+            axis: 'axis1',
+            valueField: 'val1'
         },
         {
-            axis: "axis3",
-            type: "splinearea",
-            valueField: "val2"
+            axis: 'axis3',
+            type: 'splinearea',
+            valueField: 'val2'
         }
         ],
         valueAxis: [{
@@ -124,22 +124,22 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             visible: true, // B231173
             min: 0,
             tickInterval: 50,
-            name: "axis2",
+            name: 'axis2',
             max: 1200,
-            position: "left",
-            title: { text: "title very long <br/> test <br/> test", margin: 0 },
+            position: 'left',
+            title: { text: 'title very long <br/> test <br/> test', margin: 0 },
             grid: {
                 visible: true
             },
             label: {
                 font: {
-                    color: "brown"
+                    color: 'brown'
                 }
             }
         }, {
             axisDivisionFactor: 50,
             visible: true, // B231173
-            name: "axis1",
+            name: 'axis1',
             min: 0,
             max: 5,
             inverted: true, // B231235
@@ -148,22 +148,22 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             },
             label: {
                 font: {
-                    color: "green"
+                    color: 'green'
                 }
             }
         }, {
             axisDivisionFactor: 50,
             visible: true, // B231173
-            name: "axis3",
+            name: 'axis3',
             min: 0,
             max: 11,
             grid: {
                 visible: true
             },
-            title: "title", // B231060
+            title: 'title', // B231060
             label: {
                 font: {
-                    color: "green"
+                    color: 'green'
                 }
             }
         }],
@@ -177,12 +177,12 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
 
     assert.ok(chart);
     // B231181
-    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5], "second value axis tick values");
-    assert.deepEqual(chart._valueAxes[2].getTicksValues().majorTicksValues, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "third value axis tick values");
+    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5], 'second value axis tick values');
+    assert.deepEqual(chart._valueAxes[2].getTicksValues().majorTicksValues, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 'third value axis tick values');
 });
 
-QUnit.test("Problem with two axis and range", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Problem with two axis and range', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -196,19 +196,19 @@ QUnit.test("Problem with two axis and range", function(assert) {
             arg: new Date(2011, 11, 10),
             val: 8
         }],
-        valueAxis: [{ "label": {}, "placeholderSize": 40, axisDivisionFactor: 30 }, { "position": "right", "placeholderSize": 10, axisDivisionFactor: 30 }],
-        series: { type: "bar" }
+        valueAxis: [{ 'label': {}, 'placeholderSize': 40, axisDivisionFactor: 30 }, { 'position': 'right', 'placeholderSize': 10, axisDivisionFactor: 30 }],
+        series: { type: 'bar' }
     });
 
     assert.ok(chart);
 
-    chart.option("size", { width: 900 });
+    chart.option('size', { width: 900 });
 
-    assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8], "main value axis tick values");
+    assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8], 'main value axis tick values');
 });
 
-QUnit.test("Set visualRange via arguments", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange via arguments', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -231,7 +231,7 @@ QUnit.test("Set visualRange via arguments", function(assert) {
             arg: 11,
             val: 8
         }],
-        series: { type: "line" }
+        series: { type: 'line' }
     });
 
     chart.getArgumentAxis().visualRange(2.5);
@@ -239,8 +239,8 @@ QUnit.test("Set visualRange via arguments", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].getViewport(), { startValue: 2.5, endValue: undefined });
 });
 
-QUnit.test("Set visualRange via array", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange via array', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -265,7 +265,7 @@ QUnit.test("Set visualRange via array", function(assert) {
             arg: 11,
             val: 8
         }],
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged
     });
 
@@ -277,8 +277,8 @@ QUnit.test("Set visualRange via array", function(assert) {
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { startValue: 2, endValue: 8 });
 });
 
-QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange for indexed valueAxis (check onOptionChanged fired)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -302,7 +302,7 @@ QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)"
             arg: 11,
             val: 8
         }],
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged,
         valueAxis: [{}]
     });
@@ -313,11 +313,11 @@ QUnit.test("Set visualRange for indexed valueAxis (check onOptionChanged fired)"
     chart.getValueAxis().visualRange([3, 6]);
 
     assert.deepEqual(visualRangeChanged.lastCall.args[0].value, { startValue: 3, endValue: 6 });
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 6 });
+    assert.deepEqual(chart.option('valueAxis[0].visualRange'), { startValue: 3, endValue: 6 });
 });
 
-QUnit.test("Set visualRange for multi axis (exists single option collection for value axes)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange for multi axis (exists single option collection for value axes)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -346,7 +346,7 @@ QUnit.test("Set visualRange for multi axis (exists single option collection for 
             val1: 8,
             val2: 4
         }],
-        series: [{ type: "line", valueField: "val1" }, { type: "line", valueField: "val2", axis: "axis1" }],
+        series: [{ type: 'line', valueField: 'val1' }, { type: 'line', valueField: 'val2', axis: 'axis1' }],
         onOptionChanged: visualRangeChanged,
         valueAxis: { valueMarginsEnabled: false }
     });
@@ -357,11 +357,11 @@ QUnit.test("Set visualRange for multi axis (exists single option collection for 
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 2);
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 4, endValue: 7 });
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 4, endValue: 7 });
 });
 
-QUnit.test("Set visualRange for multi axis/pane (exists option collection for each value axis)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange for multi axis/pane (exists option collection for each value axis)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -390,10 +390,10 @@ QUnit.test("Set visualRange for multi axis/pane (exists option collection for ea
             val1: 20,
             val2: -10
         }],
-        panes: [{ name: "p1" }, { name: "p2" }],
-        series: [{ type: "line", valueField: "val1", pane: "p1" }, { type: "line", valueField: "val2", pane: "p2" }],
+        panes: [{ name: 'p1' }, { name: 'p2' }],
+        series: [{ type: 'line', valueField: 'val1', pane: 'p1' }, { type: 'line', valueField: 'val2', pane: 'p2' }],
         onOptionChanged: visualRangeChanged,
-        valueAxis: [{ pane: "p1" }, { pane: "p2" }]
+        valueAxis: [{ pane: 'p1' }, { pane: 'p2' }]
     });
 
     assert.ok(chart);
@@ -402,12 +402,12 @@ QUnit.test("Set visualRange for multi axis/pane (exists option collection for ea
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 3);
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 7 });
-    assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: 3, endValue: 25 });
+    assert.deepEqual(chart.option('valueAxis[0].visualRange'), { startValue: 3, endValue: 7 });
+    assert.deepEqual(chart.option('valueAxis[1].visualRange'), { startValue: 3, endValue: 25 });
 });
 
-QUnit.test("Pass visualRange array if options is set using array", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Pass visualRange array if options is set using array', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -435,7 +435,7 @@ QUnit.test("Pass visualRange array if options is set using array", function(asse
         argumentAxis: {
             visualRange: [1, 10]
         },
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged
     });
 
@@ -445,8 +445,8 @@ QUnit.test("Pass visualRange array if options is set using array", function(asse
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
 });
 
-QUnit.test("Can disable visualRange two way binding", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Can disable visualRange two way binding', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -476,7 +476,7 @@ QUnit.test("Can disable visualRange two way binding", function(assert) {
                 endValue: 2
             }
         },
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged,
         disableTwoWayBinding: true
     });
@@ -493,8 +493,8 @@ QUnit.test("Can disable visualRange two way binding", function(assert) {
     });
 });
 
-QUnit.test("Set visualRange for multi axis/pane (check option method and adjustOnZoom)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange for multi axis/pane (check option method and adjustOnZoom)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -523,22 +523,22 @@ QUnit.test("Set visualRange for multi axis/pane (check option method and adjustO
             val1: 20,
             val2: -10
         }],
-        panes: [{ name: "p1" }, { name: "p2" }],
-        series: [{ type: "line", valueField: "val1", pane: "p1" }, { type: "line", valueField: "val2", pane: "p2" }],
+        panes: [{ name: 'p1' }, { name: 'p2' }],
+        series: [{ type: 'line', valueField: 'val1', pane: 'p1' }, { type: 'line', valueField: 'val2', pane: 'p2' }],
         onOptionChanged: visualRangeChanged,
-        valueAxis: [{ pane: "p1" }, { pane: "p2" }]
+        valueAxis: [{ pane: 'p1' }, { pane: 'p2' }]
     });
 
     chart.getArgumentAxis().visualRange([1.5, 10]);
-    chart.option("valueAxis[0].visualRange", [5, 10]);
+    chart.option('valueAxis[0].visualRange', [5, 10]);
     chart.getArgumentAxis().visualRange([2, 8]);
 
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), [5, 10]);
-    assert.deepEqual(chart.option("valueAxis[1].visualRange"), { startValue: 3, endValue: 25 });
+    assert.deepEqual(chart.option('valueAxis[0].visualRange'), [5, 10]);
+    assert.deepEqual(chart.option('valueAxis[1].visualRange'), { startValue: 3, endValue: 25 });
 });
 
-QUnit.test("Set visualRange for discrete axis (check adjustOnZoom)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set visualRange for discrete axis (check adjustOnZoom)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -546,37 +546,37 @@ QUnit.test("Set visualRange for discrete axis (check adjustOnZoom)", function(as
             height: 600
         },
         dataSource: [{
-            arg: "1",
+            arg: '1',
             val: -10
         }, {
-            arg: "2",
+            arg: '2',
             val: 5
         }, {
-            arg: "5",
+            arg: '5',
             val: 7
         }, {
-            arg: "8",
+            arg: '8',
             val: 3
         }, {
-            arg: "9",
+            arg: '9',
             val: 9
         }, {
-            arg: "11",
+            arg: '11',
             val: 20
         }],
-        argumentAxis: { type: "discrete" },
+        argumentAxis: { type: 'discrete' },
         valueAxis: { valueMarginsEnabled: false },
         series: [{ }]
     });
 
-    chart.getArgumentAxis().visualRange(["2", "9"]);
+    chart.getArgumentAxis().visualRange(['2', '9']);
 
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 9 });
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 9 });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 9 });
 });
 
-QUnit.test("Cancel visualRange setting for logarithm axis", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Cancel visualRange setting for logarithm axis', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var zoomEnd = sinon.spy(function(e) {
         e.cancel = true;
     });
@@ -605,7 +605,7 @@ QUnit.test("Cancel visualRange setting for logarithm axis", function(assert) {
             arg: 1000000,
             val: 20
         }],
-        argumentAxis: { type: "logarithmic" },
+        argumentAxis: { type: 'logarithmic' },
         valueAxis: { valueMarginsEnabled: false },
         series: [{ }],
         onZoomEnd: zoomEnd
@@ -626,7 +626,7 @@ QUnit.test("Cancel visualRange setting for logarithm axis", function(assert) {
     assert.roughEqual(zoomEnd.firstCall.args[0].shift, -900, 10);
 });
 
-QUnit.test("Set argument visual range using option", function(assert) {
+QUnit.test('Set argument visual range using option', function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 0,
@@ -638,13 +638,13 @@ QUnit.test("Set argument visual range using option", function(assert) {
         series: {}
     });
 
-    chart.option("argumentAxis.visualRange", { startValue: 2, endValue: 10 });
+    chart.option('argumentAxis.visualRange', { startValue: 2, endValue: 10 });
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 10 });
 });
 
 // T804296
-QUnit.test("Set argument visual range using option. endValue was set only", function(assert) {
+QUnit.test('Set argument visual range using option. endValue was set only', function(assert) {
     var chart = this.createChart({
         series: [{}],
         dataSource: [{
@@ -656,13 +656,13 @@ QUnit.test("Set argument visual range using option. endValue was set only", func
         }]
     });
 
-    chart.option("argumentAxis.visualRange.endValue", 80);
+    chart.option('argumentAxis.visualRange.endValue', 80);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 80 });
 });
 
 // T804296
-QUnit.test("Set argument visual range using option. startValue was set only", function(assert) {
+QUnit.test('Set argument visual range using option. startValue was set only', function(assert) {
     var chart = this.createChart({
         series: [{}],
         dataSource: [{
@@ -674,13 +674,13 @@ QUnit.test("Set argument visual range using option. startValue was set only", fu
         }]
     });
 
-    chart.option("argumentAxis.visualRange.startValue", 20);
+    chart.option('argumentAxis.visualRange.startValue', 20);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
 });
 
 // T804296
-QUnit.test("Set value visual range using option. only one edge was set. other unchanged", function(assert) {
+QUnit.test('Set value visual range using option. only one edge was set. other unchanged', function(assert) {
     var onOptionChanged = sinon.spy();
     var chart = this.createChart({
         series: [{}],
@@ -701,20 +701,20 @@ QUnit.test("Set value visual range using option. only one edge was set. other un
     });
 
     onOptionChanged.reset();
-    chart.option("valueAxis.visualRange.startValue", 50);
+    chart.option('valueAxis.visualRange.startValue', 50);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 50, endValue: 90 });
     assert.equal(onOptionChanged.callCount, 3);
-    assert.equal(onOptionChanged.firstCall.args[0].fullName, "valueAxis.visualRange.startValue");
-    assert.equal(onOptionChanged.lastCall.args[0].fullName, "valueAxis.visualRange");
+    assert.equal(onOptionChanged.firstCall.args[0].fullName, 'valueAxis.visualRange.startValue');
+    assert.equal(onOptionChanged.lastCall.args[0].fullName, 'valueAxis.visualRange');
 
-    chart.option("valueAxis.visualRange.endValue", 70);
+    chart.option('valueAxis.visualRange.endValue', 70);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 50, endValue: 70 });
 });
 
-QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Using the single section of axis options for some panes (check customVisualRange merging)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
-    var panes = [{ name: "p1" }];
+    var panes = [{ name: 'p1' }];
 
     var chart = this.createChart({
         size: {
@@ -743,22 +743,22 @@ QUnit.test("Using the single section of axis options for some panes (check custo
             val2: -10
         }],
         panes: panes,
-        series: [{ type: "line", valueField: "val1", pane: "p1", axis: "ax1" }, { type: "line", valueField: "val2", pane: "p2", axis: "ax1" }],
+        series: [{ type: 'line', valueField: 'val1', pane: 'p1', axis: 'ax1' }, { type: 'line', valueField: 'val2', pane: 'p2', axis: 'ax1' }],
         onOptionChanged: visualRangeChanged,
         valueAxis: {
-            name: "ax1",
+            name: 'ax1',
             valueMarginsEnabled: false,
             endOnTick: false
         }
     });
 
     chart.getArgumentAxis().visualRange([4, 6]);
-    panes.push({ name: "p2" });
+    panes.push({ name: 'p2' });
     visualRangeChanged.reset();
-    chart.option("panes", panes);
+    chart.option('panes', panes);
 
-    assert.deepEqual(chart.option("valueAxis.visualRange"), chart.getValueAxis().visualRange());
-    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 4, endValue: 6 }, "argument visual range");
+    assert.deepEqual(chart.option('valueAxis.visualRange'), chart.getValueAxis().visualRange());
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 4, endValue: 6 }, 'argument visual range');
     assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 6, endValue: 7 });
     assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 18, endValue: 25 });
 
@@ -768,7 +768,7 @@ QUnit.test("Using the single section of axis options for some panes (check custo
 });
 
 // T681674
-QUnit.test("actual value axis visualRange after dataSource updating (argument axis without visual range)", function(assert) {
+QUnit.test('actual value axis visualRange after dataSource updating (argument axis without visual range)', function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -783,17 +783,17 @@ QUnit.test("actual value axis visualRange after dataSource updating (argument ax
                 endValue: 100
             }
         },
-        series: [{ type: "line", valueField: "val1" }]
+        series: [{ type: 'line', valueField: 'val1' }]
     });
 
-    chart.option("valueAxis.visualRange", { startValue: 0, endValue: 80 });
-    chart.option("dataSource", [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
+    chart.option('valueAxis.visualRange', { startValue: 0, endValue: 80 });
+    chart.option('dataSource', [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
 
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 5, endValue: 10 });
 });
 
 // T681674
-QUnit.test("actual value axis visualRange after dataSource updating (argument axis with visual range)", function(assert) {
+QUnit.test('actual value axis visualRange after dataSource updating (argument axis with visual range)', function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -813,16 +813,16 @@ QUnit.test("actual value axis visualRange after dataSource updating (argument ax
                 endValue: 3
             }
         },
-        series: [{ type: "line", valueField: "val1" }]
+        series: [{ type: 'line', valueField: 'val1' }]
     });
 
-    chart.option("valueAxis.visualRange", { startValue: 0, endValue: 80 });
-    chart.option("dataSource", [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
+    chart.option('valueAxis.visualRange', { startValue: 0, endValue: 80 });
+    chart.option('dataSource', [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
 
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 80 });
 });
 
-QUnit.test("actual argument axis visualRange after dataSource updating", function(assert) {
+QUnit.test('actual argument axis visualRange after dataSource updating', function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -838,17 +838,17 @@ QUnit.test("actual argument axis visualRange after dataSource updating", functio
                 endValue: 100
             }
         },
-        series: [{ type: "line", valueField: "val1" }]
+        series: [{ type: 'line', valueField: 'val1' }]
     });
 
-    chart.option("argumentAxis.visualRange", { startValue: 0, endValue: 80 });
-    chart.option("dataSource", [{ arg: 20, val1: 5 }, { arg: 50, val1: 10 }]);
+    chart.option('argumentAxis.visualRange', { startValue: 0, endValue: 80 });
+    chart.option('dataSource', [{ arg: 20, val1: 5 }, { arg: 50, val1: 10 }]);
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 80 });
 });
 
-QUnit.test("Set the visualRange option by the different ways", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set the visualRange option by the different ways', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var dataSource = [{
         arg: 1,
         val: 4
@@ -873,29 +873,29 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
             height: 600
         },
         dataSource: dataSource,
-        series: { type: "line", point: { visible: false } },
+        series: { type: 'line', point: { visible: false } },
         onOptionChanged: visualRangeChanged,
         argumentAxis: { visualRange: [3, 10] },
         valueAxis: { visualRange: { startValue: 4, endValue: 7 } }
     });
 
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), [3, 10]);
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 4, endValue: 7 });
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), [3, 10]);
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 4, endValue: 7 });
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 3, endValue: 10 });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 4, endValue: 7 });
 
     visualRangeChanged.reset();
-    chart.option("valueAxis.visualRange", [3, 6]);
+    chart.option('valueAxis.visualRange', [3, 6]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [3, 6]);
+    assert.deepEqual(chart.option('valueAxis.visualRange'), [3, 6]);
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [3, 6]);
 
     visualRangeChanged.reset();
-    chart.option("valueAxis", { visualRange: [1, 4] });
+    chart.option('valueAxis', { visualRange: [1, 4] });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: [1, 4] });
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [1, 4]);
+    assert.deepEqual(chart.option('valueAxis.visualRange'), [1, 4]);
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [1, 4]);
 
     visualRangeChanged.reset();
@@ -905,39 +905,39 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
             height: 600
         },
         dataSource: dataSource,
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged,
         valueAxis: { visualRange: [2, 7] }
     });
 
     assert.deepEqual(visualRangeChanged.getCall(3).args[0].value, { visualRange: [2, 7] });
-    assert.deepEqual(chart.option("valueAxis.visualRange"), [2, 7]);
+    assert.deepEqual(chart.option('valueAxis.visualRange'), [2, 7]);
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [2, 7]);
 
     visualRangeChanged.reset();
-    chart.option("valueAxis", { visualRange: { startValue: 3 } });
+    chart.option('valueAxis', { visualRange: { startValue: 3 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { startValue: 3 } });
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 7 });
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 7 });
     assert.deepEqual(chart._options.valueAxis._customVisualRange, { startValue: 3 });
 
     visualRangeChanged.reset();
-    chart.option("valueAxis", { visualRange: { endValue: 10 } });
+    chart.option('valueAxis', { visualRange: { endValue: 10 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { endValue: 10 } });
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 10 });
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 10 });
     assert.deepEqual(chart._options.valueAxis._customVisualRange, { endValue: 10 });
 
     visualRangeChanged.reset();
-    chart.option("valueAxis", { visualRange: { length: 2 } });
+    chart.option('valueAxis', { visualRange: { length: 2 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { length: 2 } });
-    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 5, endValue: 7 });
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 5, endValue: 7 });
     assert.deepEqual(chart._options.valueAxis._customVisualRange, { length: 2 });
 });
 
-QUnit.test("Reload dataSource - visualRange option should be changed", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Reload dataSource - visualRange option should be changed', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var visualRangeChanged = sinon.spy();
 
     var chart = this.createChart({
@@ -955,7 +955,7 @@ QUnit.test("Reload dataSource - visualRange option should be changed", function(
             arg: 5,
             val: 7
         }],
-        series: { type: "line" },
+        series: { type: 'line' },
         onOptionChanged: visualRangeChanged,
         valueAxis: [{ valueMarginsEnabled: false }],
         argumentAxis: { valueMarginsEnabled: false }
@@ -966,8 +966,8 @@ QUnit.test("Reload dataSource - visualRange option should be changed", function(
     // act
     var ds = chart.getDataSource();
     ds.store().push([
-        { type: "insert", data: { arg: 8, val: 3 } },
-        { type: "insert", data: { arg: 11, val: 8 } }
+        { type: 'insert', data: { arg: 8, val: 3 } },
+        { type: 'insert', data: { arg: 11, val: 8 } }
     ]);
     ds.load();
 
@@ -975,16 +975,16 @@ QUnit.test("Reload dataSource - visualRange option should be changed", function(
     // argumentAxis
     assert.deepEqual(visualRangeChanged.getCall(0).args[0].previousValue, { startValue: 1, endValue: 5 });
     assert.deepEqual(visualRangeChanged.getCall(0).args[0].value, { startValue: 1, endValue: 11 });
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 1, endValue: 11 });
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), { startValue: 1, endValue: 11 });
 
     // valueAxis
     assert.deepEqual(visualRangeChanged.getCall(1).args[0].previousValue, { startValue: 4, endValue: 7 });
     assert.deepEqual(visualRangeChanged.getCall(1).args[0].value, { startValue: 3, endValue: 8 });
-    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 8 });
+    assert.deepEqual(chart.option('valueAxis[0].visualRange'), { startValue: 3, endValue: 8 });
 });
 
-QUnit.test("Set zoom in the onDone callback", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set zoom in the onDone callback', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var dataSource = [{
         arg: 1,
         val: 4
@@ -1008,20 +1008,20 @@ QUnit.test("Set zoom in the onDone callback", function(assert) {
             height: 600
         },
         dataSource: dataSource,
-        series: { type: "line" },
+        series: { type: 'line' },
         onDone: function(e) {
             e.component.zoomArgument(2, 5);
         }
     });
 
     var businessRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
-    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 2, endValue: 5 });
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), { startValue: 2, endValue: 5 });
     assert.equal(businessRange.minVisible, 2);
     assert.equal(businessRange.maxVisible, 5);
 });
 
-QUnit.test("Set null visualRange", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Set null visualRange', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -1044,7 +1044,7 @@ QUnit.test("Set null visualRange", function(assert) {
             arg: new Date(2014, 0, 1),
             val: 8
         }],
-        series: { type: "line" },
+        series: { type: 'line' },
         argumentAxis: { valueMarginsEnabled: false }
     });
 
@@ -1053,12 +1053,12 @@ QUnit.test("Set null visualRange", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].visualRange(), {
         startValue: new Date(2010, 0, 1),
         endValue: new Date(2014, 0, 1)
-    }, "visualRange is full (argument axis)");
-    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 3, endValue: 8 }, "visualRange is full (value axis)");
+    }, 'visualRange is full (argument axis)');
+    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 3, endValue: 8 }, 'visualRange is full (value axis)');
 });
 
-QUnit.test("Move visual frame by visualRangeLength", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Move visual frame by visualRangeLength', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -1081,7 +1081,7 @@ QUnit.test("Move visual frame by visualRangeLength", function(assert) {
             arg: new Date(2014, 0, 1),
             val: 15
         }],
-        series: { type: "line" },
+        series: { type: 'line' },
         argumentAxis: {
             visualRange: {
                 length: { years: 2 }
@@ -1099,8 +1099,8 @@ QUnit.test("Move visual frame by visualRangeLength", function(assert) {
     });
 });
 
-QUnit.test("Reset axis viewport", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Reset axis viewport', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var zoomStart = sinon.spy();
     var zoomEnd = sinon.spy();
@@ -1131,7 +1131,7 @@ QUnit.test("Reset axis viewport", function(assert) {
             valueMarginsEnabled: false
         },
         valueAxis: { valueMarginsEnabled: false },
-        series: { type: "line" },
+        series: { type: 'line' },
         onZoomStart: zoomStart,
         onZoomEnd: zoomEnd
     });
@@ -1156,8 +1156,8 @@ QUnit.test("Reset axis viewport", function(assert) {
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 8 });
 });
 
-QUnit.test("Reset chart viewport", function(assert) {
-    this.$container.css({ width: "1000px", height: "600px" });
+QUnit.test('Reset chart viewport', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
     var zoomStart = sinon.spy();
     var zoomEnd = sinon.spy();
     var dataSource = [{
@@ -1241,30 +1241,30 @@ QUnit.test("Reset chart viewport", function(assert) {
         },
         dataSource: dataSource,
         commonSeriesSettings: {
-            argumentField: "year"
+            argumentField: 'year'
         },
         series: [
-            { valueField: "first", name: "SMP", pane: "p1" },
-            { valueField: "second", name: "MMP", pane: "p1" },
-            { valueField: "third", name: "Cnstl", pane: "p2" },
-            { valueField: "fourth", name: "Cluster", pane: "p2" }
+            { valueField: 'first', name: 'SMP', pane: 'p1' },
+            { valueField: 'second', name: 'MMP', pane: 'p1' },
+            { valueField: 'third', name: 'Cnstl', pane: 'p2' },
+            { valueField: 'fourth', name: 'Cluster', pane: 'p2' }
         ],
         onZoomStart: zoomStart,
         onZoomEnd: zoomEnd,
-        panes: [{ name: "p1" }, { name: "p2" }],
+        panes: [{ name: 'p1' }, { name: 'p2' }],
         argumentAxis: {
             axisDivisionFactor: 60,
-            dataType: "datetime",
+            dataType: 'datetime',
             wholeRange: [new Date(2000, 6, 1), undefined],
             visualRange: { startValue: new Date(2008, 2, 1), endValue: null, length: { months: 6 } },
             endOnTick: true
         },
         valueAxis: [{
-            name: "ax1",
-            pane: "p1",
+            name: 'ax1',
+            pane: 'p1',
         }, {
-            name: "ax2",
-            pane: "p2"
+            name: 'ax2',
+            pane: 'p2'
         }]
     });
 
@@ -1272,8 +1272,8 @@ QUnit.test("Reset chart viewport", function(assert) {
     assert.equal(chart.getArgumentAxis().visualRange().endValue - chart.getArgumentAxis().visualRange().startValue, 1000 * 60 * 60 * 24 * 30 * 6); // months: 6
     assert.roughEqual(chart.getValueAxis().visualRange().startValue, 1.98, 0.2);
     assert.roughEqual(chart.getValueAxis().visualRange().endValue, 46.7, 0.2);
-    assert.roughEqual(chart.getValueAxis("ax1").visualRange().startValue, 201, 1);
-    assert.roughEqual(chart.getValueAxis("ax1").visualRange().endValue, 247, 1);
+    assert.roughEqual(chart.getValueAxis('ax1').visualRange().startValue, 201, 1);
+    assert.roughEqual(chart.getValueAxis('ax1').visualRange().endValue, 247, 1);
 
     chart.getValueAxis().visualRange([-20, 40]);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -20, endValue: 40 });
@@ -1293,79 +1293,79 @@ QUnit.test("Reset chart viewport", function(assert) {
     assert.equal(zoomEnd.thirdCall.args[0].range.endValue, 706);
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: new Date(2000, 6, 1), endValue: new Date(2015, 3, 1) });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 1, endValue: 706 });
-    assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 0, endValue: 263 });
+    assert.deepEqual(chart.getValueAxis('ax1').visualRange(), { startValue: 0, endValue: 263 });
 });
 
-QUnit.test("dxChart reinitialization - series - dataSource", function(assert) {
+QUnit.test('dxChart reinitialization - series - dataSource', function(assert) {
     // arrange
     var chart = this.$container.dxChart({
-        dataSource: [{ arg: "January", val1: 24, val2: 0, val3: 15 },
-            { arg: "February", val1: 0, val2: 34, val3: 40 },
+        dataSource: [{ arg: 'January', val1: 24, val2: 0, val3: 15 },
+            { arg: 'February', val1: 0, val2: 34, val3: 40 },
         ],
         series: [{
-            name: "First",
-            valueField: "val1"
+            name: 'First',
+            valueField: 'val1'
         }, {
-            name: "Second",
-            valueField: "val2"
+            name: 'Second',
+            valueField: 'val2'
         }],
-        title: "original"
+        title: 'original'
     });
     // act
     chart = this.$container.dxChart({
         series: [{
-            name: "Third",
-            valueField: "val3"
+            name: 'Third',
+            valueField: 'val3'
         }],
         title: {
-            text: "updated"
+            text: 'updated'
         }
     });
 
     // assert
-    chart = this.$container.dxChart("instance");
-    assert.equal(chart.series.length, 1, "Series number");
-    assert.equal(chart._legend._data.length, 1, "Legend reinitialized");
+    chart = this.$container.dxChart('instance');
+    assert.equal(chart.series.length, 1, 'Series number');
+    assert.equal(chart._legend._data.length, 1, 'Legend reinitialized');
 });
 
-QUnit.test("dxChart reinitialization - dataSource - correct axes/data types", function(assert) {
+QUnit.test('dxChart reinitialization - dataSource - correct axes/data types', function(assert) {
     // arrange
     var chart = this.createChart({
         dataSource: [],
         series: [{
-            name: "First",
-            valueField: "val1"
+            name: 'First',
+            valueField: 'val1'
         }],
-        title: "original"
+        title: 'original'
     });
     // act
-    assert.equal(chart._argumentAxes[0].getOptions().type, "continuous");
+    assert.equal(chart._argumentAxes[0].getOptions().type, 'continuous');
     assert.equal(chart._argumentAxes[0].getOptions().dataType, undefined);
-    assert.equal(chart._valueAxes[0].getOptions().type, "continuous");
+    assert.equal(chart._valueAxes[0].getOptions().type, 'continuous');
     assert.equal(chart._valueAxes[0].getOptions().dataType, undefined);
 
     this.$container.dxChart({
-        dataSource: [{ arg: "January", val1: new Date(100000) },
-            { arg: "February", val1: new Date(100000) }]
+        dataSource: [{ arg: 'January', val1: new Date(100000) },
+            { arg: 'February', val1: new Date(100000) }]
     });
 
     // assert
     assert.ok(chart);
-    assert.equal(chart._argumentAxes[0].getOptions().type, "discrete");
+    assert.equal(chart._argumentAxes[0].getOptions().type, 'discrete');
     // equal(chart._argumentAxes[0].getOptions().dataType, "string");
-    assert.equal(chart._valueAxes[0].getOptions().type, "continuous");
+    assert.equal(chart._valueAxes[0].getOptions().type, 'continuous');
     // equal(chart._valueAxes[0].getOptions().dataType, "datetime");
 });
 
-QUnit.test("dxChart reinitialization - dataSource - correct axes min max", function(assert) {
+QUnit.test('dxChart reinitialization - dataSource - correct axes min max', function(assert) {
     // arrange
     var chart = this.createChart({
         dataSource: [],
         series: [{
-            name: "First",
-            valueField: "val1"
+            name: 'First',
+            valueField: 'val1'
         }],
-        title: "original"
+        title: 'original'
     });
 
     var argAxis = chart._argumentAxes[0],
@@ -1389,17 +1389,17 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes min max", funct
     assert.equal(valAxis.setBusinessRange.lastCall.args[0].max, 4);
 });
 
-QUnit.test("dxChart dataSource update - pass current argument axis' visualRangeUpdateMode to valueAxis", function(assert) {
+QUnit.test('dxChart dataSource update - pass current argument axis\' visualRangeUpdateMode to valueAxis', function(assert) {
     // arrange
     var chart = this.createChart({
         dataSource: [{ arg: 1, val1: 1 },
             { arg: 2, val1: 2 }],
         series: [{
-            name: "First",
-            valueField: "val1"
+            name: 'First',
+            valueField: 'val1'
         }],
-        argumentAxis: { visualRangeUpdateMode: "reset" },
-        title: "original"
+        argumentAxis: { visualRangeUpdateMode: 'reset' },
+        title: 'original'
     });
 
     var valAxis = chart._valueAxes[0],
@@ -1414,42 +1414,42 @@ QUnit.test("dxChart dataSource update - pass current argument axis' visualRangeU
     });
 
     // assert
-    assert.equal(valAxis.setBusinessRange.lastCall.args[2], "reset");
+    assert.equal(valAxis.setBusinessRange.lastCall.args[2], 'reset');
 });
 
-QUnit.test("dxChart with vertical axis with title", function(assert) {
+QUnit.test('dxChart with vertical axis with title', function(assert) {
     // arrange, act
-    this.$container.width("300px");
+    this.$container.width('300px');
     this.$container.dxChart({
         valueAxis: {
-            title: "some title",
-            position: "left"
+            title: 'some title',
+            position: 'left'
         }
     });
     // assert
-    assert.equal(this.$container.find(".dxc-val-title").text(), "some title");
+    assert.equal(this.$container.find('.dxc-val-title').text(), 'some title');
 });
 
-QUnit.test("dxChart with horizontal axis with title", function(assert) {
+QUnit.test('dxChart with horizontal axis with title', function(assert) {
     // arrange, act
-    this.$container.width("300px");
+    this.$container.width('300px');
     this.$container.dxChart({
         valueAxis: {
-            title: "some title",
-            position: "bottom"
+            title: 'some title',
+            position: 'bottom'
         }
     });
     // assert
-    assert.equal(this.$container.find(".dxc-val-title").text(), "some title");
+    assert.equal(this.$container.find('.dxc-val-title').text(), 'some title');
 });
 
 // T353296
 // must be in axis (but with real renderer)
-QUnit.test("valid text in strip's labels", function(assert) {
+QUnit.test('valid text in strip\'s labels', function(assert) {
     this.createChart({
         dataSource: [
-            { "year": 1950, "europe": 546, "americas": 332, "africa": 227 },
-            { "year": 2050, "europe": 650, "americas": 1231, "africa": 1937 }
+            { 'year': 1950, 'europe': 546, 'americas': 332, 'africa': 227 },
+            { 'year': 2050, 'europe': 650, 'americas': 1231, 'africa': 1937 }
         ],
         commonSeriesSettings: {
             argumentField: 'year'
@@ -1467,17 +1467,17 @@ QUnit.test("valid text in strip's labels", function(assert) {
         }
     });
 
-    assert.strictEqual($($(this.$container.find(".dxc-arg-axis-labels")[0]).children()[0]).text(), "SomeValue");
+    assert.strictEqual($($(this.$container.find('.dxc-arg-axis-labels')[0]).children()[0]).text(), 'SomeValue');
 });
 
 // T485059
-QUnit.test("Chart was rendered with series template & dataSource = null", function(assert) {
+QUnit.test('Chart was rendered with series template & dataSource = null', function(assert) {
     var drawn = sinon.spy();
 
     this.createChart({
         dataSource: null,
         seriesTemplate: {
-            nameField: "year"
+            nameField: 'year'
         },
         onDrawn: drawn
     });
@@ -1485,14 +1485,14 @@ QUnit.test("Chart was rendered with series template & dataSource = null", functi
     assert.ok(drawn.called);
 });
 
-QUnit.test("Ticks calculation after resize", function(assert) {
+QUnit.test('Ticks calculation after resize', function(assert) {
     var container = this.$container.width(300).height(150),
         chart = this.createChart({
             animation: {
                 enabled: false
             },
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
-            series: [ { type: "bar" }],
+            series: [ { type: 'bar' }],
             legend: {
                 visible: false
             }
@@ -1506,7 +1506,7 @@ QUnit.test("Ticks calculation after resize", function(assert) {
     assert.deepEqual(chart._argumentAxes[0].getTicksValues().majorTicksValues, [1, 1.5, 2]);
 });
 
-QUnit.test("Set user's small ticksInterval (user's axisDivisionFactor undefined)", function(assert) {
+QUnit.test('Set user\'s small ticksInterval (user\'s axisDivisionFactor undefined)', function(assert) {
     var data = [{
         arg: 1950,
         val: 2525778669
@@ -1518,7 +1518,7 @@ QUnit.test("Set user's small ticksInterval (user's axisDivisionFactor undefined)
         val: 6916183482
     }];
 
-    this.$container.css({ width: "1000px", height: "600px" });
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -1534,16 +1534,16 @@ QUnit.test("Set user's small ticksInterval (user's axisDivisionFactor undefined)
             tickInterval: 2,
             label: {
                 format: {
-                    type: "decimal"
+                    type: 'decimal'
                 }
             }
         }
     });
 
-    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 2, "user's tickinterval");
+    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 2, 'user\'s tickinterval');
 });
 
-QUnit.test("Calculate tickInterval, when user's ticksInterval and axisDivisionFactor are defined", function(assert) {
+QUnit.test('Calculate tickInterval, when user\'s ticksInterval and axisDivisionFactor are defined', function(assert) {
     var data = [{
         arg: 1950,
         val: 2525778669
@@ -1555,7 +1555,7 @@ QUnit.test("Calculate tickInterval, when user's ticksInterval and axisDivisionFa
         val: 6916183482
     }];
 
-    this.$container.css({ width: "1000px", height: "600px" });
+    this.$container.css({ width: '1000px', height: '600px' });
 
     var chart = this.createChart({
         size: {
@@ -1572,54 +1572,54 @@ QUnit.test("Calculate tickInterval, when user's ticksInterval and axisDivisionFa
             axisDivisionFactor: 200,
             label: {
                 format: {
-                    type: "decimal"
+                    type: 'decimal'
                 }
             }
         }
     });
 
-    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 20, "calculated tickinterval");
+    assert.deepEqual(chart._argumentAxes[0]._tickInterval, 20, 'calculated tickinterval');
 });
 
 // T682989
-QUnit.test("two series with equal names", function(assert) {
+QUnit.test('two series with equal names', function(assert) {
     var chart = this.createChart({
-        series: [{ name: "s1", axis: "a1" }, { name: "s2", axis: "a2" }, { name: "s1", axis: "a2" }]
+        series: [{ name: 's1', axis: 'a1' }, { name: 's2', axis: 'a2' }, { name: 's1', axis: 'a2' }]
     });
 
     chart.option({
-        series: [{ name: "s1", axis: "a1" }, { name: "s2", axis: "a2" }, { name: "s1", axis: "a2" }]
+        series: [{ name: 's1', axis: 'a1' }, { name: 's2', axis: 'a2' }, { name: 's1', axis: 'a2' }]
     });
 
     var updatedSeries = chart.getAllSeries();
-    assert.strictEqual(updatedSeries[0].axis, "a1");
-    assert.strictEqual(updatedSeries[1].axis, "a2");
-    assert.strictEqual(updatedSeries[2].axis, "a2");
+    assert.strictEqual(updatedSeries[0].axis, 'a1');
+    assert.strictEqual(updatedSeries[1].axis, 'a2');
+    assert.strictEqual(updatedSeries[2].axis, 'a2');
 });
 
-QUnit.test("keep selected point after dataSource updating", function(assert) {
-    var dataSource = [{ arg: "arg1", val: 1 }],
+QUnit.test('keep selected point after dataSource updating', function(assert) {
+    var dataSource = [{ arg: 'arg1', val: 1 }],
         chart = this.createChart({
             series: [{}],
             dataSource: dataSource
         });
 
     chart.getAllSeries()[0].getAllPoints()[0].select();
-    dataSource.push({ arg: "arg2", val: 1 });
-    chart.option("dataSource", dataSource);
-    chart.getDataSource().store().insert({ arg: "arg3", val: 3 });
+    dataSource.push({ arg: 'arg2', val: 1 });
+    chart.option('dataSource', dataSource);
+    chart.getDataSource().store().insert({ arg: 'arg3', val: 3 });
     chart.getDataSource().reload();
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
 });
 
-QUnit.test("keep selected point after panning", function(assert) {
+QUnit.test('keep selected point after panning', function(assert) {
     var dataSource = [{ arg: 100, val: 1 }, { arg: 200, val: 1 }, { arg: 300, val: 3 }],
         chart = this.createChart({
             series: [{}],
             dataSource: dataSource,
             zoomAndPan: {
-                argumentAxis: "both"
+                argumentAxis: 'both'
             }
         });
 
@@ -1629,20 +1629,20 @@ QUnit.test("keep selected point after panning", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
 });
 
-QUnit.test("reject selection after options updating", function(assert) {
-    var dataSource = [{ arg: "arg1", val: 1 }],
+QUnit.test('reject selection after options updating', function(assert) {
+    var dataSource = [{ arg: 'arg1', val: 1 }],
         chart = this.createChart({
             series: [{}],
             dataSource: dataSource
         });
 
     chart.getAllSeries()[0].getAllPoints()[0].select();
-    chart.option("rotated", true);
+    chart.option('rotated', true);
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
 });
 
-QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has null values", function(assert) {
+QUnit.test('T801302. Chart do not throws exceptions when a discrete axis has null values', function(assert) {
     var chart = this.createChart({
         dataSource: [
             { arg: 1, val: null },
@@ -1651,16 +1651,16 @@ QUnit.test("T801302. Chart do not throws exceptions when a discrete axis has nul
         ],
         series: {},
         commonAxisSettings: {
-            type: "discrete",
-            argumentType: "string",
-            valueType: "string"
+            type: 'discrete',
+            argumentType: 'string',
+            valueType: 'string'
         }
     });
 
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
+QUnit.test('Change series and argumentAxis with visualRange options', function(assert) {
     var chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: {}
@@ -1670,14 +1670,14 @@ QUnit.test("Change series and argumentAxis with visualRange options", function(a
     chart.option({
         series: {}
     });
-    chart.option("argumentAxis.tickInterval", 0.2);
-    chart.option("argumentAxis.visualRange", [6, 7]);
+    chart.option('argumentAxis.tickInterval', 0.2);
+    chart.option('argumentAxis.visualRange', [6, 7]);
     chart.endUpdate();
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
 });
 
-QUnit.test("Change axis type at runtime from continuous to discrete with visual range", function(assert) {
+QUnit.test('Change axis type at runtime from continuous to discrete with visual range', function(assert) {
     const onZoomEnd = sinon.stub();
     const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 1 }, { arg: 3, val: 1 }],
@@ -1686,8 +1686,8 @@ QUnit.test("Change axis type at runtime from continuous to discrete with visual 
     });
 
     chart.beginUpdate();
-    chart.option("argumentAxis.visualRange", [2, 3]);
-    chart.option("argumentAxis.type", "discrete");
+    chart.option('argumentAxis.visualRange', [2, 3]);
+    chart.option('argumentAxis.type', 'discrete');
     chart.endUpdate();
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), {
@@ -1700,20 +1700,20 @@ QUnit.test("Change axis type at runtime from continuous to discrete with visual 
     assert.deepEqual(onZoomEnd.lastCall.args[0].zoomFactor, NaN);
 });
 
-QUnit.test("Change axis type at runtime from discrete to continuous with visual range", function(assert) {
+QUnit.test('Change axis type at runtime from discrete to continuous with visual range', function(assert) {
     const onZoomEnd = sinon.stub();
     const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 1 }, { arg: 3, val: 1 }],
         argumentAxis: {
-            type: "discrete"
+            type: 'discrete'
         },
         series: {},
         onZoomEnd
     });
 
     chart.beginUpdate();
-    chart.option("argumentAxis.type", "continuous");
-    chart.option("argumentAxis.visualRange", [2, 3]);
+    chart.option('argumentAxis.type', 'continuous');
+    chart.option('argumentAxis.visualRange', [2, 3]);
     chart.endUpdate();
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), {
@@ -1724,14 +1724,14 @@ QUnit.test("Change axis type at runtime from discrete to continuous with visual 
     assert.deepEqual(onZoomEnd.lastCall.args[0].zoomFactor, NaN);
 });
 
-QUnit.test("Validate Axis on update", function(assert) {
+QUnit.test('Validate Axis on update', function(assert) {
     const chart = this.createChart({
         valueAxis: {
             visualRange: [new Date(2019, 1, 1), new Date(2020, 1, 1)],
-            valueType: "datetime",
+            valueType: 'datetime',
             constantLines: [{
                 value: new Date(2019, 6, 3),
-                color: "black",
+                color: 'black',
                 width: 5
             }]
         },
@@ -1740,24 +1740,24 @@ QUnit.test("Validate Axis on update", function(assert) {
         }
     });
 
-    chart.option("valueAxis.constantLines[0].value", new Date(2020, 7, 1));
+    chart.option('valueAxis.constantLines[0].value', new Date(2020, 7, 1));
 
-    assert.deepEqual(chart.getValueAxis().getOptions().dataType, "datetime");
+    assert.deepEqual(chart.getValueAxis().getOptions().dataType, 'datetime');
 });
 
-QUnit.module("Legend title", $.extend({}, moduleSetup, {
+QUnit.module('Legend title', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
 
         this.options = {
             dataSource: [{ arg: 1, val: -0.25, val1: 9.75 }, { arg: 2, val: 10.2, val1: 1.9 }],
             series: [
-                { name: "seriesseriesseriesseriesseries" },
-                { valueField: "val1", name: "series1" }
+                { name: 'seriesseriesseriesseriesseries' },
+                { valueField: 'val1', name: 'series1' }
             ],
             legend: {
                 title: {
-                    text: "Super title",
+                    text: 'Super title',
                     margin: 10
                 }
             }
@@ -1768,16 +1768,16 @@ QUnit.module("Legend title", $.extend({}, moduleSetup, {
     }
 }));
 
-QUnit.test("check default horizontal alignment(left)", function(assert) {
+QUnit.test('check default horizontal alignment(left)', function(assert) {
     var chart = this.createChart({});
     assert.equal(chart._legend._title._group._settings.translateX, 10);
 });
 
-QUnit.test("check horizontal alignment === center", function(assert) {
+QUnit.test('check horizontal alignment === center', function(assert) {
     var chart = this.createChart({
         legend: {
             title: {
-                horizontalAlignment: "center",
+                horizontalAlignment: 'center',
                 margin: {
                     left: 40,
                     right: 100
@@ -1789,7 +1789,7 @@ QUnit.test("check horizontal alignment === center", function(assert) {
     assert.roughEqual(chart._legend._insideLegendGroup._settings.translateX, 370, 5);
 });
 
-QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
+QUnit.module('Auto hide point markers', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
         var dataSource = [];
@@ -1812,7 +1812,7 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
         this.options = {
             dataSource: dataSource,
             zoomAndPan: {
-                argumentAxis: "both"
+                argumentAxis: 'both'
             },
             argumentAxis: {
                 visualRange: [30000, 400000]
@@ -1827,7 +1827,7 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
     }
 }));
 
-QUnit.test("reject duplicate points for hiding calculation (T755575)", function(assert) {
+QUnit.test('reject duplicate points for hiding calculation (T755575)', function(assert) {
     var chart = moduleSetup.createChart.call(this, {
         dataSource: [
             { arg: 100000, val: 5 },
@@ -1847,7 +1847,7 @@ QUnit.test("reject duplicate points for hiding calculation (T755575)", function(
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("check density of points continuous series", function(assert) {
+QUnit.test('check density of points continuous series', function(assert) {
     var chart = moduleSetup.createChart.call(this, {
         dataSource: [
             { arg: 100000, val: 4.98 },
@@ -1868,7 +1868,7 @@ QUnit.test("check density of points continuous series", function(assert) {
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("auto switching point markers visibility", function(assert) {
+QUnit.test('auto switching point markers visibility', function(assert) {
     var chart = this.createChart({});
 
     assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
@@ -1878,20 +1878,20 @@ QUnit.test("auto switching point markers visibility", function(assert) {
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 
     chart.getArgumentAxis().visualRange([30000, 400000]);
-    chart.option("autoHidePointMarkers", false);
+    chart.option('autoHidePointMarkers', false);
 
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("auto switching point markers visibility is disabled for non-line/area series", function(assert) {
+QUnit.test('auto switching point markers visibility is disabled for non-line/area series', function(assert) {
     var chart = this.createChart({
-        series: [{ type: "bar" }]
+        series: [{ type: 'bar' }]
     });
 
     assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("bar series are not used to define autoHiding", function(assert) {
+QUnit.test('bar series are not used to define autoHiding', function(assert) {
     var chart = this.createChart({
         size: {
             width: 820,
@@ -1901,15 +1901,15 @@ QUnit.test("bar series are not used to define autoHiding", function(assert) {
             visualRange: [10000, 100000]
         },
         series: [
-            { type: "bar" },
-            { type: "line", valueField: "val1" }
+            { type: 'bar' },
+            { type: 'line', valueField: 'val1' }
         ]
     });
 
     assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("financial series are not used to define autoHiding", function(assert) {
+QUnit.test('financial series are not used to define autoHiding', function(assert) {
     var chart = this.createChart({
         size: {
             width: 820,
@@ -1918,17 +1918,17 @@ QUnit.test("financial series are not used to define autoHiding", function(assert
         argumentAxis: {
             visualRange: [new Date(10000), new Date(89000)]
         },
-        commonSeriesSettings: { argumentField: "date" },
+        commonSeriesSettings: { argumentField: 'date' },
         series: [
-            { type: "candlestick" },
-            { type: "line", valueField: "val1" }
+            { type: 'candlestick' },
+            { type: 'line', valueField: 'val1' }
         ]
     });
 
     assert.ok(chart.getAllSeries()[1].getVisiblePoints()[0].graphic);
 });
 
-QUnit.test("show hovered point (points are hidden automatically)", function(assert) {
+QUnit.test('show hovered point (points are hidden automatically)', function(assert) {
     var chart = this.createChart({});
 
     var point = chart.getAllSeries()[0].getVisiblePoints()[0];
@@ -1941,7 +1941,7 @@ QUnit.test("show hovered point (points are hidden automatically)", function(asse
     assert.notOk(point.graphic);
 });
 
-QUnit.test("show selected point (points are hidden automatically)", function(assert) {
+QUnit.test('show selected point (points are hidden automatically)', function(assert) {
     var chart = this.createChart({});
 
     var point = chart.getAllSeries()[0].getVisiblePoints()[0];
@@ -1958,12 +1958,12 @@ QUnit.test("show selected point (points are hidden automatically)", function(ass
     assert.notOk(point.graphic);
 });
 
-QUnit.module("B237847. Groups and classes", moduleSetup);
+QUnit.module('B237847. Groups and classes', moduleSetup);
 
-QUnit.test("dxChart groups and classes", function(assert) {
+QUnit.test('dxChart groups and classes', function(assert) {
     var $container = this.$container;
     $container.dxChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -1973,29 +1973,29 @@ QUnit.test("dxChart groups and classes", function(assert) {
         dataSource: [{ arg: 0, val: 2 }]
     });
 
-    assert.equal($container.find(".dxc-arg-title").length, 1, "There is one arg title group");
-    assert.equal($container.find(".dxc-val-title").length, 1, "There is one val title group");
+    assert.equal($container.find('.dxc-arg-title').length, 1, 'There is one arg title group');
+    assert.equal($container.find('.dxc-val-title').length, 1, 'There is one val title group');
 
-    assert.equal($container.find(".dxc-background").length, 1, "There is one background group");
-    assert.equal($container.find(".dxc-strips-group").length, 1, "There is one strips group");
-    assert.equal($container.find(".dxc-arg-strips").length, 1, "There is one h-strips group");
-    assert.equal($container.find(".dxc-val-strips").length, 1, "There is one v-strips group");
-    assert.equal($container.find(".dxc-axes-group").length, 1, "There is one axes group");
-    assert.equal($container.find(".dxc-arg-axis").length, 1, "There is one h-axis group");
-    assert.equal($container.find(".dxc-val-axis").length, 1, "There is one v-axis group");
-    assert.equal($container.find(".dxc-border").length, 1, "There is one border group");
-    assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
-    assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
-    assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
-    assert.equal($container.find(".dxc-constant-lines-group").length, 2, "There is one constant line group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 6, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 6, "There is one v-constant-lines group");
+    assert.equal($container.find('.dxc-background').length, 1, 'There is one background group');
+    assert.equal($container.find('.dxc-strips-group').length, 1, 'There is one strips group');
+    assert.equal($container.find('.dxc-arg-strips').length, 1, 'There is one h-strips group');
+    assert.equal($container.find('.dxc-val-strips').length, 1, 'There is one v-strips group');
+    assert.equal($container.find('.dxc-axes-group').length, 1, 'There is one axes group');
+    assert.equal($container.find('.dxc-arg-axis').length, 1, 'There is one h-axis group');
+    assert.equal($container.find('.dxc-val-axis').length, 1, 'There is one v-axis group');
+    assert.equal($container.find('.dxc-border').length, 1, 'There is one border group');
+    assert.equal($container.find('.dxc-series-group').length, 1, 'There is one series group');
+    assert.equal($container.find('.dxc-labels-group').length, 1, 'There is one labels group');
+    assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
+    assert.equal($container.find('.dxc-constant-lines-group').length, 2, 'There is one constant line group');
+    assert.equal($container.find('.dxc-arg-constant-lines').length, 6, 'There is one h-constant-lines group');
+    assert.equal($container.find('.dxc-val-constant-lines').length, 6, 'There is one v-constant-lines group');
 });
 
-QUnit.test("dxChart groups and classes after redraw", function(assert) {
+QUnit.test('dxChart groups and classes after redraw', function(assert) {
     var $container = this.$container;
     $container.dxChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -2007,28 +2007,28 @@ QUnit.test("dxChart groups and classes after redraw", function(assert) {
 
     $container.dxChart({ dataSource: [{ arg: 0, val: 3 }] });
 
-    assert.equal($container.find(".dxc-arg-title").length, 1, "There is one arg title group");
-    assert.equal($container.find(".dxc-val-title").length, 1, "There is one val title group");
-    assert.equal($container.find(".dxc-background").length, 1, "There is one background group");
-    assert.equal($container.find(".dxc-strips-group").length, 1, "There is one strips group");
-    assert.equal($container.find(".dxc-arg-strips").length, 1, "There is one h-strips group");
-    assert.equal($container.find(".dxc-val-strips").length, 1, "There is one v-strips group");
-    assert.equal($container.find(".dxc-axes-group").length, 1, "There is one axes group");
-    assert.equal($container.find(".dxc-arg-axis").length, 1, "There is one h-axis group");
-    assert.equal($container.find(".dxc-val-axis").length, 1, "There is one v-axis group");
-    assert.equal($container.find(".dxc-border").length, 1, "There is one border group");
-    assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
-    assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
-    assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
-    assert.equal($container.find(".dxc-constant-lines-group").length, 2, "There is one constant lines group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 6, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 6, "There is one v-constant-line group");
+    assert.equal($container.find('.dxc-arg-title').length, 1, 'There is one arg title group');
+    assert.equal($container.find('.dxc-val-title').length, 1, 'There is one val title group');
+    assert.equal($container.find('.dxc-background').length, 1, 'There is one background group');
+    assert.equal($container.find('.dxc-strips-group').length, 1, 'There is one strips group');
+    assert.equal($container.find('.dxc-arg-strips').length, 1, 'There is one h-strips group');
+    assert.equal($container.find('.dxc-val-strips').length, 1, 'There is one v-strips group');
+    assert.equal($container.find('.dxc-axes-group').length, 1, 'There is one axes group');
+    assert.equal($container.find('.dxc-arg-axis').length, 1, 'There is one h-axis group');
+    assert.equal($container.find('.dxc-val-axis').length, 1, 'There is one v-axis group');
+    assert.equal($container.find('.dxc-border').length, 1, 'There is one border group');
+    assert.equal($container.find('.dxc-series-group').length, 1, 'There is one series group');
+    assert.equal($container.find('.dxc-labels-group').length, 1, 'There is one labels group');
+    assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
+    assert.equal($container.find('.dxc-constant-lines-group').length, 2, 'There is one constant lines group');
+    assert.equal($container.find('.dxc-arg-constant-lines').length, 6, 'There is one h-constant-lines group');
+    assert.equal($container.find('.dxc-val-constant-lines').length, 6, 'There is one v-constant-line group');
 });
 
-QUnit.test("Pie chart groups and classes after redraw", function(assert) {
+QUnit.test('Pie chart groups and classes after redraw', function(assert) {
     var $container = this.$container;
     $container.dxPieChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -2040,15 +2040,15 @@ QUnit.test("Pie chart groups and classes after redraw", function(assert) {
 
     $container.dxPieChart({ dataSource: [{ arg: 0, val: 3 }] });
 
-    assert.equal($container.find(".dxc-title").length, 1, "There is one title group");
-    assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
-    assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
-    assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
+    assert.equal($container.find('.dxc-title').length, 1, 'There is one title group');
+    assert.equal($container.find('.dxc-series-group').length, 1, 'There is one series group');
+    assert.equal($container.find('.dxc-labels-group').length, 1, 'There is one labels group');
+    assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
 });
 
-QUnit.test("Checking title appending", function(assert) {
+QUnit.test('Checking title appending', function(assert) {
     this.createChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -2060,15 +2060,15 @@ QUnit.test("Checking title appending", function(assert) {
 
     this.$container.dxChart({ dataSource: [{ arg: 0, val: 3 }] });
 
-    assert.equal(this.$container.find(".dxc-arg-title").length, 1, "There is one arg title group");
-    assert.equal(this.$container.find(".dxc-val-title").length, 1, "There is one val title group");
-    assert.ok(this.$container.find(".dxc-title").children().length > 0, "Title group should not be empty");
+    assert.equal(this.$container.find('.dxc-arg-title').length, 1, 'There is one arg title group');
+    assert.equal(this.$container.find('.dxc-val-title').length, 1, 'There is one val title group');
+    assert.ok(this.$container.find('.dxc-title').children().length > 0, 'Title group should not be empty');
 });
 
-QUnit.test("Checking title appending in pie chart", function(assert) {
+QUnit.test('Checking title appending in pie chart', function(assert) {
     var $container = this.$container;
     $container.dxPieChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -2080,26 +2080,26 @@ QUnit.test("Checking title appending in pie chart", function(assert) {
 
     $container.dxPieChart({ dataSource: [{ arg: 0, val: 3 }] });
 
-    assert.equal($container.find(".dxc-title").length, 1, "There is one title group");
-    assert.ok($container.find(".dxc-title").children().length > 0, "Title group should not be empty");
+    assert.equal($container.find('.dxc-title').length, 1, 'There is one title group');
+    assert.ok($container.find('.dxc-title').children().length > 0, 'Title group should not be empty');
 });
 
-QUnit.module("Multistyles points", moduleSetup);
+QUnit.module('Multistyles points', moduleSetup);
 
-QUnit.test("Multicolor bars", function(assert) {
+QUnit.test('Multicolor bars', function(assert) {
     var chart = this.createChart({
             size: {
                 height: 400
             },
             title: {
-                text: "dxChart Title"
+                text: 'dxChart Title'
             },
             valueAxis: {
-                valueType: "numeric"
+                valueType: 'numeric'
             },
             commonSeriesSettings: {
-                argumentField: "year",
-                type: "bar",
+                argumentField: 'year',
+                type: 'bar',
                 point: {
                     visible: true
                 },
@@ -2109,41 +2109,41 @@ QUnit.test("Multicolor bars", function(assert) {
             },
             customizePoint: function() {
                 var options = {};
-                if(this.seriesName === "Africa") {
+                if(this.seriesName === 'Africa') {
                     switch(this.argument) {
-                        case "1949": {
-                            options.color = "orangered";
+                        case '1949': {
+                            options.color = 'orangered';
                             options.hoverStyle = {
                                 hatching: {
-                                    direction: "right"
+                                    direction: 'right'
                                 }
                             };
                             break;
                         }
-                        case "1950": {
-                            options.color = "deepskyblue";
+                        case '1950': {
+                            options.color = 'deepskyblue';
                             break;
                         }
-                        case "1951": {
-                            options.color = "red";
+                        case '1951': {
+                            options.color = 'red';
                             break;
                         }
-                        case "1952": {
-                            options.color = "pink";
+                        case '1952': {
+                            options.color = 'pink';
                             options.visible = false;
                             break;
                         }
-                        case "1953": {
-                            options.color = "orange";
+                        case '1953': {
+                            options.color = 'orange';
                             options.hoverStyle = {
                                 hatching: {
-                                    direction: "left"
+                                    direction: 'left'
                                 }
                             };
                             break;
                         }
-                        case "1954": {
-                            options.color = "green";
+                        case '1954': {
+                            options.color = 'green';
                             break;
                         }
                     }
@@ -2152,82 +2152,82 @@ QUnit.test("Multicolor bars", function(assert) {
             },
             series: [
                 {
-                    name: "Africa",
-                    valueField: "Africa"
+                    name: 'Africa',
+                    valueField: 'Africa'
                 }, {
-                    name: "America",
-                    valueField: "America"
+                    name: 'America',
+                    valueField: 'America'
                 }],
             dataSource: [{
-                "year": "1949",
-                "Africa": 25,
-                "America": 25
+                'year': '1949',
+                'Africa': 25,
+                'America': 25
             }, {
-                "year": "1950",
-                "Africa": 36,
-                "America": 25
+                'year': '1950',
+                'Africa': 36,
+                'America': 25
             }, {
-                "year": "1951",
-                "Africa": "1d0",
-                "America": 25
+                'year': '1951',
+                'Africa': '1d0',
+                'America': 25
             }, {
-                "year": "1952",
-                "Africa": 44,
-                "America": 25
+                'year': '1952',
+                'Africa': 44,
+                'America': 25
             }, {
-                "year": "1953",
-                "Africa": 33,
-                "America": 25
+                'year': '1953',
+                'Africa': 33,
+                'America': 25
             }, {
-                "year": "1954",
-                "Africa": 51,
-                "America": 25
+                'year': '1954',
+                'Africa': 51,
+                'America': 25
 
             }],
             animation: { enabled: false }
         }),
         points = chart.series[1].getPoints();
 
-    assert.equal(points[4]._options.visible, true, "Bar points always should be visible");
+    assert.equal(points[4]._options.visible, true, 'Bar points always should be visible');
 
     assert.ok(chart);
 });
 
-QUnit.module("groups order", moduleSetup);
+QUnit.module('groups order', moduleSetup);
 
 function checkOrder(assert, groups, order) {
-    assert.strictEqual(groups.length, order.length, "count");
+    assert.strictEqual(groups.length, order.length, 'count');
     for(var i = 0; i < order.length; i++) {
-        assert.strictEqual($(groups[i]).attr("class"), order[i], i + "-th group must be " + order[i]);
+        assert.strictEqual($(groups[i]).attr('class'), order[i], i + '-th group must be ' + order[i]);
     }
 }
 
 var VALIDATE_GROUPS = [
-    "dxc-background",
-    "dxc-title",
-    "dxc-strips-group",
-    "dxc-grids-group",
-    "dxc-border",
-    "dxc-axes-group",
-    "dxc-strips-labels-group",
-    "dxc-constant-lines-group",
-    "dxc-series-group",
-    "dxc-constant-lines-group",
-    "dxc-scale-breaks",
-    "dxc-labels-group",
-    "dxc-crosshair-cursor",
-    "dxc-legend",
-    "dxc-annotations",
-    "dx-export-menu"
+    'dxc-background',
+    'dxc-title',
+    'dxc-strips-group',
+    'dxc-grids-group',
+    'dxc-border',
+    'dxc-axes-group',
+    'dxc-strips-labels-group',
+    'dxc-constant-lines-group',
+    'dxc-series-group',
+    'dxc-constant-lines-group',
+    'dxc-scale-breaks',
+    'dxc-labels-group',
+    'dxc-crosshair-cursor',
+    'dxc-legend',
+    'dxc-annotations',
+    'dx-export-menu'
 ];
 
-QUnit.test("Legend inside position", function(assert) {
+QUnit.test('Legend inside position', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "inside"
+                position: 'inside'
             },
             tooltip: {
                 enabled: true
@@ -2235,24 +2235,24 @@ QUnit.test("Legend inside position", function(assert) {
             crosshair: {
                 enabled: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
         root = $(chart._renderer.root.element),
-        groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
-        groups = root.find(">" + groupTag);
+        groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
+        groups = root.find('>' + groupTag);
 
     checkOrder(assert, groups, VALIDATE_GROUPS);
 });
 
-QUnit.test("Legend inside position. Zooming", function(assert) {
+QUnit.test('Legend inside position. Zooming', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "inside"
+                position: 'inside'
             },
             tooltip: {
                 enabled: true
@@ -2260,7 +2260,7 @@ QUnit.test("Legend inside position. Zooming", function(assert) {
             crosshair: {
                 enabled: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
@@ -2271,19 +2271,19 @@ QUnit.test("Legend inside position. Zooming", function(assert) {
     chart.zoomArgument(1, 2);
 
     root = $(chart._renderer.root.element),
-    groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
-    groups = root.find(">" + groupTag);
+    groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
+    groups = root.find('>' + groupTag);
 
     checkOrder(assert, groups, VALIDATE_GROUPS);
 });
 
-QUnit.test("Legend outside position", function(assert) {
+QUnit.test('Legend outside position', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "outside"
+                position: 'outside'
             },
             tooltip: {
                 enabled: true
@@ -2291,24 +2291,24 @@ QUnit.test("Legend outside position", function(assert) {
             crosshair: {
                 enabled: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
         root = $(chart._renderer.root.element),
-        groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
-        groups = root.find(">" + groupTag);
+        groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
+        groups = root.find('>' + groupTag);
 
     checkOrder(assert, groups, VALIDATE_GROUPS);
 });
 
-QUnit.test("Legend outside position. Zooming", function(assert) {
+QUnit.test('Legend outside position. Zooming', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "outside"
+                position: 'outside'
             },
             tooltip: {
                 enabled: true
@@ -2316,7 +2316,7 @@ QUnit.test("Legend outside position. Zooming", function(assert) {
             crosshair: {
                 enabled: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
@@ -2327,19 +2327,19 @@ QUnit.test("Legend outside position. Zooming", function(assert) {
     chart.zoomArgument(1, 2);
 
     root = $(chart._renderer.root.element),
-    groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
-    groups = root.find(">" + groupTag);
+    groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
+    groups = root.find('>' + groupTag);
 
     checkOrder(assert, groups, VALIDATE_GROUPS);
 });
 
-QUnit.test("ScrollBar", function(assert) {
+QUnit.test('ScrollBar', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "inside"
+                position: 'inside'
             },
             tooltip: {
                 enabled: true
@@ -2350,26 +2350,26 @@ QUnit.test("ScrollBar", function(assert) {
             scrollBar: {
                 visible: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
         root = $(chart._renderer.root.element),
-        groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
-        groups = root.find(">" + groupTag);
+        groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g',
+        groups = root.find('>' + groupTag);
 
     var expectedGroups = VALIDATE_GROUPS.slice();
-    expectedGroups.splice(-2, 0, "dxc-scroll-bar");
+    expectedGroups.splice(-2, 0, 'dxc-scroll-bar');
     checkOrder(assert, groups, expectedGroups);
 });
 
-QUnit.test("Loading indicator should be the last", function(assert) {
+QUnit.test('Loading indicator should be the last', function(assert) {
     var chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
             series: {},
-            title: "test title",
+            title: 'test title',
             legend: {
-                position: "inside"
+                position: 'inside'
             },
             tooltip: {
                 enabled: true
@@ -2377,67 +2377,67 @@ QUnit.test("Loading indicator should be the last", function(assert) {
             crosshair: {
                 enabled: true
             },
-            "export": {
+            'export': {
                 enabled: true
             }
         }),
         root = $(chart._renderer.root.element),
-        groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g";
+        groupTag = root[0].tagName.toLowerCase() === 'div' ? 'div' : 'g';
 
     chart.showLoadingIndicator();
     var expectedGroups = VALIDATE_GROUPS.slice();
-    expectedGroups.push("dx-loading-indicator");
-    checkOrder(assert, root.find(">" + groupTag), expectedGroups);
+    expectedGroups.push('dx-loading-indicator');
+    checkOrder(assert, root.find('>' + groupTag), expectedGroups);
 });
 
-QUnit.module("Private functions", {
+QUnit.module('Private functions', {
     beforeEach: function() {
-        this.$container = $("#chartContainer");
+        this.$container = $('#chartContainer');
     }
 });
 
-QUnit.test("Get pane index when panes is object", function(assert) {
+QUnit.test('Get pane index when panes is object', function(assert) {
     var chart = createChartInstance({
             panes: {
-                name: "pane-name"
+                name: 'pane-name'
             },
             series: {}
         }, this.$container),
-        paneIndex = chart._getPaneIndex("pane-name");
+        paneIndex = chart._getPaneIndex('pane-name');
 
     // assert
-    assert.equal(paneIndex, 0, "Pane index should be 0");
+    assert.equal(paneIndex, 0, 'Pane index should be 0');
 });
 
-QUnit.test("Get pane index when panes is array", function(assert) {
+QUnit.test('Get pane index when panes is array', function(assert) {
     var chart = createChartInstance({
             panes: [{
-                name: "pane1"
+                name: 'pane1'
             }, {
-                name: "pane2"
+                name: 'pane2'
             }, {
-                name: "pane3"
+                name: 'pane3'
             }]
         }, this.$container),
-        paneIndex1 = chart._getPaneIndex("pane1"),
-        paneIndex2 = chart._getPaneIndex("pane2"),
-        paneIndex3 = chart._getPaneIndex("pane3");
+        paneIndex1 = chart._getPaneIndex('pane1'),
+        paneIndex2 = chart._getPaneIndex('pane2'),
+        paneIndex3 = chart._getPaneIndex('pane3');
 
     // assert
-    assert.equal(paneIndex1, 0, "First pane index should be 0");
-    assert.equal(paneIndex2, 1, "Second pane index should be 1");
-    assert.equal(paneIndex3, 2, "Third pane index should be 2");
+    assert.equal(paneIndex1, 0, 'First pane index should be 0');
+    assert.equal(paneIndex2, 1, 'Second pane index should be 1');
+    assert.equal(paneIndex3, 2, 'Third pane index should be 2');
 });
 
-QUnit.test("Get pane border visibility when commonPaneSettings border is undefined", function(assert) {
+QUnit.test('Get pane border visibility when commonPaneSettings border is undefined', function(assert) {
     var chart = createChartInstance({
             panes: [{
-                name: "pane1",
+                name: 'pane1',
                 border: {
                     visible: true
                 }
             }, {
-                name: "pane2",
+                name: 'pane2',
                 border: {
                     visible: false
                 }
@@ -2447,11 +2447,11 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is undefin
         borderVisible2 = chart._getPaneBorderVisibility(1);
 
     // assert
-    assert.equal(borderVisible1, true, "First pane border should be visible");
-    assert.equal(borderVisible2, false, "Second pane border should not be visible");
+    assert.equal(borderVisible1, true, 'First pane border should be visible');
+    assert.equal(borderVisible2, false, 'Second pane border should not be visible');
 });
 
-QUnit.test("Get pane border visibility when commonPaneSettings border is visible ", function(assert) {
+QUnit.test('Get pane border visibility when commonPaneSettings border is visible ', function(assert) {
     var chart = createChartInstance({
             commonPaneSettings: {
                 border: {
@@ -2459,14 +2459,14 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is visible
                 }
             },
             panes: [{
-                name: "pane1"
+                name: 'pane1'
             }, {
-                name: "pane2",
+                name: 'pane2',
                 border: {
                     visible: true
                 }
             }, {
-                name: "pane3",
+                name: 'pane3',
                 border: {
                     visible: false
                 }
@@ -2477,12 +2477,12 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is visible
         borderVisible3 = chart._getPaneBorderVisibility(2);
 
     // assert
-    assert.equal(borderVisible1, true, "First pane border should be visible");
-    assert.equal(borderVisible2, true, "Second pane border should be visible");
-    assert.equal(borderVisible3, false, "Third pane border should not be visible");
+    assert.equal(borderVisible1, true, 'First pane border should be visible');
+    assert.equal(borderVisible2, true, 'Second pane border should be visible');
+    assert.equal(borderVisible3, false, 'Third pane border should not be visible');
 });
 
-QUnit.test("Get pane border visibility when commonPaneSettings border is not visible ", function(assert) {
+QUnit.test('Get pane border visibility when commonPaneSettings border is not visible ', function(assert) {
     var chart = createChartInstance({
             commonPaneSettings: {
                 border: {
@@ -2490,14 +2490,14 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is not vis
                 }
             },
             panes: [{
-                name: "pane1"
+                name: 'pane1'
             }, {
-                name: "pane2",
+                name: 'pane2',
                 border: {
                     visible: true
                 }
             }, {
-                name: "pane3",
+                name: 'pane3',
                 border: {
                     visible: false
                 }
@@ -2508,17 +2508,17 @@ QUnit.test("Get pane border visibility when commonPaneSettings border is not vis
         borderVisible3 = chart._getPaneBorderVisibility(2);
 
     // assert
-    assert.equal(borderVisible1, false, "First pane border should not be visible");
-    assert.equal(borderVisible2, true, "Second pane border should be visible");
-    assert.equal(borderVisible3, false, "Third pane border should not be visible");
+    assert.equal(borderVisible1, false, 'First pane border should not be visible');
+    assert.equal(borderVisible2, true, 'Second pane border should be visible');
+    assert.equal(borderVisible3, false, 'Third pane border should not be visible');
 });
 
 // T336349, T503616
-QUnit.module("Option changing in onDrawn after zooming", {
+QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
-        this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, "move");
-        this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, "move");
-        sinon.spy(rendererModule, "Renderer", function() {
+        this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
+        this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
+        sinon.spy(rendererModule, 'Renderer', function() {
             return new vizMocks.Renderer();
         });
     },
@@ -2529,31 +2529,31 @@ QUnit.module("Option changing in onDrawn after zooming", {
     }
 });
 
-QUnit.test("Legend and title should have original place", function(assert) {
+QUnit.test('Legend and title should have original place', function(assert) {
     // act
     var chart = createChartInstance({
         dataSource: [{ arg: 1, val: 2 }],
         series: [{
-            type: "spline"
+            type: 'spline'
         }],
         size: {
             width: 1000,
             height: 400
         },
-        title: "text",
+        title: 'text',
         legend: {
             visible: true
         }
-    }, $("#chartContainer"));
-    chart.option("onDrawn", function() {
-        this.option("onDrawn", null);
-        this.option("series[0].type", "line");
+    }, $('#chartContainer'));
+    chart.option('onDrawn', function() {
+        this.option('onDrawn', null);
+        this.option('series[0].type', 'line');
     });
     chart.zoomArgument(0, 1);
 
     // assert
-    assert.deepEqual(this.legendShiftSpy.getCall(0).args, this.legendShiftSpy.getCall(1).args, "the same place");
-    assert.deepEqual(this.titleShiftSpy.getCall(0).args, this.titleShiftSpy.getCall(1).args, "title shift");
+    assert.deepEqual(this.legendShiftSpy.getCall(0).args, this.legendShiftSpy.getCall(1).args, 'the same place');
+    assert.deepEqual(this.titleShiftSpy.getCall(0).args, this.titleShiftSpy.getCall(1).args, 'title shift');
 });
 
 QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
@@ -2568,47 +2568,47 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
             valueMarginsEnabled: false
         },
         title: 'original'
-    }, $("#chartContainer"));
+    }, $('#chartContainer'));
     // act
-    chart.option("size", { width: 50, height: 50 });
+    chart.option('size', { width: 50, height: 50 });
 
     // assert
-    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 10, "min arg");
-    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 20, "max arg");
-    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 100, "min val");
-    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 200, "min val");
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 10, 'min arg');
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 20, 'max arg');
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 100, 'min val');
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 200, 'min val');
 });
 
-QUnit.test("Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place", function(assert) {
+QUnit.test('Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place', function(assert) {
     var that = this,
         done = assert.async();
     // act
-    var chart = $("#chartContainer").dxPieChart({
-        sizeGroup: "test-group",
+    var chart = $('#chartContainer').dxPieChart({
+        sizeGroup: 'test-group',
         dataSource: [{ arg: 1, val: 2 }],
         series: {},
-        title: "text",
+        title: 'text',
         legend: {
             visible: true
         },
         onDrawn: function() {
             // assert
-            assert.deepEqual(that.legendShiftSpy.getCall(0).args, that.legendShiftSpy.getCall(1).args, "the same place");
-            assert.deepEqual(that.titleShiftSpy.getCall(0).args, that.titleShiftSpy.getCall(1).args, "title shift");
+            assert.deepEqual(that.legendShiftSpy.getCall(0).args, that.legendShiftSpy.getCall(1).args, 'the same place');
+            assert.deepEqual(that.titleShiftSpy.getCall(0).args, that.titleShiftSpy.getCall(1).args, 'title shift');
             done();
         }
-    }).dxPieChart("instance");
-    chart.option("type", "donut");
+    }).dxPieChart('instance');
+    chart.option('type', 'donut');
 });
 
-QUnit.module("T218011 for dashboards. Private method for getting visible argument bounds", {
+QUnit.module('T218011 for dashboards. Private method for getting visible argument bounds', {
     beforeEach: function() {
-        this.$container = $("#chartContainer");
+        this.$container = $('#chartContainer');
     }
 });
 
-QUnit.test("Category", function(assert) {
-    var categories = ["A", "B", "C", "D", "E"];
+QUnit.test('Category', function(assert) {
+    var categories = ['A', 'B', 'C', 'D', 'E'];
 
     // act
     var chart = createChartInstance({
@@ -2616,16 +2616,16 @@ QUnit.test("Category", function(assert) {
             categories: categories
         },
         series: [{
-            type: "line"
+            type: 'line'
         }]
     }, this.$container);
 
     // assert
-    assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: "A", maxVisible: "E" });
+    assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 'A', maxVisible: 'E' });
 });
 
-QUnit.test("Category. After zoomArgument", function(assert) {
-    var categories = ["A", "B", "C", "D", "E"];
+QUnit.test('Category. After zoomArgument', function(assert) {
+    var categories = ['A', 'B', 'C', 'D', 'E'];
 
     // act
     var chart = createChartInstance({
@@ -2633,20 +2633,20 @@ QUnit.test("Category. After zoomArgument", function(assert) {
             categories: categories
         },
         series: [{
-            type: "line"
+            type: 'line'
         }]
     }, this.$container);
-    chart.zoomArgument("B", "C");
+    chart.zoomArgument('B', 'C');
     // assert
-    assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: "B", maxVisible: "C" });
+    assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 'B', maxVisible: 'C' });
 });
 
-QUnit.test("Numeric", function(assert) {
+QUnit.test('Numeric', function(assert) {
     // act
     var chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
-            type: "line"
+            type: 'line'
         },
         argumentAxis: {
             valueMarginsEnabled: false
@@ -2657,12 +2657,12 @@ QUnit.test("Numeric", function(assert) {
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 20, maxVisible: 40 });
 });
 
-QUnit.test("Numeric. After zoomArgument", function(assert) {
+QUnit.test('Numeric. After zoomArgument', function(assert) {
     // act
     var chart = createChartInstance({
         dataSource: [{ arg: 20, val: 10 }, { arg: 40, val: 11 }],
         series: {
-            type: "line"
+            type: 'line'
         }
     }, this.$container);
     chart.zoomArgument(25, 30);
@@ -2670,18 +2670,18 @@ QUnit.test("Numeric. After zoomArgument", function(assert) {
     assert.deepEqual(chart.getVisibleArgumentBounds(), { minVisible: 25, maxVisible: 30 });
 });
 
-QUnit.module("dxPieChart", moduleSetup);
+QUnit.module('dxPieChart', moduleSetup);
 
-QUnit.test("Checking border hover when pie chart palette changed. B237181", function(assert) {
+QUnit.test('Checking border hover when pie chart palette changed. B237181', function(assert) {
     var dataSource = [
-            { country: "Russia", area: 12, area1: 10 },
-            { country: "Canada", area: 7, area1: 10 },
-            { country: "USA", area: 7, area1: 10 },
-            { country: "China", area: 7, area1: 10 },
-            { country: "Brazil", area: 6, area1: 10 },
-            { country: "Australia", area: 5, area1: 10 },
-            { country: "India", area: 2, area1: 10 },
-            { country: "Others", area: 55, area1: 10 }
+            { country: 'Russia', area: 12, area1: 10 },
+            { country: 'Canada', area: 7, area1: 10 },
+            { country: 'USA', area: 7, area1: 10 },
+            { country: 'China', area: 7, area1: 10 },
+            { country: 'Brazil', area: 6, area1: 10 },
+            { country: 'Australia', area: 5, area1: 10 },
+            { country: 'India', area: 2, area1: 10 },
+            { country: 'Others', area: 55, area1: 10 }
         ],
         chart = this.createPieChart({
             dataSource: dataSource,
@@ -2690,10 +2690,10 @@ QUnit.test("Checking border hover when pie chart palette changed. B237181", func
                     visible: true
                 },
                 hoverStyle: {
-                    hatching: { direction: "left" }
+                    hatching: { direction: 'left' }
                 },
-                argumentField: "country",
-                valueField: "area",
+                argumentField: 'country',
+                valueField: 'area',
             },
             legend: {
                 visible: false
@@ -2704,16 +2704,16 @@ QUnit.test("Checking border hover when pie chart palette changed. B237181", func
         }),
         hoverState;
 
-    chart.option({ palette: "Soft Pastel" });
+    chart.option({ palette: 'Soft Pastel' });
     hoverState = chart.getAllSeries()[0].getPoints()[0].getOptions().styles.hover;
-    assert.equal(hoverState.stroke, "#60a69f", "Hover color is color of series");
-    assert.equal(hoverState["stroke-width"], 0, "Hover width was 0");
+    assert.equal(hoverState.stroke, '#60a69f', 'Hover color is color of series');
+    assert.equal(hoverState['stroke-width'], 0, 'Hover width was 0');
 });
 
-QUnit.test("Pie chart groups and classes", function(assert) {
+QUnit.test('Pie chart groups and classes', function(assert) {
     var $container = this.$container;
     this.createPieChart({
-        title: "test",
+        title: 'test',
         commonSeriesSettings: {
             label: {
                 visible: true
@@ -2723,36 +2723,36 @@ QUnit.test("Pie chart groups and classes", function(assert) {
         dataSource: [{ arg: 0, val: 2 }]
     });
 
-    assert.equal($container.find(".dxc-title").length, 1, "There is one title group");
-    assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
-    assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
-    assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
+    assert.equal($container.find('.dxc-title').length, 1, 'There is one title group');
+    assert.equal($container.find('.dxc-series-group').length, 1, 'There is one series group');
+    assert.equal($container.find('.dxc-labels-group').length, 1, 'There is one labels group');
+    assert.equal($container.find('.dxc-legend').length, 1, 'There is one legend group');
 });
 
 // T412270
-QUnit.test("select point after dataSource updating", function(assert) {
+QUnit.test('select point after dataSource updating', function(assert) {
     // arrange
-    var dataSource = [{ arg: "arg1", val: 1 }],
+    var dataSource = [{ arg: 'arg1', val: 1 }],
         chart = this.createPieChart({
             series: [{}],
             dataSource: dataSource
         });
 
-    dataSource.push({ arg: "arg2", val: 1 });
-    chart.option("dataSource", dataSource);
+    dataSource.push({ arg: 'arg2', val: 1 });
+    chart.option('dataSource', dataSource);
 
     chart.getAllSeries()[0].getAllPoints()[1].select();
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
 
-QUnit.test("Pie chart. Show point in order in dataSource", function(assert) {
+QUnit.test('Pie chart. Show point in order in dataSource', function(assert) {
     var pie = this.createPieChart({
         series: {},
         dataSource: [
-            { arg: "A", val: 11.10 },
-            { arg: "B", val: 12.57 },
-            { arg: "A", val: 13.51 }
+            { arg: 'A', val: 11.10 },
+            { arg: 'B', val: 12.57 },
+            { arg: 'A', val: 13.51 }
         ]
     });
 
@@ -2760,10 +2760,10 @@ QUnit.test("Pie chart. Show point in order in dataSource", function(assert) {
         return p.argument;
     });
 
-    assert.deepEqual(pointArguments, ["A", "B", "A"]);
+    assert.deepEqual(pointArguments, ['A', 'B', 'A']);
 });
 
-QUnit.test("getAllPoints with enabled aggregation", function(assert) {
+QUnit.test('getAllPoints with enabled aggregation', function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: new Date(1994, 2, 1),
@@ -2778,25 +2778,25 @@ QUnit.test("getAllPoints with enabled aggregation", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints().length, 1);
 });
 
-QUnit.module("dxPolarChart", moduleSetup);
+QUnit.module('dxPolarChart', moduleSetup);
 
-QUnit.test("Add extra ticks (endOnTick) for extend visualRange and hide overlapping labels", function(assert) {
+QUnit.test('Add extra ticks (endOnTick) for extend visualRange and hide overlapping labels', function(assert) {
     var data = [
-        { "temperature": 11.8, "sales": 185 },
-        { "temperature": 14.2, "sales": 215 },
-        { "temperature": 15.2, "sales": 332 },
-        { "temperature": 16.4, "sales": 325 },
-        { "temperature": 17.2, "sales": 408 },
-        { "temperature": 18.5, "sales": 406 },
-        { "temperature": 19.4, "sales": 412 },
-        { "temperature": 20.8, "sales": 469 },
-        { "temperature": 22.1, "sales": 522 },
-        { "temperature": 22.6, "sales": 493 },
-        { "temperature": 23.4, "sales": 544 },
-        { "temperature": 24.8, "sales": 614 }
+        { 'temperature': 11.8, 'sales': 185 },
+        { 'temperature': 14.2, 'sales': 215 },
+        { 'temperature': 15.2, 'sales': 332 },
+        { 'temperature': 16.4, 'sales': 325 },
+        { 'temperature': 17.2, 'sales': 408 },
+        { 'temperature': 18.5, 'sales': 406 },
+        { 'temperature': 19.4, 'sales': 412 },
+        { 'temperature': 20.8, 'sales': 469 },
+        { 'temperature': 22.1, 'sales': 522 },
+        { 'temperature': 22.6, 'sales': 493 },
+        { 'temperature': 23.4, 'sales': 544 },
+        { 'temperature': 24.8, 'sales': 614 }
     ];
 
-    this.$container.css({ width: "1000px", height: "400px" });
+    this.$container.css({ width: '1000px', height: '400px' });
 
     var chart = this.createPolarChart({
         dataSource: data,
@@ -2806,14 +2806,14 @@ QUnit.test("Add extra ticks (endOnTick) for extend visualRange and hide overlapp
         palette: 'Office'
     });
 
-    assert.deepEqual(chart._argumentAxes[0].visualRange(), { startValue: 11, endValue: 25 }, "extend visualRange");
-    assert.equal(chart._argumentAxes[0]._majorTicks[14].label.element.clientWidth, 0, "hidden label");
+    assert.deepEqual(chart._argumentAxes[0].visualRange(), { startValue: 11, endValue: 25 }, 'extend visualRange');
+    assert.equal(chart._argumentAxes[0]._majorTicks[14].label.element.clientWidth, 0, 'hidden label');
 });
 
-QUnit.module("T576725", $.extend({}, moduleSetup, {
+QUnit.module('T576725', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        sinon.stub(baseChartModule.overlapping, "resolveLabelOverlappingInOneDirection");
+        sinon.stub(baseChartModule.overlapping, 'resolveLabelOverlappingInOneDirection');
     },
     afterEach: function() {
         moduleSetup.afterEach.call(this);
@@ -2821,28 +2821,28 @@ QUnit.module("T576725", $.extend({}, moduleSetup, {
     }
 }));
 
-QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
+QUnit.test('Overlapping of the labels should be taken into account canvas with legend and title.', function(assert) {
     // arrange
     var dataSource = [];
 
     for(var i = 0; i < 15; i++) {
-        dataSource.push({ arg: i + "", val: i * 100 });
+        dataSource.push({ arg: i + '', val: i * 100 });
     }
     this.createPieChart({
         series: [{ label: { visible: true } }],
         dataSource: dataSource,
-        legend: { visible: true, horizontalAlignment: "center" },
-        title: "Test pie chart",
+        legend: { visible: true, horizontalAlignment: 'center' },
+        title: 'Test pie chart',
         size: { width: 400, height: 300 },
-        resolveLabelOverlapping: "shift"
+        resolveLabelOverlapping: 'shift'
     });
 
     assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
 });
 
-QUnit.module("Series visibility changed", moduleSetup);
+QUnit.module('Series visibility changed', moduleSetup);
 
-QUnit.test("All series are hidden. Axes have range from the last visible series", function(assert) {
+QUnit.test('All series are hidden. Axes have range from the last visible series', function(assert) {
     var chart = this.createChart({
         argumentAxis: {
             valueMarginsEnabled: false,
@@ -2870,7 +2870,7 @@ QUnit.test("All series are hidden. Axes have range from the last visible series"
     assert.equal(valRange.max, 900);
 });
 
-QUnit.test("Recalculate range data when one series is hidden", function(assert) {
+QUnit.test('Recalculate range data when one series is hidden', function(assert) {
     var chart = this.createChart({
         argumentAxis: {
             valueMarginsEnabled: false,
@@ -2884,7 +2884,7 @@ QUnit.test("Recalculate range data when one series is hidden", function(assert) 
             { arg1: 3, val1: 10 },
             { arg: 4, val: 100 },
             { arg: 5, val: 340 }],
-        series: [{}, { argumentField: "arg1", valueField: "val1" }]
+        series: [{}, { argumentField: 'arg1', valueField: 'val1' }]
     });
 
     chart.getAllSeries()[0].hide();
@@ -2898,7 +2898,7 @@ QUnit.test("Recalculate range data when one series is hidden", function(assert) 
     assert.equal(valRange.max, 10);
 });
 
-QUnit.test("Recalculate argument range data from all visible series", function(assert) {
+QUnit.test('Recalculate argument range data from all visible series', function(assert) {
     var chart = this.createChart({
         argumentAxis: {
             valueMarginsEnabled: false,
@@ -2912,7 +2912,7 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
             { arg1: 3, val1: 10 },
             { arg: 4, val: 100 },
             { arg: 5, val: 340 }],
-        series: [{ axis: "axis1" }, { argumentField: "arg1", valueField: "val1" }]
+        series: [{ axis: 'axis1' }, { argumentField: 'arg1', valueField: 'val1' }]
     });
 
     chart.getAllSeries()[0].hide();
@@ -2923,7 +2923,7 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
     assert.equal(argRange.isEmpty(), false);
 });
 
-QUnit.test("T720002, T719994. Change hovered series at runtime should not throw exception", function(assert) {
+QUnit.test('T720002, T719994. Change hovered series at runtime should not throw exception', function(assert) {
     var clock = sinon.useFakeTimers();
     try {
         var chart = this.createChart({
@@ -2938,7 +2938,7 @@ QUnit.test("T720002, T719994. Change hovered series at runtime should not throw 
             }),
             rootOffset = chart._renderer.getRootOffset();
 
-        pointerMock($(".dxc-trackers > path").eq(1)).start().move(rootOffset.left + 100, rootOffset.top + 100);
+        pointerMock($('.dxc-trackers > path').eq(1)).start().move(rootOffset.left + 100, rootOffset.top + 100);
         clock.tick(100);
 
         chart.option({ series: [{}] });
@@ -2950,14 +2950,14 @@ QUnit.test("T720002, T719994. Change hovered series at runtime should not throw 
 });
 
 // T688232
-QUnit.module("seriesTemplate", moduleSetup);
+QUnit.module('seriesTemplate', moduleSetup);
 
-QUnit.test("change series name on customizeSeries", function(assert) {
+QUnit.test('change series name on customizeSeries', function(assert) {
     var chart = this.createChart({
-        dataSource: [{ series1: "s1", arg: 1, val: 1 }, { series1: "s2", arg: 2, val: 2 }],
+        dataSource: [{ series1: 's1', arg: 1, val: 1 }, { series1: 's2', arg: 2, val: 2 }],
         seriesTemplate: {
-            nameField: "series1",
-            customizeSeries: function(sName) { return sName === "s2" ? { name: "customName" } : {}; }
+            nameField: 'series1',
+            customizeSeries: function(sName) { return sName === 's2' ? { name: 'customName' } : {}; }
         },
         series: [{}, {}]
     });
@@ -2965,16 +2965,16 @@ QUnit.test("change series name on customizeSeries", function(assert) {
     assert.strictEqual(chart.series[1].getAllPoints().length, 1);
 });
 
-QUnit.module("Multiple axes chart", $.extend({}, moduleSetup, {
+QUnit.module('Multiple axes chart', $.extend({}, moduleSetup, {
     beforeEach() {
         moduleSetup.beforeEach.call(this);
         this.options = {
             dataSource: [{
-                arg: "1",
+                arg: '1',
                 val: 15,
                 val1: 1
             }, {
-                arg: "2",
+                arg: '2',
                 val: 80,
                 val1: 5
             }],
@@ -2983,28 +2983,28 @@ QUnit.module("Multiple axes chart", $.extend({}, moduleSetup, {
                 height: 1000
             },
             panes: [{
-                name: "pane1"
+                name: 'pane1'
             }],
             series: [{
-                pane: "pane1",
-                axis: "axis1",
-                type: "line"
+                pane: 'pane1',
+                axis: 'axis1',
+                type: 'line'
             }, {
-                pane: "pane1",
-                axis: "axis2",
-                type: "line",
-                valueField: "val1"
+                pane: 'pane1',
+                axis: 'axis2',
+                type: 'line',
+                valueField: 'val1'
             }],
             commonAxisSettings: {
                 valueMarginsEnabled: false
             },
             valueAxis: [{
-                name: "axis1",
-                pane: "pane1",
+                name: 'axis1',
+                pane: 'pane1',
                 tickInterval: 25
             }, {
-                name: "axis2",
-                pane: "pane1",
+                name: 'axis2',
+                pane: 'pane1',
                 tickInterval: 1
             }]
         };
@@ -3021,37 +3021,37 @@ QUnit.module("Multiple axes chart", $.extend({}, moduleSetup, {
     }
 }));
 
-QUnit.test("Synchronize two axes", function(assert) {
+QUnit.test('Synchronize two axes', function(assert) {
     var chart = this.createChart(this.options);
 
-    var axis1 = chart.getValueAxis("axis1"),
-        axis2 = chart.getValueAxis("axis2");
+    var axis1 = chart.getValueAxis('axis1'),
+        axis2 = chart.getValueAxis('axis2');
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
 
-QUnit.test("Two axes without syncronization", function(assert) {
+QUnit.test('Two axes without syncronization', function(assert) {
     this.options.synchronizeMultiAxes = false;
     this.options.valueAxis[0].tickInterval = 15;
     var chart = this.createChart(this.options);
 
-    var axis1 = chart.getValueAxis("axis1"),
-        axis2 = chart.getValueAxis("axis2");
+    var axis1 = chart.getValueAxis('axis1'),
+        axis2 = chart.getValueAxis('axis2');
 
     assert.notDeepEqual(axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
 
-QUnit.test("Synchronize two axes. Rotated", function(assert) {
+QUnit.test('Synchronize two axes. Rotated', function(assert) {
     this.options.rotated = true;
     var chart = this.createChart(this.options);
 
-    var axis1 = chart.getValueAxis("axis1"),
-        axis2 = chart.getValueAxis("axis2");
+    var axis1 = chart.getValueAxis('axis1'),
+        axis2 = chart.getValueAxis('axis2');
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.x), axis1._majorTicks.map(t => t.coords.x));
 });
 
-QUnit.test("Two axes syncronization with margins", function(assert) {
+QUnit.test('Two axes syncronization with margins', function(assert) {
     this.options.commonAxisSettings = {
         valueMarginsEnabled: true,
         minValueMargin: 0.2,
@@ -3060,15 +3060,15 @@ QUnit.test("Two axes syncronization with margins", function(assert) {
 
     var chart = this.createChart(this.options);
 
-    var axis1 = chart.getValueAxis("axis1"),
-        axis2 = chart.getValueAxis("axis2");
+    var axis1 = chart.getValueAxis('axis1'),
+        axis2 = chart.getValueAxis('axis2');
 
     assert.deepEqual(axis1.getTicksValues().majorTicksValues, [0, 25, 50, 75, 100, 125, 150]);
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
 
-QUnit.module("Discrete axis label layout", $.extend({}, moduleSetup, {
+QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
     beforeEach() {
         moduleSetup.beforeEach.call(this);
         this.options = {
@@ -3077,16 +3077,16 @@ QUnit.module("Discrete axis label layout", $.extend({}, moduleSetup, {
                 height: 500
             },
             dataSource: [{
-                arg: "a",
+                arg: 'a',
                 val: 15
             }, {
-                arg: "ab",
+                arg: 'ab',
                 val: 45
             }, {
-                arg: "abc",
+                arg: 'abc',
                 val: 30
             }, {
-                arg: "abcd",
+                arg: 'abcd',
                 val: 60
             }],
             series: [{}]
@@ -3097,10 +3097,10 @@ QUnit.module("Discrete axis label layout", $.extend({}, moduleSetup, {
     }
 }));
 
-QUnit.test("Alignment left. Default division mode. No rotate", function(assert) {
+QUnit.test('Alignment left. Default division mode. No rotate', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "left"
+            alignment: 'left'
         }
     };
     var chart = this.createChart(this.options);
@@ -3111,10 +3111,10 @@ QUnit.test("Alignment left. Default division mode. No rotate", function(assert) 
     translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 2.1));
 });
 
-QUnit.test("Alignment right. Default division mode. No rotate", function(assert) {
+QUnit.test('Alignment right. Default division mode. No rotate', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "right"
+            alignment: 'right'
         }
     };
     var chart = this.createChart(this.options);
@@ -3125,12 +3125,12 @@ QUnit.test("Alignment right. Default division mode. No rotate", function(assert)
     translateX.forEach((tX, i) => assert.roughEqual(tX, 44 - 3 * i, 3.1));
 });
 
-QUnit.test("Alignment left. 'crossLabels' division mode. No rotate", function(assert) {
+QUnit.test('Alignment left. \'crossLabels\' division mode. No rotate', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "left"
+            alignment: 'left'
         },
-        discreteAxisDivisionMode: "crossLabels"
+        discreteAxisDivisionMode: 'crossLabels'
     };
     var chart = this.createChart(this.options);
 
@@ -3140,12 +3140,12 @@ QUnit.test("Alignment left. 'crossLabels' division mode. No rotate", function(as
     translateX.forEach((tX, i) => assert.roughEqual(tX, 4 + 3 * i, 1.5));
 });
 
-QUnit.test("Alignment right. 'crossLabels' division mode. No rotate", function(assert) {
+QUnit.test('Alignment right. \'crossLabels\' division mode. No rotate', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "right"
+            alignment: 'right'
         },
-        discreteAxisDivisionMode: "crossLabels"
+        discreteAxisDivisionMode: 'crossLabels'
     };
     var chart = this.createChart(this.options);
 
@@ -3155,11 +3155,11 @@ QUnit.test("Alignment right. 'crossLabels' division mode. No rotate", function(a
     translateX.forEach((tX, i) => assert.roughEqual(tX, -4 - 3 * i, 2.1));
 });
 
-QUnit.test("Alignment left. Rotate. Rotation angle is not a multiple of 90", function(assert) {
+QUnit.test('Alignment left. Rotate. Rotation angle is not a multiple of 90', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "left",
-            displayMode: "rotate",
+            alignment: 'left',
+            displayMode: 'rotate',
             rotationAngle: 45
         }
     };
@@ -3171,11 +3171,11 @@ QUnit.test("Alignment left. Rotate. Rotation angle is not a multiple of 90", fun
     translateX.forEach((tX, i) => assert.roughEqual(tX, 5 + 3 * i, 2.1));
 });
 
-QUnit.test("Alignment right. Rotate. Rotation angle is not a multiple of 90", function(assert) {
+QUnit.test('Alignment right. Rotate. Rotation angle is not a multiple of 90', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "right",
-            displayMode: "rotate",
+            alignment: 'right',
+            displayMode: 'rotate',
             rotationAngle: 45
         }
     };
@@ -3187,11 +3187,11 @@ QUnit.test("Alignment right. Rotate. Rotation angle is not a multiple of 90", fu
     translateX.forEach((tX, i) => assert.roughEqual(tX, -12 - 2.5 * i, 3));
 });
 
-QUnit.test("Alignment left. Rotate. Rotation angle is a multiple of 90", function(assert) {
+QUnit.test('Alignment left. Rotate. Rotation angle is a multiple of 90', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "left",
-            displayMode: "rotate",
+            alignment: 'left',
+            displayMode: 'rotate',
             rotationAngle: 180
         }
     };
@@ -3203,11 +3203,11 @@ QUnit.test("Alignment left. Rotate. Rotation angle is a multiple of 90", functio
     translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 3.1));
 });
 
-QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", function(assert) {
+QUnit.test('Alignment right. Rotate. Rotation angle is a multiple of 90', function(assert) {
     this.options.argumentAxis = {
         label: {
-            alignment: "right",
-            displayMode: "rotate",
+            alignment: 'right',
+            displayMode: 'rotate',
             rotationAngle: 270
         }
     };

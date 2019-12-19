@@ -1,19 +1,19 @@
-var $ = require("../../core/renderer"),
-    ko = require("knockout"),
-    Callbacks = require("../../core/utils/callbacks"),
-    errors = require("../../core/errors"),
-    inflector = require("../../core/utils/inflector"),
-    isPlainObject = require("../../core/utils/type").isPlainObject,
-    registerComponentCallbacks = require("../../core/component_registrator_callbacks"),
-    Widget = require("../../ui/widget/ui.widget"),
-    KoTemplate = require("./template"),
-    Editor = require("../../ui/editor/editor"),
-    Locker = require("../../core/utils/locker"),
-    getClosestNodeWithContext = require("./utils").getClosestNodeWithContext,
-    config = require("../../core/config");
+var $ = require('../../core/renderer'),
+    ko = require('knockout'),
+    Callbacks = require('../../core/utils/callbacks'),
+    errors = require('../../core/errors'),
+    inflector = require('../../core/utils/inflector'),
+    isPlainObject = require('../../core/utils/type').isPlainObject,
+    registerComponentCallbacks = require('../../core/component_registrator_callbacks'),
+    Widget = require('../../ui/widget/ui.widget'),
+    KoTemplate = require('./template'),
+    Editor = require('../../ui/editor/editor'),
+    Locker = require('../../core/utils/locker'),
+    getClosestNodeWithContext = require('./utils').getClosestNodeWithContext,
+    config = require('../../core/config');
 
-var LOCKS_DATA_KEY = "dxKoLocks",
-    CREATED_WITH_KO_DATA_KEY = "dxKoCreation";
+var LOCKS_DATA_KEY = 'dxKoLocks',
+    CREATED_WITH_KO_DATA_KEY = 'dxKoCreation';
 
 var editorsBindingHandlers = [];
 
@@ -63,8 +63,8 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                     },
                     nestedComponentOptions: function(component) {
                         return {
-                            modelByElement: component.option("modelByElement"),
-                            nestedComponentOptions: component.option("nestedComponentOptions")
+                            modelByElement: component.option('modelByElement'),
+                            nestedComponentOptions: component.option('nestedComponentOptions')
                         };
                     },
                     _optionChangedCallbacks: optionChangedCallbacks,
@@ -85,20 +85,20 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                             };
                         },
                         templates: {
-                            "dx-polymorph-widget": {
+                            'dx-polymorph-widget': {
                                 render: function(options) {
                                     var widgetName = ko.utils.unwrapObservable(options.model.widget);
                                     if(!widgetName) {
                                         return;
                                     }
 
-                                    if(widgetName === "button" || widgetName === "tabs" || widgetName === "dropDownMenu") {
+                                    if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
                                         var deprecatedName = widgetName;
-                                        widgetName = inflector.camelize("dx-" + widgetName);
-                                        errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
+                                        widgetName = inflector.camelize('dx-' + widgetName);
+                                        errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
                                     }
 
-                                    var markup = $("<div>").attr("data-bind", widgetName + ": options").get(0);
+                                    var markup = $('<div>').attr('data-bind', widgetName + ': options').get(0);
                                     $(options.container).append(markup);
                                     ko.applyBindings(options.model, markup);
                                 }
@@ -204,7 +204,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
             var unwrapModel = function(model, propertyPath) {
                 for(var propertyName in model) {
                     if(Object.prototype.hasOwnProperty.call(model, propertyName)) {
-                        unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join(".") : propertyName);
+                        unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join('.') : propertyName);
                     }
                 }
             };
@@ -217,8 +217,8 @@ var registerComponentKoBinding = function(componentName, componentClass) {
         }
     };
 
-    if(componentName === "dxValidator") {
-        ko.bindingHandlers["dxValidator"].after = editorsBindingHandlers;
+    if(componentName === 'dxValidator') {
+        ko.bindingHandlers['dxValidator'].after = editorsBindingHandlers;
     }
 };
 

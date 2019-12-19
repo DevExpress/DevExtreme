@@ -1,5 +1,5 @@
-import { isString } from "../../core/utils/type";
-import errors from "../../core/errors";
+import { isString } from '../../core/utils/type';
+import errors from '../../core/errors';
 
 let templateEngines = {};
 let currentTemplateEngine;
@@ -12,7 +12,7 @@ const setTemplateEngine = (templateEngine) => {
     if(isString(templateEngine)) {
         currentTemplateEngine = templateEngines[templateEngine];
         if(!currentTemplateEngine) {
-            throw errors.Error("E0020", templateEngine);
+            throw errors.Error('E0020', templateEngine);
         }
     } else {
         currentTemplateEngine = templateEngine;

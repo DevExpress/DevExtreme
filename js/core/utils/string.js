@@ -1,7 +1,7 @@
-var typeUtils = require("./type");
+var typeUtils = require('./type');
 
 var encodeHtml = (function() {
-    var encodeRegExp = [new RegExp("&", "g"), new RegExp('"', "g"), new RegExp("'", "g"), new RegExp("<", "g"), new RegExp(">", "g")];
+    var encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
     return function(str) {
         return String(str)
@@ -16,15 +16,15 @@ var encodeHtml = (function() {
 
 var splitQuad = function(raw) {
     switch(typeof raw) {
-        case "string":
+        case 'string':
             return raw.split(/\s+/, 4);
-        case "object":
+        case 'object':
             return [
                 raw.x || raw.h || raw.left,
                 raw.y || raw.v || raw.top,
                 raw.x || raw.h || raw.right,
                 raw.y || raw.v || raw.bottom];
-        case "number":
+        case 'number':
             return [raw];
         default:
             return raw;
@@ -66,11 +66,11 @@ var stringFormat = function() {
     }
 
     for(var i = 0; i < values.length; i++) {
-        reg = new RegExp("\\{" + i + "\\}", "gm");
+        reg = new RegExp('\\{' + i + '\\}', 'gm');
         value = values[i];
-        if(typeUtils.type(value) === "string" && value.indexOf("$") >= 0) {
-            replaceDollarCount = "$".replace("$", "$$").length;
-            value = value.replace("$", replaceDollarCount === 1 ? "$$$$" : "$$");
+        if(typeUtils.type(value) === 'string' && value.indexOf('$') >= 0) {
+            replaceDollarCount = '$'.replace('$', '$$').length;
+            value = value.replace('$', replaceDollarCount === 1 ? '$$$$' : '$$');
         }
         s = s.replace(reg, value);
     }
@@ -80,11 +80,11 @@ var stringFormat = function() {
 
 var replaceAll = (function() {
     var quote = function(str) {
-        return (str + "").replace(/([+*?.[^\]$(){}><|=!:])/g, "\\$1");
+        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1');
     };
 
     return function(text, searchToken, replacementToken) {
-        return text.replace(new RegExp("(" + quote(searchToken) + ")", "gi"), replacementToken);
+        return text.replace(new RegExp('(' + quote(searchToken) + ')', 'gi'), replacementToken);
     };
 })();
 
@@ -92,7 +92,7 @@ var isEmpty = (function() {
     var SPACE_REGEXP = /\s/g;
 
     return function(text) {
-        return !text || !text.replace(SPACE_REGEXP, "");
+        return !text || !text.replace(SPACE_REGEXP, '');
     };
 })();
 

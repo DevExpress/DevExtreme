@@ -1,12 +1,12 @@
-var domAdapter = require("core/dom_adapter");
-var windowUtils = require("core/utils/window");
-var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
+var domAdapter = require('core/dom_adapter');
+var windowUtils = require('core/utils/window');
+var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
 
 (function emulateNoContains() {
     var originalContains = Element.prototype.contains;
     Element.prototype.contains = function(element) {
         if(!element) {
-            throw new Error("element should be defined");
+            throw new Error('element should be defined');
         }
 
         return originalContains.apply(this, arguments);
@@ -18,7 +18,7 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
     var originalSetAttribute = Element.prototype.setAttribute;
     Element.prototype.setAttribute = function(name, value) {
         if(name.toLowerCase().substring(0, 5) === 'xmlns') {
-            throw new Error("the operation is not allowed by Namespaces in XML");
+            throw new Error('the operation is not allowed by Namespaces in XML');
         }
 
         return originalSetAttribute.apply(this, arguments);
@@ -31,7 +31,7 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
     document.createElement = function() {
         var result = originalCreateElement.apply(this, arguments);
 
-        ["offsetWidth", "offsetHeight", "getBoundingClientRect"].forEach(function(field) {
+        ['offsetWidth', 'offsetHeight', 'getBoundingClientRect'].forEach(function(field) {
             Object.defineProperty(result, field, {
                 get: function() {
                     return undefined;
@@ -49,119 +49,119 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 (function emulateStyleProps() {
     var originalCreateElement = document.createElement;
     var serverStyles = [
-        "background",
-        "backgroundAttachment",
-        "backgroundColor",
-        "backgroundImage",
-        "backgroundPosition",
-        "backgroundRepeat",
-        "border",
-        "borderBottom",
-        "borderBottomColor",
-        "borderBottomStyle",
-        "borderBottomWidth",
-        "borderCollapse",
-        "borderColor",
-        "borderLeft",
-        "borderLeftColor",
-        "borderLeftStyle",
-        "borderLeftWidth",
-        "borderRight",
-        "borderRightColor",
-        "borderRightStyle",
-        "borderRightWidth",
-        "borderSpacing",
-        "borderStyle",
-        "borderTop",
-        "borderTopColor",
-        "borderTopStyle",
-        "borderTopWidth",
-        "borderWidth",
-        "bottom",
-        "captionSide",
-        "clear",
-        "clip",
-        "color",
-        "content",
-        "counterIncrement",
-        "counterReset",
-        "cssFloat",
-        "cursor",
-        "direction",
-        "display",
-        "emptyCells",
-        "font",
-        "fontFamily",
-        "fontSize",
-        "fontSizeAdjust",
-        "fontStretch",
-        "fontStyle",
-        "fontVariant",
-        "fontWeight",
-        "height",
-        "left",
-        "letterSpacing",
-        "lineHeight",
-        "listStyle",
-        "listStyleImage",
-        "listStylePosition",
-        "listStyleType",
-        "margin",
-        "marginBottom",
-        "marginLeft",
-        "marginRight",
-        "marginTop",
-        "markerOffset",
-        "marks",
-        "maxHeight",
-        "maxWidth",
-        "minHeight",
-        "minWidth",
-        "opacity",
-        "orphans",
-        "outline",
-        "outlineColor",
-        "outlineStyle",
-        "outlineWidth",
-        "overflow",
-        "padding",
-        "paddingBottom",
-        "paddingLeft",
-        "paddingRight",
-        "paddingTop",
-        "page",
-        "pageBreakAfter",
-        "pageBreakBefore",
-        "pageBreakInside",
-        "position",
-        "quotes",
-        "right",
-        "size",
-        "tableLayout",
-        "textAlign",
-        "textDecoration",
-        "textIndent",
-        "textShadow",
-        "textTransform",
-        "top",
-        "unicodeBidi",
-        "verticalAlign",
-        "visibility",
-        "whiteSpace",
-        "widows",
-        "width",
-        "wordSpacing",
-        "zIndex"
+        'background',
+        'backgroundAttachment',
+        'backgroundColor',
+        'backgroundImage',
+        'backgroundPosition',
+        'backgroundRepeat',
+        'border',
+        'borderBottom',
+        'borderBottomColor',
+        'borderBottomStyle',
+        'borderBottomWidth',
+        'borderCollapse',
+        'borderColor',
+        'borderLeft',
+        'borderLeftColor',
+        'borderLeftStyle',
+        'borderLeftWidth',
+        'borderRight',
+        'borderRightColor',
+        'borderRightStyle',
+        'borderRightWidth',
+        'borderSpacing',
+        'borderStyle',
+        'borderTop',
+        'borderTopColor',
+        'borderTopStyle',
+        'borderTopWidth',
+        'borderWidth',
+        'bottom',
+        'captionSide',
+        'clear',
+        'clip',
+        'color',
+        'content',
+        'counterIncrement',
+        'counterReset',
+        'cssFloat',
+        'cursor',
+        'direction',
+        'display',
+        'emptyCells',
+        'font',
+        'fontFamily',
+        'fontSize',
+        'fontSizeAdjust',
+        'fontStretch',
+        'fontStyle',
+        'fontVariant',
+        'fontWeight',
+        'height',
+        'left',
+        'letterSpacing',
+        'lineHeight',
+        'listStyle',
+        'listStyleImage',
+        'listStylePosition',
+        'listStyleType',
+        'margin',
+        'marginBottom',
+        'marginLeft',
+        'marginRight',
+        'marginTop',
+        'markerOffset',
+        'marks',
+        'maxHeight',
+        'maxWidth',
+        'minHeight',
+        'minWidth',
+        'opacity',
+        'orphans',
+        'outline',
+        'outlineColor',
+        'outlineStyle',
+        'outlineWidth',
+        'overflow',
+        'padding',
+        'paddingBottom',
+        'paddingLeft',
+        'paddingRight',
+        'paddingTop',
+        'page',
+        'pageBreakAfter',
+        'pageBreakBefore',
+        'pageBreakInside',
+        'position',
+        'quotes',
+        'right',
+        'size',
+        'tableLayout',
+        'textAlign',
+        'textDecoration',
+        'textIndent',
+        'textShadow',
+        'textTransform',
+        'top',
+        'unicodeBidi',
+        'verticalAlign',
+        'visibility',
+        'whiteSpace',
+        'widows',
+        'width',
+        'wordSpacing',
+        'zIndex'
     ];
 
     var styleObj = {};
 
     serverStyles.forEach(function(style) {
-        styleObj[style] = "";
+        styleObj[style] = '';
     });
 
     document.createElement = function(tagName) {
-        return tagName === "dx" ? { style: styleObj } : originalCreateElement.apply(this, arguments);
+        return tagName === 'dx' ? { style: styleObj } : originalCreateElement.apply(this, arguments);
     };
 })();
 
@@ -175,7 +175,7 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
             lastSelectorPart = lastSelectorPart.substr(1);
             var index = this.className.indexOf(lastSelectorPart);
             var l = this.className[index + lastSelectorPart.length];
-            if(index > -1 && l && l !== " ") {
+            if(index > -1 && l && l !== ' ') {
                 return false;
             }
         }
@@ -202,7 +202,7 @@ var windowMock = {
 };
 
 var errorFunc = function() {
-    throw new Error("Window fields using is prevented");
+    throw new Error('Window fields using is prevented');
 };
 
 var windowGetter = function() {
@@ -211,7 +211,7 @@ var windowGetter = function() {
 
 for(var field in window) {
     Object.defineProperty(windowMock, field, {
-        get: field === "window" ? windowGetter : errorFunc,
+        get: field === 'window' ? windowGetter : errorFunc,
         set: errorFunc
     });
 }

@@ -1,9 +1,9 @@
-var dataQuery = require("../../data/query"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
+var dataQuery = require('../../data/query'),
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
     getKeyHash = commonUtils.getKeyHash,
-    Class = require("../../core/class"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Class = require('../../core/class'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -13,10 +13,10 @@ module.exports = Class.inherit({
     },
 
     _clearItemKeys: function() {
-        this._setOption("addedItemKeys", []);
-        this._setOption("removedItemKeys", []);
-        this._setOption("removedItems", []);
-        this._setOption("addedItems", []);
+        this._setOption('addedItemKeys', []);
+        this._setOption('removedItemKeys', []);
+        this._setOption('removedItems', []);
+        this._setOption('addedItems', []);
     },
 
     validate: commonUtils.noop,

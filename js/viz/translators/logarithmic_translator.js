@@ -1,5 +1,5 @@
-var vizUtils = require("../core/utils"),
-    isDefined = require("../../core/utils/type").isDefined,
+var vizUtils = require('../core/utils'),
+    isDefined = require('../../core/utils/type').isDefined,
     raiseTo = vizUtils.raiseTo,
     getLog = vizUtils.getLog;
 

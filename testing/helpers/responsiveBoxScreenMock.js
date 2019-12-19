@@ -1,10 +1,10 @@
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.responsiveBoxScreenMock = module.exports = factory(require("jquery"), require("ui/responsive_box"), require("core/utils/resize_callbacks"));
+            root.responsiveBoxScreenMock = module.exports = factory(require('jquery'), require('ui/responsive_box'), require('core/utils/resize_callbacks'));
         });
     } else {
-        root.responsiveBoxScreenMock = factory(root.jQuery, DevExpress.require("ui/responsive_box"), DevExpress.require("core/utils/resize_callbacks"));
+        root.responsiveBoxScreenMock = factory(root.jQuery, DevExpress.require('ui/responsive_box'), DevExpress.require('core/utils/resize_callbacks'));
     }
 }(window, function($, ResponsiveBox, resizeCallbacks) {
     return {

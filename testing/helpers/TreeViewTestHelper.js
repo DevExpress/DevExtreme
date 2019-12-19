@@ -1,30 +1,30 @@
-import $ from "jquery";
-import { isDefined } from "core/utils/type";
+import $ from 'jquery';
+import { isDefined } from 'core/utils/type';
 
-const CONTAINER_ID = "treeView";
-const WIDGET_CLASS = "dx-treeview";
+const CONTAINER_ID = 'treeView';
+const WIDGET_CLASS = 'dx-treeview';
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
 const ITEM_CLASS = `${WIDGET_CLASS}-item`;
 const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
 
-const SELECTED_ITEM_CLASS = "dx-state-selected";
-const INVISIBLE_ITEM_CLASS = "dx-state-invisible";
+const SELECTED_ITEM_CLASS = 'dx-state-selected';
+const INVISIBLE_ITEM_CLASS = 'dx-state-invisible';
 
-const CHECK_BOX_CLASS = "dx-checkbox";
-const CHECK_BOX_CHECKED_CLASS = "dx-checkbox-checked";
+const CHECK_BOX_CLASS = 'dx-checkbox';
+const CHECK_BOX_CHECKED_CLASS = 'dx-checkbox-checked';
 
 const { assert } = QUnit;
 
 class TreeViewTestWrapper {
     constructor(options) {
         this.instance = this.getInstance(options);
-        this.isCheckBoxMode = this.instance.option("showCheckBoxesMode") === "normal";
+        this.isCheckBoxMode = this.instance.option('showCheckBoxesMode') === 'normal';
     }
 
     getElement() { return $(`#${CONTAINER_ID}`); }
-    getInstance(options) { return this.getElement().dxTreeView(options).dxTreeView("instance"); }
+    getInstance(options) { return this.getElement().dxTreeView(options).dxTreeView('instance'); }
     getNodes() { return this.getElement().find(`.${NODE_CLASS}`); }
     getItems($node) { return isDefined($node) ? $node.find(`.${ITEM_CLASS}`) : this.getElement().find(`.${ITEM_CLASS}`); }
     getSelectedNodes() { return this.getElement().find(`.${NODE_CLASS}.${SELECTED_ITEM_CLASS}`); }

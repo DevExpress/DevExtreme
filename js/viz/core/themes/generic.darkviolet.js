@@ -1,47 +1,47 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = "#9c63ff",
-    BACKGROUND_COLOR = "#17171f",
-    TITLE_COLOR = "#f5f6f7",
-    SUBTITLE_COLOR = "#fff",
-    TEXT_COLOR = "#b2b2b6",
-    BORDER_COLOR = "#343840";
+    ACCENT_COLOR = '#9c63ff',
+    BACKGROUND_COLOR = '#17171f',
+    TITLE_COLOR = '#f5f6f7',
+    SUBTITLE_COLOR = '#fff',
+    TEXT_COLOR = '#b2b2b6',
+    BORDER_COLOR = '#343840';
 
 registerTheme({
-    name: "generic.darkviolet",
-    defaultPalette: "Dark Violet",
+    name: 'generic.darkviolet',
+    defaultPalette: 'Dark Violet',
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
     secondaryTitleColor: SUBTITLE_COLOR,
     gridColor: BORDER_COLOR,
     axisColor: TEXT_COLOR,
-    "export": {
+    'export': {
         backgroundColor: BACKGROUND_COLOR,
         font: {
             color: TITLE_COLOR
         },
         button: {
-            "default": {
+            'default': {
                 color: TITLE_COLOR,
-                borderColor: "#414152",
+                borderColor: '#414152',
                 backgroundColor: BACKGROUND_COLOR
             },
             hover: {
                 color: TITLE_COLOR,
-                borderColor: "#5c5c74",
-                backgroundColor: "#2d2d3c"
+                borderColor: '#5c5c74',
+                backgroundColor: '#2d2d3c'
             },
             focus: {
                 color: TITLE_COLOR,
-                borderColor: "#7c7c97",
-                backgroundColor: "#2d2d3c"
+                borderColor: '#7c7c97',
+                backgroundColor: '#2d2d3c'
             },
             active: {
                 color: TITLE_COLOR,
-                borderColor: "#7c7c97",
-                backgroundColor: "#3c3c51"
+                borderColor: '#7c7c97',
+                backgroundColor: '#3c3c51'
             }
         }
     },
@@ -53,13 +53,13 @@ registerTheme({
     tooltip: {
         color: BACKGROUND_COLOR,
         border: {
-            color: "#414152"
+            color: '#414152'
         },
         font: {
             color: TITLE_COLOR
         }
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             label: {
                 border: {
@@ -75,14 +75,14 @@ registerTheme({
             }
         },
         commonAxisSettings: {
-            breakStyle: { color: "#575e6b" }
+            breakStyle: { color: '#575e6b' }
         },
         commonAnnotationSettings: {
             font: {
                 color: TITLE_COLOR
             },
             border: {
-                color: "#414152"
+                color: '#414152'
             },
             color: BACKGROUND_COLOR
         }
@@ -96,8 +96,8 @@ registerTheme({
     },
     sparkline: {
         pointColor: BACKGROUND_COLOR,
-        minColor: "#f0ad4e",
-        maxColor: "#d9534f"
+        minColor: '#f0ad4e',
+        maxColor: '#d9534f'
     },
     treeMap: {
         group: {
@@ -114,7 +114,7 @@ registerTheme({
             color: BACKGROUND_COLOR
         },
         scale: {
-            breakStyle: { color: "#575e6b" },
+            breakStyle: { color: '#575e6b' },
             tick: {
                 opacity: 0.2
             }
@@ -123,7 +123,7 @@ registerTheme({
         sliderMarker: {
             color: ACCENT_COLOR,
             font: {
-                color: "#fff"
+                color: '#fff'
             }
         },
         sliderHandle: {
@@ -136,10 +136,10 @@ registerTheme({
     },
     gauge: {
         valueIndicators: {
-            "rangebar": {
+            'rangebar': {
                 color: ACCENT_COLOR
             },
-            "textcloud": {
+            'textcloud': {
                 color: ACCENT_COLOR
             }
         }
@@ -156,6 +156,6 @@ registerTheme({
             }
         }
     }
-}, "generic.dark");
+}, 'generic.dark');
 
-registerThemeAlias("generic.darkviolet.compact", "generic.darkviolet");
+registerThemeAlias('generic.darkviolet.compact', 'generic.darkviolet');

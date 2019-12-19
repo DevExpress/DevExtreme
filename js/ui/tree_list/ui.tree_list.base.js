@@ -8,8 +8,8 @@ import treeListCore from './ui.tree_list.core';
 import themes from '../themes';
 var callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
-var DATAGRID_ROW_SELECTOR = ".dx-row",
-    TREELIST_CLASS = "dx-treelist";
+var DATAGRID_ROW_SELECTOR = '.dx-row',
+    TREELIST_CLASS = 'dx-treelist';
 
 import './ui.tree_list.column_headers';
 import './ui.tree_list.columns_controller';
@@ -22,34 +22,34 @@ import './ui.tree_list.grid_view';
 import './ui.tree_list.header_panel';
 
 treeListCore.registerModulesOrder([
-    "stateStoring",
-    "columns",
-    "selection",
-    "editorFactory",
-    "columnChooser",
-    "editing",
-    "grouping",
-    "masterDetail",
-    "validating",
-    "adaptivity",
-    "data",
-    "virtualScrolling",
-    "columnHeaders",
-    "filterRow",
-    "headerPanel",
-    "headerFilter",
-    "sorting",
-    "search",
-    "rows",
-    "pager",
-    "columnsResizingReordering",
-    "contextMenu",
-    "keyboardNavigation",
-    "errorHandling",
-    "summary",
-    "columnFixing",
-    "export",
-    "gridView"]);
+    'stateStoring',
+    'columns',
+    'selection',
+    'editorFactory',
+    'columnChooser',
+    'editing',
+    'grouping',
+    'masterDetail',
+    'validating',
+    'adaptivity',
+    'data',
+    'virtualScrolling',
+    'columnHeaders',
+    'filterRow',
+    'headerPanel',
+    'headerFilter',
+    'sorting',
+    'search',
+    'rows',
+    'pager',
+    'columnsResizingReordering',
+    'contextMenu',
+    'keyboardNavigation',
+    'errorHandling',
+    'summary',
+    'columnFixing',
+    'export',
+    'gridView']);
 
 var TreeList = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
@@ -113,7 +113,7 @@ var TreeList = Widget.inherit({
 
         treeListCore.processModules(that, treeListCore);
 
-        callModuleItemsMethod(that, "init");
+        callModuleItemsMethod(that, 'init');
     },
 
     _clean: commonUtils.noop,
@@ -121,7 +121,7 @@ var TreeList = Widget.inherit({
     _optionChanged: function(args) {
         var that = this;
 
-        callModuleItemsMethod(that, "optionChanged", [args]);
+        callModuleItemsMethod(that, 'optionChanged', [args]);
         if(!args.handled) {
             that.callBase(args);
         }
@@ -140,11 +140,11 @@ var TreeList = Widget.inherit({
     _initMarkup: function() {
         this.callBase.apply(this, arguments);
         this.$element().addClass(TREELIST_CLASS);
-        this.getView("gridView").render(this.$element());
+        this.getView('gridView').render(this.$element());
     },
 
     _renderContentImpl: function() {
-        this.getView("gridView").update();
+        this.getView('gridView').update();
     },
 
     _renderContent: function() {
@@ -159,24 +159,24 @@ var TreeList = Widget.inherit({
         var that = this;
         that.callBase();
 
-        callModuleItemsMethod(that, "dispose");
+        callModuleItemsMethod(that, 'dispose');
     },
 
     isReady: function() {
-        return this.getController("data").isReady();
+        return this.getController('data').isReady();
     },
 
     beginUpdate: function() {
         var that = this;
 
         that.callBase();
-        callModuleItemsMethod(that, "beginUpdate");
+        callModuleItemsMethod(that, 'beginUpdate');
     },
 
     endUpdate: function() {
         var that = this;
 
-        callModuleItemsMethod(that, "endUpdate");
+        callModuleItemsMethod(that, 'endUpdate');
         that.callBase();
     },
 
@@ -192,13 +192,13 @@ var TreeList = Widget.inherit({
         this.callBase();
 
         if(typeUtils.isDefined(element)) {
-            this.getController("keyboardNavigation").focus(element);
+            this.getController('keyboardNavigation').focus(element);
         }
     }
 });
 
 TreeList.registerModule = treeListCore.registerModule.bind(treeListCore);
 
-registerComponent("dxTreeList", TreeList);
+registerComponent('dxTreeList', TreeList);
 
 module.exports = TreeList;

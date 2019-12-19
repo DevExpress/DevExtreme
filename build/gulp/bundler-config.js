@@ -20,17 +20,17 @@ var BUNDLE_CONFIG_SOURCES = [
 
 gulp.task('bundler-config', function() {
     return gulp.src(BUNDLE_CONFIG_SOURCES)
-        .pipe(replace(/[^]*BUNDLER_PARTS.*?$([^]*)^.*?BUNDLER_PARTS_END[^]*/gm, "$1"))
+        .pipe(replace(/[^]*BUNDLER_PARTS.*?$([^]*)^.*?BUNDLER_PARTS_END[^]*/gm, '$1'))
         .pipe(concat('dx.custom.js'))
         .pipe(header('/* Comment lines below for the widgets you don\'t require and run "devextreme-bundler" in this directory, then include dx.custom.js in your project */'))
         .pipe(headerPipes.useStrict())
-        .pipe(replace(/require *\( *["']..\/..\//g, 'require("'))
+        .pipe(replace(/require *\( *["']..\/..\//g, 'require(\''))
         .pipe(replace(/^[ ]{4}/gm, ''))
         .pipe(replace(/^[\n\r]{2,}/gm, '\n\n'))
         .pipe(eol())
         .pipe(gulp.dest('js/bundles'))
         .pipe(rename('dx.custom.config.js'))
-        .pipe(replace(/require *\( *["']..\//g, 'require("devextreme/'))
+        .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
         .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'));
 });
 

@@ -1,8 +1,8 @@
-import { getLog, getCategoriesInfo } from "../core/utils";
-import dateUtils from "../../core/utils/date";
-import { isDefined, isString } from "../../core/utils/type";
-import { adjust } from "../../core/utils/math";
-import { extend } from "../../core/utils/extend";
+import { getLog, getCategoriesInfo } from '../core/utils';
+import dateUtils from '../../core/utils/date';
+import { isDefined, isString } from '../../core/utils/type';
+import { adjust } from '../../core/utils/math';
+import { extend } from '../../core/utils/extend';
 
 const convertDateUnitToMilliseconds = dateUtils.convertDateUnitToMilliseconds;
 const dateToMilliseconds = dateUtils.dateToMilliseconds;
@@ -553,7 +553,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
     function correctUserTickInterval(tickInterval, businessDelta, limit) {
         if(tickInterval && (businessDelta / convertTickInterval(tickInterval)) >= limit + 1) {
-            options.incidentOccurred("W2003");
+            options.incidentOccurred('W2003');
             tickInterval = undefined;
         }
         return tickInterval;
@@ -739,21 +739,21 @@ function dateGenerator(options) {
 
         value = correctDateWithUnitBeginning(value);
 
-        if("years" in intervalObject) {
+        if('years' in intervalObject) {
             value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));
-        } else if("quarters" in intervalObject) {
+        } else if('quarters' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
-        } else if("months" in intervalObject) {
+        } else if('months' in intervalObject) {
             value.setMonth(floorNumber(value.getMonth(), intervalObject.months, 0));
-        } else if("weeks" in intervalObject || "days" in intervalObject) {
+        } else if('weeks' in intervalObject || 'days' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
-        } else if("hours" in intervalObject) {
+        } else if('hours' in intervalObject) {
             value.setHours(floorNumber(value.getHours(), intervalObject.hours, 0));
-        } else if("minutes" in intervalObject) {
+        } else if('minutes' in intervalObject) {
             value.setMinutes(floorNumber(value.getMinutes(), intervalObject.minutes, 0));
-        } else if("seconds" in intervalObject) {
+        } else if('seconds' in intervalObject) {
             value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds, 0));
-        } else if("milliseconds" in intervalObject) {
+        } else if('milliseconds' in intervalObject) {
             value = floorAtStartDate(value);
         }
 
@@ -790,11 +790,11 @@ exports.tickGenerator = function(options) {
 
     if(options.rangeIsEmpty) {
         result = dummyGenerator(options);
-    } else if(options.axisType === "discrete") {
+    } else if(options.axisType === 'discrete') {
         result = discreteGenerator(options);
-    } else if(options.axisType === "logarithmic") {
+    } else if(options.axisType === 'logarithmic') {
         result = logarithmicGenerator(options);
-    } else if(options.dataType === "datetime") {
+    } else if(options.dataType === 'datetime') {
         result = dateGenerator(options);
     } else {
         result = numericGenerator(options);

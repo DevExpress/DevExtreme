@@ -1,12 +1,12 @@
-var variableWrapper = require("../../core/utils/variable_wrapper"),
-    dataCoreUtils = require("../../core/utils/data"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    DataHelperMixin = require("../../data_helper"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    ArrayStore = require("../../data/array_store"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var variableWrapper = require('../../core/utils/variable_wrapper'),
+    dataCoreUtils = require('../../core/utils/data'),
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
+    extend = require('../../core/utils/extend').extend,
+    DataHelperMixin = require('../../data_helper'),
+    DataSourceModule = require('../../data/data_source/data_source'),
+    ArrayStore = require('../../data/array_store'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 /**
 * @name DataExpressionMixin
@@ -41,7 +41,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
             * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            itemTemplate: "item",
+            itemTemplate: 'item',
 
             /**
             * @name DataExpressionMixinOptions.value
@@ -55,7 +55,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
             * @type string|function
             * @default "this"
             */
-            valueExpr: "this",
+            valueExpr: 'this',
 
             /**
             * @name DataExpressionMixinOptions.displayExpr
@@ -76,10 +76,10 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _itemsToDataSource: function() {
-        if(!this.option("dataSource")) {
+        if(!this.option('dataSource')) {
             // TODO: try this.option("dataSource", new ...)
             this._dataSource = new DataSourceModule.DataSource({
-                store: new ArrayStore(this.option("items")),
+                store: new ArrayStore(this.option('items')),
                 pageSize: 0
             });
         }
@@ -90,7 +90,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _displayGetterExpr: function() {
-        return this.option("displayExpr");
+        return this.option('displayExpr');
     },
 
     _compileValueGetter: function() {
@@ -98,7 +98,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _valueGetterExpr: function() {
-        return this.option("valueExpr") || "this";
+        return this.option('valueExpr') || 'this';
     },
 
     _loadValue: function(value) {
@@ -123,13 +123,13 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _getCurrentValue: function() {
-        return this.option("value");
+        return this.option('value');
     },
 
     _unwrappedValue: function(value) {
         value = typeUtils.isDefined(value) ? value : this._getCurrentValue();
 
-        if(value && this._dataSource && this._valueGetterExpr() === "this") {
+        if(value && this._dataSource && this._valueGetterExpr() === 'this') {
             value = this._getItemKey(value);
         }
 
@@ -147,7 +147,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
             return result;
         }
 
-        if(key && typeof value === "object") {
+        if(key && typeof value === 'object') {
             value = value[key];
         }
 
@@ -204,35 +204,35 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
 
     _setCollectionWidgetItemTemplate: function() {
         this._initDynamicTemplates();
-        this._setCollectionWidgetOption("itemTemplate", this.option("itemTemplate"));
+        this._setCollectionWidgetOption('itemTemplate', this.option('itemTemplate'));
     },
 
     _getCollectionKeyExpr: function() {
-        var valueExpr = this.option("valueExpr");
-        var isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this" || typeUtils.isFunction(valueExpr);
+        var valueExpr = this.option('valueExpr');
+        var isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== 'this' || typeUtils.isFunction(valueExpr);
 
         return isValueExprField ? valueExpr : null;
     },
 
     _dataExpressionOptionChanged: function(args) {
         switch(args.name) {
-            case "items":
+            case 'items':
                 this._itemsToDataSource();
-                this._setCollectionWidgetOption("items");
+                this._setCollectionWidgetOption('items');
                 break;
-            case "dataSource":
+            case 'dataSource':
                 this._initDataSource();
                 break;
-            case "itemTemplate":
+            case 'itemTemplate':
                 this._setCollectionWidgetItemTemplate();
                 break;
-            case "valueExpr":
+            case 'valueExpr':
                 this._compileValueGetter();
                 break;
-            case "displayExpr":
+            case 'displayExpr':
                 this._compileDisplayGetter();
                 this._initDynamicTemplates();
-                this._setCollectionWidgetOption("displayExpr");
+                this._setCollectionWidgetOption('displayExpr');
                 break;
         }
     }

@@ -1,6 +1,6 @@
-var vizMocks = require("../../helpers/vizMocks.js"),
-    linearIndicatorsModule = require("viz/gauges/linear_indicators"),
-    Translator1D = require("viz/translators/translator1d").Translator1D;
+var vizMocks = require('../../helpers/vizMocks.js'),
+    linearIndicatorsModule = require('viz/gauges/linear_indicators'),
+    Translator1D = require('viz/translators/translator1d').Translator1D;
 
 var needle,
     renderer,

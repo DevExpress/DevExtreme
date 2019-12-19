@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    ko = require('knockout');
 
-require("ui/slide_out");
-require("integration/knockout");
+require('ui/slide_out');
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -26,33 +26,33 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("regression", {
+QUnit.module('regression', {
     beforeEach: function() {
-        this.$element = $("#slideOut");
+        this.$element = $('#slideOut');
     }
 });
 
-QUnit.test("shared external templates should works as shared internal templates for nested containers", function(assert) {
-    ko.applyBindings({}, $("#sharedTemplatesCase")[0]);
-    ko.applyBindings({}, $("#internalTemplatesCase")[0]);
+QUnit.test('shared external templates should works as shared internal templates for nested containers', function(assert) {
+    ko.applyBindings({}, $('#sharedTemplatesCase')[0]);
+    ko.applyBindings({}, $('#internalTemplatesCase')[0]);
 
-    var listItems1 = $("#sharedTemplatesCase .dx-list-item"),
-        listItems2 = $("#internalTemplatesCase .dx-list-item");
+    var listItems1 = $('#sharedTemplatesCase .dx-list-item'),
+        listItems2 = $('#internalTemplatesCase .dx-list-item');
 
     listItems1.each(function(i) {
         assert.equal($.trim(listItems2.eq(i).text()), $.trim($(this).text()));
     });
 });
 
-QUnit.test("slideout should delegate templates to child widgets (T131530)", function(assert) {
-    var $slideOut = $("#T131530");
+QUnit.test('slideout should delegate templates to child widgets (T131530)', function(assert) {
+    var $slideOut = $('#T131530');
     ko.applyBindings({}, $slideOut.get(0));
 
-    var $list = $slideOut.find(".dx-list");
+    var $list = $slideOut.find('.dx-list');
 
-    assert.equal($.trim($list.find(".dx-list-item").eq(0).text()), "Template 1");
-    assert.equal($.trim($list.find(".dx-list-item").eq(1).text()), "Template 2");
+    assert.equal($.trim($list.find('.dx-list-item').eq(0).text()), 'Template 1');
+    assert.equal($.trim($list.find('.dx-list-item').eq(1).text()), 'Template 2');
 });

@@ -1,41 +1,41 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    clickEvent = require("../../events/click"),
-    messageLocalization = require("../../localization/message"),
-    translator = require("../../animation/translator"),
-    eventUtils = require("../../events/utils"),
-    feedbackEvents = require("../../events/core/emitter.feedback"),
-    EditDecoratorMenuHelperMixin = require("./ui.list.edit.decorator_menu_helper"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    SwitchableEditDecorator = require("./ui.list.edit.decorator.switchable"),
-    fx = require("../../animation/fx"),
-    themes = require("../themes"),
-    ActionSheet = require("../action_sheet");
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    noop = require('../../core/utils/common').noop,
+    clickEvent = require('../../events/click'),
+    messageLocalization = require('../../localization/message'),
+    translator = require('../../animation/translator'),
+    eventUtils = require('../../events/utils'),
+    feedbackEvents = require('../../events/core/emitter.feedback'),
+    EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    SwitchableEditDecorator = require('./ui.list.edit.decorator.switchable'),
+    fx = require('../../animation/fx'),
+    themes = require('../themes'),
+    ActionSheet = require('../action_sheet');
 
-var LIST_EDIT_DECORATOR = "dxListEditDecorator",
+var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
     CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, LIST_EDIT_DECORATOR),
     ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR),
 
-    SLIDE_MENU_CLASS = "dx-list-slide-menu",
-    SLIDE_MENU_WRAPPER_CLASS = "dx-list-slide-menu-wrapper",
+    SLIDE_MENU_CLASS = 'dx-list-slide-menu',
+    SLIDE_MENU_WRAPPER_CLASS = 'dx-list-slide-menu-wrapper',
 
-    SLIDE_MENU_CONTENT_CLASS = "dx-list-slide-menu-content",
-    SLIDE_MENU_BUTTONS_CONTAINER_CLASS = "dx-list-slide-menu-buttons-container",
+    SLIDE_MENU_CONTENT_CLASS = 'dx-list-slide-menu-content',
+    SLIDE_MENU_BUTTONS_CONTAINER_CLASS = 'dx-list-slide-menu-buttons-container',
 
-    SLIDE_MENU_BUTTONS_CLASS = "dx-list-slide-menu-buttons",
-    SLIDE_MENU_BUTTON_CLASS = "dx-list-slide-menu-button",
+    SLIDE_MENU_BUTTONS_CLASS = 'dx-list-slide-menu-buttons',
+    SLIDE_MENU_BUTTON_CLASS = 'dx-list-slide-menu-button',
 
-    SLIDE_MENU_BUTTON_MENU_CLASS = "dx-list-slide-menu-button-menu",
-    SLIDE_MENU_BUTTON_DELETE_CLASS = "dx-list-slide-menu-button-delete",
+    SLIDE_MENU_BUTTON_MENU_CLASS = 'dx-list-slide-menu-button-menu',
+    SLIDE_MENU_BUTTON_DELETE_CLASS = 'dx-list-slide-menu-button-delete',
 
     SLIDE_MENU_ANIMATION_DURATION = 400,
-    SLIDE_MENU_ANIMATION_EASING = "cubic-bezier(0.075, 0.82, 0.165, 1)";
+    SLIDE_MENU_ANIMATION_EASING = 'cubic-bezier(0.075, 0.82, 0.165, 1)';
 
 
 registerDecorator(
-    "menu",
-    "slide",
+    'menu',
+    'slide',
     SwitchableEditDecorator.inherit({
 
         _shouldHandleSwipe: true,
@@ -43,10 +43,10 @@ registerDecorator(
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this._$buttonsContainer = $("<div>").addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
+            this._$buttonsContainer = $('<div>').addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
             eventsEngine.on(this._$buttonsContainer, ACTIVE_EVENT_NAME, noop);
 
-            this._$buttons = $("<div>")
+            this._$buttons = $('<div>')
                 .addClass(SLIDE_MENU_BUTTONS_CLASS)
                 .appendTo(this._$buttonsContainer);
 
@@ -69,7 +69,7 @@ registerDecorator(
                     this._fireAction(menuItem);
                 }).bind(this));
             } else {
-                var $menu = $("<div>").addClass(SLIDE_MENU_CLASS);
+                var $menu = $('<div>').addClass(SLIDE_MENU_CLASS);
                 this._menu = this._list._createComponent($menu, ActionSheet, {
                     showTitle: false,
                     items: menuItems,
@@ -80,16 +80,16 @@ registerDecorator(
                 });
                 $menu.appendTo(this._list.$element());
 
-                var $menuButton = this._renderMenuButton(messageLocalization.format("dxListEditDecorator-more"), (function(e) {
+                var $menuButton = this._renderMenuButton(messageLocalization.format('dxListEditDecorator-more'), (function(e) {
                     e.stopPropagation();
                     this._menu.show();
                 }).bind(this));
-                this._menu.option("target", $menuButton);
+                this._menu.option('target', $menuButton);
             }
         },
 
         _renderMenuButton: function(text, action) {
-            var $menuButton = $("<div>")
+            var $menuButton = $('<div>')
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_MENU_CLASS)
                 .text(text);
@@ -105,12 +105,12 @@ registerDecorator(
                 return;
             }
 
-            var $deleteButton = $("<div>")
+            var $deleteButton = $('<div>')
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
                 .text(themes.isMaterial()
-                    ? ""
-                    : messageLocalization.format("dxListEditDecorator-delete"));
+                    ? ''
+                    : messageLocalization.format('dxListEditDecorator-delete'));
 
             eventsEngine.on($deleteButton, CLICK_EVENT_NAME, (function(e) {
                 e.stopPropagation();
@@ -133,7 +133,7 @@ registerDecorator(
             $itemElement
                 .addClass(SLIDE_MENU_WRAPPER_CLASS);
 
-            var $slideMenuContent = $("<div>")
+            var $slideMenuContent = $('<div>')
                 .addClass(SLIDE_MENU_CONTENT_CLASS);
 
             $itemElement.wrapInner($slideMenuContent);
@@ -144,7 +144,7 @@ registerDecorator(
         },
 
         handleClick: function(_, e) {
-            if($(e.target).closest("." + SLIDE_MENU_CONTENT_CLASS).length) {
+            if($(e.target).closest('.' + SLIDE_MENU_CONTENT_CLASS).length) {
                 return this.callBase.apply(this, arguments);
             }
             return false;
@@ -218,7 +218,7 @@ registerDecorator(
                 return;
             }
 
-            this._$cachedContent = $itemElement.find("." + SLIDE_MENU_CONTENT_CLASS);
+            this._$cachedContent = $itemElement.find('.' + SLIDE_MENU_CONTENT_CLASS);
             this._cachedItemWidth = $itemElement.outerWidth();
             this._cachedButtonWidth = this._cachedButtonWidth || this._$buttons.outerWidth();
             this._$buttonsContainer.width(this._cachedButtonWidth);
@@ -279,7 +279,7 @@ registerDecorator(
                 to: positions,
                 easing: SLIDE_MENU_ANIMATION_EASING,
                 duration: SLIDE_MENU_ANIMATION_DURATION * durationTimePart,
-                strategy: "frame",
+                strategy: 'frame',
                 draw: function(positions) {
                     that._setPositions(positions);
                 }

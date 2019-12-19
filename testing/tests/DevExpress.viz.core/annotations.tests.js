@@ -1,6 +1,6 @@
-import $ from "jquery";
-import { createAnnotations } from "viz/core/annotations";
-import vizMocks from "../../helpers/vizMocks.js";
+import $ from 'jquery';
+import { createAnnotations } from 'viz/core/annotations';
+import vizMocks from '../../helpers/vizMocks.js';
 
 const environment = {
     beforeEach() {
@@ -19,7 +19,7 @@ const environment = {
 
 function checkCloudPath(assert, cloud, points, rotation) {
     let path = cloud.attr.lastCall.args[0].d;
-    path = path.replace(/a 0 0 0 0 1 0 0/g, "");
+    path = path.replace(/a 0 0 0 0 1 0 0/g, '');
 
 
     const regExp = /(?:(-?\d+),(-?\d+))/g;
@@ -33,29 +33,29 @@ function checkCloudPath(assert, cloud, points, rotation) {
         }
     } while(m);
 
-    assert.equal(path[0], "M");
-    assert.equal(path[path.length - 1], "Z");
+    assert.equal(path[0], 'M');
+    assert.equal(path[path.length - 1], 'Z');
     assert.deepEqual(coords, points);
     assert.deepEqual(cloud.rotate.lastCall.args, rotation);
 }
 
-QUnit.module("Image annotation", environment);
+QUnit.module('Image annotation', environment);
 
-QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas", function(assert) {
+QUnit.test('Do not draw annotation if cannot get coords, or coords out of canvas', function(assert) {
     const testCase = (anchor, coords, message) => {
         this.widget._getAnnotationCoords.returns($.extend({ canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } }, anchor));
-        const annotation = this.createAnnotations([$.extend({ type: "image", image: { url: "some_url" } }, coords)], {})[0];
+        const annotation = this.createAnnotations([$.extend({ type: 'image', image: { url: 'some_url' } }, coords)], {})[0];
 
         annotation.draw(this.widget, this.group);
 
-        assert.equal(this.renderer.stub("image").callCount, 0, message);
+        assert.equal(this.renderer.stub('image').callCount, 0, message);
     };
 
-    testCase({ x: undefined, y: undefined }, { x: undefined, y: undefined }, "No anchor, no coords");
-    testCase({ x: 50, y: undefined }, { x: undefined, y: undefined }, "Only anchor x, no coords");
-    testCase({ x: null, y: null }, { x: null, y: null }, "No anchor, no coords");
-    testCase({ x: undefined, y: undefined }, { x: 100, y: undefined }, "Only x is defined");
-    testCase({ x: undefined, y: undefined }, { x: undefined, y: 100 }, "Only y is defined");
+    testCase({ x: undefined, y: undefined }, { x: undefined, y: undefined }, 'No anchor, no coords');
+    testCase({ x: 50, y: undefined }, { x: undefined, y: undefined }, 'Only anchor x, no coords');
+    testCase({ x: null, y: null }, { x: null, y: null }, 'No anchor, no coords');
+    testCase({ x: undefined, y: undefined }, { x: 100, y: undefined }, 'Only x is defined');
+    testCase({ x: undefined, y: undefined }, { x: undefined, y: 100 }, 'Only y is defined');
 
     testCase({ x: 30, y: 200 }, { x: undefined, y: undefined });
     testCase({ x: 470, y: 200 }, { x: undefined, y: undefined });
@@ -63,47 +63,47 @@ QUnit.test("Do not draw annotation if cannot get coords, or coords out of canvas
     testCase({ x: 200, y: 470 }, { x: undefined, y: undefined });
 });
 
-QUnit.test("Image params", function(assert) {
-    const annotation = this.createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10, height: 10, location: "some_location" } }])[0];
+QUnit.test('Image params', function(assert) {
+    const annotation = this.createAnnotations([{ x: 10, y: 20, type: 'image', image: { url: 'some_url', width: 10, height: 10, location: 'some_location' } }])[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "some_url", "some_location"]);
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'some_url', 'some_location']);
 });
 
-QUnit.test("Merge common and item options", function(assert) {
-    const annotation = this.createAnnotations([{ x: 10, y: 20, type: "image", image: { url: "some_url", width: 10 } }], { image: { height: 10 } })[0];
+QUnit.test('Merge common and item options', function(assert) {
+    const annotation = this.createAnnotations([{ x: 10, y: 20, type: 'image', image: { url: 'some_url', width: 10 } }], { image: { height: 10 } })[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "some_url", "center"]);
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'some_url', 'center']);
 });
 
-QUnit.test("Merge customizeAnnotation result and common+item options", function(assert) {
-    const customizeAnnotation = sinon.stub().returns({ image: { url: "customized_url" } });
+QUnit.test('Merge customizeAnnotation result and common+item options', function(assert) {
+    const customizeAnnotation = sinon.stub().returns({ image: { url: 'customized_url' } });
     const itemOptions = {
         x: 10, y: 20,
-        type: "image",
-        image: { url: "some_url", width: 10 }
+        type: 'image',
+        image: { url: 'some_url', width: 10 }
     };
     const annotation = this.createAnnotations([itemOptions], { image: { height: 10 } }, customizeAnnotation)[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, "customized_url", "center"]);
+    assert.deepEqual(this.renderer.image.firstCall.args, [0, 0, 10, 10, 'customized_url', 'center']);
     assert.equal(customizeAnnotation.callCount, 1);
     assert.equal(customizeAnnotation.getCall(0).args[0], itemOptions);
 });
 
-QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+QUnit.test('Draw image inside a plaque with borders and arrow', function(assert) {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 2,
-            color: "#000000",
-            dashStyle: "solid",
+            color: '#000000',
+            dashStyle: 'solid',
             visible: true
         },
-        color: "#AAAAAA",
+        color: '#AAAAAA',
         opacity: 0.5,
         arrowLength: 20,
         arrowWidth: 30,
@@ -114,7 +114,7 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
             offsetX: 3,
             offsetY: 4,
             blur: 5,
-            color: "#111111"
+            color: '#111111'
         }
     })[0];
     this.renderer.g.reset();
@@ -127,34 +127,34 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     assert.deepEqual(wrapperGroup.append.firstCall.args, [this.group]);
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-image-annotation" }]);
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: 'dxc-image-annotation' }]);
     assert.deepEqual(annotationGroup.append.firstCall.args, [wrapperGroup]);
 
     assert.equal(this.renderer.shadowFilter.callCount, 1);
     assert.deepEqual(this.renderer.shadowFilter.firstCall.returnValue.attr.firstCall.args, [{
-        x: "-50%",
-        y: "-50%",
-        width: "200%",
-        height: "200%",
+        x: '-50%',
+        y: '-50%',
+        width: '200%',
+        height: '200%',
         opacity: 0.2,
         offsetX: 3,
         offsetY: 4,
         blur: 5,
-        color: "#111111"
+        color: '#111111'
     }]);
 
     assert.equal(this.renderer.path.callCount, 1);
-    assert.deepEqual(this.renderer.path.getCall(0).args, [[], "area"]);
+    assert.deepEqual(this.renderer.path.getCall(0).args, [[], 'area']);
     const plaque = this.renderer.path.getCall(0).returnValue;
     assert.deepEqual(plaque.attr.firstCall.args, [{
-        "stroke-width": 2,
-        stroke: "#000000",
-        dashStyle: "solid",
-        fill: "#AAAAAA",
+        'stroke-width': 2,
+        stroke: '#000000',
+        dashStyle: 'solid',
+        fill: '#AAAAAA',
         opacity: 0.5
     }]);
     const cloudGroup = this.renderer.g.getCall(2).returnValue;
-    assert.deepEqual(cloudGroup.attr.firstCall.args, [{ filter: "shadowFilter.id" }]);
+    assert.deepEqual(cloudGroup.attr.firstCall.args, [{ filter: 'shadowFilter.id' }]);
 
     assert.deepEqual(plaque.append.firstCall.args, [cloudGroup]);
     assert.equal(plaque.sharp.callCount, 1);
@@ -168,9 +168,9 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     assert.deepEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args, [contentGroup]);
 });
 
-QUnit.test("Get size from annotation setting if it less than image size", function(assert) {
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 50, height: 50 } }], {
-        color: "#AAAAAA",
+QUnit.test('Get size from annotation setting if it less than image size', function(assert) {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url', width: 50, height: 50 } }], {
+        color: '#AAAAAA',
         opacity: 0.5,
         arrowLength: 0,
         arrowWidth: 0,
@@ -185,19 +185,19 @@ QUnit.test("Get size from annotation setting if it less than image size", functi
 
     // assert
     const imageArgs = this.renderer.image.lastCall.args;
-    assert.deepEqual(imageArgs[2], 20, "width");
-    assert.deepEqual(imageArgs[3], 30, "height");
+    assert.deepEqual(imageArgs[2], 20, 'width');
+    assert.deepEqual(imageArgs[3], 30, 'height');
 });
 
-QUnit.test("Draw image inside a plaque without borders", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+QUnit.test('Draw image inside a plaque without borders', function(assert) {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 2,
-            color: "#000000",
-            dashStyle: "solid",
+            color: '#000000',
+            dashStyle: 'solid',
             visible: false
         },
-        color: "#AAAAAA",
+        color: '#AAAAAA',
         opacity: 0.5
     })[0];
     this.renderer.g.reset();
@@ -206,15 +206,15 @@ QUnit.test("Draw image inside a plaque without borders", function(assert) {
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
     assert.deepEqual(plaque.attr.firstCall.args, [{
-        "stroke-width": 0,
-        fill: "#AAAAAA",
+        'stroke-width': 0,
+        fill: '#AAAAAA',
         opacity: 0.5
     }]);
 });
 
-QUnit.test("Draw annotation with anchor and x/y", function(assert) {
+QUnit.test('Draw annotation with anchor and x/y', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -237,9 +237,9 @@ QUnit.test("Draw annotation with anchor and x/y", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
 });
 
-QUnit.test("Draw annotation with anchor and only x", function(assert) {
+QUnit.test('Draw annotation with anchor and only x', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 290, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ x: 300, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -261,8 +261,8 @@ QUnit.test("Draw annotation with anchor and only x", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 160 - 2 - 5]);
 });
 
-QUnit.test("Draw annotation with anchor and only y", function(assert) {
-    const annotation = this.createAnnotations([{ y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+QUnit.test('Draw annotation with anchor and only y', function(assert) {
+    const annotation = this.createAnnotations([{ y: 50, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -289,9 +289,9 @@ QUnit.test("Draw annotation with anchor and only y", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10, 50 - 2 - 5]);
 });
 
-QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
+QUnit.test('Draw annotation with x/y and without anchor', function(assert) {
     this.widget._getAnnotationCoords.returns({});
-    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -313,14 +313,14 @@ QUnit.test("Draw annotation with x/y and without anchor", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10, 50 - 2 - 5]);
 });
 
-QUnit.test("Draw annotation with offsetX/offsetY with anchor", function(assert) {
+QUnit.test('Draw annotation with offsetX/offsetY with anchor', function(assert) {
     this.widget._getAnnotationCoords.returns({
         offsetX: 10,
         offsetY: -20,
         x: 100,
         y: 200
     });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         arrowLength: 20,
         arrowWidth: 30,
         paddingLeftRight: 10,
@@ -335,12 +335,12 @@ QUnit.test("Draw annotation with offsetX/offsetY with anchor", function(assert) 
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 1 - 10 + 10, 160 - 2 - 5 + 20]);
 });
 
-QUnit.test("Draw annotation with offsetX/offsetY and without anchor", function(assert) {
+QUnit.test('Draw annotation with offsetX/offsetY and without anchor', function(assert) {
     this.widget._getAnnotationCoords.returns({
         offsetX: 10,
         offsetY: -20,
     });
-    const annotation = this.createAnnotations([{ x: 300, y: 50, type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ x: 300, y: 50, type: 'image', image: { url: 'some_url', width: 20, height: 13 } }], {
         border: {
             width: 1,
             visible: true
@@ -359,11 +359,11 @@ QUnit.test("Draw annotation with offsetX/offsetY and without anchor", function(a
     assert.deepEqual(contentGroup.move.firstCall.args, [300 - 1 - 10 + 10, 50 - 2 - 5 - 20]);
 });
 
-QUnit.module("Check plaque path", environment);
+QUnit.module('Check plaque path', environment);
 
-QUnit.test("Arrow on the top, left side", function(assert) {
+QUnit.test('Arrow on the top, left side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 120, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 120, y: 240, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -385,9 +385,9 @@ QUnit.test("Arrow on the top, left side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [120 - 10, 240 - 10]);
 });
 
-QUnit.test("Arrow on the top, center", function(assert) {
+QUnit.test('Arrow on the top, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 100, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 240, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -409,9 +409,9 @@ QUnit.test("Arrow on the top, center", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 240 - 10]);
 });
 
-QUnit.test("Arrow on the top, right side", function(assert) {
+QUnit.test('Arrow on the top, right side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 80, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 80, y: 240, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -433,9 +433,9 @@ QUnit.test("Arrow on the top, right side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [80 - 10, 240 - 10]);
 });
 
-QUnit.test("Arrow on the bottom, left side", function(assert) {
+QUnit.test('Arrow on the bottom, left side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 120, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 120, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -457,9 +457,9 @@ QUnit.test("Arrow on the bottom, left side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [120 - 10, 160 - 10]);
 });
 
-QUnit.test("Arrow on the bottom, center", function(assert) {
+QUnit.test('Arrow on the bottom, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -481,9 +481,9 @@ QUnit.test("Arrow on the bottom, center", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 160 - 10]);
 });
 
-QUnit.test("Arrow on the bottom, right side", function(assert) {
+QUnit.test('Arrow on the bottom, right side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 80, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 80, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -505,9 +505,9 @@ QUnit.test("Arrow on the bottom, right side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [80 - 10, 160 - 10]);
 });
 
-QUnit.test("Arrow on the left, top side", function(assert) {
+QUnit.test('Arrow on the left, top side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 220, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 220, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -529,9 +529,9 @@ QUnit.test("Arrow on the left, top side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 220 - 10]);
 });
 
-QUnit.test("Arrow on the left, center", function(assert) {
+QUnit.test('Arrow on the left, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -554,9 +554,9 @@ QUnit.test("Arrow on the left, center", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 200 - 10]);
 });
 
-QUnit.test("Arrow on the left, bottom side", function(assert) {
+QUnit.test('Arrow on the left, bottom side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 180, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 180, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -578,9 +578,9 @@ QUnit.test("Arrow on the left, bottom side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 180 - 10]);
 });
 
-QUnit.test("Arrow on the right, top side", function(assert) {
+QUnit.test('Arrow on the right, top side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 140, y: 220, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 220, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -602,9 +602,9 @@ QUnit.test("Arrow on the right, top side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 220 - 10]);
 });
 
-QUnit.test("Arrow on the left, center", function(assert) {
+QUnit.test('Arrow on the left, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 140, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -626,9 +626,9 @@ QUnit.test("Arrow on the left, center", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 200 - 10]);
 });
 
-QUnit.test("Arrow on the left, bottom side", function(assert) {
+QUnit.test('Arrow on the left, bottom side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 140, y: 180, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 180, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -650,9 +650,9 @@ QUnit.test("Arrow on the left, bottom side", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 180 - 10]);
 });
 
-QUnit.test("Arrow on top-left corner", function(assert) {
+QUnit.test('Arrow on top-left corner', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 140, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 240, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -674,9 +674,9 @@ QUnit.test("Arrow on top-left corner", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 240 - 10]);
 });
 
-QUnit.test("Arrow on top-right corner", function(assert) {
+QUnit.test('Arrow on top-right corner', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 240, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 240, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -698,9 +698,9 @@ QUnit.test("Arrow on top-right corner", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 240 - 10]);
 });
 
-QUnit.test("Arrow on bottom-right corner", function(assert) {
+QUnit.test('Arrow on bottom-right corner', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -722,9 +722,9 @@ QUnit.test("Arrow on bottom-right corner", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 160 - 10]);
 });
 
-QUnit.test("Arrow on bottom-left corner", function(assert) {
+QUnit.test('Arrow on bottom-left corner', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 140, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 140, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -746,9 +746,9 @@ QUnit.test("Arrow on bottom-left corner", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 160 - 10]);
 });
 
-QUnit.test("Anchor is inside plaque", function(assert) {
+QUnit.test('Anchor is inside plaque', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 100, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -770,9 +770,9 @@ QUnit.test("Anchor is inside plaque", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 200 - 10]);
 });
 
-QUnit.test("Arrow on the left, center. Arrow width is bigger than annotation height", function(assert) {
+QUnit.test('Arrow on the left, center. Arrow width is bigger than annotation height', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 60, y: 200, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 60, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -793,9 +793,9 @@ QUnit.test("Arrow on the left, center. Arrow width is bigger than annotation hei
     assert.deepEqual(contentGroup.move.firstCall.args, [60 - 10, 200 - 10]);
 });
 
-QUnit.test("Arrow on the bottom, center. Arrow width is bigger than annotation width", function(assert) {
+QUnit.test('Arrow on the bottom, center. Arrow width is bigger than annotation width', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ x: 100, y: 160, type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ x: 100, y: 160, type: 'image', image: { url: 'some_url' } }], {
         border: {
             width: 1,
             visible: true
@@ -816,7 +816,7 @@ QUnit.test("Arrow on the bottom, center. Arrow width is bigger than annotation w
     assert.deepEqual(contentGroup.move.firstCall.args, [100 - 10, 160 - 10]);
 });
 
-QUnit.module("Check plaque path on pane bounds", {
+QUnit.module('Check plaque path on pane bounds', {
     beforeEach() {
         environment.beforeEach.call(this);
     },
@@ -840,10 +840,10 @@ QUnit.module("Check plaque path on pane bounds", {
     }
 });
 
-QUnit.test("Out of right bound - draw plaque from right border", function(assert) {
+QUnit.test('Out of right bound - draw plaque from right border', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 440, y: 200, canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         shadow: {
             offsetX: 4,
             offsetY: 0,
@@ -862,10 +862,10 @@ QUnit.test("Out of right bound - draw plaque from right border", function(assert
     assert.deepEqual(contentGroup.move.firstCall.args, [420 - 15, 160 - 10]);
 });
 
-QUnit.test("Out of left bound - draw plaque from left border", function(assert) {
+QUnit.test('Out of left bound - draw plaque from left border', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 60, y: 200, canvas: { left: 50, top: 50, right: 50, bottom: 50, width: 500, height: 500 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         shadow: {
             offsetX: 1,
             offsetY: 0,
@@ -884,10 +884,10 @@ QUnit.test("Out of left bound - draw plaque from left border", function(assert) 
     assert.deepEqual(contentGroup.move.firstCall.args, [80, 160 - 10]);
 });
 
-QUnit.test("Plaque width more than canvas - draw plaque in center", function(assert) {
+QUnit.test('Plaque width more than canvas - draw plaque in center', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 5, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 20, height: 500 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }])[0];
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }])[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
@@ -900,10 +900,10 @@ QUnit.test("Plaque width more than canvas - draw plaque in center", function(ass
     assert.deepEqual(contentGroup.move.firstCall.args, [10 - 10, 160 - 10]);
 });
 
-QUnit.test("Out of top bound - draw plaque under anchor", function(assert) {
+QUnit.test('Out of top bound - draw plaque under anchor', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 200, y: 90, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         shadow: {
             offsetX: 0,
             offsetY: 1,
@@ -922,10 +922,10 @@ QUnit.test("Out of top bound - draw plaque under anchor", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 130 - 10]);
 });
 
-QUnit.test("Out of top bound, but does not fit under anchor - draw plaque from top border", function(assert) {
+QUnit.test('Out of top bound, but does not fit under anchor - draw plaque from top border', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 200, y: 50, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 115 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         shadow: {
             offsetX: 0,
             offsetY: 4,
@@ -944,10 +944,10 @@ QUnit.test("Out of top bound, but does not fit under anchor - draw plaque from t
     assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 20 - 10]);
 });
 
-QUnit.test("Plaque height more than canvas - draw plaque from top border", function(assert) {
+QUnit.test('Plaque height more than canvas - draw plaque from top border', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 200, y: 10, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 30 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }])[0];
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }])[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
@@ -960,11 +960,11 @@ QUnit.test("Plaque height more than canvas - draw plaque from top border", funct
     assert.deepEqual(contentGroup.move.firstCall.args, [200 - 10, 20 - 10]);
 });
 
-QUnit.test("Round x, y", function(assert) {
+QUnit.test('Round x, y', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 200, y: 10, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 30 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{
-        type: "image", image: { url: "some_url" },
+        type: 'image', image: { url: 'some_url' },
         x: 201.3,
         y: 20.6
     }])[0];
@@ -980,16 +980,16 @@ QUnit.test("Round x, y", function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [201 - 10, 21 - 10]);
 });
 
-QUnit.module("Text annotaion", environment);
+QUnit.module('Text annotaion', environment);
 
-QUnit.test("Draw text inside plaque", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {} } ], {})[0];
+QUnit.test('Draw text inside plaque', function(assert) {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'text', text: 'some text', font: {} } ], {})[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: 'dxc-text-annotation' }]);
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     const text = this.renderer.text.firstCall.returnValue;
@@ -997,36 +997,36 @@ QUnit.test("Draw text inside plaque", function(assert) {
     assert.ok(!text.setMaxSize.called);
 });
 
-QUnit.test("Text params", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 }, cssClass: "annotation_class" } ], {})[0];
+QUnit.test('Text params', function(assert) {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'text', text: 'some text', font: { size: 20 }, cssClass: 'annotation_class' } ], {})[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.text.firstCall.args, ["some text"]);
-    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20 }]);
-    assert.strictEqual(this.renderer.text.firstCall.returnValue.attr.lastCall.args[0]["class"], "annotation_class");
+    assert.deepEqual(this.renderer.text.firstCall.args, ['some text']);
+    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ 'font-size': 20 }]);
+    assert.strictEqual(this.renderer.text.firstCall.returnValue.attr.lastCall.args[0]['class'], 'annotation_class');
 });
 
-QUnit.test("Merge common and item options", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {
-        font: { color: "red" }
+QUnit.test('Merge common and item options', function(assert) {
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'text', text: 'some text', font: { size: 20 } } ], {
+        font: { color: 'red' }
     })[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20, "fill": "red" }]);
+    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ 'font-size': 20, 'fill': 'red' }]);
 });
 
-QUnit.test("Draw text with width/height", function(assert) {
+QUnit.test('Draw text with width/height', function(assert) {
     const annotation = this.createAnnotations([{
         x: 0, y: 0,
-        type: "text",
-        text: "some text",
+        type: 'text',
+        text: 'some text',
         font: {},
         width: 100,
         height: 150,
-        textOverflow: "hide",
-        wordWrap: "normal",
+        textOverflow: 'hide',
+        wordWrap: 'normal',
         paddingLeftRight: 10,
         paddingTopBottom: 20,
         arrowWidth: 0
@@ -1036,27 +1036,27 @@ QUnit.test("Draw text with width/height", function(assert) {
     annotation.draw(this.widget, this.group);
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: 'dxc-text-annotation' }]);
 
     const text = this.renderer.text.firstCall.returnValue;
 
     assert.equal(text.setMaxSize.callCount, 1);
-    assert.deepEqual(text.setMaxSize.lastCall.args, [100, 150, { textOverflow: "hide", wordWrap: "normal" }]);
+    assert.deepEqual(text.setMaxSize.lastCall.args, [100, 150, { textOverflow: 'hide', wordWrap: 'normal' }]);
 
     const plaque = this.renderer.path.getCall(0).returnValue;
     checkCloudPath(assert, plaque, [-95, -60, 95, -60, 200, -100, 95, -60, 95, 60, -95, 60], [90, 0, 0]);
 });
 
-QUnit.test("Do not call setMax size is less than 0", function(assert) {
+QUnit.test('Do not call setMax size is less than 0', function(assert) {
     const annotation = this.createAnnotations([{
         x: 0, y: 0,
-        type: "text",
-        text: "some text",
+        type: 'text',
+        text: 'some text',
         font: {},
         width: -1,
         height: -1,
-        textOverflow: "hide",
-        wordWrap: "normal",
+        textOverflow: 'hide',
+        wordWrap: 'normal',
         paddingLeftRight: 30,
         paddingTopBottom: 20,
         arrowWidth: 0
@@ -1066,23 +1066,23 @@ QUnit.test("Do not call setMax size is less than 0", function(assert) {
     annotation.draw(this.widget, this.group);
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
-    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-text-annotation" }]);
+    assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: 'dxc-text-annotation' }]);
 
     const text = this.renderer.text.firstCall.returnValue;
 
-    assert.ok(!text.stub("setMaxSize").called);
+    assert.ok(!text.stub('setMaxSize').called);
 });
 
-QUnit.test("Draw plague bound text bbox if it greater than passed size", function(assert) {
+QUnit.test('Draw plague bound text bbox if it greater than passed size', function(assert) {
     const annotation = this.createAnnotations([{
         x: 0, y: 0,
-        type: "text",
-        text: "some text",
+        type: 'text',
+        text: 'some text',
         font: {},
         width: 1,
         height: 1,
-        textOverflow: "hide",
-        wordWrap: "normal",
+        textOverflow: 'hide',
+        wordWrap: 'normal',
         paddingLeftRight: 0,
         paddingTopBottom: 0,
         arrowWidth: 0
@@ -1096,11 +1096,11 @@ QUnit.test("Draw plague bound text bbox if it greater than passed size", functio
     checkCloudPath(assert, plaque, [-100, -50, 100, -50, 200, -100, 100, -50, 100, 50, -100, 50], [90, 0, 0]);
 });
 
-QUnit.module("Tooltip", environment);
+QUnit.module('Tooltip', environment);
 
-QUnit.test("customizeTooltip in item", function(assert) {
+QUnit.test('customizeTooltip in item', function(assert) {
     const customizeTooltip = function() { return 2; };
-    const items = [{ x: 0, y: 0, opt_1: "opt_1", type: "image", image: { url: "some_url" }, customizeTooltip }];
+    const items = [{ x: 0, y: 0, opt_1: 'opt_1', type: 'image', image: { url: 'some_url' }, customizeTooltip }];
     const annotation = this.createAnnotations(items, { customizeTooltip: function() { return 1; } })[0];
 
     annotation.draw(this.widget, this.group);
@@ -1109,25 +1109,25 @@ QUnit.test("customizeTooltip in item", function(assert) {
     assert.equal(annotation.options.customizeTooltip, customizeTooltip);
 });
 
-QUnit.module("Misc", environment);
+QUnit.module('Misc', environment);
 
-QUnit.test("Do not create annotation with wrong type", function(assert) {
+QUnit.test('Do not create annotation with wrong type', function(assert) {
     const annotations = this.createAnnotations([
-        { type: "image" },
-        { type: "wrongtype" },
-        { type: "text" }
+        { type: 'image' },
+        { type: 'wrongtype' },
+        { type: 'text' }
     ], {});
 
     assert.equal(annotations.length, 2);
-    assert.equal(annotations[0].type, "image");
-    assert.equal(annotations[1].type, "text");
+    assert.equal(annotations[0].type, 'image');
+    assert.equal(annotations[1].type, 'text');
 });
 
-QUnit.module("Plaque with cornerRadius", environment);
+QUnit.module('Plaque with cornerRadius', environment);
 
-QUnit.test("Draw plaque w/o arrow", function(assert) {
+QUnit.test('Draw plaque w/o arrow', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 40, height: 20 } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url', width: 40, height: 20 } }], {
         x: 100,
         y: 100,
         paddingLeftRight: 10,
@@ -1139,12 +1139,12 @@ QUnit.test("Draw plaque w/o arrow", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(plaque.attr.lastCall.args[0].d, "M80,90a 5 5 0 0 1 5 -5L115,85a 5 5 0 0 1 5 5L120,110a 5 5 0 0 1 -5 5L85,115a 5 5 0 0 1 -5 -5Z");
+    assert.equal(plaque.attr.lastCall.args[0].d, 'M80,90a 5 5 0 0 1 5 -5L115,85a 5 5 0 0 1 5 5L120,110a 5 5 0 0 1 -5 5L85,115a 5 5 0 0 1 -5 -5Z');
 });
 
-QUnit.test("Corner radius can't be greater than half of height", function(assert) {
+QUnit.test('Corner radius can\'t be greater than half of height', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 40,
@@ -1158,12 +1158,12 @@ QUnit.test("Corner radius can't be greater than half of height", function(assert
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(plaque.attr.lastCall.args[0].d.slice(7, 27), "a 10 10 0 0 1 10 -10");
+    assert.equal(plaque.attr.lastCall.args[0].d.slice(7, 27), 'a 10 10 0 0 1 10 -10');
 });
 
-QUnit.test("Corner radius can't be greater than half of width", function(assert) {
+QUnit.test('Corner radius can\'t be greater than half of width', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 100, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 40,
@@ -1177,16 +1177,16 @@ QUnit.test("Corner radius can't be greater than half of width", function(assert)
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(plaque.attr.lastCall.args[0].d.slice(6, 26), "a 20 20 0 0 1 20 -20");
+    assert.equal(plaque.attr.lastCall.args[0].d.slice(6, 26), 'a 20 20 0 0 1 20 -20');
 });
 
 function roundPathCoords(cloud) {
     return cloud.attr.lastCall.args[0].d.replace(/\.\d+/g, d => d.slice(0, 3));
 }
 
-QUnit.test("Arrow bettween arcs", function(assert) {
+QUnit.test('Arrow bettween arcs', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1200,12 +1200,12 @@ QUnit.test("Arrow bettween arcs", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M75,80a 5 5 0 0 1 5 -5L120,75a 5 5 0 0 1 5 5L125,95,300,100,125,105L125,120a 5 5 0 0 1 -5 5L80,125a 5 5 0 0 1 -5 -5Z");
+    assert.equal(roundPathCoords(plaque), 'M75,80a 5 5 0 0 1 5 -5L120,75a 5 5 0 0 1 5 5L125,95,300,100,125,105L125,120a 5 5 0 0 1 -5 5L80,125a 5 5 0 0 1 -5 -5Z');
 });
 
-QUnit.test("Arrow start on top arc, arrow end beetween arcs", function(assert) {
+QUnit.test('Arrow start on top arc, arrow end beetween arcs', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 80, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1219,12 +1219,12 @@ QUnit.test("Arrow start on top arc, arrow end beetween arcs", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M75,75a 25 25 0 0 1 25 -25L100,50a 25 25 0 0 1 13.50 3.96L113.50,53.96,300,80,125,125L125,125a 25 25 0 0 1 -25 25L100,150a 25 25 0 0 1 -25 -25Z");
+    assert.equal(roundPathCoords(plaque), 'M75,75a 25 25 0 0 1 25 -25L100,50a 25 25 0 0 1 13.50 3.96L113.50,53.96,300,80,125,125L125,125a 25 25 0 0 1 -25 25L100,150a 25 25 0 0 1 -25 -25Z');
 });
 
-QUnit.test("Both arrrow coordinates on top arc", function(assert) {
+QUnit.test('Both arrrow coordinates on top arc', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 60, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 50,
@@ -1238,12 +1238,12 @@ QUnit.test("Both arrrow coordinates on top arc", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M75,75a 25 25 0 0 1 25 -25L100,50a 25 25 0 0 1 13.50 3.96L113.50,53.96,300,60,124.50,70.06A 25 25 0 0 1 125 75L125,125a 25 25 0 0 1 -25 25L100,150a 25 25 0 0 1 -25 -25Z");
+    assert.equal(roundPathCoords(plaque), 'M75,75a 25 25 0 0 1 25 -25L100,50a 25 25 0 0 1 13.50 3.96L113.50,53.96,300,60,124.50,70.06A 25 25 0 0 1 125 75L125,125a 25 25 0 0 1 -25 25L100,150a 25 25 0 0 1 -25 -25Z');
 });
 
-QUnit.test("Arrow starts on top arc and ends on bottom arc", function(assert) {
+QUnit.test('Arrow starts on top arc and ends on bottom arc', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 100, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1257,12 +1257,12 @@ QUnit.test("Arrow starts on top arc and ends on bottom arc", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,100a 50 50 0 0 1 50 -50L100,50a 50 50 0 0 1 48.98 40L148.98,90,300,100,148.98,110A 50 50 0 0 1 100 150L100,150a 50 50 0 0 1 -50 -50Z");
+    assert.equal(roundPathCoords(plaque), 'M50,100a 50 50 0 0 1 50 -50L100,50a 50 50 0 0 1 48.98 40L148.98,90,300,100,148.98,110A 50 50 0 0 1 100 150L100,150a 50 50 0 0 1 -50 -50Z');
 });
 
-QUnit.test("Arrow starts on bottom arc and ends on bottom arc", function(assert) {
+QUnit.test('Arrow starts on bottom arc and ends on bottom arc', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 140, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1276,12 +1276,12 @@ QUnit.test("Arrow starts on bottom arc and ends on bottom arc", function(assert)
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 20 20L150,130,300,140,130,150A 20 20 0 0 1 130 150L70,150a 20 20 0 0 1 -20 -20Z");
+    assert.equal(roundPathCoords(plaque), 'M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 20 20L150,130,300,140,130,150A 20 20 0 0 1 130 150L70,150a 20 20 0 0 1 -20 -20Z');
 });
 
-QUnit.test("Arrow starts from bottom arc", function(assert) {
+QUnit.test('Arrow starts from bottom arc', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 140, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1295,12 +1295,12 @@ QUnit.test("Arrow starts from bottom arc", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 20 20L150,130,300,140,130,150A 20 20 0 0 1 130 150L70,150a 20 20 0 0 1 -20 -20Z");
+    assert.equal(roundPathCoords(plaque), 'M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 20 20L150,130,300,140,130,150A 20 20 0 0 1 130 150L70,150a 20 20 0 0 1 -20 -20Z');
 });
 
-QUnit.test("Arrow on bottom arc", function(assert) {
+QUnit.test('Arrow on bottom arc', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 150, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1314,12 +1314,12 @@ QUnit.test("Arrow on bottom arc", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,100a 50 50 0 0 1 50 -50L100,50a 50 50 0 0 1 50 50L150,100a 50 50 0 0 1 -28.20 45L121.79,145,300,150,100,150A 50 50 0 0 1 100 150L100,150a 50 50 0 0 1 -50 -50Z");
+    assert.equal(roundPathCoords(plaque), 'M50,100a 50 50 0 0 1 50 -50L100,50a 50 50 0 0 1 50 50L150,100a 50 50 0 0 1 -28.20 45L121.79,145,300,150,100,150A 50 50 0 0 1 100 150L100,150a 50 50 0 0 1 -50 -50Z');
 });
 
-QUnit.test("Arrow in the corner", function(assert) {
+QUnit.test('Arrow in the corner', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1333,12 +1333,12 @@ QUnit.test("Arrow in the corner", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 10.20 2.79L160,-100,147.20,59.79A 20 20 0 0 1 150 70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z");
+    assert.equal(roundPathCoords(plaque), 'M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 10.20 2.79L160,-100,147.20,59.79A 20 20 0 0 1 150 70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z');
 });
 
-QUnit.test("Arrow in the corner. Arrow width greater than arc length", function(assert) {
+QUnit.test('Arrow in the corner. Arrow width greater than arc length', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1352,12 +1352,12 @@ QUnit.test("Arrow in the corner. Arrow width greater than arc length", function(
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,70a 20 20 0 0 1 20 -20L130,50,160,-100,150,70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z");
+    assert.equal(roundPathCoords(plaque), 'M50,70a 20 20 0 0 1 20 -20L130,50,160,-100,150,70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z');
 });
 
-QUnit.test("Arrow in the corner. Arrow width is 0", function(assert) {
+QUnit.test('Arrow in the corner. Arrow width is 0', function(assert) {
     this.widget._getAnnotationCoords.returns({ x: 300, y: 160, canvas: { left: 50, top: 25, right: 50, bottom: 50, width: 500, height: 500 } });
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url" } }], {
+    const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }], {
         x: 100,
         y: 100,
         width: 100,
@@ -1371,5 +1371,5 @@ QUnit.test("Arrow in the corner. Arrow width is 0", function(assert) {
 
     // assert
     const plaque = this.renderer.path.getCall(0).returnValue;
-    assert.equal(roundPathCoords(plaque), "M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 14.14 5.85L160,-100,144.14,55.85A 20 20 0 0 1 150 70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z");
+    assert.equal(roundPathCoords(plaque), 'M50,70a 20 20 0 0 1 20 -20L130,50a 20 20 0 0 1 14.14 5.85L160,-100,144.14,55.85A 20 20 0 0 1 150 70L150,130a 20 20 0 0 1 -20 20L70,150a 20 20 0 0 1 -20 -20Z');
 });

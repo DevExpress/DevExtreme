@@ -1,56 +1,56 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import registerComponent from "../../core/component_registrator";
-import { noop } from "../../core/utils/common";
-import { getPublicElement } from "../../core/utils/dom";
-import { each } from "../../core/utils/iterator";
-import { isPlainObject, isObject, isDefined } from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { getElementMaxHeightByWindow } from "../overlay/utils";
-import { addNamespace } from "../../events/utils";
-import pointerEvents from "../../events/pointer";
-import hoverEvents from "../../events/hover";
-import MenuBase from "../context_menu/ui.menu_base";
-import Overlay from "../overlay";
-import Submenu from "./ui.submenu";
-import Button from "../button";
-import TreeView from "../tree_view";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import registerComponent from '../../core/component_registrator';
+import { noop } from '../../core/utils/common';
+import { getPublicElement } from '../../core/utils/dom';
+import { each } from '../../core/utils/iterator';
+import { isPlainObject, isObject, isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { getElementMaxHeightByWindow } from '../overlay/utils';
+import { addNamespace } from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+import hoverEvents from '../../events/hover';
+import MenuBase from '../context_menu/ui.menu_base';
+import Overlay from '../overlay';
+import Submenu from './ui.submenu';
+import Button from '../button';
+import TreeView from '../tree_view';
 
-const DX_MENU_CLASS = "dx-menu";
-const DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + "-vertical";
-const DX_MENU_HORIZONTAL_CLASS = DX_MENU_CLASS + "-horizontal";
-const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item";
-const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container";
-const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded";
-const DX_CONTEXT_MENU_CLASS = "dx-context-menu";
-const DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = DX_CONTEXT_MENU_CLASS + "-container-border";
-const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter";
-const DX_SUBMENU_CLASS = "dx-submenu";
+const DX_MENU_CLASS = 'dx-menu';
+const DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + '-vertical';
+const DX_MENU_HORIZONTAL_CLASS = DX_MENU_CLASS + '-horizontal';
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
+const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + '-items-container';
+const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + '-expanded';
+const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+const DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = DX_CONTEXT_MENU_CLASS + '-container-border';
+const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
+const DX_SUBMENU_CLASS = 'dx-submenu';
 
-const DX_STATE_DISABLED_CLASS = "dx-state-disabled";
-const DX_STATE_HOVER_CLASS = "dx-state-hover";
-const DX_STATE_ACTIVE_CLASS = "dx-state-active";
+const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
+const DX_STATE_HOVER_CLASS = 'dx-state-hover';
+const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
 
-const DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode";
-const DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button";
-const DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + "-overlay-wrapper";
+const DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + '-adaptive-mode';
+const DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + '-hamburger-button';
+const DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + '-overlay-wrapper';
 
 
-const FOCUS_UP = "up";
-const FOCUS_DOWN = "down";
-const FOCUS_LEFT = "left";
-const FOCUS_RIGHT = "right";
+const FOCUS_UP = 'up';
+const FOCUS_DOWN = 'down';
+const FOCUS_LEFT = 'left';
+const FOCUS_RIGHT = 'right';
 
-const SHOW_SUBMENU_OPERATION = "showSubmenu";
-const NEXTITEM_OPERATION = "nextItem";
-const PREVITEM_OPERATION = "prevItem";
+const SHOW_SUBMENU_OPERATION = 'showSubmenu';
+const NEXTITEM_OPERATION = 'nextItem';
+const PREVITEM_OPERATION = 'prevItem';
 
 const DEFAULT_DELAY = {
-    "show": 50,
-    "hide": 300
+    'show': 50,
+    'hide': 300
 };
 
-const ACTIONS = ["onSubmenuShowing", "onSubmenuShown", "onSubmenuHiding", "onSubmenuHidden", "onItemContextMenu", "onItemClick", "onSelectionChanged"];
+const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged'];
 
 class Menu extends MenuBase {
 
@@ -65,14 +65,14 @@ class Menu extends MenuBase {
             * @type Enums.Orientation
             * @default "horizontal"
             */
-            orientation: "horizontal",
+            orientation: 'horizontal',
 
             /**
             * @name dxMenuOptions.submenuDirection
             * @type Enums.SubmenuDirection
             * @default "auto"
             */
-            submenuDirection: "auto",
+            submenuDirection: 'auto',
 
             /**
             * @name dxMenuOptions.showFirstSubmenuMode
@@ -85,7 +85,7 @@ class Menu extends MenuBase {
                 * @type Enums.ShowSubmenuMode
                 * @default "onClick"
                 */
-                name: "onClick",
+                name: 'onClick',
 
                 /**
                 * @name dxMenuOptions.showFirstSubmenuMode.delay
@@ -225,7 +225,7 @@ class Menu extends MenuBase {
     }
 
     _isMenuHorizontal() {
-        return this.option("orientation") === "horizontal";
+        return this.option('orientation') === 'horizontal';
     }
 
     _moveFocus(location) {
@@ -267,14 +267,14 @@ class Menu extends MenuBase {
         }
 
         if($newTarget && $newTarget.length !== 0) {
-            this.option("focusedElement", getPublicElement($newTarget));
+            this.option('focusedElement', getPublicElement($newTarget));
         }
     }
 
     _getItemsNavigationOperation(operation) {
         let navOperation = operation;
 
-        if(this.option("rtlEnabled")) {
+        if(this.option('rtlEnabled')) {
             navOperation = operation === PREVITEM_OPERATION ? NEXTITEM_OPERATION : PREVITEM_OPERATION;
         }
 
@@ -303,7 +303,7 @@ class Menu extends MenuBase {
 
     _clean() {
         super._clean();
-        this.option("templatesRenderAsynchronously") && clearTimeout(this._resizeEventTimer);
+        this.option('templatesRenderAsynchronously') && clearTimeout(this._resizeEventTimer);
     }
 
     _visibilityChanged(visible) {
@@ -316,11 +316,11 @@ class Menu extends MenuBase {
     }
 
     _isAdaptivityEnabled() {
-        return this.option("adaptivityEnabled") && this.option("orientation") === "horizontal";
+        return this.option('adaptivityEnabled') && this.option('orientation') === 'horizontal';
     }
 
     _updateItemsWidthCache() {
-        const $menuItems = this.$element().find("ul").first().children("li").children(`.${DX_MENU_ITEM_CLASS}`);
+        const $menuItems = this.$element().find('ul').first().children('li').children(`.${DX_MENU_ITEM_CLASS}`);
         this._menuItemsWidth = this._getSummaryItemsWidth($menuItems, true);
     }
 
@@ -351,7 +351,7 @@ class Menu extends MenuBase {
         this.$element().addClass(DX_MENU_CLASS);
 
         super._initMarkup();
-        this.setAria("role", "menubar");
+        this.setAria('role', 'menubar');
     }
 
     _render() {
@@ -360,7 +360,7 @@ class Menu extends MenuBase {
     }
 
     _renderHamburgerButton() {
-        this._hamburger = new Button($("<div>").addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
+        this._hamburger = new Button($('<div>').addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
             icon: 'menu',
             activeStateEnabled: false,
             onClick: this._toggleTreeView.bind(this)
@@ -371,9 +371,9 @@ class Menu extends MenuBase {
 
     _toggleTreeView(state) {
         if(isPlainObject(state)) {
-            state = !this._overlay.option("visible");
+            state = !this._overlay.option('visible');
         }
-        this._overlay.option("visible", state);
+        this._overlay.option('visible', state);
         this._toggleHamburgerActiveState(state);
     }
 
@@ -409,7 +409,7 @@ class Menu extends MenuBase {
     }
 
     _treeviewItemClickHandler(e) {
-        this._actions["onItemClick"](e);
+        this._actions['onItemClick'](e);
 
         if(!e.node.children.length) {
             this._toggleTreeView(false);
@@ -417,8 +417,8 @@ class Menu extends MenuBase {
     }
 
     _getAdaptiveOverlayOptions() {
-        const rtl = this.option("rtlEnabled");
-        const position = rtl ? "right" : "left";
+        const rtl = this.option('rtlEnabled');
+        const position = rtl ? 'right' : 'left';
 
         return {
             maxHeight: () => {
@@ -431,14 +431,14 @@ class Menu extends MenuBase {
             onHidden: () => {
                 this._toggleHamburgerActiveState(false);
             },
-            height: "auto",
+            height: 'auto',
             closeOnOutsideClick(e) {
                 return !($(e.target).closest(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`).length);
             },
             position: {
-                collision: "flipfit",
-                at: "bottom " + position,
-                my: "top " + position,
+                collision: 'flipfit',
+                at: 'bottom ' + position,
+                my: 'top ' + position,
                 of: this._hamburger.$element()
             }
         };
@@ -447,12 +447,12 @@ class Menu extends MenuBase {
     _getTreeViewOptions() {
         let menuOptions = {};
         const optionsToTransfer = [
-            "rtlEnabled", "width", "accessKey", "activeStateEnabled", "animation", "dataSource",
-            "disabled", "displayExpr", "displayExpr", "focusStateEnabled", "hint", "hoverStateEnabled",
-            "itemsExpr", "items", "itemTemplate", "selectedExpr",
-            "selectionMode", "tabIndex", "visible"
+            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
+            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
+            'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
+            'selectionMode', 'tabIndex', 'visible'
         ];
-        const actionsToTransfer = ["onItemContextMenu", "onSelectionChanged"];
+        const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged'];
 
         each(optionsToTransfer, (_, option) => {
             menuOptions[option] = this.option(option);
@@ -466,37 +466,37 @@ class Menu extends MenuBase {
 
         return extend(menuOptions, {
             dataSource: this.getDataSource(),
-            animationEnabled: !!this.option("animation"),
+            animationEnabled: !!this.option('animation'),
             onItemClick: this._treeviewItemClickHandler.bind(this),
             onItemExpanded: (e) => {
                 this._overlay.repaint();
-                this._actions["onSubmenuShown"](e);
+                this._actions['onSubmenuShown'](e);
             },
             onItemCollapsed: (e) => {
                 this._overlay.repaint();
-                this._actions["onSubmenuHidden"](e);
+                this._actions['onSubmenuHidden'](e);
             },
             selectNodesRecursive: false,
-            selectByClick: this.option("selectByClick"),
-            expandEvent: "click"
+            selectByClick: this.option('selectByClick'),
+            expandEvent: 'click'
         });
     }
 
     _initAdaptivity() {
         if(!this._isAdaptivityEnabled()) return;
 
-        this._$adaptiveContainer = $("<div>").addClass(DX_ADAPTIVE_MODE_CLASS);
+        this._$adaptiveContainer = $('<div>').addClass(DX_ADAPTIVE_MODE_CLASS);
 
         const $hamburger = this._renderHamburgerButton();
 
-        this._treeView = this._createComponent($("<div>"), TreeView, this._getTreeViewOptions());
+        this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
 
-        this._overlay = this._createComponent($("<div>"), Overlay, this._getAdaptiveOverlayOptions());
+        this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
 
         this._overlay.$content()
             .append(this._treeView.$element())
             .addClass(DX_ADAPTIVE_MODE_CLASS)
-            .addClass(this.option("cssClass"));
+            .addClass(this.option('cssClass'));
 
         this._overlay._wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
@@ -510,7 +510,7 @@ class Menu extends MenuBase {
     }
 
     _getDelay(delayType) {
-        const delay = this.option("showFirstSubmenuMode").delay;
+        const delay = this.option('showFirstSubmenuMode').delay;
 
         if(!isDefined(delay)) {
             return DEFAULT_DELAY[delayType];
@@ -524,7 +524,7 @@ class Menu extends MenuBase {
     }
 
     _renderContainer() {
-        const $wrapper = $("<div>");
+        const $wrapper = $('<div>');
 
         $wrapper
             .appendTo(this.$element())
@@ -542,7 +542,7 @@ class Menu extends MenuBase {
     }
 
     _createSubmenu(node, $rootItem) {
-        const $submenuContainer = $("<div>").addClass(DX_CONTEXT_MENU_CLASS)
+        const $submenuContainer = $('<div>').addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
         const childKeyboardProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor(),
@@ -562,34 +562,34 @@ class Menu extends MenuBase {
     }
 
     _getSubmenuOptions() {
-        const $submenuTarget = $("<div>");
+        const $submenuTarget = $('<div>');
         const isMenuHorizontal = this._isMenuHorizontal();
 
         return {
-            itemTemplate: this.option("itemTemplate"),
+            itemTemplate: this.option('itemTemplate'),
             target: $submenuTarget,
-            orientation: this.option("orientation"),
-            selectionMode: this.option("selectionMode"),
-            cssClass: this.option("cssClass"),
-            selectByClick: this.option("selectByClick"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled"),
-            focusStateEnabled: this.option("focusStateEnabled"),
-            animation: this.option("animation"),
-            showSubmenuMode: this.option("showSubmenuMode"),
-            displayExpr: this.option("displayExpr"),
-            disabledExpr: this.option("disabledExpr"),
-            selectedExpr: this.option("selectedExpr"),
-            itemsExpr: this.option("itemsExpr"),
+            orientation: this.option('orientation'),
+            selectionMode: this.option('selectionMode'),
+            cssClass: this.option('cssClass'),
+            selectByClick: this.option('selectByClick'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
+            activeStateEnabled: this.option('activeStateEnabled'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            animation: this.option('animation'),
+            showSubmenuMode: this.option('showSubmenuMode'),
+            displayExpr: this.option('displayExpr'),
+            disabledExpr: this.option('disabledExpr'),
+            selectedExpr: this.option('selectedExpr'),
+            itemsExpr: this.option('itemsExpr'),
             onFocusedItemChanged: (e) => {
-                if(!e.component.option("visible")) {
+                if(!e.component.option('visible')) {
                     return;
                 }
-                this.option("focusedElement", e.component.option("focusedElement"));
+                this.option('focusedElement', e.component.option('focusedElement'));
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: this.option("onItemRendered"),
+            onItemRendered: this.option('onItemRendered'),
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
@@ -599,10 +599,10 @@ class Menu extends MenuBase {
 
     _getShowFirstSubmenuMode() {
         if(!this._isDesktopDevice()) {
-            return "onClick";
+            return 'onClick';
         }
 
-        const optionValue = this.option("showFirstSubmenuMode");
+        const optionValue = this.option('showFirstSubmenuMode');
 
         return isObject(optionValue) ? optionValue.name : optionValue;
     }
@@ -625,19 +625,19 @@ class Menu extends MenuBase {
 
         const $newItem = $items.eq(itemIndex);
 
-        this.option("focusedElement", getPublicElement($newItem));
+        this.option('focusedElement', getPublicElement($newItem));
     }
 
     _nestedItemOnSelectionChangedHandler(args) {
         const selectedItem = args.addedItems.length && args.addedItems[0];
         const submenu = Submenu.getInstance(args.element);
-        const onSelectionChanged = this._actions["onSelectionChanged"];
+        const onSelectionChanged = this._actions['onSelectionChanged'];
 
         onSelectionChanged(args);
 
         selectedItem && this._clearSelectionInSubmenus(selectedItem[0], submenu);
         this._clearRootSelection();
-        this._setOptionSilent("selectedItem", selectedItem);
+        this._setOptionSilent('selectedItem', selectedItem);
     }
 
     _clearSelectionInSubmenus(item, targetSubmenu) {
@@ -674,13 +674,13 @@ class Menu extends MenuBase {
     }
 
     _nestedItemOnItemClickHandler(e) {
-        this._actions["onItemClick"](e);
+        this._actions['onItemClick'](e);
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {
         const $submenuOverlayContent = submenu.getOverlayContent();
         const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
-        const submenuMouseLeaveName = addNamespace(hoverEvents.end, this.NAME + "_submenu");
+        const submenuMouseLeaveName = addNamespace(hoverEvents.end, this.NAME + '_submenu');
 
         submenu.option({
             onShowing: this._submenuOnShowingHandler.bind(this, $rootItem, submenu),
@@ -743,9 +743,9 @@ class Menu extends MenuBase {
         const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
         const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];
 
-        if(this.option("hideSubmenuOnMouseLeave") && target !== contextMenu) {
+        if(this.option('hideSubmenuOnMouseLeave') && target !== contextMenu) {
             this._clearTimeouts();
-            setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay("hide"));
+            setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay('hide'));
         }
     }
 
@@ -756,7 +756,7 @@ class Menu extends MenuBase {
 
         const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
         const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
-        const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(":hover");
+        const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(':hover');
 
         if(!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
             this._visibleSubmenu.hide();
@@ -776,29 +776,29 @@ class Menu extends MenuBase {
 
     getSubmenuPosition($rootItem) {
         const isHorizontalMenu = this._isMenuHorizontal();
-        const submenuDirection = this.option("submenuDirection").toLowerCase();
-        const rtlEnabled = this.option("rtlEnabled");
+        const submenuDirection = this.option('submenuDirection').toLowerCase();
+        const rtlEnabled = this.option('rtlEnabled');
         let submenuPosition = {
-            collision: "flip",
+            collision: 'flip',
             of: $rootItem
         };
 
         switch(submenuDirection) {
-            case "leftortop":
-                submenuPosition.at = "left top";
-                submenuPosition.my = isHorizontalMenu ? "left bottom" : "right top";
+            case 'leftortop':
+                submenuPosition.at = 'left top';
+                submenuPosition.my = isHorizontalMenu ? 'left bottom' : 'right top';
                 break;
-            case "rightorbottom":
-                submenuPosition.at = isHorizontalMenu ? "left bottom" : "right top";
-                submenuPosition.my = "left top";
+            case 'rightorbottom':
+                submenuPosition.at = isHorizontalMenu ? 'left bottom' : 'right top';
+                submenuPosition.my = 'left top';
                 break;
             default:
                 if(isHorizontalMenu) {
-                    submenuPosition.at = rtlEnabled ? "right bottom" : "left bottom";
-                    submenuPosition.my = rtlEnabled ? "right top" : "left top";
+                    submenuPosition.at = rtlEnabled ? 'right bottom' : 'left bottom';
+                    submenuPosition.my = rtlEnabled ? 'right top' : 'left top';
                 } else {
-                    submenuPosition.at = rtlEnabled ? "left top" : "right top";
-                    submenuPosition.my = rtlEnabled ? "right top" : "left top";
+                    submenuPosition.at = rtlEnabled ? 'left top' : 'right top';
+                    submenuPosition.my = rtlEnabled ? 'right top' : 'left top';
                 }
                 break;
         }
@@ -807,7 +807,7 @@ class Menu extends MenuBase {
     }
 
     _renderBorderElement($item) {
-        $("<div>")
+        $('<div>')
             .appendTo($item)
             .addClass(DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS)
             .hide();
@@ -817,8 +817,8 @@ class Menu extends MenuBase {
         const $target = $(e.target);
         const $closestItem = $target.closest(this._itemElements());
 
-        if($closestItem.hasClass("dx-menu-item-has-submenu")) {
-            this.option("focusedElement", null);
+        if($closestItem.hasClass('dx-menu-item-has-submenu')) {
+            this.option('focusedElement', null);
             return;
         }
 
@@ -838,18 +838,18 @@ class Menu extends MenuBase {
         eventsEngine.off($item, mouseMoveEventName);
 
         if(!this._hasChildren(node)) {
-            this._showSubmenuTimer = setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay("hide"));
+            this._showSubmenuTimer = setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay('hide'));
             return;
         }
 
-        if(this._getShowFirstSubmenuMode() === "onHover" && !isSelectionActive) {
+        if(this._getShowFirstSubmenuMode() === 'onHover' && !isSelectionActive) {
             const submenu = this._getSubmenuByElement($item);
 
             this._clearTimeouts();
 
             if(!submenu.isOverlayVisible()) {
                 eventsEngine.on($item, mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
-                this._showSubmenuTimer = this._getDelay("hide");
+                this._showSubmenuTimer = this._getDelay('hide');
             }
         }
     }
@@ -869,8 +869,8 @@ class Menu extends MenuBase {
             return;
         }
 
-        if(this.option("hideSubmenuOnMouseLeave") && !relatedTarget.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS)) {
-            this._hideSubmenuTimer = setTimeout(() => { this._hideSubmenuAfterTimeout(); }, this._getDelay("hide"));
+        if(this.option('hideSubmenuOnMouseLeave') && !relatedTarget.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS)) {
+            this._hideSubmenuTimer = setTimeout(() => { this._hideSubmenuAfterTimeout(); }, this._getDelay('hide'));
         }
     }
 
@@ -892,7 +892,7 @@ class Menu extends MenuBase {
 
         if(submenu) {
             submenu.show();
-            this.option("focusedElement", submenu.option("focusedElement"));
+            this.option('focusedElement', submenu.option('focusedElement'));
         }
 
         this._visibleSubmenu = submenu;
@@ -929,7 +929,7 @@ class Menu extends MenuBase {
             if(submenu && !submenu.isOverlayVisible()) {
                 this._showSubmenu($item);
             }
-        }, this._getDelay("show"));
+        }, this._getDelay('show'));
     }
 
     _clearTimeouts() {
@@ -963,7 +963,7 @@ class Menu extends MenuBase {
 
         if(this._visibleSubmenu) {
             if(this._visibleSubmenu === currentSubmenu) {
-                if(this.option("showFirstSubmenuMode") === "onClick") this._hideSubmenu(this._visibleSubmenu);
+                if(this.option('showFirstSubmenuMode') === 'onClick') this._hideSubmenu(this._visibleSubmenu);
                 return;
             } else {
                 this._hideSubmenu(this._visibleSubmenu);
@@ -983,26 +983,26 @@ class Menu extends MenuBase {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "orientation":
-            case "submenuDirection":
+            case 'orientation':
+            case 'submenuDirection':
                 this._invalidate();
                 break;
-            case "showFirstSubmenuMode":
-            case "hideSubmenuOnMouseLeave":
+            case 'showFirstSubmenuMode':
+            case 'hideSubmenuOnMouseLeave':
                 break;
-            case "showSubmenuMode":
+            case 'showSubmenuMode':
                 this._changeSubmenusOption(args.name, args.value);
                 break;
-            case "onSubmenuShowing":
-            case "onSubmenuShown":
-            case "onSubmenuHiding":
-            case "onSubmenuHidden":
+            case 'onSubmenuShowing':
+            case 'onSubmenuShown':
+            case 'onSubmenuHiding':
+            case 'onSubmenuHidden':
                 this._initActions();
                 break;
-            case "adaptivityEnabled":
+            case 'adaptivityEnabled':
                 args.value ? this._initAdaptivity() : this._removeAdaptivity();
                 break;
-            case "width":
+            case 'width':
                 if(this._isAdaptivityEnabled()) {
                     this._treeView.option(args.name, args.value);
                     this._overlay.option(args.name, args.value);
@@ -1010,9 +1010,9 @@ class Menu extends MenuBase {
                 super._optionChanged(args);
                 this._dimensionChanged();
                 break;
-            case "animation":
+            case 'animation':
                 if(this._isAdaptivityEnabled()) {
-                    this._treeView.option("animationEnabled", !!args.value);
+                    this._treeView.option('animationEnabled', !!args.value);
                 }
                 super._optionChanged(args);
                 break;
@@ -1041,6 +1041,6 @@ class Menu extends MenuBase {
     }
 }
 
-registerComponent("dxMenu", Menu);
+registerComponent('dxMenu', Menu);
 
 module.exports = Menu;

@@ -1,6 +1,6 @@
-var extend = require("../../../core/utils/extend").extend,
-    isNumeric = require("../../../core/utils/type").isNumeric,
-    candlestickPoint = require("./candlestick_point"),
+var extend = require('../../../core/utils/extend').extend,
+    isNumeric = require('../../../core/utils/type').isNumeric,
+    candlestickPoint = require('./candlestick_point'),
     _extend = extend,
     _isNumeric = isNumeric;
 
@@ -26,7 +26,7 @@ module.exports = _extend({}, candlestickPoint, {
     },
 
     _drawMarkerInGroup: function(group, attributes, renderer) {
-        this.graphic = renderer.path(this._getPoints(), "line").attr({ "stroke-linecap": "square" }).attr(attributes).data({ "chart-data-point": this }).sharp().append(group);
+        this.graphic = renderer.path(this._getPoints(), 'line').attr({ 'stroke-linecap': 'square' }).attr(attributes).data({ 'chart-data-point': this }).sharp().append(group);
     },
 
     _getMinTrackerWidth: function() {

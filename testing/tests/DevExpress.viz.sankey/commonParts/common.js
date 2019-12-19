@@ -1,20 +1,20 @@
-var $ = require("jquery"),
-    vizMocks = require("../../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer"),
+var $ = require('jquery'),
+    vizMocks = require('../../../helpers/vizMocks.js'),
+    rendererModule = require('viz/core/renderers/renderer'),
     find = function(array, predicate) {
         return array.filter(predicate)[0];
     };
 
-require("viz/sankey/sankey");
-require("viz/themes");
+require('viz/sankey/sankey');
+require('viz/themes');
 
-var layoutBuilder = require("viz/sankey/layout"),
+var layoutBuilder = require('viz/sankey/layout'),
     spiesLayoutBuilder = {
         computeLayout: sinon.spy(layoutBuilder, 'computeLayout'),
         _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
     };
 
-$("#qunit-fixture").append('<div id="test-container"></div>');
+$('#qunit-fixture').append('<div id="test-container"></div>');
 
 function createSankey(options) {
     var defaultOptions = {
@@ -22,7 +22,7 @@ function createSankey(options) {
             width: 15
         }
     };
-    return $("#test-container").dxSankey($.extend({}, defaultOptions, options)).dxSankey("instance");
+    return $('#test-container').dxSankey($.extend({}, defaultOptions, options)).dxSankey('instance');
 }
 
 var environment = {
@@ -34,7 +34,7 @@ var environment = {
         this.nodesGroupIndex = 1;
         this.labelsGroupIndex = 2;
 
-        sinon.stub(rendererModule, "Renderer", function() {
+        sinon.stub(rendererModule, 'Renderer', function() {
             return that.renderer;
         });
     },

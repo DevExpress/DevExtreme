@@ -1,6 +1,6 @@
-var ko = require("knockout"),
-    compareVersion = require("../../core/utils/version").compare,
-    strategyChanging = require("../../core/element_data").strategyChanging;
+var ko = require('knockout'),
+    compareVersion = require('../../core/utils/version').compare,
+    strategyChanging = require('../../core/element_data').strategyChanging;
 
 var patchCleanData = function(jQuery) {
     var cleanKoData = function(element, andSelf) {
@@ -11,7 +11,7 @@ var patchCleanData = function(jQuery) {
         if(andSelf) {
             element.each(cleanNode);
         } else {
-            element.find("*").each(cleanNode);
+            element.find('*').each(cleanNode);
         }
     };
 
@@ -35,7 +35,7 @@ var patchCleanData = function(jQuery) {
 
     var originalHtml = jQuery.fn.html;
     jQuery.fn.html = function(value) {
-        if(typeof value === "string") {
+        if(typeof value === 'string') {
             cleanKoData(this, false);
         }
         return originalHtml.apply(this, arguments);

@@ -1,4 +1,4 @@
-import ItemsOption from "./ui.diagram.items";
+import ItemsOption from './ui.diagram.items';
 
 class EdgesOptions extends ItemsOption {
     _dataSourceChangedHandler(newItems, e) {

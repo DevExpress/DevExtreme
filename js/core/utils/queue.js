@@ -1,5 +1,5 @@
-var errors = require("../errors"),
-    when = require("../../core/utils/deferred").when;
+var errors = require('../errors'),
+    when = require('../../core/utils/deferred').when;
 
 function createQueue(discardPendingTasks) {
     var _tasks = [],
@@ -22,7 +22,7 @@ function createQueue(discardPendingTasks) {
                 return;
             }
 
-            throw errors.Error("E0015");
+            throw errors.Error('E0015');
         }
 
         _busy = false;

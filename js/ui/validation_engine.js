@@ -1,19 +1,19 @@
-var Class = require("../core/class"),
-    extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
-    each = require("../core/utils/iterator").each,
-    EventsMixin = require("../core/events_mixin"),
-    errors = require("../core/errors"),
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    numberLocalization = require("../localization/number"),
-    messageLocalization = require("../localization/message");
+var Class = require('../core/class'),
+    extend = require('../core/utils/extend').extend,
+    inArray = require('../core/utils/array').inArray,
+    each = require('../core/utils/iterator').each,
+    EventsMixin = require('../core/events_mixin'),
+    errors = require('../core/errors'),
+    commonUtils = require('../core/utils/common'),
+    typeUtils = require('../core/utils/type'),
+    numberLocalization = require('../localization/number'),
+    messageLocalization = require('../localization/message');
 
 var BaseRuleValidator = Class.inherit({
-    NAME: "base",
+    NAME: 'base',
 
-    defaultMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME)(value); },
-    defaultFormattedMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME + "-formatted")(value); },
+    defaultMessage: function(value) { return messageLocalization.getFormatter('validation-' + this.NAME)(value); },
+    defaultFormattedMessage: function(value) { return messageLocalization.getFormatter('validation-' + this.NAME + '-formatted')(value); },
 
     _isValueEmpty: function(value) {
         return !rulesValidators.required.validate(value, {});
@@ -37,7 +37,7 @@ var BaseRuleValidator = Class.inherit({
 });
 
 var RequiredRuleValidator = BaseRuleValidator.inherit({
-    NAME: "required",
+    NAME: 'required',
 
     /**
      * @name RequiredRule.type
@@ -63,12 +63,12 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
             value = value.trim();
         }
 
-        return value !== "";
+        return value !== '';
     }
 });
 
 var NumericRuleValidator = BaseRuleValidator.inherit({
-    NAME: "numeric",
+    NAME: 'numeric',
 
     /**
      * @name NumericRule.type
@@ -98,7 +98,7 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
 });
 
 var RangeRuleValidator = BaseRuleValidator.inherit({
-    NAME: "range",
+    NAME: 'range',
 
     /**
      * @name RangeRule.type
@@ -132,8 +132,8 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
             return true;
         }
 
-        var validNumber = rulesValidators["numeric"].validate(value, rule),
-            validValue = typeUtils.isDefined(value) && value !== "",
+        var validNumber = rulesValidators['numeric'].validate(value, rule),
+            validValue = typeUtils.isDefined(value) && value !== '',
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
@@ -151,14 +151,14 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
             if(typeUtils.isDefined(max)) {
                 return number <= max;
             } else {
-                throw errors.Error("E0101");
+                throw errors.Error('E0101');
             }
         }
     }
 });
 
 var StringLengthRuleValidator = BaseRuleValidator.inherit({
-    NAME: "stringLength",
+    NAME: 'stringLength',
 
     /**
      * @name StringLengthRule.type
@@ -188,7 +188,7 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
      * @default false
      */
     _validate: function(value, rule) {
-        value = typeUtils.isDefined(value) ? String(value) : "";
+        value = typeUtils.isDefined(value) ? String(value) : '';
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
@@ -203,7 +203,7 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
 });
 
 var CustomRuleValidator = BaseRuleValidator.inherit({
-    NAME: "custom",
+    NAME: 'custom',
 
     /**
      * @name CustomRule.type
@@ -240,7 +240,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
         }
 
         var validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
             data = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
@@ -257,7 +257,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
 });
 
 var CompareRuleValidator = BaseRuleValidator.inherit({
-    NAME: "compare",
+    NAME: 'compare',
 
     /**
      * @name CompareRule.type
@@ -290,7 +290,7 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
      */
     _validate: function(value, rule) {
         if(!rule.comparisonTarget) {
-            throw errors.Error("E0102");
+            throw errors.Error('E0102');
         }
 
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
@@ -300,24 +300,24 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
         extend(rule, { reevaluate: true });
 
         var otherValue = rule.comparisonTarget(),
-            type = rule.comparisonType || "==";
+            type = rule.comparisonType || '==';
 
         switch(type) {
-            case "==":
+            case '==':
                 return value == otherValue; // eslint-disable-line eqeqeq
-            case "!=":
+            case '!=':
                 return value != otherValue; // eslint-disable-line eqeqeq
-            case "===":
+            case '===':
                 return value === otherValue;
-            case "!==":
+            case '!==':
                 return value !== otherValue;
-            case ">":
+            case '>':
                 return value > otherValue;
-            case ">=":
+            case '>=':
                 return value >= otherValue;
-            case "<":
+            case '<':
                 return value < otherValue;
-            case "<=":
+            case '<=':
                 return value <= otherValue;
 
         }
@@ -325,7 +325,7 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
 });
 
 var PatternRuleValidator = BaseRuleValidator.inherit({
-    NAME: "pattern",
+    NAME: 'pattern',
 
     /**
      * @name PatternRule.type
@@ -358,7 +358,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
 });
 
 var EmailRuleValidator = BaseRuleValidator.inherit({
-    NAME: "email",
+    NAME: 'email',
 
     /**
      * @name EmailRule.type
@@ -393,56 +393,56 @@ var rulesValidators = {
      * @section dxValidator
      * @type object
      */
-    "required": new RequiredRuleValidator(),
+    'required': new RequiredRuleValidator(),
 
     /**
      * @name NumericRule
      * @section dxValidator
      * @type object
      */
-    "numeric": new NumericRuleValidator(),
+    'numeric': new NumericRuleValidator(),
 
     /**
      * @name RangeRule
      * @section dxValidator
      * @type object
      */
-    "range": new RangeRuleValidator(),
+    'range': new RangeRuleValidator(),
 
     /**
      * @name StringLengthRule
      * @section dxValidator
      * @type object
      */
-    "stringLength": new StringLengthRuleValidator(),
+    'stringLength': new StringLengthRuleValidator(),
 
     /**
      * @name CustomRule
      * @section dxValidator
      * @type object
      */
-    "custom": new CustomRuleValidator(),
+    'custom': new CustomRuleValidator(),
 
     /**
      * @name CompareRule
      * @section dxValidator
      * @type object
      */
-    "compare": new CompareRuleValidator(),
+    'compare': new CompareRuleValidator(),
 
     /**
      * @name PatternRule
      * @section dxValidator
      * @type object
      */
-    "pattern": new PatternRuleValidator(),
+    'pattern': new PatternRuleValidator(),
 
     /**
      * @name EmailRule
      * @section dxValidator
      * @type object
      */
-    "email": new EmailRuleValidator()
+    'email': new EmailRuleValidator()
 };
 
 var GroupConfig = Class.inherit({
@@ -484,7 +484,7 @@ var GroupConfig = Class.inherit({
             result.validators.push(validator);
         });
 
-        this.fireEvent("validated", [{
+        this.fireEvent('validated', [{
             validators: result.validators,
             brokenRules: result.brokenRules,
             isValid: result.isValid
@@ -634,7 +634,7 @@ var ValidationEngine = {
                     return false;
                 }
             } else {
-                throw errors.Error("E0100");
+                throw errors.Error('E0100');
             }
         });
 
@@ -651,7 +651,7 @@ var ValidationEngine = {
 
     _shouldRemoveGroup: function(group, validatorsInGroup) {
         var isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
+            isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
 
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
@@ -687,7 +687,7 @@ var ValidationEngine = {
         var groupConfig = ValidationEngine.getGroupConfig(group);
 
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
 
         return groupConfig.validate();
@@ -710,7 +710,7 @@ var ValidationEngine = {
         var groupConfig = ValidationEngine.getGroupConfig(group);
 
         if(!groupConfig) {
-            throw errors.Error("E0110");
+            throw errors.Error('E0110');
         }
 
         return groupConfig.reset();

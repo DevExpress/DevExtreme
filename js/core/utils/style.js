@@ -1,18 +1,18 @@
-var camelize = require("./inflector").camelize,
-    callOnce = require("./call_once"),
-    typeUtils = require("./type"),
-    domAdapter = require("../dom_adapter");
+var camelize = require('./inflector').camelize,
+    callOnce = require('./call_once'),
+    typeUtils = require('./type'),
+    domAdapter = require('../dom_adapter');
 
-var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
+var jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'],
     cssPrefixes = {
-        "": "",
-        "Webkit": "-webkit-",
-        "Moz": "-moz-",
-        "O": "-o-",
-        "ms": "-ms-"
+        '': '',
+        'Webkit': '-webkit-',
+        'Moz': '-moz-',
+        'O': '-o-',
+        'ms': '-ms-'
     },
     getStyles = callOnce(function() {
-        return domAdapter.createElement("dx").style;
+        return domAdapter.createElement('dx').style;
     });
 
 var forEachPrefixes = function(prop, callBack) {
@@ -36,7 +36,7 @@ var forEachPrefixes = function(prop, callBack) {
         }
     }
 
-    return result || "";
+    return result || '';
 };
 
 var styleProp = function(name) {
@@ -66,20 +66,20 @@ var stylePropPrefix = function(prop) {
 
 
 var pxExceptions = [
-    "fillOpacity",
-    "columnCount",
-    "flexGrow",
-    "flexShrink",
-    "fontWeight",
-    "lineHeight",
-    "opacity",
-    "zIndex",
-    "zoom"
+    'fillOpacity',
+    'columnCount',
+    'flexGrow',
+    'flexShrink',
+    'fontWeight',
+    'lineHeight',
+    'opacity',
+    'zIndex',
+    'zoom'
 ];
 
 var normalizeStyleProp = function(prop, value) {
     if(typeUtils.isNumeric(value) && pxExceptions.indexOf(prop) === -1) {
-        value += "px";
+        value += 'px';
     }
 
     return value;
@@ -87,7 +87,7 @@ var normalizeStyleProp = function(prop, value) {
 
 var setDimensionProperty = function(elements, propertyName, value) {
     if(elements) {
-        value = typeUtils.isNumeric(value) ? value += "px" : value;
+        value = typeUtils.isNumeric(value) ? value += 'px' : value;
         for(var i = 0; i < elements.length; ++i) {
             elements[i].style[propertyName] = value;
         }
@@ -95,11 +95,11 @@ var setDimensionProperty = function(elements, propertyName, value) {
 };
 
 var setWidth = function(elements, value) {
-    setDimensionProperty(elements, "width", value);
+    setDimensionProperty(elements, 'width', value);
 };
 
 var setHeight = function(elements, value) {
-    setDimensionProperty(elements, "height", value);
+    setDimensionProperty(elements, 'height', value);
 };
 
 exports.styleProp = styleProp;

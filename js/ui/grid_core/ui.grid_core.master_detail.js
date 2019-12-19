@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import gridCoreUtils from "./ui.grid_core.utils";
-import { grep } from "../../core/utils/common";
-import { each } from "../../core/utils/iterator";
-import { isDefined } from "../../core/utils/type";
+import $ from '../../core/renderer';
+import gridCoreUtils from './ui.grid_core.utils';
+import { grep } from '../../core/utils/common';
+import { each } from '../../core/utils/iterator';
+import { isDefined } from '../../core/utils/type';
 
-var MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
-    MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    ROW_LINES_CLASS = "dx-row-lines";
+var MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell',
+    MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row',
+    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
+    ROW_LINES_CLASS = 'dx-row-lines';
 
 
 module.exports = {
@@ -49,9 +49,9 @@ module.exports = {
                 _getExpandColumnsCore: function() {
                     var expandColumns = this.callBase();
 
-                    if(this.option("masterDetail.enabled")) {
+                    if(this.option('masterDetail.enabled')) {
                         expandColumns.push({
-                            type: "detailExpand",
+                            type: 'detailExpand',
                             cellTemplate: gridCoreUtils.getExpandCellTemplate()
                         });
                     }
@@ -61,7 +61,7 @@ module.exports = {
             data: (function() {
                 var initMasterDetail = function(that) {
                     that._expandedItems = [];
-                    that._isExpandAll = that.option("masterDetail.autoExpandAll");
+                    that._isExpandAll = that.option('masterDetail.autoExpandAll');
                 };
 
                 return {
@@ -124,14 +124,14 @@ module.exports = {
                             } else {
                                 that._expandedItems.push({ key: key, visible: true });
 
-                                editingController = that.getController("editing");
+                                editingController = that.getController('editing');
                                 if(editingController) {
                                     editingController.correctEditRowIndexAfterExpand(key);
                                 }
                             }
 
                             that.updateItems({
-                                changeType: "update",
+                                changeType: 'update',
                                 rowIndices: that._getRowIndicesForExpand(key)
                             });
                         }
@@ -145,7 +145,7 @@ module.exports = {
                         if(options.detailColumnIndex === undefined) {
                             options.detailColumnIndex = -1;
                             each(options.visibleColumns, function(index, column) {
-                                if(column.command === "expand" && !isDefined(column.groupIndex)) {
+                                if(column.command === 'expand' && !isDefined(column.groupIndex)) {
                                     options.detailColumnIndex = index;
                                     return false;
                                 }
@@ -164,11 +164,11 @@ module.exports = {
 
                         items = that.callBase.apply(that, arguments);
 
-                        if(changeType === "loadingAll") {
+                        if(changeType === 'loadingAll') {
                             return items;
                         }
 
-                        if(changeType === "refresh") {
+                        if(changeType === 'refresh') {
                             that._expandedItems = grep(that._expandedItems, function(item) { return item.visible; });
                         }
 
@@ -176,10 +176,10 @@ module.exports = {
                             result.push(item);
                             expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 
-                            if(item.rowType === "data" && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
+                            if(item.rowType === 'data' && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
                                 result.push({
                                     visible: item.isExpanded,
-                                    rowType: "detail",
+                                    rowType: 'detail',
                                     key: item.key,
                                     data: item.data,
                                     values: []
@@ -196,22 +196,22 @@ module.exports = {
                             isEnabledChanged,
                             isAutoExpandAllChanged;
 
-                        if(args.name === "masterDetail") {
-                            args.name = "dataSource";
+                        if(args.name === 'masterDetail') {
+                            args.name = 'dataSource';
 
                             switch(args.fullName) {
-                                case "masterDetail":
+                                case 'masterDetail':
                                     value = args.value || {};
                                     previousValue = args.previousValue || {};
                                     isEnabledChanged = value.enabled !== previousValue.enabled;
                                     isAutoExpandAllChanged = value.autoExpandAll !== previousValue.autoExpandAll;
                                     break;
 
-                                case "masterDetail.enabled":
+                                case 'masterDetail.enabled':
                                     isEnabledChanged = true;
                                     break;
 
-                                case "masterDetail.autoExpandAll":
+                                case 'masterDetail.autoExpandAll':
                                     isAutoExpandAllChanged = true;
                                     break;
                             }
@@ -230,12 +230,12 @@ module.exports = {
                     _getCellTemplate: function(options) {
                         var that = this,
                             column = options.column,
-                            editingController = that.getController("editing"),
+                            editingController = that.getController('editing'),
                             isEditRow = editingController && editingController.isEditRow(options.rowIndex),
                             template;
 
-                        if(column.command === "detail" && !isEditRow) {
-                            template = that.option("masterDetail.template") || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
+                        if(column.command === 'detail' && !isEditRow) {
+                            template = that.option('masterDetail.template') || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
                         } else {
                             template = that.callBase.apply(that, arguments);
                         }
@@ -249,12 +249,12 @@ module.exports = {
 
                         that.callBase.apply(that, arguments);
 
-                        if(options.rowType === "detail" && options.column.command === "detail") {
-                            $cell.find("." + that.getWidgetContainerClass()).each(function() {
-                                var detailGrid = $(this).parent().data("dxDataGrid");
+                        if(options.rowType === 'detail' && options.column.command === 'detail') {
+                            $cell.find('.' + that.getWidgetContainerClass()).each(function() {
+                                var detailGrid = $(this).parent().data('dxDataGrid');
 
                                 if(detailGrid) {
-                                    detailGrid.on("contentReady", () => {
+                                    detailGrid.on('contentReady', () => {
                                         that._handleDetailGridContentReady(masterGrid, options.rowIndex, detailGrid);
                                     });
                                 }
@@ -269,7 +269,7 @@ module.exports = {
                                 let detailGridWidth = detailGrid.$element().width();
 
                                 masterGrid.updateDimensions().done(function() {
-                                    let isDetailHorizontalScrollCanBeShown = detailGrid.option("columnAutoWidth") && masterGrid.option("scrolling.useNative") === true,
+                                    let isDetailHorizontalScrollCanBeShown = detailGrid.option('columnAutoWidth') && masterGrid.option('scrolling.useNative') === true,
                                         isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailGridWidth !== detailGrid.$element().width();
 
                                     if(isDetailGridWidthChanged) {
@@ -285,14 +285,14 @@ module.exports = {
                     },
 
                     _isDetailRow: function(row) {
-                        return row && row.rowType && row.rowType.indexOf("detail") === 0;
+                        return row && row.rowType && row.rowType.indexOf('detail') === 0;
                     },
 
                     _createRow: function(row) {
                         var $row = this.callBase(row);
 
                         if(row && this._isDetailRow(row)) {
-                            this.option("showRowLines") && $row.addClass(ROW_LINES_CLASS);
+                            this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);
                             $row.addClass(MASTER_DETAIL_ROW_CLASS);
 
                             if(isDefined(row.visible)) {
@@ -312,14 +312,14 @@ module.exports = {
                                 value: null,
                                 row: row,
                                 rowIndex: row.rowIndex,
-                                column: { command: "detail" },
+                                column: { command: 'detail' },
                                 columnIndex: 0
                             });
 
                             $detailCell
                                 .addClass(CELL_FOCUS_DISABLED_CLASS)
                                 .addClass(MASTER_DETAIL_CELL_CLASS)
-                                .attr("colSpan", visibleColumns.length);
+                                .attr('colSpan', visibleColumns.length);
                         } else {
                             this.callBase.apply(this, arguments);
                         }

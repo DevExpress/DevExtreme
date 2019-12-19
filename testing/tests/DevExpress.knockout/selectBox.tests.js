@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    SelectBox = require("ui/select_box"),
-    fx = require("animation/fx"),
-    ko = require("knockout");
+var $ = require('jquery'),
+    SelectBox = require('ui/select_box'),
+    fx = require('animation/fx'),
+    ko = require('knockout');
 
-require("integration/knockout");
+require('integration/knockout');
 
 QUnit.testStart(function() {
     var markup =
@@ -28,7 +28,7 @@ QUnit.testStart(function() {
             </div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 var moduleSetup = {
@@ -43,68 +43,68 @@ var moduleSetup = {
     }
 };
 
-QUnit.module("widget options", moduleSetup);
+QUnit.module('widget options', moduleSetup);
 
-QUnit.test("fieldTemplate is bound to selected item", function(assert) {
+QUnit.test('fieldTemplate is bound to selected item', function(assert) {
     var viewModel = {
         dataSource: [
-            { key: 1, name: "one" },
-            { key: 2, name: "two" }
+            { key: 1, name: 'one' },
+            { key: 2, name: 'two' }
         ],
         value: 1
     };
 
-    var $selectBox = $("#selectBoxWithFieldTemplate");
+    var $selectBox = $('#selectBoxWithFieldTemplate');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    assert.equal($("#customField").text(), "one", "fieldTemplate got item in viewModel");
+    assert.equal($('#customField').text(), 'one', 'fieldTemplate got item in viewModel');
 });
 
-QUnit.test("T221863: null value as template data", function(assert) {
+QUnit.test('T221863: null value as template data', function(assert) {
     var viewModel = {
         dataSource: [1, 2, 3],
         selectedItem: null
     };
 
-    var $selectBox = $("#selectBoxWithFieldTemplate2");
+    var $selectBox = $('#selectBoxWithFieldTemplate2');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    var input = $("#templateTextBox").find(".dx-textbox-input");
+    var input = $('#templateTextBox').find('.dx-textbox-input');
 
-    assert.equal(input.text(), "", "textBox is empty when selected item is null");
+    assert.equal(input.text(), '', 'textBox is empty when selected item is null');
 });
 
-QUnit.test("dropDownButton should be rendered when fieldTemplate is specified", function(assert) {
-    var $selectBox = $("#selectBoxFieldTemplateWithDropDownButton");
+QUnit.test('dropDownButton should be rendered when fieldTemplate is specified', function(assert) {
+    var $selectBox = $('#selectBoxFieldTemplateWithDropDownButton');
     var vm = {
         items: [1, 2, 3]
     };
 
     ko.applyBindings(vm, $selectBox.get(0));
 
-    assert.equal($selectBox.find(".dx-dropdowneditor-button").length, 1, "dropDownButton rendered after init");
+    assert.equal($selectBox.find('.dx-dropdowneditor-button').length, 1, 'dropDownButton rendered after init');
 
-    $selectBox.dxSelectBox("option", "value", 1);
-    assert.equal($selectBox.find(".dx-dropdowneditor-button").length, 1, "dropDownButton rendered after init");
+    $selectBox.dxSelectBox('option', 'value', 1);
+    assert.equal($selectBox.find('.dx-dropdowneditor-button').length, 1, 'dropDownButton rendered after init');
 });
 
-QUnit.testInActiveWindow("select box should correctly update computed value", function(assert) {
+QUnit.testInActiveWindow('select box should correctly update computed value', function(assert) {
     var clock = sinon.useFakeTimers(),
-        $selectBox = $("#selectBoxWithCustomConfig"),
+        $selectBox = $('#selectBoxWithCustomConfig'),
         getVM = function() {
             var that = this;
             that.disabled = ko.observable(false);
-            that._value = ko.observable("");
+            that._value = ko.observable('');
 
             that.customConfig = {
                 dataSource: [
                     { value: 1, displayValue: 1 },
                     { value: 2, displayValue: 2 }
                 ],
-                valueExpr: "value",
-                displayExpr: "displayValue",
+                valueExpr: 'value',
+                displayExpr: 'displayValue',
                 disabled: that.disabled,
                 value: ko.computed({
                     read: function() { return that._value(); },
@@ -121,17 +121,17 @@ QUnit.testInActiveWindow("select box should correctly update computed value", fu
 
     ko.applyBindings(new getVM(), $selectBox.get(0));
 
-    var selectBox = $selectBox.dxSelectBox("instance");
+    var selectBox = $selectBox.dxSelectBox('instance');
 
     selectBox.focus();
     selectBox.open();
-    $(".dx-selectbox-popup-wrapper .dx-list-item")
+    $('.dx-selectbox-popup-wrapper .dx-list-item')
         .first()
-        .trigger("focusin")
-        .trigger("dxclick");
+        .trigger('focusin')
+        .trigger('dxclick');
     clock.tick(300);
 
-    assert.equal(selectBox.option("value"), 1, "select box correctly updates the value");
-    assert.equal($selectBox.find(".dx-texteditor-input").val(), 1, "input value is correct");
+    assert.equal(selectBox.option('value'), 1, 'select box correctly updates the value');
+    assert.equal($selectBox.find('.dx-texteditor-input').val(), 1, 'input value is correct');
     clock.restore();
 });

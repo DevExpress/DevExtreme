@@ -1,14 +1,14 @@
-require("./core");
+require('./core');
 
-var Globalize = require("globalize"),
-    messageLocalization = require("../message"),
-    coreLocalization = require("../core");
+var Globalize = require('globalize'),
+    messageLocalization = require('../message'),
+    coreLocalization = require('../core');
 
-require("globalize/message");
+require('globalize/message');
 
 if(Globalize && Globalize.formatMessage) {
 
-    var DEFAULT_LOCALE = "en";
+    var DEFAULT_LOCALE = 'en';
 
     var originalLoadMessages = Globalize.loadMessages;
 
@@ -27,7 +27,7 @@ if(Globalize && Globalize.formatMessage) {
         },
 
         getMessagesByLocales: function() {
-            return Globalize.cldr.get("globalize-messages");
+            return Globalize.cldr.get('globalize-messages');
         },
 
         getFormatter: function(key, locale) {
@@ -58,7 +58,7 @@ if(Globalize && Globalize.formatMessage) {
 
         _messageLoaded: function(key, locale) {
             var currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale(),
-                value = currentCldr.get(["globalize-messages/{bundle}", key]);
+                value = currentCldr.get(['globalize-messages/{bundle}', key]);
 
             return !!value;
         },

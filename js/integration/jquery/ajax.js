@@ -1,6 +1,6 @@
-var jQuery = require("jquery");
-var ajax = require("../../core/utils/ajax");
-var useJQuery = require("./use_jquery")();
+var jQuery = require('jquery');
+var ajax = require('../../core/utils/ajax');
+var useJQuery = require('./use_jquery')();
 
 if(useJQuery) {
     ajax.inject({

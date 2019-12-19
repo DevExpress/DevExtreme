@@ -1,4 +1,4 @@
-var _normalizeEnum = require("./utils").normalizeEnum,
+var _normalizeEnum = require('./utils').normalizeEnum,
     _min = Math.min,
     _max = Math.max,
     _round = Math.round,
@@ -80,11 +80,11 @@ function getShrink(alignment, size) {
 function processForward(item, rect, minSize) {
     var side = item.side,
         size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]),
-        minSide = item.position === "indside" ? 0 : minSize[side],
+        minSide = item.position === 'indside' ? 0 : minSize[side],
         isValid = size[side] < rect[2 + side] - rect[side] - minSide;
 
     if(isValid) {
-        if(item.position !== "inside") {
+        if(item.position !== 'inside') {
             rect[item.primary + side] += getShrink(item.primary, size[side]);
         }
         item.size = size;
@@ -98,10 +98,10 @@ function processRectBackward(item, rect, alignmentRect) {
         itemRect = [],
         secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
 
-    itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === "inside" ? getShrink(item.primary, item.size[primarySide]) : 0));
+    itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === 'inside' ? getShrink(item.primary, item.size[primarySide]) : 0));
     itemRect[item.primary + primarySide] = _round(rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]));
 
-    if(item.position !== "inside") {
+    if(item.position !== 'inside') {
         rect[item.primary + primarySide] = itemRect[item.primary + primarySide];
     }
 

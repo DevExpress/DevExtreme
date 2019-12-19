@@ -1,26 +1,26 @@
-var $ = require("jquery"),
-    testing = require("./utils.js"),
-    Map = require("ui/map"),
-    GoogleStaticProvider = require("ui/map/provider.google_static"),
-    Color = require("color"),
-    ajaxMock = require("../../../helpers/ajaxMock.js");
+var $ = require('jquery'),
+    testing = require('./utils.js'),
+    Map = require('ui/map'),
+    GoogleStaticProvider = require('ui/map/provider.google_static'),
+    Color = require('color'),
+    ajaxMock = require('../../../helpers/ajaxMock.js');
 
 var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
 
-var MAP_CONTAINER_CLASS = "dx-map-container";
+var MAP_CONTAINER_CLASS = 'dx-map-container';
 
 
-QUnit.module("googleStatic provider", {
+QUnit.module('googleStatic provider', {
     beforeEach: function() {
-        var fakeURL = "/fakeGoogleUrl?";
+        var fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
         ajaxMock.setup({
             url: fakeURL,
-            responseText: ""
+            responseText: ''
         });
     },
     afterEach: function() {
@@ -29,19 +29,19 @@ QUnit.module("googleStatic provider", {
 });
 
 var mapUrl = function(map) {
-    return backgroundUrl((map.element ? map.$element() : map).find("." + MAP_CONTAINER_CLASS));
+    return backgroundUrl((map.element ? map.$element() : map).find('.' + MAP_CONTAINER_CLASS));
 };
 
 var backgroundUrl = function($element) {
-    return $element.css("backgroundImage").replace(/^url|[("")]/g, '');
+    return $element.css('backgroundImage').replace(/^url|[("")]/g, '');
 };
 
-QUnit.test("map ready action", function(assert) {
+QUnit.test('map ready action', function(assert) {
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             onReady: function(e) {
-                assert.ok(true, "map rendered");
+                assert.ok(true, 'map rendered');
 
                 resolve();
             }
@@ -49,12 +49,12 @@ QUnit.test("map ready action", function(assert) {
     });
 });
 
-QUnit.test("default options", function(assert) {
+QUnit.test('default options', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("sensor=false"), -1, "dimensions set correctly");
+                assert.notEqual(mapUrl(map).indexOf('sensor=false'), -1, 'dimensions set correctly');
 
                 resolve();
             }
@@ -62,121 +62,121 @@ QUnit.test("default options", function(assert) {
     });
 });
 
-QUnit.test("dimensions", function(assert) {
+QUnit.test('dimensions', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             width: 400,
             height: 500,
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("size=400x500"), -1, "dimensions set correctly");
+                assert.notEqual(mapUrl(map).indexOf('size=400x500'), -1, 'dimensions set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                map.option("onReady", function() {
-                    assert.notEqual(mapUrl(map).indexOf("size=300x400"), -1, "dimensions set correctly");
+            map.option('onReady', function() {
+                map.option('onReady', function() {
+                    assert.notEqual(mapUrl(map).indexOf('size=300x400'), -1, 'dimensions set correctly');
 
                     resolve();
                 });
             });
 
             map.option({
-                "width": 300,
-                "height": 400
+                'width': 300,
+                'height': 400
             });
         });
     });
 });
 
-QUnit.test("type", function(assert) {
+QUnit.test('type', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
-            type: "hybrid",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
+            type: 'hybrid',
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("maptype=hybrid"), -1, "type set correctly");
+                assert.notEqual(mapUrl(map).indexOf('maptype=hybrid'), -1, 'type set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("maptype=roadmap"), -1, "type set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('maptype=roadmap'), -1, 'type set correctly');
 
                 resolve(map);
             });
 
-            map.option("type", "roadmap");
+            map.option('type', 'roadmap');
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("maptype=satellite"), -1, "type set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('maptype=satellite'), -1, 'type set correctly');
 
                 resolve();
             });
 
-            map.option("type", "satellite");
+            map.option('type', 'satellite');
         });
     });
 });
 
-QUnit.test("center", function(assert) {
+QUnit.test('center', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             center: LOCATIONS[0],
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("center=Brooklyn+Bridge,New+York,NY"), -1, "center set correctly");
+                assert.notEqual(mapUrl(map).indexOf('center=Brooklyn+Bridge,New+York,NY'), -1, 'center set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("center=40.537102,-73.990318"), -1, "center set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('center=40.537102,-73.990318'), -1, 'center set correctly');
 
                 resolve(map);
             });
 
-            map.option("center", LOCATIONS[1]);
+            map.option('center', LOCATIONS[1]);
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("center=40.539102,-73.970318"), -1, "center set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('center=40.539102,-73.970318'), -1, 'center set correctly');
 
                 resolve(map);
             });
 
-            map.option("center", LOCATIONS[2]);
+            map.option('center', LOCATIONS[2]);
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("center=40.557102,-72.990318"), -1, "center set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('center=40.557102,-72.990318'), -1, 'center set correctly');
 
                 resolve();
             });
 
-            map.option("center", LOCATIONS[3]);
+            map.option('center', LOCATIONS[3]);
         });
     });
 });
 
-QUnit.test("location parsing should be correct in case of string with one comma", function(assert) {
+QUnit.test('location parsing should be correct in case of string with one comma', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
-            center: "A, B",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
+            center: 'A, B',
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("center=A,+B"), -1, "center set correctly");
+                assert.notEqual(mapUrl(map).indexOf('center=A,+B'), -1, 'center set correctly');
 
                 resolve(e.component);
             }
@@ -184,37 +184,37 @@ QUnit.test("location parsing should be correct in case of string with one comma"
     });
 });
 
-QUnit.test("zoom", function(assert) {
+QUnit.test('zoom', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             zoom: 1,
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("zoom=1"), -1, "zoom set correctly");
+                assert.notEqual(mapUrl(map).indexOf('zoom=1'), -1, 'zoom set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("zoom=13"), -1, "zoom set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('zoom=13'), -1, 'zoom set correctly');
 
                 resolve();
             });
 
-            map.option("zoom", 13);
+            map.option('zoom', 13);
         });
     });
 });
 
-QUnit.test("key", function(assert) {
+QUnit.test('key', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             key: 10153453,
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("key=10153453"), -1, "key set correctly");
+                assert.notEqual(mapUrl(map).indexOf('key=10153453'), -1, 'key set correctly');
 
                 resolve();
             }
@@ -222,36 +222,36 @@ QUnit.test("key", function(assert) {
     });
 });
 
-QUnit.test("markers", function(assert) {
+QUnit.test('markers', function(assert) {
     assert.expect(4);
 
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             markers: [MARKERS[0]],
             onReady: function(e) {
                 assert.notEqual(mapUrl(map)
-                    .indexOf("markers=" + MARKERS[0].location.lat + "," + MARKERS[0].location.lng), -1, "markers set correctly");
+                    .indexOf('markers=' + MARKERS[0].location.lat + ',' + MARKERS[0].location.lng), -1, 'markers set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
+            map.option('onReady', function() {
                 assert.notEqual(mapUrl(map)
-                    .indexOf("markers=" + MARKERS[0].location.lat + "," + MARKERS[0].location.lng + "|" + MARKERS[1].location[0] + "," + MARKERS[1].location[1]), -1, "markers set correctly");
+                    .indexOf('markers=' + MARKERS[0].location.lat + ',' + MARKERS[0].location.lng + '|' + MARKERS[1].location[0] + ',' + MARKERS[1].location[1]), -1, 'markers set correctly');
 
                 resolve(map);
             });
 
-            map.option("markers", [MARKERS[0], MARKERS[1]]);
+            map.option('markers', [MARKERS[0], MARKERS[1]]);
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
+            map.option('onReady', function() {
                 assert.equal(mapUrl(map)
-                    .indexOf("|" + MARKERS[1].location[0] + "," + MARKERS[1].location[1]), -1, "marker removed correctly");
+                    .indexOf('|' + MARKERS[1].location[0] + ',' + MARKERS[1].location[1]), -1, 'marker removed correctly');
             });
 
             map.removeMarker(MARKERS[1]).done(function() {
@@ -260,9 +260,9 @@ QUnit.test("markers", function(assert) {
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
+            map.option('onReady', function() {
                 assert.notEqual(mapUrl(map)
-                    .indexOf("markers=" + MARKERS[0].location.lat + "," + MARKERS[0].location.lng + "|" + MARKERS[1].location[0] + "," + MARKERS[1].location[1]), -1, "marker added correctly");
+                    .indexOf('markers=' + MARKERS[0].location.lat + ',' + MARKERS[0].location.lng + '|' + MARKERS[1].location[0] + ',' + MARKERS[1].location[1]), -1, 'marker added correctly');
             });
 
             map.addMarker(MARKERS[1]).done(function() {
@@ -272,43 +272,43 @@ QUnit.test("markers", function(assert) {
     });
 });
 
-QUnit.test("markerIcon", function(assert) {
-    var markerUrl1 = "http://example.com/1.png",
-        markerUrl2 = "http://example.com/2.png";
+QUnit.test('markerIcon', function(assert) {
+    var markerUrl1 = 'http://example.com/1.png',
+        markerUrl2 = 'http://example.com/2.png';
 
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             markers: [MARKERS[0]],
             markerIconSrc: markerUrl1,
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf("markers=icon:" + markerUrl1 + "|" + MARKERS[0].location.lat + "," + MARKERS[0].location.lng), -1, "markers set correctly");
+                assert.notEqual(mapUrl(map).indexOf('markers=icon:' + markerUrl1 + '|' + MARKERS[0].location.lat + ',' + MARKERS[0].location.lng), -1, 'markers set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf("markers=icon:" + markerUrl2 + "|" + MARKERS[0].location.lat + "," + MARKERS[0].location.lng), -1, "markers set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf('markers=icon:' + markerUrl2 + '|' + MARKERS[0].location.lat + ',' + MARKERS[0].location.lng), -1, 'markers set correctly');
 
                 resolve(map);
             });
 
-            map.option("markerIconSrc", markerUrl2);
+            map.option('markerIconSrc', markerUrl2);
         });
     });
 });
 
-QUnit.test("markerAdded", function(assert) {
+QUnit.test('markerAdded', function(assert) {
     var markerAddedFired = 0;
 
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             markers: [MARKERS[0]],
             onMarkerAdded: function(args) {
-                assert.equal(args.options, MARKERS[0], "correct options passed as parameter");
+                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
                 markerAddedFired++;
             },
             onReady: function(e) {
@@ -316,19 +316,19 @@ QUnit.test("markerAdded", function(assert) {
             }
         });
     }).then(function() {
-        assert.equal(markerAddedFired, 1, "markerAdded fired");
+        assert.equal(markerAddedFired, 1, 'markerAdded fired');
     });
 });
 
-QUnit.test("markerRemoved", function(assert) {
+QUnit.test('markerRemoved', function(assert) {
     var markerRemovedFired = 0;
 
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             markers: [MARKERS[0]],
             onMarkerRemoved: function(args) {
-                assert.equal(args.options, MARKERS[0], "correct options passed as parameter");
+                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
                 markerRemovedFired++;
             },
             onReady: function(e) {
@@ -337,73 +337,73 @@ QUnit.test("markerRemoved", function(assert) {
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
+            map.option('onReady', function() {
                 resolve(map);
             });
 
-            map.option("markers", []);
+            map.option('markers', []);
         });
     }).then(function() {
-        assert.equal(markerRemovedFired, 1, "markerRemoved fired");
+        assert.equal(markerRemovedFired, 1, 'markerRemoved fired');
     });
 });
 
-QUnit.test("autoAdjust", function(assert) {
+QUnit.test('autoAdjust', function(assert) {
     assert.expect(0);
 
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             autoAdjust: true,
             onReady: function(e) {
                 resolve(e.component);
             }
         });
     }).then(function(map) {
-        map.option("autoAdjust", false);
+        map.option('autoAdjust', false);
     });
 });
 
-QUnit.test("routes", function(assert) {
-    var route0 = "path="
-        + "color:" + (new Color(ROUTES[0].color).toHex() + Math.round((ROUTES[0].opacity) * 255).toString(16)).replace('#', '0x') + "|"
-        + "weight:" + ROUTES[0].weight + "|"
-        + ROUTES[0].locations[0][0] + "," + ROUTES[0].locations[0][1] + "|"
-        + ROUTES[0].locations[1][0] + "," + ROUTES[0].locations[1][1] + "|"
-        + ROUTES[0].locations[2][0] + "," + ROUTES[0].locations[2][1];
+QUnit.test('routes', function(assert) {
+    var route0 = 'path='
+        + 'color:' + (new Color(ROUTES[0].color).toHex() + Math.round((ROUTES[0].opacity) * 255).toString(16)).replace('#', '0x') + '|'
+        + 'weight:' + ROUTES[0].weight + '|'
+        + ROUTES[0].locations[0][0] + ',' + ROUTES[0].locations[0][1] + '|'
+        + ROUTES[0].locations[1][0] + ',' + ROUTES[0].locations[1][1] + '|'
+        + ROUTES[0].locations[2][0] + ',' + ROUTES[0].locations[2][1];
 
     return new Promise(function(resolve) {
-        var map = new Map($("#map"), {
-            provider: "googleStatic",
+        var map = new Map($('#map'), {
+            provider: 'googleStatic',
             routes: [ROUTES[0]],
             onReady: function(e) {
-                assert.notEqual(mapUrl(map).indexOf(route0), -1, "routes set correctly");
+                assert.notEqual(mapUrl(map).indexOf(route0), -1, 'routes set correctly');
 
                 resolve(e.component);
             }
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
-                assert.notEqual(mapUrl(map).indexOf(route0 + "&" + route0), -1, "routes set correctly");
+            map.option('onReady', function() {
+                assert.notEqual(mapUrl(map).indexOf(route0 + '&' + route0), -1, 'routes set correctly');
 
                 resolve(map);
             });
 
-            map.option("routes", [ROUTES[0], ROUTES[0]]);
+            map.option('routes', [ROUTES[0], ROUTES[0]]);
         });
     });
 });
 
-QUnit.test("routeAdded", function(assert) {
+QUnit.test('routeAdded', function(assert) {
     var routeAddedFired = 0;
 
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             routes: [ROUTES[0]],
             onRouteAdded: function(args) {
-                assert.equal(args.options, ROUTES[0], "correct options passed as parameter");
+                assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
                 routeAddedFired++;
             },
             onReady: function(e) {
@@ -411,17 +411,17 @@ QUnit.test("routeAdded", function(assert) {
             }
         });
     }).then(function() {
-        assert.equal(routeAddedFired, 1, "routeAdded fired");
+        assert.equal(routeAddedFired, 1, 'routeAdded fired');
     });
 });
 
-QUnit.test("routeRemoved", function(assert) {
+QUnit.test('routeRemoved', function(assert) {
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             routes: [ROUTES[0]],
             onRouteRemoved: function(args) {
-                assert.equal(args.options, ROUTES[0], "correct options passed as parameter");
+                assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
             },
             onReady: function(e) {
                 resolve(e.component);
@@ -429,22 +429,22 @@ QUnit.test("routeRemoved", function(assert) {
         });
     }).then(function(map) {
         return new Promise(function(resolve) {
-            map.option("onReady", function() {
+            map.option('onReady', function() {
                 resolve(map);
             });
 
-            map.option("routes", []);
+            map.option('routes', []);
         });
     });
 });
 
-QUnit.test("click", function(assert) {
+QUnit.test('click', function(assert) {
     var clicked = 0,
         eventFired = 0;
 
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             width: 400,
             height: 500,
             onClick: function() {
@@ -452,10 +452,10 @@ QUnit.test("click", function(assert) {
             },
             onReady: function(e) {
                 var $element = $(e.element);
-                $element.dxMap("instance").on("click", function() {
+                $element.dxMap('instance').on('click', function() {
                     eventFired++;
                 });
-                $element.children().trigger("dxclick");
+                $element.children().trigger('dxclick');
 
                 resolve();
             }
@@ -466,18 +466,18 @@ QUnit.test("click", function(assert) {
     });
 });
 
-QUnit.test("the pointer down event propagation should be canceled", function(assert) {
+QUnit.test('the pointer down event propagation should be canceled', function(assert) {
     var isPropagationStopped;
     return new Promise(function(resolve) {
-        new Map($("#map"), {
-            provider: "googleStatic",
+        new Map($('#map'), {
+            provider: 'googleStatic',
             width: 400,
             height: 500,
             onReady: function(e) {
-                $(e.element).on("dxpointerdown", function(e) {
+                $(e.element).on('dxpointerdown', function(e) {
                     isPropagationStopped = e.isPropagationStopped();
                 });
-                $(e.element).children().trigger("dxpointerdown");
+                $(e.element).children().trigger('dxpointerdown');
 
                 resolve();
             }

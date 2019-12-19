@@ -5,7 +5,7 @@
 
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require("jquery"), require("core/class"), require("data/errors"));
+            root.DevExpress.data.testing.ErrorHandlingHelper = module.exports = factory(require('jquery'), require('core/class'), require('data/errors'));
         });
     } else {
         root.DevExpress.data.testing.ErrorHandlingHelper = factory(window.jQuery, DevExpress.Class, DevExpress.data);
@@ -37,24 +37,24 @@
             var prevGlobalHandler = errorsModule.errorHandler;
 
             errorsModule.errorHandler = function(arg) {
-                log.push("global");
+                log.push('global');
                 globalHandlerArg = arg;
                 globalFired.resolve();
             };
 
             this.optionalHandlerImpl = function(arg) {
-                log.push("optional");
+                log.push('optional');
                 optionalHandlerArg = arg;
                 optionalFired.resolve();
             };
 
             var actionResult = action();
             if(!actionResult || !actionResult.fail) {
-                throw Error("Deferred result is expected");
+                throw Error('Deferred result is expected');
             }
 
             actionResult.fail(function(arg) {
-                log.push("fail");
+                log.push('fail');
                 failHandlerArg = arg;
                 failFired.resolve();
             });
@@ -62,8 +62,8 @@
             $.when(globalFired, failFired, optionalFired).done(function() {
                 assert.strictEqual(globalHandlerArg, optionalHandlerArg);
                 assert.strictEqual(optionalHandlerArg, failHandlerArg);
-                assert.ok("message" in globalHandlerArg);
-                assert.deepEqual(log, ["optional", "global", "fail"]);
+                assert.ok('message' in globalHandlerArg);
+                assert.deepEqual(log, ['optional', 'global', 'fail']);
 
                 if(that.extraChecker) {
                     that.extraChecker(globalHandlerArg);

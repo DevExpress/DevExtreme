@@ -1,19 +1,19 @@
-var Config = require("./config"),
-    domAdapter = require("./dom_adapter"),
-    extend = require("./utils/extend").extend,
-    Class = require("./class"),
-    Action = require("./action"),
-    errors = require("./errors"),
-    coreDataUtils = require("./utils/data"),
-    commonUtils = require("./utils/common"),
-    typeUtils = require("./utils/type"),
-    deferredUtils = require("../core/utils/deferred"),
+var Config = require('./config'),
+    domAdapter = require('./dom_adapter'),
+    extend = require('./utils/extend').extend,
+    Class = require('./class'),
+    Action = require('./action'),
+    errors = require('./errors'),
+    coreDataUtils = require('./utils/data'),
+    commonUtils = require('./utils/common'),
+    typeUtils = require('./utils/type'),
+    deferredUtils = require('../core/utils/deferred'),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
-    Callbacks = require("./utils/callbacks"),
-    EventsMixin = require("./events_mixin"),
-    publicComponentUtils = require("./utils/public_component"),
-    devices = require("./devices"),
+    Callbacks = require('./utils/callbacks'),
+    EventsMixin = require('./events_mixin'),
+    publicComponentUtils = require('./utils/public_component'),
+    devices = require('./devices'),
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
 
@@ -249,7 +249,7 @@ var Component = Class.inherit({
             return true;
         }
 
-        if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
+        if(oldValue === null || typeof oldValue !== 'object' || domAdapter.isElementNode(oldValue)) {
             return oldValue === newValue;
         }
 
@@ -259,28 +259,28 @@ var Component = Class.inherit({
     _init: function() {
         this._createOptionChangedAction();
 
-        this.on("disposing", function(args) {
+        this.on('disposing', function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
     },
 
     _createOptionChangedAction: function() {
-        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
+        this._optionChangedAction = this._createActionByOption('onOptionChanged', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _createDisposingAction: function() {
-        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
+        this._disposingAction = this._createActionByOption('onDisposing', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "onDisposing":
-            case "onInitialized":
+            case 'onDisposing':
+            case 'onInitialized':
                 break;
-            case "onOptionChanged":
+            case 'onOptionChanged':
                 this._createOptionChangedAction();
                 break;
-            case "defaultOptionsRules":
+            case 'defaultOptionsRules':
                 break;
         }
     },
@@ -325,7 +325,7 @@ var Component = Class.inherit({
                 } finally {
                     this._initializing = false;
                     this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+                    this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
                     this._updateLockCount--;
                     this._initialized = true;
                 }
@@ -343,8 +343,8 @@ var Component = Class.inherit({
     _logDeprecatedWarningCount: 0,
 
     _logDeprecatedWarning: function(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
+        var message = info.message || ('Use the \'' + info.alias + '\' option instead');
+        errors.log('W0001', this.NAME, option, info.since, message);
         ++this._logDeprecatedWarningCount;
     },
 
@@ -442,16 +442,16 @@ var Component = Class.inherit({
             if(!eventName) {
                 config = config || {};
 
-                if(typeof optionName !== "string") {
-                    throw errors.Error("E0008");
+                if(typeof optionName !== 'string') {
+                    throw errors.Error('E0008');
                 }
 
-                if(optionName.indexOf("on") === 0) {
+                if(optionName.indexOf('on') === 0) {
                     eventName = that._getEventName(optionName);
                 }
                 ///#DEBUG
-                if(optionName.indexOf("on") !== 0) {
-                    throw Error("The '" + optionName + "' option name should start with 'on' prefix");
+                if(optionName.indexOf('on') !== 0) {
+                    throw Error('The \'' + optionName + '\' option name should start with \'on\' prefix');
                 }
                 ///#ENDDEBUG
 
@@ -474,7 +474,7 @@ var Component = Class.inherit({
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option("beforeActionExecute") || noop;
+                var beforeActionExecute = that.option('beforeActionExecute') || noop;
                 var wrappedAction = beforeActionExecute(that, action, config) || action;
                 return wrappedAction.apply(that, arguments);
             }
@@ -483,7 +483,7 @@ var Component = Class.inherit({
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option("onActionCreated") || noop;
+            var onActionCreated = that.option('onActionCreated') || noop;
             result = onActionCreated(that, result, config) || result;
         }
 
@@ -594,12 +594,12 @@ var Component = Class.inherit({
         };
 
         var setOptionsField = function(options, fullName, value) {
-            var fieldName = "",
+            var fieldName = '',
                 fieldObject;
 
             do {
                 if(fieldName) {
-                    fieldName = "." + fieldName;
+                    fieldName = '.' + fieldName;
                 }
 
                 fieldName = getFieldName(fullName) + fieldName;
@@ -625,7 +625,7 @@ var Component = Class.inherit({
         var prepareOption = function(that, options, name, value) {
             if(typeUtils.isPlainObject(value)) {
                 for(var valueName in value) {
-                    prepareOption(that, options, name + "." + valueName, value[valueName]);
+                    prepareOption(that, options, name + '.' + valueName, value[valueName]);
                 }
             }
 
@@ -665,12 +665,12 @@ var Component = Class.inherit({
             var that = this,
                 name = options;
 
-            if(arguments.length < 2 && typeUtils.type(name) !== "object") {
+            if(arguments.length < 2 && typeUtils.type(name) !== 'object') {
                 name = normalizeOptionName(that, name);
                 return getOptionValue(that._options, name);
             }
 
-            if(typeof name === "string") {
+            if(typeof name === 'string') {
                 options = {};
                 options[name] = value;
             }

@@ -1,25 +1,25 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    Class = require("../../core/class"),
+var eventsEngine = require('../../events/core/events_engine'),
+    Class = require('../../core/class'),
     abstract = Class.abstract,
-    eventUtils = require("../../events/utils"),
-    GestureEmitter = require("../../events/gesture/emitter.gesture"),
-    registerEmitter = require("../../events/core/emitter_registrator"),
-    animationFrame = require("../../animation/frame"),
-    realDevice = require("../../core/devices").real(),
-    compareVersions = require("../../core/utils/version").compare;
+    eventUtils = require('../../events/utils'),
+    GestureEmitter = require('../../events/gesture/emitter.gesture'),
+    registerEmitter = require('../../events/core/emitter_registrator'),
+    animationFrame = require('../../animation/frame'),
+    realDevice = require('../../core/devices').real(),
+    compareVersions = require('../../core/utils/version').compare;
 
 
-var SCROLL_INIT_EVENT = "dxscrollinit",
-    SCROLL_START_EVENT = "dxscrollstart",
-    SCROLL_MOVE_EVENT = "dxscroll",
-    SCROLL_END_EVENT = "dxscrollend",
-    SCROLL_STOP_EVENT = "dxscrollstop",
-    SCROLL_CANCEL_EVENT = "dxscrollcancel";
+var SCROLL_INIT_EVENT = 'dxscrollinit',
+    SCROLL_START_EVENT = 'dxscrollstart',
+    SCROLL_MOVE_EVENT = 'dxscroll',
+    SCROLL_END_EVENT = 'dxscrollend',
+    SCROLL_STOP_EVENT = 'dxscrollstop',
+    SCROLL_CANCEL_EVENT = 'dxscrollcancel';
 
 
 var Locker = Class.inherit((function() {
 
-    var NAMESPACED_SCROLL_EVENT = eventUtils.addNamespace("scroll", "dxScrollEmitter");
+    var NAMESPACED_SCROLL_EVENT = eventUtils.addNamespace('scroll', 'dxScrollEmitter');
 
     return {
 
@@ -206,7 +206,7 @@ var ScrollEmitter = GestureEmitter.inherit((function() {
 
         ctor: function(element) {
             this.callBase.apply(this, arguments);
-            this.direction = "both";
+            this.direction = 'both';
 
             this._pointerLocker = new PointerLocker(element);
             this._wheelLocker = new WheelLocker(element);

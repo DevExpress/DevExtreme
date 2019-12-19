@@ -1,21 +1,21 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { isObject, isString } from "../../core/utils/type";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { isObject, isString } from '../../core/utils/type';
 
-import Widget from "../widget/ui.widget";
-import ContextMenu from "../context_menu/ui.context_menu";
+import Widget from '../widget/ui.widget';
+import ContextMenu from '../context_menu/ui.context_menu';
 
-const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
+const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
 
 const DEFAULT_CONTEXT_MENU_ITEMS = [
-    "create",
-    "upload",
-    "rename",
-    "move",
-    "copy",
-    "delete",
+    'create',
+    'upload',
+    'rename',
+    'move',
+    'copy',
+    'delete',
     {
-        commandName: "refresh",
+        commandName: 'refresh',
         beginGroup: true
     }
 ];
@@ -27,10 +27,10 @@ class FileManagerContextMenu extends Widget {
 
         this._isVisible = false;
 
-        const $menu = $("<div>").appendTo(this.$element());
+        const $menu = $('<div>').appendTo(this.$element());
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
-            showEvent: "",
+            showEvent: '',
             onItemClick: ({ itemData: { commandName } }) => this._onContextMenuItemClick(commandName),
             onHidden: () => this._onContextMenuHidden()
         });
@@ -48,16 +48,16 @@ class FileManagerContextMenu extends Widget {
 
         const position = {
             of: element,
-            at: "top left",
-            my: "top left",
-            offset: ""
+            at: 'top left',
+            my: 'top left',
+            offset: ''
         };
 
         if(offset) {
-            position.offset = offset.offsetX + " " + offset.offsetY;
+            position.offset = offset.offsetX + ' ' + offset.offsetY;
         } else {
-            position.my = "left top";
-            position.at = "left bottom";
+            position.my = 'left top';
+            position.at = 'left bottom';
         }
 
         this._contextMenu.option({
@@ -103,7 +103,7 @@ class FileManagerContextMenu extends Widget {
     }
 
     _createContextMenuHiddenAction() {
-        this._contextMenuHiddenAction = this._createActionByOption("onContextMenuHidden");
+        this._contextMenuHiddenAction = this._createActionByOption('onContextMenuHidden');
     }
 
     _onContextMenuHidden() {
@@ -126,10 +126,10 @@ class FileManagerContextMenu extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "commandManager":
+            case 'commandManager':
                 this.repaint();
                 break;
-            case "onContextMenuHidden":
+            case 'onContextMenuHidden':
                 this._createContextMenuHiddenAction();
                 break;
             default:
@@ -138,7 +138,7 @@ class FileManagerContextMenu extends Widget {
     }
 
     get _commandManager() {
-        return this.option("commandManager");
+        return this.option('commandManager');
     }
 
 }

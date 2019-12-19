@@ -1,44 +1,44 @@
-import $ from "../core/renderer";
-import eventsEngine from "../events/core/events_engine";
-import devices from "../core/devices";
-import registerComponent from "../core/component_registrator";
-import Button from "./button";
-import inkRipple from "./widget/utils.ink_ripple";
-import { addNamespace } from "../events/utils";
-import { extend } from "../core/utils/extend";
-import { isPlainObject } from "../core/utils/type";
-import pointerEvents from "../events/pointer";
-import { each } from "../core/utils/iterator";
-import TabsItem from "./tabs/item";
-import themes from "./themes";
-import holdEvent from "../events/hold";
-import Scrollable from "./scroll_view/ui.scrollable";
-import { default as CollectionWidget } from "./collection/ui.collection_widget.live_update";
-import { getImageContainer } from "../core/utils/icon";
-import BindableTemplate from "./widget/bindable_template";
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import Button from './button';
+import inkRipple from './widget/utils.ink_ripple';
+import { addNamespace } from '../events/utils';
+import { extend } from '../core/utils/extend';
+import { isPlainObject } from '../core/utils/type';
+import pointerEvents from '../events/pointer';
+import { each } from '../core/utils/iterator';
+import TabsItem from './tabs/item';
+import themes from './themes';
+import holdEvent from '../events/hold';
+import Scrollable from './scroll_view/ui.scrollable';
+import { default as CollectionWidget } from './collection/ui.collection_widget.live_update';
+import { getImageContainer } from '../core/utils/icon';
+import BindableTemplate from './widget/bindable_template';
 
-const TABS_CLASS = "dx-tabs";
-const TABS_WRAPPER_CLASS = "dx-tabs-wrapper";
-const TABS_EXPANDED_CLASS = "dx-tabs-expanded";
-const TABS_STRETCHED_CLASS = "dx-tabs-stretched";
-const TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable";
-const TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons";
+const TABS_CLASS = 'dx-tabs';
+const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+const TABS_EXPANDED_CLASS = 'dx-tabs-expanded';
+const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
+const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
+const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 
-const OVERFLOW_HIDDEN_CLASS = "dx-overflow-hidden";
+const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
-const TABS_ITEM_CLASS = "dx-tab";
-const TABS_ITEM_SELECTED_CLASS = "dx-tab-selected";
+const TABS_ITEM_CLASS = 'dx-tab';
+const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
 
-const TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
-const TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left";
-const TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right";
+const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
+const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
+const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
-const TABS_ITEM_TEXT_CLASS = "dx-tab-text";
+const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-const TABS_ITEM_DATA_KEY = "dxTabData";
+const TABS_ITEM_DATA_KEY = 'dxTabData';
 
-const BUTTON_NEXT_ICON = "chevronnext";
-const BUTTON_PREV_ICON = "chevronprev";
+const BUTTON_NEXT_ICON = 'chevronnext';
+const BUTTON_PREV_ICON = 'chevronprev';
 
 const FEEDBACK_HIDE_TIMEOUT = 100;
 const FEEDBACK_DURATION_INTERVAL = 5;
@@ -56,7 +56,7 @@ const TAB_OFFSET = 30;
 
 const Tabs = CollectionWidget.inherit({
 
-    _activeStateUnit: "." + TABS_ITEM_CLASS,
+    _activeStateUnit: '.' + TABS_ITEM_CLASS,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -100,7 +100,7 @@ const Tabs = CollectionWidget.inherit({
             * @type Enums.NavSelectionMode
             * @default 'single'
             */
-            selectionMode: "single",
+            selectionMode: 'single',
 
             /**
             * @name dxTabsOptions.activeStateEnabled
@@ -151,7 +151,7 @@ const Tabs = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
+                    return devices.real().platform !== 'generic';
                 },
                 options: {
                     /**
@@ -162,7 +162,7 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: { platform: "generic" },
+                device: { platform: 'generic' },
                 options: {
                     /**
                     * @name dxTabsOptions.scrollByContent
@@ -173,7 +173,7 @@ const Tabs = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -199,7 +199,7 @@ const Tabs = CollectionWidget.inherit({
     _init: function() {
         this.callBase();
 
-        this.setAria("role", "tablist");
+        this.setAria('role', 'tablist');
 
         this.$element().addClass(TABS_CLASS);
         this._renderWrapper();
@@ -212,7 +212,7 @@ const Tabs = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
+        this._defaultTemplates['item'] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
@@ -221,9 +221,9 @@ const Tabs = CollectionWidget.inherit({
 
             var $iconElement = getImageContainer(data.icon);
 
-            $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
+            $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }).bind(this), ["text", "html", "icon"], this.option("integrationOptions.watchMethod"));
+        }).bind(this), ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod'));
     },
 
     _itemClass: function() {
@@ -240,9 +240,9 @@ const Tabs = CollectionWidget.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this.setAria("role", "tab", this.itemElements());
+        this.setAria('role', 'tab', this.itemElements());
 
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
 
         this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
     },
@@ -255,9 +255,9 @@ const Tabs = CollectionWidget.inherit({
 
     _renderScrolling: function() {
         var removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
-        this.$element().removeClass(removeClasses.join(" "));
+        this.$element().removeClass(removeClasses.join(' '));
 
-        if(this.option("scrollingEnabled") && this._isItemsWidthExceeded()) {
+        if(this.option('scrollingEnabled') && this._isItemsWidthExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -266,13 +266,13 @@ const Tabs = CollectionWidget.inherit({
             this._scrollable.update();
             this._updateNavButtonsVisibility();
 
-            if(this.option("rtlEnabled")) {
+            if(this.option('rtlEnabled')) {
                 this._scrollable.scrollTo({ left: this._scrollable.scrollWidth() - this._scrollable.clientWidth() });
             }
-            this._scrollToItem(this.option("selectedItem"));
+            this._scrollToItem(this.option('selectedItem'));
         }
 
-        if(!(this.option("scrollingEnabled") && this._isItemsWidthExceeded())) {
+        if(!(this.option('scrollingEnabled') && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
             if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
@@ -350,13 +350,13 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderMultiple: function() {
-        if(this.option("selectionMode") === "multiple") {
-            this.option("selectOnFocus", false);
+        if(this.option('selectionMode') === 'multiple') {
+            this.option('selectOnFocus', false);
         }
     },
 
     _renderWrapper: function() {
-        this._$wrapper = $("<div>").addClass(TABS_WRAPPER_CLASS);
+        this._$wrapper = $('<div>').addClass(TABS_WRAPPER_CLASS);
         this.$element().append(this._$wrapper);
     },
 
@@ -365,14 +365,14 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderScrollable: function() {
-        var $itemContainer = this.$element().wrapInner($("<div>").addClass(TABS_SCROLLABLE_CLASS)).children();
+        var $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
-            direction: "horizontal",
+            direction: 'horizontal',
             showScrollbar: false,
             useKeyboard: false,
             useNative: false,
-            scrollByContent: this.option("scrollByContent"),
+            scrollByContent: this.option('scrollByContent'),
             onScroll: this._updateNavButtonsVisibility.bind(this)
         });
 
@@ -387,11 +387,11 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderNavButtons: function() {
-        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option("showNavButtons"));
+        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option('showNavButtons'));
 
-        if(!this.option("showNavButtons")) return;
+        if(!this.option('showNavButtons')) return;
 
-        var rtlEnabled = this.option("rtlEnabled");
+        var rtlEnabled = this.option('rtlEnabled');
         this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
 
         var $leftButton = this._leftButton.$element();
@@ -406,8 +406,8 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateNavButtonsVisibility: function() {
-        this._leftButton && this._leftButton.option("disabled", this._scrollable.scrollLeft() <= 0);
-        this._rightButton && this._rightButton.option("disabled", this._scrollable.scrollLeft() >= Math.round(this._scrollable.scrollWidth() - this._scrollable.clientWidth()));
+        this._leftButton && this._leftButton.option('disabled', this._scrollable.scrollLeft() <= 0);
+        this._rightButton && this._rightButton.option('disabled', this._scrollable.scrollLeft() >= Math.round(this._scrollable.scrollWidth() - this._scrollable.clientWidth()));
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -424,11 +424,11 @@ const Tabs = CollectionWidget.inherit({
                 }, FEEDBACK_DURATION_INTERVAL);
             }),
 
-            holdEventName = addNamespace(holdEvent.name, "dxNavButton"),
-            pointerUpEventName = addNamespace(pointerEvents.up, "dxNavButton"),
-            pointerOutEventName = addNamespace(pointerEvents.out, "dxNavButton");
+            holdEventName = addNamespace(holdEvent.name, 'dxNavButton'),
+            pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton'),
+            pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
 
-        var navButton = this._createComponent($("<div>").addClass(TABS_NAV_BUTTON_CLASS), Button, {
+        var navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
             focusStateEnabled: false,
             icon: icon,
             onClick: function() {
@@ -469,7 +469,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        if(this.option("selectionMode") === "single" && this.isItemSelected(e.currentTarget)) {
+        if(this.option('selectionMode') === 'single' && this.isItemSelected(e.currentTarget)) {
             return;
         }
 
@@ -483,23 +483,23 @@ const Tabs = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "useInkRipple":
-            case "scrollingEnabled":
-            case "showNavButtons":
+            case 'useInkRipple':
+            case 'scrollingEnabled':
+            case 'showNavButtons':
                 this._invalidate();
                 break;
-            case "scrollByContent":
+            case 'scrollByContent':
                 this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case "selectionMode":
+            case 'selectionMode':
                 this._renderMultiple();
                 this.callBase(args);
                 break;
-            case "badgeExpr":
+            case 'badgeExpr':
                 this._invalidate();
                 break;
             default:
@@ -521,7 +521,7 @@ const Tabs = CollectionWidget.inherit({
 
 Tabs.ItemClass = TabsItem;
 
-registerComponent("dxTabs", Tabs);
+registerComponent('dxTabs', Tabs);
 
 module.exports = Tabs;
 module.exports.getTabsExpandedClass = TABS_EXPANDED_CLASS;
