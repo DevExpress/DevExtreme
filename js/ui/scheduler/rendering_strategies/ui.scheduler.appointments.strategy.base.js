@@ -286,42 +286,49 @@ class BaseRenderingStrategy {
     _sortCondition() {
     }
 
-    _rowCondition(a, b) {
+    _getConditions(a, b) {
         var isSomeEdge = this._isSomeEdge(a, b);
 
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
+        return {
+            columnCondition: isSomeEdge || this._normalizeCondition(a.left, b.left),
+            rowCondition: isSomeEdge || this._normalizeCondition(a.top, b.top),
+            cellPositionCondition: isSomeEdge || this._normalizeCondition(a.cellPosition, b.cellPosition)
+        };
+    }
+
+    _rowCondition(a, b) {
+        var conditions = this._getConditions(a, b);
+        return conditions.columnCondition || conditions.rowCondition;
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
-
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return rowCondition ? rowCondition : columnCondition;
+        var conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition;
     }
 
     _isSomeEdge(a, b) {
         return a.i === b.i && a.j === b.j;
     }
 
-    _normalizeCondition(first, second, isSomeEdge) {
+    _normalizeCondition(first, second) {
         // NOTE: ie & ff pixels
         var result = first - second;
-
-        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
+        return Math.abs(result) > 1 ? result : 0;
     }
 
-    _isItemsCross(item, currentItem) {
-        const top = Math.floor(item.top);
-        const bottom = Math.floor(item.bottom);
-        return item.left === currentItem.left && (
-            (top <= currentItem.top && bottom > currentItem.top) ||
-                (top < currentItem.bottom && bottom >= currentItem.bottom || (
-                    top === currentItem.top && bottom === currentItem.bottom
+    _isItemsCross(item, currentItem, orientation) {
+        const side_1 = Math.floor(item[orientation[0]]);
+        const side_2 = Math.floor(item[orientation[1]]);
+        return item[orientation[2]] === currentItem[orientation[2]] && (
+            (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
+                (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
+                    side_1 === currentItem[orientation[0]] && side_2 === currentItem[orientation[1]]
                 ))
         );
+    }
+
+    _getOrientation() {
+        return ['top', 'bottom', 'left'];
     }
 
     _getResultPositions(sortedArray) {
@@ -332,7 +339,8 @@ class BaseRenderingStrategy {
             indexes,
             itemIndex,
             maxIndexInStack = 0,
-            stack = {};
+            stack = {},
+            orientation = this._getOrientation();
 
         var findFreeIndex = (indexes, index) => {
             var isFind = indexes.find((item) => {
@@ -367,6 +375,18 @@ class BaseRenderingStrategy {
             };
         };
 
+        var pushItemsInResult = (items) => {
+            items.forEach((item) => {
+                result.push({
+                    index: item.index,
+                    count: maxIndexInStack + 1,
+                    i: item.i,
+                    j: item.j,
+                    sortedIndex: item.sortedIndex
+                });
+            });
+        };
+
         for(i = 0; i < sortedArray.length; i++) {
             currentItem = sortedArray[i];
             indexes = [];
@@ -374,9 +394,9 @@ class BaseRenderingStrategy {
             if(!stack.items) {
                 startNewStack(currentItem);
             } else {
-                if(this._isItemsCross(stack, currentItem)) {
+                if(this._isItemsCross(stack, currentItem, orientation)) {
                     stack.items.forEach((item, index) => {
-                        if(this._isItemsCross(item, currentItem)) {
+                        if(this._isItemsCross(item, currentItem, orientation)) {
                             indexes.push(item.index);
                         }
                     });
@@ -388,15 +408,7 @@ class BaseRenderingStrategy {
                     stack.top = Math.min(stack.top, currentItem.top);
                     stack.bottom = Math.max(stack.bottom, currentItem.bottom);
                 } else {
-                    stack.items.forEach((item) => {
-                        result.push({
-                            index: item.index,
-                            count: maxIndexInStack + 1,
-                            i: item.i,
-                            j: item.j,
-                            sortedIndex: item.sortedIndex
-                        });
-                    });
+                    pushItemsInResult(stack.items);
                     stack = {};
                     startNewStack(currentItem);
                     maxIndexInStack = 0;
@@ -404,15 +416,7 @@ class BaseRenderingStrategy {
             }
         }
         if(stack.items) {
-            stack.items.forEach((item) => {
-                result.push({
-                    index: item.index,
-                    count: maxIndexInStack + 1,
-                    i: item.i,
-                    j: item.j,
-                    sortedIndex: item.sortedIndex
-                });
-            });
+            pushItemsInResult(stack.items);
         }
 
         return result.sort(function(a, b) {

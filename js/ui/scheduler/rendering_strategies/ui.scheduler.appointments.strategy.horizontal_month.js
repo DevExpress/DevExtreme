@@ -62,17 +62,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return result;
     }
 
-    _isItemsCross(item, currentItem) {
-        const left = Math.floor(item.left);
-        const right = Math.floor(item.right);
-        return item.top === currentItem.top && (
-            (left <= currentItem.left && right > currentItem.left) ||
-                (left < currentItem.right && right >= currentItem.right || (
-                    left === currentItem.left && right === currentItem.right
-                ))
-        );
-    }
-
     _calculateMultiWeekAppointmentLeftOffset(max, width) {
         return this._isRtl() ? max : max - width;
     }
@@ -103,13 +92,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
-
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge),
-            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, isSomeEdge);
-
-        return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition;
+        var conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
     }
 
     createTaskPositionMap(items) {

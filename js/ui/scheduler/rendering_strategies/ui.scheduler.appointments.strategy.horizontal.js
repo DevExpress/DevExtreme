@@ -114,15 +114,8 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         return this._columnCondition(a, b);
     }
 
-    _isItemsCross(item, currentItem) {
-        const left = Math.floor(item.left);
-        const right = Math.floor(item.right);
-        return item.top === currentItem.top && item.bottom === currentItem.bottom && (
-            (left <= currentItem.left && right > currentItem.left) ||
-                (left < currentItem.right && right >= currentItem.right || (
-                    left === currentItem.left && right === currentItem.right
-                ))
-        );
+    _getOrientation() {
+        return ['left', 'right', 'top'];
     }
 
     _getMaxAppointmentWidth(startDate) {
