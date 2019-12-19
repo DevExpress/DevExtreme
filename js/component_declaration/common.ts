@@ -1,6 +1,10 @@
+import react from "react";
+
+export const React = react;
+
 export function Component(args: {
-    name: string;
-    components: [];
+    name?: string;
+    components?: [];
     viewModel: Function;
     view: Function;
 }) {
@@ -27,4 +31,3 @@ export declare namespace JSX {
     interface Element { }
     interface IntrinsicElements { div: any; }
 }
-

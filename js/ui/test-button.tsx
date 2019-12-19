@@ -1,7 +1,7 @@
-import { Component, Prop, Event, InternalState, Listen } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, Listen, React } from "../component_declaration/common";
+import { getDocument } from "../core/dom_adapter";
+const document = getDocument();
 
-import './button.css';
-import React from "react";
 @Component({
     name: 'Button',
     components: [],
@@ -41,7 +41,7 @@ export default class Button {
 
     @Listen('pointerup', { target: document })
     onPointerUp() {
-        this._active = false;
+        //this._active = false;
     }
 
     @Listen("click")
@@ -95,12 +95,15 @@ function viewModelFunction(model: Button) {
     };
 }
 
-function viewFunction(viewModel: Button & { cssClasses: string, style: { width: number } }) {
+function viewFunction(viewModel: Button & { cssClasses: string, style: { width?: string } }) {
     return (
         <div
             className={viewModel.cssClasses}
             title={viewModel.hint}
             style={viewModel.style}
+            onPointerOver={viewModel.onPointerOver}
+            onPointerOut={viewModel.onPointerOut}
+            onPointerDown={viewModel.onPointerDown}
             onClick={viewModel.onClickHandler}>
             <div className="dx-button-content">
                 <span className="dx-button-text">{viewModel.text}</span>

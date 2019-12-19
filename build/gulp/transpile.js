@@ -8,12 +8,13 @@ var notify = require('gulp-notify');
 
 var context = require('./context.js');
 
+require("./generator");
+
 var SRC = 'js/**/*.js*';
 var TESTS_PATH = 'testing';
 var TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 var VERSION_FILE_PATH = 'core/version.js';
-
 
 gulp.task('transpile', gulp.series('bundler-config', function() {
     return gulp.src(SRC)
@@ -27,7 +28,7 @@ gulp.task('version-replace', gulp.series('transpile', function() {
         .pipe(gulp.dest('./'));
 }));
 
-gulp.task('transpile-watch', gulp.series('version-replace', function() {
+gulp.task('transpile-watch', gulp.series('version-replace', "generate-components-watch", function() {
     return watch(SRC)
         .pipe(plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')

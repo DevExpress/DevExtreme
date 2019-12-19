@@ -21,6 +21,7 @@ require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
+require("./build/gulp/generator");
 
 const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
@@ -69,4 +70,4 @@ gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
 gulp.task('default', createDefaultBatch());
 
-gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));
+gulp.task('dev', gulp.parallel('bundler-config-dev', 'generate-components-watch', 'js-bundles-dev', 'style-compiler-themes-dev'));

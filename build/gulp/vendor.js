@@ -15,7 +15,8 @@ const JS_VENDORS = [
         path: '/preact/dist/preact.js'
     },
     {
-        path: '/preact/hooks/dist/hooks.js'
+        path: '/preact/hooks/dist/hooks.js',
+        noUglyFile: true
     },
     {
         path: '/jquery/dist/jquery.js'

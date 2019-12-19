@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ES2016",
+        "module": "ESNext",
+        "strict": false,
+        "esModuleInterop": false,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "jsxFactory": "Preact.h"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
