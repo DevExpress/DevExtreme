@@ -638,7 +638,7 @@ const Widget = DOMComponent.inherit({
     endUpdate() {
         this.callBase();
 
-        if(this._initialized) {
+        if(this._options.silent('_initialized')) {
             this._ready(true);
         }
     },

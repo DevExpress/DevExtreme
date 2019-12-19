@@ -866,7 +866,7 @@ var ListBase = CollectionWidget.inherit({
     _dataSourceLoadErrorHandler: function() {
         this._forgetNextPageLoading();
 
-        if(this._initialized) {
+        if(this._options.silent('_initialized')) {
             this._renderEmptyMessage();
             this._updateLoadingState();
         }

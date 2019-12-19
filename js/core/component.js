@@ -67,7 +67,11 @@ const Component = Class.inherit({
             */
             onDisposing: null,
 
-            defaultOptionsRules: null
+            defaultOptionsRules: null,
+
+            _initializing: false,
+
+            _initialized: false
         };
     },
 
@@ -129,7 +133,7 @@ const Component = Class.inherit({
             );
 
             this._options.onChanging(
-                (name, previousValue, value) => this._initialized && this._optionChanging(name, previousValue, value));
+                (name, previousValue, value) => this._options.silent('_initialized') && this._optionChanging(name, previousValue, value));
             this._options.onDeprecated(
                 (option, info) => this._logDeprecatedWarning(option, info));
             this._options.onChanged(
@@ -209,7 +213,7 @@ const Component = Class.inherit({
 
     // TODO: remake as getter after ES6 refactor
     _isInitializingRequired() {
-        return !this._initializing && !this._initialized;
+        return !this._options.silent('_initializing') && !this._options.silent('_initialized');
     },
 
     _commitUpdate() {
@@ -218,16 +222,16 @@ const Component = Class.inherit({
     },
 
     _initializeComponent() {
-        this._initializing = true;
+        this._options.silent('_initializing', true);
 
         try {
             this._init();
         } finally {
-            this._initializing = false;
+            this._options.silent('_initializing', false);
             this._lockUpdate();
             this._createActionByOption('onInitialized', { excludeValidators: ['disabled', 'readOnly'] })();
             this._unlockUpdate();
-            this._initialized = true;
+            this._options.silent('_initialized', true);
         }
     },
 
@@ -260,7 +264,7 @@ const Component = Class.inherit({
     _optionChanging: noop,
 
     _notifyOptionChanged(option, value, previousValue) {
-        if(this._initialized) {
+        if(this._options.silent('_initialized')) {
             const optionNames = [option].concat(this._options.getAliasesByName(option));
             for(let i = 0; i < optionNames.length; i++) {
                 const name = optionNames[i];

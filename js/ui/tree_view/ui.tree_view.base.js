@@ -622,7 +622,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _dataSourceChangedHandler: function(newItems) {
         const items = this.option('items');
 
-        if(this._initialized && this._isVirtualMode() && items.length) {
+        if(this._options.silent('_initialized') && this._isVirtualMode() && items.length) {
             return;
         }
 

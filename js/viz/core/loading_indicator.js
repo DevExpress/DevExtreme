@@ -156,7 +156,7 @@ exports.plugin = {
             this._loadingIndicator.setSize(this._canvas);
         },
         endUpdate() {
-            if(this._initialized && this._dataIsReady()) {
+            if(this._options.silent('_initialized') && this._dataIsReady()) {
                 this._fulfillLoadingIndicatorHiding();
             }
         }

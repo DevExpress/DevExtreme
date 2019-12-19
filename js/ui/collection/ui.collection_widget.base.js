@@ -659,7 +659,7 @@ var CollectionWidget = Widget.inherit({
 
     _dataSourceChangedHandler: function(newItems) {
         var items = this.option('items');
-        if(this._initialized && items && this._shouldAppendItems()) {
+        if(this._options.silent('_initialized') && items && this._shouldAppendItems()) {
             this._renderedItemsCount = items.length;
             if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
                 this.option().items = items.concat(newItems.slice(this._startIndexForAppendedItems));
