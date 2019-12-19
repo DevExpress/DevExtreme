@@ -285,6 +285,72 @@ QUnit.test('AddRow method should expand row and add item after parent', function
     assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
 });
 
+QUnit.test('AddRow method should return Deferred with collapsed parent (T844118)', function(assert) {
+    // arrange
+    const $testElement = $('#treeList');
+    const done = assert.async();
+
+    this.options.editing.allowAdding = true;
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    this.clock.tick();
+    this.clock.restore();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, '1 visible row');
+
+    // act
+    const deferred = this.addRow(1);
+    deferred.done && deferred.done(() => {
+        // assert
+        assert.ok(true, 'result is Deferred');
+        assert.equal(this.getVisibleRows().length, 3, 'parent is expanded and one more row is added');
+
+        done();
+    });
+});
+
+QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
+    // arrange
+    const $testElement = $('#treeList');
+    const done = assert.async();
+    const initNewRowCalls = [];
+
+    this.options.editing.allowAdding = true;
+    this.options.onInitNewRow = (e) => {
+        initNewRowCalls.push(e.data.parentId);
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    this.clock.tick();
+    this.clock.restore();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, '1 visible row');
+
+    // act
+    const parentIds = [1, 2];
+    const addRowDeferred = (index) => {
+        let parentId = parentIds[index];
+
+        if(parentId !== undefined) {
+            return this.addRow(parentId).done(addRowDeferred.bind(null, index + 1));
+        }
+
+        // assert
+        assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequential calls onInitNewRow');
+        done();
+
+        return $.Deferred().resolve();
+    };
+
+    addRowDeferred(0);
+});
+
 // T553905
 QUnit.test('Add item in node without children (Angular)', function(assert) {
     // arrange

@@ -97,17 +97,17 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         addRow: function(key) {
             var that = this,
                 callBase = that.callBase,
-                dataController = that.getController('data');
+                dataController = that.getController('data'),
+                deferred = new Deferred();
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
-                var d = new Deferred();
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
                         callBase.call(that, key);
-                        d.resolve();
+                        deferred.resolve();
                     });
-                }).fail(d.reject);
-                return d;
+                }).fail(deferred.reject);
+                return deferred;
             }
 
             if(key === undefined) {
@@ -115,6 +115,8 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             }
 
             callBase.call(that, key);
+
+            return deferred.resolve();
         },
 
         _initNewRow: function(options, parentKey) {

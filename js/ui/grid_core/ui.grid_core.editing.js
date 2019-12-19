@@ -831,15 +831,18 @@ var EditingController = modules.ViewController.inherit((function() {
         /**
          * @name dxDataGridMethods.addRow
          * @publicName addRow()
+         * @return Promise<void>
          */
         /**
          * @name dxTreeListMethods.addRow
          * @publicName addRow()
+         * @return Promise<void>
          */
         /**
          * @name dxTreeListMethods.addRow
          * @publicName addRow(parentId)
          * @param1 parentId:any
+         * @return Promise<void>
          */
         addRow: function(parentKey) {
             var that = this,
@@ -848,27 +851,30 @@ var EditingController = modules.ViewController.inherit((function() {
                 key = store && store.key(),
                 param = { data: {} },
                 editMode = getEditMode(that),
-                oldEditRowIndex = that._getVisibleEditRowIndex();
+                oldEditRowIndex = that._getVisibleEditRowIndex(),
+                deferred = new Deferred();
 
             if(!store) {
                 dataController.fireError('E1052', this.component.NAME);
-                return;
+                return deferred.resolve();
             }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData().done(function() {
                     // T804894
                     if(!that.hasChanges()) {
-                        that.addRow(parentKey);
+                        that.addRow(parentKey).done(() => {
+                            deferred.resolve();
+                        });
                     }
                 });
-                return;
+                return deferred;
             }
 
             that.refresh();
 
             if(!that._allowRowAdding()) {
-                return;
+                return deferred.resolve();
             }
 
             if(!key) {
@@ -879,7 +885,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(that._allowRowAdding()) {
                     that._addRowCore(param.data, parentKey, oldEditRowIndex);
                 }
+                deferred.resolve();
             });
+
+            return deferred;
         },
 
         _allowRowAdding: function() {
