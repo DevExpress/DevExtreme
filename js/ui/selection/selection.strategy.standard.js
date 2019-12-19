@@ -110,7 +110,7 @@ module.exports = SelectionStrategy.inherit({
         if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length)) {
             deferred.resolve(filteredItems);
         } else {
-            deferred = this._loadFilteredData(combinedFilter, localFilter);
+            deferred = this._loadFilteredData(combinedFilter, localFilter, null, isSelectAll);
         }
 
         return deferred;
