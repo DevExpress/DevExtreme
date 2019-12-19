@@ -590,9 +590,17 @@ var SelectBox = DropDownList.inherit({
         if(!this._preventNestedFocusEvent(e)) {
             this._clearSearchTimer();
             this._restoreInputText();
+
+            if(this._isEditable() && !this._isOverlayNestedTarget(e.relatedTarget)) {
+                this._searchCanceled();
+            }
         }
 
         this.callBase(e);
+    },
+
+    _isOverlayNestedTarget: function(target) {
+        return !!$(target).closest(`.${SELECTBOX_POPUP_WRAPPER_CLASS}`).length;
     },
 
     _clearTextValue: function() {
