@@ -15,9 +15,9 @@ const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
 
 QUnit.testStart(() => {
     const markup =
-        `<div id="container">
-            <div id="dropDownButton"></div>
-            <div id="dropDownButton2"></div>
+        `<div id='container'>
+            <div id='dropDownButton'></div>
+            <div id='dropDownButton2'></div>
         </div>`;
     $('#qunit-fixture').html(markup);
 });
@@ -488,6 +488,21 @@ QUnit.module('list integration', {}, () => {
 
         dropDownButton.option('wrapItemText', false);
         assert.notOk($itemContainer.hasClass('dx-wrap-item-text'), 'class was removed');
+    });
+
+    [true, false].forEach(wrapItemText => {
+        QUnit.test('wrapItemText option should be synchronized with dxList wrapItemText option (T846124)', (assert) => {
+            const dropDownButton = new DropDownButton('#dropDownButton', {
+                deferRendering: false,
+                wrapItemText
+            });
+
+            const list = getList(dropDownButton);
+            assert.strictEqual(list.option('wrapItemText'), dropDownButton.option('wrapItemText'), `list option is correct when dropDownButton wrapItemText is ${wrapItemText} on init`);
+
+            dropDownButton.option('wrapItemText', !wrapItemText);
+            assert.strictEqual(list.option('wrapItemText'), dropDownButton.option('wrapItemText'), 'list option is correct after dropDownButton wrapItemText option value change');
+        });
     });
 
     QUnit.test('list selection should depend on selectedItemKey option', (assert) => {
