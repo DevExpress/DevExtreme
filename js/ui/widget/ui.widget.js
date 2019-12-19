@@ -179,30 +179,10 @@ const Widget = DOMComponent.inherit({
         this._initContentReadyAction();
     },
 
-    _clearInnerOptionCache(optionContainer) {
-        this[`${optionContainer}Cache`] = {};
-    },
-
-    _cacheInnerOptions(optionContainer, optionValue) {
-        const cacheName = `${optionContainer}Cache`;
-
-        this[cacheName] = extend(this[cacheName], optionValue);
-    },
-
-    _innerOptionChanged(innerWidget, args) {
+    _innerWidgetOptionChanged: function(innerWidget, args) {
         const options = Widget.getOptionsFromContainer(args);
-
         innerWidget && innerWidget.option(options);
-        this._cacheInnerOptions(args.name, options);
-    },
-
-    _getInnerOptionsCache(optionContainer) {
-        return this[`${optionContainer}Cache`];
-    },
-
-    _initInnerOptionCache(optionContainer) {
-        this._clearInnerOptionCache(optionContainer);
-        this._cacheInnerOptions(optionContainer, this.option(optionContainer));
+        this._options.cache(args.name, options);
     },
 
     _bindInnerWidgetOptions(innerWidget, optionsContainer) {

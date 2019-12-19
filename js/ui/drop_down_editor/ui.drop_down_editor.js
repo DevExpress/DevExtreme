@@ -287,7 +287,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
-        this._initInnerOptionCache('dropDownOptions');
+        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
 
     _initVisibilityActions: function() {
@@ -547,7 +547,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._getInnerOptionsCache('dropDownOptions')));
+        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._options.cache('dropDownOptions')));
 
         this._popup.on({
             'showing': this._popupShowingHandler.bind(this),
@@ -851,7 +851,7 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case 'dropDownOptions':
                 this._popupOptionChanged(args);
-                this._cacheInnerOptions('dropDownOptions', args.value);
+                this._options.cache('dropDownOptions', args.value);
                 break;
             case 'popupPosition':
             case 'deferRendering':
