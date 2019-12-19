@@ -87,6 +87,7 @@
                 }
             }
         ],
+        "quotes": ["error", "single"],
         "spellcheck/spell-checker": [
             "error",
             {

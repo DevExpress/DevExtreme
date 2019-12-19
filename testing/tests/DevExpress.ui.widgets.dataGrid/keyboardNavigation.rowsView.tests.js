@@ -1,22 +1,31 @@
-import "common.css!";
-import "generic_light.css!";
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
 
-import $ from "jquery";
-import "ui/data_grid/ui.data_grid";
-import commonUtils from "core/utils/common";
-import typeUtils from "core/utils/type";
-import pointerEvents from "events/pointer";
+    $('#qunit-fixture').html(markup);
+});
+
+import 'common.css!';
+import 'generic_light.css!';
+
+import $ from 'jquery';
+import 'ui/data_grid/ui.data_grid';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
+import pointerEvents from 'events/pointer';
 import {
     setupDataGridModules,
     MockDataController,
     MockColumnsController,
-    MockSelectionController } from "../../../helpers/dataGridMocks.js";
+    MockSelectionController } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
     setupModules
-} from "../../../helpers/grid/keyboardNavigationHelper.js";
+} from '../../helpers/grid/keyboardNavigationHelper.js';
 
-QUnit.module("Rows view", {
+QUnit.module('Rows view', {
     beforeEach: function() {
         this.items = [
             { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0 },
@@ -49,12 +58,12 @@ QUnit.module("Rows view", {
             var mockDataGrid = {
                 options: this.options,
                 $element: function() {
-                    return $(".dx-datagrid").parent();
+                    return $('.dx-datagrid').parent();
                 }
             };
             setupDataGridModules(mockDataGrid, [
-                'data', 'columns', 'rows', "editorFactory",
-                "editing", "masterDetail", "keyboardNavigation"
+                'data', 'columns', 'rows', 'editorFactory',
+                'editing', 'masterDetail', 'keyboardNavigation'
             ], {
                 initViews: true,
                 controllers: {
@@ -71,14 +80,14 @@ QUnit.module("Rows view", {
 
         this.clock = sinon.useFakeTimers();
     },
-    tearDown: function() {
+    afterEach: function() {
         this.clock.restore();
     }
 }, function() {
     // T222258
-    QUnit.testInActiveWindow("Focused cell from free space row when view is rendered", function(assert) {
+    QUnit.testInActiveWindow('Focused cell from free space row when view is rendered', function(assert) {
         // arrange
-        var $container = $("#container"),
+        var $container = $('#container'),
             origUpdateFocus;
 
         setupModules(this);
@@ -95,14 +104,14 @@ QUnit.module("Rows view", {
         };
 
         // act
-        $($container.find(".dx-freespace-row").find("td").first()).trigger(pointerEvents.up);
+        $($container.find('.dx-freespace-row').find('td').first()).trigger(pointerEvents.up);
         this.rowsView.renderCompleted.fire();
     });
 
-    QUnit.testInActiveWindow("Cell is not focused when view is rendered if key is not pressed", function(assert) {
+    QUnit.testInActiveWindow('Cell is not focused when view is rendered if key is not pressed', function(assert) {
         // arrange, act
         var isCellFocused = false,
-            $container = $("#container");
+            $container = $('#container');
 
         setupModules(this);
 
@@ -111,7 +120,7 @@ QUnit.module("Rows view", {
         this.keyboardNavigationController._focusedView = this.rowsView;
         this.keyboardNavigationController._isNeedScroll = true;
         this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 0 };
-        this.keyboardNavigationController._focus(this.gridView.element().find("td").eq(4));
+        this.keyboardNavigationController._focus(this.gridView.element().find('td').eq(4));
 
         this.clock.tick();
 
@@ -137,8 +146,8 @@ QUnit.module("Rows view", {
         rowsView.render(testElement);
 
         // assert
-        assert.strictEqual(rowsView.element().attr("tabindex"), undefined, "no tabindex on rowsView element");
-        assert.strictEqual(rowsView.element().find("td[tabIndex]").length, 1, "cells with tabIndex attr count");
+        assert.strictEqual(rowsView.element().attr('tabindex'), undefined, 'no tabindex on rowsView element');
+        assert.strictEqual(rowsView.element().find('td[tabIndex]').length, 1, 'cells with tabIndex attr count');
     });
 
     // T391194, T380140
@@ -151,20 +160,20 @@ QUnit.module("Rows view", {
         this.clock.tick();
 
         // act
-        var $focusable = testElement.find("[tabIndex]").first();
+        var $focusable = testElement.find('[tabIndex]').first();
         $focusable.focus();
         this.clock.tick();
 
         // assert
-        assert.ok($focusable.is("td"), "focusable is cell");
-        assert.strictEqual($focusable.text(), "test1", "focused cell text");
-        assert.strictEqual($focusable.index(), 0, "focused cell columnIndex");
-        assert.strictEqual($focusable.parent().index(), 0, "focused cell rowIndex");
-        assert.ok($focusable.is(":focus"), "focused cell is focused");
-        assert.ok($focusable.hasClass("dx-focused"), "focused cell has dx-focused class");
+        assert.ok($focusable.is('td'), 'focusable is cell');
+        assert.strictEqual($focusable.text(), 'test1', 'focused cell text');
+        assert.strictEqual($focusable.index(), 0, 'focused cell columnIndex');
+        assert.strictEqual($focusable.parent().index(), 0, 'focused cell rowIndex');
+        assert.ok($focusable.is(':focus'), 'focused cell is focused');
+        assert.ok($focusable.hasClass('dx-focused'), 'focused cell has dx-focused class');
     });
 
-    QUnit.testInActiveWindow("Skip invalid cell for moving to right", function(assert) {
+    QUnit.testInActiveWindow('Skip invalid cell for moving to right', function(assert) {
         // arrange
         var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
             navigationController = this.dataGrid.keyboardNavigationController,
@@ -179,11 +188,11 @@ QUnit.module("Rows view", {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, "nextInRow");
+        $cell = navigationController._getNextCell.call(navigationController, 'nextInRow');
         assert.equal($cell[0].cellIndex, 3);
     });
 
-    QUnit.testInActiveWindow("Skip invalid cell for moving to left", function(assert) {
+    QUnit.testInActiveWindow('Skip invalid cell for moving to left', function(assert) {
         // arrange
         var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
             navigationController = this.dataGrid.keyboardNavigationController,
@@ -198,16 +207,16 @@ QUnit.module("Rows view", {
         rowsView.render($('#container'));
 
         // assert, act
-        $cell = navigationController._getNextCell.call(navigationController, "previousInRow");
+        $cell = navigationController._getNextCell.call(navigationController, 'previousInRow');
         assert.equal($cell[0].cellIndex, 0);
     });
 
-    QUnit.test("Focused state is not applied when element is not cell", function(assert) {
+    QUnit.test('Focused state is not applied when element is not cell', function(assert) {
         // arrange
         var rowsView = this.createRowsView(this.items, null, [{}, {}, {}, {}]),
-            $element = $("<div>");
+            $element = $('<div>');
 
-        this.dataGrid.getController("keyboardNavigation")._isCellValid = function($cell) {
+        this.dataGrid.getController('keyboardNavigation')._isCellValid = function($cell) {
             return true;
         };
 
@@ -225,10 +234,10 @@ QUnit.module("Rows view", {
         rowsView.renderFocusState();
 
         // assert
-        assert.ok(!$element.attr("tabIndex"));
+        assert.ok(!$element.attr('tabIndex'));
     });
 
-    QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
+    QUnit.test('Apply custom tabIndex to rows view on click', function(assert) {
         // arrange
         var rowsView = this.createRowsView(this.items),
             testElement = $('#container');
@@ -238,10 +247,10 @@ QUnit.module("Rows view", {
         // act
         rowsView.render(testElement);
 
-        var $cell = $(rowsView.element().find("td").first());
+        var $cell = $(rowsView.element().find('td').first());
         $cell.trigger(CLICK_EVENT);
-        assert.equal(rowsView.element().attr("tabIndex"), undefined, "tabIndex of rowsView");
-        assert.equal($cell.attr("tabIndex"), 5, "tabIndex of clicked cell");
+        assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
+        assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
     });
 
 });

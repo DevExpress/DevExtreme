@@ -27,7 +27,7 @@ const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
 
 if(QUNIT_CI) {
-    console.warn("Using QUnit CI mode!");
+    console.warn('Using QUnit CI mode!');
 }
 
 function createStyleCompilerBatch() {

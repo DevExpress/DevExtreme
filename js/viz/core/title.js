@@ -1,9 +1,9 @@
 var _Number = Number,
-    _isString = require("../../core/utils/type").isString,
-    extend = require("../../core/utils/extend").extend,
-    _patchFontOptions = require("./utils").patchFontOptions,
-    parseHorizontalAlignment = require("./utils").enumParser(["left", "center", "right"]),
-    parseVerticalAlignment = require("./utils").enumParser(["top", "bottom"]),
+    _isString = require('../../core/utils/type').isString,
+    extend = require('../../core/utils/extend').extend,
+    _patchFontOptions = require('./utils').patchFontOptions,
+    parseHorizontalAlignment = require('./utils').enumParser(['left', 'center', 'right']),
+    parseVerticalAlignment = require('./utils').enumParser(['top', 'bottom']),
 
     DEFAULT_MARGIN = 10;
 
@@ -42,12 +42,12 @@ function checkRect(rect, boundingRect) {
 }
 function Title(params) {
     this._params = params;
-    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, "title");
+    this._group = params.renderer.g().attr({ 'class': params.cssClass }).linkOn(params.root || params.renderer.root, 'title');
     this._hasText = false;
 }
 
 // There is no normal inheritance from LayoutElement because it is actually a container of methods rather than a class.
-extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
+extend(Title.prototype, require('./layout_element').LayoutElement.prototype, {
     dispose: function() {
         var that = this;
         that._group.linkRemove();
@@ -61,8 +61,8 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     _updateOptions: function(options) {
         this._options = options;
-        this._options.horizontalAlignment = parseHorizontalAlignment(options.horizontalAlignment, "center");
-        this._options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, "top");
+        this._options.horizontalAlignment = parseHorizontalAlignment(options.horizontalAlignment, 'center');
+        this._options.verticalAlignment = parseVerticalAlignment(options.verticalAlignment, 'top');
         this._options.margin = validateMargin(options.margin);
     },
 
@@ -79,11 +79,11 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             that._titleElement = renderer.text().append(group);
             that._subtitleElement = renderer.text();
             that._clipRect = renderer.clipRect();
-            group.attr({ "clip-path": that._clipRect.id });
+            group.attr({ 'clip-path': that._clipRect.id });
         }
 
-        that._titleElement.attr({ align, "class": options.cssClass });
-        that._subtitleElement.attr({ align, "class": options.subtitle.cssClass });
+        that._titleElement.attr({ align, 'class': options.cssClass });
+        that._subtitleElement.attr({ align, 'class': options.subtitle.cssClass });
 
         group.linkAppend();
         hasText(options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
@@ -95,7 +95,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             subtitleOptions = options.subtitle,
             titleElement = that._titleElement,
             subtitleElement = that._subtitleElement,
-            testText = "A",
+            testText = 'A',
             titleBox,
             y;
 
@@ -130,7 +130,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         boundingRect.verticalAlignment = options.verticalAlignment;
         boundingRect.horizontalAlignment = options.horizontalAlignment;
         boundingRect.cutLayoutSide = options.verticalAlignment;
-        boundingRect.cutSide = "vertical";
+        boundingRect.cutSide = 'vertical';
         boundingRect.position = {
             horizontal: options.horizontalAlignment,
             vertical: options.verticalAlignment
@@ -282,7 +282,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     freeSpace: function() {
         var that = this;
-        that._params.incidentOccurred("W2103");
+        that._params.incidentOccurred('W2103');
         that._group.linkRemove();
         that._boundingRect.width = that._boundingRect.height = 0;
     },
@@ -293,7 +293,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     changeLink: function(root) {
         this._group.linkRemove();
-        this._group.linkOn(root, "title");
+        this._group.linkOn(root, 'title');
     }
     // BaseWidget_layout_implementation
 });
@@ -311,13 +311,13 @@ function processTitleOptions(options) {
 }
 
 exports.plugin = {
-    name: "title",
+    name: 'title',
     init: function() {
         var that = this;
         // "exports" is used for testing purposes.
         that._title = new exports.Title({
             renderer: that._renderer,
-            cssClass: that._rootClassPrefix + "-title",
+            cssClass: that._rootClassPrefix + '-title',
             incidentOccurred: that._incidentOccurred
         });
         that._layout.add(that._title);
@@ -328,16 +328,16 @@ exports.plugin = {
     },
     customize: function(constructor) {
         constructor.addChange({
-            code: "TITLE",
+            code: 'TITLE',
             handler: function() {
-                if(this._title.update(this._themeManager.theme("title"), this.option("title"))) {
-                    this._change(["LAYOUT"]);
+                if(this._title.update(this._themeManager.theme('title'), this.option('title'))) {
+                    this._change(['LAYOUT']);
                 }
             },
             isThemeDependent: true,
-            option: "title",
+            option: 'title',
             isOptionChange: true
         });
     },
-    fontFields: ["title.font", "title.subtitle.font"]
+    fontFields: ['title.font', 'title.subtitle.font']
 };

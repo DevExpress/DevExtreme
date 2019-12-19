@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    Callbacks = require("../../core/utils/callbacks"),
-    extend = require("../../core/utils/extend").extend,
-    eventUtils = require("../utils");
+var $ = require('../../core/renderer'),
+    noop = require('../../core/utils/common').noop,
+    Class = require('../../core/class'),
+    Callbacks = require('../../core/utils/callbacks'),
+    extend = require('../../core/utils/extend').extend,
+    eventUtils = require('../utils');
 
 var Emitter = Class.inherit({
 

@@ -1,10 +1,10 @@
-import $ from "jquery";
-import * as vizMocks from "../../helpers/vizMocks.js";
-import pointModule from "viz/series/points/base_point";
-import SeriesModule from "viz/series/base_series";
+import $ from 'jquery';
+import * as vizMocks from '../../helpers/vizMocks.js';
+import pointModule from 'viz/series/points/base_point';
+import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
-import { MockAxis, insertMockFactory, restoreMockFactory } from "../../helpers/chartMocks.js";
-import { noop } from "core/utils/common";
+import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
+import { noop } from 'core/utils/common';
 
 const originalPoint = pointModule.Point;
 let seriesType;
@@ -14,7 +14,7 @@ var createSeries = function(options, renderSettings) {
     var renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
 
     options = $.extend(true, {
-        containerBackgroundColor: "containerColor",
+        containerBackgroundColor: 'containerColor',
         visible: true,
         label: {
             visible: true,
@@ -30,11 +30,11 @@ var createSeries = function(options, renderSettings) {
             selectionStyle: {}
         },
         valueErrorBar: {},
-        hoverStyle: { hatching: "h-hatching" },
-        selectionStyle: { hatching: "s-hatching" },
-        hoverMode: "excludePoints",
-        selectionMode: "excludePoints",
-        widgetType: "chart"
+        hoverStyle: { hatching: 'h-hatching' },
+        selectionStyle: { hatching: 's-hatching' },
+        hoverMode: 'excludePoints',
+        selectionMode: 'excludePoints',
+        widgetType: 'chart'
     }, options);
 
     renderSettings = $.extend({
@@ -45,7 +45,7 @@ var createSeries = function(options, renderSettings) {
         incidentOccurred: noop
     }, renderSettings);
 
-    renderer.stub("g").reset();
+    renderer.stub('g').reset();
     return new Series(renderSettings, options);
 };
 
@@ -76,7 +76,7 @@ var environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         var mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, "Point", function(params, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point', function(params, data) {
             var stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -97,11 +97,11 @@ var environmentWithSinonStubPoint = {
 };
 
 (function RangeSeries() {
-    QUnit.module("creation", environmentWithSinonStubPoint);
+    QUnit.module('creation', environmentWithSinonStubPoint);
 
-    QUnit.test("Creation range point", function(assert) {
+    QUnit.test('Creation range point', function(assert) {
         var series = createSeries({
-                type: "rangearea", rangeValue1Field: "val1", rangeValue2Field: "val2", label: {
+                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
                     visible: false
                 }
             }),
@@ -111,18 +111,18 @@ var environmentWithSinonStubPoint = {
         series.createPoints();
         points = series.getPoints();
 
-        assert.ok(points, "Points should be created");
-        assert.equal(points.length, 1, "Series should have one point");
-        assert.equal(this.createPoint.firstCall.args[0], series, "Series should be correct");
-        assert.equal(this.createPoint.firstCall.args[1].argument, 1, "Argument should be correct");
-        assert.equal(this.createPoint.firstCall.args[1].value, 4, "Value should be correct");
-        assert.equal(this.createPoint.firstCall.args[1].minValue, 3, "Min value should be correct");
+        assert.ok(points, 'Points should be created');
+        assert.equal(points.length, 1, 'Series should have one point');
+        assert.equal(this.createPoint.firstCall.args[0], series, 'Series should be correct');
+        assert.equal(this.createPoint.firstCall.args[1].argument, 1, 'Argument should be correct');
+        assert.equal(this.createPoint.firstCall.args[1].value, 4, 'Value should be correct');
+        assert.equal(this.createPoint.firstCall.args[1].minValue, 3, 'Min value should be correct');
     });
 
-    QUnit.test("IncidentOccurred. Data without range fields", function(assert) {
+    QUnit.test('IncidentOccurred. Data without range fields', function(assert) {
         const data = [{ arg: 1 }, { arg: 2 }];
         const incidentOccurred = sinon.spy();
-        const options = { type: "rangearea", argumentField: "arg", rangeValue1Field: "val1", rangeValue2Field: "val2", label: { visible: false } };
+        const options = { type: 'rangearea', argumentField: 'arg', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: { visible: false } };
         const series = createSeries(options, {
             incidentOccurred: incidentOccurred
         });
@@ -131,12 +131,12 @@ var environmentWithSinonStubPoint = {
         series.createPoints();
 
         assert.strictEqual(incidentOccurred.callCount, 2);
-        assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
+        assert.strictEqual(incidentOccurred.lastCall.args[0], 'W2002');
     });
 
-    QUnit.test("Null values, ignoreEmptyPoints false", function(assert) {
+    QUnit.test('Null values, ignoreEmptyPoints false', function(assert) {
         var series = createSeries({
-                type: "rangearea", rangeValue1Field: "val1", rangeValue2Field: "val2", label: {
+                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
                     visible: false
                 }
             }),
@@ -146,20 +146,20 @@ var environmentWithSinonStubPoint = {
         series.createPoints();
         points = series.getPoints();
 
-        assert.ok(points, "Points should be created");
-        assert.equal(points.length, 2, "Series should have one point");
-        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "Argument should be correct");
-        assert.equal(this.createPoint.getCall(0).args[1].value, 4, "Value should be correct");
-        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, "Min value should be correct");
+        assert.ok(points, 'Points should be created');
+        assert.equal(points.length, 2, 'Series should have one point');
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, 'Argument should be correct');
+        assert.equal(this.createPoint.getCall(0).args[1].value, 4, 'Value should be correct');
+        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, 'Min value should be correct');
 
-        assert.equal(this.createPoint.getCall(1).args[1].argument, 2, "Argument should be correct");
-        assert.equal(this.createPoint.getCall(1).args[1].value, null, "Value should be correct");
-        assert.equal(this.createPoint.getCall(1).args[1].minValue, null, "Min value should be correct");
+        assert.equal(this.createPoint.getCall(1).args[1].argument, 2, 'Argument should be correct');
+        assert.equal(this.createPoint.getCall(1).args[1].value, null, 'Value should be correct');
+        assert.equal(this.createPoint.getCall(1).args[1].minValue, null, 'Min value should be correct');
     });
 
-    QUnit.test("Null values, ignoreEmptyPoints true", function(assert) {
+    QUnit.test('Null values, ignoreEmptyPoints true', function(assert) {
         var series = createSeries({
-                type: "rangearea", rangeValue1Field: "val1", rangeValue2Field: "val2",
+                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2',
                 ignoreEmptyPoints: true,
                 label: {
                     visible: false
@@ -171,17 +171,17 @@ var environmentWithSinonStubPoint = {
         series.createPoints();
         points = series.getPoints();
 
-        assert.ok(points, "Points should be created");
-        assert.equal(points.length, 1, "Series should have one point");
-        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, "Argument should be correct");
-        assert.equal(this.createPoint.getCall(0).args[1].value, 4, "Value should be correct");
-        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, "Min value should be correct");
+        assert.ok(points, 'Points should be created');
+        assert.equal(points.length, 1, 'Series should have one point');
+        assert.equal(this.createPoint.getCall(0).args[1].argument, 1, 'Argument should be correct');
+        assert.equal(this.createPoint.getCall(0).args[1].value, 4, 'Value should be correct');
+        assert.equal(this.createPoint.getCall(0).args[1].minValue, 3, 'Min value should be correct');
     });
 
-    QUnit.module("RangeSeries. API", {
+    QUnit.module('RangeSeries. API', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            this.createPoint = sinon.stub(pointModule, "Point", function() {
+            this.createPoint = sinon.stub(pointModule, 'Point', function() {
                 var stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -195,152 +195,152 @@ var environmentWithSinonStubPoint = {
         }
     });
 
-    seriesType = "rangebar";
+    seriesType = 'rangebar';
 
-    QUnit.test("getValueFields default", function(assert) {
+    QUnit.test('getValueFields default', function(assert) {
         var series = createSeries({
             type: seriesType
         });
 
-        assert.deepEqual(series.getValueFields(), ["val1", "val2"]);
+        assert.deepEqual(series.getValueFields(), ['val1', 'val2']);
     });
 
-    QUnit.test("getValueFields", function(assert) {
+    QUnit.test('getValueFields', function(assert) {
         var series = createSeries({
             type: seriesType,
-            valueField: "customValueField",
-            rangeValue1Field: "customValue1Field",
-            rangeValue2Field: "customValue2Field",
+            valueField: 'customValueField',
+            rangeValue1Field: 'customValue1Field',
+            rangeValue2Field: 'customValue2Field',
         });
 
-        assert.deepEqual(series.getValueFields(), ["customValue1Field", "customValue2Field"]);
+        assert.deepEqual(series.getValueFields(), ['customValue1Field', 'customValue2Field']);
     });
 
-    QUnit.test("getArgumentField default", function(assert) {
+    QUnit.test('getArgumentField default', function(assert) {
         var series = createSeries({
             type: seriesType
         });
 
-        assert.deepEqual(series.getArgumentField(), "arg");
+        assert.deepEqual(series.getArgumentField(), 'arg');
     });
 
-    QUnit.test("getArgumentField", function(assert) {
+    QUnit.test('getArgumentField', function(assert) {
         var series = createSeries({
             type: seriesType,
-            argumentField: "customArgumentField"
+            argumentField: 'customArgumentField'
         });
 
-        assert.deepEqual(series.getArgumentField(), "customArgumentField");
+        assert.deepEqual(series.getArgumentField(), 'customArgumentField');
     });
 
-    QUnit.test("areErrorBarsVisible", function(assert) {
+    QUnit.test('areErrorBarsVisible', function(assert) {
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "fixed",
-                displayMode: "all"
+                type: 'fixed',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "fixed, displayMode all");
+        }).areErrorBarsVisible(), 'fixed, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "percent",
-                displayMode: "all"
+                type: 'percent',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "percent, displayMode all");
+        }).areErrorBarsVisible(), 'percent, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "stdError",
-                displayMode: "all"
+                type: 'stdError',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "stdError, displayMode all");
+        }).areErrorBarsVisible(), 'stdError, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "stdDeviation",
-                displayMode: "all"
+                type: 'stdDeviation',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "stdDeviation, displayMode all");
+        }).areErrorBarsVisible(), 'stdDeviation, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "Variance",
-                displayMode: "all"
+                type: 'Variance',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "Variance, displayMode all");
+        }).areErrorBarsVisible(), 'Variance, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "unknown",
-                displayMode: "all"
+                type: 'unknown',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "unknown, displayMode all");
+        }).areErrorBarsVisible(), 'unknown, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "unknown",
-                lowValueField: "field",
-                displayMode: "all"
+                type: 'unknown',
+                lowValueField: 'field',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "unknown, displayMode all, lowValueField defined");
+        }).areErrorBarsVisible(), 'unknown, displayMode all, lowValueField defined');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "unknown",
-                highValueField: "field",
-                displayMode: "all"
+                type: 'unknown',
+                highValueField: 'field',
+                displayMode: 'all'
             }
-        }).areErrorBarsVisible(), "unknown, displayMode all, highValueField defined");
+        }).areErrorBarsVisible(), 'unknown, displayMode all, highValueField defined');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "fixed",
-                displayMode: "none"
+                type: 'fixed',
+                displayMode: 'none'
             }
-        }).areErrorBarsVisible(), "fixed, displayMode none");
+        }).areErrorBarsVisible(), 'fixed, displayMode none');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "fixed",
-                displayMode: "all"
+                type: 'fixed',
+                displayMode: 'all'
             }
-        }).updateDataType({ valueAxisType: "discrete" }).areErrorBarsVisible(), "fixed, displayMode all");
+        }).updateDataType({ valueAxisType: 'discrete' }).areErrorBarsVisible(), 'fixed, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "fixed",
-                displayMode: "all"
+                type: 'fixed',
+                displayMode: 'all'
             }
-        }).updateDataType({ valueAxisType: "logarithmic" }).areErrorBarsVisible(), "fixed, displayMode all");
+        }).updateDataType({ valueAxisType: 'logarithmic' }).areErrorBarsVisible(), 'fixed, displayMode all');
 
         assert.ok(!createSeries({
             type: seriesType,
             valueErrorBar: {
-                type: "fixed",
-                displayMode: "all"
+                type: 'fixed',
+                displayMode: 'all'
             }
-        }).updateDataType({ valueType: "datetime" }).areErrorBarsVisible(), "fixed, displayMode all");
+        }).updateDataType({ valueType: 'datetime' }).areErrorBarsVisible(), 'fixed, displayMode all');
 
     });
 
-    QUnit.module("Null points", {
+    QUnit.module('Null points', {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.options = {
-                type: "rangearea"
+                type: 'rangearea'
             };
-            this.createPoint = sinon.stub(pointModule, "Point", function() {
+            this.createPoint = sinon.stub(pointModule, 'Point', function() {
                 var stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
@@ -354,7 +354,7 @@ var environmentWithSinonStubPoint = {
         }
     });
 
-    QUnit.test("Argument is undefined", function(assert) {
+    QUnit.test('Argument is undefined', function(assert) {
         var data = [{ arg: undefined, val1: 1, val2: 1 }],
             series = createSeries(this.options);
 
@@ -364,7 +364,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 0);
     });
 
-    QUnit.test("Argument is null", function(assert) {
+    QUnit.test('Argument is null', function(assert) {
         var data = [{ arg: null, val1: 1, val2: 1 }],
             series = createSeries(this.options);
 
@@ -374,7 +374,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 0);
     });
 
-    QUnit.test("Value is undefined", function(assert) {
+    QUnit.test('Value is undefined', function(assert) {
         var data = [{ arg: 1, val1: undefined, val2: 1 }],
             series = createSeries(this.options);
 
@@ -384,7 +384,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 0);
     });
 
-    QUnit.test("Value is null", function(assert) {
+    QUnit.test('Value is null', function(assert) {
         var data = [{ arg: 1, val1: null, val2: 1 }],
             series = createSeries(this.options);
 
@@ -394,7 +394,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 1);
     });
 
-    QUnit.test("minValue is undefined", function(assert) {
+    QUnit.test('minValue is undefined', function(assert) {
         var data = [{ arg: 1, val1: 1, val2: undefined }],
             series = createSeries(this.options);
 
@@ -404,7 +404,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 0);
     });
 
-    QUnit.test("minValue is null", function(assert) {
+    QUnit.test('minValue is null', function(assert) {
         var data = [{ arg: 1, val1: 1, val2: null }],
             series = createSeries(this.options);
 
@@ -414,7 +414,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 1);
     });
 
-    QUnit.module("Draw elements. Range area series", {
+    QUnit.module('Draw elements. Range area series', {
         beforeEach: environment.beforeEach,
         afterEach: environment.afterEach,
         createSeries: function(options) {
@@ -426,9 +426,9 @@ var environmentWithSinonStubPoint = {
         }
     });
 
-    seriesType = "rangearea";
+    seriesType = 'rangearea';
 
-    QUnit.test("Draw without data", function(assert) {
+    QUnit.test('Draw without data', function(assert) {
         var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
@@ -436,10 +436,10 @@ var environmentWithSinonStubPoint = {
         // act
         series.draw(false);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 0);
+        assert.equal(this.renderer.stub('path').callCount, 0);
     });
 
-    QUnit.test("Draw simple data without animation", function(assert) {
+    QUnit.test('Draw simple data without animation', function(assert) {
         var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
@@ -459,13 +459,13 @@ var environmentWithSinonStubPoint = {
         // act
         series.draw(false);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 3);
-        assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
-        assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
-        assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
+        assert.equal(this.renderer.stub('path').callCount, 3);
+        assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
+        assert.equal(this.renderer.stub('path').getCall(1).args[1], 'area');
+        assert.equal(this.renderer.stub('path').getCall(2).args[1], 'line');
     });
 
-    QUnit.test("Update simple data without animation", function(assert) {
+    QUnit.test('Update simple data without animation', function(assert) {
         var series = this.createSeries({
             type: seriesType,
             border: {
@@ -497,34 +497,34 @@ var environmentWithSinonStubPoint = {
 
         series.draw(false);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 3);
+        assert.equal(this.renderer.stub('path').callCount, 3);
 
-        var element = this.renderer.stub("path").getCall(0).returnValue,
+        var element = this.renderer.stub('path').getCall(0).returnValue,
             elementPoints = element._stored_settings.points,
-            bottomElement = this.renderer.stub("path").getCall(2).returnValue,
+            bottomElement = this.renderer.stub('path').getCall(2).returnValue,
             bottomElementPoints = bottomElement._stored_settings.points;
 
-        assert.equal(element.stub("append").lastCall.args[0], series._bordersGroup);
-        assert.equal(bottomElement.stub("append").lastCall.args[0], series._bordersGroup);
+        assert.equal(element.stub('append').lastCall.args[0], series._bordersGroup);
+        assert.equal(bottomElement.stub('append').lastCall.args[0], series._bordersGroup);
 
-        assert.deepEqual(elementPoints.length, 2, "path element points");
+        assert.deepEqual(elementPoints.length, 2, 'path element points');
         assert.equal(elementPoints[0].x, 1);
         assert.equal(elementPoints[0].y, 4);
         assert.equal(elementPoints[1].x, 2);
         assert.equal(elementPoints[1].y, 2);
 
-        assert.deepEqual(bottomElementPoints.length, 2, "path element points");
+        assert.deepEqual(bottomElementPoints.length, 2, 'path element points');
         assert.equal(bottomElementPoints[0].x, 1);
         assert.equal(bottomElementPoints[0].y, 0);
         assert.equal(bottomElementPoints[1].x, 2);
         assert.equal(bottomElementPoints[1].y, 0);
 
-        element = this.renderer.stub("path").getCall(1).returnValue;
+        element = this.renderer.stub('path').getCall(1).returnValue;
         elementPoints = element._stored_settings.points;
 
-        assert.equal(element.stub("append").lastCall.args[0], series._elementsGroup);
+        assert.equal(element.stub('append').lastCall.args[0], series._elementsGroup);
 
-        assert.deepEqual(elementPoints.length, 4, "area elements point");
+        assert.deepEqual(elementPoints.length, 4, 'area elements point');
         assert.equal(elementPoints[0].x, 1);
         assert.equal(elementPoints[0].y, 4);
         assert.equal(elementPoints[1].x, 2);
@@ -535,7 +535,7 @@ var environmentWithSinonStubPoint = {
         assert.equal(elementPoints[3].y, 0);
     });
 
-    QUnit.test("Draw simple data with animation", function(assert) {
+    QUnit.test('Draw simple data with animation', function(assert) {
         var renderer = this.renderer,
             series = this.createSeries({
                 type: seriesType,
@@ -553,17 +553,17 @@ var environmentWithSinonStubPoint = {
             pt.minY = 0;
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
-            sinon.spy(pt, "draw");
+            sinon.spy(pt, 'draw');
         });
         // act
         series.draw(true);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 3);
+        assert.equal(this.renderer.stub('path').callCount, 3);
 
-        var element = this.renderer.stub("path").getCall(0).returnValue,
-            animatePoints = element.stub("animate").lastCall.args[0].points,
-            bottomElement = this.renderer.stub("path").getCall(2).returnValue,
-            bottomAnimatePoints = bottomElement.stub("animate").lastCall.args[0].points;
+        var element = this.renderer.stub('path').getCall(0).returnValue,
+            animatePoints = element.stub('animate').lastCall.args[0].points,
+            bottomElement = this.renderer.stub('path').getCall(2).returnValue,
+            bottomAnimatePoints = bottomElement.stub('animate').lastCall.args[0].points;
 
         assert.equal(animatePoints.length, 3);
         assert.equal(animatePoints[0].x, 1);
@@ -589,7 +589,7 @@ var environmentWithSinonStubPoint = {
         });
     });
 
-    QUnit.test("Draw data with null values. Remove segment", function(assert) {
+    QUnit.test('Draw data with null values. Remove segment', function(assert) {
         var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
@@ -610,12 +610,12 @@ var environmentWithSinonStubPoint = {
         });
         series.draw(true);
 
-        var element1 = this.renderer.stub("path").getCall(0).returnValue,
-            element2 = this.renderer.stub("path").getCall(1).returnValue,
-            element3 = this.renderer.stub("path").getCall(2).returnValue,
-            element4 = this.renderer.stub("path").getCall(3).returnValue,
-            element5 = this.renderer.stub("path").getCall(4).returnValue,
-            element6 = this.renderer.stub("path").getCall(5).returnValue;
+        var element1 = this.renderer.stub('path').getCall(0).returnValue,
+            element2 = this.renderer.stub('path').getCall(1).returnValue,
+            element3 = this.renderer.stub('path').getCall(2).returnValue,
+            element4 = this.renderer.stub('path').getCall(3).returnValue,
+            element5 = this.renderer.stub('path').getCall(4).returnValue,
+            element6 = this.renderer.stub('path').getCall(5).returnValue;
 
         // act
         series.updateData(this.data);
@@ -629,61 +629,61 @@ var environmentWithSinonStubPoint = {
         });
         series.draw(true);
         // assert
-        assert.equal(this.renderer.stub("path").callCount, 6);
-        assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
-        assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
-        assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
-        assert.equal(this.renderer.stub("path").getCall(3).args[1], "line");
-        assert.equal(this.renderer.stub("path").getCall(4).args[1], "area");
-        assert.equal(this.renderer.stub("path").getCall(5).args[1], "line");
+        assert.equal(this.renderer.stub('path').callCount, 6);
+        assert.equal(this.renderer.stub('path').getCall(0).args[1], 'line');
+        assert.equal(this.renderer.stub('path').getCall(1).args[1], 'area');
+        assert.equal(this.renderer.stub('path').getCall(2).args[1], 'line');
+        assert.equal(this.renderer.stub('path').getCall(3).args[1], 'line');
+        assert.equal(this.renderer.stub('path').getCall(4).args[1], 'area');
+        assert.equal(this.renderer.stub('path').getCall(5).args[1], 'line');
 
-        assert.equal(element1.stub("append").lastCall.args[0], series._bordersGroup);
-        assert.equal(element2.stub("append").lastCall.args[0], series._elementsGroup);
-        assert.equal(element3.stub("append").lastCall.args[0], series._bordersGroup);
-        assert.equal(element4.stub("append").lastCall.args[0], series._bordersGroup);
-        assert.equal(element5.stub("append").lastCall.args[0], series._elementsGroup);
-        assert.equal(element6.stub("append").lastCall.args[0], series._bordersGroup);
+        assert.equal(element1.stub('append').lastCall.args[0], series._bordersGroup);
+        assert.equal(element2.stub('append').lastCall.args[0], series._elementsGroup);
+        assert.equal(element3.stub('append').lastCall.args[0], series._bordersGroup);
+        assert.equal(element4.stub('append').lastCall.args[0], series._bordersGroup);
+        assert.equal(element5.stub('append').lastCall.args[0], series._elementsGroup);
+        assert.equal(element6.stub('append').lastCall.args[0], series._bordersGroup);
 
-        assert.ok(element4.stub("remove").called, "second element should be removed");
-        assert.ok(element5.stub("remove").called, "second element should be removed");
-        assert.ok(element6.stub("remove").called, "second element should be removed");
+        assert.ok(element4.stub('remove').called, 'second element should be removed');
+        assert.ok(element5.stub('remove').called, 'second element should be removed');
+        assert.ok(element6.stub('remove').called, 'second element should be removed');
     });
 
-    QUnit.module("Styles. Range area series", {
+    QUnit.module('Styles. Range area series', {
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
             this.options = {
                 type: seriesType,
                 border: {
-                    width: "b-n width",
-                    color: "b-n color",
-                    dashStyle: "b-n dashStyle",
-                    opacity: "unexpected",
+                    width: 'b-n width',
+                    color: 'b-n color',
+                    dashStyle: 'b-n dashStyle',
+                    opacity: 'unexpected',
                     visible: true
                 },
-                opacity: "n opacity",
-                color: "n color",
+                opacity: 'n opacity',
+                color: 'n color',
                 selectionStyle: {
                     border: {
-                        width: "b-s width",
-                        color: "b-s color",
-                        dashStyle: "b-s dashStyle",
-                        opacity: "unexpected",
+                        width: 'b-s width',
+                        color: 'b-s color',
+                        dashStyle: 'b-s dashStyle',
+                        opacity: 'unexpected',
                         visible: false
                     },
-                    opacity: "s opacity",
-                    color: "s color"
+                    opacity: 's opacity',
+                    color: 's color'
                 },
                 hoverStyle: {
                     border: {
-                        width: "b-h width",
-                        color: "b-h color",
-                        dashStyle: "b-h dashStyle",
-                        opacity: "unexpected",
+                        width: 'b-h width',
+                        color: 'b-h color',
+                        dashStyle: 'b-h dashStyle',
+                        opacity: 'unexpected',
                         visible: true
                     },
-                    opacity: "h opacity",
-                    color: "h color"
+                    opacity: 'h opacity',
+                    color: 'h color'
                 }
             };
         },
@@ -697,7 +697,7 @@ var environmentWithSinonStubPoint = {
         }
     });
 
-    QUnit.test("First draw - Normal State", function(assert) {
+    QUnit.test('First draw - Normal State', function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -705,27 +705,27 @@ var environmentWithSinonStubPoint = {
         series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
-            "class": "dxc-elements",
-            "clip-path": undefined,
-            "fill": "n color",
-            "opacity": "n opacity",
-            "stroke": "none"
+            'class': 'dxc-elements',
+            'clip-path': undefined,
+            'fill': 'n color',
+            'opacity': 'n opacity',
+            'stroke': 'none'
         });
 
         assert.deepEqual(series._bordersGroup._stored_settings, {
-            "class": "dxc-borders",
-            "clip-path": undefined,
-            "dashStyle": "b-n dashStyle",
-            "stroke": "b-n color",
-            "stroke-width": "b-n width"
+            'class': 'dxc-borders',
+            'clip-path': undefined,
+            'dashStyle': 'b-n dashStyle',
+            'stroke': 'b-n color',
+            'stroke-width': 'b-n width'
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], 'b-n width');
+            assert.equal(path._stored_settings['stroke-width'], 'b-n width');
         });
     });
 
-    QUnit.test("Apply hover state", function(assert) {
+    QUnit.test('Apply hover state', function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -735,24 +735,24 @@ var environmentWithSinonStubPoint = {
         series.hover();
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            "fill": "h color",
-            "opacity": "h opacity",
-            "stroke": "none",
-            hatching: "h-hatching"
+            'fill': 'h color',
+            'opacity': 'h opacity',
+            'stroke': 'none',
+            hatching: 'h-hatching'
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-h dashStyle",
-            "stroke": "b-h color",
-            "stroke-width": "b-h width"
+            'dashStyle': 'b-h dashStyle',
+            'stroke': 'b-h color',
+            'stroke-width': 'b-h width'
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], 'b-h width');
+            assert.equal(path._stored_settings['stroke-width'], 'b-h width');
         });
     });
 
-    QUnit.test("Apply normal state after hover", function(assert) {
+    QUnit.test('Apply normal state after hover', function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -763,24 +763,24 @@ var environmentWithSinonStubPoint = {
         series.clearHover();
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            "fill": "n color",
-            "opacity": "n opacity",
-            "stroke": "none",
+            'fill': 'n color',
+            'opacity': 'n opacity',
+            'stroke': 'none',
             hatching: undefined
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-n dashStyle",
-            "stroke": "b-n color",
-            "stroke-width": "b-n width"
+            'dashStyle': 'b-n dashStyle',
+            'stroke': 'b-n color',
+            'stroke-width': 'b-n width'
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], 'b-n width');
+            assert.equal(path._stored_settings['stroke-width'], 'b-n width');
         });
     });
 
-    QUnit.test("Apply selection state", function(assert) {
+    QUnit.test('Apply selection state', function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -790,24 +790,24 @@ var environmentWithSinonStubPoint = {
         series.select();
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            "fill": "s color",
-            "opacity": "s opacity",
-            "stroke": "none",
-            hatching: "s-hatching"
+            'fill': 's color',
+            'opacity': 's opacity',
+            'stroke': 'none',
+            hatching: 's-hatching'
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-s dashStyle",
-            "stroke": "none",
-            "stroke-width": "b-s width"
+            'dashStyle': 'b-s dashStyle',
+            'stroke': 'none',
+            'stroke-width': 'b-s width'
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], "b-s width");
+            assert.equal(path._stored_settings['stroke-width'], 'b-s width');
         });
     });
 
-    QUnit.test("Select series before drawing", function(assert) {
+    QUnit.test('Select series before drawing', function(assert) {
         var series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
@@ -817,20 +817,20 @@ var environmentWithSinonStubPoint = {
         series.draw(undefined, undefined, noop);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
-            "fill": "s color",
-            "opacity": "s opacity",
-            "stroke": "none",
-            hatching: "s-hatching"
+            'fill': 's color',
+            'opacity': 's opacity',
+            'stroke': 'none',
+            hatching: 's-hatching'
         });
 
         assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-s dashStyle",
-            "stroke": "none",
-            "stroke-width": "b-s width"
+            'dashStyle': 'b-s dashStyle',
+            'stroke': 'none',
+            'stroke-width': 'b-s width'
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], "b-s width");
+            assert.equal(path._stored_settings['stroke-width'], 'b-s width');
         });
     });
 })();

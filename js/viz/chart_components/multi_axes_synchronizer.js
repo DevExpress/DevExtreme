@@ -1,8 +1,8 @@
-import { debug } from "../../core/utils/console";
-import { isDefined, isNumeric } from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import { getLog, raiseTo } from "../core/utils";
-import { adjust } from "../../core/utils/math";
+import { debug } from '../../core/utils/console';
+import { isDefined, isNumeric } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { getLog, raiseTo } from '../core/utils';
+import { adjust } from '../../core/utils/math';
 
 const _math = Math;
 const _floor = _math.floor;
@@ -96,10 +96,10 @@ function populateAxesInfo(axes) {
 
         if(majorTicks && majorTicks.length > 0 &&
             isNumeric(majorTicks[0]) &&
-            options.type !== "discrete" &&
+            options.type !== 'discrete' &&
             !businessRange.isEmpty() &&
             !(businessRange.breaks && businessRange.breaks.length) &&
-            axis.getViewport().action !== "zoom"
+            axis.getViewport().action !== 'zoom'
         ) {
 
             axis.applyMargins();
@@ -117,7 +117,7 @@ function populateAxesInfo(axes) {
 
             axisInfo = {
                 axis: axis,
-                isLogarithmic: options.type === "logarithmic",
+                isLogarithmic: options.type === 'logarithmic',
                 logarithmicBase: businessRange.base,
                 tickValues: majorTicks,
                 minorValues: ticksValues.minorTicksValues,
@@ -136,7 +136,7 @@ function populateAxesInfo(axes) {
             result.push(axisInfo);
 
             ///#DEBUG
-            debug.assert((axisInfo.minValue === axisInfo.maxValue && (!isDefined(axisInfo.tickInterval) || isDefined(options.tickInterval))) || isDefined(axisInfo.tickInterval), "tickInterval was not provided");
+            debug.assert((axisInfo.minValue === axisInfo.maxValue && (!isDefined(axisInfo.tickInterval) || isDefined(options.tickInterval))) || isDefined(axisInfo.tickInterval), 'tickInterval was not provided');
             ///#ENDDEBUG
         }
         return result;
@@ -250,8 +250,8 @@ function correctMinMaxValuesByPaddings(axesInfo, paddings) {
         var range = getAxisRange(info),
             inverted = info.inverted;
 
-        info.minValue = adjust(info.minValue - paddings[inverted ? "end" : "start"] * range);
-        info.maxValue = adjust(info.maxValue + paddings[inverted ? "start" : "end"] * range);
+        info.minValue = adjust(info.minValue - paddings[inverted ? 'end' : 'start'] * range);
+        info.maxValue = adjust(info.maxValue + paddings[inverted ? 'start' : 'end'] * range);
     });
 }
 

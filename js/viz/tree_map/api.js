@@ -1,10 +1,10 @@
-var proto = require("./tree_map.base").prototype,
-    nodeProto = require("./node").prototype,
+var proto = require('./tree_map.base').prototype,
+    nodeProto = require('./node').prototype,
 
-    _extend = require("../../core/utils/extend").extend;
+    _extend = require('../../core/utils/extend').extend;
 
-proto._eventsMap.onNodesInitialized = { name: "nodesInitialized" };
-proto._eventsMap.onNodesRendering = { name: "nodesRendering" };
+proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
+proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
 
 proto._createProxyType = function() {
     var that = this,
@@ -60,7 +60,7 @@ proto._createProxyType = function() {
 
             if(arg !== undefined) {
                 updateValue(node, arg > 0 ? Number(arg) : 0);
-                change(node, ["TILING"]);
+                change(node, ['TILING']);
                 result = this;
             } else {
                 result = node.value;
@@ -74,7 +74,7 @@ proto._createProxyType = function() {
 
             if(arg !== undefined) {
                 node.customLabel = arg ? String(arg) : null;
-                change(node, ["LABELS"]);
+                change(node, ['LABELS']);
                 result = this;
             } else {
                 result = node.customLabel || node.label;
@@ -90,7 +90,7 @@ proto._createProxyType = function() {
                 _extend(true, node._custom, settings);
                 node._partialState = node._partialLabelState = null;
             }
-            change(node, ["TILES", "LABELS"]);
+            change(node, ['TILES', 'LABELS']);
             return this;
         },
 
@@ -98,7 +98,7 @@ proto._createProxyType = function() {
             var node = nodes[this._id];
 
             node._custom = node._partialState = node._partialLabelState = null;
-            change(node, ["TILES", "LABELS"]);
+            change(node, ['TILES', 'LABELS']);
             return this;
         }
     };
@@ -123,7 +123,7 @@ proto._createProxyType = function() {
         new Proxy(node);
     };
     that._handlers.endBuildNodes = function() {
-        that._eventTrigger("nodesInitialized", { root: that._root.proxy });
+        that._eventTrigger('nodesInitialized', { root: that._root.proxy });
     };
 };
 
@@ -155,12 +155,12 @@ function updateValue(node, value) {
     }
 }
 
-proto._extendProxyType = require("../../core/utils/common").noop;
+proto._extendProxyType = require('../../core/utils/common').noop;
 
 var _resetNodes = proto._resetNodes;
 proto._resetNodes = function() {
     _resetNodes.call(this);
-    this._eventTrigger("nodesRendering", { node: this._topNode.proxy });
+    this._eventTrigger('nodesRendering', { node: this._topNode.proxy });
 };
 
 var _updateStyles = nodeProto.updateStyles;
@@ -188,7 +188,7 @@ nodeProto.updateLabelStyle = function() {
 
 function calculatePartialLabelState(node, settings) {
     var state = node.ctx.calculateLabelState(settings);
-    if("visible" in settings) {
+    if('visible' in settings) {
         state.visible = !!settings.visible;
     }
     return state;
@@ -202,7 +202,7 @@ proto.resetNodes = function() {
     var context = this._context;
 
     context.suspend();
-    context.change(["NODES_CREATE"]);
+    context.change(['NODES_CREATE']);
     context.resume();
     return this;
 };

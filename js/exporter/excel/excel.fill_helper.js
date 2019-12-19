@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 import patternFillHelper from './excel.pattern_fill_helper';
 
@@ -77,7 +77,7 @@ const fillHelper = {
     toXml: function(tag) {
         // §18.8.20 fill (Fill), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return tagHelper.toXml(
-            "fill",
+            'fill',
             {},
             patternFillHelper.toXml(tag.patternFill)
         );

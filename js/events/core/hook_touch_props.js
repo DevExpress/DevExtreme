@@ -1,4 +1,4 @@
-var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];
+var touchPropsToHook = ['pageX', 'pageY', 'screenX', 'screenY', 'clientX', 'clientY'];
 var touchPropHook = function(name, event) {
     if(event[name] && !event.touches || !event.touches) {
         return event[name];

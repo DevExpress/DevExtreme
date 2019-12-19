@@ -1,16 +1,16 @@
-import $ from "jquery";
-import devices from "core/devices";
-import * as eventUtils from "events/utils";
+import $ from 'jquery';
+import devices from 'core/devices';
+import * as eventUtils from 'events/utils';
 import {
     setupDataGridModules,
     MockDataController,
     MockColumnsController,
-    MockSelectionController } from "../dataGridMocks.js";
-import pointerEvents from "events/pointer";
-import { keyboard } from "events/";
-import DataGridWrapper from "../wrappers/dataGridWrappers.js";
+    MockSelectionController } from '../dataGridMocks.js';
+import pointerEvents from 'events/pointer';
+import { keyboard } from 'events/short';
+import DataGridWrapper from '../wrappers/dataGridWrappers.js';
 
-export const dataGridWrapper = new DataGridWrapper("#container");
+export const dataGridWrapper = new DataGridWrapper('#container');
 
 export function setupModules(that, modulesOptions, gridModules) {
     var defaultSetCellValue = function(data, value) {
@@ -21,17 +21,17 @@ export function setupModules(that, modulesOptions, gridModules) {
     };
 
     that.columns = that.columns || [
-        { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1", calculateCellValue: function(data) { return data.Column1; }, setCellValue: defaultSetCellValue },
-        { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2", setCellValue: defaultSetCellValue },
-        { caption: 'Column 3', visible: true, allowEditing: true, dataField: "Column3", setCellValue: defaultSetCellValue },
-        { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", setCellValue: defaultSetCellValue }
+        { caption: 'Column 1', visible: true, allowEditing: true, dataField: 'Column1', calculateCellValue: function(data) { return data.Column1; }, setCellValue: defaultSetCellValue },
+        { caption: 'Column 2', visible: true, allowEditing: true, dataField: 'Column2', setCellValue: defaultSetCellValue },
+        { caption: 'Column 3', visible: true, allowEditing: true, dataField: 'Column3', setCellValue: defaultSetCellValue },
+        { caption: 'Column 4', visible: true, allowEditing: true, dataField: 'Column4', setCellValue: defaultSetCellValue }
     ];
 
     that.options = $.extend(true, { tabIndex: 0 }, that.options, {
         keyboardNavigation: {
             enabled: true,
-            enterKeyAction: "startEdit",
-            enterKeyDirection: "none",
+            enterKeyAction: 'startEdit',
+            enterKeyDirection: 'none',
             editOnKeyPress: false
         },
         editing: { },
@@ -39,7 +39,7 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 
     that.$element = function() {
-        return $("#container");
+        return $('#container');
     };
     that.selectionOptions = {};
     that.dataControllerOptions = that.dataControllerOptions || {
@@ -68,10 +68,10 @@ export function setupModules(that, modulesOptions, gridModules) {
     };
 
     gridModules = (gridModules || []).concat([
-        'data', 'columns', "editorFactory",
-        'gridView', 'columnHeaders', 'rows', "grouping",
-        "headerPanel", "search", "editing", "keyboardNavigation",
-        "summary", "masterDetail", "virtualScrolling"
+        'data', 'columns', 'editorFactory',
+        'gridView', 'columnHeaders', 'rows', 'grouping',
+        'headerPanel', 'search', 'editing', 'keyboardNavigation',
+        'summary', 'masterDetail', 'virtualScrolling'
     ]);
 
     setupDataGridModules(that, gridModules, modulesOptions || {
@@ -84,29 +84,29 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"),
+export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'),
     device = devices.real(),
     KEYS = {
-        "tab": "Tab",
-        "enter": "Enter",
-        "escape": "Escape",
-        "pageUp": "PageUp",
-        "pageDown": "PageDown",
-        "leftArrow": "ArrowLeft",
-        "upArrow": "ArrowUp",
-        "rightArrow": "ArrowRight",
-        "downArrow": "ArrowDown",
-        "space": " ",
-        "F": "F",
-        "A": "A",
-        "D": "D",
-        "1": "1",
-        "2": "2",
-        "F2": "F2"
+        'tab': 'Tab',
+        'enter': 'Enter',
+        'escape': 'Escape',
+        'pageUp': 'PageUp',
+        'pageDown': 'PageDown',
+        'leftArrow': 'ArrowLeft',
+        'upArrow': 'ArrowUp',
+        'rightArrow': 'ArrowRight',
+        'downArrow': 'ArrowDown',
+        'space': ' ',
+        'F': 'F',
+        'A': 'A',
+        'D': 'D',
+        '1': '1',
+        '2': '2',
+        'F2': 'F2'
     };
 
 export function testInDesktop(name, testFunc) {
-    if(device.deviceType === "desktop") {
+    if(device.deviceType === 'desktop') {
         QUnit.testInActiveWindow(name, testFunc);
     }
 }
@@ -117,7 +117,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         stopPropagation: false
     };
     var alt = false;
-    if(typeof ctrl === "object") {
+    if(typeof ctrl === 'object') {
         alt = ctrl.alt;
         shift = ctrl.shift;
         ctrl = ctrl.ctrl;
@@ -132,7 +132,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         shiftKey: shift,
         altKey: alt,
         target: target && target[0] || target,
-        type: "keydown",
+        type: 'keydown',
         preventDefault: function() {
             result.preventDefault = true;
         },
@@ -148,13 +148,13 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
 }
 
 export function fireKeyDown($target, key, ctrlKey) {
-    $target.trigger(eventUtils.createEvent("keydown", { target: $target.get(0), key: key, ctrlKey: ctrlKey }));
+    $target.trigger(eventUtils.createEvent('keydown', { target: $target.get(0), key: key, ctrlKey: ctrlKey }));
 }
 
 export function focusCell(columnIndex, rowIndex) {
     var $element0 = this.rowsView.element(),
-        $row = $($element0.find(".dx-row")[rowIndex]);
-    $($row.find("td")[columnIndex]).trigger(CLICK_EVENT);
+        $row = $($element0.find('.dx-row')[rowIndex]);
+    $($row.find('td')[columnIndex]).trigger(CLICK_EVENT);
 }
 
 export function getTextSelection(element) {

@@ -1,5 +1,5 @@
-var selectRectByAspectRatio = require("viz/circular_gauge")._TESTS_selectRectByAspectRatio,
-    selectRectBySizes = require("viz/linear_gauge")._TESTS_selectRectBySizes;
+var selectRectByAspectRatio = require('viz/circular_gauge')._TESTS_selectRectByAspectRatio,
+    selectRectBySizes = require('viz/linear_gauge')._TESTS_selectRectBySizes;
 
 QUnit.module('Selecting rect by ratio');
 

@@ -1,15 +1,15 @@
-var fitIntoRange = require("../../core/utils/math").fitIntoRange,
-    escapeRegExp = require("../../core/utils/common").escapeRegExp,
-    number = require("../../localization/number");
+var fitIntoRange = require('../../core/utils/math').fitIntoRange,
+    escapeRegExp = require('../../core/utils/common').escapeRegExp,
+    number = require('../../localization/number');
 
 var getCaretBoundaries = function(text, format) {
-    var signParts = format.split(";");
+    var signParts = format.split(';');
     var sign = number.getSign(text, format);
 
-    signParts[1] = signParts[1] || "-" + signParts[0];
+    signParts[1] = signParts[1] || '-' + signParts[0];
     format = signParts[sign < 0 ? 1 : 0];
 
-    var mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split("").map(() => " ").join("").substr(2));
+    var mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split('').map(() => ' ').join('').substr(2));
 
     format = mockEscapedStubs(format);
 
@@ -24,14 +24,14 @@ var getCaretBoundaries = function(text, format) {
 
 var _getDigitCountBeforeIndex = function(index, text) {
     var decimalSeparator = number.getDecimalSeparator(),
-        regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
+        regExp = new RegExp('[^0-9' + escapeRegExp(decimalSeparator) + ']', 'g'),
         textBeforePosition = text.slice(0, index);
 
     return textBeforePosition.replace(regExp, '').length;
 };
 
 var _reverseText = function(text) {
-    return text.split("").reverse().join("");
+    return text.split('').reverse().join('');
 };
 
 var _getDigitPositionByIndex = function(digitIndex, text) {

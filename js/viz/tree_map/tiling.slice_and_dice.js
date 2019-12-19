@@ -1,4 +1,4 @@
-var tiling = require("./tiling");
+var tiling = require('./tiling');
 
 function sliceAndDice(data) {
     var items = data.items,
@@ -11,5 +11,5 @@ function sliceAndDice(data) {
     });
 }
 
-tiling.addAlgorithm("sliceanddice", sliceAndDice);
+tiling.addAlgorithm('sliceanddice', sliceAndDice);
 module.exports = sliceAndDice;

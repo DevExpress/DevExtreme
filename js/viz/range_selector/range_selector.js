@@ -1,13 +1,13 @@
-import registerComponent from "../../core/component_registrator";
+import registerComponent from '../../core/component_registrator';
 import {
     isDefined as _isDefined,
     isNumeric as _isNumber,
     isDate as _isDate,
     type as _type,
     isPlainObject
-} from "../../core/utils/type";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
+} from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
 import {
     patchFontOptions,
     normalizeEnum as _normalizeEnum,
@@ -15,7 +15,7 @@ import {
     convertVisualRangeObject,
     getCategoriesInfo,
     getLog
-} from "../core/utils";
+} from '../core/utils';
 import {
     addInterval,
     dateToMilliseconds,
@@ -25,38 +25,38 @@ import {
     getDateFormatByTickInterval,
     correctDateWithUnitBeginning,
     getSequenceByInterval
-} from "../../core/utils/date";
-import { adjust } from "../../core/utils/math";
-import rangeModule from "../translators/range";
-import axisModule from "../axes/base_axis";
-import parseUtils from "../components/parse_utils";
-import formatHelper from "../../format_helper";
-import commonModule from "./common";
-import slidersControllerModule from "./sliders_controller";
-import { Tracker } from "./tracker";
-import rangeViewModule from "./range_view";
-import seriesDataSourceModule from "./series_data_source";
-import tickGeneratorModule from "../axes/tick_generator";
-import baseWidgetModule from "../core/base_widget";
+} from '../../core/utils/date';
+import { adjust } from '../../core/utils/math';
+import rangeModule from '../translators/range';
+import axisModule from '../axes/base_axis';
+import parseUtils from '../components/parse_utils';
+import formatHelper from '../../format_helper';
+import commonModule from './common';
+import slidersControllerModule from './sliders_controller';
+import { Tracker } from './tracker';
+import rangeViewModule from './range_view';
+import seriesDataSourceModule from './series_data_source';
+import tickGeneratorModule from '../axes/tick_generator';
+import baseWidgetModule from '../core/base_widget';
 
 const _max = Math.max;
 const _ceil = Math.ceil;
 const _floor = Math.floor;
-const START_VALUE = "startValue";
-const END_VALUE = "endValue";
-const DATETIME = "datetime";
-const VALUE = "value";
-const DISCRETE = "discrete";
-const SEMIDISCRETE = "semidiscrete";
-const STRING = "string";
-const VALUE_CHANGED = VALUE + "Changed";
-const CONTAINER_BACKGROUND_COLOR = "containerBackgroundColor";
-const SLIDER_MARKER = "sliderMarker";
-const OPTION_BACKGROUND = "background";
-const LOGARITHMIC = "logarithmic";
-const KEEP = "keep";
-const SHIFT = "shift";
-const RESET = "reset";
+const START_VALUE = 'startValue';
+const END_VALUE = 'endValue';
+const DATETIME = 'datetime';
+const VALUE = 'value';
+const DISCRETE = 'discrete';
+const SEMIDISCRETE = 'semidiscrete';
+const STRING = 'string';
+const VALUE_CHANGED = VALUE + 'Changed';
+const CONTAINER_BACKGROUND_COLOR = 'containerBackgroundColor';
+const SLIDER_MARKER = 'sliderMarker';
+const OPTION_BACKGROUND = 'background';
+const LOGARITHMIC = 'logarithmic';
+const KEEP = 'keep';
+const SHIFT = 'shift';
+const RESET = 'reset';
 const INVISIBLE_POS = -1000;
 const SEMIDISCRETE_GRID_SPACING_FACTOR = 50;
 const DEFAULT_AXIS_DIVISION_FACTOR = 30;
@@ -84,7 +84,7 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         placeholderWidthLeft,
         placeholderWidthRight,
         placeholderHeight,
-        ticks = scale.type === "semidiscrete" ? scale.customTicks : tickIntervalsInfo.ticks,
+        ticks = scale.type === 'semidiscrete' ? scale.customTicks : tickIntervalsInfo.ticks,
         startTickValue,
         endTickValue;
 
@@ -127,7 +127,7 @@ function calculateValueType(firstValue, secondValue) {
             return typeFirstValue === type || typeSecondValue === type;
         };
 
-    return validType("date") ? DATETIME : validType("number") ? "numeric" : validType(STRING) ? STRING : "";
+    return validType('date') ? DATETIME : validType('number') ? 'numeric' : validType(STRING) ? STRING : '';
 }
 
 function showScaleMarkers(scaleOptions) {
@@ -136,7 +136,7 @@ function showScaleMarkers(scaleOptions) {
 
 function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
     var intervalX = scaleOptions.minorTickInterval || scaleOptions.tickInterval;
-    if(scaleOptions.valueType === "datetime") {
+    if(scaleOptions.valueType === 'datetime') {
         intervalX = dateToMilliseconds(intervalX);
     }
     translatorRange.addRange({ interval: intervalX });
@@ -152,7 +152,7 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
     logarithmBase = options.logarithmBase;
     if(options.type === LOGARITHMIC && logarithmBase <= 0 || (logarithmBase && !_isNumber(logarithmBase))) {
         options.logarithmBase = defaultLogarithmBase;
-        incidentOccurred("E2104");
+        incidentOccurred('E2104');
     } else if(options.type !== LOGARITHMIC) {
         options.logarithmBase = undefined;
     }
@@ -162,7 +162,7 @@ function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers, tickIn
     var labelScaleOptions = scaleOptions.label,
         markerScaleOptions = scaleOptions.marker,
         placeholderHeight = scaleOptions.placeholderHeight,
-        ticks = scaleOptions.type === "semidiscrete" ? scaleOptions.customTicks : tickIntervalsInfo.ticks,
+        ticks = scaleOptions.type === 'semidiscrete' ? scaleOptions.customTicks : tickIntervalsInfo.ticks,
         text = commonModule.formatValue(ticks[0], labelScaleOptions);
 
     if(placeholderHeight) {
@@ -203,7 +203,7 @@ function calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, scre
     var minorTickInterval = scaleOptions.minorTickInterval,
         tickInterval = scaleOptions.tickInterval,
         interval,
-        isDateType = scaleOptions.valueType === "datetime",
+        isDateType = scaleOptions.valueType === 'datetime',
         gridSpacingFactor = scaleOptions.axisDivisionFactor || {},
         tickCountByInterval,
         tickCountByScreen;
@@ -304,7 +304,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
         // TODO: There should be something like "seriesDataSource.getArgumentRange()"
         translatorRange = seriesDataSource ? seriesDataSource.getBoundRange().arg : new rangeModule.Range(),
         rangeForCategories,
-        isDate = scaleOptions.valueType === "datetime",
+        isDate = scaleOptions.valueType === 'datetime',
         minRange = scaleOptions.minRange;
 
     if(scaleOptions.type === DISCRETE) {
@@ -380,7 +380,7 @@ function getDateMarkerVisibilityChecker(screenDelta) {
     return function(isDateScale, isMarkerVisible, min, max, tickInterval) {
         if(isMarkerVisible && isDateScale) {
             if(!_isDefined(tickInterval) || tickInterval.years || tickInterval.months >= 6 ||
-                (screenDelta / SEMIDISCRETE_GRID_SPACING_FACTOR < (_ceil((max - min) / dateToMilliseconds("year")) + 1))) {
+                (screenDelta / SEMIDISCRETE_GRID_SPACING_FACTOR < (_ceil((max - min) / dateToMilliseconds('year')) + 1))) {
                 isMarkerVisible = false;
             }
         }
@@ -444,7 +444,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
         valueType = parseUtils.correctValueType(_normalizeEnum(scaleOption.valueType)),
         parser,
         validateStartEndValues = function(field, parser) {
-            var messageToIncidentOccurred = field === START_VALUE ? "start" : "end";
+            var messageToIncidentOccurred = field === START_VALUE ? 'start' : 'end';
 
             if(_isDefined(scaleOption[field])) {
                 parsedValue = parser(scaleOption[field]);
@@ -452,7 +452,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
                     scaleOption[field] = parsedValue;
                 } else {
                     scaleOption[field] = undefined;
-                    incidentOccurred("E2202", [messageToIncidentOccurred]);
+                    incidentOccurred('E2202', [messageToIncidentOccurred]);
                 }
             }
         };
@@ -460,7 +460,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
     valueType = calculatedValueType || valueType;
 
     if(!valueType) {
-        valueType = calculateValueType(scaleOption.startValue, scaleOption.endValue) || "numeric";
+        valueType = calculateValueType(scaleOption.startValue, scaleOption.endValue) || 'numeric';
     }
 
     if(valueType === STRING || scaleOption.categories) {
@@ -479,7 +479,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
 
     checkLogarithmicOptions(scaleOption, logarithmBase, incidentOccurred);
     if(!scaleOption.type) {
-        scaleOption.type = "continuous";
+        scaleOption.type = 'continuous';
     }
 
     scaleOption.parser = parser;
@@ -508,7 +508,7 @@ function correctValueByInterval(value, isDate, interval) {
 function getIntervalCustomTicks(options) {
     var min = options.startValue,
         max = options.endValue,
-        isDate = options.valueType === "datetime",
+        isDate = options.valueType === 'datetime',
         tickInterval = options.tickInterval,
         res = {
             intervals: []
@@ -543,39 +543,39 @@ function getPrecisionForSlider(startValue, endValue, screenDelta) {
 var dxRangeSelector = baseWidgetModule.inherit({
     _toggleParentsScrollSubscription() {},
     _eventsMap: {
-        "onValueChanged": { name: VALUE_CHANGED }
+        'onValueChanged': { name: VALUE_CHANGED }
     },
 
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         extend(this._deprecatedOptions, {
-            "chart.barWidth": {
-                since: "18.1", message: "Use the 'chart.commonSeriesSettings.barPadding' or 'chart.series.barPadding' option instead"
+            'chart.barWidth': {
+                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.barPadding\' or \'chart.series.barPadding\' option instead'
             },
-            "chart.equalBarWidth": {
-                since: "18.1", message: "Use the 'chart.commonSeriesSettings.ignoreEmptyPoints' or 'chart.series.ignoreEmptyPoints' option instead"
+            'chart.equalBarWidth': {
+                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.ignoreEmptyPoints\' or \'chart.series.ignoreEmptyPoints\' option instead'
             },
-            "chart.useAggregation": {
-                since: "18.1", message: "Use the 'chart.commonSeriesSettings.aggregation.enabled' or 'chart.series.aggregation.enabled' option instead"
+            'chart.useAggregation': {
+                since: '18.1', message: 'Use the \'chart.commonSeriesSettings.aggregation.enabled\' or \'chart.series.aggregation.enabled\' option instead'
             }
         });
     },
 
-    _rootClassPrefix: "dxrs",
+    _rootClassPrefix: 'dxrs',
 
-    _rootClass: "dxrs-range-selector",
+    _rootClass: 'dxrs-range-selector',
 
     _dataIsReady: function() {
         return this._dataIsLoaded();
     },
 
-    _initialChanges: ["DATA_SOURCE", "VALUE"],
+    _initialChanges: ['DATA_SOURCE', 'VALUE'],
 
-    _themeDependentChanges: ["MOSTLY_TOTAL"],
+    _themeDependentChanges: ['MOSTLY_TOTAL'],
 
-    _themeSection: "rangeSelector",
+    _themeSection: 'rangeSelector',
 
-    _fontFields: ["scale.label.font", "sliderMarker.font"],
+    _fontFields: ['scale.label.font', 'sliderMarker.font'],
 
     _initCore: function() {
         var that = this,
@@ -589,17 +589,17 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
         // TODO: Move it to the SlidersEventManager
         root.css({
-            "touch-action": "pan-y"
+            'touch-action': 'pan-y'
         });
 
         // RangeContainer
         that._clipRect = renderer.clipRect(); // TODO: Try to remove it
         // TODO: Groups could be created by the corresponding components
-        rangeViewGroup = renderer.g().attr({ "class": "dxrs-view" }).append(root);
-        slidersGroup = renderer.g().attr({ "class": "dxrs-slidersContainer", "clip-path": that._clipRect.id }).append(root);
-        scaleGroup = renderer.g().attr({ "class": "dxrs-scale", "clip-path": that._clipRect.id }).append(root);
-        scaleBreaksGroup = renderer.g().attr({ "class": "dxrs-scale-breaks" }).append(root);
-        trackersGroup = renderer.g().attr({ "class": "dxrs-trackers" }).append(root);
+        rangeViewGroup = renderer.g().attr({ 'class': 'dxrs-view' }).append(root);
+        slidersGroup = renderer.g().attr({ 'class': 'dxrs-slidersContainer', 'clip-path': that._clipRect.id }).append(root);
+        scaleGroup = renderer.g().attr({ 'class': 'dxrs-scale', 'clip-path': that._clipRect.id }).append(root);
+        scaleBreaksGroup = renderer.g().attr({ 'class': 'dxrs-scale-breaks' }).append(root);
+        trackersGroup = renderer.g().attr({ 'class': 'dxrs-trackers' }).append(root);
 
         that._axis = new AxisWrapper({
             renderer: renderer,
@@ -621,7 +621,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
             trackersGroup: trackersGroup,
             updateSelectedRange: function(range, lastSelectedRange, e) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that._getOptionByStealth(VALUE))));
+                    that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that._options.silent(VALUE))));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
@@ -654,28 +654,28 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _applySize: function(rect) {
         this._clientRect = rect.slice();
-        this._change(["MOSTLY_TOTAL"]);
+        this._change(['MOSTLY_TOTAL']);
     },
 
     _optionChangesMap: {
-        scale: "SCALE",
-        value: "VALUE",
-        dataSource: "DATA_SOURCE"
+        scale: 'SCALE',
+        value: 'VALUE',
+        dataSource: 'DATA_SOURCE'
     },
 
-    _optionChangesOrder: ["SCALE", "DATA_SOURCE"],
+    _optionChangesOrder: ['SCALE', 'DATA_SOURCE'],
 
     _change_SCALE: function() {
-        this._change(["MOSTLY_TOTAL"]);
+        this._change(['MOSTLY_TOTAL']);
     },
 
     _setValueByDataSource() {
         const that = this;
-        const options = that._getOptionByStealth();
+        const options = that._options.silent();
         const axis = that._axis;
 
         if(options.dataSource) {
-            let selectedRangeUpdateMode = that.option("selectedRangeUpdateMode");
+            let selectedRangeUpdateMode = that.option('selectedRangeUpdateMode');
             const value = that.getValue();
             const valueIsReady = _isDefined(value[0]) && _isDefined(value[1]);
             if(_isDefined(selectedRangeUpdateMode)) {
@@ -685,7 +685,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
                 selectedRangeUpdateMode = RESET;
             }
 
-            if(selectedRangeUpdateMode === "auto" && valueIsReady) {
+            if(selectedRangeUpdateMode === 'auto' && valueIsReady) {
                 const rangesInfo = axis.allScaleSelected(value);
 
                 if(rangesInfo.startValue && rangesInfo.endValue) {
@@ -710,12 +710,12 @@ var dxRangeSelector = baseWidgetModule.inherit({
     },
 
     _change_DATA_SOURCE: function() {
-        if(this._getOptionByStealth('dataSource')) {
+        if(this._options.silent('dataSource')) {
             this._updateDataSource();
         }
     },
 
-    _customChangesOrder: ["MOSTLY_TOTAL", "VALUE", "SLIDER_SELECTION"],
+    _customChangesOrder: ['MOSTLY_TOTAL', 'VALUE', 'SLIDER_SELECTION'],
 
     _change_MOSTLY_TOTAL: function() {
         this._applyMostlyTotalChange();
@@ -723,7 +723,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _change_SLIDER_SELECTION: function() {
         var that = this,
-            value = that._getOptionByStealth(VALUE);
+            value = that._options.silent(VALUE);
 
         that._slidersController.setSelectedRange(value && parseValue(value));
     },
@@ -732,7 +732,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
         var that = this,
             option = that._rangeOption;
         if(option) {
-            that._setOptionByStealth(VALUE, option);
+            that._options.silent(VALUE, option);
             that.setValue(option);
         }
     },
@@ -742,15 +742,15 @@ var dxRangeSelector = baseWidgetModule.inherit({
             translator = that._axis.getTranslator();
         if(_isDefined(start) && !translator.isValid(start) ||
             _isDefined(end) && !translator.isValid(end)) {
-            that._incidentOccurred("E2203");
+            that._incidentOccurred('E2203');
         }
     },
 
     _applyChanges: function() {
         var that = this,
-            value = that._getOptionByStealth(VALUE);
+            value = that._options.silent(VALUE);
 
-        if(that._changes.has("VALUE") && value) {
+        if(that._changes.has('VALUE') && value) {
             that._rangeOption = value;
         }
         that.callBase.apply(that, arguments);
@@ -795,7 +795,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _dataSourceChangedHandler: function() {
         this._setValueByDataSource();
-        this._requestChange(["MOSTLY_TOTAL"]);
+        this._requestChange(['MOSTLY_TOTAL']);
     },
 
     // It seems that we REALLY like to translate option structures from one form to another.
@@ -831,10 +831,10 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _updateContent: function(canvas) {
         let that = this;
-        let chartOptions = that.option("chart");
+        let chartOptions = that.option('chart');
         let seriesDataSource = that._createSeriesDataSource(chartOptions);
-        let isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option("background.image.url"));
-        let scaleOptions = prepareScaleOptions(that._getOption("scale"), seriesDataSource && seriesDataSource.getCalculatedValueType(), that._incidentOccurred, this._getOption("containerBackgroundColor", true));
+        let isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option('background.image.url'));
+        let scaleOptions = prepareScaleOptions(that._getOption('scale'), seriesDataSource && seriesDataSource.getCalculatedValueType(), that._incidentOccurred, this._getOption('containerBackgroundColor', true));
         seriesDataSource && that._completeSeriesDataSourceCreation(scaleOptions, seriesDataSource);
         let argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions);
         let tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange);
@@ -845,13 +845,13 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
         if(chartThemeManager) {
             // TODO: Looks like usage of "chartThemeManager" can be replaced with "that._getOption("chart").valueAxis.logarithmBase - check it
-            checkLogarithmicOptions(chartOptions && chartOptions.valueAxis, chartThemeManager.getOptions("valueAxis").logarithmBase, that._incidentOccurred);
+            checkLogarithmicOptions(chartOptions && chartOptions.valueAxis, chartThemeManager.getOptions('valueAxis').logarithmBase, that._incidentOccurred);
         }
 
         updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
         sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
-        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"), tickIntervalsInfo);
+        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option('indent'), tickIntervalsInfo);
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
@@ -878,24 +878,24 @@ var dxRangeSelector = baseWidgetModule.inherit({
 
     _updateElements: function(scaleOptions, sliderMarkerOptions, isCompactMode, canvas, seriesDataSource) {
         var that = this,
-            behavior = that._getOption("behavior"),
-            shutterOptions = that._getOption("shutter"),
+            behavior = that._getOption('behavior'),
+            shutterOptions = that._getOption('shutter'),
             isNotSemiDiscrete = scaleOptions.type !== SEMIDISCRETE;
 
         shutterOptions.color = shutterOptions.color || that._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
-        that._rangeView.update(that.option("background"), that._themeManager.theme("background"), canvas, isCompactMode,
+        that._rangeView.update(that.option('background'), that._themeManager.theme('background'), canvas, isCompactMode,
             behavior.animationEnabled && that._renderer.animationEnabled(), seriesDataSource);
 
         // TODO: Is entire options bag really needed for SlidersContainer?
         that._isUpdating = true;
         that._slidersController.update([canvas.top, canvas.top + canvas.height], behavior, isCompactMode,
-            that._getOption("sliderHandle"), sliderMarkerOptions, shutterOptions, {
-                minRange: isNotSemiDiscrete ? that.option("scale.minRange") : undefined,
-                maxRange: isNotSemiDiscrete ? that.option("scale.maxRange") : undefined
-            }, that._axis.getFullTicks(), that._getOption("selectedRangeColor", true));
+            that._getOption('sliderHandle'), sliderMarkerOptions, shutterOptions, {
+                minRange: isNotSemiDiscrete ? that.option('scale.minRange') : undefined,
+                maxRange: isNotSemiDiscrete ? that.option('scale.maxRange') : undefined
+            }, that._axis.getFullTicks(), that._getOption('selectedRangeColor', true));
 
-        that._requestChange(["SLIDER_SELECTION"]);
+        that._requestChange(['SLIDER_SELECTION']);
         that._isUpdating = false;
         that._tracker.update(!that._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
     },
@@ -904,23 +904,23 @@ var dxRangeSelector = baseWidgetModule.inherit({
         var that = this,
             seriesDataSource,
             dataSource = that._dataSourceItems(), // TODO: This code can be executed when data source is not loaded (it is an error)!
-            scaleOptions = that._getOption("scale"),
+            scaleOptions = that._getOption('scale'),
             valueType = scaleOptions.valueType || calculateValueType(scaleOptions.startValue, scaleOptions.endValue),
             valueAxis = new axisModule.Axis({
                 renderer: that._renderer,
-                axisType: "xyAxes",
-                drawingType: "linear"
+                axisType: 'xyAxes',
+                drawingType: 'linear'
             });
 
         valueAxis.updateOptions({
             isHorizontal: false,
             label: {},
-            categoriesSortingMethod: that._getOption("chart").valueAxis.categoriesSortingMethod
+            categoriesSortingMethod: that._getOption('chart').valueAxis.categoriesSortingMethod
         });
 
         if(dataSource || (chartOptions && chartOptions.series)) {
             chartOptions = extend({}, chartOptions, {
-                theme: that.option("theme")
+                theme: that.option('theme')
             });
             seriesDataSource = new seriesDataSourceModule.SeriesDataSource({
                 renderer: that._renderer,
@@ -928,7 +928,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
                 valueType: _normalizeEnum(valueType),
                 axisType: scaleOptions.type,
                 chart: chartOptions,
-                dataSourceField: that.option("dataSourceField"),
+                dataSourceField: that.option('dataSourceField'),
                 incidentOccurred: that._incidentOccurred,
                 categories: scaleOptions.categories,
                 argumentAxis: that._axis,
@@ -946,7 +946,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
             endValue = scaleOptions.endValue,
             startValue = scaleOptions.startValue,
             sliderMarkerOptions = that._getOption(SLIDER_MARKER),
-            doNotSnap = !that._getOption("behavior").snapToTicks,
+            doNotSnap = !that._getOption('behavior').snapToTicks,
             isTypeDiscrete = scaleOptions.type === DISCRETE,
             isValueTypeDatetime = scaleOptions.valueType === DATETIME;
 
@@ -955,7 +955,7 @@ var dxRangeSelector = baseWidgetModule.inherit({
         if(!sliderMarkerOptions.format && !argRange.isEmpty()) {
             if(doNotSnap && _isNumber(scaleOptions.startValue)) {
                 sliderMarkerOptions.format = {
-                    type: "fixedPoint",
+                    type: 'fixedPoint',
                     precision: getPrecisionForSlider(startValue, endValue, screenDelta)
                 };
             }
@@ -1003,10 +1003,10 @@ var dxRangeSelector = baseWidgetModule.inherit({
     }
 });
 
-each(["selectedRangeColor", "containerBackgroundColor", "sliderMarker", "sliderHandle",
-    "shutter", OPTION_BACKGROUND, "behavior", "chart", "indent"
+each(['selectedRangeColor', 'containerBackgroundColor', 'sliderMarker', 'sliderHandle',
+    'shutter', OPTION_BACKGROUND, 'behavior', 'chart', 'indent'
 ], function(_, name) {
-    dxRangeSelector.prototype._optionChangesMap[name] = "MOSTLY_TOTAL";
+    dxRangeSelector.prototype._optionChangesMap[name] = 'MOSTLY_TOTAL';
 });
 
 // AxisWrapper
@@ -1037,7 +1037,7 @@ function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
 
 function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) {
     each(markerTrackers, function(_, value) {
-        value.on("dxpointerdown", onPointerDown);
+        value.on('dxpointerdown', onPointerDown);
     });
     function onPointerDown(e) {
         var range = e.target.range,
@@ -1065,10 +1065,10 @@ function AxisWrapper(params) {
         scaleBreaksGroup: params.scaleBreaksGroup,
         incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
-        axisType: "xyAxes",
-        drawingType: "linear",
-        widgetClass: "dxrs",
-        axisClass: "range-selector",
+        axisType: 'xyAxes',
+        drawingType: 'linear',
+        widgetClass: 'dxrs',
+        axisClass: 'range-selector',
         isArgumentAxis: true
     });
     that._updateSelectedRangeCallback = params.updateSelectedRange;
@@ -1125,7 +1125,7 @@ AxisWrapper.prototype = {
     }
 };
 
-["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength", "getVisibleArea", "getMarginOptions"].forEach(methodName => {
+['setMarginOptions', 'getFullTicks', 'updateCanvas', 'updateOptions', 'getAggregationInfo', 'getTranslator', 'getVisualRangeLength', 'getVisibleArea', 'getMarginOptions'].forEach(methodName => {
     AxisWrapper.prototype[methodName] = function() {
         const axis = this._axis;
 
@@ -1133,15 +1133,15 @@ AxisWrapper.prototype = {
     };
 });
 
-registerComponent("dxRangeSelector", dxRangeSelector);
+registerComponent('dxRangeSelector', dxRangeSelector);
 
 module.exports = dxRangeSelector;
 
 // PLUGINS_SECTION
-import { plugin as exportPlugin } from "../core/export";
-import { plugin as titlePlugin } from "../core/title";
-import { plugin as LoadingIndicatorPlugin } from "../core/loading_indicator";
-import { plugin as dataSourcePlugin } from "../core/data_source";
+import { plugin as exportPlugin } from '../core/export';
+import { plugin as titlePlugin } from '../core/title';
+import { plugin as LoadingIndicatorPlugin } from '../core/loading_indicator';
+import { plugin as dataSourcePlugin } from '../core/data_source';
 
 dxRangeSelector.addPlugin(exportPlugin);
 dxRangeSelector.addPlugin(titlePlugin);

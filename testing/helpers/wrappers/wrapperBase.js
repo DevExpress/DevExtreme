@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 
 export class WrapperBase {
     constructor(containerSelector) {
@@ -6,7 +6,7 @@ export class WrapperBase {
     }
 
     getElement() {
-        throw "getElement() is not implemented";
+        throw 'getElement() is not implemented';
     }
 
     getContainer() {

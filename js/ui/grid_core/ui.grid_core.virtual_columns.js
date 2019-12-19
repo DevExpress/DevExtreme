@@ -1,5 +1,5 @@
-import { hasWindow } from "../../core/utils/window";
-import { createColumnsInfo } from "./ui.grid_core.virtual_columns_core";
+import { hasWindow } from '../../core/utils/window';
+import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
 
 var DEFAULT_COLUMN_WIDTH = 50;
 
@@ -16,7 +16,7 @@ var VirtualScrollingRowsViewExtender = {
 
         that.callBase.apply(that, arguments);
 
-        if(that.option("rtlEnabled") && scrollable) {
+        if(that.option('rtlEnabled') && scrollable) {
             left = scrollable.$content().width() - scrollable.$element().width() - left;
         }
 
@@ -72,11 +72,11 @@ var ColumnsControllerExtender = (function() {
             return 0;
         },
         getTotalWidth: function() {
-            var width = this.option("width");
-            if(typeof width === "number") {
+            var width = this.option('width');
+            if(typeof width === 'number') {
                 return width;
             }
-            return this.getController("resizing")._lastWidth || this.component.$element().outerWidth();
+            return this.getController('resizing')._lastWidth || this.component.$element().outerWidth();
         },
         getEndPageIndex: function(position) {
             var visibleColumns = this.getVisibleColumns(undefined, true),
@@ -95,7 +95,7 @@ var ColumnsControllerExtender = (function() {
             return Math.ceil(widths.length / this.getColumnPageSize());
         },
         getColumnPageSize: function() {
-            return this.option("scrolling.columnPageSize");
+            return this.option('scrolling.columnPageSize');
         },
         _fireColumnsChanged: function() {
             var date = new Date();
@@ -107,20 +107,20 @@ var ColumnsControllerExtender = (function() {
         },
         setScrollPosition: function(position) {
             var that = this,
-                renderingThreshold = that.option("scrolling.columnRenderingThreshold");
+                renderingThreshold = that.option('scrolling.columnRenderingThreshold');
 
             if(that._renderTime > renderingThreshold) {
                 clearTimeout(that._changedTimeout);
 
                 that._changedTimeout = setTimeout(function() {
                     that._setScrollPositionCore(position);
-                }, that.option("scrolling.timeout"));
+                }, that.option('scrolling.timeout'));
             } else {
                 that._setScrollPositionCore(position);
             }
         },
         isVirtualMode: function() {
-            return hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual";
+            return hasWindow() && this.option('scrolling.columnRenderingMode') === 'virtual';
         },
         resize: function() {
             this._setScrollPositionCore(this._position);
@@ -144,7 +144,7 @@ var ColumnsControllerExtender = (function() {
         getFixedColumns: function(rowIndex, isBase) {
             var fixedColumns = this.callBase(rowIndex);
             if(this.isVirtualMode() && !isBase && fixedColumns.length) {
-                var transparentColumnIndex = fixedColumns.map(c => c.command).indexOf("transparent");
+                var transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
                 fixedColumns[transparentColumnIndex].colspan = this.getVisibleColumns().length - this.callBase().length + 1;
                 return fixedColumns;
             }
@@ -163,7 +163,7 @@ var ColumnsControllerExtender = (function() {
 
             var beginPageIndex = this._beginPageIndex,
                 endPageIndex = this._endPageIndex,
-                visibleColumnsHash = rowIndex + "-" + beginPageIndex + "-" + endPageIndex;
+                visibleColumnsHash = rowIndex + '-' + beginPageIndex + '-' + endPageIndex;
 
             if(this._virtualVisibleColumns[visibleColumnsHash]) {
                 return this._virtualVisibleColumns[visibleColumnsHash];
@@ -175,7 +175,7 @@ var ColumnsControllerExtender = (function() {
                 startIndex = beginPageIndex * pageSize,
                 endIndex = endPageIndex * pageSize,
                 fixedColumns = this.getFixedColumns(undefined, true),
-                transparentColumnIndex = fixedColumns.map(c => c.command).indexOf("transparent");
+                transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
 
             var beginFixedColumnCount = fixedColumns.length ? transparentColumnIndex : 0;
             var beginFixedColumns = visibleColumns.slice(0, beginFixedColumnCount);
@@ -195,7 +195,7 @@ var ColumnsControllerExtender = (function() {
                 endIndex = visibleColumns.length;
             }
 
-            if(rowCount > 1 && typeof rowIndex === "number") {
+            if(rowCount > 1 && typeof rowIndex === 'number') {
                 var columnsInfo = [];
                 for(var i = 0; i < rowCount; i++) {
                     columnsInfo.push(this.callBase(i));
@@ -208,12 +208,12 @@ var ColumnsControllerExtender = (function() {
             }
 
             if(beginWidth) {
-                visibleColumns.unshift({ command: "virtual", width: beginWidth });
+                visibleColumns.unshift({ command: 'virtual', width: beginWidth });
                 visibleColumns = beginFixedColumns.concat(visibleColumns);
             }
 
             if(endWidth) {
-                visibleColumns.push({ command: "virtual", width: endWidth });
+                visibleColumns.push({ command: 'virtual', width: endWidth });
                 visibleColumns = visibleColumns.concat(endFixedColumns);
             }
 
@@ -239,7 +239,7 @@ module.exports = {
                  * @type Enums.GridColumnRenderingMode
                  * @default "standard"
                  */
-                columnRenderingMode: "standard",
+                columnRenderingMode: 'standard',
                 columnPageSize: 5,
                 columnRenderingThreshold: 300
             }

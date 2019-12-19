@@ -1,9 +1,9 @@
-var queryAdapters = require("./query_adapters"),
-    errorsModule = require("./errors"),
-    each = require("../core/utils/iterator").each,
-    isFunction = require("../core/utils/type").isFunction,
-    Deferred = require("../core/utils/deferred").Deferred,
-    arrayQueryImpl = require("./array_query");
+var queryAdapters = require('./query_adapters'),
+    errorsModule = require('./errors'),
+    each = require('../core/utils/iterator').each,
+    isFunction = require('../core/utils/type').isFunction,
+    Deferred = require('../core/utils/deferred').Deferred,
+    arrayQueryImpl = require('./array_query');
 
 var remoteQueryImpl = function(url, queryOptions, tasks) {
     tasks = tasks || [];
@@ -33,13 +33,13 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
 
         function mergeSortTask(task) {
             switch(task.name) {
-                case "sortBy":
+                case 'sortBy':
                     _mergedSortArgs = [task.args];
                     return true;
 
-                case "thenBy":
+                case 'thenBy':
                     if(!_mergedSortArgs) {
-                        throw errorsModule.errors.Error("E4004");
+                        throw errorsModule.errors.Error('E4004');
                     }
 
                     _mergedSortArgs.push(task.args);
@@ -53,10 +53,10 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
             var head = _taskQueue[0],
                 unmergedTasks = [ ];
 
-            if(head && head.name === "multiSort") {
+            if(head && head.name === 'multiSort') {
                 _taskQueue.shift();
                 each(head.args[0], function() {
-                    unmergedTasks.push(createTask(unmergedTasks.length ? "thenBy" : "sortBy", this));
+                    unmergedTasks.push(createTask(unmergedTasks.length ? 'thenBy' : 'sortBy', this));
                 });
             }
 
@@ -81,12 +81,12 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
 
                 if(!mergeSortTask(_currentTask)) {
                     if(_mergedSortArgs) {
-                        _taskQueue.unshift(createTask("multiSort", [_mergedSortArgs]));
+                        _taskQueue.unshift(createTask('multiSort', [_mergedSortArgs]));
                         _mergedSortArgs = null;
                         continue;
                     }
 
-                    if(String(_currentTask.name) !== "enumerate") {
+                    if(String(_currentTask.name) !== 'enumerate') {
                         if(!_adapter[_currentTask.name] || _adapter[_currentTask.name].apply(_adapter, _currentTask.args) === false) {
                             break;
                         }
@@ -125,7 +125,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
     var query = {};
 
     each(
-        ["sortBy", "thenBy", "filter", "slice", "select", "groupBy"],
+        ['sortBy', 'thenBy', 'filter', 'slice', 'select', 'groupBy'],
         function() {
             var name = String(this);
             query[name] = function() {
@@ -135,7 +135,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
     );
 
     each(
-        ["count", "min", "max", "sum", "avg", "aggregate", "enumerate"],
+        ['count', 'min', 'max', 'sum', 'avg', 'aggregate', 'enumerate'],
         function() {
             var name = String(this);
             query[name] = function() {

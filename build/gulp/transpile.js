@@ -24,7 +24,7 @@ gulp.task('transpile', gulp.series('bundler-config', function() {
 
 gulp.task('version-replace', gulp.series('transpile', function() {
     return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
-        .pipe(replace("%VERSION%", context.version.script))
+        .pipe(replace('%VERSION%', context.version.script))
         .pipe(gulp.dest('./'));
 }));
 

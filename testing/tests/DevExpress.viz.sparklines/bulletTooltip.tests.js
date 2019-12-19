@@ -1,17 +1,17 @@
 /* global currentTest, createTestContainer */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    tooltipModule = require("viz/core/tooltip"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    baseThemeManagerModule = require("viz/core/base_theme_manager");
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    tooltipModule = require('viz/core/tooltip'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    baseThemeManagerModule = require('viz/core/base_theme_manager');
 
-require("viz/bullet");
+require('viz/bullet');
 
-$("<div>")
-    .attr("id", "container")
+$('<div>')
+    .attr('id', 'container')
     .css({ width: 250, height: 20 })
-    .appendTo("#qunit-fixture");
+    .appendTo('#qunit-fixture');
 
 var StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
 var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
@@ -41,7 +41,7 @@ var environment = {
                 enabled: true,
                 font: {}
             }
-        }).withArgs("tooltip").returns({
+        }).withArgs('tooltip').returns({
             enabled: true,
             font: {}
         });
@@ -52,7 +52,7 @@ var environment = {
                 tooltip: {
                     enabled: true
                 }
-            }, options)).dxBullet("instance");
+            }, options)).dxBullet('instance');
         };
     },
     afterEach: function() {
@@ -77,7 +77,7 @@ QUnit.test('Enabled tooltip', function(assert) {
 
     var arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
-    assert.deepEqual(arg[0].cssClass, "dxb-tooltip", 'parameter - cssClass');
+    assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
 
     assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
@@ -105,7 +105,7 @@ QUnit.test('Enabled tooltip. Empty data', function(assert) {
 
     var arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
-    assert.deepEqual(arg[0].cssClass, "dxb-tooltip", 'parameter - cssClass');
+    assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
 
     assert.equal(bullet._tooltip.update.callCount, 1, 'update is called');
@@ -148,9 +148,9 @@ QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
     assert.deepEqual(bullet._tooltip.show.lastCall.args, [{
         originalTarget: 20,
         originalValue: 10,
-        target: "20:undefined",
-        value: "10:undefined",
-        valueText: ["Actual Value:", "10:undefined", "Target Value:", "20:undefined"],
+        target: '20:undefined',
+        value: '10:undefined',
+        valueText: ['Actual Value:', '10:undefined', 'Target Value:', '20:undefined'],
     }, {
         x: (200 / 2) + 10 + 3,
         y: 30 / 2 + 5
@@ -173,7 +173,7 @@ QUnit.test('Default Tooltip text', function(assert) {
 
     var ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
     assert.deepEqual(ctResult, {
-        html: "<table style='border-spacing:0px; line-height: 14px'><tr><td>Actual Value:</td><td style='width: 15px'></td><td style='text-align: right'>0</td></tr><tr><td>Target Value:</td><td style='width: 15px'></td><td style='text-align: right'>0</td></tr></table>"
+        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr></table>'
     });
 });
 
@@ -194,6 +194,6 @@ QUnit.test('Default Tooltip text. Rtl', function(assert) {
 
     var ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
     assert.deepEqual(ctResult, {
-        html: "<table style='border-spacing:0px; line-height: 14px'><tr><td>Actual Value:</td><td style='width: 15px'></td><td style='text-align: left'>0</td></tr><tr><td>Target Value:</td><td style='width: 15px'></td><td style='text-align: left'>0</td></tr></table>"
+        html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr></table>'
     });
 });

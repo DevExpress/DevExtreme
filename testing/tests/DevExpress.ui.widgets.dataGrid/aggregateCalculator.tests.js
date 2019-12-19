@@ -1,5 +1,5 @@
-import $ from "jquery";
-import AggregateCalculator from "ui/data_grid/aggregate_calculator";
+import $ from 'jquery';
+import AggregateCalculator from 'ui/data_grid/aggregate_calculator';
 
 var customAggregator = {
     seed: 6,
@@ -39,23 +39,23 @@ var customAggregatorWithGlobal = {
 function createHierarchicalData() {
     return $.extend(true, [], [
         {
-            key: "1",
+            key: '1',
             items: [
                 {
-                    key: "1.1",
+                    key: '1.1',
                     items: [4, 6]
                 },
                 {
-                    key: "1.2",
+                    key: '1.2',
                     items: [5, 4]
                 }
             ]
         },
         {
-            key: "2",
+            key: '2',
             items: [
                 {
-                    key: "2.1",
+                    key: '2.1',
                     items: [2, 3]
                 }
             ]
@@ -63,16 +63,16 @@ function createHierarchicalData() {
     ]);
 }
 
-QUnit.test("total aggregates for plain list", function(assert) {
+QUnit.test('total aggregates for plain list', function(assert) {
     var calculator = new AggregateCalculator({
         data: [1, 2, 3],
         totalAggregates: [
-            { aggregator: "count" },
-            { aggregator: "sum", selector: "this" },
-            { aggregator: "max", selector: "this" },
-            { aggregator: "min", selector: "this" },
-            { aggregator: "avg", selector: "this" },
-            { aggregator: customAggregator, selector: "this" }
+            { aggregator: 'count' },
+            { aggregator: 'sum', selector: 'this' },
+            { aggregator: 'max', selector: 'this' },
+            { aggregator: 'min', selector: 'this' },
+            { aggregator: 'avg', selector: 'this' },
+            { aggregator: customAggregator, selector: 'this' }
         ]
     });
 
@@ -81,11 +81,11 @@ QUnit.test("total aggregates for plain list", function(assert) {
     assert.deepEqual(calculator.totalAggregates(), [3, 6, 3, 1, 2, 42]);
 });
 
-QUnit.test("total aggregates for grouped list", function(assert) {
+QUnit.test('total aggregates for grouped list', function(assert) {
     var calculator = new AggregateCalculator({
         totalAggregates: [
-            { aggregator: "count" },
-            { aggregator: "avg", selector: "this" }
+            { aggregator: 'count' },
+            { aggregator: 'avg', selector: 'this' }
         ],
         data: createHierarchicalData(),
         groupLevel: 2
@@ -96,18 +96,18 @@ QUnit.test("total aggregates for grouped list", function(assert) {
     assert.deepEqual(calculator.totalAggregates(), [6, 4]);
 });
 
-QUnit.test("group aggregates", function(assert) {
+QUnit.test('group aggregates', function(assert) {
     var data = createHierarchicalData();
     var calculator = new AggregateCalculator({
         data: data,
         groupAggregates: [
-            { aggregator: "count" },
-            { aggregator: "sum", selector: "this" },
-            { aggregator: "max", selector: "this" },
-            { aggregator: "min", selector: "this" },
-            { aggregator: "avg", selector: "this" },
-            { aggregator: customAggregator, selector: "this" },
-            { aggregator: customAggregatorForSecondGroup, selector: "this" }
+            { aggregator: 'count' },
+            { aggregator: 'sum', selector: 'this' },
+            { aggregator: 'max', selector: 'this' },
+            { aggregator: 'min', selector: 'this' },
+            { aggregator: 'avg', selector: 'this' },
+            { aggregator: customAggregator, selector: 'this' },
+            { aggregator: customAggregatorForSecondGroup, selector: 'this' }
         ],
         groupLevel: 2
     });
@@ -122,7 +122,7 @@ QUnit.test("group aggregates", function(assert) {
     assert.deepEqual(data[1].items[0].aggregates, [2, 5, 3, 2, 2.5, 43, 43]);
 });
 
-QUnit.test("selectors", function(assert) {
+QUnit.test('selectors', function(assert) {
     var data = [
         {
             items: [
@@ -133,8 +133,8 @@ QUnit.test("selectors", function(assert) {
     ];
     var calculator = new AggregateCalculator({
         data: data,
-        totalAggregates: [{ aggregator: "sum", selector: "value" }],
-        groupAggregates: [{ aggregator: "avg", selector: function(item) { return item.value; } }],
+        totalAggregates: [{ aggregator: 'sum', selector: 'value' }],
+        groupAggregates: [{ aggregator: 'avg', selector: function(item) { return item.value; } }],
         groupLevel: 1
     });
 
@@ -144,7 +144,7 @@ QUnit.test("selectors", function(assert) {
     assert.deepEqual(data[0].aggregates, [2]);
 });
 
-QUnit.test("empty total aggregates", function(assert) {
+QUnit.test('empty total aggregates', function(assert) {
     var calculator = new AggregateCalculator({
         data: [],
         totalAggregates: []
@@ -155,27 +155,27 @@ QUnit.test("empty total aggregates", function(assert) {
     assert.deepEqual(calculator.totalAggregates(), []);
 });
 
-QUnit.test("exception in case of incorrect aggregator name", function(assert) {
+QUnit.test('exception in case of incorrect aggregator name', function(assert) {
     assert.throws(
         function() {
-            new AggregateCalculator({ data: [1], totalAggregates: [{ aggregator: "Avg" }] }).calculate();
+            new AggregateCalculator({ data: [1], totalAggregates: [{ aggregator: 'Avg' }] }).calculate();
         },
         function(e) {
             return /E4001/.test(e.message);
         },
-        "Exception messages should be readable"
+        'Exception messages should be readable'
     );
 });
 
-QUnit.test("total aggregates for empty list", function(assert) {
+QUnit.test('total aggregates for empty list', function(assert) {
     var calculator = new AggregateCalculator({
         data: [],
         totalAggregates: [
-            { aggregator: "count" },
-            { aggregator: "sum", selector: "this" },
-            { aggregator: "max", selector: "this" },
-            { aggregator: "min", selector: "this" },
-            { aggregator: "avg", selector: "this" }
+            { aggregator: 'count' },
+            { aggregator: 'sum', selector: 'this' },
+            { aggregator: 'max', selector: 'this' },
+            { aggregator: 'min', selector: 'this' },
+            { aggregator: 'avg', selector: 'this' }
         ]
     });
 
@@ -184,7 +184,7 @@ QUnit.test("total aggregates for empty list", function(assert) {
     assert.deepEqual(calculator.totalAggregates(), [0, 0, NaN, NaN, NaN]);
 });
 
-QUnit.test("group aggregates for empty list", function(assert) {
+QUnit.test('group aggregates for empty list', function(assert) {
     var data = [
         { items: [] },
         { items: [] }
@@ -193,11 +193,11 @@ QUnit.test("group aggregates for empty list", function(assert) {
     var calculator = new AggregateCalculator({
         data: data,
         groupAggregates: [
-            { aggregator: "count" },
-            { aggregator: "sum", selector: "this" },
-            { aggregator: "max", selector: "this" },
-            { aggregator: "min", selector: "this" },
-            { aggregator: "avg", selector: "this" }
+            { aggregator: 'count' },
+            { aggregator: 'sum', selector: 'this' },
+            { aggregator: 'max', selector: 'this' },
+            { aggregator: 'min', selector: 'this' },
+            { aggregator: 'avg', selector: 'this' }
         ],
         groupLevel: 1
     });
@@ -216,11 +216,11 @@ QUnit.test("group aggregates for empty list", function(assert) {
     ]);
 });
 
-QUnit.test("group aggregates should not calculates if groupLevel < 1", function(assert) {
+QUnit.test('group aggregates should not calculates if groupLevel < 1', function(assert) {
     var result;
     var calculator = new AggregateCalculator({
         groupAggregates: [
-            { aggregator: "count" }
+            { aggregator: 'count' }
         ]
     });
 
@@ -235,11 +235,11 @@ QUnit.test("group aggregates should not calculates if groupLevel < 1", function(
     assert.ok(result);
 });
 
-QUnit.test("skipEmpty", function(assert) {
+QUnit.test('skipEmpty', function(assert) {
     var data = [{
         items: [
             { foo: 1 },
-            { foo: "" },
+            { foo: '' },
             { foo: NaN },
             { foo: null },
             { foo: 12345 },
@@ -259,12 +259,12 @@ QUnit.test("skipEmpty", function(assert) {
 
         groupAggregates: [
             {
-                selector: "foo",
+                selector: 'foo',
                 aggregator: aggregator,
                 skipEmptyValues: true
             },
             {
-                selector: "foo",
+                selector: 'foo',
                 aggregator: aggregator,
                 skipEmptyValues: false
             }
@@ -272,12 +272,12 @@ QUnit.test("skipEmpty", function(assert) {
 
         totalAggregates: [
             {
-                selector: "foo",
+                selector: 'foo',
                 aggregator: aggregator,
                 skipEmptyValues: true
             },
             {
-                selector: "foo",
+                selector: 'foo',
                 aggregator: aggregator,
                 skipEmptyValues: false
             }
@@ -286,15 +286,15 @@ QUnit.test("skipEmpty", function(assert) {
 
     calculator.calculate();
 
-    assert.deepEqual(data[0].aggregates, [[1, 12345], [1, "", NaN, null, 12345, undefined]]);
-    assert.deepEqual(calculator.totalAggregates(), [[1, 12345], [1, "", NaN, null, 12345, undefined]]);
+    assert.deepEqual(data[0].aggregates, [[1, 12345], [1, '', NaN, null, 12345, undefined]]);
+    assert.deepEqual(calculator.totalAggregates(), [[1, 12345], [1, '', NaN, null, 12345, undefined]]);
 });
 
-QUnit.test("skipEmpty ignored in case of count", function(assert) {
+QUnit.test('skipEmpty ignored in case of count', function(assert) {
     var data = [{
         items: [
             { foo: 1 },
-            { foo: "" },
+            { foo: '' },
             { foo: NaN },
             { foo: null },
             { foo: 12345 },
@@ -307,26 +307,26 @@ QUnit.test("skipEmpty ignored in case of count", function(assert) {
 
         groupAggregates: [
             {
-                selector: "foo",
-                aggregator: "count",
+                selector: 'foo',
+                aggregator: 'count',
                 skipEmptyValues: true
             },
             {
-                selector: "foo",
-                aggregator: "count",
+                selector: 'foo',
+                aggregator: 'count',
                 skipEmptyValues: false
             }
         ],
 
         totalAggregates: [
             {
-                selector: "foo",
-                aggregator: "count",
+                selector: 'foo',
+                aggregator: 'count',
                 skipEmptyValues: true
             },
             {
-                selector: "foo",
-                aggregator: "count",
+                selector: 'foo',
+                aggregator: 'count',
                 skipEmptyValues: false
             }
         ]
@@ -338,13 +338,13 @@ QUnit.test("skipEmpty ignored in case of count", function(assert) {
     assert.deepEqual(calculator.totalAggregates(), [6, 6]);
 });
 
-QUnit.test("global variables (see T353923)", function(assert) {
+QUnit.test('global variables (see T353923)', function(assert) {
     var data = createHierarchicalData();
     var calculator = new AggregateCalculator({
         data: data,
         groupAggregates: [
-            { aggregator: customAggregator, selector: "this" },
-            { aggregator: customAggregatorWithGlobal, selector: "this" }
+            { aggregator: customAggregator, selector: 'this' },
+            { aggregator: customAggregatorWithGlobal, selector: 'this' }
         ],
         groupLevel: 2
     });

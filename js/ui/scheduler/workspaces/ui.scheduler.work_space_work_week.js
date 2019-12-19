@@ -1,10 +1,10 @@
-var registerComponent = require("../../../core/component_registrator"),
-    dateUtils = require("../../../core/utils/date"),
+var registerComponent = require('../../../core/component_registrator'),
+    dateUtils = require('../../../core/utils/date'),
     toMs = dateUtils.dateToMilliseconds,
-    SchedulerWorkSpaceWeek = require("./ui.scheduler.work_space_week"),
-    dateLocalization = require("../../../localization/date");
+    SchedulerWorkSpaceWeek = require('./ui.scheduler.work_space_week'),
+    dateLocalization = require('../../../localization/date');
 
-var WORK_WEEK_CLASS = "dx-scheduler-work-space-work-week";
+var WORK_WEEK_CLASS = 'dx-scheduler-work-space-work-week';
 
 var dayIndexes = [1, 2, 3, 4, 5];
 
@@ -17,11 +17,11 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _getCellCount: function() {
-        return 5 * this.option("intervalCount");
+        return 5 * this.option('intervalCount');
     },
 
     _firstDayOfWeek: function() {
-        return this.option("firstDayOfWeek") || 1;
+        return this.option('firstDayOfWeek') || 1;
     },
 
     _getDateByIndex: function(headerIndex) {
@@ -68,10 +68,10 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
 
         var weekendCount = Math.floor(cellIndex / 5);
 
-        return toMs("day") * weekendCount * 2;
+        return toMs('day') * weekendCount * 2;
     },
 });
 
-registerComponent("dxSchedulerWorkSpaceWorkWeek", SchedulerWorkSpaceWorkWeek);
+registerComponent('dxSchedulerWorkSpaceWorkWeek', SchedulerWorkSpaceWorkWeek);
 
 module.exports = SchedulerWorkSpaceWorkWeek;

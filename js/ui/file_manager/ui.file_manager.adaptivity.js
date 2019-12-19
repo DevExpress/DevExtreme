@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { isFunction } from "../../core/utils/type";
-import { getWindow, hasWindow } from "../../core/utils/window";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { isFunction } from '../../core/utils/type';
+import { getWindow, hasWindow } from '../../core/utils/window';
 
-import Widget from "../widget/ui.widget";
-import Drawer from "../drawer/ui.drawer";
-import SplitterControl from "../splitter";
+import Widget from '../widget/ui.widget';
+import Drawer from '../drawer/ui.drawer';
+import SplitterControl from '../splitter';
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
-const DRAWER_PANEL_CONTENT_INITIAL = "dx-drawer-panel-content-initial";
+const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -21,9 +21,9 @@ class FileManagerAdaptivityControl extends Widget {
 
         this._isInAdaptiveState = false;
 
-        const $drawer = $("<div>").appendTo(this.$element());
+        const $drawer = $('<div>').appendTo(this.$element());
 
-        const contentRenderer = this.option("contentTemplate");
+        const contentRenderer = this.option('contentTemplate');
         if(isFunction(contentRenderer)) {
             contentRenderer($drawer);
         }
@@ -37,8 +37,8 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _createDrawerTemplate(container) {
-        this.option("drawerTemplate")(container);
-        this._splitter = this._createComponent("<div>", SplitterControl, {
+        this.option('drawerTemplate')(container);
+        this._splitter = this._createComponent('<div>', SplitterControl, {
             container: this.$element(),
             leftElement: $(this._drawer.content()),
             rightElement: $(this._drawer.viewContent()),
@@ -62,18 +62,18 @@ class FileManagerAdaptivityControl extends Widget {
             return;
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
-        $(this._drawer.content()).css("width", e.leftPanelWidth);
+        $(this._drawer.content()).css('width', e.leftPanelWidth);
         this._drawer.resizeContent();
     }
 
     _updateDrawerDimensions() {
-        $(this._drawer.content()).css("width", "");
+        $(this._drawer.content()).css('width', '');
         this._drawer._initSize();
         this._drawer._strategy.setPanelSize(true);
     }
 
     _dimensionChanged(dimension) {
-        if(!dimension || dimension !== "height") {
+        if(!dimension || dimension !== 'height') {
             this._checkAdaptiveState();
         }
     }
@@ -94,7 +94,7 @@ class FileManagerAdaptivityControl extends Widget {
 
     _initActions() {
         this._actions = {
-            onAdaptiveStateChanged: this._createActionByOption("onAdaptiveStateChanged")
+            onAdaptiveStateChanged: this._createActionByOption('onAdaptiveStateChanged')
         };
     }
 
@@ -114,11 +114,11 @@ class FileManagerAdaptivityControl extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "drawerTemplate":
-            case "contentTemplate":
+            case 'drawerTemplate':
+            case 'contentTemplate':
                 this.repaint();
                 break;
-            case "onAdaptiveStateChanged":
+            case 'onAdaptiveStateChanged':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -131,7 +131,7 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     toggleDrawer(showing, skipAnimation) {
-        this._drawer.option("animationEnabled", !skipAnimation);
+        this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
     }
 }

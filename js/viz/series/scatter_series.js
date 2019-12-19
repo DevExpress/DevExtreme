@@ -1,11 +1,11 @@
-var _extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    _each = require("../../core/utils/iterator").each,
-    rangeCalculator = require("./helpers/range_data_calculator"),
-    typeUtils = require("../../core/utils/type"),
-    vizUtils = require("../core/utils"),
+var _extend = require('../../core/utils/extend').extend,
+    inArray = require('../../core/utils/array').inArray,
+    _each = require('../../core/utils/iterator').each,
+    rangeCalculator = require('./helpers/range_data_calculator'),
+    typeUtils = require('../../core/utils/type'),
+    vizUtils = require('../core/utils'),
 
-    _noop = require("../../core/utils/common").noop,
+    _noop = require('../../core/utils/common').noop,
     _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
     _map = vizUtils.map,
@@ -18,19 +18,19 @@ var _extend = require("../../core/utils/extend").extend,
     DEFAULT_TRACKER_WIDTH = 12,
     DEFAULT_DURATION = 400,
 
-    HIGH_ERROR = "highError",
-    LOW_ERROR = "lowError",
+    HIGH_ERROR = 'highError',
+    LOW_ERROR = 'lowError',
 
-    VARIANCE = "variance",
-    STANDARD_DEVIATION = "stddeviation",
-    STANDARD_ERROR = "stderror",
-    PERCENT = "percent",
-    FIXED = "fixed",
-    UNDEFINED = "undefined",
+    VARIANCE = 'variance',
+    STANDARD_DEVIATION = 'stddeviation',
+    STANDARD_ERROR = 'stderror',
+    PERCENT = 'percent',
+    FIXED = 'fixed',
+    UNDEFINED = 'undefined',
 
-    DISCRETE = "discrete",
-    LOGARITHMIC = "logarithmic",
-    DATETIME = "datetime";
+    DISCRETE = 'discrete',
+    LOGARITHMIC = 'logarithmic',
+    DATETIME = 'datetime';
 
 exports.chart = {};
 exports.polar = {};
@@ -130,8 +130,8 @@ function checkFields(data, fieldsToCheck, skippedFields) {
     let allFieldsIsValid = true;
 
     for(let field in fieldsToCheck) {
-        const isArgument = field === "argument";
-        if((isArgument || field === "size") ? !_isDefined(data[field]) : data[field] === undefined) {
+        const isArgument = field === 'argument';
+        if((isArgument || field === 'size') ? !_isDefined(data[field]) : data[field] === undefined) {
             const selector = fieldsToCheck[field];
             if(!isArgument) {
                 skippedFields[selector] = (skippedFields[selector] || 0) + 1;
@@ -164,16 +164,16 @@ var baseScatterMethods = {
     _createLegendState: function(styleOptions, defaultColor) {
         return {
             fill: styleOptions.color || defaultColor,
-            hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: "right" }) : undefined
+            hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: 'right' }) : undefined
         };
     },
 
     _applyElementsClipRect: function(settings) {
-        settings["clip-path"] = this._paneClipRectID;
+        settings['clip-path'] = this._paneClipRectID;
     },
 
     _applyMarkerClipRect: function(settings) {
-        settings["clip-path"] = this._forceClipping ? this._paneClipRectID : null;
+        settings['clip-path'] = this._forceClipping ? this._paneClipRectID : null;
     },
 
     _createGroup: function(groupName, parent, target, settings) {
@@ -194,14 +194,14 @@ var baseScatterMethods = {
 
     _createGroups: function() {
         var that = this;
-        that._createGroup("_markersGroup", that, that._group);
-        that._createGroup("_labelsGroup", that);
+        that._createGroup('_markersGroup', that, that._group);
+        that._createGroup('_labelsGroup', that);
     },
 
     _setMarkerGroupSettings: function() {
         var that = this,
             settings = that._createPointStyles(that._getMarkerGroupOptions()).normal;
-        settings["class"] = "dxc-markers";
+        settings['class'] = 'dxc-markers';
         settings.opacity = 1; // T172577
         that._applyMarkerClipRect(settings);
         that._markersGroup.attr(settings);
@@ -213,7 +213,7 @@ var baseScatterMethods = {
 
     areErrorBarsVisible: function() {
         var errorBarOptions = this._options.valueErrorBar;
-        return errorBarOptions && this._errorBarsEnabled() && errorBarOptions.displayMode !== "none" && (isErrorBarTypeCorrect(_normalizeEnum(errorBarOptions.type)) || (_isDefined(errorBarOptions.lowValueField) || _isDefined(errorBarOptions.highValueField)));
+        return errorBarOptions && this._errorBarsEnabled() && errorBarOptions.displayMode !== 'none' && (isErrorBarTypeCorrect(_normalizeEnum(errorBarOptions.type)) || (_isDefined(errorBarOptions.lowValueField) || _isDefined(errorBarOptions.highValueField)));
     },
 
     groupPointsByCoords(rotated) {
@@ -238,15 +238,15 @@ var baseScatterMethods = {
 
         if(that.areErrorBarsVisible()) {
             settings = {
-                "class": "dxc-error-bars",
+                'class': 'dxc-error-bars',
                 stroke: errorBarOptions.color,
                 'stroke-width': errorBarOptions.lineWidth,
                 opacity: animationEnabled ? 0.001 : errorBarOptions.opacity || 1,
-                "stroke-linecap": "square",
+                'stroke-linecap': 'square',
                 sharp: true,
-                "clip-path": that._forceClipping ? that._paneClipRectID : that._widePaneClipRectID
+                'clip-path': that._forceClipping ? that._paneClipRectID : that._widePaneClipRectID
             };
-            that._createGroup("_errorBarGroup", that, that._group, settings);
+            that._createGroup('_errorBarGroup', that, that._group, settings);
         }
     },
 
@@ -269,7 +269,7 @@ var baseScatterMethods = {
 
             creatingPointOptions.styles = creatingPointOptions.styles || {};
             creatingPointOptions.styles.normal = {
-                "stroke-width": normalStyle["stroke-width"],
+                'stroke-width': normalStyle['stroke-width'],
                 r: normalStyle.r,
                 opacity: normalStyle.opacity
             };
@@ -292,7 +292,7 @@ var baseScatterMethods = {
         return {
             fill: style.color || defaultColor,
             stroke: border.color || defaultBorderColor,
-            "stroke-width": border.visible ? border.width : 0,
+            'stroke-width': border.visible ? border.width : 0,
             r: sizeValue / 2 + (border.visible && sizeValue !== 0 ? ~~(border.width / 2) || 0 : 0)
         };
     },
@@ -303,7 +303,7 @@ var baseScatterMethods = {
             containerColor = that._options.containerBackgroundColor,
             normalStyle = that._parsePointStyle(pointOptions, mainPointColor, mainPointColor);
 
-        normalStyle.visibility = pointOptions.visible ? "visible" : "hidden";
+        normalStyle.visibility = pointOptions.visible ? 'visible' : 'hidden';
 
         return {
             normal: normalStyle,
@@ -388,7 +388,7 @@ var baseScatterMethods = {
         });
     },
 
-    _defaultAggregator: "avg",
+    _defaultAggregator: 'avg',
 
     _aggregators: {
         avg({ data, intervalStart }, series) {
@@ -467,13 +467,13 @@ var baseScatterMethods = {
     },
 
     getArgumentField: function() {
-        return this._options.argumentField || "arg";
+        return this._options.argumentField || 'arg';
     },
 
     getValueFields: function() {
         var options = this._options,
             errorBarsOptions = options.valueErrorBar,
-            valueFields = [options.valueField || "val"],
+            valueFields = [options.valueField || 'val'],
             lowValueField,
             highValueField;
 
@@ -560,11 +560,11 @@ var baseScatterMethods = {
             styles = pointOptions.styles,
             maxSize = [styles.normal, styles.hover, styles.selection]
                 .reduce(function(max, style) {
-                    return _max(max, style.r * 2 + style["stroke-width"]);
+                    return _max(max, style.r * 2 + style['stroke-width']);
                 }, 0);
 
         options.size = pointOptions.visible ? maxSize : 0;
-        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal["stroke-width"] : 2;
+        options.sizePointNormalState = pointOptions.visible ? styles.normal.r * 2 + styles.normal['stroke-width'] : 2;
 
         return options;
     },
@@ -589,15 +589,15 @@ exports.chart = _extend({}, baseScatterMethods, {
         if(segments.length) {
             trackers = that._trackers = that._trackers || [];
             trackersGroup = that._trackersGroup = (that._trackersGroup || that._renderer.g().attr({
-                fill: "gray",
+                fill: 'gray',
                 opacity: 0.001,
-                stroke: "gray",
-                "class": "dxc-trackers"
-            })).attr({ "clip-path": this._paneClipRectID || null }).append(that._group);
+                stroke: 'gray',
+                'class': 'dxc-trackers'
+            })).attr({ 'clip-path': this._paneClipRectID || null }).append(that._group);
 
             _each(segments, function(i, segment) {
                 if(!trackers[i]) {
-                    trackers[i] = that._drawTrackerElement(segment).data({ "chart-data-series": that }).append(trackersGroup);
+                    trackers[i] = that._drawTrackerElement(segment).data({ 'chart-data-series': that }).append(trackersGroup);
                 } else {
                     that._updateTrackerElement(segment, trackers[i]);
                 }
@@ -621,8 +621,8 @@ exports.chart = _extend({}, baseScatterMethods, {
     getSeriesPairCoord(coord, isArgument) {
         let oppositeCoord = null;
         const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
-        const coordName = !isOpposite ? "vx" : "vy";
-        const oppositeCoordName = !isOpposite ? "vy" : "vx";
+        const coordName = !isOpposite ? 'vx' : 'vy';
+        const oppositeCoordName = !isOpposite ? 'vy' : 'vx';
         const points = this.getVisiblePoints();
 
         for(let i = 0; i < points.length; i++) {
@@ -642,7 +642,7 @@ exports.chart = _extend({}, baseScatterMethods, {
         const that = this;
         const rotated = that.getOptions().rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = isOpposite ? "vy" : "vx";
+        const coordName = isOpposite ? 'vy' : 'vx';
         const points = that.getVisiblePoints();
         const allPoints = that.getPoints();
         const nearestPoints = [];
@@ -686,7 +686,7 @@ exports.chart = _extend({}, baseScatterMethods, {
             point = null,
             minDistance,
             oppositeCoord = this._options.rotated ? x : y,
-            oppositeCoordName = this._options.rotated ? "vx" : "vy";
+            oppositeCoordName = this._options.rotated ? 'vx' : 'vy';
 
         if(this.isVisible() && cat) {
             point = cat[pCoord];

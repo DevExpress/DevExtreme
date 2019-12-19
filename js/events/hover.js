@@ -1,17 +1,17 @@
-var eventsEngine = require("../events/core/events_engine"),
-    dataUtils = require("../core/element_data"),
-    Class = require("../core/class"),
-    devices = require("../core/devices"),
-    registerEvent = require("./core/event_registrator"),
-    eventUtils = require("./utils"),
-    pointerEvents = require("./pointer");
+var eventsEngine = require('../events/core/events_engine'),
+    dataUtils = require('../core/element_data'),
+    Class = require('../core/class'),
+    devices = require('../core/devices'),
+    registerEvent = require('./core/event_registrator'),
+    eventUtils = require('./utils'),
+    pointerEvents = require('./pointer');
 
-var HOVERSTART_NAMESPACE = "dxHoverStart",
-    HOVERSTART = "dxhoverstart",
+var HOVERSTART_NAMESPACE = 'dxHoverStart',
+    HOVERSTART = 'dxhoverstart',
     POINTERENTER_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE),
 
-    HOVEREND_NAMESPACE = "dxHoverEnd",
-    HOVEREND = "dxhoverend",
+    HOVEREND_NAMESPACE = 'dxHoverEnd',
+    HOVEREND = 'dxhoverend',
     POINTERLEAVE_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
 
 
@@ -20,7 +20,7 @@ var Hover = Class.inherit({
     noBubble: true,
 
     ctor: function() {
-        this._handlerArrayKeyPath = this._eventNamespace + "_HandlerStore";
+        this._handlerArrayKeyPath = this._eventNamespace + '_HandlerStore';
     },
 
     setup: function(element) {

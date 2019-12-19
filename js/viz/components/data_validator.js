@@ -1,18 +1,18 @@
-var typeUtils = require("../../core/utils/type"),
+var typeUtils = require('../../core/utils/type'),
 
-    STRING = "string",
-    NUMERIC = "numeric",
-    DATETIME = "datetime",
-    DISCRETE = "discrete",
-    SEMIDISCRETE = "semidiscrete",
-    CONTINUOUS = "continuous",
-    LOGARITHMIC = "logarithmic",
-    VALUE_TYPE = "valueType",
-    ARGUMENT_TYPE = "argumentType",
+    STRING = 'string',
+    NUMERIC = 'numeric',
+    DATETIME = 'datetime',
+    DISCRETE = 'discrete',
+    SEMIDISCRETE = 'semidiscrete',
+    CONTINUOUS = 'continuous',
+    LOGARITHMIC = 'logarithmic',
+    VALUE_TYPE = 'valueType',
+    ARGUMENT_TYPE = 'argumentType',
 
-    extend = require("../../core/utils/extend").extend,
-    axisTypeParser = require("../core/utils").enumParser([STRING, NUMERIC, DATETIME]),
-    _getParser = require("./parse_utils").getParser,
+    extend = require('../../core/utils/extend').extend,
+    axisTypeParser = require('../core/utils').enumParser([STRING, NUMERIC, DATETIME]),
+    _getParser = require('./parse_utils').getParser,
 
     _isDefined = typeUtils.isDefined,
     _isFunction = typeUtils.isFunction,
@@ -104,7 +104,7 @@ function getType(unit, type) {
 
 function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
     if(type === STRING && (axisType === CONTINUOUS || axisType === LOGARITHMIC || axisType === SEMIDISCRETE)) {
-        incidentOccurred("E2002");
+        incidentOccurred('E2002');
     }
     return axisType === LOGARITHMIC ? LOGARITHMIC : (hasCategories || axisType === DISCRETE || type === STRING ? DISCRETE : (axisType === SEMIDISCRETE ? SEMIDISCRETE : CONTINUOUS));
 }
@@ -112,7 +112,7 @@ function correctAxisType(type, axisType, hasCategories, incidentOccurred) {
 // Do we really need this one if all it is only for logarithmic case?
 function validUnit(unit, field, incidentOccurred) {
     if(unit) {
-        incidentOccurred(!_isNumber(unit) && !_isDate(unit) && !_isString(unit) ? "E2003" : "E2004", [field]);
+        incidentOccurred(!_isNumber(unit) && !_isDate(unit) && !_isString(unit) ? 'E2003' : 'E2004', [field]);
     }
 }
 
@@ -208,20 +208,20 @@ function groupMinSlices(originalData, argumentField, valueField, smallValuesGrou
         others = {},
         data;
 
-    if(!mode || mode === "none") { return; }
-    others[argumentField] = String(smallValuesGrouping.groupName || "others");
+    if(!mode || mode === 'none') { return; }
+    others[argumentField] = String(smallValuesGrouping.groupName || 'others');
     others[valueField] = 0;
 
     data = sortValues(originalData.slice(), false, function(a) { return a[valueField]; });
 
-    groupingValues(data, others, valueField, mode === "smallValueThreshold" ? findIndexByThreshold(data, valueField, smallValuesGrouping.threshold) : smallValuesGrouping.topCount);
+    groupingValues(data, others, valueField, mode === 'smallValueThreshold' ? findIndexByThreshold(data, valueField, smallValuesGrouping.threshold) : smallValuesGrouping.topCount);
 
     others[valueField] && originalData.push(others);
 }
 
 function groupPieData(data, groupsData) {
     var firstSeries = groupsData.groups[0] && groupsData.groups[0].series[0],
-        isPie = firstSeries && (firstSeries.type === "pie" || firstSeries.type === "doughnut" || firstSeries.type === "donut");
+        isPie = firstSeries && (firstSeries.type === 'pie' || firstSeries.type === 'doughnut' || firstSeries.type === 'donut');
 
     if(!isPie) { return; }
 
@@ -460,7 +460,7 @@ function verifyData(source, incidentOccurred) {
         }
     }
     if(hasError) {
-        incidentOccurred("E2001");
+        incidentOccurred('E2001');
     }
     return data;
 }

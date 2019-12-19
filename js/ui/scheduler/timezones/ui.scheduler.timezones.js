@@ -1,6 +1,6 @@
-var query = require("../../../data/query"),
-    errors = require("../../../core/errors"),
-    tzData = require("./ui.scheduler.timezones_data");
+var query = require('../../../data/query'),
+    errors = require('../../../core/errors'),
+    tzData = require('./ui.scheduler.timezones_data');
 
 var SchedulerTimezones = {
     _displayNames: tzData.displayNames,
@@ -23,10 +23,10 @@ var SchedulerTimezones = {
         if(id) {
             while(!result) {
                 if(!tzList[i]) {
-                    errors.log("W0009", id);
+                    errors.log('W0009', id);
                     return;
                 }
-                var currentId = tzList[i]["id"];
+                var currentId = tzList[i]['id'];
                 if(currentId === id) {
                     result = tzList[i];
                 }
@@ -61,10 +61,10 @@ var SchedulerTimezones = {
     },
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
         var index = 0;
-        var offsetIndicesList = offsetIndices.split("");
+        var offsetIndicesList = offsetIndices.split('');
 
-        var untilsList = untils.split("|").map(function(until) {
-            if(until === "Infinity") {
+        var untilsList = untils.split('|').map(function(until) {
+            if(until === 'Infinity') {
                 return null;
             }
             return parseInt(until, 36) * 1000;
@@ -103,7 +103,7 @@ var SchedulerTimezones = {
     },
     getTimezoneDisplayNameById: function(id) {
         var tz = this.getTimezoneById(id);
-        return tz ? this.getDisplayNames()[tz.winIndex] : "";
+        return tz ? this.getDisplayNames()[tz.winIndex] : '';
     },
     getSimilarTimezones: function(id) {
         if(!id) {
@@ -117,8 +117,8 @@ var SchedulerTimezones = {
     },
     getTimezonesIdsByWinIndex: function(winIndex) {
         return this.queryableTimezones()
-            .filter(["winIndex", winIndex])
-            .sortBy("title")
+            .filter(['winIndex', winIndex])
+            .sortBy('title')
             .toArray()
             .map(function(item) {
                 return {

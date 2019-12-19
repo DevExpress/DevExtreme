@@ -9,10 +9,10 @@ import treeListCore from './ui.tree_list.core';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import editingModule from '../grid_core/ui.grid_core.editing';
 
-var TREELIST_EXPAND_ICON_CONTAINER_CLASS = "dx-treelist-icon-container",
-    SELECT_CHECKBOX_CLASS = "dx-select-checkbox",
+var TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container',
+    SELECT_CHECKBOX_CLASS = 'dx-select-checkbox',
 
-    DATA_EDIT_DATA_INSERT_TYPE = "insert";
+    DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
 var EditingController = editingModule.controllers.editing.inherit((function() {
     return {
@@ -24,14 +24,14 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             };
             item.children = [];
             item.level = 0;
-            item.parentKey = this.option("rootValue");
+            item.parentKey = this.option('rootValue');
 
             return item;
         },
 
         _needInsertItem: function(editData, changeType, items, item) {
             var parentKey = editData.key.parentKey;
-            if(parentKey !== undefined && parentKey !== this.option("rootValue")) {
+            if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
                 var rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
                 if(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
                     items.splice(rowIndex + 1, 0, item);
@@ -43,7 +43,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 
         _isEditColumnVisible: function() {
             var result = this.callBase.apply(this, arguments),
-                editingOptions = this.option("editing");
+                editingOptions = this.option('editing');
 
             return result || editingOptions && editingOptions.allowAdding;
         },
@@ -52,7 +52,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             var result = this.callBase.apply(this, arguments),
                 row = options.row;
 
-            if(button.name === "add") {
+            if(button.name === 'add') {
                 return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.isNewRow);
             }
 
@@ -63,7 +63,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             var buttons = this.callBase.apply(this, arguments);
 
             if(!options.column.buttons) {
-                buttons.unshift(this._getButtonConfig("add", options));
+                buttons.unshift(this._getButtonConfig('add', options));
             }
 
             return buttons;
@@ -80,7 +80,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 key = store && store.key();
 
                 if(!isDefined(key)) {
-                    throw errors.Error("E1045");
+                    throw errors.Error('E1045');
                 }
             }
 
@@ -88,7 +88,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         addRowByRowIndex: function(rowIndex) {
-            var dataController = this.getController("data"),
+            var dataController = this.getController('data'),
                 row = dataController.getVisibleRows()[rowIndex];
 
             return this.addRow(row ? row.key : undefined);
@@ -97,7 +97,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         addRow: function(key) {
             var that = this,
                 callBase = that.callBase,
-                dataController = that.getController("data");
+                dataController = that.getController('data');
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
                 var d = new Deferred();
@@ -111,14 +111,14 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             }
 
             if(key === undefined) {
-                key = that.option("rootValue");
+                key = that.option('rootValue');
             }
 
             callBase.call(that, key);
         },
 
         _initNewRow: function(options, parentKey) {
-            var dataController = this.getController("data"),
+            var dataController = this.getController('data'),
                 dataSourceAdapter = dataController.dataSource(),
                 parentIdSetter = dataSourceAdapter.createParentIdSetter();
 
@@ -128,16 +128,16 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         allowAdding: function(options) {
-            return this._allowEditAction("allowAdding", options);
+            return this._allowEditAction('allowAdding', options);
         },
 
         _needToCloseEditableCell: function($targetElement) {
-            return this.callBase.apply(this, arguments) || $targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length && this.isEditing();
+            return this.callBase.apply(this, arguments) || $targetElement.closest('.' + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length && this.isEditing();
         },
 
         getButtonLocalizationNames() {
             var names = this.callBase.apply(this);
-            names.add = "dxTreeList-editingAddRowToNode";
+            names.add = 'dxTreeList-editingAddRowToNode';
 
             return names;
         }
@@ -149,9 +149,9 @@ var originalRowClick = editingModule.extenders.views.rowsView._rowClick,
 
 var validateClick = function(e) {
     var $targetElement = $(e.event.target),
-        originalClickHandler = e.event.type === "dxdblclick" ? originalRowDblClick : originalRowClick;
+        originalClickHandler = e.event.type === 'dxdblclick' ? originalRowDblClick : originalRowClick;
 
-    if($targetElement.closest("." + SELECT_CHECKBOX_CLASS).length) {
+    if($targetElement.closest('.' + SELECT_CHECKBOX_CLASS).length) {
         return false;
     }
 
@@ -161,7 +161,7 @@ var validateClick = function(e) {
 var needToCallOriginalClickHandler = function(e, originalClickHandler) {
     var $targetElement = $(e.event.target);
 
-    if(!$targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
+    if(!$targetElement.closest('.' + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
         originalClickHandler.call(this, e);
         return true;
     }
@@ -195,7 +195,7 @@ var RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
     }
 });
 
-treeListCore.registerModule("editing", {
+treeListCore.registerModule('editing', {
     defaultOptions: function() {
         return extend(true, editingModule.defaultOptions(), {
             editing: {
@@ -209,7 +209,7 @@ treeListCore.registerModule("editing", {
                      * @type string
                      * @default "Add"
                      */
-                    addRowToNode: messageLocalization.format("dxTreeList-editingAddRowToNode"),
+                    addRowToNode: messageLocalization.format('dxTreeList-editingAddRowToNode'),
                 }
             }
         });

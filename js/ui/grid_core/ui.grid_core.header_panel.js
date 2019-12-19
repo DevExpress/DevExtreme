@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import Toolbar from "../toolbar";
-import columnsView from "./ui.grid_core.columns_view";
-import { noop } from "../../core/utils/common";
-import { isDefined } from "../../core/utils/type";
-import { triggerResizeEvent } from "../../core/utils/dom";
+import $ from '../../core/renderer';
+import Toolbar from '../toolbar';
+import columnsView from './ui.grid_core.columns_view';
+import { noop } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import { triggerResizeEvent } from '../../core/utils/dom';
 
-require("../drop_down_menu");
-var HEADER_PANEL_CLASS = "header-panel",
-    TOOLBAR_BUTTON_CLASS = "toolbar-button";
+require('../drop_down_menu');
+var HEADER_PANEL_CLASS = 'header-panel',
+    TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
 var HeaderPanel = columnsView.ColumnsView.inherit({
     _getToolbarItems: function() {
@@ -15,11 +15,11 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     },
 
     _getButtonContainer: function() {
-        return $("<div>").addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
+        return $('<div>').addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
     },
 
     _getToolbarButtonClass: function(specificClass) {
-        var secondClass = specificClass ? " " + specificClass : "";
+        var secondClass = specificClass ? ' ' + specificClass : '';
 
         return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;
     },
@@ -39,7 +39,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
                 }
             };
 
-        this.executeAction("onToolbarPreparing", options);
+        this.executeAction('onToolbarPreparing', options);
 
         if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
             toolbarItems = options.toolbarOptions.items;
@@ -52,7 +52,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     _renderCore: function() {
         if(!this._toolbar) {
             this.element().addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
-            this._toolbar = this._createComponent($("<div>").appendTo(this.element()), Toolbar, this._toolbarOptions);
+            this._toolbar = this._createComponent($('<div>').appendTo(this.element()), Toolbar, this._toolbarOptions);
         } else {
             this._toolbar.option(this._toolbarOptions);
         }
@@ -68,7 +68,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
 
     init: function() {
         this.callBase();
-        this.createAction("onToolbarPreparing", { excludeValidators: ["disabled", "readOnly"] });
+        this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
     },
 
     render: function() {
@@ -80,17 +80,17 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         var toolbarInstance = this._toolbar;
 
         if(toolbarInstance) {
-            var items = toolbarInstance.option("items") || [],
+            var items = toolbarInstance.option('items') || [],
                 itemIndex = items.indexOf(items.filter(function(item) {
                     return item.name === name;
                 })[0]);
 
             if(itemIndex >= 0) {
-                var itemOptionPrefix = "items[" + itemIndex + "]";
-                if(toolbarInstance.option(itemOptionPrefix + ".options")) {
-                    toolbarInstance.option(itemOptionPrefix + ".options.disabled", optionValue);
+                var itemOptionPrefix = 'items[' + itemIndex + ']';
+                if(toolbarInstance.option(itemOptionPrefix + '.options')) {
+                    toolbarInstance.option(itemOptionPrefix + '.options.disabled', optionValue);
                 } else {
-                    toolbarInstance.option(itemOptionPrefix + ".disabled", optionValue);
+                    toolbarInstance.option(itemOptionPrefix + '.disabled', optionValue);
                 }
             }
         }
@@ -111,7 +111,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     },
 
     optionChanged: function(args) {
-        if(args.name === "onToolbarPreparing") {
+        if(args.name === 'onToolbarPreparing') {
             this._invalidate();
             args.handled = true;
         }
@@ -147,7 +147,7 @@ module.exports = {
                 _updateDimensionsCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    this.getView("headerPanel").updateToolbarDimensions();
+                    this.getView('headerPanel').updateToolbarDimensions();
                 }
             }
         }

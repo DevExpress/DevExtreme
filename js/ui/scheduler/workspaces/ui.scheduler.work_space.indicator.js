@@ -1,28 +1,28 @@
-import $ from "../../../core/renderer";
-import SchedulerWorkSpace from "./ui.scheduler.work_space";
-import registerComponent from "../../../core/component_registrator";
-import dateUtils from "../../../core/utils/date";
-import { extend } from "../../../core/utils/extend";
-import windowUtils from "../../../core/utils/window";
+import $ from '../../../core/renderer';
+import SchedulerWorkSpace from './ui.scheduler.work_space';
+import registerComponent from '../../../core/component_registrator';
+import dateUtils from '../../../core/utils/date';
+import { extend } from '../../../core/utils/extend';
+import windowUtils from '../../../core/utils/window';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
-    HEADER_CURRENT_TIME_CELL_CLASS = "dx-scheduler-header-panel-current-time-cell";
+const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator',
+    TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell',
+    HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _getToday: function() {
-        var date = this.option("indicatorTime") || new Date();
+        var date = this.option('indicatorTime') || new Date();
 
-        return this.invoke("convertDateByTimezone", date) || date;
+        return this.invoke('convertDateByTimezone', date) || date;
     },
 
     _needRenderDateTimeIndicator: function() {
         var today = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs("day")));
+        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
     },
 
     needRenderDateTimeIndication: function() {
@@ -37,11 +37,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
     _renderDateTimeIndication: function() {
         if(this.needRenderDateTimeIndication()) {
-            if(this.option("shadeUntilCurrentTime")) {
+            if(this.option('shadeUntilCurrentTime')) {
                 this._shader.render(this);
             }
 
-            if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
                 var groupCount = this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.$content(),
                     height = this.getIndicationHeight(),
@@ -64,18 +64,18 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _createIndicator: function($container) {
-        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        var $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         $container.append($indicator);
 
         return $indicator;
     },
 
     _getRtlOffset: function(width) {
-        return this.option("rtlEnabled") ? this._dateTableScrollable.$content().get(0).getBoundingClientRect().width - this.getTimePanelWidth() - width : 0;
+        return this.option('rtlEnabled') ? this._dateTableScrollable.$content().get(0).getBoundingClientRect().width - this.getTimePanelWidth() - width : 0;
     },
 
     _setIndicationUpdateInterval: function() {
-        if(!this.option("showCurrentTimeIndicator") || this.option("indicatorUpdateInterval") === 0) {
+        if(!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
             return;
         }
 
@@ -83,7 +83,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
         this._indicatorInterval = setInterval(function() {
             this._refreshDateTimeIndication();
-        }.bind(this), this.option("indicatorUpdateInterval"));
+        }.bind(this), this.option('indicatorUpdateInterval'));
     },
 
     _clearIndicatorUpdateInterval: function() {
@@ -121,10 +121,10 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             firstViewDate = new Date(this._firstViewDate);
         let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
-            timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs("day"))) * toMs("day"));
+            timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day'));
         }
 
-        return Math.ceil((timeDiff + 1) / toMs("day"));
+        return Math.ceil((timeDiff + 1) / toMs('day'));
     },
 
     getIndicationHeight: function() {
@@ -154,7 +154,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
             var today = this._getToday(),
                 result = false;
             date = new Date(date);
@@ -177,9 +177,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
             var date = this._getDateByIndex(headerIndex),
-                now = this.option("indicatorTime") || new Date();
+                now = this.option('indicatorTime') || new Date();
 
             result = dateUtils.sameDate(date, now);
         }
@@ -192,7 +192,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             cellClass = this.callBase(i);
 
         if(this._isCurrentTime(startViewDate)) {
-            return cellClass + " " + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
+            return cellClass + ' ' + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
         }
 
         return cellClass;
@@ -202,7 +202,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         var cellClass = this.callBase(i);
 
         if(this._isCurrentTimeHeaderCell(i)) {
-            return cellClass + " " + HEADER_CURRENT_TIME_CELL_CLASS;
+            return cellClass + ' ' + HEADER_CURRENT_TIME_CELL_CLASS;
         }
 
         return cellClass;
@@ -221,7 +221,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _cleanDateTimeIndicator: function() {
-        this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
+        this.$element().find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     },
 
     _cleanWorkSpace: function() {
@@ -234,26 +234,26 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _optionChanged: function(args) {
 
         switch(args.name) {
-            case "showCurrentTimeIndicator":
-            case "indicatorTime":
+            case 'showCurrentTimeIndicator':
+            case 'indicatorTime':
                 this._cleanWorkSpace();
                 break;
-            case "indicatorUpdateInterval":
+            case 'indicatorUpdateInterval':
                 this._setIndicationUpdateInterval();
                 break;
-            case "showAllDayPanel":
+            case 'showAllDayPanel':
                 this.callBase(args);
                 this._refreshDateTimeIndication();
                 break;
-            case "allDayExpanded":
+            case 'allDayExpanded':
                 this.callBase(args);
                 this._refreshDateTimeIndication();
                 break;
-            case "crossScrollingEnabled":
+            case 'crossScrollingEnabled':
                 this.callBase(args);
                 this._refreshDateTimeIndication();
                 break;
-            case "shadeUntilCurrentTime":
+            case 'shadeUntilCurrentTime':
                 this._refreshDateTimeIndication();
                 break;
             default:
@@ -265,11 +265,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return extend(this.callBase(), {
             showCurrentTimeIndicator: true,
             indicatorTime: new Date(),
-            indicatorUpdateInterval: 5 * toMs("minute"),
+            indicatorUpdateInterval: 5 * toMs('minute'),
             shadeUntilCurrentTime: true
         });
     }
 });
 
-registerComponent("dxSchedulerWorkSpace", SchedulerWorkSpaceIndicator);
+registerComponent('dxSchedulerWorkSpace', SchedulerWorkSpaceIndicator);
 module.exports = SchedulerWorkSpaceIndicator;

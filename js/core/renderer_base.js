@@ -1,11 +1,11 @@
-var dataUtils = require("./element_data");
-var domAdapter = require("./dom_adapter");
-var windowUtils = require("./utils/window");
+var dataUtils = require('./element_data');
+var domAdapter = require('./dom_adapter');
+var windowUtils = require('./utils/window');
 var window = windowUtils.getWindow();
-var typeUtils = require("./utils/type");
-var styleUtils = require("./utils/style");
-var sizeUtils = require("./utils/size");
-var htmlParser = require("./utils/html_parser");
+var typeUtils = require('./utils/type');
+var styleUtils = require('./utils/style');
+var sizeUtils = require('./utils/size');
+var htmlParser = require('./utils/html_parser');
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
@@ -17,15 +17,15 @@ var initRender = function(selector, context) {
         return this;
     }
 
-    if(typeof selector === "string") {
-        if(selector === "body") {
+    if(typeof selector === 'string') {
+        if(selector === 'body') {
             this[0] = context ? context.body : domAdapter.getBody();
             this.length = 1;
             return this;
         }
 
         context = context || domAdapter.getDocument();
-        if(selector[0] === "<") {
+        if(selector[0] === '<') {
             this[0] = domAdapter.createElement(selector.slice(1, -1), context);
             this.length = 1;
             return this;
@@ -74,14 +74,14 @@ initRender.prototype.hide = function() {
 
 initRender.prototype.toggle = function(value) {
     if(this[0]) {
-        this.toggleClass("dx-state-invisible", !value);
+        this.toggleClass('dx-state-invisible', !value);
     }
 
     return this;
 };
 
 initRender.prototype.attr = function(attrName, value) {
-    if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
+    if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, 'attr', arguments);
     if(!this[0]) {
         if(typeUtils.isObject(attrName) || value !== undefined) {
             return this;
@@ -92,7 +92,7 @@ initRender.prototype.attr = function(attrName, value) {
     if(!this[0].getAttribute) {
         return this.prop(attrName, value);
     }
-    if(typeof attrName === "string" && arguments.length === 1) {
+    if(typeof attrName === 'string' && arguments.length === 1) {
         var result = this[0].getAttribute(attrName);
         return result == null ? undefined : result;
     } else if(typeUtils.isPlainObject(attrName)) {
@@ -112,7 +112,7 @@ initRender.prototype.removeAttr = function(attrName) {
 
 initRender.prototype.prop = function(propName, value) {
     if(!this[0]) return this;
-    if(typeof propName === "string" && arguments.length === 1) {
+    if(typeof propName === 'string' && arguments.length === 1) {
         return this[0][propName];
     } else if(typeUtils.isPlainObject(propName)) {
         for(var key in propName) {
@@ -136,13 +136,13 @@ initRender.prototype.removeClass = function(className) {
 initRender.prototype.hasClass = function(className) {
     if(!this[0] || this[0].className === undefined) return false;
 
-    var classNames = className.split(" ");
+    var classNames = className.split(' ');
     for(var i = 0; i < classNames.length; i++) {
         if(this[0].classList) {
             if(this[0].classList.contains(classNames[i])) return true;
         } else { // IE9
             const className = typeUtils.isString(this[0].className) ? this[0].className : domAdapter.getAttribute(this[0], 'class');
-            if((className || "").split(" ").indexOf(classNames[i]) >= 0) return true;
+            if((className || '').split(' ').indexOf(classNames[i]) >= 0) return true;
         }
     }
     return false;
@@ -150,24 +150,24 @@ initRender.prototype.hasClass = function(className) {
 
 initRender.prototype.toggleClass = function(className, value) {
     if(this.length > 1) {
-        return repeatMethod.call(this, "toggleClass", arguments);
+        return repeatMethod.call(this, 'toggleClass', arguments);
     }
 
     if(!this[0] || !className) return this;
     value = value === undefined ? !this.hasClass(className) : value;
 
-    var classNames = className.split(" ");
+    var classNames = className.split(' ');
     for(var i = 0; i < classNames.length; i++) {
         domAdapter.setClass(this[0], classNames[i], value);
     }
     return this;
 };
 
-["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(methodName) {
-    var partialName = methodName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
+['width', 'height', 'outerWidth', 'outerHeight', 'innerWidth', 'innerHeight'].forEach(function(methodName) {
+    var partialName = methodName.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     var propName = partialName.toLowerCase();
-    var isOuter = methodName.indexOf("outer") === 0;
-    var isInner = methodName.indexOf("inner") === 0;
+    var isOuter = methodName.indexOf('outer') === 0;
+    var isInner = methodName.indexOf('inner') === 0;
 
     initRender.prototype[methodName] = function(value) {
         if(this.length > 1 && arguments.length > 0) {
@@ -181,7 +181,7 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(typeUtils.isWindow(element)) {
-            return isOuter ? element["inner" + partialName] : domAdapter.getDocumentElement()["client" + partialName];
+            return isOuter ? element['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
         }
 
         if(domAdapter.isDocument(element)) {
@@ -189,15 +189,15 @@ initRender.prototype.toggleClass = function(className, value) {
                 body = domAdapter.getBody();
 
             return Math.max(
-                body["scroll" + partialName],
-                body["offset" + partialName],
-                documentElement["scroll" + partialName],
-                documentElement["offset" + partialName],
-                documentElement["client" + partialName]
+                body['scroll' + partialName],
+                body['offset' + partialName],
+                documentElement['scroll' + partialName],
+                documentElement['offset' + partialName],
+                documentElement['client' + partialName]
             );
         }
 
-        if(arguments.length === 0 || typeof value === "boolean") {
+        if(arguments.length === 0 || typeof value === 'boolean') {
             var include = {
                 paddings: isInner || isOuter,
                 borders: isOuter,
@@ -214,7 +214,7 @@ initRender.prototype.toggleClass = function(className, value) {
         if(typeUtils.isNumeric(value)) {
             var elementStyles = window.getComputedStyle(element);
             var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
-            var isBorderBox = elementStyles.boxSizing === "border-box";
+            var isBorderBox = elementStyles.boxSizing === 'border-box';
             value = Number(value);
 
             if(isOuter) {
@@ -225,7 +225,7 @@ initRender.prototype.toggleClass = function(className, value) {
                 value += sizeAdjustment.border + sizeAdjustment.padding;
             }
         }
-        value += typeUtils.isNumeric(value) ? "px" : "";
+        value += typeUtils.isNumeric(value) ? 'px' : '';
 
         domAdapter.setStyle(element, propName, value);
 
@@ -240,7 +240,7 @@ initRender.prototype.html = function(value) {
 
     this.empty();
 
-    if(typeof value === "string" && !htmlParser.isTablePart(value) || typeof value === "number") {
+    if(typeof value === 'string' && !htmlParser.isTablePart(value) || typeof value === 'number') {
         this[0].innerHTML = value;
 
         return this;
@@ -252,7 +252,7 @@ initRender.prototype.html = function(value) {
 var appendElements = function(element, nextSibling) {
     if(!this[0] || !element) return;
 
-    if(typeof element === "string") {
+    if(typeof element === 'string') {
         element = htmlParser.parseHTML(element);
     } else if(element.nodeType) {
         element = [element];
@@ -263,7 +263,7 @@ var appendElements = function(element, nextSibling) {
     for(var i = 0; i < element.length; i++) {
         var item = element[i],
             container = this[0],
-            wrapTR = container.tagName === "TABLE" && item.tagName === "TR";
+            wrapTR = container.tagName === 'TABLE' && item.tagName === 'TR';
 
         if(wrapTR && container.tBodies && container.tBodies.length) {
             container = container.tBodies[0];
@@ -275,7 +275,7 @@ var appendElements = function(element, nextSibling) {
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return;
 
-    if(value === null || (typeof value === "number" && isNaN(value))) {
+    if(value === null || (typeof value === 'number' && isNaN(value))) {
         return;
     }
 
@@ -339,7 +339,7 @@ initRender.prototype.prependTo = function(element) {
 
 initRender.prototype.appendTo = function(element) {
     if(this.length > 1) {
-        return repeatMethod.call(this, "appendTo", arguments);
+        return repeatMethod.call(this, 'appendTo', arguments);
     }
 
     domAdapter.insertElement(renderer(element)[0], this[0]);
@@ -409,7 +409,7 @@ initRender.prototype.replaceWith = function(element) {
 
 initRender.prototype.remove = function() {
     if(this.length > 1) {
-        return repeatMethod.call(this, "remove", arguments);
+        return repeatMethod.call(this, 'remove', arguments);
     }
 
     dataUtils.cleanDataRecursive(this[0], true);
@@ -420,7 +420,7 @@ initRender.prototype.remove = function() {
 
 initRender.prototype.detach = function() {
     if(this.length > 1) {
-        return repeatMethod.call(this, "detach", arguments);
+        return repeatMethod.call(this, 'detach', arguments);
     }
 
     domAdapter.removeElement(this[0]);
@@ -430,11 +430,11 @@ initRender.prototype.detach = function() {
 
 initRender.prototype.empty = function() {
     if(this.length > 1) {
-        return repeatMethod.call(this, "empty", arguments);
+        return repeatMethod.call(this, 'empty', arguments);
     }
 
     dataUtils.cleanDataRecursive(this[0]);
-    domAdapter.setText(this[0], "");
+    domAdapter.setText(this[0], '');
 
     return this;
 };
@@ -449,10 +449,10 @@ initRender.prototype.clone = function() {
 
 initRender.prototype.text = function(value) {
     if(!arguments.length) {
-        var result = "";
+        var result = '';
 
         for(var i = 0; i < this.length; i++) {
-            result += this[i] && this[i].textContent || "";
+            result += this[i] && this[i].textContent || '';
         }
         return result;
     }
@@ -460,17 +460,17 @@ initRender.prototype.text = function(value) {
     var text = typeUtils.isFunction(value) ? value() : value;
 
     dataUtils.cleanDataRecursive(this[0], false);
-    domAdapter.setText(this[0], typeUtils.isDefined(text) ? text : "");
+    domAdapter.setText(this[0], typeUtils.isDefined(text) ? text : '');
 
     return this;
 };
 
 initRender.prototype.val = function(value) {
     if(arguments.length === 1) {
-        return this.prop("value", typeUtils.isDefined(value) ? value : "");
+        return this.prop('value', typeUtils.isDefined(value) ? value : '');
     }
 
-    return this.prop("value");
+    return this.prop('value');
 };
 
 initRender.prototype.contents = function() {
@@ -490,23 +490,23 @@ initRender.prototype.find = function(selector) {
     var nodes = [],
         i;
 
-    if(typeof selector === "string") {
+    if(typeof selector === 'string') {
         selector = selector.trim();
 
         for(i = 0; i < this.length; i++) {
             var element = this[i];
             if(domAdapter.isElementNode(element)) {
-                var elementId = element.getAttribute("id"),
-                    queryId = elementId || "dx-query-children";
+                var elementId = element.getAttribute('id'),
+                    queryId = elementId || 'dx-query-children';
 
                 if(!elementId) {
-                    setAttributeValue(element, "id", queryId);
+                    setAttributeValue(element, 'id', queryId);
                 }
-                queryId = "[id='" + queryId + "'] ";
+                queryId = '[id=\'' + queryId + '\'] ';
 
-                var querySelector = queryId + selector.replace(/([^\\])(,)/g, "$1, " + queryId);
+                var querySelector = queryId + selector.replace(/([^\\])(,)/g, '$1, ' + queryId);
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
-                setAttributeValue(element, "id", elementId);
+                setAttributeValue(element, 'id', elementId);
             } else if(domAdapter.isDocument(element)) {
                 nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
             }
@@ -531,9 +531,9 @@ var isVisible = function(_, element) {
 initRender.prototype.filter = function(selector) {
     if(!selector) return renderer();
 
-    if(selector === ":visible") {
+    if(selector === ':visible') {
         return this.filter(isVisible);
-    } else if(selector === ":hidden") {
+    } else if(selector === ':hidden') {
         return this.filter(function(_, element) {
             return !isVisible(_, element);
         });
@@ -542,7 +542,7 @@ initRender.prototype.filter = function(selector) {
     var result = [];
     for(var i = 0; i < this.length; i++) {
         var item = this[i];
-        if(domAdapter.isElementNode(item) && typeUtils.type(selector) === "string") {
+        if(domAdapter.isElementNode(item) && typeUtils.type(selector) === 'string') {
             domAdapter.elementMatches(item, selector) && result.push(item);
         } else if(domAdapter.isNode(selector) || typeUtils.isWindow(selector)) {
             selector === item && result.push(item);
@@ -753,7 +753,7 @@ initRender.prototype.offsetParent = function() {
 
     var offsetParent = renderer(this[0].offsetParent);
 
-    while(offsetParent[0] && offsetParent.css("position") === "static") {
+    while(offsetParent[0] && offsetParent.css('position') === 'static') {
         offsetParent = renderer(offsetParent[0].offsetParent);
     }
 
@@ -766,10 +766,10 @@ initRender.prototype.position = function() {
     if(!this[0]) return;
 
     var offset;
-    var marginTop = parseFloat(this.css("marginTop"));
-    var marginLeft = parseFloat(this.css("marginLeft"));
+    var marginTop = parseFloat(this.css('marginTop'));
+    var marginLeft = parseFloat(this.css('marginLeft'));
 
-    if(this.css("position") === "fixed") {
+    if(this.css('position') === 'fixed') {
         offset = this[0].getBoundingClientRect();
 
         return {
@@ -786,13 +786,13 @@ initRender.prototype.position = function() {
         left: 0
     };
 
-    if(offsetParent[0].nodeName !== "HTML") {
+    if(offsetParent[0].nodeName !== 'HTML') {
         parentOffset = offsetParent.offset();
     }
 
     parentOffset = {
-        top: parentOffset.top + parseFloat(offsetParent.css("borderTopWidth")),
-        left: parentOffset.left + parseFloat(offsetParent.css("borderLeftWidth"))
+        top: parentOffset.top + parseFloat(offsetParent.css('borderTopWidth')),
+        left: parentOffset.left + parseFloat(offsetParent.css('borderLeftWidth'))
     };
 
     return {
@@ -802,14 +802,14 @@ initRender.prototype.position = function() {
 };
 
 [{
-    name: "scrollLeft",
-    offsetProp: "pageXOffset",
+    name: 'scrollLeft',
+    offsetProp: 'pageXOffset',
     scrollWindow: function(win, value) {
         win.scrollTo(value, win.pageYOffset);
     }
 }, {
-    name: "scrollTop",
-    offsetProp: "pageYOffset",
+    name: 'scrollTop',
+    offsetProp: 'pageYOffset',
     scrollWindow: function(win, value) {
         win.scrollTo(win.pageXOffset, value);
     }
@@ -857,7 +857,7 @@ var rendererWrapper = function() {
     return renderer.apply(this, arguments);
 };
 
-Object.defineProperty(rendererWrapper, "fn", {
+Object.defineProperty(rendererWrapper, 'fn', {
     enumerable: true,
     configurable: true,
 

@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import DiagramPanel from "./diagram.panel";
-import Accordion from "../accordion";
-import Form from "../form";
-import DiagramCommands from "./ui.diagram.commands";
-import { extend } from "../../core/utils/extend";
-import messageLocalization from "../../localization/message";
-import DiagramBar from "./diagram_bar";
-import ScrollView from "../scroll_view";
-import { Deferred } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import DiagramPanel from './diagram.panel';
+import Accordion from '../accordion';
+import Form from '../form';
+import DiagramCommands from './ui.diagram.commands';
+import { extend } from '../../core/utils/extend';
+import messageLocalization from '../../localization/message';
+import DiagramBar from './diagram_bar';
+import ScrollView from '../scroll_view';
+import { Deferred } from '../../core/utils/deferred';
 
-const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
-const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
+const DIAGRAM_RIGHT_PANEL_CLASS = 'dx-diagram-right-panel';
+const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = 'dx-diagram-right-panel-begin-group';
 
 class DiagramRightPanel extends DiagramPanel {
     _init() {
@@ -21,17 +21,17 @@ class DiagramRightPanel extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
-        const $scrollViewWrapper = $("<div>")
+        const $scrollViewWrapper = $('<div>')
             .appendTo(this.$element());
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
-        const $accordion = $("<div>")
+        const $accordion = $('<div>')
             .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
         return [{
-            title: messageLocalization.format("dxDiagram-commandProperties"),
+            title: messageLocalization.format('dxDiagram-commandProperties'),
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }
@@ -39,7 +39,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
-            displayExpr: "title",
+            displayExpr: 'title',
             dataSource: this._getAccordionDataSource(),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element),
             onContentReady: (e) => {
@@ -55,7 +55,7 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
-        var commands = DiagramCommands.getPropertyPanelCommands(this.option("propertyGroups"));
+        var commands = DiagramCommands.getPropertyPanelCommands(this.option('propertyGroups'));
         this._formInstance = this._createComponent($container, Form, {
             items: commands.map(item => {
                 return extend(true, {
@@ -80,12 +80,12 @@ class DiagramRightPanel extends DiagramPanel {
         if(item.getValue && item.setValue) {
             this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
         }
-        if(item.widget === "dxSelectBox") {
+        if(item.widget === 'dxSelectBox') {
             return {
                 editorOptions: {
                     dataSource: item.items,
-                    displayExpr: "title",
-                    valueExpr: "value"
+                    displayExpr: 'title',
+                    valueExpr: 'value'
                 }
             };
         }
@@ -113,7 +113,7 @@ class DiagramRightPanel extends DiagramPanel {
         var editorInstance = this._formInstance.getEditor(key.toString());
         if(editorInstance) {
             editorInstance.option('items', items.map(item => {
-                var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
+                var value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
                 return {
                     'value': value,
                     'title': item.text
@@ -123,7 +123,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._updateLocked = false;
     }
     _setEnabled(enabled) {
-        this._formInstance.option("disabled", !enabled);
+        this._formInstance.option('disabled', !enabled);
     }
     _setItemEnabled(key, enabled) {
         var editorInstance = this._formInstance.getEditor(key.toString());
@@ -131,7 +131,7 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _optionChanged(args) {
         switch(args.name) {
-            case "propertyGroups":
+            case 'propertyGroups':
                 this._invalidate();
                 break;
             default:

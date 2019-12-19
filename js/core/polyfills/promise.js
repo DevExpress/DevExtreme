@@ -1,5 +1,5 @@
-var deferredUtils = require("../../core/utils/deferred"),
-    windowUtils = require("../../core/utils/window"),
+var deferredUtils = require('../../core/utils/deferred'),
+    windowUtils = require('../../core/utils/window'),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
