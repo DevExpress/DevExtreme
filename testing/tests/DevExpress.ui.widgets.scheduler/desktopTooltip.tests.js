@@ -121,21 +121,27 @@ QUnit.test('onShowing and closeOnTargetScroll options passed to createComponent 
 });
 
 QUnit.test('contentTemplate passed to createComponent should work correct', function(assert) {
-    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
-    const dataList = ['data1', 'data2'];
+    const _touch = support.touch;
+    try {
+        support.touch = false;
+        const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+        const dataList = ['data1', 'data2'];
 
-    tooltip.show('target', dataList, this.extraOptions);
+        tooltip.show('target', dataList, this.extraOptions);
 
-    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+        stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
 
-    assert.equal(stubCreateComponent.getCall(1).args[0][0].nodeName, 'DIV');
-    assert.equal(stubCreateComponent.getCall(1).args[1], List);
-    assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 5);
-    assert.equal(stubCreateComponent.getCall(1).args[2].dataSource, dataList);
-    assert.equal(stubCreateComponent.getCall(1).args[2].showScrollbar, 'onHover');
-    assert.ok(stubCreateComponent.getCall(1).args[2].onContentReady);
-    assert.ok(stubCreateComponent.getCall(1).args[2].onItemClick);
-    assert.ok(stubCreateComponent.getCall(1).args[2].itemTemplate);
+        assert.equal(stubCreateComponent.getCall(1).args[0][0].nodeName, 'DIV');
+        assert.equal(stubCreateComponent.getCall(1).args[1], List);
+        assert.equal(Object.keys(stubCreateComponent.getCall(1).args[2]).length, 5);
+        assert.equal(stubCreateComponent.getCall(1).args[2].dataSource, dataList);
+        assert.equal(stubCreateComponent.getCall(1).args[2].showScrollbar, 'onHover');
+        assert.ok(stubCreateComponent.getCall(1).args[2].onContentReady);
+        assert.ok(stubCreateComponent.getCall(1).args[2].onItemClick);
+        assert.ok(stubCreateComponent.getCall(1).args[2].itemTemplate);
+    } finally {
+        support.touch = _touch;
+    }
 });
 
 QUnit.test('Tooltip should update the content after call method "show" several times', function(assert) {
