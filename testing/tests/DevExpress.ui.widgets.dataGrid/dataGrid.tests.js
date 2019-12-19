@@ -18903,9 +18903,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             },
-            paging: {
-                pageSize: 50
-            },
+            paging: { pageSize: 50 },
             editing: {
                 mode: 'cell',
                 allowAdding: true,
