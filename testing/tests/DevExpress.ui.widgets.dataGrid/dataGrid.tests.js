@@ -18254,6 +18254,34 @@ QUnit.test('Pressing symbol keys inside detail grid editor does not change maste
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, 'Master grid focusedCellPosition is not changed');
 });
 
+QUnit.test('Should open master detail by click if row is edited in row mode (T845240)', function(assert) {
+    ['click', 'dblClick'].forEach(startEditAction => {
+        // arrange
+        const masterDetailClass = 'master-detail-test';
+        this.dataGrid.option({
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1 }],
+            startEditAction: startEditAction,
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $(`<div class="${masterDetailClass}">Test</div>`).appendTo(container);
+                }
+            }
+        });
+
+        // assert
+        assert.notOk($(this.dataGrid.$element()).find('.' + masterDetailClass).length, 'Master detail is not displayed');
+
+        // act
+        this.dataGrid.editRow(0);
+        $(this.dataGrid.getCellElement(0, 0)).trigger('dxclick');
+
+        // assert
+        assert.ok($(this.dataGrid.$element()).find('.' + masterDetailClass).length, 'Master detail is displayed');
+    });
+});
+
 QUnit.test('DataGrid should regenerate columns and apply filter after dataSource change if columns autogenerate', function(assert) {
     // arrange
     var dataSource0 = {
