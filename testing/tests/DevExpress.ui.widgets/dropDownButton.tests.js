@@ -92,7 +92,7 @@ QUnit.module('markup', {
         });
 
         let $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, 'Test', 'action button text is empty');
+        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
 
         dropDownButton.option('selectedItemKey', null);
         $actionButtonText = getActionButton(dropDownButton).text();
@@ -109,7 +109,7 @@ QUnit.module('markup', {
         });
 
         let $actionButtonText = getActionButton(dropDownButton).text();
-        assert.strictEqual($actionButtonText, 'Test', 'action button text is empty');
+        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
 
         dropDownButton.option('items', []);
         $actionButtonText = getActionButton(dropDownButton).text();
