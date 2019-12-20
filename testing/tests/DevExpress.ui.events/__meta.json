@@ -1,5 +1,5 @@
 {
-    "constellation": "ui.events",
+    "constellation": "ui",
     "explicit": false,
     "runOnDevices": true
 }

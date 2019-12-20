@@ -17,8 +17,9 @@ jobs:
       run: npm run build
     - name: Run QUnit tests
       run: |
-        $runner = Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru
+        $runner = Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru  -passthru -RedirectStandardOutput "output.txt"
         Start-Sleep -s 3
         & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&include=DevExpress.ui.events'
         $runner.WaitForExit()
+        Get-Content -Path .\output.txt
         exit $runner.ExitCode
