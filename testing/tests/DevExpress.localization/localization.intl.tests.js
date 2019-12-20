@@ -238,46 +238,6 @@ QUnit.module('Intl localization', {
             assert.ok(isNaN(numberLocalization.parse('1111111111111111111111111111111111111')));
         });
 
-        QUnit.module('currency', {
-            beforeEach: function() {
-                locale('en');
-            },
-            afterEach: function() {
-                locale('en');
-            }
-        });
-
-        QUnit.test('getOpenXmlCurrencyFormat', assert => {
-            const nonBreakingSpace = '\xa0',
-                expectedResults = {
-                    RUB: {
-                        de: '#,##0{0} RUB',
-                        en: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ja: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ru: '#,##0{0} ₽'
-                    },
-                    USD: {
-                        de: '#,##0{0} $',
-                        en: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ja: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ru: '#,##0{0} $'
-                    }
-                };
-
-            for(const currency in expectedResults) {
-                for(const localeId in expectedResults[currency]) {
-                    const expected = expectedResults[currency][localeId];
-
-                    locale(localeId);
-                    assert.equal(numberLocalization.getOpenXmlCurrencyFormat(currency), expected.replace(' ', nonBreakingSpace));
-                }
-            }
-        });
-
-        QUnit.test('getOpenXmlCurrencyFormat should return default format when currency is undefined', assert => {
-            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
-        });
-
         const getIntlDateFormatter = format => {
             return date => {
                 return (new Intl.DateTimeFormat(localeId, format))
@@ -622,6 +582,55 @@ QUnit.module('Intl localization', {
             };
             assert.equal(dateLocalization.firstDayOfWeekIndex(), expectedValues[localeId]);
         });
+    });
+
+    QUnit.module('getOpenXmlCurrencyFormat');
+
+    QUnit.test('getOpenXmlCurrencyFormat: check conversion for some cultures (T835933)', assert => {
+        try {
+            locale('de');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B');
+
+            locale('en');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
+            locale('en-ru'); // switch to parent if there are no settings for the passed culture
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '\\C\\N\\¥#,##0{0}_);\\(\\C\\N\\¥#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '\\N\\O\\K#,##0{0}_);\\(\\N\\O\\K#,##0{0}\\)');
+
+            locale('et');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$_);\\(#,##0{0}\xA0$\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$_);\\(#,##0{0}\xA0$\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B_);\\(#,##0{0}\xA0\\R\\U\\B\\)');
+
+            locale('ja');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '$#,##0{0}_);\\($#,##0{0}\\)');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '\\R\\U\\B#,##0{0}_);\\(\\R\\U\\B#,##0{0}\\)');
+
+            locale('ru');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\₽');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('CNY'), '#,##0{0}\xA0\\C\\N\\¥');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('NOK'), '#,##0{0}\xA0\\N\\O\\K');
+
+            locale('sv');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat(undefined), '#,##0{0}\xA0\\U\\S$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('USD'), '#,##0{0}\xA0\\U\\S$');
+            assert.equal(numberLocalization.getOpenXmlCurrencyFormat('RUB'), '#,##0{0}\xA0\\R\\U\\B');
+        } finally {
+            locale('en');
+        }
     });
 
     QUnit.module('defaultCurrency');

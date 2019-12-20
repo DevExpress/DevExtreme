@@ -1,6 +1,6 @@
 /* globals Intl */
 import dxConfig from '../../core/config';
-import { locale } from '../core';
+import { locale, getValueByClosestLocale } from '../core';
 import dxVersion from '../../core/version';
 import { compare as compareVersions } from '../../core/utils/version';
 import openXmlCurrencyFormat from '../open_xml_currency_format';
@@ -154,9 +154,10 @@ module.exports = {
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        const currencyValue = currency || dxConfig().defaultCurrency;
-        const currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
+        const calculatedCurrency = currency || dxConfig().defaultCurrency;
+        const currencySymbol = this._getCurrencySymbolInfo(calculatedCurrency).symbol;
+        const closestAccountingFormat = getValueByClosestLocale(locale => accountingFormats[locale]);
 
-        return openXmlCurrencyFormat(currencySymbol, accountingFormats[locale()]);
+        return openXmlCurrencyFormat(currencySymbol, closestAccountingFormat);
     }
 };
