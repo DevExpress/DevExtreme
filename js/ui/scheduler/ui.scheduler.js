@@ -1681,10 +1681,6 @@ const Scheduler = Widget.inherit({
         this.callBase();
     },
 
-    setDefaultTemplate: function(templateName, template) {
-        this._defaultTemplates[templateName] = template;
-    },
-
     _initAppointmentTemplate: function() {
         const { expr } = this._dataAccessors;
         const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
@@ -1934,7 +1930,7 @@ const Scheduler = Widget.inherit({
             createComponent: that._createComponent.bind(that),
             container: that.$element(),
             getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
-            setDefaultTemplate: that.setDefaultTemplate.bind(that),
+            addDefaultTemplates: that._templateManager.addDefaultTemplates.bind(that._templateManager),
             getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
             getText: that.getText.bind(that),

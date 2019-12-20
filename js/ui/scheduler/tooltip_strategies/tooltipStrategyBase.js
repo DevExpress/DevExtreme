@@ -96,13 +96,13 @@ export class TooltipStrategyBase {
 
     _renderTemplate(target, data, currentData, index, color) {
         const itemListContent = this._createItemListContent(data, currentData, color);
-        this._options.setDefaultTemplate(
-            this._getItemListTemplateName(),
-            new FunctionTemplate(options => {
+        this._options.addDefaultTemplates({
+            [this._getItemListTemplateName()]: new FunctionTemplate(options => {
                 const $container = $(options.container);
                 $container.append(itemListContent);
                 return $container;
-            }));
+            })
+        });
 
         const template = this._options.getAppointmentTemplate(this._getItemListTemplateName() + 'Template');
         return this._createFunctionTemplate(template, data, this._options.getTargetedAppointmentData(data, target), index);
