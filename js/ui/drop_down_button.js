@@ -323,7 +323,7 @@ let DropDownButton = Widget.inherit({
         this._loadSingle(this.option('keyExpr'), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(this.option('selectedItem'));
+                d.resolve(null);
             });
 
         return d.promise();
