@@ -35,9 +35,7 @@ var SCROLL_CONTAINER_CLASS = 'scroll-container',
 
     CELL_HINT_VISIBLE = 'dxCellHintVisible',
 
-    FORM_FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content',
-
-    TABLE_WITH_SCROLLER_BORDER_CLASS = 'dx-table-with-scroller-border';
+    FORM_FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 
 var appendElementTemplate = {
     render: function(options) {
@@ -1106,23 +1104,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     getName: function() { },
 
     setScrollerSpacing: function(width) {
-        let $element = this.element(),
-            rtlEnabled = this.option('rtlEnabled');
+        var that = this,
+            $element = that.element(),
+            rtlEnabled = that.option('rtlEnabled');
 
-        $element && $element.css({
-            paddingLeft: rtlEnabled ? width : '',
-            paddingRight: rtlEnabled ? '' : width
-        });
-
-        this._toggleScrollerBorder(width);
-    },
-
-    _toggleScrollerBorder: function(width) {
-        let $tables = this.getTableElements(),
-            $table = this.option('rtlEnabled') ? $tables.last() : $tables.first(),
-            $element = this.option('rtlEnabled') && this._fixedTableElement ? $table : $table.parent();
-
-        $element.toggleClass(TABLE_WITH_SCROLLER_BORDER_CLASS, width > 0);
+        $element && $element.css(rtlEnabled ? { paddingLeft: width } : { paddingRight: width });
     },
 
     isScrollbarVisible: function(isHorizontal) {
