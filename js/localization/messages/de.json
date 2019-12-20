@@ -453,7 +453,7 @@
         "dxDiagram-shapeContainerDefaultText": "Container",
         "dxDiagram-shapeVerticalContainer": "Vertikaler Container",
         "dxDiagram-shapeHorizontalContainer": "Horizontaler Container",
-        "dxDiagram-shapeCardDefaultText": "Personenname",
+        "dxDiagram-shapeCardDefaultText": "Name der Person",
         "dxDiagram-shapeCardWithImageOnLeft": "Karte mit Bild links",
         "dxDiagram-shapeCardWithImageOnTop": "Karte mit Bild oben",
         "dxDiagram-shapeCardWithImageOnRight": "Karte mit Bild rechts"
