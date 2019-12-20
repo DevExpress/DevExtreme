@@ -42,7 +42,7 @@ matrix:
     - { TARGET: test, CONSTEL: ui.scheduler }
     - { TARGET: test, CONSTEL: viz }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, HEADLESS: false }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, NO_HEADLESS: true }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: viz }
