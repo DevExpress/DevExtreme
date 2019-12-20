@@ -17312,7 +17312,8 @@ QUnit.test('rowTemplate with tbody should works with virtual scrolling', functio
         dataSource: data,
         columns: ['id'],
         scrolling: {
-            mode: 'virtual'
+            mode: 'virtual',
+            useNative: false
         },
         paging: {
             pageSize: 2
