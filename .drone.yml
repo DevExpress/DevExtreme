@@ -38,24 +38,23 @@ matrix:
     - { TARGET: ts }
     - { TARGET: test, CONSTEL: export }
     - { TARGET: test, CONSTEL: misc }
-    - { TARGET: test, CONSTEL: misc, JQUERY: true }
     - { TARGET: test, CONSTEL: ui }
     - { TARGET: test, CONSTEL: ui.editors }
     - { TARGET: test, CONSTEL: ui.grid }
     - { TARGET: test, CONSTEL: ui.scheduler }
     - { TARGET: test, CONSTEL: viz }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, JQUERY: true, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, JQUERY: true, CONSTEL: ui.editors }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, JQUERY: true, CONSTEL: ui.grid }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, JQUERY: true, CONSTEL: ui.scheduler }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, JQUERY: true, CONSTEL: viz }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: export }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: misc }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: ui }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: ui.editors }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: ui.grid }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: ui.scheduler }
-    - { TARGET: test, BROWSER: firefox, CONSTEL: viz }
+    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui }
+    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.editors }
+    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.grid }
+    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.scheduler }
+    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: viz }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: misc }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.editors }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.grid }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui.scheduler }
+    - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: viz }
     - { TARGET: test_functional, COMPONENT: dataGrid }
     - { TARGET: test_functional, COMPONENT: scheduler }
     - { TARGET: test_functional, COMPONENT: editors }
