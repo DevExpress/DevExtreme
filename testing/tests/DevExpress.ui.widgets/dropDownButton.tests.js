@@ -535,6 +535,26 @@ QUnit.module('list integration', {}, () => {
         });
     });
 
+    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1,
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
+    });
+
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1' }, { key: 2, name: 'Item 2' }],
