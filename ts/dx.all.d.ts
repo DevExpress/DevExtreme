@@ -1622,8 +1622,8 @@ declare module DevExpress.fileProvider {
     }
     /** @name ArrayFileProvider.Options */
     export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
-        /** @name ArrayFileProvider.Options.content */
-        content?: string | Function;
+        /** @name ArrayFileProvider.Options.contentExpr */
+        contentExpr?: string | Function;
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
         /** @name ArrayFileProvider.Options.itemsExpr */
@@ -1940,7 +1940,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.filterRow */
         filterRow?: { applyFilter?: 'auto' | 'onClick', applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean };
         /** @name GridBase.Options.filterSyncEnabled */
-        filterSyncEnabled?: boolean | 'auto';
+        filterSyncEnabled?: boolean | 'auto' | 'auto';
         /** @name GridBase.Options.filterValue */
         filterValue?: string | Array<any> | Function;
         /** @name GridBase.Options.focusedColumnIndex */
@@ -1958,7 +1958,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.keyboardNavigation */
         keyboardNavigation?: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row' };
         /** @name GridBase.Options.loadPanel */
-        loadPanel?: { enabled?: boolean | 'auto', height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
+        loadPanel?: { enabled?: boolean | 'auto' | 'auto', height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
         /** @name GridBase.Options.noDataText */
         noDataText?: string;
         /** @name GridBase.Options.onAdaptiveDetailRowPreparing */
@@ -1996,7 +1996,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.onToolbarPreparing */
         onToolbarPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /** @name GridBase.Options.pager */
-        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number> | 'auto' | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' | 'auto' };
         /** @name GridBase.Options.paging */
         paging?: GridBasePaging;
         /** @name GridBase.Options.renderAsync */
@@ -2102,7 +2102,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.scrolling.showScrollbar */
         showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
         /** @name GridBase.Options.scrolling.useNative */
-        useNative?: boolean | 'auto';
+        useNative?: boolean | 'auto' | 'auto';
     }
     /** @name GridBase.Options.selection */
     export interface GridBaseSelection {
@@ -2892,7 +2892,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onRowPrepared */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.remoteOperations */
-        remoteOperations?: boolean | { filtering?: boolean, groupPaging?: boolean, grouping?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } | 'auto';
+        remoteOperations?: boolean | { filtering?: boolean, groupPaging?: boolean, grouping?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } | 'auto' | 'auto';
         /** @name dxDataGrid.Options.rowTemplate */
         rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
         /** @name dxDataGrid.Options.scrolling */
@@ -4717,7 +4717,7 @@ declare module DevExpress.ui {
         /** @name dxPivotGrid.Options.rowHeaderLayout */
         rowHeaderLayout?: 'standard' | 'tree';
         /** @name dxPivotGrid.Options.scrolling */
-        scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' };
+        scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' | 'auto' };
         /** @name dxPivotGrid.Options.showBorders */
         showBorders?: boolean;
         /** @name dxPivotGrid.Options.showColumnGrandTotals */
@@ -5984,7 +5984,7 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.parentIdExpr */
         parentIdExpr?: string | Function;
         /** @name dxTreeList.Options.remoteOperations */
-        remoteOperations?: { filtering?: boolean, grouping?: boolean, sorting?: boolean } | 'auto';
+        remoteOperations?: { filtering?: boolean, grouping?: boolean, sorting?: boolean } | 'auto' | 'auto';
         /** @name dxTreeList.Options.rootValue */
         rootValue?: any;
         /** @name dxTreeList.Options.scrolling */
