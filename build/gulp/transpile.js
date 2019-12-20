@@ -8,7 +8,7 @@ var notify = require('gulp-notify');
 
 var context = require('./context.js');
 
-require("./generator");
+require('./generator');
 
 var SRC = 'js/**/*.js*';
 var TESTS_PATH = 'testing';
@@ -16,7 +16,7 @@ var TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 var VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile', gulp.series('bundler-config', function() {
+gulp.task('transpile', gulp.series('generate-components', 'bundler-config', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
@@ -28,7 +28,7 @@ gulp.task('version-replace', gulp.series('transpile', function() {
         .pipe(gulp.dest('./'));
 }));
 
-gulp.task('transpile-watch', gulp.series('version-replace', "generate-components-watch", function() {
+gulp.task('transpile-watch', gulp.series('version-replace', 'generate-components-watch', function() {
     return watch(SRC)
         .pipe(plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')
