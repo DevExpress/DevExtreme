@@ -10,19 +10,23 @@ env:
     - TARGET=ts
     - TARGET=test CONSTEL=export
     - TARGET=test CONSTEL=misc
-    - TARGET=test CONSTEL=misc JQUERY=true
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=viz
-    - TARGET=test BROWSER=firefox CONSTEL=export
-    - TARGET=test BROWSER=firefox CONSTEL=misc
-    - TARGET=test BROWSER=firefox CONSTEL=ui
-    - TARGET=test BROWSER=firefox CONSTEL=ui.editors
-    - TARGET=test BROWSER=firefox CONSTEL=ui.grid
-    - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
-    - TARGET=test BROWSER=firefox CONSTEL=viz
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.editors NO_HEADLESS=true
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.grid
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=ui.scheduler
+    - TARGET=test MOBILE_UA=ios9 CONSTEL=viz
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=export
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=misc
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.editors
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.grid
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=ui.scheduler
+    - TARGET=test BROWSER=firefox JQUERY=true CONSTEL=viz
     - TARGET=test_functional COMPONENT=dataGrid
     - TARGET=test_functional COMPONENT=scheduler
     - TARGET=test_functional COMPONENT=editors
@@ -45,7 +49,7 @@ script:
 
   - >
     docker run -t
-    -e HEADLESS=true
+    -e NO_HEADLESS=$NO_HEADLESS
     -e TARGET=$TARGET
     -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
