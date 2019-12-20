@@ -472,12 +472,12 @@ let DropDownButton = Widget.inherit({
     _listOptions() {
         const selectedItemKey = this.option('selectedItemKey');
         return {
-            selectionMode: 'single',
+            selectionMode: this.option('useSelectMode') ? 'single' : 'none',
             wrapItemText: this.option('wrapItemText'),
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
             showItemDataTitle: true,
-            selectedItemKeys: selectedItemKey ? [selectedItemKey] : [],
+            selectedItemKeys: selectedItemKey && this.option('useSelectMode') ? [selectedItemKey] : [],
             grouped: this.option('grouped'),
             keyExpr: this.option('keyExpr'),
             noDataText: this.option('noDataText'),
@@ -614,7 +614,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _selectedItemKeyChanged(value) {
-        this._setListOption('selectedItemKeys', value ? [value] : []);
+        this._setListOption('selectedItemKeys', this.option('useSelectMode') && value ? [value] : []);
         const previousItem = this.option('selectedItem');
         this._loadSelectedItem().done((selectedItem) => {
             this._updateActionButton(selectedItem);
