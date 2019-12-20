@@ -12,6 +12,7 @@
 .dx-dropdownbutton-toggle {
     display: flex;
     flex: 0 0 auto;
+    min-width: 0;
 
     &.dx-button {
         .dx-rtl & {
@@ -22,6 +23,10 @@
     .dx-button-content {
         flex: @MATERIAL_TOGGLE_BUTTON_FLEX;
     }
+}
+
+.dx-dropdownbutton-action {
+    min-width: 0;
 }
 
 .dx-dropdownbutton {
