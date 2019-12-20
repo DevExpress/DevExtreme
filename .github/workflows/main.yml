@@ -9,14 +9,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: npm install
+    - name: Set DEVEXTREME_QUNIT_CI
+      run: Set-Variable -Name DEVEXTREME_QUNIT_CI -Value "true"
+    - name: Run npm install
       run: npm install
-    - name: npm build
+    - name: Run npm run build
       run: npm run build
     - name: Start testing runner
       run: Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run'
     - name: Run QUnit tests
       run: |
         & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&constellation=ui.editors'
-        Invoke-Item "C:\Program Files\Internet Explorer\iexplore.exe"
         echo test, and deploy your project.
