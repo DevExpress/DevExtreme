@@ -507,6 +507,34 @@ QUnit.module('list integration', {}, () => {
         });
     });
 
+    [true, false].forEach(wrapItemText => {
+        QUnit.test('toggleButton should render inside of dropDownButton when width option is defined in generic themes (T847072)', function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                items: [{
+                    'id': 1,
+                    'name': 'VeryVeryVeryVeryLongString',
+                    'icon': 'alignright'
+                }],
+                displayExpr: 'name',
+                keyExpr: 'id',
+                stylingMode: 'text',
+                useSelectMode: true,
+                width: 120,
+                splitButton: true,
+                selectedItemKey: 1,
+                wrapItemText
+            }).dxDropDownButton('instance');
+
+            const dropDownButtonElement = dropDownButton.$element().get(0);
+            const toggleButtonElement = getToggleButton(dropDownButton).get(0);
+
+            const dropDownButtonRightPosition = dropDownButtonElement.getBoundingClientRect(0).right;
+            const toggleButtonRightPosition = toggleButtonElement.getBoundingClientRect(0).right;
+
+            assert.strictEqual(dropDownButtonRightPosition, toggleButtonRightPosition, 'toggleButton position is correct');
+        });
+    });
+
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: [{ key: 1, name: 'Item 1' }, { key: 2, name: 'Item 2' }],
