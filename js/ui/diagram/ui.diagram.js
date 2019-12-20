@@ -980,11 +980,11 @@ class Diagram extends Widget {
         texts[ShapeTypes.Or] = messageLocalization.format('dxDiagram-shapeOr');
         texts[ShapeTypes.SummingJunction] = messageLocalization.format('dxDiagram-shapeSummingJunction');
         // Containers
-        texts[ShapeTypes.Container] = messageLocalization.format('dxDiagram-shapeContainer');
+        texts[ShapeTypes.Container] = messageLocalization.format('dxDiagram-shapeContainerDefaultText');
         texts[ShapeTypes.VerticalContainer] = messageLocalization.format('dxDiagram-shapeVerticalContainer');
         texts[ShapeTypes.HorizontalContainer] = messageLocalization.format('dxDiagram-shapeHorizontalContainer');
         // Shapes with images
-        texts[ShapeTypes.Card] = messageLocalization.format('dxDiagram-shapeCard');
+        texts[ShapeTypes.Card] = messageLocalization.format('dxDiagram-shapeCardDefaultText');
         texts[ShapeTypes.CardWithImageOnLeft] = messageLocalization.format('dxDiagram-shapeCardWithImageOnLeft');
         texts[ShapeTypes.CardWithImageOnTop] = messageLocalization.format('dxDiagram-shapeCardWithImageOnTop');
         texts[ShapeTypes.CardWithImageOnRight] = messageLocalization.format('dxDiagram-shapeCardWithImageOnRight');
