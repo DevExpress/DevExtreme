@@ -8,7 +8,8 @@ const notify = require('gulp-notify');
 
 const context = require('./context.js');
 
-const SRC = 'js/**/*.*';
+const GLOB_TS = require('./ts').GLOB_TS;
+const SRC = ['js/**/*.*', '!' + GLOB_TS];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
