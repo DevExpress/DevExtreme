@@ -9,8 +9,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
+    - name: npm install
+      run: npm install
+    - name: npm build
+      run: npm run build
+    - name: Start testing runner
+      run: dotnet ./testing/runner/bin/runner.dll --single-run
     - name: Run a multi-line script
       run: |
         echo Add other actions to build,
