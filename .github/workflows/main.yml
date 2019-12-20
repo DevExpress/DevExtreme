@@ -14,8 +14,9 @@ jobs:
     - name: npm build
       run: npm run build
     - name: Start testing runner
-      run: dotnet ./testing/runner/bin/runner.dll --single-run
-    - name: Run a multi-line script
+      run: Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run'
+    - name: Run QUnit tests
       run: |
-        echo Add other actions to build,
+        & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&constellation=ui.editors'
+        Invoke-Item "C:\Program Files\Internet Explorer\iexplore.exe"
         echo test, and deploy your project.
