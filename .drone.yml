@@ -25,8 +25,6 @@ pipeline:
 
   build:
     image: devexpress/devextreme-build:19_2
-    environment:
-      - HEADLESS=true
     commands:
       - ./drone-cache.sh restore
       - ./docker-ci.sh
@@ -44,8 +42,8 @@ matrix:
     - { TARGET: test, CONSTEL: ui.scheduler }
     - { TARGET: test, CONSTEL: viz }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, NO_HEADLESS: true, CONSTEL: ui.editors }
-    - { TARGET: test, MOBILE_UA: ios9, NO_HEADLESS: true, CONSTEL: ui.grid }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.editors, HEADLESS: false }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.grid }
     - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler }
     - { TARGET: test, MOBILE_UA: ios9, false, CONSTEL: viz }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
