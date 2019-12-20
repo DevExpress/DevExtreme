@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    queueUtils = require("core/utils/queue");
+var $ = require('jquery'),
+    queueUtils = require('core/utils/queue');
 
-QUnit.module("enqueue");
+QUnit.module('enqueue');
 
-QUnit.test("enqueue continues when deferred is rejected", function(assert) {
+QUnit.test('enqueue continues when deferred is rejected', function(assert) {
     var done = assert.async(),
         deferredToReject = $.Deferred(),
         deferredToResolve = $.Deferred();
@@ -24,9 +24,9 @@ QUnit.test("enqueue continues when deferred is rejected", function(assert) {
 });
 
 
-QUnit.module("create");
+QUnit.module('create');
 
-QUnit.test("default (discardPendingTasks = false)", function(assert) {
+QUnit.test('default (discardPendingTasks = false)', function(assert) {
     var done = assert.async(),
         log = [],
         d1 = $.Deferred(),
@@ -46,7 +46,7 @@ QUnit.test("default (discardPendingTasks = false)", function(assert) {
     d2.resolve();
 });
 
-QUnit.test("discardPendingTasks = true", function(assert) {
+QUnit.test('discardPendingTasks = true', function(assert) {
     var done = assert.async(),
         log = [],
         d1 = $.Deferred(),
@@ -70,7 +70,7 @@ QUnit.test("discardPendingTasks = true", function(assert) {
     d2.resolve();
 });
 
-QUnit.test("add task during task execution", function(assert) {
+QUnit.test('add task during task execution', function(assert) {
     var queue = queueUtils.create(true),
         d = $.Deferred(),
         nestedExecuted = false,

@@ -1,13 +1,13 @@
-var DataSource = require("./data/data_source/data_source").DataSource,
-    extend = require("./core/utils/extend").extend,
-    normalizeDataSourceOptions = require("./data/data_source/data_source").normalizeDataSourceOptions;
+var DataSource = require('./data/data_source/data_source').DataSource,
+    extend = require('./core/utils/extend').extend,
+    normalizeDataSourceOptions = require('./data/data_source/data_source').normalizeDataSourceOptions;
 
-var DATA_SOURCE_OPTIONS_METHOD = "_dataSourceOptions",
-    DATA_SOURCE_CHANGED_METHOD = "_dataSourceChangedHandler",
-    DATA_SOURCE_LOAD_ERROR_METHOD = "_dataSourceLoadErrorHandler",
-    DATA_SOURCE_LOADING_CHANGED_METHOD = "_dataSourceLoadingChangedHandler",
-    DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = "_dataSourceFromUrlLoadMode",
-    SPECIFIC_DATA_SOURCE_OPTION = "_getSpecificDataSourceOption";
+var DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions',
+    DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler',
+    DATA_SOURCE_LOAD_ERROR_METHOD = '_dataSourceLoadErrorHandler',
+    DATA_SOURCE_LOADING_CHANGED_METHOD = '_dataSourceLoadingChangedHandler',
+    DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode',
+    SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 
 
 /**
@@ -19,7 +19,7 @@ var DATA_SOURCE_OPTIONS_METHOD = "_dataSourceOptions",
 var DataHelperMixin = {
 
     postCtor: function() {
-        this.on("disposing", function() {
+        this.on('disposing', function() {
             this._disposeDataSource();
         }.bind(this));
     },
@@ -30,7 +30,7 @@ var DataHelperMixin = {
     },
 
     _initDataSource: function() {
-        var dataSourceOptions = (SPECIFIC_DATA_SOURCE_OPTION in this) ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option("dataSource"),
+        var dataSourceOptions = (SPECIFIC_DATA_SOURCE_OPTION in this) ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option('dataSource'),
             widgetDataSourceOptions,
             dataSourceType;
 
@@ -72,7 +72,7 @@ var DataHelperMixin = {
     },
 
     _addReadyWatcher: function() {
-        this._dataSource.on("loadingChanged", (function(isLoading) {
+        this._dataSource.on('loadingChanged', (function(isLoading) {
             this._ready && this._ready(!isLoading);
         }).bind(this));
     },
@@ -82,17 +82,17 @@ var DataHelperMixin = {
         this._proxiedDataSourceChangedHandler = (function(e) {
             this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
         }).bind(this);
-        dataSource.on("changed", this._proxiedDataSourceChangedHandler);
+        dataSource.on('changed', this._proxiedDataSourceChangedHandler);
     },
 
     _addDataSourceLoadErrorHandler: function() {
         this._proxiedDataSourceLoadErrorHandler = this[DATA_SOURCE_LOAD_ERROR_METHOD].bind(this);
-        this._dataSource.on("loadError", this._proxiedDataSourceLoadErrorHandler);
+        this._dataSource.on('loadError', this._proxiedDataSourceLoadErrorHandler);
     },
 
     _addDataSourceLoadingChangedHandler: function() {
         this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD].bind(this);
-        this._dataSource.on("loadingChanged", this._proxiedDataSourceLoadingChangedHandler);
+        this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
     },
 
     _loadDataSource: function() {
@@ -108,7 +108,7 @@ var DataHelperMixin = {
     },
 
     _loadSingle: function(key, value) {
-        key = key === "this" ? this._dataSource.key() || "this" : key;
+        key = key === 'this' ? this._dataSource.key() || 'this' : key;
         return this._dataSource.loadSingle(key, value);
     },
 
@@ -125,9 +125,9 @@ var DataHelperMixin = {
             if(this._isSharedDataSource) {
                 delete this._isSharedDataSource;
 
-                this._proxiedDataSourceChangedHandler && this._dataSource.off("changed", this._proxiedDataSourceChangedHandler);
-                this._proxiedDataSourceLoadErrorHandler && this._dataSource.off("loadError", this._proxiedDataSourceLoadErrorHandler);
-                this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off("loadingChanged", this._proxiedDataSourceLoadingChangedHandler);
+                this._proxiedDataSourceChangedHandler && this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
+                this._proxiedDataSourceLoadErrorHandler && this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
+                this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
             } else {
                 this._dataSource.dispose();
             }

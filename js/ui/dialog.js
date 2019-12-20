@@ -1,33 +1,33 @@
-import $ from "../core/renderer";
-import Component from "../core/component";
-import Action from "../core/action";
-import devices from "../core/devices";
-import config from "../core/config";
+import $ from '../core/renderer';
+import Component from '../core/component';
+import Action from '../core/action';
+import devices from '../core/devices';
+import config from '../core/config';
 
-import { resetActiveElement } from "../core/utils/dom";
-import { Deferred } from "../core/utils/deferred";
-import { isFunction } from "../core/utils/type";
-import { each } from "../core/utils/iterator";
-import { isPlainObject } from "../core/utils/type";
-import { extend } from "../core/utils/extend";
-import { getWindow } from "../core/utils/window";
-import { trigger } from "../events/core/events_engine";
-import { value as getViewport } from "../core/utils/view_port";
+import { resetActiveElement } from '../core/utils/dom';
+import { Deferred } from '../core/utils/deferred';
+import { isFunction } from '../core/utils/type';
+import { each } from '../core/utils/iterator';
+import { isPlainObject } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { getWindow } from '../core/utils/window';
+import { trigger } from '../events/core/events_engine';
+import { value as getViewport } from '../core/utils/view_port';
 
-import messageLocalization from "../localization/message";
-import errors from "./widget/ui.errors";
-import Popup from "./popup";
+import messageLocalization from '../localization/message';
+import errors from './widget/ui.errors';
+import Popup from './popup';
 
-import { ensureDefined } from "../core/utils/common";
+import { ensureDefined } from '../core/utils/common';
 
 const window = getWindow();
 
 const DEFAULT_BUTTON = {
-    text: "OK",
+    text: 'OK',
     onClick: function() { return true; }
 };
 
-const DX_DIALOG_CLASSNAME = "dx-dialog";
+const DX_DIALOG_CLASSNAME = 'dx-dialog';
 const DX_DIALOG_WRAPPER_CLASSNAME = `${DX_DIALOG_CLASSNAME}-wrapper`;
 const DX_DIALOG_ROOT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-root`;
 const DX_DIALOG_CONTENT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-content`;
@@ -35,7 +35,7 @@ const DX_DIALOG_MESSAGE_CLASSNAME = `${DX_DIALOG_CLASSNAME}-message`;
 const DX_DIALOG_BUTTONS_CLASSNAME = `${DX_DIALOG_CLASSNAME}-buttons`;
 const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
-const DX_BUTTON_CLASSNAME = "dx-button";
+const DX_BUTTON_CLASSNAME = 'dx-button';
 
 const FakeDialogComponent = Component.inherit({
     ctor: function(element, options) {
@@ -46,16 +46,16 @@ const FakeDialogComponent = Component.inherit({
 
         return this.callBase().concat([
             {
-                device: { platform: "ios" },
+                device: { platform: 'ios' },
                 options: {
                     width: 276
                 }
             },
             {
-                device: { platform: "android" },
+                device: { platform: 'android' },
                 options: {
-                    lWidth: "60%",
-                    pWidth: "80%"
+                    lWidth: '60%',
+                    pWidth: '80%'
                 }
             }
         ]);
@@ -63,7 +63,7 @@ const FakeDialogComponent = Component.inherit({
 });
 exports.FakeDialogComponent = FakeDialogComponent;
 
-exports.title = "";
+exports.title = '';
 
 /**
  * @name ui.dialog
@@ -92,20 +92,20 @@ exports.custom = function(options) {
 
     options = extend(defaultOptions, options);
 
-    const $element = $("<div>")
+    const $element = $('<div>')
         .addClass(DX_DIALOG_CLASSNAME)
         .appendTo(getViewport());
 
-    const isMessageDefined = "message" in options;
-    const isMessageHtmlDefined = "messageHtml" in options;
+    const isMessageDefined = 'message' in options;
+    const isMessageHtmlDefined = 'messageHtml' in options;
 
     if(isMessageDefined) {
-        errors.log("W1013");
+        errors.log('W1013');
     }
 
     const messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
 
-    const $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
+    const $message = $('<div>').addClass(DX_DIALOG_MESSAGE_CLASSNAME)
         .html(messageHtml);
 
     const popupToolbarItems = [];
@@ -113,7 +113,7 @@ exports.custom = function(options) {
     let toolbarItemsOption = options.toolbarItems;
 
     if(toolbarItemsOption) {
-        errors.log("W0001", "DevExpress.ui.dialog", "toolbarItems", "16.2", "Use the 'buttons' option instead");
+        errors.log('W0001', 'DevExpress.ui.dialog', 'toolbarItems', '16.2', 'Use the \'buttons\' option instead');
     } else {
         toolbarItemsOption = options.buttons;
     }
@@ -124,9 +124,9 @@ exports.custom = function(options) {
         });
 
         popupToolbarItems.push({
-            toolbar: "bottom",
-            location: devices.current().android ? "after" : "center",
-            widget: "dxButton",
+            toolbar: 'bottom',
+            location: devices.current().android ? 'after' : 'center',
+            widget: 'dxButton',
             options: extend({}, this, {
                 onClick: function() {
                     const result = action.execute(...arguments);
@@ -140,11 +140,11 @@ exports.custom = function(options) {
         title: options.title || exports.title,
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
-        height: "auto",
+        height: 'auto',
         width: function() {
             const isPortrait = $(window).height() > $(window).width(),
-                key = (isPortrait ? "p" : "l") + "Width",
-                widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options["width"];
+                key = (isPortrait ? 'p' : 'l') + 'Width',
+                widthOption = Object.prototype.hasOwnProperty.call(options, key) ? options[key] : options['width'];
 
             return isFunction(widthOption) ? widthOption() : widthOption;
         },
@@ -170,7 +170,7 @@ exports.custom = function(options) {
                 .find(`.${DX_BUTTON_CLASSNAME}`)
                 .first();
 
-            trigger($firstButton, "focus");
+            trigger($firstButton, 'focus');
         },
         onHiding: function() {
             deferred.reject();
@@ -178,11 +178,11 @@ exports.custom = function(options) {
         toolbarItems: popupToolbarItems,
         animation: {
             show: {
-                type: "pop",
+                type: 'pop',
                 duration: 400
             },
             hide: {
-                type: "pop",
+                type: 'pop',
                 duration: 400,
                 to: {
                     opacity: 0,
@@ -201,7 +201,7 @@ exports.custom = function(options) {
     popupInstance._wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 
     if(options.position) {
-        popupInstance.option("position", options.position);
+        popupInstance.option('position', options.position);
     }
 
     popupInstance._wrapper()
@@ -260,8 +260,8 @@ exports.confirm = function(messageHtml, title, showTitle) {
             messageHtml,
             showTitle,
             buttons: [
-                { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
-                { text: messageLocalization.format("No"), onClick: function() { return false; } }
+                { text: messageLocalization.format('Yes'), onClick: function() { return true; } },
+                { text: messageLocalization.format('No'), onClick: function() { return false; } }
             ],
             dragEnabled: showTitle
         };

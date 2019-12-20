@@ -1,94 +1,94 @@
-var $ = require("jquery"),
-    commons = require("./vectorMapParts/commons.js"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    projectionModule = require("viz/vector_map/projection.main"),
-    controlBarModule = require("viz/vector_map/control_bar"),
-    gestureHandlerModule = require("viz/vector_map/gesture_handler"),
-    trackerModule = require("viz/vector_map/tracker"),
-    dataExchangerModule = require("viz/vector_map/data_exchanger"),
-    legendModule = require("viz/vector_map/legend"),
-    layoutModule = require("viz/vector_map/layout"),
-    mapLayerModule = require("viz/vector_map/map_layer"),
-    tooltipViewerModule = require("viz/vector_map/tooltip_viewer"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    typeUtils = require("core/utils/type");
+var $ = require('jquery'),
+    commons = require('./vectorMapParts/commons.js'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    projectionModule = require('viz/vector_map/projection.main'),
+    controlBarModule = require('viz/vector_map/control_bar'),
+    gestureHandlerModule = require('viz/vector_map/gesture_handler'),
+    trackerModule = require('viz/vector_map/tracker'),
+    dataExchangerModule = require('viz/vector_map/data_exchanger'),
+    legendModule = require('viz/vector_map/legend'),
+    layoutModule = require('viz/vector_map/layout'),
+    mapLayerModule = require('viz/vector_map/map_layer'),
+    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    typeUtils = require('core/utils/type');
 
-require("viz/vector_map/vector_map");
+require('viz/vector_map/vector_map');
 
 var stubLayersEnvironment = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
-        this.layerCollection.stub("items").returns([]);
+        this.layerCollection.stub('items').returns([]);
     }
 });
 
-QUnit.module("Map - elements", stubLayersEnvironment);
+QUnit.module('Map - elements', stubLayersEnvironment);
 
-QUnit.test("Renderer", function(assert) {
-    var spy = sinon.spy(rendererModule, "Renderer");
+QUnit.test('Renderer', function(assert) {
+    var spy = sinon.spy(rendererModule, 'Renderer');
 
-    this.createMap({ pathModified: "path-modified" });
+    this.createMap({ pathModified: 'path-modified' });
 
-    assert.deepEqual(spy.lastCall.args, [{ cssClass: "dxm dxm-vector-map", container: this.$container[0], pathModified: "path-modified" }], "renderer is created");
-    assert.deepEqual(this.renderer.resize.firstCall.args, [400, 300], "renderer is resized");
+    assert.deepEqual(spy.lastCall.args, [{ cssClass: 'dxm dxm-vector-map', container: this.$container[0], pathModified: 'path-modified' }], 'renderer is created');
+    assert.deepEqual(this.renderer.resize.firstCall.args, [400, 300], 'renderer is resized');
 });
 
-QUnit.test("Root", function(assert) {
+QUnit.test('Root', function(assert) {
     this.createMap();
 
     assert.strictEqual(this.renderer.root.attr.callCount, 2);
-    assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ align: "center", cursor: "default" }], "root settings");
+    assert.deepEqual(this.renderer.root.attr.getCall(0).args, [{ align: 'center', cursor: 'default' }], 'root settings');
 });
 
 QUnit.test('Background', function(assert) {
-    this.themeManager.theme.withArgs("background").returns({ borderWidth: 3, borderColor: "red" });
+    this.themeManager.theme.withArgs('background').returns({ borderWidth: 3, borderColor: 'red' });
 
     this.createMap({
-        background: { borderWidth: 2, color: "green" }
+        background: { borderWidth: 2, color: 'green' }
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ color: "green", borderColor: "red", borderWidth: 2 }], "options");
+    assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ color: 'green', borderColor: 'red', borderWidth: 2 }], 'options');
 });
 
-QUnit.test("Layer collection", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Layer collection', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
 
     this.createMap({
-        layers: [{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]
+        layers: [{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.strictEqual(spy.lastCall.args.length, 1, "parameters count");
+    assert.strictEqual(spy.lastCall.args.length, 1, 'parameters count');
     var arg = spy.lastCall.args[0];
     assert.strictEqual(arg.renderer, this.renderer, 'parameter - renderer');
     assert.strictEqual(arg.projection, this.projection, 'parameter - projection');
     assert.strictEqual(arg.themeManager, this.themeManager, 'parameter - theme manager');
     assert.strictEqual(arg.tracker, this.tracker, 'parameter - tracker');
     assert.strictEqual(arg.dataExchanger, this.dataExchanger, 'parameter - data exchanger');
-    assert.strictEqual(arg.dataKey, "vectormap-data-1", 'parameter - dataKey');
+    assert.strictEqual(arg.dataKey, 'vectormap-data-1', 'parameter - dataKey');
     assert.ok(typeUtils.isFunction(arg.dataReady));
     assert.strictEqual(typeof arg.eventTrigger, 'function', 'parameter - event trigger');
     assert.strictEqual(typeof arg.notifyDirty, 'function', 'parameter - notify dirty');
     assert.strictEqual(typeof arg.notifyReady, 'function', 'parameter - notify ready');
-    assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [[{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]], "data is passed");
-    assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [[{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]], "options are passed");
-    assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
-    assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
+    assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [[{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]], 'data is passed');
+    assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [[{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]], 'options are passed');
+    assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), 'data is passed inside the renderer lock');
+    assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), 'data is passed inside the renderer lock');
     assert.strictEqual(this.projection.setBounds.callCount, 1);
 });
 
-QUnit.test("Set bounds when data ready called. Without bounds in options", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Set bounds when data ready called. Without bounds in options', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [{
-        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
-        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        proxy: { tag: 'p2', getBounds: function() { return [-200, -10, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         getBoundsFromData: true,
@@ -101,17 +101,17 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     assert.deepEqual(this.projection.setBounds.lastCall.args, [[-200, 10, 10, -10]]);
 });
 
-QUnit.test("Projection by data. Default bounds are include common bounds", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Projection by data. Default bounds are include common bounds', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [{
-        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
-        proxy: { tag: "p2", getBounds: function() { return [-60, -10, 10, 10]; } },
+        proxy: { tag: 'p2', getBounds: function() { return [-60, -10, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         layers: layers
@@ -122,17 +122,17 @@ QUnit.test("Projection by data. Default bounds are include common bounds", funct
     assert.strictEqual(this.projection.setEngine.callCount, 1);
 });
 
-QUnit.test("Projection by data. Without projection in options", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Projection by data. Without projection in options', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [{
-        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
-        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        proxy: { tag: 'p2', getBounds: function() { return [-200, -10, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         layers: layers
@@ -145,17 +145,17 @@ QUnit.test("Projection by data. Without projection in options", function(assert)
     assert.deepEqual(this.projection.setEngine.lastCall.args[0].from([-1, -1]), [-200, -10]);
 });
 
-QUnit.test("Projection by data. Projection in options", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Projection by data. Projection in options', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [{
-        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
-        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        proxy: { tag: 'p2', getBounds: function() { return [-200, -10, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         layers: layers,
@@ -166,11 +166,11 @@ QUnit.test("Projection by data. Projection in options", function(assert) {
     assert.strictEqual(this.projection.setEngine.callCount, 1);
 });
 
-QUnit.test("Bounds by data. Empty bbox", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Bounds by data. Empty bbox', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         getBoundsFromData: true,
@@ -183,26 +183,26 @@ QUnit.test("Bounds by data. Empty bbox", function(assert) {
     assert.deepEqual(this.projection.setBounds.lastCall.args[0], [undefined, undefined, undefined, undefined]);
 });
 
-QUnit.test("Set bounds when data ready called. With bounds in options", function(assert) {
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+QUnit.test('Set bounds when data ready called. With bounds in options', function(assert) {
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     var layers = [{
-        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() {
             return { count: function() { return 0; } };
         }
     }, {
-        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        proxy: { tag: 'p2', getBounds: function() { return [-200, -10, 10, 10]; } },
         getData: function() {
             return { count: function() { return 0; } };
         }
     }];
 
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     this.createMap({
         getBoundsFromData: true,
         bounds: [10, 10, 10, 10],
-        layers: [{ tag: "layer-1", dataSource: "data-1" }]
+        layers: [{ tag: 'layer-1', dataSource: 'data-1' }]
     });
 
     spy.lastCall.args[0].dataReady();
@@ -210,50 +210,50 @@ QUnit.test("Set bounds when data ready called. With bounds in options", function
     assert.strictEqual(this.projection.setBounds.callCount, 1);
 });
 
-QUnit.test("Layer collection - object option", function(assert) {
+QUnit.test('Layer collection - object option', function(assert) {
     this.createMap({
-        layers: { tag: "layer", dataSource: "data" }
+        layers: { tag: 'layer', dataSource: 'data' }
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [{ tag: "layer", dataSource: "data" }], "data is passed");
-    assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [{ tag: "layer", dataSource: "data" }], "options are passed");
+    assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [{ tag: 'layer', dataSource: 'data' }], 'data is passed');
+    assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [{ tag: 'layer', dataSource: 'data' }], 'options are passed');
 });
 
 QUnit.test('Projection', function(assert) {
-    var spy = sinon.spy(projectionModule, "Projection");
+    var spy = sinon.spy(projectionModule, 'Projection');
 
     this.createMap({
-        projection: "projection",
-        bounds: "bounds",
-        center: "center",
-        zoomFactor: "zoom-factor",
-        maxZoomFactor: "max-zoom-factor"
+        projection: 'projection',
+        bounds: 'bounds',
+        center: 'center',
+        zoomFactor: 'zoom-factor',
+        maxZoomFactor: 'max-zoom-factor'
     });
 
-    assert.strictEqual(spy.lastCall.args.length, 1, "created");
+    assert.strictEqual(spy.lastCall.args.length, 1, 'created');
 
-    assert.deepEqual(this.projection.setEngine.lastCall.args, ["projection"], "setEngine is called");
-    assert.deepEqual(this.projection.setBounds.lastCall.args, ["bounds"], "setBounds is called");
-    assert.deepEqual(this.projection.setMaxZoom.lastCall.args, ["max-zoom-factor"], "setMaxZoom is called");
-    assert.deepEqual(this.projection.setZoom.lastCall.args, ["zoom-factor"], "setZoom is called");
-    assert.deepEqual(this.projection.setCenter.lastCall.args, ["center"], "setCenter is called");
-    assert.deepEqual(this.projection.setSize.lastCall.args[0], { bottom: 0, height: 300, left: 0, right: 0, top: 0, width: 400 }, "setSize is called");
+    assert.deepEqual(this.projection.setEngine.lastCall.args, ['projection'], 'setEngine is called');
+    assert.deepEqual(this.projection.setBounds.lastCall.args, ['bounds'], 'setBounds is called');
+    assert.deepEqual(this.projection.setMaxZoom.lastCall.args, ['max-zoom-factor'], 'setMaxZoom is called');
+    assert.deepEqual(this.projection.setZoom.lastCall.args, ['zoom-factor'], 'setZoom is called');
+    assert.deepEqual(this.projection.setCenter.lastCall.args, ['center'], 'setCenter is called');
+    assert.deepEqual(this.projection.setSize.lastCall.args[0], { bottom: 0, height: 300, left: 0, right: 0, top: 0, width: 400 }, 'setSize is called');
 
-    assert.strictEqual(typeof spy.lastCall.args[0].centerChanged, "function", "centerChanged");
-    assert.strictEqual(typeof spy.lastCall.args[0].zoomChanged, "function", "zoomChanged");
+    assert.strictEqual(typeof spy.lastCall.args[0].centerChanged, 'function', 'centerChanged');
+    assert.strictEqual(typeof spy.lastCall.args[0].zoomChanged, 'function', 'zoomChanged');
 });
 
-QUnit.test("DataExchanger", function(assert) {
-    var spy = sinon.spy(dataExchangerModule, "DataExchanger");
+QUnit.test('DataExchanger', function(assert) {
+    var spy = sinon.spy(dataExchangerModule, 'DataExchanger');
 
     this.createMap();
 
-    assert.deepEqual(spy.lastCall.args, [], "created");
+    assert.deepEqual(spy.lastCall.args, [], 'created');
 });
 
-QUnit.test("GestureHandler", function(assert) {
-    var spy = sinon.spy(gestureHandlerModule, "GestureHandler");
+QUnit.test('GestureHandler', function(assert) {
+    var spy = sinon.spy(gestureHandlerModule, 'GestureHandler');
 
     this.createMap({
         panningEnabled: 1,
@@ -265,28 +265,28 @@ QUnit.test("GestureHandler", function(assert) {
         projection: this.projection,
         renderer: this.renderer,
         tracker: this.tracker
-    }], "created");
+    }], 'created');
 
-    assert.deepEqual(this.gestureHandler.setInteraction.lastCall.args, [{ centeringEnabled: true, zoomingEnabled: false }], "setInteraction is called");
+    assert.deepEqual(this.gestureHandler.setInteraction.lastCall.args, [{ centeringEnabled: true, zoomingEnabled: false }], 'setInteraction is called');
 });
 
 QUnit.test('LayoutControl', function(assert) {
-    var spy = sinon.spy(layoutModule, "LayoutControl");
+    var spy = sinon.spy(layoutModule, 'LayoutControl');
 
     this.createMap({ layers: {} });
 
-    assert.deepEqual(spy.lastCall.args, [], "created");
-    assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), "suspend");
+    assert.deepEqual(spy.lastCall.args, [], 'created');
+    assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), 'suspend');
 
-    assert.ok(this.layoutControl.resume.getCall(0).calledBefore(this.layerCollection.setOptions.lastCall), "resume");
-    assert.ok(this.layoutControl.resume.getCall(0).calledAfter(this.controlBar.setOptions.getCall(0)), "resume");
+    assert.ok(this.layoutControl.resume.getCall(0).calledBefore(this.layerCollection.setOptions.lastCall), 'resume');
+    assert.ok(this.layoutControl.resume.getCall(0).calledAfter(this.controlBar.setOptions.getCall(0)), 'resume');
 
     assert.equal(this.layoutControl.resume.callCount, 1);
     assert.equal(this.controlBar.setOptions.callCount, 1);
 });
 
-QUnit.test("Tracker", function(assert) {
-    var spy = sinon.spy(trackerModule, "Tracker");
+QUnit.test('Tracker', function(assert) {
+    var spy = sinon.spy(trackerModule, 'Tracker');
 
     this.createMap({
         touchEnabled: 0,
@@ -297,18 +297,18 @@ QUnit.test("Tracker", function(assert) {
     assert.deepEqual(spy.lastCall.args, [{
         root: this.renderer.root,
         projection: this.projection,
-        dataKey: "vectormap-data-1"
-    }], "created");
+        dataKey: 'vectormap-data-1'
+    }], 'created');
 
-    assert.deepEqual(this.tracker.setOptions.lastCall.args, [{ touchEnabled: 0, wheelEnabled: 1 }], "setOptions is called");
+    assert.deepEqual(this.tracker.setOptions.lastCall.args, [{ touchEnabled: 0, wheelEnabled: 1 }], 'setOptions is called');
 });
 
-QUnit.test("Control bar", function(assert) {
-    var spy = sinon.spy(controlBarModule, "ControlBar");
-    this.themeManager.theme.withArgs("controlBar").returns({ theme: "control-bar" });
+QUnit.test('Control bar', function(assert) {
+    var spy = sinon.spy(controlBarModule, 'ControlBar');
+    this.themeManager.theme.withArgs('controlBar').returns({ theme: 'control-bar' });
 
     this.createMap({
-        controlBar: { tag: "option" },
+        controlBar: { tag: 'option' },
         panningEnabled: 0,
         zoomingEnabled: 1
     });
@@ -320,15 +320,15 @@ QUnit.test("Control bar", function(assert) {
         layoutControl: this.layoutControl,
         projection: this.projection,
         tracker: this.tracker,
-        dataKey: "vectormap-data-1"
-    }], "created");
+        dataKey: 'vectormap-data-1'
+    }], 'created');
 
-    assert.deepEqual(this.controlBar.setInteraction.lastCall.args, [{ centeringEnabled: false, zoomingEnabled: true }], "setInteraction is called");
-    assert.deepEqual(this.controlBar.setOptions.lastCall.args, [{ theme: "control-bar", tag: "option" }], "setOptions is called");
+    assert.deepEqual(this.controlBar.setInteraction.lastCall.args, [{ centeringEnabled: false, zoomingEnabled: true }], 'setInteraction is called');
+    assert.deepEqual(this.controlBar.setOptions.lastCall.args, [{ theme: 'control-bar', tag: 'option' }], 'setOptions is called');
 });
 
 QUnit.test('Legends', function(assert) {
-    var spy = sinon.spy(legendModule, "LegendsControl");
+    var spy = sinon.spy(legendModule, 'LegendsControl');
 
     var map = this.createMap({
         legends: {
@@ -346,12 +346,12 @@ QUnit.test('Legends', function(assert) {
         themeManager: this.themeManager,
         notifyDirty: spy.lastCall.args[0].notifyDirty,
         notifyReady: spy.lastCall.args[0].notifyReady
-    }], "created");
-    assert.deepEqual(this.legendsControl.setOptions.lastCall.args, [{ option: "option" }], "setOptions is called");
+    }], 'created');
+    assert.deepEqual(this.legendsControl.setOptions.lastCall.args, [{ option: 'option' }], 'setOptions is called');
 });
 
-QUnit.test("TooltipViewer", function(assert) {
-    var spy = sinon.spy(tooltipViewerModule, "TooltipViewer");
+QUnit.test('TooltipViewer', function(assert) {
+    var spy = sinon.spy(tooltipViewerModule, 'TooltipViewer');
 
     this.createMap();
 
@@ -359,25 +359,25 @@ QUnit.test("TooltipViewer", function(assert) {
         tracker: this.tracker,
         layerCollection: this.layerCollection,
         tooltip: this.tooltip
-    }], "created");
+    }], 'created');
 });
 
-QUnit.test("Disposing", function(assert) {
+QUnit.test('Disposing', function(assert) {
     this.createMap();
 
     this.$container.remove(); // Force disposing
-    assert.ok(this.renderer.dispose.called, "renderer is disposed");
+    assert.ok(this.renderer.dispose.called, 'renderer is disposed');
 
-    assert.deepEqual(this.themeManager.dispose.lastCall.args, [], "theme manager is disposed");
-    assert.deepEqual(this.projection.dispose.lastCall.args, [], "projection is disposed");
-    assert.deepEqual(this.dataExchanger.dispose.lastCall.args, [], "data exchanger is disposed");
-    assert.deepEqual(this.layerCollection.dispose.lastCall.args, [], "layer collection is disposed");
-    assert.deepEqual(this.tracker.dispose.lastCall.args, [], "tracker is disposed");
-    assert.deepEqual(this.controlBar.dispose.lastCall.args, [], "control bar is disposed");
-    assert.deepEqual(this.gestureHandler.dispose.lastCall.args, [], "gesture handler is disposed");
-    assert.deepEqual(this.legendsControl.dispose.lastCall.args, [], "legends control is disposed");
-    assert.deepEqual(this.tooltipViewer.dispose.lastCall.args, [], "tooltip viewer is disposed");
-    assert.deepEqual(this.layoutControl.dispose.lastCall.args, [], "layout control is disposed");
+    assert.deepEqual(this.themeManager.dispose.lastCall.args, [], 'theme manager is disposed');
+    assert.deepEqual(this.projection.dispose.lastCall.args, [], 'projection is disposed');
+    assert.deepEqual(this.dataExchanger.dispose.lastCall.args, [], 'data exchanger is disposed');
+    assert.deepEqual(this.layerCollection.dispose.lastCall.args, [], 'layer collection is disposed');
+    assert.deepEqual(this.tracker.dispose.lastCall.args, [], 'tracker is disposed');
+    assert.deepEqual(this.controlBar.dispose.lastCall.args, [], 'control bar is disposed');
+    assert.deepEqual(this.gestureHandler.dispose.lastCall.args, [], 'gesture handler is disposed');
+    assert.deepEqual(this.legendsControl.dispose.lastCall.args, [], 'legends control is disposed');
+    assert.deepEqual(this.tooltipViewer.dispose.lastCall.args, [], 'tooltip viewer is disposed');
+    assert.deepEqual(this.layoutControl.dispose.lastCall.args, [], 'layout control is disposed');
 });
 
 // T127469
@@ -416,10 +416,10 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
 
 QUnit.module('Map - API', stubLayersEnvironment);
 
-QUnit.test("Applying bounds by data", function(assert) {
+QUnit.test('Applying bounds by data', function(assert) {
     var layers = [{
         proxy: {
-            tag: "p1",
+            tag: 'p1',
             getBounds: function() {
                 return [0, 0, 10, 10];
             }
@@ -429,7 +429,7 @@ QUnit.test("Applying bounds by data", function(assert) {
         }
     }, {
         proxy: {
-            tag: "p2",
+            tag: 'p2',
             getBounds: function() {
                 return [-10, -10, 10, 10];
             }
@@ -440,40 +440,40 @@ QUnit.test("Applying bounds by data", function(assert) {
             };
         }
     }];
-    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     this.createMap({
         getBoundsFromData: true
     });
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
     spy.lastCall.args[0].dataReady();
 
     assert.deepEqual(this.projection.setBounds.lastCall.args[0], [ -10, 10, 10, -10]);
 });
 
-QUnit.test("getLayers", function(assert) {
-    var layers = [{ proxy: { tag: "p1" } }, { proxy: { tag: "p2" } }, { proxy: { tag: "p3" } }];
+QUnit.test('getLayers', function(assert) {
+    var layers = [{ proxy: { tag: 'p1' } }, { proxy: { tag: 'p2' } }, { proxy: { tag: 'p3' } }];
     this.createMap();
-    this.layerCollection.stub("items").returns(layers);
+    this.layerCollection.stub('items').returns(layers);
 
-    assert.deepEqual(this.map.getLayers(), [{ tag: "p1" }, { tag: "p2" }, { tag: "p3" }], "return value");
-    assert.deepEqual(this.layerCollection.items.lastCall.args, [], "layer collection");
+    assert.deepEqual(this.map.getLayers(), [{ tag: 'p1' }, { tag: 'p2' }, { tag: 'p3' }], 'return value');
+    assert.deepEqual(this.layerCollection.items.lastCall.args, [], 'layer collection');
 });
 
-QUnit.test("getLayerByIndex", function(assert) {
+QUnit.test('getLayerByIndex', function(assert) {
     this.createMap();
-    this.layerCollection.stub("byIndex").withArgs(1).returns({ proxy: { tag: "p" } });
+    this.layerCollection.stub('byIndex').withArgs(1).returns({ proxy: { tag: 'p' } });
 
-    assert.deepEqual(this.map.getLayerByIndex(1), { tag: "p" });
+    assert.deepEqual(this.map.getLayerByIndex(1), { tag: 'p' });
     assert.strictEqual(this.map.getLayerByIndex(2), null);
 });
 
-QUnit.test("getLayerByName", function(assert) {
+QUnit.test('getLayerByName', function(assert) {
     this.createMap();
-    this.layerCollection.stub("byName").withArgs("n").returns({ proxy: { tag: "p" } });
+    this.layerCollection.stub('byName').withArgs('n').returns({ proxy: { tag: 'p' } });
 
-    assert.deepEqual(this.map.getLayerByName("n"), { tag: "p" });
-    assert.strictEqual(this.map.getLayerByIndex("m"), null);
+    assert.deepEqual(this.map.getLayerByName('n'), { tag: 'p' });
+    assert.strictEqual(this.map.getLayerByIndex('m'), null);
 });
 
 QUnit.test('clearSelection', function(assert) {
@@ -482,7 +482,7 @@ QUnit.test('clearSelection', function(assert) {
         spy2 = sinon.spy(),
         spy3 = sinon.spy();
     this.createMap();
-    this.layerCollection.stub("items").returns([{ clearSelection: spy1 }, { clearSelection: spy2 }, { clearSelection: spy3 }]);
+    this.layerCollection.stub('items').returns([{ clearSelection: spy1 }, { clearSelection: spy2 }, { clearSelection: spy3 }]);
 
     this.map.clearSelection(arg);
 
@@ -572,10 +572,10 @@ QUnit.test('convertToXY', function(assert) {
     assert.deepEqual(this.projection.toScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
 });
 
-QUnit.module("Map - option changing", $.extend({}, stubLayersEnvironment, {
+QUnit.module('Map - option changing', $.extend({}, stubLayersEnvironment, {
     createMap: function() {
         commons.environment.createMap.apply(this, arguments);
-        this.invalidate = sinon.spy(this.map, "_invalidate");
+        this.invalidate = sinon.spy(this.map, '_invalidate');
     }
 }));
 
@@ -597,14 +597,14 @@ QUnit.test('"zoomFactor" option', function(assert) {
     assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
-QUnit.test("'layers' option", function(assert) {
-    var layers = { tag: "layers" };
+QUnit.test('\'layers\' option', function(assert) {
+    var layers = { tag: 'layers' };
     this.createMap();
 
-    this.map.option("layers", layers);
+    this.map.option('layers', layers);
 
-    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [layers], "layer collection");
-    assert.strictEqual(this.invalidate.lastCall, null, "not invalidated");
+    assert.deepEqual(this.layerCollection.setOptions.lastCall.args, [layers], 'layer collection');
+    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
 QUnit.test('"maxZoomFactor" option', function(assert) {
@@ -616,13 +616,13 @@ QUnit.test('"maxZoomFactor" option', function(assert) {
     assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
-QUnit.test("'projection' option", function(assert) {
+QUnit.test('\'projection\' option', function(assert) {
     this.createMap();
 
-    this.map.option("projection", "projection");
+    this.map.option('projection', 'projection');
 
-    assert.deepEqual(this.projection.setEngine.lastCall.args, ["projection"], "projection is called");
-    assert.strictEqual(this.invalidate.lastCall, null, "not invalidated");
+    assert.deepEqual(this.projection.setEngine.lastCall.args, ['projection'], 'projection is called');
+    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
 QUnit.test('"bounds" option', function(assert) {
@@ -640,8 +640,8 @@ QUnit.test('"background" option', function(assert) {
 
     this.map.option('background', { color: 'green', borderColor: 'blue' });
 
-    assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ borderWidth: 10, borderColor: 'blue', color: 'green' }], "options");
-    assert.strictEqual(this.invalidate.lastCall, null, "not invalidated");
+    assert.deepEqual(this.layerCollection.setBackgroundOptions.lastCall.args, [{ borderWidth: 10, borderColor: 'blue', color: 'green' }], 'options');
+    assert.strictEqual(this.invalidate.lastCall, null, 'not invalidated');
 });
 
 QUnit.test('"legends" options', function(assert) {
@@ -707,178 +707,178 @@ QUnit.test('"zoomingEnabled" option', function(assert) {
     assert.deepEqual(this.themeManager.theme.withArgs('zoomingEnabled').callCount, 2, 'theme');
 });
 
-QUnit.module("Map - preventing option merging", stubLayersEnvironment);
+QUnit.module('Map - preventing option merging', stubLayersEnvironment);
 
-QUnit.test("'layers' array option", function(assert) {
+QUnit.test('\'layers\' array option', function(assert) {
     this.createMap({
         layers: [{
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }, {
-            a: "layer-2",
-            dataSource: { tag: "data-2" }
+            a: 'layer-2',
+            dataSource: { tag: 'data-2' }
         }]
     });
 
-    this.map.option("layers", [{
-        b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    this.map.option('layers', [{
+        b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 
-    assert.deepEqual(this.map.option("layers"), [{
-        b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    assert.deepEqual(this.map.option('layers'), [{
+        b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 });
 
-QUnit.test("'layers' object option", function(assert) {
+QUnit.test('\'layers\' object option', function(assert) {
     this.createMap({
         layers: {
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }
     });
 
-    this.map.option("layers", {
-        b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    this.map.option('layers', {
+        b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     });
 
-    assert.deepEqual(this.map.option("layers"), {
-        a: "layer-1", b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    assert.deepEqual(this.map.option('layers'), {
+        a: 'layer-1', b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     });
 });
 
-QUnit.test("'layers[i]' option", function(assert) {
+QUnit.test('\'layers[i]\' option', function(assert) {
     this.createMap({
         layers: [{
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }, {
-            a: "layer-2",
-            dataSource: { tag: "data-2" }
+            a: 'layer-2',
+            dataSource: { tag: 'data-2' }
         }]
     });
 
-    this.map.option("layers[1]", {
-        b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    this.map.option('layers[1]', {
+        b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     });
 
-    assert.deepEqual(this.map.option("layers"), [{
-        a: "layer-1",
-        dataSource: { tag: "data-1" }
+    assert.deepEqual(this.map.option('layers'), [{
+        a: 'layer-1',
+        dataSource: { tag: 'data-1' }
     }, {
-        a: "layer-2", b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+        a: 'layer-2', b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 });
 
-QUnit.test("'layers[i].dataSource' option", function(assert) {
+QUnit.test('\'layers[i].dataSource\' option', function(assert) {
     this.createMap({
         layers: [{
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }, {
-            a: "layer-2",
-            dataSource: { tag: "data-2" }
+            a: 'layer-2',
+            dataSource: { tag: 'data-2' }
         }]
     });
 
-    this.map.option("layers[1].dataSource", { tag2: "data-2-2" });
+    this.map.option('layers[1].dataSource', { tag2: 'data-2-2' });
 
-    assert.deepEqual(this.map.option("layers"), [{
-        a: "layer-1",
-        dataSource: { tag: "data-1" }
+    assert.deepEqual(this.map.option('layers'), [{
+        a: 'layer-1',
+        dataSource: { tag: 'data-1' }
     }, {
-        a: "layer-2",
-        dataSource: { tag2: "data-2-2" }
+        a: 'layer-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 });
 
-QUnit.test("'layers.dataSource' option", function(assert) {
+QUnit.test('\'layers.dataSource\' option', function(assert) {
     this.createMap({
         layers: {
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }
     });
 
-    this.map.option("layers.dataSource", { tag2: "data-1-1" });
+    this.map.option('layers.dataSource', { tag2: 'data-1-1' });
 
-    assert.deepEqual(this.map.option("layers"), {
-        a: "layer-1",
-        dataSource: { tag2: "data-1-1" }
+    assert.deepEqual(this.map.option('layers'), {
+        a: 'layer-1',
+        dataSource: { tag2: 'data-1-1' }
     });
 });
 
-QUnit.test("'layer' array option - same instance", function(assert) {
+QUnit.test('\'layer\' array option - same instance', function(assert) {
     this.createMap({
         layers: [{
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }, {
-            a: "layer-2",
-            dataSource: { tag: "data-2" }
+            a: 'layer-2',
+            dataSource: { tag: 'data-2' }
         }]
     });
 
-    var layers = this.map.option("layers");
-    layers[1].b = "layer-2-2";
-    layers[1].dataSource = { tag2: "data-2-2" };
-    this.map.option("layers", layers);
+    var layers = this.map.option('layers');
+    layers[1].b = 'layer-2-2';
+    layers[1].dataSource = { tag2: 'data-2-2' };
+    this.map.option('layers', layers);
 
-    assert.deepEqual(this.map.option("layers"), [{
-        a: "layer-1",
-        dataSource: { tag: "data-1" }
+    assert.deepEqual(this.map.option('layers'), [{
+        a: 'layer-1',
+        dataSource: { tag: 'data-1' }
     }, {
-        a: "layer-2", b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+        a: 'layer-2', b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 });
 
-QUnit.test("'layers' object option - same instance", function(assert) {
+QUnit.test('\'layers\' object option - same instance', function(assert) {
     this.createMap({
         layers: {
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }
     });
 
-    var layers = this.map.option("layers");
-    layers.b = "layer-2-2";
-    layers.dataSource = { tag2: "data-2-2" };
-    this.map.option("layers", layers);
+    var layers = this.map.option('layers');
+    layers.b = 'layer-2-2';
+    layers.dataSource = { tag2: 'data-2-2' };
+    this.map.option('layers', layers);
 
-    assert.deepEqual(this.map.option("layers"), {
-        a: "layer-1", b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+    assert.deepEqual(this.map.option('layers'), {
+        a: 'layer-1', b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     });
 });
 
-QUnit.test("'layers[i]' option - same instance", function(assert) {
+QUnit.test('\'layers[i]\' option - same instance', function(assert) {
     this.createMap({
         layers: [{
-            a: "layer-1",
-            dataSource: { tag: "data-1" }
+            a: 'layer-1',
+            dataSource: { tag: 'data-1' }
         }, {
-            a: "layer-2",
-            dataSource: { tag: "data-2" }
+            a: 'layer-2',
+            dataSource: { tag: 'data-2' }
         }]
     });
 
-    var layer = this.map.option("layers[1]");
-    layer.b = "layer-2-2";
-    layer.dataSource = { tag2: "data-2-2" };
-    this.map.option("layers[1]", layer);
+    var layer = this.map.option('layers[1]');
+    layer.b = 'layer-2-2';
+    layer.dataSource = { tag2: 'data-2-2' };
+    this.map.option('layers[1]', layer);
 
-    assert.deepEqual(this.map.option("layers"), [{
-        a: "layer-1",
-        dataSource: { tag: "data-1" }
+    assert.deepEqual(this.map.option('layers'), [{
+        a: 'layer-1',
+        dataSource: { tag: 'data-1' }
     }, {
-        a: "layer-2", b: "layer-2-2",
-        dataSource: { tag2: "data-2-2" }
+        a: 'layer-2', b: 'layer-2-2',
+        dataSource: { tag2: 'data-2-2' }
     }]);
 });
 
@@ -919,7 +919,7 @@ QUnit.module('drawn', stubLayersEnvironment);
 
 QUnit.test('call drawn after layer collection ready', function(assert) {
     var onDrawn = sinon.spy(),
-        spy = sinon.spy(mapLayerModule, "MapLayerCollection"),
+        spy = sinon.spy(mapLayerModule, 'MapLayerCollection'),
         notifyDirty,
         notifyReady;
     this.createMap({

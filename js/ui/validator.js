@@ -1,19 +1,19 @@
-import dataUtils from "../core/element_data";
-import Callbacks from "../core/utils/callbacks";
-import errors from "./widget/ui.errors";
-import DOMComponent from "../core/dom_component";
-import { extend } from "../core/utils/extend";
-import { map } from "../core/utils/iterator";
-import ValidationEngine from "./validation_engine";
-import DefaultAdapter from "./validation/default_adapter";
-import registerComponent from "../core/component_registrator";
-import { Deferred } from "../core/utils/deferred";
-import Guid from "../core/guid";
+import dataUtils from '../core/element_data';
+import Callbacks from '../core/utils/callbacks';
+import errors from './widget/ui.errors';
+import DOMComponent from '../core/dom_component';
+import { extend } from '../core/utils/extend';
+import { map } from '../core/utils/iterator';
+import ValidationEngine from './validation_engine';
+import DefaultAdapter from './validation/default_adapter';
+import registerComponent from '../core/component_registrator';
+import { Deferred } from '../core/utils/deferred';
+import Guid from '../core/guid';
 
-const VALIDATOR_CLASS = "dx-validator",
-    VALIDATION_STATUS_VALID = "valid",
-    VALIDATION_STATUS_INVALID = "invalid",
-    VALIDATION_STATUS_PENDING = "pending";
+const VALIDATOR_CLASS = 'dx-validator',
+    VALIDATION_STATUS_VALID = 'valid',
+    VALIDATION_STATUS_INVALID = 'invalid',
+    VALIDATION_STATUS_PENDING = 'pending';
 
 /**
 * @name dxValidator
@@ -126,7 +126,7 @@ const Validator = DOMComponent.inherit({
     _initGroupRegistration() {
         const group = this._findGroup();
         if(!this._groupWasInit) {
-            this.on("disposing", function(args) {
+            this.on('disposing', function(args) {
                 ValidationEngine.removeRegisteredValidator(args.component._validationGroup, args.component);
             });
         }
@@ -147,8 +147,8 @@ const Validator = DOMComponent.inherit({
 
     _initAdapter() {
         const element = this.$element()[0],
-            dxStandardEditor = dataUtils.data(element, "dx-validation-target");
-        let adapter = this.option("adapter");
+            dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
@@ -158,10 +158,10 @@ const Validator = DOMComponent.inherit({
                     }
                     this.validate(args);
                 });
-                this.option("adapter", adapter);
+                this.option('adapter', adapter);
                 return;
             }
-            throw errors.Error("E0120");
+            throw errors.Error('E0120');
         }
         const callbacks = adapter.validationRequestsCallbacks;
         if(callbacks) {
@@ -170,7 +170,7 @@ const Validator = DOMComponent.inherit({
                     this.validate(args);
                 });
             } else {
-                errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
+                errors.log('W0014', 'validationRequestsCallbacks', 'jQuery.Callbacks', '17.2', 'Use the array instead');
                 callbacks.add((args) => {
                     this.validate(args);
                 });
@@ -191,18 +191,18 @@ const Validator = DOMComponent.inherit({
 
     _optionChanged(args) {
         switch(args.name) {
-            case "validationGroup":
+            case 'validationGroup':
                 this._initGroupRegistration();
                 return;
-            case "validationRules":
+            case 'validationRules':
                 this._resetValidationRules();
-                this.option("isValid") !== undefined && this.validate();
+                this.option('isValid') !== undefined && this.validate();
                 return;
-            case "adapter":
+            case 'adapter':
                 this._initAdapter();
                 break;
-            case "isValid":
-            case "validationStatus":
+            case 'isValid':
+            case 'validationStatus':
                 this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
                 break;
             default:
@@ -212,7 +212,7 @@ const Validator = DOMComponent.inherit({
 
     _getValidationRules() {
         if(!this._validationRules) {
-            this._validationRules = map(this.option("validationRules"), (rule, index) => {
+            this._validationRules = map(this.option('validationRules'), (rule, index) => {
                 return extend({}, rule, {
                     validator: this,
                     index: index
@@ -239,8 +239,8 @@ const Validator = DOMComponent.inherit({
     * @return dxValidatorResult
     */
     validate(args) {
-        const adapter = this.option("adapter"),
-            name = this.option("name"),
+        const adapter = this.option('adapter'),
+            name = this.option('name'),
             bypass = adapter.bypass && adapter.bypass(),
             value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
@@ -273,7 +273,7 @@ const Validator = DOMComponent.inherit({
     * @publicName reset()
     */
     reset() {
-        const adapter = this.option("adapter"),
+        const adapter = this.option('adapter'),
             result = {
                 id: null,
                 isValid: true,
@@ -297,7 +297,7 @@ const Validator = DOMComponent.inherit({
             this._validationInfo.result = extend({}, result, { complete });
         } else {
             for(let prop in result) {
-                if(prop !== "id" && prop !== "complete") {
+                if(prop !== 'id' && prop !== 'complete') {
                     this._validationInfo.result[prop] = result[prop];
                 }
             }
@@ -305,7 +305,7 @@ const Validator = DOMComponent.inherit({
     },
 
     _applyValidationResult(result, adapter) {
-        const validatedAction = this._createActionByOption("onValidated");
+        const validatedAction = this._createActionByOption('onValidated');
         result.validator = this;
         this._updateValidationResult(result);
         adapter.applyValidationResults && adapter.applyValidationResults(this._validationInfo.result);
@@ -317,7 +317,7 @@ const Validator = DOMComponent.inherit({
                 this._validationInfo.deferred = new Deferred();
                 this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this._eventsStrategy.fireEvent("validating", [this._validationInfo.result]);
+            this._eventsStrategy.fireEvent('validating', [this._validationInfo.result]);
             return;
         }
         if(this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
@@ -333,11 +333,14 @@ const Validator = DOMComponent.inherit({
     * @publicName focus()
     */
     focus() {
-        const adapter = this.option("adapter");
+        const adapter = this.option('adapter');
         adapter && adapter.focus && adapter.focus();
-    }
+    },
+    _useTemplates: function() {
+        return false;
+    },
 });
 
-registerComponent("dxValidator", Validator);
+registerComponent('dxValidator', Validator);
 
 module.exports = Validator;

@@ -1,11 +1,11 @@
-import $ from "jquery";
-import vizMocks from "../../helpers/vizMocks.js";
-import tickGeneratorModule from "viz/axes/tick_generator";
-import translator2DModule from "viz/translators/translator2d";
-import rangeModule from "viz/translators/range";
-import { Axis } from "viz/axes/base_axis";
-import { MockSeries } from "../../helpers/chartMocks.js";
-import { patchFontOptions } from "viz/core/utils";
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import tickGeneratorModule from 'viz/axes/tick_generator';
+import translator2DModule from 'viz/translators/translator2d';
+import rangeModule from 'viz/translators/range';
+import { Axis } from 'viz/axes/base_axis';
+import { MockSeries } from '../../helpers/chartMocks.js';
+import { patchFontOptions } from 'viz/core/utils';
 
 var Translator2D = translator2DModule.Translator2D;
 
@@ -17,7 +17,7 @@ function getStub2DTranslatorWithSettings() {
 
 function spyRendererText(markersBBoxes) {
     var that = this,
-        baseCreateText = this.renderer.stub("text");
+        baseCreateText = this.renderer.stub('text');
     return sinon.spy(function() {
         var element = baseCreateText.apply(this, arguments),
             text = arguments[0];
@@ -42,11 +42,11 @@ var environment = {
                     breaks: breaks
                 };
             });
-            this.tickGenerator = sinon.stub(tickGeneratorModule, "tickGenerator", function() {
+            this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
                 return that.tickGeneratorSpy;
             });
 
-            sinon.stub(translator2DModule, "Translator2D", function() {
+            sinon.stub(translator2DModule, 'Translator2D', function() {
                 return that.translator;
             });
 
@@ -68,34 +68,34 @@ var environment = {
                     textLeftIndent: 7,
                     textTopIndent: 11,
                     topIndent: 10,
-                    color: "black",
+                    color: 'black',
                     width: 1,
                     opacity: 1,
                     label: {
                         font: {
                             size: 12,
-                            color: "green"
+                            color: 'green'
                         }
                     }
                 },
                 width: 1,
-                color: "red",
+                color: 'red',
                 opacity: 1,
                 visible: false,
-                tick: { color: "red", width: 1, visible: false, opacity: 1 },
+                tick: { color: 'red', width: 1, visible: false, opacity: 1 },
                 label: {
                     visible: true,
-                    alignment: "center",
-                    font: { size: 12, color: "black" },
+                    alignment: 'center',
+                    font: { size: 12, color: 'black' },
                     opacity: 1,
                     style: {},
-                    overlappingBehavior: "ignore"
+                    overlappingBehavior: 'ignore'
                 },
                 axisDivisionFactor: 30,
                 stripStyle: {},
                 constantLineStyle: {},
-                position: "left",
-                discreteAxisDivisionMode: "crossLabels"
+                position: 'left',
+                discreteAxisDivisionMode: 'crossLabels'
             };
 
             this.incidentOccurred = sinon.spy();
@@ -106,8 +106,8 @@ var environment = {
                 axesContainerGroup: this.renderer.g(),
                 gridGroup: this.renderer.g(),
                 renderer: this.renderer,
-                axisType: "xyAxes",
-                drawingType: "linear",
+                axisType: 'xyAxes',
+                drawingType: 'linear',
                 incidentOccurred: this.incidentOccurred,
                 eventTrigger: () => { }
             };
@@ -154,10 +154,10 @@ var environment = {
             this.translator = getStub2DTranslatorWithSettings();
             this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
 
-            this.options.position = "bottom";
+            this.options.position = 'bottom';
             this.options.label = {
-                overlappingBehavior: "ignore",
-                alignment: "center",
+                overlappingBehavior: 'ignore',
+                alignment: 'center',
                 indentFromAxis: 10
             };
             this.options.isHorizontal = false;
@@ -180,10 +180,10 @@ var environment = {
             this.translator.translate.withArgs(9).returns(50);
             this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
 
-            this.options.drawingType = "linear";
-            this.options.axisType = "xyAxes";
+            this.options.drawingType = 'linear';
+            this.options.axisType = 'xyAxes';
 
-            this.options.label.displayMode = "standard";
+            this.options.label.displayMode = 'standard';
 
             this.arrayRemovedElements = [];
             this.bBoxCount = 0;
@@ -196,38 +196,38 @@ var environment = {
         }
     });
 
-QUnit.module("Translators in axis", {
+QUnit.module('Translators in axis', {
     beforeEach: function() {
         environment.beforeEach.call(this);
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, "Translator2D");
+        sinon.spy(translator2DModule, 'Translator2D');
     },
     afterEach: function() {
         environment.afterEach.call(this);
     }
 });
 
-QUnit.test("Linear axis creates 2d translator on creation", function(assert) {
+QUnit.test('Linear axis creates 2d translator on creation', function(assert) {
     var axis = new Axis({
         renderer: this.renderer,
-        axisType: "xyAxes",
-        drawingType: "linear"
+        axisType: 'xyAxes',
+        drawingType: 'linear'
     });
 
     assert.ok(axis.getTranslator() instanceof translator2DModule.Translator2D);
-    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
+    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, 'created single translator instance');
 });
 
-QUnit.test("Linear axis updates translator on option changed", function(assert) {
+QUnit.test('Linear axis updates translator on option changed', function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
-            axisType: "xyAxes",
-            drawingType: "linear",
+            axisType: 'xyAxes',
+            drawingType: 'linear',
             isArgumentAxis: true
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    sinon.spy(translator, "update");
+    sinon.spy(translator, 'update');
 
     axis.updateOptions({
         isHorizontal: true,
@@ -235,21 +235,21 @@ QUnit.test("Linear axis updates translator on option changed", function(assert) 
         label: {}
     });
 
-    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
+    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, 'created single translator instance');
     assert.equal(translator.update.lastCall.args[2].isHorizontal, true);
     assert.equal(translator.update.lastCall.args[2].interval, 0.2);
     assert.strictEqual(translator.update.lastCall.args[2].shiftZeroValue, false); // T756714
 });
 
-QUnit.test("Linear axis updates translator, valueMarginsEnabled = true - stick false", function(assert) {
+QUnit.test('Linear axis updates translator, valueMarginsEnabled = true - stick false', function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
-            axisType: "xyAxes",
-            drawingType: "linear"
+            axisType: 'xyAxes',
+            drawingType: 'linear'
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    sinon.spy(translator, "update");
+    sinon.spy(translator, 'update');
 
     axis.updateOptions({
         label: {},
@@ -259,15 +259,15 @@ QUnit.test("Linear axis updates translator, valueMarginsEnabled = true - stick f
     assert.strictEqual(translator.update.lastCall.args[2].stick, false);
 });
 
-QUnit.test("Linear axis with scale breaks", function(assert) {
+QUnit.test('Linear axis with scale breaks', function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
-            axisType: "xyAxes",
-            drawingType: "linear"
+            axisType: 'xyAxes',
+            drawingType: 'linear'
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    sinon.spy(translator, "update");
+    sinon.spy(translator, 'update');
 
     axis.updateOptions({
         isHorizontal: true,
@@ -277,19 +277,19 @@ QUnit.test("Linear axis with scale breaks", function(assert) {
         label: {}
     });
 
-    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
+    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, 'created single translator instance');
     assert.equal(translator.update.lastCall.args[2].breaksSize, 20);
 });
 
-QUnit.test("Linear axis with scale breaks, breaksSize is not set", function(assert) {
+QUnit.test('Linear axis with scale breaks, breaksSize is not set', function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
-            axisType: "xyAxes",
-            drawingType: "linear"
+            axisType: 'xyAxes',
+            drawingType: 'linear'
         }),
         translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    sinon.spy(translator, "update");
+    sinon.spy(translator, 'update');
 
     axis.updateOptions({
         isHorizontal: true,
@@ -298,15 +298,15 @@ QUnit.test("Linear axis with scale breaks, breaksSize is not set", function(asse
         label: {}
     });
 
-    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
+    assert.strictEqual(translator2DModule.Translator2D.callCount, 1, 'created single translator instance');
     assert.equal(translator.update.lastCall.args[2].breaksSize, 0);
 });
 
-QUnit.test("Update canvas", function(assert) {
+QUnit.test('Update canvas', function(assert) {
     var axis = new Axis({
         renderer: this.renderer,
-        axisType: "xyAxes",
-        drawingType: "linear"
+        axisType: 'xyAxes',
+        drawingType: 'linear'
     });
 
     axis.updateOptions({
@@ -323,14 +323,14 @@ QUnit.test("Update canvas", function(assert) {
     assert.deepEqual(axis.getTranslator().getCanvasVisibleArea(), {
         min: 10,
         max: 920
-    }, "canvas is set");
+    }, 'canvas is set');
 });
 
-QUnit.test("set business range and canvas", function(assert) {
+QUnit.test('set business range and canvas', function(assert) {
     var axis = new Axis({
         renderer: this.renderer,
-        axisType: "xyAxes",
-        drawingType: "linear"
+        axisType: 'xyAxes',
+        drawingType: 'linear'
     });
 
     axis.updateOptions({
@@ -353,11 +353,11 @@ QUnit.test("set business range and canvas", function(assert) {
     assert.strictEqual(axis.getTranslator().translate(100), 920);
 });
 
-QUnit.test("set business range with constant lines", function(assert) {
+QUnit.test('set business range with constant lines', function(assert) {
     var axis = new Axis({
         renderer: this.renderer,
-        axisType: "xyAxes",
-        drawingType: "linear"
+        axisType: 'xyAxes',
+        drawingType: 'linear'
     });
 
     axis.updateOptions({
@@ -383,22 +383,22 @@ QUnit.test("set business range with constant lines", function(assert) {
     assert.strictEqual(axis.getTranslator().translate(110), 950);
 });
 
-QUnit.module("Ticks skipping. Normal axis", $.extend({}, environment, {
+QUnit.module('Ticks skipping. Normal axis', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         var that = this;
 
-        that.generatedTicks = ["c1", "c2", "c3", "c4"];
+        that.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
 
         this.translator = getStub2DTranslatorWithSettings();
-        this.options.drawingType = "linear";
-        this.options.axisType = "xyAxes";
-        this.options.categories = ["c1", "c2", "c3", "c4"];
+        this.options.drawingType = 'linear';
+        this.options.axisType = 'xyAxes';
+        this.options.categories = ['c1', 'c2', 'c3', 'c4'];
         this.options.label.visible = false;
     }
 }));
 
-QUnit.module("Semidiscrete axis", $.extend({}, environment, {
+QUnit.module('Semidiscrete axis', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         var that = this;
@@ -406,16 +406,16 @@ QUnit.module("Semidiscrete axis", $.extend({}, environment, {
         that.generatedTicks = [1, 2, 3, 4];
 
         this.translator = getStub2DTranslatorWithSettings();
-        this.options.drawingType = "linear";
-        this.options.axisType = "xyAxes";
+        this.options.drawingType = 'linear';
+        this.options.axisType = 'xyAxes';
         this.options.label.visible = false;
     }
 }));
 
-QUnit.test("translates coordinates with tickInterval info", function(assert) {
+QUnit.test('translates coordinates with tickInterval info', function(assert) {
     this.createDrawnAxis({
         endOnTick: false,
-        type: "semidiscrete", tickInterval: 5
+        type: 'semidiscrete', tickInterval: 5
     });
 
     assert.equal(this.translator.translate.callCount, 8); // 4 for labels
@@ -425,181 +425,181 @@ QUnit.test("translates coordinates with tickInterval info", function(assert) {
     assert.deepEqual(this.translator.translate.getCall(6).args, [4, 0, 5]);
 });
 
-QUnit.module("checkAlignmentConstantLineLabels", environment2DTranslator);
+QUnit.module('checkAlignmentConstantLineLabels', environment2DTranslator);
 
-QUnit.test("Horizontal Axis, outside", function(assert) {
+QUnit.test('Horizontal Axis, outside', function(assert) {
     this.options.isHorizontal = true;
     var axis = this.createSimpleAxis(),
-        labelOptions = { position: "outside", verticalAlignment: "center", horizontalAlignment: "left" };
+        labelOptions = { position: 'outside', verticalAlignment: 'center', horizontalAlignment: 'left' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
-    assert.equal(labelOptions.verticalAlignment, "top");
-    assert.equal(labelOptions.horizontalAlignment, "center");
+    assert.equal(labelOptions.verticalAlignment, 'top');
+    assert.equal(labelOptions.horizontalAlignment, 'center');
 });
 
-QUnit.test("Horizontal Axis, inside", function(assert) {
+QUnit.test('Horizontal Axis, inside', function(assert) {
     this.options.isHorizontal = true;
     var axis = this.createSimpleAxis(),
-        labelOptions = { position: "inside", verticalAlignment: "center", horizontalAlignment: "center" };
+        labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
-    assert.equal(labelOptions.verticalAlignment, "center");
-    assert.equal(labelOptions.horizontalAlignment, "right");
+    assert.equal(labelOptions.verticalAlignment, 'center');
+    assert.equal(labelOptions.horizontalAlignment, 'right');
 });
 
-QUnit.test("Vertical Axis, outside", function(assert) {
+QUnit.test('Vertical Axis, outside', function(assert) {
     var axis = this.createSimpleAxis(),
-        labelOptions = { position: "outside", verticalAlignment: "left", horizontalAlignment: "center" };
+        labelOptions = { position: 'outside', verticalAlignment: 'left', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
-    assert.equal(labelOptions.verticalAlignment, "center");
-    assert.equal(labelOptions.horizontalAlignment, "right");
+    assert.equal(labelOptions.verticalAlignment, 'center');
+    assert.equal(labelOptions.horizontalAlignment, 'right');
 });
 
-QUnit.test("Vertical Axis, inside", function(assert) {
+QUnit.test('Vertical Axis, inside', function(assert) {
     var axis = this.createSimpleAxis(),
-        labelOptions = { position: "inside", verticalAlignment: "center", horizontalAlignment: "center" };
+        labelOptions = { position: 'inside', verticalAlignment: 'center', horizontalAlignment: 'center' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
-    assert.equal(labelOptions.verticalAlignment, "top");
-    assert.equal(labelOptions.horizontalAlignment, "center");
+    assert.equal(labelOptions.verticalAlignment, 'top');
+    assert.equal(labelOptions.horizontalAlignment, 'center');
 });
 
-QUnit.test("verticalAlignment and horizontalAlignment specify wrong", function(assert) {
+QUnit.test('verticalAlignment and horizontalAlignment specify wrong', function(assert) {
     this.options.isHorizontal = true;
     var axis = this.createSimpleAxis(),
-        labelOptions = { position: "outside", verticalAlignment: "ToP", horizontalAlignment: "CeNtEr" };
+        labelOptions = { position: 'outside', verticalAlignment: 'ToP', horizontalAlignment: 'CeNtEr' };
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
-    assert.equal(labelOptions.verticalAlignment, "top");
-    assert.equal(labelOptions.horizontalAlignment, "center");
+    assert.equal(labelOptions.verticalAlignment, 'top');
+    assert.equal(labelOptions.horizontalAlignment, 'center');
 });
 
-QUnit.module("Formats for constant line labels", environment2DTranslator);
+QUnit.module('Formats for constant line labels', environment2DTranslator);
 
-QUnit.test("Currency format", function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: "currency" } });
+QUnit.test('Currency format', function(assert) {
+    var axis = this.createSimpleAxis({ label: { format: 'currency' } });
     axis.updateCanvas(this.canvas);
 
     axis._drawConstantLineLabels(30, {}, 0, this.renderer.g());
 
-    assert.equal(this.renderer.text.getCall(0).args[0], "$30");
+    assert.equal(this.renderer.text.getCall(0).args[0], '$30');
 });
 
-QUnit.test("Percent format", function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: "percent" } });
+QUnit.test('Percent format', function(assert) {
+    var axis = this.createSimpleAxis({ label: { format: 'percent' } });
     axis.updateCanvas(this.canvas);
     axis._drawConstantLineLabels(30, {}, 0, this.renderer.g());
 
-    assert.equal(this.renderer.text.getCall(0).args[0], "3,000%");
+    assert.equal(this.renderer.text.getCall(0).args[0], '3,000%');
 });
 
-QUnit.test("Date format with month", function(assert) {
-    var axis = this.createSimpleAxis({ label: { format: "month" } });
+QUnit.test('Date format with month', function(assert) {
+    var axis = this.createSimpleAxis({ label: { format: 'month' } });
     axis.updateCanvas(this.canvas);
     axis._drawConstantLineLabels(new Date(2010, 0, 10), {}, 0, this.renderer.g());
 
-    assert.equal(this.renderer.text.getCall(0).args[0], "January");
+    assert.equal(this.renderer.text.getCall(0).args[0], 'January');
 });
 
-QUnit.module("Axis shift", environment2DTranslator);
+QUnit.module('Axis shift', environment2DTranslator);
 
-QUnit.test("axis without shifting", function(assert) {
+QUnit.test('axis without shifting', function(assert) {
     this.options.isHorizontal = false;
-    var axis = this.createDrawnAxis({ position: "left" });
+    var axis = this.createDrawnAxis({ position: 'left' });
     assert.deepEqual(axis.getAxisShift(), 0);
 });
 
-QUnit.test("axis shifted", function(assert) {
+QUnit.test('axis shifted', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: "bottom" });
+    var axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getAxisShift(), 40);
 });
 
-QUnit.test("axis shifted (multipleAxesSpacing)", function(assert) {
+QUnit.test('axis shifted (multipleAxesSpacing)', function(assert) {
     this.options.isHorizontal = true;
     this.options.multipleAxesSpacing = 10;
-    var axis = this.createDrawnAxis({ position: "top" });
+    var axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getAxisShift(), 20);
 });
 
-QUnit.module("API methods", environment2DTranslator);
+QUnit.module('API methods', environment2DTranslator);
 
-QUnit.test("axis position is top", function(assert) {
+QUnit.test('axis position is top', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: "top" });
+    var axis = this.createDrawnAxis({ position: 'top' });
     assert.deepEqual(axis.getLabelsPosition(), 0);
 });
 
-QUnit.test("axis position is bottom", function(assert) {
+QUnit.test('axis position is bottom', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: "bottom" });
+    var axis = this.createDrawnAxis({ position: 'bottom' });
 
     assert.deepEqual(axis.getLabelsPosition(), 610);
 });
 
-QUnit.test("axis position is left", function(assert) {
-    var axis = this.createDrawnAxis({ position: "left" });
+QUnit.test('axis position is left', function(assert) {
+    var axis = this.createDrawnAxis({ position: 'left' });
 
     assert.deepEqual(axis.getLabelsPosition(), 10);
 });
 
-QUnit.test("axis position is right", function(assert) {
-    var axis = this.createDrawnAxis({ position: "right" });
+QUnit.test('axis position is right', function(assert) {
+    var axis = this.createDrawnAxis({ position: 'right' });
 
     assert.deepEqual(axis.getLabelsPosition(), 920);
 });
 
-QUnit.test("getLabelsPosition. shifted axis in top position", function(assert) {
+QUnit.test('getLabelsPosition. shifted axis in top position', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: "top" });
+    var axis = this.createDrawnAxis({ position: 'top' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), -10);
 });
 
-QUnit.test("getLabelsPosition. shifted axis in bottom position", function(assert) {
+QUnit.test('getLabelsPosition. shifted axis in bottom position', function(assert) {
     this.options.isHorizontal = true;
-    var axis = this.createDrawnAxis({ position: "bottom" });
+    var axis = this.createDrawnAxis({ position: 'bottom' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 650);
 });
 
-QUnit.test("getLabelsPosition. shifted axis in left position", function(assert) {
-    var axis = this.createDrawnAxis({ position: "left" });
+QUnit.test('getLabelsPosition. shifted axis in left position', function(assert) {
+    var axis = this.createDrawnAxis({ position: 'left' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 0);
 });
 
-QUnit.test("getLabelsPosition. shifted axis in right position", function(assert) {
-    var axis = this.createDrawnAxis({ position: "right" });
+QUnit.test('getLabelsPosition. shifted axis in right position', function(assert) {
+    var axis = this.createDrawnAxis({ position: 'right' });
 
     axis.shift({ top: 10, bottom: 40, left: 10, right: 20 });
     assert.deepEqual(axis.getLabelsPosition(), 940);
 });
 
-QUnit.test("getLabelsPosition. With outer constantline label", function(assert) {
+QUnit.test('getLabelsPosition. With outer constantline label', function(assert) {
     this.translator.translate.withArgs(10).returns(50);
     var axis = this.createDrawnAxis({
-        position: "left",
+        position: 'left',
         constantLines: [{
             value: 10,
             paddingLeftRight: 5,
             label: {
-                horizontalAlignment: "left",
-                text: "Text",
-                position: "outside",
+                horizontalAlignment: 'left',
+                text: 'Text',
+                position: 'outside',
                 visible: true,
             }
         }]
@@ -608,7 +608,7 @@ QUnit.test("getLabelsPosition. With outer constantline label", function(assert) 
     assert.deepEqual(axis.getLabelsPosition(), -15);
 });
 
-QUnit.test("measure labels, one label", function(assert) {
+QUnit.test('measure labels, one label', function(assert) {
     var that = this;
     that.translator.translate.withArgs(0).returns({ y: 4 });
     var axis = this.createSimpleAxis({ label: { visible: true } });
@@ -618,10 +618,10 @@ QUnit.test("measure labels, one label", function(assert) {
         height: 10,
         x: 1,
         y: 2
-    }, "measurements");
+    }, 'measurements');
 });
 
-QUnit.test("measuring label, label visibility is false", function(assert) {
+QUnit.test('measuring label, label visibility is false', function(assert) {
     var axis = this.createSimpleAxis({ label: { visible: false } });
 
     assert.deepEqual(axis.measureLabels(this.canvas), {
@@ -629,41 +629,41 @@ QUnit.test("measuring label, label visibility is false", function(assert) {
         height: 0,
         x: 0,
         y: 0
-    }, "measurements");
+    }, 'measurements');
 });
 
-QUnit.test("measuring label, label creation", function(assert) {
+QUnit.test('measuring label, label creation', function(assert) {
     this.generatedTicks = [0, 1, 2];
-    var axis = this.createSimpleAxis({ label: { visible: true, customizeText: function() { return this.value + " sec"; }, font: { color: "color" } } }),
+    var axis = this.createSimpleAxis({ label: { visible: true, customizeText: function() { return this.value + ' sec'; }, font: { color: 'color' } } }),
         text;
 
     axis.measureLabels(this.canvas);
 
     text = this.renderer.text;
 
-    assert.equal(text.args[0][0], "0 sec", "text of the label");
-    assert.equal(text.args[0][1], 0, "x coord");
-    assert.equal(text.args[0][2], 0, "y coord");
+    assert.equal(text.args[0][0], '0 sec', 'text of the label');
+    assert.equal(text.args[0][1], 0, 'x coord');
+    assert.equal(text.args[0][2], 0, 'y coord');
 
-    assert.deepEqual(text.returnValues[0].css.args[0][0], { fill: "color" }, "font style");
-    assert.deepEqual(text.returnValues[0].attr.args[0][0], { opacity: undefined, align: "center", "class": undefined }, "text options");
+    assert.deepEqual(text.returnValues[0].css.args[0][0], { fill: 'color' }, 'font style');
+    assert.deepEqual(text.returnValues[0].attr.args[0][0], { opacity: undefined, align: 'center', 'class': undefined }, 'text options');
 
-    assert.equal(text.returnValues[0].append.args[0][0], this.renderer.root, "group");
-    assert.ok(text.returnValues[0].remove.called, "text is removed");
+    assert.equal(text.returnValues[0].append.args[0][0], this.renderer.root, 'group');
+    assert.ok(text.returnValues[0].remove.called, 'text is removed');
 });
 
-QUnit.test("measure labels, several labels", function(assert) {
+QUnit.test('measure labels, several labels', function(assert) {
     this.generatedTicks = [1, 2, 300, 4, 5];
     var axis = this.createSimpleAxis({ label: { visible: true } });
     axis.measureLabels(this.canvas);
 
-    assert.equal(this.renderer.text.args[0][0], "300", "text of the label");
+    assert.equal(this.renderer.text.args[0][0], '300', 'text of the label');
 });
 
-QUnit.test("measuring label on axis with empty range - do not render texts", function(assert) {
+QUnit.test('measuring label on axis with empty range - do not render texts', function(assert) {
     this.generatedTicks = [0, 1, 2];
     this.range = {};
-    var axis = this.createSimpleAxis({ label: { visible: true }, valueType: "datetime" });
+    var axis = this.createSimpleAxis({ label: { visible: true }, valueType: 'datetime' });
 
     var measurements = axis.measureLabels(this.canvas);
 
@@ -675,10 +675,10 @@ QUnit.test("measuring label on axis with empty range - do not render texts", fun
         y: 0
     });
 
-    assert.equal(this.renderer.stub("text").callCount, 0);
+    assert.equal(this.renderer.stub('text').callCount, 0);
 });
 
-QUnit.test("IncidentOccured on measure labels", function(assert) {
+QUnit.test('IncidentOccured on measure labels', function(assert) {
     this.renderSettings.isArgumentAxis = true;
     this.translator.getBusinessRange = function() {
         return {
@@ -693,26 +693,26 @@ QUnit.test("IncidentOccured on measure labels", function(assert) {
     assert.ok(this.tickGenerator.lastCall.args[0].incidentOccurred !== this.incidentOccurred);
 });
 
-QUnit.test("call measure labels after axis draw - use ticks generated on draw", function(assert) {
+QUnit.test('call measure labels after axis draw - use ticks generated on draw', function(assert) {
     this.generatedTicks = [1, 2, 300, 4, 5];
     var axis = this.createSimpleAxis({ label: { visible: true } });
     axis.createTicks(this.canvas);
     this.generatedTicks = [2, 3, 4];
 
     axis.measureLabels(this.canvas);
-    assert.equal(this.renderer.text.getCall(0).args[0], "300", "text of the label");
+    assert.equal(this.renderer.text.getCall(0).args[0], '300', 'text of the label');
 });
 
-QUnit.test("Datetime, no custom format - use auto format based on estimated tickInterval", function(assert) {
+QUnit.test('Datetime, no custom format - use auto format based on estimated tickInterval', function(assert) {
     this.generatedTicks = [
         new Date(2010, 7, 1),
         new Date(2010, 8, 1),
         new Date(2010, 9, 1)
     ];
-    this.generatedTickInterval = "month";
+    this.generatedTickInterval = 'month';
 
     var axis = this.createSimpleAxis({
-        valueType: "datetime",
+        valueType: 'datetime',
         label: {
             visible: true
         },
@@ -722,23 +722,23 @@ QUnit.test("Datetime, no custom format - use auto format based on estimated tick
 
     axis.measureLabels(this.canvas);
 
-    assert.strictEqual(this.renderer.text.getCall(0).args[0], "August 2010");
+    assert.strictEqual(this.renderer.text.getCall(0).args[0], 'August 2010');
 });
 
-QUnit.test("Datetime, custom format - use provided format", function(assert) {
+QUnit.test('Datetime, custom format - use provided format', function(assert) {
     this.generatedTicks = [
         new Date(2010, 7, 1),
         new Date(2010, 8, 10),
         new Date(2010, 9, 25)
     ];
-    this.generatedTickInterval = "month";
+    this.generatedTickInterval = 'month';
 
     var axis = this.createSimpleAxis({
-        valueType: "datetime",
+        valueType: 'datetime',
         label: {
             visible: true,
             format: {
-                type: "day"
+                type: 'day'
             }
         },
         min: new Date(2010, 7, 1),
@@ -747,12 +747,12 @@ QUnit.test("Datetime, custom format - use provided format", function(assert) {
 
     axis.measureLabels(this.canvas);
 
-    assert.strictEqual(this.renderer.text.getCall(0).args[0], "10");
+    assert.strictEqual(this.renderer.text.getCall(0).args[0], '10');
 });
 
-QUnit.module("Label overlapping, 'hide' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'hide\' mode', overlappingEnvironment);
 
-QUnit.test("horizontal axis", function(assert) {
+QUnit.test('horizontal axis', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -761,13 +761,13 @@ QUnit.test("horizontal axis", function(assert) {
         { x: 60, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
 });
 
-QUnit.test("labels are not overlapping", function(assert) {
+QUnit.test('labels are not overlapping', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 5, height: 5 },
         { x: 15, y: 0, width: 5, height: 5 },
@@ -776,13 +776,13 @@ QUnit.test("labels are not overlapping", function(assert) {
         { x: 60, y: 0, width: 5, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("one very long label", function(assert) {
+QUnit.test('one very long label', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -791,13 +791,13 @@ QUnit.test("one very long label", function(assert) {
         { x: 60, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "7", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '7', '9']);
 });
 
-QUnit.test("vertical axis", function(assert) {
+QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(1).returns(50);
     this.translator.translate.withArgs(3).returns(40);
     this.translator.translate.withArgs(5).returns(30);
@@ -812,23 +812,23 @@ QUnit.test("vertical axis", function(assert) {
     ];
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
 });
 
-QUnit.test("Overlapping shouldn't apply if there is only one tick", function(assert) {
+QUnit.test('Overlapping shouldn\'t apply if there is only one tick', function(assert) {
     var markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
 
     this.generatedTicks = [5];
 
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 });
 
-QUnit.test("Not valid mode, default is hide", function(assert) {
+QUnit.test('Not valid mode, default is hide', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -837,13 +837,13 @@ QUnit.test("Not valid mode, default is hide", function(assert) {
         { x: 60, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "mode" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'mode' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
 });
 
-QUnit.test("Labels are empty", function(assert) {
+QUnit.test('Labels are empty', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -854,17 +854,17 @@ QUnit.test("Labels are empty", function(assert) {
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1, max: 10, label: {
-            customizeText: function() { return ""; },
-            overlappingBehavior: "hide"
+            customizeText: function() { return ''; },
+            overlappingBehavior: 'hide'
         }
     });
 
-    assert.equal(this.renderer.text.callCount, 0, "nothing should fail");
+    assert.equal(this.renderer.text.callCount, 0, 'nothing should fail');
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
 // T497323
-QUnit.test("frequent ticks", function(assert) {
+QUnit.test('frequent ticks', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 1, height: 2 },
         { x: 0, y: 0, width: 2, height: 2 },
@@ -893,14 +893,14 @@ QUnit.test("frequent ticks", function(assert) {
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         label: {
-            overlappingBehavior: "hide"
+            overlappingBehavior: 'hide'
         }
     });
 
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "7", "11", "13", "15", "19"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '7', '11', '13', '15', '19']);
 });
 
-QUnit.test("There is no real overlap of the labels", function(assert) {
+QUnit.test('There is no real overlap of the labels', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -909,13 +909,13 @@ QUnit.test("There is no real overlap of the labels", function(assert) {
         { x: 60, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("There is no real overlap of the labels. Alignment value is left", function(assert) {
+QUnit.test('There is no real overlap of the labels. Alignment value is left', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 20, height: 5 },
@@ -924,13 +924,13 @@ QUnit.test("There is no real overlap of the labels. Alignment value is left", fu
         { x: 80, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide", alignment: "left" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("There is real overlap of the labels. Alignment value is left", function(assert) {
+QUnit.test('There is real overlap of the labels. Alignment value is left', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 8, y: 0, width: 10, height: 5 },
@@ -939,13 +939,13 @@ QUnit.test("There is real overlap of the labels. Alignment value is left", funct
         { x: 32, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide", alignment: "left" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'left' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7']);
 });
 
-QUnit.test("There is real overlap of the labels. Alignment value is center", function(assert) {
+QUnit.test('There is real overlap of the labels. Alignment value is center', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 10, height: 5 },
@@ -954,13 +954,13 @@ QUnit.test("There is real overlap of the labels. Alignment value is center", fun
         { x: 40, y: 0, width: 30, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide", alignment: "center" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'center' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "7"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '7']);
 });
 
-QUnit.test("There is real overlap of the labels. Alignment value is right", function(assert) {
+QUnit.test('There is real overlap of the labels. Alignment value is right', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 10, y: 0, width: 10, height: 5 },
@@ -969,13 +969,13 @@ QUnit.test("There is real overlap of the labels. Alignment value is right", func
         { x: 40, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide", alignment: "right" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right' } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7']);
 });
 
-QUnit.test("There is not real overlap of the labels. Alignment value is right", function(assert) {
+QUnit.test('There is not real overlap of the labels. Alignment value is right', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 20, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
@@ -984,13 +984,13 @@ QUnit.test("There is not real overlap of the labels. Alignment value is right", 
         { x: 70, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "hide", alignment: "right" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'hide', alignment: 'right' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("Check title offset after olerlap resolving", function(assert) {
+QUnit.test('Check title offset after olerlap resolving', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 0, y: 0, width: 10, height: 5 },
@@ -1005,22 +1005,22 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
         min: 1,
         max: 10,
         title: {
-            text: "Title",
+            text: 'Title',
             margin: 0
         },
         label: {
-            overlappingBehavior: "hide",
+            overlappingBehavior: 'hide',
             indentFromAxis: 0
         }
     });
 
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
-    assert.equal(this.renderer.text.getCall(0).returnValue.attr.lastCall.args[0].translateY, 605, "title offset");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
+    assert.equal(this.renderer.text.getCall(0).returnValue.attr.lastCall.args[0].translateY, 605, 'title offset');
 });
 
-QUnit.module("Label overlapping, 'rotate' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'rotate\' mode', overlappingEnvironment);
 
-QUnit.test("horizontal axis, labels overlap, rotationAngle is 90", function(assert) {
+QUnit.test('horizontal axis, labels overlap, rotationAngle is 90', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1030,16 +1030,16 @@ QUnit.test("horizontal axis, labels overlap, rotationAngle is 90", function(asse
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 90, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 90, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("alignment of labels after rotate", function(assert) {
+QUnit.test('alignment of labels after rotate', function(assert) {
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1054,7 +1054,7 @@ QUnit.test("alignment of labels after rotate", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
 
@@ -1062,7 +1062,7 @@ QUnit.test("alignment of labels after rotate", function(assert) {
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0);
 });
 
-QUnit.test("alignment of labels after rotate, angle less than 0", function(assert) {
+QUnit.test('alignment of labels after rotate, angle less than 0', function(assert) {
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1078,14 +1078,14 @@ QUnit.test("alignment of labels after rotate, angle less than 0", function(asser
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -40, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 374);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 467);
 });
 
-QUnit.test("custom alignment for labels", function(assert) { // TODO: remove userAlingment and this test
+QUnit.test('custom alignment for labels', function(assert) { // TODO: remove userAlingment and this test
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1100,7 +1100,7 @@ QUnit.test("custom alignment for labels", function(assert) { // TODO: remove use
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { alignment: "right", userAlignment: true, overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { alignment: 'right', userAlignment: true, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
 
@@ -1108,7 +1108,7 @@ QUnit.test("custom alignment for labels", function(assert) { // TODO: remove use
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600);
 });
 
-QUnit.test("vertical labels overlap but shouldn't rotate", function(assert) {
+QUnit.test('vertical labels overlap but shouldn\'t rotate', function(assert) {
     this.translator.translate.withArgs(1).returns(60);
     this.translator.translate.withArgs(3).returns(45);
     this.translator.translate.withArgs(5).returns(20);
@@ -1124,7 +1124,7 @@ QUnit.test("vertical labels overlap but shouldn't rotate", function(assert) {
         texts, i;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
@@ -1135,7 +1135,7 @@ QUnit.test("vertical labels overlap but shouldn't rotate", function(assert) {
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, -5);
 });
 
-QUnit.test("Check title offset after olerlap resolving", function(assert) {
+QUnit.test('Check title offset after olerlap resolving', function(assert) {
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1156,21 +1156,21 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
         min: 1,
         max: 10,
         title: {
-            text: "Title",
+            text: 'Title',
             margin: 0
         },
         label: {
-            overlappingBehavior: "rotate",
+            overlappingBehavior: 'rotate',
             rotationAngle: 30,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 616, "title offset");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 616, 'title offset');
 });
 
-QUnit.test("labels overlap after rotation", function(assert) {
+QUnit.test('labels overlap after rotation', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 20 },
             { x: 15, y: 0, width: 10, height: 20 },
@@ -1180,19 +1180,19 @@ QUnit.test("labels overlap after rotation", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 90 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 90 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 90, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 90, "2 text is rotated at an angle");
-    assert.ok(!texts.getCall(3).returnValue.rotate.called, "3 text is not rotated at an angle");
-    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 90, "4 text is rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 90, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 90, '2 text is rotated at an angle');
+    assert.ok(!texts.getCall(3).returnValue.rotate.called, '3 text is not rotated at an angle');
+    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 90, '4 text is rotated at an angle');
 });
 
-QUnit.test("labels overlap, rotationAngle is zero", function(assert) {
+QUnit.test('labels overlap, rotationAngle is zero', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1202,19 +1202,19 @@ QUnit.test("labels overlap, rotationAngle is zero", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 0 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 0 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 0, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.ok(!texts.getCall(2).returnValue.rotate.called, "2 text is not rotated at an angle");
-    assert.equal(texts.getCall(3).returnValue.rotate.args[0][0], 0, "3 text is rotated at an angle");
-    assert.ok(!texts.getCall(4).returnValue.rotate.called, "4 text is not rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 0, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.ok(!texts.getCall(2).returnValue.rotate.called, '2 text is not rotated at an angle');
+    assert.equal(texts.getCall(3).returnValue.rotate.args[0][0], 0, '3 text is rotated at an angle');
+    assert.ok(!texts.getCall(4).returnValue.rotate.called, '4 text is not rotated at an angle');
 });
 
-QUnit.test("labels overlap, rotationAngle less then zero", function(assert) {
+QUnit.test('labels overlap, rotationAngle less then zero', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 8 },
             { x: 15, y: 0, width: 10, height: 8 },
@@ -1224,19 +1224,19 @@ QUnit.test("labels overlap, rotationAngle less then zero", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: -30 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: -30 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -30, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], -30, "2 text is rotated at an angle");
-    assert.ok(!texts.getCall(3).returnValue.rotate.called, "3 text is not rotated at an angle");
-    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], -30, "4 text is rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -30, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], -30, '2 text is rotated at an angle');
+    assert.ok(!texts.getCall(3).returnValue.rotate.called, '3 text is not rotated at an angle');
+    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], -30, '4 text is rotated at an angle');
 });
 
-QUnit.test("labels overlap, rotationAngle is 180", function(assert) {
+QUnit.test('labels overlap, rotationAngle is 180', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1246,19 +1246,19 @@ QUnit.test("labels overlap, rotationAngle is 180", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 180 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 180 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 180, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.ok(!texts.getCall(2).returnValue.rotate.called, "2 text is not rotated at an angle");
-    assert.equal(texts.getCall(3).returnValue.rotate.args[0][0], 180, "3 text is rotated at an angle");
-    assert.ok(!texts.getCall(4).returnValue.rotate.called, "4 text is not rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 180, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.ok(!texts.getCall(2).returnValue.rotate.called, '2 text is not rotated at an angle');
+    assert.equal(texts.getCall(3).returnValue.rotate.args[0][0], 180, '3 text is rotated at an angle');
+    assert.ok(!texts.getCall(4).returnValue.rotate.called, '4 text is not rotated at an angle');
 });
 
-QUnit.test("labels overlap, rotationAngle less then 90", function(assert) {
+QUnit.test('labels overlap, rotationAngle less then 90', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1268,19 +1268,19 @@ QUnit.test("labels overlap, rotationAngle less then 90", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 20 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 20 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 20, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 20, "2 text is rotated at an angle");
-    assert.ok(!texts.getCall(3).returnValue.rotate.called, "3 text is not rotated at an angle");
-    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 20, "4 text is rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 20, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 20, '2 text is rotated at an angle');
+    assert.ok(!texts.getCall(3).returnValue.rotate.called, '3 text is not rotated at an angle');
+    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 20, '4 text is rotated at an angle');
 });
 
-QUnit.test("labels overlap, rotationAngle more then 90", function(assert) {
+QUnit.test('labels overlap, rotationAngle more then 90', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1290,19 +1290,19 @@ QUnit.test("labels overlap, rotationAngle more then 90", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 160 } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 160 } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 160, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 160, "2 text is rotated at an angle");
-    assert.ok(!texts.getCall(3).returnValue.rotate.called, "3 text is not rotated at an angle");
-    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 160, "4 text is rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], 160, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], 160, '2 text is rotated at an angle');
+    assert.ok(!texts.getCall(3).returnValue.rotate.called, '3 text is not rotated at an angle');
+    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], 160, '4 text is rotated at an angle');
 });
 
-QUnit.test("Alignment of labels after their rotation and updating width of canvas", function(assert) {
+QUnit.test('Alignment of labels after their rotation and updating width of canvas', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1312,7 +1312,7 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "rotate", rotationAngle: 40 } });
+    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 40 } });
 
     // updating
     this.translator.translate.withArgs(1).returns(10);
@@ -1324,13 +1324,13 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
 
     texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue._stored_settings.align, "center", i + " text align after update");
+        assert.equal(texts.getCall(i).returnValue._stored_settings.align, 'center', i + ' text align after update');
     }
 });
 
-QUnit.module("Label overlapping, 'stagger' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'stagger\' mode', overlappingEnvironment);
 
-QUnit.test("Labels overlap", function(assert) {
+QUnit.test('Labels overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -1344,23 +1344,23 @@ QUnit.test("Labels overlap", function(assert) {
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Check title offset after olerlap resolving", function(assert) {
+QUnit.test('Check title offset after olerlap resolving', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 0, y: 0, width: 10, height: 5 },
@@ -1377,23 +1377,23 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
         min: 1,
         max: 10,
         title: {
-            text: "Title",
+            text: 'Title',
             margin: 0
         },
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 614, "title offset");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 614, 'title offset');
 });
 
-QUnit.test("Labels overlap, some of them hide", function(assert) {
+QUnit.test('Labels overlap, some of them hide', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 20, height: 5 },
             { x: 15, y: 0, width: 20, height: 6 },
@@ -1417,22 +1417,22 @@ QUnit.test("Labels overlap, some of them hide", function(assert) {
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7", "11", "15"], "decimated labels");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7', '11', '15'], 'decimated labels');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, "2 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
-    assert.equal(texts.getCall(6).returnValue.attr.lastCall.args[0].translateY, 607, "6 text moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, '2 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
+    assert.equal(texts.getCall(6).returnValue.attr.lastCall.args[0].translateY, 607, '6 text moved');
 });
 
-QUnit.test("Do not update removed label position on update size", function(assert) {
+QUnit.test('Do not update removed label position on update size', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 20, height: 5 },
         { x: 15, y: 0, width: 20, height: 6 },
@@ -1456,7 +1456,7 @@ QUnit.test("Do not update removed label position on update size", function(asser
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
@@ -1472,7 +1472,7 @@ QUnit.test("Do not update removed label position on update size", function(asser
     assert.equal(removedLabel.attr.callCount, 0);
 });
 
-QUnit.test("Axis position is top", function(assert) {
+QUnit.test('Axis position is top', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -1485,25 +1485,25 @@ QUnit.test("Axis position is top", function(assert) {
     this.drawAxisWithOptions({
         min: 1,
         max: 10,
-        position: "top",
+        position: 'top',
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 5, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, -3, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 5, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, -4, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 5, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 5, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, -3, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 5, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, -4, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 5, '4 text not moved');
 });
 
-QUnit.test("staggeringSpacing more than zero", function(assert) {
+QUnit.test('staggeringSpacing more than zero', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -1517,25 +1517,25 @@ QUnit.test("staggeringSpacing more than zero", function(assert) {
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 5,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 612, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 612, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 612, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 612, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.module("Label overlapping, 'auto' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'auto\' mode', overlappingEnvironment);
 
-QUnit.test("Labels overlap and apply stagger mode", function(assert) {
+QUnit.test('Labels overlap and apply stagger mode', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -1549,23 +1549,23 @@ QUnit.test("Labels overlap and apply stagger mode", function(assert) {
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "auto",
+            overlappingBehavior: 'auto',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Labels overlap and rotate -45 degrees", function(assert) {
+QUnit.test('Labels overlap and rotate -45 degrees', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -1575,16 +1575,16 @@ QUnit.test("Labels overlap and rotate -45 degrees", function(assert) {
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "auto" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -45, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -45, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Labels overlap and rotate -90 degrees", function(assert) {
+QUnit.test('Labels overlap and rotate -90 degrees', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1594,16 +1594,16 @@ QUnit.test("Labels overlap and rotate -90 degrees", function(assert) {
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "auto" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -90, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -90, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Labels overlap, rotate -90 degrees and hide", function(assert) {
+QUnit.test('Labels overlap, rotate -90 degrees and hide', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 10 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1613,21 +1613,21 @@ QUnit.test("Labels overlap, rotate -90 degrees and hide", function(assert) {
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "auto" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels decimated');
 
-    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -90, "0 text is rotated at an angle");
-    assert.ok(!texts.getCall(1).returnValue.rotate.called, "1 text is not rotated at an angle");
-    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], -90, "2 text is rotated at an angle");
-    assert.ok(!texts.getCall(3).returnValue.rotate.called, "3 text is not rotated at an angle");
-    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], -90, "4 text is rotated at an angle");
+    assert.equal(texts.getCall(0).returnValue.rotate.args[0][0], -90, '0 text is rotated at an angle');
+    assert.ok(!texts.getCall(1).returnValue.rotate.called, '1 text is not rotated at an angle');
+    assert.equal(texts.getCall(2).returnValue.rotate.args[0][0], -90, '2 text is rotated at an angle');
+    assert.ok(!texts.getCall(3).returnValue.rotate.called, '3 text is not rotated at an angle');
+    assert.equal(texts.getCall(4).returnValue.rotate.args[0][0], -90, '4 text is rotated at an angle');
 });
 
-QUnit.module("Label overlapping, 'none' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'none\' mode', overlappingEnvironment);
 
-QUnit.test("horizontal axis", function(assert) {
+QUnit.test('horizontal axis', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 4 },
         { x: 15, y: 0, width: 10, height: 4 },
@@ -1636,13 +1636,13 @@ QUnit.test("horizontal axis", function(assert) {
         { x: 60, y: 0, width: 10, height: 4 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "none" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("vertical axis", function(assert) {
+QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(1).returns(50);
     this.translator.translate.withArgs(3).returns(40);
     this.translator.translate.withArgs(5).returns(30);
@@ -1657,15 +1657,15 @@ QUnit.test("vertical axis", function(assert) {
     ];
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "none" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.module("Label overlapping, change mode on axis redrawing", overlappingEnvironment);
+QUnit.module('Label overlapping, change mode on axis redrawing', overlappingEnvironment);
 
-QUnit.test("Auto mode. After first draw - rotate, after second - stagger. Reset all rotation artifacts", function(assert) {
+QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset all rotation artifacts', function(assert) {
     var that = this,
         markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
@@ -1682,7 +1682,7 @@ QUnit.test("Auto mode. After first draw - rotate, after second - stagger. Reset 
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "auto",
+            overlappingBehavior: 'auto',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
@@ -1713,13 +1713,13 @@ QUnit.test("Auto mode. After first draw - rotate, after second - stagger. Reset 
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue._stored_settings.rotate, 0);
@@ -1727,7 +1727,7 @@ QUnit.test("Auto mode. After first draw - rotate, after second - stagger. Reset 
     }
 });
 
-QUnit.test("Auto mode. After first draw - stagger, after second - rotate. Reset all stagger artifacts", function(assert) {
+QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset all stagger artifacts', function(assert) {
     var that = this,
         markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
@@ -1744,7 +1744,7 @@ QUnit.test("Auto mode. After first draw - stagger, after second - rotate. Reset 
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "auto",
+            overlappingBehavior: 'auto',
             staggeringSpacing: 0,
             indentFromAxis: 0
         }
@@ -1772,20 +1772,20 @@ QUnit.test("Auto mode. After first draw - stagger, after second - rotate. Reset 
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 0, "1 text not moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 10, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 0, "3 text not moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 0, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 0, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 0, '1 text not moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 10, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 0, '3 text not moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 0, '4 text not moved');
 
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -90, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], -90, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Rotated mode with positive angle. No overlapping after second draw. Reset all rotation artifacts", function(assert) {
+QUnit.test('Rotated mode with positive angle. No overlapping after second draw. Reset all rotation artifacts', function(assert) {
     this.translator.translate.withArgs(1).returns(0);
     this.translator.translate.withArgs(3).returns(15);
     this.translator.translate.withArgs(5).returns(20);
@@ -1802,7 +1802,7 @@ QUnit.test("Rotated mode with positive angle. No overlapping after second draw. 
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -89, overlappingBehavior: "rotate", indentFromAxis: 0 } });
+    var axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: -89, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
     texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
@@ -1830,13 +1830,13 @@ QUnit.test("Rotated mode with positive angle. No overlapping after second draw. 
     axis.draw(this.canvas);
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -5, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateX, -5, "1 text not moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateX, -5, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateX, -5, "3 text not moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateX, -5, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -5, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateX, -5, '1 text not moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateX, -5, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateX, -5, '3 text not moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateX, -5, '4 text not moved');
 
     for(i = 0; i < texts.callCount; i++) {
         assert.equal(texts.getCall(i).returnValue._stored_settings.rotate, 0);
@@ -1844,9 +1844,9 @@ QUnit.test("Rotated mode with positive angle. No overlapping after second draw. 
     }
 });
 
-QUnit.module("Display mode for label", overlappingEnvironment);
+QUnit.module('Display mode for label', overlappingEnvironment);
 
-QUnit.test("Custom rotation angle, overlapping mode is none", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode is none', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 10 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1857,17 +1857,17 @@ QUnit.test("Custom rotation angle, overlapping mode is none", function(assert) {
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "none" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'none' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels is not decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Custom rotation angle, overlapping mode is ignore", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode is ignore', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 10 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1878,17 +1878,17 @@ QUnit.test("Custom rotation angle, overlapping mode is ignore", function(assert)
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "ignore" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'ignore' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels is not decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Custom rotation angle, overlapping mode is hide, labels are not overlap", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode is hide, labels are not overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1899,17 +1899,17 @@ QUnit.test("Custom rotation angle, overlapping mode is hide, labels are not over
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels is not decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i++) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Custom rotation angle, overlapping mode is hide, labels are overlap", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode is hide, labels are overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 10 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1920,28 +1920,28 @@ QUnit.test("Custom rotation angle, overlapping mode is hide, labels are overlap"
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels is not decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels is not decimated');
 
     for(i = 0; i < texts.callCount; i += 2) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
     }
 });
 
-QUnit.test("Custom rotation angle, overlapping mode is hide, one tick", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode is hide, one tick', function(assert) {
     var markersBBoxes = [{ x: 0, y: 0, width: 20, height: 5 }];
 
     this.generatedTicks = [5];
 
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "hide" } });
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
-    assert.equal(this.renderer.text.getCall(0).returnValue.rotate.args[0][0], 40, "0 text is rotated at an angle");
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'hide' } });
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
+    assert.equal(this.renderer.text.getCall(0).returnValue.rotate.args[0][0], 40, '0 text is rotated at an angle');
 });
 
-QUnit.test("Custom rotation angle, overlapping mode besides hide, none or ignor shouldn't apply", function(assert) {
+QUnit.test('Custom rotation angle, overlapping mode besides hide, none or ignor shouldn\'t apply', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 10 },
             { x: 10, y: 0, width: 10, height: 5 },
@@ -1952,19 +1952,19 @@ QUnit.test("Custom rotation angle, overlapping mode besides hide, none or ignor 
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 40, overlappingBehavior: "stagger" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 40, overlappingBehavior: 'stagger' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels should decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels should decimated');
     for(i = 0; i < texts.callCount; i += 2) {
-        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + " text is rotated at an angle");
+        assert.equal(texts.getCall(i).returnValue.rotate.args[0][0], 40, i + ' text is rotated at an angle');
     }
     for(i = 0; i < texts.callCount; i++) {
-        assert.ok(!texts.getCall(i).returnValue.move.called, i + " text shouldn't move");
+        assert.ok(!texts.getCall(i).returnValue.move.called, i + ' text shouldn\'t move');
     }
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are not overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are not overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -1978,24 +1978,24 @@ QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are not 
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "hide",
+            overlappingBehavior: 'hide',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is hide, labels are overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 20, height: 6 },
@@ -2009,22 +2009,22 @@ QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are over
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "hide",
+            overlappingBehavior: 'hide',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "7"], "labels should decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '7'], 'labels should decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, "2 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 607, '2 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is none, labels are not overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is none, labels are not overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -2038,24 +2038,24 @@ QUnit.test("Custom staggering spacing, overlapping mode is none, labels are not 
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "none",
+            overlappingBehavior: 'none',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are not overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are not overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -2069,24 +2069,24 @@ QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are no
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "ignore",
+            overlappingBehavior: 'ignore',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is none, labels are overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is none, labels are overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -2100,24 +2100,24 @@ QUnit.test("Custom staggering spacing, overlapping mode is none, labels are over
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "none",
+            overlappingBehavior: 'none',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are overlap", function(assert) {
+QUnit.test('Custom staggering spacing, overlapping mode is ignore, labels are overlap', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -2131,24 +2131,24 @@ QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are ov
         min: 1,
         max: 10,
         label: {
-            displayMode: "stagger",
+            displayMode: 'stagger',
             staggeringSpacing: 0,
-            overlappingBehavior: "ignore",
+            overlappingBehavior: 'ignore',
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.test("For value axis shouldn't apply display mode", function(assert) {
+QUnit.test('For value axis shouldn\'t apply display mode', function(assert) {
     this.translator.translate.withArgs(1).returns(50);
     this.translator.translate.withArgs(3).returns(40);
     this.translator.translate.withArgs(5).returns(30);
@@ -2165,18 +2165,18 @@ QUnit.test("For value axis shouldn't apply display mode", function(assert) {
         texts;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "rotate", rotationAngle: 30, overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'rotate', rotationAngle: 30, overlappingBehavior: 'hide' } });
 
     texts = this.renderer.text;
     assert.equal(texts.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9']);
 
     for(i = 0; i < texts.callCount; i++) {
-        assert.ok(!texts.getCall(i).returnValue.rotate.called, i + " text is not rotated");
+        assert.ok(!texts.getCall(i).returnValue.rotate.called, i + ' text is not rotated');
     }
 });
 
-QUnit.test("Invalid display mode", function(assert) {
+QUnit.test('Invalid display mode', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 20, height: 5 },
             { x: 15, y: 0, width: 10, height: 5 },
@@ -2187,18 +2187,18 @@ QUnit.test("Invalid display mode", function(assert) {
         texts,
         i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: "invalid", overlappingBehavior: "hide" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { displayMode: 'invalid', overlappingBehavior: 'hide' } });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "9"], "labels should decimated");
+    assert.deepEqual(this.arrayRemovedElements, ['3', '5', '9'], 'labels should decimated');
 
     for(i = 0; i < texts.length; i++) {
-        assert.ok(!texts.getCall(i).returnValue.move.called, i + " text not moved");
-        assert.ok(!texts.getCall(i).returnValue.rotate.called, i + " text not moved");
+        assert.ok(!texts.getCall(i).returnValue.move.called, i + ' text not moved');
+        assert.ok(!texts.getCall(i).returnValue.rotate.called, i + ' text not moved');
     }
 });
 
-QUnit.test("Labels are empty", function(assert) {
+QUnit.test('Labels are empty', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
         { x: 15, y: 0, width: 10, height: 5 },
@@ -2209,17 +2209,17 @@ QUnit.test("Labels are empty", function(assert) {
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({
         min: 1, max: 10, label: {
-            customizeText: function() { return ""; },
-            displayMode: "rotate",
-            overlappingBehavior: "hide"
+            customizeText: function() { return ''; },
+            displayMode: 'rotate',
+            overlappingBehavior: 'hide'
         }
     });
 
-    assert.equal(this.renderer.text.callCount, 0, "nothing should fail");
+    assert.equal(this.renderer.text.callCount, 0, 'nothing should fail');
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.test("Temporary _auto mode support", function(assert) {
+QUnit.test('Temporary _auto mode support', function(assert) {
     var markersBBoxes = [
             { x: 0, y: 0, width: 10, height: 5 },
             { x: 15, y: 0, width: 10, height: 6 },
@@ -2233,24 +2233,24 @@ QUnit.test("Temporary _auto mode support", function(assert) {
         min: 1,
         max: 10,
         label: {
-            overlappingBehavior: "_auto", staggeringSpacing: 0,
+            overlappingBehavior: '_auto', staggeringSpacing: 0,
             indentFromAxis: 0
         }
     });
 
     texts = this.renderer.text;
-    assert.deepEqual(this.arrayRemovedElements, [], "labels shouldn't decimated");
+    assert.deepEqual(this.arrayRemovedElements, [], 'labels shouldn\'t decimated');
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, "0 text not moved");
-    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, "1 text moved");
-    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, "2 text not moved");
-    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, "3 text moved");
-    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, "4 text not moved");
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, 600, '0 text not moved');
+    assert.equal(texts.getCall(1).returnValue.attr.lastCall.args[0].translateY, 607, '1 text moved');
+    assert.equal(texts.getCall(2).returnValue.attr.lastCall.args[0].translateY, 600, '2 text not moved');
+    assert.equal(texts.getCall(3).returnValue.attr.lastCall.args[0].translateY, 607, '3 text moved');
+    assert.equal(texts.getCall(4).returnValue.attr.lastCall.args[0].translateY, 600, '4 text not moved');
 });
 
-QUnit.module("Label overlapping, 'none' mode", overlappingEnvironment);
+QUnit.module('Label overlapping, \'none\' mode', overlappingEnvironment);
 
-QUnit.test("horizontal axis", function(assert) {
+QUnit.test('horizontal axis', function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 4 },
         { x: 15, y: 0, width: 10, height: 4 },
@@ -2259,14 +2259,14 @@ QUnit.test("horizontal axis", function(assert) {
         { x: 60, y: 0, width: 10, height: 4 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "none" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
 
-QUnit.test("vertical axis", function(assert) {
+QUnit.test('vertical axis', function(assert) {
     this.translator.translate.withArgs(1).returns(50);
     this.translator.translate.withArgs(3).returns(40);
     this.translator.translate.withArgs(5).returns(30);
@@ -2281,13 +2281,13 @@ QUnit.test("vertical axis", function(assert) {
     ];
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
-    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: "none" } });
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'none' } });
 
     assert.equal(this.renderer.text.callCount, 5);
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
-QUnit.module("Estimate size", $.extend({}, environment2DTranslator, {
+QUnit.module('Estimate size', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
         var that = this;
@@ -2312,11 +2312,11 @@ QUnit.module("Estimate size", $.extend({}, environment2DTranslator, {
     }
 }));
 
-QUnit.test("no estimate margins without ticks", function(assert) {
+QUnit.test('no estimate margins without ticks', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        type: "discrete",
-        categories: ["cat1", "cat2"],
+        type: 'discrete',
+        categories: ['cat1', 'cat2'],
         label: {
             visible: true
         }
@@ -2324,10 +2324,10 @@ QUnit.test("no estimate margins without ticks", function(assert) {
 
     axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(this.renderer.stub("text").called, false);
+    assert.strictEqual(this.renderer.stub('text').called, false);
 });
 
-QUnit.test("Estimate left/right margin. Visible labels", function(assert) {
+QUnit.test('Estimate left/right margin. Visible labels', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2336,12 +2336,12 @@ QUnit.test("Estimate left/right margin. Visible labels", function(assert) {
     });
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.left, 10, "left margin");
-    assert.strictEqual(margins.right, 22, "right margin");
+    assert.strictEqual(margins.left, 10, 'left margin');
+    assert.strictEqual(margins.right, 22, 'right margin');
 });
 
-QUnit.test("Estimate top/bottom margin. Bottom axis", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate top/bottom margin. Bottom axis', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2352,15 +2352,15 @@ QUnit.test("Estimate top/bottom margin. Bottom axis", function(assert) {
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.top, 0, "top margin");
-    assert.strictEqual(margins.bottom, 17, "bottom margin");
+    assert.strictEqual(margins.top, 0, 'top margin');
+    assert.strictEqual(margins.bottom, 17, 'bottom margin');
 });
 
-QUnit.test("Estimate top/bottom margin. Top axis", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate top/bottom margin. Top axis', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "top",
+        position: 'top',
         label: {
             visible: true,
             indentFromAxis: 3
@@ -2369,11 +2369,11 @@ QUnit.test("Estimate top/bottom margin. Top axis", function(assert) {
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.top, 17, "top margin");
-    assert.strictEqual(margins.bottom, 0, "bottom margin");
+    assert.strictEqual(margins.top, 17, 'top margin');
+    assert.strictEqual(margins.bottom, 0, 'bottom margin');
 });
 
-QUnit.test("Estimate left/right margin. Invisible labels", function(assert) {
+QUnit.test('Estimate left/right margin. Invisible labels', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2390,79 +2390,79 @@ QUnit.test("Estimate left/right margin. Invisible labels", function(assert) {
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(this.renderer.stub("text").callCount, 0);
-    assert.strictEqual(margins.left, 0, "left margin");
-    assert.strictEqual(margins.right, 0, "right margin");
-    assert.strictEqual(margins.top, 0, "top margin");
-    assert.strictEqual(margins.bottom, 0, "bottom margin");
+    assert.strictEqual(this.renderer.stub('text').callCount, 0);
+    assert.strictEqual(margins.left, 0, 'left margin');
+    assert.strictEqual(margins.right, 0, 'right margin');
+    assert.strictEqual(margins.top, 0, 'top margin');
+    assert.strictEqual(margins.bottom, 0, 'bottom margin');
 });
 
-QUnit.test("Estimate draws title text and remove it", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate draws title text and remove it', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true
         },
         title: {
-            text: "Title text",
+            text: 'Title text',
             font: {
-                weight: "bold"
+                weight: 'bold'
             },
-            cssClass: "css_class",
+            cssClass: 'css_class',
             opacity: 0.3,
-            alignment: "center"
+            alignment: 'center'
         }
     });
 
     axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.text.callCount, 2);
-    assert.deepEqual(this.renderer.text.getCall(1).args, ["Title text", 0, 0], "cteate text args");
+    assert.deepEqual(this.renderer.text.getCall(1).args, ['Title text', 0, 0], 'cteate text args');
 
     var textElement = this.renderer.text.getCall(1).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
         opacity: 0.3,
-        align: "center",
-        "class": "css_class"
-    }, "lebel settings");
+        align: 'center',
+        'class': 'css_class'
+    }, 'lebel settings');
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "font-weight": "bold"
-    }, "lebel style");
+        'font-weight': 'bold'
+    }, 'lebel style');
 
-    assert.strictEqual(textElement.append.lastCall.args[0], this.renderer.root, "element appended");
-    assert.strictEqual(textElement.remove.callCount, 1, "element removed");
+    assert.strictEqual(textElement.append.lastCall.args[0], this.renderer.root, 'element appended');
+    assert.strictEqual(textElement.remove.callCount, 1, 'element removed');
 });
 
-QUnit.test("Check title overflow on draw", function(assert) {
+QUnit.test('Check title overflow on draw', function(assert) {
     this.canvas.width = 20;
     this.canvas.right = 10;
     this.createDrawnAxis({
         isHorizontal: true,
         title: {
-            wordWrap: "breakWord",
-            textOverflow: "none",
-            text: "Title text"
+            wordWrap: 'breakWord',
+            textOverflow: 'none',
+            text: 'Title text'
         }
     });
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     const textElement = this.renderer.text.firstCall.returnValue;
     assert.deepEqual(textElement.setMaxSize.callCount, 1);
-    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: "none", wordWrap: "breakWord" }]);
+    assert.deepEqual(textElement.setMaxSize.firstCall.args, [10, undefined, { textOverflow: 'none', wordWrap: 'breakWord' }]);
 });
 
-QUnit.test("Check title rest", function(assert) {
+QUnit.test('Check title rest', function(assert) {
     this.renderer.bBoxTemplate = function() {
         return { height: 29, width: 9 };
     };
     const axis = this.createDrawnAxis({
         isHorizontal: true,
         title: {
-            wordWrap: "breakWord",
-            textOverflow: "none",
-            text: "Title text"
+            wordWrap: 'breakWord',
+            textOverflow: 'none',
+            text: 'Title text'
         }
     });
 
@@ -2473,8 +2473,8 @@ QUnit.test("Check title rest", function(assert) {
     assert.equal(textElement.restoreText.callCount, 1);
 });
 
-QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate top/bottom margin. Axis with title', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2482,7 +2482,7 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
             indentFromAxis: 3
         },
         title: {
-            text: "text",
+            text: 'text',
             margin: 7
         }
     });
@@ -2497,87 +2497,87 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.bottom, 17 + (44 + 7), "bottom margin");
-    assert.strictEqual(margins.top, 0, "top margin");
+    assert.strictEqual(margins.bottom, 17 + (44 + 7), 'bottom margin');
+    assert.strictEqual(margins.top, 0, 'top margin');
 });
 
-QUnit.test("Estimate margin. Staggered labels", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Staggered labels', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            drawingType: "stagger",
+            drawingType: 'stagger',
             staggeringSpacing: 10
         }
     });
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
+    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
-QUnit.test("Estimate margin. Overlapping mode stagger", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Overlapping mode stagger', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            overlappingBehavior: "stagger",
+            overlappingBehavior: 'stagger',
             staggeringSpacing: 10
         }
     });
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
+    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
-QUnit.test("Estimate margin. Rotated labels", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Rotated labels', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            drawingType: "rotate",
+            drawingType: 'rotate',
             rotationAngle: 90
         }
     });
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.equal(margins.bottom, 35, "bottom margin");
+    assert.equal(margins.bottom, 35, 'bottom margin');
 });
 
-QUnit.test("Estimate margin. Overlapping mode is rotate", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Overlapping mode is rotate', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            overlappingBehavior: "rotate",
+            overlappingBehavior: 'rotate',
             rotationAngle: 90
         }
     });
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.equal(margins.bottom, 35, "bottom margin");
+    assert.equal(margins.bottom, 35, 'bottom margin');
 });
 
-QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Overlapping mode is stagger, drawing type is rotate', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            overlappingBehavior: "stagger",
-            drawingType: "rotate",
+            overlappingBehavior: 'stagger',
+            drawingType: 'rotate',
             rotationAngle: 90,
             staggeringSpacing: 10
         }
@@ -2585,67 +2585,67 @@ QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.bottom, 35, "bottom margin");
+    assert.strictEqual(margins.bottom, 35, 'bottom margin');
 });
 
-QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Estimate margin. Overlapping mode is rotate, drawing type is stagger', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
             visible: true,
             indentFromAxis: 3,
-            overlappingBehavior: "rotate",
-            drawingType: "stagger",
+            overlappingBehavior: 'rotate',
+            drawingType: 'stagger',
             staggeringSpacing: 10
         }
     });
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
+    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, 'bottom margin');
 });
 
-QUnit.test("Estimate draws constant lines with outside labels", function(assert) {
+QUnit.test('Estimate draws constant lines with outside labels', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "bottom",
+        position: 'bottom',
         label: {
             visible: false
         },
 
         constantLines: [{
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true,
                 font: {
-                    weight: "bold"
+                    weight: 'bold'
                 }
             }
         }, {
             label: {
-                text: "Text2",
-                position: "inside",
+                text: 'Text2',
+                position: 'inside',
                 visible: true,
                 font: {
-                    weight: "bold"
+                    weight: 'bold'
                 }
             }
         }, {
             label: {
-                text: "Text3",
-                position: "outside",
+                text: 'Text3',
+                position: 'outside',
                 visible: true,
                 font: {
-                    weight: "bold"
+                    weight: 'bold'
                 }
             }
         },
         {
             label: {
-                text: "Text4",
-                position: "outside",
+                text: 'Text4',
+                position: 'outside',
                 visible: false
             }
         }]
@@ -2657,58 +2657,58 @@ QUnit.test("Estimate draws constant lines with outside labels", function(assert)
 
     var group = this.renderer.g.getCall(0).returnValue;
 
-    assert.strictEqual(group.append.lastCall.args[0], this.renderer.root, "element appended");
-    assert.strictEqual(group.remove.callCount, 1, "element removed");
+    assert.strictEqual(group.append.lastCall.args[0], this.renderer.root, 'element appended');
+    assert.strictEqual(group.remove.callCount, 1, 'element removed');
 
     assert.strictEqual(this.renderer.text.callCount, 2);
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["Text1", 0, 0], "cteate text args");
+    assert.deepEqual(this.renderer.text.getCall(0).args, ['Text1', 0, 0], 'cteate text args');
 
     var textElement = this.renderer.text.getCall(0).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
-        align: "center"
-    }, "lebel settings");
+        align: 'center'
+    }, 'lebel settings');
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "font-weight": "bold"
-    }, "lebel style");
+        'font-weight': 'bold'
+    }, 'lebel style');
 
-    assert.strictEqual(textElement.append.lastCall.args[0], group, "element appended");
+    assert.strictEqual(textElement.append.lastCall.args[0], group, 'element appended');
 
-    assert.deepEqual(this.renderer.text.getCall(1).args, ["Text3", 0, 0], "cteate text args");
+    assert.deepEqual(this.renderer.text.getCall(1).args, ['Text3', 0, 0], 'cteate text args');
     textElement = this.renderer.text.getCall(1).returnValue;
     assert.deepEqual(textElement.attr.lastCall.args[0], {
-        align: "center"
-    }, "lebel settings");
+        align: 'center'
+    }, 'lebel settings');
 
     assert.deepEqual(textElement.css.lastCall.args[0], {
-        "font-weight": "bold"
-    }, "lebel style");
+        'font-weight': 'bold'
+    }, 'lebel style');
 
-    assert.strictEqual(textElement.append.lastCall.args[0], group, "element appended");
+    assert.strictEqual(textElement.append.lastCall.args[0], group, 'element appended');
 });
 
-QUnit.test("Include constant line labels in bottom margin", function(assert) {
+QUnit.test('Include constant line labels in bottom margin', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "bottom",
+        position: 'bottom',
         label: {
             visible: false
         },
         constantLines: [{
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true,
-                verticalAlignment: "bottom"
+                verticalAlignment: 'bottom'
             },
             paddingTopBottom: 10
         },
         {
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true,
-                verticalAlignment: "bottom"
+                verticalAlignment: 'bottom'
             },
             paddingTopBottom: 5
         }]
@@ -2722,19 +2722,19 @@ QUnit.test("Include constant line labels in bottom margin", function(assert) {
     assert.strictEqual(margins.bottom, 14 + 10);
 });
 
-QUnit.test("Include constant line labels in top margin", function(assert) {
+QUnit.test('Include constant line labels in top margin', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "bottom",
+        position: 'bottom',
         label: {
             visible: false
         },
         constantLines: [{
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true,
-                verticalAlignment: "top"
+                verticalAlignment: 'top'
             },
             paddingTopBottom: 10
         }]
@@ -2744,21 +2744,21 @@ QUnit.test("Include constant line labels in top margin", function(assert) {
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.top, 14 + 10, "top margin");
-    assert.strictEqual(margins.bottom, 0, "bottom margin");
+    assert.strictEqual(margins.top, 14 + 10, 'top margin');
+    assert.strictEqual(margins.bottom, 0, 'bottom margin');
 });
 
-QUnit.test("Label is wider than constant line label - get label as margin", function(assert) {
+QUnit.test('Label is wider than constant line label - get label as margin', function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "bottom",
+        position: 'bottom',
         label: {
             visible: true
         },
         constantLines: [{
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true
             },
             paddingTopBottom: 10
@@ -2779,22 +2779,22 @@ QUnit.test("Label is wider than constant line label - get label as margin", func
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.left, 10, "top margin");
-    assert.strictEqual(margins.right, 22, "right margin");
+    assert.strictEqual(margins.left, 10, 'top margin');
+    assert.strictEqual(margins.right, 22, 'right margin');
 });
 
-QUnit.test("Constant line label is wider than label - get constant line label as margin", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
+QUnit.test('Constant line label is wider than label - get constant line label as margin', function(assert) {
+    this.generatedTicks = ['c1', 'c2', 'c3', 'c4'];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        position: "bottom",
+        position: 'bottom',
         label: {
             visible: true
         },
         constantLines: [{
             label: {
-                text: "Text1",
-                position: "outside",
+                text: 'Text1',
+                position: 'outside',
                 visible: true
             },
             paddingTopBottom: 10
@@ -2815,11 +2815,11 @@ QUnit.test("Constant line label is wider than label - get constant line label as
 
     var margins = axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(margins.left, 12, "top margin");
-    assert.strictEqual(margins.right, 32, "right margin");
+    assert.strictEqual(margins.left, 12, 'top margin');
+    assert.strictEqual(margins.right, 32, 'right margin');
 });
 
-QUnit.test("Estimate margins does not include labels if stub data", function(assert) {
+QUnit.test('Estimate margins does not include labels if stub data', function(assert) {
     var customizeText = sinon.stub(),
         axis = this.createSimpleAxis({
             isHorizontal: true,
@@ -2831,22 +2831,22 @@ QUnit.test("Estimate margins does not include labels if stub data", function(ass
 
     axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(this.renderer.stub("text").callCount, 0);
+    assert.strictEqual(this.renderer.stub('text').callCount, 0);
     assert.ok(!customizeText.called, 0);
 });
 
-QUnit.test("no custom format - use auto format based on estimated tickInterval", function(assert) {
+QUnit.test('no custom format - use auto format based on estimated tickInterval', function(assert) {
     this.generatedTicks = [
         new Date(2009, 11, 1),
         new Date(2010, 0, 1),
         new Date(2010, 1, 1)
     ];
-    this.generatedTickInterval = "month";
+    this.generatedTickInterval = 'month';
 
     var axis = this.createSimpleAxis({
         isHorizontal: true,
-        type: "continuous",
-        valueType: "datetime",
+        type: 'continuous',
+        valueType: 'datetime',
         label: {
             visible: true
         },
@@ -2857,10 +2857,10 @@ QUnit.test("no custom format - use auto format based on estimated tickInterval",
 
     axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(this.renderer.text.getCall(0).args[0], "February");
+    assert.strictEqual(this.renderer.text.getCall(0).args[0], 'February');
 });
 
-QUnit.module("Coords In", $.extend({}, environment2DTranslator, {
+QUnit.module('Coords In', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
         this.axis = this.createSimpleAxis();
@@ -2875,10 +2875,10 @@ QUnit.module("Coords In", $.extend({}, environment2DTranslator, {
     }
 }));
 
-QUnit.test("Horizontal axis. bottom position", function(assert) {
+QUnit.test('Horizontal axis. bottom position', function(assert) {
     this.updateOptions({
         isHorizontal: true,
-        position: "bottom"
+        position: 'bottom'
     });
 
     assert.strictEqual(this.axis.coordsIn(500, 601), true);
@@ -2887,10 +2887,10 @@ QUnit.test("Horizontal axis. bottom position", function(assert) {
     assert.strictEqual(this.axis.coordsIn(500, 100), false);
 });
 
-QUnit.test("Horizontal axis. top position", function(assert) {
+QUnit.test('Horizontal axis. top position', function(assert) {
     this.updateOptions({
         isHorizontal: true,
-        position: "top"
+        position: 'top'
     });
 
     assert.strictEqual(this.axis.coordsIn(500, 9), true);
@@ -2900,10 +2900,10 @@ QUnit.test("Horizontal axis. top position", function(assert) {
     assert.strictEqual(this.axis.coordsIn(500, 601), false);
 });
 
-QUnit.test("Vertica axis. left position", function(assert) {
+QUnit.test('Vertica axis. left position', function(assert) {
     this.updateOptions({
         isHorizontal: false,
-        position: "left"
+        position: 'left'
     });
 
     assert.strictEqual(this.axis.coordsIn(10, 100), true);
@@ -2912,10 +2912,10 @@ QUnit.test("Vertica axis. left position", function(assert) {
     assert.strictEqual(this.axis.coordsIn(10, 700), false);
 });
 
-QUnit.test("Vertical axis. right position", function(assert) {
+QUnit.test('Vertical axis. right position', function(assert) {
     this.updateOptions({
         isHorizontal: false,
-        position: "right"
+        position: 'right'
     });
 
     assert.strictEqual(this.axis.coordsIn(920, 100), true);
@@ -2924,9 +2924,9 @@ QUnit.test("Vertical axis. right position", function(assert) {
     assert.strictEqual(this.axis.coordsIn(920, 700), false);
 });
 
-QUnit.module("API: Shift", environment2DTranslator);
+QUnit.module('API: Shift', environment2DTranslator);
 
-QUnit.test("All margins are zero", function(assert) {
+QUnit.test('All margins are zero', function(assert) {
     this.options.multipleAxesSpacing = 5;
     var axis = this.createDrawnAxis();
 
@@ -2940,7 +2940,7 @@ QUnit.test("All margins are zero", function(assert) {
     });
 });
 
-QUnit.test("getLabelsPosition returns correct value after empty shift", function(assert) {
+QUnit.test('getLabelsPosition returns correct value after empty shift', function(assert) {
     this.options.multipleAxesSpacing = 5;
     var axis = this.createDrawnAxis();
 
@@ -2949,9 +2949,9 @@ QUnit.test("getLabelsPosition returns correct value after empty shift", function
     assert.equal(axis.getLabelsPosition(), 10);
 });
 
-QUnit.test("Vertical axis position is left", function(assert) {
+QUnit.test('Vertical axis position is left', function(assert) {
     this.options.isHorizontal = false;
-    this.options.position = "left";
+    this.options.position = 'left';
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -2961,10 +2961,10 @@ QUnit.test("Vertical axis position is left", function(assert) {
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
 });
 
-QUnit.test("Vertical axis with multipleAxesSpacing option", function(assert) {
+QUnit.test('Vertical axis with multipleAxesSpacing option', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = false;
-    this.options.position = "left";
+    this.options.position = 'left';
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -2974,9 +2974,9 @@ QUnit.test("Vertical axis with multipleAxesSpacing option", function(assert) {
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
 });
 
-QUnit.test("Vertical axis position is right", function(assert) {
+QUnit.test('Vertical axis position is right', function(assert) {
     this.options.isHorizontal = false;
-    this.options.position = "right";
+    this.options.position = 'right';
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -2986,9 +2986,9 @@ QUnit.test("Vertical axis position is right", function(assert) {
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 0);
 });
 
-QUnit.test("Horizontal axis position is top", function(assert) {
+QUnit.test('Horizontal axis position is top', function(assert) {
     this.options.isHorizontal = true;
-    this.options.position = "top";
+    this.options.position = 'top';
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -2998,9 +2998,9 @@ QUnit.test("Horizontal axis position is top", function(assert) {
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, -64);
 });
 
-QUnit.test("Horizontal axis position is bottom", function(assert) {
+QUnit.test('Horizontal axis position is bottom', function(assert) {
     this.options.isHorizontal = true;
-    this.options.position = "bottom";
+    this.options.position = 'bottom';
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -3010,7 +3010,7 @@ QUnit.test("Horizontal axis position is bottom", function(assert) {
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 45);
 });
 
-QUnit.test("Horizontal axis. Shift outside constant line groups vertically", function(assert) {
+QUnit.test('Horizontal axis. Shift outside constant line groups vertically', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = true;
     var axis = this.createDrawnAxis();
@@ -3031,7 +3031,7 @@ QUnit.test("Horizontal axis. Shift outside constant line groups vertically", fun
     assert.deepEqual(groupUnderSeries.bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5, translateX: 0 }]);
 });
 
-QUnit.test("Vertical axis. Shift outside constant line groups horizontally", function(assert) {
+QUnit.test('Vertical axis. Shift outside constant line groups horizontally', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = false;
     var axis = this.createDrawnAxis();
@@ -3052,7 +3052,7 @@ QUnit.test("Vertical axis. Shift outside constant line groups horizontally", fun
     assert.deepEqual(groupUnderSeries.rightGroup.attr.lastCall.args, [{ translateX: 76 + 5, translateY: 0 }]);
 });
 
-QUnit.test("Inside constant line group is not shifted", function(assert) {
+QUnit.test('Inside constant line group is not shifted', function(assert) {
     this.options.multipleAxesSpacing = 5;
     this.options.isHorizontal = true;
     var axis = this.createDrawnAxis();
@@ -3064,7 +3064,7 @@ QUnit.test("Inside constant line group is not shifted", function(assert) {
     assert.equal(group.attr.callCount, 0);
 });
 
-QUnit.module("Scale breaks", $.extend({}, environment2DTranslator, {
+QUnit.module('Scale breaks', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
 
@@ -3080,7 +3080,7 @@ QUnit.module("Scale breaks", $.extend({}, environment2DTranslator, {
     afterEach: environment2DTranslator.afterEach
 }));
 
-QUnit.test("Get scale breaks in the viewport", function(assert) {
+QUnit.test('Get scale breaks in the viewport', function(assert) {
     this.updateOptions({
         breakStyle: { width: 10 },
         breaks: [
@@ -3103,7 +3103,7 @@ QUnit.test("Get scale breaks in the viewport", function(assert) {
     ]);
 });
 
-QUnit.test("Do not get scale break if viewport inside it", function(assert) {
+QUnit.test('Do not get scale break if viewport inside it', function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 200, endValue: 500 }]
     });
@@ -3116,7 +3116,7 @@ QUnit.test("Do not get scale break if viewport inside it", function(assert) {
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Sorting of the breaks if user set not sorted breaks", function(assert) {
+QUnit.test('Sorting of the breaks if user set not sorted breaks', function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 200, endValue: 500 }, { startValue: 100, endValue: 150 }],
         min: 0,
@@ -3136,7 +3136,7 @@ QUnit.test("Sorting of the breaks if user set not sorted breaks", function(asser
     }]);
 });
 
-QUnit.test("Correct the breaks if user set 'from' > 'to'", function(assert) {
+QUnit.test('Correct the breaks if user set \'from\' > \'to\'', function(assert) {
     this.updateOptions({
         breaks: [{ startValue: 150, endValue: 100 }, { startValue: 500, endValue: 200 }],
         min: 0,
@@ -3156,7 +3156,7 @@ QUnit.test("Correct the breaks if user set 'from' > 'to'", function(assert) {
     }]);
 });
 
-QUnit.test("Filter the breaks if user set them with null and undefined values", function(assert) {
+QUnit.test('Filter the breaks if user set them with null and undefined values', function(assert) {
     this.updateOptions({
         breaks: [
             { startValue: 100, endValue: null },
@@ -3180,7 +3180,7 @@ QUnit.test("Filter the breaks if user set them with null and undefined values", 
     }]);
 });
 
-QUnit.test("Merge breaks if they cross each other", function(assert) {
+QUnit.test('Merge breaks if they cross each other', function(assert) {
     this.updateOptions({
         breaks: [
             { startValue: 50, endValue: 100 },
@@ -3205,7 +3205,7 @@ QUnit.test("Merge breaks if they cross each other", function(assert) {
     }]);
 });
 
-QUnit.test("Merge breaks if they cross each other and last the break more than maxVisible", function(assert) {
+QUnit.test('Merge breaks if they cross each other and last the break more than maxVisible', function(assert) {
     this.updateOptions({
         breaks: [
             { startValue: 50, endValue: 100 },
@@ -3224,11 +3224,11 @@ QUnit.test("Merge breaks if they cross each other and last the break more than m
     }]);
 });
 
-QUnit.test("Datetime axis, breaks values are string", function(assert) {
-    this.updateOptions({ valueType: "datetime" });
+QUnit.test('Datetime axis, breaks values are string', function(assert) {
+    this.updateOptions({ valueType: 'datetime' });
     this.axis.validate();
     this.updateOptions({
-        dataType: "datetime",
+        dataType: 'datetime',
         breaks: [{ startValue: 'May 7, 2015', endValue: 'May 9, 2015' }],
         min: new Date(2015, 4, 5),
         max: new Date(2015, 4, 10)
@@ -3243,7 +3243,7 @@ QUnit.test("Datetime axis, breaks values are string", function(assert) {
     }]);
 });
 
-QUnit.test("Remove groups on disposing", function(assert) {
+QUnit.test('Remove groups on disposing', function(assert) {
     this.renderSettings.scaleBreaksGroup = this.renderer.g();
     var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
         breaks: [
@@ -3252,8 +3252,8 @@ QUnit.test("Remove groups on disposing", function(assert) {
         ],
         visible: true,
         breakStyle: {
-            color: "black",
-            line: "waved",
+            color: 'black',
+            line: 'waved',
             width: 10
         },
         min: 0,
@@ -3284,19 +3284,19 @@ QUnit.test("Remove groups on disposing", function(assert) {
     assert.ok(this.renderer.clipRect.getCall(1).returnValue.dispose.called);
 });
 
-QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
+QUnit.module('Datetime scale breaks. Weekends and holidays', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         var that = this;
         environment2DTranslator.beforeEach.call(that);
 
         that.axis = that.createSimpleAxis({
-            dataType: "datetime"
+            dataType: 'datetime'
         });
     },
     updateOptions: function(opt) {
 
         var options = $.extend(true, this.options, {
-            dataType: "datetime",
+            dataType: 'datetime',
             breakStyle: { width: 0 },
             workdaysOnly: true
         }, opt);
@@ -3309,7 +3309,7 @@ QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, enviro
     afterEach: environment2DTranslator.afterEach
 }));
 
-QUnit.test("Generate weekend breaks", function(assert) {
+QUnit.test('Generate weekend breaks', function(assert) {
     this.updateOptions({
         breakStyle: { width: 10 }
     });
@@ -3328,7 +3328,7 @@ QUnit.test("Generate weekend breaks", function(assert) {
     }]);
 });
 
-QUnit.test("Generate weekend breaks for 3 days workweek", function(assert) {
+QUnit.test('Generate weekend breaks for 3 days workweek', function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         workWeek: [2, 3, 4],
@@ -3357,8 +3357,8 @@ QUnit.test("Generate weekend breaks for 3 days workweek", function(assert) {
     }]);
 });
 
-QUnit.test("Do not generate weekend breaks if dataType is not datetime", function(assert) {
-    this.updateOptions({ dataType: "numeric" });
+QUnit.test('Do not generate weekend breaks if dataType is not datetime', function(assert) {
+    this.updateOptions({ dataType: 'numeric' });
 
     this.axis.createTicks(this.canvas);
 
@@ -3367,7 +3367,7 @@ QUnit.test("Do not generate weekend breaks if dataType is not datetime", functio
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Do not generate weekend breaks if workdaysOnly is set to false", function(assert) {
+QUnit.test('Do not generate weekend breaks if workdaysOnly is set to false', function(assert) {
     this.updateOptions({
         workdaysOnly: false
     });
@@ -3379,10 +3379,10 @@ QUnit.test("Do not generate weekend breaks if workdaysOnly is set to false", fun
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Do not generate weekend breaks if axis type is discrete", function(assert) {
+QUnit.test('Do not generate weekend breaks if axis type is discrete', function(assert) {
     this.updateOptions({
-        dataType: "datetime",
-        type: "discrete"
+        dataType: 'datetime',
+        type: 'discrete'
     });
 
     this.axis.createTicks(this.canvas);
@@ -3392,7 +3392,7 @@ QUnit.test("Do not generate weekend breaks if axis type is discrete", function(a
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Generate two breaks when two days off on week", function(assert) {
+QUnit.test('Generate two breaks when two days off on week', function(assert) {
     this.updateOptions({
         workWeek: [1, 2, 4, 5],
     });
@@ -3421,7 +3421,7 @@ QUnit.test("Generate two breaks when two days off on week", function(assert) {
     ]);
 });
 
-QUnit.test("The break starts with min if the range starts on a weekend", function(assert) {
+QUnit.test('The break starts with min if the range starts on a weekend', function(assert) {
     this.updateOptions({ min: new Date(2017, 8, 3, 8, 20), max: new Date(2017, 8, 11) });
 
     this.axis.createTicks(this.canvas);
@@ -3449,7 +3449,7 @@ QUnit.test("The break starts with min if the range starts on a weekend", functio
     ]);
 });
 
-QUnit.test("End of the scale break is max of the range if range ends on a weekend", function(assert) {
+QUnit.test('End of the scale break is max of the range if range ends on a weekend', function(assert) {
     this.updateOptions({
         min: new Date(2017, 8, 4),
         max: new Date(2017, 8, 10, 8, 20)
@@ -3473,7 +3473,7 @@ QUnit.test("End of the scale break is max of the range if range ends on a weeken
     ]);
 });
 
-QUnit.test("All range is in weekend", function(assert) {
+QUnit.test('All range is in weekend', function(assert) {
     this.updateOptions({
         min: new Date(2017, 8, 10),
         max: new Date(2017, 8, 10, 8, 20)
@@ -3486,7 +3486,7 @@ QUnit.test("All range is in weekend", function(assert) {
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Exclude exactWorkDays from weekend when it at the end of the weekend", function(assert) {
+QUnit.test('Exclude exactWorkDays from weekend when it at the end of the weekend', function(assert) {
     this.updateOptions({
         singleWorkdays: [new Date(2017, 8, 10, 8, 20)],
         min: new Date(2017, 8, 4, 8, 0, 0),
@@ -3505,7 +3505,7 @@ QUnit.test("Exclude exactWorkDays from weekend when it at the end of the weekend
     }]);
 });
 
-QUnit.test("Exclude exactWorkDays from weekend when it at the begin of the weekend", function(assert) {
+QUnit.test('Exclude exactWorkDays from weekend when it at the begin of the weekend', function(assert) {
     this.updateOptions({
         singleWorkdays: [new Date(2017, 8, 9, 8, 20)],
         min: new Date(2017, 8, 4, 8, 0, 0),
@@ -3524,7 +3524,7 @@ QUnit.test("Exclude exactWorkDays from weekend when it at the begin of the weeke
     }]);
 });
 
-QUnit.test("Separate a weekend if exactWorkDays in the middle of the break", function(assert) {
+QUnit.test('Separate a weekend if exactWorkDays in the middle of the break', function(assert) {
     this.updateOptions({
         singleWorkdays: [new Date(2017, 8, 10, 8, 20)],
         workWeek: [2, 3, 4, 5],
@@ -3542,7 +3542,7 @@ QUnit.test("Separate a weekend if exactWorkDays in the middle of the break", fun
     ]);
 });
 
-QUnit.test("Axis has not breaks if exactWorkDays in the weekend", function(assert) {
+QUnit.test('Axis has not breaks if exactWorkDays in the weekend', function(assert) {
     this.updateOptions({
         singleWorkdays: [new Date(2017, 8, 9, 8, 20), new Date(2017, 8, 10, 8, 20)],
         min: new Date(2017, 8, 6, 8, 0, 0),
@@ -3556,7 +3556,7 @@ QUnit.test("Axis has not breaks if exactWorkDays in the weekend", function(asser
     assert.deepEqual(breaks, []);
 });
 
-QUnit.test("Generate breaks for holidays", function(assert) {
+QUnit.test('Generate breaks for holidays', function(assert) {
     this.updateOptions({
         workWeek: [0, 1, 2, 3, 4, 5, 6],
         holidays: [new Date(2017, 8, 10, 8, 20)],
@@ -3576,7 +3576,7 @@ QUnit.test("Generate breaks for holidays", function(assert) {
     }]);
 });
 
-QUnit.test("The break starts with min range if holiday starts early then min", function(assert) {
+QUnit.test('The break starts with min range if holiday starts early then min', function(assert) {
     this.updateOptions({
         workWeek: [0, 1, 2, 3, 4, 5, 6],
         holidays: [new Date(2017, 8, 6, 6, 20)],
@@ -3598,7 +3598,7 @@ QUnit.test("The break starts with min range if holiday starts early then min", f
     }]);
 });
 
-QUnit.test("The break ends with max range if holiday ends later then max", function(assert) {
+QUnit.test('The break ends with max range if holiday ends later then max', function(assert) {
     this.updateOptions({
         workWeek: [0, 1, 2, 3, 4, 5, 6],
         holidays: [new Date(2017, 8, 13, 6, 20)],
@@ -3620,7 +3620,7 @@ QUnit.test("The break ends with max range if holiday ends later then max", funct
     }]);
 });
 
-QUnit.test("Do not generate the breaks for holiday if it in the weekend", function(assert) {
+QUnit.test('Do not generate the breaks for holiday if it in the weekend', function(assert) {
     this.updateOptions({
         holidays: [new Date(2017, 8, 10, 8, 20)],
         min: new Date(2017, 8, 6, 8, 0, 0),
@@ -3641,7 +3641,7 @@ QUnit.test("Do not generate the breaks for holiday if it in the weekend", functi
     }]);
 });
 
-QUnit.test("sort generated breaks", function(assert) {
+QUnit.test('sort generated breaks', function(assert) {
     this.updateOptions({
         holidays: [new Date(2017, 8, 6)],
         min: new Date(2017, 8, 4, 8, 0, 0),
@@ -3672,7 +3672,7 @@ QUnit.test("sort generated breaks", function(assert) {
     ]);
 });
 
-QUnit.test("Recalculate the breaks on zoom", function(assert) {
+QUnit.test('Recalculate the breaks on zoom', function(assert) {
     this.updateOptions({
         workWeek: [1, 2, 3, 5],
         min: new Date(2017, 8, 4, 8, 0, 0),
@@ -3699,7 +3699,7 @@ QUnit.test("Recalculate the breaks on zoom", function(assert) {
     ]);
 });
 
-QUnit.test("Correct generation of the breaks if workdays set with uppercase", function(assert) {
+QUnit.test('Correct generation of the breaks if workdays set with uppercase', function(assert) {
     this.updateOptions({
         min: new Date(2017, 8, 4, 8, 0, 0),
         max: new Date(2017, 8, 11)
@@ -3719,7 +3719,7 @@ QUnit.test("Correct generation of the breaks if workdays set with uppercase", fu
     }]);
 });
 
-QUnit.test("Correct generation of the breaks if holidays set with string", function(assert) {
+QUnit.test('Correct generation of the breaks if holidays set with string', function(assert) {
     this.updateOptions({
         workWeek: [0, 1, 2, 3, 4, 5, 6],
         holidays: ['September 11, 2017'],
@@ -3741,7 +3741,7 @@ QUnit.test("Correct generation of the breaks if holidays set with string", funct
     }]);
 });
 
-QUnit.test("Correct generation of the breaks if exactWorkdays set with string", function(assert) {
+QUnit.test('Correct generation of the breaks if exactWorkdays set with string', function(assert) {
     this.updateOptions({
         workWeek: [1, 2, 3, 4, 5],
         singleWorkdays: ['September 10, 2017'],
@@ -3763,7 +3763,7 @@ QUnit.test("Correct generation of the breaks if exactWorkdays set with string", 
     }]);
 });
 
-QUnit.test("Concatenate generated breaks with user breaks", function(assert) {
+QUnit.test('Concatenate generated breaks with user breaks', function(assert) {
     this.updateOptions({
         breaks: [{ startValue: new Date(2017, 8, 12), endValue: new Date(2017, 8, 13) }],
         min: new Date(2017, 8, 4),
@@ -3791,7 +3791,7 @@ QUnit.test("Concatenate generated breaks with user breaks", function(assert) {
     ]);
 });
 
-QUnit.test("Merge generated breaks with user breaks", function(assert) {
+QUnit.test('Merge generated breaks with user breaks', function(assert) {
     this.updateOptions({
         breakStyle: { width: 10 },
         breaks: [{ startValue: new Date(2017, 8, 10), endValue: new Date(2017, 8, 13) }],
@@ -3813,7 +3813,7 @@ QUnit.test("Merge generated breaks with user breaks", function(assert) {
     ]);
 });
 
-QUnit.module("Auto scale breaks", $.extend({}, environment2DTranslator, {
+QUnit.module('Auto scale breaks', $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
         this.options.maxAutoBreakCount = 2;
@@ -3836,7 +3836,7 @@ QUnit.module("Auto scale breaks", $.extend({}, environment2DTranslator, {
     afterEach: environment2DTranslator.afterEach
 }));
 
-QUnit.test("Several series with not sorted values", function(assert) {
+QUnit.test('Several series with not sorted values', function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 100, 40], []]),
         this.stubSeries([[80, 120, 40], []])
@@ -3853,7 +3853,7 @@ QUnit.test("Several series with not sorted values", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 10, to: 40, cumulativeWidth: 0 }, { from: 40, to: 80, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Very big difference beetwen the values", function(assert) {
+QUnit.test('Very big difference beetwen the values', function(assert) {
     this.series = [
         this.stubSeries([[5500, 5100, 300, 5], []])
     ];
@@ -3871,7 +3871,7 @@ QUnit.test("Very big difference beetwen the values", function(assert) {
     ]);
 });
 
-QUnit.test("Small difference beetween the values, breaks are not generated", function(assert) {
+QUnit.test('Small difference beetween the values, breaks are not generated', function(assert) {
     this.series = [
         this.stubSeries([[2, 3, 4, 5, 6, 7, 8, 9, 10], []])
     ];
@@ -3887,7 +3887,7 @@ QUnit.test("Small difference beetween the values, breaks are not generated", fun
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("maxCountOfBreaks option is set to zero. Without breaks", function(assert) {
+QUnit.test('maxCountOfBreaks option is set to zero. Without breaks', function(assert) {
     this.axis.setGroupSeries(this.series);
     this.updateOptions({
         min: 2,
@@ -3900,7 +3900,7 @@ QUnit.test("maxCountOfBreaks option is set to zero. Without breaks", function(as
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Argument axis. Without breaks", function(assert) {
+QUnit.test('Argument axis. Without breaks', function(assert) {
     this.series = [
         this.stubSeries([[5500, 5100, 300, 5], []])
     ];
@@ -3923,9 +3923,9 @@ QUnit.test("Argument axis. Without breaks", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Discrete. Without breaks", function(assert) {
+QUnit.test('Discrete. Without breaks', function(assert) {
     this.updateOptions({
-        type: "discrete",
+        type: 'discrete',
         min: 2,
         max: 100
     });
@@ -3935,9 +3935,9 @@ QUnit.test("Discrete. Without breaks", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Datetime. Without breaks", function(assert) {
+QUnit.test('Datetime. Without breaks', function(assert) {
     this.updateOptions({
-        dataType: "datetime",
+        dataType: 'datetime',
         min: new Date(2),
         max: new Date(100)
     });
@@ -3946,7 +3946,7 @@ QUnit.test("Datetime. Without breaks", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Without breaks, autoScaleBreaks option is false", function(assert) {
+QUnit.test('Without breaks, autoScaleBreaks option is false', function(assert) {
     this.updateOptions({
         autoBreaksEnabled: false,
         min: 2,
@@ -3958,7 +3958,7 @@ QUnit.test("Without breaks, autoScaleBreaks option is false", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Two values and range is equal to this values", function(assert) {
+QUnit.test('Two values and range is equal to this values', function(assert) {
     this.series = [
         this.stubSeries([[3, 100], []]),
     ];
@@ -3975,7 +3975,7 @@ QUnit.test("Two values and range is equal to this values", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
 });
 
-QUnit.test("Option maxCountOfBreaks is more than generated breaks", function(assert) {
+QUnit.test('Option maxCountOfBreaks is more than generated breaks', function(assert) {
     this.series = [
         this.stubSeries([[3, 100], []]),
     ];
@@ -3991,7 +3991,7 @@ QUnit.test("Option maxCountOfBreaks is more than generated breaks", function(ass
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 3, to: 100, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Option maxCountOfBreaks is undefined", function(assert) {
+QUnit.test('Option maxCountOfBreaks is undefined', function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 100, 40], []]),
         this.stubSeries([[80, 120, 40], []])
@@ -4016,14 +4016,14 @@ QUnit.test("Option maxCountOfBreaks is undefined", function(assert) {
     ]);
 });
 
-QUnit.test("Logarithmic axis", function(assert) {
+QUnit.test('Logarithmic axis', function(assert) {
     this.series = [
         this.stubSeries([[0.1, 1, 10, 100, 1000, 10000000], []])
     ];
     this.axis.setGroupSeries(this.series);
 
     this.updateOptions({
-        type: "logarithmic",
+        type: 'logarithmic',
         logarithmBase: 10,
         min: 0.1,
         max: 10000000
@@ -4034,7 +4034,7 @@ QUnit.test("Logarithmic axis", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 1000, to: 10000000, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Breaks length should be less than visible range. T569737", function(assert) {
+QUnit.test('Breaks length should be less than visible range. T569737', function(assert) {
     this.series = [
         this.stubSeries([[0.001, 0.267, 19, 23, 145, 1009], []])
     ];
@@ -4043,7 +4043,7 @@ QUnit.test("Breaks length should be less than visible range. T569737", function(
     this.options.maxAutoBreakCount = undefined;
 
     this.updateOptions({
-        type: "logarithmic",
+        type: 'logarithmic',
         logarithmBase: 10,
         min: 0.001,
         max: 1009
@@ -4054,7 +4054,7 @@ QUnit.test("Breaks length should be less than visible range. T569737", function(
     assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 4);
 });
 
-QUnit.test("Breaks count is equal point range count if breaks length less than visible range. T569737", function(assert) {
+QUnit.test('Breaks count is equal point range count if breaks length less than visible range. T569737', function(assert) {
     this.series = [
         this.stubSeries([[0.001, 0.267, 19, 23, 145, 1009], []])
     ];
@@ -4063,7 +4063,7 @@ QUnit.test("Breaks count is equal point range count if breaks length less than v
     this.options.maxAutoBreakCount = undefined;
 
     this.updateOptions({
-        type: "logarithmic",
+        type: 'logarithmic',
         logarithmBase: 10,
         min: 0.0009,
         max: 1009
@@ -4074,7 +4074,25 @@ QUnit.test("Breaks count is equal point range count if breaks length less than v
     assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 5);
 });
 
-QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
+// T835287
+QUnit.test('Auto scale breaks with large range', function(assert) {
+    this.series = [
+        this.stubSeries([[1970, 1972, 1974, 5330000000000], []])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.updateOptions({
+        type: 'numeric',
+        min: 0,
+        max: 5330000000000
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 1);
+});
+
+QUnit.test('Concatenate auto breaks with user breaks', function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 35, 43, 45, 100, 40], []]),
     ];
@@ -4095,7 +4113,7 @@ QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
     ]);
 });
 
-QUnit.test("Filter scalebreaks on zoom", function(assert) {
+QUnit.test('Filter scalebreaks on zoom', function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 100, 40], []]),
         this.stubSeries([[80, 120, 40], []])
@@ -4116,7 +4134,7 @@ QUnit.test("Filter scalebreaks on zoom", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 50, to: 80, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Recalculate scale breaks on zoom", function(assert) {
+QUnit.test('Recalculate scale breaks on zoom', function(assert) {
     this.axis.setGroupSeries([
         this.stubSeries([[3, 10, 40], []]),
         this.stubSeries([[80, 120, 40], []])
@@ -4140,7 +4158,7 @@ QUnit.test("Recalculate scale breaks on zoom", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 80, to: 100, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Reset zoom", function(assert) {
+QUnit.test('Reset zoom', function(assert) {
     this.series = [
         this.stubSeries([[3, 10, 100, 40], []]),
         this.stubSeries([[80, 120, 40], []])
@@ -4161,7 +4179,7 @@ QUnit.test("Reset zoom", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 10, to: 40, cumulativeWidth: 0 }, { from: 40, to: 80, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Generate the breaks take into account the edge points that out of the range", function(assert) {
+QUnit.test('Generate the breaks take into account the edge points that out of the range', function(assert) {
     this.series = [
         this.stubSeries([[14, 50, 100], [20, 43]])
     ];
@@ -4177,7 +4195,7 @@ QUnit.test("Generate the breaks take into account the edge points that out of th
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 20, to: 43, cumulativeWidth: 0 }, { from: 50, to: 100, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Generate the breaks take into account the edge points that out of the range, min range === min edge value", function(assert) {
+QUnit.test('Generate the breaks take into account the edge points that out of the range, min range === min edge value', function(assert) {
     this.series = [
         this.stubSeries([[30, 100], [90, 2]])
     ];
@@ -4193,7 +4211,7 @@ QUnit.test("Generate the breaks take into account the edge points that out of th
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 2, to: 30, cumulativeWidth: 0 }, { from: 30, to: 90, cumulativeWidth: 0 }]);
 });
 
-QUnit.test("Generate the breaks take into account the edge points that out of the range, edge point equal to point in the range", function(assert) {
+QUnit.test('Generate the breaks take into account the edge points that out of the range, edge point equal to point in the range', function(assert) {
     this.series = [
         this.stubSeries([[2, 30, 100], [30, 90]])
     ];
@@ -4209,12 +4227,12 @@ QUnit.test("Generate the breaks take into account the edge points that out of th
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 2, to: 30, cumulativeWidth: 0 }, { from: 30, to: 90, cumulativeWidth: 0 }]);
 });
 
-QUnit.module("XY axes margin calculation", {
+QUnit.module('XY axes margin calculation', {
     beforeEach: function() {
         environment.beforeEach.call(this);
 
         translator2DModule.Translator2D.restore();
-        sinon.spy(translator2DModule, "Translator2D");
+        sinon.spy(translator2DModule, 'Translator2D');
 
         this.canvas = {
             top: 200,
@@ -4232,8 +4250,8 @@ QUnit.module("XY axes margin calculation", {
         var axis = new Axis(renderSettings);
 
         axis.updateOptions($.extend(true, {
-            type: "continuous",
-            dataType: "numeric",
+            type: 'continuous',
+            dataType: 'numeric',
             isHorizontal: true,
             label: {
                 visible: true
@@ -4254,7 +4272,7 @@ QUnit.module("XY axes margin calculation", {
 
         const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-        sinon.spy(translator, "updateBusinessRange");
+        sinon.spy(translator, 'updateBusinessRange');
 
         if(data.zoom) {
             axis.visualRange(data.zoom);
@@ -4276,14 +4294,14 @@ QUnit.module("XY axes margin calculation", {
         const expectedRange = data.expectedRange;
 
         if(expectedRange) {
-            if("categories" in expectedRange) {
-                assert.deepEqual(range.categories, expectedRange.categories, "categorties");
+            if('categories' in expectedRange) {
+                assert.deepEqual(range.categories, expectedRange.categories, 'categorties');
             } else {
-                "minVisible" in expectedRange && assert.roughEqual(translator.to(expectedRange.minVisible, -1), this.canvas.left, 1.01, "minVisible value");
-                "maxVisible" in expectedRange && assert.roughEqual(translator.to(data.expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, "maxVisible value");
+                'minVisible' in expectedRange && assert.roughEqual(translator.to(expectedRange.minVisible, -1), this.canvas.left, 1.01, 'minVisible value');
+                'maxVisible' in expectedRange && assert.roughEqual(translator.to(data.expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, 'maxVisible value');
             }
 
-            "interval" in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, "interval");
+            'interval' in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, 'interval');
         }
 
         const expectedVisibleArea = data.expectedVisibleArea;
@@ -4294,7 +4312,7 @@ QUnit.module("XY axes margin calculation", {
     }
 });
 
-QUnit.test("Size margins with scale breaks", function(assert) {
+QUnit.test('Size margins with scale breaks', function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -4327,7 +4345,7 @@ QUnit.test("Size margins with scale breaks", function(assert) {
 });
 
 
-QUnit.test("Interval margins with scale breaks", function(assert) {
+QUnit.test('Interval margins with scale breaks', function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -4361,7 +4379,7 @@ QUnit.test("Interval margins with scale breaks", function(assert) {
     });
 });
 
-QUnit.test("Percent margins with scale breaks", function(assert) {
+QUnit.test('Percent margins with scale breaks', function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -4389,7 +4407,7 @@ QUnit.test("Percent margins with scale breaks", function(assert) {
     });
 });
 
-QUnit.test("Calculate correct margins if scale breaks in range start and end", function(assert) {
+QUnit.test('Calculate correct margins if scale breaks in range start and end', function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -4421,7 +4439,7 @@ QUnit.test("Calculate correct margins if scale breaks in range start and end", f
 });
 
 
-QUnit.test("Calculate correct margins if scalebreks in range start and end. Inverted", function(assert) {
+QUnit.test('Calculate correct margins if scalebreks in range start and end. Inverted', function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -4451,7 +4469,7 @@ QUnit.test("Calculate correct margins if scalebreks in range start and end. Inve
     });
 });
 
-QUnit.test("Apply margin to series range when adjust", function(assert) {
+QUnit.test('Apply margin to series range when adjust', function(assert) {
     const series = [new MockSeries({})];
     series[0].getViewport.returns({
         min: 120,
@@ -4479,7 +4497,7 @@ QUnit.test("Apply margin to series range when adjust", function(assert) {
     });
 });
 
-QUnit.test("T746896. Take into account scale breaks on tick calculation", function(assert) {
+QUnit.test('T746896. Take into account scale breaks on tick calculation', function(assert) {
     const axis = this.createAxis(this.renderSettings, {
         valueMarginsEnabled: true,
         breakStyle: { width: 0 },
@@ -4505,7 +4523,7 @@ QUnit.test("T746896. Take into account scale breaks on tick calculation", functi
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, 1010);
 });
 
-QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
+QUnit.test('Extend range to boundery ticks on adjust', function(assert) {
     const series = [new MockSeries({})];
     series[0].getViewport.returns({
         min: 120,
@@ -4534,13 +4552,13 @@ QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
     });
 });
 
-QUnit.module("Adjust value axis", {
+QUnit.module('Adjust value axis', {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
         this.axis = new Axis({
             renderer: this.renderer,
-            axisType: "xyAxes",
-            drawingType: "linear",
+            axisType: 'xyAxes',
+            drawingType: 'linear',
             isArgumentAxis: false,
             eventTrigger() {}
         });
@@ -4565,7 +4583,7 @@ QUnit.module("Adjust value axis", {
     }
 });
 
-QUnit.test("Calculate common range from series on adjust", function(assert) {
+QUnit.test('Calculate common range from series on adjust', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4597,7 +4615,7 @@ QUnit.test("Calculate common range from series on adjust", function(assert) {
     assert.strictEqual(maxVisible, 15);
 });
 
-QUnit.test("Calculate common range from series on adjust. series with show zero", function(assert) {
+QUnit.test('Calculate common range from series on adjust. series with show zero', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4631,7 +4649,7 @@ QUnit.test("Calculate common range from series on adjust. series with show zero"
     assert.strictEqual(maxVisible, 15);
 });
 
-QUnit.test("Recalculate scale breaks", function(assert) {
+QUnit.test('Recalculate scale breaks', function(assert) {
     this.updateOptions({
         breakStyle: { width: 10 },
         breaks: [
@@ -4674,7 +4692,7 @@ QUnit.test("Recalculate scale breaks", function(assert) {
     ]);
 });
 
-QUnit.test("Calculate common range from series on adjust when one series is not visible", function(assert) {
+QUnit.test('Calculate common range from series on adjust when one series is not visible', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4710,7 +4728,7 @@ QUnit.test("Calculate common range from series on adjust when one series is not 
     assert.strictEqual(maxVisible, 12);
 });
 
-QUnit.test("min and are undefined in common range", function(assert) {
+QUnit.test('min and are undefined in common range', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4732,7 +4750,7 @@ QUnit.test("min and are undefined in common range", function(assert) {
     assert.strictEqual(maxVisible, 100);
 });
 
-QUnit.test("Do not adjust axis if it has min/max", function(assert) {
+QUnit.test('Do not adjust axis if it has min/max', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4763,7 +4781,7 @@ QUnit.test("Do not adjust axis if it has min/max", function(assert) {
     assert.strictEqual(maxVisible, 60);
 });
 
-QUnit.test("Do not adjust axis if it was zoomed", function(assert) {
+QUnit.test('Do not adjust axis if it was zoomed', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4794,7 +4812,7 @@ QUnit.test("Do not adjust axis if it was zoomed", function(assert) {
     assert.strictEqual(maxVisible, 60);
 });
 
-QUnit.test("Adjust axis after reset zoom", function(assert) {
+QUnit.test('Adjust axis after reset zoom', function(assert) {
     this.updateOptions({
         endOnTick: false,
         valueMarginsEnabled: false,
@@ -4827,7 +4845,7 @@ QUnit.test("Adjust axis after reset zoom", function(assert) {
     assert.strictEqual(maxVisible, 15);
 });
 
-QUnit.test("Adjusting with constant lines", function(assert) {
+QUnit.test('Adjusting with constant lines', function(assert) {
     this.updateOptions({
         constantLines: [{ value: 90, extendAxis: true }, { value: 210 }]
     });
@@ -4852,7 +4870,7 @@ QUnit.test("Adjusting with constant lines", function(assert) {
     assert.strictEqual(maxVisible, 180);
 });
 
-QUnit.test("Update translator business range after adjust axis", function(assert) {
+QUnit.test('Update translator business range after adjust axis', function(assert) {
     this.series[0].getViewport.returns({
         min: 120,
         max: 180
@@ -4871,25 +4889,25 @@ QUnit.test("Update translator business range after adjust axis", function(assert
     assert.strictEqual(maxVisible, 180);
 });
 
-QUnit.test("Update discrete translator business range after adjust axis", function(assert) {
+QUnit.test('Update discrete translator business range after adjust axis', function(assert) {
     this.updateOptions({
-        type: "discrete"
+        type: 'discrete'
     });
 
     this.series[0].getViewport.returns({
-        min: "120",
-        max: "180"
+        min: '120',
+        max: '180'
     });
 
-    this.axis.setBusinessRange({ min: "100", max: "200" });
+    this.axis.setBusinessRange({ min: '100', max: '200' });
 
     this.translator.updateBusinessRange.reset();
     this.axis.adjust();
 
     const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
-    assert.strictEqual(min, "100");
-    assert.strictEqual(max, "200");
-    assert.strictEqual(minVisible, "120");
-    assert.strictEqual(maxVisible, "180");
+    assert.strictEqual(min, '100');
+    assert.strictEqual(max, '200');
+    assert.strictEqual(minVisible, '120');
+    assert.strictEqual(maxVisible, '180');
 });

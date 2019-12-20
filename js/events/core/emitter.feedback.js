@@ -1,14 +1,14 @@
-var Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
-    contains = require("../../core/utils/dom").contains,
-    devices = require("../../core/devices"),
-    eventUtils = require("../utils"),
-    pointerEvents = require("../pointer"),
-    Emitter = require("./emitter"),
-    registerEmitter = require("./emitter_registrator");
+var Class = require('../../core/class'),
+    commonUtils = require('../../core/utils/common'),
+    contains = require('../../core/utils/dom').contains,
+    devices = require('../../core/devices'),
+    eventUtils = require('../utils'),
+    pointerEvents = require('../pointer'),
+    Emitter = require('./emitter'),
+    registerEmitter = require('./emitter_registrator');
 
-var ACTIVE_EVENT_NAME = "dxactive",
-    INACTIVE_EVENT_NAME = "dxinactive",
+var ACTIVE_EVENT_NAME = 'dxactive',
+    INACTIVE_EVENT_NAME = 'dxinactive',
 
     ACTIVE_TIMEOUT = 30,
     INACTIVE_TIMEOUT = 400;

@@ -1,11 +1,12 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import Sortable from "../sortable";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import Sortable from '../sortable';
 
-let COMMAND_HANDLE_CLASS = "dx-command-drag",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    HANDLE_ICON_CLASS = "drag-icon",
-    ROWS_VIEW = "rowsview";
+let COMMAND_HANDLE_CLASS = 'dx-command-drag',
+    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
+    HANDLE_ICON_CLASS = 'drag-icon',
+    ROWS_VIEW = 'rowsview',
+    SORTABLE_WITHOUT_HANDLE_CLASS = 'dx-sortable-without-handle';
 
 var RowDraggingExtender = {
     init: function() {
@@ -14,34 +15,34 @@ var RowDraggingExtender = {
     },
 
     _allowReordering: function() {
-        let rowDragging = this.option("rowDragging");
+        let rowDragging = this.option('rowDragging');
 
         return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
     },
 
     _updateHandleColumn: function() {
-        let rowDragging = this.option("rowDragging"),
+        let rowDragging = this.option('rowDragging'),
             allowReordering = this._allowReordering(),
             columnsController = this._columnsController,
             isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
 
         columnsController && columnsController.addCommandColumn({
-            type: "drag",
-            command: "drag",
+            type: 'drag',
+            command: 'drag',
             visibleIndex: -2,
-            alignment: "center",
+            alignment: 'center',
             cssClass: COMMAND_HANDLE_CLASS,
-            width: "auto",
+            width: 'auto',
             cellTemplate: this._getHandleTemplate(),
             visible: isHandleColumnVisible
         });
 
-        columnsController.columnOption("type:drag", "visible", isHandleColumnVisible);
+        columnsController.columnOption('type:drag', 'visible', isHandleColumnVisible);
     },
 
     _renderContent: function() {
         let that = this,
-            rowDragging = this.option("rowDragging"),
+            rowDragging = this.option('rowDragging'),
             allowReordering = this._allowReordering(),
             $content = that.callBase.apply(that, arguments);
 
@@ -49,22 +50,24 @@ var RowDraggingExtender = {
             that._sortable = that._createComponent($content, Sortable, extend({
                 component: that.component,
                 contentTemplate: null,
-                filter: "> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)",
+                filter: '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)',
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
-                dropFeedbackMode: "indicate"
+                dropFeedbackMode: 'indicate'
             }, rowDragging, {
                 onDragStart: function(e) {
                     const row = e.component.getVisibleRows()[e.fromIndex];
                     e.itemData = row && row.data;
 
-                    const isDataRow = row && row.rowType === "data";
+                    const isDataRow = row && row.rowType === 'data';
                     e.cancel = !isDataRow;
 
                     const onDragStart = rowDragging.onDragStart;
                     onDragStart && onDragStart(e);
                 }
             }));
+
+            $content.toggleClass(SORTABLE_WITHOUT_HANDLE_CLASS, !rowDragging.showDragIcons);
         }
 
         return $content;
@@ -98,7 +101,7 @@ var RowDraggingExtender = {
                 };
             }),
             onRowPrepared: (e) => {
-                const rowsView = e.component.getView("rowsView");
+                const rowsView = e.component.getView('rowsView');
                 $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
             }
         };
@@ -107,13 +110,13 @@ var RowDraggingExtender = {
     _getDraggableRowTemplate: function() {
         return (options) => {
             let $rootElement = this.component.$element(),
-                $dataGridContainer = $("<div>").width($rootElement.width()),
+                $dataGridContainer = $('<div>').width($rootElement.width()),
                 items = this._dataController.items(),
                 row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);
 
             this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
-            $dataGridContainer.find(".dx-gridbase-container").children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
+            $dataGridContainer.find('.dx-gridbase-container').children(`:not(.${this.addWidgetPrefix(ROWS_VIEW)})`).hide();
 
             return $dataGridContainer;
         };
@@ -122,12 +125,12 @@ var RowDraggingExtender = {
     _getHandleTemplate: function() {
         return (container, options) => {
             $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
-            return $("<span>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
+            return $('<span>').addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
         };
     },
 
     optionChanged: function(args) {
-        if(args.name === "rowDragging") {
+        if(args.name === 'rowDragging') {
             this._updateHandleColumn();
             this._invalidate(true, true);
             args.handled = true;
@@ -157,7 +160,7 @@ module.exports = {
                  * @type Enums.DropFeedbackMode
                  * @default "indicate"
                  */
-                dropFeedbackMode: "indicate",
+                dropFeedbackMode: 'indicate',
                 /**
                  * @name GridBaseOptions.rowDragging.allowReordering
                  * @type boolean

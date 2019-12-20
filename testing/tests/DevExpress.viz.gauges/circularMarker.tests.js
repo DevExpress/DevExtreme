@@ -1,8 +1,8 @@
-var noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    circularIndicatorsModule = require("viz/gauges/circular_indicators"),
-    getTextCloudInfo = require("viz/gauges/base_indicators").getTextCloudInfo,
-    Translator1D = require("viz/translators/translator1d").Translator1D;
+var noop = require('core/utils/common').noop,
+    vizMocks = require('../../helpers/vizMocks.js'),
+    circularIndicatorsModule = require('viz/gauges/circular_indicators'),
+    getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo,
+    Translator1D = require('viz/translators/translator1d').Translator1D;
 
 var marker,
     renderer,
@@ -19,7 +19,7 @@ QUnit.module('TriangleMarker', {
             detach: function(arg) { this.detached = arg; }
         };
         var translator = new Translator1D(0, 100, 180, 0);
-        marker = new circularIndicatorsModule["trianglemarker"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
+        marker = new circularIndicatorsModule['trianglemarker']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
             y: 100,
@@ -54,12 +54,12 @@ QUnit.test('render', function(assert) {
 
     assert.ok(marker._element, '_element');
     assert.strictEqual(marker._element.parent, marker._rootElement, '_element parent');
-    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'none', "stroke-width": 0, "stroke-linecap": "square", type: "area" }, '_element settings');
+    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square', type: 'area' }, '_element settings');
     assert.equal(marker._element.sharp.callCount, 1, '_element is sharped');
     assert.ok(marker._element.sharp.lastCall.calledAfter(marker._element.attr.lastCall), '_element is sharped');
 
     assert.ok(marker._trackerElement, '_trackerElement');
-    assert.deepEqual(marker._trackerElement._stored_settings, { points: [190, 4, 190, 24, 210, 24, 210, 4], type: "area" }, '_tracker settings');
+    assert.deepEqual(marker._trackerElement._stored_settings, { points: [190, 4, 190, 24, 210, 24, 210, 4], type: 'area' }, '_tracker settings');
 
     assert.deepEqual(marker._rootElement.rotate.firstCall.args, [-45, 200, 100], 'rotation');
     assert.deepEqual(marker._trackerElement.rotate.firstCall.args, [-45, 200, 100], 'trackerElement rotation');
@@ -69,7 +69,7 @@ QUnit.test('render - with background', function(assert) {
     options.space = 1;
     options.containerBackgroundColor = 'white';
     marker.render(options).resize(this.layout);
-    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'white', "stroke-width": 1, "stroke-linecap": "square", type: "area" }, '_element settings');
+    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'white', 'stroke-width': 1, 'stroke-linecap': 'square', type: 'area' }, '_element settings');
     assert.equal(marker._element.sharp.callCount, 1, '_element is sharped');
     assert.ok(marker._element.sharp.lastCall.calledAfter(marker._element.attr.lastCall), '_element is sharped');
 });
@@ -78,7 +78,7 @@ QUnit.test('render - background size is limited', function(assert) {
     options.space = 5;
     options.containerBackgroundColor = 'white';
     marker.render(options).resize(this.layout);
-    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'white', "stroke-width": 2, "stroke-linecap": "square", type: "area" }, '_element settings');
+    assert.deepEqual(marker._element._stored_settings, { points: [200, 20, 196, 8, 204, 8], stroke: 'white', 'stroke-width': 2, 'stroke-linecap': 'square', type: 'area' }, '_element settings');
     assert.equal(marker._element.sharp.callCount, 1, '_element is sharped');
     assert.ok(marker._element.sharp.lastCall.calledAfter(marker._element.attr.lastCall), '_element is sharped');
 });
@@ -112,7 +112,7 @@ QUnit.module('TextCloudMarker', {
             detach: function(arg) { this.detached = arg; }
         };
         var translator = new Translator1D(0, 100, 180, 0);
-        marker = new circularIndicatorsModule["textcloud"]({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class', notifiers: { dirty: noop, ready: noop, changed: noop } });
+        marker = new circularIndicatorsModule['textcloud']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class', notifiers: { dirty: noop, ready: noop, changed: noop } });
         this.layout = {
             x: 200,
             y: 100,
@@ -132,7 +132,7 @@ QUnit.module('TextCloudMarker', {
             },
             currentValue: 25
         };
-        var baseCreateText = renderer.stub("text");
+        var baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
             var text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
@@ -189,7 +189,7 @@ QUnit.test('render', function(assert) {
 
     assert.ok(marker._cloud, '_cloud');
     assert.strictEqual(marker._cloud.parent, marker._rootElement, '_cloud parent');
-    assert.deepEqual(marker._cloud._stored_settings, { points: tc.points, type: "area" }, '_cloud settings');
+    assert.deepEqual(marker._cloud._stored_settings, { points: tc.points, type: 'area' }, '_cloud settings');
 
     assert.ok(marker._text, '_text');
     assert.strictEqual(marker._text.parent, marker._rootElement, '_text parent');
@@ -198,14 +198,14 @@ QUnit.test('render', function(assert) {
 });
 
 // T346511
-QUnit.test("change value when container is invisible", function(assert) {
+QUnit.test('change value when container is invisible', function(assert) {
     marker.render(options).resize(this.layout);
     marker._text.getBBox = function() { return { x: 0, y: 0, width: 0, height: 0 }; };
 
     marker.value(30);
 
-    assert.strictEqual(marker._text._stored_settings.x, 129, "text x");
-    assert.strictEqual(marker._text._stored_settings.y, 22, "text y");
+    assert.strictEqual(marker._text._stored_settings.x, 129, 'text x');
+    assert.strictEqual(marker._text._stored_settings.y, 22, 'text y');
 });
 
 QUnit.test('_getTextCloudOptions - 1 quarter', function(assert) {

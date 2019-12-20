@@ -1,4 +1,4 @@
-var isPlainObject = require("./type").isPlainObject;
+var isPlainObject = require('./type').isPlainObject;
 
 var extendFromObject = function(target, source, overrideExistingValues) {
     target = target || {};
@@ -19,7 +19,7 @@ var extend = function(target) {
     var i = 1,
         deep = false;
 
-    if(typeof target === "boolean") {
+    if(typeof target === 'boolean') {
         deep = target;
         target = arguments[1] || {};
         i++;
@@ -37,7 +37,7 @@ var extend = function(target) {
                 sourceValueIsArray = false,
                 clone;
 
-            if(key === "__proto__" || target === sourceValue) {
+            if(key === '__proto__' || target === sourceValue) {
                 continue;
             }
 

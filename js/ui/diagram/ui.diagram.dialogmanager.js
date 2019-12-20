@@ -1,9 +1,9 @@
-import $ from "../../core/renderer";
-import { getDiagram } from "./diagram_importer";
-import messageLocalization from "../../localization/message";
+import $ from '../../core/renderer';
+import { getDiagram } from './diagram_importer';
+import messageLocalization from '../../localization/message';
 
-var FileUploader = require("../file_uploader");
-import { getWindow } from "../../core/utils/window";
+var FileUploader = require('../file_uploader');
+import { getWindow } from '../../core/utils/window';
 
 const DiagramDialogManager = {
     getConfigurations: function() {
@@ -12,22 +12,22 @@ const DiagramDialogManager = {
             (this.dialogList = [
                 {
                     command: DiagramCommand.InsertShapeImage,
-                    title: messageLocalization.format("dxDiagram-dialogInsertShapeImageTitle"),
+                    title: messageLocalization.format('dxDiagram-dialogInsertShapeImageTitle'),
                     onGetContent: this.getChangeImageDialogContent
                 },
                 {
                     command: DiagramCommand.EditShapeImage,
-                    title: messageLocalization.format("dxDiagram-dialogEditShapeImageTitle"),
+                    title: messageLocalization.format('dxDiagram-dialogEditShapeImageTitle'),
                     onGetContent: this.getChangeImageDialogContent
                 }
             ]);
     },
     getChangeImageDialogContent: function(args) {
-        const $uploader = $("<div>");
+        const $uploader = $('<div>');
         args.component._createComponent($uploader, FileUploader, {
-            selectButtonText: messageLocalization.format("dxDiagram-dialogEditShapeImageSelectButton"),
-            accept: "image/*",
-            uploadMode: "useForm",
+            selectButtonText: messageLocalization.format('dxDiagram-dialogEditShapeImageSelectButton'),
+            accept: 'image/*',
+            uploadMode: 'useForm',
             onValueChanged: function(e) {
                 const window = getWindow();
                 var reader = new window.FileReader();

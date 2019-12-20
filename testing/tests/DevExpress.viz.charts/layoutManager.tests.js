@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    axisModule = require("viz/axes/base_axis"),
-    labelModule = require("viz/series/points/label"),
-    layoutElementModule = require("viz/core/layout_element"),
-    layoutManagerModule = require("viz/chart_components/layout_manager");
+var $ = require('jquery'),
+    noop = require('core/utils/common').noop,
+    vizMocks = require('../../helpers/vizMocks.js'),
+    axisModule = require('viz/axes/base_axis'),
+    labelModule = require('viz/series/points/label'),
+    layoutElementModule = require('viz/core/layout_element'),
+    layoutManagerModule = require('viz/chart_components/layout_manager');
 
 var canvasTemplate = {
         width: 1000,
@@ -39,9 +39,9 @@ var environment = {
             layoutElement = new LayoutElement(options),
             empty = $.extend({}, options, { width: 0, height: 0 });
 
-        layoutElement.stub("getLayoutOptions").returns(options);
+        layoutElement.stub('getLayoutOptions').returns(options);
         layoutElement.probeDraw = sinon.stub();
-        layoutElement.stub("position").returnsThis();
+        layoutElement.stub('position').returnsThis();
         layoutElement.draw = sinon.spy(function() {
             if(!that.checkLayoutElementVisibility(layoutElement)) {
                 layoutElement.getLayoutOptions.returns(empty);
@@ -61,7 +61,7 @@ var environment = {
     },
     createAxis: function() {
         var axis = new Axis();
-        axis.stub("getBoundingRect").returns({ height: 0, width: 0 });
+        axis.stub('getBoundingRect').returns({ height: 0, width: 0 });
         return axis;
     }
 };
@@ -81,7 +81,7 @@ function getStubSeries(type, innerRadius, points) {
 
     stubSeries.type = type;
 
-    stubSeries.stub("getVisiblePoints").returns(points || [createFakePointsWithStubLabels({}, true, false)]);
+    stubSeries.stub('getVisiblePoints').returns(points || [createFakePointsWithStubLabels({}, true, false)]);
     stubSeries.correctLabelRadius = sinon.stub();
     stubSeries.setVisibleArea = sinon.stub();
     stubSeries.innerRadius = innerRadius;
@@ -104,7 +104,7 @@ function createFakePointsWithStubLabels(bBox, isVisible, hasText, options) {
 
     stubLabel.getBoundingRect.returns(bBox || {});
     stubLabel.isVisible.returns(hasText);
-    stubLabel.getLayoutOptions.returns({ position: options && options.position || "outside" });
+    stubLabel.getLayoutOptions.returns({ position: options && options.position || 'outside' });
 
     return fakePoint;
 }
@@ -116,18 +116,18 @@ function checkLayout(assert, layout, canvas, inner, outer) {
     assert.strictEqual(layout.radiusOuter, outer, 'radiusOuter');
 }
 
-QUnit.module("Lifecycle", environment);
+QUnit.module('Lifecycle', environment);
 
-QUnit.test("create layout manager", function(assert) {
+QUnit.test('create layout manager', function(assert) {
     assert.ok(this.createLayoutManager() instanceof layoutManagerModule.LayoutManager);
 });
 
-QUnit.module("Pie series", {
+QUnit.module('Pie series', {
     beforeEach: setupCanvas
 });
 
 QUnit.test('Simple pie. RadiusOuter equal height of canvas', function(assert) {
-    var series = getStubSeries("pie"),
+    var series = getStubSeries('pie'),
         layoutManager = createLayoutManager(),
         inner = 0,
         outer = (canvas.height - canvas.top - canvas.bottom) / 2;
@@ -136,7 +136,7 @@ QUnit.test('Simple pie. RadiusOuter equal height of canvas', function(assert) {
 });
 
 QUnit.test('Simple pie. RadiusOuter equal width of canvas', function(assert) {
-    var series = getStubSeries("pie"),
+    var series = getStubSeries('pie'),
         layoutManager = createLayoutManager(),
         inner = 0,
         outer = (canvasTemplate.height - canvas.left - canvas.right) / 2;
@@ -148,7 +148,7 @@ QUnit.test('Simple pie. RadiusOuter equal width of canvas', function(assert) {
 });
 
 QUnit.test('Simple pie - vertical canvas. width and height odd ', function(assert) {
-    var series = getStubSeries("doughnut"),
+    var series = getStubSeries('doughnut'),
         layoutManager = createLayoutManager(),
         inner = 111,
         outer = 223;
@@ -160,7 +160,7 @@ QUnit.test('Simple pie - vertical canvas. width and height odd ', function(asser
 });
 
 QUnit.test('Simple donut - innerRadius less then 0.2', function(assert) {
-    var series = getStubSeries("donut", 0),
+    var series = getStubSeries('donut', 0),
         layoutManager = createLayoutManager(),
         inner = 33,
         outer = 165;
@@ -225,11 +225,11 @@ QUnit.test('simple donut with diameter', function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.module("PieChart. Calculate radius charts with labels", {
+QUnit.module('PieChart. Calculate radius charts with labels', {
     beforeEach: setupCanvas
 });
 
-QUnit.test("Nearest label topLeft", function(assert) {
+QUnit.test('Nearest label topLeft', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 350, y: 100, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -240,7 +240,7 @@ QUnit.test("Nearest label topLeft", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label topRight", function(assert) {
+QUnit.test('Nearest label topRight', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 650, y: 100, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -251,7 +251,7 @@ QUnit.test("Nearest label topRight", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label topCenter", function(assert) {
+QUnit.test('Nearest label topCenter', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 490, y: 0, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -262,7 +262,7 @@ QUnit.test("Nearest label topCenter", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label CenterLeft", function(assert) {
+QUnit.test('Nearest label CenterLeft', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 300, y: 190, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -273,7 +273,7 @@ QUnit.test("Nearest label CenterLeft", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label CenterRight", function(assert) {
+QUnit.test('Nearest label CenterRight', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 650, y: 190, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -284,7 +284,7 @@ QUnit.test("Nearest label CenterRight", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label BottomLeft", function(assert) {
+QUnit.test('Nearest label BottomLeft', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 350, y: 300, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -295,7 +295,7 @@ QUnit.test("Nearest label BottomLeft", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label BottomRight", function(assert) {
+QUnit.test('Nearest label BottomRight', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 570, y: 350, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -306,7 +306,7 @@ QUnit.test("Nearest label BottomRight", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label BottomCenter", function(assert) {
+QUnit.test('Nearest label BottomCenter', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 490, y: 350, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -317,7 +317,7 @@ QUnit.test("Nearest label BottomCenter", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Calculate of nearest label", function(assert) {
+QUnit.test('Calculate of nearest label', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 570, y: 350, width: 10, height: 10 }, true, true),
             CFPWSL({ x: 490, y: 350, width: 10, height: 10 }, true, true)],
@@ -329,7 +329,7 @@ QUnit.test("Calculate of nearest label", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Calculate of visible point with label with text", function(assert) {
+QUnit.test('Calculate of visible point with label with text', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 570, y: 350, width: 10, height: 10 }, false, true),
             CFPWSL({ x: 490, y: 350, width: 10, height: 10 }, true, false),
@@ -342,7 +342,7 @@ QUnit.test("Calculate of visible point with label with text", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("Nearest label BottomLeft label closer then 0.7 R", function(assert) {
+QUnit.test('Nearest label BottomLeft label closer then 0.7 R', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points = [CFPWSL({ x: 450, y: 190, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
@@ -353,7 +353,7 @@ QUnit.test("Nearest label BottomLeft label closer then 0.7 R", function(assert) 
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series), canvas, inner, outer);
 });
 
-QUnit.test("piePercentage was not set && hideLabels was set", function(assert) {
+QUnit.test('piePercentage was not set && hideLabels was set', function(assert) {
     var points = [createFakePointsWithStubLabels({ x: 450, y: 190, width: 10, height: 10 }, true, true)],
         series = getStubSeries('pie', null, points),
         layoutManager = createLayoutManager({}),
@@ -363,11 +363,11 @@ QUnit.test("piePercentage was not set && hideLabels was set", function(assert) {
     checkLayout(assert, layoutManager.applyPieChartSeriesLayout(canvas, series, true), canvas, inner, outer);
 });
 
-QUnit.module("Multi series pie", {
+QUnit.module('Multi series pie', {
     beforeEach: setupCanvas
 });
 
-QUnit.test("2 series, labels are fit in canvas", function(assert) {
+QUnit.test('2 series, labels are fit in canvas', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 15, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
@@ -402,7 +402,7 @@ QUnit.test("2 series, labels are fit in canvas", function(assert) {
     });
 });
 
-QUnit.test("2 series, labels are not fit in canvas", function(assert) {
+QUnit.test('2 series, labels are not fit in canvas', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 60, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 65, height: 10 }, true, true)],
@@ -439,7 +439,7 @@ QUnit.test("2 series, labels are not fit in canvas", function(assert) {
     });
 });
 
-QUnit.test("2 series, labels are not fit in canvas, check margins", function(assert) {
+QUnit.test('2 series, labels are not fit in canvas, check margins', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 50, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 40, height: 10 }, true, true)],
@@ -476,7 +476,7 @@ QUnit.test("2 series, labels are not fit in canvas, check margins", function(ass
     });
 });
 
-QUnit.test("2 series, diameter is set, labels are not fit in canvas", function(assert) {
+QUnit.test('2 series, diameter is set, labels are not fit in canvas', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 60, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 65, height: 10 }, true, true)],
@@ -513,9 +513,9 @@ QUnit.test("2 series, diameter is set, labels are not fit in canvas", function(a
     });
 });
 
-QUnit.test("2 series, first series has lables inside", function(assert) {
+QUnit.test('2 series, first series has lables inside', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
-        points1 = [CFPWSL({ x: 400, y: 300, width: 15, height: 10 }, true, true, { position: "inside" })],
+        points1 = [CFPWSL({ x: 400, y: 300, width: 15, height: 10 }, true, true, { position: 'inside' })],
         points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
         series = getNStubSeries('pie', null, [points1, points2]),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
@@ -539,10 +539,10 @@ QUnit.test("2 series, first series has lables inside", function(assert) {
     });
 });
 
-QUnit.test("3 series, labels one of the series have inside position", function(assert) {
+QUnit.test('3 series, labels one of the series have inside position', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
-        points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true, { position: "inside" })],
+        points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true, { position: 'inside' })],
         points3 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
         series = getNStubSeries('pie', null, [points1, points2, points3]),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
@@ -578,10 +578,10 @@ QUnit.test("3 series, labels one of the series have inside position", function(a
     });
 });
 
-QUnit.test("3 series, labels one of the series have inside position, not fit in canvas", function(assert) {
+QUnit.test('3 series, labels one of the series have inside position, not fit in canvas', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 50, height: 10 }, true, true)],
-        points2 = [CFPWSL({ x: 400, y: 300, width: 30, height: 10 }, true, true, { position: "inside" })],
+        points2 = [CFPWSL({ x: 400, y: 300, width: 30, height: 10 }, true, true, { position: 'inside' })],
         points3 = [CFPWSL({ x: 400, y: 300, width: 50, height: 10 }, true, true)],
         series = getNStubSeries('pie', null, [points1, points2, points3]),
         layoutManager = createLayoutManager({ minPiePercentage: 0.7 }),
@@ -619,7 +619,7 @@ QUnit.test("3 series, labels one of the series have inside position, not fit in 
     });
 });
 
-QUnit.test("correctPieLabelRadius", function(assert) {
+QUnit.test('correctPieLabelRadius', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 15, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 10, height: 10 }, true, true)],
@@ -653,7 +653,7 @@ QUnit.test("correctPieLabelRadius", function(assert) {
     });
 });
 
-QUnit.test("correctPieLabelRadius when labels are not fit in canvas", function(assert) {
+QUnit.test('correctPieLabelRadius when labels are not fit in canvas', function(assert) {
     var CFPWSL = createFakePointsWithStubLabels,
         points1 = [CFPWSL({ x: 400, y: 300, width: 30, height: 10 }, true, true)],
         points2 = [CFPWSL({ x: 400, y: 300, width: 35, height: 10 }, true, true)],
@@ -689,12 +689,12 @@ QUnit.test("correctPieLabelRadius when labels are not fit in canvas", function(a
     });
 });
 
-QUnit.module("Layout for equal pie charts", {
+QUnit.module('Layout for equal pie charts', {
     beforeEach: setupCanvas
 });
 
 QUnit.test('Pie - inner radius is 0', function(assert) {
-    var series = getStubSeries("pie"),
+    var series = getStubSeries('pie'),
         layoutManager = createLayoutManager();
 
     assert.deepEqual(layoutManager.applyEqualPieChartLayout(series, { x: 100, y: 200, radius: 300 }), {
@@ -717,9 +717,9 @@ QUnit.test('Donut - inner radius is calculated', function(assert) {
     });
 });
 
-QUnit.module("check need space panes canvas");
+QUnit.module('check need space panes canvas');
 
-QUnit.test("space sufficiently", function(assert) {
+QUnit.test('space sufficiently', function(assert) {
     var panes = [{ canvas: { width: 200, left: 10, right: 20, height: 300, top: 30, bottom: 40 } }],
         updateSide,
         layoutManager = createLayoutManager();
@@ -729,7 +729,7 @@ QUnit.test("space sufficiently", function(assert) {
     assert.equal(updateSide, false);
 });
 
-QUnit.test("need width space", function(assert) {
+QUnit.test('need width space', function(assert) {
     var panes = [{ canvas: { width: 200, left: 40, right: 20, height: 300, top: 30, bottom: 40 } }],
         updateSide,
         layoutManager = createLayoutManager();
@@ -742,7 +742,7 @@ QUnit.test("need width space", function(assert) {
     });
 });
 
-QUnit.test("need height space", function(assert) {
+QUnit.test('need height space', function(assert) {
     var panes = [{ canvas: { width: 200, left: 10, right: 20, height: 300, top: 130, bottom: 40 } }],
         updateSide,
         layoutManager = createLayoutManager();
@@ -755,7 +755,7 @@ QUnit.test("need height space", function(assert) {
     });
 });
 
-QUnit.test("need both side space", function(assert) {
+QUnit.test('need both side space', function(assert) {
     var panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } }],
         updateSide,
         layoutManager = createLayoutManager();
@@ -768,7 +768,7 @@ QUnit.test("need both side space", function(assert) {
     });
 });
 
-QUnit.test("for several panes", function(assert) {
+QUnit.test('for several panes', function(assert) {
     var panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } },
             { canvas: { width: 200, left: 10, right: 20, height: 300, top: 30, bottom: 40 } }],
         updateSide,
@@ -782,7 +782,7 @@ QUnit.test("for several panes", function(assert) {
     });
 });
 
-QUnit.test("for several rotated panes", function(assert) {
+QUnit.test('for several rotated panes', function(assert) {
     var panes = [{ canvas: { width: 200, left: 10, right: 50, height: 300, top: 130, bottom: 40 } },
             { canvas: { width: 300, left: 145, right: 20, height: 300, top: 130, bottom: 40 } }],
         updateSide,
@@ -796,7 +796,7 @@ QUnit.test("for several rotated panes", function(assert) {
     });
 });
 
-QUnit.test("space with radius", function(assert) {
+QUnit.test('space with radius', function(assert) {
     var panes = [{ canvas: { width: 500, left: 110, right: 50, height: 500, top: 130, bottom: 40 } }],
         updateSide,
         layoutManager = createLayoutManager({ piePercentage: 0.7 });
@@ -806,11 +806,11 @@ QUnit.test("space with radius", function(assert) {
     assert.deepEqual(updateSide, { height: 20, width: 10 });
 });
 
-QUnit.module("Layout elements", environment);
+QUnit.module('Layout elements', environment);
 
-QUnit.test("draw elements. [Left Left]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
+QUnit.test('draw elements. [Left Left]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
@@ -827,9 +827,9 @@ QUnit.test("draw elements. [Left Left]", function(assert) {
     assert.deepEqual(LE2.draw.getCall(0).args, [20, 100]);
 });
 
-QUnit.test("draw elements. [Top Top]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
+QUnit.test('draw elements. [Top Top]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
@@ -840,9 +840,9 @@ QUnit.test("draw elements. [Top Top]", function(assert) {
     assert.deepEqual(LE2.draw.getCall(0).args, [100, 20]);
 });
 
-QUnit.test("draw elements. [Top Left]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
+QUnit.test('draw elements. [Top Left]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
@@ -853,107 +853,107 @@ QUnit.test("draw elements. [Top Left]", function(assert) {
     assert.deepEqual(LE2.draw.getCall(0).args, [20, 80]);
 });
 
-QUnit.test("position elements. [Top Top]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
+QUnit.test('position elements. [Top Top]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
 
     assert.deepEqual(LE1.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 40, width: 100, height: 60 }),
-        my: { horizontal: "center", vertical: "bottom" },
-        at: { horizontal: "center", vertical: "top" },
+        my: { horizontal: 'center', vertical: 'bottom' },
+        at: { horizontal: 'center', vertical: 'top' },
         offset: { horizontal: 0, vertical: -20 }
     });
     assert.deepEqual(LE2.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 40, width: 100, height: 60 }),
-        my: { horizontal: "center", vertical: "bottom" },
-        at: { horizontal: "center", vertical: "top" },
+        my: { horizontal: 'center', vertical: 'bottom' },
+        at: { horizontal: 'center', vertical: 'top' },
         offset: { horizontal: 0, vertical: 0 }
     });
 });
 
-QUnit.test("draw elements. [Left Left]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
+QUnit.test('draw elements. [Left Left]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
 
     assert.deepEqual(LE1.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 40, y: 0, width: 60, height: 100 }),
-        my: { horizontal: "right", vertical: "center" },
-        at: { horizontal: "left", vertical: "center" },
+        my: { horizontal: 'right', vertical: 'center' },
+        at: { horizontal: 'left', vertical: 'center' },
         offset: { horizontal: -20, vertical: 0 }
     });
     assert.deepEqual(LE2.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 40, y: 0, width: 60, height: 100 }),
-        my: { horizontal: "right", vertical: "center" },
-        at: { horizontal: "left", vertical: "center" },
+        my: { horizontal: 'right', vertical: 'center' },
+        at: { horizontal: 'left', vertical: 'center' },
         offset: { horizontal: 0, vertical: 0 }
     });
 });
 
-QUnit.test("position elements. [Top Right]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "right", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "right" }),
+QUnit.test('position elements. [Top Right]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2], this.canvas, noop, []);
 
     assert.deepEqual(LE1.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 80, height: 80 }),
-        my: { horizontal: "center", vertical: "bottom" },
-        at: { horizontal: "center", vertical: "top" },
+        my: { horizontal: 'center', vertical: 'bottom' },
+        at: { horizontal: 'center', vertical: 'top' },
         offset: { horizontal: 0, vertical: 0 }
     });
     assert.deepEqual(LE2.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 80, height: 80 }),
-        my: { horizontal: "left", vertical: "center" },
-        at: { horizontal: "right", vertical: "center" },
+        my: { horizontal: 'left', vertical: 'center' },
+        at: { horizontal: 'right', vertical: 'center' },
         offset: { horizontal: 0, vertical: 0 }
     });
 });
 
-QUnit.test("position elements. [Bottom Right Bottom Right]", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "center", vertical: "bottom" }, cutSide: "vertical", cutLayoutSide: "bottom" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "right", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "right" }),
-        LE3 = this.createLayoutElement({ position: { horizontal: "center", vertical: "bottom" }, cutSide: "vertical", cutLayoutSide: "bottom" }),
-        LE4 = this.createLayoutElement({ position: { horizontal: "right", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "right" }),
+QUnit.test('position elements. [Bottom Right Bottom Right]', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' }),
+        LE3 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' }),
+        LE4 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE1, LE2, LE3, LE4], this.canvas, noop, []);
 
     assert.deepEqual(LE1.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: "center", vertical: "top" },
-        at: { horizontal: "center", vertical: "bottom" },
+        my: { horizontal: 'center', vertical: 'top' },
+        at: { horizontal: 'center', vertical: 'bottom' },
         offset: { horizontal: 0, vertical: 20 }
     });
     assert.deepEqual(LE2.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: "left", vertical: "center" },
-        at: { horizontal: "right", vertical: "center" },
+        my: { horizontal: 'left', vertical: 'center' },
+        at: { horizontal: 'right', vertical: 'center' },
         offset: { horizontal: 20, vertical: 0 }
     });
     assert.deepEqual(LE3.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: "center", vertical: "top" },
-        at: { horizontal: "center", vertical: "bottom" },
+        my: { horizontal: 'center', vertical: 'top' },
+        at: { horizontal: 'center', vertical: 'bottom' },
         offset: { horizontal: 0, vertical: 0 }
     });
     assert.deepEqual(LE4.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: "left", vertical: "center" },
-        at: { horizontal: "right", vertical: "center" },
+        my: { horizontal: 'left', vertical: 'center' },
+        at: { horizontal: 'right', vertical: 'center' },
         offset: { horizontal: 0, vertical: 0 }
     });
 });
 
-QUnit.test("draw elements. getLayoutOptions returns null", function(assert) {
-    var LE1 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
-        LE2 = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
+QUnit.test('draw elements. getLayoutOptions returns null', function(assert) {
+    var LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
+        LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
         LM = this.createLayoutManager();
 
     LE1.getLayoutOptions.returns(null);
@@ -966,8 +966,8 @@ QUnit.test("draw elements. getLayoutOptions returns null", function(assert) {
     assert.equal(LE2.probeDraw.callCount, 0);
 });
 
-QUnit.test("cut canvas. left", function(assert) {
-    var LE = this.createLayoutElement({ position: { horizontal: "left", vertical: "center" }, cutSide: "horizontal", cutLayoutSide: "left" }),
+QUnit.test('cut canvas. left', function(assert) {
+    var LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE], this.canvas, noop, []);
@@ -982,8 +982,8 @@ QUnit.test("cut canvas. left", function(assert) {
     });
 });
 
-QUnit.test("cut canvas. top", function(assert) {
-    var LE = this.createLayoutElement({ position: { horizontal: "center", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
+QUnit.test('cut canvas. top', function(assert) {
+    var LE = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE], this.canvas, noop, []);
@@ -998,21 +998,21 @@ QUnit.test("cut canvas. top", function(assert) {
     });
 });
 
-QUnit.test("draw elements.\"[left top]\"", function(assert) {
-    var LE = this.createLayoutElement({ position: { horizontal: "left", vertical: "top" }, cutSide: "vertical", cutLayoutSide: "top" }),
+QUnit.test('draw elements."[left top]"', function(assert) {
+    var LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' }),
         LM = this.createLayoutManager();
 
     LM.layoutElements([LE], this.canvas, noop, []);
 
     assert.deepEqual(LE.position.getCall(0).args[0], {
         of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 100, height: 80 }),
-        my: { horizontal: "left", vertical: "bottom" },
-        at: { horizontal: "left", vertical: "top" },
+        my: { horizontal: 'left', vertical: 'bottom' },
+        at: { horizontal: 'left', vertical: 'top' },
         offset: { vertical: 0, horizontal: 0 }
     });
 });
 
-QUnit.test("call draw axis method", function(assert) {
+QUnit.test('call draw axis method', function(assert) {
     var LayoutManager = this.createLayoutManager(),
         spyAxisDrawer = sinon.spy();
 
@@ -1022,14 +1022,14 @@ QUnit.test("call draw axis method", function(assert) {
     assert.deepEqual(spyAxisDrawer.getCall(0).args, []);
 });
 
-QUnit.module("Adaptive layout", environment);
+QUnit.module('Adaptive layout', environment);
 
-QUnit.test("One vertical element", function(assert) {
+QUnit.test('One vertical element', function(assert) {
     var layoutManager = this.createLayoutManager({ width: 80, height: 90 }),
         layoutElement = this.createLayoutElement({
-            position: { horizontal: "center", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top"
+            position: { horizontal: 'center', vertical: 'top' },
+            cutSide: 'vertical',
+            cutLayoutSide: 'top'
         });
 
     layoutManager.layoutElements(
@@ -1048,17 +1048,17 @@ QUnit.test("One vertical element", function(assert) {
     assert.equal(this.canvas.right, 10);
 });
 
-QUnit.test("Two vertical elements", function(assert) {
+QUnit.test('Two vertical elements', function(assert) {
     var layoutManager = this.createLayoutManager({ width: 80, height: 70 }),
         layoutElement1 = this.createLayoutElement({
-            position: { horizontal: "center", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top"
+            position: { horizontal: 'center', vertical: 'top' },
+            cutSide: 'vertical',
+            cutLayoutSide: 'top'
         }),
         layoutElement2 = this.createLayoutElement({
-            position: { horizontal: "center", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top"
+            position: { horizontal: 'center', vertical: 'top' },
+            cutSide: 'vertical',
+            cutLayoutSide: 'top'
         });
 
     layoutManager.layoutElements(
@@ -1075,12 +1075,12 @@ QUnit.test("Two vertical elements", function(assert) {
     assert.equal(this.canvas.top, 20);
 });
 
-QUnit.test("One horizontal element", function(assert) {
+QUnit.test('One horizontal element', function(assert) {
     var layoutManager = this.createLayoutManager({ width: 90, height: 80 }),
         layoutElement = this.createLayoutElement({
-            position: { horizontal: "left", vertical: "top" },
-            cutSide: "horizontal",
-            cutLayoutSide: "left"
+            position: { horizontal: 'left', vertical: 'top' },
+            cutSide: 'horizontal',
+            cutLayoutSide: 'left'
         });
 
     layoutManager.layoutElements(
@@ -1095,19 +1095,19 @@ QUnit.test("One horizontal element", function(assert) {
     assert.ok(!this.checkLayoutElementVisibility(layoutElement));
 });
 
-QUnit.test("Perpendicular elements. Vertical is hidden", function(assert) {
+QUnit.test('Perpendicular elements. Vertical is hidden', function(assert) {
     var layoutManager = this.createLayoutManager({ width: 80, height: 90 }),
         layoutElement1 = this.createLayoutElement({
-            position: { horizontal: "left", vertical: "top" },
-            cutSide: "horizontal",
-            cutLayoutSide: "left",
+            position: { horizontal: 'left', vertical: 'top' },
+            cutSide: 'horizontal',
+            cutLayoutSide: 'left',
             width: 20,
             height: 30
         }),
         layoutElement2 = this.createLayoutElement({
-            position: { horizontal: "left", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top",
+            position: { horizontal: 'left', vertical: 'top' },
+            cutSide: 'vertical',
+            cutLayoutSide: 'top',
             width: 20,
             height: 30
         });
@@ -1128,19 +1128,19 @@ QUnit.test("Perpendicular elements. Vertical is hidden", function(assert) {
     assert.equal(this.canvas.left, 20);
 });
 
-QUnit.test("Perpendicular elements. Horizontal is hidden", function(assert) {
+QUnit.test('Perpendicular elements. Horizontal is hidden', function(assert) {
     var layoutManager = this.createLayoutManager({ width: 90, height: 80 }),
         layoutElement1 = this.createLayoutElement({
-            position: { horizontal: "left", vertical: "top" },
-            cutSide: "horizontal",
-            cutLayoutSide: "left",
+            position: { horizontal: 'left', vertical: 'top' },
+            cutSide: 'horizontal',
+            cutLayoutSide: 'left',
             width: 30,
             height: 30
         }),
         layoutElement2 = this.createLayoutElement({
-            position: { horizontal: "left", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top",
+            position: { horizontal: 'left', vertical: 'top' },
+            cutSide: 'vertical',
+            cutLayoutSide: 'top',
             width: 30,
             height: 20
         });
@@ -1161,7 +1161,7 @@ QUnit.test("Perpendicular elements. Horizontal is hidden", function(assert) {
     assert.equal(this.canvas.top, 20);
 });
 
-QUnit.test("Check axis drawing params", function(assert) {
+QUnit.test('Check axis drawing params', function(assert) {
     var that = this,
         layoutManager = this.createLayoutManager({ width: 100, height: 80 }),
         axesDrawer = sinon.spy(function(sizeShortage) {
@@ -1178,6 +1178,6 @@ QUnit.test("Check axis drawing params", function(assert) {
     );
 
     assert.ok(axesDrawer.calledTwice);
-    assert.deepEqual(axesDrawer.getCall(0).args, [], "first call");
-    assert.deepEqual(axesDrawer.getCall(1).args, [{ height: 0, width: 10 }], "second call");
+    assert.deepEqual(axesDrawer.getCall(0).args, [], 'first call');
+    assert.deepEqual(axesDrawer.getCall(1).args, [{ height: 0, width: 10 }], 'second call');
 });

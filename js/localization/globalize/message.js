@@ -1,14 +1,14 @@
-import "./core";
+import './core';
 
-import Globalize from "globalize";
-import messageLocalization from "../message";
-import coreLocalization from "../core";
+import Globalize from 'globalize';
+import messageLocalization from '../message';
+import coreLocalization from '../core';
 
-import "globalize/message";
+import 'globalize/message';
 
 if(Globalize && Globalize.formatMessage) {
 
-    const DEFAULT_LOCALE = "en";
+    const DEFAULT_LOCALE = 'en';
 
     const originalLoadMessages = Globalize.loadMessages;
 
@@ -18,7 +18,7 @@ if(Globalize && Globalize.formatMessage) {
 
     const globalizeMessageLocalization = {
         engine: function() {
-            return "globalize";
+            return 'globalize';
         },
 
         ctor: function() {
@@ -31,7 +31,7 @@ if(Globalize && Globalize.formatMessage) {
         },
 
         getMessagesByLocales: function() {
-            return Globalize.cldr.get("globalize-messages");
+            return Globalize.cldr.get('globalize-messages');
         },
 
         getFormatter: function(key, locale) {
@@ -62,7 +62,7 @@ if(Globalize && Globalize.formatMessage) {
 
         _messageLoaded: function(key, locale) {
             const currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale();
-            const value = currentCldr.get(["globalize-messages/{bundle}", key]);
+            const value = currentCldr.get(['globalize-messages/{bundle}', key]);
 
             return !!value;
         },

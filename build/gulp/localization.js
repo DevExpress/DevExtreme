@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var path = require('path');
 var rename = require('gulp-rename');
 var template = require('gulp-template');
+var lint = require('gulp-eslint');
 var fs = require('fs');
 
 var headerPipes = require('./header-pipes.js');
@@ -18,13 +19,13 @@ var getParentLocale = require('../../js/localization/parentLocale.js');
 
 var firstDayOfWeekData = function() {
     var DAY_INDEXES = {
-        "sun": 0,
-        "mon": 1,
-        "tue": 2,
-        "wed": 3,
-        "thu": 4,
-        "fri": 5,
-        "sat": 6
+        'sun': 0,
+        'mon': 1,
+        'tue': 2,
+        'wed': 3,
+        'thu': 4,
+        'fri': 5,
+        'sat': 6
     };
     var DEFAULT_DAY_OF_WEEK_INDEX = 0;
 
@@ -130,6 +131,8 @@ gulp.task('localization-generated-sources', gulp.parallel([
             .pipe(template({
                 json: serializeObject(source.data)
             }))
+            .pipe(lint({ fix: true }))
+            .pipe(lint.format())
             .pipe(rename(source.filename))
             .pipe(gulp.dest(source.destination));
     };

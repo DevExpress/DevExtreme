@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/button.markup.tests.js");
+require('../DevExpress.ui.widgets/button.markup.tests.js');

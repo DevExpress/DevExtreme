@@ -1,23 +1,23 @@
-import ConverterController from "../converterController";
-import { getQuill } from "../quill_importer";
-import { isFunction } from "../../../core/utils/type";
+import ConverterController from '../converterController';
+import { getQuill } from '../quill_importer';
+import { isFunction } from '../../../core/utils/type';
 
 const ESCAPING_MAP = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&#39;',
 };
 
-const LIST_BLOT_NAME = "list";
-const LIST_ITEM_BLOT_NAME = "list-item";
+const LIST_BLOT_NAME = 'list';
+const LIST_ITEM_BLOT_NAME = 'list-item';
 
 class DeltaConverter {
 
     constructor() {
-        this.TextBlot = getQuill().import("blots/text");
-        this.BreakBlot = getQuill().import("blots/break");
+        this.TextBlot = getQuill().import('blots/text');
+        this.BreakBlot = getQuill().import('blots/break');
     }
 
     setQuillInstance(quillInstance) {
@@ -30,7 +30,7 @@ class DeltaConverter {
         }
 
         return this._isQuillEmpty() ?
-            "" :
+            '' :
             this._convertHTML(this.quillInstance.scroll, 0, this.quillInstance.getLength(), true);
     }
 
@@ -41,7 +41,7 @@ class DeltaConverter {
     }
 
     _isDeltaEmpty(delta) {
-        return delta.reduce((__, { insert }) => insert.indexOf("\n") !== -1);
+        return delta.reduce((__, { insert }) => insert.indexOf('\n') !== -1);
     }
 
     _convertHTML(blot, index, length, isRoot = false) {
@@ -66,13 +66,13 @@ class DeltaConverter {
             this._handleBreakLine(blot.children, parts);
 
             if(isRoot || blot.statics.blotName === LIST_ITEM_BLOT_NAME) {
-                return parts.join("");
+                return parts.join('');
             }
 
             const { outerHTML, innerHTML } = blot.domNode;
             const [start, end] = outerHTML.split(`>${innerHTML}<`);
 
-            return `${start}>${parts.join("")}<${end}`;
+            return `${start}>${parts.join('')}<${end}`;
         }
 
         return blot.domNode.outerHTML;
@@ -80,7 +80,7 @@ class DeltaConverter {
 
     _handleBreakLine(linkedList, parts) {
         if(linkedList.length === 1 && linkedList.head instanceof this.BreakBlot) {
-            parts.push("<br>");
+            parts.push('<br>');
         }
     }
 
@@ -134,7 +134,7 @@ class DeltaConverter {
     }
 
     _correctListMultiIndent(listTypes, type, tag, indent) {
-        let markup = "";
+        let markup = '';
 
         while(indent) {
             markup += `<${tag}>`;
@@ -149,23 +149,23 @@ class DeltaConverter {
         return `</li></${tag}>${this._getListMarkup(...childItemArgs)}`;
     }
 
-    _processIndentListMarkup(childItemArgs, restItemsArgs, tag = "/li") {
+    _processIndentListMarkup(childItemArgs, restItemsArgs, tag = '/li') {
         const itemAttrs = this._getListItemAttributes(childItemArgs[0]);
         return `<${tag}><li${itemAttrs}>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs)}`;
     }
 
     _getListItemAttributes({ domNode }) {
         if(!domNode.hasAttributes()) {
-            return "";
+            return '';
         }
 
         const { attributes } = domNode;
-        let attributesString = " ";
+        let attributesString = ' ';
 
         for(let i = 0; i < attributes.length; i++) {
             let { name, value } = attributes[i];
 
-            if(name === "class") {
+            if(name === 'class') {
                 value = this._removeIndentClass(value);
             }
 
@@ -174,15 +174,15 @@ class DeltaConverter {
             }
         }
 
-        return attributesString.length > 1 ? attributesString : "";
+        return attributesString.length > 1 ? attributesString : '';
     }
 
     _getListType(type) {
-        return type === "ordered" ? "ol" : "ul";
+        return type === 'ordered' ? 'ol' : 'ul';
     }
 
     _removeIndentClass(classString) {
-        return classString.replace(/ql-indent-\d/g, "").trim();
+        return classString.replace(/ql-indent-\d/g, '').trim();
     }
 
     _escapeText(text) {
@@ -192,6 +192,6 @@ class DeltaConverter {
     }
 }
 
-ConverterController.addConverter("delta", DeltaConverter);
+ConverterController.addConverter('delta', DeltaConverter);
 
 export default DeltaConverter;

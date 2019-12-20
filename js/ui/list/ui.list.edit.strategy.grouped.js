@@ -1,13 +1,13 @@
-var $ = require("../../core/renderer"),
-    isNumeric = require("../../core/utils/type").isNumeric,
-    each = require("../../core/utils/iterator").each,
-    queryByOptions = require("../../data/store_helper").queryByOptions,
-    query = require("../../data/query"),
-    EditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");
+var $ = require('../../core/renderer'),
+    isNumeric = require('../../core/utils/type').isNumeric,
+    each = require('../../core/utils/iterator').each,
+    queryByOptions = require('../../data/store_helper').queryByOptions,
+    query = require('../../data/query'),
+    EditStrategy = require('../collection/ui.collection_widget.edit.strategy.plain');
 
 
-var LIST_ITEM_CLASS = "dx-list-item",
-    LIST_GROUP_CLASS = "dx-list-group";
+var LIST_ITEM_CLASS = 'dx-list-item',
+    LIST_GROUP_CLASS = 'dx-list-group';
 
 var SELECTION_SHIFT = 20,
     SELECTION_MASK = 0x8FF;
@@ -26,15 +26,15 @@ var splitIndex = function(combinedIndex) {
 var GroupedEditStrategy = EditStrategy.inherit({
 
     _groupElements: function() {
-        return this._collectionWidget._itemContainer().find("." + LIST_GROUP_CLASS);
+        return this._collectionWidget._itemContainer().find('.' + LIST_GROUP_CLASS);
     },
 
     _groupItemElements: function($group) {
-        return $group.find("." + LIST_ITEM_CLASS);
+        return $group.find('.' + LIST_ITEM_CLASS);
     },
 
     getIndexByItemData: function(itemData) {
-        var groups = this._collectionWidget.option("items"),
+        var groups = this._collectionWidget.option('items'),
             index = false;
 
         if(!itemData) return false;
@@ -68,7 +68,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
     },
 
     getItemDataByIndex: function(index) {
-        var items = this._collectionWidget.option("items");
+        var items = this._collectionWidget.option('items');
 
         if(isNumeric(index)) {
             return this.itemsGetter()[index];
@@ -79,7 +79,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
 
     itemsGetter: function() {
         var resultItems = [],
-            items = this._collectionWidget.option("items");
+            items = this._collectionWidget.option('items');
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
@@ -93,7 +93,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
 
     deleteItemAtIndex: function(index) {
         var indices = splitIndex(index),
-            itemGroup = this._collectionWidget.option("items")[indices.group].items;
+            itemGroup = this._collectionWidget.option('items')[indices.group].items;
 
         itemGroup.splice(indices.item, 1);
     },
@@ -118,7 +118,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
     },
 
     getIndexByKey: function(key, items) {
-        var groups = items || this._collectionWidget.option("items"),
+        var groups = items || this._collectionWidget.option('items'),
             index = -1,
             that = this;
 
@@ -152,7 +152,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
             return queryByOptions(query(items), { group: group }).toArray();
         }
 
-        return this._collectionWidget.option("items");
+        return this._collectionWidget.option('items');
     },
 
     getItemsByKeys: function(keys, items) {
@@ -197,7 +197,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
     },
 
     moveItemAtIndexToIndex: function(movingIndex, destinationIndex) {
-        var items = this._collectionWidget.option("items"),
+        var items = this._collectionWidget.option('items'),
 
             movingIndices = splitIndex(movingIndex),
             destinationIndices = splitIndex(destinationIndex),
@@ -217,7 +217,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
 
     _getNormalizedItemIndex: function(itemElement) {
         var $item = $(itemElement),
-            $group = $item.closest("." + LIST_GROUP_CLASS);
+            $group = $item.closest('.' + LIST_GROUP_CLASS);
 
         if(!$group.length) {
             return -1;

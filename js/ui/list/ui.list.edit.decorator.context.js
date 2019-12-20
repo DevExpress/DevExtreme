@@ -1,21 +1,21 @@
-var $ = require("../../core/renderer"),
-    EditDecoratorMenuHelperMixin = require("./ui.list.edit.decorator_menu_helper"),
-    messageLocalization = require("../../localization/message"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator"),
-    Overlay = require("../overlay"),
-    ListBase = require("./ui.list.base");
+var $ = require('../../core/renderer'),
+    EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper'),
+    messageLocalization = require('../../localization/message'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    EditDecorator = require('./ui.list.edit.decorator'),
+    Overlay = require('../overlay'),
+    ListBase = require('./ui.list.base');
 
-var CONTEXTMENU_CLASS = "dx-list-context-menu",
-    CONTEXTMENU_MENUCONTENT_CLASS = "dx-list-context-menucontent";
+var CONTEXTMENU_CLASS = 'dx-list-context-menu',
+    CONTEXTMENU_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 
 registerDecorator(
-    "menu",
-    "context",
+    'menu',
+    'context',
     EditDecorator.inherit({
 
         _init: function() {
-            var $menu = $("<div>").addClass(CONTEXTMENU_CLASS);
+            var $menu = $('<div>').addClass(CONTEXTMENU_CLASS);
             this._list.$element().append($menu);
 
             this._menu = this._renderOverlay($menu);
@@ -27,11 +27,11 @@ registerDecorator(
                 deferRendering: true,
                 closeOnTargetScroll: true,
                 closeOnOutsideClick: function(e) {
-                    return !$(e.target).closest("." + CONTEXTMENU_CLASS).length;
+                    return !$(e.target).closest('.' + CONTEXTMENU_CLASS).length;
                 },
                 animation: {
                     show: {
-                        type: "slide",
+                        type: 'slide',
                         duration: 300,
                         from: {
                             height: 0,
@@ -43,7 +43,7 @@ registerDecorator(
                         }
                     },
                     hide: {
-                        type: "slide",
+                        type: 'slide',
                         duration: 0,
                         from: {
                             opacity: 1
@@ -65,16 +65,16 @@ registerDecorator(
             var items = this._menuItems().slice();
             if(this._deleteEnabled()) {
                 items.push({
-                    text: messageLocalization.format("dxListEditDecorator-delete"),
+                    text: messageLocalization.format('dxListEditDecorator-delete'),
                     action: this._deleteItem.bind(this)
                 });
             }
 
-            this._$menuList = $("<div>");
+            this._$menuList = $('<div>');
             this._list._createComponent(this._$menuList, ListBase, {
                 items: items,
                 onItemClick: this._menuItemClickHandler.bind(this),
-                height: "auto",
+                height: 'auto',
                 integrationOptions: {}
             });
 
@@ -96,10 +96,10 @@ registerDecorator(
 
             this._menu.option({
                 position: {
-                    my: "top",
-                    at: "bottom",
+                    my: 'top',
+                    at: 'bottom',
                     of: $itemElement,
-                    collision: "flip"
+                    collision: 'flip'
                 }
             });
             this._menu.show();

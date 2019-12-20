@@ -1,15 +1,15 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import dataUtils from "../../core/element_data";
-import typeUtils from "../../core/utils/type";
-import { getPublicElement } from "../../core/utils/dom";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import dataUtils from '../../core/element_data';
+import typeUtils from '../../core/utils/type';
+import { getPublicElement } from '../../core/utils/dom';
 
-const ROW_SELECTOR = "tr";
+const ROW_SELECTOR = 'tr';
 
 const SchedulerTableCreator = {
 
-    VERTICAL: "vertical",
-    HORIZONTAL: "horizontal",
+    VERTICAL: 'vertical',
+    HORIZONTAL: 'horizontal',
 
     insertAllDayRow: function(allDayElements, tableBody, index) {
         if(allDayElements[index]) {
@@ -25,7 +25,7 @@ const SchedulerTableCreator = {
     },
 
     makeTable: function(options) {
-        var tableBody = domAdapter.createElement("tbody"),
+        var tableBody = domAdapter.createElement('tbody'),
             templateCallbacks = [],
             row,
             rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
@@ -52,7 +52,7 @@ const SchedulerTableCreator = {
             }
 
             for(var j = 0; j < options.cellCount; j++) {
-                var td = domAdapter.createElement("td");
+                var td = domAdapter.createElement('td');
                 row.appendChild(td);
 
                 if(options.cellClass) {
@@ -78,7 +78,7 @@ const SchedulerTableCreator = {
                 if(options.cellTemplate && options.cellTemplate.render) {
                     var templateOptions = {
                         model: {
-                            text: options.getCellText ? options.getCellText(i, j) : "",
+                            text: options.getCellText ? options.getCellText(i, j) : '',
                             date: options.getCellDate ? options.getCellDate(i) : undefined
                         },
                         container: getPublicElement($(td)),
@@ -87,19 +87,19 @@ const SchedulerTableCreator = {
 
                     if(dataValue) {
                         if(dataValue.startDate) {
-                            templateOptions.model["startDate"] = dataValue.startDate;
+                            templateOptions.model['startDate'] = dataValue.startDate;
                         }
 
                         if(dataValue.endDate) {
-                            templateOptions.model["endDate"] = dataValue.endDate;
+                            templateOptions.model['endDate'] = dataValue.endDate;
                         }
 
                         if(dataValue.groups) {
-                            templateOptions.model["groups"] = dataValue.groups;
+                            templateOptions.model['groups'] = dataValue.groups;
                         }
 
                         if(dataValue.allDay) {
-                            templateOptions.model["allDay"] = dataValue.allDay;
+                            templateOptions.model['allDay'] = dataValue.allDay;
                         }
                     }
 
@@ -107,7 +107,7 @@ const SchedulerTableCreator = {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
+                        td.innerHTML = '<div>' + options.getCellText(i, j) + '</div>';
                     }
                 }
             }
@@ -140,16 +140,16 @@ const SchedulerTableCreator = {
 
         config = config || {};
 
-        var cellTag = config.cellTag || "td",
-            childrenField = config.childrenField || "children",
-            titleField = config.titleField || "title",
+        var cellTag = config.cellTag || 'td',
+            childrenField = config.childrenField || 'children',
+            titleField = config.titleField || 'title',
             groupTableClass = config.groupTableClass,
             groupRowClass = config.groupRowClass,
             groupCellClass = config.groupCellClass,
             groupCellCustomContent = config.groupCellCustomContent;
 
         function createTable() {
-            table = domAdapter.createElement("table");
+            table = domAdapter.createElement('table');
 
             if(groupTableClass) {
                 table.className = groupTableClass;
@@ -174,7 +174,7 @@ const SchedulerTableCreator = {
             }
 
             var cellText = domAdapter.createTextNode(text);
-            if(typeof groupCellCustomContent === "function") {
+            if(typeof groupCellCustomContent === 'function') {
                 groupCellCustomContent(cell.element, cellText, index, data);
             } else {
                 cell.element.appendChild(cellText);
@@ -222,7 +222,7 @@ const SchedulerTableCreator = {
 
                 cells.forEach(function(cell, index) {
                     if(rowspans[index]) {
-                        cell.element.setAttribute("rowSpan", rowspans[index]);
+                        cell.element.setAttribute('rowSpan', rowspans[index]);
                     }
                     row.appendChild(cell.element);
                 });
@@ -247,7 +247,7 @@ const SchedulerTableCreator = {
 
         for(let i = 0; i < repeatCount * repeatByDate; i++) {
             for(let j = 0; j < itemCount; j++) {
-                let $container = $("<div>"),
+                let $container = $('<div>'),
                     cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
@@ -263,12 +263,13 @@ const SchedulerTableCreator = {
 
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
-                    $container.text(items[j].text);
+                    $container.text(items[j].text).attr('title', items[j].text).addClass('dx-scheduler-group-header-content');
+                    $container = $('<div>').append($container);
                 }
 
                 const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
 
-                cell.element = $("<div>").addClass(cssClass).append($container);
+                cell.element = $container.addClass(cssClass);
 
                 cells.push(cell);
             }
@@ -302,7 +303,7 @@ const SchedulerTableCreator = {
             groupCount = cellsArray.length;
 
         for(let i = 0; i < groupCount; i++) {
-            rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
+            rows.push($('<div>').addClass(cssClasses.groupHeaderRowClass));
         }
 
         for(let i = groupCount - 1; i >= 0; i--) {
@@ -313,7 +314,7 @@ const SchedulerTableCreator = {
         }
 
         return {
-            elements: $("<div>").addClass("dx-scheduler-group-flex-container").append(rows),
+            elements: $('<div>').addClass('dx-scheduler-group-flex-container').append(rows),
             cellTemplates: cellTemplates
         };
     },
@@ -342,23 +343,23 @@ const SchedulerTableCreator = {
             var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
 
             rows.push(
-                $("<tr>")
+                $('<tr>')
                     .addClass(cssClasses.groupRowClass)
                     .append(cells.map(cellIterator))
             );
         }
 
-        var maxCellCount = rows[groupCount - 1].find("th").length;
+        var maxCellCount = rows[groupCount - 1].find('th').length;
 
         for(var j = 0; j < groupCount; j++) {
-            var $cell = rows[j].find("th"),
+            var $cell = rows[j].find('th'),
                 colspan = maxCellCount / $cell.length;
 
             if(!groupByDate) {
                 colspan = colspan * cellCount;
             }
             if((colspan > 1 && repeatByDate === 1) || (groupByDate && groupCount > 1)) {
-                $cell.attr("colSpan", colspan);
+                $cell.attr('colSpan', colspan);
             }
         }
 
@@ -379,7 +380,7 @@ const SchedulerTableCreator = {
 
         for(var i = 0; i < repeatCount; i++) {
             for(var j = 0; j < itemCount; j++) {
-                var $container = $("<div>"),
+                var $container = $('<div>'),
                     cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
@@ -396,7 +397,7 @@ const SchedulerTableCreator = {
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
                     $container.text(items[j].text);
-                    $container = $("<div>").append($container);
+                    $container = $('<div>').append($container);
                 }
 
                 $container.addClass(cssClasses.groupHeaderContentClass);
@@ -409,7 +410,7 @@ const SchedulerTableCreator = {
                     cssClass = cssClasses.groupHeaderClass;
                 }
 
-                cell.element = $("<th>").addClass(cssClass).append($container);
+                cell.element = $('<th>').addClass(cssClass).append($container);
 
                 cells.push(cell);
             }

@@ -1,40 +1,40 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import { titleize } from "../../core/utils/inflector";
-import { extend } from "../../core/utils/extend";
-import { hasWindow } from "../../core/utils/window";
-import { each, map } from "../../core/utils/iterator";
-import { isDefined } from "../../core/utils/type";
-import translator from "../../animation/translator";
-import Class from "../../core/class";
-import Animator from "./animator";
-import devices from "../../core/devices";
-import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from "../../events/utils";
-import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from "../../core/utils/common";
-import Scrollbar from "./ui.scrollbar";
-import { when, Deferred } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import { titleize } from '../../core/utils/inflector';
+import { extend } from '../../core/utils/extend';
+import { hasWindow, getWindow } from '../../core/utils/window';
+import { each, map } from '../../core/utils/iterator';
+import { isDefined } from '../../core/utils/type';
+import translator from '../../animation/translator';
+import Class from '../../core/class';
+import Animator from './animator';
+import devices from '../../core/devices';
+import { isDxMouseWheelEvent, addNamespace as addEventNamespace, normalizeKeyName } from '../../events/utils';
+import { deferUpdate, deferUpdater, deferRender, deferRenderer, noop } from '../../core/utils/common';
+import Scrollbar from './ui.scrollbar';
+import { when, Deferred } from '../../core/utils/deferred';
 
 const realDevice = devices.real;
-const isSluggishPlatform = realDevice.platform === "android";
+const isSluggishPlatform = realDevice.platform === 'android';
 
-const SCROLLABLE_SIMULATED = "dxSimulatedScrollable";
-const SCROLLABLE_STRATEGY = "dxScrollableStrategy";
-const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + "Cursor";
-const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + "Keyboard";
-const SCROLLABLE_SIMULATED_CLASS = "dx-scrollable-simulated";
-const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
-const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible";
-const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
+const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
+const SCROLLABLE_SIMULATED_CURSOR = SCROLLABLE_SIMULATED + 'Cursor';
+const SCROLLABLE_SIMULATED_KEYBOARD = SCROLLABLE_SIMULATED + 'Keyboard';
+const SCROLLABLE_SIMULATED_CLASS = 'dx-scrollable-simulated';
+const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = 'dx-scrollable-scrollbars-alwaysvisible';
+const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
 
-const VERTICAL = "vertical";
-const HORIZONTAL = "horizontal";
+const VERTICAL = 'vertical';
+const HORIZONTAL = 'horizontal';
 
 const ACCELERATION = isSluggishPlatform ? 0.95 : 0.92;
 const OUT_BOUNDS_ACCELERATION = 0.5;
 const MIN_VELOCITY_LIMIT = 1;
 const FRAME_DURATION = Math.round(1000 / 60);
-const SCROLL_LINE_HEIGHT = 20;
+const SCROLL_LINE_HEIGHT = 40;
 const VALIDATE_WHEEL_TIMEOUT = 500;
 
 const BOUNCE_MIN_VELOCITY_LIMIT = MIN_VELOCITY_LIMIT / 5;
@@ -43,15 +43,15 @@ const BOUNCE_FRAMES = BOUNCE_DURATION / FRAME_DURATION;
 const BOUNCE_ACCELERATION_SUM = (1 - Math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
 const KEY_CODES = {
-    PAGE_UP: "pageUp",
-    PAGE_DOWN: "pageDown",
-    END: "end",
-    HOME: "home",
-    LEFT: "leftArrow",
-    UP: "upArrow",
-    RIGHT: "rightArrow",
-    DOWN: "downArrow",
-    TAB: "tab"
+    PAGE_UP: 'pageUp',
+    PAGE_DOWN: 'pageDown',
+    END: 'end',
+    HOME: 'home',
+    LEFT: 'leftArrow',
+    UP: 'upArrow',
+    RIGHT: 'rightArrow',
+    DOWN: 'downArrow',
+    TAB: 'tab'
 };
 
 var InertiaAnimator = Animator.inherit({
@@ -113,13 +113,13 @@ var Scroller = Class.inherit({
         this._location = 0;
         this._topReached = false;
         this._bottomReached = false;
-        this._axis = options.direction === HORIZONTAL ? "x" : "y";
-        this._prop = options.direction === HORIZONTAL ? "left" : "top";
-        this._dimension = options.direction === HORIZONTAL ? "width" : "height";
-        this._scrollProp = options.direction === HORIZONTAL ? "scrollLeft" : "scrollTop";
+        this._axis = options.direction === HORIZONTAL ? 'x' : 'y';
+        this._prop = options.direction === HORIZONTAL ? 'left' : 'top';
+        this._dimension = options.direction === HORIZONTAL ? 'width' : 'height';
+        this._scrollProp = options.direction === HORIZONTAL ? 'scrollLeft' : 'scrollTop';
 
         each(options, (optionName, optionValue) => {
-            this["_" + optionName] = optionValue;
+            this['_' + optionName] = optionValue;
         });
     },
 
@@ -129,7 +129,7 @@ var Scroller = Class.inherit({
     },
 
     _initScrollbar: function() {
-        this._scrollbar = new Scrollbar($("<div>").appendTo(this._$container), {
+        this._scrollbar = new Scrollbar($('<div>').appendTo(this._$container), {
             direction: this._direction,
             visible: this._scrollByThumb,
             visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
@@ -139,7 +139,7 @@ var Scroller = Class.inherit({
     },
 
     _visibilityModeNormalize: function(mode) {
-        return (mode === true) ? "onScroll" : (mode === false) ? "never" : mode;
+        return (mode === true) ? 'onScroll' : (mode === false) ? 'never' : mode;
     },
 
     _scrollStep: function(delta) {
@@ -153,7 +153,7 @@ var Scroller = Class.inherit({
             return;
         }
 
-        eventsEngine.triggerHandler(this._$container, { type: "scroll" });
+        eventsEngine.triggerHandler(this._$container, { type: 'scroll' });
     },
 
     _suppressBounce: function() {
@@ -202,7 +202,7 @@ var Scroller = Class.inherit({
     },
 
     _getBaseDimension: function(element, dimension) {
-        const dimensionName = "offset" + titleize(dimension);
+        const dimensionName = 'offset' + titleize(dimension);
 
         return element[dimensionName];
     },
@@ -316,7 +316,7 @@ var Scroller = Class.inherit({
     },
 
     _moveToMouseLocation: function(e) {
-        const mouseLocation = e["page" + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
+        const mouseLocation = e['page' + this._axis.toUpperCase()] - this._$element.offset()[this._prop];
         const location = this._location + mouseLocation / this._containerToContentRatio() - this._$container.height() / 2;
 
         this._scrollStep(-Math.round(location));
@@ -479,11 +479,11 @@ var Scroller = Class.inherit({
     },
 
     _showScrollbar: function() {
-        this._scrollbar.option("visible", true);
+        this._scrollbar.option('visible', true);
     },
 
     _hideScrollbar: function() {
-        this._scrollbar.option("visible", false);
+        this._scrollbar.option('visible', false);
     },
 
     _containerSize: function() {
@@ -491,11 +491,11 @@ var Scroller = Class.inherit({
     },
 
     _contentSize: function() {
-        const isOverflowHidden = this._$content.css("overflow" + this._axis.toUpperCase()) === "hidden";
+        const isOverflowHidden = this._$content.css('overflow' + this._axis.toUpperCase()) === 'hidden';
         let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
         if(!isOverflowHidden) {
-            let containerScrollSize = this._$content[0]["scroll" + titleize(this._dimension)] * this._getScaleRatio();
+            let containerScrollSize = this._$content[0]['scroll' + titleize(this._dimension)] * this._getScaleRatio();
 
             contentSize = Math.max(containerScrollSize, contentSize);
         }
@@ -568,8 +568,8 @@ var SimulatedStrategy = Class.inherit({
     render: function() {
         this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
-        if(this.option("useKeyboard")) {
-            this._$container.prop("tabIndex", 0);
+        if(this.option('useKeyboard')) {
+            this._$container.prop('tabIndex', 0);
         }
         this._attachKeyboardHandler();
         this._attachCursorHandlers();
@@ -586,8 +586,8 @@ var SimulatedStrategy = Class.inherit({
             this._createScroller(VERTICAL);
         }
 
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option("showScrollbar") === "always");
-        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option("showScrollbar"));
+        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
+        this._$element.toggleClass(SCROLLABLE_SCROLLBARS_HIDDEN, !this.option('showScrollbar'));
     },
 
     _createScroller: function(direction) {
@@ -601,11 +601,11 @@ var SimulatedStrategy = Class.inherit({
             $container: this._$container,
             $wrapper: this._$wrapper,
             $element: this._$element,
-            scrollByContent: this.option("scrollByContent"),
-            scrollByThumb: this.option("scrollByThumb"),
-            scrollbarVisible: this.option("showScrollbar"),
-            bounceEnabled: this.option("bounceEnabled"),
-            inertiaEnabled: this.option("inertiaEnabled"),
+            scrollByContent: this.option('scrollByContent'),
+            scrollByThumb: this.option('scrollByThumb'),
+            scrollbarVisible: this.option('showScrollbar'),
+            bounceEnabled: this.option('bounceEnabled'),
+            inertiaEnabled: this.option('inertiaEnabled'),
             isAnyThumbScrolling: this._isAnyThumbScrolling.bind(this)
         };
     },
@@ -626,7 +626,7 @@ var SimulatedStrategy = Class.inherit({
     _isAnyThumbScrolling: function($target) {
         let result = false;
 
-        this._eventHandler("isThumbScrolling", $target).done(function(isThumbScrollingVertical, isThumbScrollingHorizontal) {
+        this._eventHandler('isThumbScrolling', $target).done(function(isThumbScrollingVertical, isThumbScrollingHorizontal) {
             result = isThumbScrollingVertical || isThumbScrollingHorizontal;
         });
         return result;
@@ -635,7 +635,7 @@ var SimulatedStrategy = Class.inherit({
     handleInit: function(e) {
         this._suppressDirections(e);
         this._eventForUserAction = e;
-        this._eventHandler("init", e).done(this._stopAction);
+        this._eventHandler('init', e).done(this._stopAction);
     },
 
     _suppressDirections: function(e) {
@@ -667,7 +667,7 @@ var SimulatedStrategy = Class.inherit({
 
     handleStart: function(e) {
         this._eventForUserAction = e;
-        this._eventHandler("start").done(this._startAction);
+        this._eventHandler('start').done(this._startAction);
     },
 
     _saveActive: function() {
@@ -688,33 +688,47 @@ var SimulatedStrategy = Class.inherit({
         }
         this._saveActive();
         e.preventDefault && e.preventDefault();
-        this._adjustDistance(e.delta);
+
+        this._adjustDistance(e, e.delta);
         this._eventForUserAction = e;
-        this._eventHandler("move", e.delta);
+        this._eventHandler('move', e.delta);
     },
 
-    _adjustDistance: function(distance) {
+    _adjustDistance: function(e, distance) {
         distance.x *= this._validDirections[HORIZONTAL];
         distance.y *= this._validDirections[VERTICAL];
+
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        if(devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
+            distance.x = Math.round(distance.x / devicePixelRatio * 100) / 100;
+            distance.y = Math.round(distance.y / devicePixelRatio * 100) / 100;
+        }
+    },
+
+    _tryGetDevicePixelRatio: function() {
+        if(hasWindow()) {
+            return getWindow().devicePixelRatio;
+        }
     },
 
     handleEnd: function(e) {
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
-        this._adjustDistance(e.velocity);
+
+        this._adjustDistance(e, e.velocity);
         this._eventForUserAction = e;
-        return this._eventHandler("end", e.velocity).done(this._endAction);
+        return this._eventHandler('end', e.velocity).done(this._endAction);
     },
 
     handleCancel: function(e) {
         this._resetActive();
         this._eventForUserAction = e;
-        return this._eventHandler("end", { x: 0, y: 0 });
+        return this._eventHandler('end', { x: 0, y: 0 });
     },
 
     handleStop: function() {
         this._resetActive();
-        this._eventHandler("stop");
+        this._eventHandler('stop');
     },
 
     handleScroll: function() {
@@ -724,8 +738,8 @@ var SimulatedStrategy = Class.inherit({
     _attachKeyboardHandler: function() {
         eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_KEYBOARD}`);
 
-        if(!this.option("disabled") && this.option("useKeyboard")) {
-            eventsEngine.on(this._$element, addEventNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+        if(!this.option('disabled') && this.option('useKeyboard')) {
+            eventsEngine.on(this._$element, addEventNamespace('keydown', SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
         }
     },
 
@@ -782,9 +796,14 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _scrollByLine: function(lines) {
+        const devicePixelRatio = this._tryGetDevicePixelRatio();
+        let scrollOffset = SCROLL_LINE_HEIGHT;
+        if(devicePixelRatio) {
+            scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+        }
         this.scrollBy({
-            top: (lines.y || 0) * -SCROLL_LINE_HEIGHT,
-            left: (lines.x || 0) * -SCROLL_LINE_HEIGHT
+            top: (lines.y || 0) * -scrollOffset,
+            left: (lines.x || 0) * -scrollOffset
         });
     },
 
@@ -798,11 +817,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _dimensionByProp: function(prop) {
-        return (prop === "left") ? "width" : "height";
+        return (prop === 'left') ? 'width' : 'height';
     },
 
     _getPropByDirection: function(direction) {
-        return direction === HORIZONTAL ? "left" : "top";
+        return direction === HORIZONTAL ? 'left' : 'top';
     },
 
     _scrollToHome: function() {
@@ -823,18 +842,18 @@ var SimulatedStrategy = Class.inherit({
     },
 
     createActions: function() {
-        this._startAction = this._createActionHandler("onStart");
-        this._stopAction = this._createActionHandler("onStop");
-        this._endAction = this._createActionHandler("onEnd");
-        this._updateAction = this._createActionHandler("onUpdated");
+        this._startAction = this._createActionHandler('onStart');
+        this._stopAction = this._createActionHandler('onStop');
+        this._endAction = this._createActionHandler('onEnd');
+        this._updateAction = this._createActionHandler('onUpdated');
 
         this._createScrollerActions();
     },
 
     _createScrollerActions: function() {
-        this._scrollAction = this._createActionHandler("onScroll");
-        this._bounceAction = this._createActionHandler("onBounce");
-        this._eventHandler("createActions", {
+        this._scrollAction = this._createActionHandler('onScroll');
+        this._bounceAction = this._createActionHandler('onBounce');
+        this._eventHandler('createActions', {
             scroll: this._scrollAction,
             bounce: this._bounceAction
         });
@@ -871,7 +890,7 @@ var SimulatedStrategy = Class.inherit({
     _eventHandler: function(eventName) {
         const args = [].slice.call(arguments).slice(1);
         let deferreds = map(this._scrollers, (scroller) => {
-            return scroller["_" + eventName + "Handler"].apply(scroller, args);
+            return scroller['_' + eventName + 'Handler'].apply(scroller, args);
         });
 
         return when.apply($, deferreds).promise();
@@ -892,14 +911,14 @@ var SimulatedStrategy = Class.inherit({
     _attachCursorHandlers: function() {
         eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
 
-        if(!this.option("disabled") && this._isHoverMode()) {
-            eventsEngine.on(this._$element, addEventNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
-            eventsEngine.on(this._$element, addEventNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+        if(!this.option('disabled') && this._isHoverMode()) {
+            eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
+            eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
         }
     },
 
     _isHoverMode: function() {
-        return this.option("showScrollbar") === "onHover";
+        return this.option('showScrollbar') === 'onHover';
     },
 
     _cursorEnterHandler: function(e) {
@@ -915,7 +934,7 @@ var SimulatedStrategy = Class.inherit({
         }
 
         hoveredScrollable = this;
-        this._eventHandler("cursorEnter");
+        this._eventHandler('cursorEnter');
         e.originalEvent._hoverHandled = true;
     },
 
@@ -924,7 +943,7 @@ var SimulatedStrategy = Class.inherit({
             return;
         }
 
-        this._eventHandler("cursorLeave");
+        this._eventHandler('cursorLeave');
         hoveredScrollable = null;
         this._refreshCursorState(e && e.relatedTarget);
     },
@@ -948,22 +967,22 @@ var SimulatedStrategy = Class.inherit({
     },
 
     update: function() {
-        const result = this._eventHandler("update").done(this._updateAction);
+        const result = this._eventHandler('update').done(this._updateAction);
 
         return when(result, deferUpdate(() => {
             const allowedDirections = this._allowedDirections();
             deferRender(() => {
-                let touchDirection = allowedDirections.vertical ? "pan-x" : "";
-                touchDirection = allowedDirections.horizontal ? "pan-y" : touchDirection;
-                touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? "none" : touchDirection;
-                this._$container.css("touchAction", touchDirection);
+                let touchDirection = allowedDirections.vertical ? 'pan-x' : '';
+                touchDirection = allowedDirections.horizontal ? 'pan-y' : touchDirection;
+                touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? 'none' : touchDirection;
+                this._$container.css('touchAction', touchDirection);
             });
             return when().promise();
         }));
     },
 
     _allowedDirections: function() {
-        const bounceEnabled = this.option("bounceEnabled");
+        const bounceEnabled = this.option('bounceEnabled');
         const verticalScroller = this._scrollers[VERTICAL];
         const horizontalScroller = this._scrollers[HORIZONTAL];
 
@@ -990,16 +1009,16 @@ var SimulatedStrategy = Class.inherit({
 
         this._prepareDirections(true);
         this._startAction();
-        this._eventHandler("scrollBy", { x: distance.left, y: distance.top });
+        this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
         this._endAction();
     },
 
     validate: function(e) {
-        if(this.option("disabled")) {
+        if(this.option('disabled')) {
             return false;
         }
 
-        if(this.option("bounceEnabled")) {
+        if(this.option('bounceEnabled')) {
             return true;
         }
 
@@ -1030,7 +1049,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _validateMove: function(e) {
-        if(!this.option("scrollByContent") && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
+        if(!this.option('scrollByContent') && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
             return false;
         }
 
@@ -1042,11 +1061,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _wheelProp: function() {
-        return (this._wheelDirection() === HORIZONTAL) ? "left" : "top";
+        return (this._wheelDirection() === HORIZONTAL) ? 'left' : 'top';
     },
 
     _wheelDirection: function(e) {
-        switch(this.option("direction")) {
+        switch(this.option('direction')) {
             case HORIZONTAL:
                 return HORIZONTAL;
             case VERTICAL:
@@ -1067,7 +1086,7 @@ var SimulatedStrategy = Class.inherit({
             hoveredScrollable = null;
         }
 
-        this._eventHandler("dispose");
+        this._eventHandler('dispose');
         this._detachEventHandlers();
         this._$element.removeClass(SCROLLABLE_SIMULATED_CLASS);
         this._eventForUserAction = null;

@@ -1,19 +1,19 @@
-var $ = require("jquery"),
-    common = require("./commonParts/common.js"),
+var $ = require('jquery'),
+    common = require('./commonParts/common.js'),
     createSankey = common.createSankey,
     environment = common.environment;
 
-QUnit.module("Node labels", environment);
+QUnit.module('Node labels', environment);
 
-QUnit.test("Create label group on initialization", function(assert) {
+QUnit.test('Create label group on initialization', function(assert) {
     createSankey({});
 
     var labelsGroup = this.labelsGroup();
     assert.equal(labelsGroup.append.lastCall.args[0], this.renderer.root);
-    assert.equal(labelsGroup.attr.lastCall.args[0].class, "dxs-labels");
+    assert.equal(labelsGroup.attr.lastCall.args[0].class, 'dxs-labels');
 });
 
-QUnit.test("Create labels", function(assert) {
+QUnit.test('Create labels', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -39,7 +39,7 @@ QUnit.test("Create labels", function(assert) {
     assert.equal(that.renderer.text.getCall(2).args[0], 'Z');
 });
 
-QUnit.test("If no labels present", function(assert) {
+QUnit.test('If no labels present', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -53,19 +53,19 @@ QUnit.test("If no labels present", function(assert) {
     assert.equal(labels.length, 0);
 });
 
-QUnit.test("Create labels with styles", function(assert) {
+QUnit.test('Create labels with styles', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true,
             border: {
                 visible: true,
-                color: "white",
+                color: 'white',
                 width: 10,
                 opacity: 0.2
             },
             font: {
-                color: "red",
+                color: 'red',
                 weight: 400,
                 size: 26
             },
@@ -76,25 +76,25 @@ QUnit.test("Create labels with styles", function(assert) {
         attrs = label.attr.firstCall.args[0];
 
     assert.deepEqual(css, {
-        fill: "red",
-        cursor: "default",
-        "font-family": "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif",
-        "font-size": 26,
-        "font-weight": 400
+        fill: 'red',
+        cursor: 'default',
+        'font-family': '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+        'font-size': 26,
+        'font-weight': 400
     });
-    assert.equal(attrs.stroke, "white");
-    assert.equal(attrs["stroke-opacity"], 0.2);
-    assert.equal(attrs["stroke-width"], 10);
+    assert.equal(attrs.stroke, 'white');
+    assert.equal(attrs['stroke-opacity'], 0.2);
+    assert.equal(attrs['stroke-width'], 10);
 });
 
-QUnit.test("Create labels with styles and invisible borders", function(assert) {
+QUnit.test('Create labels with styles and invisible borders', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true,
             border: {
                 visible: false,
-                color: "white",
+                color: 'white',
                 width: 10,
                 opacity: 0.2
             }
@@ -103,19 +103,19 @@ QUnit.test("Create labels with styles and invisible borders", function(assert) {
     var attrs = this.label(0).attr.firstCall.args[0];
     var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
-    assert.equal(haveAttrsOwnProperty("stroke-width"), false);
-    assert.equal(haveAttrsOwnProperty("stroke-opacity"), false);
-    assert.equal(haveAttrsOwnProperty("stroke"), false);
+    assert.equal(haveAttrsOwnProperty('stroke-width'), false);
+    assert.equal(haveAttrsOwnProperty('stroke-opacity'), false);
+    assert.equal(haveAttrsOwnProperty('stroke'), false);
 });
 
-QUnit.test("Create labels with styles and invisible borders if border width is 0", function(assert) {
+QUnit.test('Create labels with styles and invisible borders if border width is 0', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true,
             border: {
                 visible: true,
-                color: "white",
+                color: 'white',
                 width: 0,
                 opacity: 0.2
             }
@@ -124,12 +124,12 @@ QUnit.test("Create labels with styles and invisible borders if border width is 0
     var attrs = this.label(0).attr.firstCall.args[0];
     var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
-    assert.equal(haveAttrsOwnProperty("stroke-width"), false);
-    assert.equal(haveAttrsOwnProperty("stroke-opacity"), false);
-    assert.equal(haveAttrsOwnProperty("stroke"), false);
+    assert.equal(haveAttrsOwnProperty('stroke-width'), false);
+    assert.equal(haveAttrsOwnProperty('stroke-opacity'), false);
+    assert.equal(haveAttrsOwnProperty('stroke'), false);
 });
 
-QUnit.test("Label color if useNodeColors set to true", function(assert) {
+QUnit.test('Label color if useNodeColors set to true', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -143,7 +143,7 @@ QUnit.test("Label color if useNodeColors set to true", function(assert) {
     assert.equal(nodes[2].attr.lastCall.args[0].fill, this.label(2).css.firstCall.args[0].fill);
 });
 
-QUnit.test("Labels customize text", function(assert) {
+QUnit.test('Labels customize text', function(assert) {
 
     var customizeText = function(node) {
         return 'test text ' + node.title;
@@ -161,7 +161,7 @@ QUnit.test("Labels customize text", function(assert) {
     assert.equal(this.renderer.text.getCall(2).args[0], 'test text Z');
 });
 
-QUnit.test("Labels alignment through cascades", function(assert) {
+QUnit.test('Labels alignment through cascades', function(assert) {
     createSankey({
         dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
     });
@@ -177,7 +177,7 @@ QUnit.test("Labels alignment through cascades", function(assert) {
     assert.ok(nodes[2].attr.firstCall.args[0].x > this.label(2).attr.lastCall.args[0].translateX, 'Last cascade');
 });
 
-QUnit.test("Labels alignment through cascades with rtlEnabled", function(assert) {
+QUnit.test('Labels alignment through cascades with rtlEnabled', function(assert) {
     createSankey({
         rtlEnabled: true,
         dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
@@ -195,7 +195,7 @@ QUnit.test("Labels alignment through cascades with rtlEnabled", function(assert)
 });
 
 
-QUnit.test("Labels offsets", function(assert) {
+QUnit.test('Labels offsets', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -225,7 +225,7 @@ QUnit.test("Labels offsets", function(assert) {
 });
 
 // T669620
-QUnit.test("Label drawing on bottom border of widget", function(assert) {
+QUnit.test('Label drawing on bottom border of widget', function(assert) {
     this.renderer.bBoxTemplate = sinon.stub();
     this.renderer.bBoxTemplate.onCall(7).returns({ x: 1, y: -10, width: 20, height: 10 });
     this.renderer.bBoxTemplate.returns({ x: 1, y: 2, width: 20, height: 10 });
@@ -244,7 +244,7 @@ QUnit.test("Label drawing on bottom border of widget", function(assert) {
 });
 
 // T669620
-QUnit.test("Label drawing on top border of widget", function(assert) {
+QUnit.test('Label drawing on top border of widget', function(assert) {
     createSankey({
         dataSource: [{ target: 't3', source: 's1', weight: 0.1 }, { target: 't1', source: 's1', weight: 20 },
             { target: 't2', source: 's1', weight: 30 }
@@ -258,16 +258,16 @@ QUnit.test("Label drawing on top border of widget", function(assert) {
     assert.equal(this.label(1).attr.lastCall.args[0].translateY, -2, 'Alignment of top label');
 });
 
-QUnit.module("Node labels. Adaptive layout", $.extend({}, environment, {
+QUnit.module('Node labels. Adaptive layout', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        $("#test-container").css({
+        $('#test-container').css({
             width: 300
         });
     }
 }));
 
-QUnit.test("Shown labels if container size bigger than adaptiveLayout", function(assert) {
+QUnit.test('Shown labels if container size bigger than adaptiveLayout', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -283,7 +283,7 @@ QUnit.test("Shown labels if container size bigger than adaptiveLayout", function
     assert.equal(this.labels().length, this.nodes().length);
 });
 
-QUnit.test("Hide labels if container size smaller than adaptiveLayout", function(assert) {
+QUnit.test('Hide labels if container size smaller than adaptiveLayout', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -299,7 +299,7 @@ QUnit.test("Hide labels if container size smaller than adaptiveLayout", function
     assert.equal(this.labels().length, 0);
 });
 
-QUnit.test("Show labels if keepLabels is true and container size is smaller than adaptiveLayout", function(assert) {
+QUnit.test('Show labels if keepLabels is true and container size is smaller than adaptiveLayout', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -314,7 +314,7 @@ QUnit.test("Show labels if keepLabels is true and container size is smaller than
     assert.equal(this.labels().length, 3);
 });
 
-QUnit.test("Show labels if keepLabels is true and widget size is smaller than adaptiveLayout", function(assert) {
+QUnit.test('Show labels if keepLabels is true and widget size is smaller than adaptiveLayout', function(assert) {
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -332,7 +332,7 @@ QUnit.test("Show labels if keepLabels is true and widget size is smaller than ad
     assert.equal(this.labels().length, 3);
 });
 
-QUnit.test("Show hidden labels", function(assert) {
+QUnit.test('Show hidden labels', function(assert) {
     var sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {

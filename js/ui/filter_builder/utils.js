@@ -1,49 +1,49 @@
-import { Deferred, when } from "../../core/utils/deferred";
-import { errors as dataErrors } from "../../data/errors";
-import { isDefined } from "../../core/utils/type";
-import { compileGetter } from "../../core/utils/data";
-import errors from "../widget/ui.errors";
-import filterUtils from "../shared/filtering";
-import formatHelper from "../../format_helper";
-import { extend } from "../../core/utils/extend";
-import inflector from "../../core/utils/inflector";
-import between from "./between";
-import messageLocalization from "../../localization/message";
-import { DataSource } from "../../data/data_source/data_source";
-import filterOperationsDictionary from "./ui.filter_operations_dictionary";
+import { Deferred, when } from '../../core/utils/deferred';
+import { errors as dataErrors } from '../../data/errors';
+import { isDefined } from '../../core/utils/type';
+import { compileGetter } from '../../core/utils/data';
+import errors from '../widget/ui.errors';
+import filterUtils from '../shared/filtering';
+import formatHelper from '../../format_helper';
+import { extend } from '../../core/utils/extend';
+import inflector from '../../core/utils/inflector';
+import between from './between';
+import messageLocalization from '../../localization/message';
+import { DataSource } from '../../data/data_source/data_source';
+import filterOperationsDictionary from './ui.filter_operations_dictionary';
 
-var DEFAULT_DATA_TYPE = "string",
-    EMPTY_MENU_ICON = "icon-none",
-    AND_GROUP_OPERATION = "and",
-    EQUAL_OPERATION = "=",
-    NOT_EQUAL_OPERATION = "<>",
+var DEFAULT_DATA_TYPE = 'string',
+    EMPTY_MENU_ICON = 'icon-none',
+    AND_GROUP_OPERATION = 'and',
+    EQUAL_OPERATION = '=',
+    NOT_EQUAL_OPERATION = '<>',
     DATATYPE_OPERATIONS = {
-        "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
-        "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
-        "date": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
-        "datetime": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
-        "boolean": ["=", "<>", "isblank", "isnotblank"],
-        "object": ["isblank", "isnotblank"]
+        'number': ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
+        'string': ['contains', 'notcontains', 'startswith', 'endswith', '=', '<>', 'isblank', 'isnotblank'],
+        'date': ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
+        'datetime': ['=', '<>', '<', '>', '<=', '>=', 'isblank', 'isnotblank'],
+        'boolean': ['=', '<>', 'isblank', 'isnotblank'],
+        'object': ['isblank', 'isnotblank']
     },
     DEFAULT_FORMAT = {
-        "date": "shortDate",
-        "datetime": "shortDateShortTime"
+        'date': 'shortDate',
+        'datetime': 'shortDateShortTime'
     },
-    LOOKUP_OPERATIONS = ["=", "<>", "isblank", "isnotblank"],
+    LOOKUP_OPERATIONS = ['=', '<>', 'isblank', 'isnotblank'],
     AVAILABLE_FIELD_PROPERTIES = [
-        "caption",
-        "customizeText",
-        "dataField",
-        "dataType",
-        "editorTemplate",
-        "falseText",
-        "editorOptions",
-        "filterOperations",
-        "format",
-        "lookup",
-        "trueText",
-        "calculateFilterExpression",
-        "name"
+        'caption',
+        'customizeText',
+        'dataField',
+        'dataType',
+        'editorTemplate',
+        'falseText',
+        'editorOptions',
+        'filterOperations',
+        'format',
+        'lookup',
+        'trueText',
+        'calculateFilterExpression',
+        'name'
     ];
 
 function getFormattedValueText(field, value) {
@@ -54,7 +54,7 @@ function getFormattedValueText(field, value) {
 function isNegationGroup(group) {
     return group
     && group.length > 1
-    && group[0] === "!"
+    && group[0] === '!'
     && !isCondition(group);
 }
 
@@ -73,12 +73,12 @@ function setGroupCriteria(group, criteria) {
 
 function convertGroupToNewStructure(group, value) {
     var isNegationValue = function(value) {
-            return value.indexOf("!") !== -1;
+            return value.indexOf('!') !== -1;
         },
         convertGroupToNegationGroup = function(group) {
             var criteria = group.slice(0);
             group.length = 0;
-            group.push("!", criteria);
+            group.push('!', criteria);
         },
         convertNegationGroupToGroup = function(group) {
             var criteria = getGroupCriteria(group);
@@ -101,7 +101,7 @@ function setGroupValue(group, value) {
     var criteria = getGroupCriteria(group),
         i,
         getNormalizedGroupValue = function(value) {
-            return value.indexOf("!") === -1 ? value : value.substring(1);
+            return value.indexOf('!') === -1 ? value : value.substring(1);
         },
         changeCriteriaValue = function(criteria, value) {
             for(i = 0; i < criteria.length; i++) {
@@ -130,14 +130,14 @@ function getCriteriaOperation(criteria) {
         return AND_GROUP_OPERATION;
     }
 
-    var value = "";
+    var value = '';
     for(var i = 0; i < criteria.length; i++) {
         var item = criteria[i];
         if(!Array.isArray(item)) {
             if(value && value !== item) {
-                throw new dataErrors.Error("E4019");
+                throw new dataErrors.Error('E4019');
             }
-            if(item !== "!") {
+            if(item !== '!') {
                 value = item;
             }
         }
@@ -153,7 +153,7 @@ function getGroupValue(group) {
         value = AND_GROUP_OPERATION;
     }
     if(criteria !== group) {
-        value = "!" + value;
+        value = '!' + value;
     }
     return value;
 }
@@ -182,7 +182,7 @@ function getOperationFromAvailable(operation, availableOperations) {
             return availableOperations[i];
         }
     }
-    throw new errors.Error("E1048", operation);
+    throw new errors.Error('E1048', operation);
 }
 
 function getCustomOperation(customOperations, name) {
@@ -228,7 +228,7 @@ function getDefaultOperation(field) {
 }
 
 function createCondition(field, customOperations) {
-    var condition = [field.dataField, "", ""],
+    var condition = [field.dataField, '', ''],
         filterOperation = getDefaultOperation(field);
 
     updateConditionByOperation(condition, filterOperation, customOperations);
@@ -249,7 +249,7 @@ function removeItem(group, item) {
 }
 
 function createEmptyGroup(value) {
-    return value.indexOf("not") !== -1 ? ["!", [value.substring(3).toLowerCase()]] : [value];
+    return value.indexOf('not') !== -1 ? ['!', [value.substring(3).toLowerCase()]] : [value];
 }
 
 function isEmptyGroup(group) {
@@ -290,7 +290,7 @@ function getField(dataField, fields) {
     if(extendedFields.length > 0) {
         return extendedFields[0];
     }
-    throw new errors.Error("E1047", dataField);
+    throw new errors.Error('E1047', dataField);
 }
 
 function isGroup(criteria) {
@@ -357,7 +357,7 @@ function convertToInnerStructure(value, customOperations) {
         return [convertToInnerCondition(value, customOperations), AND_GROUP_OPERATION];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1])
+        return ['!', isCondition(value[1])
             ? [convertToInnerCondition(value[1], customOperations), AND_GROUP_OPERATION]
             : isNegationGroup(value[1]) ? [convertToInnerStructure(value[1], customOperations), AND_GROUP_OPERATION] : convertToInnerGroup(value[1], customOperations)];
     }
@@ -406,7 +406,7 @@ function getFilterExpression(value, fields, customOperations, target) {
 
     if(isNegationGroup(value)) {
         let filterExpression = getFilterExpression(value[1], fields, customOperations, target);
-        return ["!", filterExpression];
+        return ['!', filterExpression];
     }
     let criteria = getGroupCriteria(value);
     if(isCondition(criteria)) {
@@ -480,19 +480,19 @@ function getNormalizedFilter(group) {
 }
 
 function getCurrentLookupValueText(field, value, handler) {
-    if(value === "") {
-        handler("");
+    if(value === '') {
+        handler('');
         return;
     }
     let lookup = field.lookup;
     if(lookup.items) {
-        handler(lookup.calculateCellValue(value) || "");
+        handler(lookup.calculateCellValue(value) || '');
     } else {
         var dataSource = new DataSource(lookup.dataSource);
         dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
-            result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler("");
+            result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler('');
         }).fail(function() {
-            handler("");
+            handler('');
         });
     }
 }
@@ -500,9 +500,9 @@ function getCurrentLookupValueText(field, value, handler) {
 function getPrimitiveValueText(field, value, customOperation, target) {
     var valueText;
     if(value === true) {
-        valueText = field.trueText || messageLocalization.format("dxDataGrid-trueText");
+        valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
     } else if(value === false) {
-        valueText = field.falseText || messageLocalization.format("dxDataGrid-falseText");
+        valueText = field.falseText || messageLocalization.format('dxDataGrid-falseText');
     } else {
         valueText = getFormattedValueText(field, value);
     }
@@ -529,20 +529,20 @@ function getArrayValueText(field, value, customOperation, target) {
 }
 
 function checkDefaultValue(value) {
-    return value === "" || value === null;
+    return value === '' || value === null;
 }
 
-function getCurrentValueText(field, value, customOperation, target = "filterBuilder") {
+function getCurrentValueText(field, value, customOperation, target = 'filterBuilder') {
     if(checkDefaultValue(value)) {
-        return "";
+        return '';
     }
 
     if(Array.isArray(value)) {
         let result = new Deferred();
         when.apply(this, getArrayValueText(field, value, customOperation, target)).done((...args) => {
             let text = args.some(item => !checkDefaultValue(item))
-                ? args.map(item => !checkDefaultValue(item) ? item : "?")
-                : "";
+                ? args.map(item => !checkDefaultValue(item) ? item : '?')
+                : '';
             result.resolve(text);
         });
         return result;
@@ -562,10 +562,10 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
         if(!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
             pushItemAndCheckParent(originalItems, plainItems, {
                 id: item.parentId,
-                dataType: "object",
+                dataType: 'object',
                 dataField: item.parentId,
                 caption: generateCaptionByDataField(item.parentId, true),
-                filterOperations: ["isblank", "isnotblank"]
+                filterOperations: ['isblank', 'isnotblank']
             });
         }
     }
@@ -573,15 +573,15 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
 }
 
 function generateCaptionByDataField(dataField, allowHierarchicalFields) {
-    var caption = "";
+    var caption = '';
 
     if(allowHierarchicalFields) {
-        dataField = dataField.substring(dataField.lastIndexOf(".") + 1);
+        dataField = dataField.substring(dataField.lastIndexOf('.') + 1);
     } else if(hasParent(dataField)) {
-        dataField.split(".").forEach(function(field, index, arr) {
+        dataField.split('.').forEach(function(field, index, arr) {
             caption += inflector.captionize(field);
             if(index !== (arr.length - 1)) {
-                caption += ".";
+                caption += '.';
             }
         });
 
@@ -609,11 +609,11 @@ function getItems(fields, allowHierarchicalFields) {
 }
 
 function hasParent(dataField) {
-    return dataField.lastIndexOf(".") !== -1;
+    return dataField.lastIndexOf('.') !== -1;
 }
 
 function getParentIdFromItemDataField(dataField) {
-    return dataField.substring(0, dataField.lastIndexOf("."));
+    return dataField.substring(0, dataField.lastIndexOf('.'));
 }
 
 function getCaptionWithParents(item, plainItems) {
@@ -621,7 +621,7 @@ function getCaptionWithParents(item, plainItems) {
         var parentId = getParentIdFromItemDataField(item.dataField);
         for(var i = 0; i < plainItems.length; i++) {
             if(plainItems[i].dataField === parentId) {
-                return getCaptionWithParents(plainItems[i], plainItems) + "." + item.caption;
+                return getCaptionWithParents(plainItems[i], plainItems) + '.' + item.caption;
             }
         }
     }
@@ -636,21 +636,21 @@ function updateConditionByOperation(condition, operation, customOperations) {
             condition.length = 2;
         } else {
             condition[1] = operation;
-            condition[2] = "";
+            condition[2] = '';
         }
         return condition;
     }
 
-    if(operation === "isblank") {
+    if(operation === 'isblank') {
         condition[1] = EQUAL_OPERATION;
         condition[2] = null;
-    } else if(operation === "isnotblank") {
+    } else if(operation === 'isnotblank') {
         condition[1] = NOT_EQUAL_OPERATION;
         condition[2] = null;
     } else {
         customOperation = getCustomOperation(customOperations, condition[1]);
         if(customOperation || (condition.length === 2 || condition[2] === null)) {
-            condition[2] = "";
+            condition[2] = '';
         }
         condition[1] = operation;
     }
@@ -661,9 +661,9 @@ function getOperationValue(condition) {
     var caption;
     if(condition[2] === null) {
         if(condition[1] === EQUAL_OPERATION) {
-            caption = "isblank";
+            caption = 'isblank';
         } else {
-            caption = "isnotblank";
+            caption = 'isnotblank';
         }
     } else {
         caption = condition[1];
@@ -672,22 +672,22 @@ function getOperationValue(condition) {
 }
 
 function isValidCondition(condition) {
-    return condition[2] !== "";
+    return condition[2] !== '';
 }
 
-function getMergedOperations(customOperations, betweenCaption) {
+function getMergedOperations(customOperations, betweenCaption, context) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
     result.some(function(customOperation, index) {
-        if(customOperation.name === "between") {
+        if(customOperation.name === 'between') {
             betweenIndex = index;
             return true;
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(between.getConfig(betweenCaption), result[betweenIndex]);
+        result[betweenIndex] = extend(between.getConfig(betweenCaption, context), result[betweenIndex]);
     } else {
-        result.unshift(between.getConfig(betweenCaption));
+        result.unshift(between.getConfig(betweenCaption, context));
     }
     return result;
 }
@@ -755,7 +755,7 @@ function syncFilters(filter, addedFilter) {
 
     var groupValue = getGroupValue(filter);
     if(groupValue !== AND_GROUP_OPERATION) {
-        return [addedFilter, "and", filter];
+        return [addedFilter, 'and', filter];
     }
 
     return syncConditionIntoGroup(filter, addedFilter, true);

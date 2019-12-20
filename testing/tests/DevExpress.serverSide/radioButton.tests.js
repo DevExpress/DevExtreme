@@ -1,1 +1,1 @@
-import "../DevExpress.ui.widgets.editors/radioButton.markup.tests.js";
+import '../DevExpress.ui.widgets.editors/radioButton.markup.tests.js';

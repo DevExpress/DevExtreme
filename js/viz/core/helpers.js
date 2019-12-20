@@ -1,6 +1,6 @@
-var _extend = require("../../core/utils/extend").extend;
-var windowUtils = require("../../core/utils/window");
-var noop = require("../../core/utils/common").noop;
+var _extend = require('../../core/utils/extend').extend;
+var windowUtils = require('../../core/utils/window');
+var noop = require('../../core/utils/common').noop;
 var isServerSide = !windowUtils.hasWindow();
 
 function Flags() {
@@ -51,7 +51,7 @@ function addChange(settings) {
     var proto = this.prototype,
         code = settings.code;
 
-    proto["_change_" + code] = settings.handler;
+    proto['_change_' + code] = settings.handler;
     if(settings.isThemeDependent) {
         proto._themeDependentChanges.push(code);
     }
@@ -126,15 +126,15 @@ exports.replaceInherit = isServerSide
             var result = _inherit.apply(this, arguments);
             var proto = result.prototype;
             [
-                "_plugins",
-                "_eventsMap",
-                "_initialChanges",
-                "_themeDependentChanges",
-                "_optionChangesMap",
-                "_optionChangesOrder",
-                "_layoutChangesOrder",
-                "_customChangesOrder",
-                "_totalChangesOrder"
+                '_plugins',
+                '_eventsMap',
+                '_initialChanges',
+                '_themeDependentChanges',
+                '_optionChangesMap',
+                '_optionChangesOrder',
+                '_layoutChangesOrder',
+                '_customChangesOrder',
+                '_totalChangesOrder'
             ].forEach(function(key) {
                 proto[key] = {};
             });

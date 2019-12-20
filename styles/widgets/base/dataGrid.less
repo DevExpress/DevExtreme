@@ -171,6 +171,11 @@
         }
     }
 
+    .dx-table-with-scroller-border {
+        border-right: 1px solid @datagrid-border-color;
+        box-sizing: content-box;
+    }
+
     .dx-datagrid-filter-row .dx-filter-range-content {
         color: @datagrid-base-color;
     }
@@ -234,16 +239,6 @@
     .dx-base-typography();
 }
 
-.dx-datagrid-export-menu {
-    .dx-menu-item .dx-icon-exportxlsx {
-        .dx-icon-sizing(16px);
-    }
-
-    .dx-menu-item .dx-icon-exportselected {
-        .dx-icon-sizing(16px);
-    }
-}
-
 .dx-datagrid-adaptive-more {
     cursor: pointer;
     .dx-icon-more;
@@ -301,6 +296,11 @@
                 border-right: @datagrid-border;
             }
         }
+    }
+
+    .dx-table-with-scroller-border {
+        border-left: 1px solid @datagrid-border-color;
+        border-right: none;
     }
 
     .dx-datagrid-form-buttons-container {

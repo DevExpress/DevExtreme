@@ -1,36 +1,36 @@
-import $ from "../../core/renderer";
+import $ from '../../core/renderer';
 
-import Widget from "../widget/ui.widget";
-import Popover from "../popover";
+import Widget from '../widget/ui.widget';
+import Popover from '../popover';
 
-const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = "dx-diagram-context-toolbox-target";
-const DIAGRAM_CONTEXT_TOOLBOX_CLASS = "dx-diagram-context-toolbox";
-const DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS = "dx-diagram-context-toolbox-content";
+const DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS = 'dx-diagram-context-toolbox-target';
+const DIAGRAM_CONTEXT_TOOLBOX_CLASS = 'dx-diagram-context-toolbox';
+const DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS = 'dx-diagram-context-toolbox-content';
 
 class DiagramContextToolbox extends Widget {
     _init() {
         super._init();
 
-        this._onShownAction = this._createActionByOption("onShown");
+        this._onShownAction = this._createActionByOption('onShown');
         this._popoverPositionData = [
             {
-                my: { x: "center", y: "top" },
-                at: { x: "center", y: "bottom" },
+                my: { x: 'center', y: 'top' },
+                at: { x: 'center', y: 'bottom' },
                 offset: { x: 0, y: 5 }
             },
             {
-                my: { x: "right", y: "center" },
-                at: { x: "left", y: "center" },
+                my: { x: 'right', y: 'center' },
+                at: { x: 'left', y: 'center' },
                 offset: { x: -5, y: 0 }
             },
             {
-                my: { x: "center", y: "bottom" },
-                at: { x: "center", y: "top" },
+                my: { x: 'center', y: 'bottom' },
+                at: { x: 'center', y: 'top' },
                 offset: { x: 0, y: -5 }
             },
             {
-                my: { x: "left", y: "center" },
-                at: { x: "right", y: "center" },
+                my: { x: 'left', y: 'center' },
+                at: { x: 'right', y: 'center' },
                 offset: { x: 5, y: 0 }
             }
         ];
@@ -38,11 +38,11 @@ class DiagramContextToolbox extends Widget {
     _initMarkup() {
         super._initMarkup();
 
-        this._$popoverTargetElement = $("<div>")
+        this._$popoverTargetElement = $('<div>')
             .addClass(DIAGRAM_CONTEXT_TOOLBOX_TARGET_CLASS)
             .appendTo(this.$element());
 
-        const $popoverElement = $("<div>")
+        const $popoverElement = $('<div>')
             .appendTo(this.$element());
 
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
@@ -54,7 +54,7 @@ class DiagramContextToolbox extends Widget {
     _show(x, y, side, category, callback) {
         this._popoverInstance.hide();
 
-        var $content = $("<div>")
+        var $content = $('<div>')
             .addClass(DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
         this._$popoverTargetElement
             .css({
@@ -70,7 +70,7 @@ class DiagramContextToolbox extends Widget {
             },
             contentTemplate: $content,
             onContentReady: function() {
-                var $element = this.$element().find("." + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
+                var $element = this.$element().find('.' + DIAGRAM_CONTEXT_TOOLBOX_CONTENT_CLASS);
                 this._onShownAction({ category, callback, $element });
             }.bind(this)
         });

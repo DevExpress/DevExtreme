@@ -1,4 +1,4 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined } from '../../core/utils/type';
 import tagHelper from './excel.tag_helper';
 
 const cellAlignmentHelper = {
@@ -52,7 +52,7 @@ const cellAlignmentHelper = {
     toXml: function(tag) {
         // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         return tagHelper.toXml(
-            "alignment",
+            'alignment',
             {
                 vertical: tag.vertical, // 18.18.88 ST_VerticalAlignment (Vertical Alignment Types)
                 wrapText: isDefined(tag.wrapText) ? Number(tag.wrapText) : undefined,

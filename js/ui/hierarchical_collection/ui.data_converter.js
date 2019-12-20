@@ -1,8 +1,8 @@
-var Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    errors = require("../../ui/widget/ui.errors"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type");
+var Class = require('../../core/class'),
+    extend = require('../../core/utils/extend').extend,
+    errors = require('../../ui/widget/ui.errors'),
+    each = require('../../core/utils/iterator').each,
+    typeUtils = require('../../core/utils/type');
 
 var DataConverter = Class.inherit({
 
@@ -34,16 +34,16 @@ var DataConverter = Class.inherit({
 
     _checkForDuplicateId: function(key) {
         if(typeUtils.isDefined(this._indexByKey[key])) {
-            throw errors.Error("E1040", key);
+            throw errors.Error('E1040', key);
         }
     },
 
     _getParentId: function(item) {
-        return this._dataType === "plain" ? this._dataAccessors.getters.parentKey(item) : undefined;
+        return this._dataType === 'plain' ? this._dataAccessors.getters.parentKey(item) : undefined;
     },
 
     _itemHasChildren: function(item) {
-        if(this._dataType === "plain") {
+        if(this._dataType === 'plain') {
             return;
         }
         var items = this._dataAccessors.getters.items(item);

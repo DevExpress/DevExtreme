@@ -5,7 +5,7 @@ import List from '../../model/list';
 fixture `List`
     .page(url(__dirname, './pages/t718398.html'));
 
-test("Should focus first item after changing selection mode (T811770)", async t => {
+test('Should focus first item after changing selection mode (T811770)', async t => {
     const list = new List('#list');
     const input = Selector('#input');
     const switchSelectionMode = Selector('#button');
@@ -24,7 +24,7 @@ test("Should focus first item after changing selection mode (T811770)", async t 
         .expect(firstItemRadioButton.isFocused).ok();
 });
 
-test("List selection should work with keyboard arrows (T718398)", async t => {
+test('List selection should work with keyboard arrows (T718398)', async t => {
     const list = new List('#list');
     const input = Selector('#input');
     const firstItemCheckBox = list.getItem().checkBox;
@@ -75,7 +75,7 @@ test("List selection should work with keyboard arrows (T718398)", async t => {
         .expect(secondItemCheckBox.isFocused).notOk();
 });
 
-test("Should save focused checkbox", async t => {
+test('Should save focused checkbox', async t => {
     const list = new List('#list');
     const input = Selector('#input');
     const secondItemCheckBox = list.getItem(1).checkBox;
@@ -115,7 +115,7 @@ test("Should save focused checkbox", async t => {
 fixture `List T727360`
     .page(url(__dirname, './pages/t727360.html'));
 
-test("Grouped list can not reorder items (T727360)", async t => {
+test('Grouped list can not reorder items (T727360)', async t => {
     const list = new List('#list');
     const firstGroup = list.getGroup();
     const secondGroup = list.getGroup(1);
@@ -147,7 +147,7 @@ test("Grouped list can not reorder items (T727360)", async t => {
 fixture `List T815151`
     .page(url(__dirname, './pages/t815151.html'));
 
-test("Disabled item should not have focus (T815151)", async t => {
+test('Disabled item should not have focus (T815151)', async t => {
     const list = new List('#list');
     const { searchInput } = list;
     const firstItem = list.getItem();
@@ -155,8 +155,10 @@ test("Disabled item should not have focus (T815151)", async t => {
     const disableFirstItem = Selector('#disable');
 
     await t
-        .click(firstItem.element)
+        .click(searchInput)
+        .pressKey('tab')
         .expect(firstItem.isFocused).ok()
+        .expect(secondItem.isFocused).notOk()
 
         .click(disableFirstItem)
         .expect(firstItem.isDisabled).ok()

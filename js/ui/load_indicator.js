@@ -1,20 +1,20 @@
-var $ = require("../core/renderer"),
-    windowUtils = require("../core/utils/window"),
+var $ = require('../core/renderer'),
+    windowUtils = require('../core/utils/window'),
     navigator = windowUtils.getNavigator(),
-    support = require("../core/utils/support"),
-    themes = require("./themes"),
-    extend = require("../core/utils/extend").extend,
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    Widget = require("./widget/ui.widget");
+    support = require('../core/utils/support'),
+    themes = require('./themes'),
+    extend = require('../core/utils/extend').extend,
+    devices = require('../core/devices'),
+    registerComponent = require('../core/component_registrator'),
+    Widget = require('./widget/ui.widget');
 
-var LOADINDICATOR_CLASS = "dx-loadindicator",
-    LOADINDICATOR_WRAPPER_CLASS = "dx-loadindicator-wrapper",
-    LOADINDICATOR_CONTENT_CLASS = "dx-loadindicator-content",
-    LOADINDICATOR_ICON_CLASS = "dx-loadindicator-icon",
-    LOADINDICATOR_SEGMENT_CLASS = "dx-loadindicator-segment",
-    LOADINDICATOR_SEGMENT_INNER_CLASS = "dx-loadindicator-segment-inner",
-    LOADINDICATOR_IMAGE_CLASS = "dx-loadindicator-image";
+var LOADINDICATOR_CLASS = 'dx-loadindicator',
+    LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper',
+    LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content',
+    LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon',
+    LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment',
+    LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner',
+    LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
 /**
 * @name dxLoadIndicator
@@ -31,7 +31,7 @@ var LoadIndicator = Widget.inherit({
             * @type string
             * @default ""
             */
-            indicatorSrc: "",
+            indicatorSrc: '',
 
             /**
             * @name dxLoadIndicatorOptions.disabled
@@ -79,7 +79,7 @@ var LoadIndicator = Widget.inherit({
             {
                 device: function() {
                     var realDevice = devices.real(),
-                        obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(navigator.userAgent));
+                        obsoleteAndroid = realDevice.platform === 'android' && !(/chrome/i.test(navigator.userAgent));
                     return obsoleteAndroid;
                 },
                 options: {
@@ -128,17 +128,17 @@ var LoadIndicator = Widget.inherit({
     },
 
     _renderWrapper: function() {
-        this._$wrapper = $("<div>").addClass(LOADINDICATOR_WRAPPER_CLASS);
+        this._$wrapper = $('<div>').addClass(LOADINDICATOR_WRAPPER_CLASS);
         this.$element().append(this._$wrapper);
     },
 
     _renderIndicatorContent: function() {
-        this._$content = $("<div>").addClass(LOADINDICATOR_CONTENT_CLASS);
+        this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
         this._$wrapper.append(this._$content);
     },
 
     _renderMarkup: function() {
-        if(support.animation() && !this.option("viaImage") && !this.option("indicatorSrc")) { // B236922
+        if(support.animation() && !this.option('viaImage') && !this.option('indicatorSrc')) { // B236922
             this._renderMarkupForAnimation();
         } else {
             this._renderMarkupForImage();
@@ -146,19 +146,19 @@ var LoadIndicator = Widget.inherit({
     },
 
     _renderMarkupForAnimation: function() {
-        var animatingSegmentInner = this.option("_animatingSegmentInner");
+        var animatingSegmentInner = this.option('_animatingSegmentInner');
 
-        this._$indicator = $("<div>").addClass(LOADINDICATOR_ICON_CLASS);
+        this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
         this._$content.append(this._$indicator);
 
         // Indicator markup
-        for(var i = this.option("_animatingSegmentCount"); i >= 0; --i) {
-            var $segment = $("<div>")
+        for(var i = this.option('_animatingSegmentCount'); i >= 0; --i) {
+            var $segment = $('<div>')
                 .addClass(LOADINDICATOR_SEGMENT_CLASS)
                 .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
 
             if(animatingSegmentInner) {
-                $segment.append($("<div>").addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
+                $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
             }
 
             this._$indicator.append($segment);
@@ -166,12 +166,12 @@ var LoadIndicator = Widget.inherit({
     },
 
     _renderMarkupForImage: function() {
-        var indicatorSrc = this.option("indicatorSrc");
+        var indicatorSrc = this.option('indicatorSrc');
 
         this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
 
         if(indicatorSrc) {
-            this._$wrapper.css("backgroundImage", "url(" + indicatorSrc + ")");
+            this._$wrapper.css('backgroundImage', 'url(' + indicatorSrc + ')');
         }
     },
 
@@ -185,8 +185,8 @@ var LoadIndicator = Widget.inherit({
             return;
         }
 
-        var width = this.option("width"),
-            height = this.option("height");
+        var width = this.option('width'),
+            height = this.option('height');
 
         if(width || height) {
             width = this.$element().width();
@@ -218,14 +218,14 @@ var LoadIndicator = Widget.inherit({
     },
 
     _removeMarkupForImage: function() {
-        this._$wrapper.css("backgroundImage", "none");
+        this._$wrapper.css('backgroundImage', 'none');
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "_animatingSegmentCount":
-            case "_animatingSegmentInner":
-            case "indicatorSrc":
+            case '_animatingSegmentCount':
+            case '_animatingSegmentInner':
+            case 'indicatorSrc':
                 this._invalidate();
                 break;
             default:
@@ -246,6 +246,6 @@ var LoadIndicator = Widget.inherit({
     */
 });
 
-registerComponent("dxLoadIndicator", LoadIndicator);
+registerComponent('dxLoadIndicator', LoadIndicator);
 
 module.exports = LoadIndicator;

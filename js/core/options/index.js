@@ -3,6 +3,7 @@ import { equalByValue, noop } from '../utils/common';
 import { OptionManager } from './option_manager';
 import { clone } from '../utils/object';
 import { getFieldName, getParentName, convertRulesToOptions } from './utils';
+import { extend } from '../utils/extend';
 
 export class Options {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
@@ -18,7 +19,8 @@ export class Options {
             options,
             optionsByReference
         );
-        this._optionManager.onRelevantNamesPrepared((options, name, value) => this._setRelevantNames(options, name, value));
+        this._optionManager.onRelevantNamesPrepared((options, name, value, silent) => this._setRelevantNames(options, name, value, silent));
+        this._cachedOptions = {};
 
         this._rules = [];
     }
@@ -58,9 +60,9 @@ export class Options {
         }
     }
 
-    _setRelevantNames(options, name, value) {
+    _setRelevantNames(options, name, value, silent) {
         if(name) {
-            const normalizedName = this._normalizeName(name);
+            const normalizedName = this._normalizeName(name, silent);
 
             if(normalizedName && normalizedName !== name) {
                 this._setField(options, normalizedName, value);
@@ -96,8 +98,8 @@ export class Options {
         }
     }
 
-    _normalizeName(name) {
-        if(name) {
+    _normalizeName(name, silent) {
+        if(name && !silent) {
             for(let i = 0; i < this._deprecatedNames.length; i++) {
                 if(this._deprecatedNames[i] === name) {
                     const deprecate = this._deprecated[name];
@@ -196,5 +198,15 @@ export class Options {
 
     isDeprecated(name) {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
+    }
+
+    cache(name, options) {
+        const isGetter = arguments.length < 2;
+
+        if(isGetter) {
+            return this._cachedOptions[name];
+        } else {
+            this._cachedOptions[name] = extend(this._cachedOptions[name], options);
+        }
     }
 }

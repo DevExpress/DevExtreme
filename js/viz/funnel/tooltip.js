@@ -1,4 +1,4 @@
-var noop = require("../../core/utils/common").noop;
+var noop = require('../../core/utils/common').noop;
 
 function getCoords(figureCoords, renderer) {
     var offset = renderer.getRootOffset();
@@ -7,7 +7,7 @@ function getCoords(figureCoords, renderer) {
 }
 
 exports.plugin = {
-    name: "funnel-tooltip",
+    name: 'funnel-tooltip',
     init: noop,
     dispose: noop,
 
@@ -44,7 +44,7 @@ exports.plugin = {
                 state = that._tooltipIndex === index || tooltip.show({
                     value: item.value,
                     valueText: tooltip.formatValue(item.value),
-                    percentText: tooltip.formatValue(item.percent, "percent"),
+                    percentText: tooltip.formatValue(item.percent, 'percent'),
                     percent: item.percent,
                     item: item
                 }, { x: 0, y: 0, offset: 0 }, { item: item });
@@ -58,7 +58,7 @@ exports.plugin = {
         }
     },
     customize: function(constructor) {
-        constructor.addPlugin(require("../core/tooltip").plugin);
+        constructor.addPlugin(require('../core/tooltip').plugin);
     }
 };
 

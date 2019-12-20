@@ -1,16 +1,16 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    devices = require("../../core/devices"),
-    styleUtils = require("../../core/utils/style"),
-    callOnce = require("../../core/utils/call_once"),
-    domUtils = require("../../core/utils/dom"),
-    readyCallbacks = require("../../core/utils/ready_callbacks"),
+var $ = require('../../core/renderer'),
+    eventsEngine = require('../../events/core/events_engine'),
+    devices = require('../../core/devices'),
+    styleUtils = require('../../core/utils/style'),
+    callOnce = require('../../core/utils/call_once'),
+    domUtils = require('../../core/utils/dom'),
+    readyCallbacks = require('../../core/utils/ready_callbacks'),
     ready = readyCallbacks.add,
-    mathUtils = require("../../core/utils/math"),
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    eventUtils = require("../utils"),
-    Emitter = require("../core/emitter"),
+    mathUtils = require('../../core/utils/math'),
+    noop = require('../../core/utils/common').noop,
+    isDefined = require('../../core/utils/type').isDefined,
+    eventUtils = require('../utils'),
+    Emitter = require('../core/emitter'),
     sign = mathUtils.sign,
     abs = Math.abs;
 
@@ -23,33 +23,33 @@ var SLEEP = 0,
     IMMEDIATE_TIMEOUT = 180;
 
 var supportPointerEvents = function() {
-    return styleUtils.styleProp("pointer-events");
+    return styleUtils.styleProp('pointer-events');
 };
 
 var setGestureCover = callOnce(function() {
-    var GESTURE_COVER_CLASS = "dx-gesture-cover";
+    var GESTURE_COVER_CLASS = 'dx-gesture-cover';
 
-    var isDesktop = devices.real().deviceType === "desktop";
+    var isDesktop = devices.real().deviceType === 'desktop';
 
     if(!supportPointerEvents() || !isDesktop) {
         return noop;
     }
 
-    var $cover = $("<div>")
+    var $cover = $('<div>')
         .addClass(GESTURE_COVER_CLASS)
-        .css("pointerEvents", "none");
+        .css('pointerEvents', 'none');
 
-    eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
+    eventsEngine.subscribeGlobal($cover, 'dxmousewheel', function(e) {
         e.preventDefault();
     });
 
     ready(function() {
-        $cover.appendTo("body");
+        $cover.appendTo('body');
     });
 
     return function(toggle, cursor) {
-        $cover.css("pointerEvents", toggle ? "all" : "none");
-        toggle && $cover.css("cursor", cursor);
+        $cover.css('pointerEvents', toggle ? 'all' : 'none');
+        toggle && $cover.css('cursor', cursor);
     };
 });
 
@@ -63,7 +63,7 @@ var GestureEmitter = Emitter.inherit({
     gesture: true,
 
     configure: function(data) {
-        this.getElement().css("msTouchAction", data.immediate ? "pinch-zoom" : "");
+        this.getElement().css('msTouchAction', data.immediate ? 'pinch-zoom' : '');
 
         this.callBase(data);
     },
@@ -145,9 +145,9 @@ var GestureEmitter = Emitter.inherit({
             verticalMove = this._validateMove(touchBoundary, deltaY, deltaX);
 
         var direction = this.getDirection(e),
-            bothAccepted = direction === "both" && (horizontalMove || verticalMove),
-            horizontalAccepted = direction === "horizontal" && horizontalMove,
-            verticalAccepted = direction === "vertical" && verticalMove;
+            bothAccepted = direction === 'both' && (horizontalMove || verticalMove),
+            horizontalAccepted = direction === 'horizontal' && horizontalMove,
+            verticalAccepted = direction === 'vertical' && verticalMove;
 
         return bothAccepted || horizontalAccepted || verticalAccepted || this._immediateAccepted;
     },
@@ -169,7 +169,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _resetActiveElement: function() {
-        if(devices.real().platform === "ios" && this.getElement().find(":focus").length) {
+        if(devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
             domUtils.resetActiveElement();
         }
     },
@@ -182,7 +182,7 @@ var GestureEmitter = Emitter.inherit({
         var isStarted = this._stage === STARTED;
 
         if(isStarted) {
-            gestureCover(toggle, this.getElement().css("cursor"));
+            gestureCover(toggle, this.getElement().css('cursor'));
         }
     },
 

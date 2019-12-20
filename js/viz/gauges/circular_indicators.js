@@ -1,8 +1,8 @@
-var baseIndicatorsModule = require("./base_indicators"),
+var baseIndicatorsModule = require('./base_indicators'),
     BaseIndicator = baseIndicatorsModule.BaseIndicator,
     BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker,
     BaseRangeBar = baseIndicatorsModule.BaseRangeBar,
-    vizUtils = require("../core/utils"),
+    vizUtils = require('../core/utils'),
 
     _Number = Number,
     _getCosAndSin = vizUtils.getCosAndSin,
@@ -148,7 +148,7 @@ var rectangleNeedle = NeedleIndicator.inherit({
             x1 = options.x - options.width / 2,
             x2 = x1 + _Number(options.width);
 
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
         that._element.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
     }
 });
@@ -162,7 +162,7 @@ var triangleNeedle = NeedleIndicator.inherit({
             x1 = options.x - options.width / 2,
             x2 = options.x + options.width / 2;
 
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
         that._element.attr({ points: [x1, y1, options.x, y2, x2, y1] });
     }
 });
@@ -187,9 +187,9 @@ var twoColorNeedle = NeedleIndicator.inherit({
             y3 = y4 + (y1 - y4) * fraction;
             y2 = y3 + _Number(options.space);
         }
-        that._firstElement = that._firstElement || that._renderer.path([], "area").append(that._rootElement);
-        that._spaceElement = that._spaceElement || that._renderer.path([], "area").append(that._rootElement);
-        that._secondElement = that._secondElement || that._renderer.path([], "area").append(that._rootElement);
+        that._firstElement = that._firstElement || that._renderer.path([], 'area').append(that._rootElement);
+        that._spaceElement = that._spaceElement || that._renderer.path([], 'area').append(that._rootElement);
+        that._secondElement = that._secondElement || that._renderer.path([], 'area').append(that._rootElement);
         that._firstElement.attr({ points: [x1, y1, x1, y2, x2, y2, x2, y1] });
         that._spaceElement.attr({ points: [x1, y2, x1, y3, x2, y3, x2, y2], 'class': 'dxg-hole', fill: options.containerBackgroundColor });
         that._secondElement.attr({ points: [x1, y3, x1, y4, x2, y4, x2, y3], 'class': 'dxg-part', fill: options.secondColor });
@@ -221,11 +221,11 @@ var triangleMarker = SimpleIndicator.inherit({
             dx = options.width / 2 || 0,
             y2 = y1 - _Number(options.length),
             settings;
-        that._element = that._element || that._renderer.path([], "area").append(that._rootElement);
-        settings = { points: [x, y1, x - dx, y2, x + dx, y2], stroke: "none", "stroke-width": 0, "stroke-linecap": "square" };
+        that._element = that._element || that._renderer.path([], 'area').append(that._rootElement);
+        settings = { points: [x, y1, x - dx, y2, x + dx, y2], stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
         if(options.space > 0) {
-            settings["stroke-width"] = Math.min(options.space, options.width / 4) || 0;
-            settings.stroke = settings["stroke-width"] > 0 ? options.containerBackgroundColor || "none" : "none";
+            settings['stroke-width'] = Math.min(options.space, options.width / 4) || 0;
+            settings.stroke = settings['stroke-width'] > 0 ? options.containerBackgroundColor || 'none' : 'none';
         }
         that._element.attr(settings).sharp();
     },
@@ -276,7 +276,7 @@ var textCloud = BaseTextCloudMarker.inherit({
         return {
             x: that._options.x + cosSin.cos * that._options.radius,
             y: that._options.y - cosSin.sin * that._options.radius,
-            type: nAngle > 270 ? "left-top" : (nAngle > 180 ? "top-right" : (nAngle > 90 ? "right-bottom" : "bottom-left"))
+            type: nAngle > 270 ? 'left-top' : (nAngle > 180 ? 'top-right' : (nAngle > 90 ? 'right-bottom' : 'bottom-left'))
         };
     },
 
@@ -313,11 +313,11 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _createBarItem: function() {
-        return this._renderer.arc().attr({ "stroke-linejoin": "round" }).append(this._rootElement);
+        return this._renderer.arc().attr({ 'stroke-linejoin': 'round' }).append(this._rootElement);
     },
 
     _createTracker: function() {
-        return this._renderer.arc().attr({ "stroke-linejoin": "round" });
+        return this._renderer.arc().attr({ 'stroke-linejoin': 'round' });
     },
 
     _setBarSides: function() {
@@ -428,9 +428,9 @@ var rangeBar = BaseRangeBar.inherit({
 });
 
 exports._default = rectangleNeedle;
-exports["rectangleneedle"] = rectangleNeedle;
-exports["triangleneedle"] = triangleNeedle;
-exports["twocolorneedle"] = twoColorNeedle;
-exports["trianglemarker"] = triangleMarker;
-exports["textcloud"] = textCloud;
-exports["rangebar"] = rangeBar;
+exports['rectangleneedle'] = rectangleNeedle;
+exports['triangleneedle'] = triangleNeedle;
+exports['twocolorneedle'] = twoColorNeedle;
+exports['trianglemarker'] = triangleMarker;
+exports['textcloud'] = textCloud;
+exports['rangebar'] = rangeBar;
