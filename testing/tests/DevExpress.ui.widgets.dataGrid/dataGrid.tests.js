@@ -744,6 +744,11 @@ QUnit.test('Vertical scrollbar spacing should not be added when widget does not 
 });
 
 QUnit.test('Clear scroller spacer while switch rtlEnabled (T838716)', function(assert) {
+    if(devices.real().deviceType !== 'desktop') {
+        assert.ok(true, 'scroll is disabled for not desktop devices');
+        return;
+    }
+
     // arrange
     let dataGrid = createDataGrid({
         dataSource: [{ id: 0 }, { id: 1 }],
