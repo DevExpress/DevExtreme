@@ -3059,9 +3059,13 @@ const Scheduler = Widget.inherit({
     },
 
     showAppointmentTooltipCore: function(target, data, options) {
-        this._appointmentTooltip.show(
-            target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
-        );
+        if(this._appointmentTooltip.isAlreadyShown(target)) {
+            this.hideAppointmentTooltip();
+        } else {
+            this._appointmentTooltip.show(
+                target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
+            );
+        }
     },
 
     /**
