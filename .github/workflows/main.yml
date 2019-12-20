@@ -15,9 +15,10 @@ jobs:
       run: npm install
     - name: Run npm run build
       run: npm run build
+    - name: Run testing runner
+      run: $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
     - name: Run QUnit tests
       run: |
-        $runner = Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru  -passthru -RedirectStandardOutput "output.txt"
         Start-Sleep -s 3
         & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&include=DevExpress.ui.events'
         $runner.WaitForExit()
