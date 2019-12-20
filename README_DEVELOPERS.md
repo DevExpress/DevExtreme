@@ -55,7 +55,7 @@ Run "testing/launch" (for Mac and Linux) or "testing/launch.cmd" (for Windows). 
 If you have [Docker](https://docs.docker.com/engine/installation/) installed, you can run tests in the same environment as the online Continuous Integration. Use the following command:
 
 ```
-docker run --rm -ti -e TARGET=test -e NO_HEADLESS=false -v REPO_PATH:/devextreme devexpress/devextreme-build:TAG ./docker-ci.sh
+docker run --rm -ti -e TARGET=test -e NO_HEADLESS=true -v REPO_PATH:/devextreme devexpress/devextreme-build:TAG ./docker-ci.sh
 ```
 
 Make the following replacements in the command line:
