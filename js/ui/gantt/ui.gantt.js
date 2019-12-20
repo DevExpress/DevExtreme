@@ -433,6 +433,11 @@ class Gantt extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
+            * @name dxGanttOptions.rtlEnabled
+            * @hidden
+            */
+
+            /**
             * @name dxGanttOptions.tasks
             * @type Object
             * @default null
