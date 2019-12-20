@@ -11,13 +11,6 @@ function isLocalHostName(url) {
 }
 
 /**
-* @name EndpointSelector
-* @type object
-* @namespace DevExpress
-* @module data/endpoint_selector
-* @export default
-*/
-/**
 * @name EndpointSelectorMethods.ctor
 * @publicName ctor(options)
 * @param1 options:Object
@@ -30,13 +23,6 @@ var EndpointSelector = function(config) {
 };
 
 EndpointSelector.prototype = {
-    /**
-    * @name EndpointSelectorMethods.urlFor
-    * @publicName urlFor(key)
-    * @param1 key:string
-    * @type method
-    * @return string
-    */
     urlFor: function(key) {
         var bag = this.config[key];
         if(!bag) {

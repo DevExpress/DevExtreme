@@ -16,13 +16,6 @@ const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
-/**
-* @name dxTextArea
-* @isEditor
-* @inherits dxTextBox
-* @module ui/text_area
-* @export default
-*/
 var TextArea = TextBox.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -36,32 +29,12 @@ var TextArea = TextBox.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxTextAreaOptions.spellcheck
-            * @type boolean
-            * @default true
-            */
             spellcheck: true,
 
-            /**
-            * @name dxTextAreaOptions.minHeight
-            * @type numeric|string
-            * @default undefined
-            */
             minHeight: undefined,
 
-            /**
-            * @name dxTextAreaOptions.maxHeight
-            * @type numeric|string
-            * @default undefined
-            */
             maxHeight: undefined,
 
-            /**
-            * @name dxTextAreaOptions.autoResizeEnabled
-            * @type boolean
-            * @default false
-            */
             autoResizeEnabled: false
 
             /**

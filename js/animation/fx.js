@@ -33,58 +33,6 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @namespace DevExpress
 * @type object
 */
-/**
-* @name animationConfig.start
-* @type function
-* @type_function_param1 $element:dxElement
-* @type_function_param2 config:object
-*/
-/**
-* @name animationConfig.complete
-* @type function
-* @type_function_param1 $element:dxElement
-* @type_function_param2 config:object
-*/
-/**
-* @name animationConfig.delay
-* @type number
-* @default 0
-*/
-/**
-* @name animationConfig.staggerDelay
-* @type number
-* @default undefined
-*/
-/**
-* @name animationConfig.duration
-* @type number
-* @default 400
-*/
-/**
-* @name animationConfig.easing
-* @type string
-* @default 'ease'
-*/
-/**
-* @name animationConfig.type
-* @type Enums.AnimationType
-* @default 'custom'
-*/
-/**
-* @name animationConfig.direction
-* @type Enums.Direction
-* @default undefined
-*/
-/**
-* @name animationConfig.from
-* @type number|string|object
-* @default {}
-*/
-/**
-* @name animationConfig.to
-* @type number|string|object
-* @default {}
-*/
 
 var TransitionAnimationStrategy = {
     initAnimation: function($element, config) {
@@ -887,31 +835,9 @@ var stop = function(element, jumpToEnd) {
 var fx = {
     off: false,
     animationTypes: animationConfigurators,
-    /**
-    * @name fxmethods.animate
-    * @publicName animate(element, config)
-    * @param1 element:Node
-    * @param2 config:animationConfig
-    * @return Promise<void>
-    * @namespace DevExpress.fx
-    */
     animate: animate,
     createAnimation: createAnimation,
-    /**
-    * @name fxmethods.isAnimating
-    * @publicName isAnimating(element)
-    * @param1 element:Node
-    * @return boolean
-    * @namespace DevExpress.fx
-    */
     isAnimating: isAnimating,
-    /**
-    * @name fxmethods.stop
-    * @publicName stop(element, jumpToEnd)
-    * @param1 element:Node
-    * @param2 jumpToEnd:boolean
-    * @namespace DevExpress.fx
-    */
     stop: stop,
     _simulatedTransitionEndDelay: 100
 };

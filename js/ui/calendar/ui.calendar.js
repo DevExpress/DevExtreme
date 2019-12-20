@@ -57,18 +57,8 @@ var Calendar = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxCalendarOptions.hoverStateEnabled
-            * @type boolean
-            * @default true
-            */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxCalendarOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
             /**
@@ -79,94 +69,26 @@ var Calendar = Editor.inherit({
             */
             currentDate: new Date(),
 
-            /**
-            * @name dxCalendarOptions.value
-            * @type Date|number|string
-            * @default null
-            */
             value: null,
 
-            /**
-            * @name dxCalendarOptions.dateSerializationFormat
-            * @type string
-            * @default undefined
-            */
             dateSerializationFormat: undefined,
 
-            /**
-            * @name dxCalendarOptions.min
-            * @type Date|number|string
-            * @default new Date(1000, 0)
-            */
             min: new Date(1000, 0),
 
-            /**
-            * @name dxCalendarOptions.max
-            * @type Date|number|string
-            * @default new Date(3000, 0)
-            */
             max: new Date(3000, 0),
 
-            /**
-            * @name dxCalendarOptions.firstDayOfWeek
-            * @type Enums.FirstDayOfWeek
-            * @default undefined
-            */
             firstDayOfWeek: undefined,
 
-            /**
-            * @name dxCalendarOptions.zoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'month'
-            * @fires dxCalendarOptions.onOptionChanged
-            */
             zoomLevel: ZOOM_LEVEL.MONTH,
 
-            /**
-            * @name dxCalendarOptions.maxZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'month'
-            */
             maxZoomLevel: ZOOM_LEVEL.MONTH,
 
-            /**
-            * @name dxCalendarOptions.minZoomLevel
-            * @type Enums.CalendarZoomLevel
-            * @default 'century'
-            */
             minZoomLevel: ZOOM_LEVEL.CENTURY,
 
-            /**
-            * @name dxCalendarOptions.showTodayButton
-            * @type boolean
-            * @default false
-            */
             showTodayButton: false,
 
-            /**
-            * @name dxCalendarOptions.cellTemplate
-            * @type template|function
-            * @default "cell"
-            * @type_function_param1 itemData:object
-            * @type_function_param1_field1 date:Date
-            * @type_function_param1_field2 view:string
-            * @type_function_param1_field3 text:string
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             cellTemplate: 'cell',
 
-            /**
-             * @name dxCalendarOptions.disabledDates
-             * @type Array<Date>|function(data)
-             * @default null
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:object
-             * @type_function_param1_field2 date:Date
-             * @type_function_param1_field3 view:string
-             * @type_function_return boolean
-             */
             disabledDates: null,
 
             onCellClick: null,
@@ -175,11 +97,6 @@ var Calendar = Editor.inherit({
                 return element.hasClass(FOCUSED_STATE_CLASS);
             }
 
-            /**
-            * @name dxCalendarOptions.name
-            * @type string
-            * @hidden false
-            */
 
             /**
             * @name dxCalendarOptions.onContentReady
@@ -196,11 +113,6 @@ var Calendar = Editor.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxCalendarOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }

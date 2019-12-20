@@ -26,25 +26,7 @@ var UI_FEEDBACK = 'UIFeedback',
     FEEDBACK_HIDE_TIMEOUT = 400,
     FOCUS_NAMESPACE = 'Focus';
 
-/**
- * @name ui
- * @section utils
- */
 
-/**
-* @const dxItem
-* @type object
-* @section uiWidgetMarkupComponents
-*/
-
-/**
-* @name Widget
-* @type object
-* @inherits DOMComponent
-* @module ui/widget/ui.widget
-* @export default
-* @hidden
-*/
 var Widget = DOMComponentWithTemplate.inherit({
 
     _supportedKeys: function() {
@@ -54,67 +36,22 @@ var Widget = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-             * @name WidgetOptions.disabled
-             * @type boolean
-             * @default false
-             */
             disabled: false,
 
-            /**
-             * @name WidgetOptions.visible
-             * @type boolean
-             * @default true
-             */
             visible: true,
 
-            /**
-             * @name WidgetOptions.hint
-             * @type string
-             * @default undefined
-             */
             hint: undefined,
 
-            /**
-             * @name WidgetOptions.activeStateEnabled
-             * @type boolean
-             * @default false
-             */
             activeStateEnabled: false,
 
-            /**
-            * @name WidgetOptions.onContentReady
-            * @extends Action
-            * @action
-            */
             onContentReady: null,
 
-            /**
-             * @name WidgetOptions.hoverStateEnabled
-             * @type boolean
-             * @default false
-             */
             hoverStateEnabled: false,
 
-            /**
-             * @name WidgetOptions.focusStateEnabled
-             * @type boolean
-             * @default false
-             */
             focusStateEnabled: false,
 
-            /**
-             * @name WidgetOptions.tabIndex
-             * @type number
-             * @default 0
-             */
             tabIndex: 0,
 
-            /**
-             * @name WidgetOptions.accessKey
-             * @type string
-             * @default null
-             */
             accessKey: null,
 
             /**
@@ -135,21 +72,7 @@ var Widget = DOMComponentWithTemplate.inherit({
 
             _keyboardProcessor: undefined,
 
-            /**
-            * @name ui.template
-            * @type template
-            * @namespace DevExpress.ui
-            * @deprecated
-            */
 
-            /**
-            * @name format
-            * @type Enums.Format|string|function|Object
-            * @type_function_param1 value:number|date
-            * @type_function_return string
-            * @default undefined
-            * @section Common
-            */
             /**
             * @name format.type
             * @type Enums.Format
@@ -755,28 +678,14 @@ var Widget = DOMComponentWithTemplate.inherit({
         return this._ready();
     },
 
-    /**
-    * @name WidgetMethods.repaint
-    * @publicName repaint()
-    */
     repaint: function() {
         this._refresh();
     },
 
-    /**
-    * @name WidgetMethods.focus
-    * @publicName focus()
-    */
     focus: function() {
         eventsEngine.trigger(this._focusTarget(), 'focus');
     },
 
-    /**
-    * @name WidgetMethods.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @param1 key:string
-    * @param2 handler:function
-    */
     registerKeyHandler: function(key, handler) {
         var currentKeys = this._supportedKeys(),
             addingKeys = {};

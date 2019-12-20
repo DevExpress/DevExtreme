@@ -144,10 +144,6 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
 module.exports = {
     defaultOptions() {
         return {
-            /**
-             * @name GridBaseOptions.sorting
-             * @type object
-             */
             sorting: {
                 /**
                  * @name GridBaseOptions.sorting.mode

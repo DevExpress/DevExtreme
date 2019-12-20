@@ -82,10 +82,6 @@ const getFilterValue = (that, state) => {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-         * @name GridBaseOptions.stateStoring
-         * @type object
-         */
             stateStoring: {
                 /**
                  * @name GridBaseOptions.stateStoring.enabled
@@ -159,16 +155,6 @@ module.exports = {
                     this.callBase.apply(this, arguments);
                     processLoadState(this);
                 },
-                /**
-                 * @name GridBaseMethods.state
-                 * @publicName state()
-                 * @return object
-                 */
-                /**
-                 * @name GridBaseMethods.state
-                 * @publicName state(state)
-                 * @param1 state:object
-                 */
                 isLoading: function() {
                     return this.callBase() || this.getController('data').isStateLoading();
                 },

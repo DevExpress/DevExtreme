@@ -462,10 +462,6 @@ module.exports = {
     invertFilterExpression: invertFilterExpression,
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.headerFilter
-             * @type object
-             */
             headerFilter: {
                 /**
                  * @name GridBaseOptions.headerFilter.visible
@@ -479,11 +475,6 @@ module.exports = {
                  * @default 252
                  */
                 width: 252,
-                /**
-                 * @name GridBaseOptions.headerFilter.height
-                 * @type number
-                 * @default 325
-                 */
                 height: 325,
                 /**
                  * @name GridBaseOptions.headerFilter.allowSearch

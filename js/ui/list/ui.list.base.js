@@ -123,204 +123,51 @@ var ListBase = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxListOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxListOptions.displayExpr
-             * @type string|function(item)
-             * @default undefined
-             * @type_function_param1 item:object
-             * @type_function_return string
-             */
-
-            /**
-             * @name dxListOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxListOptions.pullRefreshEnabled
-            * @type boolean
-            * @default false
-            */
             pullRefreshEnabled: false,
 
-            /**
-            * @name dxListOptions.scrollingEnabled
-            * @type boolean
-            * @default true
-            */
             scrollingEnabled: true,
 
-            /**
-            * @name dxListOptions.showScrollbar
-            * @type Enums.ShowScrollbarMode
-            * @default 'onScroll'
-            * @default 'onHover' @for desktop
-            */
             showScrollbar: 'onScroll',
 
             useNativeScrolling: true,
 
-            /**
-            * @name dxListOptions.bounceEnabled
-            * @type boolean
-            * @default true
-            * @default false @for desktop
-            */
             bounceEnabled: true,
 
-            /**
-            * @name dxListOptions.scrollByContent
-            * @type boolean
-            * @default true
-            * @default false @for non-touch_devices
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxListOptions.scrollByThumb
-            * @type boolean
-            * @default false
-            * @default true @for desktop
-            */
             scrollByThumb: false,
 
-            /**
-            * @name dxListOptions.pullingDownText
-            * @type string
-            * @default "Pull down to refresh..."
-            */
             pullingDownText: messageLocalization.format('dxList-pullingDownText'),
 
-            /**
-            * @name dxListOptions.pulledDownText
-            * @type string
-            * @default "Release to refresh..."
-            */
             pulledDownText: messageLocalization.format('dxList-pulledDownText'),
 
-            /**
-            * @name dxListOptions.refreshingText
-            * @type string
-            * @default "Refreshing..."
-            */
             refreshingText: messageLocalization.format('dxList-refreshingText'),
 
-            /**
-            * @name dxListOptions.pageLoadingText
-            * @type string
-            * @default "Loading..."
-            */
             pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
 
-            /**
-            * @name dxListOptions.onScroll
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 scrollOffset:object
-            * @type_function_param1_field7 reachedLeft:boolean
-            * @type_function_param1_field8 reachedRight:boolean
-            * @type_function_param1_field9 reachedTop:boolean
-            * @type_function_param1_field10 reachedBottom:boolean
-            * @action
-            */
             onScroll: null,
 
-            /**
-            * @name dxListOptions.onPullRefresh
-            * @extends Action
-            * @action
-            */
             onPullRefresh: null,
 
-            /**
-            * @name dxListOptions.onPageLoading
-            * @extends Action
-            * @action
-            */
             onPageLoading: null,
 
-            /**
-            * @name dxListOptions.pageLoadMode
-            * @type Enums.ListPageLoadMode
-            * @default "scrollBottom"
-            */
             pageLoadMode: 'scrollBottom',
 
-            /**
-            * @name dxListOptions.nextButtonText
-            * @type string
-            * @default "More"
-            */
             nextButtonText: messageLocalization.format('dxList-nextButtonText'),
 
-            /**
-            * @name dxListOptions.onItemSwipe
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 itemData:object
-            * @type_function_param1_field7 itemElement:dxElement
-            * @type_function_param1_field8 itemIndex:number | object
-            * @type_function_param1_field9 direction:string
-            * @action
-            */
             onItemSwipe: null,
 
-            /**
-            * @name dxListOptions.grouped
-            * @type boolean
-            * @default false
-            */
             grouped: false,
 
-            /**
-            * @name dxListOptions.onGroupRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 groupData:object
-            * @type_function_param1_field5 groupElement:dxElement
-            * @type_function_param1_field6 groupIndex:number
-            * @action
-            */
             onGroupRendered: null,
 
-            /**
-            * @name dxListOptions.collapsibleGroups
-            * @type boolean
-            * @default false
-            */
             collapsibleGroups: false,
 
-            /**
-            * @name dxListOptions.groupTemplate
-            * @type template|function
-            * @default "group"
-            * @type_function_param1 groupData:object
-            * @type_function_param2 groupIndex:number
-            * @type_function_param3 groupElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             groupTemplate: 'group',
 
-            /**
-            * @name dxListOptions.indicateLoading
-            * @type boolean
-            * @default true
-            */
             indicateLoading: true,
 
             /**
@@ -335,11 +182,6 @@ var ListBase = CollectionWidget.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxListOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
             _itemAttributes: { 'role': 'option' },
@@ -349,56 +191,6 @@ var ListBase = CollectionWidget.inherit({
 
             wrapItemText: false,
 
-            /**
-            * @name dxListOptions.onItemClick
-            * @extends Action
-            * @type function(e)|string
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
-
-            /**
-            * @name dxListOptions.onItemContextMenu
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
-
-            /**
-            * @name dxListOptions.onItemHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
-
-            /**
-             * @name dxListOptions.dataSource
-             * @type string|Array<string,dxListItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxListOptions.items
-             * @type Array<string, dxListItem, object>
-             * @fires dxListOptions.onOptionChanged
-             */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -407,31 +199,10 @@ var ListBase = CollectionWidget.inherit({
             * @inherits CollectionWidgetItem
             * @type object
             */
-            /**
-            * @name dxListItem.badge
-            * @type String
-            */
-            /**
-            * @name dxListItem.showChevron
-            * @type boolean
-            */
-            /**
-             * @name dxListItem.icon
-             * @type String
-             */
-            /**
-             * @name dxListItem.key
-             * @type String
-             */
         });
     },
 
     _defaultOptionsRules: function() {
-        /**
-        * @name dxListOptions.useNativeScrolling
-        * @default false @for desktop
-        * @default true @for Mac
-        */
         var themeName = themes.current();
 
         return this.callBase().concat(deviceDependentOptions(), [
@@ -440,11 +211,6 @@ var ListBase = CollectionWidget.inherit({
                     return !support.nativeScrolling;
                 },
                 options: {
-                    /**
-                    * @name dxListOptions.useNativeScrolling
-                    * @type boolean
-                    * @default true
-                    */
                     useNativeScrolling: false
                 }
             },
@@ -453,16 +219,8 @@ var ListBase = CollectionWidget.inherit({
                     return !support.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
-                    /**
-                    * @name dxListOptions.showScrollbar
-                    * @default 'onHover' @for desktop
-                    */
                     showScrollbar: 'onHover',
 
-                    /**
-                    * @name dxListOptions.pageLoadMode
-                    * @default 'nextButton' @for desktop
-                    */
                     pageLoadMode: 'nextButton'
                 }
             },
@@ -471,11 +229,6 @@ var ListBase = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxListOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -484,32 +237,12 @@ var ListBase = CollectionWidget.inherit({
                     return themes.isMaterial(themeName);
                 },
                 options: {
-                    /**
-                    * @name dxListOptions.pullingDownText
-                    * @type string
-                    * @default "" @for Material
-                    */
                     pullingDownText: '',
 
-                    /**
-                    * @name dxListOptions.pulledDownText
-                    * @type string
-                    * @default "" @for Material
-                    */
                     pulledDownText: '',
 
-                    /**
-                    * @name dxListOptions.refreshingText
-                    * @type string
-                    * @default "" @for Material
-                    */
                     refreshingText: '',
 
-                    /**
-                    * @name dxListOptions.pageLoadingText
-                    * @type string
-                    * @default "" @for Material
-                    */
                     pageLoadingText: '',
                     useInkRipple: true
                 }
@@ -1166,12 +899,6 @@ var ListBase = CollectionWidget.inherit({
         });
     },
 
-    /**
-    * @name dxListMethods.expandGroup
-    * @publicName expandGroup(groupIndex)
-    * @param1 groupIndex:Number
-    * @return Promise<void>
-    */
     expandGroup: function(groupIndex) {
         var deferred = new Deferred(),
             $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
@@ -1183,12 +910,6 @@ var ListBase = CollectionWidget.inherit({
         return deferred.promise();
     },
 
-    /**
-    * @name dxListMethods.collapseGroup
-    * @publicName collapseGroup(groupIndex)
-    * @param1 groupIndex:Number
-    * @return Promise<void>
-    */
     collapseGroup: function(groupIndex) {
         var deferred = new Deferred(),
             $group = this._itemContainer().find('.' + LIST_GROUP_CLASS).eq(groupIndex);
@@ -1200,11 +921,6 @@ var ListBase = CollectionWidget.inherit({
         return deferred;
     },
 
-    /**
-    * @name dxListMethods.updateDimensions
-    * @publicName updateDimensions()
-    * @return Promise<void>
-    */
     updateDimensions: function() {
         var that = this,
             deferred = new Deferred();
@@ -1221,10 +937,6 @@ var ListBase = CollectionWidget.inherit({
         return deferred.promise();
     },
 
-    /**
-    * @name dxListMethods.reload
-    * @publicName reload()
-    */
     reload: function() {
         this.callBase();
         this.scrollTo(0);
@@ -1236,61 +948,26 @@ var ListBase = CollectionWidget.inherit({
         this.callBase();
     },
 
-    /**
-    * @name dxListMethods.scrollTop
-    * @publicName scrollTop()
-    * @return numeric
-    */
     scrollTop: function() {
         return this._scrollView.scrollOffset().top;
     },
 
-    /**
-    * @name dxListMethods.clientHeight
-    * @publicName clientHeight()
-    * @return numeric
-    */
     clientHeight: function() {
         return this._scrollView.clientHeight();
     },
 
-    /**
-    * @name dxListMethods.scrollHeight
-    * @publicName scrollHeight()
-    * @return numeric
-    */
     scrollHeight: function() {
         return this._scrollView.scrollHeight();
     },
 
-    /**
-    * @name dxListMethods.scrollBy
-    * @publicName scrollBy(distance)
-    * @param1 distance:numeric
-    */
     scrollBy: function(distance) {
         this._scrollView.scrollBy(distance);
     },
 
-    /**
-    * @name dxListMethods.scrollTo
-    * @publicName scrollTo(location)
-    * @param1 location:numeric
-    */
     scrollTo: function(location) {
         this._scrollView.scrollTo(location);
     },
 
-    /**
-    * @name dxListMethods.scrollToItem
-    * @publicName scrollToItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxListMethods.scrollToItem
-    * @publicName scrollToItem(itemIndex)
-    * @param1 itemIndex:Number|Object
-    */
     scrollToItem: function(itemElement) {
         var $item = this._editStrategy.getItemElement(itemElement);
 

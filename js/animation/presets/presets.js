@@ -389,40 +389,5 @@ var AnimationPresetCollection = Component.inherit({
 
 exports.PresetCollection = AnimationPresetCollection;
 
-/**
-* @name animationPresetsMethods.resetToDefaults
-* @publicName resetToDefaults()
-*/
-/**
-* @name animationPresetsMethods.clear
-* @publicName clear()
-*/
-/**
-* @name animationPresetsMethods.clear
-* @publicName clear(name)
-* @param1 name:string
-*/
-/**
-* @name animationPresetsMethods.registerPreset
-* @publicName registerPreset(name, config)
-* @param1 name:string
-* @param2 config:object
-* @param2_field1 animation:animationConfig
-* @param2_field2 device:Device
-*/
-/**
-* @name animationPresetsMethods.applyChanges
-* @publicName applyChanges()
-*/
-/**
-* @name animationPresetsMethods.getPreset
-* @publicName getPreset(name)
-* @param1 name:string
-* @return any
-*/
-/**
-* @name animationPresetsMethods.registerDefaultPresets
-* @publicName registerDefaultPresets()
-*/
 var animationPresets = new AnimationPresetCollection();
 exports.presets = animationPresets;

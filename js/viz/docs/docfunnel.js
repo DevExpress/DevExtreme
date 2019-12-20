@@ -1,14 +1,5 @@
-/**
-* @name dxFunnel
-* @inherits BaseWidget, DataHelperMixin
-* @module viz/funnel
-* @export default
-*/
+
 var dxFunnel = {
-    /**
-    * @name dxFunnelOptions.adaptiveLayout
-    * @type object
-    */
     adaptiveLayout: {
         /**
         * @name dxFunnelOptions.adaptiveLayout.width
@@ -29,86 +20,19 @@ var dxFunnel = {
         */
         keepLabels: true
     },
-    /**
-    * @name dxFunnelOptions.dataSource
-    * @extends CommonVizDataSource
-    */
     dataSource: undefined,
-    /**
-    * @name dxFunnelOptions.valueField
-    * @type string
-    * @default 'val'
-    */
     valueField: "val",
-    /**
-    * @name dxFunnelOptions.argumentField
-    * @type string
-    * @default 'arg'
-    */
     argumentField: "arg",
-    /**
-    * @name dxFunnelOptions.colorField
-    * @type string
-    * @default 'color'
-    */
     colorField: "color",
-    /**
-    * @name dxFunnelOptions.palette
-    * @extends CommonVizPalette
-    */
     palette: [],
-    /**
-    * @name dxFunnelOptions.paletteExtensionMode
-    * @type Enums.VizPaletteExtensionMode
-    * @default 'blend'
-    */
     paletteExtensionMode: 'blend',
-    /**
-    * @name dxFunnelOptions.hoverEnabled
-    * @type boolean
-    * @default true
-    */
     hoverEnabled: true,
-    /**
-    * @name dxFunnelOptions.selectionMode
-    * @type Enums.SelectionMode
-    * @default 'single'
-    */
     selectionMode: 'single',
-    /**
-    * @name dxFunnelOptions.algorithm
-    * @type Enums.FunnelAlgorithm
-    * @default 'dynamicSlope'
-    */
     algorithm: "dynamicSlope",
-    /**
-    * @name dxFunnelOptions.neckHeight
-    * @type number
-    * @default 0
-    */
     neckHeight: 0,
-    /**
-    * @name dxFunnelOptions.neckWidth
-    * @type number
-    * @default 0
-    */
     neckWidth: 0,
-    /**
-    * @name dxFunnelOptions.inverted
-    * @type boolean
-    * @default false
-    */
     inverted: false,
-    /**
-    * @name dxFunnelOptions.sortData
-    * @type boolean
-    * @default true
-    */
     sortData: true,
-    /**
-    * @name dxFunnelOptions.item
-    * @type object
-    */
     item: {
         /**
         * @name dxFunnelOptions.item.border
@@ -256,16 +180,7 @@ var dxFunnel = {
             }
         }
     },
-    /**
-    * @name dxFunnelOptions.resolveLabelOverlapping
-    * @type Enums.FunnelResolveLabelOverlapping
-    * @default "shift"
-    */
     resolveLabelOverlapping: "shift",
-    /**
-    * @name dxFunnelOptions.label
-    * @type object
-    */
     label: {
         /**
         * @name dxFunnelOptions.label.font
@@ -406,145 +321,22 @@ var dxFunnel = {
         */
        wordWrap: 'normal'
     },
-    /**
-    * @name dxFunnelOptions.legend
-    * @inherits BaseLegend
-    * @type object
-    */
     legend: {
-        /**
-        * @name dxFunnelOptions.legend.visible
-        * @type boolean
-        * @default false
-        */
         visible: false,
-        /**
-        * @name dxFunnelOptions.legend.customizeText
-        * @type function(itemInfo)
-        * @type_function_param1 itemInfo:object
-        * @type_function_param1_field1 item:dxFunnelItem
-        * @type_function_param1_field2 text:string
-        * @type_function_return string
-        * @notUsedInTheme
-        */
         customizeText: undefined,
-        /**
-        * @name dxFunnelOptions.legend.customizeHint
-        * @type function(itemInfo)
-        * @type_function_param1 itemInfo:object
-        * @type_function_param1_field1 item:dxFunnelItem
-        * @type_function_param1_field2 text:string
-        * @type_function_return string
-        */
         customizeHint: undefined,
-        /**
-        * @name dxFunnelOptions.legend.customizeItems
-        * @type function(items)
-        * @type_function_param1 items:Array<FunnelLegendItem>
-        * @type_function_return Array<FunnelLegendItem>
-        */
         customizeItems: undefined,
-        /**
-        * @name dxFunnelOptions.legend.markerTemplate
-        * @type template|function
-        * @default undefined
-        * @type_function_param1 legendItem:FunnelLegendItem
-        * @type_function_param2 element:SVGGElement
-        * @type_function_return string|SVGElement|jQuery
-        */
         markerTemplate: undefined
     },
-   /**
-    * @name dxFunnelOptions.tooltip
-    * @type object
-    */
     tooltip: {
-        /**
-        * @name dxFunnelOptions.tooltip.customizeTooltip
-        * @default undefined
-        * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 item:dxFunnelItem
-        * @type_function_param1_field2 value:Number
-        * @type_function_param1_field3 valueText:string
-        * @type_function_param1_field4 percent:Number
-        * @type_function_param1_field5 percentText:string
-        * @type_function_return object
-        */
         customizeTooltip: undefined,
-        /**
-        * @name dxFunnelOptions.tooltip.contentTemplate
-        * @type template|function(info, element)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 item:dxFunnelItem
-        * @type_function_param1_field2 value:Number
-        * @type_function_param1_field3 valueText:string
-        * @type_function_param1_field4 percent:Number
-        * @type_function_param1_field5 percentText:string
-        * @type_function_param2 element:dxElement
-        * @type_function_return string|Node|jQuery
-        * @default undefined
-        */
         contentTemplate: undefined
     },
-    /**
-    * @name dxFunnelOptions.onItemClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 item:dxFunnelItem
-    * @notUsedInTheme
-    * @action
-    */
     onItemClick: function() { },
-    /**
-    * @name dxFunnelOptions.onLegendClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 item:dxFunnelItem
-    * @notUsedInTheme
-    * @action
-    */
     onLegendClick: function() { },
-    /**
-    * @name dxFunnelOptions.onHoverChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxFunnelItem
-    * @notUsedInTheme
-    * @action
-    */
     onHoverChanged: function() { },
-    /**
-    * @name dxFunnelOptions.onSelectionChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 item:dxFunnelItem
-    * @notUsedInTheme
-    * @action
-    */
     onSelectionChanged: function() { },
-    /**
-    * @name dxFunnelMethods.clearSelection
-    * @publicName clearSelection()
-    */
     clearSelection: function () { },
-    /**
-    * @name dxFunnelMethods.getAllItems
-    * @publicName getAllItems()
-    * @return Array<dxFunnelItem>
-    */
     getAllItems: function () { },
-    /**
-    * @name dxFunnelMethods.hideTooltip
-    * @publicName hideTooltip()
-    */
     hideTooltip: function() { }
 };

@@ -91,46 +91,8 @@ var renderValueText = function($container, value, customOperation) {
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-              * @name dxFilterBuilderOptions.onEditorPreparing
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 value:any
-              * @type_function_param1_field5 setValue(newValue):any
-              * @type_function_param1_field6 cancel:boolean
-              * @type_function_param1_field7 editorElement:dxElement
-              * @type_function_param1_field8 editorName:string
-              * @type_function_param1_field9 editorOptions:object
-              * @type_function_param1_field10 dataField:string
-              * @type_function_param1_field11 filterOperation:string
-              * @type_function_param1_field12 updateValueTimeout:number
-              * @type_function_param1_field13 width:number
-              * @type_function_param1_field14 readOnly:boolean
-              * @type_function_param1_field15 disabled:boolean
-              * @type_function_param1_field16 rtlEnabled:boolean
-              * @extends Action
-              * @action
-             */
             onEditorPreparing: null,
 
-            /**
-              * @name dxFilterBuilderOptions.onEditorPrepared
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 value:any
-              * @type_function_param1_field5 setValue(newValue):any
-              * @type_function_param1_field6 editorElement:dxElement
-              * @type_function_param1_field7 editorName:string
-              * @type_function_param1_field8 dataField:string
-              * @type_function_param1_field9 filterOperation:string
-              * @type_function_param1_field10 updateValueTimeout:number
-              * @type_function_param1_field11 width:number
-              * @type_function_param1_field12 readOnly:boolean
-              * @type_function_param1_field13 disabled:boolean
-              * @type_function_param1_field14 rtlEnabled:boolean
-              * @extends Action
-              * @action
-             */
             onEditorPrepared: null,
 
             /**
@@ -138,83 +100,10 @@ var FilterBuilder = Widget.inherit({
             * @type object
             */
 
-            /**
-            * @name dxFilterBuilderOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @action
-            */
             onValueChanged: null,
 
-            /**
-            * @name dxFilterBuilderOptions.fields
-            * @type Array<dxFilterBuilderField>
-            * @default []
-            */
             fields: [],
-            /**
-            * @name dxFilterBuilderField.caption
-            * @type string
-            * @default undefined
-            */
 
-            /**
-             * @name dxFilterBuilderField.calculateFilterExpression
-             * @type function(filterValue, selectedFilterOperation)
-             * @type_function_param1 filterValue:any
-             * @type_function_param2 selectedFilterOperation:string
-             * @type_function_return Filter expression
-             */
-
-            /**
-            * @name dxFilterBuilderField.dataField
-            * @type string
-            * @default undefined
-            */
-
-            /**
-            * @name dxFilterBuilderField.name
-            * @type string
-            * @default undefined
-            */
-
-            /**
-             * @name dxFilterBuilderField.dataType
-             * @type Enums.FilterBuilderFieldDataType
-             * @default "string"
-             */
-
-            /**
-             * @name dxFilterBuilderField.editorOptions
-             * @type object
-             */
-
-            /**
-             * @name dxFilterBuilderField.format
-             * @type format
-             * @default ""
-             */
-
-            /**
-             * @name dxFilterBuilderField.trueText
-             * @type string
-             * @default "true"
-             */
-
-            /**
-             * @name dxFilterBuilderField.falseText
-             * @type string
-             * @default "false"
-             */
-
-            /**
-             * @name dxFilterBuilderField.lookup
-             * @type object
-             * @default undefined
-             */
 
             /**
              * @name dxFilterBuilderField.lookup.dataSource
@@ -250,32 +139,6 @@ var FilterBuilder = Widget.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxFilterBuilderField.filterOperations
-             * @type Array<Enums.FilterBuilderFieldFilterOperations, string>
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderField.customizeText
-             * @type function(fieldInfo)
-             * @type_function_param1 fieldInfo:object
-             * @type_function_param1_field1 value:string|number|date
-             * @type_function_param1_field2 valueText:string
-             * @type_function_return string
-             */
-
-            /**
-             * @name dxFilterBuilderField.editorTemplate
-             * @type template|function
-             * @type_function_param1 conditionInfo:object
-             * @type_function_param1_field1 value:string|number|date
-             * @type_function_param1_field2 filterOperation:string
-             * @type_function_param1_field3 field:dxFilterBuilderField
-             * @type_function_param1_field4 setValue:function
-             * @type_function_param2 container:dxElement
-             * @type_function_return string|Node|jQuery
-             */
 
             /**
             * @name dxFilterBuilderOptions.defaultGroupOperation
@@ -285,39 +148,14 @@ var FilterBuilder = Widget.inherit({
             */
             defaultGroupOperation: 'and',
 
-            /**
-             * @name dxFilterBuilderOptions.groupOperations
-             * @type Array<Enums.FilterBuilderGroupOperations>
-             * @default ['and', 'or', 'notAnd', 'notOr']
-             */
             groupOperations: ['and', 'or', 'notAnd', 'notOr'],
 
-            /**
-             * @name dxFilterBuilderOptions.maxGroupLevel
-             * @type number
-             * @default undefined
-             */
             maxGroupLevel: undefined,
 
-            /**
-             * @name dxFilterBuilderOptions.value
-             * @type Filter expression
-             * @default null
-             * @fires dxFilterBuilderOptions.onValueChanged
-             */
             value: null,
 
-            /**
-             * @name dxFilterBuilderOptions.allowHierarchicalFields
-             * @type boolean
-             * @default false
-             */
             allowHierarchicalFields: false,
 
-            /**
-             * @name dxFilterBuilderOptions.groupOperationDescriptions
-             * @type object
-             */
             groupOperationDescriptions: {
                 /**
                  * @name dxFilterBuilderOptions.groupOperationDescriptions.and
@@ -345,11 +183,6 @@ var FilterBuilder = Widget.inherit({
                 notOr: messageLocalization.format('dxFilterBuilder-notOr'),
             },
 
-            /**
-             * @name dxFilterBuilderOptions.customOperations
-             * @type Array<dxFilterBuilderCustomOperation>
-             * @default []
-             */
             customOperations: [],
 
             closePopupOnTargetScroll: true,
@@ -359,69 +192,7 @@ var FilterBuilder = Widget.inherit({
              * @type object
              */
 
-            /**
-             * @name dxFilterBuilderCustomOperation.name
-             * @type string
-             * @default undefined
-             */
 
-            /**
-             * @name dxFilterBuilderCustomOperation.caption
-             * @type string
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.icon
-             * @type string
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.dataTypes
-             * @type Array<Enums.FilterBuilderFieldDataType>
-             * @default undefined
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.hasValue
-             * @type boolean
-             * @default true
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.calculateFilterExpression
-             * @type function(filterValue, field)
-             * @type_function_param1 filterValue:any
-             * @type_function_param2 field:dxFilterBuilderField
-             * @type_function_return Filter expression
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.editorTemplate
-             * @type template|function
-             * @type_function_param1 conditionInfo:object
-             * @type_function_param1_field1 value:string|number|date
-             * @type_function_param1_field2 field:dxFilterBuilderField
-             * @type_function_param1_field3 setValue:function
-             * @type_function_param2 container:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-
-            /**
-             * @name dxFilterBuilderCustomOperation.customizeText
-             * @type function(fieldInfo)
-             * @type_function_param1 fieldInfo:object
-             * @type_function_param1_field1 value:string|number|date
-             * @type_function_param1_field2 valueText:string
-             * @type_function_param1_field3 field:dxFilterBuilderField
-             * @type_function_return string
-             */
-
-            /**
-             * @name dxFilterBuilderOptions.filterOperationDescriptions
-             * @type object
-             */
             filterOperationDescriptions: {
                 /**
                  * @name dxFilterBuilderOptions.filterOperationDescriptions.between
@@ -547,11 +318,6 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
-    /**
-    * @name dxFilterBuilderMethods.getFilterExpression
-    * @publicName getFilterExpression()
-    * @return Filter expression
-    */
     getFilterExpression: function() {
         var fields = this._getNormalizedFields(),
             value = extend(true, [], this._model);

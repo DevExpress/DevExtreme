@@ -9,14 +9,6 @@ import { FileProvider } from './file_provider';
 import { ErrorCode } from '../ui.file_manager.common';
 import { pathCombine } from '../ui.file_manager.utils';
 
-/**
-* @name ArrayFileProvider
-* @inherits FileProvider
-* @type object
-* @module ui/file_manager/file_provider/array
-* @namespace DevExpress.fileProvider
-* @export default
-*/
 class ArrayFileProvider extends FileProvider {
 
     constructor(options) {
@@ -28,14 +20,6 @@ class ArrayFileProvider extends FileProvider {
             throw errors.Error('E4006');
         }
 
-        /**
-         * @name ArrayFileProviderOptions.data
-         * @type Array<any>
-         */
-        /**
-         * @name ArrayFileProviderOptions.itemsExpr
-         * @type string|function(fileItem)
-         */
         const itemsExpr = options.itemsExpr || 'items';
         this._subFileItemsGetter = compileGetter(itemsExpr);
         this._subFileItemsSetter = this._getSetter(itemsExpr);

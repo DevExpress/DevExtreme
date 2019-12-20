@@ -3,11 +3,6 @@
  * @inherits CommonIndicator
  * @hidden
  */
-/**
- * @name GaugeIndicator.type
- * @type string
- * @acceptValues 'circle'|'rangeBar'|'rectangle'|'rectangleNeedle'|'rhombus'|'textCloud'|'triangleMarker'|'triangleNeedle'|'twoColorNeedle'
- */
 
 /**
 * @name CommonIndicator
@@ -16,38 +11,10 @@
 * @hidden
 */
 var CommonIndicator = {
-    /**
-    * @name CommonIndicator.color
-    * @type string
-    */
     color: undefined,
-    /**
-    * @name CommonIndicator.baseValue
-    * @type number
-    * @default undefined
-    * @notUsedInTheme
-    * @propertyOf circularRangeBar,linearRangeBar
-    */
     baseValue: undefined,
-    /**
-    * @name CommonIndicator.size
-    * @type number
-    * @default 10
-    * @propertyOf circularRangeBar,linearRangeBar
-    */
     size: 10,
-    /**
-    * @name CommonIndicator.backgroundColor
-    * @type string
-    * @default 'none'
-    * @propertyOf circularRangeBar,linearRangeBar
-    */
     backgroundColor: 'none',
-    /**
-    * @name CommonIndicator.text
-    * @type object
-    * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
-    */
     text: {
         /**
         * @name CommonIndicator.text.indent
@@ -88,94 +55,18 @@ var CommonIndicator = {
             opacity: 1
         }
     },
-    /**
-    * @name CommonIndicator.length
-    * @type number
-    * @default 15
-    * @propertyOf circularTriangleMarker,linearRectangle,linearCircle,linearRhombus,linearTriangleMarker
-    */
     length: 15,
-    /**
-    * @name CommonIndicator.width
-    * @type number
-    * @default 2
-    * @propertyOf circularTriangleMarker,circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle,linearRectangle,linearTriangleMarker,linearRhombus
-    */
     width: 2,
-    /**
-    * @name CommonIndicator.arrowLength
-    * @type number
-    * @default 5
-    * @propertyOf circularTextCloud,linearTextCloud
-    */
     arrowLength: 5,
-    /**
-    * @name CommonIndicator.palette
-    * @extends CommonVizPalette
-    */
     palette: undefined,
-    /**
-    * @name CommonIndicator.offset
-    * @type number
-    */
     offset: undefined,
-    /**
-    * @name CommonIndicator.indentFromCenter
-    * @type number
-    * @default 0
-    * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
-    */
     indentFromCenter: 0,
-    /**
-    * @name CommonIndicator.beginAdaptingAtRadius
-    * @type number
-    * @default 50
-    * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
-    */
     beginAdaptingAtRadius: 50,
-    /**
-    * @name CommonIndicator.secondColor
-    * @type string
-    * @default '#E18E92'
-    * @propertyOf circularTwoColorNeedle
-    */
     secondColor: '#E18E92',
-    /**
-    * @name CommonIndicator.secondFraction
-    * @type number
-    * @default 0.4
-    * @propertyOf circularTwoColorNeedle
-    */
     secondFraction: 0.4,
-    /**
-    * @name CommonIndicator.spindleSize
-    * @type number
-    * @default 14
-    * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
-    */
     spindleSize: 14,
-    /**
-    * @name CommonIndicator.spindleGapSize
-    * @type number
-    * @default 10
-    * @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
-    */
     spindleGapSize: 10,
-    /**
-    * @name CommonIndicator.horizontalOrientation
-    * @type Enums.HorizontalEdge
-    * @default 'right' @for value_indicators
-    * @default 'left' @for subvalue_indicators
-        * @propertyOf linearRangeBar
-    */
     horizontalOrientation: 'right',
-    /**
-    * @name CommonIndicator.verticalOrientation
-    * @type Enums.VerticalEdge
-    * @default 'bottom' @for value_indicators
-    * @default 'top' @for subvalue_indicators
-        * @propertyOf linearRangeBar
-    */
     verticalOrientation: 'bottom'
 };
 

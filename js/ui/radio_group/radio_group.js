@@ -121,20 +121,11 @@ class RadioGroup extends Editor {
         return defaultOptionsRules.concat([{
             device: { tablet: true },
             options: {
-                /**
-                 * @name dxRadioGroupOptions.layout
-                 * @default 'horizontal' @for tablets
-                 */
                 layout: 'horizontal'
             }
         }, {
             device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
             options: {
-                /**
-                * @name dxRadioGroupOptions.focusStateEnabled
-                * @type boolean
-                * @default true @for desktop
-                */
                 focusStateEnabled: true
             }
         }]);
@@ -157,39 +148,15 @@ class RadioGroup extends Editor {
 
         return extend(defaultOptions, extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
 
-            /**
-             * @name dxRadioGroupOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
-            /**
-            * @name dxRadioGroupOptions.layout
-            * @type Enums.Orientation
-            * @default "vertical"
-            */
             layout: 'vertical',
 
             useInkRipple: false
 
-            /**
-            * @name dxRadioGroupOptions.value
-            * @ref
-            */
 
-            /**
-            * @name dxRadioGroupOptions.name
-            * @type string
-            * @hidden false
-            */
         }));
     }
 

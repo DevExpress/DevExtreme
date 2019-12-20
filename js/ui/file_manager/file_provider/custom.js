@@ -5,90 +5,34 @@ import { compileGetter } from '../../../core/utils/data';
 
 import { FileProvider } from './file_provider';
 
-/**
-* @name CustomFileProvider
-* @inherits FileProvider
-* @type object
-* @module ui/file_manager/file_provider/custom
-* @namespace DevExpress.fileProvider
-* @export default
-*/
 class CustomFileProvider extends FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, { });
         super(options);
 
-        /**
-         * @name CustomFileProviderOptions.hasSubDirectoriesExpr
-         * @type string|function(fileItem)
-         */
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
 
-        /**
-         * @name CustomFileProviderOptions.getItems
-         * @type function
-         */
         this._getItemsFunction = this._ensureFunction(options.getItems, () => []);
 
-        /**
-         * @name CustomFileProviderOptions.renameItem
-         * @type function
-         */
         this._renameItemFunction = this._ensureFunction(options.renameItem);
 
-        /**
-         * @name CustomFileProviderOptions.createDirectory
-         * @type function
-         */
         this._createDirectoryFunction = this._ensureFunction(options.createDirectory);
 
-        /**
-         * @name CustomFileProviderOptions.deleteItem
-         * @type function
-         */
         this._deleteItemFunction = this._ensureFunction(options.deleteItem);
 
-        /**
-         * @name CustomFileProviderOptions.moveItem
-         * @type function
-         */
         this._moveItemFunction = this._ensureFunction(options.moveItem);
 
-        /**
-         * @name CustomFileProviderOptions.copyItem
-         * @type function
-         */
         this._copyItemFunction = this._ensureFunction(options.copyItem);
 
-        /**
-         * @name CustomFileProviderOptions.uploadFileChunk
-         * @type function
-         */
         this._uploadFileChunkFunction = this._ensureFunction(options.uploadFileChunk);
 
-        /**
-         * @name CustomFileProviderOptions.abortFileUpload
-         * @type function
-         */
         this._abortFileUploadFunction = this._ensureFunction(options.abortFileUpload);
 
-        /**
-         * @name CustomFileProviderOptions.downloadItems
-         * @type function
-         */
         this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
 
-        /**
-         * @name CustomFileProviderOptions.getItemsContent
-         * @type function
-         */
         this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
 
-        /**
-         * @name CustomFileProviderOptions.uploadChunkSize
-         * @type number
-         */
         this._uploadChunkSize = options.uploadChunkSize;
     }
 

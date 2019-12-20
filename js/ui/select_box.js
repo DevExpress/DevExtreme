@@ -22,13 +22,6 @@ var DISABLED_STATE_SELECTOR = '.dx-state-disabled',
     SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container',
     SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
 
-/**
-* @name dxSelectBox
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/select_box
-* @export default
-*/
 var SelectBox = DropDownList.inherit({
 
     _supportedKeys: function() {
@@ -153,58 +146,20 @@ var SelectBox = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxSelectBoxOptions.placeholder
-            * @type string
-            * @default "Select"
-            */
             placeholder: messageLocalization.format('Select'),
 
-            /**
-            * @name dxSelectBoxOptions.fieldTemplate
-            * @type template|function
-            * @default null
-            * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             fieldTemplate: null,
 
-            /**
-            * @name dxSelectBoxOptions.valueChangeEvent
-            * @type string
-            * @default "change"
-            */
             valueChangeEvent: 'change',
 
-            /**
-            * @name dxSelectBoxOptions.acceptCustomValue
-            * @type boolean
-            * @default false
-            */
             acceptCustomValue: false,
 
-            /**
-            * @name dxSelectBoxOptions.onCustomItemCreating
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 text:string
-            * @type_function_param1_field5 customItem:string|object|Promise<any>
-            * @action
-            * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
-            */
             onCustomItemCreating: function(e) {
                 if(!isDefined(e.customItem)) {
                     e.customItem = e.text;
                 }
             },
 
-            /**
-            * @name dxSelectBoxOptions.showSelectionControls
-            * @type boolean
-            * @default false
-            */
             showSelectionControls: false,
 
             /**
@@ -225,15 +180,8 @@ var SelectBox = DropDownList.inherit({
 
             tooltipEnabled: false,
 
-            /**
-             * @name dxSelectBoxOptions.openOnFieldClick
-             * @default true
-             */
             openOnFieldClick: true,
 
-            /**
-             * @name dxSelectBoxOptions.showDropDownButton
-             */
             showDropDownButton: true,
 
             displayCustomValue: false,

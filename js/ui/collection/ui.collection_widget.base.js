@@ -47,14 +47,6 @@ const FOCUS_PAGE_DOWN = 'pagedown';
 const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
-/**
-* @name CollectionWidget
-* @type object
-* @inherits Widget, DataHelperMixin
-* @module ui/collection/ui.collection_widget.base
-* @export default
-* @hidden
-*/
 var CollectionWidget = Widget.inherit({
 
     _activeStateUnit: '.' + ITEM_CLASS,
@@ -111,107 +103,28 @@ var CollectionWidget = Widget.inherit({
             */
             loopItemFocus: true,
 
-            /**
-            * @name CollectionWidgetOptions.items
-            * @type Array<string, CollectionWidgetItem, object>
-            * @fires CollectionWidgetOptions.onOptionChanged
-            */
             items: [],
 
-            /**
-            * @name CollectionWidgetOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTemplate: 'item',
 
-            /**
-            * @name CollectionWidgetOptions.onItemRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @action
-            */
             onItemRendered: null,
 
-            /**
-            * @name CollectionWidgetOptions.onItemClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
             onItemClick: null,
 
-            /**
-            * @name CollectionWidgetOptions.onItemHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemHold: null,
 
-            /**
-            * @name CollectionWidgetOptions.itemHoldTimeout
-            * @type number
-            * @default 750
-            */
             itemHoldTimeout: 750,
 
-            /**
-            * @name CollectionWidgetOptions.onItemContextMenu
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field8 event:event
-            * @action
-            */
             onItemContextMenu: null,
 
             onFocusedItemChanged: null,
 
-            /**
-            * @name CollectionWidgetOptions.noDataText
-            * @type string
-            * @default "No data to display"
-            */
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
-            /**
-            * @name CollectionWidgetOptions.dataSource
-            * @type string|Array<string,CollectionWidgetItem>|DataSource|DataSourceOptions
-            * @default null
-            */
             dataSource: null,
             /**
             * @name CollectionWidgetItem
             * @type object
-            */
-            /**
-            * @name CollectionWidgetItem.template
-            * @type template|function
-            * @type_function_return string|Node|jQuery
             */
 
             _itemAttributes: {},
@@ -229,24 +142,6 @@ var CollectionWidget = Widget.inherit({
             disabledExpr: function(data) { return data ? data.disabled : undefined; },
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
-            /**
-            * @name CollectionWidgetItem.html
-            * @type String
-            */
-            /**
-            * @name CollectionWidgetItem.text
-            * @type String
-            */
-            /**
-            * @name CollectionWidgetItem.disabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name CollectionWidgetItem.visible
-            * @type boolean
-            * @default true
-            */
         });
     },
 

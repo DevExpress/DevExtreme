@@ -84,12 +84,6 @@ var GalleryNavButton = Widget.inherit({
 });
 
 
-/**
-* @name dxGallery
-* @inherits CollectionWidget
-* @module ui/gallery
-* @export default
-*/
 var Gallery = CollectionWidget.inherit({
 
     _activeStateUnit: GALLERY_ITEM_SELECTOR,
@@ -97,104 +91,37 @@ var Gallery = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-            * @name dxGalleryOptions.activeStateEnabled
-            * @type boolean
-            * @default false
+             * @name dxGalleryOptions.activeStateEnabled
+             * @type boolean
+             * @default false
+             * @hidden
             */
             activeStateEnabled: false,
 
-            /**
-            * @name dxGalleryOptions.animationDuration
-            * @type number
-            * @default 400
-            */
             animationDuration: 400,
 
-            /**
-            * @name dxGalleryOptions.animationEnabled
-            * @type boolean
-            * @default true
-            */
             animationEnabled: true,
 
-            /**
-            * @name dxGalleryOptions.loop
-            * @type boolean
-            * @default false
-            */
             loop: false,
 
-            /**
-            * @name dxGalleryOptions.swipeEnabled
-            * @type boolean
-            * @default true
-            */
             swipeEnabled: true,
 
-            /**
-            * @name dxGalleryOptions.indicatorEnabled
-            * @type boolean
-            * @default true
-            */
             indicatorEnabled: true,
 
-            /**
-            * @name dxGalleryOptions.showIndicator
-            * @type boolean
-            * @default true
-            */
             showIndicator: true,
 
-            /**
-            * @name dxGalleryOptions.selectedIndex
-            * @type number
-            * @default 0
-            */
             selectedIndex: 0,
 
-            /**
-            * @name dxGalleryOptions.slideshowDelay
-            * @type number
-            * @default 0
-            */
             slideshowDelay: 0,
 
-            /**
-            * @name dxGalleryOptions.showNavButtons
-            * @type boolean
-            * @default false
-            */
             showNavButtons: false,
 
-            /**
-            * @name dxGalleryOptions.wrapAround
-            * @type boolean
-            * @default false
-            */
             wrapAround: false,
 
-            /**
-            * @name dxGalleryOptions.initialItemWidth
-            * @type number
-            * @default undefined
-            */
             initialItemWidth: undefined,
 
-            /**
-            * @name dxGalleryOptions.stretchImages
-            * @type boolean
-            * @default false
-            */
             stretchImages: false,
 
-            /**
-            * @name dxGalleryOptions.activeStateEnabled
-            * @hidden
-            */
-
-            /**
-            * @name dxGalleryOptions.noDataText
-            */
 
             /**
             * @name dxGalleryOptions.selectedItems
@@ -211,17 +138,6 @@ var Gallery = CollectionWidget.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxGalleryOptions.dataSource
-             * @type string|Array<string,dxGalleryItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxGalleryOptions.items
-             * @type Array<string, dxGalleryItem, object>
-             * @fires dxGalleryOptions.onOptionChanged
-             */
 
             _itemAttributes: { role: 'option' },
             loopItemFocus: false,
@@ -239,11 +155,6 @@ var Gallery = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxGalleryOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }
@@ -262,14 +173,6 @@ var Gallery = CollectionWidget.inherit({
         * @name dxGalleryItem
         * @inherits CollectionWidgetItem
         * @type object
-        */
-        /**
-        * @name dxGalleryItem.imageSrc
-        * @type String
-        */
-        /**
-        * @name dxGalleryItem.imageAlt
-        * @type String
         */
         /**
         * @name dxGalleryItem.visible
@@ -1209,13 +1112,6 @@ var Gallery = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxGalleryMethods.goToItem
-    * @publicName goToItem(itemIndex, animation)
-    * @param1 itemIndex:numeric
-    * @param2 animation:boolean
-    * @return Promise<void>
-    */
     goToItem: function(itemIndex, animation) {
         var selectedIndex = this.option('selectedIndex'),
             itemsCount = this._itemsCount();
@@ -1236,22 +1132,10 @@ var Gallery = CollectionWidget.inherit({
         return this._deferredAnimate.promise();
     },
 
-    /**
-    * @name dxGalleryMethods.prevItem
-    * @publicName prevItem(animation)
-    * @param1 animation:boolean
-    * @return Promise<void>
-    */
     prevItem: function(animation) {
         return this.goToItem(this.option('selectedIndex') - 1, animation);
     },
 
-    /**
-    * @name dxGalleryMethods.nextItem
-    * @publicName nextItem(animation)
-    * @param1 animation:boolean
-    * @return Promise<void>
-    */
     nextItem: function(animation) {
         return this.goToItem(this.option('selectedIndex') + 1, animation);
     }

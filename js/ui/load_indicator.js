@@ -16,21 +16,10 @@ var LOADINDICATOR_CLASS = 'dx-loadindicator',
     LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner',
     LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
-/**
-* @name dxLoadIndicator
-* @inherits Widget
-* @module ui/load_indicator
-* @export default
-*/
 var LoadIndicator = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxLoadIndicatorOptions.indicatorSrc
-            * @type string
-            * @default ""
-            */
             indicatorSrc: '',
 
             /**

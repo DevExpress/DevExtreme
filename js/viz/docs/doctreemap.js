@@ -1,83 +1,20 @@
-/**
-* @name dxTreeMap
-* @inherits BaseWidget, DataHelperMixin
-* @module viz/tree_map
-* @export default
-*/
+
 var dxTreeMap = {
     /**
     * @name dxTreeMapOptions.margin
     * @hidden
     */
     margin: undefined,
-    /**
-    * @name dxTreeMapOptions.dataSource
-    * @extends CommonVizDataSource
-    */
     dataSource: undefined,
-    /**
-    * @name dxTreeMapOptions.childrenField
-    * @type string
-    * @default 'items'
-    */
     childrenField: "items",
-    /**
-    * @name dxTreeMapOptions.valueField
-    * @type string
-    * @default 'value'
-    */
     valueField: "value",
-    /**
-    * @name dxTreeMapOptions.colorField
-    * @type string
-    * @default 'color'
-    */
     colorField: "color",
-    /**
-    * @name dxTreeMapOptions.labelField
-    * @type string
-    * @default 'name'
-    */
     labelField: "name",
-    /**
-    * @name dxTreeMapOptions.idField
-    * @type string
-    * @default undefined
-    */
     idField: undefined,
-    /**
-    * @name dxTreeMapOptions.parentField
-    * @type string
-    * @default undefined
-    */
     parentField: undefined,
-    /**
-    * @name dxTreeMapOptions.layoutAlgorithm
-    * @type Enums.TreeMapLayoutAlgorithm | function
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 rect:Array<number>
-    * @type_function_param1_field2 sum:number
-    * @type_function_param1_field3 items:Array<any>
-    * @default 'squarified'
-    */
     layoutAlgorithm: "squarified",
-    /**
-    * @name dxTreeMapOptions.layoutDirection
-    * @type Enums.TreeMapLayoutDirection
-    * @default 'leftTopRightBottom'
-    */
     layoutDirection: "leftTopRightBottom",
-    /**
-     * @name dxTreeMapOptions.resolveLabelOverflow
-     * @type Enums.TreeMapResolveLabelOverflow
-     * @default 'hide'
-     * @deprecated dxTreeMapOptions.tile.label.textOverflow
-     */
     resolveLabelOverflow: 'hide',
-    /**
-    * @name dxTreeMapOptions.tile
-    * @type object
-    */
     tile: {
         /**
         * @name dxTreeMapOptions.tile.border
@@ -201,10 +138,6 @@ var dxTreeMap = {
            textOverflow: "ellipsis"
         }
     },
-    /**
-    * @name dxTreeMapOptions.group
-    * @type object
-    */
     group: {
         /**
         * @name dxTreeMapOptions.group.headerHeight
@@ -334,10 +267,6 @@ var dxTreeMap = {
         */
         hoverEnabled: undefined
     },
-    /**
-    * @name dxTreeMapOptions.colorizer
-    * @type object
-    */
     colorizer: {
         /**
         * @name dxTreeMapOptions.colorizer.type
@@ -375,151 +304,24 @@ var dxTreeMap = {
         */
         colorCodeField: undefined
     },
-    /**
-    * @name dxTreeMapOptions.maxDepth
-    * @type number
-    * @default undefined
-    */
     maxDepth: undefined,
-    /**
-    * @name dxTreeMapOptions.interactWithGroup
-    * @type boolean
-    * @default false
-    */
     interactWithGroup: undefined,
-    /**
-    * @name dxTreeMapOptions.hoverEnabled
-    * @type boolean
-    * @default undefined
-    */
     hoverEnabled: undefined,
-    /**
-    * @name dxTreeMapOptions.selectionMode
-    * @type Enums.SelectionMode
-    * @default undefined
-    */
     selectionMode: undefined,
-    /**
-    * @name dxTreeMapOptions.tooltip
-    * @type object
-    */
     tooltip: {
-        /**
-        * @name dxTreeMapOptions.tooltip.customizeTooltip
-        * @default undefined
-        * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 value:Number
-        * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 node:dxTreeMapNode
-        * @type_function_return object
-        */
         customizeTooltip: undefined,
-        /**
-        * @name dxTreeMapOptions.tooltip.contentTemplate
-        * @type template|function(info, element)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 value:Number
-        * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 node:dxTreeMapNode
-        * @type_function_param2 element:dxElement
-        * @type_function_return string|Node|jQuery
-        * @default undefined
-        */
         contentTemplate: undefined
     },
-    /**
-    * @name dxTreeMapOptions.onNodesInitialized
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 root:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onNodesInitialized: function() { },
-    /**
-    * @name dxTreeMapOptions.onNodesRendering
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 node:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onNodesRendering: function() { },
-    /**
-    * @name dxTreeMapOptions.onClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 node:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onClick: function() { },
-    /**
-    * @name dxTreeMapOptions.onHoverChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 node:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onHoverChanged: function() { },
-    /**
-    * @name dxTreeMapOptions.onSelectionChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 node:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onSelectionChanged: function() { },
-    /**
-    * @name dxTreeMapOptions.onDrill
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 node:dxTreeMapNode
-    * @notUsedInTheme
-    * @action
-    */
     onDrill: function() { },
-    /**
-    * @name dxTreeMapMethods.getRootNode
-    * @publicName getRootNode()
-    * @return dxTreeMapNode
-    */
     getRootNode: function() { },
-    /**
-    * @name dxTreeMapMethods.clearSelection
-    * @publicName clearSelection()
-    */
     clearSelection: function() { },
-    /**
-    * @name dxTreeMapMethods.hideTooltip
-    * @publicName hideTooltip()
-    */
     hideTooltip: function() { },
-    /**
-    * @name dxTreeMapMethods.drillUp
-    * @publicName drillUp()
-    */
     drillUp: function() { },
-    /**
-    * @name dxTreeMapMethods.resetDrillDown
-    * @publicName resetDrillDown()
-    */
     resetDrillDown: function() { },
-    /**
-    * @name dxTreeMapMethods.getCurrentNode
-    * @publicName getCurrentNode()
-    * @return dxTreeMapNode
-    */
     getCurrentNode: function() { }
 };

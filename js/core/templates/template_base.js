@@ -6,22 +6,6 @@ import errors from '../errors';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
 
-/**
-* @name dxTemplate
-* @section uiWidgetMarkupComponents
-* @type object
-*/
-
-/**
-* @name dxTemplateOptions.name
-* @type string
-*/
-
-/**
-* @name template
-* @type String|function|Node|jQuery
-* @section Common
-*/
 
 export class TemplateBase {
     render(options) {

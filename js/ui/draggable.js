@@ -204,20 +204,6 @@ var ScrollAnimator = Animator.inherit({
     }
 });
 
-/**
- * @name DraggableBase
- * @inherits DOMComponent
- * @export default
- * @hidden
- */
-
-/**
- * @name dxDraggable
- * @inherits DraggableBase
- * @hasTranscludedContent
- * @module ui/draggable
- * @export default
- */
 
 var Draggable = DOMComponentWithTemplate.inherit({
     reset: noop,
@@ -232,50 +218,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxDraggableOptions.onDragStart
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromData:any
-             * @action
-             */
             onDragStart: null,
-            /**
-             * @name dxDraggableOptions.onDragMove
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field10 fromData:any
-             * @type_function_param1_field11 toData:any
-             * @action
-             */
             onDragMove: null,
-            /**
-             * @name dxDraggableOptions.onDragEnd
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field10 fromData:any
-             * @type_function_param1_field11 toData:any
-             * @action
-             */
             onDragEnd: null,
             /**
              * @name dxDraggableOptions.onDrop
@@ -294,37 +238,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
              */
             onDrop: null,
             immediate: true,
-            /**
-             * @name DraggableBaseOptions.dragDirection
-             * @type Enums.DragDirection
-             * @default "both"
-             */
             dragDirection: 'both',
-            /**
-             * @name DraggableBaseOptions.boundary
-             * @type string|Node|jQuery
-             * @default undefined
-             */
             boundary: undefined,
             boundOffset: 0,
             allowMoveByClick: false,
             itemData: null,
-            /**
-             * @name DraggableBaseOptions.container
-             * @type string|Node|jQuery
-             * @default undefined
-             */
             container: undefined,
-            /**
-             * @name dxDraggableOptions.dragTemplate
-             * @type template|function
-             * @type_function_param1 dragInfo:object
-             * @type_function_param1_field1 itemData:any
-             * @type_function_param1_field2 itemElement:dxElement
-             * @type_function_param2 containerElement:dxElement
-             * @type_function_return string|Node|jQuery
-             * @default undefined
-             */
             dragTemplate: undefined,
             /**
              * @name DraggableBaseOptions.contentTemplate
@@ -334,11 +253,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @default "content"
              */
             contentTemplate: 'content',
-            /**
-             * @name DraggableBaseOptions.handle
-             * @type string
-             * @default ""
-             */
             handle: '',
             /**
              * @name dxDraggableOptions.filter
@@ -347,46 +261,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @hidden
              */
             filter: '',
-            /**
-             * @name dxDraggableOptions.clone
-             * @type boolean
-             * @default false
-             */
             clone: false,
-            /**
-             * @name DraggableBaseOptions.autoScroll
-             * @type boolean
-             * @default true
-             */
             autoScroll: true,
-            /**
-             * @name DraggableBaseOptions.scrollSpeed
-             * @type number
-             * @default 30
-             */
             scrollSpeed: 30,
-            /**
-             * @name DraggableBaseOptions.scrollSensitivity
-             * @type number
-             * @default 60
-             */
             scrollSensitivity: 60,
-            /**
-             * @name DraggableBaseOptions.group
-             * @type string
-             * @default undefined
-             */
             group: undefined,
-            /**
-             * @name DraggableBaseOptions.data
-             * @type any
-             * @default undefined
-             */
             data: undefined,
-            /**
-             * @name DraggableBaseOptions.cursorOffset
-             * @type string|object
-             */
             /**
              * @name DraggableBaseOptions.cursorOffset.x
              * @type number

@@ -1000,30 +1000,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    /**
-     * @name GridBaseMethods.getCellElement
-     * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return dxElement|undefined
-     */
-    /**
-     * @name GridBaseMethods.getCellElement
-     * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return dxElement|undefined
-     */
     getCellElement: function(rowIndex, columnIdentifier) {
         return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
     },
 
-    /**
-     * @name GridBaseMethods.getRowElement
-     * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
-     * @return Array<Node>|jQuery|undefined
-     */
     getRowElement: function(rowIndex) {
         var $rows = this._getRowElement(rowIndex),
             elements = [];

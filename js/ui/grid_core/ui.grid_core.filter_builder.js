@@ -114,11 +114,6 @@ var FilterBuilderView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.filterBuilder
-             * @type dxFilterBuilderOptions
-             * @default {}
-             */
             filterBuilder: {
                 groupOperationDescriptions: {
                     and: messageLocalization.format('dxFilterBuilder-and'),
@@ -143,11 +138,6 @@ module.exports = {
                 }
             },
 
-            /**
-             * @name GridBaseOptions.filterBuilderPopup
-             * @type dxPopupOptions
-             * @default {}
-             */
             filterBuilderPopup: {}
         };
     },

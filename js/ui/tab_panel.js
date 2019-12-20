@@ -18,106 +18,26 @@ const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
-/**
-* @name dxTabPanel
-* @inherits dxMultiView
-* @module ui/tab_panel
-* @export default
-*/
 var TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTabPanelOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
 
-            /**
-             * @name dxTabPanelOptions.dataSource
-             * @type string|Array<string,dxTabPanelItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
 
-            /**
-             * @name dxTabPanelOptions.items
-             * @type Array<string, dxTabPanelItem, object>
-             * @fires dxTabPanelOptions.onOptionChanged
-             */
-
-            /**
-            * @name dxTabPanelOptions.itemTitleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTitleTemplate: 'title',
 
-            /**
-             * @name dxTabPanelOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxTabPanelOptions.showNavButtons
-            * @type boolean
-            * @default false
-            */
             showNavButtons: false,
 
-            /**
-            * @name dxTabPanelOptions.scrollByContent
-            * @type boolean
-            * @default true
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxTabPanelOptions.scrollingEnabled
-            * @type boolean
-            * @default true
-            */
             scrollingEnabled: true,
 
-            /**
-            * @name dxTabPanelOptions.onTitleClick
-            * @extends Action
-            * @type function(e)|string
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 event:event
-            * @action
-            */
             onTitleClick: null,
 
-            /**
-            * @name dxTabPanelOptions.onTitleHold
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 event:event
-            * @action
-            */
             onTitleHold: null,
 
-            /**
-            * @name dxTabPanelOptions.onTitleRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @action
-            */
             onTitleRendered: null,
 
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -127,27 +47,10 @@ var TabPanel = MultiView.inherit({
             * @inherits dxMultiViewItem
             * @type object
             */
-            /**
-            * @name dxTabPanelItem.tabTemplate
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
 
             /**
             * @name dxTabPanelItem.visible
             * @hidden
-            */
-            /**
-            * @name dxTabPanelItem.title
-            * @type String
-            */
-            /**
-            * @name dxTabPanelItem.icon
-            * @type String
-            */
-            /**
-            * @name dxTabPanelItem.badge
-            * @type String
             */
         });
     },
@@ -159,11 +62,6 @@ var TabPanel = MultiView.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -172,23 +70,12 @@ var TabPanel = MultiView.inherit({
                     return !support.touch;
                 },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.swipeEnabled
-                    * @type boolean
-                    * @default false @for non-touch_devices
-                    */
                     swipeEnabled: false
                 }
             },
             {
                 device: { platform: 'generic' },
                 options: {
-                    /**
-                    * @name dxTabPanelOptions.animationEnabled
-                    * @type boolean
-                    * @default false
-                    * @default true @for Android|iOS
-                    */
                     animationEnabled: false
                 }
             }

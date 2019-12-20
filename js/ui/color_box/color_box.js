@@ -78,18 +78,8 @@ var ColorBox = DropDownEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxColorBoxOptions.editAlphaChannel
-            * @type boolean
-            * @default false
-            */
             editAlphaChannel: false,
 
-            /**
-            * @name dxColorBoxOptions.applyButtonText
-            * @type string
-            * @default "OK"
-            */
 
             /**
             * @name dxColorBoxOptions.onContentReady
@@ -107,34 +97,11 @@ var ColorBox = DropDownEditor.inherit({
              * @hidden
              */
 
-            /**
-            * @name dxColorBoxOptions.cancelButtonText
-            * @type string
-            * @default "Cancel"
-            */
 
-            /**
-            * @name dxColorBoxOptions.applyValueMode
-            * @type Enums.EditorApplyValueMode
-            * @default "useButtons"
-            */
             applyValueMode: 'useButtons',
 
-            /**
-            * @name dxColorBoxOptions.keyStep
-            * @type number
-            * @default 1
-            */
             keyStep: 1,
 
-            /**
-             * @name dxColorBoxOptions.fieldTemplate
-             * @type template|function
-             * @default null
-             * @type_function_param1 value:string
-             * @type_function_param2 fieldElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             fieldTemplate: null,
 
             // TODO: convert these options to actions and publish them
@@ -143,10 +110,6 @@ var ColorBox = DropDownEditor.inherit({
 
             buttonsLocation: 'bottom after'
 
-            /**
-            * @name dxColorBoxOptions.value
-            * @type string
-            */
 
             /**
             * @name dxColorBoxOptions.maxLength

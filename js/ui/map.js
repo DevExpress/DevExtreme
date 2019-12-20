@@ -30,12 +30,6 @@ var MAP_CLASS = 'dx-map',
     MAP_SHIELD_CLASS = 'dx-map-shield',
     NATIVE_CLICK_CLASS = 'dx-native-click';
 
-/**
-* @name dxMap
-* @inherits Widget
-* @module ui/map
-* @export default
-*/
 var Map = Widget.inherit({
 
     _getDefaultOptions: function() {
@@ -95,74 +89,23 @@ var Map = Widget.inherit({
             * @name MapLocation
             * @hidden
             */
-            /**
-            * @name MapLocation.lat
-            * @type number
-            * @default 0
-            */
-            /**
-            * @name MapLocation.lng
-            * @type number
-            * @default 0
-            */
-            /**
-            * @name dxMapOptions.center
-            * @extends MapLocationType
-            * @fires dxMapOptions.onOptionChanged
-            * @inherits MapLocation
-            */
             center: {
                 lat: 0,
                 lng: 0
             },
 
-            /**
-            * @name dxMapOptions.zoom
-            * @type number
-            * @default 1
-            * @fires dxMapOptions.onOptionChanged
-            */
             zoom: 1,
 
-            /**
-            * @name dxMapOptions.width
-            * @default 300
-            */
             width: 300,
 
-            /**
-            * @name dxMapOptions.height
-            * @default 300
-            */
             height: 300,
 
-            /**
-            * @name dxMapOptions.type
-            * @type Enums.GeoMapType
-            * @default "roadmap"
-            */
             type: 'roadmap',
 
-            /**
-            * @name dxMapOptions.provider
-            * @type Enums.GeoMapProvider
-            * @default "google"
-            */
             provider: 'google',
 
-            /**
-            * @name dxMapOptions.autoAdjust
-            * @type boolean
-            * @default true
-            */
             autoAdjust: true,
 
-            /**
-            * @name dxMapOptions.markers
-            * @type Array<Object>
-            * @fires dxMapOptions.onMarkerAdded
-            * @fires dxMapOptions.onMarkerRemoved
-            */
             /**
             * @name dxMapOptions.markers.location
             * @extends MapLocationType
@@ -191,39 +134,12 @@ var Map = Widget.inherit({
             */
             markers: [],
 
-            /**
-            * @name dxMapOptions.markerIconSrc
-            * @type string
-            */
             markerIconSrc: null,
 
-            /**
-            * @name dxMapOptions.onMarkerAdded
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 options:object
-            * @type_function_param1_field5 originalMarker:object
-            * @action
-            */
             onMarkerAdded: null,
 
-            /**
-            * @name dxMapOptions.onMarkerRemoved
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 options:object
-            * @action
-            */
             onMarkerRemoved: null,
 
-            /**
-            * @name dxMapOptions.routes
-            * @type Array<Object>
-            * @fires dxMapOptions.onRouteAdded
-            * @fires dxMapOptions.onRouteRemoved
-            */
             /**
             * @name dxMapOptions.routes.locations
             * @extends MapLocationType
@@ -252,32 +168,10 @@ var Map = Widget.inherit({
             */
             routes: [],
 
-            /**
-            * @name dxMapOptions.onRouteAdded
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 options:object
-            * @type_function_param1_field5 originalRoute:object
-            * @action
-            */
             onRouteAdded: null,
 
-            /**
-            * @name dxMapOptions.onRouteRemoved
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 options:object
-            * @action
-            */
             onRouteRemoved: null,
 
-            /**
-            * @name dxMapOptions.key
-            * @type string|object
-            * @default ""
-            */
             key: {
                 /**
                 * @name dxMapOptions.key.bing
@@ -301,21 +195,8 @@ var Map = Widget.inherit({
                 googleStatic: ''
             },
 
-            /**
-            * @name dxMapOptions.controls
-            * @default false
-            * @type boolean
-            */
             controls: false,
 
-            /**
-            * @name dxMapOptions.onReady
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 originalMap:object
-            * @action
-            */
             onReady: null,
 
 
@@ -328,16 +209,6 @@ var Map = Widget.inherit({
             // for internal use only
             onUpdated: null,
 
-            /**
-            * @name dxMapOptions.onClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 location:object
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @action
-            */
             onClick: null
         });
     },
@@ -349,11 +220,6 @@ var Map = Widget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxMapOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }
@@ -578,42 +444,18 @@ var Map = Widget.inherit({
         this._setOptionSilent(name, value);
     },
 
-    /**
-    * @name dxMapMethods.addmarker
-    * @publicName addMarker(markerOptions)
-    * @param1 markerOptions:Object|Array<Object>
-    * @return Promise<Object>
-    */
     addMarker: function(marker) {
         return this._addFunction('markers', marker);
     },
 
-    /**
-    * @name dxMapMethods.removemarker
-    * @publicName removeMarker(marker)
-    * @param1 marker:Object|number|Array<Object>
-    * @return Promise<void>
-    */
     removeMarker: function(marker) {
         return this._removeFunction('markers', marker);
     },
 
-    /**
-    * @name dxMapMethods.addroute
-    * @publicName addRoute(routeOptions)
-    * @param1 options:object|Array<Object>
-    * @return Promise<Object>
-    */
     addRoute: function(route) {
         return this._addFunction('routes', route);
     },
 
-    /**
-    * @name dxMapMethods.removeroute
-    * @publicName removeRoute(route)
-    * @param1 route:object|number|Array<Object>
-    * @return Promise<void>
-    */
     removeRoute: function(route) {
         return this._removeFunction('routes', route);
     },

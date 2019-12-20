@@ -56,34 +56,10 @@ class Menu extends MenuBase {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-             * @name dxMenuOptions.dataSource
-             * @type string|Array<dxMenuItem>|DataSource|DataSourceOptions
-             * @default null
-             */
-            /**
-            * @name dxMenuOptions.items
-            * @type Array<dxMenuItem>
-            */
-            /**
-            * @name dxMenuOptions.orientation
-            * @type Enums.Orientation
-            * @default "horizontal"
-            */
             orientation: 'horizontal',
 
-            /**
-            * @name dxMenuOptions.submenuDirection
-            * @type Enums.SubmenuDirection
-            * @default "auto"
-            */
             submenuDirection: 'auto',
 
-            /**
-            * @name dxMenuOptions.showFirstSubmenuMode
-            * @type Object|Enums.ShowSubmenuMode
-            * @default { name: "onClick", delay: { show: 50, hide: 300 } }
-            */
             showFirstSubmenuMode: {
                 /**
                 * @name dxMenuOptions.showFirstSubmenuMode.name
@@ -114,59 +90,16 @@ class Menu extends MenuBase {
                 }
             },
 
-            /**
-            * @name dxMenuOptions.hideSubmenuOnMouseLeave
-            * @type boolean
-            * @default false
-            */
             hideSubmenuOnMouseLeave: false,
 
-            /**
-            * @name dxMenuOptions.onSubmenuShowing
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuShowing: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuShown
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuShown: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuHiding
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @type_function_param1_field5 cancel:boolean
-            * @action
-            */
             onSubmenuHiding: null,
 
-            /**
-            * @name dxMenuOptions.onSubmenuHidden
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 rootItem:dxElement
-            * @action
-            */
             onSubmenuHidden: null,
 
-            /**
-            * @name dxMenuOptions.adaptivityEnabled
-            * @type boolean
-            * @default false
-            */
             adaptivityEnabled: false
 
             /**
@@ -188,10 +121,6 @@ class Menu extends MenuBase {
             * @name dxMenuItem
             * @inherits dxMenuBaseItem
             * @type object
-            */
-            /**
-            * @name dxMenuItem.items
-            * @type Array<dxMenuItem>
             */
         });
     }

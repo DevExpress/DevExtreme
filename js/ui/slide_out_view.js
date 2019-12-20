@@ -42,53 +42,19 @@ var animation = {
     }
 };
 
-/**
-* @name dxSlideOutView
-* @inherits Widget
-* @hasTranscludedContent
-* @module ui/slide_out_view
-* @export default
-*/
 var SlideOutView = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxSlideOutViewOptions.menuPosition
-            * @type Enums.SlideOutMenuPosition
-            * @default "normal"
-            */
             menuPosition: 'normal',
 
-            /**
-            * @name dxSlideOutViewOptions.menuVisible
-            * @type boolean
-            * @default false
-            */
             menuVisible: false,
 
-            /**
-            * @name dxSlideOutViewOptions.swipeEnabled
-            * @type boolean
-            * @default true
-            */
             swipeEnabled: true,
 
-            /**
-            * @name dxSlideOutViewOptions.menuTemplate
-            * @type_function_param1 menuElement:dxElement
-            * @type template|function
-            * @default null
-            */
             menuTemplate: 'menu',
 
-            /**
-            * @name dxSlideOutViewOptions.contentTemplate
-            * @type_function_param1 contentElement:dxElement
-            * @type template|function
-            * @default "content"
-            */
             contentTemplate: 'content',
 
             /**
@@ -391,47 +357,22 @@ var SlideOutView = Widget.inherit({
         }
     },
 
-    /**
-    * @name dxSlideOutViewMethods.menuContent
-    * @publicName menuContent()
-    * @return dxElement
-    */
     menuContent: function() {
         return getPublicElement(this._$menu);
     },
 
-    /**
-    * @name dxSlideOutViewMethods.content
-    * @publicName content()
-    * @return dxElement
-    */
     content: function() {
         return getPublicElement(this._$container);
     },
 
-    /**
-    * @name dxSlideOutViewMethods.showMenu
-    * @publicName showMenu()
-    * @return Promise<void>
-    */
     showMenu: function() {
         return this.toggleMenuVisibility(true);
     },
 
-    /**
-    * @name dxSlideOutViewMethods.hideMenu
-    * @publicName hideMenu()
-    * @return Promise<void>
-    */
     hideMenu: function() {
         return this.toggleMenuVisibility(false);
     },
 
-    /**
-    * @name dxSlideOutViewMethods.toggleMenuVisibility
-    * @publicName toggleMenuVisibility()
-    * @return Promise<void>
-    */
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option('menuVisible') : showing;
 
