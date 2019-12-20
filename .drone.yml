@@ -43,11 +43,11 @@ matrix:
     - { TARGET: test, CONSTEL: ui.grid }
     - { TARGET: test, CONSTEL: ui.scheduler }
     - { TARGET: test, CONSTEL: viz }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.editors }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.grid }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: ui.scheduler }
-    - { TARGET: test, MOBILE_UA: ios9, HEADLESS: false, CONSTEL: viz }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui }
+    - { TARGET: test, MOBILE_UA: ios9, NO_HEADLESS: true, CONSTEL: ui.editors }
+    - { TARGET: test, MOBILE_UA: ios9, NO_HEADLESS: true, CONSTEL: ui.grid }
+    - { TARGET: test, MOBILE_UA: ios9, CONSTEL: ui.scheduler }
+    - { TARGET: test, MOBILE_UA: ios9, false, CONSTEL: viz }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: export }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: misc }
     - { TARGET: test, BROWSER: firefox, JQUERY: true, CONSTEL: ui }

@@ -45,7 +45,7 @@ function run_test {
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
     [ -z "$JQUERY"  ] && url="$url&nojquery=true"
 
-    if [ "$HEADLESS" != "true" ]; then
+    if [ "$HEADLESS" != "true" ] || [ "$NO_HEADLESS" == "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
         x11vnc -display :99 2>/dev/null &
     fi
@@ -79,7 +79,7 @@ function run_test {
                 --disable-extensions \
                 --user-data-dir=/tmp/chrome";
 
-            if [ "$HEADLESS" == "true" ]; then
+            if [ "$HEADLESS" == "true" ] && [ "$NO_HEADLESS" != "true" ]; then
                 echo "Headless mode"
                 chrome_command="$chrome_command \
                     --headless \
