@@ -5796,7 +5796,7 @@ declare module DevExpress.ui {
         /** @name dxTileView.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTileView.Options.height */
-        height?: number | string;
+        height?: number | string | (() => number | string);
         /** @name dxTileView.Options.hoverStateEnabled */
         hoverStateEnabled?: boolean;
         /** @name dxTileView.Options.itemMargin */
@@ -6342,15 +6342,6 @@ declare module DevExpress.ui {
     }
     /** @name format */
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
-    /** @name ui.dialog */
-    export class dialog {
-        /** @name ui.dialog.alert(messageHtml,title) */
-        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
-        /** @name ui.dialog.confirm(messageHtml,title) */
-        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
-        /** @name ui.dialog.custom(options) */
-        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
-    }
     /** @deprecated */
     /** @name ui.template */
     export type template = DevExpress.core.template;
@@ -6363,6 +6354,14 @@ declare module DevExpress.ui {
         /** @name ui.themes.ready(callback) */
         static ready(callback: Function): void;
     }
+}
+declare module DevExpress.ui.dialog {
+    /** @name ui.dialog.alert(messageHtml,title) */
+    export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+    /** @name ui.dialog.confirm(messageHtml,title) */
+    export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+    /** @name ui.dialog.custom(options) */
+    export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
 }
 declare module DevExpress.ui.dxOverlay {
     /** @name ui.dxOverlay.baseZIndex(zIndex) */
