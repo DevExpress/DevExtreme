@@ -15,9 +15,9 @@ jobs:
       run: npm install
     - name: Run npm run build
       run: npm run build
-    - name: Start testing runner
-      run: Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run'
     - name: Run QUnit tests
       run: |
-        & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&constellation=ui.editors'
+        $runner = Start-Process -FilePath dotnet  -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru
+        & 'C:\Program Files\Internet Explorer\iexplore.exe' 'http://localhost:20050/run?notimers=true&nojquery=true&constellation=ui.events'
+        Wait-Process -Id $runner.id
         echo test, and deploy your project.
