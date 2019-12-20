@@ -759,3 +759,32 @@ QUnit.test('Command drag cell should have cursor \'grabbing/pointer\' for draggi
     let cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
     assert.strictEqual($draggableElement.find('.dx-command-drag').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
 });
+
+QUnit.test('Drag icon should not be displayed for group footer', function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $('#container');
+
+    this.options.grouping = { autoExpandAll: true };
+    this.options.columns[0] = { dataField: 'field1', groupIndex: 0 };
+    this.options.summary = {
+        groupItems: [{
+            column: 'field2',
+            summaryType: 'count',
+            showInGroupFooter: true
+        }],
+        texts: {
+            count: 'Count: {0}'
+        }
+    };
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // assert
+    assert.ok($(rowsView.getRowElement(2)).hasClass('dx-datagrid-group-footer'), 'has group footer');
+
+    const $commandDragCell = $(rowsView.getRowElement(2)).find('.dx-command-drag');
+    assert.strictEqual($commandDragCell.length, 1, 'group footer has a drag cell');
+    assert.strictEqual($(rowsView.getRowElement(2)).find('.dx-command-drag').html(), '&nbsp;', 'group footer does not have a drag icon');
+});
