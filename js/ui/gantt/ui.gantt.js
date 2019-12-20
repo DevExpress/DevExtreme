@@ -453,6 +453,11 @@ class Gantt extends Widget {
             */
 
             /**
+            * @name dxGanttOptions.rtlEnabled
+            * @hidden
+            */
+
+            /**
             * @name dxGanttOptions.tasks
             * @type Object
             * @default null
