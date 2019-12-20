@@ -13,6 +13,7 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
+const BUTTON_TEXT = 'dx-button-text';
 
 QUnit.testStart(() => {
     const markup =
@@ -536,6 +537,31 @@ QUnit.module('list integration', {}, () => {
     });
 
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'VeryVeryVeryVeryLongString',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            height: 100,
+            splitButton: true,
+            selectedItemKey: 1,
+        });
+
+        const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
+        const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
+        const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
+
+        const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
+        const buttonTextVerticalCenter = (buttonTextRect.top + buttonTextRect.bottom) / 2;
+        assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
+    });
+
+    QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,
