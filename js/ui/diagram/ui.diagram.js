@@ -662,10 +662,10 @@ class Diagram extends Widget {
         }
 
         if(Array.isArray(customShapes)) {
-            var that = this;
             this._diagramInstance.addCustomShapes(customShapes.map(
-                function(s) {
-                    var template = s.template && that._getTemplate(s.template);
+                (s) => {
+                    var templateOption = s.template || this.option('customShapeTemplate');
+                    var template = templateOption && this._getTemplate(templateOption);
                     return {
                         category: s.category,
                         type: s.type,
@@ -698,12 +698,12 @@ class Diagram extends Widget {
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
                             return { 'x': pt.x, 'y': pt.y };
                         }),
-                        createTemplate: template && function(container, item) {
+                        createTemplate: template && ((container, item) => {
                             template.render({
-                                model: item,
+                                model: this._nativeItemToDiagramItem(item),
                                 container: domUtils.getPublicElement($(container))
                             });
-                        },
+                        }),
                         templateLeft: s.templateLeft,
                         templateTop: s.templateTop,
                         templateWidth: s.templateWidth,
@@ -1565,6 +1565,13 @@ class Diagram extends Widget {
                 * @type Number
                 */
             ],
+            /**
+            * @name dxDiagramOptions.customShapeTemplate
+            * @type template|function
+            * @type_function_param1 container:dxElement
+            * @type_function_param2 data:object
+            * @type_function_param2_field1 item:dxDiagramItem
+            */
             /**
             * @name dxDiagramOptions.toolbox
             * @type Object
