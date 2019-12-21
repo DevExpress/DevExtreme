@@ -22,4 +22,4 @@
  * @module ui/set_template_engine
  * @export default
 */
-module.exports = require('./templates/template_engine_registry').setTemplateEngine;
+module.exports = require('../core/templates/template_engine_registry').setTemplateEngine;
