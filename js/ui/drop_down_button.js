@@ -26,12 +26,6 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
-/**
- * @name dxDropDownButton
- * @inherits Widget, DataHelperMixin
- * @module ui/drop_down_button
- * @export default
- */
 let DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
@@ -51,195 +45,52 @@ let DropDownButton = Widget.inherit({
              * @hidden
              */
 
-            /**
-             * @name dxDropDownButtonOptions.itemTemplate
-             * @type template|function
-             * @default "item"
-             * @type_function_param1 itemData:object
-             * @type_function_param2 itemIndex:number
-             * @type_function_param3 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             itemTemplate: 'item',
 
-            /**
-             * @name dxDropDownButtonOptions.keyExpr
-             * @type string
-             * @default 'this'
-             */
             keyExpr: 'this',
 
-            /**
-             * @name dxDropDownButtonOptions.displayExpr
-             * @type string|function
-             * @default 'this'
-             * @type_function_param1 itemData:object
-             * @type_function_return string
-             */
             displayExpr: 'this',
 
-            /**
-             * @name dxDropDownButtonOptions.selectedItem
-             * @type string|integer|object
-             * @default null
-             * @readonly
-             */
             selectedItem: null,
 
-            /**
-             * @name dxDropDownButtonOptions.selectedItemKey
-             * @type string|integer
-             * @default null
-             */
             selectedItemKey: null,
 
-            /**
-             * @name dxDropDownButtonOptions.stylingMode
-             * @type Enums.ButtonStylingMode
-             * @default 'outlined'
-             */
             stylingMode: 'outlined',
 
-            /**
-             * @name dxDropDownButtonOptions.deferRendering
-             * @type boolean
-             * @default true
-             */
             deferRendering: true,
 
-            /**
-             * @name dxDropDownButtonOptions.noDataText
-             * @type string
-             * @default 'No data to display'
-             */
             noDataText: formatMessage('dxCollectionWidget-noDataText'),
 
-            /**
-             * @name dxDropDownButtonOptions.useSelectMode
-             * @type boolean
-             * @default false
-             */
             useSelectMode: false,
 
-            /**
-             * @name dxDropDownButtonOptions.splitButton
-             * @type boolean
-             * @default false
-             */
             splitButton: false,
 
-            /**
-             * @name dxDropDownButtonOptions.showArrowIcon
-             * @type boolean
-             * @default true
-             */
             showArrowIcon: true,
 
-            /**
-             * @name dxDropDownButtonOptions.text
-             * @type string
-             * @default ""
-             */
             text: '',
 
-            /**
-             * @name dxDropDownButtonOptions.icon
-             * @type string
-             * @default undefined
-             */
             icon: undefined,
 
-            /**
-             * @name dxDropDownButtonOptions.onButtonClick
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 selectedItem:object
-             * @action
-             */
             onButtonClick: null,
 
-            /**
-             * @name dxDropDownButtonOptions.onSelectionChanged
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 item:object
-             * @type_function_param1_field5 previousItem:object
-             * @action
-             */
             onSelectionChanged: null,
 
-            /**
-             * @name dxDropDownButtonOptions.onItemClick
-             * @type function(e)|string
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemData:object
-             * @type_function_param1_field6 itemElement:dxElement
-             * @action
-             */
             onItemClick: null,
 
-            /**
-             * @name dxDropDownButtonOptions.opened
-             * @type boolean
-             * @default false
-             */
             opened: false,
 
-            /**
-             * @name dxDropDownButtonOptions.items
-             * @type Array<dxDropDownButtonItem, object>
-             * @default null
-             */
             items: null,
 
-            /**
-             * @name dxDropDownButtonOptions.dataSource
-             * @type string|Array<dxDropDownButtonItem, object>|DataSource|DataSourceOptions
-             * @default null
-             */
             dataSource: null,
 
-            /**
-             * @name dxDropDownButtonOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-             * @name dxDropDownButtonOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxDropDownButtonOptions.dropDownOptions
-             * @type dxPopupOptions
-             * @default {}
-             */
             dropDownOptions: {},
 
-            /**
-             * @name dxDropDownButtonOptions.dropDownContentTemplate
-             * @type template|function
-             * @default "content"
-             * @type_function_param1 data:Array<string,number,Object>|DataSource
-             * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             dropDownContentTemplate: 'content',
 
-            /**
-             * @name dxDropDownButtonOptions.wrapItemText
-             * @type boolean
-             * @default false
-             */
             wrapItemText: false,
 
             grouped: false,
@@ -551,36 +402,15 @@ let DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
     },
 
-    /**
-     * @name dxDropDownButton.toggle
-     * @publicName toggle()
-     * @return Promise<void>
-     */
-    /**
-     * @name dxDropDownButton.toggle
-     * @publicName toggle(visibility)
-     * @param1 visibility:boolean
-     * @return Promise<void>
-     */
     toggle(visible) {
         this._popup || this._renderPopup();
         return this._popup.toggle(visible);
     },
 
-    /**
-     * @name dxDropDownButton.open
-     * @publicName open()
-     * @return Promise<void>
-     */
     open() {
         return this.toggle(true);
     },
 
-    /**
-     * @name dxDropDownButton.close
-     * @publicName close()
-     * @return Promise<void>
-     */
     close() {
         return this.toggle(false);
     },

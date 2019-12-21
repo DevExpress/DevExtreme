@@ -124,91 +124,34 @@ var POPOVER_CLASS = 'dx-popover',
         }
     };
 
-/**
- * @name dxPopover
- * @inherits dxPopup
- * @hasTranscludedContent
- * @module ui/popover
- * @export default
- */
 
 var Popover = Popup.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxPopoverOptions.target
-            * @type string|Node|jQuery
-            */
             target: window,
 
-            /**
-            * @name dxPopoverOptions.shading
-            * @type boolean
-            * @default false
-            */
             shading: false,
 
-            /**
-            * @name dxPopoverOptions.position
-            * @type Enums.Position|positionConfig
-            * @default 'bottom'
-            */
             position: 'bottom',
 
-            /**
-            * @name dxPopoverOptions.closeOnOutsideClick
-            * @default true
-            */
             closeOnOutsideClick: true,
 
-            /**
-            * @name dxPopoverOptions.animation
-            * @type object
-            * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", to: 0 } }
-            */
             animation: {
-                /**
-                * @name dxPopoverOptions.animation.show
-                * @type animationConfig
-                * @default { type: "fade", from: 0, to: 1 }
-                */
                 show: {
                     type: 'fade',
                     from: 0,
                     to: 1
                 },
-                /**
-                * @name dxPopoverOptions.animation.hide
-                * @type animationConfig
-                * @default { type: "fade", to: 0 }
-                */
                 hide: {
                     type: 'fade',
                     to: 0
                 }
             },
 
-            /**
-            * @name dxPopoverOptions.showTitle
-            * @type boolean
-            * @default false
-            */
             showTitle: false,
 
-            /**
-             * @name dxPopoverOptions.width
-             * @type number|string|function
-             * @default "auto"
-             * @type_function_return number|string
-             */
             width: 'auto',
 
-            /**
-             * @name dxPopoverOptions.height
-             * @type number|string|function
-             * @default "auto"
-             * @type_function_return number|string
-             */
             height: 'auto',
 
             /**
@@ -250,11 +193,6 @@ var Popover = Popup.inherit({
             */
 
             /**
-            * @name dxPopoverOptions.showEvent
-            * @type Object|string
-            * @default undefined
-            */
-            /**
             * @name dxPopoverOptions.showEvent.name
             * @type string
             * @default undefined
@@ -265,11 +203,6 @@ var Popover = Popup.inherit({
             * @default undefined
             */
 
-            /**
-            * @name dxPopoverOptions.hideEvent
-            * @type Object|string
-            * @default undefined
-            */
             /**
             * @name dxPopoverOptions.hideEvent.name
             * @type string
@@ -652,12 +585,6 @@ var Popover = Popup.inherit({
         }
     },
 
-    /**
-    * @name dxPopoverMethods.show
-    * @publicName show(target)
-    * @param1 target:string|Node|jQuery
-    * @return Promise<boolean>
-    */
     show: function(target) {
         if(target) {
             this.option('target', target);

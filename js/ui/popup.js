@@ -92,160 +92,26 @@ var getButtonPlace = function(name) {
     };
 };
 
-/**
- * @name dxPopup
- * @inherits dxOverlay
- * @hasTranscludedContent
- * @module ui/popup
- * @export default
- */
 var Popup = Overlay.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxPopupOptions.fullScreen
-            * @type boolean
-            * @default false
-            */
             fullScreen: false,
 
-            /**
-            * @name dxPopupOptions.title
-            * @type string
-            * @default ""
-            */
             title: '',
 
-            /**
-            * @name dxPopupOptions.showTitle
-            * @type boolean
-            * @default true
-            */
             showTitle: true,
 
-            /**
-             * @name dxPopupOptions.container
-             * @type string|Node|jQuery
-             * @default undefined
-             */
 
-            /**
-            * @name dxPopupOptions.titleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 titleElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             titleTemplate: 'title',
 
-            /**
-            * @name dxPopupOptions.onTitleRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 titleElement:dxElement
-            * @action
-            */
             onTitleRendered: null,
 
-            /**
-            * @name dxPopupOptions.dragEnabled
-            * @type boolean
-            * @default false
-            */
             dragEnabled: false,
 
-            /**
-            * @name dxPopupOptions.position
-            * @type Enums.PositionAlignment|positionConfig|function
-            */
 
-            /**
-             * @name dxPopupOptions.resizeEnabled
-             * @type boolean
-             * @default false
-             */
-
-            /**
-            * @name dxPopupOptions.onResizeStart
-            * @extends Action
-            * @action
-            */
-
-            /**
-            * @name dxPopupOptions.onResize
-            * @extends Action
-            * @action
-            */
-
-            /**
-            * @name dxPopupOptions.onResizeEnd
-            * @extends Action
-            * @action
-            */
-
-            /**
-             * @name dxPopupOptions.width
-             * @fires dxPopupOptions.onResize
-             */
-
-            /**
-             * @name dxPopupOptions.height
-             * @fires dxPopupOptions.onResize
-             */
-
-            /**
-            * @name dxPopupOptions.toolbarItems
-            * @type Array<Object>
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.toolbar
-            * @type Enums.Toolbar
-            * @default 'top'
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.html
-            * @type String
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.text
-            * @type String
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.visible
-            * @type boolean
-            * @default true
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.disabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.template
-            * @type template
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.widget
-            * @type Enums.ToolbarItemWidget
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.options
-            * @type object
-            */
-            /**
-            * @name dxPopupOptions.toolbarItems.location
-            * @type Enums.ToolbarItemLocation
-            * @default 'center'
-            */
             toolbarItems: [],
 
-            /**
-            * @name dxPopupOptions.showCloseButton
-            * @type boolean
-            * @default false
-            */
             showCloseButton: false,
 
             bottomTemplate: 'bottom',
@@ -262,18 +128,6 @@ var Popup = Overlay.inherit({
             {
                 device: { platform: 'ios' },
                 options: {
-                    /**
-                    * @name dxPopupOptions.animation
-                    * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
-                    */
-                    /**
-                    * @name dxPopupOptions.animation.show
-                    * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
-                    */
-                    /**
-                    * @name dxPopupOptions.animation.hide
-                    * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
-                    */
                     animation: this._iosAnimation
                 }
             },
@@ -286,10 +140,6 @@ var Popup = Overlay.inherit({
             {
                 device: { platform: 'generic' },
                 options: {
-                    /**
-                    * @name dxPopupOptions.showCloseButton
-                    * @default true @for desktop
-                    */
                     showCloseButton: true
                 }
             },
@@ -298,10 +148,6 @@ var Popup = Overlay.inherit({
                     return devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions.dragEnabled
-                    * @default true @for desktop
-                    */
                     dragEnabled: true
                 }
             },
@@ -310,11 +156,6 @@ var Popup = Overlay.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxPopupOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },

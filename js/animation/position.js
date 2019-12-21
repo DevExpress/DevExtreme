@@ -5,10 +5,6 @@
 */
 
 /**
-* @name positionConfig.my
-* @type Enums.PositionAlignment|object
-*/
-/**
 * @name positionConfig.my.x
 * @type Enums.HorizontalAlignment
 */
@@ -18,10 +14,6 @@
 */
 
 /**
-* @name positionConfig.at
-* @type Enums.PositionAlignment|object
-*/
-/**
 * @name positionConfig.at.x
 * @type Enums.HorizontalAlignment
 */
@@ -30,15 +22,7 @@
 * @type Enums.VerticalAlignment
 */
 
-/**
-* @name positionConfig.of
-* @type string|Node|jQuery|window
-*/
 
-/**
-* @name positionConfig.offset
-* @type string|object
-*/
 /**
 * @name positionConfig.offset.x
 * @type number
@@ -51,10 +35,6 @@
 */
 
 /**
-* @name positionConfig.collision
-* @type Enums.PositionResolveCollisionXY|object
-*/
-/**
 * @name positionConfig.collision.x
 * @type Enums.PositionResolveCollision
 * @default 'none'
@@ -65,15 +45,7 @@
 * @default 'none'
 */
 
-/**
-* @name positionConfig.boundary
-* @type string|Node|jQuery|window
-*/
 
-/**
-* @name positionConfig.boundaryOffset
-* @type string|object
-*/
 /**
 * @name positionConfig.boundaryOffset.x
 * @type number

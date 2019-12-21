@@ -297,27 +297,8 @@ const ValidatingController = modules.Controller.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-            * @name GridBaseOptions.onRowValidating
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            * @type_function_param1_field5 isValid:boolean
-            * @type_function_param1_field6 key:any
-            * @type_function_param1_field7 newData:object
-            * @type_function_param1_field8 oldData:object
-            * @type_function_param1_field9 errorText:string
-            * @type_function_param1_field10 promise:Promise<void>
-            * @extends Action
-            * @action
-            */
             editing: {
                 texts: {
-                    /**
-                     * @name GridBaseOptions.editing.texts.validationCancelChanges
-                     * @type string
-                     * @default "Cancel changes"
-                     */
                     validationCancelChanges: messageLocalization.format('dxDataGrid-validationCancelChanges')
                 }
             }

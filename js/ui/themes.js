@@ -399,32 +399,8 @@ devices.changed.add(function() {
     init({ _autoInit: true });
 });
 
-/**
- * @name ui.themes
- * @namespace DevExpress.ui
- * @module ui/themes
- * @export default
- */
-/**
- * @name ui.themesmethods.current
- * @publicName current()
- * @static
- * @return string
- */
-/**
- * @name ui.themesmethods.current
- * @publicName current(themeName)
- * @param1 themeName:string
- * @static
- */
 exports.current = current;
 
-/**
- * @name ui.themesmethods.ready
- * @publicName ready(callback)
- * @param1 callback:function
- * @static
- */
 exports.ready = themeReady;
 
 exports.init = init;

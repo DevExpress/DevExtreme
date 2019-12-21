@@ -19,27 +19,12 @@ var TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide',
     TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide',
     TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
 
-/**
-* @name dxToolbar
-* @inherits CollectionWidget
-* @module ui/toolbar
-* @export default
-*/
 
 var Toolbar = ToolbarBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxToolbarOptions.menuItemTemplate
-            * @type template|function
-            * @default "menuItem"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             menuItemTemplate: 'menuItem',
 
             /**
@@ -53,41 +38,6 @@ var Toolbar = ToolbarBase.inherit({
 
             menuContainer: undefined,
 
-            /**
-            * @name dxToolbarItem.location
-            * @type Enums.ToolbarItemLocation
-            * @default 'center'
-            */
-
-            /**
-            * @name dxToolbarItem.locateInMenu
-            * @type Enums.ToolbarItemLocateInMenuMode
-            * @default 'never'
-            */
-
-            /**
-            * @name dxToolbarItem.showText
-            * @type Enums.ToolbarItemShowTextMode
-            * @default 'always'
-            */
-
-            /**
-            * @name dxToolbarItem.menuItemTemplate
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
-
-            /**
-             * @name dxToolbarItem.cssClass
-             * @type string
-             * @default undefined
-             */
-
-            /**
-            * @name dxToolbarOptions.renderAs
-            * @type Enums.ToolbarRenderMode
-            * @default 'topToolbar'
-            */
 
             /**
             * @name dxToolbarOptions.selectedIndex
@@ -371,15 +321,15 @@ var Toolbar = ToolbarBase.inherit({
     }
 
     /**
-    * @name dxToolbarMethods.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @hidden
+     * @name dxToolbarMethods.registerKeyHandler
+     * @publicName registerKeyHandler(key, handler)
+     * @hidden
     */
 
     /**
-    * @name dxToolbarMethods.focus
-    * @publicName focus()
-    * @hidden
+     * @name dxToolbarMethods.focus
+     * @publicName focus()
+     * @hidden
     */
 });
 

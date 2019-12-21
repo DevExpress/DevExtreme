@@ -1,19 +1,10 @@
-/**
-* @name dxVectorMap
-* @inherits BaseWidget
-* @module viz/vector_map
-* @export default
-*/
+
 var dxVectorMap = {
     /**
     * @name dxVectorMapOptions.margin
     * @hidden
     */
     margin: undefined,
-    /**
-    * @name dxVectorMapOptions.background
-    * @type object
-    */
     background: {
         /**
         * @name dxVectorMapOptions.background.borderColor
@@ -28,12 +19,6 @@ var dxVectorMap = {
         */
         color: '#ffffff'
     },
-    /**
-    * @name dxVectorMapOptions.layers
-    * @type Array<Object>|Object
-    * @default undefined
-    * @notUsedInTheme
-    */
     layers: [{
         /**
         * @name dxVectorMapOptions.layers.name
@@ -227,10 +212,6 @@ var dxVectorMap = {
             }
         }
     }],
-    /**
-    * @name dxVectorMapOptions.controlBar
-    * @type object
-    */
     controlBar: {
         /**
         * @name dxVectorMapOptions.controlBar.enabled
@@ -275,28 +256,8 @@ var dxVectorMap = {
         */
         opacity: 0.3
     },
-    /**
-    * @name dxVectorMapOptions.tooltip
-    * @type object
-    */
     tooltip: {
-        /**
-        * @name dxVectorMapOptions.tooltip.customizeTooltip
-        * @type function(info)
-        * @type_function_param1 info:MapLayerElement
-        * @type_function_return object
-        * @default undefined
-        * @notUsedInTheme
-        */
         customizeTooltip: undefined,
-        /**
-        * @name dxVectorMapOptions.tooltip.contentTemplate
-        * @type template | function(info, element)
-        * @type_function_param1 info:MapLayerElement
-        * @type_function_param2 element:dxElement
-        * @type_function_return string|Node|jQuery
-        * @default undefined
-        */
         contentTemplate: undefined,
         /**
         * @name dxVectorMapOptions.tooltip.format
@@ -304,38 +265,9 @@ var dxVectorMap = {
         */
         format: undefined
     },
-    /**
-    * @name dxVectorMapOptions.onTooltipShown
-    * @extends Action
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 target:MapLayerElement
-    * @notUsedInTheme
-    * @action
-    */
     onTooltipShown: function() { },
-    /**
-    * @name dxVectorMapOptions.onTooltipHidden
-    * @extends Action
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 target:MapLayerElement
-    * @notUsedInTheme
-    * @action
-    */
     onTooltipHidden: function() { },
-    /**
-    * @name dxVectorMapOptions.legends
-    * @type Array<Object>
-    * @inherits BaseLegend
-    * @default undefined
-    */
     legends: [{
-        /**
-        * @name dxVectorMapOptions.legends.source
-        * @type object
-        * @notUsedInTheme
-        */
         source: {
             /**
             * @name dxVectorMapOptions.legends.source.layer
@@ -350,260 +282,41 @@ var dxVectorMap = {
             */
             grouping: undefined
         },
-        /**
-        * @name dxVectorMapOptions.legends.customizeText
-        * @type function(itemInfo)
-        * @type_function_param1 itemInfo:object
-        * @type_function_param1_field1 start:number
-        * @type_function_param1_field2 end:number
-        * @type_function_param1_field3 index:number
-        * @type_function_param1_field4 color:string
-        * @type_function_param1_field5 size:number
-        * @type_function_return string
-        * @notUsedInTheme
-        */
         customizeText: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.customizeHint
-        * @type function(itemInfo)
-        * @type_function_param1 itemInfo:object
-        * @type_function_param1_field1 start:number
-        * @type_function_param1_field2 end:number
-        * @type_function_param1_field3 index:number
-        * @type_function_param1_field4 color:string
-        * @type_function_param1_field5 size:number
-        * @type_function_return string
-        * @notUsedInTheme
-        */
         customizeHint: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.customizeItems
-        * @type function(items)
-        * @type_function_param1 items:Array<VectorMapLegendItem>
-        * @type_function_return Array<VectorMapLegendItem>
-        */
         customizeItems: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.markerTemplate
-        * @type template|function
-        * @default undefined
-        * @type_function_param1 legendItem:VectorMapLegendItem
-        * @type_function_param2 element:SVGGElement
-        * @type_function_return string|SVGElement|jQuery
-        */
         markerTemplate: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.font
-        * @type Font
-        * @default '#2b2b2b' @prop color
-        */
         font: {
             color: '#2b2b2b'
         },
-        /**
-        * @name dxVectorMapOptions.legends.markerSize
-        * @type number
-        * @default 12
-        */
         markerSize: 12,
-        /**
-        * @name dxVectorMapOptions.legends.markerColor
-        * @type string
-        * @default undefined
-        */
         markerColor: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.markerShape
-        * @type Enums.VectorMapMarkerShape
-        * @default "square"
-        */
         markerShape: "square"
     }],
-    /**
-    * @name dxVectorMapOptions.projection
-    * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
-    * @default "mercator"
-    * @notUsedInTheme
-    */
     projection: "mercator",
-    /**
-    * @name dxVectorMapOptions.bounds
-    * @type Array<number>
-    * @default undefined
-    * @notUsedInTheme
-    */
     bounds: undefined,
-    /**
-    * @name dxVectorMapOptions.touchEnabled
-    * @type boolean
-    * @default true
-    */
     touchEnabled: true,
-    /**
-    * @name dxVectorMapOptions.wheelEnabled
-    * @type boolean
-    * @default true
-    */
     wheelEnabled: true,
-    /**
-    * @name dxVectorMapOptions.panningEnabled
-    * @type boolean
-    * @default true
-    */
     panningEnabled: true,
-    /**
-    * @name dxVectorMapOptions.zoomingEnabled
-    * @type boolean
-    * @default true
-    */
     zoomingEnabled: true,
-    /**
-    * @name dxVectorMapOptions.center
-    * @type Array<number>
-    * @default [0, 0]
-    * @notUsedInTheme
-    */
     center: [0, 0],
-    /**
-    * @name dxVectorMapOptions.zoomFactor
-    * @type number
-    * @default 1
-    * @notUsedInTheme
-    */
     zoomFactor: 1,
-    /**
-    * @name dxVectorMapOptions.maxZoomFactor
-    * @type number
-    * @default 256
-    * @notUsedInTheme
-    */
     maxZoomFactor: 256,
-    /**
-    * @name dxVectorMapOptions.onClick
-    * @extends Action
-    * @type function|string
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-    * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 target:MapLayerElement
-    * @notUsedInTheme
-    * @action
-    */
     onClick: function() { },
-    /**
-    * @name dxVectorMapOptions.onCenterChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 center:Array<number>
-    * @notUsedInTheme
-    * @action
-    */
     onCenterChanged: function() { },
-    /**
-    * @name dxVectorMapOptions.onZoomFactorChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 zoomFactor:number
-    * @notUsedInTheme
-    * @action
-    */
     onZoomFactorChanged: function() { },
-    /**
-    * @name dxVectorMapOptions.onSelectionChanged
-    * @extends Action
-    * @type function
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 target:MapLayerElement
-    * @notUsedInTheme
-    * @action
-    */
     onSelectionChanged: function() { },
-    /**
-    * @name dxVectorMapMethods.getLayers
-    * @publicName getLayers()
-    * @return Array<MapLayer>
-    */
     getLayers: function() { },
-    /**
-    * @name dxVectorMapMethods.getLayerByIndex
-    * @publicName getLayerByIndex(index)
-    * @return MapLayer
-    * @param1 index:number
-    */
     getLayerByIndex: function() { },
-    /**
-    * @name dxVectorMapMethods.getLayerByName
-    * @publicName getLayerByName(name)
-    * @return MapLayer
-    * @param1 name:string
-    */
     getLayerByName: function() { },
-    /**
-    * @name dxVectorMapMethods.clearSelection
-    * @publicName clearSelection()
-    */
     clearSelection: function() { },
-    /**
-    * @name dxVectorMapMethods.center
-    * @publicName center()
-    * @return Array<number>
-    */
     center: function() { },
-    /**
-    * @name dxVectorMapMethods.center
-    * @publicName center(centerCoordinates)
-    * @param1 centerCoordinates:Array<number>
-    */
     center: function() { },
-    /**
-    * @name dxVectorMapMethods.zoomFactor
-    * @publicName zoomFactor()
-    * @return number
-    */
     zoomFactor: function() { },
-    /**
-    * @name dxVectorMapMethods.zoomFactor
-    * @publicName zoomFactor(zoomFactor)
-    * @param1 zoomFactor:number
-    */
     zoomFactor: function() { },
-    /**
-    * @name dxVectorMapMethods.viewport
-    * @publicName viewport()
-    * @return Array<number>
-    */
     viewport: function() { },
-    /**
-    * @name dxVectorMapMethods.viewport
-    * @publicName viewport(viewportCoordinates)
-    * @param1 viewportCoordinates:Array<number>
-    */
     viewport: function() { },
-    /**
-    * @name dxVectorMapMethods.convertCoordinates
-    * @publicName convertCoordinates(x, y)
-    * @param1 x:number
-    * @param2 y:number
-    * @return Array<number>
-    * @deprecated dxVectorMapMethods.convertToGeo
-    */
     convertCoordinates: function() { },
-    /**
-    * @name dxVectorMapMethods.convertToGeo
-    * @publicName convertToGeo(x, y)
-    * @param1 x:number
-    * @param2 y:number
-    * @return Array<number>
-    */
     convertToGeo: function() { },
-    /**
-    * @name dxVectorMapMethods.convertToXY
-    * @publicName convertToXY(longitude, latitude)
-    * @param1 longitude:number
-    * @param2 latitude:number
-    * @return Array<number>
-    */
     convertToXY: function() { }
 };

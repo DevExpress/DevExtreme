@@ -13,13 +13,6 @@ import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
 import { name as clickEventName } from '../events/click';
 
-/**
-* @name dxButton
-* @inherits Widget
-* @hasTranscludedContent
-* @module ui/button
-* @export default
-*/
 class Button extends Widget {
     constructor(...args) {
         super(...args);
@@ -38,11 +31,6 @@ class Button extends Widget {
             {
                 device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
                 options: {
-                    /**
-                    * @name dxButtonOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -84,89 +72,29 @@ class Button extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
 
-            /**
-             * @name dxButtonOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxButtonOptions.onClick
-            * @type function(e)
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 validationGroup:object
-            * @action
-            */
             onClick: null,
 
-            /**
-            * @name dxButtonOptions.type
-            * @type Enums.ButtonType
-            * @default 'normal'
-            */
             type: 'normal',
 
-            /**
-            * @name dxButtonOptions.text
-            * @type string
-            * @default ""
-            */
             text: '',
 
-            /**
-            * @name dxButtonOptions.icon
-            * @type string
-            * @default ""
-            */
             icon: '',
 
             iconPosition: 'left',
 
-            /**
-            * @name dxButtonOptions.validationGroup
-            * @type string
-            * @default undefined
-            */
             validationGroup: undefined,
 
-            /**
-             * @name dxButtonOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
-            /**
-            * @name dxButtonOptions.template
-            * @type template|function
-            * @default "content"
-            * @type_function_param1 buttonData:object
-            * @type_function_param1_field1 text:string
-            * @type_function_param1_field2 icon:string
-            * @type_function_param2 contentElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             template: 'content',
 
-            /**
-            * @name dxButtonOptions.useSubmitBehavior
-            * @type boolean
-            * @default false
-            */
             useSubmitBehavior: false,
 
             useInkRipple: false,
             _templateData: {},
 
-            /**
-            * @name dxButtonOptions.stylingMode
-            * @type Enums.ButtonStylingMode
-            * @default 'contained'
-            */
             stylingMode: 'contained'
         });
     }

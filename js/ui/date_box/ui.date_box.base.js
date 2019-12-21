@@ -73,152 +73,40 @@ var DateBox = DropDownEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxDateBoxOptions.type
-             * @type Enums.DateBoxType
-             * @default "date"
-             */
             type: 'date',
 
-            /**
-             * @name dxDateBoxOptions.showAnalogClock
-             * @type boolean
-             * @default true
-             */
             showAnalogClock: true,
 
-            /**
-             * @name dxDateBoxOptions.value
-             * @type Date|number|string
-             * @default null
-             */
             value: null,
 
-            /**
-             * @name dxDateBoxOptions.dateSerializationFormat
-             * @type string
-             * @default undefined
-             */
             dateSerializationFormat: undefined,
 
-            /**
-             * @name dxDateBoxOptions.min
-             * @type Date|number|string
-             * @default undefined
-             */
             min: undefined,
 
-            /**
-             * @name dxDateBoxOptions.max
-             * @type Date|number|string
-             * @default undefined
-             */
             max: undefined,
 
-            /**
-             * @name dxDateBoxOptions.placeholder
-             * @type string
-             * @default ""
-             */
 
-            /**
-             * @name dxDateBoxOptions.displayFormat
-             * @type format
-             * @default null
-             */
             displayFormat: null,
 
-            /**
-             * @name dxDateBoxOptions.interval
-             * @type number
-             * @default 30
-             */
             interval: 30,
 
-            /**
-             * @name dxDateBoxOptions.disabledDates
-             * @type Array<Date>|function(data)
-             * @default null
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxDateBox
-             * @type_function_param1_field2 date:Date
-             * @type_function_param1_field3 view:string
-             * @type_function_return boolean
-             */
             disabledDates: null,
 
-            /**
-             * @name dxDateBoxOptions.maxZoomLevel
-             * @type Enums.CalendarZoomLevel
-             * @default 'month'
-             * @deprecated dxDateBoxOptions.calendarOptions
-             */
             maxZoomLevel: 'month',
 
-            /**
-             * @name dxDateBoxOptions.minZoomLevel
-             * @type Enums.CalendarZoomLevel
-             * @default 'century'
-             * @deprecated dxDateBoxOptions.calendarOptions
-             */
             minZoomLevel: 'century',
 
-            /**
-             * @name dxDateBoxOptions.pickerType
-             * @type Enums.DateBoxPickerType
-             * @default 'calendar'
-             */
             pickerType: PICKER_TYPE['calendar'],
 
-            /**
-             * @name dxDateBoxOptions.invalidDateMessage
-             * @type string
-             * @default "Value must be a date or time"
-             */
             invalidDateMessage: messageLocalization.format('dxDateBox-validation-datetime'),
 
-            /**
-             * @name dxDateBoxOptions.dateOutOfRangeMessage
-             * @type string
-             * @default "Value is out of range"
-             */
             dateOutOfRangeMessage: messageLocalization.format('validation-range'),
 
-            /**
-             * @name dxDateBoxOptions.applyButtonText
-             * @type string
-             * @default "OK"
-             */
             applyButtonText: messageLocalization.format('OK'),
 
-            /**
-             * @name dxDateBoxOptions.cancelButtonText
-             * @type string
-             * @default "Cancel"
-             */
 
-            /**
-             * @name dxDateBoxMethods.open
-             * @publicName open()
-             */
-
-            /**
-             * @name dxDateBoxMethods.close
-             * @publicName close()
-             */
-
-            /**
-             * @name dxDateBoxOptions.adaptivityEnabled
-             * @type boolean
-             * @default false
-             */
             adaptivityEnabled: false,
 
-            /**
-             * @name dxDateBoxOptions.calendarOptions
-             * @type dxCalendarOptions
-             * @default {}
-             */
             calendarOptions: {},
 
             useHiddenSubmitElement: true
@@ -246,11 +134,6 @@ var DateBox = DropDownEditor.inherit({
                     return platform === 'ios' || platform === 'android';
                 },
                 options: {
-                    /**
-                     * @name dxDateBoxOptions.pickerType
-                     * @default 'native' @for iOS
-                     * @default 'native' @for Android
-                     */
                     pickerType: PICKER_TYPE.native
                 }
             },
@@ -262,11 +145,6 @@ var DateBox = DropDownEditor.inherit({
                     return platform === 'generic' && currentDevice.deviceType !== 'desktop' || (platform === 'android' && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
-                    /**
-                     * @name dxDateBoxOptions.pickerType
-                     * @default 'rollers' @for Android_below_version_4.4
-                     * @default 'rollers' @for mobile_devices
-                     */
                     pickerType: PICKER_TYPE.rollers
                 }
             },

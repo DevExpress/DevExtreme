@@ -37,14 +37,6 @@ const getValidationErrorMessage = function(validationErrors) {
     return validationErrorMessage;
 };
 
-/**
-* @name Editor
-* @type object
-* @inherits Widget
-* @module ui/editor/editor
-* @export default
-* @hidden
-*/
 const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
@@ -71,12 +63,6 @@ const Editor = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name EditorOptions.value
-            * @type any
-            * @default null
-            * @fires EditorOptions.onValueChanged
-            */
             value: null,
 
             /**
@@ -87,60 +73,18 @@ const Editor = Widget.inherit({
             */
             name: '',
 
-            /**
-            * @name EditorOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onValueChanged: null,
 
-            /**
-             * @name EditorOptions.readOnly
-             * @type boolean
-             * @default false
-             */
             readOnly: false,
 
-            /**
-            * @name EditorOptions.isValid
-            * @type boolean
-            * @default true
-            */
             isValid: true,
 
-            /**
-            * @name EditorOptions.validationError
-            * @type object
-            * @ref
-            * @default null
-            */
             validationError: null,
 
-            /**
-            * @name EditorOptions.validationErrors
-            * @type Array<object>
-            * @default null
-            */
             validationErrors: null,
 
-            /**
-            * @name EditorOptions.validationStatus
-            * @type Enums.ValidationStatus
-            * @default "valid"
-            */
             validationStatus: VALIDATION_STATUS_VALID,
 
-            /**
-             * @name EditorOptions.validationMessageMode
-             * @type Enums.ValidationMessageMode
-             * @default "auto"
-             */
             validationMessageMode: 'auto',
 
             validationBoundary: undefined,
@@ -437,10 +381,6 @@ const Editor = Widget.inherit({
         }
     },
 
-    /**
-    * @name EditorMethods.reset
-    * @publicName reset()
-    */
     reset: function() {
         const defaultOptions = this._getDefaultOptions();
         this.option('value', defaultOptions.value);

@@ -286,20 +286,6 @@ function removeBinding(chart) {
 }
 
 module.exports = {
-    /**
-    * @name dxPivotGridMethods.bindChart
-    * @publicName bindChart(chart, integrationOptions)
-    * @param1 chart:string|jQuery|object
-    * @param2 integrationOptions:object
-    * @param2_field1 inverted:boolean
-    * @param2_field2 dataFieldsDisplayMode:string
-    * @param2_field3 putDataFieldsInto:string
-    * @param2_field4 alternateDataFields:boolean
-    * @param2_field5 processCell:function(cellData)
-    * @param2_field6 customizeChart:function(chartOptions)
-    * @param2_field7 customizeSeries:function(seriesName, seriesOptions)
-    * @return function | null
-    */
     bindChart: function(chart, integrationOptions) {
         integrationOptions = extend({}, integrationOptions);
 

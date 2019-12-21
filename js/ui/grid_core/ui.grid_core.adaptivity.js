@@ -663,31 +663,16 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return ['isAdaptiveDetailRowExpanded', 'expandAdaptiveDetailRow', 'collapseAdaptiveDetailRow'];
     },
 
-    /**
-     * @name GridBaseMethods.isAdaptiveDetailRowExpanded
-     * @publicName isAdaptiveDetailRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
-     */
     isAdaptiveDetailRowExpanded: function(key) {
         return this._dataController.adaptiveExpandedKey() && equalByValue(this._dataController.adaptiveExpandedKey(), key);
     },
 
-    /**
-    * @name GridBaseMethods.expandAdaptiveDetailRow
-    * @publicName expandAdaptiveDetailRow(key)
-    * @param1 key:any
-    */
     expandAdaptiveDetailRow: function(key) {
         if(!this.hasAdaptiveDetailRowExpanded()) {
             this.toggleExpandAdaptiveDetailRow(key);
         }
     },
 
-    /**
-    * @name GridBaseMethods.collapseAdaptiveDetailRow
-    * @publicName collapseAdaptiveDetailRow()
-    */
     collapseAdaptiveDetailRow: function() {
         if(this.hasAdaptiveDetailRowExpanded()) {
             this.toggleExpandAdaptiveDetailRow();
@@ -698,20 +683,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-            * @name GridBaseOptions.columnHidingEnabled
-            * @type boolean
-            * @default false
-            */
             columnHidingEnabled: false,
-            /**
-            * @name GridBaseOptions.onAdaptiveDetailRowPreparing
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 formOptions:object
-            * @action
-            */
             onAdaptiveDetailRowPreparing: null
         };
     },

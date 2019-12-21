@@ -1,20 +1,6 @@
-/**
-* @name dxRangeSelector
-* @inherits BaseWidget, DataHelperMixin
-* @module viz/range_selector
-* @export default
-*/
+
 var dxRangeSelector = {
-    /**
-    * @name dxRangeSelectorOptions.selectedRangeUpdateMode
-    * @type Enums.VisualRangeUpdateMode
-    * @default "reset"
-    */
     selectedRangeUpdateMode: "reset",
-    /**
-    * @name dxRangeSelectorOptions.scale
-    * @type object
-    */
     scale: {
         /**
         * @name dxRangeSelectorOptions.scale.valueType
@@ -346,10 +332,6 @@ var dxRangeSelector = {
         */
         aggregateByCategory: false,
     },
-    /**
-    * @name dxRangeSelectorOptions.sliderMarker
-    * @type object
-    */
     sliderMarker: {
         /**
         * @name dxRangeSelectorOptions.sliderMarker.visible
@@ -417,10 +399,6 @@ var dxRangeSelector = {
             opacity: undefined
         }
     },
-    /**
-    * @name dxRangeSelectorOptions.sliderHandle
-    * @type object
-    */
     sliderHandle: {
         /**
         * @name dxRangeSelectorOptions.sliderHandle.color
@@ -441,10 +419,6 @@ var dxRangeSelector = {
         */
         opacity: 0.2
     },
-    /**
-    * @name dxRangeSelectorOptions.shutter
-    * @type object
-    */
     shutter: {
         /**
         * @name dxRangeSelectorOptions.shutter.color
@@ -459,23 +433,8 @@ var dxRangeSelector = {
         */
         opacity: 0.75
     },
-    /**
-    * @name dxRangeSelectorOptions.value
-    * @type Array<number,string,Date> | VizRange
-    * @fires dxRangeSelectorOptions.onValueChanged
-    * @notUsedInTheme
-    */
     value: [undefined, undefined],
-    /**
-    * @name dxRangeSelectorOptions.selectedRangeColor
-    * @type string
-    * @default "#606060"
-    */
     selectedRangeColor: "#606060",
-    /**
-    * @name dxRangeSelectorOptions.indent
-    * @type object
-    */
     indent: {
         /**
         * @name dxRangeSelectorOptions.indent.left
@@ -492,10 +451,6 @@ var dxRangeSelector = {
         */
         right: undefined
     },
-    /**
-    * @name dxRangeSelectorOptions.behavior
-    * @type object
-    */
     behavior: {
         /**
         * @name dxRangeSelectorOptions.behavior.animationEnabled
@@ -534,10 +489,6 @@ var dxRangeSelector = {
         */
         callValueChanged: "onMovingComplete"
     },
-    /**
-    * @name dxRangeSelectorOptions.background
-    * @type object
-    */
     background: {
         /**
         * @name dxRangeSelectorOptions.background.visible
@@ -575,10 +526,6 @@ var dxRangeSelector = {
     * @hidden
     */
     tooltip: undefined,
-    /**
-    * @name dxRangeSelectorOptions.chart
-    * @type object
-    */
     chart: {
         /**
         * @name dxRangeSelectorOptions.chart.commonSeriesSettings
@@ -761,52 +708,11 @@ var dxRangeSelector = {
         */
         maxBubbleSize: 0.2
     },
-    /**
-    * @name dxRangeSelectorOptions.dataSource
-    * @extends CommonVizDataSource
-    */
     dataSource: undefined,
-    /**
-    * @name dxRangeSelectorOptions.dataSourceField
-    * @type string
-    * @default 'arg'
-    */
     dataSourceField: undefined,
-    /**
-    * @name dxRangeSelectorOptions.onValueChanged
-    * @extends Action
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field4 value:Array<number,string,Date>
-    * @type_function_param1_field5 previousValue:Array<number,string,Date>
-    * @type_function_param1_field6 event:event
-    * @default null
-    * @notUsedInTheme
-    * @action
-    */
     onValueChanged: null,
-    /**
-    * @name dxRangeSelectorOptions.containerBackgroundColor
-    * @type string
-    * @default '#FFFFFF'
-    */
     containerBackgroundColor: '#FFFFFF',
-    /**
-    * @name dxRangeSelectorMethods.setValue
-    * @publicName setValue(value)
-    * @param1 value:Array<number,string,Date> | VizRange
-    */
     setValue: function() { },
-    /**
-    * @name dxRangeSelectorMethods.getValue
-    * @publicName getValue()
-    * @return Array<number,string,Date>
-    */
     getValue: function() { },
-    /**
-    * @name dxRangeSelectorMethods.render
-    * @publicName render(skipChartAnimation)
-    * @param1 skipChartAnimation:boolean
-    */
     render: function(skipChartAnimation) { }
 };

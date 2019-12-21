@@ -46,12 +46,6 @@ const animation = {
     }
 };
 
-/**
-* @name dxMultiView
-* @inherits CollectionWidget
-* @module ui/multi_view
-* @export default
-*/
 const MultiView = CollectionWidget.inherit({
 
     _activeStateUnit: '.' + MULTIVIEW_ITEM_CLASS,
@@ -65,39 +59,14 @@ const MultiView = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxMultiViewOptions.selectedIndex
-            * @type number
-            * @default 0
-            */
             selectedIndex: 0,
 
-            /**
-            * @name dxMultiViewOptions.swipeEnabled
-            * @type boolean
-            * @default true
-            */
             swipeEnabled: true,
 
-            /**
-            * @name dxMultiViewOptions.animationEnabled
-            * @type boolean
-            * @default true
-            */
             animationEnabled: true,
 
-            /**
-            * @name dxMultiViewOptions.loop
-            * @type boolean
-            * @default false
-            */
             loop: false,
 
-            /**
-            * @name dxMultiViewOptions.deferRendering
-            * @type boolean
-            * @default true
-            */
             deferRendering: true,
 
             /**
@@ -115,17 +84,6 @@ const MultiView = CollectionWidget.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxMultiViewOptions.dataSource
-             * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxMultiViewOptions.items
-             * @type Array<string, dxMultiViewItem, object>
-             * @fires dxMultiViewOptions.onOptionChanged
-             */
 
             _itemAttributes: { role: 'tabpanel' },
             loopItemFocus: false,
@@ -143,11 +101,6 @@ const MultiView = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxMultiViewOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }

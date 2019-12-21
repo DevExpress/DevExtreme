@@ -5,28 +5,12 @@ import { extend } from '../../../core/utils/extend';
 import { FileProvider } from './file_provider';
 import ArrayFileProvider from './array';
 
-/**
-* @name AjaxFileProvider
-* @inherits FileProvider
-* @type object
-* @module ui/file_manager/file_provider/ajax
-* @namespace DevExpress.fileProvider
-* @export default
-*/
 class AjaxFileProvider extends FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, { });
         super(options);
 
-        /**
-         * @name AjaxFileProviderOptions.url
-         * @type string
-         */
-        /**
-         * @name AjaxFileProviderOptions.itemsExpr
-         * @type string|function(fileItem)
-         */
         this._options = options;
         this._provider = null;
     }

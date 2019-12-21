@@ -340,69 +340,23 @@ class FileManager extends Widget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxFileManagerOptions.fileProvider
-            * @type object
-            * @default null
-            */
             fileProvider: null,
 
-            /**
-            * @name dxFileManagerOptions.currentPath
-            * @type string
-            * @default ""
-            */
             currentPath: '',
 
-            /**
-            * @name dxFileManagerOptions.rootFolderName
-            * @type string
-            * @default "Files"
-            */
             rootFolderName: messageLocalization.format('dxFileManager-rootDirectoryName'),
 
-            /**
-            * @name dxFileManagerOptions.selectionMode
-            * @type Enums.FileManagerSelectionMode
-            * @default "multiple"
-            */
             selectionMode: 'multiple', // "single"
 
-            /**
-            * @name dxFileManagerOptions.toolbar
-            * @type dxFileManagerToolbar
-            */
 
             /**
             * @name dxFileManagerToolbar
             * @type object
             */
-            /**
-            * @name dxFileManagerToolbar.items
-            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-            * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
-            */
-            /**
-            * @name dxFileManagerToolbar.fileSelectionItems
-            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-            * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
-            */
 
             /**
             * @name dxFileManagerToolbarItem
             * @inherits dxToolbarItem
-            */
-            /**
-            * @name dxFileManagerToolbarItem.name
-            * @type Enums.FileManagerToolbarItem|string
-            */
-            /**
-            * @name dxFileManagerToolbarItem.location
-            * @default "before"
-            */
-            /**
-            * @name dxFileManagerToolbarItem.visible
-            * @default undefined
             */
 
             toolbar: {
@@ -420,32 +374,15 @@ class FileManager extends Widget {
                 ]
             },
 
-            /**
-            * @name dxFileManagerOptions.contextMenu
-            * @type dxFileManagerContextMenu
-            */
 
             /**
             * @name dxFileManagerContextMenu
             * @type object
             */
-            /**
-            * @name dxFileManagerContextMenu.items
-            * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
-            * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
-            */
 
             /**
             * @name dxFileManagerContextMenuItem
             * @inherits dxContextMenuItem
-            */
-            /**
-            * @name dxFileManagerContextMenuItem.name
-            * @type Enums.FileManagerContextMenuItem|string
-            */
-            /**
-            * @name dxFileManagerContextMenuItem.visible
-            * @default undefined
             */
 
             contextMenu: {
@@ -454,11 +391,6 @@ class FileManager extends Widget {
                 ]
             },
 
-            /**
-            * @name dxFileManagerOptions.itemView
-            * @type object
-            * @default null
-            */
             itemView: {
                 /**
                 * @name dxFileManagerOptions.itemView.mode
@@ -480,54 +412,16 @@ class FileManager extends Widget {
                 showParentFolder: true
             },
 
-            /**
-            * @name dxFileManagerOptions.customizeThumbnail
-            * @type function
-            * @type_function_param1 fileItem:object
-            * @type_function_return string
-            */
             customizeThumbnail: null,
 
-            /**
-            * @name dxFileManagerOptions.customizeDetailColumns
-            * @type function
-            * @type_function_param1 columns:Array<dxDataGridColumn>
-            * @type_function_return Array<dxDataGridColumn>
-            */
             customizeDetailColumns: null,
 
-            /**
-            * @name dxFileManagerOptions.onCurrentDirectoryChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @default null
-            * @action
-            */
             onCurrentDirectoryChanged: null,
 
-            /**
-            * @name dxFileManagerOptions.onSelectedFileOpened
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 fileItem:object
-            * @default null
-            * @action
-            */
             onSelectedFileOpened: null,
 
-            /**
-            * @name dxFileManagerOptions.allowedFileExtensions
-            * @type Array<string>
-            * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
-            */
             allowedFileExtensions: ['.txt', '.rtf', '.doc', '.docx', '.odt', '.xls', '.xlsx', '.ods', '.ppt', '.pptx', '.odp', '.pdf', '.xml', '.png', '.svg', '.gif', '.jpg', '.jpeg', '.ico', '.bmp', '.avi', '.mpeg', '.mkv', ''],
 
-            /**
-            * @name dxFileManagerOptions.upload
-            * @type object
-            */
             upload: {
                 /**
                 * @name dxFileManagerOptions.upload.maxFileSize
@@ -537,10 +431,6 @@ class FileManager extends Widget {
                 maxFileSize: 0
             },
 
-            /**
-             * @name dxFileManagerOptions.permissions
-             * @type object
-             */
             permissions: {
                 /**
                  * @name dxFileManagerOptions.permissions.create
@@ -665,30 +555,15 @@ class FileManager extends Widget {
         return this._itemView.getSelectedItems();
     }
 
-    /**
-     * @name dxFileManagerMethods.refresh
-     * @publicName refresh()
-     * @return Promise<any>
-     */
     refresh() {
         return this.executeCommand('refresh');
     }
 
-    /**
-     * @name dxFileManagerMethods.getCurrentDirectory
-     * @publicName getCurrentDirectory()
-     * @return object
-     */
     getCurrentDirectory() {
         const directoryInfo = this._getCurrentDirectory();
         return directoryInfo && directoryInfo.fileItem || null;
     }
 
-    /**
-     * @name dxFileManagerMethods.getSelectedItems
-     * @publicName getSelectedItems()
-     * @return Array<object>
-     */
     getSelectedItems() {
         return this._getSelectedItemInfos().map(itemInfo => itemInfo.fileItem);
     }

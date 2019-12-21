@@ -55,30 +55,11 @@ var setAnimationFrameMethods = callOnce(function() {
     }
 });
 
-/**
- * @name utils.requestAnimationFrame
- * @publicName requestAnimationFrame(callback)
- * @type method
- * @param1 callback:function
- * @return number
- * @namespace DevExpress.utils
- * @module animation/frame
- * @export request
- */
 exports.requestAnimationFrame = function() {
     setAnimationFrameMethods();
     return request.apply(window, arguments);
 };
 
-/**
- * @name utils.cancelAnimationFrame
- * @publicName cancelAnimationFrame(requestID)
- * @type method
- * @param1 requestID:number
- * @namespace DevExpress.utils
- * @module animation/frame
- * @export cancel
- */
 exports.cancelAnimationFrame = function() {
     setAnimationFrameMethods();
     cancel.apply(window, arguments);

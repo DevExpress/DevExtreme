@@ -64,46 +64,16 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-                * @name dxTextEditorOptions.mask
-                * @type string
-                * @default ""
-                */
             mask: '',
 
-            /**
-                * @name dxTextEditorOptions.maskChar
-                * @type string
-                * @default "_"
-                */
             maskChar: '_',
 
-            /**
-                * @name dxTextEditorOptions.maskRules
-                * @type Object
-                * @default "{}"
-                */
             maskRules: {},
 
-            /**
-                * @name dxTextEditorOptions.maskInvalidMessage
-                * @type string
-                * @default "Value is invalid"
-                */
             maskInvalidMessage: messageLocalization.format('validation-mask'),
 
-            /**
-                * @name dxTextEditorOptions.useMaskedValue
-                * @type boolean
-                * @default false
-                */
             useMaskedValue: false,
 
-            /**
-             * @name dxTextEditorOptions.showMaskMode
-             * @type Enums.ShowMaskMode
-             * @default "always"
-             */
             showMaskMode: 'always'
         });
     },

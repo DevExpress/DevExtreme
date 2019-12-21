@@ -14,10 +14,6 @@ var MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell',
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name dxDataGridOptions.masterDetail
-             * @type object
-             */
             masterDetail: {
                 /**
                  * @name dxDataGridOptions.masterDetail.enabled

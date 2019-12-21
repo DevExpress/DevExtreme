@@ -11,185 +11,20 @@ var SORTABLE = 'dxSortable',
     PLACEHOLDER_CLASS = 'placeholder',
     CLONE_CLASS = 'clone';
 
-/**
-* @name dxSortable
-* @inherits DraggableBase
-* @hasTranscludedContent
-* @module ui/sortable
-* @export default
-*/
 
 var Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             clone: true,
-            /**
-             * @name dxSortableOptions.filter
-             * @type string
-             * @default "> *"
-             */
             filter: '> *',
-            /**
-             * @name dxSortableOptions.itemOrientation
-             * @type Enums.Orientation
-             * @default "vertical"
-             */
             itemOrientation: 'vertical',
-            /**
-             * @name dxSortableOptions.dropFeedbackMode
-             * @type Enums.DropFeedbackMode
-             * @default "push"
-             */
             dropFeedbackMode: 'push',
-            /**
-             * @name dxSortableOptions.allowDropInsideItem
-             * @type boolean
-             * @default false
-             */
             allowDropInsideItem: false,
-            /**
-             * @name dxSortableOptions.allowReordering
-             * @type boolean
-             * @default true
-             */
             allowReordering: true,
-            /**
-             * @name dxSortableOptions.moveItemOnDrop
-             * @type boolean
-             * @default false
-             */
             moveItemOnDrop: false,
-            /**
-             * @name dxSortableOptions.dragTemplate
-             * @type template|function
-             * @type_function_param1 dragInfo:object
-             * @type_function_param1_field1 itemData:any
-             * @type_function_param1_field2 itemElement:dxElement
-             * @type_function_param1_field3 fromIndex:number
-             * @type_function_param2 containerElement:dxElement
-             * @type_function_return string|Node|jQuery
-             * @default undefined
-             */
-            /**
-             * @name dxSortableOptions.onDragStart
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromIndex:number
-             * @type_function_param1_field9 fromData:any
-             * @action
-             */
-            /**
-             * @name dxSortableOptions.onDragMove
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromIndex:number
-             * @type_function_param1_field9 toIndex:number
-             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field12 fromData:any
-             * @type_function_param1_field13 toData:any
-             * @type_function_param1_field14 dropInsideItem:boolean
-             * @action
-             */
-            /**
-             * @name dxSortableOptions.onDragEnd
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromIndex:number
-             * @type_function_param1_field9 toIndex:number
-             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field12 fromData:any
-             * @type_function_param1_field13 toData:any
-             * @type_function_param1_field14 dropInsideItem:boolean
-             * @action
-             */
-            /**
-             * @name dxSortableOptions.onDragChange
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromIndex:number
-             * @type_function_param1_field9 toIndex:number
-             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field12 fromData:any
-             * @type_function_param1_field13 toData:any
-             * @type_function_param1_field14 dropInsideItem:boolean
-             * @action
-             */
             onDragChange: null,
-            /**
-             * @name dxSortableOptions.onAdd
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemData:any
-             * @type_function_param1_field6 itemElement:dxElement
-             * @type_function_param1_field7 fromIndex:number
-             * @type_function_param1_field8 toIndex:number
-             * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 fromData:any
-             * @type_function_param1_field12 toData:any
-             * @type_function_param1_field13 dropInsideItem:boolean
-             * @action
-             */
             onAdd: null,
-            /**
-             * @name dxSortableOptions.onRemove
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemData:any
-             * @type_function_param1_field6 itemElement:dxElement
-             * @type_function_param1_field7 fromIndex:number
-             * @type_function_param1_field8 toIndex:number
-             * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 fromData:any
-             * @type_function_param1_field12 toData:any
-             * @action
-             */
             onRemove: null,
-            /**
-             * @name dxSortableOptions.onReorder
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemData:any
-             * @type_function_param1_field6 itemElement:dxElement
-             * @type_function_param1_field7 fromIndex:number
-             * @type_function_param1_field8 toIndex:number
-             * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field11 fromData:any
-             * @type_function_param1_field12 toData:any
-             * @type_function_param1_field13 dropInsideItem:boolean
-             * @action
-             */
             onReorder: null,
             /**
              * @name dxSortableOptions.onPlaceholderPrepared

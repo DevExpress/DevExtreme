@@ -749,23 +749,8 @@ module.exports = {
                 renderingThreshold: 100,
                 removeInvisiblePages: true,
                 rowPageSize: 5,
-                /**
-                 * @name dxDataGridOptions.scrolling.mode
-                 * @type Enums.GridScrollingMode
-                 * @default "standard"
-                 */
                 mode: 'standard',
-                /**
-                 * @name GridBaseOptions.scrolling.preloadEnabled
-                 * @type boolean
-                 * @default false
-                 */
                 preloadEnabled: false,
-                /**
-                 * @name GridBaseOptions.scrolling.rowRenderingMode
-                 * @type Enums.GridRowRenderingMode
-                 * @default "standard"
-                 */
                 rowRenderingMode: 'standard'
             }
         };

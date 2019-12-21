@@ -75,20 +75,11 @@ exports.DataController = Class.inherit((function() {
             * @type object
             */
             var infoItem = {
-                /**
-                * @name dxPivotGridPivotGridCell.type
-                * @acceptValues "D" | "T" | "GT"
-                * @type string
-                */
                 type: headerItem.type,
                 text: headerItem.text
             };
 
             if(headerItem.path) {
-                /**
-                * @name dxPivotGridPivotGridCell.path
-                * @type Array<string, number, Date>
-                */
                 infoItem.path = headerItem.path;
             }
             if(headerItem.width) {
@@ -108,10 +99,6 @@ exports.DataController = Class.inherit((function() {
                 infoItem.dataIndex = headerItem.dataIndex;
             }
             if(isDefined(headerItem.expanded)) {
-                /**
-                * @name dxPivotGridPivotGridCell.expanded
-                * @type boolean
-                */
                 infoItem.expanded = headerItem.expanded;
             }
             if(breadth > 1) {
@@ -502,45 +489,16 @@ exports.DataController = Class.inherit((function() {
                     cellValue = cell[dataIndex];
 
                     row[columnIndex] = {
-                        /**
-                        * @name dxPivotGridPivotGridCell.text
-                        * @type string
-                        */
                         text: formatCellValue(cellValue, dataField, errorText),
-                        /**
-                       * @name dxPivotGridPivotGridCell.value
-                       */
                         value: cellValue,
                         format: dataField.format,
                         dataType: dataField.dataType,
 
-                        /**
-                        * @name dxPivotGridPivotGridCell.columnType
-                        * @acceptValues "D" | "T" | "GT"
-                        * @type string
-                        */
                         columnType: columnInfo.type,
 
-                        /**
-                        * @name dxPivotGridPivotGridCell.rowType
-                        * @acceptValues "D" | "T" | "GT"
-                        * @type string
-                        */
                         rowType: rowInfo.type,
-                        /**
-                       * @name dxPivotGridPivotGridCell.rowPath
-                       * @type Array<string, number, Date>
-                       */
                         rowPath: rowInfo.path || [],
-                        /**
-                        * @name dxPivotGridPivotGridCell.columnPath
-                        * @type Array<string, number, Date>
-                        */
                         columnPath: columnInfo.path || [],
-                        /**
-                        * @name dxPivotGridPivotGridCell.dataIndex
-                        * @type number
-                        */
                         dataIndex: dataIndex
                     };
 

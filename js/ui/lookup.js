@@ -45,13 +45,6 @@ var MATERIAL_LOOKUP_LIST_ITEMS_COUNT = 4;
 var MATERIAL_LOOKUP_LIST_PADDING = 8;
 
 
-/**
-* @name dxLookup
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/lookup
-* @export default
-*/
 var Lookup = DropDownList.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
@@ -67,144 +60,41 @@ var Lookup = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxLookupOptions.title
-            * @type string
-            * @default ""
-            */
             title: '',
 
-            /**
-            * @name dxLookupOptions.titleTemplate
-            * @type template|function
-            * @default "title"
-            * @type_function_param1 titleElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             titleTemplate: 'title',
 
-            /**
-            * @name dxLookupOptions.onTitleRendered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 titleElement:dxElement
-            * @action
-            */
             onTitleRendered: null,
 
-            /**
-            * @name dxLookupOptions.placeholder
-            * @type string
-            * @default "Select"
-            */
             placeholder: messageLocalization.format('Select'),
 
-            /**
-            * @name dxLookupOptions.searchPlaceholder
-            * @type string
-            * @default "Search"
-            */
             searchPlaceholder: messageLocalization.format('Search'),
 
-            /**
-            * @name dxLookupOptions.searchEnabled
-            * @type boolean
-            * @default true
-            */
             searchEnabled: true,
 
-            /**
-            * @name dxLookupOptions.cleanSearchOnOpening
-            * @type boolean
-            * @default true
-            */
             cleanSearchOnOpening: true,
 
-            /**
-            * @name dxLookupOptions.fullScreen
-            * @type boolean
-            * @default false
-            */
             fullScreen: false,
 
-            /**
-            * @name dxLookupOptions.showCancelButton
-            * @type boolean
-            * @default true
-            */
             showCancelButton: true,
 
-            /**
-            * @name dxLookupOptions.cancelButtonText
-            * @type string
-            * @default "Cancel"
-            */
 
-            /**
-            * @name dxLookupOptions.showClearButton
-            * @type boolean
-            * @default false
-            */
             showClearButton: false,
 
-            /**
-            * @name dxLookupOptions.clearButtonText
-            * @type string
-            * @default "Clear"
-            */
             clearButtonText: messageLocalization.format('Clear'),
 
-            /**
-            * @name dxLookupOptions.applyButtonText
-            * @type string
-            * @default "OK"
-            */
             applyButtonText: messageLocalization.format('OK'),
 
-            /**
-             * @name dxLookupOptions.popupWidth
-             * @type number|string|function
-             * @default function() {return $(window).width() * 0.8 }
-             * @type_function_return number|string
-             */
             popupWidth: function() { return $(window).width() * 0.8; },
 
-            /**
-             * @name dxLookupOptions.popupHeight
-             * @type number|string|function
-             * @default function() { return $(window).height() * 0.8 }
-             * @type_function_return number|string
-             */
             popupHeight: function() { return $(window).height() * 0.8; },
 
-            /**
-            * @name dxLookupOptions.shading
-            * @type boolean
-            * @default true
-            */
             shading: true,
 
-            /**
-            * @name dxLookupOptions.closeOnOutsideClick
-            * @type boolean|function
-            * @default false
-            * @type_function_return boolean
-            */
             closeOnOutsideClick: false,
 
-            /**
-            * @name dxLookupOptions.position
-            * @type positionConfig
-            * @default undefined
-            */
             position: undefined,
 
-            /**
-            * @name dxLookupOptions.animation
-            * @type object
-            * @default undefined
-            */
             animation: {
                 /**
                 * @name dxLookupOptions.animation.show
@@ -218,115 +108,32 @@ var Lookup = DropDownList.inherit({
                 */
             },
 
-            /**
-            * @name dxLookupOptions.pullRefreshEnabled
-            * @type boolean
-            * @default false
-            */
             pullRefreshEnabled: false,
 
-            /**
-            * @name dxLookupOptions.useNativeScrolling
-            * @type boolean
-            * @default true
-            */
             useNativeScrolling: true,
 
-            /**
-            * @name dxLookupOptions.pullingDownText
-            * @type string
-            * @default "Pull down to refresh..."
-            */
             pullingDownText: messageLocalization.format('dxList-pullingDownText'),
 
-            /**
-            * @name dxLookupOptions.pulledDownText
-            * @type string
-            * @default "Release to refresh..."
-            */
             pulledDownText: messageLocalization.format('dxList-pulledDownText'),
 
-            /**
-            * @name dxLookupOptions.refreshingText
-            * @type string
-            * @default "Refreshing..."
-            */
             refreshingText: messageLocalization.format('dxList-refreshingText'),
 
-            /**
-            * @name dxLookupOptions.pageLoadingText
-            * @type string
-            * @default "Loading..."
-            */
             pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
 
-            /**
-            * @name dxLookupOptions.onScroll
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 scrollOffset:object
-            * @type_function_param1_field7 reachedLeft:boolean
-            * @type_function_param1_field8 reachedRight:boolean
-            * @type_function_param1_field9 reachedTop:boolean
-            * @type_function_param1_field10 reachedBottom:boolean
-            * @action
-            */
             onScroll: null,
 
-            /**
-            * @name dxLookupOptions.onPullRefresh
-            * @extends Action
-            * @action
-            */
             onPullRefresh: null,
 
-            /**
-            * @name dxLookupOptions.onPageLoading
-            * @extends Action
-            * @action
-            */
             onPageLoading: null,
 
-            /**
-            * @name dxLookupOptions.pageLoadMode
-            * @type Enums.ListPageLoadMode
-            * @default "scrollBottom"
-            */
             pageLoadMode: 'scrollBottom',
 
-            /**
-            * @name dxLookupOptions.nextButtonText
-            * @type string
-            * @default "More"
-            */
             nextButtonText: messageLocalization.format('dxList-nextButtonText'),
 
-            /**
-            * @name dxLookupOptions.grouped
-            * @type boolean
-            * @default false
-            */
             grouped: false,
 
-            /**
-            * @name dxLookupOptions.groupTemplate
-            * @type template|function
-            * @default "group"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             groupTemplate: 'group',
 
-            /**
-            * @name dxLookupOptions.usePopover
-            * @type boolean
-            * @default false
-            */
             usePopover: false,
 
             /**
@@ -345,40 +152,10 @@ var Lookup = DropDownList.inherit({
              */
             showDropDownButton: false,
 
-            /**
-            * @name dxLookupOptions.showPopupTitle
-            * @type boolean
-            * @default true
-            */
             showPopupTitle: true,
 
-            /**
-            * @name dxLookupOptions.focusStateEnabled
-            * @type boolean
-            * @default false
-            */
             focusStateEnabled: false,
 
-            /**
-            * @name dxLookupOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
-
-            /**
-            * @name dxLookupOptions.fieldTemplate
-            * @type template|function
-            * @default null
-            * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
 
             /**
             * @name dxLookupOptions.acceptCustomValue
@@ -455,11 +232,6 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions.buttons
             * @hidden
             */
-            /**
-            * @name dxLookupOptions.applyValueMode
-            * @type Enums.EditorApplyValueMode
-            * @hidden false
-            */
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
@@ -475,11 +247,6 @@ var Lookup = DropDownList.inherit({
                     return !support.nativeScrolling;
                 },
                 options: {
-                    /**
-                    * @name dxLookupOptions.useNativeScrolling
-                    * @default false @for desktop
-                    * @default true @for Mac
-                    */
                     useNativeScrolling: false
                 }
             },
@@ -488,35 +255,19 @@ var Lookup = DropDownList.inherit({
                     return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
-                    /**
-                    * @name dxLookupOptions.usePopover
-                    * @default true @for desktop|iOS
-                    */
                     usePopover: true,
-                    /**
-                    * @name dxLookupOptions.popupHeight
-                    * @default 'auto' @for desktop|iPad
-                    */
                     popupHeight: 'auto'
                 }
             },
             {
                 device: { platform: 'ios', phone: true },
                 options: {
-                    /**
-                    * @name dxLookupOptions.fullScreen
-                    * @default true @for iPhone
-                    */
                     fullScreen: true
                 }
             },
             {
                 device: { platform: 'ios', tablet: true },
                 options: {
-                    /**
-                    * @name dxLookupOptions.popupWidth
-                    * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } @for iPad
-                    */
                     popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
 
                     popupHeight: 'auto',
@@ -530,11 +281,6 @@ var Lookup = DropDownList.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxLookupOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -544,56 +290,19 @@ var Lookup = DropDownList.inherit({
                 },
                 options: {
 
-                    /**
-                    * @name dxLookupOptions.usePopover
-                    * @publicName usePopover
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     usePopover: false,
 
-                    /**
-                    * @name dxLookupOptions.closeOnOutsideClick
-                    * @publicName closeOnOutsideClick
-                    * @type boolean|function
-                    * @default true @for Material
-                    * @type_function_return boolean
-                    */
                     closeOnOutsideClick: true,
 
                     popupWidth: (function() { return $(this.element()).outerWidth(); }).bind(this),
                     popupHeight: (function() { return this._getPopupHeight(MATERIAL_LOOKUP_LIST_ITEMS_COUNT); }).bind(this),
 
-                    /**
-                    * @name dxLookupOptions.searchEnabled
-                    * @publicName searchEnabled
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     searchEnabled: false,
 
-                    /**
-                    * @name dxLookupOptions.showCancelButton
-                    * @publicName showCancelButton
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     showCancelButton: false,
 
-                    /**
-                    * @name dxLookupOptions.showPopupTitle
-                    * @publicName showPopupTitle
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     showPopupTitle: false,
 
-                    /**
-                    * @name dxLookupOptions.position
-                    * @publicName position
-                    * @type positionConfig
-                    * @default { my: 'left top', at: 'left top', of: lookupContainer } @for Material
-                    */
                     position: {
                         my: 'left top',
                         at: 'left top',

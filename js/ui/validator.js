@@ -15,13 +15,6 @@ const VALIDATOR_CLASS = 'dx-validator',
     VALIDATION_STATUS_INVALID = 'invalid',
     VALIDATION_STATUS_PENDING = 'pending';
 
-/**
-* @name dxValidator
-* @inherits DOMComponent
-* @extension
-* @module ui/validator
-* @export default
-*/
 const Validator = DOMComponent.inherit({
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
@@ -30,25 +23,8 @@ const Validator = DOMComponent.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-            * @name dxValidatorOptions.validationRules
-            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            */
             validationRules: []
-            /**
-            * @name dxValidatorOptions.validationGroup
-            * @type string
-            * @ref
-            */
-            /**
-            * @name dxValidatorOptions.name
-            * @type string
-            */
 
-            /**
-            * @name dxValidatorOptions.adapter
-            * @type Object
-            */
             /**
             * @name dxValidatorOptions.adapter.getValue
             * @type function
@@ -74,19 +50,6 @@ const Validator = DOMComponent.inherit({
             * @type function
             */
 
-            /**
-            * @name dxValidatorOptions.onValidated
-            * @type function(validatedInfo)
-            * @type_function_param1 validatedInfo:Object
-            * @type_function_param1_field1 name:string
-            * @type_function_param1_field2 isValid:boolean
-            * @type_function_param1_field3 value:Object
-            * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-            * @type_function_param1_field6 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-            * @type_function_param1_field7 status:Enums.ValidationStatus
-            * @action
-            */
 
             /**
             * @name dxValidatorOptions.rtlEnabled
@@ -233,11 +196,6 @@ const Validator = DOMComponent.inherit({
         delete this._validationRules;
     },
 
-    /**
-    * @name dxValidatorMethods.validate
-    * @publicName validate()
-    * @return dxValidatorResult
-    */
     validate(args) {
         const adapter = this.option('adapter'),
             name = this.option('name'),
@@ -268,10 +226,6 @@ const Validator = DOMComponent.inherit({
         return extend({}, this._validationInfo.result);
     },
 
-    /**
-    * @name dxValidatorMethods.reset
-    * @publicName reset()
-    */
     reset() {
         const adapter = this.option('adapter'),
             result = {
@@ -328,10 +282,6 @@ const Validator = DOMComponent.inherit({
             }
         }
     },
-    /**
-    * @name dxValidatorMethods.focus
-    * @publicName focus()
-    */
     focus() {
         const adapter = this.option('adapter');
         adapter && adapter.focus && adapter.focus();

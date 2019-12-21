@@ -240,87 +240,8 @@ var EditorFactory = modules.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-              * @name dxDataGridOptions.onEditorPreparing
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:dxElement
-              * @type_function_param1_field13 readOnly:boolean
-              * @type_function_param1_field14 editorName:string
-              * @type_function_param1_field15 editorOptions:object
-              * @type_function_param1_field16 dataField:string
-              * @type_function_param1_field17 row:dxDataGridRowObject
-              * @extends Action
-              * @action
-             */
 
-            /**
-              * @name dxTreeListOptions.onEditorPreparing
-              * @type function(e)
-              * @type_function_param1 e:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:dxElement
-              * @type_function_param1_field13 readOnly:boolean
-              * @type_function_param1_field14 editorName:string
-              * @type_function_param1_field15 editorOptions:object
-              * @type_function_param1_field16 dataField:string
-              * @type_function_param1_field17 row:dxTreeListRowObject
-              * @extends Action
-              * @action
-             */
 
-            /**
-              * @name dxDataGridOptions.onEditorPrepared
-              * @type function(options)
-              * @type_function_param1 options:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:dxElement
-              * @type_function_param1_field12 readOnly:boolean
-              * @type_function_param1_field13 dataField:string
-              * @type_function_param1_field14 row:dxDataGridRowObject
-              * @extends Action
-              * @action
-             */
-
-            /**
-              * @name dxTreeListOptions.onEditorPrepared
-              * @type function(options)
-              * @type_function_param1 options:object
-              * @type_function_param1_field4 parentType:string
-              * @type_function_param1_field5 value:any
-              * @type_function_param1_field6 setValue(newValue, newText):any
-              * @type_function_param1_field7 updateValueTimeout:number
-              * @type_function_param1_field8 width:number
-              * @type_function_param1_field9 disabled:boolean
-              * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:dxElement
-              * @type_function_param1_field12 readOnly:boolean
-              * @type_function_param1_field13 dataField:string
-              * @type_function_param1_field14 row:dxTreeListRowObject
-              * @extends Action
-              * @action
-             */
         };
     },
     controllers: {

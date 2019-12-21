@@ -141,11 +141,6 @@ var ErrorHandlingController = modules.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-            * @name GridBaseOptions.errorRowEnabled
-            * @type boolean
-            * @default true
-            */
             errorRowEnabled: true
         };
     },

@@ -57,12 +57,6 @@ let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 
 const isFormDataSupported = () => !!window.FormData;
 
-/**
-* @name dxFileUploader
-* @inherits Editor
-* @module ui/file_uploader
-* @export default
-*/
 class FileUploader extends Editor {
 
     _supportedKeys() {
@@ -88,240 +82,61 @@ class FileUploader extends Editor {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxFileUploaderOptions.chunkSize
-            * @type number
-            * @default 0
-            */
             chunkSize: 0,
-            /**
-            * @name dxFileUploaderOptions.value
-            * @type Array<File>
-            * @default []
-            */
             value: [],
 
-            /**
-            * @name dxFileUploaderOptions.selectButtonText
-            * @type string
-            * @default "Select File"
-            */
             selectButtonText: messageLocalization.format('dxFileUploader-selectFile'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadButtonText
-            * @type string
-            * @default "Upload"
-            */
             uploadButtonText: messageLocalization.format('dxFileUploader-upload'),
 
-            /**
-            * @name dxFileUploaderOptions.labelText
-            * @type string
-            * @default "or Drop file here"
-            */
             labelText: messageLocalization.format('dxFileUploader-dropFile'),
 
-            /**
-            * @name dxFileUploaderOptions.name
-            * @type string
-            * @default "files[]"
-            */
             name: 'files[]',
 
-            /**
-            * @name dxFileUploaderOptions.multiple
-            * @type boolean
-            * @default false
-            */
             multiple: false,
 
-            /**
-            * @name dxFileUploaderOptions.accept
-            * @type string
-            * @default ""
-            */
             accept: '',
 
-            /**
-            * @name dxFileUploaderOptions.uploadUrl
-            * @type string
-            * @default "/"
-            */
             uploadUrl: '/',
 
-            /**
-            * @name dxFileUploaderOptions.allowCanceling
-            * @type boolean
-            * @default true
-            */
             allowCanceling: true,
 
-            /**
-            * @name dxFileUploaderOptions.showFileList
-            * @type boolean
-            * @default true
-            */
             showFileList: true,
 
-            /**
-            * @name dxFileUploaderOptions.progress
-            * @type number
-            * @default 0
-            */
             progress: 0,
 
-            /**
-            * @name dxFileUploaderOptions.readyToUploadMessage
-            * @type string
-            * @default "Ready to upload"
-            */
             readyToUploadMessage: messageLocalization.format('dxFileUploader-readyToUpload'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadedMessage
-            * @type string
-            * @default "Uploaded"
-            */
             uploadedMessage: messageLocalization.format('dxFileUploader-uploaded'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadFailedMessage
-            * @type string
-            * @default "Upload failed"
-            */
             uploadFailedMessage: messageLocalization.format('dxFileUploader-uploadFailedMessage'),
 
-            /**
-            * @name dxFileUploaderOptions.uploadMode
-            * @type Enums.FileUploadMode
-            * @default "instantly"
-            */
             uploadMode: 'instantly',
 
-            /**
-            * @name dxFileUploaderOptions.uploadMethod
-            * @type Enums.UploadHttpMethod
-            * @default "POST"
-            */
             uploadMethod: 'POST',
 
-            /**
-            * @name dxFileUploaderOptions.uploadHeaders
-            * @type object
-            * @default {}
-            */
             uploadHeaders: {},
 
-            /**
-            * @name dxFileUploaderOptions.onUploadStarted
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploadStarted: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploaded
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploaded: null,
 
-            /**
-            * @name dxFileUploaderOptions.onProgress
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 segmentSize:Number
-            * @type_function_param1_field6 bytesLoaded:Number
-            * @type_function_param1_field7 bytesTotal:Number
-            * @type_function_param1_field8 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field9 event:event
-            * @type_function_param1_field10 request:XMLHttpRequest
-            * @action
-            */
             onProgress: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploadError
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @type_function_param1_field8 error:any
-            * @action
-            */
             onUploadError: null,
 
-            /**
-            * @name dxFileUploaderOptions.onUploadAborted
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 file:File
-            * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field6 event:event
-            * @type_function_param1_field7 request:XMLHttpRequest
-            * @action
-            */
             onUploadAborted: null,
 
-            /**
-            * @name dxFileUploaderOptions.allowedFileExtensions
-            * @type Array<string>
-            * @default []
-            */
             allowedFileExtensions: [],
 
-            /**
-            * @name dxFileUploaderOptions.maxFileSize
-            * @type number
-            * @default 0
-            */
             maxFileSize: 0,
 
-            /**
-            * @name dxFileUploaderOptions.minFileSize
-            * @type number
-            * @default 0
-            */
             minFileSize: 0,
 
-            /**
-            * @name dxFileUploaderOptions.invalidFileExtensionMessage
-            * @type string
-            * @default "File type is not allowed"
-            */
             invalidFileExtensionMessage: messageLocalization.format('dxFileUploader-invalidFileExtension'),
 
-            /**
-            * @name dxFileUploaderOptions.invalidMaxFileSizeMessage
-            * @type string
-            * @default "File is too large"
-            */
             invalidMaxFileSizeMessage: messageLocalization.format('dxFileUploader-invalidMaxFileSize'),
 
-            /**
-            * @name dxFileUploaderOptions.invalidMinFileSizeMessage
-            * @type string
-            * @default "File is too small"
-            */
             invalidMinFileSizeMessage: messageLocalization.format('dxFileUploader-invalidMinFileSize'),
 
 
@@ -339,53 +154,11 @@ class FileUploader extends Editor {
             */
             validationMessageMode: 'always',
 
-            /**
-            * @name dxFileUploaderOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:Array<File>
-            * @type_function_param1_field5 previousValue:Array<File>
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
 
-            /**
-            * @name dxFileUploaderOptions.uploadFile
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 progressCallback:Function
-            * @type_function_return Promise<any>|any
-            */
             uploadFile: null,
 
-            /**
-            * @name dxFileUploaderOptions.uploadChunk
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 uploadInfo:object
-            * @type_function_param2_field1 bytesUploaded:Number
-            * @type_function_param2_field2 chunkCount:Number
-            * @type_function_param2_field3 customData:object
-            * @type_function_param2_field4 chunkBlob:Blob
-            * @type_function_param2_field5 chunkIndex:Number
-            * @type_function_return Promise<any>|any
-            */
             uploadChunk: null,
 
-            /**
-            * @name dxFileUploaderOptions.abortUpload
-            * @type function
-            * @type_function_param1 file:File
-            * @type_function_param2 uploadInfo:object
-            * @type_function_param2_field1 bytesUploaded:Number
-            * @type_function_param2_field2 chunkCount:Number
-            * @type_function_param2_field3 customData:object
-            * @type_function_param2_field4 chunkBlob:Blob
-            * @type_function_param2_field5 chunkIndex:Number
-            * @type_function_return Promise<any>|any
-            */
             abortUpload: null,
 
             validationMessageOffset: { h: 0, v: 0 },
@@ -402,11 +175,6 @@ class FileUploader extends Editor {
             {
                 device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
                 options: {
-                    /**
-                    * @name dxFileUploaderOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },

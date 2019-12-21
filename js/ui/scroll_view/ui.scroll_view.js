@@ -49,46 +49,16 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxScrollViewOptions.pullingDownText
-            * @type string
-            * @default "Pull down to refresh..."
-            */
             pullingDownText: messageLocalization.format('dxScrollView-pullingDownText'),
 
-            /**
-            * @name dxScrollViewOptions.pulledDownText
-            * @type string
-            * @default "Release to refresh..."
-            */
             pulledDownText: messageLocalization.format('dxScrollView-pulledDownText'),
 
-            /**
-            * @name dxScrollViewOptions.refreshingText
-            * @type string
-            * @default "Refreshing..."
-            */
             refreshingText: messageLocalization.format('dxScrollView-refreshingText'),
 
-            /**
-            * @name dxScrollViewOptions.reachBottomText
-            * @type string
-            * @default "Loading..."
-            */
             reachBottomText: messageLocalization.format('dxScrollView-reachBottomText'),
 
-            /**
-            * @name dxScrollViewOptions.onPullDown
-            * @extends Action
-            * @action
-            */
             onPullDown: null,
 
-            /**
-            * @name dxScrollViewOptions.onReachBottom
-            * @extends Action
-            * @action
-            */
             onReachBottom: null,
 
             refreshStrategy: 'pullDown'
@@ -111,32 +81,12 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name dxScrollViewOptions.pullingDownText
-                    * @type string
-                    * @default "" @for Material
-                    */
                     pullingDownText: '',
 
-                    /**
-                     * @name dxScrollViewOptions.pulledDownText
-                     * @type string
-                     * @default "" @for Material
-                     */
                     pulledDownText: '',
 
-                    /**
-                     * @name dxScrollViewOptions.refreshingText
-                     * @type string
-                     * @default "" @for Material
-                     */
                     refreshingText: '',
 
-                    /**
-                     * @name dxScrollViewOptions.reachBottomText
-                     * @type string
-                     * @default "" @for Material
-                     */
                     reachBottomText: ''
                 }
             }
@@ -330,12 +280,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return getPublicElement(this._$content.children().eq(1));
     },
 
-    /**
-    * @name dxScrollViewMethods.release
-    * @publicName release(preventScrollBottom)
-    * @param1 preventScrollBottom:boolean
-    * @return Promise<void>
-    */
     release: function(preventReachBottom) {
         if(preventReachBottom !== undefined) {
             this.toggleLoading(!preventReachBottom);
@@ -363,10 +307,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return $(this.content()).height() > this._$container.height();
     },
 
-    /**
-    * @name dxScrollViewMethods.refresh
-    * @publicName refresh()
-    */
     refresh: function() {
         if(!this.hasActionSubscription('onPullDown')) {
             return;

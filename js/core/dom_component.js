@@ -20,63 +20,16 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 const VISIBILITY_CHANGE_CLASS = 'dx-visibility-change-handler';
 const VISIBILITY_CHANGE_EVENTNAMESPACE = 'VisibilityChange';
 
-/**
- * @name DOMComponent
- * @section uiWidgets
- * @type object
- * @inherits Component
- * @namespace DevExpress
- * @module core/dom_component
- * @export default
- * @hidden
- */
 var DOMComponent = Component.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name DOMComponentOptions.onOptionChanged
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 name:string
-            * @type_function_param1_field5 fullName:string
-            * @type_function_param1_field6 value:any
-            * @action
-            * @extends Action
-            */
-            /**
-            * @name DOMComponentOptions.onDisposing
-            * @action
-            * @extends Action
-            */
 
-            /**
-            * @name DOMComponentOptions.width
-            * @type number|string|function
-            * @default undefined
-            * @type_function_return number|string
-            */
             width: undefined,
 
-            /**
-            * @name DOMComponentOptions.height
-            * @type number|string|function
-            * @default undefined
-            * @type_function_return number|string
-            */
             height: undefined,
 
-            /**
-            * @name DOMComponentOptions.rtlEnabled
-            * @type boolean
-            * @default false
-            */
             rtlEnabled: config().rtlEnabled,
 
-            /**
-             * @name DOMComponentOptions.elementAttr
-             * @type object
-             * @default {}
-             */
             elementAttr: {},
 
             disabled: false,
@@ -424,19 +377,10 @@ var DOMComponent = Component.inherit({
         return this._$element;
     },
 
-    /**
-    * @name DOMComponentMethods.element
-    * @publicName element()
-    * @return dxElement
-    */
     element: function() {
         return getPublicElement(this.$element());
     },
 
-    /**
-    * @name DOMComponentMethods.dispose
-    * @publicName dispose()
-    */
     dispose: function() {
         var element = this.$element().get(0);
         dataUtils.cleanDataRecursive(element, true);
@@ -455,27 +399,10 @@ var DOMComponent = Component.inherit({
 
 });
 
-/**
-* @name DOMComponentMethods.getInstance
-* @static
-* @section uiWidgets
-* @publicName getInstance(element)
-* @param1 element:Node|JQuery
-* @return DOMComponent
-*/
 DOMComponent.getInstance = function(element) {
     return publicComponentUtils.getInstanceByElement($(element), this);
 };
 
-/**
-* @name DOMComponentMethods.defaultOptions
-* @static
-* @section uiWidgets
-* @publicName defaultOptions(rule)
-* @param1 rule:Object
-* @param1_field1 device:Device|Array<Device>|function
-* @param1_field2 options:Object
-*/
 DOMComponent.defaultOptions = function(rule) {
     this._classCustomRules = this._classCustomRules || [];
     this._classCustomRules.push(rule);

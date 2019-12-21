@@ -35,10 +35,6 @@ function parseValue(column, text) {
 module.exports = {
     defaultOptions: function() {
         return {
-        /**
-         * @name GridBaseOptions.searchPanel
-         * @type object
-         */
             searchPanel: {
                 /**
                  * @name GridBaseOptions.searchPanel.visible
@@ -144,11 +140,6 @@ module.exports = {
                         return combineFilters([filter, searchFilter]);
                     },
 
-                    /**
-                     * @name GridBaseMethods.searchByText
-                     * @publicName searchByText(text)
-                     * @param1 text:string
-                     */
                     searchByText: function(text) {
                         this.option('searchPanel.text', text);
                     },

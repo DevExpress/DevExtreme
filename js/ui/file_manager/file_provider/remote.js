@@ -13,28 +13,12 @@ import { compileGetter } from '../../../core/utils/data';
 const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = 'chunk';
 
-/**
-* @name RemoteFileProvider
-* @inherits FileProvider
-* @type object
-* @module ui/file_manager/file_provider/remote
-* @namespace DevExpress.fileProvider
-* @export default
-*/
 class RemoteFileProvider extends FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, { });
         super(options);
-        /**
-         * @name RemoteFileProviderOptions.endpointUrl
-         * @type string
-         */
         this._endpointUrl = options.endpointUrl;
-        /**
-         * @name RemoteFileProviderOptions.hasSubDirectoriesExpr
-         * @type string|function(fileItem)
-         */
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || 'hasSubDirectories');
     }
 

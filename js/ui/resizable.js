@@ -38,23 +38,11 @@ var SIDE_BORDER_WIDTH_STYLES = {
     'right': 'borderRightWidth',
     'bottom': 'borderBottomWidth'
 };
-/**
-* @name dxResizable
-* @inherits DOMComponent
-* @hasTranscludedContent
-* @module ui/resizable
-* @export default
-*/
 var Resizable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-            * @name dxResizableOptions.handles
-            * @type Enums.ResizeHandle | string
-            * @default "all"
-            */
             handles: 'all',
 
             step: '1',
@@ -70,80 +58,19 @@ var Resizable = DOMComponent.inherit({
 
             area: undefined,
 
-            /**
-            * @name dxResizableOptions.minWidth
-            * @type number
-            * @default 30
-            */
             minWidth: 30,
 
-            /**
-            * @name dxResizableOptions.maxWidth
-            * @type number
-            * @default Infinity
-            */
             maxWidth: Infinity,
 
-            /**
-            * @name dxResizableOptions.minHeight
-            * @type number
-            * @default 30
-            */
             minHeight: 30,
 
-            /**
-            * @name dxResizableOptions.maxHeight
-            * @type number
-            * @default Infinity
-            */
             maxHeight: Infinity,
 
-            /**
-            * @name dxResizableOptions.onResizeStart
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 width:number
-            * @type_function_param1_field7 height:number
-            * @action
-            */
             onResizeStart: null,
 
-            /**
-            * @name dxResizableOptions.onResize
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 width:number
-            * @type_function_param1_field7 height:number
-            * @action
-            */
             onResize: null,
 
-            /**
-            * @name dxResizableOptions.onResizeEnd
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 width:number
-            * @type_function_param1_field7 height:number
-            * @action
-            */
             onResizeEnd: null,
-            /**
-             * @name dxResizableOptions.width
-             * @fires dxResizableOptions.onResize
-             */
-            /**
-             * @name dxResizableOptions.height
-             * @fires dxResizableOptions.onResize
-             */
 
             roundStepValue: true
         });

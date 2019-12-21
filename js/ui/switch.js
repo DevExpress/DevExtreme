@@ -25,13 +25,6 @@ var SWITCH_CLASS = 'dx-switch',
 
     SWITCH_ANIMATION_DURATION = 100;
 
-/**
-* @name dxSwitch
-* @isEditor
-* @inherits Editor
-* @module ui/switch
-* @export default
-*/
 var Switch = Editor.inherit({
     _supportedKeys: function() {
         var isRTL = this.option('rtlEnabled');
@@ -55,49 +48,19 @@ var Switch = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxSwitchOptions.hoverStateEnabled
-            * @type boolean
-            * @default true
-            */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxSwitchOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
-            /**
-            * @name dxSwitchOptions.switchedOnText
-            * @type string
-            * @default "ON"
-            */
             switchedOnText: this._getLocalizationMessage('On'),
 
-            /**
-            * @name dxSwitchOptions.switchedOffText
-            * @type string
-            * @default "OFF"
-            */
             switchedOffText: this._getLocalizationMessage('Off'),
 
-            /**
-            * @name dxSwitchOptions.value
-            * @type boolean
-            * @default false
-            */
             value: false,
 
             useInkRipple: false,
             _animateHandle: true
 
-            /**
-            * @name dxSwitchOptions.name
-            * @type string
-            * @hidden false
-            */
         });
     },
 
@@ -110,11 +73,6 @@ var Switch = Editor.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxSwitchOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             },
@@ -133,18 +91,8 @@ var Switch = Editor.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            /**
-             * @name dxSwitchOptions.onText
-             * @type string
-             * @deprecated dxSwitchOptions.switchedOnText
-             */
             onText: { since: '18.2', alias: 'switchedOnText' },
 
-            /**
-             * @name dxSwitchOptions.offText
-             * @type string
-             * @deprecated dxSwitchOptions.switchedOffText
-             */
             offText: { since: '18.2', alias: 'switchedOffText' }
         });
     },

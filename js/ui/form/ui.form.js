@@ -79,25 +79,9 @@ const Form = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             formID: 'dx-' + new Guid(),
-            /**
-             * @name dxFormOptions.formData
-             * @type object
-             * @default {}
-             * @fires dxFormOptions.onFieldDataChanged
-             */
             formData: {},
-            /**
-             * @name dxFormOptions.colCount
-             * @type number|Enums.Mode
-             * @default 1
-             */
             colCount: 1,
 
-            /**
-            * @name dxFormOptions.screenByWidth
-            * @type function
-            * @default null
-            */
             screenByWidth: null,
 
             /**
@@ -108,149 +92,26 @@ const Form = Widget.inherit({
             * @name ColCountResponsible
             * @hidden
             */
-            /**
-            * @name ColCountResponsible.xs
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.sm
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.md
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name ColCountResponsible.lg
-            * @type number
-            * @default undefined
-            */
 
-            /**
-            * @name dxFormOptions.colCountByScreen
-            * @extends ColCountResponsibleType
-            * @inherits ColCountResponsible
-            * @default undefined
-            */
             colCountByScreen: undefined,
 
-            /**
-             * @name dxFormOptions.labelLocation
-             * @type Enums.FormLabelLocation
-             * @default "left"
-             */
             labelLocation: 'left',
-            /**
-             * @name dxFormOptions.readOnly
-             * @type boolean
-             * @default false
-             */
             readOnly: false,
-            /**
-             * @name dxFormOptions.onFieldDataChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 dataField:string
-             * @type_function_param1_field5 value:object
-             * @action
-             */
             onFieldDataChanged: null,
-            /**
-             * @name dxFormOptions.customizeItem
-             * @type function
-             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
-             */
             customizeItem: null,
-            /**
-             * @name dxFormOptions.onEditorEnterKey
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 dataField:string
-             * @action
-             */
             onEditorEnterKey: null,
-            /**
-             * @name dxFormOptions.minColWidth
-             * @type number
-             * @default 200
-             */
             minColWidth: 200,
-            /**
-             * @name dxFormOptions.alignItemLabels
-             * @type boolean
-             * @default true
-             */
             alignItemLabels: true,
-            /**
-             * @name dxFormOptions.alignItemLabelsInAllGroups
-             * @type boolean
-             * @default true
-             */
             alignItemLabelsInAllGroups: true,
-            /**
-             * @name dxFormOptions.showColonAfterLabel
-             * @type boolean
-             * @default true
-             */
             showColonAfterLabel: true,
-            /**
-             * @name dxFormOptions.showRequiredMark
-             * @type boolean
-             * @default true
-             */
             showRequiredMark: true,
-            /**
-             * @name dxFormOptions.showOptionalMark
-             * @type boolean
-             * @default false
-             */
             showOptionalMark: false,
-            /**
-             * @name dxFormOptions.requiredMark
-             * @type string
-             * @default "*"
-             */
             requiredMark: '*',
-            /**
-             * @name dxFormOptions.optionalMark
-             * @type string
-             * @default "optional"
-             */
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
-            /**
-            * @name dxFormOptions.requiredMessage
-            * @type string
-            * @default "{0} is required"
-            */
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage'),
-            /**
-             * @name dxFormOptions.showValidationSummary
-             * @type boolean
-             * @default false
-             */
             showValidationSummary: false,
-            /**
-             * @name dxFormOptions.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
             items: undefined,
-            /**
-             * @name dxFormOptions.scrollingEnabled
-             * @type boolean
-             * @default false
-             */
             scrollingEnabled: false,
-            /**
-             * @name dxFormOptions.validationGroup
-             * @type string
-             * @default undefined
-             */
             validationGroup: undefined,
             stylingMode: undefined
             /**
@@ -259,67 +120,6 @@ const Form = Widget.inherit({
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormSimpleItem.dataField
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.editorType
-             * @type Enums.FormItemEditorType
-             */
-            /**
-             * @name dxFormSimpleItem.editorOptions
-             * @type object
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormSimpleItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormSimpleItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.template
-             * @type template|function
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxForm
-             * @type_function_param1_field2 dataField:string
-             * @type_function_param1_field3 editorOptions:object
-             * @type_function_param1_field4 editorType:string
-             * @type_function_param1_field5 name:string
-             * @type_function_param2 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-            /**
-             * @name dxFormSimpleItem.label
-             * @type object
-             * @default undefined
-             */
             /**
              * @name dxFormSimpleItem.label.text
              * @type string
@@ -346,137 +146,17 @@ const Form = Widget.inherit({
              * @default "left"
              */
             /**
-             * @name dxFormSimpleItem.helpText
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.isRequired
-             * @type boolean
-             * @default undefined
-             */
-            /**
-             * @name dxFormSimpleItem.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             * @default undefined
-             */
-            /**
             * @name dxFormGroupItem
 			* @publicName GroupItem
             * @section FormItems
             * @type object
             */
             /**
-             * @name dxFormGroupItem.caption
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.colCount
-             * @type number
-             * @default 1
-             */
-            /**
-             * @name dxFormGroupItem.colCountByScreen
-             * @extends ColCountResponsibleType
-             * @inherits ColCountResponsible
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormGroupItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormGroupItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormGroupItem.alignItemLabels
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormGroupItem.template
-             * @type template|function
-             * @type_function_param1 data:object
-             * @type_function_param1_field1 component:dxForm
-             * @type_function_param1_field2 formData:object
-             * @type_function_param2 itemElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
-            /**
-             * @name dxFormGroupItem.items
-             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
-             * @default undefined
-             */
-            /**
             * @name dxFormTabbedItem
 			* @publicName TabbedItem
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormTabbedItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormTabbedItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormTabbedItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabPanelOptions
-             * @type dxTabPanelOptions
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormTabbedItem.tabs
-             * @type Array<Object>
-             * @default undefined
-             */
             /**
              * @name dxFormTabbedItem.tabs.alignItemLabels
              * @type boolean
@@ -541,92 +221,11 @@ const Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormEmptyItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormEmptyItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormEmptyItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormEmptyItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
             * @name dxFormButtonItem
 			* @publicName ButtonItem
             * @section FormItems
             * @type object
             */
-            /**
-             * @name dxFormButtonItem.name
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.colSpan
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.itemType
-             * @type Enums.FormItemType
-             * @default "simple"
-             */
-            /**
-             * @name dxFormButtonItem.visible
-             * @type boolean
-             * @default true
-             */
-            /**
-             * @name dxFormButtonItem.cssClass
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.visibleIndex
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.buttonOptions
-             * @type dxButtonOptions
-             * @default undefined
-             */
-            /**
-             * @name dxFormButtonItem.alignment
-             * @type Enums.HorizontalAlignment
-             * @default "right"
-             * @deprecated dxFormButtonItem.horizontalAlignment
-             */
-            /**
-             * @name dxFormButtonItem.horizontalAlignment
-             * @type Enums.HorizontalAlignment
-             * @default "right"
-             */
-            /**
-             * @name dxFormButtonItem.verticalAlignment
-             * @type Enums.VerticalAlignment
-             * @default "top"
-             */
         });
     },
 
@@ -637,17 +236,7 @@ const Form = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                     * @name dxFormOptions.showColonAfterLabel
-                     * @type boolean
-                     * @default false @for Material
-                     */
                     showColonAfterLabel: false,
-                    /**
-                     * @name dxFormOptions.labelLocation
-                     * @type Enums.FormLabelLocation
-                     * @default "top" @for Material
-                     */
                     labelLocation: 'top'
                 }
             }
@@ -1710,54 +1299,22 @@ const Form = Widget.inherit({
         this.callBase();
     },
 
-    /**
-     * @name dxFormMethods.resetValues
-     * @publicName resetValues()
-     */
     resetValues: function() {
         this._resetValues();
     },
 
-    /**
-     * @name dxFormMethods.updateData
-     * @publicName updateData(dataField, value)
-     * @param1 dataField:string
-     * @param2 value:object
-     */
-    /**
-     * @name dxFormMethods.updateData
-     * @publicName updateData(data)
-     * @param1 data:object
-     */
     updateData: function(data, value) {
         this._updateData(data, value);
     },
 
-    /**
-     * @name dxFormMethods.getEditor
-     * @publicName getEditor(dataField)
-     * @param1 dataField:string
-     * @return Editor | undefined
-     */
     getEditor: function(dataField) {
         return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField) || this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
     },
 
-    /**
-     * @name dxFormMethods.getButton
-     * @publicName getButton(name)
-     * @param1 name:string
-     * @return dxButton | undefined
-     */
     getButton: function(name) {
         return this._itemsRunTimeInfo.findWidgetInstanceByName(name);
     },
 
-    /**
-     * @name dxFormMethods.updateDimensions
-     * @publicName updateDimensions()
-     * @return Promise<void>
-     */
     updateDimensions: function() {
         var that = this,
             deferred = new Deferred();
@@ -1773,25 +1330,6 @@ const Form = Widget.inherit({
         return deferred.promise();
     },
 
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id, option, value)
-     * @param1 id:string
-     * @param2 option:string
-     * @param3 value:any
-     */
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id, options)
-     * @param1 id:string
-     * @param2 options:object
-     */
-    /**
-     * @name dxFormMethods.itemOption
-     * @publicName itemOption(id)
-     * @param1 id:string
-     * @return any
-     */
     itemOption(id, option, value) {
         const items = this._generateItemsFromData(this.option('items'));
         const item = this._getItemByField(id, items);
@@ -1831,11 +1369,6 @@ const Form = Widget.inherit({
             }
         }
     },
-    /**
-     * @name dxFormMethods.validate
-     * @publicName validate()
-     * @return dxValidationGroupResult
-     */
     validate: function() {
         return ValidationEngine.validateGroup(this._getValidationGroup());
     },

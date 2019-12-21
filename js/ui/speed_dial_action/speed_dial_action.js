@@ -11,43 +11,15 @@ const ready = readyCallbacks.add;
 class SpeedDialAction extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxSpeedDialActionOptions.icon
-            * @type string
-            * @default ""
-            */
             icon: '',
 
-            /**
-            * @name dxSpeedDialActionOptions.onClick
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 event:event
-            * @type_function_param1_field2 component:this
-            * @type_function_param1_field3 element:dxElement
-            * @type_function_param1_field4 actionElement:dxElement
-            * @action
-            */
 
             onClick: null,
 
-            /**
-            * @name dxSpeedDialActionOptions.label
-            * @type string
-            * @default ""
-            */
             label: '',
 
-            /**
-            * @name dxSpeedDialActionOptions.visible
-            */
             visible: true,
 
-            /**
-            * @name dxSpeedDialActionOptions.index
-            * @type number
-            * @default 0
-            */
             index: 0,
 
             /**
@@ -66,14 +38,6 @@ class SpeedDialAction extends Widget {
             */
 
 
-            /**
-            * @name dxSpeedDialActionOptions.onContentReady
-            * @type function
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 actionElement:dxElement
-            * @action
-            */
             onContentReady: null,
 
             activeStateEnabled: true,

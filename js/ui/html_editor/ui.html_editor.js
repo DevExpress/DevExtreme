@@ -37,76 +37,15 @@ const HtmlEditor = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxHtmlEditorOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-            * @name dxHtmlEditorOptions.onFocusIn
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 event:event
-            * @action
-            */
-            /**
-            * @name dxHtmlEditorOptions.onFocusOut
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 event:event
-            * @action
-            */
-            /**
-            * @name dxHtmlEditorOptions.name
-            * @type string
-            * @hidden false
-            */
 
-            /**
-            * @name dxHtmlEditorOptions.valueType
-            * @type Enums.HtmlEditorValueType
-            * @default "html"
-            */
             valueType: 'html',
-            /**
-            * @name dxHtmlEditorOptions.placeholder
-            * @type string
-            * @default ""
-            */
             placeholder: '',
-            /**
-            * @name dxHtmlEditorOptions.toolbar
-            * @type dxHtmlEditorToolbar
-            * @default null
-            */
             toolbar: null,
-            /**
-            * @name dxHtmlEditorOptions.variables
-            * @type dxHtmlEditorVariables
-            * @default null
-            */
             variables: null,
-            /**
-            * @name dxHtmlEditorOptions.mediaResizing
-            * @type dxHtmlEditorMediaResizing
-            * @default null
-            */
             mediaResizing: null,
-            /**
-            * @name dxHtmlEditorOptions.mentions
-            * @type Array<dxHtmlEditorMention>
-            * @default null
-            */
             mentions: null,
-            /**
-             * @name dxHtmlEditorOptions.customizeModules
-             * @type function
-             * @type_function_param1 config:object
-             */
             customizeModules: null,
 
             formDialogOptions: null
@@ -115,122 +54,25 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorToolbar
             * @type object
             */
-            /**
-            * @name dxHtmlEditorToolbar.container
-            * @type string|Node|jQuery
-            */
-            /**
-            * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
-            */
 
             /**
             * @name dxHtmlEditorToolbarItem
             * @inherits dxToolbarItem
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.formatName
-            * @type Enums.HtmlEditorToolbarItem|string
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.formatValues
-            * @type Array<string,number,boolean>
-            */
-            /**
-            * @name dxHtmlEditorToolbarItem.location
-            * @default "before"
             */
 
             /**
             * @name dxHtmlEditorVariables
             * @type object
             */
-            /**
-            * @name dxHtmlEditorVariables.dataSource
-            * @type string|Array<string>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxHtmlEditorVariables.escapeChar
-            * @type string|Array<string>
-            * @default ""
-            */
 
             /**
             * @name dxHtmlEditorMediaResizing
             * @type object
             */
-            /**
-            * @name dxHtmlEditorMediaResizing.enabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxHtmlEditorMediaResizing.allowedTargets
-            * @type Array<string>
-            * @default ["images"]
-            */
 
             /**
             * @name dxHtmlEditorMention
             * @type object
-            */
-            /**
-            * @name dxHtmlEditorMention.dataSource
-            * @type Array<string>|DataSource|DataSourceOptions
-            * @default null
-            */
-            /**
-            * @name dxHtmlEditorMention.marker
-            * @type string
-            * @default "@"
-            */
-            /**
-            * @name dxHtmlEditorMention.minSearchLength
-            * @type number
-            * @default 0
-            */
-            /**
-            * @name dxHtmlEditorMention.searchTimeout
-            * @type number
-            * @default 500
-            */
-            /**
-            * @name dxHtmlEditorMention.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
-            /**
-            * @name dxHtmlEditorMention.displayExpr
-            * @type string|function(item)
-            * @default "this"
-            * @type_function_param1 item:object
-            * @type_function_return string
-            */
-            /**
-            * @name dxHtmlEditorMention.searchExpr
-            * @type getter|Array<getter>
-            * @default "this"
-            */
-            /**
-            * @name dxHtmlEditorMention.valueExpr
-            * @type string|function
-            * @default "this"
-            */
-            /**
-            * @name dxHtmlEditorMention.template
-            * @type template|function
-            * @default null
-            * @type_function_param1 mentionData:object
-            * @type_function_param1_field1 marker:string
-            * @type_function_param1_field2 id:string|number
-            * @type_function_param1_field3 value:any
-            * @type_function_param2 contentElement:dxElement
-            * @type_function_return string|Node|jQuery
             */
         });
     },
@@ -674,11 +516,6 @@ const HtmlEditor = Editor.inherit({
         this._contentInitializedCallback.add(callback);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.register
-    * @publicName register(components)
-    * @param1 modules:Object
-    */
     register: function(components) {
         this._getRegistrator().registerModules(components);
 
@@ -687,176 +524,68 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
-    /**
-    * @name dxHtmlEditorMethods.get
-    * @publicName get(componentPath)
-    * @param1 componentPath:string
-    * @return Object
-    */
     get: function(modulePath) {
         return this._getRegistrator().getQuill().import(modulePath);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getQuillInstance
-    * @publicName getQuillInstance()
-    * @return Object
-    */
     getQuillInstance: function() {
         return this._quillInstance;
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getSelection
-    * @publicName getSelection()
-    * @return Object
-    */
     getSelection: function() {
         return this._applyQuillMethod('getSelection');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.setSelection
-    * @publicName setSelection(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     setSelection: function(index, length) {
         this._applyQuillMethod('setSelection', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.format
-    * @publicName format(formatName, formatValue)
-    * @param1 formatName:Enums.HtmlEditorFormat|string
-    * @param2 formatValue:any
-    */
     format: function(formatName, formatValue) {
         this._applyQuillMethod('format', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.formatText
-    * @publicName formatText(index, length, formatName, formatValue)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formatName:Enums.HtmlEditorFormat|string
-    * @param4 formatValue:any
-    */
-    /**
-    * @name dxHtmlEditorMethods.formatText
-    * @publicName formatText(index, length, formats)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formats:object
-    */
     formatText: function(index, length, formatName, formatValue) {
         this._applyQuillMethod('formatText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.formatLine
-    * @publicName formatLine(index, length, formatName, formatValue)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formatName:Enums.HtmlEditorFormat|string
-    * @param4 formatValue:any
-    */
-    /**
-    * @name dxHtmlEditorMethods.formatLine
-    * @publicName formatLine(index, length, formats)
-    * @param1 index:number
-    * @param2 length:number
-    * @param3 formats:object
-    */
     formatLine: function(index, length, formatName, formatValue) {
         this._applyQuillMethod('formatLine', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getFormat
-    * @publicName getFormat(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    * @return Object
-    */
     getFormat: function(index, length) {
         return this._applyQuillMethod('getFormat', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.removeFormat
-    * @publicName removeFormat(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     removeFormat: function(index, length) {
         return this._applyQuillMethod('removeFormat', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.clearHistory
-    * @publicName clearHistory()
-    */
     clearHistory: function() {
         this._applyQuillHistoryMethod('clear');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.undo
-    * @publicName undo()
-    */
     undo: function() {
         this._applyQuillHistoryMethod('undo');
 
     },
 
-    /**
-    * @name dxHtmlEditorMethods.redo
-    * @publicName redo()
-    */
     redo: function() {
         this._applyQuillHistoryMethod('redo');
 
     },
 
-    /**
-    * @name dxHtmlEditorMethods.getLength
-    * @publicName getLength()
-    * @return number
-    */
     getLength: function() {
         return this._applyQuillMethod('getLength');
     },
 
-    /**
-    * @name dxHtmlEditorMethods.delete
-    * @publicName delete(index, length)
-    * @param1 index:number
-    * @param2 length:number
-    */
     delete: function(index, length) {
         this._applyQuillMethod('deleteText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.insertText
-    * @publicName insertText(index, text, formats)
-    * @param1 index:number
-    * @param2 text:string
-    * @param3 formats:object
-    */
     insertText: function(index, text, formats) {
         this._applyQuillMethod('insertText', arguments);
     },
 
-    /**
-    * @name dxHtmlEditorMethods.insertEmbed
-    * @publicName insertEmbed(index, type, config)
-    * @param1 index:number
-    * @param2 type:string
-    * @param3 config:any
-    */
     insertEmbed: function(index, type, config) {
         this._applyQuillMethod('insertEmbed', arguments);
     },

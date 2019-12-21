@@ -56,55 +56,18 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             */
             selectionByClick: true,
 
-            /**
-            * @name CollectionWidgetOptions.selectedItems
-            * @type Array<any>
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            */
             selectedItems: [],
 
-            /**
-             * @name CollectionWidgetOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires CollectionWidgetOptions.onSelectionChanged
-             */
             selectedItemKeys: [],
 
             maxFilterLengthInRequest: 1500,
 
-            /**
-             * @name CollectionWidgetOptions.keyExpr
-             * @type string|function
-             * @default null
-             */
             keyExpr: null,
 
-            /**
-            * @name CollectionWidgetOptions.selectedIndex
-            * @type number
-            * @default -1
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            */
             selectedIndex: NOT_EXISTING_INDEX,
 
-            /**
-            * @name CollectionWidgetOptions.selectedItem
-            * @type object
-            * @default null
-            * @fires CollectionWidgetOptions.onSelectionChanged
-            * @ref
-            */
             selectedItem: null,
 
-            /**
-            * @name CollectionWidgetOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 addedItems:array<any>
-            * @type_function_param1_field5 removedItems:array<any>
-            * @action
-            */
             onSelectionChanged: null,
 
             /**

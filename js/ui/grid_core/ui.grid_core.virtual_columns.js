@@ -234,11 +234,6 @@ module.exports = {
     defaultOptions: function() {
         return {
             scrolling: {
-                /**
-                 * @name GridBaseOptions.scrolling.columnRenderingMode
-                 * @type Enums.GridColumnRenderingMode
-                 * @default "standard"
-                 */
                 columnRenderingMode: 'standard',
                 columnPageSize: 5,
                 columnRenderingThreshold: 300
