@@ -53,20 +53,6 @@ class RequiredRuleValidator extends BaseRuleValidator {
         this.NAME = 'required';
     }
 
-    /**
-     * @name RequiredRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name RequiredRule.trim
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name RequiredRule.message
-     * @type string
-     * @default 'Required'
-     */
     _validate(value, rule) {
         if(!typeUtils.isDefined(value)) return false;
         if(value === false) {
@@ -86,20 +72,6 @@ class NumericRuleValidator extends BaseRuleValidator {
         this.NAME = 'numeric';
     }
 
-    /**
-     * @name NumericRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name NumericRule.message
-     * @type string
-     * @default 'Value should be a number'
-     */
-    /**
-     * @name NumericRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -118,33 +90,6 @@ class RangeRuleValidator extends BaseRuleValidator {
         this.NAME = 'range';
     }
 
-    /**
-     * @name RangeRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name RangeRule.min
-     * @type datetime|number
-     */
-    /**
-     * @name RangeRule.max
-     * @type datetime|number
-     */
-    /**
-     * @name RangeRule.message
-     * @type string
-     * @default 'Value is out of range'
-     */
-    /**
-     * @name RangeRule.reevaluate
-     * @type boolean
-     * @default false
-     */
-    /**
-     * @name RangeRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -178,33 +123,6 @@ class StringLengthRuleValidator extends BaseRuleValidator {
         this.NAME = 'stringLength';
     }
 
-    /**
-     * @name StringLengthRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name StringLengthRule.min
-     * @type number
-     */
-    /**
-     * @name StringLengthRule.max
-     * @type number
-     */
-    /**
-     * @name StringLengthRule.trim
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name StringLengthRule.message
-     * @type string
-     * @default 'The length of the value is not correct'
-     */
-    /**
-     * @name StringLengthRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     _validate(value, rule) {
         value = typeUtils.isDefined(value) ? String(value) : '';
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
@@ -224,37 +142,6 @@ class CustomRuleValidator extends BaseRuleValidator {
         this.NAME = 'custom';
     }
 
-    /**
-     * @name CustomRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name CustomRule.validationCallback
-     * @type function
-     * @type_function_return boolean
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
-     */
-    /**
-     * @name CustomRule.message
-     * @type string
-     * @default 'Value is invalid'
-     */
-    /**
-     * @name CustomRule.reevaluate
-     * @type boolean
-     * @default false
-     */
-    /**
-     * @name CustomRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     validate(value, rule) {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
@@ -280,37 +167,6 @@ class AsyncRuleValidator extends CustomRuleValidator {
         this.NAME = 'async';
     }
 
-    /**
-     * @name AsyncRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name AsyncRule.validationCallback
-     * @type function
-     * @type_function_return Promise<any>
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 value:string|number
-     * @type_function_param1_field2 rule:object
-     * @type_function_param1_field3 validator:object
-     * @type_function_param1_field4 data:object
-     * @type_function_param1_field5 column:object
-     * @type_function_param1_field6 formItem:object
-     */
-    /**
-     * @name AsyncRule.message
-     * @type string
-     * @default 'Value is invalid'
-     */
-    /**
-     * @name AsyncRule.reevaluate
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name AsyncRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     validate(value, rule) {
         if(!typeUtils.isDefined(rule.reevaluate)) {
             extend(rule, { reevaluate: true });
@@ -363,35 +219,6 @@ class CompareRuleValidator extends BaseRuleValidator {
         this.NAME = 'compare';
     }
 
-    /**
-     * @name CompareRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name CompareRule.comparisonTarget
-     * @type function
-     * @type_function_return object
-     */
-    /**
-     * @name CompareRule.comparisonType
-     * @type Enums.ComparisonOperator
-     * @default '=='
-     */
-    /**
-     * @name CompareRule.message
-     * @type string
-     * @default 'Values do not match'
-     */
-    /**
-     * @name CompareRule.reevaluate
-     * @type boolean
-     * @default true
-     */
-    /**
-     * @name CompareRule.ignoreEmptyValue
-     * @type boolean
-     * @default false
-     */
     _validate(value, rule) {
         if(!rule.comparisonTarget) {
             throw errors.Error('E0102');
@@ -429,24 +256,6 @@ class PatternRuleValidator extends BaseRuleValidator {
         this.NAME = 'pattern';
     }
 
-    /**
-     * @name PatternRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name PatternRule.pattern
-     * @type regexp|string
-     */
-    /**
-     * @name PatternRule.message
-     * @type string
-     * @default 'Value does not match pattern'
-     */
-    /**
-     * @name PatternRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -465,20 +274,6 @@ class EmailRuleValidator extends BaseRuleValidator {
         this.NAME = 'email';
     }
 
-    /**
-     * @name EmailRule.type
-     * @type Enums.ValidationRuleType
-     */
-    /**
-     * @name EmailRule.message
-     * @type string
-     * @default 'Email is invalid'
-     */
-    /**
-     * @name EmailRule.ignoreEmptyValue
-     * @type boolean
-     * @default true
-     */
     _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -572,30 +367,10 @@ const GroupConfig = Class.inherit({
          * @type Object
          */
         const result = {
-            /**
-             * @name dxValidationGroupResult.isValid
-             * @type boolean
-             */
             isValid: true,
-            /**
-             * @name dxValidationGroupResult.brokenRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             brokenRules: [],
-            /**
-             * @name dxValidationGroupResult.validators
-             * @type Array<Object>
-             */
             validators: [],
-            /**
-             * @name dxValidationGroupResult.status
-             * @type Enums.ValidationStatus
-             */
             status: STATUS.valid,
-            /**
-             * @name dxValidationGroupResult.complete
-             * @type Promise<dxValidationGroupResult>
-             */
             complete: null
         };
         this._unsubscribeFromAllChangeEvents();
@@ -764,31 +539,9 @@ const GroupConfig = Class.inherit({
     }
 }).include(EventsMixin);
 
-/**
- * @name validationEngine
- * @section Core
- * @namespace DevExpress
- * @module ui/validation_engine
- * @export default
- */
 const ValidationEngine = {
     groups: [],
 
-    /**
-    * @name validationEngineMethods.getGroupConfig
-    * @section Core
-    * @publicName getGroupConfig(group)
-    * @param1 group:string|object
-    * @return object
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.getGroupConfig
-    * @section Core
-    * @publicName getGroupConfig()
-    * @return object
-    * @static
-    */
     getGroupConfig(group) {
         const result = grep(this.groups, function(config) {
             return config.group === group;
@@ -863,45 +616,13 @@ const ValidationEngine = {
          */
         let result = {
             name: name,
-            /**
-             * @name dxValidatorResult.value
-             * @type any
-             */
             value: value,
-            /**
-             * @name dxValidatorResult.brokenRule
-             * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-             */
             brokenRule: null,
-            /**
-             * @name dxValidatorResult.brokenRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             brokenRules: null,
-            /**
-             * @name dxValidatorResult.isValid
-             * @type boolean
-             */
             isValid: true,
-            /**
-             * @name dxValidatorResult.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
-             */
             validationRules: rules,
-            /**
-             * @name dxValidatorResult.pendingRules
-             * @type Array<AsyncRule>
-             */
             pendingRules: null,
-            /**
-             * @name dxValidatorResult.status
-             * @type Enums.ValidationStatus
-             */
             status: STATUS.valid,
-            /**
-             * @name dxValidatorResult.complete
-             * @type Promise<dxValidatorResult>
-             */
             complete: null
         };
         const asyncRuleItems = [];
@@ -1130,21 +851,6 @@ const ValidationEngine = {
         return {};
     },
 
-    /**
-    * @name validationEngineMethods.validateGroup
-    * @section Core
-    * @publicName validateGroup(group)
-    * @param1 group:string|object
-    * @return dxValidationGroupResult
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.validateGroup
-    * @section Core
-    * @publicName validateGroup()
-    * @return dxValidationGroupResult
-    * @static
-    */
     validateGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
@@ -1153,19 +859,6 @@ const ValidationEngine = {
         return groupConfig.validate();
     },
 
-    /**
-    * @name validationEngineMethods.resetGroup
-    * @section Core
-    * @publicName resetGroup(group)
-    * @param1 group:string|object
-    * @static
-    */
-    /**
-    * @name validationEngineMethods.resetGroup
-    * @section Core
-    * @publicName resetGroup()
-    * @static
-    */
     resetGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {

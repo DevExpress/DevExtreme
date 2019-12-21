@@ -796,11 +796,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
     // #endregion Click_Handler
 
     // #region Focusing
-    /**
-    * @name GridBaseMethods.focus
-    * @publicName focus(element)
-    * @param1 element:Node|jQuery
-    */
     focus: function(element) {
         var activeElementSelector,
             focusedRowEnabled = this.option('focusedRowEnabled'),
@@ -1699,10 +1694,6 @@ module.exports = {
         return {
             useLegacyKeyboardNavigation: false,
 
-            /**
-             * @name GridBaseOptions.keyboardNavigation
-             * @type object
-             */
             keyboardNavigation: {
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enabled
@@ -1731,124 +1722,7 @@ module.exports = {
                 editOnKeyPress: false
             }
 
-            /**
-             * @name GridBaseOptions.onKeyDown
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-             * @type_function_param1_field5 event:event
-             * @type_function_param1_field6 handled:boolean
-             * @extends Action
-             * @action
-             */
 
-            /**
-             * @name dxDataGridOptions.onFocusedCellChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 prevColumnIndex:number
-             * @type_function_param1_field6 prevRowIndex:number
-             * @type_function_param1_field7 newColumnIndex:number
-             * @type_function_param1_field8 newRowIndex:number
-             * @type_function_param1_field9 event:event
-             * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field11 columns:Array<dxDataGridColumn>
-             * @type_function_param1_field12 cancel:boolean
-             * @type_function_param1_field13 isHighlighted:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedCellChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 prevColumnIndex:number
-             * @type_function_param1_field6 prevRowIndex:number
-             * @type_function_param1_field7 newColumnIndex:number
-             * @type_function_param1_field8 newRowIndex:number
-             * @type_function_param1_field9 event:event
-             * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field11 columns:Array<dxTreeListColumn>
-             * @type_function_param1_field12 cancel:boolean
-             * @type_function_param1_field13 isHighlighted:boolean
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedCellChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 columnIndex:number
-             * @type_function_param1_field6 rowIndex:number
-             * @type_function_param1_field7 row:dxDataGridRowObject
-             * @type_function_param1_field8 column:dxDataGridColumn
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedCellChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 cellElement:dxElement
-             * @type_function_param1_field5 columnIndex:number
-             * @type_function_param1_field6 rowIndex:number
-             * @type_function_param1_field7 row:dxTreeListRowObject
-             * @type_function_param1_field8 column:dxTreeListColumn
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedRowChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 prevRowIndex:number
-             * @type_function_param1_field6 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field9 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedRowChanging
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 prevRowIndex:number
-             * @type_function_param1_field6 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field9 cancel:boolean
-             * @extends Action
-             * @action
-             */
-
-            /**
-             * @name dxDataGridOptions.onFocusedRowChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 rowIndex:number
-             * @type_function_param1_field6 row:dxDataGridRowObject
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onFocusedRowChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 rowElement:dxElement
-             * @type_function_param1_field5 rowIndex:number
-             * @type_function_param1_field6 row:dxTreeListRowObject
-             * @extends Action
-             * @action
-             */
         };
     },
     controllers: {

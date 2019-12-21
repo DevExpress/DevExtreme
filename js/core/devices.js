@@ -36,53 +36,14 @@ var KNOWN_UA_TABLE = {
 * @export default
 */
 var DEFAULT_DEVICE = {
-    /**
-    * @name Device.deviceType
-    * @type string
-    * @acceptValues 'phone'|'tablet'|'desktop'
-    */
     deviceType: 'desktop',
-    /**
-    * @name Device.platform
-    * @type string
-    * @acceptValues 'android'|'ios'|'generic'
-    */
     platform: 'generic',
-    /**
-    * @name Device.version
-    * @type Array<number>
-    */
     version: [],
-    /**
-    * @name Device.phone
-    * @type boolean
-    */
     phone: false,
-    /**
-    * @name Device.tablet
-    * @type boolean
-    */
     tablet: false,
-    /**
-    * @name Device.android
-    * @type boolean
-    */
     android: false,
-    /**
-    * @name Device.ios
-    * @type boolean
-    */
     ios: false,
-    /**
-    * @name Device.generic
-    * @type boolean
-    */
     generic: true,
-    /**
-    * @name Device.grade
-    * @type string
-    * @acceptValues 'A'|'B'|'C'
-    */
     grade: 'A',
 
     // TODO: For internal use (draft, do not document these options!)
@@ -148,15 +109,6 @@ var uaParsers = {
     }
 };
 
-/**
- * @name DevicesObject
- * @publicName devices
- * @section Utils
- * @inherits EventsMixin
- * @namespace DevExpress
- * @module core/devices
- * @export default
- */
 var Devices = Class.inherit({
     /**
     * @name DevicesObjectevents.orientationChanged
@@ -184,16 +136,6 @@ var Devices = Class.inherit({
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
     },
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current()
-    * @return Device
-    */
-    /**
-    * @name DevicesObjectmethods.current
-    * @publicName current(deviceName)
-    * @param1 deviceName:string|Device
-    */
     current: function(deviceOrName) {
         if(deviceOrName) {
             this._currentDevice = this._getDevice(deviceOrName);
@@ -223,11 +165,6 @@ var Devices = Class.inherit({
         return this._currentDevice;
     },
 
-    /**
-    * @name DevicesObjectMethods.real
-    * @publicName real()
-    * @return Device
-    */
     real: function() {
         ///#DEBUG
         var forceDevice = arguments[0];
@@ -239,11 +176,6 @@ var Devices = Class.inherit({
         return extend({}, this._realDevice);
     },
 
-    /**
-     * @name DevicesObjectMethods.orientation
-     * @publicName orientation()
-     * @return String
-     */
     orientation: function() {
         return this._currentOrientation;
     },
@@ -423,10 +355,4 @@ viewPort.changeCallback.add(function(viewPort, prevViewport) {
     devices.attachCssClasses(viewPort);
 });
 
-/**
- * @const devices
- * @type DevicesObject
- * @namespace DevExpress
- * @hidden
- */
 module.exports = devices;

@@ -18,15 +18,6 @@ var Config = require('./config'),
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
 
-/**
-* @name Component
-* @type object
-* @inherits EventsMixin
-* @module core/component
-* @export default
-* @namespace DevExpress
-* @hidden
-*/
 
 class PostponedOperations {
     constructor() {
@@ -90,36 +81,8 @@ var Component = Class.inherit({
 
     _getDefaultOptions: function() {
         return {
-            /**
-            * @name ComponentOptions.onInitialized
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @type_function_param1_field2 element:dxElement
-            * @default null
-            * @action
-            */
             onInitialized: null,
-            /**
-            * @name ComponentOptions.onOptionChanged
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @type_function_param1_field4 name:string
-            * @type_function_param1_field5 fullName:string
-            * @type_function_param1_field6 value:any
-            * @default null
-            * @action
-            */
             onOptionChanged: null,
-            /**
-            * @name ComponentOptions.onDisposing
-            * @type function
-            * @type_function_param1 e:object
-            * @type_function_param1_field1 component:this
-            * @default null
-            * @action
-            */
             onDisposing: null,
 
             defaultOptionsRules: null
@@ -294,27 +257,14 @@ var Component = Class.inherit({
         this._disposed = true;
     },
 
-    /**
-     * @name componentmethods.instance
-     * @publicName instance()
-     * @return this
-     */
     instance: function() {
         return this;
     },
 
-    /**
-     * @name componentmethods.beginupdate
-     * @publicName beginUpdate()
-     */
     beginUpdate: function() {
         this._updateLockCount++;
     },
 
-    /**
-     * @name componentmethods.endupdate
-     * @publicName endUpdate()
-     */
     endUpdate: function() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
         if(!this._updateLockCount) {
@@ -496,28 +446,6 @@ var Component = Class.inherit({
         return value;
     },
 
-    /**
-     * @name componentmethods.option
-     * @publicName option()
-     * @return object
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(optionName)
-     * @param1 optionName:string
-     * @return any
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(optionName, optionValue)
-     * @param1 optionName:string
-     * @param2 optionValue:any
-     */
-    /**
-     * @name componentmethods.option
-     * @publicName option(options)
-     * @param1 options:object
-     */
     option: function(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== 'object') {
             return this._optionManager.getValue(options);
@@ -532,11 +460,6 @@ var Component = Class.inherit({
         }
     },
 
-    /**
-     * @name componentmethods.resetOption
-     * @publicName resetOption(optionName)
-     * @param1 optionName:string
-     */
     resetOption: function(name) {
         if(!name) {
             return;

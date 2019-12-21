@@ -390,13 +390,6 @@ var interpretLightJsonFormat = function(obj) {
 
 // Serialization and parsing
 
-/**
-* @name EdmLiteral
-* @type object
-* @namespace DevExpress.data
-* @module data/odata/utils
-* @export EdmLiteral
-*/
 var EdmLiteral = Class.inherit({
     /**
     * @name EdmLiteralMethods.ctor
@@ -407,11 +400,6 @@ var EdmLiteral = Class.inherit({
         this._value = value;
     },
 
-    /**
-    * @name EdmLiteralMethods.valueOf
-    * @publicName valueOf()
-    * @return string
-    */
     valueOf: function() {
         return this._value;
     }
@@ -517,14 +505,6 @@ var serializeKey = function(key, protocolVersion) {
     return serializeValue(key, protocolVersion);
 };
 
-/**
-* @const Utils.keyConverters
-* @publicName odata.keyConverters
-* @type object
-* @namespace DevExpress.data.utils.odata
-* @module data/odata/utils
-* @export keyConverters
-*/
 var keyConverters = {
 
     String: function(value) {

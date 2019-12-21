@@ -220,163 +220,29 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @namespace DevExpress.data
  * @type object
  */
-/**
- * @name LoadOptions.filter
- * @type object
- */
-/**
- * @name LoadOptions.sort
- * @type object
- */
-/**
- * @name LoadOptions.select
- * @type object
- */
-/**
- * @name LoadOptions.group
- * @type object
- */
-/**
- * @name LoadOptions.skip
- * @type number
- */
-/**
- * @name LoadOptions.skip
- * @type number
- */
-/**
- * @name LoadOptions.take
- * @type number
- */
-/**
- * @name LoadOptions.userData
- * @type object
- */
-/**
- * @name LoadOptions.expand
- * @type object
- */
-/**
- * @name LoadOptions.requireTotalCount
- * @type boolean
- */
-/**
- * @name LoadOptions.searchValue
- * @type any
- */
-/**
- * @name LoadOptions.searchOperation
- * @type string
- */
-/**
- * @name LoadOptions.searchExpr
- * @type getter|Array<getter>
- */
-/**
- * @name LoadOptions.customQueryParams
- * @type Object
- */
-/**
- * @name LoadOptions.totalSummary
- * @type Object
- */
-/**
- * @name LoadOptions.groupSummary
- * @type Object
- */
-/**
- * @name LoadOptions.requireGroupCount
- * @type boolean
- */
-/**
- * @name LoadOptions.parentIds
- * @type Array<any>
- */
 
-/**
-* @name CustomStore
-* @inherits Store
-* @type object
-* @module data/custom_store
-* @export default
-*/
 var CustomStore = Store.inherit({
     ctor: function(options) {
         options = options || {};
 
         this.callBase(options);
 
-        /**
-         * @name CustomStoreOptions.useDefaultSearch
-         * @type boolean
-         * @default undefined
-         */
         this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
 
-        /**
-         * @name CustomStoreOptions.loadMode
-         * @type string
-         * @default 'processed'
-         * @acceptValues 'processed'|'raw'
-         */
         this._loadMode = options.loadMode;
 
-        /**
-         * @name CustomStoreOptions.cacheRawData
-         * @type boolean
-         * @default true
-         */
         this._cacheRawData = options.cacheRawData !== false;
 
-        /**
-         * @name CustomStoreOptions.load
-         * @type function
-         * @type_function_param1 options:LoadOptions
-         * @type_function_return Promise<any>|Array<any>
-         */
         this._loadFunc = options[LOAD];
 
-        /**
-         * @name CustomStoreOptions.totalCount
-         * @type function
-         * @type_function_param1 loadOptions:object
-         * @type_function_param1_field1 filter:object
-         * @type_function_param1_field2 group:object
-         * @type_function_return Promise<number>
-         */
         this._totalCountFunc = options[TOTAL_COUNT];
 
-        /**
-         * @name CustomStoreOptions.byKey
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_return Promise<any>
-         */
         this._byKeyFunc = options[BY_KEY];
 
-        /**
-         * @name CustomStoreOptions.insert
-         * @type function
-         * @type_function_param1 values:object
-         * @type_function_return Promise<any>
-         */
         this._insertFunc = options[INSERT];
 
-        /**
-         * @name CustomStoreOptions.update
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_param2 values:object
-         * @type_function_return Promise<any>
-         */
         this._updateFunc = options[UPDATE];
 
-        /**
-         * @name CustomStoreOptions.remove
-         * @type function
-         * @type_function_param1 key:object|string|number
-         * @type_function_return Promise<void>
-         */
         this._removeFunc = options[REMOVE];
     },
 
@@ -384,10 +250,6 @@ var CustomStore = Store.inherit({
         throw errors.Error('E4010');
     },
 
-    /**
-    * @name CustomStoreMethods.clearRawDataCache
-    * @publicName clearRawDataCache()
-    */
     clearRawDataCache: function() {
         delete this.__rawData;
     },

@@ -29,47 +29,17 @@ const DX_MENU_ITEM_CAPTION_CLASS = ITEM_CLASS + '-text';
 const SINGLE_SELECTION_MODE = 'single';
 const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
 
-/**
-* @name dxMenuBase
-* @type object
-* @inherits HierarchicalCollectionWidget
-* @hidden
-*/
 
 class MenuBase extends HierarchicalCollectionWidget {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-             * @name dxMenuBaseOptions.dataSource
-             * @type string|Array<dxMenuBaseItem>|DataSource|DataSourceOptions
-             * @default null
-             */
-            /**
-            * @name dxMenuBaseOptions.items
-            * @type Array<dxMenuBaseItem>
-            */
             items: [],
 
-            /**
-            * @name dxMenuBaseOptions.cssClass
-            * @type string
-            * @default ""
-            */
             cssClass: '',
 
-            /**
-             * @name dxMenuBaseOptions.activeStateEnabled
-             * @type Boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
-            /**
-            * @name dxMenuBaseOptions.showSubmenuMode
-            * @type Object|Enums.ShowSubmenuMode
-            * @default { name: "onHover", delay: { show: 0, hide: 0 } }
-            */
             showSubmenuMode: {
                 /**
                 * @name dxMenuBaseOptions.showSubmenuMode.name
@@ -100,12 +70,6 @@ class MenuBase extends HierarchicalCollectionWidget {
                 }
             },
 
-            /**
-            * @name dxMenuBaseOptions.animation
-            * @type object
-            * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
-            * @ref
-            */
             animation: {
                 /**
                 * @name dxMenuBaseOptions.animation.show
@@ -131,11 +95,6 @@ class MenuBase extends HierarchicalCollectionWidget {
                 }
             },
 
-            /**
-            * @name dxMenuBaseOptions.selectByClick
-            * @type boolean
-            * @default false
-            */
             selectByClick: false,
 
             focusOnSelectedItem: false,
@@ -188,66 +147,15 @@ class MenuBase extends HierarchicalCollectionWidget {
             * @type object
             */
 
-            /**
-            * @name dxMenuBaseItem.beginGroup
-            * @type Boolean
-            */
-
-            /**
-            * @name dxMenuBaseOptions.selectionMode
-            * @type Enums.MenuSelectionMode
-            * @default none
-             */
 
             _itemAttributes: { role: 'menuitem' },
 
             useInkRipple: false
 
             /**
-            * @name dxMenuBaseItem.html
-            * @type String
-            * @hidden
-            */
-            /**
-            * @name dxMenuBaseItem.disabled
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxMenuBaseItem.visible
-            * @type boolean
-            * @default true
-            */
-            /**
-            * @name dxMenuBaseItem.icon
-            * @type String
-            */
-            /**
-            * @name dxMenuBaseItem.text
-            * @type String
-            */
-            /**
              * @name dxMenuBaseItem.html
              * @type String
-             */
-            /**
-            * @name dxMenuBaseItem.items
-            * @type Array<dxMenuBaseItem>
-            */
-            /**
-            * @name dxMenuBaseItem.selectable
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxMenuBaseItem.selected
-            * @type boolean
-            * @default false
-            */
-            /**
-            * @name dxMenuBaseItem.closeMenuOnClick
-            * @type boolean
-            * @default true
+             * @hidden
             */
         });
     }
@@ -754,11 +662,6 @@ class MenuBase extends HierarchicalCollectionWidget {
         });
     }
 
-    /**
-        * @name dxMenuBaseMethods.selectItem
-        * @publicName selectItem(itemElement)
-        * @param1 itemElement:Node
-    */
     selectItem(itemElement) {
         const itemData = (itemElement.nodeType) ? this._getItemData(itemElement) : itemElement;
         const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
@@ -775,11 +678,6 @@ class MenuBase extends HierarchicalCollectionWidget {
         }
     }
 
-    /**
-    * @name dxMenuBaseMethods.unselectItem
-    * @publicName unselectItem(itemElement)
-    * @param1 itemElement:Node
-    */
     unselectItem(itemElement) {
         const itemData = (itemElement.nodeType) ? this._getItemData(itemElement) : itemElement;
         const node = this._dataAdapter.getNodeByItem(itemData);

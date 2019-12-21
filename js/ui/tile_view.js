@@ -41,12 +41,6 @@ var CONFIGS = {
     }
 };
 
-/**
-* @name dxTileView
-* @inherits CollectionWidget
-* @module ui/tile_view
-* @export default
-*/
 var TileView = CollectionWidget.inherit({
 
     _activeStateUnit: TILEVIEW_ITEM_SELECTOR,
@@ -55,72 +49,21 @@ var TileView = CollectionWidget.inherit({
         return extend(this.callBase(), {
             items: null,
 
-            /**
-             * @name dxTileViewOptions.dataSource
-             * @type string|Array<string,dxTileViewItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
 
-            /**
-             * @name dxTileViewOptions.items
-             * @type Array<string, dxTileViewItem, object>
-             * @fires dxTileViewOptions.onOptionChanged
-             */
-
-            /**
-            * @name dxTileViewOptions.direction
-            * @type Enums.Orientation
-            * @default 'horizontal'
-            */
             direction: 'horizontal',
 
-            /**
-             * @name dxTileViewOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxTileViewOptions.showScrollbar
-            * @type boolean
-            * @default false
-            */
             showScrollbar: false,
 
-            /**
-            * @name dxTileViewOptions.height
-            * @type number|string
-            * @default 500
-            */
             height: 500,
 
-            /**
-            * @name dxTileViewOptions.baseItemWidth
-            * @type number
-            * @default 100
-            */
             baseItemWidth: 100,
 
-            /**
-            * @name dxTileViewOptions.baseItemHeight
-            * @type number
-            * @default 100
-            */
             baseItemHeight: 100,
 
-            /**
-            * @name dxTileViewOptions.itemMargin
-            * @type number
-            * @default 20
-            */
             itemMargin: 20,
 
-            /**
-             * @name dxTileViewOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
             indicateLoading: true
@@ -131,24 +74,6 @@ var TileView = CollectionWidget.inherit({
             * @type object
             */
 
-            /**
-            * @name dxTileViewItem.widthRatio
-            * @type number
-            * @default 1
-            */
-
-            /**
-            * @name dxTileViewItem.heightRatio
-            * @type number
-            * @default 1
-            */
-
-            /**
-            * @name dxTileViewOptions.height
-            * @type number|string|function
-            * @default 500
-            * @type_function_return number|string
-            */
 
             /**
             * @name dxTileViewOptions.selectedIndex
@@ -190,11 +115,6 @@ var TileView = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxTileViewOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }
@@ -571,11 +491,6 @@ var TileView = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxtileviewmethods.scrollPosition
-    * @publicName scrollPosition()
-    * @return numeric
-    */
     scrollPosition: function() {
         return this._scrollView.scrollOffset()[this._config.mainPosition];
     }

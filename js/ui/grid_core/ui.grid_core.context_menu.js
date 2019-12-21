@@ -108,34 +108,6 @@ var ContextMenuView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name dxDataGridOptions.onContextMenuPreparing
-             * @type function(e)
-             * @type_function_param1 e:Object
-             * @type_function_param1_field4 items:Array<Object>
-             * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:dxElement
-             * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:dxDataGridColumn
-             * @type_function_param1_field9 rowIndex:number
-             * @type_function_param1_field10 row:dxDataGridRowObject
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name dxTreeListOptions.onContextMenuPreparing
-             * @type function(e)
-             * @type_function_param1 e:Object
-             * @type_function_param1_field4 items:Array<Object>
-             * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:dxElement
-             * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:dxTreeListColumn
-             * @type_function_param1_field9 rowIndex:number
-             * @type_function_param1_field10 row:dxTreeListRowObject
-             * @extends Action
-             * @action
-             */
             onContextMenuPreparing: null
         };
     },

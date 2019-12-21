@@ -117,12 +117,6 @@ class RecurrenceRule {
 const RecurrenceEditor = Editor.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-            * @name dxRecurrenceEditorOptions.value
-            * @type string
-            * @default null
-            * @fires dxRecurrenceEditorOptions.onValueChanged
-            */
             value: null,
 
             /**

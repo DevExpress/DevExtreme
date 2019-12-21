@@ -508,10 +508,6 @@ var ResizingController = modules.ViewController.inherit({
         return !this.component._requireResize && this.updateDimensions();
     },
 
-    /**
-    * @name GridBaseMethods.updateDimensions
-    * @publicName updateDimensions()
-    */
     updateDimensions: function(checkSize) {
         var that = this;
 
@@ -786,17 +782,7 @@ var GridView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.showBorders
-             * @type boolean
-             * @default false
-             */
             showBorders: false,
-            /**
-             * @name GridBaseOptions.renderAsync
-             * @type boolean
-             * @default false
-             */
             renderAsync: false,
             legacyRendering: false,
         };

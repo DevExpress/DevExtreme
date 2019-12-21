@@ -35,11 +35,6 @@ const safeApply = (func, scope) => {
     }
 };
 
-/**
- * @name DOMComponentOptions.bindingOptions
- * @type object
- * @default {}
- */
 
 let ComponentBuilder = Class.inherit({
 

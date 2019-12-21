@@ -73,31 +73,11 @@ var TreeList = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name GridBaseOptions.showRowLines
-                    * @type boolean
-                    * @default true @for Material
-                    */
                     showRowLines: true,
-                    /**
-                    * @name GridBaseOptions.showColumnLines
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     showColumnLines: false,
-                    /**
-                     * @name GridBaseOptions.headerFilter.height
-                     * @type number
-                     * @default 315 @for Material
-                     */
                     headerFilter: {
                         height: 315
                     },
-                    /**
-                     * @name GridBaseOptions.editing.useIcons
-                     * @type boolean
-                     * @default true @for Material
-                     */
                     editing: {
                         useIcons: true
                     }

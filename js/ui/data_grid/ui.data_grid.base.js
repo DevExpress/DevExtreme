@@ -81,11 +81,6 @@ var DataGrid = Widget.inherit({
             {
                 device: { platform: 'ios' },
                 options: {
-                    /**
-                    * @name GridBaseOptions.showRowLines
-                    * @type boolean
-                    * @default true @for iOS
-                    */
                     showRowLines: true
                 }
             },
@@ -94,31 +89,17 @@ var DataGrid = Widget.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name GridBaseOptions.showRowLines
-                    * @type boolean
-                    * @default true @for Material
-                    */
                     showRowLines: true,
-                    /**
-                    * @name GridBaseOptions.showColumnLines
-                    * @type boolean
-                    * @default false @for Material
-                    */
                     showColumnLines: false,
                     /**
                      * @name GridBaseOptions.headerFilter.height
                      * @type number
                      * @default 315 @for Material
+                     * @default 325
                      */
                     headerFilter: {
                         height: 315
                     },
-                    /**
-                     * @name GridBaseOptions.editing.useIcons
-                     * @type boolean
-                     * @default true @for Material
-                     */
                     editing: {
                         useIcons: true
                     }
@@ -151,6 +132,8 @@ var DataGrid = Widget.inherit({
                         /**
                          * @name dxDataGridOptions.grouping.expandMode
                          * @default 'rowClick' @for mobile_devices
+                         * @type Enums.GridGroupingExpandMode
+                         * @default "buttonClick"
                          */
                         expandMode: 'rowClick'
                     }

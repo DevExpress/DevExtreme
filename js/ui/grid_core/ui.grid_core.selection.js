@@ -317,18 +317,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return ['selectRows', 'deselectRows', 'selectRowsByIndexes', 'getSelectedRowKeys', 'getSelectedRowsData', 'clearSelection', 'selectAll', 'deselectAll', 'startSelectionWithCheckboxes', 'stopSelectionWithCheckboxes', 'isRowSelected'];
         },
 
-        /**
-         * @name GridBaseMethods.isRowSelected(key)
-         * @publicName isRowSelected(key)
-         * @param1 key:any
-         * @return boolean
-         */
-        /**
-         * @name dxDataGridMethods.isRowSelected(data)
-         * @publicName isRowSelected(data)
-         * @param1 data:any
-         * @return boolean
-         */
         isRowSelected: function(arg) {
             return this._selection.isItemSelected(arg);
         },
@@ -345,11 +333,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.getSelectAllState(this._isOnePageSelectAll());
         },
 
-        /**
-         * @name GridBaseMethods.selectAll
-         * @publicName selectAll()
-         * @return Promise<void>
-         */
         selectAll: function() {
             if(this.option(SHOW_CHECKBOXES_MODE) === 'onClick') {
                 this.startSelectionWithCheckboxes();
@@ -358,19 +341,10 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.selectAll(this._isOnePageSelectAll());
         },
 
-        /**
-         * @name GridBaseMethods.deselectAll
-         * @publicName deselectAll()
-         * @return Promise<void>
-         */
         deselectAll: function() {
             return this._selection.deselectAll(this._isOnePageSelectAll());
         },
 
-        /**
-         * @name GridBaseMethods.clearSelection
-         * @publicName clearSelection()
-         */
         clearSelection: function() {
             return this.selectedItemKeys([]);
         },
@@ -389,46 +363,17 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
         },
 
-        /**
-         * @name dxDataGridMethods.getSelectedRowKeys
-         * @publicName getSelectedRowKeys()
-         * @return Array<any> | Promise<any>
-         */
-        /**
-         * @name dxTreeListMethods.getSelectedRowKeys
-         * @publicName getSelectedRowKeys()
-         * @return Array<any>
-         */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
         },
 
-        /**
-         * @name GridBaseMethods.selectRows
-         * @publicName selectRows(keys, preserve)
-         * @param1 keys:Array<any>
-         * @param2 preserve:boolean
-         * @return Promise<any>
-         */
         selectRows: function(keys, preserve) {
             return this.selectedItemKeys(keys, preserve);
         },
-        /**
-        * @name GridBaseMethods.deselectRows
-        * @publicName deselectRows(keys)
-        * @param1 keys:Array<any>
-        * @return Promise<any>
-        */
         deselectRows: function(keys) {
             return this.selectedItemKeys(keys, true, true);
         },
 
-        /**
-         * @name GridBaseMethods.selectRowsByIndexes
-         * @publicName selectRowsByIndexes(indexes)
-         * @param1 indexes:Array<number>
-         * @return Promise<any>
-         */
         selectRowsByIndexes: function(indexes) {
             var items = this._dataController.items(),
                 keys = [];
@@ -446,11 +391,6 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return this.selectRows(keys);
         },
 
-        /**
-         * @name dxDataGridMethods.getSelectedRowsData
-         * @publicName getSelectedRowsData()
-         * @return Array<any> | Promise<any>
-         */
         getSelectedRowsData: function() {
             return this._selection.getSelectedItems();
         },
@@ -516,42 +456,10 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-        /**
-         * @name GridBaseOptions.selection
-         * @type object
-         */
-            /**
-         * @name dxDataGridOptions.selection
-         * @type object
-         */
-            /**
-         * @name dxTreeListOptions.selection
-         * @type object
-         */
             selection: {
-                /**
-                 * @name GridBaseOptions.selection.mode
-                 * @type Enums.SelectionMode
-                 * @default "none"
-                 */
                 mode: 'none', // "single", "multiple"
-                /**
-                 * @name dxDataGridOptions.selection.showCheckBoxesMode
-                 * @type Enums.GridSelectionShowCheckBoxesMode
-                 * @default "onClick"
-                 */
                 showCheckBoxesMode: 'onClick', // "onLongTap", "always", "none"
-                /**
-                 * @name GridBaseOptions.selection.allowSelectAll
-                 * @type boolean
-                 * @default true
-                 */
                 allowSelectAll: true,
-                /**
-                 * @name dxDataGridOptions.selection.selectAllMode
-                 * @type Enums.SelectAllMode
-                 * @default "allPages"
-                 */
                 selectAllMode: 'allPages',
 
                 /**
@@ -561,36 +469,9 @@ module.exports = {
                  * @default 1500
                  */
                 maxFilterLengthInRequest: 1500,
-                /**
-                 * @name dxDataGridOptions.selection.deferred
-                 * @type boolean
-                 * @default false
-                 */
                 deferred: false
             },
-            /**
-            * @name dxDataGridOptions.selectionFilter
-            * @type Filter expression
-            * @default []
-            * @fires dxDataGridOptions.onOptionChanged
-            */
             selectionFilter: [],
-            /**
-             * @name GridBaseOptions.onSelectionChanged
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
-             * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
-             * @type_function_param1_field6 selectedRowKeys:Array<any>
-             * @type_function_param1_field7 selectedRowsData:Array<Object>
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.selectedRowKeys
-             * @type Array<any>
-             * @fires GridBaseOptions.onSelectionChanged
-             */
             selectedRowKeys: []
         };
     },

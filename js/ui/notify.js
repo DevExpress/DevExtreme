@@ -29,24 +29,4 @@ var notify = function(message, /* optional */ type, displayTime) {
     new Toast($notify, options).show();
 };
 
-/**
- * @name ui.notify
- * @static
- * @publicName notify(message,type,displayTime)
- * @param1 message:string
- * @param2 type:string|undefined
- * @param3 displayTime:integer|undefined
- * @module ui/notify
- * @export default
- */
-/**
- * @name ui.notify
- * @static
- * @publicName notify(options,type,displayTime)
- * @param1 options:object
- * @param2 type:string|undefined
- * @param3 displayTime:integer|undefined
- * @module ui/notify
- * @export default
- */
 module.exports = notify;

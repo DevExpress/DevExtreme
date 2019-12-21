@@ -33,13 +33,6 @@ var DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor',
 
 var isIOs = devices.current().platform === 'ios';
 
-/**
-* @name dxDropDownEditor
-* @inherits dxTextBox
-* @module ui/drop_down_editor/ui.drop_down_editor
-* @export default
-* @hidden
-*/
 var DropDownEditor = TextBox.inherit({
 
     _supportedKeys: function() {
@@ -113,98 +106,31 @@ var DropDownEditor = TextBox.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxDropDownEditorOptions.value
-            * @type any
-            * @default null
-            */
             value: null,
 
-            /**
-            * @name dxDropDownEditorOptions.onOpened
-            * @extends Action
-            * @action
-            */
             onOpened: null,
 
-            /**
-            * @name dxDropDownEditorOptions.onClosed
-            * @extends Action
-            * @action
-            */
             onClosed: null,
 
-            /**
-            * @name dxDropDownEditorOptions.opened
-            * @type boolean
-            * @default false
-            * @fires dxDropDownEditorOptions.onOpened
-            * @fires dxDropDownEditorOptions.onClosed
-            */
             opened: false,
 
-            /**
-            * @name dxDropDownEditorOptions.acceptCustomValue
-            * @type boolean
-            * @default true
-            */
             acceptCustomValue: true,
 
-            /**
-            * @name dxDropDownEditorOptions.applyValueMode
-            * @type Enums.EditorApplyValueMode
-            * @default "instantly"
-            */
             applyValueMode: 'instantly',
 
-            /**
-            * @name dxDropDownEditorOptions.deferRendering
-            * @type boolean
-            * @default true
-            */
             deferRendering: true,
 
-            /**
-            * @name dxDropDownEditorOptions.activeStateEnabled
-            * @type boolean
-            * @default true
-            */
             activeStateEnabled: true,
 
-            /**
-             * @name dxDropDownEditorOptions.dropDownButtonTemplate
-             * @type template|function
-             * @default "dropDownButton"
-             * @type_function_param1 buttonData:object
-             * @type_function_param1_field1 text:string
-             * @type_function_param1_field2 icon:string
-             * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             dropDownButtonTemplate: 'dropDownButton',
 
             fieldTemplate: null,
             contentTemplate: null,
 
-            /**
-             * @name dxDropDownEditorOptions.openOnFieldClick
-             * @type boolean
-             * @default false
-             */
             openOnFieldClick: false,
 
-            /**
-             * @name dxDropDownEditorOptions.showDropDownButton
-             * @type boolean
-             * @default true
-             */
             showDropDownButton: true,
 
-            /**
-            * @name dxDropDownEditorOptions.buttons
-            * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
-            * @default undefined
-            */
             buttons: void 0,
 
             dropDownOptions: {},
@@ -876,36 +802,18 @@ var DropDownEditor = TextBox.inherit({
         }
     },
 
-    /**
-    * @name dxDropDownEditorMethods.open
-    * @publicName open()
-    */
     open: function() {
         this.option('opened', true);
     },
 
-    /**
-    * @name dxDropDownEditorMethods.close
-    * @publicName close()
-    */
     close: function() {
         this.option('opened', false);
     },
 
-    /**
-    * @name dxDropDownEditorMethods.field
-    * @publicName field()
-    * @return dxElement
-    */
     field: function() {
         return getPublicElement(this._input());
     },
 
-    /**
-    * @name dxDropDownEditorMethods.content
-    * @publicName content()
-    * @return dxElement
-    */
     content: function() {
         return this._popup ? this._popup.content() : null;
     }

@@ -905,44 +905,12 @@ exports.XmlaStore = Class.inherit((function() {
         }
     }
 
-    /**
-    * @name XmlaStore
-    * @type object
-    * @namespace DevExpress.data
-    * @module ui/pivot_grid/xmla_store
-    * @export default
-    */
 
     return {
         ctor: function(options) {
             this._options = options;
 
-            /**
-            * @name XmlaStoreOptions.url
-            * @type string
-            */
 
-            /**
-            * @name XmlaStoreOptions.catalog
-            * @type string
-            */
-
-            /**
-            * @name XmlaStoreOptions.cube
-            * @type string
-            */
-
-            /**
-             * @name XmlaStoreOptions.beforeSend
-             * @type function
-             * @type_function_param1 options:object
-             * @type_function_param1_field1 url:string
-             * @type_function_param1_field2 method:string
-             * @type_function_param1_field3 headers:object
-             * @type_function_param1_field4 xhrFields:object
-             * @type_function_param1_field5 data:string
-             * @type_function_param1_field6 dataType:string
-             */
         },
 
         getFields: function() {

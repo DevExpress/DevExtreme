@@ -21,11 +21,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
         return extend(true, selectionModule.defaultOptions(), {
             selection: {
                 showCheckBoxesMode: 'always',
-                /**
-                 * @name dxTreeListOptions.selection.recursive
-                 * @type boolean
-                 * @default false
-                 */
                 recursive: false
             }
         });
@@ -472,20 +467,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     return result;
                 },
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowKeys
-                * @publicName getSelectedRowKeys(leavesOnly)
-                * @param1 leavesOnly:boolean
-                * @return Array<any>
-                * @deprecated
-                */
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowKeys
-                * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:string
-                * @return Array<any>
-                */
                 getSelectedRowKeys(mode) {
                     var that = this;
 
@@ -515,17 +497,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     return selectedRowKeys;
                 },
 
-                /**
-                * @name dxTreeListMethods.getSelectedRowsData
-                * @publicName getSelectedRowsData()
-                * @return Array<any>
-                */
-                /**
-                * @name dxTreeListMethods.getSelectedRowsData
-                * @publicName getSelectedRowsData(mode)
-                * @param1 mode:string
-                * @return Array<any>
-                */
                 getSelectedRowsData: function(mode) {
                     var that = this,
                         dataController = that._dataController,

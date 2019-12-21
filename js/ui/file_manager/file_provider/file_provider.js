@@ -6,48 +6,16 @@ import { each } from '../../../core/utils/iterator';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
-/**
-* @name FileProvider
-* @type object
-* @module ui/file_manager/file_provider/file_provider
-* @namespace DevExpress.fileProvider
-* @export default
-* @hidden
-*/
 class FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, {});
 
-        /**
-         * @name FileProviderOptions.keyExpr
-         * @type string|function(fileItem)
-         */
         this._keyGetter = compileGetter(this._getKeyExpr(options));
-        /**
-         * @name FileProviderOptions.nameExpr
-         * @type string|function(fileItem)
-         */
         this._nameGetter = compileGetter(this._getNameExpr(options));
-        /**
-         * @name FileProviderOptions.isDirectoryExpr
-         * @type string|function(fileItem)
-         */
         this._isDirGetter = compileGetter(this._getIsDirExpr(options));
-        /**
-         * @name FileProviderOptions.sizeExpr
-         * @type string|function(fileItem)
-         */
         this._sizeGetter = compileGetter(options.sizeExpr || 'size');
-        /**
-         * @name FileProviderOptions.dateModifiedExpr
-         * @type string|function(fileItem)
-         */
         this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || 'dateModified');
-        /**
-         * @name FileProviderOptions.thumbnailExpr
-         * @type string|function(fileItem)
-         */
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || 'thumbnail');
     }
 
@@ -79,12 +47,6 @@ class FileProvider {
     downloadItems(items) {
     }
 
-    /**
-     * @name FileProviderMethods.getItemContent
-     * @publicName getItemContent()
-     * @param1 items:Array<object>
-     * @return Promise<object>
-     */
     getItemContent(items) {
     }
 

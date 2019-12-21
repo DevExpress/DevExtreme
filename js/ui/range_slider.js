@@ -12,13 +12,6 @@ var RANGE_SLIDER_CLASS = 'dx-rangeslider',
     RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle',
     RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';
 
-/**
-* @name dxRangeSlider
-* @isEditor
-* @inherits dxSliderBase
-* @module ui/range_slider
-* @export default
-*/
 var RangeSlider = Slider.inherit({
 
     _supportedKeys: function() {
@@ -105,49 +98,16 @@ var RangeSlider = Slider.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxRangeSliderOptions.start
-            * @type number
-            * @default 40
-            */
             start: 40,
 
-            /**
-            * @name dxRangeSliderOptions.end
-            * @type number
-            * @default 60
-            */
             end: 60,
 
-            /**
-            * @name dxRangeSliderOptions.value
-            * @type Array<number>
-            * @default [40, 60]
-            */
             value: [40, 60],
 
-            /**
-            * @name dxRangeSliderOptions.startName
-            * @type string
-            * @default ""
-            */
             startName: '',
 
-            /**
-            * @name dxRangeSliderOptions.endName
-            * @type string
-            * @default ""
-            */
             endName: ''
 
-            /**
-            * @name dxRangeSliderOptions.onValueChanged
-            * @action
-            * @extends Action
-            * @type_function_param1_field4 start:number
-            * @type_function_param1_field5 end:number
-            * @type_function_param1_field6 value:array<number>
-            */
 
             /**
             * @name dxRangeSliderOptions.name

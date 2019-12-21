@@ -89,6 +89,7 @@
     "less": "3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
     "lint-staged": "^3.4.0",
+    "map-stream": "0.0.7",
     "merge-stream": "^2.0.0",
     "minimist": "^1.2.0",
     "mustache": "2.3.0",

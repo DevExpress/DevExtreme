@@ -36,11 +36,6 @@ var deviceDependentOptions = function() {
             return !support.nativeScrolling;
         },
         options: {
-            /**
-            * @name dxScrollableOptions.useNative
-            * @default false @for desktop
-            * @default true @for Mac
-            */
             useNative: false
         }
     }, {
@@ -48,123 +43,36 @@ var deviceDependentOptions = function() {
             return !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
         },
         options: {
-            /**
-            * @name dxScrollableOptions.bounceEnabled
-            * @default false @for desktop
-            */
             bounceEnabled: false,
 
-            /**
-            * @name dxScrollableOptions.scrollByThumb
-            * @default true @for desktop
-            */
             scrollByThumb: true,
 
-            /**
-            * @name dxScrollableOptions.scrollByContent
-            * @default false @for non-touch_devices
-            */
             scrollByContent: support.touch,
 
-            /**
-            * @name dxScrollableOptions.showScrollbar
-            * @default 'onHover' @for desktop
-            */
             showScrollbar: 'onHover'
         }
     }];
 };
 
-/**
-* @name dxScrollable
-* @type object
-* @inherits DOMComponent
-* @namespace DevExpress.ui
-* @hidden
-*/
 var Scrollable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxScrollableOptions.disabled
-            * @type boolean
-            * @default false
-            */
             disabled: false,
-            /**
-            * @name dxScrollableOptions.onScroll
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 scrollOffset:object
-            * @type_function_param1_field7 reachedLeft:boolean
-            * @type_function_param1_field8 reachedRight:boolean
-            * @type_function_param1_field9 reachedTop:boolean
-            * @type_function_param1_field10 reachedBottom:boolean
-            * @action
-            */
             onScroll: null,
 
-            /**
-            * @name dxScrollableOptions.direction
-            * @type Enums.ScrollDirection
-            * @default "vertical"
-            */
             direction: VERTICAL,
 
-            /**
-            * @name dxScrollableOptions.showScrollbar
-            * @type string
-            * @acceptValues 'onScroll'|'onHover'|'always'|'never'
-            * @default 'onScroll'
-            */
             showScrollbar: 'onScroll',
 
-            /**
-            * @name dxScrollableOptions.useNative
-            * @type boolean
-            * @default true
-            */
             useNative: true,
 
-            /**
-            * @name dxScrollableOptions.bounceEnabled
-            * @type boolean
-            * @default true
-            */
             bounceEnabled: true,
 
-            /**
-            * @name dxScrollableOptions.scrollByContent
-            * @type boolean
-            * @default true
-            */
             scrollByContent: true,
 
-            /**
-            * @name dxScrollableOptions.scrollByThumb
-            * @type boolean
-            * @default false
-            */
             scrollByThumb: false,
 
-            /**
-            * @name dxScrollableOptions.onUpdated
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @type_function_param1_field6 scrollOffset:object
-            * @type_function_param1_field7 reachedLeft:boolean
-            * @type_function_param1_field8 reachedRight:boolean
-            * @type_function_param1_field9 reachedTop:boolean
-            * @type_function_param1_field10 reachedBottom:boolean
-            * @action
-            */
             onUpdated: null,
 
             onStart: null,
@@ -512,20 +420,10 @@ var Scrollable = DOMComponent.inherit({
         return this._$content;
     },
 
-    /**
-    * @name dxScrollablemethods.content
-    * @publicName content()
-    * @return dxElement
-    */
     content: function() {
         return getPublicElement(this._$content);
     },
 
-    /**
-    * @name dxScrollablemethods.scrollOffset
-    * @publicName scrollOffset()
-    * @return object
-    */
     scrollOffset: function() {
         var location = this._location();
         return {
@@ -534,65 +432,30 @@ var Scrollable = DOMComponent.inherit({
         };
     },
 
-    /**
-    * @name dxScrollablemethods.scrollTop
-    * @publicName scrollTop()
-    * @return numeric
-    */
     scrollTop: function() {
         return this.scrollOffset().top;
     },
 
-    /**
-    * @name dxScrollablemethods.scrollLeft
-    * @publicName scrollLeft()
-    * @return numeric
-    */
     scrollLeft: function() {
         return this.scrollOffset().left;
     },
 
-    /**
-    * @name dxScrollablemethods.clientHeight
-    * @publicName clientHeight()
-    * @return numeric
-    */
     clientHeight: function() {
         return this._$container.height();
     },
 
-    /**
-    * @name dxScrollablemethods.scrollHeight
-    * @publicName scrollHeight()
-    * @return numeric
-    */
     scrollHeight: function() {
         return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
 
-    /**
-    * @name dxScrollablemethods.clientWidth
-    * @publicName clientWidth()
-    * @return numeric
-    */
     clientWidth: function() {
         return this._$container.width();
     },
 
-    /**
-    * @name dxScrollablemethods.scrollWidth
-    * @publicName scrollWidth()
-    * @return numeric
-    */
     scrollWidth: function() {
         return this.$content().outerWidth();
     },
 
-    /**
-    * @name dxScrollablemethods.update
-    * @publicName update()
-    * @return Promise<void>
-    */
     update: function() {
         if(!this._strategy) {
             return;
@@ -602,16 +465,6 @@ var Scrollable = DOMComponent.inherit({
         }).bind(this));
     },
 
-    /**
-    * @name dxScrollablemethods.scrollBy
-    * @publicName scrollBy(distance)
-    * @param1 distance:numeric
-    */
-    /**
-    * @name dxScrollablemethods.scrollBy
-    * @publicName scrollBy(distanceObject)
-    * @param1 distanceObject:object
-    */
     scrollBy: function(distance) {
         distance = this._normalizeLocation(distance);
 
@@ -623,16 +476,6 @@ var Scrollable = DOMComponent.inherit({
         this._strategy.scrollBy(distance);
     },
 
-    /**
-    * @name dxScrollablemethods.scrollTo
-    * @publicName scrollTo(targetLocation)
-    * @param1 targetLocation:numeric
-    */
-    /**
-    * @name dxScrollablemethods.scrollTo
-    * @publicName scrollTo(targetLocationObject)
-    * @param1 targetLocation:object
-    */
     scrollTo: function(targetLocation) {
         targetLocation = this._normalizeLocation(targetLocation);
 
@@ -657,11 +500,6 @@ var Scrollable = DOMComponent.inherit({
         this._strategy.scrollBy(distance);
     },
 
-    /**
-    * @name dxScrollablemethods.scrollToElement
-    * @publicName scrollToElement(targetLocation)
-    * @param1 element:Node|jQuery
-    */
     scrollToElement: function(element, offset) {
         var $element = $(element);
         var elementInsideContent = this.$content().find(element).length;

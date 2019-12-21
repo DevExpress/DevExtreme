@@ -66,11 +66,6 @@ function checkButtonsOptionType(buttons) {
     }
 }
 
-/**
-* @name dxTextEditor
-* @inherits Editor
-* @hidden
-*/
 const TextEditorBase = Editor.inherit({
     ctor: function(_, options) {
         if(options) {
@@ -91,232 +86,56 @@ const TextEditorBase = Editor.inherit({
             * @name dxTextEditorButton
             * @type object
             */
-            /**
-            * @name dxTextEditorButton.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            /**
-            * @name dxTextEditorButton.location
-            * @type Enums.TextEditorButtonLocation
-            * @default "after"
-            */
-            /**
-            * @name dxTextEditorButton.options
-            * @type dxButtonOptions
-            * @default undefined
-            */
 
-            /**
-            * @name dxTextEditorOptions.buttons
-            * @type Array<string, Enums.TextBoxButtonName, dxTextEditorButton>
-            * @default undefined
-            */
             buttons: void 0,
 
-            /**
-            * @name dxTextEditorOptions.value
-            * @type any
-            * @default ""
-            */
             value: '',
 
-            /**
-            * @name dxTextEditorOptions.spellcheck
-            * @type boolean
-            * @default false
-            */
             spellcheck: false,
 
-            /**
-            * @name dxTextEditorOptions.showClearButton
-            * @type boolean
-            * @default false
-            */
             showClearButton: false,
 
-            /**
-            * @name dxTextEditorOptions.valueChangeEvent
-            * @type string
-            * @default "change"
-            */
             valueChangeEvent: 'change',
 
-            /**
-            * @name dxTextEditorOptions.placeholder
-            * @type string
-            * @default ""
-            */
             placeholder: '',
 
-            /**
-            * @name dxTextEditorOptions.inputAttr
-            * @type object
-            * @default {}
-            */
             inputAttr: {},
 
-            /**
-            * @name dxTextEditorOptions.onFocusIn
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onFocusIn: null,
 
-            /**
-            * @name dxTextEditorOptions.onFocusOut
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onFocusOut: null,
 
-            /**
-            * @name dxTextEditorOptions.onKeyDown
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @default null
-            * @action
-            */
             onKeyDown: null,
 
-            /**
-            * @name dxTextEditorOptions.onKeyPress
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onKeyPress: null,
 
-            /**
-            * @name dxTextEditorOptions.onKeyUp
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onKeyUp: null,
 
-            /**
-            * @name dxTextEditorOptions.onChange
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onChange: null,
 
-            /**
-            * @name dxTextEditorOptions.onInput
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onInput: null,
 
-            /**
-            * @name dxTextEditorOptions.onCut
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onCut: null,
 
-            /**
-            * @name dxTextEditorOptions.onCopy
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onCopy: null,
 
-            /**
-            * @name dxTextEditorOptions.onPaste
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onPaste: null,
 
-            /**
-            * @name dxTextEditorOptions.onEnterKey
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onEnterKey: null,
 
             mode: 'text',
 
-            /**
-             * @name dxTextEditorOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxTextEditorOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-            * @name dxTextEditorOptions.text
-            * @type string
-            * @readonly
-            */
             text: undefined,
 
             displayValueFormatter: function(value) {
                 return isDefined(value) && value !== false ? value : '';
             },
 
-            /**
-            * @name dxTextEditorOptions.name
-            * @type string
-            * @hidden false
-            */
 
-            /**
-            * @name dxTextEditorOptions.stylingMode
-            * @type Enums.EditorStylingMode
-            * @default 'outlined'
-            */
             stylingMode: config().editorStylingMode || 'outlined'
         });
     },
@@ -330,10 +149,6 @@ const TextEditorBase = Editor.inherit({
                     return themes.isMaterial(themeName);
                 },
                 options: {
-                    /**
-                    * @name dxTextEditorOptions.stylingMode
-                    * @default 'underlined' @for Material
-                    */
                     stylingMode: config().editorStylingMode || 'underlined'
                 }
             }
@@ -922,28 +737,14 @@ const TextEditorBase = Editor.inherit({
         }
     },
 
-    /**
-    * @name dxTextEditorMethods.getButton
-    * @publicName getButton(name)
-    * @param1 name:string
-    * @return dxButton | undefined
-    */
     getButton(name) {
         return this._buttonCollection.getButton(name);
     },
 
-    /**
-    * @name dxTextEditorMethods.focus
-    * @publicName focus()
-    */
     focus: function() {
         eventsEngine.trigger(this._input(), 'focus');
     },
 
-    /**
-    * @name dxTextEditorMethods.blur
-    * @publicName blur()
-    */
     blur: function() {
         if(this._input().is(domAdapter.getActiveElement())) {
             domUtils.resetActiveElement();

@@ -12,14 +12,6 @@ var Class = require('../core/class'),
 
     storeImpl = {};
 
-/**
-* @name Store
-* @type object
-* @inherits EventsMixin
-* @hidden
-* @module data/abstract_store
-* @export default
-*/
 var Store = Class.inherit({
 
     ctor: function(options) {
@@ -28,93 +20,26 @@ var Store = Class.inherit({
 
         each(
             [
-                /**
-                 * @name StoreOptions.onLoaded
-                 * @type function
-                 * @type_function_param1 result:Array<any>
-                 * @action
-                 */
                 'onLoaded',
 
-                /**
-                 * @name StoreOptions.onLoading
-                 * @type function
-                 * @type_function_param1 loadOptions:LoadOptions
-                 * @action
-                 */
                 'onLoading',
 
-                /**
-                 * @name StoreOptions.onInserted
-                 * @type function
-                 * @type_function_param1 values:object
-                 * @type_function_param2 key:object|string|number
-                 * @action
-                 */
                 'onInserted',
 
-                /**
-                 * @name StoreOptions.onInserting
-                 * @type function
-                 * @type_function_param1 values:object
-                 * @action
-                 */
                 'onInserting',
 
-                /**
-                 * @name StoreOptions.onUpdated
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @type_function_param2 values:object
-                 * @action
-                 */
                 'onUpdated',
 
-                /**
-                 * @name StoreOptions.onUpdating
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @type_function_param2 values:object
-                 * @action
-                 */
                 'onUpdating',
 
-                /**
-                 * @name StoreOptions.onPush
-                 * @type function
-                 * @type_function_param1 changes:Array<any>
-                 * @action
-                 */
                 'onPush',
 
-                /**
-                 * @name StoreOptions.onRemoved
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @action
-                 */
                 'onRemoved',
 
-                /**
-                 * @name StoreOptions.onRemoving
-                 * @type function
-                 * @type_function_param1 key:object|string|number
-                 * @action
-                 */
                 'onRemoving',
 
-                /**
-                 * @name StoreOptions.onModified
-                 * @type function
-                 * @action
-                 */
                 'onModified',
 
-                /**
-                 * @name StoreOptions.onModifying
-                 * @type function
-                 * @action
-                 */
                 'onModifying'
             ],
             function(_, optionName) {
@@ -123,16 +48,8 @@ var Store = Class.inherit({
                 }
             });
 
-        /**
-         * @name StoreOptions.key
-         * @type string|Array<string>
-         */
         this._key = options.key;
 
-        /**
-         * @name StoreOptions.errorHandler
-         * @type function
-         */
         this._errorHandler = options.errorHandler;
 
         this._useDefaultSearch = true;
@@ -142,21 +59,10 @@ var Store = Class.inherit({
         return null;
     },
 
-    /**
-    * @name StoreMethods.key
-    * @publicName key()
-    * @return any
-    */
     key: function() {
         return this._key;
     },
 
-    /**
-    * @name StoreMethods.keyOf
-    * @publicName keyOf(obj)
-    * @param1 obj:object
-    * @return any
-    */
     keyOf: function(obj) {
         if(!this._keyGetter) {
             this._keyGetter = compileGetter(this.key());
@@ -170,17 +76,6 @@ var Store = Class.inherit({
             throw errorsModule.errors.Error('E4005');
         }
     },
-    /**
-    * @name StoreMethods.load
-    * @publicName load()
-    * @return Promise<any>
-    */
-    /**
-    * @name StoreMethods.load
-    * @publicName load(options)
-    * @param1 options:LoadOptions
-    * @return Promise<any>
-    */
     load: function(options) {
         var that = this;
 
@@ -219,14 +114,6 @@ var Store = Class.inherit({
 
     createQuery: abstract,
 
-    /**
-    * @name StoreMethods.totalCount
-    * @publicName totalCount(options)
-    * @param1 obj:object
-    * @param1_field1 filter:object
-    * @param1_field2 group:object
-    * @return Promise<number>
-    */
     totalCount: function(options) {
         return this._totalCountImpl(options);
     },
@@ -235,24 +122,12 @@ var Store = Class.inherit({
         return queryByOptions(this.createQuery(options), options, true).count();
     },
 
-    /**
-    * @name StoreMethods.byKey
-    * @publicName byKey(key)
-    * @param1 key:object|string|number
-    * @return Promise<any>
-    */
     byKey: function(key, extraOptions) {
         return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
     },
 
     _byKeyImpl: abstract,
 
-    /**
-    * @name StoreMethods.insert
-    * @publicName insert(values)
-    * @param1 values:object
-    * @return Promise<any>
-    */
     insert: function(values) {
         var that = this;
 
@@ -267,13 +142,6 @@ var Store = Class.inherit({
 
     _insertImpl: abstract,
 
-    /**
-    * @name StoreMethods.update
-    * @publicName update(key, values)
-    * @param1 key:object|string|number
-    * @param2 values:object
-    * @return Promise<any>
-    */
     update: function(key, values) {
         var that = this;
 
@@ -288,11 +156,6 @@ var Store = Class.inherit({
 
     _updateImpl: abstract,
 
-    /**
-    * @name StoreMethods.push
-    * @publicName push(changes)
-    * @param1 changes:Array<any>
-    */
     push: function(changes) {
         this._pushImpl(changes);
         this.fireEvent('push', [changes]);
@@ -300,12 +163,6 @@ var Store = Class.inherit({
 
     _pushImpl: noop,
 
-    /**
-    * @name StoreMethods.remove
-    * @publicName remove(key)
-    * @param1 key:object|string|number
-    * @return Promise<void>
-    */
     remove: function(key) {
         var that = this;
 

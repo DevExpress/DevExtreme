@@ -4,13 +4,6 @@ import { errors } from './errors';
 import Store from './abstract_store';
 import arrayUtils from './array_utils';
 
-/**
-* @name ArrayStore
-* @inherits Store
-* @type object
-* @module data/array_store
-* @export default
-*/
 var ArrayStore = Store.inherit({
     ctor: function(options) {
         if(Array.isArray(options)) {
@@ -26,18 +19,9 @@ var ArrayStore = Store.inherit({
             throw errors.Error('E4006');
         }
 
-        /**
-         * @name ArrayStoreOptions.data
-         * @type Array<any>
-         */
         this._array = initialArray || [];
     },
 
-    /**
-    * @name ArrayStoreMethods.createQuery
-    * @publicName createQuery()
-    * @return object
-    */
     createQuery: function() {
         return Query(this._array, {
             errorHandler: this._errorHandler
@@ -70,10 +54,6 @@ var ArrayStore = Store.inherit({
         return arrayUtils.remove(this, this._array, key);
     },
 
-    /**
-    * @name ArrayStoreMethods.clear
-    * @publicName clear()
-    */
     clear: function() {
         this.fireEvent('modifying');
         this._array = [];

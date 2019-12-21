@@ -15,10 +15,6 @@ var DEFAULT_DATA_TYPE = 'string',
     DEFAUL_COLUMN_WIDTH = 100;
 
 exports.ExportMixin = extend({}, exportMixin, {
-    /**
-    * @name dxPivotGridMethods.exportToExcel
-    * @publicName exportToExcel()
-    */
     exportToExcel: function() {
         var that = this;
 

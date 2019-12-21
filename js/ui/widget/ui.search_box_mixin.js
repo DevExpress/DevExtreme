@@ -5,56 +5,20 @@ import TextBox from '../text_box';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 
-/**
-* @name SearchBoxMixin
-* @module ui/widget/ui.search_box_mixin
-* @export default
-* @hidden
-*/
 
 module.exports = {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name SearchBoxMixinOptions.searchMode
-            * @type Enums.CollectionSearchMode
-            * @default 'contains'
-            */
             searchMode: '',
 
-            /**
-            * @name SearchBoxMixinOptions.searchExpr
-            * @type getter|Array<getter>
-            * @default null
-            */
             searchExpr: null,
 
-            /**
-            * @name SearchBoxMixinOptions.searchValue
-            * @type String
-            * @default ""
-            */
             searchValue: '',
 
-            /**
-            * @name SearchBoxMixinOptions.searchEnabled
-            * @type boolean
-            * @default false
-            */
             searchEnabled: false,
 
-            /**
-             * @name SearchBoxMixinOptions.searchEditorOptions
-             * @type dxTextBoxOptions
-             * @default {}
-             */
             searchEditorOptions: {},
 
-            /**
-            * @name SearchBoxMixinOptions.searchTimeout
-            * @type number
-            * @default undefined
-            */
         });
     },
 

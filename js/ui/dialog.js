@@ -65,26 +65,7 @@ exports.FakeDialogComponent = FakeDialogComponent;
 
 exports.title = '';
 
-/**
- * @name ui.dialog
- * @namespace DevExpress.ui
- */
 
-/**
- * @name ui.dialogmethods.custom
- * @publicName custom(options)
- * @return Object
- * @param1 options:object
- * @param1_field1 title:String
- * @param1_field2 messageHtml:String
- * @param1_field3 buttons:Array<dxButtonOptions>
- * @param1_field4 showTitle:boolean
- * @param1_field5 message:String:deprecated(messageHtml)
- * @param1_field6 dragEnabled:boolean
- * @static
- * @module ui/dialog
- * @export custom
- */
 exports.custom = function(options) {
     const deferred = new Deferred();
 
@@ -226,32 +207,12 @@ exports.custom = function(options) {
 };
 
 
-/**
- * @name ui.dialogmethods.alert
- * @publicName alert(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
- * @return Promise<void>
- * @static
- * @module ui/dialog
- * @export alert
- */
 exports.alert = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
     return exports.custom(options).show();
 };
 
-/**
- * @name ui.dialogmethods.confirm
- * @publicName confirm(messageHtml,title)
- * @param1 messageHtml:string
- * @param2 title:string
- * @return Promise<boolean>
- * @static
- * @module ui/dialog
- * @export confirm
- */
 exports.confirm = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml)
         ? messageHtml

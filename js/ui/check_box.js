@@ -17,13 +17,6 @@ var CHECKBOX_CLASS = 'dx-checkbox',
     CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate',
     CHECKBOX_FEEDBACK_HIDE_TIMEOUT = 100;
 
-/**
-* @name dxCheckBox
-* @isEditor
-* @inherits Editor
-* @module ui/check_box
-* @export default
-*/
 var CheckBox = Editor.inherit({
 
     _supportedKeys: function() {
@@ -39,41 +32,16 @@ var CheckBox = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
-            /**
-             * @name dxCheckBoxOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxCheckBoxOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
-            /**
-             * @name dxCheckBoxOptions.value
-             * @type boolean
-             * @default false
-             */
             value: false,
 
-            /**
-             * @name dxCheckBoxOptions.text
-             * @type string
-             * @default ""
-             */
             text: '',
 
             useInkRipple: false
 
-            /**
-            * @name dxCheckBoxOptions.name
-            * @type string
-            * @hidden false
-            */
         });
     },
 
@@ -84,11 +52,6 @@ var CheckBox = Editor.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name dxCheckBoxOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }

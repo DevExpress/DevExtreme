@@ -255,11 +255,6 @@ var FilterPanelView = modules.View.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.filterPanel
-             * @type object
-             * @default {}
-             */
             filterPanel: {
                 /**
                  * @name GridBaseOptions.filterPanel.visible

@@ -182,12 +182,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return new SummaryCell(config._columnPath || that._columnPath, config._rowPath || that._rowPath, that._data, that._descriptions, that._fieldIndex);
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.parent
-    * @publicName parent(direction)
-    * @param1 direction:string
-    * @return dxPivotGridSummaryCell
-    */
     parent: function(direction) {
         var path = this._getPath(direction).slice(),
             config = {};
@@ -200,12 +194,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return NULL;
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.children
-    * @publicName children(direction)
-    * @param1 direction:string
-    * @return Array<dxPivotGridSummaryCell>
-    */
     children: function(direction) {
         var path = this._getPath(direction).slice(),
             item = path[0],
@@ -221,18 +209,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
         return result;
     },
-    /**
-    * @name dxPivotGridSummaryCell.grandTotal
-    * @publicName grandTotal(direction)
-    * @param1 direction:string
-    * @return dxPivotGridSummaryCell
-    */
 
-    /**
-   * @name dxPivotGridSummaryCell.grandTotal
-   * @publicName grandTotal()
-   * @return dxPivotGridSummaryCell
-   */
     grandTotal: function(direction) {
         var config = {},
             rowPath = this._rowPath,
@@ -249,20 +226,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return this._createCell(config);
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.next
-    * @publicName next(direction)
-    * @param1 direction:string
-    * @return dxPivotGridSummaryCell
-    */
-
-    /**
-    * @name dxPivotGridSummaryCell.next
-    * @publicName next(direction, allowCrossGroup)
-    * @param1 direction:string
-    * @param2 allowCrossGroup:bool
-    * @return dxPivotGridSummaryCell
-    */
 
     next: function(direction, allowCrossGroup) {
         var currentPath = this._getPath(direction),
@@ -293,20 +256,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return NULL;
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.prev
-    * @publicName prev(direction)
-    * @param1 direction:string
-    * @return dxPivotGridSummaryCell
-    */
-
-    /**
-    * @name dxPivotGridSummaryCell.prev
-    * @publicName prev(direction, allowCrossGroup)
-    * @param1 direction:string
-    * @param2 allowCrossGroup:bool
-    * @return dxPivotGridSummaryCell
-    */
 
     prev: function(direction, allowCrossGroup) {
         var currentPath = this._getPath(direction),
@@ -341,12 +290,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return this._cell;
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.field
-    * @publicName field(area)
-    * @param1 area:string
-    * @return PivotGridDataSourceOptions.fields
-    */
 
     field: function(area) {
         if(area === 'data') {
@@ -359,13 +302,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return field || NULL;
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.child
-    * @publicName child(direction, fieldValue)
-    * @param1 direction:string
-    * @param2 fieldValue:number|string
-    * @return dxPivotGridSummaryCell
-    */
     child: function(direction, fieldValue) {
         var children = this.children(direction),
             childLevelField;
@@ -379,13 +315,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
 
-    /**
-   * @name dxPivotGridSummaryCell.slice
-   * @publicName slice(field, value)
-   * @param1 field:PivotGridDataSourceOptions.fields
-   * @param2 value:number|string
-   * @return dxPivotGridSummaryCell
-   */
     slice: function(field, value) {
         var that = this,
             config = {},
@@ -431,30 +360,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return sliceCell;
     },
 
-    /**
-   * @name dxPivotGridSummaryCell.value
-   * @publicName value()
-   * @return any
-   */
-    /**
-  * @name dxPivotGridSummaryCell.value
-  * @publicName value(postProcessed)
-  * @param1 postProcessed:boolean
-  * @return any
-  */
-    /**
-   * @name dxPivotGridSummaryCell.value
-   * @publicName value(field)
-   * @param1 field:PivotGridDataSourceOptions.fields|string
-   * @return any
-   */
-    /**
-  * @name dxPivotGridSummaryCell.value
-  * @publicName value(field, postProcessed)
-  * @param1 field:PivotGridDataSourceOptions.fields|string
-  * @param2 postProcessed:boolean
-  * @return any
-  */
     value: function(arg1, arg2) {
         var cell = this._cell,
             fieldIndex = this._fieldIndex,
@@ -483,12 +388,6 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         return NULL;
     },
 
-    /**
-    * @name dxPivotGridSummaryCell.isPostProcessed
-    * @publicName isPostProcessed(field)
-    * @param1 field:PivotGridDataSourceOptions.fields|string
-    * @return boolean
-    */
     isPostProcessed(field) {
         let fieldIndex = this._fieldIndex;
         if(isDefined(field)) {

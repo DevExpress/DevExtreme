@@ -29,13 +29,6 @@ var LIST_ITEM_SELECTOR = '.dx-list-item',
 
     SEARCH_MODES = ['startswith', 'contains', 'endwith', 'notcontains'];
 
-/**
-* @name dxDropDownList
-* @inherits DataExpressionMixin, dxDropDownEditor
-* @module ui/drop_down_editor/ui.drop_down_list
-* @export default
-* @hidden
-*/
 var DropDownList = DropDownEditor.inherit({
 
     _supportedKeys: function() {
@@ -72,119 +65,32 @@ var DropDownList = DropDownEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
-            /**
-            * @name dxDropDownListOptions.displayValue
-            * @type string
-            * @readonly
-            * @default undefined
-            * @ref
-            */
             displayValue: undefined,
 
-            /**
-            * @name dxDropDownListOptions.searchEnabled
-            * @type boolean
-            * @default false
-            */
             searchEnabled: false,
 
-            /**
-            * @name dxDropDownListOptions.searchMode
-            * @type Enums.DropDownSearchMode
-            * @default "contains"
-            */
             searchMode: 'contains',
 
-            /**
-            * @name dxDropDownListOptions.searchTimeout
-            * @type number
-            * @default 500
-            */
             searchTimeout: 500,
 
-            /**
-            * @name dxDropDownListOptions.minSearchLength
-            * @type number
-            * @default 0
-            */
             minSearchLength: 0,
 
-            /**
-            * @name dxDropDownListOptions.searchExpr
-            * @type getter|Array<getter>
-            * @default null
-            */
             searchExpr: null,
 
-            /**
-            * @name dxDropDownListOptions.valueChangeEvent
-            * @type string
-            * @default "input change keyup"
-            */
             valueChangeEvent: 'input change keyup',
 
-            /**
-            * @name dxDropDownListOptions.selectedItem
-            * @type any
-            * @readonly
-            * @default null
-            * @ref
-            */
             selectedItem: null,
 
-            /**
-            * @name dxDropDownListOptions.noDataText
-            * @type string
-            * @default "No data to display"
-            */
             noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
-            /**
-            * @name dxDropDownListOptions.onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 selectedItem:object
-            * @action
-            */
             onSelectionChanged: null,
 
-            /**
-            * @name dxDropDownListOptions.onItemClick
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:object
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: commonUtils.noop,
 
-            /**
-            * @name dxDropDownListOptions.showDataBeforeSearch
-            * @type boolean
-            * @default false
-            */
             showDataBeforeSearch: false,
 
-            /**
-            * @name dxDropDownListOptions.grouped
-            * @type boolean
-            * @default false
-            */
             grouped: false,
 
-            /**
-            * @name dxDropDownListOptions.groupTemplate
-            * @type template|function
-            * @default "group"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             groupTemplate: 'group',
 
             popupPosition: {
@@ -194,24 +100,8 @@ var DropDownList = DropDownEditor.inherit({
                 collision: 'flip'
             },
 
-            /**
-             * @name dxDropDownListOptions.wrapItemText
-             * @type boolean
-             * @default false
-             */
             wrapItemText: false,
 
-            /**
-            * @name dxDropDownListOptions.onValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:object
-            * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field7 event:event
-            * @action
-            */
 
             /**
             * @name dxDropDownListOptions.fieldTemplate
@@ -259,10 +149,6 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         extend(this._optionsByReference, {
-            /**
-            * @name dxDropDownListOptions.value
-            * @ref
-            */
             value: true,
             selectedItem: true,
             displayValue: true

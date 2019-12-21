@@ -422,34 +422,13 @@ class FallbackLayoutStrategy {
     }
 }
 
-/**
-* @name dxBox
-* @inherits CollectionWidget
-* @module ui/box
-* @export default
-*/
 class Box extends CollectionWidget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            /**
-            * @name dxBoxOptions.direction
-            * @type Enums.BoxDirection
-            * @default 'row'
-            */
             direction: 'row',
 
-            /**
-            * @name dxBoxOptions.align
-            * @type Enums.BoxAlign
-            * @default 'start'
-            */
             align: 'start',
 
-            /**
-            * @name dxBoxOptions.crossAlign
-            * @type Enums.BoxCrossAlign
-            * @default 'start'
-            */
             crossAlign: 'stretch',
 
             /**
@@ -512,17 +491,7 @@ class Box extends CollectionWidget {
             * @hidden
             */
 
-            /**
-             * @name dxBoxOptions.dataSource
-             * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
 
-            /**
-             * @name dxBoxOptions.items
-             * @type Array<string, dxBoxItem, object>
-             * @fires dxBoxOptions.onOptionChanged
-             */
         });
     }
 
@@ -732,26 +701,6 @@ class Box extends CollectionWidget {
 * @name dxBoxItem
 * @inherits CollectionWidgetItem
 * @type object
-*/
-/**
-* @name dxBoxItem.ratio
-* @type number
-* @default 0
-*/
-/**
-* @name dxBoxItem.baseSize
-* @type number | Enums.Mode
-* @default 0
-*/
-/**
-* @name dxBoxItem.shrink
-* @type number
-* @default 1
-*/
-/**
-* @name dxBoxItem.box
-* @type dxBoxOptions
-* @default undefined
 */
 
 

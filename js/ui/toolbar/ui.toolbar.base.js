@@ -32,29 +32,10 @@ const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
 
-    /**
-     * @name  dxToolbarOptions.dataSource
-     * @type string|Array<string,dxToolbarItem,object>|DataSource|DataSourceOptions
-     * @default null
-     */
-
-    /**
-     * @name dxToolbarOptions.items
-     * @type Array<string, dxToolbarItem, object>
-     * @fires dxToolbarOptions.onOptionChanged
-     */
 
     /**
     * @name dxToolbarItem
     * @inherits CollectionWidgetItem
-    * @type object
-    */
-    /**
-    * @name dxToolbarItem.widget
-    * @type Enums.ToolbarItemWidget
-    */
-    /**
-    * @name dxToolbarItem.options
     * @type object
     */
 
@@ -483,17 +464,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
         clearTimeout(this._waitParentAnimationTimeout);
     },
 
-    /**
-    * @name dxToolbarMethods.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @hidden
-    */
 
-    /**
-    * @name dxToolbarMethods.focus
-    * @publicName focus()
-    * @hidden
-    */
 });
 
 registerComponent('dxToolbarBase', ToolbarBase);

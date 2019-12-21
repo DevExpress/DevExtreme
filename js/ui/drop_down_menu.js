@@ -32,13 +32,6 @@ var BUTTON_OPTION_MAP = {
     'buttonTemplate': 'template'
 };
 
-/**
-* @name dxDropDownMenu
-* @inherits Widget
-* @module ui/drop_down_menu
-* @export default
-* @hidden
-*/
 var DropDownMenu = Widget.inherit({
     _supportedKeys: function() {
         var extension = {};
@@ -56,112 +49,34 @@ var DropDownMenu = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxDropDownMenuOptions.items
-            * @type Array<Object>
-            */
             items: [],
 
-            /**
-            * @name dxDropDownMenuOptions.onItemClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: null,
 
-            /**
-            * @name dxDropDownMenuOptions.dataSource
-            * @type string|Array<Object>|DataSource|DataSourceOptions
-            * @default null
-            */
             dataSource: null,
 
-            /**
-            * @name dxDropDownMenuOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTemplate: 'item',
 
-            /**
-            * @name dxDropDownMenuOptions.buttonText
-            * @type string
-            * @default ""
-            */
             buttonText: '',
 
-            /**
-            * @name dxDropDownMenuOptions.buttonIcon
-            * @type string
-            * @default "overflow"
-            */
             buttonIcon: 'overflow',
 
             buttonWidth: undefined,
             buttonHeight: undefined,
             buttonTemplate: 'content',
 
-            /**
-            * @name dxDropDownMenuOptions.onButtonClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onButtonClick: null,
 
-            /**
-            * @name dxDropDownMenuOptions.usePopover
-            * @type boolean
-            * @default false
-            */
             usePopover: false,
 
-            /**
-             * @name dxDropDownMenuOptions.popupWidth
-             * @type number|string|function
-             * @default auto
-             */
             popupWidth: 'auto',
 
-            /**
-             * @name dxDropDownMenuOptions.popupHeight
-             * @type number|string|function
-             * @default auto
-             */
             popupHeight: 'auto',
 
-            /**
-             * @name dxDropDownMenuOptions.activeStateEnabled
-             * @type boolean
-             * @default true
-             */
             activeStateEnabled: true,
 
-            /**
-             * @name dxDropDownMenuOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-            * @name dxDropDownMenuOptions.opened
-            * @type boolean
-            * @default false
-            */
             opened: false,
 
             deferRendering: false,
@@ -529,18 +444,10 @@ var DropDownMenu = Widget.inherit({
         }
     },
 
-    /**
-    * @name dxDropDownMenuMethods.open
-    * @publicName open()
-    */
     open: function() {
         this.option('opened', true);
     },
 
-    /**
-    * @name dxDropDownMenuMethods.close
-    * @publicName close()
-    */
     close: function() {
         this.option('opened', false);
     }

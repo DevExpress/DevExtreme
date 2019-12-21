@@ -13,50 +13,17 @@ var PROGRESSBAR_CLASS = 'dx-progressbar',
     PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container',
     PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
 
-/**
-* @name dxProgressBar
-* @inherits dxTrackBar
-* @module ui/progress_bar
-* @export default
-*/
 var ProgressBar = TrackBar.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxProgressBarOptions.value
-            * @type number
-            * @default 0
-            */
             value: 0,
 
-            /**
-            * @name dxProgressBarOptions.statusFormat
-            * @type string|function
-            * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
-            * @type_function_param1 ratio:number
-            * @type_function_param2 value:number
-            * @type_function_return string
-            */
             statusFormat: function(ratio) {
                 return 'Progress: ' + Math.round(ratio * 100) + '%';
             },
 
-            /**
-            * @name dxProgressBarOptions.showStatus
-            * @type boolean
-            * @default true
-            */
             showStatus: true,
 
-            /**
-            * @name dxProgressBarOptions.onComplete
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            * @action
-            */
             onComplete: null,
 
             /**

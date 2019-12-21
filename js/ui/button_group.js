@@ -25,19 +25,6 @@ const ButtonCollection = CollectionWidget.inherit({
          * @type object
          */
         /**
-         * @name dxButtonGroupItem.hint
-         * @type String
-         */
-        /**
-         * @name dxButtonGroupItem.type
-         * @type Enums.ButtonType
-         * @default 'normal'
-         */
-        /**
-         * @name dxButtonGroupItem.icon
-         * @type String
-         */
-        /**
          * @name dxButtonGroupItem.html
          * @hidden
          */
@@ -112,108 +99,30 @@ const ButtonCollection = CollectionWidget.inherit({
     }
 });
 
-/**
- * @name dxButtonGroup
- * @inherits Widget
- * @module ui/button_group
- * @export default
- */
 const ButtonGroup = Widget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-             * @name dxButtonGroupOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
-            /**
-             * @name dxButtonGroupOptions.focusStateEnabled
-             * @type boolean
-             * @default true
-             */
             focusStateEnabled: true,
 
-            /**
-            * @name dxButtonGroupOptions.selectionMode
-            * @type Enums.ButtonGroupSelectionMode
-            * @default 'single'
-            */
             selectionMode: 'single',
 
-            /**
-             * @name dxButtonGroupOptions.selectedItems
-             * @type Array<any>
-             * @fires dxButtonGroupOptions.onSelectionChanged
-             */
             selectedItems: [],
 
-            /**
-             * @name dxButtonGroupOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires dxButtonGroupOptions.onSelectionChanged
-             */
             selectedItemKeys: [],
 
-            /**
-             * @name dxButtonGroupOptions.stylingMode
-             * @type Enums.ButtonStylingMode
-             * @default 'contained'
-             */
             stylingMode: 'contained',
 
-            /**
-             * @name dxButtonGroupOptions.keyExpr
-             * @type string|function
-             * @default 'text'
-             */
             keyExpr: 'text',
 
-            /**
-             * @name dxButtonGroupOptions.items
-             * @type Array<dxButtonGroupItem>
-             */
             items: [],
 
-            /**
-             * @name dxButtonGroupOptions.itemTemplate
-             * @type template|function
-             * @deprecated dxButtonGroupOptions.buttonTemplate
-             */
 
-            /**
-             * @name dxButtonGroupOptions.buttonTemplate
-             * @type template|function
-             * @default "content"
-             * @type_function_param1 buttonData:object
-             * @type_function_param2 buttonContent:dxElement
-             * @type_function_return string|Node|jQuery
-             */
             buttonTemplate: 'content',
 
-            /**
-             * @name dxButtonGroupOptions.onSelectionChanged
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 addedItems:array<any>
-             * @type_function_param1_field5 removedItems:array<any>
-             * @action
-             */
             onSelectionChanged: null,
 
-            /**
-            * @name dxButtonGroupOptions.onItemClick
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 event:event
-            * @action
-            */
             onItemClick: null
         });
     },

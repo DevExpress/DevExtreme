@@ -16,49 +16,11 @@ module.exports = {
     defaultOptions: function() {
         return {
             loadingTimeout: 0,
-            /**
-             * @name GridBaseOptions.dataSource
-             * @type string|Array<Object>|DataSource|DataSourceOptions
-             * @default null
-             */
             dataSource: null,
-            /**
-             * @name GridBaseOptions.cacheEnabled
-             * @type boolean
-             * @default true
-             */
             cacheEnabled: true,
-            /**
-             * @name GridBaseOptions.repaintChangesOnly
-             * @type boolean
-             * @default false
-             */
             repaintChangesOnly: false,
-            /**
-             * @name GridBaseOptions.highlightChanges
-             * @type boolean
-             * @default false
-             */
             highlightChanges: false,
-            /**
-             * @name GridBaseOptions.onDataErrorOccurred
-             * @extends Action
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 error:Error
-             * @action
-            */
             onDataErrorOccurred: null,
-            /**
-             * @name dxDataGridOptions.remoteOperations
-             * @type boolean|object|Enums.Mode
-             * @default "auto"
-             */
-            /**
-             * @name dxTreeListOptions.remoteOperations
-             * @type object|Enums.Mode
-             * @default "auto"
-             */
             remoteOperations: 'auto',
             /**
              * @name dxDataGridOptions.remoteOperations.sorting
@@ -105,66 +67,11 @@ module.exports = {
              * @type boolean
              * @default false
              */
-            /**
-             * @name GridBaseOptions.paging
-             * @type object
-             */
             paging: {
-                /**
-                 * @name GridBaseOptions.paging.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-                /**
-                 * @name GridBaseOptions.paging.pageSize
-                 * @type number
-                 * @default 20
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 pageSize: undefined,
-                /**
-                 * @name GridBaseOptions.paging.pageIndex
-                 * @type number
-                 * @default 0
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 pageIndex: undefined
             }
-            /**
-             * @name GridBaseOptions.onRowExpanding
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @type_function_param1_field5 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowExpanded
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowCollapsing
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @type_function_param1_field5 cancel:boolean
-             * @extends Action
-             * @action
-             */
-            /**
-             * @name GridBaseOptions.onRowCollapsed
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 key:any
-             * @extends Action
-             * @action
-             */
         };
     },
     controllers: {
@@ -320,17 +227,6 @@ module.exports = {
                 getDataSource: function() {
                     return this._dataSource && this._dataSource._dataSource;
                 },
-                /**
-                 * @name GridBaseMethods.getCombinedFilter
-                 * @publicName getCombinedFilter()
-                 * @return any
-                 */
-                /**
-                 * @name GridBaseMethods.getCombinedFilter
-                 * @publicName getCombinedFilter(returnDataField)
-                 * @param1 returnDataField:boolean
-                 * @return any
-                 */
                 getCombinedFilter: function(returnDataField) {
                     return this.combinedFilter(undefined, returnDataField);
                 },
@@ -1016,16 +912,6 @@ module.exports = {
                         return that.reload().done(that.pageChanged.fire.bind(that.pageChanged));
                     }
                 },
-                /**
-                 * @name GridBaseMethods.filter
-                 * @publicName filter(filterExpr)
-                 * @param1 filterExpr:any
-                 */
-                /**
-                 * @name GridBaseMethods.filter
-                 * @publicName filter()
-                 * @return any
-                 */
                 filter: function(filterExpr) {
                     var dataSource = this._dataSource,
                         filter = dataSource && dataSource.filter();
@@ -1044,15 +930,6 @@ module.exports = {
                     }
                     this._applyFilter();
                 },
-                /**
-                * @name GridBaseMethods.clearFilter
-                * @publicName clearFilter()
-                */
-                /**
-                 * @name GridBaseMethods.clearFilter
-                 * @publicName clearFilter(filterName)
-                 * @param1 filterName:string
-                 */
                 clearFilter: function(filterName) {
                     var that = this,
                         columnsController = that._columnsController,
@@ -1174,11 +1051,6 @@ module.exports = {
                 isEmpty: function() {
                     return !this.items().length;
                 },
-                /**
-                 * @name GridBaseMethods.pageCount
-                 * @publicName pageCount()
-                 * @return numeric
-                 */
                 pageCount: function() {
                     return this._dataSource ? this._dataSource.pageCount() : 1;
                 },
@@ -1228,45 +1100,21 @@ module.exports = {
                     }
                     return d;
                 },
-                /**
-                * @name GridBaseMethods.getKeyByRowIndex
-                * @publicName getKeyByRowIndex(rowIndex)
-                * @param1 rowIndex:numeric
-                * @return any
-                */
                 getKeyByRowIndex: function(rowIndex) {
                     var item = this.items()[rowIndex];
                     if(item) {
                         return item.key;
                     }
                 },
-                /**
-                * @name GridBaseMethods.getRowIndexByKey
-                * @publicName getRowIndexByKey(key)
-                * @param1 key:object|string|number
-                * @return numeric
-                */
                 getRowIndexByKey: function(key) {
                     return gridCoreUtils.getIndexByKey(key, this.items());
                 },
-                /**
-                * @name GridBaseMethods.keyOf
-                * @publicName keyOf(obj)
-                * @param1 obj:object
-                * @return any
-                */
                 keyOf: function(data) {
                     var store = this.store();
                     if(store) {
                         return store.keyOf(data);
                     }
                 },
-                /**
-                * @name GridBaseMethods.byKey
-                * @publicName byKey(key)
-                * @param1 key:object|string|number
-                * @return Promise<Object>
-                */
                 byKey: function(key) {
                     var store = this.store(),
                         rowIndex = this.getRowIndexByKey(key),
@@ -1308,63 +1156,22 @@ module.exports = {
 
                     return result;
                 },
-                /**
-                * @name GridBaseMethods.pageIndex
-                * @publicName pageIndex()
-                * @return numeric
-                */
-                /**
-                * @name GridBaseMethods.pageIndex
-                * @publicName pageIndex(newIndex)
-                * @param1 newIndex:numeric
-                * @return Promise<void>
-                */
                 pageIndex: function(value) {
                     return changePaging(this, 'pageIndex', value);
                 },
-                /**
-                * @name GridBaseMethods.pageSize
-                * @publicName pageSize()
-                * @return numeric
-                */
-                /**
-                * @name GridBaseMethods.pageSize
-                * @publicName pageSize(value)
-                * @param1 value:numeric
-                */
                 pageSize: function(value) {
                     return changePaging(this, 'pageSize', value);
                 },
-                /**
-                 * @name GridBaseMethods.beginCustomLoading
-                 * @publicName beginCustomLoading(messageText)
-                 * @param1 messageText:string
-                 */
                 beginCustomLoading: function(messageText) {
                     this._isCustomLoading = true;
                     this._loadingText = messageText || '';
                     this._fireLoadingChanged();
                 },
-                /**
-                 * @name GridBaseMethods.endCustomLoading
-                 * @publicName endCustomLoading()
-                 */
                 endCustomLoading: function() {
                     this._isCustomLoading = false;
                     this._loadingText = undefined;
                     this._fireLoadingChanged();
                 },
-                /**
-                 * @name GridBaseMethods.refresh
-                 * @publicName refresh()
-                 * @return Promise<void>
-                 */
-                /**
-                 * @name GridBaseMethods.refresh
-                 * @publicName refresh(changesOnly)
-                 * @param1 changesOnly:boolean
-                 * @return Promise<void>
-                 */
                 refresh: function(options) {
                     if(options === true) {
                         options = { reload: true, changesOnly: true };
@@ -1398,16 +1205,6 @@ module.exports = {
 
                     return d.promise();
                 },
-                /**
-                 * @name dxDataGridMethods.getVisibleRows
-                 * @publicName getVisibleRows()
-                 * @return Array<dxDataGridRowObject>
-                 */
-                /**
-                 * @name dxTreeListMethods.getVisibleRows
-                 * @publicName getVisibleRows()
-                 * @return Array<dxTreeListRowObject>
-                 */
                 getVisibleRows: function() {
                     return this.items();
                 },
@@ -1419,11 +1216,6 @@ module.exports = {
                     this.callBase.apply(this, arguments);
                 },
 
-                /**
-                * @name GridBaseMethods.repaintRows
-                * @publicName repaintRows(rowIndexes)
-                * @param1 rowIndexes:Array<number>
-                */
                 repaintRows: function(rowIndexes, changesOnly) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
@@ -1456,11 +1248,6 @@ module.exports = {
             gridCoreUtils.proxyMethod(members, 'totalItemsCount', 0);
             gridCoreUtils.proxyMethod(members, 'hasKnownLastPage', true);
             gridCoreUtils.proxyMethod(members, 'isLoaded', true);
-            /**
-            * @name dxDataGridMethods.totalCount
-            * @publicName totalCount()
-            * @return numeric
-            */
             gridCoreUtils.proxyMethod(members, 'totalCount', 0);
 
             return members;

@@ -256,11 +256,6 @@ var GroupingDataControllerExtender = (function() {
         publicMethods: function() {
             return this.callBase().concat(['collapseAll', 'expandAll', 'isRowExpanded', 'expandRow', 'collapseRow']);
         },
-        /**
-         * @name dxDataGridMethods.collapseAll
-         * @publicName collapseAll(groupIndex)
-         * @param1 groupIndex:number | undefined
-         */
         collapseAll: function(groupIndex) {
             var dataSource = this._dataSource;
             if(dataSource && dataSource.collapseAll(groupIndex)) {
@@ -268,11 +263,6 @@ var GroupingDataControllerExtender = (function() {
                 dataSource.reload();
             }
         },
-        /**
-         * @name dxDataGridMethods.expandAll
-         * @publicName expandAll(groupIndex)
-         * @param1 groupIndex:number | undefined
-         */
         expandAll: function(groupIndex) {
             var dataSource = this._dataSource;
             if(dataSource && dataSource.expandAll(groupIndex)) {
@@ -313,35 +303,17 @@ var GroupingDataControllerExtender = (function() {
 
             return d;
         },
-        /**
-         * @name dxDataGridMethods.isRowExpanded
-         * @publicName isRowExpanded(key)
-         * @param1 key:any
-         * @return boolean
-         */
         isRowExpanded: function(key) {
             var dataSource = this._dataSource;
 
             return dataSource && dataSource.isRowExpanded(key);
         },
-        /**
-         * @name dxDataGridMethods.expandRow
-         * @publicName expandRow(key)
-         * @param1 key:any
-         * @return Promise<void>
-         */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
             return new Deferred().resolve();
         },
-        /**
-         * @name dxDataGridMethods.collapseRow
-         * @publicName collapseRow(key)
-         * @param1 key:any
-         * @return Promise<void>
-         */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
@@ -664,10 +636,6 @@ var columnHeadersViewExtender = (function() {
 gridCore.registerModule('grouping', {
     defaultOptions: function() {
         return {
-            /**
-             * @name dxDataGridOptions.grouping
-             * @type object
-             */
             grouping: {
                 /**
                  * @name dxDataGridOptions.grouping.autoExpandAll
@@ -687,11 +655,6 @@ gridCore.registerModule('grouping', {
                  * @default false
                  */
                 contextMenuEnabled: false,
-                /**
-                 * @name dxDataGridOptions.grouping.expandMode
-                 * @type Enums.GridGroupingExpandMode
-                 * @default "buttonClick"
-                 */
                 expandMode: 'buttonClick',
                 /**
                  * @name dxDataGridOptions.grouping.texts
@@ -730,10 +693,6 @@ gridCore.registerModule('grouping', {
                     ungroupAll: messageLocalization.format('dxDataGrid-ungroupAllText')
                 }
             },
-            /**
-            * @name dxDataGridOptions.groupPanel
-            * @type object
-            */
             groupPanel: {
                 /**
                  * @name dxDataGridOptions.groupPanel.visible

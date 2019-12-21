@@ -10,12 +10,6 @@ const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
     ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item',
     ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
 
-/**
-* @name dxValidationSummary
-* @inherits CollectionWidget
-* @module ui/validation_summary
-* @export default
-*/
 const ValidationSummary = CollectionWidget.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
@@ -29,11 +23,6 @@ const ValidationSummary = CollectionWidget.inherit({
             * @hidden
             */
             noDataText: null
-            /**
-            * @name dxValidationSummaryOptions.validationGroup
-            * @type string
-            * @ref
-            */
 
             // Ignore comments
             /**

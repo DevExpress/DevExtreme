@@ -8,12 +8,6 @@ var NAVBAR_CLASS = 'dx-navbar',
     NAVBAR_ITEM_CLASS = 'dx-nav-item',
     NAVBAR_ITEM_CONTENT_CLASS = 'dx-nav-item-content';
 
-/**
-* @name dxNavBar
-* @inherits dxTabs
-* @module ui/nav_bar
-* @export default
-*/
 var NavBar = Tabs.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -30,9 +24,6 @@ var NavBar = Tabs.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxNavBarOptions.scrollByContent
-            */
         });
     },
 
@@ -61,10 +52,6 @@ var NavBar = Tabs.inherit({
 * @name dxNavBarItem
 * @inherits dxTabsItem
 * @type object
-*/
-/**
-* @name dxNavBarItem.badge
-* @type String
 */
 NavBar.ItemClass = NavBarItem;
 

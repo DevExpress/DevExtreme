@@ -98,35 +98,12 @@ const ListEdit = ListBase.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            /**
-            * @name dxListOptions.showSelectionControls
-            * @type boolean
-            * @default false
-            */
             showSelectionControls: false,
 
-            /**
-            * @name dxListOptions.selectionMode
-            * @type Enums.ListSelectionMode
-            * @default 'none'
-            */
             selectionMode: 'none',
 
-            /**
-             * @name dxListOptions.selectAllMode
-             * @type Enums.SelectAllMode
-             * @default 'page'
-             */
             selectAllMode: 'page',
 
-            /**
-            * @name dxListOptions.onSelectAllValueChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 value:boolean
-            * @action
-            */
             onSelectAllValueChanged: null,
 
             /**
@@ -137,11 +114,6 @@ const ListEdit = ListBase.inherit({
             */
             selectAllText: formatMessage('dxList-selectAll'),
 
-            /**
-            * @name dxListOptions.menuItems
-            * @type Array<Object>
-            * @default []
-            */
             /**
             * @name dxListOptions.menuItems.text
             * @type string
@@ -154,79 +126,17 @@ const ListEdit = ListBase.inherit({
             */
             menuItems: [],
 
-            /**
-            * @name dxListOptions.menuMode
-            * @type Enums.ListMenuMode
-            * @default 'context'
-            */
             menuMode: 'context',
 
-            /**
-            * @name dxListOptions.allowItemDeleting
-            * @type boolean
-            * @default false
-            */
             allowItemDeleting: false,
 
-            /**
-            * @name dxListOptions.itemDeleteMode
-            * @type Enums.ListItemDeleteMode
-             * @default 'static'
-            */
             itemDeleteMode: 'static',
 
-            /**
-            * @name dxListOptions.allowItemReordering
-            * @type boolean
-            * @default false
-            * @deprecated dxListOptions.itemDragging
-            */
             allowItemReordering: false,
 
-            /**
-            * @name dxListOptions.itemDragging
-            * @type dxSortableOptions
-            */
             itemDragging: {}
 
-            /**
-            * @name dxListOptions.onItemDeleting
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 cancel:boolean | Promise<void>
-            * @action
-            * @hidden false
-            */
 
-            /**
-            * @name dxListOptions.onItemDeleted
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @action
-            * @hidden false
-            */
-
-            /**
-            * @name dxListOptions.onItemReordered
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:dxElement
-            * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 fromIndex:number
-            * @type_function_param1_field8 toIndex:number
-            * @action
-            * @hidden false
-            */
         });
     },
 
@@ -235,26 +145,14 @@ const ListEdit = ListBase.inherit({
             {
                 device: device => device.platform === 'ios',
                 options: {
-                    /**
-                    * @name dxListOptions.menuMode
-                    * @default 'slide' @for iOS
-                    */
                     menuMode: 'slide',
 
-                    /**
-                    * @name dxListOptions.itemDeleteMode
-                    * @default 'slideItem' @for iOS
-                    */
                     itemDeleteMode: 'slideItem'
                 }
             },
             {
                 device: { platform: 'android' },
                 options: {
-                    /**
-                    * @name dxListOptions.itemDeleteMode
-                    * @default 'swipe' @for Android
-                    */
                     itemDeleteMode: 'swipe'
                 }
             }
@@ -415,18 +313,10 @@ const ListEdit = ListBase.inherit({
         }
     },
 
-    /**
-    * @name dxListMethods.selectAll
-    * @publicName selectAll()
-    */
     selectAll() {
         return this._selection.selectAll(this._isPageSelectAll());
     },
 
-    /**
-    * @name dxListMethods.unselectAll
-    * @publicName unselectAll()
-    */
     unselectAll() {
         return this._selection.deselectAll(this._isPageSelectAll());
     },
@@ -475,68 +365,7 @@ const ListEdit = ListBase.inherit({
         return this._editStrategy.getItemDataByIndex(index);
     }
 
-    /**
-    * @name dxListMethods.deleteItem
-    * @publicName deleteItem(itemElement)
-    * @param1 itemElement:Node
-    * @return Promise<void>
-    */
-    /**
-    * @name dxListMethods.deleteItem
-    * @publicName deleteItem(itemIndex)
-    * @param1 itemIndex:Number|Object
-    * @return Promise<void>
-    */
 
-    /**
-    * @name dxListMethods.isItemSelected
-    * @publicName isItemSelected(itemElement)
-    * @param1 itemElement:Node
-    * @return boolean
-    */
-    /**
-    * @name dxListMethods.isItemSelected
-    * @publicName isItemSelected(itemIndex)
-    * @param1 itemIndex:Number|Object
-    * @return boolean
-    */
-
-    /**
-    * @name dxListMethods.selectItem
-    * @publicName selectItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxListMethods.selectItem
-    * @publicName selectItem(itemIndex)
-    * @param1 itemIndex:Number|Object
-    */
-
-    /**
-    * @name dxListMethods.unselectItem
-    * @publicName unselectItem(itemElement)
-    * @param1 itemElement:Node
-    */
-    /**
-    * @name dxListMethods.unselectItem
-    * @publicName unselectItem(itemIndex)
-    * @param1 itemIndex:Number|Object
-    */
-
-    /**
-    * @name dxListMethods.reorderItem
-    * @publicName reorderItem(itemElement, toItemElement)
-    * @param1 itemElement:Node
-    * @param2 toItemElement:Node
-    * @return Promise<void>
-    */
-    /**
-    * @name dxListMethods.reorderItem
-    * @publicName reorderItem(itemIndex, toItemIndex)
-    * @param1 itemIndex:Number|Object
-    * @param2 toItemIndex:Number|Object
-    * @return Promise<void>
-    */
 });
 
 module.exports = ListEdit;

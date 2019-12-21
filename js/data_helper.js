@@ -10,12 +10,6 @@ var DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions',
     SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 
 
-/**
-* @name DataHelperMixin
-* @module data_helper
-* @export default
-* @hidden
-*/
 var DataHelperMixin = {
 
     postCtor: function() {
@@ -140,11 +134,6 @@ var DataHelperMixin = {
         }
     },
 
-    /**
-    * @name DataHelperMixinMethods.getDataSource
-    * @publicName getDataSource()
-    * @return DataSource
-    */
     getDataSource: function() {
         return this._dataSource || null;
     }

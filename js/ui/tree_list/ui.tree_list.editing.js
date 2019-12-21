@@ -199,16 +199,7 @@ treeListCore.registerModule('editing', {
     defaultOptions: function() {
         return extend(true, editingModule.defaultOptions(), {
             editing: {
-                /**
-                 * @name dxTreeListOptions.editing.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name dxTreeListOptions.editing.texts.addRowToNode
-                     * @type string
-                     * @default "Add"
-                     */
                     addRowToNode: messageLocalization.format('dxTreeList-editingAddRowToNode'),
                 }
             }

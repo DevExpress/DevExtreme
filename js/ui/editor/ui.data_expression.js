@@ -8,64 +8,20 @@ var variableWrapper = require('../../core/utils/variable_wrapper'),
     ArrayStore = require('../../data/array_store'),
     Deferred = require('../../core/utils/deferred').Deferred;
 
-/**
-* @name DataExpressionMixin
-* @module ui/editor/ui.data_expression
-* @inherits DataHelperMixin
-* @export default
-* @hidden
-*/
 var DataExpressionMixin = extend({}, DataHelperMixin, {
 
     _dataExpressionDefaultOptions: function() {
         return {
-            /**
-            * @name DataExpressionMixinOptions.items
-            * @type Array<CollectionWidgetItem, object>
-            */
             items: [],
 
-            /**
-            * @name DataExpressionMixinOptions.dataSource
-            * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
-            * @default null
-            */
             dataSource: null,
 
-            /**
-            * @name DataExpressionMixinOptions.itemTemplate
-            * @type template|function
-            * @default "item"
-            * @type_function_param1 itemData:object
-            * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:dxElement
-            * @type_function_return string|Node|jQuery
-            */
             itemTemplate: 'item',
 
-            /**
-            * @name DataExpressionMixinOptions.value
-            * @type any
-            * @default null
-            */
             value: null,
 
-            /**
-            * @name DataExpressionMixinOptions.valueExpr
-             * @type string|function(item)
-            * @default "this"
-             * @type_function_param1 item:object
-             * @type_function_return string|number|boolean
-            */
             valueExpr: 'this',
 
-            /**
-            * @name DataExpressionMixinOptions.displayExpr
-            * @type string|function(item)
-             * @default undefined
-            * @type_function_param1 item:object
-             * @type_function_return string
-            */
             displayExpr: undefined
         };
     },

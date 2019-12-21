@@ -42,68 +42,22 @@ var NumberBoxBase = TextEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxNumberBoxOptions.value
-             * @type number
-             * @default 0
-             */
             value: 0,
 
-            /**
-             * @name dxNumberBoxOptions.min
-             * @type number
-             * @default undefined
-             */
             min: undefined,
 
-            /**
-             * @name dxNumberBoxOptions.max
-             * @type number
-             * @default undefined
-             */
             max: undefined,
 
-            /**
-             * @name dxNumberBoxOptions.step
-             * @type number
-             * @default 1
-             */
             step: 1,
 
-            /**
-             * @name dxNumberBoxOptions.showSpinButtons
-             * @type boolean
-             * @default false
-             */
             showSpinButtons: false,
 
-            /**
-             * @name dxNumberBoxOptions.useLargeSpinButtons
-             * @type boolean
-             * @default true
-             * @default false @for desktop
-             */
             useLargeSpinButtons: true,
 
-            /**
-             * @name dxNumberBoxOptions.mode
-             * @type Enums.NumberBoxMode
-             * @default "text"
-             */
             mode: 'text',
 
-            /**
-             * @name dxNumberBoxOptions.invalidValueMessage
-             * @type string
-             * @default "Value must be a number"
-             */
             invalidValueMessage: messageLocalization.format('dxNumberBox-invalidValueMessage'),
 
-            /**
-            * @name dxNumberBoxOptions.buttons
-            * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
-            * @default undefined
-            */
             buttons: void 0,
 
             /**
@@ -172,10 +126,6 @@ var NumberBoxBase = TextEditor.inherit({
                     return devices.real().deviceType !== 'desktop' && !this._isSupportInputMode();
                 }.bind(this),
                 options: {
-                    /**
-                     * @name dxNumberBoxOptions.mode
-                     * @default 'number' @for mobile_devices
-                     */
                     mode: 'number'
                 }
             }

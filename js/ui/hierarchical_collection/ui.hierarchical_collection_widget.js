@@ -12,60 +12,20 @@ import { noop } from '../../core/utils/common';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-/**
-* @name HierarchicalCollectionWidget
-* @type object
-* @inherits CollectionWidget
-* @module ui/hierarchical_collection/ui.hierarchical_collection_widget
-* @export default
-* @hidden
-*/
 var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name HierarchicalCollectionWidgetOptions.keyExpr
-            * @type string|function
-            * @default 'id'
-            */
             keyExpr: 'id',
 
-            /**
-            * @name HierarchicalCollectionWidgetOptions.displayExpr
-            * @type string|function(item)
-            * @default 'text'
-             * @type_function_param1 item:object
-             * @type_function_return string
-            */
             displayExpr: 'text',
 
-            /**
-            * @name HierarchicalCollectionWidgetOptions.selectedExpr
-            * @type string|function
-            * @default 'selected'
-            */
             selectedExpr: 'selected',
 
-            /**
-            * @name HierarchicalCollectionWidgetOptions.disabledExpr
-            * @type string|function
-            * @default 'disabled'
-            */
             disabledExpr: 'disabled',
 
-            /**
-            * @name HierarchicalCollectionWidgetOptions.itemsExpr
-            * @type string|function
-            * @default 'items'
-            */
             itemsExpr: 'items',
 
-            /**
-             * @name HierarchicalCollectionWidgetOptions.hoverStateEnabled
-             * @type boolean
-             * @default true
-             */
             hoverStateEnabled: true,
 
             parentIdExpr: 'parentId',
@@ -80,11 +40,6 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                     return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                    * @name HierarchicalCollectionWidgetOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
                     focusStateEnabled: true
                 }
             }

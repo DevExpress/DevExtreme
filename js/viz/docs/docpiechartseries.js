@@ -5,17 +5,7 @@
  * @hidden
  */
 var pieChartSeries = {
-    /**
-    * @name PieChartSeries.name
-    * @type string
-    * @default undefined
-    */
     name: undefined,
-    /**
-    * @name PieChartSeries.tag
-    * @type any
-    * @default undefined
-    */
     tag: undefined
 };
 
@@ -23,28 +13,9 @@ var pieChartSeries = {
 * @name dxPieChartSeriesTypes
 * @type object
 */
-/**
-* @name dxPieChartSeriesTypes.CommonPieChartSeries
-* @type object
-* @hidden
-*/
 var commonPieChartSeries = {
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.color
-    * @type string
-    * @default undefined
-    */
     color: undefined,
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize
-    * @type number
-    * @default undefined
-    */
     minSegmentSize: undefined,
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping
-    * @type object
-    */
     smallValuesGrouping: {
         /**
          * @name dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.mode
@@ -71,34 +42,10 @@ var commonPieChartSeries = {
          */
         groupName: 'others',
     },
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.valueField
-    * @type string
-    * @default 'val'
-    */
     valueField: 'val',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.argumentField
-    * @type string
-    * @default 'arg'
-    */
     argumentField: 'arg',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.argumentType
-    * @type Enums.ChartDataType
-    * @default undefined
-    */
     argumentType: undefined,
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.tagField
-    * @type string
-    * @default 'tag'
-    */
     tagField: 'tag',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.border
-    * @type object
-    */
     border: {
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
@@ -125,22 +72,8 @@ var commonPieChartSeries = {
        */
         dashStyle: undefined
     },
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode
-    * @type Enums.PieChartSeriesInteractionMode
-    * @default 'onlyPoint'
-    */
     hoverMode: 'onlyPoint',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode
-    * @type Enums.PieChartSeriesInteractionMode
-        * @default 'onlyPoint'
-    */
     selectionMode: 'onlyPoint',
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle
-    * @type object
-    */
     hoverStyle: {
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.color
@@ -209,10 +142,6 @@ var commonPieChartSeries = {
             dashStyle: undefined
         }
     },
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle
-    * @type object
-    */
     selectionStyle: {
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.color
@@ -281,16 +210,7 @@ var commonPieChartSeries = {
             dashStyle: undefined
         }
     },
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
-    * @type number
-    * @default undefined
-    */
     maxLabelCount: undefined,
-    /**
-    * @name dxPieChartSeriesTypes.CommonPieChartSeries.label
-    * @type object
-    */
     label: {
         /**
         * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.customizeText
@@ -422,20 +342,10 @@ var commonPieChartSeries = {
     }
 };
 
-/**
-* @name dxPieChartSeriesTypes.DoughnutSeries
-* @type object
-* @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-*/
 var doughnutSeries = {
 
 };
 
-/**
-* @name dxPieChartSeriesTypes.PieSeries
-* @type object
-* @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-*/
 var pieSeries = {
 
 };

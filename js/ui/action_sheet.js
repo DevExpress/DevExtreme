@@ -21,73 +21,24 @@ var ACTION_SHEET_CLASS = 'dx-actionsheet',
     ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
 
 
-/**
-* @name dxActionSheet
-* @inherits CollectionWidget
-* @module ui/action_sheet
-* @export default
-*/
 var ActionSheet = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxActionSheetOptions.usePopover
-            * @type boolean
-            * @default false
-            */
             usePopover: false,
 
-            /**
-            * @name dxActionSheetOptions.target
-            * @type string|Node|jQuery
-            */
             target: null,
 
-            /**
-            * @name dxActionSheetOptions.title
-            * @type string
-            * @default ""
-            */
             title: '',
 
-            /**
-            * @name dxActionSheetOptions.showTitle
-            * @type boolean
-            * @default true
-            */
             showTitle: true,
 
-            /**
-            * @name dxActionSheetOptions.showCancelButton
-            * @type boolean
-            * @default true
-            */
             showCancelButton: true,
 
-            /**
-            * @name dxActionSheetOptions.cancelText
-            * @type string
-            * @default "Cancel"
-            */
             cancelText: messageLocalization.format('Cancel'),
 
-            /**
-            * @name dxActionSheetOptions.onCancelClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 cancel:boolean
-            * @action
-            */
             onCancelClick: null,
 
-            /**
-            * @name dxActionSheetOptions.visible
-            * @type boolean
-            * @default false
-            * @fires dxActionSheetOptions.onOptionChanged
-            */
             visible: false,
 
             /**
@@ -142,17 +93,6 @@ var ActionSheet = CollectionWidget.inherit({
             * @hidden
             */
 
-            /**
-             * @name dxActionSheetOptions.dataSource
-             * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-
-            /**
-             * @name dxActionSheetOptions.items
-             * @type Array<string, dxActionSheetItem, object>
-             * @fires dxActionSheetOptions.onOptionChanged
-             */
 
             /**
              * @name dxActionSheetOptions.focusStateEnabled
@@ -170,10 +110,6 @@ var ActionSheet = CollectionWidget.inherit({
         return this.callBase().concat([{
             device: { platform: 'ios', tablet: true },
             options: {
-                /**
-                * @name dxActionSheetOptions.usePopover
-                * @default true @for iPad
-                */
                 usePopover: true
             }
         }]);
@@ -185,26 +121,6 @@ var ActionSheet = CollectionWidget.inherit({
         * @name dxActionSheetItem
         * @inherits CollectionWidgetItem
         * @type object
-        */
-        /**
-        * @name dxActionSheetItem.type
-        * @type Enums.ButtonType
-        * @default 'normal'
-        */
-        /**
-        * @name dxActionSheetItem.onClick
-        * @type function(e)|string
-        * @default null
-        * @type_function_param1 e:object
-        * @type_function_param1_field1 component:dxActionSheet
-        * @type_function_param1_field2 element:dxElement
-        * @type_function_param1_field3 model:object
-        * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-        * @type_function_param1_field5 event:event
-        */
-        /**
-        * @name dxActionSheetItem.icon
-        * @type String
         */
         /**
         * @name dxActionSheetItem.visible
@@ -453,12 +369,6 @@ var ActionSheet = CollectionWidget.inherit({
         }
     },
 
-    /**
-    * @name dxActionSheetMethods.toggle
-    * @publicName toggle(showing)
-    * @param1 showing:boolean
-    * @return Promise<void>
-    */
     toggle: function(showing) {
         var that = this,
             d = new Deferred();
@@ -471,20 +381,10 @@ var ActionSheet = CollectionWidget.inherit({
         return d.promise();
     },
 
-    /**
-    * @name dxActionSheetMethods.show
-    * @publicName show()
-    * @return Promise<void>
-    */
     show: function() {
         return this.toggle(true);
     },
 
-    /**
-    * @name dxActionSheetMethods.hide
-    * @publicName hide()
-    * @return Promise<void>
-    */
     hide: function() {
         return this.toggle(false);
     }

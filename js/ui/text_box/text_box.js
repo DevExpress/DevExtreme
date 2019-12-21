@@ -31,24 +31,9 @@ var TextBox = TextEditor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxTextBoxOptions.value
-            * @type string
-            * @default ""
-            */
             value: '',
-            /**
-            * @name dxTextBoxOptions.mode
-            * @type Enums.TextBoxMode
-            * @default "text"
-            */
             mode: 'text',
 
-            /**
-            * @name dxTextBoxOptions.maxLength
-            * @type string|number
-            * @default null
-            */
             maxLength: null
         });
     },

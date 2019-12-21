@@ -18,21 +18,10 @@ var RESPONSIVE_BOX_CLASS = 'dx-responsivebox',
 
     HD_SCREEN_WIDTH = 1920;
 
-/**
-* @name dxResponsiveBox
-* @type object
-* @inherits CollectionWidget
-* @module ui/responsive_box
-* @export default
-*/
 var ResponsiveBox = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxResponsiveBoxOptions.rows
-            * @type Array<Object>
-            */
             /**
             * @name dxResponsiveBoxOptions.rows.baseSize
             * @type number | Enums.Mode
@@ -56,10 +45,6 @@ var ResponsiveBox = CollectionWidget.inherit({
             rows: [],
 
             /**
-            * @name dxResponsiveBoxOptions.cols
-            * @type Array<Object>
-            */
-            /**
             * @name dxResponsiveBoxOptions.cols.baseSize
             * @type number | Enums.Mode
             * @default 0
@@ -81,30 +66,12 @@ var ResponsiveBox = CollectionWidget.inherit({
             */
             cols: [],
 
-            /**
-            * @name dxResponsiveBoxOptions.screenByWidth
-            * @type function
-            * @default null
-            */
             screenByWidth: null,
 
-            /**
-            * @name dxResponsiveBoxOptions.singleColumnScreen
-            * @type string
-            * @default ""
-            */
             singleColumnScreen: '',
 
-            /**
-            * @name dxResponsiveBoxOptions.height
-            * @default '100%'
-            */
             height: '100%',
 
-            /**
-            * @name dxResponsiveBoxOptions.width
-            * @default '100%'
-            */
             width: '100%',
 
             /**
@@ -163,16 +130,6 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions.tabIndex
             * @hidden
             */
-            /**
-             * @name dxResponsiveBoxOptions.dataSource
-             * @type string|Array<string,dxResponsiveBoxItem,object>|DataSource|DataSourceOptions
-             * @default null
-             */
-            /**
-             * @name dxResponsiveBoxOptions.items
-             * @type Array<string, dxResponsiveBoxItem, object>
-             * @fires dxResponsiveBoxOptions.onOptionChanged
-             */
 
             onLayoutChanged: null,
             currentScreenFactor: undefined,
@@ -736,10 +693,6 @@ var ResponsiveBox = CollectionWidget.inherit({
 * @name dxResponsiveBoxItem
 * @inherits CollectionWidgetItem
 * @type object
-*/
-/**
-* @name dxResponsiveBoxItem.location
-* @type Object|Array<Object>
 */
 /**
 * @name dxResponsiveBoxItem.location.row

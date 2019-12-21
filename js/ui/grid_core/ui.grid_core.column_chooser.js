@@ -382,10 +382,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         return null;
     },
 
-    /**
-     * @name GridBaseMethods.showColumnChooser
-     * @publicName showColumnChooser()
-     */
     showColumnChooser: function() {
         ///#DEBUG
         this._isPopupContainerShown = true;
@@ -402,10 +398,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         }
     },
 
-    /**
-     * @name GridBaseMethods.hideColumnChooser
-     * @publicName hideColumnChooser()
-     */
     hideColumnChooser: function() {
         if(this._popupContainer) {
             this._popupContainer.hide();
@@ -430,10 +422,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.columnChooser
-             * @type object
-             */
             columnChooser: {
                 /**
                  * @name GridBaseOptions.columnChooser.enabled

@@ -16,12 +16,6 @@ var LOADPANEL_CLASS = 'dx-loadpanel',
     LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper',
     LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
-/**
-* @name dxLoadPanel
-* @inherits dxOverlay
-* @module ui/load_panel
-* @export default
-*/
 var LoadPanel = Overlay.inherit({
 
     _supportedKeys: function() {
@@ -32,51 +26,13 @@ var LoadPanel = Overlay.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxLoadPanelOptions.message
-            * @type string
-            * @default "Loading ..."
-            */
             message: messageLocalization.format('Loading'),
 
-            /**
-            * @name dxLoadPanelOptions.width
-            * @default 222
-            */
             width: 222,
 
-            /**
-            * @name dxLoadPanelOptions.height
-            * @default 90
-            */
             height: 90,
 
-            /**
-            * @name dxLoadPanelOptions.position
-            * @type Enums.PositionAlignment|positionConfig|function
-            */
 
-            /**
-            * @name dxLoadPanelOptions.container
-            * @type string|Node|jQuery
-            * @default undefined
-            */
-
-            /**
-            * @name dxLoadPanelOptions.animation
-            * @type object
-            * @default null
-            */
-            /**
-            * @name dxLoadPanelOptions.animation.show
-            * @type animationConfig
-            * @default null
-            */
-            /**
-            * @name dxLoadPanelOptions.animation.hide
-            * @type animationConfig
-            * @default null
-            */
             animation: null,
 
             /**
@@ -84,32 +40,12 @@ var LoadPanel = Overlay.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxLoadPanelOptions.showIndicator
-            * @type boolean
-            * @default true
-            */
             showIndicator: true,
 
-            /**
-            * @name dxLoadPanelOptions.indicatorSrc
-            * @type string
-            * @default ""
-            */
             indicatorSrc: '',
 
-            /**
-            * @name dxLoadPanelOptions.showPane
-            * @type boolean
-            * @default true
-            */
             showPane: true,
 
-            /**
-            * @name dxLoadPanelOptions.delay
-            * @type Number
-            * @default 0
-            */
             delay: 0,
 
             closeOnBackButton: false,
@@ -120,11 +56,6 @@ var LoadPanel = Overlay.inherit({
             */
             resizeEnabled: false,
 
-            /**
-            * @name dxLoadPanelOptions.focusStateEnabled
-            * @type boolean
-            * @default false
-            */
             focusStateEnabled: false
 
             /**
@@ -151,11 +82,6 @@ var LoadPanel = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                /**
-                * @name dxLoadPanelOptions.shadingColor
-                * @default 'transparent'
-                * @default '' @for Android|iOS
-                */
                 device: { platform: 'generic' },
                 options: {
                     shadingColor: 'transparent'
@@ -166,34 +92,14 @@ var LoadPanel = Overlay.inherit({
                     return themes.isMaterial();
                 },
                 options: {
-                    /**
-                    * @name dxLoadPanelOptions.message
-                    * @default "" @for Material
-                    */
                     message: '',
 
-                    /**
-                    * @name dxLoadPanelOptions.width
-                    * @default 60 @for Material
-                    */
                     width: 60,
 
-                    /**
-                    * @name dxLoadPanelOptions.height
-                    * @default 60 @for Material
-                    */
                     height: 60,
 
-                    /**
-                    * @name dxLoadPanelOptions.maxHeight
-                    * @default 60 @for Material
-                    */
                     maxHeight: 60,
 
-                    /**
-                    * @name dxLoadPanelOptions.maxWidth
-                    * @default 60 @for Material
-                    */
                     maxWidth: 60
                 }
             }

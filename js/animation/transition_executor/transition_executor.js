@@ -127,10 +127,6 @@ var TransitionExecutor = Class.inherit({
         this._animations.length = 0;
     },
 
-    /**
-    * @name TransitionExecutorMethods.reset
-    * @publicName reset()
-    */
     reset: function() {
         this._accumulatedDelays.enter = 0;
         this._accumulatedDelays.leave = 0;
@@ -138,31 +134,14 @@ var TransitionExecutor = Class.inherit({
         this._completeDeferred = new Deferred();
         this._completePromise = this._completeDeferred.promise();
     },
-    /**
-    * @name TransitionExecutorMethods.enter
-    * @publicName enter(elements, animation)
-    * @param1 elements:jQuery
-    * @param2 animation:animationConfig|string
-    */
     enter: function($elements, animationConfig, configModifier) {
         var animations = this._createAnimations($elements, animationConfig, configModifier, 'enter');
         this._animations.push.apply(this._animations, animations);
     },
-    /**
-    * @name TransitionExecutorMethods.leave
-    * @publicName leave(elements, animation)
-    * @param1 elements:jQuery
-    * @param2 animation:animationConfig|string
-    */
     leave: function($elements, animationConfig, configModifier) {
         var animations = this._createAnimations($elements, animationConfig, configModifier, 'leave');
         this._animations.push.apply(this._animations, animations);
     },
-    /**
-    * @name TransitionExecutorMethods.start
-    * @publicName start()
-    * @return Promise<void>
-    */
     start: function() {
         var that = this,
             result;
@@ -194,10 +173,6 @@ var TransitionExecutor = Class.inherit({
 
         return result;
     },
-    /**
-    * @name TransitionExecutorMethods.stop
-    * @publicName stop()
-    */
     stop: function(jumpToEnd) {
         this._stopAnimations(jumpToEnd);
     }

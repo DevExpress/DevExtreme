@@ -8,13 +8,6 @@ var $ = require('../core/renderer'),
 var AUTOCOMPLETE_CLASS = 'dx-autocomplete',
     AUTOCOMPLETE_POPUP_WRAPPER_CLASS = 'dx-autocomplete-popup-wrapper';
 
-/**
-* @name dxAutocomplete
-* @isEditor
-* @inherits dxDropDownList
-* @module ui/autocomplete
-* @export default
-*/
 var Autocomplete = DropDownList.inherit({
 
     _supportedKeys: function() {
@@ -54,24 +47,9 @@ var Autocomplete = DropDownList.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name dxAutocompleteOptions.value
-            * @type string
-            * @default null
-            */
 
-            /**
-            * @name dxAutocompleteOptions.minSearchLength
-            * @type number
-            * @default 1
-            */
             minSearchLength: 1,
 
-            /**
-            * @name dxAutocompleteOptions.maxItemCount
-            * @type number
-            * @default 10
-            */
             maxItemCount: 10,
 
             /**
@@ -82,10 +60,6 @@ var Autocomplete = DropDownList.inherit({
             */
             noDataText: '',
 
-            /**
-             * @name dxAutocompleteOptions.showDropDownButton
-             * @default false
-             */
             showDropDownButton: false,
 
             searchEnabled: true

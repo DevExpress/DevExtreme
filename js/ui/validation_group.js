@@ -9,13 +9,6 @@ const VALIDATION_ENGINE_CLASS = 'dx-validationgroup';
 const VALIDATOR_CLASS = 'dx-validator';
 const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 
-/**
- * @name dxValidationGroup
- * @inherits DOMComponent
- * @hasTranscludedContent
- * @module ui/validation_group
- * @export default
- */
 class ValidationGroup extends DOMComponent {
     _getDefaultOptions() {
         return super._getDefaultOptions();
@@ -59,19 +52,10 @@ class ValidationGroup extends DOMComponent {
         super._initMarkup();
     }
 
-    /**
-     * @name dxValidationGroupMethods.validate
-     * @publicName validate()
-     * @return dxValidationGroupResult
-     */
     validate() {
         return ValidationEngine.validateGroup(this);
     }
 
-    /**
-     * @name dxValidationGroupMethods.reset
-     * @publicName reset()
-     */
     reset() {
         return ValidationEngine.resetGroup(this);
     }
