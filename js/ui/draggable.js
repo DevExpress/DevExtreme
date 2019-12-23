@@ -230,7 +230,16 @@ var Draggable = DOMComponent.inherit({
 
     dragLeave: noop,
 
-    dragEnd: noop,
+    dragEnd: function(sourceEvent) {
+        const sourceDraggable = this._getSourceDraggable(),
+            isSourceSortable = sourceDraggable.NAME !== this.NAME;
+
+        if(isSourceSortable) {
+            sourceDraggable._fireRemoveEvent(sourceEvent);
+        }
+    },
+
+    _fireRemoveEvent: noop,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
