@@ -1968,7 +1968,7 @@ module.exports = {
                 },
                 _checkAsyncValidationRules: function() {
                     const currentEditMode = this.option('editing.mode');
-                    if(currentEditMode !== 'form' && currentEditMode !== 'popup') {
+                    if(currentEditMode !== 'form' && currentEditMode !== 'popup' /* */ && currentEditMode !== 'row' && currentEditMode !== 'cell') {
                         const hasAsyncRules = this._columns.some(function(col) {
                             return (col.validationRules || []).some(rule => rule.type === 'async');
                         });
