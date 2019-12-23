@@ -133,6 +133,35 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
     assert.equal(margin, '0px auto', 'aligned by center');
 });
 
+function checkItemsLocation($toolbarElement, expectedItemsCountWithBeforeLocation, expectedItemsCountWithCenterLocation, expectedItemsCountWithAfterLocation) {
+    const $itemsWithBeforeLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS);
+    const $itemsWithCenterLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS);
+    const $itemsWithAfterLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS);
+    QUnit.assert.equal($itemsWithBeforeLocation.length, expectedItemsCountWithBeforeLocation, 'items count with before location value');
+    QUnit.assert.equal($itemsWithCenterLocation.length, expectedItemsCountWithCenterLocation, 'items count with center location value');
+    QUnit.assert.equal($itemsWithAfterLocation.length, expectedItemsCountWithAfterLocation, 'items count with after location value');
+}
+
+QUnit.test('Change item location at runtime (T844890)', function(assert) {
+    const $toolbarElement = this.element.dxToolbar({
+            items: [
+                { location: 'before', text: 'toolbar item' },
+            ]
+        }),
+        toolbar = $toolbarElement.dxToolbar('instance');
+    checkItemsLocation($toolbarElement, 1, 0, 0);
+
+    toolbar.option('items[0].location', 'center');
+    checkItemsLocation($toolbarElement, 0, 1, 0);
+
+    toolbar.option('items[0].location', 'after');
+    checkItemsLocation($toolbarElement, 0, 0, 1);
+
+    toolbar.option('items[0].location', 'before');
+    checkItemsLocation($toolbarElement, 1, 0, 0);
+});
+
+
 QUnit.test('buttons has text style in Material', function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
@@ -338,11 +367,11 @@ QUnit.module('disabled state', () => {
                     [true, false].forEach((changeDisabledOrder) => {
                         ['never', 'always'].forEach((locateInMenu) => {
                             QUnit.test(`new dxToolbar({
-                                    toolbar.disabled: ${isToolbarDisabled}, 
-                                    button.disabled: ${isButtonDisabled}), 
-                                    toolbar.disabled new: ${isToolbarDisabledNew}, 
-                                    button.disabled new: ${isButtonDisabledNew}, 
-                                    changeDisableOrder: ${changeDisabledOrder}, 
+                                    toolbar.disabled: ${isToolbarDisabled},
+                                    button.disabled: ${isButtonDisabled}),
+                                    toolbar.disabled new: ${isToolbarDisabledNew},
+                                    button.disabled new: ${isButtonDisabledNew},
+                                    changeDisableOrder: ${changeDisabledOrder},
                                     locateInMenu: ${locateInMenu}`,
                             function(assert) {
                                 let itemClickHandler = sinon.spy();
