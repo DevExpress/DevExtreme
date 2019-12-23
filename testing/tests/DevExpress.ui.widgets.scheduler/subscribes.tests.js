@@ -394,22 +394,6 @@ QUnit.test('\'mapAppointmentFields\' should call getTargetedAppointmentData', fu
     }, 'Appointment data is OK');
 });
 
-QUnit.test('\'formatDates\' should work correct with custom data fields', function(assert) {
-    this.createInstance({
-        startDateExpr: 'Start',
-        endDateExpr: 'End'
-    });
-
-    this.instance.fire('formatDates', {
-        startDate: new Date(2015, 2, 2, 0),
-        endDate: new Date(2015, 2, 2, 30),
-        formatType: 'DATETIME',
-        callback: function(result) {
-            assert.ok(result, 'There is some result');
-        }
-    });
-});
-
 QUnit.test('\'appointmentTakesAllDay\' should work correct with custom data fields', function(assert) {
     this.createInstance({
         startDateExpr: 'Start',

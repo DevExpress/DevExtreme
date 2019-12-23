@@ -1416,14 +1416,9 @@ QUnit.test('Long appointment should have a correct template', function(assert) {
     const $secondContentDates = $appts.eq(1).find('.dx-scheduler-appointment-content-date');
     const $lastContentDates = $appts.last().find('.dx-scheduler-appointment-content-date');
 
-    assert.equal($firstContentDates.first().text(), '9:30 AM', 'Start date is correct');
-    assert.equal($firstContentDates.last().text(), '8:00 PM', 'End date is correct');
-
-    assert.equal($secondContentDates.first().text(), '8:00 AM', 'Start date is correct');
-    assert.equal($secondContentDates.last().text(), '8:00 PM', 'End date is correct');
-
-    assert.equal($lastContentDates.first().text(), '8:00 AM', 'Start date is correct');
-    assert.equal($lastContentDates.last().text(), '10:00 AM', 'End date is correct');
+    assert.equal($firstContentDates.first().text(), '9:30 AM - 8:00 PM', 'First date is correct');
+    assert.equal($secondContentDates.first().text(), '8:00 AM - 8:00 PM', 'Second date is correct');
+    assert.equal($lastContentDates.first().text(), '8:00 AM - 10:00 AM', 'Last date is correct');
 
 });
 

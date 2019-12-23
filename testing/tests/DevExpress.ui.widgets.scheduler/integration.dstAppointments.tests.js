@@ -60,11 +60,10 @@ QUnit.test('Appointment wich started in DST and ended in STD time should have co
     const deltaTzEnd = getDeltaTz(-6, endDate);
     const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000));
     const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
+    const resultDate = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDateByTz, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDateByTz, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('Appointment wich started in STD and ended in DST time should have correct start & end dates', function(assert) {
@@ -92,11 +91,10 @@ QUnit.test('Appointment wich started in STD and ended in DST time should have co
     const deltaTzEnd = getDeltaTz(-4, endDate);
     const startDateByTz = new Date(startDate.setHours(startDate.getHours() + deltaTzStart / 3600000));
     const endDateByTz = new Date(endDate.setHours(endDate.getHours() + deltaTzEnd / 3600000));
+    const resultDate = `${dateLocalization.format(startDateByTz, 'shorttime')} - ${dateLocalization.format(endDateByTz, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDateByTz, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDateByTz, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('Second recurring appointment wich started in STD and ended in DST time should have correct start & end dates & position', function(assert) {
@@ -123,9 +121,7 @@ QUnit.test('Second recurring appointment wich started in STD and ended in DST ti
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'DST', 'Text is correct on init');
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM', 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '2:00 AM', 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM - 2:00 AM', 'Start Date is correct on init');
 
     assert.roughEqual($appointment.get(0).getBoundingClientRect().width, $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).get(0).getBoundingClientRect().width * 2, 2, 'Appointment width is correct');
 });

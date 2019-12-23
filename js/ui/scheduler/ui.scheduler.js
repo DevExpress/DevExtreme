@@ -1469,7 +1469,8 @@ const Scheduler = Widget.inherit({
     },
 
     _getAppointmentTooltipOptions: function() {
-        const that = this;
+        const that = this,
+            appointmentInstance = that.getAppointmentsInstance();
         return {
             createComponent: that._createComponent.bind(that),
             container: that.$element(),
@@ -1477,7 +1478,7 @@ const Scheduler = Widget.inherit({
             setDefaultTemplate: that.setDefaultTemplate.bind(that),
             getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
-            getText: that.getText.bind(that),
+            getText: appointmentInstance.getText.bind(appointmentInstance),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
@@ -1506,42 +1507,6 @@ const Scheduler = Widget.inherit({
         const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
 
         return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
-    },
-
-    getText(data, currentData) {
-        const isAllDay = this.fire('getField', 'allDay', data);
-        const text = this.fire('getField', 'text', data);
-        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', data);
-        const endDateTimeZone = this.fire('getField', 'endDateTimeZone', data);
-        const startDate = this.fire('convertDateByTimezone', this.fire('getField', 'startDate', currentData), startDateTimeZone);
-        const endDate = this.fire('convertDateByTimezone', this.fire('getField', 'endDate', currentData), endDateTimeZone);
-        return {
-            text: text,
-            formatDate: this._formatDate(startDate, endDate, isAllDay)
-        };
-    },
-
-    _formatDate(startDate, endDate, isAllDay) {
-        let result = '';
-
-        this.fire('formatDates', {
-            startDate: startDate,
-            endDate: endDate,
-            formatType: this._getTypeFormat(startDate, endDate, isAllDay),
-            callback: value => result = value
-        });
-
-        return result;
-    },
-
-    _getTypeFormat(startDate, endDate, isAllDay) {
-        if(isAllDay) {
-            return 'DATE';
-        }
-        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
-            return 'TIME';
-        }
-        return 'DATETIME';
     },
 
     _initMarkupCore: function(resources) {
@@ -1629,6 +1594,7 @@ const Scheduler = Widget.inherit({
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
             rtlEnabled: this.option('rtlEnabled'),
+            currentView: this.option('currentView'),
             onContentReady: function() {
                 that._workSpace && that._workSpace.option('allDayExpanded', that._isAllDayExpanded(that.getFilteredItems()));
             }

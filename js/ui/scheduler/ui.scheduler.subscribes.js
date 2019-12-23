@@ -8,7 +8,6 @@ import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import dateLocalization from '../../localization/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -347,41 +346,6 @@ const subscribes = {
 
     getWorkSpaceDateTableOffset: function() {
         return this.getWorkSpaceDateTableOffset();
-    },
-
-    formatDates: function(options) {
-        const startDate = options.startDate;
-        const endDate = options.endDate;
-        const formatType = options.formatType;
-
-        const formatTypes = {
-            'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
-
-                return startDateString + endDateString;
-            },
-            'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
-            },
-            'DATE': function() {
-                const dateTimeFormat = 'monthAndDay';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
-                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
-            }
-        };
-
-        options.callback(formatTypes[formatType]());
     },
 
     getFullWeekAppointmentWidth: function(options) {

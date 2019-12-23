@@ -306,11 +306,8 @@ QUnit.test('Appointments should have correct size with custom time zone & hourly
         assert.roughEqual($first.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
         assert.roughEqual($second.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
 
-        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '6:00 AM', 'Appointment start is correct');
-        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(2).text(), '10:00 AM', 'Appointment edn is correct');
-
-        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM', 'Appointment start is correct');
-        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(2).text(), '6:00 PM', 'Appointment edn is correct');
+        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '6:00 AM - 10:00 AM', 'First appointment is correct');
+        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM - 6:00 PM', 'Second appointment is correct');
 
     } finally {
         tzOffsetStub.restore();
@@ -464,8 +461,7 @@ QUnit.test('Appointment should have a correct template with custom timezone', fu
         const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
         const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
 
-        assert.equal($contentDates.first().text(), '10:00 AM', 'Start date is correct');
-        assert.equal($contentDates.last().text(), '10:30 AM', 'End date is correct');
+        assert.equal($contentDates.first().text(), '10:00 AM - 10:30 AM', 'Date is correct');
 
     } finally {
         tzOffsetStub.restore();
@@ -526,8 +522,7 @@ QUnit.test('Appointment should have a correct template with custom timezone(T387
         const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
         const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
 
-        assert.equal($contentDates.first().text(), '11:00 AM', 'Start date is correct');
-        assert.equal($contentDates.last().text(), '11:30 AM', 'End date is correct');
+        assert.equal($contentDates.first().text(), '11:00 AM - 11:30 AM', 'Date is correct');
 
     } finally {
         tzOffsetStub.restore();
@@ -896,14 +891,13 @@ QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should 
     assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
     assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-    const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-    const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+    const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
     const cellData = dataUtils.data($cell.get(0), 'dxCellData');
     const startDate = cellData.startDate;
     const endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
-    assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
-    assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
+    assert.equal(dateText, resultDate, 'Appointment date is OK');
 });
 
 QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
@@ -942,14 +936,13 @@ QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
         assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-        const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-        const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
         const cellData = dataUtils.data($cell.get(0), 'dxCellData');
         const startDate = cellData.startDate;
         const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
+        const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
-        assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
-        assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
+        assert.equal(dateText, resultDate, 'Appointment date is OK');
     } finally {
         tzOffsetStub.restore();
     }
@@ -982,40 +975,9 @@ QUnit.test('Appointment should be rendered correctly when custom timezone was se
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
     const deltaTz = getDeltaTz(timezone, startDate);
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
-});
+    const resultDate = `${dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime')} - ${dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime')}`;
 
-QUnit.test('Appointment should be rendered correctly when custom timezone was set', function(assert) {
-    const startDate = new Date(2015, 1, 4, 5);
-    const endDate = new Date(2015, 1, 4, 7);
-
-    const appointments = [{
-        startDate: startDate.toString(),
-        endDate: endDate.toString(),
-        text: 'abc',
-        recurrenceRule: 'FREQ=DAILY'
-    }];
-
-    const timezone = 5;
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 4),
-        views: ['day'],
-        currentView: 'day',
-        firstDayOfWeek: 1,
-        dataSource: appointments,
-        timeZone: timezone
-    });
-
-    const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
-
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
-
-    const deltaTz = getDeltaTz(timezone, startDate);
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
+    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
@@ -1048,8 +1010,8 @@ QUnit.test('Appointment should be rendered correctly when custom timezone was se
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
     const deltaTz = getDeltaTz(5, startDate);
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
+    const resultDate = `${dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime')} - ${dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime')}`;
+    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
@@ -1075,8 +1037,9 @@ QUnit.test('Appointment should be rendered correctly when appointment timeZone w
 
         const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
-        assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(2015, 1, 4, 7, 30), 'shorttime'), 'Start Date is correct on init');
-        assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(2015, 1, 4, 8, 30), 'shorttime'), 'End Date is correct on init');
+        var resultDate = `${dateLocalization.format(new Date(2015, 1, 4, 7, 30), 'shorttime')} - ${dateLocalization.format(new Date(2015, 1, 4, 8, 30), 'shorttime')}`;
+
+        assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     } finally {
         tzOffsetStub.restore();
     }
@@ -1141,11 +1104,10 @@ QUnit.test('Appointment should be rendered correctly when appointment timezone a
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
     const deltaTz = getDeltaTz(6, startDate);
+    const resultDate = `${dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime')} - ${dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
-
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('All-day Appointment should be rendered correctly when custom timezone was set', function(assert) {
@@ -1271,15 +1233,13 @@ QUnit.test('Recurrence appointment with \'Etc/UTC\' tz should be updated correct
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, 'Appointment top is OK');
         assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-
-        const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-        const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
         const cellData = dataUtils.data($cell.get(0), 'dxCellData');
         const startDate = cellData.startDate;
         const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
+        const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
-        assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
-        assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
+        assert.equal(dateText, resultDate, 'Appointment date is OK');
     } finally {
         tzOffsetStub.restore();
     }
