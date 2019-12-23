@@ -132,7 +132,7 @@
     "dev": "gulp dev",
     "test-env": "node testing/launch",
     "update-ts": "dx-tools declaration-validator && dx-tools ts-generator",
-    "discover-declarations": "dx-tools discoverer",
+    "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools declaration-validator",
     "test-functional": "node ./testing/functional/runner"
   },
