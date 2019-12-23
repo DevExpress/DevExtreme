@@ -592,7 +592,7 @@ QUnit.module('list integration', {}, () => {
 
         const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
         const buttonTextVerticalCenter = (buttonTextRect.top + buttonTextRect.bottom) / 2;
-        assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
+        assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 3, 'content is vertically centered');
     });
 
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
