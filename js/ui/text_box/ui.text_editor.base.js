@@ -365,15 +365,15 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderStylingMode: function() {
-        const optionName = 'stylingMode';
-        const optionValue = this.option(optionName);
+        var optionName = 'stylingMode';
+        var optionValue = this.option(optionName);
         ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
 
         let stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + optionValue;
 
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()[optionName];
-            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
+            var defaultOptionValue = this._getDefaultOptions()[optionName];
+            var platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
             stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
         }
 
@@ -422,7 +422,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderButtonContainers: function() {
-        const buttons = this.option('buttons');
+        var buttons = this.option('buttons');
 
         this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this._$textEditorContainer);
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$textEditorContainer);
@@ -657,9 +657,9 @@ var TextEditorBase = Editor.inherit({
     },
 
     _keyDownHandler: function(e) {
-        const $input = this._input();
-        const isCtrlEnter = e.ctrlKey && eventUtils.normalizeKeyName(e) === 'enter';
-        const isNewValue = $input.val() !== this.option('value');
+        var $input = this._input();
+        var isCtrlEnter = e.ctrlKey && eventUtils.normalizeKeyName(e) === 'enter';
+        var isNewValue = $input.val() !== this.option('value');
 
         if(isCtrlEnter && isNewValue) {
             eventsEngine.trigger($input, 'change');
@@ -667,10 +667,10 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderValueChangeEvent: function() {
-        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-        const valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
-        const keyDownEvent = eventUtils.addNamespace('keydown', `${this.NAME}TextChange`);
-        const $input = this._input();
+        var keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
+        var valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
+        var keyDownEvent = eventUtils.addNamespace('keydown', `${this.NAME}TextChange`);
+        var $input = this._input();
 
         eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
         eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
@@ -678,8 +678,8 @@ var TextEditorBase = Editor.inherit({
     },
 
     _cleanValueChangeEvent: function() {
-        const valueChangeNamespace = `.${this.NAME}ValueChange`;
-        const textChangeNamespace = `.${this.NAME}TextChange`;
+        var valueChangeNamespace = `.${this.NAME}ValueChange`;
+        var textChangeNamespace = `.${this.NAME}TextChange`;
 
         eventsEngine.off(this._input(), valueChangeNamespace);
         eventsEngine.off(this._input(), textChangeNamespace);
