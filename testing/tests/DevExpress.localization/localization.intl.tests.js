@@ -745,9 +745,9 @@ QUnit.module('Intl localization', {
 
 ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
-    { value: 'RUB', expected: 'RUB#,##0_);\\(RUB#,##0\\)' },
-    { value: 'JPY', expected: '¥#,##0_);\\(¥#,##0\\)' },
-    { value: 'KPW', expected: 'KPW#,##0_);\\(KPW#,##0\\)' },
-    { value: 'LBP', expected: 'LBP#,##0_);\\(LBP#,##0\\)' },
-    { value: 'SEK', expected: 'SEK#,##0_);\\(SEK#,##0\\)' }
+    { value: 'RUB', expected: '\\R\\U\\B#,##0_);\\(\\R\\U\\B#,##0\\)' },
+    { value: 'JPY', expected: '\\¥#,##0_);\\(\\¥#,##0\\)' },
+    { value: 'KPW', expected: '\\K\\P\\W#,##0_);\\(\\K\\P\\W#,##0\\)' },
+    { value: 'LBP', expected: '\\L\\B\\P#,##0_);\\(\\L\\B\\P#,##0\\)' },
+    { value: 'SEK', expected: '\\S\\E\\K#,##0_);\\(\\S\\E\\K#,##0\\)' }
 ]);
