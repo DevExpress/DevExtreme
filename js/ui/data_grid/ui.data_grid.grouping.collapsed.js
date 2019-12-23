@@ -334,7 +334,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             var count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
             if(!isFinite(count)) {
-                throw dataErrors.Error(isGrouping ? 'E4022' : 'E4021');
+                d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
+                return;
             }
             d.resolve(count);
         }).fail(d.reject.bind(d));
@@ -529,7 +530,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 totalCount = updateGroupInfos(that, options, options.data, loadedGroupCount);
 
                 if(totalCount < 0) {
-                    throw errors.Error('E1037');
+                    options.data = (new Deferred()).reject(errors.Error('E1037'));
+                    return;
                 }
 
                 if(!options.remoteOperations.paging) {
@@ -540,7 +542,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 }
 
                 if(groupCount && options.storeLoadOptions.requireGroupCount && !isFinite(options.extra.groupCount)) {
-                    throw dataErrors.Error('E4022');
+                    options.data = (new Deferred()).reject(dataErrors.Error('E4022'));
+                    return;
                 }
 
                 that.updateTotalItemsCount(options);
