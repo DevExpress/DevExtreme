@@ -1363,11 +1363,12 @@ module.exports = {
                 var value = options.value,
                     optionName = options.optionName,
                     prevValue = options.prevValue,
-                    fullOptionName = options.fullOptionName;
+                    fullOptionName = options.fullOptionName,
+                    fullOptionPath = `${fullOptionName}.${optionName}`;
 
-                if(!IGNORE_COLUMN_OPTION_NAMES[optionName] && !that._skipProcessingColumnsChange) {
-                    that._skipProcessingColumnsChange = true;
-                    that.component._notifyOptionChanged(fullOptionName + '.' + optionName, value, prevValue);
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName] && that._skipProcessingColumnsChange !== fullOptionPath) {
+                    that._skipProcessingColumnsChange = fullOptionPath;
+                    that.component._notifyOptionChanged(fullOptionPath, value, prevValue);
                     that._skipProcessingColumnsChange = false;
                 }
             };
@@ -1780,7 +1781,8 @@ module.exports = {
                         } else {
                             columnOptionValue = args.value;
                         }
-                        this._skipProcessingColumnsChange = true;
+
+                        this._skipProcessingColumnsChange = args.fullName;
                         this.columnOption(column.index, columnOptionValue);
                         this._skipProcessingColumnsChange = false;
                     }
