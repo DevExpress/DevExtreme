@@ -21,7 +21,7 @@ require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
-require("./build/gulp/generator");
+require('./build/gulp/generator');
 
 const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
 const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);

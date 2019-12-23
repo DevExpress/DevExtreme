@@ -1,6 +1,6 @@
 const gulp = require('gulp');
-const { generateComponents } = require('generator/generator/build/component-compiler');
-const generator = require('generator/generator/build/preact-generator').default;
+const { generateComponents } = require('devextreme-generator/component-compiler');
+const generator = require('devextreme-generator/preact-generator').default;
 const gulpTypeScript = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
