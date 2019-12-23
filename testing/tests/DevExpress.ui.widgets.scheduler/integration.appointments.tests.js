@@ -2508,10 +2508,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on init', 
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.notOk($appointment.find('.dx-scheduler-appointment-recurrence-icon').length, 'Repeat icon isn\'t rendered');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Repeat icon is rendered');
 });
@@ -2537,11 +2537,11 @@ QUnit.test('Appointment should be rendered correctly with recurrenceRule express
     });
 
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'def', 'Text is correct on init');
 
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
@@ -2577,10 +2577,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on optionC
     });
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content .dx-scheduler-appointment-title').eq(0).text(), 'xyz', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('Appointment should be rendered correctly with expressions on custom template', function(assert) {

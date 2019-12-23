@@ -341,6 +341,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
             endDate = data.endDate;
         }
 
+        var currentData = extend(data, { startDate: startDate, endDate: endDate });
+        var formatText = this.getText(currentData, currentData, 'TIME');
+
         $('<div>')
             .text(this._createAppointmentTitle(data))
             .addClass(APPOINTMENT_TITLE_CLASS)
@@ -356,15 +359,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         const allDay = data.allDay;
         const $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
-        const apptStartTz = data.startDateTimeZone;
-        const apptEndTz = data.endDateTimeZone;
-
-        startDate = this.invoke('convertDateByTimezone', startDate, apptStartTz);
-        endDate = this.invoke('convertDateByTimezone', endDate, apptEndTz);
-
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(startDate, 'shorttime')).appendTo($contentDetails);
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(' - ').appendTo($contentDetails);
-        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(endDate, 'shorttime')).appendTo($contentDetails);
+        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(formatText.formatDate).appendTo($contentDetails);
 
         $contentDetails.appendTo($container);
 
@@ -378,6 +373,62 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 .addClass(ALL_DAY_CONTENT_CLASS)
                 .prependTo($contentDetails);
         }
+    },
+
+    getText(data, currentData, format) {
+        const isAllDay = data.allDay,
+            text = this._createAppointmentTitle(data),
+            startDateTimeZone = data.startDateTimeZone,
+            endDateTimeZone = data.endDateTimeZone,
+            startDate = this.invoke('convertDateByTimezone', currentData.startDate, startDateTimeZone),
+            endDate = this.invoke('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        return {
+            text: text,
+            formatDate: this._formatDates(startDate, endDate, isAllDay, format)
+        };
+    },
+
+    _formatDates: function(startDate, endDate, isAllDay, format) {
+        const formatType = format || this._getTypeFormat(startDate, endDate, isAllDay);
+
+        const formatTypes = {
+            'DATETIME': function() {
+                const dateTimeFormat = 'mediumdatemediumtime',
+                    startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+
+                const endDateString = (startDate.getDate() === endDate.getDate()) ?
+                    dateLocalization.format(endDate, 'shorttime') :
+                    dateLocalization.format(endDate, dateTimeFormat);
+
+                return startDateString + endDateString;
+            },
+            'TIME': function() {
+                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
+            },
+            'DATE': function() {
+                const dateTimeFormat = 'monthAndDay',
+                    startDateString = dateLocalization.format(startDate, dateTimeFormat),
+                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+
+                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
+                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
+                    '';
+
+                return startDateString + endDateString;
+            }
+        };
+
+        return formatTypes[formatType]();
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
     },
 
     _createAppointmentTitle: function(data) {
