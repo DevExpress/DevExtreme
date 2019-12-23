@@ -365,7 +365,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @type_function_param1_field4 value:boolean
              * @action
              */
-            onSelectAllValueChanged: null,
+            onSelectAllValueChanged: null
 
             /**
              * @name dxTreeViewOptions.onSelectionChanged
@@ -398,12 +398,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-             * @name CollectionWidgetOptions.selectedItemKeys
-             * @type Array<any>
-             * @fires CollectionWidgetOptions.onSelectionChanged
+             * @name dxTreeViewOptions.selectedItemKeys
+             * @hidden
              */
-            selectedItemKeys: null,
-
             /**
             * @name dxTreeViewOptions.selectedIndex
             * @hidden
@@ -446,11 +443,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
-
-    _syncSelectionOptions: function(option) {
-        this._updateSelectionOptions();
-        return new Deferred().resolve().promise();
-    },
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _normalizeSelectedItems: commonUtils.noop,
 
@@ -549,9 +542,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'virtualModeEnabled':
             case 'selectByClick':
                 break;
-            case 'selectedItemKeys':
-                this._selectedItemKeysOptionChange(args.value);
-                break;
             case 'selectionMode':
                 this._initDataAdapter();
                 this.callBase(args);
@@ -590,23 +580,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(!filter.internal) {
             filter.internal = [this.option('parentIdExpr'), this.option('rootValue')];
-        }
-    },
-
-    _selectedItemKeysOptionChange: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodesKeys();
-        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
-
-        diff.toDeselect.forEach((key) => {
-            this._setItemSelection(false, key);
-        });
-        diff.toSelect.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-
-        this._updateSelectionOptions();
-        if(oldSelectedKeys !== this.option('selectedItemKeys')) {
-            this._fireSelectionChanged();
         }
     },
 
@@ -1505,11 +1478,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return true;
     },
 
-    _updateSelectionOptions: function() {
-        const selectedNodes = this.getSelectedNodesKeys();
-        this._setOptionWithoutOptionChange('selectedItemKeys', selectedNodes);
-    },
-
     _getCheckBoxInstance: function($node) {
         return $node.children('.dx-checkbox').dxCheckBox('instance');
     },
@@ -1962,13 +1930,42 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getTreeNodes();
     },
 
+    /**
+     * @name dxTreeViewMethods.getSelectedNodesKeys
+     * @publicName getSelectedNodesKeys()
+     * @return Array<any>
+     */
     getSelectedNodesKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
     },
 
     /**
+     * @name dxTreeViewMethods.setSelectedNodesKeys
+     * @publicName setSelectedNodesKeys(keys)
+     * @param1 keys:Array<any>
+     * @return Array<any>
+     */
+    setSelectedNodesKeys: function(keys) {
+        const oldSelectedKeys = this.getSelectedNodesKeys();
+        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
+
+        diff.toDeselect.forEach((key) => {
+            this._setItemSelection(false, key);
+        });
+        diff.toSelect.forEach((key) => {
+            this._setItemSelection(true, key);
+        });
+
+        this._updateSelectionOptions();
+        if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
+            this._fireSelectionChanged();
+        }
+        return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    /**
      * @name dxTreeViewMethods.getSelectedNodes
-     * @publicName getNodes()
+     * @publicName getSelectedNodes()
      * @return Array<dxTreeViewNode>
      */
     /**
@@ -2058,7 +2055,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataAdapter = this._dataAdapter;
         each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
         this.repaint();
-        this._updateSelectionOptions();
     },
 
     /**
