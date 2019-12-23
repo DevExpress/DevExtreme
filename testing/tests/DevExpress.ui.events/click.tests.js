@@ -6,6 +6,7 @@ import support from 'core/utils/support';
 import devices from 'core/devices';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
+import browser from 'core/utils/browser';
 
 QUnit.testStart(function() {
     var markup =
@@ -798,4 +799,8 @@ QUnit.test('dxclick should not be fired twice when \'click\' is triggered from i
 
     pointer.start().down().up();
     $(document).off('dxclick', $.noop);
+
+    if(browser.msie) {
+        assert.ok(false, 'experiment');
+    }
 });
