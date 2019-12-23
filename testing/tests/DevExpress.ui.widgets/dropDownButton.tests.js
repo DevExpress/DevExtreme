@@ -509,7 +509,7 @@ QUnit.module('list integration', {}, () => {
     });
 
     [true, false].forEach(wrapItemText => {
-        QUnit.test('toggleButton should render inside of dropDownButton when width option is defined in generic themes (T847072)', function(assert) {
+        QUnit.test(`toggleButton should render inside of dropDownButton when width option is defined in generic themes when wrapItemText=${wrapItemText} (T847072)`, function(assert) {
             const dropDownButton = $('#dropDownButton').dxDropDownButton({
                 items: [{
                     'id': 1,
@@ -549,7 +549,7 @@ QUnit.module('list integration', {}, () => {
             width: 100,
             height: 100,
             splitButton: true,
-            selectedItemKey: 1,
+            selectedItemKey: 1
         });
 
         const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
@@ -573,7 +573,7 @@ QUnit.module('list integration', {}, () => {
             useSelectMode: true,
             width: 100,
             splitButton: true,
-            selectedItemKey: 1,
+            selectedItemKey: 1
         }).dxDropDownButton('instance');
 
         const toggleButtonElement = getToggleButton(dropDownButton);
@@ -593,7 +593,7 @@ QUnit.module('list integration', {}, () => {
             useSelectMode: true,
             width: 100,
             splitButton: true,
-            selectedItemKey: 1,
+            selectedItemKey: 1
         }).dxDropDownButton('instance');
 
         const toggleButtonElement = getToggleButton(dropDownButton);
