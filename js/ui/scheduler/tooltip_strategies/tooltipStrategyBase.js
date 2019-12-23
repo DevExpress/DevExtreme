@@ -47,6 +47,12 @@ export class TooltipStrategyBase {
         };
     }
 
+    isAlreadyShown(target) {
+        if(this._tooltip && this._tooltip.option('visible')) {
+            return this._tooltip.option('target')[0] === target[0];
+        }
+    }
+
     _onShown() {
         this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
     }

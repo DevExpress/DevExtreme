@@ -1135,6 +1135,50 @@ QUnit.testStart(function() {
 
         assert.equal(this.instance.option('dataSource').length, 0);
     });
+
+    QUnit.test('showAppointmentTooltipCore, should call show tooltip', function(assert) {
+        this.createInstance({});
+        this.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        this.instance._appointmentTooltip.show = sinon.stub();
+        this.instance._appointmentTooltip.hide = sinon.stub();
+        this.instance.showAppointmentTooltipCore('target', 'data', 'options');
+
+        assert.ok(!this.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
+        assert.ok(this.instance._appointmentTooltip.show.called, 'show tooltip is called');
+    });
+
+    QUnit.test('showAppointmentTooltipCore, should call hide tooltip', function(assert) {
+        this.createInstance({});
+        this.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        this.instance._appointmentTooltip.show = sinon.stub();
+        this.instance._appointmentTooltip.hide = sinon.stub();
+        this.instance.showAppointmentTooltipCore('target', 'data', 'options');
+
+        assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
+        assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+    });
+
+    QUnit.test('showAppointmentTooltip, should call show tooltip', function(assert) {
+        this.createInstance({});
+        this.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        this.instance._appointmentTooltip.show = sinon.stub();
+        this.instance._appointmentTooltip.hide = sinon.stub();
+        this.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
+
+        assert.ok(!this.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
+        assert.ok(this.instance._appointmentTooltip.show.called, 'show tooltip is called');
+    });
+
+    QUnit.test('showAppointmentTooltip, should call hide tooltip', function(assert) {
+        this.createInstance({});
+        this.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        this.instance._appointmentTooltip.show = sinon.stub();
+        this.instance._appointmentTooltip.hide = sinon.stub();
+        this.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
+
+        assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
+        assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+    });
 })('Methods');
 
 (function() {

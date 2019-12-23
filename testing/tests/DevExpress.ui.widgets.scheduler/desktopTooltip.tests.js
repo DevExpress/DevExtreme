@@ -320,6 +320,44 @@ QUnit.test('Delete button shouldn\'t created, appointment is disabled', function
     assert.equal(stubCreateComponent.getCall(2), undefined);
 });
 
+QUnit.test('isAlreadyShown method, tooltip is not created', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const target = ['target'];
+
+    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is not created and haven\'t data');
+});
+
+QUnit.test('isAlreadyShown method, tooltip is created and shown', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = [{ data: 'data1' }, { data: 'data2' }];
+    const target = ['target'];
+    const callback = sinon.stub();
+
+    callback.withArgs('target').returns(target);
+    callback.withArgs('visible').returns(true);
+    stubComponent.option = callback;
+
+    tooltip.show(target, dataList, this.extraOptions);
+    stubCreateComponent.getCall(0).args[2].contentTemplate('<div>');
+
+    assert.ok(tooltip.isAlreadyShown(target), 'tooltip is shown and have the same target');
+    assert.ok(!tooltip.isAlreadyShown(['target_1']), 'tooltip is shown and have another target');
+});
+
+QUnit.test('isAlreadyShown method, tooltip is hide', function(assert) {
+    const tooltip = this.createSimpleTooltip(this.tooltipOptions);
+    const dataList = [{ data: 'data1' }, { data: 'data2' }];
+    const target = ['target'];
+    const callback = sinon.stub();
+
+    callback.withArgs('target').returns(target);
+    callback.withArgs('visible').returns(false);
+    stubComponent.option = callback;
+    tooltip.show(target, dataList, this.extraOptions);
+
+    assert.ok(!tooltip.isAlreadyShown(target), 'tooltip is hidden');
+});
+
 // deprecated option
 QUnit.test('dropDownAppointmentTemplate equal to "dropDownAppointment"', function(assert) {
     const tooltip = this.createSimpleTooltip(this.tooltipOptions);
