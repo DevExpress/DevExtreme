@@ -917,6 +917,25 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.equal(this.element.hasClass('dx-editor-underlined'), true, 'right class after option change present');
         assert.equal(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
     });
+
+    QUnit.test('the "value" option should changed by pressing Ctrl+Enter', (assert) => {
+        const valueChangedStub = sinon.stub();
+        const changeStub = sinon.stub();
+
+        this.instance.on('valueChanged', valueChangedStub);
+        this.instance.on('change', changeStub);
+        this.keyboard
+            .type('123')
+            .triggerEvent('keydown', { key: 'Enter', ctrlKey: true });
+
+        assert.strictEqual(this.instance.option('value'), '123');
+        assert.ok(valueChangedStub.calledOnce);
+        assert.ok(changeStub.calledOnce);
+
+        this.keyboard.triggerEvent('keydown', { key: 'Enter', ctrlKey: true });
+        assert.ok(valueChangedStub.calledOnce, 'there is no extra calls');
+        assert.ok(changeStub.calledOnce, 'there is no extra calls');
+    });
 });
 
 QUnit.module('api', moduleConfig, () => {
