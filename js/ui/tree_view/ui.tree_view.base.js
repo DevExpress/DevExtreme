@@ -1507,7 +1507,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _updateSelectionOptions: function() {
         const selectedNodes = this.getSelectedNodesKeys();
-        this._setOptionSilent('selectedItemKeys', selectedNodes);
+        this._setOptionWithoutOptionChange('selectedItemKeys', selectedNodes);
     },
 
     _getCheckBoxInstance: function($node) {
