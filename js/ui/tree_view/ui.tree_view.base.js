@@ -652,14 +652,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initStoreChangeHandlers();
     },
 
-    _initSelectedItemsBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
-        if(this._initialized || selectedKeys === null) {
-            return;
-        }
-
-        this._setItemsSelectionBySelectedKeysOption(items, selectedKeys, keyGetter, itemGetter);
-    },
-
     _setItemsSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
         items.forEach((item) => {
             const itemKey = keyGetter(item);
@@ -1191,7 +1183,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 return;
             }
 
-            this._updateSelectionOptions();
             this._fireContentReadyAction();
             this._updateExpandedItem(actualNodeData, state, e);
         });
@@ -1231,8 +1222,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _appendItems: function(newItems) {
         this.option().items = this.option('items').concat(newItems);
         this._initDataAdapter();
-
-        this._updateSelectionOptions();
     },
 
     _updateExpandedItem: function(node, state, e) {
@@ -1332,7 +1321,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _toggleSelectAll: function(args) {
         this._dataAdapter.toggleSelectAll(args.value);
         this._updateItemsUI();
-        this._updateSelectionOptions();
         this._fireSelectionChanged();
     },
 
@@ -1464,7 +1452,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
-        this._updateSelectionOptions();
 
         const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
             handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
@@ -1955,7 +1942,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._setItemSelection(true, key);
         });
 
-        this._updateSelectionOptions();
         if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
             this._fireSelectionChanged();
         }
