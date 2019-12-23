@@ -536,7 +536,7 @@ QUnit.module('list integration', {}, () => {
         });
     });
 
-    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+    QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,
@@ -561,7 +561,7 @@ QUnit.module('list integration', {}, () => {
         assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
     });
 
-    QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
+    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
         const dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,
@@ -579,6 +579,28 @@ QUnit.module('list integration', {}, () => {
         const toggleButtonElement = getToggleButton(dropDownButton);
 
         assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
+    });
+
+    QUnit.test('toggle/action buttons should have correct height when height option is not defined (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1,
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+        const actionButtonElement = getActionButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerHeight(), 36, 'toggleButton has correct height in generic theme');
+        assert.strictEqual(actionButtonElement.outerHeight(), 36, 'actionButton has correct height in generic theme');
     });
 
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
