@@ -1129,7 +1129,9 @@ QUnit.test('fieldTemplate item element should have 100% width with field templat
 
 QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(assert) {
     let keyboard;
-    const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+    let $input;
+
+    $('#dropDownEditorLazy').dxDropDownEditor({
         dataSource: [1, 2],
         fieldTemplate: (value, $element) => {
             const textBox = $('<div>')
@@ -1140,11 +1142,11 @@ QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(
                 })
                 .dxTextBox('instance');
 
-            keyboard = new keyboardMock(textBox._input(), true);
+            $input = textBox._input();
+            keyboard = new keyboardMock($input, true);
             caretWorkaround($input);
         }
     });
-    const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
     keyboard.type('z5');
     assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
