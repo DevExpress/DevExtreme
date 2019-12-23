@@ -9,11 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set DEVEXTREME_QUNIT_CI
-      run: Set-Variable -Name DEVEXTREME_QUNIT_CI -Value "true"
     - name: Run npm install
       run: npm install
     - name: Run npm run build
+      env:
+        DEVEXTREME_QUNIT_CI: true
       run: npm run build
     - name: Run QUnit tests
       run: |
