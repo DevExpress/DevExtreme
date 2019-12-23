@@ -856,7 +856,38 @@ QUnit.module('API', moduleConfig, () => {
                 });
             });
 
-            QUnit.test('Data - 1 row & 1 columns, col.encodeHtml: false' + testCaption, function(assert) {
+            QUnit.test('Data - 1 row & 1 columns, value as html' + testCaption, function(assert) {
+                const done = assert.async();
+                const ds = [{ f1: '<p><strong>text</strong></p>' }];
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    columns: [{
+                        dataField: 'f1'
+                    }],
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
+                    helper.checkAutoFilter(autoFilterEnabled, null);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test('Data - 1 row & 1 columns, value as html, col.encodeHtml: false' + testCaption, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: '<p><strong>text</strong></p>' }];
                 const dataGrid = $('#dataGrid').dxDataGrid({
