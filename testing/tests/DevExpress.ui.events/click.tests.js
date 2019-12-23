@@ -799,3 +799,7 @@ QUnit.test('dxclick should not be fired twice when \'click\' is triggered from i
     pointer.start().down().up();
     $(document).off('dxclick', $.noop);
 });
+
+QUnit.test('fail test', function(assert) {
+    assert.ok(false, 'fail');
+});
