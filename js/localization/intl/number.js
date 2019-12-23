@@ -154,8 +154,8 @@ module.exports = {
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        const calculatedCurrency = currency || dxConfig().defaultCurrency;
-        const currencySymbol = this._getCurrencySymbolInfo(calculatedCurrency).symbol;
+        const targetCurrency = currency || dxConfig().defaultCurrency;
+        const currencySymbol = this._getCurrencySymbolInfo(targetCurrency).symbol;
         const closestAccountingFormat = getValueByClosestLocale(locale => accountingFormats[locale]);
 
         return openXmlCurrencyFormat(currencySymbol, closestAccountingFormat);
