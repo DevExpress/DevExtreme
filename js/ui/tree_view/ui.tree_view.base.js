@@ -398,9 +398,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-             * @name dxTreeViewOptions.selectedItemKeys
-             * @hidden
-             */
+            * @name dxTreeViewOptions.selectedItemKeys
+            * @hidden
+            */
+
             /**
             * @name dxTreeViewOptions.selectedIndex
             * @hidden
@@ -444,8 +445,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
     _syncSelectionOptions: commonUtils.asyncNoop,
-
-    _normalizeSelectedItems: commonUtils.noop,
 
     _fireSelectionChanged: function() {
         const selectionChangePromise = this._selectionChangePromise;
