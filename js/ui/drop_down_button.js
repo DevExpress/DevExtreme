@@ -219,7 +219,6 @@ let DropDownButton = Widget.inherit({
         if(this.option('splitButton')) {
             items.push({
                 icon: 'spindown',
-                width: 26,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
         }
