@@ -5,6 +5,7 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
@@ -12,6 +13,7 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
 const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
+const BUTTON_TEXT = 'dx-button-text';
 
 QUnit.testStart(() => {
     const markup =
@@ -190,7 +192,6 @@ QUnit.module('button group integration', {}, () => {
         assert.strictEqual(buttonGroupItems.length, 2, '2 buttons are rendered');
         assert.strictEqual(buttonGroupItems[0].icon, undefined, 'empty icon is correct');
         assert.strictEqual(buttonGroupItems[1].icon, 'spindown', 'dropdown icon is correct');
-        assert.strictEqual(buttonGroupItems[1].width, 26, 'button content should be 24px without borders');
     });
 
     QUnit.test('hoverStateEnabled should be transfered to the buttonGroup', function(assert) {
@@ -303,7 +304,7 @@ QUnit.module('popup integration', {
         });
 
         const instance = $dropDownButton.dxDropDownButton('instance');
-        const $popupContent = $(getPopup(instance).content());
+        const $popupContent = $(getPopup(instance)._$content);
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), 'width are equal on init');
         assert.equal($popupContent.outerWidth(), 500, 'width are equal on init');
 
@@ -331,11 +332,11 @@ QUnit.module('popup integration', {
         const instance = $dropDownButton.dxDropDownButton('instance'),
             dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
-        let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        let popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
 
         instance.option('rtlEnabled', true);
-        popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
+        popupContentElementRect = getPopup(instance)._$content.get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.right, dropDownButtonElementRect.right, 'popup position is correct, rtlEnabled = true');
     });
 
@@ -346,16 +347,18 @@ QUnit.module('popup integration', {
             dropDownContentTemplate: function(data, $container) {
                 $('<div>')
                     .addClass('custom-color-picker')
+                    .css({
+                        width: 82,
+                        padding: 5
+                    })
                     .appendTo($container);
             }
         });
 
-        const colorPicker = $('.custom-color-picker');
-        colorPicker.css('width:82px; padding:5px;');
-
         const instance = $dropDownButton.dxDropDownButton('instance');
         const $popupContent = $(getPopup(instance).content());
-        assert.equal(`${$popupContent.outerWidth()}px`, colorPicker.css('width'), 'width is right');
+
+        assert.equal($popupContent.outerWidth(), 84, 'width is right');
     });
 
     QUnit.test('popup should have correct options after rendering', function(assert) {
@@ -537,6 +540,101 @@ QUnit.module('list integration', {}, () => {
             dropDownButton.option('wrapItemText', !wrapItemText);
             assert.strictEqual(list.option('wrapItemText'), dropDownButton.option('wrapItemText'), 'list option is correct after dropDownButton wrapItemText option value change');
         });
+    });
+
+    [true, false].forEach(wrapItemText => {
+        QUnit.test(`toggleButton should render inside of dropDownButton when width option is defined in generic themes when wrapItemText=${wrapItemText} (T847072)`, function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                items: [{
+                    'id': 1,
+                    'name': 'VeryVeryVeryVeryLongString',
+                    'icon': 'alignright'
+                }],
+                displayExpr: 'name',
+                keyExpr: 'id',
+                stylingMode: 'text',
+                useSelectMode: true,
+                width: 120,
+                splitButton: true,
+                selectedItemKey: 1,
+                wrapItemText
+            }).dxDropDownButton('instance');
+
+            const dropDownButtonElement = dropDownButton.$element().get(0);
+            const toggleButtonElement = getToggleButton(dropDownButton).get(0);
+
+            const dropDownButtonRightPosition = dropDownButtonElement.getBoundingClientRect(0).right;
+            const toggleButtonRightPosition = toggleButtonElement.getBoundingClientRect(0).right;
+
+            assert.strictEqual(dropDownButtonRightPosition, toggleButtonRightPosition, 'toggleButton position is correct');
+        });
+    });
+
+    QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
+        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'VeryVeryVeryVeryLongString',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            height: 100,
+            splitButton: true,
+            selectedItemKey: 1
+        });
+
+        const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
+        const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
+        const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
+
+        const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
+        const buttonTextVerticalCenter = (buttonTextRect.top + buttonTextRect.bottom) / 2;
+        assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
+    });
+
+    QUnit.test('toggleButton should have static width (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerWidth(), 20, 'toggleButton has correct width in generic theme');
+    });
+
+    QUnit.test('toggle/action buttons should have correct height when height option is not defined (T847072)', function(assert) {
+        const dropDownButton = $('#dropDownButton').dxDropDownButton({
+            items: [{
+                'id': 1,
+                'name': 'I',
+                'icon': 'alignright'
+            }],
+            displayExpr: 'name',
+            keyExpr: 'id',
+            useSelectMode: true,
+            width: 100,
+            splitButton: true,
+            selectedItemKey: 1
+        }).dxDropDownButton('instance');
+
+        const toggleButtonElement = getToggleButton(dropDownButton);
+        const actionButtonElement = getActionButton(dropDownButton);
+
+        assert.strictEqual(toggleButtonElement.outerHeight(), 36, 'toggleButton has correct height in generic theme');
+        assert.strictEqual(actionButtonElement.outerHeight(), 36, 'actionButton has correct height in generic theme');
     });
 
     QUnit.test('list selection should depend on selectedItemKey option', function(assert) {
