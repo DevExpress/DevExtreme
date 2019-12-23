@@ -918,7 +918,7 @@ QUnit.module('options changing', moduleConfig, () => {
         assert.equal(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
     });
 
-    QUnit.test('the "value" option should changed by pressing Ctrl+Enter', function(assert) {
+    QUnit.test('the "value" option should changed by pressing Ctrl+Enter', (assert) => {
         const valueChangedStub = sinon.stub();
         const changeStub = sinon.stub();
 
