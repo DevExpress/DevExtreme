@@ -656,20 +656,33 @@ var TextEditorBase = Editor.inherit({
         this.option('text', this._input().val());
     },
 
-    _renderValueChangeEvent: function() {
-        var keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + 'TextChange'),
-            valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), this.NAME + 'ValueChange');
+    _keyDownHandler: function(e) {
+        const $input = this._input();
+        const isCtrlEnter = e.ctrlKey && eventUtils.normalizeKeyName(e) === 'enter';
+        const isNewValue = $input.val() !== this.option('value');
 
-        eventsEngine.on(this._input(), keyPressEvent, this._keyPressHandler.bind(this));
-        eventsEngine.on(this._input(), valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        if(isCtrlEnter && isNewValue) {
+            eventsEngine.trigger($input, 'change');
+        }
+    },
+
+    _renderValueChangeEvent: function() {
+        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
+        const valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
+        const keyDownEvent = eventUtils.addNamespace('keydown', `${this.NAME}TextChange`);
+        const $input = this._input();
+
+        eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
+        eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        eventsEngine.on($input, keyDownEvent, this._keyDownHandler.bind(this));
     },
 
     _cleanValueChangeEvent: function() {
-        var eventNamespace = this.NAME + 'ValueChange',
-            keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + 'TextChange');
+        const valueChangeNamespace = `.${this.NAME}ValueChange`;
+        const textChangeNamespace = `.${this.NAME}TextChange`;
 
-        eventsEngine.off(this._input(), '.' + eventNamespace);
-        eventsEngine.off(this._input(), keyPressEvent);
+        eventsEngine.off(this._input(), valueChangeNamespace);
+        eventsEngine.off(this._input(), textChangeNamespace);
     },
 
     _refreshValueChangeEvent: function() {
