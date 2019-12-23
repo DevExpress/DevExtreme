@@ -19,8 +19,18 @@ function exportDataGrid(options) {
         topLeftCell = { row: 1, column: 1 },
         autoFilterEnabled = undefined,
         keepColumnWidths = true,
-        selectedRowsOnly = false
+        selectedRowsOnly = false,
+        loadPanel = {
+            enabled: true,
+            text: 'Exporting...' // Todo: look at on the text from asp.net or winforms
+        }
     } = options;
+
+    let cachedLoadPanelOptions = extend({}, component.option('loadPanel'));
+    component.option('loadPanel', loadPanel);
+
+    let rowsView = component.getView('rowsView');
+    rowsView.option('loadPanel.animation', null);
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -82,6 +92,8 @@ function exportDataGrid(options) {
             }
 
             resolve(cellsRange);
+        }).always(() => {
+            component.option('loadPanel', cachedLoadPanelOptions);
         });
     });
 }
