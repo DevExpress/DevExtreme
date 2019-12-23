@@ -652,18 +652,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._initStoreChangeHandlers();
     },
 
-    _setItemsSelectionBySelectedKeysOption: function(items, selectedKeys, keyGetter, itemGetter) {
-        items.forEach((item) => {
-            const itemKey = keyGetter(item);
-            item.selected = selectedKeys.indexOf(itemKey) !== -1;
-
-            let children = itemGetter(item);
-            if(children && children.length) {
-                this._setItemsSelectionBySelectedKeysOption(children, selectedKeys, keyGetter, itemGetter);
-            }
-        });
-    },
-
     _dataSourceChangedHandler: function(newItems) {
         const items = this.option('items');
 
@@ -1421,16 +1409,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
-        if(this._setItemSelection(value, itemElement, dxEvent)) {
-            this._fireSelectionChanged();
-        }
-    },
-
-    _setItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
-            return false;
+            return;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1440,7 +1422,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return false;
+            return;
         }
 
         const selectedNodesKeys = this.getSelectedNodesKeys();
@@ -1461,7 +1443,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: node.internalFields.item
         });
 
-        return true;
+        this._fireSelectionChanged();
     },
 
     _getCheckBoxInstance: function($node) {
