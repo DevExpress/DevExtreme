@@ -324,18 +324,24 @@ var Toolbar = ToolbarBase.inherit({
     _itemOptionChanged: function(item, property, value) {
         if(this._isMenuItem(item)) {
             this._menuStrategy.renderMenuItems();
+        } else if(this._isToolbarItem(item)) {
+            this.callBase(item, property, value);
         } else {
             this.callBase(item, property, value);
             this._menuStrategy.renderMenuItems();
+        }
 
-            if(property === 'location') {
-                this.repaint();
-            }
+        if(property === 'location') {
+            this.repaint();
         }
     },
 
     _isMenuItem: function(itemData) {
         return itemData.location === 'menu' || itemData.locateInMenu === 'always';
+    },
+
+    _isToolbarItem: function(itemData) {
+        return itemData.location === undefined || itemData.locateInMenu === 'never';
     },
 
     _optionChanged: function(args) {
