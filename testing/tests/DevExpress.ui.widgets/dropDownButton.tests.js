@@ -82,6 +82,40 @@ QUnit.module('markup', {
         assert.strictEqual($listItemText, '', 'item text is empty');
     });
 
+    QUnit.test('Widget should have no text after selectedItemKey is changed to null', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [{ id: 1, text: 'Test' }],
+            keyExpr: 'id',
+            displayExpr: 'text',
+            selectedItemKey: 1,
+            useSelectMode: true
+        });
+
+        let $actionButtonText = getActionButton(dropDownButton).text();
+        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
+
+        dropDownButton.option('selectedItemKey', null);
+        $actionButtonText = getActionButton(dropDownButton).text();
+        assert.strictEqual($actionButtonText, '', 'action button text is empty');
+    });
+
+    QUnit.test('Widget should have no text after Items is changed to empty array', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton2', {
+            items: [{ id: 1, text: 'Test' }],
+            keyExpr: 'id',
+            displayExpr: 'text',
+            selectedItemKey: 1,
+            useSelectMode: true
+        });
+
+        let $actionButtonText = getActionButton(dropDownButton).text();
+        assert.strictEqual($actionButtonText, 'Test', 'action button text is not empty');
+
+        dropDownButton.option('items', []);
+        $actionButtonText = getActionButton(dropDownButton).text();
+        assert.strictEqual($actionButtonText, '', 'action button text is empty');
+    });
+
     QUnit.test('width option should change dropDownButton width', (assert) => {
         const dropDownButton = new DropDownButton('#dropDownButton2', {
             text: 'Item 1',
