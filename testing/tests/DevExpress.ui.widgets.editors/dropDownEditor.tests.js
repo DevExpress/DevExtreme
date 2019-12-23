@@ -1134,15 +1134,14 @@ QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(
     $('#dropDownEditorLazy').dxDropDownEditor({
         dataSource: [1, 2],
         fieldTemplate: (value, $element) => {
-            const textBox = $('<div>')
+            const $textBox = $('<div>')
                 .appendTo($element)
                 .dxTextBox({
                     mask: '0-0',
                     value
-                })
-                .dxTextBox('instance');
+                });
 
-            $input = textBox._input();
+            $input = $textBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             keyboard = new keyboardMock($input, true);
             caretWorkaround($input);
         }
