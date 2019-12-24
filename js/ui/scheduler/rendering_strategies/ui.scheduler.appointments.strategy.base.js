@@ -343,10 +343,10 @@ class BaseRenderingStrategy {
             orientation = this._getOrientation();
 
         var findFreeIndex = (indexes, index) => {
-            var isFind = indexes.find((item) => {
+            var isFind = indexes.some((item) => {
                 return item === index;
             });
-            if(isFind !== undefined) {
+            if(isFind) {
                 return findFreeIndex(indexes, ++index);
             } else {
                 return index;
