@@ -1898,37 +1898,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this._dataAdapter.getTreeNodes();
     },
 
-    /**
-     * @name dxTreeViewMethods.getSelectedNodesKeys
-     * @publicName getSelectedNodesKeys()
-     * @return Array<any>
-     */
-    getSelectedNodesKeys: function() {
-        return this._dataAdapter.getSelectedNodesKeys();
-    },
-
-    /**
-     * @name dxTreeViewMethods.setSelectedNodesKeys
-     * @publicName setSelectedNodesKeys(keys)
-     * @param1 keys:Array<any>
-     * @return Array<any>
-     */
-    setSelectedNodesKeys: function(keys) {
-        const oldSelectedKeys = this.getSelectedNodesKeys();
-        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
-
-        diff.toDeselect.forEach((key) => {
-            this._setItemSelection(false, key);
-        });
-        diff.toSelect.forEach((key) => {
-            this._setItemSelection(true, key);
-        });
-
-        if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
-            this._fireSelectionChanged();
-        }
-        return this._dataAdapter.getSelectedNodesKeys();
-    },
 
     /**
      * @name dxTreeViewMethods.getSelectedNodes
@@ -1988,6 +1957,38 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
 
         return items;
+    },
+
+    /**
+     * @name dxTreeViewMethods.getSelectedNodesKeys
+     * @publicName getSelectedNodesKeys()
+     * @return Array<any>
+     */
+    getSelectedNodesKeys: function() {
+        return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    /**
+     * @name dxTreeViewMethods.setSelectedNodesKeys
+     * @publicName setSelectedNodesKeys(keys)
+     * @param1 keys:Array<any>
+     * @return Array<any>
+     */
+    setSelectedNodesKeys: function(keys) {
+        const oldSelectedKeys = this.getSelectedNodesKeys();
+        const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
+
+        diff.toDeselect.forEach((key) => {
+            this._updateItemSelection(false, key);
+        });
+        diff.toSelect.forEach((key) => {
+            this._updateItemSelection(true, key);
+        });
+
+        if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
+            this._fireSelectionChanged();
+        }
+        return this._dataAdapter.getSelectedNodesKeys();
     },
 
     /**
