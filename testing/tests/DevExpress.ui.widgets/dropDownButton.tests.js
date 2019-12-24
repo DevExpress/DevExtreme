@@ -576,6 +576,7 @@ QUnit.module('list integration', {}, () => {
             assert.ok(true, 'should not run in IE');
             return;
         }
+
         const $dropDownButton = $('#dropDownButton').dxDropDownButton({
             items: [{
                 'id': 1,
