@@ -137,11 +137,11 @@ function checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedC
     const $beforeItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $centerItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $afterItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $menuElement = $toolbarElement.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
+    const $menuItems = $toolbarElement.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
     QUnit.assert.equal($beforeItems.length, expectedBeforeItemsCount, 'items count with before location value');
     QUnit.assert.equal($centerItems.length, expectedCenterItemsCount, 'items count with center location value');
     QUnit.assert.equal($afterItems.length, expectedAfterItemsCount, 'items count with after location value');
-    QUnit.assert.equal($menuElement.length, expectedMenuItemsCount, 'menu element');
+    QUnit.assert.equal($menuItems.length, expectedMenuItemsCount, 'menu element');
 }
 
 ['before', 'center', 'after', undefined].forEach((location) => {
