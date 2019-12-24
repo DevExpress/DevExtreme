@@ -3684,13 +3684,17 @@ QUnit.test('Long term appoinment inflict index shift in other appointments (T737
 
 QUnit.test('Multi-day appointment should be rendered when started after endDayHour (T819852)', function(assert) {
     var data = [{
-        text: 'Google AdWords Strategy',
-        startDate: new Date('2019-10-01T18:00:00.000'),
-        endDate: new Date('2019-10-02T16:00:00.000'),
-    }, {
-        text: 'New Brochures',
+        text: 'Appt with end before endDayHour',
         startDate: new Date('2019-10-02T17:00:00.000'),
         endDate: new Date('2019-10-03T17:00:00.000'),
+    }, {
+        text: 'Default appt',
+        startDate: new Date('2019-10-03T06:00:00.000'),
+        endDate: new Date('2019-10-03T18:00:00.000'),
+    }, {
+        text: 'Appt with end after endDayHour',
+        startDate: new Date('2019-10-02T19:00:00.000'),
+        endDate: new Date('2019-10-03T19:00:00.000'),
     }];
 
     this.createInstance({
@@ -3704,7 +3708,8 @@ QUnit.test('Multi-day appointment should be rendered when started after endDayHo
         height: 580
     });
 
-    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 3, 'Appointments are rendered');
+    assert.strictEqual($(this.scheduler.appointments.getAppointment(1)).position().left, $(this.scheduler.appointments.getAppointment(2)).position().left, 'Appointments have same left coordinate');
 });
 
 QUnit.test('Appointment with equal startDate and endDate should render with 1 minute duration (T817857)', function(assert) {
