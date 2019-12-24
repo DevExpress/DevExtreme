@@ -436,7 +436,7 @@ QUnit.test('unselectItem for last item if \'allPages\' selectAllMode', function(
 
 QUnit.test('change selectedItemKeys to invisible items should perform load with filter', function(assert) {
     const items = [1, 2, 3, 4, 5];
-    const loading = sinon.spy();
+    let loading = null;
     const ds = new DataSource({
         store: {
             type: 'array',
@@ -454,6 +454,7 @@ QUnit.test('change selectedItemKeys to invisible items should perform load with 
     });
 
     const instance = $element.dxList('instance');
+    loading = sinon.spy();
     ds.store().on('loading', loading);
 
     // act
