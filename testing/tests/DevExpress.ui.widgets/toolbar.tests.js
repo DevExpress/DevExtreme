@@ -133,53 +133,51 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
     assert.equal(margin, '0px auto', 'aligned by center');
 });
 
-function checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedCenterItemsCount, expectedAfterItemsCount, expectedMenuItemsCount) {
+function checkItemsLocation($toolbarElement, expected) {
     const $beforeItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $centerItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $afterItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $menuItems = $toolbarElement.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
-    QUnit.assert.equal($beforeItems.length, expectedBeforeItemsCount, 'items count with before location value');
-    QUnit.assert.equal($centerItems.length, expectedCenterItemsCount, 'items count with center location value');
-    QUnit.assert.equal($afterItems.length, expectedAfterItemsCount, 'items count with after location value');
-    QUnit.assert.equal($menuItems.length, expectedMenuItemsCount, 'menu element');
+    QUnit.assert.equal($beforeItems.length, expected.before, 'items count with before location value');
+    QUnit.assert.equal($centerItems.length, expected.center, 'items count with center location value');
+    QUnit.assert.equal($afterItems.length, expected.after, 'items count with after location value');
+    QUnit.assert.equal($menuItems.length, expected.menu, 'menu element');
 }
 
 ['before', 'center', 'after', undefined].forEach((location) => {
     ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
         [1, 10000].forEach((width) => {
             QUnit.test(`Change item location at runtime -> location: ${location}, locateInMenu: ${locateInMenu}, width: ${width} (T844890)`, function(assert) {
-                const $toolbarElement = this.element.dxToolbar({
+                const $toolbar = this.element.dxToolbar({
                         items: [
                             { text: 'toolbar item', locateInMenu: locateInMenu, location: location },
                         ],
                         width: width
                     }),
-                    toolbar = $toolbarElement.dxToolbar('instance');
+                    toolbar = $toolbar.dxToolbar('instance');
 
-                let expectedBeforeItemsCount = 0,
-                    expectedCenterItemsCount = 0,
-                    expectedAfterItemsCount = 0,
-                    expectedMenuItemsCount = 0,
-                    isMenuMode = locateInMenu === 'always' || (locateInMenu === 'auto' && width < 100);
+                const getExpectedToolbarItems = (location, locateInMenu) => {
+                    const result = { before: 0, center: 0, after: 0, menu: 0 };
+                    if(locateInMenu === 'always' || (locateInMenu === 'auto' && width < 100)) {
+                        result.menu = 1;
+                    } else {
+                        result.before = location === 'before' ? 1 : 0;
+                        result.center = (location === 'center' || location === undefined) ? 1 : 0;
+                        result.after = location === 'after' ? 1 : 0;
+                    }
+                    return result;
+                };
 
-                if(isMenuMode) {
-                    expectedMenuItemsCount = 1;
-                } else {
-                    expectedBeforeItemsCount = location === 'before' ? 1 : 0;
-                    expectedCenterItemsCount = (location === 'center' || location === undefined) ? 1 : 0;
-                    expectedAfterItemsCount = location === 'after' ? 1 : 0;
-                }
-
-                checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedCenterItemsCount, expectedAfterItemsCount, expectedMenuItemsCount);
+                checkItemsLocation($toolbar, getExpectedToolbarItems(location, locateInMenu));
 
                 toolbar.option('items[0].location', 'center');
-                checkItemsLocation($toolbarElement, 0, isMenuMode ? 0 : 1, 0, isMenuMode ? 1 : 0);
+                checkItemsLocation($toolbar, getExpectedToolbarItems('center', locateInMenu));
 
                 toolbar.option('items[0].location', 'after');
-                checkItemsLocation($toolbarElement, 0, 0, isMenuMode ? 0 : 1, isMenuMode ? 1 : 0);
+                checkItemsLocation($toolbar, getExpectedToolbarItems('after', locateInMenu));
 
                 toolbar.option('items[0].location', 'before');
-                checkItemsLocation($toolbarElement, isMenuMode ? 0 : 1, 0, 0, isMenuMode ? 1 : 0);
+                checkItemsLocation($toolbar, getExpectedToolbarItems('before', locateInMenu));
             });
         });
     });
