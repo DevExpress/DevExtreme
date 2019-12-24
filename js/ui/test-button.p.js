@@ -56,6 +56,8 @@ function getCssClasses(model) {
         classNames.push('dx-button-default');
     } else if(model.type === 'success') {
         classNames.push('dx-button-success');
+    } else if(model.type === 'back') {
+        classNames.push('dx-button-back');
     } else {
         classNames.push('dx-button-normal');
     }
@@ -79,8 +81,8 @@ function viewModelFunction(model) {
 }
 function viewFunction(viewModel) {
     let icon;
-    if(viewModel.icon) {
-        icon = getImageContainerJSX(viewModel.icon);
+    if(viewModel.icon || viewModel.type === 'back') {
+        icon = getImageContainerJSX(viewModel.icon || 'back');
     }
     return (Preact.h('div', Object.assign({}, viewModel.elementAttr, { className: viewModel.cssClasses, title: viewModel.hint, style: viewModel.style, onPointerOver: viewModel.onPointerOver, onPointerOut: viewModel.onPointerOut, onPointerDown: viewModel.onPointerDown, onClick: viewModel.onClickHandler }), viewModel.contentRender && (Preact.h('div', { className: 'dx-button-content' },
         Preact.h(viewModel.contentRender, { icon: viewModel.icon, text: viewModel.text }))) || (Preact.h('div', { className: 'dx-button-content' },
@@ -92,7 +94,7 @@ const SVG_ICON_CLASS = 'dx-svg-icon';
 function getImageContainerJSX(source) {
     const type = getImageSourceType(source);
     if(type === 'image') { return (Preact.h('img', { src: source, className: ICON_CLASS })); }
-    if(type === 'fontIcon') { return (Preact.h('i', { className: ICON_CLASS + ' ' + source })); }
-    if(type === 'dxIcon') { return (Preact.h('i', { className: ICON_CLASS + ' ' + ICON_CLASS + '-' + source })); }
-    if(type === 'svg') { return (Preact.h('i', { className: ICON_CLASS + ' ' + SVG_ICON_CLASS }, source)); }
+    if(type === 'fontIcon') { return (Preact.h('i', { className: `${ICON_CLASS} ${source}` })); }
+    if(type === 'dxIcon') { return (Preact.h('i', { className: `${ICON_CLASS} ${ICON_CLASS}-${source}` })); }
+    if(type === 'svg') { return (Preact.h('i', { className: `${ICON_CLASS} ${SVG_ICON_CLASS}` }, source)); }
 }

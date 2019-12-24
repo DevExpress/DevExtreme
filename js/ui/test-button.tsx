@@ -74,6 +74,8 @@ function getCssClasses(model: any) {
         classNames.push('dx-button-default');
     } else if (model.type === 'success') {
         classNames.push('dx-button-success');
+    } else if (model.type === 'back') {
+        classNames.push('dx-button-back');
     } else {
         classNames.push('dx-button-normal');
     }
@@ -108,8 +110,8 @@ function viewModelFunction(model: Button) {
 
 function viewFunction(viewModel: Button & { cssClasses: string, style: { width?: string } }) {
     let icon;
-    if(viewModel.icon) {
-        icon = getImageContainerJSX(viewModel.icon);
+    if(viewModel.icon || viewModel.type === 'back') {
+        icon = getImageContainerJSX(viewModel.icon || 'back');
     }
 
     return (
@@ -148,9 +150,9 @@ function getImageContainerJSX(source: string) {
     if(type === 'image')
         return (<img src={source} className={ICON_CLASS}></img>);
     if(type === 'fontIcon')
-        return (<i className={ICON_CLASS + ' ' + source}></i>);
+        return (<i className={`${ICON_CLASS} ${source}`}></i>);
     if(type === 'dxIcon')
-        return (<i className={ICON_CLASS + ' ' + ICON_CLASS + '-' + source}></i>);
+        return (<i className={`${ICON_CLASS} ${ICON_CLASS}-${source}`}></i>);
     if(type === 'svg')
-        return (<i className={ICON_CLASS + ' ' + SVG_ICON_CLASS}>{source}></i>);
+        return (<i className={`${ICON_CLASS} ${SVG_ICON_CLASS}`}>{source}></i>);
 }
