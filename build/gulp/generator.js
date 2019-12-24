@@ -8,14 +8,25 @@ const plumber = require('gulp-plumber');
 const SRC = 'js/**/*.tsx';
 const DEST = 'js';
 
+const knownErrors = [
+    'Cannot find module \'preact\'.',
+    'Cannot find module \'preact/hooks\'.',
+    'Cannot find module \'csstype\'.'
+];
+
 gulp.task('generate-components', function() {
     const tsProject = gulpTypeScript.createProject('build/gulp/preact.tsconfig.json');
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
-        .pipe(plumber({
-            errorHandler: console.log
+        .pipe(plumber())
+        .pipe(tsProject({
+            error(e) {
+                if(!knownErrors.some(i => e.message.endsWith(i))) {
+                    console.log(e.message);
+                }
+            },
+            finish() {}
         }))
-        .pipe(tsProject())
         .pipe(lint({
             quiet: true,
             fix: true,
@@ -25,6 +36,6 @@ gulp.task('generate-components', function() {
         .pipe(gulp.dest(DEST));
 });
 
-gulp.task('generate-components-watch', function() {
+gulp.task('generate-components-watch', gulp.series('generate-components', function() {
     gulp.watch([SRC], gulp.series('generate-components'));
-});
+}));
