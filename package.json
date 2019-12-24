@@ -53,7 +53,7 @@
     "cldr-numbers-full": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
-    "devextreme-generator": "^1.0.1",
+    "devextreme-generator": "^1.0.4",
     "devextreme-internal-tools": "~1.2.0",
     "eslint": "^6.0.0",
     "eslint-plugin-qunit": "^4.0.0",
