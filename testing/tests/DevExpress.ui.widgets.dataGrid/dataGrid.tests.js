@@ -11823,9 +11823,14 @@ QUnit.testInActiveWindow('Filter row editor should not lose focus after changing
     // assert
     assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
 
+    assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'columns[0].filterValue', 'option fullName');
+    assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'filterValue', 'option fullName');
+    assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterType', 'option fullName');
+    assert.equal(onOptionChanged.getCall(3).args[0].fullName, 'columns[0].filterValues', 'option fullName');
+
     assert.ok($filterRowEditor.hasClass('dx-focused'), 'dx-focused');
     assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');
-    assert.ok($filterRowEditor.find(':focus').length, 'focus');
+    assert.ok($filterRowEditor.find('.dx-texteditor-input').is(':focus'), 'focus');
 });
 
 // T837684
