@@ -43,6 +43,7 @@
     "@types/jquery": "^2.0.34",
     "angular": "^1.6.10",
     "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.3",
     "babel-loader": "^7.1.2",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
