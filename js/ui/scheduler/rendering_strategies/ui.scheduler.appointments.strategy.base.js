@@ -251,143 +251,164 @@ class BaseRenderingStrategy {
         const result = [];
 
         const round = value => Math.round(value * 100) / 100;
-        const createSortedItem = (rowIndex, cellIndex, top, left, position, isStart, allDay, tmpIndex) => {
+        const createItem = (rowIndex, cellIndex, top, left, bottom, right, position, allDay) => {
             return {
                 i: rowIndex,
                 j: cellIndex,
                 top: round(top),
                 left: round(left),
+                bottom: round(bottom),
+                right: round(right),
                 cellPosition: position,
-                isStart: isStart,
                 allDay: allDay,
-                __tmpIndex: tmpIndex
             };
         };
-
-        let tmpIndex = 0; // unstable sorting fix
 
         for(let rowIndex = 0, rowCount = positionList.length; rowIndex < rowCount; rowIndex++) {
             for(let cellIndex = 0, cellCount = positionList[rowIndex].length; cellIndex < cellCount; cellIndex++) {
                 const { top, left, height, width, cellPosition, allDay } = positionList[rowIndex][cellIndex];
 
-                const start = createSortedItem(rowIndex, cellIndex, top, left, cellPosition, true, allDay, tmpIndex);
-                tmpIndex++;
-
-                const end = createSortedItem(rowIndex, cellIndex, top + height, left + width, cellPosition, false, allDay, tmpIndex);
-                tmpIndex++;
-
-                result.push(start, end);
+                result.push(createItem(rowIndex, cellIndex, top, left, top + height, left + width, cellPosition, allDay));
             }
         }
 
         return result.sort((a, b) => this._sortCondition(a, b));
     }
 
-    _fixUnstableSorting(comparisonResult, a, b) {
-        if(comparisonResult === 0) {
-            if(a.__tmpIndex < b.__tmpIndex) return -1;
-            if(a.__tmpIndex > b.__tmpIndex) return 1;
-        }
-        return comparisonResult;
-    }
-
     _sortCondition() {
     }
 
-    _rowCondition(a, b) {
+    _getConditions(a, b) {
         var isSomeEdge = this._isSomeEdge(a, b);
 
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
+        return {
+            columnCondition: isSomeEdge || this._normalizeCondition(a.left, b.left),
+            rowCondition: isSomeEdge || this._normalizeCondition(a.top, b.top),
+            cellPositionCondition: isSomeEdge || this._normalizeCondition(a.cellPosition, b.cellPosition)
+        };
+    }
+
+    _rowCondition(a, b) {
+        var conditions = this._getConditions(a, b);
+        return conditions.columnCondition || conditions.rowCondition;
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
-
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
+        var conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition;
     }
 
     _isSomeEdge(a, b) {
         return a.i === b.i && a.j === b.j;
     }
 
-    _normalizeCondition(first, second, isSomeEdge) {
+    _normalizeCondition(first, second) {
         // NOTE: ie & ff pixels
         var result = first - second;
+        return Math.abs(result) > 1 ? result : 0;
+    }
 
-        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
+    _isItemsCross(item, currentItem, orientation) {
+        const side_1 = Math.floor(item[orientation[0]]);
+        const side_2 = Math.floor(item[orientation[1]]);
+        return item[orientation[2]] === currentItem[orientation[2]] && (
+            (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
+                (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
+                    side_1 === currentItem[orientation[0]] && side_2 === currentItem[orientation[1]]
+                ))
+        );
+    }
+
+    _getOrientation() {
+        return ['top', 'bottom', 'left'];
     }
 
     _getResultPositions(sortedArray) {
-        var stack = [],
-            indexes = [],
-            result = [],
-            intersectPositions = [],
-            intersectPositionCount = 0,
+        var result = [],
+            i,
             sortedIndex = 0,
-            position;
+            currentItem,
+            indexes,
+            itemIndex,
+            maxIndexInStack = 0,
+            stack = {},
+            orientation = this._getOrientation();
 
-        for(var i = 0; i < sortedArray.length; i++) {
-            var current = sortedArray[i],
-                j;
-
-            if(current.isStart) {
-                position = undefined;
-                for(j = 0; j < indexes.length; j++) {
-                    if(!indexes[j]) {
-
-                        position = j;
-                        indexes[j] = true;
-                        break;
-                    }
-                }
-
-                if(position === undefined) {
-
-                    position = indexes.length;
-
-                    indexes.push(true);
-
-                    for(j = 0; j < stack.length; j++) {
-                        stack[j].count++;
-                    }
-                }
-
-                stack.push({
-                    index: position,
-                    count: indexes.length,
-                    i: current.i,
-                    j: current.j,
-                    sortedIndex: this._skipSortedIndex(position) ? null : sortedIndex++
-                });
-
-                if(intersectPositionCount < indexes.length) {
-                    intersectPositionCount = indexes.length;
-                }
+        var findFreeIndex = (indexes, index) => {
+            var isFind = indexes.some((item) => {
+                return item === index;
+            });
+            if(isFind) {
+                return findFreeIndex(indexes, ++index);
             } else {
-                var removeIndex = this._findIndexByKey(stack, 'i', 'j', current.i, current.j),
-                    resultItem = stack[removeIndex];
-
-                stack.splice(removeIndex, 1);
-
-                indexes[resultItem.index] = false;
-                intersectPositions.push(resultItem);
-
-                if(!stack.length) {
-                    indexes = [];
-                    for(var k = 0; k < intersectPositions.length; k++) {
-                        intersectPositions[k].count = intersectPositionCount;
-                    }
-                    intersectPositions = [];
-                    intersectPositionCount = 0;
-                }
-
-                result.push(resultItem);
-
+                return index;
             }
+        };
+
+        var startNewStack = (currentItem) => {
+            stack.items = [createItem(currentItem)];
+            stack.left = currentItem.left;
+            stack.right = currentItem.right;
+            stack.top = currentItem.top;
+            stack.bottom = currentItem.bottom;
+        };
+
+        var createItem = (currentItem, index) => {
+            var currentIndex = index || 0;
+            return {
+                index: currentIndex,
+                i: currentItem.i,
+                j: currentItem.j,
+                left: currentItem.left,
+                right: currentItem.right,
+                top: currentItem.top,
+                bottom: currentItem.bottom,
+                sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
+            };
+        };
+
+        var pushItemsInResult = (items) => {
+            items.forEach((item) => {
+                result.push({
+                    index: item.index,
+                    count: maxIndexInStack + 1,
+                    i: item.i,
+                    j: item.j,
+                    sortedIndex: item.sortedIndex
+                });
+            });
+        };
+
+        for(i = 0; i < sortedArray.length; i++) {
+            currentItem = sortedArray[i];
+            indexes = [];
+
+            if(!stack.items) {
+                startNewStack(currentItem);
+            } else {
+                if(this._isItemsCross(stack, currentItem, orientation)) {
+                    stack.items.forEach((item, index) => {
+                        if(this._isItemsCross(item, currentItem, orientation)) {
+                            indexes.push(item.index);
+                        }
+                    });
+                    itemIndex = indexes.length ? findFreeIndex(indexes, 0) : 0;
+                    stack.items.push(createItem(currentItem, itemIndex));
+                    maxIndexInStack = Math.max(itemIndex, maxIndexInStack);
+                    stack.left = Math.min(stack.left, currentItem.left);
+                    stack.right = Math.max(stack.right, currentItem.right);
+                    stack.top = Math.min(stack.top, currentItem.top);
+                    stack.bottom = Math.max(stack.bottom, currentItem.bottom);
+                } else {
+                    pushItemsInResult(stack.items);
+                    stack = {};
+                    startNewStack(currentItem);
+                    maxIndexInStack = 0;
+                }
+            }
+        }
+        if(stack.items) {
+            pushItemsInResult(stack.items);
         }
 
         return result.sort(function(a, b) {
