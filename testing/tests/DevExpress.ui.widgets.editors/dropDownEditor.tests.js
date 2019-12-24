@@ -9,6 +9,7 @@ import support from 'core/utils/support';
 import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay';
 import { isRenderer } from 'core/utils/type';
+import caretWorkaround from './textEditorParts/caretWorkaround.js';
 
 import 'common.css!';
 
@@ -1120,6 +1121,30 @@ QUnit.module('Templates', () => {
         const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
         assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
+    });
+
+    QUnit.testInActiveWindow('fieldTemplate can contain a masked TextBox', function(assert) {
+        let keyboard;
+        let $input;
+
+        $('#dropDownEditorLazy').dxDropDownEditor({
+            dataSource: [1, 2],
+            fieldTemplate: (value, $element) => {
+                const $textBox = $('<div>')
+                    .appendTo($element)
+                    .dxTextBox({
+                        mask: '0-0',
+                        value
+                    });
+
+                $input = $textBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                keyboard = new keyboardMock($input, true);
+                caretWorkaround($input);
+            }
+        });
+
+        keyboard.type('z5');
+        assert.strictEqual($input.val(), '5-_', 'Masked TextBox works fine');
     });
 });
 
