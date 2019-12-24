@@ -19154,7 +19154,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.equal(this.data[0].field, 0, 'changes were not saved');
 
         assert.ok($errorRow, 'error row');
-        assert.equal($errorRow.text(), 'Field is required', 'error message');
+        assert.equal($errorRow.text(), '', 'error message');
     });
 
     function rowAddingValidationWithInvalidHiddenColumnTest(that, assert, editMode) {
@@ -19228,7 +19228,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.ok($input, 'cell has input');
 
         assert.ok($errorRow, 'error row');
-        assert.equal($errorRow.text(), 'Field is required, Hidden Field is required', 'error message');
+        assert.equal($errorRow.text(), 'Hidden Field is required', 'error message');
 
         assert.equal(that.data.length, 100, 'data was not modified');
 
@@ -19333,7 +19333,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.ok($input, 'cell has input');
 
         assert.ok($errorRow, 'error row');
-        assert.equal($errorRow.text(), 'Field is required', 'error message');
+        assert.equal($errorRow.text(), '', 'error message');
 
         assert.equal(that.data.length, 100, 'data was not modified');
 
