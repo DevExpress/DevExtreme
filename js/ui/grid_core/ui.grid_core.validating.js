@@ -72,7 +72,9 @@ var ValidatingController = modules.Controller.inherit((function() {
             var brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                if(!brokenRule.validator.$element().parent().length) {
+                let isInvisibleColumn = !brokenRule.column.visible || brokenRule.column.groupIndex !== undefined;
+
+                if(!brokenRule.validator.$element().parent().length && isInvisibleColumn) {
                     brokenRulesMessages.push(brokenRule.message);
                 }
             });
@@ -400,25 +402,24 @@ module.exports = {
 
                 _getInvisibleColumns: function(editData) {
                     var columnsController = this.getController('columns'),
-                        needAllColumns,
-                        invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand),
-                        hasHiddenColumns = invisibleColumns.length && invisibleColumns.some((column) => column.validationRules.length);
+                        hasInvisibleRows,
+                        invisibleColumns = columnsController.getInvisibleColumns();
 
-                    if(this.isCellOrBatchEditMode() && hasHiddenColumns) {
-                        needAllColumns = editData.some((rowEditData) => {
+                    if(this.isCellOrBatchEditMode()) {
+                        hasInvisibleRows = editData.some((rowEditData) => {
                             let rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
 
                             return rowIndex < 0;
                         });
                     }
 
-                    return needAllColumns ? columnsController.getColumns().filter((column) => !column.isBand) : invisibleColumns;
+                    return hasInvisibleRows ? columnsController.getColumns() : invisibleColumns;
                 },
 
                 _createInvisibleColumnValidators: function(editData) {
-                    var validatingController = this.getController("validating"),
-                        columnsController = this.getController("columns"),
-                        invisibleColumns = this._getInvisibleColumns(editData),
+                    var validatingController = this.getController('validating'),
+                        columnsController = this.getController('columns'),
+                        invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand),
                         groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
                         invisibleColumnValidators = [];
 
