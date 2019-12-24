@@ -524,7 +524,7 @@ var Draggable = DOMComponent.inherit({
         }
 
         var $element = this._$content(),
-            itemsSelector = this._getItemsSelector(),
+            itemsSelector = this._prepareSubscribeSelector(this._getItemsSelector()),
             allowMoveByClick = this.option('allowMoveByClick'),
             data = {
                 direction: this.option('dragDirection'),
@@ -546,15 +546,17 @@ var Draggable = DOMComponent.inherit({
             eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
         }
 
-        if(itemsSelector[0] === '>') {
-            itemsSelector = itemsSelector.slice(1);
-        }
-
         eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
         eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
         eventsEngine.on($element, DRAG_ENTER_EVENT_NAME, data, this._dragEnterHandler.bind(this));
         eventsEngine.on($element, DRAGEND_LEAVE_EVENT_NAME, data, this._dragLeaveHandler.bind(this));
+    },
+
+    _prepareSubscribeSelector: function(selector) {
+        return selector
+            .replace(/^>/, '')
+            .replace(/,\s?>/g, ',');
     },
 
     _dragElementIsCloned: function() {
