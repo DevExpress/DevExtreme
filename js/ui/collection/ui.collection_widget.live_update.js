@@ -207,12 +207,13 @@ export default CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'items':
+            case 'items': {
                 const isItemsUpdated = this._partialRefresh(args.value);
                 if(!isItemsUpdated) {
                     this.callBase(args);
                 }
                 break;
+            }
             case 'dataSource':
                 if(!this.option('repaintChangesOnly') || !args.value) {
                     this.option('items', []);

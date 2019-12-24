@@ -274,7 +274,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             that.callBase(args);
 
             switch(args.name) {
-                case 'selection':
+                case 'selection': {
                     const oldSelectionMode = that._selectionMode;
 
                     that.init();
@@ -299,17 +299,19 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     that.getController('columns').updateColumns();
                     args.handled = true;
                     break;
+                }
                 case 'selectionFilter':
                     this._selection.selectionFilter(args.value);
                     args.handled = true;
                     break;
-                case 'selectedRowKeys':
+                case 'selectedRowKeys': {
                     const value = args.value || [];
                     if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
                         that.selectRows(value);
                     }
                     args.handled = true;
                     break;
+                }
             }
         },
 
@@ -728,10 +730,9 @@ module.exports = {
 
                 _renderSelectAllCheckBox: function($container, column) {
                     const that = this;
-                    let groupElement;
                     const selectionController = that.getController('selection');
 
-                    groupElement = $('<div>')
+                    const groupElement = $('<div>')
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 

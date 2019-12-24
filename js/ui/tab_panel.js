@@ -435,12 +435,13 @@ const TabPanel = MultiView.inherit({
             case 'showNavButtons':
                 this._setTabsOption(fullName, value);
                 break;
-            case 'focusedElement':
+            case 'focusedElement': {
                 const id = value ? $(value).index() : value;
                 const newItem = value ? this._tabs._itemElements().eq(id) : value;
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
                 this.callBase(args);
                 break;
+            }
             case 'itemTitleTemplate':
                 this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
                 break;

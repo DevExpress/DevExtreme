@@ -1186,11 +1186,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _animateNodeContainer: function(node, state, e) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
-        let nodeHeight;
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
-        nodeHeight = $nodeContainer.height();
+        const nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {
@@ -1609,7 +1608,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         switch(location) {
-            case FOCUS_UP:
+            case FOCUS_UP: {
                 const $prevItem = this._prevItem($items);
 
                 this.option('focusedElement', getPublicElement($prevItem));
@@ -1617,7 +1616,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateItemSelection(true, $prevItem.find('.' + ITEM_CLASS).get(0));
                 }
                 break;
-            case FOCUS_DOWN:
+            }
+            case FOCUS_DOWN: {
                 const $nextItem = this._nextItem($items);
 
                 this.option('focusedElement', getPublicElement($nextItem));
@@ -1625,7 +1625,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateItemSelection(true, $nextItem.find('.' + ITEM_CLASS).get(0));
                 }
                 break;
-            case FOCUS_FIRST:
+            }
+            case FOCUS_FIRST: {
                 const $firstItem = $items.first();
 
                 if(e.shiftKey && this._showCheckboxes()) {
@@ -1634,7 +1635,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 this.option('focusedElement', getPublicElement($firstItem));
                 break;
-            case FOCUS_LAST:
+            }
+            case FOCUS_LAST: {
                 const $lastItem = $items.last();
 
                 if(e.shiftKey && this._showCheckboxes()) {
@@ -1643,12 +1645,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 this.option('focusedElement', getPublicElement($lastItem));
                 break;
-            case FOCUS_RIGHT:
+            }
+            case FOCUS_RIGHT: {
                 this._expandFocusedContainer();
                 break;
-            case FOCUS_LEFT:
+            }
+            case FOCUS_LEFT: {
                 this._collapseFocusedContainer();
                 break;
+            }
             default:
                 this.callBase.apply(this, arguments);
                 return;

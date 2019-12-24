@@ -342,7 +342,7 @@ const RangeSlider = Slider.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case 'value':
+            case 'value': {
                 if(args.value[0] === args.previousValue[0] && args.value[1] === args.previousValue[1]) {
                     break;
                 }
@@ -371,6 +371,7 @@ const RangeSlider = Slider.inherit({
 
                 this._saveValueChangeEvent(undefined);
                 break;
+            }
             case 'start':
             case 'end':
                 this._setValueOption();

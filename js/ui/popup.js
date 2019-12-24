@@ -827,7 +827,7 @@ const Popup = Overlay.inherit({
                 break;
             case 'toolbarItems':
             case 'useDefaultToolbarButtons':
-            case 'useFlatToolbarButtons':
+            case 'useFlatToolbarButtons': {
                 // NOTE: Geometry rendering after "toolbarItems" runtime change breaks the popup animation first appereance.
                 // But geometry rendering for options connected to the popup position still should be called.
                 const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
@@ -839,6 +839,7 @@ const Popup = Overlay.inherit({
                     this._renderGeometry();
                 }
                 break;
+            }
             case 'dragEnabled':
                 this._renderDrag();
                 break;

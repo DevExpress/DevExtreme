@@ -226,7 +226,7 @@ const SliderHandle = Widget.inherit({
             case 'tooltipFormat':
                 this._renderValue();
                 break;
-            case 'value':
+            case 'value': {
                 this._renderValue();
 
                 const value = this._getFormattedValue(args.value);
@@ -235,6 +235,7 @@ const SliderHandle = Widget.inherit({
 
                 this.setAria('valuenow', args.value);
                 break;
+            }
             case 'tooltipEnabled':
                 this._renderTooltip();
                 break;

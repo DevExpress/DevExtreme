@@ -1371,7 +1371,7 @@ const Scheduler = Widget.inherit({
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case 'editing':
+            case 'editing': {
                 this._initEditing();
                 const editing = this._editing;
 
@@ -1380,6 +1380,7 @@ const Scheduler = Widget.inherit({
                 this.hideAppointmentTooltip();
                 this._cleanPopup();
                 break;
+            }
             case 'showAllDayPanel':
                 this._postponeResourceLoading().done((resources) => {
                     this._filterAppointmentsByDate();
@@ -1961,11 +1962,10 @@ const Scheduler = Widget.inherit({
     },
 
     _headerConfig: function() {
-        let result;
         const currentViewOptions = this._getCurrentViewOptions();
         const countConfig = this._getViewCountConfig();
 
-        result = extend({
+        const result = extend({
             firstDayOfWeek: this.option('firstDayOfWeek'),
             currentView: this._currentView,
             tabIndex: this.option('tabIndex'),
@@ -2095,10 +2095,9 @@ const Scheduler = Widget.inherit({
     },
 
     _workSpaceConfig: function(groups, countConfig) {
-        let result;
         const currentViewOptions = this._getCurrentViewOptions();
 
-        result = extend({
+        const result = extend({
             noDataText: this.option('noDataText'),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             startDayHour: this.option('startDayHour'),

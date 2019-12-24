@@ -800,10 +800,11 @@ const DateBox = DropDownEditor.inherit({
                 break;
             case 'formatWidthCalculator':
                 break;
-            case 'closeOnValueChange':
+            case 'closeOnValueChange': {
                 const applyValueMode = args.value ? 'instantly' : 'useButtons';
                 this.option('applyValueMode', applyValueMode);
                 break;
+            }
             case 'applyValueMode':
                 this.option('closeOnValueChange', args.value === 'instantly');
                 this.callBase.apply(this, arguments);

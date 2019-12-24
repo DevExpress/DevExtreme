@@ -302,11 +302,10 @@ const GroupingDataControllerExtender = (function() {
         _changeRowExpandCore: function(key) {
             const that = this;
             const dataSource = this._dataSource;
-            let d;
 
             if(!dataSource) return;
 
-            d = new Deferred();
+            const d = new Deferred();
             when(dataSource.changeRowExpand(key)).done(function() {
                 that.load().done(d.resolve).fail(d.reject);
             }).fail(d.reject);
@@ -361,11 +360,12 @@ const onGroupingMenuItemClick = function(column, params) {
     const columnsController = this._columnsController;
 
     switch(params.itemData.value) {
-        case 'group':
+        case 'group': {
             const groups = columnsController._dataSource.group() || [];
 
             columnsController.columnOption(column.dataField, 'groupIndex', groups.length);
             break;
+        }
         case 'ungroup':
             columnsController.columnOption(column.dataField, 'groupIndex', -1);
             break;

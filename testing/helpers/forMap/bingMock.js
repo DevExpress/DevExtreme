@@ -79,7 +79,7 @@ Microsoft.Maps = {
                 case 'click':
                     Microsoft.clickActionCallback = callback;
                     return 'clickHandler';
-                case 'directionsUpdated':
+                case 'directionsUpdated': {
                     if(Microsoft.abortDirectionsUpdate) {
                         return;
                     }
@@ -94,6 +94,7 @@ Microsoft.Maps = {
                         });
                     });
                     return 'directionsUpdatedHandler';
+                }
                 case 'directionsError':
                     if(!Microsoft.abortDirectionsUpdate) {
                         return;

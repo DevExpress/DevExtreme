@@ -663,13 +663,14 @@ const Pager = Widget.inherit({
             case 'visible':
                 this._toggleVisibility(args.value);
                 break;
-            case 'pageIndex':
+            case 'pageIndex': {
                 const pageIndexChanged = this.option('pageIndexChanged');
                 if(pageIndexChanged) {
                     pageIndexChanged(args.value);
                 }
                 this._updatePages();
                 break;
+            }
             case 'maxPagesCount':
             case 'pageCount':
             case 'totalCount':
@@ -678,13 +679,14 @@ const Pager = Widget.inherit({
             case 'showNavigationButtons':
                 this._updatePages();
                 break;
-            case 'pageSize':
+            case 'pageSize': {
                 const pageSizeChanged = this.option('pageSizeChanged');
                 if(pageSizeChanged) {
                     pageSizeChanged(args.value);
                 }
                 this._updatePageSizes();
                 break;
+            }
             case 'pageSizes':
                 this._updatePageSizes();
                 break;

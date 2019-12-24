@@ -493,7 +493,7 @@ const Map = Widget.inherit({
                 this._queueAsyncAction('adjustViewport');
                 break;
             case 'markers':
-            case 'routes':
+            case 'routes': {
                 this._checkOption(name);
 
                 const prevValue = this._rendered[name];
@@ -508,6 +508,7 @@ const Map = Widget.inherit({
                     }
                 });
                 break;
+            }
             case 'markerIconSrc':
                 this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
                 break;
