@@ -20,6 +20,7 @@ export default class Button {
     @Prop() text?: string;
     @Prop() type?: string;
     @Prop() width?: string;
+    @Prop() elementAttr?: any = {};
 
     // @Template() contentRender?: any;
     @Prop() contentRender?: any;
@@ -57,6 +58,7 @@ export default class Button {
 
 function getCssClasses(model: any) {
     const classNames = ['dx-widget', 'dx-button'];
+    model.elementAttr.class && classNames.push(model.elementAttr.class);
 
     if (model.stylingMode === 'outlined') {
         classNames.push('dx-button-mode-outlined');
@@ -112,13 +114,15 @@ function viewFunction(viewModel: Button & { cssClasses: string, style: { width?:
 
     return (
         <div
+            {...viewModel.elementAttr}
             className={viewModel.cssClasses}
             title={viewModel.hint}
             style={viewModel.style}
             onPointerOver={viewModel.onPointerOver}
             onPointerOut={viewModel.onPointerOut}
             onPointerDown={viewModel.onPointerDown}
-            onClick={viewModel.onClickHandler}>
+            onClick={viewModel.onClickHandler}
+        >
             {viewModel.contentRender && (
                 <div className="dx-button-content">
                     <viewModel.contentRender icon={viewModel.icon} text={viewModel.text} />

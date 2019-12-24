@@ -36,11 +36,13 @@ export default function Button(props) {
         onClickHandler })));
 }
 Button.defaultProps = {
+    elementAttr: {},
     onClick: (() => {
     })
 };
 function getCssClasses(model) {
     const classNames = ['dx-widget', 'dx-button'];
+    model.elementAttr.class && classNames.push(model.elementAttr.class);
     if(model.stylingMode === 'outlined') {
         classNames.push('dx-button-mode-outlined');
     } else if(model.stylingMode === 'text') {
@@ -80,7 +82,7 @@ function viewFunction(viewModel) {
     if(viewModel.icon) {
         icon = getImageContainerJSX(viewModel.icon);
     }
-    return (Preact.h('div', { className: viewModel.cssClasses, title: viewModel.hint, style: viewModel.style, onPointerOver: viewModel.onPointerOver, onPointerOut: viewModel.onPointerOut, onPointerDown: viewModel.onPointerDown, onClick: viewModel.onClickHandler }, viewModel.contentRender && (Preact.h('div', { className: 'dx-button-content' },
+    return (Preact.h('div', Object.assign({}, viewModel.elementAttr, { className: viewModel.cssClasses, title: viewModel.hint, style: viewModel.style, onPointerOver: viewModel.onPointerOver, onPointerOut: viewModel.onPointerOut, onPointerDown: viewModel.onPointerDown, onClick: viewModel.onClickHandler }), viewModel.contentRender && (Preact.h('div', { className: 'dx-button-content' },
         Preact.h(viewModel.contentRender, { icon: viewModel.icon, text: viewModel.text }))) || (Preact.h('div', { className: 'dx-button-content' },
         icon,
         viewModel.text && Preact.h('span', { className: 'dx-button-text' }, viewModel.text)))));
