@@ -573,7 +573,7 @@ QUnit.module('list integration', {}, () => {
 
     QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
         if(browser.msie && browser.version <= 11) {
-            assert.ok(true, 'should not run in IE');
+            assert.ok(true, 'IE has some problems with getBoundingClientRect');
             return;
         }
 
