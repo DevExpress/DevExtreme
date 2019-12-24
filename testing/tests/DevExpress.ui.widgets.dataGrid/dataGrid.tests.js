@@ -9027,6 +9027,48 @@ QUnit.test('Editor should be rendered for hidden columns while editing in row mo
     assert.notOk($(dataGrid.getRowElement(1)).find('.dx-texteditor').length, 'row doesn\'t have editor');
 });
 
+['row', 'form'].forEach(editMode => {
+    QUnit.test(`Should not throw exception after calling editRow() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            editing: {
+                mode: editMode,
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                enabled: false
+            },
+            focusedRowEnabled: true,
+            dataSource: [{ field1: '1', field2: '2' }]
+        }).dxDataGrid('instance');
+
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        assert.ok(true, 'no exception');
+    });
+
+    QUnit.test(`Should not throw exception after calling focus() if KBN is disabled and edit mode is ${editMode}`, function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            loadingTimeout: undefined,
+            editing: {
+                mode: editMode,
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                enabled: false
+            },
+            focusedRowEnabled: true,
+            dataSource: [{ field1: '1', field2: '2' }]
+        }).dxDataGrid('instance');
+
+        dataGrid.focus(dataGrid.getCellElement(0, 0));
+        this.clock.tick();
+
+        assert.ok(true, 'no exception');
+    });
+});
+
 QUnit.module('Virtual row rendering', baseModuleConfig);
 
 QUnit.test('editing should starts correctly if scrolling mode is virtual', function(assert) {
