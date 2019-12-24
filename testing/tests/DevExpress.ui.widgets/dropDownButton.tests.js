@@ -3,6 +3,7 @@ import DropDownButton from 'ui/drop_down_button';
 import typeUtils from 'core/utils/type';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import browser from 'core/utils/browser';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -571,28 +572,33 @@ QUnit.module('list integration', {}, () => {
     });
 
     QUnit.test('dropDownButton content should be centered vertically (T847072)', function(assert) {
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            items: [{
-                'id': 1,
-                'name': 'VeryVeryVeryVeryLongString',
-                'icon': 'alignright'
-            }],
-            displayExpr: 'name',
-            keyExpr: 'id',
-            useSelectMode: true,
-            width: 100,
-            height: 100,
-            splitButton: true,
-            selectedItemKey: 1
-        });
+        if(browser.msie && browser.version <= 11) {
+            assert.ok(true, 'should not run in IE');
+        } else {
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                items: [{
+                    'id': 1,
+                    'name': 'VeryVeryVeryVeryLongString',
+                    'icon': 'alignright'
+                }],
+                displayExpr: 'name',
+                keyExpr: 'id',
+                useSelectMode: true,
+                width: 100,
+                height: 100,
+                splitButton: true,
+                selectedItemKey: 1
+            });
 
-        const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
-        const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
-        const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
+            const $buttonText = $dropDownButton.find(`.${BUTTON_TEXT}`);
+            const dropDownButtonRect = $dropDownButton.get(0).getBoundingClientRect();
+            const buttonTextRect = $buttonText.get(0).getBoundingClientRect();
 
-        const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
-        const buttonTextVerticalCenter = (buttonTextRect.top + buttonTextRect.bottom) / 2;
-        assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 3, 'content is vertically centered');
+            const dropDownButtonVerticalCenter = (dropDownButtonRect.top + dropDownButtonRect.bottom) / 2;
+            const buttonTextVerticalCenter = (buttonTextRect.top + buttonTextRect.bottom) / 2;
+
+            assert.roughEqual(buttonTextVerticalCenter, dropDownButtonVerticalCenter, 2, 'content is vertically centered');
+        }
     });
 
     QUnit.test('toggleButton should have static width (T847072)', function(assert) {
