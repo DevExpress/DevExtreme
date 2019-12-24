@@ -19,6 +19,15 @@ const { assert } = QUnit;
 
 class TreeViewTestWrapper {
     constructor(options) {
+        if(!options.onItemSelectionChanged) {
+            options.onItemSelectionChanged = () => this.eventLog.push('itemSelectionChanged');
+        }
+
+        if(!options.onSelectionChanged) {
+            options.onSelectionChanged = () => this.eventLog.push('selectionChanged');
+        }
+
+        this.eventLog = [];
         this.instance = this.getInstance(options);
         this.isCheckBoxMode = this.instance.option('showCheckBoxesMode') === 'normal';
     }
@@ -39,18 +48,18 @@ class TreeViewTestWrapper {
     hasSelectedClass($item) { return $item.hasClass(SELECTED_ITEM_CLASS); }
     hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
 
-    checkSelectedNodes(selectedIndexes) {
+    checkSelectedNodes(selectedIndexes, additionalErrorMessage) {
         let $node = this.getNodes();
 
         selectedIndexes.forEach((index) => {
             assert.equal(this.hasSelectedClass($node.eq(index)), true, `item ${index} has selected class`);
-            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class`);
+            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class` + (additionalErrorMessage || ''));
         });
 
         $node.each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 assert.equal(this.hasSelectedClass($node.eq(index)), false, `item ${index} has no selected class`);
-                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class`);
+                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class` + (additionalErrorMessage || ''));
             }
         });
     }
@@ -70,6 +79,19 @@ class TreeViewTestWrapper {
     checkSelected(expectedSelectedIndexes, items) {
         this.checkSelectedItems(expectedSelectedIndexes, items);
         this.checkSelectedNodes(expectedSelectedIndexes);
+    }
+
+    checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
+        const actualSelectedKeys = this.instance.getSelectedNodesKeys();
+        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+    }
+
+    checkEventLog(expectedEventLog, additionalErrorMessage) {
+        assert.deepEqual(this.eventLog, expectedEventLog, 'eventLog ' + additionalErrorMessage);
+    }
+
+    clearEventLog() {
+        this.eventLog = [];
     }
 
     convertTreeToFlatList(items) {

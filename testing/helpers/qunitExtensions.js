@@ -571,3 +571,19 @@
         log.clear();
     });
 })();
+
+(function checkSinonFakeTimers() {
+
+    QUnit.testStart(function() {
+        var dateOnTestStart = Date,
+            after = QUnit.config.current.after;
+
+        QUnit.config.current.after = function() {
+            if(dateOnTestStart !== Date) {
+                QUnit.pushFailure('Not restored Sinon timers detected!', this.stack);
+            }
+            return after.apply(this, arguments);
+        };
+    });
+
+})();

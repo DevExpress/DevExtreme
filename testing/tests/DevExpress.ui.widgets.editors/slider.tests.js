@@ -320,9 +320,8 @@ module('render', moduleOptions, () => {
             value: 0,
             width: 500,
             useInkRipple: false,
-            onOptionChanged: ({ component }) => {
-                component.option('step', 2000);
-            }
+            onOptionChanged: ({ component, name }) =>
+                name === 'value' && component.option('step', 2000)
         });
         const { left: offsetX } = $element.offset();
         const $handle = $element.find(`.${SLIDER_HANDLE_CLASS}`);

@@ -1,4 +1,3 @@
-import createCallBack from '../utils/callbacks';
 import { compileGetter, compileSetter } from '../utils/data';
 import { noop } from '../utils/common';
 import { equals } from '../utils/comparator';
@@ -16,7 +15,7 @@ export class OptionManager {
 
         this._changingCallback;
         this._changedCallback;
-        this._namePreparedCallbacks = createCallBack({ syncStrategy: true });
+        this._namePreparedCallbacks;
     }
 
     _setByReference(options, rulesOptions) {
@@ -53,7 +52,7 @@ export class OptionManager {
             }
         }
 
-        this._namePreparedCallbacks.fire(options, name, value, silent);
+        this._namePreparedCallbacks(options, name, value, silent);
     }
 
     get(options = this._options, name, unwrapObservables) {
@@ -74,8 +73,8 @@ export class OptionManager {
         }
     }
 
-    onRelevantNamesPrepared(callback) {
-        this._namePreparedCallbacks.add(callback);
+    onRelevantNamesPrepared(callBack) {
+        this._namePreparedCallbacks = callBack;
     }
 
     onChanging(callBack) {
