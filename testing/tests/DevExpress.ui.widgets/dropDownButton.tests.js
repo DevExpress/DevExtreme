@@ -460,7 +460,18 @@ QUnit.module('list integration', {}, () => {
 
         assert.strictEqual(list.option('grouped'), true, 'grouped option transfered');
         assert.strictEqual(list.option('noDataText'), 'No data', 'noDataText option transfered');
-        assert.strictEqual(list.option('selectionMode'), 'single', 'selectionMode is always single. The widget uses selectedItems to prevent extra dataSource loads');
+        assert.strictEqual(list.option('selectionMode'), 'none', 'selectionMode is none for useSelectMode: false');
+    });
+
+    QUnit.test('list should have single selection mode if useSelectMode: true', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ key: 1, name: 'Item 1', icon: 'box' }],
+            deferRendering: false,
+            useSelectMode: true
+        });
+        const list = getList(dropDownButton);
+
+        assert.strictEqual(list.option('selectionMode'), 'single', 'selectionMode is single for useSelectMode: true');
     });
 
     QUnit.test('showItemDataTitle should be true for the list', function(assert) {
@@ -511,7 +522,8 @@ QUnit.module('list integration', {}, () => {
             deferRendering: false,
             keyExpr: 'key',
             displayExpr: 'name',
-            selectedItemKey: 2
+            selectedItemKey: 2,
+            useSelectMode: true
         });
 
         const list = getList(dropDownButton);
@@ -519,6 +531,26 @@ QUnit.module('list integration', {}, () => {
 
         dropDownButton.option('selectedItemKey', 1);
         assert.deepEqual(list.option('selectedItemKeys'), [1], 'selection is correct');
+    });
+
+    QUnit.test('list selection should by defined depend on useSelectMode option (T838962)', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ key: 1, name: 'Item 1' }, { key: 2, name: 'Item 2' }],
+            deferRendering: false,
+            keyExpr: 'key',
+            displayExpr: 'name',
+            selectedItemKey: 1,
+            useSelectMode: false
+        });
+        const list = getList(dropDownButton);
+
+        assert.deepEqual(list.option('selectedItemKeys'), [], 'selection is correct');
+
+        dropDownButton.option('useSelectMode', true);
+        assert.deepEqual(list.option('selectedItemKeys'), [1], 'selection is correct');
+
+        dropDownButton.option('useSelectMode', false);
+        assert.deepEqual(list.option('selectedItemKeys'), [], 'selection is correct');
     });
 });
 
@@ -567,9 +599,36 @@ QUnit.module('common use cases', {
     });
 
     QUnit.test('custom item should be redefined after selection if useSelectMode is true', function(assert) {
-        this.dropDownButton.option('useSelectMode', true);
-        eventsEngine.trigger(this.listItems.eq(0), 'dxclick');
+        this.dropDownButton.option({
+            useSelectMode: true,
+            opened: true
+        });
+        eventsEngine.trigger(this.list.itemElements().eq(0), 'dxclick');
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for Visual Studio', 'action button has been changed');
+    });
+
+    QUnit.test('custom item should be redefined after selection if useSelectMode is changed to true at runtime', function(assert) {
+        this.dropDownButton.option({
+            useSelectMode: false,
+            opened: true
+        });
+
+        eventsEngine.trigger(this.list.itemElements().eq(1), 'dxclick');
+        assert.strictEqual(this.list.option('selectedItem'), undefined, 'list selectedItem is undefined after item click');
+
+        this.dropDownButton.option({
+            useSelectMode: true,
+            opened: true
+        });
+
+        eventsEngine.trigger(this.list.itemElements().eq(0), 'dxclick');
+
+        assert.deepEqual(this.dropDownButton.option('selectedItem'), { id: 1, file: 'vs.exe', name: 'Trial for Visual Studio', icon: 'box' }, 'selectedItem is defined after item click');
+        assert.deepEqual(this.list.option('selectedItem'), { id: 1, file: 'vs.exe', name: 'Trial for Visual Studio', icon: 'box' }, 'list selectedITem is defined after item click');
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for Visual Studio', 'action button has been changed');
+
+        this.dropDownButton.option('useSelectMode', false);
+        assert.deepEqual(this.dropDownButton.option('selectedItem'), undefined, 'selectedITem is undefined if useSelectMode is changed to false');
     });
 
     QUnit.test('prevent default behavior for the itemClick action', function(assert) {
@@ -837,6 +896,56 @@ QUnit.module('items changing', {
 
         this.dropDownButton.option('splitButton', true);
         this.dropDownButton.option('splitButton', false);
+
+        assert.strictEqual(byKeyHandler.callCount, byKeyCount, 'byKey was not called');
+        assert.strictEqual(loadHandler.callCount, loadCount, 'load was not called');
+    });
+
+    QUnit.test('items changing with useSelectMode: false should not lead to datasource loading', function(assert) {
+        const data = [{
+            id: 1,
+            name: 'Item 1'
+        }, {
+            id: 2,
+            name: 'Item 2'
+        }, {
+            id: 3,
+            name: 'Item 3'
+        }];
+
+        const loadHandler = sinon.stub().returns(data);
+        const byKeyHandler = sinon.spy((key) => {
+            return [ data[key - 1] ];
+        });
+
+        this.dropDownButton.option({
+            dataSource: {
+                load: loadHandler,
+                byKey: byKeyHandler
+            },
+            useSelectMode: false,
+            deferRendering: false,
+            keyExpr: 'id',
+            displayExpr: 'name',
+            selectedItemKey: 1,
+            opened: true
+        });
+
+        const loadCount = loadHandler.callCount;
+        const byKeyCount = byKeyHandler.callCount;
+        const $items = getList(this.dropDownButton).itemElements();
+
+        eventsEngine.trigger($items.eq(0), 'dxclick');
+        this.dropDownButton.option('opened', true);
+        eventsEngine.trigger($items.eq(1), 'dxclick');
+        this.dropDownButton.option('opened', true);
+        eventsEngine.trigger($items.eq(2), 'dxclick');
+
+        assert.strictEqual(byKeyHandler.callCount, byKeyCount, 'byKey was not called after items clicks');
+        assert.strictEqual(loadHandler.callCount, loadCount, 'load was not called after items clicks');
+
+        this.dropDownButton.option('selectedItemKey', 1);
+        this.dropDownButton.option('selectedItemKey', 3);
 
         assert.strictEqual(byKeyHandler.callCount, byKeyCount, 'byKey was not called');
         assert.strictEqual(loadHandler.callCount, loadCount, 'load was not called');
