@@ -1,5 +1,6 @@
 import { isDefined, isString, isObject } from '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
+import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
@@ -22,7 +23,7 @@ function exportDataGrid(options) {
         selectedRowsOnly = false,
         loadPanel = {
             enabled: true,
-            text: 'Exporting...' // Todo: look at on the text from asp.net or winforms
+            text: messageLocalization.format('dxDataGrid-exporting'),
         }
     } = options;
 

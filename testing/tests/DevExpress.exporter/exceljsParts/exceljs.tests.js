@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
+import messageLocalization from 'localization/message';
 import { isDefined } from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
@@ -12,7 +15,6 @@ import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 
 import typeUtils from 'core/utils/type';
-
 import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
@@ -855,108 +857,6 @@ QUnit.module('API', moduleConfig, () => {
                         helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                         done();
                     });
-                });
-            });
-
-            QUnit.test('Data - 1 row & 1 columns, default loadPanel settings' + testCaption, function(assert) {
-                const done = assert.async();
-                const ds = [{ f1: 'f1_1' }];
-
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: ds,
-                    loadingTimeout: undefined,
-                    showColumnHeaders: false
-                }).dxDataGrid('instance');
-
-                const expectedCells = [[
-                    { excelCell: { value: ds[0].f1 }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                let actualLoadPanelSettingsOnExporting;
-
-                const loadPanelOnShownHandler = (e) => {
-                    actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
-                };
-
-                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-                const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-                const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'Exporting...' });
-
-                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
-                    helper.checkValues(expectedCells);
-                    assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
-                    assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
-                    done();
-                });
-            });
-
-            QUnit.test('Data - 1 row & 1 columns, custom loadPanel settings, loadPanel: { enabled: true, text: \'Export to .xlsx...\'}' + testCaption, function(assert) {
-                const done = assert.async();
-                const ds = [{ f1: 'f1_1' }];
-
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: ds,
-                    loadingTimeout: undefined,
-                    showColumnHeaders: false
-                }).dxDataGrid('instance');
-
-                const expectedCells = [[
-                    { excelCell: { value: ds[0].f1 }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                let actualLoadPanelSettingsOnExporting;
-
-                const loadPanelOnShownHandler = (e) => {
-                    actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
-                };
-
-                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-                const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-                const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'Export to .xlsx...' });
-
-                exportDataGrid(getOptions(this, dataGrid, expectedCells, { loadPanel: { enabled: true, text: 'Export to .xlsx...' } })).then(() => {
-                    helper.checkValues(expectedCells);
-                    assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
-                    assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
-                    done();
-                });
-            });
-
-            QUnit.test('Data - 1 row & 1 columns, hide loadPanel on Exporting, loadPanel: { enabled: false }' + testCaption, function(assert) {
-                assert.expect();
-                const done = assert.async();
-                const ds = [{ f1: 'f1_1' }];
-
-                const dataGrid = $('#dataGrid').dxDataGrid({
-                    dataSource: ds,
-                    loadingTimeout: undefined,
-                    showColumnHeaders: false
-                }).dxDataGrid('instance');
-
-                const expectedCells = [[
-                    { excelCell: { value: ds[0].f1 }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(0) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                let loadPanelOnShownHandlerCallCount = 0;
-
-                const loadPanelOnShownHandler = (e) => {
-                    loadPanelOnShownHandlerCallCount++;
-                };
-
-                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-                const initialLoadPanelSettings = dataGrid.option('loadPanel');
-
-                exportDataGrid(getOptions(this, dataGrid, expectedCells, { loadPanel: { enabled: false } })).then(() => {
-                    helper.checkValues(expectedCells);
-                    assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
-                    assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
-                    done();
                 });
             });
 
@@ -6502,4 +6402,159 @@ QUnit.module('API', moduleConfig, () => {
         { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
         { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
     ]);
+
+    QUnit.test('LoadPanel - default settings', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        let actualLoadPanelSettingsOnExporting;
+
+        const loadPanelOnShownHandler = () => {
+            actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
+        };
+
+        dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+        const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
+        const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'Exporting...' });
+
+        exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
+            assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
+            done();
+        });
+    });
+
+    QUnit.test('LoadPanel - localization message', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+        const locale = localization.locale();
+
+        try {
+            localization.loadMessages(ja);
+            localization.locale('ja');
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid('instance');
+
+            let actualLoadPanelSettingsOnExporting;
+
+            const loadPanelOnShownHandler = () => {
+                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
+            };
+
+            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'エクスポート...' });
+
+            exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
+                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
+                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
+                done();
+            });
+        } finally {
+            localization.locale(locale);
+        }
+    });
+
+    QUnit.test('LoadPanel - customize localization message', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+        const locale = localization.locale();
+
+        try {
+            messageLocalization.load({
+                'ja': {
+                    'dxDataGrid-exporting': '!CUSTOM MESSAGE!'
+                }
+            });
+            localization.locale('ja');
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid('instance');
+
+            let actualLoadPanelSettingsOnExporting;
+
+            const loadPanelOnShownHandler = () => {
+                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
+            };
+
+            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: '!CUSTOM MESSAGE!' });
+
+            exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
+                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
+                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
+                done();
+            });
+        } finally {
+            localization.locale(locale);
+        }
+    });
+
+    QUnit.test('LoadPanel - custom settings, loadPanel: { enabled: true, text: \'Export to .xlsx...\'}', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        let actualLoadPanelSettingsOnExporting;
+
+        const loadPanelOnShownHandler = (e) => {
+            actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
+        };
+
+        dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+        const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
+        const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'Export to .xlsx...' });
+
+        exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: { enabled: true, text: 'Export to .xlsx...' } }).then(() => {
+            assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
+            assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
+            done();
+        });
+    });
+
+    QUnit.test('LoadPanel - hide on Exporting, loadPanel: { enabled: false }', function(assert) {
+        assert.expect();
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        let loadPanelOnShownHandlerCallCount = 0;
+
+        const loadPanelOnShownHandler = (e) => {
+            loadPanelOnShownHandlerCallCount++;
+        };
+
+        dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+        const initialLoadPanelSettings = dataGrid.option('loadPanel');
+
+        exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
+            assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
+            assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
+            done();
+        });
+    });
 });
