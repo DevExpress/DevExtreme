@@ -2155,7 +2155,9 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);
 
-        currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
+        if(new Date(date).getHours() <= this.option('endDayHour')) {
+            currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
+        }
 
         let currentDateTime = date.getTime(),
             currentDayStartTime = currentDayStart.getTime(),

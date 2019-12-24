@@ -466,8 +466,8 @@ class BaseRenderingStrategy {
         return startDate;
     }
 
-    endDate(appointment, position, isRecurring) {
-        var endDate = this.instance._getEndDate(appointment),
+    endDate(appointment, position, isRecurring, ignoreViewDates = false) {
+        var endDate = this.instance._getEndDate(appointment, ignoreViewDates),
             realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
@@ -498,6 +498,13 @@ class BaseRenderingStrategy {
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
+            }
+
+            var currentDayViewEndHour = new Date(endDate);
+            currentDayViewEndHour = new Date(currentDayViewEndHour.setHours(this.instance.option('endDayHour'), 0, 0));
+
+            if(endDate.getTime() > currentDayViewEndHour.getTime()) {
+                endDate = currentDayViewEndHour;
             }
         }
 

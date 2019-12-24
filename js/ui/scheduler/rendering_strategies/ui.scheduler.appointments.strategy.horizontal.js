@@ -20,7 +20,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
             width;
 
         var startDate = this.startDate(appointment, false, position),
-            endDate = this.endDate(appointment, position, isRecurring),
+            endDate = this.endDate(appointment, position, isRecurring, true),
             appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
