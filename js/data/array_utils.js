@@ -45,12 +45,16 @@ function getItems(keyInfo, items, key, groupCount) {
     return items;
 }
 
+const LENGTH_KEY = '__DX_LENGTH__';
+
 function generateDataByKeyMap(keyInfo, array) {
-    if(keyInfo.key() && !array._dataByKeyMap) {
+    if(keyInfo.key() && (!array._dataByKeyMap || array._dataByKeyMap[LENGTH_KEY] !== array.length)) {
         var dataByKeyMap = {};
         for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
             dataByKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }
+
+        dataByKeyMap[LENGTH_KEY] = arrayLength;
 
         array._dataByKeyMap = dataByKeyMap;
     }
