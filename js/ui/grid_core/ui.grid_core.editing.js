@@ -856,7 +856,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(!store) {
                 dataController.fireError('E1052', this.component.NAME);
-                return deferred.resolve();
+                return deferred.reject();
             }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
@@ -868,13 +868,13 @@ var EditingController = modules.ViewController.inherit((function() {
                         });
                     }
                 });
-                return deferred;
+                return deferred.promise();
             }
 
             that.refresh();
 
             if(!that._allowRowAdding()) {
-                return deferred.resolve();
+                return deferred.reject();
             }
 
             if(!key) {
@@ -888,7 +888,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 deferred.resolve();
             });
 
-            return deferred;
+            return deferred.promise();
         },
 
         _allowRowAdding: function() {

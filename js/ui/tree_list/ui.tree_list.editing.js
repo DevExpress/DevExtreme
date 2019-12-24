@@ -103,8 +103,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             if(key !== undefined && !dataController.isRowExpanded(key)) {
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
-                        callBase.call(that, key);
-                        deferred.resolve();
+                        callBase.call(that, key).done(deferred.resolve).fail(deferred.reject);
                     });
                 }).fail(deferred.reject);
                 return deferred;
@@ -114,9 +113,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 key = that.option('rootValue');
             }
 
-            callBase.call(that, key);
-
-            return deferred.resolve();
+            return callBase.call(that, key);
         },
 
         _initNewRow: function(options, parentKey) {
