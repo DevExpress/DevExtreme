@@ -478,6 +478,43 @@ QUnit.test('More than 3 small appointments should be grouped', function(assert) 
     assert.equal($appointments.length, 2, 'Small appointments are grouped');
 });
 
+QUnit.test('Appointments should be rendered without errors (T816873)', function(assert) {
+    this.createInstance(
+        {
+            dataSource: [
+                {
+                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000',
+                    recurrenceException: '',
+                    startDate: '2019-09-19T18:00:00.000Z',
+                    endDate: '2019-09-19T18:04:00.000Z'
+                },
+                {
+                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000',
+                    recurrenceException: '',
+                    startDate: '2019-09-20T10:00:00.000Z',
+                    endDate: '2019-09-20T04:59:59.000Z'
+                },
+                {
+                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900',
+                    recurrenceException: '',
+                    startDate: '2019-09-20T09:59:00.000Z',
+                    endDate: '2019-09-20T10:00:00.000Z'
+                }
+            ],
+            currentView: 'week',
+            currentDate: new Date(2019, 8, 22),
+            views: [{
+                type: 'week',
+                cellDuration: 120,
+                maxAppointmentsPerCell: 'unlimited'
+            }]
+        }
+    );
+
+    var $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
+    assert.equal($appointments.length, 15, 'appointments should be rendered without errors');
+});
+
 QUnit.module('Horizontal Month Line Strategy', moduleOptions);
 
 QUnit.test('Start date of appointment should be changed when resize is finished', function(assert) {
