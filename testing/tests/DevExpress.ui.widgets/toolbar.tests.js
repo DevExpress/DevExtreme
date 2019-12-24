@@ -160,13 +160,13 @@ function checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedC
                     expectedCenterItemsCount = 0,
                     expectedAfterItemsCount = 0,
                     expectedMenuItemsCount = 0,
-                    isMenuMode = (locateInMenu === 'always' || locateInMenu === 'auto' && width < 100);
+                    isMenuMode = locateInMenu === 'always' || (locateInMenu === 'auto' && width < 100);
 
                 if(isMenuMode) {
                     expectedMenuItemsCount = 1;
                 } else {
                     expectedBeforeItemsCount = location === 'before' ? 1 : 0;
-                    expectedCenterItemsCount = location === 'center' || location === undefined ? 1 : 0;
+                    expectedCenterItemsCount = (location === 'center' || location === undefined) ? 1 : 0;
                     expectedAfterItemsCount = location === 'after' ? 1 : 0;
                 }
 
