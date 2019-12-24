@@ -2543,7 +2543,7 @@ QUnit.test('sortable options', function(assert) {
     var sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '.dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
 });
@@ -2824,6 +2824,37 @@ QUnit.test('drop item should reorder list items with correct indexes', function(
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(1);
+    this.clock.tick();
+    pointer.dragEnd();
+});
+
+QUnit.test('reordering should correctly handle items contains List widget', function(assert) {
+    const $list = $('#list').dxList({
+        items: [
+            '0',
+            '1',
+            {
+                template: (data, index, container) => $('<div>').appendTo(container).dxList({ items: ['2-1', '2-2'] })
+            },
+            '3',
+            '4',
+            '5'
+        ],
+        itemDragging: { allowReordering: true }
+    });
+    const list = $list.dxList('instance');
+
+    list.reorderItem = (itemElement, toItemElement) => {
+        assert.strictEqual(itemElement.text(), $item1.text());
+        assert.strictEqual(toItemElement.text(), $item2.text());
+    };
+
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item1 = $items.eq(1);
+    const $item2 = $items.eq(2);
+    const pointer = reorderingPointerMock($item1, this.clock);
+
+    pointer.dragStart(0.5).drag(2);
     this.clock.tick();
     pointer.dragEnd();
 });

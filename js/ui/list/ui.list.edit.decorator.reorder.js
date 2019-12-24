@@ -23,11 +23,11 @@ registerDecorator(
 
             this._lockedDrag = false;
 
-            this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
+            this._sortable = list._createComponent(list._scrollView.content(), Sortable, extend({
                 component: list,
                 contentTemplate: null,
                 allowReordering: false,
-                filter: '.dx-list-item',
+                filter: '> .dx-list-item',
                 container: list.$element(),
                 dragDirection: list.option('itemDragging.group') ? 'both' : 'vertical',
                 handle: '.' + REORDER_HANDLE_CLASS,
