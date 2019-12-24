@@ -27,7 +27,7 @@ registerDecorator(
                 component: list,
                 contentTemplate: null,
                 allowReordering: false,
-                filter: '> .dx-list-item',
+                filter: '> .dx-list-item, > .dx-list-group > .dx-list-group-body > .dx-list-item',
                 container: list.$element(),
                 dragDirection: list.option('itemDragging.group') ? 'both' : 'vertical',
                 handle: '.' + REORDER_HANDLE_CLASS,

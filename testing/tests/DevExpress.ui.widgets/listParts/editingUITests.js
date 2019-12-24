@@ -2543,7 +2543,7 @@ QUnit.test('sortable options', function(assert) {
     var sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '> .dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-item, > .dx-list-group > .dx-list-group-body > .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
 });
