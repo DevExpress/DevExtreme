@@ -133,20 +133,20 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
     assert.equal(margin, '0px auto', 'aligned by center');
 });
 
-function checkItemsLocation($toolbarElement, expectedItemsCountWithBeforeLocation, expectedItemsCountWithCenterLocation, expectedItemsCountWithAfterLocation, expectedMenuItemsCount) {
-    const $itemsWithBeforeLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $itemsWithCenterLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $itemsWithAfterLocation = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+function checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedCenterItemsCount, expectedAfterItemsCount, expectedMenuItemsCount) {
+    const $beforeItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+    const $centerItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+    const $afterItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
     const $menuElement = $toolbarElement.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
-    QUnit.assert.equal($itemsWithBeforeLocation.length, expectedItemsCountWithBeforeLocation, 'items count with before location value');
-    QUnit.assert.equal($itemsWithCenterLocation.length, expectedItemsCountWithCenterLocation, 'items count with center location value');
-    QUnit.assert.equal($itemsWithAfterLocation.length, expectedItemsCountWithAfterLocation, 'items count with after location value');
+    QUnit.assert.equal($beforeItems.length, expectedBeforeItemsCount, 'items count with before location value');
+    QUnit.assert.equal($centerItems.length, expectedCenterItemsCount, 'items count with center location value');
+    QUnit.assert.equal($afterItems.length, expectedAfterItemsCount, 'items count with after location value');
     QUnit.assert.equal($menuElement.length, expectedMenuItemsCount, 'menu element');
 }
 
 ['before', 'center', 'after', undefined].forEach((location) => {
     ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
-        [1, 10000, undefined].forEach((width) => {
+        [1, 10000].forEach((width) => {
             QUnit.test(`Change item location at runtime -> location: ${location}, locateInMenu: ${locateInMenu}, width: ${width} (T844890)`, function(assert) {
                 const $toolbarElement = this.element.dxToolbar({
                         items: [
@@ -156,21 +156,21 @@ function checkItemsLocation($toolbarElement, expectedItemsCountWithBeforeLocatio
                     }),
                     toolbar = $toolbarElement.dxToolbar('instance');
 
-                let expectedItemsCountWithBeforeLocation = 0,
-                    expectedItemsCountWithCenterLocation = 0,
-                    expectedItemsCountWithAfterLocation = 0,
+                let expectedBeforeItemsCount = 0,
+                    expectedCenterItemsCount = 0,
+                    expectedAfterItemsCount = 0,
                     expectedMenuItemsCount = 0,
                     isMenuMode = (locateInMenu === 'always' || locateInMenu === 'auto' && width < 100);
 
                 if(isMenuMode) {
                     expectedMenuItemsCount = 1;
                 } else {
-                    expectedItemsCountWithBeforeLocation = location === 'before' ? 1 : 0;
-                    expectedItemsCountWithCenterLocation = location === 'center' || location === undefined ? 1 : 0;
-                    expectedItemsCountWithAfterLocation = location === 'after' ? 1 : 0;
+                    expectedBeforeItemsCount = location === 'before' ? 1 : 0;
+                    expectedCenterItemsCount = location === 'center' || location === undefined ? 1 : 0;
+                    expectedAfterItemsCount = location === 'after' ? 1 : 0;
                 }
 
-                checkItemsLocation($toolbarElement, expectedItemsCountWithBeforeLocation, expectedItemsCountWithCenterLocation, expectedItemsCountWithAfterLocation, expectedMenuItemsCount);
+                checkItemsLocation($toolbarElement, expectedBeforeItemsCount, expectedCenterItemsCount, expectedAfterItemsCount, expectedMenuItemsCount);
 
                 toolbar.option('items[0].location', 'center');
                 checkItemsLocation($toolbarElement, 0, isMenuMode ? 0 : 1, 0, isMenuMode ? 1 : 0);
