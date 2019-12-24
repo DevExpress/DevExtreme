@@ -72,9 +72,9 @@ var ValidatingController = modules.Controller.inherit((function() {
             var brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                let isInvisibleColumn = !brokenRule.column.visible || brokenRule.column.groupIndex !== undefined;
+                let isVisibleColumn = brokenRule.column && brokenRule.column.visible && brokenRule.column.groupIndex === undefined;
 
-                if(!brokenRule.validator.$element().parent().length && isInvisibleColumn) {
+                if(!brokenRule.validator.$element().parent().length && !isVisibleColumn) {
                     brokenRulesMessages.push(brokenRule.message);
                 }
             });
