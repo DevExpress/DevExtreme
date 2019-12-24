@@ -874,7 +874,7 @@ QUnit.module('API', moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
@@ -906,7 +906,7 @@ QUnit.module('API', moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkAutoFilter(autoFilterEnabled, null);
                     helper.checkFont(expectedCells);
