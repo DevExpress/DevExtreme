@@ -97,16 +97,16 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         addRow: function(key) {
             var that = this,
                 callBase = that.callBase,
-                dataController = that.getController('data'),
-                deferred = new Deferred();
+                dataController = that.getController('data');
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
+                var deferred = new Deferred();
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
                         callBase.call(that, key).done(deferred.resolve).fail(deferred.reject);
                     });
                 }).fail(deferred.reject);
-                return deferred;
+                return deferred.promise();
             }
 
             if(key === undefined) {
