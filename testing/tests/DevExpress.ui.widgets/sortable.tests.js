@@ -800,6 +800,111 @@ QUnit.test('Dragging an item to the last position when there is ignored (not dra
     assert.equal($('.dx-sortable-placeholder').length, 0, 'placeholder removed');
 });
 
+QUnit.test('Dragging an item when the next item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.eq(1).hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    const pointer = pointerMock($items.eq(0)).start().down().move(0, 15);
+
+    // assert
+    let $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
+
+    // act
+    pointer.move(0, 45);
+
+    // assert
+    $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+});
+
+QUnit.test('Dragging an item when the prev item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.eq(1).hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    const pointer = pointerMock($items.eq(2)).start().down(0, 55).move(0, -10);
+
+    // assert
+    let $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
+
+    // act
+    pointer.move(0, -50);
+
+    // assert
+    $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 0, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, 'toIndex');
+});
+
+QUnit.test('Dragging an item to the last position when the last item is hidden (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    const $items = $('#items').children();
+    const onDragChangeSpy = sinon.spy();
+
+    $items.last().hide();
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate',
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    pointerMock($items.eq(0)).start().down().move(0, 60);
+
+    // assert
+    const $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, 60, 'placeholder position top');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
+});
+
+QUnit.test('The placeholder should not be displayed for the last visible item when it is dragged (dropFeedbackMode is "indicate")', function(assert) {
+    // arrange
+    let $items = $('#items').children();
+
+    $items.eq(1).hide();
+    $items.eq(2).hide();
+    $('#items').append(`
+        <div id="item4" class="draggable">item4</div>
+        <div id="item5" class="draggable" style="display: none;">item5</div>
+    `);
+
+    this.createSortable({
+        filter: '.draggable',
+        dropFeedbackMode: 'indicate'
+    });
+    $items = $('#items').children();
+
+    // act
+    pointerMock($items.eq(3)).start().down(0, 45).move(0, 15);
+
+    // assert
+    const $placeholderElement = $('.dx-sortable-placeholder');
+    assert.notOk($placeholderElement.is(':visible'), 'placeholder is hidden');
+});
+
 
 QUnit.module('Events', crossComponentModuleConfig);
 
@@ -1621,6 +1726,40 @@ QUnit.test('Dragging item to another the sortable widget without free space', fu
 
     // assert
     assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, '1px', 'items2 last item margin bottom is restored');
+});
+
+QUnit.test('Dragging an item to another the sortable widget without free space when its last element is hidden', function(assert) {
+    // arrange
+    $('#items2').css('height', '');
+    $('#items2').children().last().hide();
+    $('#items2').children().eq(-2).css('margin', 1);
+
+
+    let sortable1 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
+
+    let sortable2 = this.createSortable({
+        dropFeedbackMode: 'push',
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items2'));
+
+
+    // act
+    let pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().eq(-2)[0].style.marginBottom, '29px', 'items2 last item has margin bottom');
+    assert.strictEqual(sortable2.$element().css('overflow'), 'hidden', 'overflow is hidden to correct applying margin to sortable element');
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().eq(-2)[0].style.marginBottom, '1px', 'items2 last item margin bottom is restored');
 });
 
 
