@@ -133,11 +133,11 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
     assert.equal(margin, '0px auto', 'aligned by center');
 });
 
-function checkItemsLocation($toolbarElement, expected) {
-    const $beforeItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $centerItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $afterItems = $toolbarElement.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $menuItems = $toolbarElement.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
+function checkItemsLocation($toolbar, expected) {
+    const $beforeItems = $toolbar.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+    const $centerItems = $toolbar.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+    const $afterItems = $toolbar.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
+    const $menuItems = $toolbar.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
     QUnit.assert.equal($beforeItems.length, expected.beforeItemsCount, 'items count with before location value');
     QUnit.assert.equal($centerItems.length, expected.centerItemsCount, 'items count with center location value');
     QUnit.assert.equal($afterItems.length, expected.afterItemsCount, 'items count with after location value');
