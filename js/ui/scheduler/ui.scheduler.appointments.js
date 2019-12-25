@@ -442,11 +442,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _executeItemRenderAction: function(index, itemData, itemElement) {
         const action = this._getItemRenderAction();
         if(action) {
-            action({
-                appointmentElement: itemElement,
-                appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, itemElement)
-            });
+            action(this.invoke('mapAppointmentFields', { itemData: itemData, itemElement: itemElement }));
         }
         delete this._currentAppointmentSettings;
     },
@@ -831,14 +827,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const virtualCoordinates = virtualGroup.coordinates;
             const $container = virtualGroup.isAllDay ? this.option('allDayContainer') : this.$element();
             const left = virtualCoordinates.left;
-
             const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
             const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-            let rtlOffset = 0;
-
-            if(this.option('rtlEnabled')) {
-                rtlOffset = buttonWidth;
-            }
+            const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
 
             this.notifyObserver('renderCompactAppointments', {
                 $container: $container,
@@ -848,10 +839,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 },
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
-                itemTemplate: this.option('itemTemplate'),
                 width: buttonWidth - this.option('_collectorOffset'),
                 height: buttonHeight,
                 onAppointmentClick: this.option('onItemClick'),
+                dragBehavior: this.option('dragBehavior'),
+                allowDrag: this.option('allowDrag'),
                 isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
                 applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
             });

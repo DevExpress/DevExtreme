@@ -417,16 +417,11 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const result = {
+        return {
             appointmentData: config.itemData,
-            appointmentElement: config.itemElement
+            appointmentElement: config.itemElement,
+            targetedAppointmentData: this.fire('getTargetedAppointmentData', config.itemData, config.itemElement),
         };
-
-        if(config.itemData) {
-            result.targetedAppointmentData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
-        }
-
-        return result;
     },
 
     getOffsetByAllDayPanel: function(groupIndex) {
