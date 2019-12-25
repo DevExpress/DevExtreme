@@ -79,7 +79,7 @@ QUnit.module('API', moduleConfig, () => {
         [true, false, undefined].forEach((autoFilterEnabled) => {
             let testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
             const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-                let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft, loadPanel } = options || {};
+                let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
                 const result = {
                     component: dataGrid,
@@ -94,7 +94,6 @@ QUnit.module('API', moduleConfig, () => {
                 };
                 result.keepColumnWidths = keepColumnWidths;
                 result.selectedRowsOnly = selectedRowsOnly;
-                result.loadPanel = loadPanel;
                 return result;
             };
 
