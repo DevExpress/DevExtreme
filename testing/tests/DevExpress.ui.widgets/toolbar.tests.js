@@ -146,19 +146,19 @@ function checkItemsLocation($toolbarElement, expected) {
 
 ['before', 'center', 'after', undefined].forEach((location) => {
     ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
-        [10, 1000].forEach((width) => {
-            QUnit.test(`Change item location at runtime -> location: ${location}, locateInMenu: ${locateInMenu}, width: ${width} (T844890)`, function(assert) {
-                const TOOLBAR_ITEM_WIDTH = 100;
+        [10, 1000].forEach((toolbarWidth) => {
+            QUnit.test(`Change item location at runtime -> location: ${location}, locateInMenu: ${locateInMenu}, width: ${toolbarWidth} (T844890)`, function(assert) {
+                const ITEM_WIDTH = 100;
                 const $toolbar = this.element.dxToolbar({
                         items: [
-                            { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: TOOLBAR_ITEM_WIDTH },
+                            { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH },
                         ],
-                        width: width
+                        width: toolbarWidth
                     }),
                     toolbar = $toolbar.dxToolbar('instance');
 
                 const getExpectedToolbarItems = (location, locateInMenu) => {
-                    if(locateInMenu === 'always' || (locateInMenu === 'auto' && width < TOOLBAR_ITEM_WIDTH)) {
+                    if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
                         return {
                             menuItemsCount: 1,
                             beforeItemsCount: 0,
