@@ -8,13 +8,13 @@ var HOURS_IN_DAY = 24,
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        var startDate = new Date(this.startDate(appointment, false, position)),
+        let startDate = new Date(this.startDate(appointment, false, position)),
             endDate = new Date(this.endDate(appointment, position, isRecurring, true)),
             cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);
 
-        var width = Math.ceil(this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY) * cellWidth;
+        let width = Math.ceil(this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY) * cellWidth;
         width = this.cropAppointmentWidth(width, cellWidth);
 
         return width;

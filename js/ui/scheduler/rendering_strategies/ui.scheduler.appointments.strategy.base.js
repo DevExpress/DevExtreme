@@ -496,14 +496,15 @@ class BaseRenderingStrategy {
     }
 
     endDate(appointment, position, isRecurring, ignoreViewDates = false) {
-        var endDate = this.instance._getEndDate(appointment, ignoreViewDates),
+        let endDate = this.instance._getEndDate(appointment, ignoreViewDates),
             realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            var recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
-                recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate,
-                fullDuration =
+            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
+                recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
+
+            let fullDuration =
                 viewStartDate.getTime() > endDate.getTime() ?
                     this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
                     endDate.getTime() - realStartDate.getTime();
@@ -517,7 +518,7 @@ class BaseRenderingStrategy {
             }
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
-                var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime(),
+                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime(),
                     tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
@@ -526,15 +527,14 @@ class BaseRenderingStrategy {
         }
 
         if(!this.isAllDay(appointment)) {
-            var viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
+            const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
             }
         }
 
-        var currentViewEndTime = new Date(endDate);
-        currentViewEndTime = new Date(currentViewEndTime.setHours(this.instance.option('endDayHour'), 0, 0));
+        const currentViewEndTime = new Date(new Date(endDate).setHours(this.instance.option('endDayHour'), 0, 0));
 
         if(endDate.getTime() > currentViewEndTime.getTime()) {
             endDate = currentViewEndTime;
