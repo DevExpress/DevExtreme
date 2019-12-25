@@ -1575,7 +1575,7 @@ QUnit.test('New allDay appointment should be rendered correctly when groupByDate
 
     scheduler.instance.updateAppointment(appointment, newAppointment);
 
-    let $appointment = scheduler.appointments.getAppointment();
+    const $appointment = scheduler.appointments.getAppointment();
 
     assert.ok($appointment.hasClass('dx-scheduler-all-day-appointment'), 'Appointment has `addDayAppointment` class');
     assert.ok($(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').length === 1, 'Appointment is in `allDayAppointments` container');
