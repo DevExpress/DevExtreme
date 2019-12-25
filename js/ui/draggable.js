@@ -215,12 +215,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
     dragLeave: noop,
 
     dragEnd: function(sourceEvent) {
-        const sourceDraggable = this._getSourceDraggable(),
-            isSourceSortable = sourceDraggable.NAME !== this.NAME;
+        const sourceDraggable = this._getSourceDraggable();
 
-        if(isSourceSortable) {
-            sourceDraggable._fireRemoveEvent(sourceEvent);
-        }
+        sourceDraggable._fireRemoveEvent(sourceEvent);
     },
 
     _fireRemoveEvent: noop,
