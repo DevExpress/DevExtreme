@@ -1962,6 +1962,23 @@ QUnit.module('live update', {
         assert.deepEqual(dataSource.items()[0].items.length, 2);
     });
 
+    // T837104
+    QUnit.test('push after adding items via array directly', function(assert) {
+        var store = this.initPlainDataSource().store();
+
+        store.push([
+            { type: 'update', key: 1, data: { text: 'updated' } }
+        ]);
+
+        this.array.push({ id: 3, text: 'test 3' });
+
+        store.push([
+            { type: 'update', key: 3, data: { text: 'updated' } }
+        ]);
+
+        assert.deepEqual(this.array[2].text, 'updated');
+    });
+
     QUnit.test('push type=\'insert\' if item is exists', function(assert) {
         var dataSource = this.initPlainDataSource();
         dataSource.load();
