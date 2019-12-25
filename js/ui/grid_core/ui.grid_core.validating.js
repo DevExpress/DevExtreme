@@ -86,12 +86,14 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         getHiddenValidatorsErrorText: function(brokenRules) {
-            var brokenRulesMessages = [];
+            let brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                let isVisibleColumn = brokenRule.column && brokenRule.column.visible && !brokenRule.column.type;
+                let column = brokenRule.column,
+                    isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped,
+                    isVisibleColumn = column && column.visible;
 
-                if(!brokenRule.validator.$element().parent().length && !isVisibleColumn) {
+                if(!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
                     brokenRulesMessages.push(brokenRule.message);
                 }
             });
