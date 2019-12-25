@@ -34,7 +34,7 @@ const subscribes = {
     needCoordinates: function(options) {
         let appointmentData = options.appointmentData,
             startDate = options.startDate,
-            endDate = this._getEndDate(appointmentData, true),
+            endDate = this._getEndDate(appointmentData),
             recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData),
             recurrenceException = this._getRecurrenceException(appointmentData),
             dateRange = this._workSpace.getDateRange(),
