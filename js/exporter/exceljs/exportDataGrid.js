@@ -18,12 +18,12 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        autoFilterEnabled = undefined,
+        autoFilterEnabled,
         keepColumnWidths = true,
         selectedRowsOnly = false,
         loadPanel = {
             enabled: true,
-            text: messageLocalization.format('dxDataGrid-exporting'),
+            text: messageLocalization.format('dxDataGrid-exporting')
         }
     } = options;
 
