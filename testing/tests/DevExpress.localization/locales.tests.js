@@ -51,6 +51,10 @@ var compareLocales = function(first, second, assert) {
             'dxDiagram-unitCm',
             'dxDiagram-unitPx',
             'dxDiagram-dialogButtonOK',
+            'dxDiagram-shapeOr',
+            'dxDiagram-shapeText',
+            'dxDiagram-shapeEllipse',
+            'dxDiagram-shapeContainerDefaultText',
             'dxFileManager-listDetailsColumnCaptionName'
         ];
 

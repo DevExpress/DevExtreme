@@ -49,7 +49,7 @@ function createRowsView() {
         }
     };
 
-    setupDataGridModules(mockDataGrid, ['data', 'columns', 'rows', 'rowDragging', 'columnFixing', 'grouping', 'masterDetail', 'virtualScrolling'], {
+    setupDataGridModules(mockDataGrid, ['data', 'columns', 'rows', 'rowDragging', 'columnFixing', 'grouping', 'masterDetail', 'virtualScrolling', 'summary'], {
         initViews: true
     });
 
@@ -582,6 +582,51 @@ QUnit.test('Placeholder should be placed correctly if scrollLeft > 0', function(
     assert.equal($placeholderElement.offset().left, 0, 'placeholder offset left');
 });
 
+// T837848
+QUnit.test('The placeholder should be placed correctly when there are grouping and hidden group summary rows', function(assert) {
+    // arrange
+    let rowsView,
+        onDragChangeSpy = sinon.spy(),
+        $testElement = $('#container'),
+        $placeholderElement;
+
+    this.options.grouping = { autoExpandAll: true };
+    this.options.rowDragging.onDragChange = onDragChangeSpy;
+    this.options.columns[0] = { dataField: 'field1', groupIndex: 0 };
+    this.options.summary = {
+        groupItems: [{
+            column: 'field2',
+            summaryType: 'count',
+            showInGroupFooter: true
+        }],
+        texts: {
+            count: 'Count: {0}'
+        }
+    };
+    this.options.onRowPrepared = (e) => {
+        if(e.rowType === 'groupFooter') {
+            $(e.rowElement).hide();
+        }
+    };
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // assert
+    assert.ok($(rowsView.getRowElement(2)).hasClass('dx-datagrid-group-footer'), 'has group footer');
+    assert.notOk($(rowsView.getRowElement(2)).is(':visible'), 'group footer is hidden');
+
+    // act
+    pointerMock(rowsView.getRowElement(1)).start().down().move(0, 100);
+
+    // assert
+    $placeholderElement = $('.dx-sortable-placeholder');
+    assert.ok($placeholderElement.is(':visible'), 'placeholder is visible');
+    assert.strictEqual($placeholderElement.offset().top, $(rowsView.getRowElement(4)).offset().top, 'placeholder position');
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 3, 'toIndex');
+});
+
+
 QUnit.module('Handle', $.extend({}, moduleConfig, {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-visible');
@@ -713,4 +758,33 @@ QUnit.test('Command drag cell should have cursor \'grabbing/pointer\' for draggi
     let $draggableElement = $('body').children('.dx-sortable-dragging');
     let cursor = browser.msie && parseInt(browser.version) <= 11 ? 'pointer' : 'grabbing';
     assert.strictEqual($draggableElement.find('.dx-command-drag').eq(0).css('cursor'), cursor, `cursor is ${cursor}`);
+});
+
+QUnit.test('Drag icon should not be displayed for group footer', function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $('#container');
+
+    this.options.grouping = { autoExpandAll: true };
+    this.options.columns[0] = { dataField: 'field1', groupIndex: 0 };
+    this.options.summary = {
+        groupItems: [{
+            column: 'field2',
+            summaryType: 'count',
+            showInGroupFooter: true
+        }],
+        texts: {
+            count: 'Count: {0}'
+        }
+    };
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // assert
+    assert.ok($(rowsView.getRowElement(2)).hasClass('dx-datagrid-group-footer'), 'has group footer');
+
+    const $commandDragCell = $(rowsView.getRowElement(2)).find('.dx-command-drag');
+    assert.strictEqual($commandDragCell.length, 1, 'group footer has a drag cell');
+    assert.strictEqual($(rowsView.getRowElement(2)).find('.dx-command-drag').html(), '&nbsp;', 'group footer does not have a drag icon');
 });

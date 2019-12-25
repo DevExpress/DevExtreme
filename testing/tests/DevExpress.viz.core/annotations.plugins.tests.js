@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { __test_utils } from 'viz/core/annotations';
+import { __test_utils, plugins } from 'viz/core/annotations';
 import rendererModule from 'viz/core/renderers/renderer';
 import TooltipModule from 'viz/core/tooltip';
 import vizMocks from '../../helpers/vizMocks.js';
@@ -9,6 +9,7 @@ import { getDocument } from 'core/dom_adapter';
 import devices from 'core/devices';
 
 import 'viz/chart';
+import 'viz/polar_chart';
 
 QUnit.module('Coordinates calculation. Chart plugin', {
     p1Canvas: { width: 100, height: 210, top: 0, bottom: 110, left: 0, right: 0, originalTop: 0, originalBottom: 110, originalLeft: 0, originalRight: 0 },
@@ -301,7 +302,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
         this.checkCoords(assert, chart, { argument: 50, series: 's1' }, { x: 50, y: 0 });
 
         // TODO
-        // this.checkCoords(assert, chart, { value: 150, series: "s1" }, { x: 0, y: 50 });
+        // this.checkCoords(assert, chart, { value: 150, series: 's1' }, { x: 0, y: 50 });
         this.checkCoords(assert, chart, { value: 200, series: 's1' }, { x: 50, y: 0 });
         this.checkCoords(assert, chart, { value: 160, series: 's1' }, { x: null, y: 40 });
 
@@ -474,6 +475,320 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 });
 
+QUnit.module('Coordinates calculation. PolarChart plugin', {
+    getPolarChartForSeriesTests(options) {
+        return $('<div>').appendTo('#qunit-fixture').dxPolarChart($.extend({
+            size: {
+                width: 200,
+                height: 200
+            },
+            dataSource: [
+                { arg: 0, val: 50, val2: 200 },
+                { arg: 30, val: 100, val2: 150 },
+                { arg: 60, val: 150, val2: 100 },
+                { arg: 90, val: 200, val2: 50 },
+                { arg: 120, val: 150, val2: 100 },
+                { arg: 150, val: 100, val2: 150 },
+                { arg: 180, val: 50, val2: 200 },
+                { arg: 210, val: 100, val2: 150 },
+                { arg: 240, val: 150, val2: 100 },
+                { arg: 270, val: 200, val2: 50 },
+                { arg: 300, val: 150, val2: 100 },
+                { arg: 330, val: 100, val2: 150 },
+                { arg: 360, val: 50, val2: 200 }
+            ],
+            series: [
+                { name: 's1', type: 'line' },
+                { name: 's2', type: 'line', valueField: 'val2' }
+            ],
+            commonAxisSettings: {
+                valueMarginsEnabled: false,
+                grid: { visible: false },
+                label: { visible: false },
+                tick: { visible: false }
+            },
+            argumentAxis: {
+                inverted: true,
+                startAngle: 90
+            },
+            valueAxis: {
+                visualRange: [0, 200]
+            },
+            legend: { visible: false }
+        }, options)).dxPolarChart('instance');
+    },
+    checkCoords(assert, polarChart, annotation, expected) {
+        const coords = polarChart._getAnnotationCoords(annotation);
+        if(expected.x !== undefined) {
+            assert.roughEqual(coords.x, expected.x, 1.2);
+        } else {
+            assert.equal(coords.x, expected.x);
+        }
+
+        if(expected.y !== undefined) {
+            assert.roughEqual(coords.y, expected.y, 1.2);
+        } else {
+            assert.equal(coords.y, expected.y);
+        }
+    }
+}, function() {
+    QUnit.test('Get coordinates from axes', function(assert) {
+        const polarChart = this.getPolarChartForSeriesTests();
+
+        this.checkCoords(assert, polarChart, { argument: 50, value: 100 }, { x: 135, y: 65 });
+        this.checkCoords(assert, polarChart, { value: 150 }, { x: 175, y: 100 });
+        this.checkCoords(assert, polarChart, { argument: 100 }, { x: 100, y: 0 });
+
+        this.checkCoords(assert, polarChart, { angle: 45, radius: 50 }, { x: 135, y: 65 });
+        this.checkCoords(assert, polarChart, { angle: 90 }, { x: 100, y: 0 });
+        this.checkCoords(assert, polarChart, { radius: 50 }, { x: 150, y: 100 });
+
+        this.checkCoords(assert, polarChart, { angle: 310, value: 100 }, { x: 132, y: 138 });
+        this.checkCoords(assert, polarChart, { argument: 70, radius: 90 }, { x: 141, y: 20 });
+    });
+
+    QUnit.test('Get coordinates from axes, convert arg/val to axis types', function(assert) {
+        const polarChart = this.getPolarChartForSeriesTests({
+            size: {
+                width: 100,
+                height: 100
+            },
+            series: [{ }],
+            dataSource: [
+                { arg: new Date(2018, 1, 1), val: new Date(2018, 1, 1) },
+                { arg: new Date(2018, 1, 6), val: new Date(2018, 1, 6) }
+            ],
+            argumentAxis: {
+                argumentType: 'datetime'
+            },
+            valueAxis: {
+                valueType: 'datetime',
+                axisType: 'discrete',
+                categories: [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4), new Date(2018, 1, 5), new Date(2018, 1, 6)]
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: '2018-02-03', value: '2018-02-02' }, { x: 56, y: 58 });
+    });
+
+    QUnit.test('Get coordinates from series. Line series', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests({
+            argumentAxis: {
+                tickInterval: 30
+            }
+        });
+        this.checkCoords(assert, polarChart, { argument: 260.2, series: 's1' }, { x: 9.5, y: 115.5 });
+        this.checkCoords(assert, polarChart, { value: 100, series: 's1' }, { x: 125, y: 57 });
+
+        this.checkCoords(assert, polarChart, { argument: 345.5, series: 's2' }, { x: 78, y: 14.88 });
+        this.checkCoords(assert, polarChart, { value: 65.1, series: 's2' }, { x: 132.5, y: 94.5 });
+
+        polarChart.option({
+            valueAxis: {
+                type: 'discrete'
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 287, series: 's1' }, { x: 28, y: 78 });
+        this.checkCoords(assert, polarChart, { radius: 95, series: 's1' }, { x: 195, y: 96 });
+
+        polarChart.option({
+            valueAxis: {
+                type: 'continuous',
+                inverted: true
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 120, series: 's2' }, { x: 143, y: 125 });
+        this.checkCoords(assert, polarChart, { value: 150, series: 's2' }, { x: 113, y: 78 });
+
+        polarChart.option({
+            argumentAxis: {
+                inverted: true,
+                startAngle: -45,
+                tickInterval: 30
+            },
+            valueAxis: {
+                visualRange: [100, 200],
+                inverted: false
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { angle: 45, series: 's1' }, { x: 75, y: 100 });
+        this.checkCoords(assert, polarChart, { radius: 25, series: 's2' }, { x: 75, y: 100 });
+    });
+
+    QUnit.test('Get coordinates from series. Area series', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests({
+            series: [
+                { type: 'area', name: 's1' }
+            ],
+            argumentAxis: {
+                tickInterval: 30
+            }
+        });
+        this.checkCoords(assert, polarChart, { argument: 260.2, series: 's1' }, { x: 9.5, y: 115.5 });
+        this.checkCoords(assert, polarChart, { value: 125, series: 's1' }, { x: 145, y: 56 });
+
+        polarChart.option({
+            valueAxis: {
+                type: 'discrete'
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 287, series: 's1' }, { x: 28, y: 78 });
+        this.checkCoords(assert, polarChart, { radius: 95, series: 's1' }, { x: 195, y: 96 });
+
+        polarChart.option({
+            valueAxis: {
+                type: 'continuous',
+                inverted: true
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 315, series: 's1' }, { x: 73.5, y: 73.5 });
+        this.checkCoords(assert, polarChart, { value: 159, series: 's1' }, { x: 119, y: 91 });
+
+        polarChart.option({
+            argumentAxis: {
+                inverted: true,
+                startAngle: -45,
+                tickInterval: 30
+            },
+            valueAxis: {
+                inverted: false,
+                visualRange: [100, 200]
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { angle: 45, series: 's1' }, { x: 75, y: 100 });
+        this.checkCoords(assert, polarChart, { radius: 25, series: 's1' }, { x: 75, y: 100 });
+    });
+
+    QUnit.test('Get coordinates from series. Scatter series', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests({
+            series: [
+                { type: 'scatter', name: 's1' }
+            ],
+            argumentAxis: {
+                tickInterval: 30
+            }
+        });
+        this.checkCoords(assert, polarChart, { argument: 330, series: 's1' }, { x: 75, y: 57 });
+        this.checkCoords(assert, polarChart, { argument: 69, series: 's1' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { value: 150, series: 's1' }, { x: 165, y: 63 });
+        this.checkCoords(assert, polarChart, { value: 69 }, { x: 100, y: 65 });
+        this.checkCoords(assert, polarChart, { angle: 40, series: 's1' }, { x: undefined, y: undefined });
+
+        polarChart.option('argumentAxis.type', 'discrete');
+
+        this.checkCoords(assert, polarChart, { angle: 40, series: 's1' }, { x: 133, y: 63 });
+        this.checkCoords(assert, polarChart, { angle: 287 }, { x: 4, y: 71 });
+        this.checkCoords(assert, polarChart, { radius: 100, series: 's1' }, { x: 199, y: 112 });
+        this.checkCoords(assert, polarChart, { radius: 80 }, { x: 100, y: 20 });
+    });
+
+    QUnit.test('Get coordinates from series. Bar series', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests({
+            series: [
+                { name: 's1', type: 'bar' },
+                { name: 's2', type: 'bar', valueField: 'val2' }
+            ],
+            argumentAxis: {
+                tickInterval: 30
+            }
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 330, series: 's2' }, { x: 69, y: 31 });
+        this.checkCoords(assert, polarChart, { value: 150, series: 's1' }, { x: 161, y: 56 });
+        this.checkCoords(assert, polarChart, { angle: 240, series: 's2' }, { x: 54, y: 120 });
+        this.checkCoords(assert, polarChart, { radius: 50, series: 's1' }, { x: 120, y: 54 });
+
+        polarChart.option({
+            series: [
+                { type: 'bar', name: 's1' }
+            ]
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 330, series: 's1' }, { x: 75, y: 57 });
+        this.checkCoords(assert, polarChart, { argument: 69, series: 's1' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { value: 150, series: 's1' }, { x: 165, y: 62 });
+        this.checkCoords(assert, polarChart, { value: 69 }, { x: 100, y: 65 });
+        this.checkCoords(assert, polarChart, { angle: 40, series: 's1' }, { x: undefined, y: undefined });
+
+        polarChart.option('argumentAxis.type', 'discrete');
+
+        this.checkCoords(assert, polarChart, { angle: 40, series: 's1' }, { x: 133, y: 63 });
+        this.checkCoords(assert, polarChart, { angle: 287 }, { x: 4, y: 71 });
+        this.checkCoords(assert, polarChart, { radius: 100, series: 's1' }, { x: 199, y: 112 });
+        this.checkCoords(assert, polarChart, { radius: 80 }, { x: 100, y: 20 });
+    });
+
+    QUnit.test('Get coordinates from series. Closed series', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests({
+            dataSource: [
+                { arg: 30, val: 100, val2: 150 },
+                { arg: 90, val: 200, val2: 50 },
+                { arg: 180, val: 50, val2: 200 },
+                { arg: 210, val: 100, val2: 150 },
+                { arg: 240, val: 150, val2: 100 },
+                { arg: 330, val: 100, val2: 50 }
+            ],
+            argumentAxis: {
+                period: 360,
+                tickInterval: 30
+            }
+        });
+        this.checkCoords(assert, polarChart, { argument: 349, series: 's1' }, { x: 90.5, y: 51 });
+        this.checkCoords(assert, polarChart, { angle: 11, series: 's1' }, { x: 109.5, y: 51 });
+
+        this.checkCoords(assert, polarChart, { argument: 20.8, series: 's2' }, { x: 124, y: 37 });
+        this.checkCoords(assert, polarChart, { angle: -8, series: 's2' }, { x: 94, y: 57 });
+
+        polarChart.option('useSpiderWeb', true);
+
+        this.checkCoords(assert, polarChart, { angle: 350, series: 's2' }, { x: 95, y: 71.3 });
+    });
+
+    QUnit.test('Cases when coords can not be calculated', function(assert) {
+        const polarChart = this.getPolarChartForSeriesTests();
+
+        this.checkCoords(assert, polarChart, { x: 50, y: 50, series: 's0' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { value: 150, series: 'wrongseries' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { argument: 170, radius: 'radius' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { angle: 'angle', radius: 'radius' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { angle: 'angle', series: 's1' }, { x: undefined, y: undefined });
+        this.checkCoords(assert, polarChart, { radius: 'radius', series: 's1' }, { x: undefined, y: undefined });
+    });
+
+    QUnit.test('Can\'t convert arg/val to axis types', function(assert) {
+        const polarChart = this.getPolarChartForSeriesTests({
+            series: [{ }],
+            argumentAxis: {
+                argumentType: 'datetime',
+                visualRange: [new Date(2018, 1, 1), new Date(2018, 1, 3)]
+            },
+            valueAxis: [{
+                valueType: 'datetime',
+                axisType: 'discrete',
+                categories: [new Date(2018, 1, 1), new Date(2018, 1, 2), new Date(2018, 1, 3), new Date(2018, 1, 4), new Date(2018, 1, 5)]
+            }]
+        });
+
+        this.checkCoords(assert, polarChart, { argument: 'December', value: 'Monday' }, { x: undefined, y: undefined });
+    });
+
+    QUnit.test('Pass offset to annotation coord object', function(assert) {
+        let polarChart = this.getPolarChartForSeriesTests();
+        const coords = polarChart._getAnnotationCoords({
+            offsetX: 10,
+            offsetY: 20
+        });
+        assert.equal(coords.offsetX, 10);
+        assert.equal(coords.offsetY, 20);
+    });
+});
+
 QUnit.module('Lifecycle', {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
@@ -586,6 +901,7 @@ QUnit.module('Lifecycle', {
             allowDragging: false
         });
         assert.deepEqual(this.createAnnotationStub.getCall(0).args[3], customizeAnnotation);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[4], plugins.chart.members._pullOptions);
     });
 
     QUnit.test('Pass widget instance and group to annotations.draw method', function(assert) {
@@ -674,6 +990,193 @@ QUnit.module('Lifecycle', {
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
+        assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
+    });
+
+    QUnit.module('PolarChart plugin', {
+        beforeEach() {
+            this.onDrawn = sinon.spy();
+        },
+        polarChart(annotationSettings, annotationItems, customizeAnnotation) {
+            return $('<div>').appendTo('#qunit-fixture').dxPolarChart({
+                size: {
+                    width: 100,
+                    height: 100
+                },
+                legend: { visible: false },
+                dataSource: [],
+                series: [],
+                commonAxisSettings: {
+                    grid: { visible: false },
+                    label: { visible: false }
+                },
+                valueAxis: {},
+                argumentAxis: {
+                    visualRange: [0, 100]
+                },
+                onDrawn: this.onDrawn,
+                customizeAnnotation,
+                commonAnnotationSettings: annotationSettings,
+                annotations: annotationItems
+            }).dxPolarChart('instance');
+        },
+        getAnnotationsGroup() {
+            return this.renderer.g.getCalls().map(g => g.returnValue).filter(g => {
+                const attr = g.stub('attr').getCall(0);
+                return attr && attr.args[0].class === 'dxc-annotations';
+            })[0];
+        }
+    });
+
+    QUnit.test('Do not create annotation if no items passed', function(assert) {
+        this.polarChart({ some: 'options' });
+        assert.equal(this.createAnnotationStub.callCount, 0);
+    });
+
+    QUnit.test('Create annotation with given options', function(assert) {
+        const annotationOptions = {
+            some: 'options'
+        };
+        const customizeAnnotation = {
+            customize: 'annotation'
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const polarChart = this.polarChart(annotationOptions, items, customizeAnnotation);
+
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        assert.equal(this.createAnnotationStub.getCall(0).args[0], polarChart);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[2], {
+            some: 'options',
+            image: {
+                width: 30,
+                height: 30
+            },
+            font: {
+                color: '#333333',
+                cursor: 'default',
+                family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif',
+                size: 12,
+                weight: 400
+            },
+            tooltipEnabled: true,
+
+            border: {
+                width: 1,
+                color: '#dddddd',
+                dashStyle: 'solid',
+                visible: true
+            },
+            color: '#ffffff',
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            textOverflow: 'ellipsis',
+            wordWrap: 'normal',
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: '#000000'
+            },
+            allowDragging: false
+        });
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[3], customizeAnnotation);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[4], plugins.polarChart.members._pullOptions);
+    });
+
+    QUnit.test('Pass widget instance and group to annotations.draw method', function(assert) {
+        const annotationOptions = {
+            some: 'options'
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const polarChart = this.polarChart(annotationOptions, items);
+
+        const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
+        assert.equal(annotation.draw.callCount, 1);
+        assert.deepEqual(annotation.draw.getCall(0).args, [polarChart, this.getAnnotationsGroup()]);
+    });
+
+    QUnit.test('Draw annotations before onDrawn event', function(assert) {
+        const annotationOptions = {
+            some: 'options'
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        this.polarChart(annotationOptions, items);
+
+        const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
+        assert.ok(annotation.draw.lastCall.calledBefore(this.onDrawn.lastCall));
+    });
+
+    QUnit.test('Change annotations option - recreate annotations, clear group, draw new annotations', function(assert) {
+        const annotationOptions = {
+            some: 'options'
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const polarChart = this.polarChart(annotationOptions, items);
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
+        this.createAnnotationStub.reset();
+
+        const newItems = [
+            { some: 'newItem' }
+        ];
+        polarChart.option({ annotations: newItems });
+
+        // assert
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
+        assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'options');
+
+        const annotationsGroup = this.getAnnotationsGroup();
+
+        const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
+        assert.equal(annotation.draw.callCount, 1);
+        assert.deepEqual(annotation.draw.getCall(0).args, [polarChart, annotationsGroup]);
+        assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
+    });
+
+    QUnit.test('Change commonAnnotationSettings option - recreate annotations, clear group, draw new annotations', function(assert) {
+        const annotationOptions = {
+            some: 'options'
+        };
+        const items = [
+            { x: 100, y: 200, },
+            { value: 1, argument: 2 }
+        ];
+        const polarChart = this.polarChart(annotationOptions, items);
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
+        this.createAnnotationStub.reset();
+
+        const newAnnotationOptions = {
+            some: 'otherOptions'
+        };
+        polarChart.option({ commonAnnotationSettings: newAnnotationOptions });
+
+        // assert
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
+        assert.equal(this.createAnnotationStub.getCall(0).args[2].some, 'otherOptions');
+
+        const annotationsGroup = this.getAnnotationsGroup();
+
+        const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
+        assert.equal(annotation.draw.callCount, 1);
+        assert.deepEqual(annotation.draw.getCall(0).args, [polarChart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
     });
 });

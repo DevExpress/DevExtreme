@@ -2,6 +2,26 @@
 @import (once) "./popup.generic.less";
 @import (once) "./list.generic.less";
 
+.dx-dropdownbutton {
+    .dx-button {
+        overflow: hidden;
+    }
+
+    .dx-button-has-text .dx-icon.dx-icon-right {
+        margin-left: 4px;
+        margin-right: 0;
+    }
+}
+
+.dx-dropdownbutton-toggle {
+    flex: 0 0 20px;
+    max-width: 20px;
+}
+
+.dx-dropdownbutton-action {
+    min-width: 0;
+}
+
 .dx-dropdownbutton-popup-wrapper {
     .dx-dropdownlist-list-appearance();
 }

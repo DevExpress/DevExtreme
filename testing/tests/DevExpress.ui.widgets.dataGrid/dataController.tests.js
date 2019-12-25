@@ -7993,8 +7993,10 @@ QUnit.module('Remote Grouping', {
 });
 
 // T320744
-QUnit.test('Exception when CustomStore returns plain data and remote grouping enabled', function(assert) {
-    var storeLoadOptions;
+QUnit.test('Error when CustomStore returns plain data and remote grouping enabled', function(assert) {
+    var storeLoadOptions,
+        onDataErrorOccurredSpy = sinon.spy();
+
     this.options = {
         dataSource: {
             group: 'name',
@@ -8009,6 +8011,7 @@ QUnit.test('Exception when CustomStore returns plain data and remote grouping en
             },
             pageSize: 2
         },
+        onDataErrorOccurred: onDataErrorOccurredSpy,
         paging: {
             enabled: true
         },
@@ -8017,28 +8020,28 @@ QUnit.test('Exception when CustomStore returns plain data and remote grouping en
     };
 
     // act
-    try {
-        this.setupDataGridModules();
-    } catch(e) {
-        // assert
-        assert.ok(e instanceof Error, 'data error is Error object');
+    this.setupDataGridModules();
 
-        assert.equal(e.__id, 'E1037', 'data error id');
-        assert.equal(e.__details, 'Invalid structure of grouped data', 'data error details');
-    }
+    // assert
+    const error = onDataErrorOccurredSpy.getCall(0).args[0].error;
+    assert.ok(error instanceof Error, 'data error is Error object');
+
+    assert.equal(error.__id, 'E1037', 'data error id');
+    assert.equal(error.__details, 'Invalid structure of grouped data', 'data error details');
 
     assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
     assert.strictEqual(storeLoadOptions.take, undefined, 'no take option');
     assert.deepEqual(storeLoadOptions.group, [{ selector: 'name', desc: false, isExpanded: false }], 'group option');
 
-    assert.ok(this.dataController.isLoading());
     assert.equal(this.dataController.totalCount(), -1, 'totalCount');
     assert.equal(this.dataController.pageCount(), 1, 'pageCount');
 });
 
 // T366766
-QUnit.test('Exception when CustomStore returns groups without items', function(assert) {
-    var storeLoadOptions;
+QUnit.test('Error when CustomStore returns groups without items', function(assert) {
+    var storeLoadOptions,
+        onDataErrorOccurredSpy = sinon.spy();
+
     this.options = {
         dataSource: {
             group: 'name',
@@ -8053,6 +8056,7 @@ QUnit.test('Exception when CustomStore returns groups without items', function(a
             },
             pageSize: 2
         },
+        onDataErrorOccurred: onDataErrorOccurredSpy,
         paging: {
             enabled: true
         },
@@ -8061,21 +8065,19 @@ QUnit.test('Exception when CustomStore returns groups without items', function(a
     };
 
     // act
-    try {
-        this.setupDataGridModules();
-    } catch(e) {
-        // assert
-        assert.ok(e instanceof Error, 'data error is Error object');
+    this.setupDataGridModules();
 
-        assert.equal(e.__id, 'E1037', 'data error id');
-        assert.equal(e.__details, 'Invalid structure of grouped data', 'data error details');
-    }
+    // assert
+    const error = onDataErrorOccurredSpy.getCall(0).args[0].error;
+    assert.ok(error instanceof Error, 'data error is Error object');
+
+    assert.equal(error.__id, 'E1037', 'data error id');
+    assert.equal(error.__details, 'Invalid structure of grouped data', 'data error details');
 
     assert.strictEqual(storeLoadOptions.skip, undefined, 'no skip option');
     assert.strictEqual(storeLoadOptions.take, undefined, 'no take option');
     assert.deepEqual(storeLoadOptions.group, [{ selector: 'name', desc: false, isExpanded: false }], 'group option');
 
-    assert.ok(this.dataController.isLoading());
     assert.equal(this.dataController.totalCount(), -1, 'totalCount');
     assert.equal(this.dataController.pageCount(), 1, 'pageCount');
 });

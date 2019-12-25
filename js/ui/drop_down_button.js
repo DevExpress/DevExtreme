@@ -323,7 +323,7 @@ let DropDownButton = Widget.inherit({
         this._loadSingle(this.option('keyExpr'), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(this.option('selectedItem'));
+                d.resolve(null);
             });
 
         return d.promise();
@@ -370,7 +370,6 @@ let DropDownButton = Widget.inherit({
         if(this.option('splitButton')) {
             items.push({
                 icon: 'spindown',
-                width: 26,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
         }

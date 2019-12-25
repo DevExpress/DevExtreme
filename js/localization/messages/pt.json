@@ -377,10 +377,10 @@
         "dxDiagram-shapeConnector": "TODO",
         "dxDiagram-shapeOr": "TODO",
         "dxDiagram-shapeSummingJunction": "TODO",
-        "dxDiagram-shapeContainer": "TODO",
+        "dxDiagram-shapeContainerDefaultText": "TODO",
         "dxDiagram-shapeVerticalContainer": "TODO",
         "dxDiagram-shapeHorizontalContainer": "TODO",
-        "dxDiagram-shapeCard": "TODO",
+        "dxDiagram-shapeCardDefaultText": "TODO",
         "dxDiagram-shapeCardWithImageOnLeft": "TODO",
         "dxDiagram-shapeCardWithImageOnTop": "TODO",
         "dxDiagram-shapeCardWithImageOnRight": "TODO"

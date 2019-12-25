@@ -186,13 +186,10 @@ const subscribes = {
     deleteAppointment: function(options) {
         options.$appointment = $(options.target);
 
-        let appointmentData = options.data,
-            singleAppointmentData = this._getSingleAppointmentData(appointmentData, options),
-            startDate = this.fire('getField', 'startDate', singleAppointmentData);
+        const appointmentData = options.data,
+            singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
 
-        this._checkRecurringAppointment(appointmentData, singleAppointmentData, startDate, (function() {
-            this.deleteAppointment(appointmentData);
-        }).bind(this), true);
+        this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
     },
 
     getResourceForPainting: function() {
