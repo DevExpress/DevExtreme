@@ -2169,12 +2169,12 @@ QUnit.test('The onRemove event should be fired when dragging the item from sorta
     assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable, 'onRemove arg - fromComponent');
     assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, draggable, 'onRemove arg - toComponent');
     assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 0, 'onRemove arg - fromIndex');
-    assert.notOk(onRemoveSpy.getCall(0).args[0].toIndex, 'onRemove arg - toIndex');
+    assert.ok(isNaN(onRemoveSpy.getCall(0).args[0].toIndex), 'onRemove arg - toIndex');
     assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
     assert.deepEqual(onDragEndSpy.getCall(0).args[0].fromComponent, sortable, 'onDragEnd arg - fromComponent');
     assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'onDragEnd arg - toComponent');
     assert.strictEqual(onDragEndSpy.getCall(0).args[0].fromIndex, 0, 'onDragEndSpy arg - fromIndex');
-    assert.notOk(onDragEndSpy.getCall(0).args[0].toIndex, 'onDragEndSpy arg - toIndex');
+    assert.ok(isNaN(onDragEndSpy.getCall(0).args[0].toIndex), 'onDragEndSpy arg - toIndex');
 });
 
 
