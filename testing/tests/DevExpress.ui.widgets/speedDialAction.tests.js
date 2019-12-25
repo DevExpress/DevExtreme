@@ -33,7 +33,7 @@ QUnit.module('create one action', () => {
         const $fabContent = $fabElement.find('.dx-overlay-content');
         const clickHandler = sinon.spy();
 
-        assert.ok($fabElement.length === 1, 'one action button created');
+        assert.strictEqual($fabElement.length, 1, 'one action button created');
         assert.ok($fabElement.hasClass(FAB_MAIN_SELECTOR.substr(1)), 'it is main action button');
         assert.equal($fabContent.find('.dx-fa-button-icon').length, 1, 'icon container created');
         assert.equal($fabContent.find('.dx-icon-close').length, 1, 'default close icon created');
@@ -101,8 +101,8 @@ QUnit.module('create multiple actions', (hooks) => {
         let $fabElement = $(FAB_SELECTOR);
         let $fabContent = $fabElement.find('.dx-overlay-content');
 
-        assert.ok($fabMainElement.length === 1, 'create one main fab');
-        assert.ok($fabElement.length === 3, 'create two actions');
+        assert.strictEqual($fabMainElement.length, 1, 'create one main fab');
+        assert.strictEqual($fabElement.length, 3, 'create two actions');
 
         assert.equal($fabMainElement.attr('title'), undefined, 'default hint empty');
         assert.equal($fabMainContent.find('.dx-icon-add').length, 1, 'default icon is applied');
@@ -140,7 +140,7 @@ QUnit.module('create multiple actions', (hooks) => {
 
         assert.equal($fabMainElement.attr('title'), 'Arrow down', 'hint by first action option');
     });
-});
+}, () => {});
 
 QUnit.module('modify global action button config', (hooks) => {
     hooks.beforeEach(() => {
@@ -246,7 +246,7 @@ QUnit.module('modify global action button config', (hooks) => {
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, 'multiple actions - correct position left after config change');
 
     });
-});
+}, () => {});
 
 QUnit.module('add or remove action buttons', (hooks) => {
     hooks.beforeEach(() => {
@@ -293,7 +293,7 @@ QUnit.module('add or remove action buttons', (hooks) => {
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), 'use dafault position');
     });
-});
+}, () => {});
 
 QUnit.module('check action buttons position', (hooks) => {
     hooks.beforeEach(() => {
@@ -362,7 +362,7 @@ QUnit.module('check action buttons position', (hooks) => {
         assert.equal($fabWrapper.eq(0).css('position'), expectedPosition, 'first action has the same position with main fab');
         assert.equal($fabWrapper.eq(1).css('position'), expectedPosition, 'second action has the same position with main fab');
     });
-});
+}, () => {});
 
 QUnit.module('check action buttons click args', (hooks) => {
     hooks.beforeEach(() => {
@@ -400,7 +400,7 @@ QUnit.module('check action buttons click args', (hooks) => {
         $fabMainContent.trigger('dxclick');
         $fabContent.eq(2).trigger('dxclick');
     });
-});
+}, () => {});
 
 QUnit.module('add label option', (hooks) => {
     let firstSDA;
@@ -486,7 +486,7 @@ QUnit.module('add label option', (hooks) => {
         assert.ok($(FAB_SELECTOR).find('.dx-overlay-content').eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), 'first SDA has label on the right');
         assert.ok($(FAB_SELECTOR).find('.dx-overlay-content').eq(2).hasClass(FAB_CONTENT_REVERSE_CLASS), 'second SDA has label on the right');
     });
-});
+}, () => {});
 
 QUnit.module('add visible option', (hooks) => {
     let firstSDA;
@@ -604,7 +604,7 @@ QUnit.module('add visible option', (hooks) => {
 
         assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, 'all actions are invisible');
     });
-});
+}, () => {});
 
 QUnit.module('add shading option', (hooks) => {
     hooks.beforeEach(() => {
@@ -705,7 +705,7 @@ QUnit.module('add shading option', (hooks) => {
         firstSDA.dispose();
         secondSDA.dispose();
     });
-});
+}, () => {});
 
 QUnit.module('add direction option', (hooks) => {
     hooks.beforeEach(() => {
@@ -783,7 +783,7 @@ QUnit.module('add direction option', (hooks) => {
         firstSDA.dispose();
         secondSDA.dispose();
     });
-});
+}, () => {});
 
 QUnit.module('add index option', (hooks) => {
     hooks.beforeEach(() => {
@@ -837,7 +837,7 @@ QUnit.module('add index option', (hooks) => {
         firstSDA.dispose();
         secondSDA.dispose();
     });
-});
+}, () => {});
 
 QUnit.module('check action buttons events', (hooks) => {
     hooks.beforeEach(() => {
@@ -912,4 +912,5 @@ QUnit.module('check action buttons events', (hooks) => {
         assert.ok(contentReadyTwoArgs[0].actionElement.hasClass('dx-overlay'), 'right second SDA content ready actionElement in args');
         assert.equal($(contentReadyTwoArgs[0].element).attr('id'), 'fab-two', 'right second SDA content ready element in args');
     });
-});
+}, () => {});
+
