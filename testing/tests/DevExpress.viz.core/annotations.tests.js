@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { createAnnotations } from 'viz/core/annotations';
+import { createAnnotations, plugins } from 'viz/core/annotations';
 import vizMocks from '../../helpers/vizMocks.js';
 
 const environment = {
@@ -20,8 +20,9 @@ const environment = {
             _getAnnotationCoords: sinon.stub().returns({ x: 100, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 500 } })
         };
     },
-    createAnnotations(items, options = {}, customizeAnnotation) {
-        return createAnnotations(this.widget, items, $.extend(true, { argument: 0 }, options), customizeAnnotation);
+    createAnnotations(items, options = {}, customizeAnnotation, widget = 'chart') {
+        const pullOptions = plugins[widget].members._pullOptions;
+        return createAnnotations(this.widget, items, $.extend(true, { argument: 0 }, options), customizeAnnotation, pullOptions);
     }
 };
 
@@ -612,7 +613,7 @@ QUnit.test('Arrow on the right, top side', function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 220 - 10]);
 });
 
-QUnit.test('Arrow on the left, center', function(assert) {
+QUnit.test('Arrow on the right, center', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ x: 140, y: 200, type: 'image', image: { url: 'some_url' } }], {
         border: {
@@ -636,7 +637,7 @@ QUnit.test('Arrow on the left, center', function(assert) {
     assert.deepEqual(contentGroup.move.firstCall.args, [140 - 10, 200 - 10]);
 });
 
-QUnit.test('Arrow on the left, bottom side', function(assert) {
+QUnit.test('Arrow on the right, bottom side', function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ x: 140, y: 180, type: 'image', image: { url: 'some_url' } }], {
         border: {
@@ -846,7 +847,9 @@ QUnit.module('Check plaque path on pane bounds', {
                 offsetY: 4,
                 blur: 5
             }
-        }, options));
+        }, options),
+        undefined,
+        plugins.chart.members._pullOptions);
     }
 });
 

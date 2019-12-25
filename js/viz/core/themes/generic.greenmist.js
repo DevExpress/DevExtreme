@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        color: '#fff',
+        border: {
+            color: BORDER_COLOR
+        },
+        font: {
+            color: TITLE_COLOR
+        }
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#c1c1c1' }
-        },
-        commonAnnotationSettings: {
-            color: '#fff',
-            border: {
-                color: BORDER_COLOR
-            },
-            font: {
-                color: TITLE_COLOR
-            }
         }
     },
     funnel: {
