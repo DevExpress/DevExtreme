@@ -1,34 +1,34 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    Promise = require("../core/polyfills/promise"),
-    fromPromise = require("../core/utils/deferred").fromPromise,
-    registerComponent = require("../core/component_registrator"),
-    errors = require("./widget/ui.errors"),
-    devices = require("../core/devices"),
-    Widget = require("./widget/ui.widget"),
-    inflector = require("../core/utils/inflector"),
-    each = require("../core/utils/iterator").each,
-    extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
-    isNumeric = require("../core/utils/type").isNumeric,
-    eventUtils = require("../events/utils"),
-    pointerEvents = require("../events/pointer"),
-    wrapToArray = require("../core/utils/array").wrapToArray;
+var $ = require('../core/renderer'),
+    eventsEngine = require('../events/core/events_engine'),
+    Promise = require('../core/polyfills/promise'),
+    fromPromise = require('../core/utils/deferred').fromPromise,
+    registerComponent = require('../core/component_registrator'),
+    errors = require('./widget/ui.errors'),
+    devices = require('../core/devices'),
+    Widget = require('./widget/ui.widget'),
+    inflector = require('../core/utils/inflector'),
+    each = require('../core/utils/iterator').each,
+    extend = require('../core/utils/extend').extend,
+    inArray = require('../core/utils/array').inArray,
+    isNumeric = require('../core/utils/type').isNumeric,
+    eventUtils = require('../events/utils'),
+    pointerEvents = require('../events/pointer'),
+    wrapToArray = require('../core/utils/array').wrapToArray;
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
 
 var PROVIDERS = {
-    googleStatic: require("./map/provider.google_static"),
-    google: require("./map/provider.dynamic.google"),
-    bing: require("./map/provider.dynamic.bing")
+    googleStatic: require('./map/provider.google_static'),
+    google: require('./map/provider.dynamic.google'),
+    bing: require('./map/provider.dynamic.bing')
 };
 
 
-var MAP_CLASS = "dx-map",
-    MAP_CONTAINER_CLASS = "dx-map-container",
-    MAP_SHIELD_CLASS = "dx-map-shield",
-    NATIVE_CLICK_CLASS = "dx-native-click";
+var MAP_CLASS = 'dx-map',
+    MAP_CONTAINER_CLASS = 'dx-map-container',
+    MAP_SHIELD_CLASS = 'dx-map-shield',
+    NATIVE_CLICK_CLASS = 'dx-native-click';
 
 /**
 * @name dxMap
@@ -141,14 +141,14 @@ var Map = Widget.inherit({
             * @type Enums.GeoMapType
             * @default "roadmap"
             */
-            type: "roadmap",
+            type: 'roadmap',
 
             /**
             * @name dxMapOptions.provider
             * @type Enums.GeoMapProvider
             * @default "google"
             */
-            provider: "google",
+            provider: 'google',
 
             /**
             * @name dxMapOptions.autoAdjust
@@ -284,21 +284,21 @@ var Map = Widget.inherit({
                 * @type string
                 * @default ""
                 */
-                bing: "",
+                bing: '',
 
                 /**
                 * @name dxMapOptions.key.google
                 * @type string
                 * @default ""
                 */
-                google: "",
+                google: '',
 
                 /**
                 * @name dxMapOptions.key.googleStatic
                 * @type string
                 * @default ""
                 */
-                googleStatic: ""
+                googleStatic: ''
             },
 
             /**
@@ -346,7 +346,7 @@ var Map = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -369,9 +369,9 @@ var Map = Widget.inherit({
 
         this._lastAsyncAction = Promise.resolve();
 
-        this._checkOption("provider");
-        this._checkOption("markers");
-        this._checkOption("routes");
+        this._checkOption('provider');
+        this._checkOption('markers');
+        this._checkOption('routes');
 
         this._initContainer();
         this._grabEvents();
@@ -382,16 +382,16 @@ var Map = Widget.inherit({
     _checkOption: function(option) {
         var value = this.option(option);
 
-        if(option === "markers" && !Array.isArray(value)) {
-            throw errors.Error("E1022");
+        if(option === 'markers' && !Array.isArray(value)) {
+            throw errors.Error('E1022');
         }
-        if(option === "routes" && !Array.isArray(value)) {
-            throw errors.Error("E1023");
+        if(option === 'routes' && !Array.isArray(value)) {
+            throw errors.Error('E1023');
         }
     },
 
     _initContainer: function() {
-        this._$container = $("<div>")
+        this._$container = $('<div>')
             .addClass(MAP_CONTAINER_CLASS);
 
         this.$element().append(this._$container);
@@ -404,7 +404,7 @@ var Map = Widget.inherit({
     },
 
     _cancelEvent: function(e) {
-        var cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option("disabled");
+        var cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option('disabled');
         if(cancelByProvider) {
             e.stopPropagation();
         }
@@ -421,20 +421,20 @@ var Map = Widget.inherit({
 
         this._renderShield();
 
-        this._saveRendered("markers");
-        this._saveRendered("routes");
-        this._provider = new PROVIDERS[this.option("provider")](this, this._$container);
-        this._queueAsyncAction("render", this._rendered.markers, this._rendered.routes);
+        this._saveRendered('markers');
+        this._saveRendered('routes');
+        this._provider = new PROVIDERS[this.option('provider')](this, this._$container);
+        this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
     },
 
     _renderShield: function() {
         var $shield;
 
-        if(this.option("disabled")) {
-            $shield = $("<div>").addClass(MAP_SHIELD_CLASS);
+        if(this.option('disabled')) {
+            $shield = $('<div>').addClass(MAP_SHIELD_CLASS);
             this.$element().append($shield);
         } else {
-            $shield = this.$element().find("." + MAP_SHIELD_CLASS);
+            $shield = this.$element().find('.' + MAP_SHIELD_CLASS);
             $shield.remove();
         }
     },
@@ -446,7 +446,7 @@ var Map = Widget.inherit({
         }
         this._provider = null;
         this._lastAsyncAction = Promise.resolve();
-        this.setOptionSilent("bounds", { northEast: null, southWest: null });
+        this.setOptionSilent('bounds', { northEast: null, southWest: null });
 
         delete this._suppressAsyncAction;
     },
@@ -458,48 +458,48 @@ var Map = Widget.inherit({
         this._optionChangeBag = null;
 
         switch(name) {
-            case "disabled":
+            case 'disabled':
                 this._renderShield();
                 this.callBase(args);
                 break;
-            case "width":
-            case "height":
+            case 'width':
+            case 'height':
                 this.callBase(args);
                 this._dimensionChanged();
                 break;
-            case "provider":
+            case 'provider':
                 this._suppressAsyncAction = true;
                 this._invalidate();
                 break;
-            case "key":
-                errors.log("W1001");
+            case 'key':
+                errors.log('W1001');
                 break;
-            case "bounds":
-                this._queueAsyncAction("updateBounds");
+            case 'bounds':
+                this._queueAsyncAction('updateBounds');
                 break;
-            case "center":
-                this._queueAsyncAction("updateCenter");
+            case 'center':
+                this._queueAsyncAction('updateCenter');
                 break;
-            case "zoom":
-                this._queueAsyncAction("updateZoom");
+            case 'zoom':
+                this._queueAsyncAction('updateZoom');
                 break;
-            case "type":
-                this._queueAsyncAction("updateMapType");
+            case 'type':
+                this._queueAsyncAction('updateMapType');
                 break;
-            case "controls":
-                this._queueAsyncAction("updateControls", this._rendered.markers, this._rendered.routes);
+            case 'controls':
+                this._queueAsyncAction('updateControls', this._rendered.markers, this._rendered.routes);
                 break;
-            case "autoAdjust":
-                this._queueAsyncAction("adjustViewport");
+            case 'autoAdjust':
+                this._queueAsyncAction('adjustViewport');
                 break;
-            case "markers":
-            case "routes":
+            case 'markers':
+            case 'routes':
                 this._checkOption(name);
 
                 var prevValue = this._rendered[name];
                 this._saveRendered(name);
                 this._queueAsyncAction(
-                    "update" + inflector.titleize(name),
+                    'update' + inflector.titleize(name),
                     changeBag ? changeBag.removed : prevValue,
                     changeBag ? changeBag.added : this._rendered[name]
                 ).then(function(result) {
@@ -508,16 +508,16 @@ var Map = Widget.inherit({
                     }
                 });
                 break;
-            case "markerIconSrc":
-                this._queueAsyncAction("updateMarkers", this._rendered.markers, this._rendered.markers);
+            case 'markerIconSrc':
+                this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
                 break;
-            case "onReady":
-            case "onUpdated":
-            case "onMarkerAdded":
-            case "onMarkerRemoved":
-            case "onRouteAdded":
-            case "onRouteRemoved":
-            case "onClick":
+            case 'onReady':
+            case 'onUpdated':
+            case 'onMarkerAdded':
+            case 'onMarkerRemoved':
+            case 'onRouteAdded':
+            case 'onRouteRemoved':
+            case 'onClick':
                 break;
             default:
                 this.callBase.apply(this, arguments);
@@ -531,7 +531,7 @@ var Map = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._queueAsyncAction("updateDimensions");
+        this._queueAsyncAction('updateDimensions');
     },
 
     _queueAsyncAction: function(name) {
@@ -554,7 +554,7 @@ var Map = Widget.inherit({
                     this._triggerReadyAction();
                 }
                 ///#DEBUG
-                if(!mapRefreshed && name !== "clean") {
+                if(!mapRefreshed && name !== 'clean') {
                     this._triggerUpdateAction();
                 }
                 ///#ENDDEBUG
@@ -567,11 +567,11 @@ var Map = Widget.inherit({
     },
 
     _triggerReadyAction: function() {
-        this._createActionByOption("onReady")({ originalMap: this._provider.map() });
+        this._createActionByOption('onReady')({ originalMap: this._provider.map() });
     },
 
     _triggerUpdateAction: function() {
-        this._createActionByOption("onUpdated")();
+        this._createActionByOption('onUpdated')();
     },
 
     setOptionSilent: function(name, value) {
@@ -585,7 +585,7 @@ var Map = Widget.inherit({
     * @return Promise<Object>
     */
     addMarker: function(marker) {
-        return this._addFunction("markers", marker);
+        return this._addFunction('markers', marker);
     },
 
     /**
@@ -595,7 +595,7 @@ var Map = Widget.inherit({
     * @return Promise<void>
     */
     removeMarker: function(marker) {
-        return this._removeFunction("markers", marker);
+        return this._removeFunction('markers', marker);
     },
 
     /**
@@ -605,7 +605,7 @@ var Map = Widget.inherit({
     * @return Promise<Object>
     */
     addRoute: function(route) {
-        return this._addFunction("routes", route);
+        return this._addFunction('routes', route);
     },
 
     /**
@@ -615,7 +615,7 @@ var Map = Widget.inherit({
     * @return Promise<void>
     */
     removeRoute: function(route) {
-        return this._removeFunction("routes", route);
+        return this._removeFunction('routes', route);
     },
 
     _addFunction: function(optionName, addingValue) {
@@ -640,7 +640,7 @@ var Map = Widget.inherit({
                 var removing = optionValue.splice(index, 1)[0];
                 removingValues.splice(removingIndex, 1, removing);
             } else {
-                throw errors.log("E1021", inflector.titleize(optionName.substring(0, optionName.length - 1)), removingValue);
+                throw errors.log('E1021', inflector.titleize(optionName.substring(0, optionName.length - 1)), removingValue);
             }
         });
 
@@ -662,6 +662,6 @@ var Map = Widget.inherit({
 
 });
 
-registerComponent("dxMap", Map);
+registerComponent('dxMap', Map);
 
 module.exports = Map;

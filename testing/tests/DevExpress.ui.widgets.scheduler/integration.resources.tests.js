@@ -1,31 +1,31 @@
-import $ from "jquery";
+import $ from 'jquery';
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html(
+    $('#qunit-fixture').html(
         '<div id="scheduler">\
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
 
-import "common.css!";
-import "generic_light.css!";
+import 'common.css!';
+import 'generic_light.css!';
 
-import fx from "animation/fx";
-import { DataSource } from "data/data_source/data_source";
-import CustomStore from "data/custom_store";
-import translator from "animation/translator";
-import Color from "color";
+import fx from 'animation/fx';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import translator from 'animation/translator';
+import Color from 'color';
 
-import "ui/scheduler/ui.scheduler";
+import 'ui/scheduler/ui.scheduler';
 
-const SCHEDULER_HORIZONTAL_SCROLLBAR = ".dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal",
-    SCHEDULER_SCROLLBAR_CONTAINER = ".dx-scheduler-work-space-both-scrollbar";
+const SCHEDULER_HORIZONTAL_SCROLLBAR = '.dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal',
+    SCHEDULER_SCROLLBAR_CONTAINER = '.dx-scheduler-work-space-both-scrollbar';
 
-QUnit.module("Integration: Resources", {
+QUnit.module('Integration: Resources', {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
         this.clock = sinon.useFakeTimers();
     },
@@ -35,24 +35,24 @@ QUnit.module("Integration: Resources", {
     }
 });
 
-QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935)", function(assert) {
-    const views = ["timelineDay", "day"];
+QUnit.test('Grouping by value = 0 in case nested groups shouldn\'t ignore(T821935)', function(assert) {
+    const views = ['timelineDay', 'day'];
     const expectedValues = [
         {
-            "appointment1": {
+            'appointment1': {
                 top: 26,
                 left: 0
             },
-            "appointment2": {
+            'appointment2': {
                 top: 190,
                 left: 431
             }
         }, {
-            "appointment1": {
+            'appointment1': {
                 top: 0,
                 left: 100
             },
-            "appointment2": {
+            'appointment2': {
                 top: 100,
                 left: 406
             }
@@ -60,35 +60,35 @@ QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935
     ];
 
     const banquetResource = [{
-        text: "Hall 1",
+        text: 'Hall 1',
         id: 0
     }, {
-        text: "Hall 2",
+        text: 'Hall 2',
         id: 2
     }];
 
     const bookingResource = [{
         id: 1,
-        text: "Confirmed",
-        status_code: "CN",
+        text: 'Confirmed',
+        status_code: 'CN',
     }, {
         id: 2,
-        text: "Tentative",
-        status_code: "TN"
+        text: 'Tentative',
+        status_code: 'TN'
     }, {
         id: 3,
-        text: "Waitlisted",
-        status_code: "WL"
+        text: 'Waitlisted',
+        status_code: 'WL'
     }];
 
     const data = [{
-        text: "appointment1",
+        text: 'appointment1',
         banquetId: 0,
         status: 1,
         startDate: new Date(2015, 4, 25, 10, 0),
         endDate: new Date(2015, 4, 25, 10, 30)
     }, {
-        text: "appointment2",
+        text: 'appointment2',
         banquetId: 0,
         status: 3,
         startDate: new Date(2015, 4, 25, 11, 0),
@@ -97,8 +97,8 @@ QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935
 
     const findAppointment = (instance, text) => {
         return instance.$element()
-            .find(".dx-scheduler-appointment")
-            .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+            .find('.dx-scheduler-appointment')
+            .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
     };
 
     this.createInstance({
@@ -110,21 +110,21 @@ QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935
         endDayHour: 12,
         height: 600,
         width: 1024,
-        groups: ["banquetId", "status"],
+        groups: ['banquetId', 'status'],
         resources: [{
-            fieldExpr: "banquetId",
+            fieldExpr: 'banquetId',
             dataSource: banquetResource
         }, {
-            fieldExpr: "status",
+            fieldExpr: 'status',
             dataSource: bookingResource
         }]
     });
 
     views.forEach((view, index) => {
-        this.instance.option("currentView", view);
+        this.instance.option('currentView', view);
 
         const expectedValue = expectedValues[index];
-        ["appointment1", "appointment2"].forEach(appointmentName => {
+        ['appointment1', 'appointment2'].forEach(appointmentName => {
             const expectedPosition = expectedValue[appointmentName];
             const position = translator.locate(findAppointment(this.instance, appointmentName));
 
@@ -134,48 +134,48 @@ QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935
     });
 });
 
-QUnit.test("Editor for resource should be passed to details view", function(assert) {
+QUnit.test('Editor for resource should be passed to details view', function(assert) {
     var task1 = {
-            text: "Task 1",
+            text: 'Task 1',
             ownerId: 1,
             startDate: new Date(2015, 1, 9, 1, 0),
             endDate: new Date(2015, 1, 9, 2, 0)
         },
         task2 = {
-            text: "Task 2",
+            text: 'Task 2',
             roomId: 1,
             startDate: new Date(2015, 1, 9, 1, 0),
             endDate: new Date(2015, 1, 9, 2, 0)
         },
         roomResource = [
             {
-                text: "#1",
+                text: '#1',
                 id: 1,
-                color: "#606060"
+                color: '#606060'
             },
             {
-                text: "#2",
+                text: '#2',
                 id: 2,
-                color: "#606066"
+                color: '#606066'
             }
         ],
         resources = [{
-            field: "ownerId",
+            field: 'ownerId',
             allowMultiple: true,
             dataSource: [
                 {
-                    text: "Jack",
+                    text: 'Jack',
                     id: 1,
-                    color: "#606060"
+                    color: '#606060'
                 },
                 {
-                    text: "Mike",
+                    text: 'Mike',
                     id: 2,
-                    color: "#ff0000"
+                    color: '#ff0000'
                 }
             ]
         }, {
-            field: "roomId",
+            field: 'roomId',
             allowMultiple: false,
             dataSource: new DataSource(roomResource)
         }];
@@ -192,56 +192,56 @@ QUnit.test("Editor for resource should be passed to details view", function(asse
     this.instance.showAppointmentPopup(task1);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        ownerEditor = taskDetailsView.option("items")[10];
+        ownerEditor = taskDetailsView.option('items')[10];
 
     ownerEditor.editorOptions.dataSource.load();
 
-    assert.ok(taskDetailsView.getEditor("ownerId"), "Editor is exist");
-    assert.equal(ownerEditor.editorType, "dxTagBox", "Editor is dxTagBox");
-    assert.deepEqual(ownerEditor.editorOptions.dataSource.items(), resources[0].dataSource, "Data source is OK");
-    assert.deepEqual(taskDetailsView.option("formData").ownerId, [1], "Value is OK");
+    assert.ok(taskDetailsView.getEditor('ownerId'), 'Editor is exist');
+    assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
+    assert.deepEqual(ownerEditor.editorOptions.dataSource.items(), resources[0].dataSource, 'Data source is OK');
+    assert.deepEqual(taskDetailsView.option('formData').ownerId, [1], 'Value is OK');
 
 
     this.instance.showAppointmentPopup(task2);
     taskDetailsView = this.instance.getAppointmentDetailsForm();
 
-    var roomEditor = taskDetailsView.option("items")[11];
+    var roomEditor = taskDetailsView.option('items')[11];
 
     roomEditor.editorOptions.dataSource.load();
 
-    assert.ok(taskDetailsView.getEditor("roomId"), "Editor is exist");
-    assert.equal(roomEditor.editorType, "dxSelectBox", "Editor is dxSelectBox");
-    assert.strictEqual(taskDetailsView.option("formData").roomId, 1, "Value is OK");
-    assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, "Data source is OK");
+    assert.ok(taskDetailsView.getEditor('roomId'), 'Editor is exist');
+    assert.equal(roomEditor.editorType, 'dxSelectBox', 'Editor is dxSelectBox');
+    assert.strictEqual(taskDetailsView.option('formData').roomId, 1, 'Value is OK');
+    assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, 'Data source is OK');
 });
 
-QUnit.test("Editor for resource should be passed to details view for scheduler with groups", function(assert) {
+QUnit.test('Editor for resource should be passed to details view for scheduler with groups', function(assert) {
     var task = {
-            text: "Task 1",
+            text: 'Task 1',
             ownerId: 1,
             startDate: new Date(2015, 1, 9, 1, 0),
             endDate: new Date(2015, 1, 9, 2, 0)
         },
         resources = [{
-            field: "ownerId",
+            field: 'ownerId',
             allowMultiple: true,
-            displayExpr: "name",
+            displayExpr: 'name',
             dataSource: [
                 {
-                    name: "Jack",
+                    name: 'Jack',
                     id: 1,
-                    color: "#606060"
+                    color: '#606060'
                 },
                 {
-                    name: "Mike",
+                    name: 'Mike',
                     id: 2,
-                    color: "#ff0000"
+                    color: '#ff0000'
                 }
             ]
         }];
     this.createInstance({
         resources: resources,
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         dataSource: new DataSource({
             store: [task]
         }),
@@ -252,40 +252,40 @@ QUnit.test("Editor for resource should be passed to details view for scheduler w
     this.instance.showAppointmentPopup(task);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        ownerEditor = taskDetailsView.option("items")[10];
+        ownerEditor = taskDetailsView.option('items')[10];
 
 
-    assert.equal(ownerEditor.editorType, "dxTagBox", "Editor is dxTagBox");
-    assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, "Data source is OK");
-    assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, "displayExpr is OK");
+    assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
+    assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, 'Data source is OK');
+    assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, 'displayExpr is OK');
 });
 
-QUnit.test("Editor for resource with right value should be passed to details view when fieldExpr is used", function(assert) {
+QUnit.test('Editor for resource with right value should be passed to details view when fieldExpr is used', function(assert) {
     var appointment = {
-        "Price": 10,
-        "startDate": new Date(2015, 4, 24, 9, 10, 0, 0),
-        "endDate": new Date(2015, 4, 24, 11, 1, 0, 0),
-        "Movie": {
-            "ID": 3
+        'Price': 10,
+        'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
+        'endDate': new Date(2015, 4, 24, 11, 1, 0, 0),
+        'Movie': {
+            'ID': 3
         },
-        "TheatreId": 1
+        'TheatreId': 1
     };
 
     var resources = [{
-        fieldExpr: "Movie.ID",
+        fieldExpr: 'Movie.ID',
         useColorAsDefault: true,
         allowMultiple: false,
         dataSource: [{
-            "ID": 1,
-            "Color": "blue"
+            'ID': 1,
+            'Color': 'blue'
         }, {
-            "ID": 3,
-            "Color": "red"
+            'ID': 3,
+            'Color': 'red'
         }],
-        valueExpr: "ID",
-        colorExpr: "Color"
+        valueExpr: 'ID',
+        colorExpr: 'Color'
     }, {
-        fieldExpr: "TheatreId",
+        fieldExpr: 'TheatreId',
         dataSource: [{
             id: 1
         }, {
@@ -302,23 +302,23 @@ QUnit.test("Editor for resource with right value should be passed to details vie
     this.instance.showAppointmentPopup(appointment);
 
     var taskDetailsView = this.instance.getAppointmentDetailsForm(),
-        movieEditor = taskDetailsView.option("items")[10];
+        movieEditor = taskDetailsView.option('items')[10];
 
     movieEditor.editorOptions.dataSource.load();
 
-    assert.deepEqual(movieEditor.editorOptions.dataSource.items(), resources[0].dataSource, "Data source is OK");
-    assert.strictEqual(taskDetailsView.option("formData").Movie.ID, 3, "Value is OK");
+    assert.deepEqual(movieEditor.editorOptions.dataSource.items(), resources[0].dataSource, 'Data source is OK');
+    assert.strictEqual(taskDetailsView.option('formData').Movie.ID, 3, 'Value is OK');
 });
 
-QUnit.test("Alias for getResourceDataByValue method", function(assert) {
+QUnit.test('Alias for getResourceDataByValue method', function(assert) {
     this.createInstance({
         resources: [{
-            field: "ownerId",
+            field: 'ownerId',
             dataSource: [
                 {
-                    text: "Jack",
+                    text: 'Jack',
                     id: 1,
-                    color: "#606060"
+                    color: '#606060'
                 }
             ]
         }]
@@ -326,71 +326,71 @@ QUnit.test("Alias for getResourceDataByValue method", function(assert) {
 
     var done = assert.async();
 
-    this.instance.getResourceManager().getResourceDataByValue("ownerId", 1).done(function(resource) {
+    this.instance.getResourceManager().getResourceDataByValue('ownerId', 1).done(function(resource) {
         assert.deepEqual(resource, {
-            text: "Jack",
+            text: 'Jack',
             id: 1,
-            color: "#606060"
-        }, "Resource was found");
+            color: '#606060'
+        }, 'Resource was found');
 
         done();
     });
 
 });
 
-QUnit.test("Appointments should be repainted if 'groups' option is changed", function(assert) {
+QUnit.test('Appointments should be repainted if \'groups\' option is changed', function(assert) {
     this.createInstance({
         dataSource: new DataSource({
-            store: [{ text: "a", startDate: new Date(2015, 4, 26, 5), endDate: new Date(2015, 4, 26, 5, 30), ownerId: [1, 2], roomId: [1, 2] }]
+            store: [{ text: 'a', startDate: new Date(2015, 4, 26, 5), endDate: new Date(2015, 4, 26, 5, 30), ownerId: [1, 2], roomId: [1, 2] }]
         }),
         currentDate: new Date(2015, 4, 26),
-        groups: ["ownerId", "roomId"],
+        groups: ['ownerId', 'roomId'],
         resources: [{
-            field: "ownerId",
+            field: 'ownerId',
             allowMultiple: true,
             dataSource: [
-                { text: "o1", id: 1 },
-                { text: "o2", id: 2 }
+                { text: 'o1', id: 1 },
+                { text: 'o2', id: 2 }
             ]
         }, {
-            field: "roomId",
+            field: 'roomId',
             allowMultiple: true,
             dataSource: [
-                { text: "r1", id: 1 },
-                { text: "r2", id: 2 }
+                { text: 'r1', id: 1 },
+                { text: 'r2', id: 2 }
             ]
         }]
     });
 
-    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 4, "Appointments are OK");
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 4, 'Appointments are OK');
 
-    this.instance.option("groups", ["ownerId"]);
-    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 2, "Appointments are OK");
+    this.instance.option('groups', ['ownerId']);
+    assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 2, 'Appointments are OK');
 });
 
-QUnit.test("Resources should be loaded only once to calculate appts color", function(assert) {
+QUnit.test('Resources should be loaded only once to calculate appts color', function(assert) {
     var loadStub = sinon.stub().returns([
-        { text: "o1", id: 1 },
-        { text: "o2", id: 2 }
+        { text: 'o1', id: 1 },
+        { text: 'o2', id: 2 }
     ]);
     this.createInstance({
         dataSource: new DataSource({
             store: [{
-                text: "a",
+                text: 'a',
                 startDate: new Date(2015, 4, 26, 5),
                 endDate: new Date(2015, 4, 26, 5, 30),
                 ownerId: 1
             }, {
-                text: "b",
+                text: 'b',
                 startDate: new Date(2015, 4, 26, 5),
                 endDate: new Date(2015, 4, 26, 5, 30),
                 ownerId: 2
             }]
         }),
         currentDate: new Date(2015, 4, 26),
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         resources: [{
-            fieldExpr: "ownerId",
+            fieldExpr: 'ownerId',
             allowMultiple: true,
             dataSource: new CustomStore({
                 load: loadStub
@@ -398,20 +398,20 @@ QUnit.test("Resources should be loaded only once to calculate appts color", func
         }]
     });
 
-    assert.equal(loadStub.callCount, 1, "Resources are loaded only once");
+    assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
 });
 
-QUnit.test("Paint appts if groups array don't contain all resources", function(assert) {
+QUnit.test('Paint appts if groups array don\'t contain all resources', function(assert) {
     this.createInstance({
         dataSource: new DataSource({
             store: [{
-                text: "a",
+                text: 'a',
                 startDate: new Date(2015, 4, 26, 5),
                 endDate: new Date(2015, 4, 26, 5, 30),
                 ownerId: 1,
                 roomId: [1]
             }, {
-                text: "b",
+                text: 'b',
                 startDate: new Date(2015, 4, 26, 5),
                 endDate: new Date(2015, 4, 26, 5, 30),
                 ownerId: 2,
@@ -419,44 +419,44 @@ QUnit.test("Paint appts if groups array don't contain all resources", function(a
             }]
         }),
         currentDate: new Date(2015, 4, 26),
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         resources: [{
-            fieldExpr: "ownerId",
+            fieldExpr: 'ownerId',
             allowMultiple: true,
             dataSource: [
-                { text: "o1", id: 1 },
-                { text: "o2", id: 2 }
+                { text: 'o1', id: 1 },
+                { text: 'o2', id: 2 }
             ]
         }, {
-            fieldExpr: "roomId",
+            fieldExpr: 'roomId',
             allowMultiple: true,
             useColorAsDefault: true,
             dataSource: [
-                { text: "o1", id: 1, color: "red" },
-                { text: "o2", id: 2, color: "blue" }
+                { text: 'o1', id: 1, color: 'red' },
+                { text: 'o2', id: 2, color: 'blue' }
             ]
         }]
     });
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find('.dx-scheduler-appointment');
 
-    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
-    assert.equal(new Color($appointments.eq(1).css("backgroundColor")).toHex(), "#0000ff", "Color is OK");
+    assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
+    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#0000ff', 'Color is OK');
 });
 
-QUnit.test("Resources should not be reloaded when details popup is opening", function(assert) {
+QUnit.test('Resources should not be reloaded when details popup is opening', function(assert) {
     var loadStub = sinon.stub().returns([
-        { text: "o1", id: 1 },
-        { text: "o2", id: 2 }
+        { text: 'o1', id: 1 },
+        { text: 'o2', id: 2 }
     ]);
     var byKeyStub = sinon.stub();
     var data = [{
-        text: "a",
+        text: 'a',
         startDate: new Date(2015, 4, 26, 5),
         endDate: new Date(2015, 4, 26, 5, 30),
         ownerId: 1
     }, {
-        text: "b",
+        text: 'b',
         startDate: new Date(2015, 4, 26, 5),
         endDate: new Date(2015, 4, 26, 5, 30),
         ownerId: 2
@@ -466,9 +466,9 @@ QUnit.test("Resources should not be reloaded when details popup is opening", fun
             store: data
         }),
         currentDate: new Date(2015, 4, 26),
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         resources: [{
-            fieldExpr: "ownerId",
+            fieldExpr: 'ownerId',
             allowMultiple: true,
             dataSource: new CustomStore({
                 load: loadStub,
@@ -479,36 +479,36 @@ QUnit.test("Resources should not be reloaded when details popup is opening", fun
 
     this.instance.showAppointmentPopup(data[0]);
 
-    assert.equal(loadStub.callCount, 1, "Resources are loaded only once");
-    assert.equal(byKeyStub.callCount, 0, "Resources are loaded only once");
+    assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
+    assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
 });
 
-QUnit.test("Resources should be set correctly is the resources[].dataSource option is changed(T396746)", function(assert) {
-    var resourceData = [{ id: 1, text: "John", color: "red" }];
+QUnit.test('Resources should be set correctly is the resources[].dataSource option is changed(T396746)', function(assert) {
+    var resourceData = [{ id: 1, text: 'John', color: 'red' }];
     this.createInstance({
         dataSource: [],
         currentDate: new Date(2015, 4, 26),
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         resources: [{
-            fieldExpr: "ownerId",
+            fieldExpr: 'ownerId',
             dataSource: []
         }]
     });
 
-    this.instance.option("resources[0].dataSource", resourceData);
+    this.instance.option('resources[0].dataSource', resourceData);
     var resources = this.instance.getResourceManager().getResources();
 
     assert.deepEqual(resources, [{
-        fieldExpr: "ownerId",
+        fieldExpr: 'ownerId',
         dataSource: resourceData
-    }], "Resources were changed correctly");
+    }], 'Resources were changed correctly');
 });
 
-QUnit.test("Appointment should have correct color after resources option changing", function(assert) {
+QUnit.test('Appointment should have correct color after resources option changing', function(assert) {
     this.createInstance({
         dataSource: new DataSource({
             store: [{
-                text: "a",
+                text: 'a',
                 startDate: new Date(2015, 4, 26, 5),
                 endDate: new Date(2015, 4, 26, 5, 30),
                 roomId: [1]
@@ -518,26 +518,26 @@ QUnit.test("Appointment should have correct color after resources option changin
         currentDate: new Date(2015, 4, 26)
     });
 
-    this.instance.option("resources", [
+    this.instance.option('resources', [
         {
-            fieldExpr: "roomId",
+            fieldExpr: 'roomId',
             dataSource: [
-                { text: "o1", id: 1, color: "red" },
-                { text: "o2", id: 2, color: "blue" }
+                { text: 'o1', id: 1, color: 'red' },
+                { text: 'o2', id: 2, color: 'blue' }
             ]
         }]);
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-    assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
+    var $appointments = this.instance.$element().find('.dx-scheduler-appointment');
+    assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
 });
 
-QUnit.module("Integration: Multiple resources", {
+QUnit.module('Integration: Multiple resources', {
     beforeEach: function() {
-        $("#qunit-fixture").css({ top: 0, left: 0 });
+        $('#qunit-fixture').css({ top: 0, left: 0 });
         this.createInstance = (options) => {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
-        $("#qunit-fixture").html(
+        $('#qunit-fixture').html(
             `<div style="width: 400px; height: 500px;">
                 <div id="scheduler" style="height: 100%;">
                     <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
@@ -545,10 +545,10 @@ QUnit.module("Integration: Multiple resources", {
             </div>`);
     },
     afterEach: function() {
-        $("#qunit-fixture").css({ top: "-10000px", left: "-10000px" });
+        $('#qunit-fixture').css({ top: '-10000px', left: '-10000px' });
     }
 }, () => {
-    QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
+    QUnit.test('Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)', function(assert) {
         const getData = function(count) {
             let result = [];
             for(let i = 0; i < count; i++) {
@@ -561,18 +561,18 @@ QUnit.module("Integration: Multiple resources", {
         };
 
         this.createInstance({
-            groups: ["facilityId"],
+            groups: ['facilityId'],
             crossScrollingEnabled: true,
             dataSource: [],
             resources: [{
                 dataSource: getData(10),
-                displayExpr: "facilityName",
-                valueExpr: "facilityId",
-                fieldExpr: "facilityId",
+                displayExpr: 'facilityName',
+                valueExpr: 'facilityId',
+                fieldExpr: 'facilityId',
                 allowMultiple: false,
             }]
         });
         var scrollbar = $(this.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-        assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, "Horizontal scrollbar has visible top coordinate");
+        assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, 'Horizontal scrollbar has visible top coordinate');
     });
 });

@@ -1,17 +1,17 @@
-import $ from "../../../core/renderer";
-import eventsEngine from "../../../events/core/events_engine";
-import { name as ClickEvent } from "../../../events/click";
-import { addNamespace } from "../../../events/utils";
-import { move } from "../../../animation/translator";
-import devices from "../../../core/devices";
-import Resizable from "../../resizable";
+import $ from '../../../core/renderer';
+import eventsEngine from '../../../events/core/events_engine';
+import { name as ClickEvent } from '../../../events/click';
+import { addNamespace } from '../../../events/utils';
+import { move } from '../../../animation/translator';
+import devices from '../../../core/devices';
+import Resizable from '../../resizable';
 
-const DX_RESIZE_FRAME_CLASS = "dx-resize-frame";
-const DX_TOUCH_DEVICE_CLASS = "dx-touch-device";
-const MODULE_NAMESPACE = "dxHtmlResizingModule";
+const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
+const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';
+const MODULE_NAMESPACE = 'dxHtmlResizingModule';
 
-const KEYDOWN_EVENT = addNamespace("keydown", MODULE_NAMESPACE);
-const SCROLL_EVENT = addNamespace("scroll", MODULE_NAMESPACE);
+const KEYDOWN_EVENT = addNamespace('keydown', MODULE_NAMESPACE);
+const SCROLL_EVENT = addNamespace('scroll', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
@@ -19,7 +19,7 @@ class ResizingModule {
     constructor(quill, options) {
         this.quill = quill;
         this.editorInstance = options.editorInstance;
-        this.allowedTargets = options.allowedTargets || ["image"];
+        this.allowedTargets = options.allowedTargets || ['image'];
         this.enabled = !!options.enabled;
 
         if(this.enabled) {
@@ -63,7 +63,7 @@ class ResizingModule {
     }
 
     _isImage(targetElement) {
-        return this.allowedTargets.indexOf("image") !== -1 && targetElement.tagName.toUpperCase() === "IMG";
+        return this.allowedTargets.indexOf('image') !== -1 && targetElement.tagName.toUpperCase() === 'IMG';
     }
 
     showFrame() {
@@ -94,7 +94,7 @@ class ResizingModule {
     }
 
     _getBorderWidth() {
-        return parseInt(this._$resizeFrame.css("borderTopWidth"));
+        return parseInt(this._$resizeFrame.css('borderTopWidth'));
     }
 
     _createResizeFrame() {
@@ -104,9 +104,9 @@ class ResizingModule {
 
         const { deviceType } = devices.current();
 
-        this._$resizeFrame = $("<div>")
+        this._$resizeFrame = $('<div>')
             .addClass(DX_RESIZE_FRAME_CLASS)
-            .toggleClass(DX_TOUCH_DEVICE_CLASS, deviceType !== "desktop")
+            .toggleClass(DX_TOUCH_DEVICE_CLASS, deviceType !== 'desktop')
             .appendTo(this.editorInstance._getQuillContainer())
             .hide();
 
@@ -128,15 +128,15 @@ class ResizingModule {
     }
 
     option(option, value) {
-        if(option === "mediaResizing") {
+        if(option === 'mediaResizing') {
             Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
             return;
         }
 
-        if(option === "enabled") {
+        if(option === 'enabled') {
             this.enabled = value;
             value ? this._attachEvents() : this._detachEvents();
-        } else if(option === "allowedTargets" && Array.isArray(value)) {
+        } else if(option === 'allowedTargets' && Array.isArray(value)) {
             this.allowedTargets = value;
         }
     }

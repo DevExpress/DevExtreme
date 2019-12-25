@@ -1,23 +1,23 @@
-import $ from "../../core/renderer";
-import eventsEngine from "../../events/core/events_engine";
-import { Deferred, when } from "../../core/utils/deferred";
-import { extend } from "../../core/utils/extend";
-import { getImageContainer } from "../../core/utils/icon";
-import { noop } from "../../core/utils/common";
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { Deferred, when } from '../../core/utils/deferred';
+import { extend } from '../../core/utils/extend';
+import { getImageContainer } from '../../core/utils/icon';
+import { noop } from '../../core/utils/common';
 
-import Widget from "../widget/ui.widget";
-import TreeViewSearch from "../tree_view/ui.tree_view.search";
+import Widget from '../widget/ui.widget';
+import TreeViewSearch from '../tree_view/ui.tree_view.search';
 
-import { FileManagerItem } from "./file_provider/file_provider";
-import whenSome from "./ui.file_manager.common";
-import { getParentPath, getName } from "./ui.file_manager.utils";
+import { FileManagerItem } from './file_provider/file_provider';
+import whenSome from './ui.file_manager.common';
+import { getParentPath, getName } from './ui.file_manager.utils';
 
-import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
+import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 
-const FILE_MANAGER_DIRS_TREE_CLASS = "dx-filemanager-dirs-tree";
-const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = "dx-filemanager-focused-item";
-const FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS = "dx-filemanager-dirs-tree-item-text";
-const TREE_VIEW_ITEM_CLASS = "dx-treeview-item";
+const FILE_MANAGER_DIRS_TREE_CLASS = 'dx-filemanager-dirs-tree';
+const FILE_MANAGER_DIRS_TREE_FOCUSED_ITEM_CLASS = 'dx-filemanager-focused-item';
+const FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS = 'dx-filemanager-dirs-tree-item-text';
+const TREE_VIEW_ITEM_CLASS = 'dx-treeview-item';
 
 class FileManagerFilesTreeView extends Widget {
 
@@ -28,22 +28,22 @@ class FileManagerFilesTreeView extends Widget {
         this._createFileActionsButton = noop;
 
         this._model = new FilesTreeViewModel({
-            rootItemText: this.option("rootFolderDisplayName"),
-            initialDir: this.option("initialFolder"),
-            getItems: this.option("getItems"),
+            rootItemText: this.option('rootFolderDisplayName'),
+            initialDir: this.option('initialFolder'),
+            getItems: this.option('getItems'),
             onSelectedItemLoaded: item => this._onModelSelectedItemLoaded(item)
         });
 
-        const $treeView = $("<div>")
+        const $treeView = $('<div>')
             .addClass(FILE_MANAGER_DIRS_TREE_CLASS)
             .appendTo(this.$element());
 
         const treeViewOptions = {
-            dataStructure: "plain",
-            rootValue: "",
+            dataStructure: 'plain',
+            rootValue: '',
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             itemTemplate: this._createFilesTreeViewItemTemplate.bind(this),
-            hasItemsExpr: "dataItem.hasSubDirs",
+            hasItemsExpr: 'dataItem.hasSubDirs',
             onItemClick: this._onFilesTreeViewItemClick.bind(this),
             onItemExpanded: ({ itemData }) => this._model.changeItemExpandState(itemData, true),
             onItemCollapsed: ({ itemData }) => this._model.changeItemExpandState(itemData, false),
@@ -51,14 +51,14 @@ class FileManagerFilesTreeView extends Widget {
         };
 
         if(this._contextMenu) {
-            this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
+            this._contextMenu.option('onContextMenuHidden', () => this._onContextMenuHidden());
             treeViewOptions.onItemContextMenu = e => this._onFilesTreeViewItemContextMenu(e);
             this._createFileActionsButton = (element, options) => this._createComponent(element, FileManagerFileActionsButton, options);
         }
 
         this._filesTreeView = this._createComponent($treeView, TreeViewSearch, treeViewOptions);
 
-        eventsEngine.on($treeView, "click", this._raiseClick.bind(this));
+        eventsEngine.on($treeView, 'click', this._raiseClick.bind(this));
     }
 
     _onFilesTreeViewCreateChildren(parent) {
@@ -84,15 +84,15 @@ class FileManagerFilesTreeView extends Widget {
     _createFilesTreeViewItemTemplate(itemData, itemIndex, itemElement) {
         const $itemElement = $(itemElement);
         const $itemWrapper = $itemElement.closest(this._filesTreeViewItemSelector);
-        $itemWrapper.data("item", itemData);
+        $itemWrapper.data('item', itemData);
 
         const $image = getImageContainer(itemData.icon);
 
-        const $text = $("<span>")
+        const $text = $('<span>')
             .text(itemData.text)
             .addClass(FILE_MANAGER_DIRS_TREE_ITEM_TEXT_CLASS);
 
-        const $button = $("<div>");
+        const $button = $('<div>');
 
         $itemElement.append($image, $text, $button);
 
@@ -103,14 +103,14 @@ class FileManagerFilesTreeView extends Widget {
 
     _onFilesTreeViewItemContextMenu({ itemElement, event }) {
         event.preventDefault();
-        const itemData = $(itemElement).data("item");
+        const itemData = $(itemElement).data('item');
         this._contextMenu.showAt([ itemData.dataItem ], itemElement, event);
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
         event.stopPropagation();
         const $item = component.$element().closest(this._filesTreeViewItemSelector);
-        const item = $item.data("item");
+        const item = $item.data('item');
         this._contextMenu.showAt([ item.dataItem ], element);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
@@ -174,14 +174,14 @@ class FileManagerFilesTreeView extends Widget {
 
     _initActions() {
         this._actions = {
-            onCurrentFolderChanged: this._createActionByOption("onCurrentFolderChanged"),
-            onClick: this._createActionByOption("onClick")
+            onCurrentFolderChanged: this._createActionByOption('onCurrentFolderChanged'),
+            onClick: this._createActionByOption('onClick')
         };
     }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            rootFolderDisplayName: "Files",
+            rootFolderDisplayName: 'Files',
             initialFolder: null,
             contextMenu: null,
             getItems: null,
@@ -194,14 +194,14 @@ class FileManagerFilesTreeView extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "getItems":
-            case "rootFolderDisplayName":
-            case "initialFolder":
-            case "contextMenu":
+            case 'getItems':
+            case 'rootFolderDisplayName':
+            case 'initialFolder':
+            case 'contextMenu':
                 this.repaint();
                 break;
-            case "onCurrentFolderChanged":
-            case "onClick":
+            case 'onCurrentFolderChanged':
+            case 'onClick':
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -214,7 +214,7 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     get _contextMenu() {
-        return this.option("contextMenu");
+        return this.option('contextMenu');
     }
 
     refreshData() {
@@ -223,7 +223,7 @@ class FileManagerFilesTreeView extends Widget {
         this._setSelectedItem();
 
         this._model.refresh();
-        this._filesTreeView.option("dataSource", []);
+        this._filesTreeView.option('dataSource', []);
 
         const currentFolderChanged = this.getCurrentFolderPath() !== oldPath;
 
@@ -462,7 +462,7 @@ class FilesTreeViewModel {
         this._itemMap = { };
         this._loadMap = { };
 
-        const rootData = new FileManagerItem("", "", true);
+        const rootData = new FileManagerItem('', '', true);
         rootData.name = this._options.rootItemText;
         this._rootItem = this.getItemByDataItem(rootData);
         this.changeItemExpandState(this._rootItem, true);
@@ -475,7 +475,7 @@ class FilesTreeViewModel {
     _createItem(dataItem) {
         const dataKey = dataItem.relativeName;
         const isRoot = !dataItem.relativeName;
-        const parentId = isRoot ? "" : this._getTreeItemKey(dataItem.parentPath);
+        const parentId = isRoot ? '' : this._getTreeItemKey(dataItem.parentPath);
         const expanded = !!this._expandedDataItems[dataKey];
 
         const result = {
@@ -488,7 +488,7 @@ class FilesTreeViewModel {
             parentId,
             text: dataItem.name,
             expanded,
-            icon: "folder"
+            icon: 'folder'
         };
 
         this._itemMap[result.dataKey] = result;

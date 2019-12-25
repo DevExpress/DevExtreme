@@ -1,4 +1,4 @@
-import Menu from "./menu/ui.menu";
+import Menu from './menu/ui.menu';
 
 /**
 * @name dxMenu

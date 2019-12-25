@@ -1,9 +1,9 @@
-var dataQuery = require("../../data/query"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
+var dataQuery = require('../../data/query'),
+    commonUtils = require('../../core/utils/common'),
+    typeUtils = require('../../core/utils/type'),
     getKeyHash = commonUtils.getKeyHash,
-    Class = require("../../core/class"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Class = require('../../core/class'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -13,10 +13,10 @@ module.exports = Class.inherit({
     },
 
     _clearItemKeys: function() {
-        this._setOption("addedItemKeys", []);
-        this._setOption("removedItemKeys", []);
-        this._setOption("removedItems", []);
-        this._setOption("addedItems", []);
+        this._setOption('addedItemKeys', []);
+        this._setOption('removedItemKeys', []);
+        this._setOption('removedItems', []);
+        this._setOption('addedItems', []);
     },
 
     validate: commonUtils.noop,
@@ -63,7 +63,7 @@ module.exports = Class.inherit({
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
     },
 
-    _loadFilteredData: function(remoteFilter, localFilter, select) {
+    _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
         var filterLength = encodeURI(JSON.stringify(remoteFilter)).length,
             needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest),
             deferred = new Deferred(),
@@ -79,7 +79,7 @@ module.exports = Class.inherit({
                 .done(function(items) {
                     var filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
 
-                    if(localFilter) {
+                    if(localFilter && !isSelectAll) {
                         filteredItems = filteredItems.filter(localFilter);
                     } else if(needLoadAllData) {
                         filteredItems = dataQuery(filteredItems).filter(remoteFilter).toArray();

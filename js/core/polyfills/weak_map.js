@@ -1,5 +1,5 @@
-var inArray = require("../../core/utils/array").inArray,
-    windowUtils = require("../../core/utils/window"),
+var inArray = require('../../core/utils/array').inArray,
+    windowUtils = require('../../core/utils/window'),
     weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
 
 if(!weakMap) {

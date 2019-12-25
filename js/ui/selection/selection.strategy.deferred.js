@@ -1,8 +1,8 @@
-var typeUtils = require("../../core/utils/type"),
-    SelectionStrategy = require("./selection.strategy"),
-    errors = require("../widget/ui.errors"),
-    dataQuery = require("../../data/query"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+var typeUtils = require('../../core/utils/type'),
+    SelectionStrategy = require('./selection.strategy'),
+    errors = require('../widget/ui.errors'),
+    dataQuery = require('../../data/query'),
+    Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = SelectionStrategy.inherit({
 
@@ -32,14 +32,14 @@ module.exports = SelectionStrategy.inherit({
             var filter = this.options.filter();
 
             if(!filter) {
-                this._setOption("selectionFilter", isDeselect ? [] : null);
+                this._setOption('selectionFilter', isDeselect ? [] : null);
             } else {
                 this._addSelectionFilter(isDeselect, filter, isSelectAll);
             }
 
         } else {
             if(!preserve) {
-                this._setOption("selectionFilter", []);
+                this._setOption('selectionFilter', []);
             }
 
             for(var i = 0; i < keys.length; i++) {
@@ -57,7 +57,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     setSelectedItems: function(keys) {
-        this._setOption("selectionFilter", null);
+        this._setOption('selectionFilter', null);
         for(var i = 0; i < keys.length; i++) {
             this.addSelectedItem(keys[i]);
         }
@@ -79,15 +79,15 @@ module.exports = SelectionStrategy.inherit({
 
     _processSelectedItem: function(key) {
         var keyField = this.options.key(),
-            filter = [keyField, "=", key];
+            filter = [keyField, '=', key];
 
 
         if(Array.isArray(keyField)) {
             filter = [];
             for(var i = 0; i < keyField.length; i++) {
-                filter.push([keyField[i], "=", key[keyField[i]]]);
+                filter.push([keyField[i], '=', key[keyField[i]]]);
                 if(i !== keyField.length - 1) {
-                    filter.push("and");
+                    filter.push('and');
                 }
             }
         }
@@ -111,7 +111,7 @@ module.exports = SelectionStrategy.inherit({
         var key = this.options.key;
 
         if(key && key() === undefined) {
-            throw errors.Error("E1042", "Deferred selection");
+            throw errors.Error('E1042', 'Deferred selection');
         }
     },
 
@@ -156,8 +156,8 @@ module.exports = SelectionStrategy.inherit({
     _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
         var that = this,
             needAddFilter = true,
-            currentFilter = isDeselect ? ["!", filter] : filter,
-            currentOperation = isDeselect ? "and" : "or",
+            currentFilter = isDeselect ? ['!', filter] : filter,
+            currentOperation = isDeselect ? 'and' : 'or',
             selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
@@ -166,7 +166,7 @@ module.exports = SelectionStrategy.inherit({
             that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             var lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
-            if(lastOperation && (lastOperation !== "or" && isDeselect || lastOperation !== "and" && !isDeselect)) {
+            if(lastOperation && (lastOperation !== 'or' && isDeselect || lastOperation !== 'and' && !isDeselect)) {
                 needAddFilter = false;
                 selectionFilter = [];
             }
@@ -182,7 +182,7 @@ module.exports = SelectionStrategy.inherit({
 
         selectionFilter = that._normalizeFilter(selectionFilter);
 
-        that._setOption("selectionFilter", !isDeselect && !selectionFilter.length ? null : selectionFilter);
+        that._setOption('selectionFilter', !isDeselect && !selectionFilter.length ? null : selectionFilter);
     },
 
     _normalizeFilter: function(filter) {
@@ -198,10 +198,10 @@ module.exports = SelectionStrategy.inherit({
         if(filterIndex > 0) {
             lastRemoveOperation = filter.splice(filterIndex - 1, 2)[0];
         } else {
-            lastRemoveOperation = filter.splice(filterIndex, 2)[1] || "undefined";
+            lastRemoveOperation = filter.splice(filterIndex, 2)[1] || 'undefined';
         }
 
-        if(isSelectAll && lastRemoveOperation === "and") {
+        if(isSelectAll && lastRemoveOperation === 'and') {
             filter.splice(0, filter.length);
         }
 
@@ -209,13 +209,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
-        filter = inverted ? ["!", filter] : filter;
+        filter = inverted ? ['!', filter] : filter;
 
         var filterIndex = this._findSubFilter(selectionFilter, filter);
 
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
             selectionFilter.splice(0, selectionFilter.length);
-            return "undefined";
+            return 'undefined';
         }
 
         if(filterIndex >= 0) {
@@ -250,7 +250,7 @@ module.exports = SelectionStrategy.inherit({
             return true;
         }
 
-        if(this._isLastSubFilter(selectionFilter, ["!", filter])) {
+        if(this._isLastSubFilter(selectionFilter, ['!', filter])) {
             return false;
         }
 

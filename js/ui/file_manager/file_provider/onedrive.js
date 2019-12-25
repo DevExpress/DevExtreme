@@ -1,13 +1,13 @@
-import ajax from "../../../core/utils/ajax";
-import { Deferred } from "../../../core/utils/deferred";
-import { noop } from "../../../core/utils/common";
+import ajax from '../../../core/utils/ajax';
+import { Deferred } from '../../../core/utils/deferred';
+import { noop } from '../../../core/utils/common';
 
-import { FileProvider } from "./file_provider";
+import { FileProvider } from './file_provider';
 
-const REQUIRED_ITEM_FIELDS = "id,name,folder,lastModifiedDateTime,size,parentReference";
-const REST_API_URL = "https://graph.microsoft.com/";
-const DRIVE_API_URL = REST_API_URL + "v1.0/drive";
-const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
+const REQUIRED_ITEM_FIELDS = 'id,name,folder,lastModifiedDateTime,size,parentReference';
+const REST_API_URL = 'https://graph.microsoft.com/';
+const DRIVE_API_URL = REST_API_URL + 'v1.0/drive';
+const APP_ROOT_URL = DRIVE_API_URL + '/special/approot';
 
 /**
 * @name OneDriveFileProvider
@@ -41,13 +41,13 @@ class OneDriveFileProvider extends FileProvider {
          */
 
         options = options || {};
-        options.dateModifiedExpr = "lastModifiedDateTime";
-        options.isDirectoryExpr = "folder";
+        options.dateModifiedExpr = 'lastModifiedDateTime';
+        options.isDirectoryExpr = 'folder';
         super(options);
 
-        this._getAccessTokenUrl = options.getAccessTokenUrl || "";
+        this._getAccessTokenUrl = options.getAccessTokenUrl || '';
 
-        this._accessToken = "";
+        this._accessToken = '';
         this._accessTokenPromise = null;
     }
 
@@ -99,7 +99,7 @@ class OneDriveFileProvider extends FileProvider {
         } else {
             ajax.sendRequest({
                 url: this._getAccessTokenUrl,
-                dataType: "json"
+                dataType: 'json'
             }).done(({ token }) => {
                 this._accessToken = token;
                 this._accessTokenPromise = null;
@@ -117,9 +117,9 @@ class OneDriveFileProvider extends FileProvider {
         const url = APP_ROOT_URL + itemPath + queryString;
         return ajax.sendRequest({
             url: url,
-            dataType: "json",
+            dataType: 'json',
             cache: false,
-            headers: { "Authorization": this._authorizationString }
+            headers: { 'Authorization': this._authorizationString }
         });
     }
 
@@ -128,8 +128,8 @@ class OneDriveFileProvider extends FileProvider {
         const contentRange = `bytes ${uploadedSize}-${chunkEndPosition}/${totalSize}`;
         return ajax.sendRequest({
             url: uploadUrl,
-            method: "PUT",
-            dataType: "json",
+            method: 'PUT',
+            dataType: 'json',
             data: chunkBlob,
             upload: {
                 onprogress: noop,
@@ -138,8 +138,8 @@ class OneDriveFileProvider extends FileProvider {
             },
             cache: false,
             headers: {
-                "Authorization": this._authorizationString,
-                "Content-Range": contentRange
+                'Authorization': this._authorizationString,
+                'Content-Range': contentRange
             }
         });
     }
@@ -148,34 +148,34 @@ class OneDriveFileProvider extends FileProvider {
         const url = `${DRIVE_API_URL}/items/${fileId}/createUploadSession`;
         return ajax.sendRequest({
             url: url,
-            method: "POST",
-            dataType: "json",
+            method: 'POST',
+            dataType: 'json',
             cache: false,
-            headers: { "Authorization": this._authorizationString }
+            headers: { 'Authorization': this._authorizationString }
         });
     }
 
     _createFile(folderPath, objectName) {
         const itemPath = this._prepareItemRelativePath(folderPath);
         const queryString = `?$select=${REQUIRED_ITEM_FIELDS}`;
-        const url = APP_ROOT_URL + itemPath + "/children" + queryString;
+        const url = APP_ROOT_URL + itemPath + '/children' + queryString;
 
         const params = {
-            "name": objectName,
-            "file": { },
-            "@microsoft.graph.conflictBehavior": "rename"
+            'name': objectName,
+            'file': { },
+            '@microsoft.graph.conflictBehavior': 'rename'
         };
         const data = JSON.stringify(params);
 
         return ajax.sendRequest({
             url: url,
-            method: "POST",
-            dataType: "json",
+            method: 'POST',
+            dataType: 'json',
             data: data,
             cache: false,
             headers: {
-                "Authorization": this._authorizationString,
-                "Content-Type": "application/json"
+                'Authorization': this._authorizationString,
+                'Content-Type': 'application/json'
             }
         });
     }
@@ -183,21 +183,21 @@ class OneDriveFileProvider extends FileProvider {
     _cancelUploadSession(uploadUrl) {
         return ajax.sendRequest({
             url: uploadUrl,
-            method: "DELETE",
-            dataType: "json",
+            method: 'DELETE',
+            dataType: 'json',
             cache: false,
             headers: {
-                "Authorization": this._authorizationString
+                'Authorization': this._authorizationString
             }
         });
     }
 
     _prepareItemRelativePath(path) {
-        return path === "" ? "" : `:/${path}:`;
+        return path === '' ? '' : `:/${path}:`;
     }
 
     _hasSubDirs(dataObj) {
-        return Object.prototype.hasOwnProperty.call(dataObj, "folder") && dataObj.folder.childCount > 0;
+        return Object.prototype.hasOwnProperty.call(dataObj, 'folder') && dataObj.folder.childCount > 0;
     }
 
 }

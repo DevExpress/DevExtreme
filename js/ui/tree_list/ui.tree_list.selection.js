@@ -6,9 +6,9 @@ import selectionModule from '../grid_core/ui.grid_core.selection';
 import errors from '../widget/ui.errors';
 import { extend } from '../../core/utils/extend';
 
-var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    SELECT_CHECKBOX_CLASS = "dx-select-checkbox";
+var TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all',
+    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
+    SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick,
     originalHandleDataChanged = selectionModule.extenders.controllers.data._handleDataChanged;
@@ -17,11 +17,11 @@ var nodeExists = function(array, currentKey) {
     return !!array.filter(function(key) { return key === currentKey; }).length;
 };
 
-treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
+treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
     defaultOptions: function() {
         return extend(true, selectionModule.defaultOptions(), {
             selection: {
-                showCheckBoxesMode: "always",
+                showCheckBoxesMode: 'always',
                 /**
                  * @name dxTreeListOptions.selection.recursive
                  * @type boolean
@@ -35,12 +35,12 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
         controllers: {
             data: {
                 _handleDataChanged: function(e) {
-                    var selectionController = this.getController("selection"),
+                    var selectionController = this.getController('selection'),
                         isRecursiveSelection = selectionController.isRecursiveSelection();
 
-                    if(isRecursiveSelection && (!e || e.changeType !== "updateSelectionState")) {
+                    if(isRecursiveSelection && (!e || e.changeType !== 'updateSelectionState')) {
                         selectionController.updateSelectionState({
-                            selectedItemKeys: this.option("selectedRowKeys")
+                            selectedItemKeys: this.option('selectedRowKeys')
                         });
                     }
                     originalHandleDataChanged.apply(this, arguments);
@@ -49,13 +49,13 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 loadDescendants: function() {
                     var that = this,
                         d = that.callBase.apply(that, arguments),
-                        selectionController = that.getController("selection"),
+                        selectionController = that.getController('selection'),
                         isRecursiveSelection = selectionController.isRecursiveSelection();
 
                     if(isRecursiveSelection) {
                         d.done(function() {
                             selectionController.updateSelectionState({
-                                selectedItemKeys: that.option("selectedRowKeys")
+                                selectedItemKeys: that.option('selectedRowKeys')
                             });
                         });
                     }
@@ -98,7 +98,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 renderSelectCheckBoxContainer: function($container, model) {
                     var that = this,
-                        rowsView = that.component.getView("rowsView");
+                        rowsView = that.component.getView('rowsView');
 
                     $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
@@ -169,7 +169,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 selectedItemKeys: function(value, preserve, isDeselect, isSelectAll) {
                     var that = this,
-                        selectedRowKeys = that.option("selectedRowKeys"),
+                        selectedRowKeys = that.option('selectedRowKeys'),
                         isRecursiveSelection = this.isRecursiveSelection(),
                         normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
                             keys: value || []
@@ -373,7 +373,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 _normalizeSelectionArgs: function(args, isSelect) {
                     var result,
                         keys = Array.isArray(args.keys) ? args.keys : [args.keys],
-                        selectedRowKeys = this.option("selectedRowKeys") || [];
+                        selectedRowKeys = this.option('selectedRowKeys') || [];
 
                     if(keys.length) {
                         result = {
@@ -400,7 +400,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _isModeLeavesOnly: function(mode) {
-                    return mode === "leavesOnly" || mode === true;
+                    return mode === 'leavesOnly' || mode === true;
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
@@ -445,10 +445,10 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 isRecursiveSelection: function() {
-                    var selectionMode = this.option("selection.mode"),
-                        isRecursive = this.option("selection.recursive");
+                    var selectionMode = this.option('selection.mode'),
+                        isRecursive = this.option('selection.recursive');
 
-                    return selectionMode === "multiple" && isRecursive;
+                    return selectionMode === 'multiple' && isRecursive;
                 },
 
                 updateSelectionState: function(options) {
@@ -495,7 +495,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
 
                     if(mode === true) {
-                        errors.log("W0002", "dxTreeList", "getSelectedRowKeys(leavesOnly)", "18.1", "Use the 'getSelectedRowKeys(mode)' method with a string parameter instead");
+                        errors.log('W0002', 'dxTreeList', 'getSelectedRowKeys(leavesOnly)', '18.1', 'Use the \'getSelectedRowKeys(mode)\' method with a string parameter instead');
                     }
 
                     var selectedRowKeys = that.callBase.apply(that, arguments);
@@ -505,8 +505,8 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
                         }
 
-                        if(mode !== "all") {
-                            if(mode === "excludeRecursive") {
+                        if(mode !== 'all') {
+                            if(mode === 'excludeRecursive') {
                                 selectedRowKeys = that._getParentSelectedRowKeys(selectedRowKeys);
                             } else if(that._isModeLeavesOnly(mode)) {
                                 selectedRowKeys = that._getLeafSelectedRowKeys(selectedRowKeys);
@@ -556,10 +556,10 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                     var firstDataColumnIndex = that._columnsController.getFirstDataColumnIndex();
 
-                    if(renderingTemplate && options.rowType === "header" && options.column.index === firstDataColumnIndex) {
+                    if(renderingTemplate && options.rowType === 'header' && options.column.index === firstDataColumnIndex) {
                         resultTemplate = {
                             render: function(options) {
-                                if(that.option("selection.mode") === "multiple") {
+                                if(that.option('selection.mode') === 'multiple') {
                                     that.renderSelectAll(options.container, options.model);
                                 }
 
@@ -580,7 +580,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _isSortableElement: function($target) {
-                    return this.callBase($target) && !$target.closest("." + SELECT_CHECKBOX_CLASS).length;
+                    return this.callBase($target) && !$target.closest('.' + SELECT_CHECKBOX_CLASS).length;
                 }
             },
 
@@ -588,8 +588,8 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 _renderExpandIcon: function($container, options) {
                     var $iconContainer = this.callBase($container, options);
 
-                    if(this.option("selection.mode") === "multiple") {
-                        this.getController("selection").renderSelectCheckBoxContainer($iconContainer, options);
+                    if(this.option('selection.mode') === 'multiple') {
+                        this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);
                     }
 
                     return $iconContainer;

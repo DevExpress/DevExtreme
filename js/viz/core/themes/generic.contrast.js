@@ -1,15 +1,15 @@
-var themeModule = require("../../themes"),
+var themeModule = require('../../themes'),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias,
-    WHITE = "#ffffff",
-    BLACK = "#000000",
-    CONTRAST_ACTIVE = "#cf00da",
-    MARKER_COLOR = "#f8ca00",
-    AREA_LAYER_COLOR = "#686868";
+    WHITE = '#ffffff',
+    BLACK = '#000000',
+    CONTRAST_ACTIVE = '#cf00da',
+    MARKER_COLOR = '#f8ca00',
+    AREA_LAYER_COLOR = '#686868';
 
 registerTheme({
-    name: "generic.contrast",
-    defaultPalette: "Bright",
+    name: 'generic.contrast',
+    defaultPalette: 'Bright',
     // CONTRAST_ACTIVE
     font: {
         color: WHITE
@@ -19,13 +19,13 @@ registerTheme({
     secondaryTitleColor: WHITE,
     gridColor: WHITE,
     axisColor: WHITE,
-    "export": {
+    'export': {
         backgroundColor: BLACK,
         font: {
             color: WHITE
         },
         button: {
-            "default": {
+            'default': {
                 color: WHITE,
                 borderColor: WHITE,
                 backgroundColor: BLACK
@@ -33,11 +33,11 @@ registerTheme({
             hover: {
                 color: WHITE,
                 borderColor: WHITE,
-                backgroundColor: "#cf00d7"
+                backgroundColor: '#cf00d7'
             },
             focus: {
                 color: WHITE,
-                borderColor: "#cf00d7",
+                borderColor: '#cf00d7',
                 backgroundColor: BLACK
             },
             active: {
@@ -52,7 +52,7 @@ registerTheme({
         activeColor: BLACK,
         selectedBorderColor: CONTRAST_ACTIVE,
         selectedColor: CONTRAST_ACTIVE,
-        shadowColor: "none"
+        shadowColor: 'none'
     },
     tooltip: {
         border: {
@@ -63,7 +63,7 @@ registerTheme({
         },
         color: BLACK
     },
-    "chart:common": {
+    'chart:common': {
         commonSeriesSettings: {
             valueErrorBar: {
                 color: WHITE
@@ -88,7 +88,7 @@ registerTheme({
             }
         }
     },
-    "chart:common:axis": {
+    'chart:common:axis': {
         constantLineStyle: {
             color: WHITE
         }
@@ -97,7 +97,7 @@ registerTheme({
         commonSeriesSettings: {
         },
         crosshair: {
-            color: "#cf00d7"
+            color: '#cf00d7'
         },
         commonPaneSettings: {
             backgroundColor: BLACK,
@@ -110,7 +110,7 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: {
-                color: "#cf00d7"
+                color: '#cf00d7'
             }
         },
         zoomAndPan: {
@@ -177,17 +177,17 @@ registerTheme({
             _default: {
                 color: WHITE
             },
-            "rangebar": {
+            'rangebar': {
                 color: WHITE,
                 backgroundColor: BLACK
             },
-            "twocolorneedle": {
+            'twocolorneedle': {
                 secondColor: WHITE
             },
-            "trianglemarker": {
+            'trianglemarker': {
                 color: WHITE
             },
-            "textcloud": {
+            'textcloud': {
                 color: WHITE,
                 text: {
                     font: {
@@ -198,7 +198,7 @@ registerTheme({
         }
     },
     barGauge: {
-        backgroundColor: "#3c3c3c"
+        backgroundColor: '#3c3c3c'
     },
     rangeSelector: {
         scale: {
@@ -211,7 +211,7 @@ registerTheme({
                 opacity: 0.12
             },
             breakStyle: {
-                color: "#cf00d7"
+                color: '#cf00d7'
             }
         },
         selectedRangeColor: CONTRAST_ACTIVE,
@@ -241,7 +241,7 @@ registerTheme({
                 }
             }
         },
-        "layer:area": {
+        'layer:area': {
             borderColor: BLACK,
             color: AREA_LAYER_COLOR,
             hoveredBorderColor: WHITE,
@@ -252,23 +252,23 @@ registerTheme({
                 }
             }
         },
-        "layer:line": {
-            color: "#267cff",
-            hoveredColor: "#f613ff",
+        'layer:line': {
+            color: '#267cff',
+            hoveredColor: '#f613ff',
             selectedColor: WHITE
         },
-        "layer:marker:dot": {
+        'layer:marker:dot': {
             borderColor: BLACK,
             color: MARKER_COLOR,
             backColor: BLACK,
             backOpacity: 0.32
         },
-        "layer:marker:bubble": {
+        'layer:marker:bubble': {
             color: MARKER_COLOR,
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
-        "layer:marker:pie": {
+        'layer:marker:pie': {
             hoveredBorderColor: WHITE,
             selectedBorderColor: WHITE
         },
@@ -280,10 +280,10 @@ registerTheme({
     },
     treeMap: {
         tile: {
-            color: "#70c92f"
+            color: '#70c92f'
         },
         group: {
-            color: "#797979",
+            color: '#797979',
             label: {
                 font: {
                     color: WHITE
@@ -335,6 +335,6 @@ registerTheme({
             }
         }
     }
-}, "generic.light");
+}, 'generic.light');
 
-registerThemeAlias("generic.contrast.compact", "generic.contrast");
+registerThemeAlias('generic.contrast.compact', 'generic.contrast');

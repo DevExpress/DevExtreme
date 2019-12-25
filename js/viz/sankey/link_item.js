@@ -1,7 +1,7 @@
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
-var states = ["normal", "adjacentNodeHover", "hover"],
-    isDefined = require("../../core/utils/type").isDefined;
+var states = ['normal', 'adjacentNodeHover', 'hover'],
+    isDefined = require('../../core/utils/type').isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
 
@@ -88,19 +88,19 @@ Link.prototype = {
     },
 
     hover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true) || state === this.isHovered()) {
+        if(!this.widget._getOption('hoverEnabled', true) || state === this.isHovered()) {
             return;
         }
 
         this.widget._suspend();
         state && this.widget.clearHover();
         this.setState(2, state);
-        this.widget._eventTrigger("linkHoverChanged", { target: this });
+        this.widget._eventTrigger('linkHoverChanged', { target: this });
         this.widget._resume();
     },
 
     adjacentNodeHover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true) || state === this.isAdjacentNodeHovered()) {
+        if(!this.widget._getOption('hoverEnabled', true) || state === this.isAdjacentNodeHovered()) {
             return;
         }
 
@@ -114,7 +114,7 @@ Link.prototype = {
     },
 
     showTooltip: function(coords) {
-        this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
+        this.widget._getOption('hoverEnabled', true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'link',
             info: {
                 source: this.connection.source,

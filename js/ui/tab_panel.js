@@ -1,22 +1,22 @@
-import $ from "../core/renderer";
-import support from "../core/utils/support";
-import { extend } from "../core/utils/extend";
-import devices from "../core/devices";
-import registerComponent from "../core/component_registrator";
-import MultiView from "./multi_view";
-import Tabs from "./tabs";
-import { default as TabPanelItem } from "./tab_panel/item";
-import { getImageContainer } from "../core/utils/icon";
-import { getPublicElement } from "../core/utils/dom";
-import BindableTemplate from "./widget/bindable_template";
-import { isPlainObject, isDefined } from "../core/utils/type";
-import windowUtils from "../core/utils/window";
+import $ from '../core/renderer';
+import support from '../core/utils/support';
+import { extend } from '../core/utils/extend';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import MultiView from './multi_view';
+import Tabs from './tabs';
+import { default as TabPanelItem } from './tab_panel/item';
+import { getImageContainer } from '../core/utils/icon';
+import { getPublicElement } from '../core/utils/dom';
+import BindableTemplate from './widget/bindable_template';
+import { isPlainObject, isDefined } from '../core/utils/type';
+import windowUtils from '../core/utils/window';
 
-const TABPANEL_CLASS = "dx-tabpanel";
-const TABPANEL_TABS_CLASS = "dx-tabpanel-tabs";
-const TABPANEL_CONTAINER_CLASS = "dx-tabpanel-container";
+const TABPANEL_CLASS = 'dx-tabpanel';
+const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
+const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
-const TABS_ITEM_TEXT_CLASS = "dx-tab-text";
+const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 
 /**
 * @name dxTabPanel
@@ -49,7 +49,7 @@ var TabPanel = MultiView.inherit({
             * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            itemTitleTemplate: "title",
+            itemTitleTemplate: 'title',
 
             /**
              * @name dxTabPanelOptions.hoverStateEnabled
@@ -150,7 +150,7 @@ var TabPanel = MultiView.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -175,7 +175,7 @@ var TabPanel = MultiView.inherit({
                 }
             },
             {
-                device: { platform: "generic" },
+                device: { platform: 'generic' },
                 options: {
                     /**
                     * @name dxTabPanelOptions.animationEnabled
@@ -194,7 +194,7 @@ var TabPanel = MultiView.inherit({
 
         this.$element().addClass(TABPANEL_CLASS);
 
-        this.setAria("role", "tabpanel");
+        this.setAria('role', 'tabpanel');
     },
 
     _initMarkup: function() {
@@ -207,7 +207,7 @@ var TabPanel = MultiView.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
+        this._defaultTemplates['title'] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
                 if(isDefined(data.title) && !isPlainObject(data.title)) {
                     $container.text(data.title);
@@ -221,8 +221,8 @@ var TabPanel = MultiView.inherit({
                 }
             }
 
-            $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
-        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
+            $container.wrapInner($('<span>').addClass(TABS_ITEM_TEXT_CLASS));
+        }, ['title', 'icon'], this.option('integrationOptions.watchMethod'));
     },
 
     _createTitleActions: function() {
@@ -232,22 +232,22 @@ var TabPanel = MultiView.inherit({
     },
 
     _createTitleClickAction: function() {
-        this._titleClickAction = this._createActionByOption("onTitleClick");
+        this._titleClickAction = this._createActionByOption('onTitleClick');
     },
 
     _createTitleHoldAction: function() {
-        this._titleHoldAction = this._createActionByOption("onTitleHold");
+        this._titleHoldAction = this._createActionByOption('onTitleHold');
     },
 
     _createTitleRenderedAction: function() {
-        this._titleRenderedAction = this._createActionByOption("onTitleRendered");
+        this._titleRenderedAction = this._createActionByOption('onTitleRendered');
     },
 
     _renderContent: function() {
         var that = this;
 
         this.callBase();
-        if(this.option("templatesRenderAsynchronously")) {
+        if(this.option('templatesRenderAsynchronously')) {
             this._resizeEventTimer = setTimeout(function() {
                 that._updateLayout();
             }, 0);
@@ -261,15 +261,15 @@ var TabPanel = MultiView.inherit({
 
         var $element = this.$element();
 
-        this._$tabContainer = $("<div>")
+        this._$tabContainer = $('<div>')
             .addClass(TABPANEL_TABS_CLASS)
             .appendTo($element);
 
-        var $tabs = $("<div>").appendTo(this._$tabContainer);
+        var $tabs = $('<div>').appendTo(this._$tabContainer);
 
         this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
 
-        this._$container = $("<div>")
+        this._$container = $('<div>')
             .addClass(TABPANEL_CONTAINER_CLASS)
             .appendTo($element);
         this._$container.append(this._$wrapper);
@@ -281,8 +281,8 @@ var TabPanel = MultiView.inherit({
         if(windowUtils.hasWindow()) {
             var tabsHeight = this._$tabContainer.outerHeight();
             this._$container.css({
-                "marginTop": -tabsHeight,
-                "paddingTop": tabsHeight
+                'marginTop': -tabsHeight,
+                'paddingTop': tabsHeight
             });
         }
     },
@@ -294,47 +294,47 @@ var TabPanel = MultiView.inherit({
 
         var tabs = this._tabs,
             tabItems = tabs.itemElements(),
-            $activeTab = $(tabItems[tabs.option("selectedIndex")]),
+            $activeTab = $(tabItems[tabs.option('selectedIndex')]),
             id = this.getFocusedItemId();
 
-        this.setAria("controls", undefined, $(tabItems));
-        this.setAria("controls", id, $activeTab);
+        this.setAria('controls', undefined, $(tabItems));
+        this.setAria('controls', id, $activeTab);
     },
 
     _tabConfig: function() {
         return {
             selectOnFocus: true,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            hoverStateEnabled: this.option("hoverStateEnabled"),
-            repaintChangesOnly: this.option("repaintChangesOnly"),
-            tabIndex: this.option("tabIndex"),
-            selectedIndex: this.option("selectedIndex"),
-            badgeExpr: this.option("badgeExpr"),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            hoverStateEnabled: this.option('hoverStateEnabled'),
+            repaintChangesOnly: this.option('repaintChangesOnly'),
+            tabIndex: this.option('tabIndex'),
+            selectedIndex: this.option('selectedIndex'),
+            badgeExpr: this.option('badgeExpr'),
             onItemClick: this._titleClickAction.bind(this),
             onItemHold: this._titleHoldAction.bind(this),
-            itemHoldTimeout: this.option("itemHoldTimeout"),
+            itemHoldTimeout: this.option('itemHoldTimeout'),
             onSelectionChanged: (function(e) {
-                this.option("selectedIndex", e.component.option("selectedIndex"));
+                this.option('selectedIndex', e.component.option('selectedIndex'));
                 this._refreshActiveDescendant();
             }).bind(this),
             onItemRendered: this._titleRenderedAction.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTitleTemplate"),
-            items: this.option("items"),
+            itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
+            items: this.option('items'),
             noDataText: null,
-            scrollingEnabled: this.option("scrollingEnabled"),
-            scrollByContent: this.option("scrollByContent"),
-            showNavButtons: this.option("showNavButtons"),
-            itemTemplateProperty: "tabTemplate",
-            loopItemFocus: this.option("loop"),
+            scrollingEnabled: this.option('scrollingEnabled'),
+            scrollByContent: this.option('scrollByContent'),
+            showNavButtons: this.option('showNavButtons'),
+            itemTemplateProperty: 'tabTemplate',
+            loopItemFocus: this.option('loop'),
             selectionRequired: true,
             onOptionChanged: (function(args) {
-                if(args.name === "focusedElement") {
+                if(args.name === 'focusedElement') {
                     if(args.value) {
                         var $value = $(args.value);
                         var $newItem = this._itemElements().eq($value.index());
-                        this.option("focusedElement", getPublicElement($newItem));
+                        this.option('focusedElement', getPublicElement($newItem));
                     } else {
-                        this.option("focusedElement", args.value);
+                        this.option('focusedElement', args.value);
                     }
                 }
             }).bind(this),
@@ -348,7 +348,7 @@ var TabPanel = MultiView.inherit({
     },
 
     _renderFocusTarget: function() {
-        this._focusTarget().attr("tabIndex", -1);
+        this._focusTarget().attr('tabIndex', -1);
     },
 
     _updateFocusState: function(e, isFocused) {
@@ -400,59 +400,59 @@ var TabPanel = MultiView.inherit({
             fullName = args.fullName;
 
         switch(name) {
-            case "dataSource":
+            case 'dataSource':
                 this.callBase(args);
                 break;
-            case "items":
+            case 'items':
                 this._setTabsOption(name, this.option(name));
                 this._updateLayout();
-                if(!this.option("repaintChangesOnly")) {
+                if(!this.option('repaintChangesOnly')) {
                     this._tabs.repaint();
                 }
                 this.callBase(args);
                 break;
-            case "width":
+            case 'width':
                 this.callBase(args);
                 this._tabs.repaint();
                 break;
-            case "selectedIndex":
-            case "selectedItem":
-            case "itemHoldTimeout":
-            case "focusStateEnabled":
-            case "hoverStateEnabled":
+            case 'selectedIndex':
+            case 'selectedItem':
+            case 'itemHoldTimeout':
+            case 'focusStateEnabled':
+            case 'hoverStateEnabled':
                 this._setTabsOption(fullName, value);
                 this.callBase(args);
                 break;
-            case "scrollingEnabled":
-            case "scrollByContent":
-            case "showNavButtons":
+            case 'scrollingEnabled':
+            case 'scrollByContent':
+            case 'showNavButtons':
                 this._setTabsOption(fullName, value);
                 break;
-            case "focusedElement":
+            case 'focusedElement':
                 var id = value ? $(value).index() : value;
                 var newItem = value ? this._tabs._itemElements().eq(id) : value;
-                this._setTabsOption("focusedElement", getPublicElement(newItem));
+                this._setTabsOption('focusedElement', getPublicElement(newItem));
                 this.callBase(args);
                 break;
-            case "itemTitleTemplate":
-                this._setTabsOption("itemTemplate", this._getTemplateByOption("itemTitleTemplate"));
+            case 'itemTitleTemplate':
+                this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
                 break;
-            case "onTitleClick":
+            case 'onTitleClick':
                 this._createTitleClickAction();
-                this._setTabsOption("onItemClick", this._titleClickAction.bind(this));
+                this._setTabsOption('onItemClick', this._titleClickAction.bind(this));
                 break;
-            case "onTitleHold":
+            case 'onTitleHold':
                 this._createTitleHoldAction();
-                this._setTabsOption("onItemHold", this._titleHoldAction.bind(this));
+                this._setTabsOption('onItemHold', this._titleHoldAction.bind(this));
                 break;
-            case "onTitleRendered":
+            case 'onTitleRendered':
                 this._createTitleRenderedAction();
-                this._setTabsOption("onItemRendered", this._titleRenderedAction.bind(this));
+                this._setTabsOption('onItemRendered', this._titleRenderedAction.bind(this));
                 break;
-            case "loop":
-                this._setTabsOption("loopItemFocus", value);
+            case 'loop':
+                this._setTabsOption('loopItemFocus', value);
                 break;
-            case "badgeExpr":
+            case 'badgeExpr':
                 this._invalidate();
                 break;
             default:
@@ -469,6 +469,6 @@ var TabPanel = MultiView.inherit({
 
 TabPanel.ItemClass = TabPanelItem;
 
-registerComponent("dxTabPanel", TabPanel);
+registerComponent('dxTabPanel', TabPanel);
 
 module.exports = TabPanel;

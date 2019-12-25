@@ -1,5 +1,5 @@
-var extend = require("../../core/utils/extend").extend,
-    eventEmitterModule = require("./event_emitter");
+var extend = require('../../core/utils/extend').extend,
+    eventEmitterModule = require('./event_emitter');
 
 var _Number = Number,
     _min = Math.min,
@@ -22,7 +22,7 @@ var _Number = Number,
 
     DEFAULT_CENTER = [NaN, NaN],
 
-    DEFAULT_ENGINE_NAME = "mercator";
+    DEFAULT_ENGINE_NAME = 'mercator';
 
 function floatsEqual(f1, f2) {
     return _abs(f1 - f2) < 1E-8;
@@ -76,7 +76,7 @@ Projection.prototype = {
             engine = getEngine(value);
         if(that._engine !== engine) {
             that._engine = engine;
-            that._fire("engine");
+            that._fire('engine');
             if(that._changeCenter(engine.center())) {
                 that._triggerCenterChanged();
             }
@@ -109,7 +109,7 @@ Projection.prototype = {
             that._xRadius = (height / 2) * aspectRatio;
             that._yRadius = height / 2;
         }
-        that._fire("screen");
+        that._fire('screen');
     },
 
     setSize: function(canvas) {
@@ -187,7 +187,7 @@ Projection.prototype = {
             isChanged = !floatsEqual(oldZoom, newZoom);
         if(isChanged) {
             that._adjustCenter();
-            that._fire("zoom");
+            that._fire('zoom');
         }
         return isChanged;
     },
@@ -238,7 +238,7 @@ Projection.prototype = {
         if(that._zoom > that._maxZoom) {
             that.setZoom(that._maxZoom);
         }
-        that._fire("max-zoom");
+        that._fire('max-zoom');
     },
 
     getCenter: function() {
@@ -259,7 +259,7 @@ Projection.prototype = {
             isChanged = !arraysEqual(oldCenter, newCenter);
         if(isChanged) {
             that._adjustCenter();
-            that._fire("center");
+            that._fire('center');
         }
         return isChanged;
     },
@@ -349,7 +349,7 @@ Projection.prototype = {
         return this._engine.unproject(this._fromTransformed(this._fromScreen(coordinates)));
     },
 
-    _eventNames: ["engine", "screen", "center", "zoom", "max-zoom"]
+    _eventNames: ['engine', 'screen', 'center', 'zoom', 'max-zoom']
 };
 
 eventEmitterModule.makeEventEmitter(Projection);

@@ -1,7 +1,7 @@
-var BaseSparkline = require("./base_sparkline"),
+var BaseSparkline = require('./base_sparkline'),
 
-    dataValidatorModule = require("../components/data_validator"),
-    seriesModule = require("../series/base_series"),
+    dataValidatorModule = require('../components/data_validator'),
+    seriesModule = require('../series/base_series'),
     MIN_BAR_WIDTH = 1,
     MAX_BAR_WIDTH = 50,
     DEFAULT_BAR_INTERVAL = 4,
@@ -12,14 +12,14 @@ var BaseSparkline = require("./base_sparkline"),
     DEFAULT_POINT_BORDER = 2,
 
     ALLOWED_TYPES = {
-        "line": true,
-        "spline": true,
-        "stepline": true,
-        "area": true,
-        "steparea": true,
-        "splinearea": true,
-        "bar": true,
-        "winloss": true
+        'line': true,
+        'spline': true,
+        'stepline': true,
+        'area': true,
+        'steparea': true,
+        'splinearea': true,
+        'bar': true,
+        'winloss': true
     },
 
     _math = Math,
@@ -28,10 +28,10 @@ var BaseSparkline = require("./base_sparkline"),
     _max = _math.max,
     _min = _math.min,
     _isFinite = isFinite,
-    vizUtils = require("../core/utils"),
+    vizUtils = require('../core/utils'),
     _map = vizUtils.map,
     _normalizeEnum = vizUtils.normalizeEnum,
-    _isDefined = require("../../core/utils/type").isDefined,
+    _isDefined = require('../../core/utils/type').isDefined,
     _Number = Number,
     _String = String;
 
@@ -130,7 +130,7 @@ function createLineCustomizeFunction(pointIndexes, options) {
 function createBarCustomizeFunction(pointIndexes, options, winlossData) {
     return function() {
         var index = this.index,
-            isWinloss = options.type === "winloss",
+            isWinloss = options.type === 'winloss',
             target = isWinloss ? options.winlossThreshold : 0,
             value = isWinloss ? winlossData[index][options.valueField] : this.value,
             positiveColor = isWinloss ? options.winColor : options.barPositiveColor,
@@ -141,11 +141,11 @@ function createBarCustomizeFunction(pointIndexes, options, winlossData) {
 }
 
 var dxSparkline = BaseSparkline.inherit({
-    _rootClassPrefix: "dxsl",
+    _rootClassPrefix: 'dxsl',
 
-    _rootClass: "dxsl-sparkline",
+    _rootClass: 'dxsl-sparkline',
 
-    _themeSection: "sparkline",
+    _themeSection: 'sparkline',
 
     _defaultSize: {
         width: DEFAULT_CANVAS_WIDTH,
@@ -157,10 +157,10 @@ var dxSparkline = BaseSparkline.inherit({
         this._createSeries();
     },
 
-    _initialChanges: ["DATA_SOURCE"],
+    _initialChanges: ['DATA_SOURCE'],
 
     _dataSourceChangedHandler: function() {
-        this._requestChange(["UPDATE"]);
+        this._requestChange(['UPDATE']);
     },
 
     _updateWidgetElements: function() {
@@ -194,7 +194,7 @@ var dxSparkline = BaseSparkline.inherit({
             canvas = this._canvas,
             halfPointSize = options.pointSize && Math.ceil(options.pointSize / 2) + DEFAULT_POINT_BORDER,
             type = options.type;
-        if(type !== "bar" && type !== "winloss" && (options.showFirstLast || options.showMinMax)) {
+        if(type !== 'bar' && type !== 'winloss' && (options.showFirstLast || options.showMinMax)) {
             return {
                 width: canvas.width,
                 height: canvas.height,
@@ -214,13 +214,13 @@ var dxSparkline = BaseSparkline.inherit({
 
         that._allOptions.type = _normalizeEnum(that._allOptions.type);
         if(!ALLOWED_TYPES[that._allOptions.type]) {
-            that._allOptions.type = "line";
+            that._allOptions.type = 'line';
         }
     },
 
     _createHtmlElements: function() {
-        this._seriesGroup = this._renderer.g().attr({ "class": "dxsl-series" });
-        this._seriesLabelGroup = this._renderer.g().attr({ "class": "dxsl-series-labels" });
+        this._seriesGroup = this._renderer.g().attr({ 'class': 'dxsl-series' });
+        this._seriesLabelGroup = this._renderer.g().attr({ 'class': 'dxsl-series-labels' });
     },
 
     _createSeries: function() {
@@ -232,8 +232,8 @@ var dxSparkline = BaseSparkline.inherit({
             argumentAxis: this._argumentAxis,
             valueAxis: this._valueAxis
         }, {
-            widgetType: "chart",
-            type: "line"
+            widgetType: 'chart',
+            type: 'line'
         });
     },
 
@@ -255,7 +255,7 @@ var dxSparkline = BaseSparkline.inherit({
 
         groupsData = { groups: [{ series: [singleSeries] }] };
         groupsData.argumentOptions = {
-            type: seriesOptions.type === "bar" ? "discrete" : undefined
+            type: seriesOptions.type === 'bar' ? 'discrete' : undefined
         };
 
         that._simpleDataSource = dataValidatorModule.validateData(that._simpleDataSource, groupsData, that._incidentOccurred, {
@@ -272,10 +272,10 @@ var dxSparkline = BaseSparkline.inherit({
     },
 
     _optionChangesMap: {
-        dataSource: "DATA_SOURCE"
+        dataSource: 'DATA_SOURCE'
     },
 
-    _optionChangesOrder: ["DATA_SOURCE"],
+    _optionChangesOrder: ['DATA_SOURCE'],
 
     _change_DATA_SOURCE: function() {
         this._updateDataSource();
@@ -287,9 +287,9 @@ var dxSparkline = BaseSparkline.inherit({
             argField = options.argumentField,
             valField = options.valueField,
             dataSource = that._dataSourceItems() || [],
-            data = parseNumericDataSource(dataSource, argField, valField, that.option("ignoreEmptyPoints"));
+            data = parseNumericDataSource(dataSource, argField, valField, that.option('ignoreEmptyPoints'));
 
-        if(options.type === "winloss") {
+        if(options.type === 'winloss') {
             that._winlossDataSource = data;
             that._simpleDataSource = parseWinlossDataSource(data, argField, valField, options.winlossThreshold);
         } else {
@@ -300,7 +300,7 @@ var dxSparkline = BaseSparkline.inherit({
     _prepareSeriesOptions: function() {
         var that = this,
             options = that._allOptions,
-            type = (options.type === "winloss") ? "bar" : options.type;
+            type = (options.type === 'winloss') ? 'bar' : options.type;
 
         return {
             visible: true,
@@ -308,9 +308,9 @@ var dxSparkline = BaseSparkline.inherit({
             valueField: options.valueField,
             color: options.lineColor,
             width: options.lineWidth,
-            widgetType: "chart",
+            widgetType: 'chart',
             type: type,
-            opacity: type.indexOf("area") !== -1 ? that._allOptions.areaOpacity : undefined,
+            opacity: type.indexOf('area') !== -1 ? that._allOptions.areaOpacity : undefined,
             point: {
                 size: options.pointSize,
                 symbol: options.pointSymbol,
@@ -330,7 +330,7 @@ var dxSparkline = BaseSparkline.inherit({
             border: {
                 color: options.lineColor,
                 width: options.lineWidth,
-                visible: type !== "bar"
+                visible: type !== 'bar'
             }
         };
     },
@@ -342,7 +342,7 @@ var dxSparkline = BaseSparkline.inherit({
             drawnPointIndexes = that._getExtremumPointsIndexes(dataSource),
             customizeFunction;
 
-        if((options.type === "winloss") || (options.type === "bar")) {
+        if((options.type === 'winloss') || (options.type === 'bar')) {
             customizeFunction = createBarCustomizeFunction(drawnPointIndexes, options, that._winlossDataSource);
         } else {
             customizeFunction = createLineCustomizeFunction(drawnPointIndexes, options);
@@ -372,7 +372,7 @@ var dxSparkline = BaseSparkline.inherit({
 
     _getStick: function() {
         return {
-            stick: this._series.type !== "bar"
+            stick: this._series.type !== 'bar'
         };
     },
 
@@ -380,8 +380,8 @@ var dxSparkline = BaseSparkline.inherit({
         var that = this,
             series = that._series,
             type = series.type,
-            isBarType = type === "bar",
-            isWinlossType = type === "winloss",
+            isBarType = type === 'bar',
+            isWinlossType = type === 'winloss',
 
             DEFAULT_VALUE_RANGE_MARGIN = 0.15,
             DEFAULT_ARGUMENT_RANGE_MARGIN = 0.1,
@@ -397,7 +397,7 @@ var dxSparkline = BaseSparkline.inherit({
             argCoef;
 
         valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN;
-        if(isBarType || isWinlossType || type === "area") {
+        if(isBarType || isWinlossType || type === 'area') {
             if(rangeData.val.min !== 0) {
                 rangeData.val.min -= valCoef;
             }
@@ -460,7 +460,7 @@ var dxSparkline = BaseSparkline.inherit({
             barWidth,
             i;
 
-        if(seriesType === "bar" || seriesType === "winloss") {
+        if(seriesType === 'bar' || seriesType === 'winloss') {
             barWidth = that._getBarWidth(pointsLength);
             for(i = 0; i < pointsLength; i++) {
                 seriesPoints[i].correctCoordinates({ width: barWidth, offset: 0 });
@@ -511,10 +511,10 @@ var dxSparkline = BaseSparkline.inherit({
                 originalLastValue: last,
                 originalMinValue: min,
                 originalMaxValue: max,
-                valueText: ["Start:", formattedFirst, "End:", formattedLast, "Min:", formattedMin, "Max:", formattedMax]
+                valueText: ['Start:', formattedFirst, 'End:', formattedLast, 'Min:', formattedMin, 'Max:', formattedMax]
             };
 
-        if(options.type === "winloss") {
+        if(options.type === 'winloss') {
             customizeObject.originalThresholdValue = options.winlossThreshold;
             customizeObject.thresholdValue = tooltip.formatValue(options.winlossThreshold);
         }
@@ -523,16 +523,16 @@ var dxSparkline = BaseSparkline.inherit({
     }
 });
 
-_map(["lineColor", "lineWidth", "areaOpacity", "minColor", "maxColor", "barPositiveColor", "barNegativeColor",
-    "winColor", "lessColor", "firstLastColor", "pointSymbol", "pointColor", "pointSize",
-    "type", "argumentField", "valueField", "winlossThreshold", "showFirstLast", "showMinMax",
-    "ignoreEmptyPoints", "minValue", "maxValue"
+_map(['lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPositiveColor', 'barNegativeColor',
+    'winColor', 'lessColor', 'firstLastColor', 'pointSymbol', 'pointColor', 'pointSize',
+    'type', 'argumentField', 'valueField', 'winlossThreshold', 'showFirstLast', 'showMinMax',
+    'ignoreEmptyPoints', 'minValue', 'maxValue'
 ], function(name) {
-    dxSparkline.prototype._optionChangesMap[name] = "OPTIONS";
+    dxSparkline.prototype._optionChangesMap[name] = 'OPTIONS';
 });
 
-require("../../core/component_registrator")("dxSparkline", dxSparkline);
+require('../../core/component_registrator')('dxSparkline', dxSparkline);
 
 module.exports = dxSparkline;
 // PLUGINS_SECTION
-dxSparkline.addPlugin(require("../core/data_source").plugin);
+dxSparkline.addPlugin(require('../core/data_source').plugin);

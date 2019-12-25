@@ -1,39 +1,39 @@
-import $ from "../../core/renderer";
-import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
-import dataUtils from "../../core/element_data";
-import translator from "../../animation/translator";
-import dateUtils from "../../core/utils/date";
-import commonUtils from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
-import objectUtils from "../../core/utils/object";
-import arrayUtils from "../../core/utils/array";
-import { extend } from "../../core/utils/extend";
-import { getPublicElement } from "../../core/utils/dom";
-import recurrenceUtils from "./utils.recurrence";
-import registerComponent from "../../core/component_registrator";
-import publisherMixin from "./ui.scheduler.publisher_mixin";
-import Appointment from "./ui.scheduler.appointment";
-import eventUtils from "../../events/utils";
-import dblclickEvent from "../../events/double_click";
-import dateLocalization from "../../localization/date";
-import messageLocalization from "../../localization/message";
-import CollectionWidget from "../collection/ui.collection_widget.edit";
-import Draggable from "../draggable";
-import { Deferred } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import domAdapter from '../../core/dom_adapter';
+import eventsEngine from '../../events/core/events_engine';
+import dataUtils from '../../core/element_data';
+import translator from '../../animation/translator';
+import dateUtils from '../../core/utils/date';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import objectUtils from '../../core/utils/object';
+import arrayUtils from '../../core/utils/array';
+import { extend } from '../../core/utils/extend';
+import { getPublicElement } from '../../core/utils/dom';
+import recurrenceUtils from './utils.recurrence';
+import registerComponent from '../../core/component_registrator';
+import publisherMixin from './ui.scheduler.publisher_mixin';
+import Appointment from './ui.scheduler.appointment';
+import eventUtils from '../../events/utils';
+import dblclickEvent from '../../events/double_click';
+import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
+import CollectionWidget from '../collection/ui.collection_widget.edit';
+import Draggable from '../draggable';
+import { Deferred } from '../../core/utils/deferred';
 
-const APPOINTMENT_SETTINGS_NAME = "dxAppointmentSettings";
+const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
-const COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
-    APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
-    APPOINTMENT_TITLE_CLASS = "dx-scheduler-appointment-title",
-    APPOINTMENT_CONTENT_DETAILS_CLASS = "dx-scheduler-appointment-content-details",
-    APPOINTMENT_DATE_CLASS = "dx-scheduler-appointment-content-date",
-    RECURRING_ICON_CLASS = "dx-scheduler-appointment-recurrence-icon",
-    ALL_DAY_CONTENT_CLASS = "dx-scheduler-appointment-content-allday",
+const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments',
+    APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment',
+    APPOINTMENT_TITLE_CLASS = 'dx-scheduler-appointment-title',
+    APPOINTMENT_CONTENT_DETAILS_CLASS = 'dx-scheduler-appointment-content-details',
+    APPOINTMENT_DATE_CLASS = 'dx-scheduler-appointment-content-date',
+    RECURRING_ICON_CLASS = 'dx-scheduler-appointment-recurrence-icon',
+    ALL_DAY_CONTENT_CLASS = 'dx-scheduler-appointment-content-allday',
 
-    DBLCLICK_EVENT_NAME = eventUtils.addNamespace(dblclickEvent.name, "dxSchedulerAppointment");
+    DBLCLICK_EVENT_NAME = eventUtils.addNamespace(dblclickEvent.name, 'dxSchedulerAppointment');
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -43,8 +43,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         var tabHandler = function(e) {
             var appointments = this._getAccessAppointments(),
-                focusedAppointment = appointments.filter(".dx-state-focused"),
-                index = focusedAppointment.data("dxAppointmentSettings").sortedIndex,
+                focusedAppointment = appointments.filter('.dx-state-focused'),
+                index = focusedAppointment.data('dxAppointmentSettings').sortedIndex,
                 lastIndex = appointments.length - 1;
 
             if((index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
@@ -54,7 +54,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 var $nextAppointment = this._getAppointmentByIndex(index);
                 this._resetTabIndex($nextAppointment);
-                eventsEngine.trigger($nextAppointment, "focus");
+                eventsEngine.trigger($nextAppointment, 'focus');
             }
         };
 
@@ -64,11 +64,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this._escPressed = true;
             }).bind(this),
             del: (function(e) {
-                if(this.option("allowDelete")) {
+                if(this.option('allowDelete')) {
                     e.preventDefault();
                     var data = this._getItemData(e.target);
-                    this.notifyObserver("deleteAppointment", { data: data, target: e.target });
-                    this.notifyObserver("hideAppointmentTooltip");
+                    this.notifyObserver('deleteAppointment', { data: data, target: e.target });
+                    this.notifyObserver('hideAppointmentTooltip');
                 }
             }).bind(this),
             tab: tabHandler
@@ -79,17 +79,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return dataUtils.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
+            return dataUtils.data($item, 'dxAppointmentSettings').sortedIndex === sortedIndex;
         }).eq(0);
     },
 
     _getAccessAppointments: function() {
-        return this._itemElements().filter(":visible").not(".dx-state-disabled");
+        return this._itemElements().filter(':visible').not('.dx-state-disabled');
     },
 
     _resetTabIndex: function($appointment) {
-        this._focusTarget().attr("tabIndex", -1);
-        $appointment.attr("tabIndex", this.option("tabIndex"));
+        this._focusTarget().attr('tabIndex', -1);
+        $appointment.attr('tabIndex', this.option('tabIndex'));
     },
 
     _moveFocus: commonUtils.noop,
@@ -112,22 +112,22 @@ var SchedulerAppointments = CollectionWidget.inherit({
         clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
-        this.option("focusedElement", getPublicElement($(e.target)));
+        this.option('focusedElement', getPublicElement($(e.target)));
         var that = this;
 
         this._appointmentFocusedTimeout = setTimeout(function() {
-            that.notifyObserver("appointmentFocused");
+            that.notifyObserver('appointmentFocused');
         });
     },
 
     _targetIsDisabled: function(e) {
-        return $(e.currentTarget).is(".dx-state-disabled, .dx-state-disabled *");
+        return $(e.currentTarget).is('.dx-state-disabled, .dx-state-disabled *');
     },
 
     _focusOutHandler: function() {
         var $appointment = this._getAppointmentByIndex(0);
 
-        this.option("focusedElement", getPublicElement($appointment));
+        this.option('focusedElement', getPublicElement($appointment));
         this.callBase.apply(this, arguments);
     },
 
@@ -153,7 +153,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "items":
+            case 'items':
                 this._cleanFocusState();
                 this._clearDropDownItems();
                 this._clearDropDownItemsElements();
@@ -163,22 +163,22 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 this._attachAppointmentsEvents();
                 break;
-            case "fixedContainer":
-            case "allDayContainer":
-            case "onAppointmentDblClick":
+            case 'fixedContainer':
+            case 'allDayContainer':
+            case 'onAppointmentDblClick':
                 break;
-            case "allowDrag":
-            case "allowResize":
-            case "allowAllDayResize":
+            case 'allowDrag':
+            case 'allowResize':
+            case 'allowAllDayResize':
                 this._invalidate();
                 break;
-            case "focusedElement":
+            case 'focusedElement':
                 this._resetTabIndex($(args.value));
                 this.callBase(args);
                 break;
-            case "allowDelete":
+            case 'allowDelete':
                 break;
-            case "focusStateEnabled":
+            case 'focusStateEnabled':
                 this._clearDropDownItemsElements();
                 this._renderDropDownAppointments();
 
@@ -198,7 +198,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _isRepaintAll: function(appointments) {
-        if(this.invoke("isCurrentViewAgenda")) {
+        if(this.invoke('isCurrentViewAgenda')) {
             return true;
         }
         for(let i = 0; i < appointments.length; i++) {
@@ -237,8 +237,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
-            this._getAppointmentContainer(true).html("");
-            this._getAppointmentContainer(false).html("");
+            this._getAppointmentContainer(true).html('');
+            this._getAppointmentContainer(false).html('');
         }
 
         !appointments.length && this._cleanItemContainer();
@@ -280,7 +280,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _clearDropDownItemsElements: function() {
-        this.invoke("clearCompactAppointments");
+        this.invoke('clearCompactAppointments');
     },
 
     _findItemElementByItem: function(item) {
@@ -304,7 +304,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _itemContainer: function() {
         var $container = this.callBase(),
             $result = $container,
-            $allDayContainer = this.option("allDayContainer");
+            $allDayContainer = this.option('allDayContainer');
 
         if($allDayContainer) {
             $result = $container.add($allDayContainer);
@@ -315,7 +315,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _cleanItemContainer: function() {
         this.callBase();
-        var $allDayContainer = this.option("allDayContainer");
+        var $allDayContainer = this.option('allDayContainer');
 
         if($allDayContainer) {
             $allDayContainer.empty();
@@ -338,15 +338,15 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        var startDate = model.settings ? new Date(this.invoke("getField", "startDate", model.settings)) : data.startDate,
-            endDate = model.settings ? new Date(this.invoke("getField", "endDate", model.settings)) : data.endDate;
+        var startDate = model.settings ? new Date(this.invoke('getField', 'startDate', model.settings)) : data.startDate,
+            endDate = model.settings ? new Date(this.invoke('getField', 'endDate', model.settings)) : data.endDate;
 
         if(isNaN(startDate) || isNaN(endDate)) {
             startDate = data.startDate;
             endDate = data.endDate;
         }
 
-        $("<div>")
+        $('<div>')
             .text(this._createAppointmentTitle(data))
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
@@ -359,27 +359,27 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         var recurrenceRule = data.recurrenceRule,
             allDay = data.allDay,
-            $contentDetails = $("<div>").addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
+            $contentDetails = $('<div>').addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
         var apptStartTz = data.startDateTimeZone,
             apptEndTz = data.endDateTimeZone;
 
-        startDate = this.invoke("convertDateByTimezone", startDate, apptStartTz);
-        endDate = this.invoke("convertDateByTimezone", endDate, apptEndTz);
+        startDate = this.invoke('convertDateByTimezone', startDate, apptStartTz);
+        endDate = this.invoke('convertDateByTimezone', endDate, apptEndTz);
 
-        $("<div>").addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(startDate, "shorttime")).appendTo($contentDetails);
-        $("<div>").addClass(APPOINTMENT_DATE_CLASS).text(" - ").appendTo($contentDetails);
-        $("<div>").addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(endDate, "shorttime")).appendTo($contentDetails);
+        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(startDate, 'shorttime')).appendTo($contentDetails);
+        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(' - ').appendTo($contentDetails);
+        $('<div>').addClass(APPOINTMENT_DATE_CLASS).text(dateLocalization.format(endDate, 'shorttime')).appendTo($contentDetails);
 
         $contentDetails.appendTo($container);
 
         if(recurrenceRule) {
-            $("<span>").addClass(RECURRING_ICON_CLASS + " dx-icon-repeat").appendTo($container);
+            $('<span>').addClass(RECURRING_ICON_CLASS + ' dx-icon-repeat').appendTo($container);
         }
 
         if(allDay) {
-            $("<div>")
-                .text(" " + messageLocalization.format("dxScheduler-allDay") + ": ")
+            $('<div>')
+                .text(' ' + messageLocalization.format('dxScheduler-allDay') + ': ')
                 .addClass(ALL_DAY_CONTENT_CLASS)
                 .prependTo($contentDetails);
         }
@@ -399,7 +399,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             action({
                 appointmentElement: itemElement,
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement, index)
+                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, itemElement, index)
             });
         }
         delete this._currentAppointmentSettings;
@@ -422,14 +422,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        if(e.type === "keydown" || eventUtils.isFakeClickEvent(e)) {
-            this.notifyObserver("showEditAppointmentPopup", { data: data, target: $target });
+        if(e.type === 'keydown' || eventUtils.isFakeClickEvent(e)) {
+            this.notifyObserver('showEditAppointmentPopup', { data: data, target: $target });
             return;
         }
 
         this._appointmentClickTimeout = setTimeout((function() {
             if(!this._preventSingleAppointmentClick && domAdapter.getBody().contains($target[0])) {
-                this.notifyObserver("showAppointmentTooltip", { data: data, target: $target });
+                this.notifyObserver('showAppointmentTooltip', { data: data, target: $target });
             }
 
             this._preventSingleAppointmentClick = false;
@@ -439,7 +439,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _extendActionArgs: function() {
         var args = this.callBase.apply(this, arguments);
 
-        return this.invoke("mapAppointmentFields", args);
+        return this.invoke('mapAppointmentFields', args);
     },
 
     _render: function() {
@@ -455,7 +455,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
         eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, function(e) {
-            that._itemDXEventHandler(e, "onAppointmentDblClick", {}, {
+            that._itemDXEventHandler(e, 'onAppointmentDblClick', {}, {
                 afterExecute: function(e) {
                     that._dblClickHandler(e.args[0].event);
                 }
@@ -469,7 +469,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         clearTimeout(this._appointmentClickTimeout);
         this._preventSingleAppointmentClick = true;
-        this.notifyObserver("showEditAppointmentPopup", { data: appointmentData, target: $targetAppointment });
+        this.notifyObserver('showEditAppointmentPopup', { data: appointmentData, target: $targetAppointment });
     },
 
     _renderItem: function(index, item, container) {
@@ -498,7 +498,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _getAppointmentContainer: function(allDay) {
-        var $allDayContainer = this.option("allDayContainer"),
+        var $allDayContainer = this.option('allDayContainer'),
             $container = this.itemsContainer().not($allDayContainer);
 
         if(allDay && $allDayContainer) {
@@ -517,11 +517,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         this._applyResourceDataAttr($appointment);
         var data = this._getItemData($appointment),
-            geometry = this.invoke("getAppointmentGeometry", settings),
-            allowResize = !settings.isCompact && this.option("allowResize") && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
-            allowDrag = this.option("allowDrag"),
+            geometry = this.invoke('getAppointmentGeometry', settings),
+            allowResize = !settings.isCompact && this.option('allowResize') && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
+            allowDrag = this.option('allowDrag'),
             allDay = settings.allDay;
-        this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
+        this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
         var deferredColor = this._getAppointmentColor($appointment, settings.groupIndex);
 
@@ -529,24 +529,24 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._processVirtualAppointment(settings, $appointment, data, deferredColor);
         } else {
             this._createComponent($appointment, Appointment, {
-                observer: this.option("observer"),
+                observer: this.option('observer'),
                 data: data,
                 geometry: geometry,
-                direction: settings.direction || "vertical",
+                direction: settings.direction || 'vertical',
                 allowResize: allowResize,
                 allowDrag: allowDrag,
                 allDay: allDay,
                 reduced: settings.appointmentReduced,
                 isCompact: settings.isCompact,
                 startDate: new Date(settings.startDate),
-                cellWidth: this.invoke("getCellWidth"),
-                cellHeight: this.invoke("getCellHeight"),
+                cellWidth: this.invoke('getCellWidth'),
+                cellHeight: this.invoke('getCellHeight'),
                 resizableConfig: this._resizableConfig(data, settings)
             });
 
             deferredColor.done(function(color) {
                 if(color) {
-                    $appointment.css("backgroundColor", color);
+                    $appointment.css('backgroundColor', color);
                 }
             });
 
@@ -556,12 +556,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
 
     _applyResourceDataAttr: function($appointment) {
-        this.notifyObserver("getResourcesFromItem", {
+        this.notifyObserver('getResourcesFromItem', {
             itemData: this._getItemData($appointment),
             callback: function(resources) {
                 if(resources) {
                     each(resources, function(name, values) {
-                        var attr = "data-" + commonUtils.normalizeKey(name.toLowerCase()) + "-";
+                        var attr = 'data-' + commonUtils.normalizeKey(name.toLowerCase()) + '-';
                         for(var i = 0; i < values.length; i++) {
                             $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
                         }
@@ -577,10 +577,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
             onResizeStart: (function(e) {
                 this._$currentAppointment = $(e.element);
 
-                if(this.invoke("needRecalculateResizableArea")) {
-                    var updatedArea = this._calculateResizableArea(this._$currentAppointment.data("dxAppointmentSettings"), this._$currentAppointment.data("dxItemData"));
+                if(this.invoke('needRecalculateResizableArea')) {
+                    var updatedArea = this._calculateResizableArea(this._$currentAppointment.data('dxAppointmentSettings'), this._$currentAppointment.data('dxItemData'));
 
-                    e.component.option("area", updatedArea);
+                    e.component.option('area', updatedArea);
                     e.component._renderDragOffsets(e.event);
                 }
 
@@ -599,9 +599,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        var area = this.$element().closest(".dx-scrollable-content");
+        var area = this.$element().closest('.dx-scrollable-content');
 
-        this.notifyObserver("getResizableAppointmentArea", {
+        this.notifyObserver('getResizableAppointmentArea', {
             coordinates: {
                 left: itemSetting.left,
                 top: 0,
@@ -621,19 +621,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _resizeEndHandler: function(e) {
         var $element = $(e.element),
             itemData = this._getItemData($element),
-            startDate = this.invoke("getStartDate", itemData, true),
-            endDate = this.invoke("getEndDate", itemData, true);
+            startDate = this.invoke('getStartDate', itemData, true),
+            endDate = this.invoke('getEndDate', itemData, true);
 
         var dateRange = this._getDateRange(e, startDate, endDate);
 
         var updatedDates = {};
 
-        this.invoke("setField", "startDate", updatedDates, new Date(dateRange[0]));
-        this.invoke("setField", "endDate", updatedDates, new Date(dateRange[1]));
+        this.invoke('setField', 'startDate', updatedDates, new Date(dateRange[0]));
+        this.invoke('setField', 'endDate', updatedDates, new Date(dateRange[1]));
 
         var data = extend({}, itemData, updatedDates);
 
-        this.notifyObserver("updateAppointmentAfterResize", {
+        this.notifyObserver('updateAppointmentAfterResize', {
             target: itemData,
             data: data,
             $appointment: $element
@@ -642,16 +642,16 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _getDateRange: function(e, startDate, endDate) {
         var itemData = this._getItemData(e.element),
-            deltaTime = this.invoke("getDeltaTime", e, this._initialSize, itemData),
-            renderingStrategyDirection = this.invoke("getRenderingStrategyDirection"),
+            deltaTime = this.invoke('getDeltaTime', e, this._initialSize, itemData),
+            renderingStrategyDirection = this.invoke('getRenderingStrategyDirection'),
             cond = false,
-            isAllDay = this.invoke("isAllDay", itemData),
-            needCorrectDates = this.invoke("needCorrectAppointmentDates") && !isAllDay,
+            isAllDay = this.invoke('isAllDay', itemData),
+            needCorrectDates = this.invoke('needCorrectAppointmentDates') && !isAllDay,
             startTime,
             endTime;
 
-        if(renderingStrategyDirection !== "vertical" || isAllDay) {
-            cond = this.option("rtlEnabled") ? e.handles.right : e.handles.left;
+        if(renderingStrategyDirection !== 'vertical' || isAllDay) {
+            cond = this.option('rtlEnabled') ? e.handles.right : e.handles.left;
         } else {
             cond = e.handles.top;
         }
@@ -668,10 +668,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _correctEndDateByDelta: function(endDate, deltaTime) {
-        var endDayHour = this.invoke("getEndDayHour"),
-            startDayHour = this.invoke("getStartDayHour"),
+        var endDayHour = this.invoke('getEndDayHour'),
+            startDayHour = this.invoke('getStartDayHour'),
             result = endDate.getTime() + deltaTime,
-            visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
+            visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
         var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
             maxDate = new Date(endDate),
@@ -693,10 +693,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _correctStartDateByDelta: function(startDate, deltaTime) {
-        var endDayHour = this.invoke("getEndDayHour"),
-            startDayHour = this.invoke("getStartDayHour"),
+        var endDayHour = this.invoke('getEndDayHour'),
+            startDayHour = this.invoke('getStartDayHour'),
             result = startDate.getTime() - deltaTime,
-            visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
+            visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
         var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
             maxDate = new Date(startDate),
@@ -727,7 +727,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _getAppointmentColor: function($appointment, groupIndex) {
         const res = new Deferred();
-        this.notifyObserver("getAppointmentColor", {
+        this.notifyObserver('getAppointmentColor', {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
             callback: d => d.done(color => res.resolve(color))
@@ -737,17 +737,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderDraggable: function($appointment, allDay) {
-        if(!this.option("allowDrag")) {
+        if(!this.option('allowDrag')) {
             return;
         }
 
         var that = this,
-            $fixedContainer = this.option("fixedContainer"),
+            $fixedContainer = this.option('fixedContainer'),
             draggableArea,
             correctCoordinates = function(element, isFixedContainer) {
                 var coordinates = translator.locate($(element));
 
-                that.notifyObserver("correctAppointmentCoordinates", {
+                that.notifyObserver('correctAppointmentCoordinates', {
                     coordinates: coordinates,
                     allDay: allDay,
                     isFixedContainer: isFixedContainer,
@@ -761,7 +761,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 translator.move($appointment, coordinates);
             };
 
-        this.notifyObserver("getDraggableAppointmentArea", {
+        this.notifyObserver('getDraggableAppointmentArea', {
             callback: function(result) {
                 if(result) {
                     draggableArea = result;
@@ -778,7 +778,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 that._skipDraggableRestriction(e);
 
-                that.notifyObserver("hideAppointmentTooltip");
+                that.notifyObserver('hideAppointmentTooltip');
                 $fixedContainer.append($appointment);
 
                 that._$currentAppointment = $(args.element);
@@ -808,7 +808,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             top: 0
         };
 
-        this.notifyObserver("getBoundOffset", {
+        this.notifyObserver('getBoundOffset', {
             callback: function(offset) {
                 result = offset;
             }
@@ -817,7 +817,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _skipDraggableRestriction: function(e) {
-        if(this.option("rtlEnabled")) {
+        if(this.option('rtlEnabled')) {
             e.maxLeftOffset = null;
         } else {
             e.maxRightOffset = null;
@@ -830,7 +830,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             itemData = this._getItemData($element),
             coordinates = this._initialCoordinates;
 
-        this.notifyObserver("updateAppointmentAfterDrag", {
+        this.notifyObserver('updateAppointmentAfterDrag', {
             data: itemData,
             $appointment: $element,
             coordinates: coordinates
@@ -872,18 +872,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
-                $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
+                $container = virtualGroup.isAllDay ? this.option('allDayContainer') : this.$element(),
                 left = virtualCoordinates.left;
 
-            var buttonWidth = this.invoke("getDropDownAppointmentWidth", virtualGroup.isAllDay),
-                buttonHeight = this.invoke("getDropDownAppointmentHeight"),
+            var buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay),
+                buttonHeight = this.invoke('getDropDownAppointmentHeight'),
                 rtlOffset = 0;
 
-            if(this.option("rtlEnabled")) {
+            if(this.option('rtlEnabled')) {
                 rtlOffset = buttonWidth;
             }
 
-            this.notifyObserver("renderCompactAppointments", {
+            this.notifyObserver('renderCompactAppointments', {
                 $container: $container,
                 coordinates: {
                     top: virtualCoordinates.top,
@@ -891,25 +891,25 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 },
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
-                itemTemplate: this.option("itemTemplate"),
-                width: buttonWidth - this.option("_collectorOffset"),
+                itemTemplate: this.option('itemTemplate'),
+                width: buttonWidth - this.option('_collectorOffset'),
                 height: buttonHeight,
-                onAppointmentClick: this.option("onItemClick"),
-                isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
+                onAppointmentClick: this.option('onItemClick'),
+                isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
                 applyOffset: this._isGroupCompact(virtualGroup)
             });
         }).bind(this));
     },
 
     _isGroupCompact: function(virtualGroup) {
-        return !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments");
+        return !virtualGroup.isAllDay && this.invoke('supportCompactDropDownAppointments');
     },
 
     _sortAppointmentsByStartDate: function(appointments) {
         appointments.sort((function(a, b) {
             var result = 0,
-                firstDate = new Date(this.invoke("getField", "startDate", a.settings || a)).getTime(),
-                secondDate = new Date(this.invoke("getField", "startDate", b.settings || b)).getTime();
+                firstDate = new Date(this.invoke('getField', 'startDate', a.settings || a)).getTime(),
+                secondDate = new Date(this.invoke('getField', 'startDate', b.settings || b)).getTime();
 
             if(firstDate < secondDate) {
                 result = -1;
@@ -923,7 +923,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _processRecurrenceAppointment: function(appointment, index, skipLongAppointments) {
-        var recurrenceRule = this.invoke("getField", "recurrenceRule", appointment),
+        var recurrenceRule = this.invoke('getField', 'recurrenceRule', appointment),
             result = {
                 parts: [],
                 indexes: []
@@ -932,12 +932,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
         if(recurrenceRule) {
             var dates = appointment.settings || appointment;
 
-            var startDate = new Date(this.invoke("getField", "startDate", dates)),
-                endDate = new Date(this.invoke("getField", "endDate", dates)),
+            var startDate = new Date(this.invoke('getField', 'startDate', dates)),
+                endDate = new Date(this.invoke('getField', 'endDate', dates)),
                 appointmentDuration = endDate.getTime() - startDate.getTime(),
-                recurrenceException = this.invoke("getField", "recurrenceException", appointment),
-                startViewDate = this.invoke("getStartViewDate"),
-                endViewDate = this.invoke("getEndViewDate"),
+                recurrenceException = this.invoke('getField', 'recurrenceException', appointment),
+                startViewDate = this.invoke('getStartViewDate'),
+                endViewDate = this.invoke('getEndViewDate'),
                 recurrentDates = recurrenceUtils.getDatesByRecurrence({
                     rule: recurrenceRule,
                     exception: recurrenceException,
@@ -975,9 +975,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _processLongAppointment: function(appointment, result) {
         var parts = this.splitAppointmentByDay(appointment),
             partCount = parts.length,
-            endViewDate = this.invoke("getEndViewDate").getTime(),
-            startViewDate = this.invoke("getStartViewDate").getTime(),
-            startDateTimeZone = this.invoke("getField", "startDateTimeZone", appointment);
+            endViewDate = this.invoke('getEndViewDate').getTime(),
+            startViewDate = this.invoke('getStartViewDate').getTime(),
+            startDateTimeZone = this.invoke('getField', 'startDateTimeZone', appointment);
 
 
         result = result || {
@@ -988,8 +988,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             extend(appointment, parts[0]);
 
             for(var i = 1; i < partCount; i++) {
-                var startDate = this.invoke("getField", "startDate", parts[i].settings).getTime();
-                startDate = this.invoke("convertDateByTimezone", startDate, startDateTimeZone);
+                var startDate = this.invoke('getField', 'startDate', parts[i].settings).getTime();
+                startDate = this.invoke('convertDateByTimezone', startDate, startDateTimeZone);
 
                 if(startDate < endViewDate && startDate > startViewDate) {
                     result.parts.push(parts[i]);
@@ -1014,23 +1014,23 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _applyStartDateToObj: function(startDate, obj) {
-        this.invoke("setField", "startDate", obj, startDate);
+        this.invoke('setField', 'startDate', obj, startDate);
         return obj;
     },
 
     _applyEndDateToObj: function(endDate, obj) {
-        this.invoke("setField", "endDate", obj, endDate);
+        this.invoke('setField', 'endDate', obj, endDate);
         return obj;
     },
 
     updateDraggablesBoundOffsets: function() {
-        if(this.option("allowDrag")) {
-            this.$element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
+        if(this.option('allowDrag')) {
+            this.$element().find('.' + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
                 var $appointment = $(appointmentElement),
                     appointmentData = this._getItemData($appointment);
 
-                if(!this.invoke("isAllDay", appointmentData)) {
-                    Draggable.getInstance($appointment).option("boundOffset", this._calculateBoundOffset());
+                if(!this.invoke('isAllDay', appointmentData)) {
+                    Draggable.getInstance($appointment).option('boundOffset', this._calculateBoundOffset());
                 }
             }).bind(this));
         }
@@ -1057,27 +1057,27 @@ var SchedulerAppointments = CollectionWidget.inherit({
     focus: function() {
         var $appointment = this._$currentAppointment;
         if($appointment) {
-            this.option("focusedElement", getPublicElement($appointment));
-            eventsEngine.trigger(this.option("focusedElement"), "focus");
+            this.option('focusedElement', getPublicElement($appointment));
+            eventsEngine.trigger(this.option('focusedElement'), 'focus');
         }
     },
 
     splitAppointmentByDay: function(appointment) {
         var dates = appointment.settings || appointment;
 
-        var originalStartDate = new Date(this.invoke("getField", "startDate", dates)),
+        var originalStartDate = new Date(this.invoke('getField', 'startDate', dates)),
             startDate = dateUtils.makeDate(originalStartDate),
-            endDate = dateUtils.makeDate(this.invoke("getField", "endDate", dates)),
-            startDateTimeZone = this.invoke("getField", "startDateTimeZone", appointment),
-            endDateTimeZone = this.invoke("getField", "endDateTimeZone", appointment),
-            maxAllowedDate = this.invoke("getEndViewDate"),
-            startDayHour = this.invoke("getStartDayHour"),
-            endDayHour = this.invoke("getEndDayHour"),
-            appointmentIsLong = this.invoke("appointmentTakesSeveralDays", appointment),
+            endDate = dateUtils.makeDate(this.invoke('getField', 'endDate', dates)),
+            startDateTimeZone = this.invoke('getField', 'startDateTimeZone', appointment),
+            endDateTimeZone = this.invoke('getField', 'endDateTimeZone', appointment),
+            maxAllowedDate = this.invoke('getEndViewDate'),
+            startDayHour = this.invoke('getStartDayHour'),
+            endDayHour = this.invoke('getEndDayHour'),
+            appointmentIsLong = this.invoke('appointmentTakesSeveralDays', appointment),
             result = [];
 
-        startDate = this.invoke("convertDateByTimezone", startDate, startDateTimeZone);
-        endDate = this.invoke("convertDateByTimezone", endDate, endDateTimeZone);
+        startDate = this.invoke('convertDateByTimezone', startDate, startDateTimeZone);
+        endDate = this.invoke('convertDateByTimezone', endDate, endDateTimeZone);
 
         if(startDate.getHours() <= endDayHour && startDate.getHours() >= startDayHour && !appointmentIsLong) {
             result.push(this._applyStartDateToObj(new Date(startDate), {
@@ -1126,6 +1126,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
 }).include(publisherMixin);
 
-registerComponent("dxSchedulerAppointments", SchedulerAppointments);
+registerComponent('dxSchedulerAppointments', SchedulerAppointments);
 
 module.exports = SchedulerAppointments;

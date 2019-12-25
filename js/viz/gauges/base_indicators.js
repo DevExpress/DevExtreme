@@ -1,20 +1,20 @@
-var noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
+var noop = require('../../core/utils/common').noop,
+    each = require('../../core/utils/iterator').each,
     _isFinite = isFinite,
     _Number = Number,
     _round = Math.round,
-    baseGaugeModule = require("./base_gauge"),
+    baseGaugeModule = require('./base_gauge'),
     _formatValue = baseGaugeModule.formatValue,
     _getSampleText = baseGaugeModule.getSampleText,
-    _patchFontOptions = require("../core/utils").patchFontOptions,
-    extend = require("../../core/utils/extend").extend,
-    Class = require("../../core/class");
+    _patchFontOptions = require('../core/utils').patchFontOptions,
+    extend = require('../../core/utils/extend').extend,
+    Class = require('../../core/class');
 
 var BaseElement = Class.inherit({
     ctor: function(parameters) {
         var that = this;
         each(parameters, function(name, value) {
-            that["_" + name] = value;
+            that['_' + name] = value;
         });
         that._init();
     },
@@ -36,7 +36,7 @@ var BaseElement = Class.inherit({
 var BaseIndicator = BaseElement.inherit({
     _init: function() {
         var that = this;
-        that._rootElement = that._createRoot().linkOn(that._owner, { name: "value-indicator", after: "core" });
+        that._rootElement = that._createRoot().linkOn(that._owner, { name: 'value-indicator', after: 'core' });
         that._trackerElement = that._createTracker();
     },
 
@@ -72,7 +72,7 @@ var BaseIndicator = BaseElement.inherit({
     },
 
     _createTracker: function() {
-        return this._renderer.path([], "area");
+        return this._renderer.path([], 'area');
     },
 
     _getTrackerSettings: noop,
@@ -127,7 +127,7 @@ var BaseIndicator = BaseElement.inherit({
         }
 
         if(arg === null) {
-            visibility = "hidden";
+            visibility = 'hidden';
             that._currentValue = arg;
         } else {
             val = that._translator.adjust(arg);
@@ -237,7 +237,7 @@ var BaseTextCloudMarker = BaseIndicator.inherit({
         if(!that._textVerticalOffset) {
             root = that._createRoot().append(that._owner);
             sampleText = _getSampleText(that._translator, that._options.text);
-            text = that._renderer.text(sampleText, 0, 0).attr({ align: "center" }).css(_patchFontOptions(that._options.text.font)).append(root);
+            text = that._renderer.text(sampleText, 0, 0).attr({ align: 'center' }).css(_patchFontOptions(that._options.text.font)).append(root);
             bBox = text.getBBox();
             root.remove();
             that._textVerticalOffset = -bBox.y - bBox.height / 2;
@@ -253,9 +253,9 @@ var BaseTextCloudMarker = BaseIndicator.inherit({
         var that = this;
 
         that._measureText();
-        that._cloud = that._cloud || that._renderer.path([], "area").append(that._rootElement);
+        that._cloud = that._cloud || that._renderer.path([], 'area').append(that._rootElement);
         that._text = that._text || that._renderer.text().append(that._rootElement);
-        that._text.attr({ align: "center" }).css(_patchFontOptions(that._options.text.font));
+        that._text.attr({ align: 'center' }).css(_patchFontOptions(that._options.text.font));
     },
 
     _clear: function() {
@@ -334,7 +334,7 @@ var BaseRangeBar = BaseIndicator.inherit({
     _updateTextItems: function() {
         var that = this;
         if(that._hasText) {
-            that._line = that._line || that._renderer.path([], "line").attr({ 'class': 'dxg-main-bar', "stroke-linecap": "square" }).append(that._rootElement);
+            that._line = that._line || that._renderer.path([], 'line').attr({ 'class': 'dxg-main-bar', 'stroke-linecap': 'square' }).append(that._rootElement);
             that._text = that._text || that._renderer.text('', 0, 0).attr({ 'class': 'dxg-text' }).append(that._rootElement);
             that._text.attr({ align: that._getTextAlign() }).css(that._getFontOptions());
             that._setTextItemsSides();

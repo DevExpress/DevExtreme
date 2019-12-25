@@ -1,13 +1,13 @@
-import $ from "jquery";
-import { environment, stubAlgorithm } from "./common.js";
-import labelModule from "viz/series/points/label";
-import vizMocks from "../../../helpers/vizMocks.js";
+import $ from 'jquery';
+import { environment, stubAlgorithm } from './common.js';
+import labelModule from 'viz/series/points/label';
+import vizMocks from '../../../helpers/vizMocks.js';
 
 const Label = labelModule.Label;
 const stubLabel = vizMocks.stubClass(Label);
-import labels from "viz/funnel/label";
+import labels from 'viz/funnel/label';
 
-import dxFunnel from "viz/funnel/funnel";
+import dxFunnel from 'viz/funnel/funnel';
 
 dxFunnel.addPlugin(labels.plugin);
 
@@ -31,13 +31,13 @@ export const labelEnvironment = $.extend({}, environment, {
         ];
         let labelBoxesIndex = 0;
 
-        sinon.stub(labelModule, "Label", ()=> {
+        sinon.stub(labelModule, 'Label', ()=> {
             var stub = new stubLabel();
-            stub.stub("getBoundingRect").returns(this.labelBoxes[(labelBoxesIndex++) % this.labelBoxes.length]);
+            stub.stub('getBoundingRect').returns(this.labelBoxes[(labelBoxesIndex++) % this.labelBoxes.length]);
             return stub;
         });
 
-        $("#test-container").css({
+        $('#test-container').css({
             width: 800,
             height: 600
         });

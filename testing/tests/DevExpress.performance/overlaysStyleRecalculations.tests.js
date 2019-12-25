@@ -1,12 +1,12 @@
-require("../../helpers/qunitPerformanceExtension.js");
-require("ui/overlay");
-require("ui/popup");
+require('../../helpers/qunitPerformanceExtension.js');
+require('ui/overlay');
+require('ui/popup');
 
-require("common.css!");
-require("generic_light.css!");
+require('common.css!');
+require('generic_light.css!');
 
-var $ = require("jquery"),
-    positionUtils = require("animation/position");
+var $ = require('jquery'),
+    positionUtils = require('animation/position');
 
 positionUtils.calculateScrollbarWidth();
 
@@ -25,20 +25,20 @@ QUnit.testStart(function() {
         <div>item10</div>\
     </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.performanceTest("dxOverlay should not force relayout on creation", function(assert) {
+QUnit.performanceTest('dxOverlay should not force relayout on creation', function(assert) {
     var measureFunction = function() {
-        $("#element").dxOverlay({});
+        $('#element').dxOverlay({});
     };
 
     assert.measureStyleRecalculation(measureFunction, 1);
 });
 
-QUnit.performanceTest("dxOverlay should be rendered with minimum count of relayouts", function(assert) {
+QUnit.performanceTest('dxOverlay should be rendered with minimum count of relayouts', function(assert) {
     var measureFunction = function() {
-        $("#element").dxOverlay({
+        $('#element').dxOverlay({
             visible: true,
             shading: false,
             animation: null
@@ -48,12 +48,12 @@ QUnit.performanceTest("dxOverlay should be rendered with minimum count of relayo
     assert.measureStyleRecalculation(measureFunction, 7);
 });
 
-QUnit.performanceTest("showing dxOverlay should be with minimum count of relayouts", function(assert) {
-    var overlay = $("#element").dxOverlay({
+QUnit.performanceTest('showing dxOverlay should be with minimum count of relayouts', function(assert) {
+    var overlay = $('#element').dxOverlay({
         visible: false,
         shading: false,
         animation: null
-    }).dxOverlay("instance");
+    }).dxOverlay('instance');
 
     var measureFunction = function() {
         overlay.show();
@@ -62,12 +62,12 @@ QUnit.performanceTest("showing dxOverlay should be with minimum count of relayou
     assert.measureStyleRecalculation(measureFunction, 5);
 });
 
-QUnit.performanceTest("showing dxOverlay with shading should be with minimum count of relayouts", function(assert) {
-    var overlay = $("#element").dxOverlay({
+QUnit.performanceTest('showing dxOverlay with shading should be with minimum count of relayouts', function(assert) {
+    var overlay = $('#element').dxOverlay({
         visible: false,
         shading: true,
         animation: null
-    }).dxOverlay("instance");
+    }).dxOverlay('instance');
 
     var measureFunction = function() {
         overlay.show();
@@ -76,9 +76,9 @@ QUnit.performanceTest("showing dxOverlay with shading should be with minimum cou
     assert.measureStyleRecalculation(measureFunction, 8);
 });
 
-QUnit.performanceTest("dxPopup should be rendered with minimum count of relayouts", function(assert) {
+QUnit.performanceTest('dxPopup should be rendered with minimum count of relayouts', function(assert) {
     var measureFunction = function() {
-        $("#element").dxPopup({
+        $('#element').dxPopup({
             visible: true,
             shading: false,
             animation: null

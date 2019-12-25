@@ -1,8 +1,8 @@
-import { compileGetter } from "../../../core/utils/data";
-import { pathCombine, getFileExtension, getParentPath, getName } from "../ui.file_manager.utils";
-import { ensureDefined } from "../../../core/utils/common";
-import { deserializeDate } from "../../../core/utils/date_serialization";
-import { each } from "../../../core/utils/iterator";
+import { compileGetter } from '../../../core/utils/data';
+import { pathCombine, getFileExtension, getParentPath, getName } from '../ui.file_manager.utils';
+import { ensureDefined } from '../../../core/utils/common';
+import { deserializeDate } from '../../../core/utils/date_serialization';
+import { each } from '../../../core/utils/iterator';
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
@@ -32,25 +32,25 @@ class FileProvider {
          * @name FileProviderOptions.sizeExpr
          * @type string|function(fileItem)
          */
-        this._sizeGetter = compileGetter(options.sizeExpr || "size");
+        this._sizeGetter = compileGetter(options.sizeExpr || 'size');
         /**
          * @name FileProviderOptions.dateModifiedExpr
          * @type string|function(fileItem)
          */
-        this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || "dateModified");
+        this._dateModifiedGetter = compileGetter(options.dateModifiedExpr || 'dateModified');
         /**
          * @name FileProviderOptions.thumbnailExpr
          * @type string|function(fileItem)
          */
-        this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
+        this._thumbnailGetter = compileGetter(options.thumbnailExpr || 'thumbnail');
     }
 
     getFolders(path) {
-        return this.getItems(path, "folder");
+        return this.getItems(path, 'folder');
     }
 
     getFiles(path) {
-        return this.getItems(path, "file");
+        return this.getItems(path, 'file');
     }
 
     getItems(path, itemType) {
@@ -93,7 +93,7 @@ class FileProvider {
     }
 
     _convertDataObjectsToFileItems(entries, path, itemType) {
-        const useFolders = itemType === "folder";
+        const useFolders = itemType === 'folder';
         const result = [];
         each(entries, (_, entry) => {
             const fileItem = this._createFileItem(entry, path);
@@ -120,7 +120,7 @@ class FileProvider {
             fileItem.hasSubDirs = this._hasSubDirs(dataObj);
         }
 
-        fileItem.thumbnail = this._thumbnailGetter(dataObj) || "";
+        fileItem.thumbnail = this._thumbnailGetter(dataObj) || '';
         fileItem.dataItem = dataObj;
         return fileItem;
     }
@@ -130,11 +130,11 @@ class FileProvider {
     }
 
     _getNameExpr(options) {
-        return options.nameExpr || "name";
+        return options.nameExpr || 'name';
     }
 
     _getIsDirExpr(options) {
-        return options.isDirectoryExpr || "isDirectory";
+        return options.isDirectoryExpr || 'isDirectory';
     }
 
 }
@@ -149,12 +149,12 @@ class FileManagerItem {
         this.size = 0;
         this.dateModified = new Date();
 
-        this.thumbnail = "";
-        this.tooltipText = "";
+        this.thumbnail = '';
+        this.tooltipText = '';
     }
 
     getExtension() {
-        return this.isDirectory ? "" : getFileExtension(this.name);
+        return this.isDirectory ? '' : getFileExtension(this.name);
     }
 
     getParent() {

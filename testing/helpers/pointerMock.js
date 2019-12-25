@@ -3,9 +3,9 @@
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             root.pointerMock = module.exports = factory(
-                require("jquery"),
-                require("events/gesture/emitter.gesture"),
-                require("events/click"));
+                require('jquery'),
+                require('events/gesture/emitter.gesture'),
+                require('events/click'));
         });
     } else {
         root.pointerMock = factory(jQuery, DevExpress.events.GestureEmitter, DevExpress.events.click);
@@ -25,7 +25,7 @@
             _clock,
             _shiftKey,
             _cancelable,
-            _pointerType = "mouse",
+            _pointerType = 'mouse',
             _lastEvent;
 
         var triggerEvent = function(type, args) {
@@ -78,7 +78,7 @@
                 _x = x || _x;
                 _y = y || _y;
 
-                triggerEvent("dxpointerdown", {
+                triggerEvent('dxpointerdown', {
                     pointers: [{ pointerId: 1 }]
                 });
 
@@ -92,7 +92,7 @@
                     _x += x || 0;
                     _y += y || 0;
 
-                    triggerEvent("dxpointermove", {
+                    triggerEvent('dxpointermove', {
                         pointers: [{ pointerId: 1 }]
                     });
                 }
@@ -105,7 +105,7 @@
                     clickEvent.misc.requestAnimationFrame = function(callback) { requestAnimationFrameCallback = callback; };
                 }
 
-                triggerEvent("dxpointerup");
+                triggerEvent('dxpointerup');
                 requestAnimationFrameCallback();
 
                 this.nativeClick();
@@ -114,7 +114,7 @@
             },
 
             cancel: function() {
-                triggerEvent("dxpointercancel");
+                triggerEvent('dxpointercancel');
 
                 return this;
             },
@@ -124,21 +124,21 @@
                     this.down();
                     this.up();
                 } else {
-                    triggerEvent("dxclick");
+                    triggerEvent('dxclick');
                 }
                 return this;
             },
 
             nativeClick: function() {
-                triggerEvent("click");
+                triggerEvent('click');
             },
 
             wheel: function(d, shiftKey) {
-                triggerEvent("dxmousewheel", {
+                triggerEvent('dxmousewheel', {
                     delta: d,
                     shiftKey: shiftKey
                 });
-                triggerEvent("scroll");
+                triggerEvent('scroll');
 
                 return this;
             },
@@ -159,12 +159,12 @@
             },
 
             swipeStart: function() {
-                triggerEvent("dxswipestart");
+                triggerEvent('dxswipestart');
                 return this;
             },
 
             swipe: function(offset) {
-                triggerEvent("dxswipe", {
+                triggerEvent('dxswipe', {
                     offset: offset
                 });
 
@@ -172,7 +172,7 @@
             },
 
             swipeEnd: function(targetOffset, offset) {
-                triggerEvent("dxswipeend", {
+                triggerEvent('dxswipeend', {
                     offset: offset,
                     targetOffset: targetOffset
                 });
@@ -181,7 +181,7 @@
             },
 
             dragStart: function() {
-                triggerEvent("dxdragstart");
+                triggerEvent('dxdragstart');
 
                 return this;
             },
@@ -190,7 +190,7 @@
                 _x += x || 0;
                 _y += y || 0;
 
-                triggerEvent("dxdrag", {
+                triggerEvent('dxdrag', {
                     offset: {
                         x: _x,
                         y: _y
@@ -201,7 +201,7 @@
             },
 
             dragEnd: function() {
-                triggerEvent("dxdragend", {
+                triggerEvent('dxdragend', {
                     offset: {
                         x: _x,
                         y: _y
@@ -216,13 +216,13 @@
             },
 
             active: function(target) {
-                triggerEvent("dxactive", { delegatedTarget: $(target).get(0) });
+                triggerEvent('dxactive', { delegatedTarget: $(target).get(0) });
 
                 return this;
             },
 
             inactive: function(target) {
-                triggerEvent("dxinactive", { delegatedTarget: $(target).get(0) });
+                triggerEvent('dxinactive', { delegatedTarget: $(target).get(0) });
 
                 return this;
             }

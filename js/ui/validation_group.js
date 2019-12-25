@@ -1,13 +1,13 @@
-import $ from "../core/renderer";
-import registerComponent from "../core/component_registrator";
-import DOMComponent from "../core/dom_component";
-import ValidationSummary from "./validation_summary";
-import ValidationEngine from "./validation_engine";
-import Validator from "./validator";
+import $ from '../core/renderer';
+import registerComponent from '../core/component_registrator';
+import DOMComponent from '../core/dom_component';
+import ValidationSummary from './validation_summary';
+import ValidationEngine from './validation_engine';
+import Validator from './validator';
 
-const VALIDATION_ENGINE_CLASS = "dx-validationgroup";
-const VALIDATOR_CLASS = "dx-validator";
-const VALIDATION_SUMMARY_CLASS = "dx-validationsummary";
+const VALIDATION_ENGINE_CLASS = 'dx-validationgroup';
+const VALIDATOR_CLASS = 'dx-validator';
+const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
 
 /**
  * @name dxValidationGroup
@@ -88,6 +88,6 @@ const ValidationGroup = DOMComponent.inherit({
     }
 });
 
-registerComponent("dxValidationGroup", ValidationGroup);
+registerComponent('dxValidationGroup', ValidationGroup);
 
 module.exports = ValidationGroup;

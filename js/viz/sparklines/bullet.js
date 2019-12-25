@@ -1,5 +1,5 @@
-var each = require("../../core/utils/iterator").each,
-    BaseSparkline = require("./base_sparkline"),
+var each = require('../../core/utils/iterator').each,
+    BaseSparkline = require('./base_sparkline'),
 
     TARGET_MIN_Y = 0.02,
     TARGET_MAX_Y = 0.98,
@@ -15,11 +15,11 @@ var each = require("../../core/utils/iterator").each,
     _isFinite = isFinite;
 
 var dxBullet = BaseSparkline.inherit({
-    _rootClassPrefix: "dxb",
+    _rootClassPrefix: 'dxb',
 
-    _rootClass: "dxb-bullet",
+    _rootClass: 'dxb-bullet',
 
-    _themeSection: "bullet",
+    _themeSection: 'bullet',
 
     _defaultSize: {
         width: DEFAULT_CANVAS_WIDTH,
@@ -49,9 +49,9 @@ var dxBullet = BaseSparkline.inherit({
 
     _createHtmlElements: function() {
         var renderer = this._renderer;
-        this._zeroLevelPath = renderer.path(undefined, "line").attr({ "class": "dxb-zero-level", "stroke-linecap": "square" });
-        this._targetPath = renderer.path(undefined, "line").attr({ "class": "dxb-target", "stroke-linecap": "square" });
-        this._barValuePath = renderer.path(undefined, "line").attr({ "class": "dxb-bar-value", "stroke-linecap": "square" });
+        this._zeroLevelPath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-zero-level', 'stroke-linecap': 'square' });
+        this._targetPath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-target', 'stroke-linecap': 'square' });
+        this._barValuePath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-bar-value', 'stroke-linecap': 'square' });
     },
 
     _prepareOptions: function() {
@@ -109,14 +109,14 @@ var dxBullet = BaseSparkline.inherit({
                 invert: options.inverted,
                 min: options.startScaleValue,
                 max: options.endScaleValue,
-                axisType: "continuous",
-                dataType: "numeric"
+                axisType: 'continuous',
+                dataType: 'numeric'
             },
             val: {
                 min: 0,
                 max: 1,
-                axisType: "continuous",
-                dataType: "numeric"
+                axisType: 'continuous',
+                dataType: 'numeric'
             }
         };
     },
@@ -146,7 +146,7 @@ var dxBullet = BaseSparkline.inherit({
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],
             stroke: options.targetColor,
-            "stroke-width": options.targetWidth
+            'stroke-width': options.targetWidth
         };
     },
 
@@ -192,7 +192,7 @@ var dxBullet = BaseSparkline.inherit({
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],
             stroke: that._allOptions.targetColor,
-            "stroke-width": 1
+            'stroke-width': 1
         };
     },
 
@@ -248,7 +248,7 @@ var dxBullet = BaseSparkline.inherit({
             originalTarget: target,
             value: valueText,
             target: targetText,
-            valueText: ["Actual Value:", valueText, "Target Value:", targetText]
+            valueText: ['Actual Value:', valueText, 'Target Value:', targetText]
         };
     },
 
@@ -257,12 +257,12 @@ var dxBullet = BaseSparkline.inherit({
     }
 });
 
-each(["color", "targetColor", "targetWidth", "showTarget", "showZeroLevel",
-    "value", "target", "startScaleValue", "endScaleValue"
+each(['color', 'targetColor', 'targetWidth', 'showTarget', 'showZeroLevel',
+    'value', 'target', 'startScaleValue', 'endScaleValue'
 ], function(_, name) {
-    dxBullet.prototype._optionChangesMap[name] = "OPTIONS";
+    dxBullet.prototype._optionChangesMap[name] = 'OPTIONS';
 });
 
-require("../../core/component_registrator")("dxBullet", dxBullet);
+require('../../core/component_registrator')('dxBullet', dxBullet);
 
 module.exports = dxBullet;

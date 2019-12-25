@@ -1,29 +1,29 @@
-import $ from "../../core/renderer";
-import fx from "../../animation/fx";
-import { Deferred, when } from "../../core/utils/deferred";
-import { camelize } from "../../core/utils/inflector";
+import $ from '../../core/renderer';
+import fx from '../../animation/fx';
+import { Deferred, when } from '../../core/utils/deferred';
+import { camelize } from '../../core/utils/inflector';
 
 const animation = {
     moveTo(config) {
         let $element = config.$element,
             position = config.position,
-            direction = config.direction || "left",
+            direction = config.direction || 'left',
             toConfig = {},
             animationType;
 
-        if(direction === "right") {
-            toConfig["transform"] = "translate(" + position + "px, 0px)";
-            animationType = "custom";
+        if(direction === 'right') {
+            toConfig['transform'] = 'translate(' + position + 'px, 0px)';
+            animationType = 'custom';
         }
 
-        if(direction === "left") {
-            toConfig["left"] = position;
-            animationType = "slide";
+        if(direction === 'left') {
+            toConfig['left'] = position;
+            animationType = 'slide';
         }
 
-        if(direction === "top" || direction === "bottom") {
-            toConfig["top"] = position;
-            animationType = "slide";
+        if(direction === 'top' || direction === 'bottom') {
+            toConfig['top'] = position;
+            animationType = 'slide';
         }
 
         fx.animate($element, {
@@ -36,10 +36,10 @@ const animation = {
     margin(config) {
         let $element = config.$element,
             margin = config.margin,
-            direction = config.direction || "left",
+            direction = config.direction || 'left',
             toConfig = {};
 
-        toConfig["margin" + camelize(direction, true)] = margin;
+        toConfig['margin' + camelize(direction, true)] = margin;
 
         fx.animate($element, {
             to: toConfig,
@@ -49,7 +49,7 @@ const animation = {
     },
     fade($element, config, duration, completeAction) {
         fx.animate($element, {
-            type: "fade",
+            type: 'fade',
             to: config.to,
             from: config.from,
             duration,
@@ -60,20 +60,20 @@ const animation = {
     size(config) {
         let $element = config.$element,
             size = config.size,
-            direction = config.direction || "left",
+            direction = config.direction || 'left',
             marginTop = config.marginTop || 0,
             duration = config.duration,
             toConfig = {};
 
 
-        if(direction === "right" || direction === "left") {
-            toConfig["width"] = size;
+        if(direction === 'right' || direction === 'left') {
+            toConfig['width'] = size;
         } else {
-            toConfig["height"] = size;
+            toConfig['height'] = size;
         }
 
-        if(direction === "bottom") {
-            toConfig["marginTop"] = marginTop;
+        if(direction === 'bottom') {
+            toConfig['marginTop'] = marginTop;
         }
         fx.animate($element, {
             to: toConfig,
@@ -108,7 +108,7 @@ class DrawerStrategy {
 
     renderPosition(offset, animate) {
         const drawer = this.getDrawerInstance();
-        const revealMode = drawer.option("revealMode");
+        const revealMode = drawer.option('revealMode');
 
         this.prepareAnimationDeferreds(animate);
 
@@ -117,10 +117,10 @@ class DrawerStrategy {
         if(this.useDefaultAnimation()) {
             this.defaultPositionRendering(config, offset, animate);
         } else {
-            if(revealMode === "slide") {
+            if(revealMode === 'slide') {
                 this.slidePositionRendering(config, offset, animate);
             }
-            if(revealMode === "expand") {
+            if(revealMode === 'expand') {
                 this.expandPositionRendering(config, offset, animate);
             }
         }
@@ -199,7 +199,7 @@ class DrawerStrategy {
             });
         } else {
             drawer._toggleShaderVisibility(offset);
-            drawer._$shader.css("opacity", fadeConfig.to);
+            drawer._$shader.css('opacity', fadeConfig.to);
         }
     }
 
@@ -227,7 +227,7 @@ class DrawerStrategy {
 
     setPanelSize(keepMaxSize) {
         const drawer = this.getDrawerInstance();
-        const panelSize = this._getPanelSize(drawer.option("opened"));
+        const panelSize = this._getPanelSize(drawer.option('opened'));
 
 
         if(drawer.isHorizontalDirection()) {

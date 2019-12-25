@@ -1,16 +1,16 @@
 (function(factory) {
     /* global define, DevExpress, window */
-    if(typeof define === "function" && define.amd) {
+    if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(
-                require("jquery"),
-                require("./ui/set_template_engine"),
-                require("./ui/widget/ui.template_base").renderedCallbacks,
-                require("./core/guid"),
-                require("./ui/validation_engine"),
-                require("./core/utils/iterator"),
-                require("./core/utils/dom").extractTemplateMarkup,
-                require("./core/utils/string").encodeHtml
+                require('jquery'),
+                require('./ui/set_template_engine'),
+                require('./ui/widget/ui.template_base').renderedCallbacks,
+                require('./core/guid'),
+                require('./ui/validation_engine'),
+                require('./core/utils/iterator'),
+                require('./core/utils/dom').extractTemplateMarkup,
+                require('./core/utils/string').encodeHtml
             );
         });
     } else {
@@ -33,17 +33,17 @@
     var enableAlternateTemplateTags = true;
 
     function createTemplateCompiler() {
-        var OPEN_TAG = "<%",
-            CLOSE_TAG = "%>",
-            ENCODE_QUALIFIER = "-",
-            INTERPOLATE_QUALIFIER = "=";
+        var OPEN_TAG = '<%',
+            CLOSE_TAG = '%>',
+            ENCODE_QUALIFIER = '-',
+            INTERPOLATE_QUALIFIER = '=';
 
         var EXTENDED_OPEN_TAG = /[<[]%/g,
             EXTENDED_CLOSE_TAG = /%[>\]]/g;
 
         function acceptText(bag, text) {
             if(text) {
-                bag.push("_.push(", JSON.stringify(text), ");");
+                bag.push('_.push(', JSON.stringify(text), ');');
             }
         }
 
@@ -53,16 +53,16 @@
                 interpolate = code.charAt(0) === INTERPOLATE_QUALIFIER;
 
             if(encode || interpolate) {
-                bag.push("_.push(");
-                bag.push(encode ? "arguments[1](" + value + ")" : value);
-                bag.push(");");
+                bag.push('_.push(');
+                bag.push(encode ? 'arguments[1](' + value + ')' : value);
+                bag.push(');');
             } else {
-                bag.push(code + "\n");
+                bag.push(code + '\n');
             }
         }
 
         return function(text) {
-            var bag = ["var _ = [];", "with(obj||{}) {"],
+            var bag = ['var _ = [];', 'with(obj||{}) {'],
                 chunks = text.split(enableAlternateTemplateTags ? EXTENDED_OPEN_TAG : OPEN_TAG);
 
             acceptText(bag, chunks.shift());
@@ -70,16 +70,16 @@
             for(var i = 0; i < chunks.length; i++) {
                 var tmp = chunks[i].split(enableAlternateTemplateTags ? EXTENDED_CLOSE_TAG : CLOSE_TAG);
                 if(tmp.length !== 2) {
-                    throw "Template syntax error";
+                    throw 'Template syntax error';
                 }
                 acceptCode(bag, tmp[0]);
                 acceptText(bag, tmp[1]);
             }
 
-            bag.push("}", "return _.join('')");
+            bag.push('}', 'return _.join(\'\')');
 
             // eslint-disable-next-line no-new-func
-            return new Function("obj", bag.join(''));
+            return new Function('obj', bag.join(''));
         };
     }
 
@@ -91,9 +91,9 @@
             render: function(template, data) {
                 var html = template(data, encodeHtml);
 
-                var dxMvcExtensionsObj = window["MVCx"];
+                var dxMvcExtensionsObj = window['MVCx'];
                 if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
-                    html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, "$1");
+                    html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, '$1');
                 }
 
                 return html;
@@ -103,9 +103,9 @@
 
     function getValidationSummary(validationGroup) {
         var result;
-        $(".dx-validationsummary").each(function(_, element) {
-            var summary = $(element).data("dxValidationSummary");
-            if(summary && summary.option("validationGroup") === validationGroup) {
+        $('.dx-validationsummary').each(function(_, element) {
+            var summary = $(element).data('dxValidationSummary');
+            if(summary && summary.option('validationGroup') === validationGroup) {
                 result = summary;
                 return false;
             }
@@ -117,10 +117,10 @@
         var items = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            var widget = validator.$element().data("dx-validation-target");
-            if(widget && $.inArray(widget.option("name"), editorNames) > -1) {
+            var widget = validator.$element().data('dx-validation-target');
+            if(widget && $.inArray(widget.option('name'), editorNames) > -1) {
                 items.push({
-                    text: widget.option("validationError.message"),
+                    text: widget.option('validationError.message'),
                     validator: validator
                 });
             }
@@ -130,7 +130,7 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var selector = "#" + id.replace(/[^\w-]/g, "\\$&");
+        var selector = '#' + String(id).replace(/[^\w-]/g, '\\$&');
         pendingCreateComponentRoutines.push(function() {
             var $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {
@@ -149,19 +149,19 @@
         createComponent: createComponent,
 
         renderComponent: function(name, options, id, validatorOptions) {
-            id = id || ("dx-" + new Guid());
+            id = id || ('dx-' + new Guid());
             createComponent(name, options, id, validatorOptions);
-            return "<div id=\"" + id + "\"></div>";
+            return '<div id="' + id + '"></div>';
         },
 
         getEditorValue: function(inputName) {
-            var $widget = $("input[name='" + inputName + "']").closest(".dx-widget");
+            var $widget = $('input[name=\'' + inputName + '\']').closest('.dx-widget');
             if($widget.length) {
-                var dxComponents = $widget.data("dxComponents"),
+                var dxComponents = $widget.data('dxComponents'),
                     widget = $widget.data(dxComponents[0]);
 
                 if(widget) {
-                    return widget.option("value");
+                    return widget.option('value');
                 }
             }
         },
@@ -185,7 +185,7 @@
                 groupConfig = validationEngine.getGroupConfig(validationGroup);
                 if(groupConfig) {
                     items = createValidationSummaryItemsFromValidators(groupConfig.validators, editorNames);
-                    items.length && summary.option("items", items);
+                    items.length && summary.option('items', items);
                 }
             }
         }

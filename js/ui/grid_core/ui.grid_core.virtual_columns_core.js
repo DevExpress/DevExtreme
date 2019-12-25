@@ -1,4 +1,4 @@
-import { extend } from "../../core/utils/extend";
+import { extend } from '../../core/utils/extend';
 
 function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastProcessedIndexes) {
     rowIndex = rowIndex || 0;

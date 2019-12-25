@@ -1,41 +1,41 @@
-import $ from "jquery";
-import renderer from "core/renderer";
-import fx from "animation/fx";
-import errors from "ui/widget/ui.errors";
-import translator from "animation/translator";
-import animationFrame from "animation/frame";
-import holdEvent from "events/hold";
-import { isRenderer } from "core/utils/type";
-import config from "core/config";
-import pointerMock from "../../../helpers/pointerMock.js";
-import contextMenuEvent from "events/contextmenu";
-import keyboardMock from "../../../helpers/keyboardMock.js";
-import decoratorRegistry from "ui/list/ui.list.edit.decorator_registry";
-import SwitchableEditDecorator from "ui/list/ui.list.edit.decorator.switchable";
-import SwitchableButtonEditDecorator from "ui/list/ui.list.edit.decorator.switchable.button";
-import themes from "ui/themes";
-import { DataSource } from "data/data_source/data_source";
-import ArrayStore from "data/array_store";
+import $ from 'jquery';
+import renderer from 'core/renderer';
+import fx from 'animation/fx';
+import errors from 'ui/widget/ui.errors';
+import translator from 'animation/translator';
+import animationFrame from 'animation/frame';
+import holdEvent from 'events/hold';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
+import pointerMock from '../../../helpers/pointerMock.js';
+import contextMenuEvent from 'events/contextmenu';
+import keyboardMock from '../../../helpers/keyboardMock.js';
+import decoratorRegistry from 'ui/list/ui.list.edit.decorator_registry';
+import SwitchableEditDecorator from 'ui/list/ui.list.edit.decorator.switchable';
+import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switchable.button';
+import themes from 'ui/themes';
+import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
 
-import "ui/action_sheet";
-import "ui/list";
-import "common.css!";
+import 'ui/action_sheet';
+import 'ui/list';
+import 'common.css!';
 
-const LIST_ITEM_CLASS = "dx-list-item";
-const LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container";
-const LIST_ITEM_CONTENT_CLASS = "dx-list-item-content";
-const LIST_ITEM_BEFORE_BAG_CLASS = "dx-list-item-before-bag";
+const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
+const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
+const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
 
 const toSelector = (cssClass) => `.${cssClass}`;
 
-const SWITCHABLE_DELETE_READY_CLASS = "dx-list-switchable-delete-ready";
-const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-shield-positioning";
-const SWITCHABLE_DELETE_TOP_SHIELD_CLASS = "dx-list-switchable-delete-top-shield";
-const SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = "dx-list-switchable-delete-bottom-shield";
-const SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = "dx-list-switchable-menu-item-shield-positioning";
-const SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = "dx-list-switchable-delete-item-content-shield";
+const SWITCHABLE_DELETE_READY_CLASS = 'dx-list-switchable-delete-ready';
+const SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-shield-positioning';
+const SWITCHABLE_DELETE_TOP_SHIELD_CLASS = 'dx-list-switchable-delete-top-shield';
+const SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS = 'dx-list-switchable-delete-bottom-shield';
+const SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-item-shield-positioning';
+const SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = 'dx-list-switchable-delete-item-content-shield';
 
-QUnit.module("switchable menu decorator", {
+QUnit.module('switchable menu decorator', {
     beforeEach: () => {
         const testDecorator = SwitchableEditDecorator.inherit({
 
@@ -44,7 +44,7 @@ QUnit.module("switchable menu decorator", {
 
                 const $itemElement = $(config.$itemElement);
 
-                $itemElement.on("dxpreparetodelete", $.proxy((e) => {
+                $itemElement.on('dxpreparetodelete', $.proxy((e) => {
                     this._toggleDeleteReady($itemElement);
                 }, this));
             },
@@ -59,138 +59,119 @@ QUnit.module("switchable menu decorator", {
 
         });
 
-        decoratorRegistry.register("menu", "test", testDecorator);
+        decoratorRegistry.register('menu', 'test', testDecorator);
     },
     afterEach: () => {
         delete decoratorRegistry.registry.menu.test;
     }
 });
 
-QUnit.test("positioning should be enabled while item prepared to delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('positioning should be enabled while item prepared to delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual($list.hasClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS), true, "shield positioning class added");
-    assert.strictEqual($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), true, "positioning class added");
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual($list.hasClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS), false, "shield positioning class removed");
-    assert.strictEqual($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), false, "positioning class removed");
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual($list.hasClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS), true, 'shield positioning class added');
+    assert.strictEqual($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), true, 'positioning class added');
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual($list.hasClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS), false, 'shield positioning class removed');
+    assert.strictEqual($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), false, 'positioning class removed');
 });
 
-QUnit.test("active state should be enabled while item prepared to delete", (assert) => {
+QUnit.test('active state should be enabled while item prepared to delete', (assert) => {
     const clock = sinon.useFakeTimers();
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0"],
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
             allowItemDeleting: true,
-            itemDeleteMode: "test"
+            itemDeleteMode: 'test'
         });
 
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
-        $item.trigger("dxpreparetodelete");
-        pointer.start("touch").down();
+        $item.trigger('dxpreparetodelete');
+        pointer.start('touch').down();
         clock.tick(1000);
-        assert.ok(!$item.hasClass("dx-state-active"), "item is not activated");
+        assert.ok(!$item.hasClass('dx-state-active'), 'item is not activated');
 
-        $item.trigger("dxpreparetodelete");
-        pointer.start("touch").down();
+        $item.trigger('dxpreparetodelete');
+        pointer.start('touch').down();
         clock.tick(1000);
-        assert.ok($item.hasClass("dx-state-active"), "item is activated");
+        assert.ok($item.hasClass('dx-state-active'), 'item is activated');
     } finally {
         clock.restore();
     }
 });
 
-QUnit.test("click should remove delete ready class", (assert) => {
+QUnit.test('click should remove delete ready class', (assert) => {
     const clickHandledStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1"],
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1'],
         onItemClick: clickHandledStub,
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), true, "delete ready class added for testing");
-    $item.trigger("dxclick");
-    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, "delete ready class removed");
-    assert.strictEqual(clickHandledStub.callCount, 0, "click action is not triggered");
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), true, 'delete ready class added for testing');
+    $item.trigger('dxclick');
+    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, 'delete ready class removed');
+    assert.strictEqual(clickHandledStub.callCount, 0, 'click action is not triggered');
 });
 
-QUnit.test("click on item should not remove delete ready class if widget is disabled", (assert) => {
+QUnit.test('click on item should not remove delete ready class if widget is disabled', (assert) => {
     const clickHandledStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         disabled: true,
         onItemClick: clickHandledStub,
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
-    $("#templated-list").dxList("instance");
+    $('#templated-list').dxList('instance');
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
-    $item.trigger("dxclick");
-    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), true, "delete ready class not removed");
-    assert.strictEqual(clickHandledStub.callCount, 0, "click action is not triggered");
+    $item.trigger('dxpreparetodelete');
+    $item.trigger('dxclick');
+    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), true, 'delete ready class not removed');
+    assert.strictEqual(clickHandledStub.callCount, 0, 'click action is not triggered');
 });
 
-QUnit.test("shields should be generated", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('shields should be generated', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
     const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
 
-    assert.ok($topShield.length, "top shield generated");
-    assert.ok($bottomShield.length, "bottom shield generated");
-    assert.ok($topShield.is(":hidden"), "top shield disabled");
-    assert.ok($bottomShield.is(":hidden"), "bottom shield disabled");
+    assert.ok($topShield.length, 'top shield generated');
+    assert.ok($bottomShield.length, 'bottom shield generated');
+    assert.ok($topShield.is(':hidden'), 'top shield disabled');
+    assert.ok($bottomShield.is(':hidden'), 'bottom shield disabled');
 });
 
-QUnit.test("prepare delete should add shields before and after element", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('prepare delete should add shields before and after element', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
-    });
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(1);
-    const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
-    const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
-
-    $item.trigger("dxpreparetodelete");
-    assert.ok($topShield.is(":visible"), "top shield enabled");
-    assert.ok($bottomShield.is(":visible"), "bottom shield enabled");
-    assert.ok(Math.abs($topShield.height() - ($item.offset().top - $list.offset().top)) < 1, "top shield dimensions correct");
-    assert.ok(Math.abs($bottomShield.height() - ($list.outerHeight() - $item.outerHeight() - ($item.offset().top - $list.offset().top))) < 1, "bottom shield dimensions correct");
-});
-
-QUnit.test("pointerdown on shields should cancel delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -198,22 +179,41 @@ QUnit.test("pointerdown on shields should cancel delete", (assert) => {
     const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
     const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
 
-    $item.trigger("dxpreparetodelete");
+    $item.trigger('dxpreparetodelete');
+    assert.ok($topShield.is(':visible'), 'top shield enabled');
+    assert.ok($bottomShield.is(':visible'), 'bottom shield enabled');
+    assert.ok(Math.abs($topShield.height() - ($item.offset().top - $list.offset().top)) < 1, 'top shield dimensions correct');
+    assert.ok(Math.abs($bottomShield.height() - ($list.outerHeight() - $item.outerHeight() - ($item.offset().top - $list.offset().top))) < 1, 'bottom shield dimensions correct');
+});
+
+QUnit.test('pointerdown on shields should cancel delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
+        allowItemDeleting: true,
+        itemDeleteMode: 'test'
+    });
+
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item = $items.eq(1);
+    const $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS));
+    const $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
+
+    $item.trigger('dxpreparetodelete');
     pointerMock($topShield).start().down();
-    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, "delete canceled");
+    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, 'delete canceled');
 
-    $item.trigger("dxpreparetodelete");
+    $item.trigger('dxpreparetodelete');
     pointerMock($bottomShield).start().down();
-    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, "delete canceled");
+    assert.strictEqual($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), false, 'delete canceled');
 });
 
-QUnit.test("prepare delete should add shield above item content", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('prepare delete should add shield above item content', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test",
+        itemDeleteMode: 'test',
         itemTemplate: () => {
-            return $("<div>").append($("<div>").addClass(LIST_ITEM_CONTENT_CLASS));
+            return $('<div>').append($('<div>').addClass(LIST_ITEM_CONTENT_CLASS));
         }
     });
 
@@ -221,59 +221,59 @@ QUnit.test("prepare delete should add shield above item content", (assert) => {
     const $item = $items.eq(0);
     const itemContentShield = () => { return $list.find(toSelector(LIST_ITEM_CONTENT_CLASS)).find(toSelector(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS)); };
 
-    assert.ok(!itemContentShield().length, "shield not added");
-    $item.trigger("dxpreparetodelete");
-    assert.ok(itemContentShield().length, "shield added");
-    $item.trigger("dxpreparetodelete");
-    assert.ok(!itemContentShield().length, "shield removed");
+    assert.ok(!itemContentShield().length, 'shield not added');
+    $item.trigger('dxpreparetodelete');
+    assert.ok(itemContentShield().length, 'shield added');
+    $item.trigger('dxpreparetodelete');
+    assert.ok(!itemContentShield().length, 'shield removed');
 });
 
-QUnit.test("prepare delete should disable scrolling", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('prepare delete should disable scrolling', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test",
+        itemDeleteMode: 'test',
         useNativeScrolling: false
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
-    let event = $.Event({ type: "dxscrollstart" });
-    $list.find(".dx-scrollable-wrapper").trigger(event);
-    assert.strictEqual(event.cancel, true, "scroll disabled");
-    $item.trigger("dxpreparetodelete");
-    event = $.Event({ type: "dxscrollstart" });
-    $list.find(".dx-scrollable-container").trigger(event);
-    assert.strictEqual(event.cancel, undefined, "scroll enabled");
+    $item.trigger('dxpreparetodelete');
+    let event = $.Event({ type: 'dxscrollstart' });
+    $list.find('.dx-scrollable-wrapper').trigger(event);
+    assert.strictEqual(event.cancel, true, 'scroll disabled');
+    $item.trigger('dxpreparetodelete');
+    event = $.Event({ type: 'dxscrollstart' });
+    $list.find('.dx-scrollable-container').trigger(event);
+    assert.strictEqual(event.cancel, undefined, 'scroll enabled');
 });
 
-QUnit.test("forget delete should not enable scrolling that already was disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('forget delete should not enable scrolling that already was disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
-    const scrollView = $list.dxScrollView("instance");
+    const scrollView = $list.dxScrollView('instance');
 
-    scrollView.option("disabled", true);
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual(scrollView.option("disabled"), true, "scroll disabled");
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual(scrollView.option("disabled"), true, "scroll disabled reset");
+    scrollView.option('disabled', true);
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual(scrollView.option('disabled'), true, 'scroll disabled');
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual(scrollView.option('disabled'), true, 'scroll disabled reset');
 });
 
 
-const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container";
-const SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = "dx-list-switchable-delete-button-wrapper";
-const SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS = "dx-list-switchable-delete-button-inner-wrapper";
-const SWITCHABLE_DELETE_BUTTON_CLASS = "dx-list-switchable-delete-button";
+const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
+const SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = 'dx-list-switchable-delete-button-wrapper';
+const SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS = 'dx-list-switchable-delete-button-inner-wrapper';
+const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 
-QUnit.module("switchable button delete decorator", {
+QUnit.module('switchable button delete decorator', {
     beforeEach: () => {
         fx.off = true;
 
@@ -284,13 +284,13 @@ QUnit.module("switchable button delete decorator", {
 
                 const $itemElement = $(config.$itemElement);
 
-                $itemElement.on("dxpreparetodelete", $.proxy((e) => {
+                $itemElement.on('dxpreparetodelete', $.proxy((e) => {
                     this._toggleDeleteReady($itemElement);
                 }, this));
             }
 
         });
-        decoratorRegistry.register("menu", "test", testDecorator);
+        decoratorRegistry.register('menu', 'test', testDecorator);
     },
     afterEach: () => {
         fx.off = false;
@@ -299,156 +299,156 @@ QUnit.module("switchable button delete decorator", {
     }
 });
 
-QUnit.test("list item markup", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('list item markup', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    assert.strictEqual($item.children(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS)).length, 0, "delete button won't rendered");
+    assert.strictEqual($item.children(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS)).length, 0, 'delete button won\'t rendered');
 });
 
-QUnit.test("button should be added only when item is ready to delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('button should be added only when item is ready to delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
+    $item.trigger('dxpreparetodelete');
     const $deleteButton = $item
         .children(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS))
         .children(toSelector(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS))
         .children(toSelector(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS))
         .children(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
-    assert.ok($deleteButton.hasClass("dx-button"), "button generated");
+    assert.ok($deleteButton.hasClass('dx-button'), 'button generated');
 
-    $item.trigger("dxpreparetodelete");
-    assert.strictEqual($deleteButton.parents().length, 3, "button removed");
+    $item.trigger('dxpreparetodelete');
+    assert.strictEqual($deleteButton.parents().length, 3, 'button removed');
 });
 
-QUnit.test("delete button click should delete list item", (assert) => {
+QUnit.test('delete button click should delete list item', (assert) => {
     assert.expect(1);
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "test"
+        itemDeleteMode: 'test'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxpreparetodelete");
+    $item.trigger('dxpreparetodelete');
     list.deleteItem = ($itemElement) => {
-        assert.strictEqual($itemElement.get(0), $item.get(0), "item is deleted");
+        assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
         return $.Deferred().resolve().promise();
     };
 
     const $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
-    $deleteButton.trigger("dxclick");
+    $deleteButton.trigger('dxclick');
 });
 
-const TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
+const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 
-QUnit.test("switchable delete button should has button content on the second deleting", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('switchable delete button should has button content on the second deleting', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemDeleting: true,
-        itemDeleteMode: "toggle"
+        itemDeleteMode: 'toggle'
     });
 
     let $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
     let $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
 
-    $deleteToggle.trigger("dxclick");
+    $deleteToggle.trigger('dxclick');
 
     let $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
 
-    $deleteButton.trigger("dxclick");
+    $deleteButton.trigger('dxclick');
     $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
     $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
-    $deleteToggle.trigger("dxclick");
+    $deleteToggle.trigger('dxclick');
     $deleteButton = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CLASS));
 
-    assert.strictEqual($deleteButton.children(".dx-button-content").length, 1, "button container has content");
+    assert.strictEqual($deleteButton.children('.dx-button-content').length, 1, 'button container has content');
 });
 
-QUnit.module("toggle delete decorator");
+QUnit.module('toggle delete decorator');
 
-QUnit.test("toggling delete toggle button should switch delete ready class", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('toggling delete toggle button should switch delete ready class', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "toggle"
+        itemDeleteMode: 'toggle'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
 
-    $deleteToggle.trigger("dxclick");
-    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "delete ready class added if toggle pressed");
+    $deleteToggle.trigger('dxclick');
+    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'delete ready class added if toggle pressed');
 });
 
-QUnit.test("animation should stop after first click, toggle", (assert) => {
-    const fxStopSpy = sinon.spy(fx, "stop");
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('animation should stop after first click, toggle', (assert) => {
+    const fxStopSpy = sinon.spy(fx, 'stop');
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "toggle"
+        itemDeleteMode: 'toggle'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $deleteToggle = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(TOGGLE_DELETE_SWITCH_CLASS));
 
-    $deleteToggle.trigger("dxclick");
+    $deleteToggle.trigger('dxclick');
     const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
 
     assert.strictEqual(fxStopSpy.callCount, 3);
-    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], "stop is called on button container");
-    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, "without jump to end");
+    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
     fx.stop.restore();
 });
 
-const STATIC_DELETE_BUTTON_CLASS = "dx-list-static-delete-button";
+const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 
-QUnit.module("static delete decorator");
+QUnit.module('static delete decorator');
 
-QUnit.test("delete button click should delete list item", (assert) => {
+QUnit.test('delete button click should delete list item', (assert) => {
     assert.expect(1);
 
-    const $list = $("#list").dxList({
-        items: ["0"],
+    const $list = $('#list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "static"
+        itemDeleteMode: 'static'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
     list.deleteItem = ($itemElement) => {
-        assert.strictEqual($itemElement.get(0), $item.get(0), "item is deleted");
+        assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
         return $.Deferred().resolve().promise();
     };
 
     const $deleteButton = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
-    $deleteButton.trigger("dxclick");
+    $deleteButton.trigger('dxclick');
 });
 
-QUnit.test("click on delete button should not raise item click event when item deleting is deferred", (assert) => {
+QUnit.test('click on delete button should not raise item click event when item deleting is deferred', (assert) => {
     const clickHandledStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "static",
+        itemDeleteMode: 'static',
         onItemDeleting: () => {
             return $.Deferred().promise();
         },
@@ -459,46 +459,46 @@ QUnit.test("click on delete button should not raise item click event when item d
     const $item = $items.eq(0);
     const $deleteButton = $item.find(toSelector(STATIC_DELETE_BUTTON_CLASS));
 
-    $deleteButton.trigger("dxclick");
-    assert.strictEqual(clickHandledStub.callCount, 0, "click action is not triggered");
+    $deleteButton.trigger('dxclick');
+    assert.strictEqual(clickHandledStub.callCount, 0, 'click action is not triggered');
 });
 
-QUnit.module("slideButton delete decorator");
+QUnit.module('slideButton delete decorator');
 
-QUnit.test("item swiping should add delete ready class", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('item swiping should add delete ready class', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideButton"
+        itemDeleteMode: 'slideButton'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
     pointerMock($item).start().swipeEnd(1);
 
-    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "delete ready class added if item swiped");
+    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'delete ready class added if item swiped');
 });
 
-QUnit.test("item swiping should not add delete ready class if widget is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('item swiping should not add delete ready class if widget is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         disabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "slideButton"
+        itemDeleteMode: 'slideButton'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
-    assert.ok(startEvent.cancel, "swipe canceled in disabled widget");
+    assert.ok(startEvent.cancel, 'swipe canceled in disabled widget');
 });
 
-QUnit.test("animation should stop after first click, slideButton", (assert) => {
-    const fxStopSpy = sinon.spy(fx, "stop");
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('animation should stop after first click, slideButton', (assert) => {
+    const fxStopSpy = sinon.spy(fx, 'stop');
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideButton"
+        itemDeleteMode: 'slideButton'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -506,24 +506,24 @@ QUnit.test("animation should stop after first click, slideButton", (assert) => {
     const $buttonContainer = $item.find(toSelector(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS));
 
     assert.strictEqual(fxStopSpy.callCount, 3);
-    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], "stop is called on button container");
-    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, "without jump to end");
+    assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+    assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
     fx.stop.restore();
 });
 
 
-const SLIDE_MENU_WRAPPER_CLASS = "dx-list-slide-menu-wrapper";
-const SLIDE_MENU_CONTENT_CLASS = "dx-list-slide-menu-content";
-const SLIDE_MENU_BUTTONS_CONTAINER_CLASS = "dx-list-slide-menu-buttons-container";
-const SLIDE_MENU_BUTTONS_CLASS = "dx-list-slide-menu-buttons";
-const SLIDE_MENU_BUTTON_CLASS = "dx-list-slide-menu-button";
-const SLIDE_MENU_BUTTON_MENU_CLASS = "dx-list-slide-menu-button-menu";
-const SLIDE_MENU_CLASS = "dx-list-slide-menu";
+const SLIDE_MENU_WRAPPER_CLASS = 'dx-list-slide-menu-wrapper';
+const SLIDE_MENU_CONTENT_CLASS = 'dx-list-slide-menu-content';
+const SLIDE_MENU_BUTTONS_CONTAINER_CLASS = 'dx-list-slide-menu-buttons-container';
+const SLIDE_MENU_BUTTONS_CLASS = 'dx-list-slide-menu-buttons';
+const SLIDE_MENU_BUTTON_CLASS = 'dx-list-slide-menu-button';
+const SLIDE_MENU_BUTTON_MENU_CLASS = 'dx-list-slide-menu-button-menu';
+const SLIDE_MENU_CLASS = 'dx-list-slide-menu';
 const position = ($element) => {
     return translator.locate($element).left;
 };
 
-QUnit.module("slideItem delete decorator", {
+QUnit.module('slideItem delete decorator', {
     beforeEach: () => {
         fx.off = true;
     },
@@ -532,19 +532,19 @@ QUnit.module("slideItem delete decorator", {
     }
 });
 
-QUnit.test("list item markup", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('list item markup', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    assert.ok($item.hasClass(SLIDE_MENU_WRAPPER_CLASS), "class added to list item");
+    assert.ok($item.hasClass(SLIDE_MENU_WRAPPER_CLASS), 'class added to list item');
     const $itemContent = $item.children(toSelector(SLIDE_MENU_CONTENT_CLASS));
-    assert.strictEqual($itemContent.length, 1, "content generated");
-    assert.strictEqual($itemContent.text(), "Item Template", "content moved in inner div");
+    assert.strictEqual($itemContent.length, 1, 'content generated');
+    assert.strictEqual($itemContent.text(), 'Item Template', 'content moved in inner div');
 
     const deleteButtonContent = () => {
         return $item
@@ -552,25 +552,25 @@ QUnit.test("list item markup", (assert) => {
             .children(toSelector(SLIDE_MENU_BUTTONS_CLASS))
             .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
     };
-    assert.strictEqual(deleteButtonContent().length, 0, "button is not generated");
+    assert.strictEqual(deleteButtonContent().length, 0, 'button is not generated');
 });
 
-QUnit.test("icon should not be rendered when custom item template is used", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: [{ icon: "box", text: "Item 1" }],
+QUnit.test('icon should not be rendered when custom item template is used', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: [{ icon: 'box', text: 'Item 1' }],
         itemTemplate: (data) => {
-            return $("<div>").text("$: " + data.text);
+            return $('<div>').text('$: ' + data.text);
         }
     });
 
-    assert.strictEqual($list.find("." + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, "item content has not been rendered");
+    assert.strictEqual($list.find('.' + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, 'item content has not been rendered');
 });
 
-QUnit.test("swipe should prepare item for delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should prepare item for delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -582,98 +582,98 @@ QUnit.test("swipe should prepare item for delete", (assert) => {
     const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
 
-    assert.ok(position($itemContent) < 0, "item moved");
+    assert.ok(position($itemContent) < 0, 'item moved');
 
     const containerPositionDifference = $item.width() - position($deleteButtonContainer);
 
-    assert.ok(containerPositionDifference > 0 && containerPositionDifference < $deleteButton.outerWidth(), "button container moved");
-    assert.ok(position($deleteButton) < 0 && position($deleteButton) > -$deleteButton.outerWidth(), "button moved");
+    assert.ok(containerPositionDifference > 0 && containerPositionDifference < $deleteButton.outerWidth(), 'button container moved');
+    assert.ok(position($deleteButton) < 0 && position($deleteButton) > -$deleteButton.outerWidth(), 'button moved');
     pointer.swipeEnd(-1, -0.5);
-    assert.roughEqual(position($itemContent), -$deleteButton.outerWidth(), 0.251, "item animated");
-    assert.roughEqual(position($deleteButtonContainer), $item.width() - $deleteButton.outerWidth(), 0.251, "button container animated");
-    assert.strictEqual(position($deleteButton), 0, "button animated");
-    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "item ready for delete");
+    assert.roughEqual(position($itemContent), -$deleteButton.outerWidth(), 0.251, 'item animated');
+    assert.roughEqual(position($deleteButtonContainer), $item.width() - $deleteButton.outerWidth(), 0.251, 'button container animated');
+    assert.strictEqual(position($deleteButton), 0, 'button animated');
+    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'item ready for delete');
 
     fx.off = false;
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
-    assert.strictEqual(position($itemContent), 0, "item animated back");
-    assert.strictEqual(position($deleteButtonContainer), $item.width(), "button container animated back");
-    assert.roughEqual(position($deleteButton), -$deleteButton.outerWidth(), 0.251, "button animated back");
+    assert.strictEqual(position($itemContent), 0, 'item animated back');
+    assert.strictEqual(position($deleteButtonContainer), $item.width(), 'button container animated back');
+    assert.roughEqual(position($deleteButton), -$deleteButton.outerWidth(), 0.251, 'button animated back');
 });
 
-QUnit.test("swipe should not prepare item for delete if widget is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should not prepare item for delete if widget is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         disabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
-    assert.ok(startEvent.cancel, "swipe canceled");
+    assert.ok(startEvent.cancel, 'swipe canceled');
 });
 
-QUnit.test("swipe should be canceled if swipe in opposite direction", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should be canceled if swipe in opposite direction', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const startEvent = pointerMock($item).start().swipeStart().swipe(0.1).lastEvent();
 
-    assert.ok(startEvent.cancel, "swipe canceled");
+    assert.ok(startEvent.cancel, 'swipe canceled');
 });
 
-QUnit.test("swipe should not be canceled if swipe in opposite direction and item is ready to delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should not be canceled if swipe in opposite direction and item is ready to delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
     const startEvent = pointerMock($item).start().swipeStart().swipe(0.1).lastEvent();
-    assert.ok(!startEvent.cancel, "swipe canceled");
+    assert.ok(!startEvent.cancel, 'swipe canceled');
 });
 
-QUnit.test("swipe should not move item righter", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should not move item righter', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
 
     pointerMock($item).start().swipeStart().swipe(0.5);
-    assert.strictEqual(position($itemContent), 0, "item not moved");
+    assert.strictEqual(position($itemContent), 0, 'item not moved');
 });
 
-QUnit.test("swipe loop should not be canceled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe loop should not be canceled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const startEvent = pointerMock($item).start().swipeStart().swipe(-0.5).swipe(0.5).lastEvent();
 
-    assert.ok(!startEvent.cancel, "item returned back");
+    assert.ok(!startEvent.cancel, 'item returned back');
 });
 
-QUnit.test("click should undo readiness to delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('click should undo readiness to delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -681,38 +681,38 @@ QUnit.test("click should undo readiness to delete", (assert) => {
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
 
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
-    $itemContent.trigger("dxclick");
-    assert.strictEqual(position($itemContent), 0, "item moved back");
-    assert.ok(!$item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "item not ready for delete");
-    assert.strictEqual($deleteButton.parents().length, 0, "button removed");
+    $itemContent.trigger('dxclick');
+    assert.strictEqual(position($itemContent), 0, 'item moved back');
+    assert.ok(!$item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'item not ready for delete');
+    assert.strictEqual($deleteButton.parents().length, 0, 'button removed');
 });
 
-QUnit.test("click on button should remove item", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('click on button should remove item', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
     list.deleteItem = ($itemElement) => {
-        assert.strictEqual($itemElement.get(0), $item.get(0), "item is deleted");
+        assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
         return $.Deferred().resolve().promise();
     };
 
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
-    $deleteButton.trigger("dxclick");
+    $deleteButton.trigger('dxclick');
 });
 
-QUnit.test("click on button should not cause item click event if confirmation present", (assert) => {
+QUnit.test('click on button should not cause item click event if confirmation present', (assert) => {
     const clickHandledStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem",
+        itemDeleteMode: 'slideItem',
         onItemDeleting: () => {
             return $.Deferred().promise();
         },
@@ -723,40 +723,40 @@ QUnit.test("click on button should not cause item click event if confirmation pr
 
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
-    $deleteButton.trigger("dxclick");
+    $deleteButton.trigger('dxclick');
 
-    assert.strictEqual(clickHandledStub.callCount, 0, "item click action not fired");
+    assert.strictEqual(clickHandledStub.callCount, 0, 'item click action not fired');
 });
 
-QUnit.test("click on button should not remove item if widget disabled", (assert) => {
+QUnit.test('click on button should not remove item if widget disabled', (assert) => {
     assert.expect(0);
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem",
+        itemDeleteMode: 'slideItem',
         onItemDeleted: (e) => {
-            assert.ok(false, "delete action executed");
+            assert.ok(false, 'delete action executed');
         }
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
 
     pointerMock($item).start().swipeStart().swipe(-0.5).swipeEnd(-1);
-    list.option("disabled", true);
-    $deleteButton.trigger("dxclick");
+    list.option('disabled', true);
+    $deleteButton.trigger('dxclick');
 });
 
-QUnit.test("button should have no text for the Material theme", (assert) => {
+QUnit.test('button should have no text for the Material theme', (assert) => {
     const origIsMaterial = themes.isMaterial;
     themes.isMaterial = () => { return true; };
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -765,16 +765,16 @@ QUnit.test("button should have no text for the Material theme", (assert) => {
 
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
 
-    assert.strictEqual($deleteButton.text(), "", "button has no text for Material theme");
+    assert.strictEqual($deleteButton.text(), '', 'button has no text for Material theme');
 
     themes.isMaterial = origIsMaterial;
 });
 
-QUnit.test("button should have no text for the Generic theme", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('button should have no text for the Generic theme', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -783,24 +783,24 @@ QUnit.test("button should have no text for the Generic theme", (assert) => {
 
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTON_CLASS));
 
-    assert.ok($deleteButton.text().length > 0, "button has a text for Generic theme");
+    assert.ok($deleteButton.text().length > 0, 'button has a text for Generic theme');
 });
 
-const INKRIPPLE_WAVE_SHOWING_CLASS = "dx-inkripple-showing";
+const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
 
-QUnit.test("button should have no inkRipple after fast swipe for Material theme", (assert) => {
+QUnit.test('button should have no inkRipple after fast swipe for Material theme', (assert) => {
     const origIsMaterial = themes.isMaterial,
         origCurrent = themes.current,
         clock = sinon.useFakeTimers();
 
     themes.isMaterial = () => { return true; };
-    themes.current = () => { return "material"; };
+    themes.current = () => { return 'material'; };
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
     const pointer = pointerMock($item);
@@ -810,24 +810,24 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
         afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
         afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT,
         result: 0,
-        message: "button has no inkRipple after short touch before swipe for Material theme",
+        message: 'button has no inkRipple after short touch before swipe for Material theme',
     }, {
         afterTouchTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 1.2,
         afterSwipeTimeout: INKRIPPLE_MATERIAL_SHOW_TIMEOUT * 0.8,
         result: 1,
-        message: "button has inkRipple after long touch before swipe for Material theme",
+        message: 'button has inkRipple after long touch before swipe for Material theme',
     }];
 
     for(let i = 0; i < testArgs.length; i++) {
         args = testArgs[i];
 
-        pointer.start("touch").down();
+        pointer.start('touch').down();
         clock.tick(args.afterTouchTimeout);
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
         clock.tick(args.afterSwipeTimeout);
         inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
         assert.strictEqual(inkRippleShowingWave.length, args.result, args.message);
-        pointer.start("touch").up();
+        pointer.start('touch').up();
         clock.tick(400);
     }
 
@@ -836,11 +836,11 @@ QUnit.test("button should have no inkRipple after fast swipe for Material theme"
     themes.current = origCurrent;
 });
 
-QUnit.test("inkRipple feedback should not be broken if swipe in opposite direction", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('inkRipple feedback should not be broken if swipe in opposite direction', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem",
+        itemDeleteMode: 'slideItem',
         useInkRipple: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -850,24 +850,24 @@ QUnit.test("inkRipple feedback should not be broken if swipe in opposite directi
 
     pointer.start().swipeStart().swipe(0.01);
     clock.tick(50);
-    pointer.start("touch").up();
+    pointer.start('touch').up();
     clock.tick(50);
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     clock.tick(100);
     const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
-    assert.ok(inkRippleShowingWave.length === 1, "inkripple feedback works right after swipe in opposite direction");
+    assert.ok(inkRippleShowingWave.length === 1, 'inkripple feedback works right after swipe in opposite direction');
 
-    pointer.start("touch").up();
+    pointer.start('touch').up();
     clock.restore();
 });
 
-QUnit.test("swipe should prepare item for delete in RTL mode", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should prepare item for delete in RTL mode', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         rtlEnabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -879,50 +879,50 @@ QUnit.test("swipe should prepare item for delete in RTL mode", (assert) => {
     const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
     const $deleteButton = $item.find(toSelector(SLIDE_MENU_BUTTONS_CLASS));
 
-    assert.ok(position($itemContent) > 0, "item moved");
+    assert.ok(position($itemContent) > 0, 'item moved');
     const containerPositionDifference = position($deleteButtonContainer);
-    assert.ok(containerPositionDifference < 0 && containerPositionDifference > -$deleteButton.outerWidth(), "button container moved");
-    assert.ok(position($deleteButton) > 0 && position($deleteButton) < $deleteButton.outerWidth(), "button moved");
+    assert.ok(containerPositionDifference < 0 && containerPositionDifference > -$deleteButton.outerWidth(), 'button container moved');
+    assert.ok(position($deleteButton) > 0 && position($deleteButton) < $deleteButton.outerWidth(), 'button moved');
 
     pointer.swipeEnd(1, 0.5);
-    assert.roughEqual(position($itemContent), $deleteButton.outerWidth(), 0.251, "item animated");
-    assert.strictEqual(position($deleteButtonContainer), 0, "button container animated");
-    assert.strictEqual(position($deleteButton), 0, "button animated");
-    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), "item ready for delete");
+    assert.roughEqual(position($itemContent), $deleteButton.outerWidth(), 0.251, 'item animated');
+    assert.strictEqual(position($deleteButtonContainer), 0, 'button container animated');
+    assert.strictEqual(position($deleteButton), 0, 'button animated');
+    assert.ok($item.hasClass(SWITCHABLE_DELETE_READY_CLASS), 'item ready for delete');
 
     fx.off = false;
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1);
-    assert.strictEqual(position($itemContent), 0, "item animated back");
-    assert.roughEqual(position($deleteButtonContainer), -$deleteButton.outerWidth(), 0.251, "button container animated back");
-    assert.roughEqual(position($deleteButton), $deleteButton.outerWidth(), 0.251, "button animated back");
+    assert.strictEqual(position($itemContent), 0, 'item animated back');
+    assert.roughEqual(position($deleteButtonContainer), -$deleteButton.outerWidth(), 0.251, 'button container animated back');
+    assert.roughEqual(position($deleteButton), $deleteButton.outerWidth(), 0.251, 'button animated back');
 });
 
-QUnit.test("swipe should not move item lefter in RTL mode", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('swipe should not move item lefter in RTL mode', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         rtlEnabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "slideItem"
+        itemDeleteMode: 'slideItem'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $itemContent = $item.find(toSelector(SLIDE_MENU_CONTENT_CLASS));
 
     pointerMock($item).start().swipeStart().swipe(-0.5);
-    assert.strictEqual(position($itemContent), 0, "item not moved");
+    assert.strictEqual(position($itemContent), 0, 'item not moved');
 });
 
-QUnit.test("multiple swipes should not break deletion", (assert) => {
+QUnit.test('multiple swipes should not break deletion', (assert) => {
     const origFxOff = fx.off;
     const clock = sinon.useFakeTimers();
 
     try {
         fx.off = false;
 
-        const $list = $("#templated-list").dxList({
-            items: ["0"],
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
             allowItemDeleting: true,
-            itemDeleteMode: "slideItem"
+            itemDeleteMode: 'slideItem'
         });
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
         const $item = $items.eq(0);
@@ -933,27 +933,27 @@ QUnit.test("multiple swipes should not break deletion", (assert) => {
         pointer.swipeStart().swipe(0.5).swipeEnd(1);
         clock.tick(200);
         pointer.swipeStart().swipe(-0.5);
-        assert.ok($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), "positioning is turned on");
+        assert.ok($item.hasClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS), 'positioning is turned on');
         pointer.swipeEnd(-1);
         clock.tick(300);
 
         const $deleteButtonContainer = $item.find(toSelector(SLIDE_MENU_BUTTONS_CONTAINER_CLASS));
-        assert.ok($deleteButtonContainer.length, "delete button present");
+        assert.ok($deleteButtonContainer.length, 'delete button present');
     } finally {
         fx.off = origFxOff;
         clock.restore();
     }
 });
 
-QUnit.test("optimizations", (assert) => {
+QUnit.test('optimizations', (assert) => {
     let origOuterWidth = renderer.fn.outerWidth;
     const outerWidthStub = sinon.stub();
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0"],
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
             allowItemDeleting: true,
-            itemDeleteMode: "slideItem"
+            itemDeleteMode: 'slideItem'
         });
 
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -968,13 +968,13 @@ QUnit.test("optimizations", (assert) => {
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
-        assert.strictEqual(outerWidthStub.callCount, 2, "outerWidth should be calculated only once for item and button");
+        assert.strictEqual(outerWidthStub.callCount, 2, 'outerWidth should be calculated only once for item and button');
         renderer.fn.outerWidth = origOuterWidth;
     }
 });
 
 
-QUnit.module("slide menu decorator", {
+QUnit.module('slide menu decorator', {
     beforeEach: () => {
         fx.off = true;
     },
@@ -983,11 +983,11 @@ QUnit.module("slide menu decorator", {
     }
 });
 
-QUnit.test("list item markup", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
-        menuItems: [{ text: "menu" }, { text: "menu" }]
+QUnit.test('list item markup', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
+        menuItems: [{ text: 'menu' }, { text: 'menu' }]
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -1000,16 +1000,16 @@ QUnit.test("list item markup", (assert) => {
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    assert.strictEqual(deleteButtonContent().length, 1, "menu button was generated");
-    assert.ok(deleteButtonContent().hasClass(SLIDE_MENU_BUTTON_MENU_CLASS), "menu button has correct class");
-    assert.strictEqual(deleteButtonContent().text(), "More", "menu button text is correct");
+    assert.strictEqual(deleteButtonContent().length, 1, 'menu button was generated');
+    assert.ok(deleteButtonContent().hasClass(SLIDE_MENU_BUTTON_MENU_CLASS), 'menu button has correct class');
+    assert.strictEqual(deleteButtonContent().text(), 'More', 'menu button text is correct');
 });
 
-QUnit.test("list item markup with one button", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
-        menuItems: [{ text: "menu" }]
+QUnit.test('list item markup with one button', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
+        menuItems: [{ text: 'menu' }]
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -1022,16 +1022,16 @@ QUnit.test("list item markup with one button", (assert) => {
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    assert.strictEqual(deleteButtonContent().length, 1, "menu button was generated");
-    assert.ok(deleteButtonContent().hasClass(SLIDE_MENU_BUTTON_MENU_CLASS), "menu button has correct class");
-    assert.strictEqual(deleteButtonContent().text(), "menu", "menu button text is correct");
+    assert.strictEqual(deleteButtonContent().length, 1, 'menu button was generated');
+    assert.ok(deleteButtonContent().hasClass(SLIDE_MENU_BUTTON_MENU_CLASS), 'menu button has correct class');
+    assert.strictEqual(deleteButtonContent().text(), 'menu', 'menu button text is correct');
 });
 
-QUnit.test("click on menu item should open menu", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
-        menuItems: [{ text: "menu" }, { text: "menu" }]
+QUnit.test('click on menu item should open menu', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
+        menuItems: [{ text: 'menu' }, { text: 'menu' }]
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -1044,22 +1044,22 @@ QUnit.test("click on menu item should open menu", (assert) => {
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    deleteButtonContent().trigger("dxclick");
+    deleteButtonContent().trigger('dxclick');
 
     const $menu = $list.find(toSelector(SLIDE_MENU_CLASS));
-    const menu = $menu.dxActionSheet("instance");
+    const menu = $menu.dxActionSheet('instance');
     const $menuItems = $(menu.itemElements());
 
-    assert.strictEqual($menuItems.length, 2, "menu items was rendered");
-    assert.strictEqual(menu.option("visible"), true, "menu is shown");
-    assert.strictEqual($menuItems.text(), "menumenu", "menu text is correct");
+    assert.strictEqual($menuItems.length, 2, 'menu items was rendered');
+    assert.strictEqual(menu.option('visible'), true, 'menu is shown');
+    assert.strictEqual($menuItems.text(), 'menumenu', 'menu text is correct');
 });
 
-QUnit.test("click on menu toggle should not turn off ready to delete", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
-        menuItems: [{ text: "menu" }, { text: "menu" }]
+QUnit.test('click on menu toggle should not turn off ready to delete', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
+        menuItems: [{ text: 'menu' }, { text: 'menu' }]
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -1072,26 +1072,26 @@ QUnit.test("click on menu toggle should not turn off ready to delete", (assert) 
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    deleteButtonContent().trigger("dxclick");
+    deleteButtonContent().trigger('dxclick');
 
-    assert.strictEqual(deleteButtonContent().length, 1, "ready to delete mode is enabled");
+    assert.strictEqual(deleteButtonContent().length, 1, 'ready to delete mode is enabled');
 });
 
-QUnit.test("menu item action should be fired after item click", (assert) => {
+QUnit.test('menu item action should be fired after item click', (assert) => {
     assert.expect(2);
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
         menuItems: [
             {
-                text: "menu",
+                text: 'menu',
                 action: (e) => {
                     assert.strictEqual($(e.itemElement).get(0), $item.get(0));
                 }
             },
             {
-                text: "menu"
+                text: 'menu'
             }
         ]
     });
@@ -1106,27 +1106,27 @@ QUnit.test("menu item action should be fired after item click", (assert) => {
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    deleteButtonContent().trigger("dxclick");
+    deleteButtonContent().trigger('dxclick');
 
     const $menu = $list.find(toSelector(SLIDE_MENU_CLASS));
-    const menu = $menu.dxActionSheet("instance");
+    const menu = $menu.dxActionSheet('instance');
     const $menuItems = $(menu.itemElements());
 
-    $menuItems.eq(0).trigger("dxclick");
-    assert.strictEqual(deleteButtonContent().length, 0, "ready to delete mode is disabled");
+    $menuItems.eq(0).trigger('dxclick');
+    assert.strictEqual(deleteButtonContent().length, 0, 'ready to delete mode is disabled');
 });
 
-QUnit.test("menu item action should be fired after item click", (assert) => {
+QUnit.test('menu item action should be fired after item click', (assert) => {
     assert.expect(3);
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
-        menuMode: "slide",
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        menuMode: 'slide',
         menuItems: [
             {
-                text: "menu",
+                text: 'menu',
                 action: (e) => {
-                    assert.strictEqual(isRenderer(e.itemElement), !!config().useJQuery, "itemElement is correct");
+                    assert.strictEqual(isRenderer(e.itemElement), !!config().useJQuery, 'itemElement is correct');
                     assert.strictEqual($(e.itemElement).get(0), $item.get(0));
                 }
             }
@@ -1143,21 +1143,21 @@ QUnit.test("menu item action should be fired after item click", (assert) => {
     };
 
     pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    deleteButtonContent().trigger("dxclick");
-    assert.strictEqual(deleteButtonContent().length, 0, "ready to delete mode is disabled");
+    deleteButtonContent().trigger('dxclick');
+    assert.strictEqual(deleteButtonContent().length, 0, 'ready to delete mode is disabled');
 });
 
-QUnit.test("click on menu toggle should cause item click event", (assert) => {
+QUnit.test('click on menu toggle should cause item click event', (assert) => {
     const origFxOff = fx.off;
     const clickHandledStub = sinon.stub();
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0"],
-            menuMode: "slide",
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            menuMode: 'slide',
             menuItems: [
                 {
-                    text: "menu",
+                    text: 'menu',
                     action: () => {}
                 }
             ],
@@ -1175,27 +1175,27 @@ QUnit.test("click on menu toggle should cause item click event", (assert) => {
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
         fx.off = false;
-        deleteButtonContent().trigger("dxclick");
-        assert.strictEqual(clickHandledStub.callCount, 0, "click on item not fired");
+        deleteButtonContent().trigger('dxclick');
+        assert.strictEqual(clickHandledStub.callCount, 0, 'click on item not fired');
     } finally {
         fx.off = origFxOff;
     }
 });
 
-QUnit.test("click on menu toggle should cause item click event if at least 2 menu items present", (assert) => {
+QUnit.test('click on menu toggle should cause item click event if at least 2 menu items present', (assert) => {
     const origFxOff = fx.off;
     const clickHandledStub = sinon.stub();
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0"],
-            menuMode: "slide",
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            menuMode: 'slide',
             menuItems: [
                 {
-                    text: "menu"
+                    text: 'menu'
                 },
                 {
-                    text: "menu"
+                    text: 'menu'
                 }
             ],
             onItemClick: clickHandledStub
@@ -1212,14 +1212,14 @@ QUnit.test("click on menu toggle should cause item click event if at least 2 men
 
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
         fx.off = false;
-        deleteButtonContent().trigger("dxclick");
-        assert.strictEqual(clickHandledStub.callCount, 0, "click on item not fired");
+        deleteButtonContent().trigger('dxclick');
+        assert.strictEqual(clickHandledStub.callCount, 0, 'click on item not fired');
     } finally {
         fx.off = origFxOff;
     }
 });
 
-QUnit.module("swipe delete decorator", {
+QUnit.module('swipe delete decorator', {
     beforeEach: () => {
         fx.off = true;
     },
@@ -1228,31 +1228,31 @@ QUnit.module("swipe delete decorator", {
     }
 });
 
-QUnit.test("delete item by swipe gesture", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('delete item by swipe gesture', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "swipe"
+        itemDeleteMode: 'swipe'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $item = $(list.itemElements()).eq(0);
     const pointer = pointerMock($item);
 
     list.deleteItem = ($itemElement) => {
-        assert.strictEqual($itemElement.get(0), $item.get(0), "item is deleted");
+        assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
         return $.Deferred().resolve().promise();
     };
 
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
 });
 
-QUnit.test("item should be at normal position if confirmation not passed", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('item should be at normal position if confirmation not passed', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "swipe"
+        itemDeleteMode: 'swipe'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $item = $(list.itemElements()).eq(0);
     const pointer = pointerMock($item);
 
@@ -1261,28 +1261,28 @@ QUnit.test("item should be at normal position if confirmation not passed", (asse
     };
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
 
-    assert.strictEqual(position($item), 0, "position returned");
+    assert.strictEqual(position($item), 0, 'position returned');
 });
 
-QUnit.test("swipe should not delete item if widget is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('swipe should not delete item if widget is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         disabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "swipe"
+        itemDeleteMode: 'swipe'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $item = $(list.itemElements()).eq(0);
     const startEvent = pointerMock($item).start().swipeStart().lastEvent();
 
-    assert.ok(startEvent.cancel, "swipe canceled");
+    assert.ok(startEvent.cancel, 'swipe canceled');
 });
 
-const CONTEXTMENU_CLASS = "dx-list-context-menu";
-const CONTEXTMENU_MENUCONTENT_CLASS = "dx-list-context-menucontent";
+const CONTEXTMENU_CLASS = 'dx-list-context-menu';
+const CONTEXTMENU_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 const CONTEXTMENU_MENUITEM = LIST_ITEM_CLASS;
 
-QUnit.module("context delete decorator", {
+QUnit.module('context delete decorator', {
     beforeEach: () => {
         fx.off = true;
     },
@@ -1291,47 +1291,47 @@ QUnit.module("context delete decorator", {
     }
 });
 
-QUnit.test("overlay content markup", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('overlay content markup', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context"
+        itemDeleteMode: 'context'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
 
-    assert.ok($deleteMenuItem.length, "delete menu item generated");
-    assert.strictEqual($deleteMenuItem.text(), "Delete", "delete menu item text set");
+    assert.ok($deleteMenuItem.length, 'delete menu item generated');
+    assert.strictEqual($deleteMenuItem.text(), 'Delete', 'delete menu item text set');
 });
 
-QUnit.test("item should be deleted from menu", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('item should be deleted from menu', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         editEnabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "context"
+        itemDeleteMode: 'context'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
 
     list.deleteItem = ($itemElement) => {
-        assert.ok(true, "item is deleted");
+        assert.ok(true, 'item is deleted');
         return $.Deferred().resolve().promise();
     };
-    $deleteMenuItem.trigger("dxclick");
+    $deleteMenuItem.trigger('dxclick');
 });
 
-QUnit.module("context menu decorator", {
+QUnit.module('context menu decorator', {
     beforeEach: () => {
         fx.off = true;
     },
@@ -1340,193 +1340,193 @@ QUnit.module("context menu decorator", {
     }
 });
 
-QUnit.test("menu content markup", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('menu content markup', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
-        menuMode: "context",
-        menuItems: [{ text: "menu" }]
+        menuMode: 'context',
+        menuItems: [{ text: 'menu' }]
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $menuContent = $(menu.content());
     const $contextMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
-    assert.ok($menuContent.hasClass(CONTEXTMENU_MENUCONTENT_CLASS), "menu content class set");
-    assert.strictEqual($contextMenuItem.length, 1, "context menu item generated");
-    assert.strictEqual($contextMenuItem.text(), "menu", "context menu item text set");
+    assert.ok($menuContent.hasClass(CONTEXTMENU_MENUCONTENT_CLASS), 'menu content class set');
+    assert.strictEqual($contextMenuItem.length, 1, 'context menu item generated');
+    assert.strictEqual($contextMenuItem.text(), 'menu', 'context menu item text set');
 });
 
-QUnit.test("delete button should be rendered in menu if delete enabled", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('delete button should be rendered in menu if delete enabled', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        menuMode: "context",
-        menuItems: [{ text: "menu" }]
+        menuMode: 'context',
+        menuItems: [{ text: 'menu' }]
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $menuContent = $(menu.content());
     const $contextMenuItems = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
-    assert.strictEqual($contextMenuItems.length, 2, "context menu item and delete item menu generated");
-    assert.strictEqual($contextMenuItems.eq(1).text(), "Delete", "delete item text set");
+    assert.strictEqual($contextMenuItems.length, 2, 'context menu item and delete item menu generated');
+    assert.strictEqual($contextMenuItems.eq(1).text(), 'Delete', 'delete item text set');
 });
 
-QUnit.test("item hold should open overlay", (assert) => {
+QUnit.test('item hold should open overlay', (assert) => {
     assert.expect(1);
 
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context"
+        itemDeleteMode: 'context'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
 
     $item.trigger(contextMenuEvent.name);
-    assert.ok(menu.option("visible"), "overlay shown");
+    assert.ok(menu.option('visible'), 'overlay shown');
 });
 
-QUnit.test("item hold should not open overlay if editing disabled", (assert) => {
+QUnit.test('item hold should not open overlay if editing disabled', (assert) => {
     assert.expect(1);
 
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context"
+        itemDeleteMode: 'context'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    list.option("allowItemDeleting", false);
+    list.option('allowItemDeleting', false);
 
     const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
-    assert.ok(!$menu.length, "overlay won't created");
+    assert.ok(!$menu.length, 'overlay won\'t created');
 });
 
-QUnit.test("item hold should not open overlay if widget is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('item hold should not open overlay if widget is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         disabled: true,
         allowItemDeleting: true,
-        itemDeleteMode: "context"
+        itemDeleteMode: 'context'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
 
     $item.trigger(contextMenuEvent.name);
-    assert.ok(!menu.option("visible"), "overlay shown");
+    assert.ok(!menu.option('visible'), 'overlay shown');
 });
 
-QUnit.test("menu item click action should be fired with correct arguments", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('menu item click action should be fired with correct arguments', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
-        menuMode: "context",
+        menuMode: 'context',
         menuItems: [
             {
-                text: "menu",
+                text: 'menu',
                 action: (e) => {
-                    assert.strictEqual($(e.itemElement).get(0), $item.get(0), "itemElement is correct");
+                    assert.strictEqual($(e.itemElement).get(0), $item.get(0), 'itemElement is correct');
                 }
             }
         ]
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $menuContent = $(menu.content());
     const $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
-    $menuItem.trigger("dxclick");
+    $menuItem.trigger('dxclick');
 });
 
-QUnit.test("delete menu item click should remove item and hide overlay", (assert) => {
+QUnit.test('delete menu item click should remove item and hide overlay', (assert) => {
     assert.expect(3);
 
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context",
+        itemDeleteMode: 'context',
         onItemHold: () => {
-            assert.ok(false, "item hold action fired");
+            assert.ok(false, 'item hold action fired');
         }
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     list.deleteItem = (itemElement) => {
-        assert.ok(true, "delete action executed");
+        assert.ok(true, 'delete action executed');
         assert.ok($(itemElement).hasClass(LIST_ITEM_CLASS));
     };
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $menuContent = $(menu.content());
     const $deleteMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
-    $deleteMenuItem.trigger("dxclick");
-    assert.ok(!menu.option("visible"), "overlay shown");
+    $deleteMenuItem.trigger('dxclick');
+    assert.ok(!menu.option('visible'), 'overlay shown');
 });
 
-QUnit.test("menu should be closed after click", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('menu should be closed after click', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
-        menuMode: "context",
-        menuItems: [{ text: "menu" }]
+        menuMode: 'context',
+        menuItems: [{ text: 'menu' }]
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger('dxcontextmenu');
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $menu = $list.find(toSelector(CONTEXTMENU_CLASS));
-    const menu = $menu.dxOverlay("instance");
+    const menu = $menu.dxOverlay('instance');
     const $menuContent = $(menu.content());
     const $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
-    $menuItem.trigger("dxclick");
+    $menuItem.trigger('dxclick');
 
-    assert.ok(!menu.option("visible"), "menu hidden");
+    assert.ok(!menu.option('visible'), 'menu hidden');
 });
 
-QUnit.test("onItemHold should not be fired if context menu was opened by hold", (assert) => {
+QUnit.test('onItemHold should not be fired if context menu was opened by hold', (assert) => {
     assert.expect(0);
 
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context",
+        itemDeleteMode: 'context',
         onItemHold: () => {
             assert.ok(false);
         }
@@ -1536,15 +1536,15 @@ QUnit.test("onItemHold should not be fired if context menu was opened by hold", 
 
     $item.trigger({
         type: holdEvent.name,
-        pointerType: "touch"
+        pointerType: 'touch'
     });
 });
 
-QUnit.test("onItemHold should not be fired if context menu was not opened by hold", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('onItemHold should not be fired if context menu was not opened by hold', (assert) => {
+    const $list = $('#templated-list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context",
+        itemDeleteMode: 'context',
         onItemHold: () => {
             assert.ok(true);
         }
@@ -1554,125 +1554,125 @@ QUnit.test("onItemHold should not be fired if context menu was not opened by hol
 
     $item.trigger({
         type: holdEvent.name,
-        pointerType: "mouse"
+        pointerType: 'mouse'
     });
 });
 
-QUnit.test("rtlEnabled option should be passed to overlay", (assert) => {
+QUnit.test('rtlEnabled option should be passed to overlay', (assert) => {
     assert.expect(1);
 
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
-        itemDeleteMode: "context",
+        itemDeleteMode: 'context',
         rtlEnabled: true
     });
-    const menu = $list.find(toSelector(CONTEXTMENU_CLASS)).dxOverlay("instance");
+    const menu = $list.find(toSelector(CONTEXTMENU_CLASS)).dxOverlay('instance');
 
-    assert.ok(menu.option("rtlEnabled"), "rtl option is true");
+    assert.ok(menu.option('rtlEnabled'), 'rtl option is true');
 });
 
 
-QUnit.module("item select decorator");
+QUnit.module('item select decorator');
 
-const SELECT_DECORATOR_ENABLED_CLASS = "dx-list-select-decorator-enabled";
-const SELECT_CHECKBOX_CLASS = "dx-list-select-checkbox";
+const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
+const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 
-QUnit.test("selection control has focusStateEnabled = false and hoverStateEnabled = false", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('selection control has focusStateEnabled = false and hoverStateEnabled = false', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $checkboxContainer = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS));
-    const checkbox = $checkboxContainer.children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox("instance");
+    const checkbox = $checkboxContainer.children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
-    assert.ok(!checkbox.option("focusStateEnabled"), "focused state is turned off for the control");
-    assert.ok(!checkbox.option("hoverStateEnabled"), "hover state is turned off for the control");
+    assert.ok(!checkbox.option('focusStateEnabled'), 'focused state is turned off for the control');
+    assert.ok(!checkbox.option('hoverStateEnabled'), 'hover state is turned off for the control');
 });
 
-QUnit.test("checkbox click should trigger select callback only once with correct itemData", (assert) => {
+QUnit.test('checkbox click should trigger select callback only once with correct itemData', (assert) => {
     assert.expect(1);
 
-    const item = "0";
-    const $list = $("#templated-list").dxList({
+    const item = '0';
+    const $list = $('#templated-list').dxList({
         items: [item],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     list.selectItem = () => {
-        assert.ok(true, "item selected");
+        assert.ok(true, 'item selected');
     };
 
     const $checkbox = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
 
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
 });
 
-QUnit.test("checkbox click should trigger unselect callback only once with correct itemData", (assert) => {
+QUnit.test('checkbox click should trigger unselect callback only once with correct itemData', (assert) => {
     assert.expect(1);
 
-    const item = "0";
-    const $list = $("#templated-list").dxList({
+    const item = '0';
+    const $list = $('#templated-list').dxList({
         items: [item],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     list.unselectItem = () => {
-        assert.ok(true, "item unselected");
+        assert.ok(true, 'item unselected');
     };
 
     const $checkbox = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
 
-    $checkbox.trigger("dxclick");
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
+    $checkbox.trigger('dxclick');
 });
 
-QUnit.test("rendering if selecting is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('rendering if selecting is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "none"
+        selectionMode: 'none'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS));
 
-    assert.strictEqual($checkbox.hasClass("dx-checkbox"), false, "select not generated");
+    assert.strictEqual($checkbox.hasClass('dx-checkbox'), false, 'select not generated');
 });
 
-QUnit.test("checkbox should be refreshed with correct state", (assert) => {
+QUnit.test('checkbox should be refreshed with correct state', (assert) => {
     assert.expect(1);
 
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const checkbox = () => {
         return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0).find(toSelector(SELECT_CHECKBOX_CLASS));
     };
 
-    checkbox().trigger("dxclick");
+    checkbox().trigger('dxclick');
     list._refresh();
 
-    assert.strictEqual(checkbox().dxCheckBox("instance").option("value"), true, "checkbox regenerated successfully");
+    assert.strictEqual(checkbox().dxCheckBox('instance').option('value'), true, 'checkbox regenerated successfully');
 });
 
-QUnit.test("checkbox should be refreshed when selectItem is called on it", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('checkbox should be refreshed when selectItem is called on it', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const item = () => {
         return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
     };
@@ -1682,16 +1682,16 @@ QUnit.test("checkbox should be refreshed when selectItem is called on it", (asse
 
     list.selectItem(item());
 
-    assert.strictEqual(checkbox().dxCheckBox("instance").option("value"), true, "checkbox regenerated successfully");
+    assert.strictEqual(checkbox().dxCheckBox('instance').option('value'), true, 'checkbox regenerated successfully');
 });
 
-QUnit.test("checkbox should be refreshed when unselectItem is called on it", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('checkbox should be refreshed when unselectItem is called on it', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const item = () => {
         return $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
     };
@@ -1699,49 +1699,49 @@ QUnit.test("checkbox should be refreshed when unselectItem is called on it", (as
         return item().find(toSelector(SELECT_CHECKBOX_CLASS));
     };
 
-    checkbox().trigger("dxclick");
+    checkbox().trigger('dxclick');
     list.unselectItem(item());
 
-    assert.strictEqual(checkbox().dxCheckBox("instance").option("value"), false, "checkbox regenerated successfully");
+    assert.strictEqual(checkbox().dxCheckBox('instance').option('value'), false, 'checkbox regenerated successfully');
 });
 
-QUnit.test("selection enabled class should be added when needed", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('selection enabled class should be added when needed', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
-    assert.ok($list.hasClass(SELECT_DECORATOR_ENABLED_CLASS), "class added");
-    list.option("showSelectionControls", false);
-    assert.ok(!$list.hasClass(SELECT_DECORATOR_ENABLED_CLASS), "class removed");
+    assert.ok($list.hasClass(SELECT_DECORATOR_ENABLED_CLASS), 'class added');
+    list.option('showSelectionControls', false);
+    assert.ok(!$list.hasClass(SELECT_DECORATOR_ENABLED_CLASS), 'class removed');
 });
 
-QUnit.test("item click changes checkbox state", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('item click changes checkbox state', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
 
-    const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox("instance");
+    const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
-    assert.strictEqual(checkbox.option("value"), true, "state changed");
+    assert.strictEqual(checkbox.option('value'), true, 'state changed');
 });
 
-QUnit.test("item click should trigger select/unselect callback only once", (assert) => {
-    const item = "0";
+QUnit.test('item click should trigger select/unselect callback only once', (assert) => {
+    const item = '0';
     const selectActionStub = sinon.stub();
     const unselectActionStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [item],
         showSelectionControls: true,
-        selectionMode: "multiple",
+        selectionMode: 'multiple',
         onSelectionChanged: (args) => {
             if(args.addedItems.length) {
                 selectActionStub();
@@ -1754,21 +1754,21 @@ QUnit.test("item click should trigger select/unselect callback only once", (asse
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
+    $item.trigger('dxclick');
 
-    assert.strictEqual(selectActionStub.callCount, 1, "selection triggered");
-    assert.strictEqual(unselectActionStub.callCount, 1, "unselected triggered");
+    assert.strictEqual(selectActionStub.callCount, 1, 'selection triggered');
+    assert.strictEqual(unselectActionStub.callCount, 1, 'unselected triggered');
 });
 
-QUnit.test("click on checkbox should trigger events only once", (assert) => {
-    const item = "0";
+QUnit.test('click on checkbox should trigger events only once', (assert) => {
+    const item = '0';
     const selectActionStub = sinon.stub();
     const unselectActionStub = sinon.stub();
-    const $list = $("#templated-list").dxList({
+    const $list = $('#templated-list').dxList({
         items: [item],
         showSelectionControls: true,
-        selectionMode: "multiple",
+        selectionMode: 'multiple',
         onSelectionChanged: (args) => {
             if(args.addedItems.length) {
                 selectActionStub();
@@ -1783,123 +1783,123 @@ QUnit.test("click on checkbox should trigger events only once", (assert) => {
     const $item = $items.eq(0);
     const $checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS));
 
-    $checkbox.trigger("dxclick");
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
+    $checkbox.trigger('dxclick');
 
-    assert.strictEqual(selectActionStub.callCount, 1, "selected triggered");
-    assert.strictEqual(unselectActionStub.callCount, 1, "unselected triggered");
+    assert.strictEqual(selectActionStub.callCount, 1, 'selected triggered');
+    assert.strictEqual(unselectActionStub.callCount, 1, 'unselected triggered');
 });
 
-QUnit.test("click on item should not change selected state if widget is disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('click on item should not change selected state if widget is disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
         disabled: true,
-        items: ["0"],
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
-    const list = $("#templated-list").dxList("instance");
+    const list = $('#templated-list').dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
 
-    assert.strictEqual(list.option("selectedItems").length, 0, "item is not selected");
+    assert.strictEqual(list.option('selectedItems').length, 0, 'item is not selected');
 });
 
-QUnit.test("click on delete toggle should not change selected state", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('click on delete toggle should not change selected state', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemDeleting: true,
-        itemDeleteMode: "toggle",
+        itemDeleteMode: 'toggle',
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
 
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
-    const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox("instance");
+    const checkbox = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
-    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger("dxpointerup");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
-    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger("dxpointerup");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
 
-QUnit.test("click on item ready to delete with toggle mode should not change selected state", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1"],
+QUnit.test('click on item ready to delete with toggle mode should not change selected state', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1'],
         allowItemDeleting: true,
-        itemDeleteMode: "toggle",
+        itemDeleteMode: 'toggle',
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $item1 = $items.eq(1);
-    const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox("instance");
+    const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
 
-    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger("dxpointerup");
-    $item.find($item).trigger("dxclick");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    $item.find($item).trigger('dxclick');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
-    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger("dxpointerup");
-    $item.find($item1).trigger("dxclick");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find(toSelector(TOGGLE_DELETE_SWITCH_CLASS)).trigger('dxpointerup');
+    $item.find($item1).trigger('dxclick');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
 
-QUnit.test("click on item ready to delete with slideButton mode should not change selected state", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1"],
+QUnit.test('click on item ready to delete with slideButton mode should not change selected state', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1'],
         allowItemDeleting: true,
-        itemDeleteMode: "slideButton",
+        itemDeleteMode: 'slideButton',
         showSelectionControls: true,
-        selectionMode: "multiple"
+        selectionMode: 'multiple'
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
     const $item1 = $items.eq(1);
-    const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox("instance");
+    const checkbox = $item.find(toSelector(SELECT_CHECKBOX_CLASS)).dxCheckBox('instance');
     const pointer = pointerMock($item);
 
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
-    $item.find($item).trigger("click");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find($item).trigger('click');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 
     pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
-    $item.find($item1).trigger("dxclick");
-    assert.strictEqual(checkbox.option("value"), false, "click action is not pass to item");
+    $item.find($item1).trigger('dxclick');
+    assert.strictEqual(checkbox.option('value'), false, 'click action is not pass to item');
 });
 
-QUnit.test("item click event should be fired if selectionControls is enabled", (assert) => {
+QUnit.test('item click event should be fired if selectionControls is enabled', (assert) => {
     const itemClickHandler = sinon.spy();
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
-        selectionMode: "all",
+        selectionMode: 'all',
         onItemClick: itemClickHandler
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
 
-    assert.strictEqual(itemClickHandler.callCount, 1, "handler was called once");
+    assert.strictEqual(itemClickHandler.callCount, 1, 'handler was called once');
 });
 
-QUnit.test("grouped list with dataSource and store key specified should select items correctly", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('grouped list with dataSource and store key specified should select items correctly', (assert) => {
+    const $list = $('#templated-list').dxList({
         dataSource: new DataSource({
             store: new ArrayStore({
                 data: [
-                    { id: 0, text: "Item 1", cId: 1 },
-                    { id: 1, text: "Item 2", cId: 1 },
-                    { id: 2, text: "Item 3", cId: 2 },
-                    { id: 3, text: "Item 4", cId: 2 }
+                    { id: 0, text: 'Item 1', cId: 1 },
+                    { id: 1, text: 'Item 2', cId: 1 },
+                    { id: 2, text: 'Item 3', cId: 2 },
+                    { id: 3, text: 'Item 4', cId: 2 }
                 ],
-                key: "id"
+                key: 'id'
             }),
-            group: "cId"
+            group: 'cId'
         }),
         selectionMode: 'multiple',
         grouped: true,
@@ -1908,508 +1908,508 @@ QUnit.test("grouped list with dataSource and store key specified should select i
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
 
-    assert.ok($item.hasClass("dx-list-item-selected"), "item is selected");
+    assert.ok($item.hasClass('dx-list-item-selected'), 'item is selected');
 });
 
 
-QUnit.module("selectAll for all pages");
+QUnit.module('selectAll for all pages');
 
-QUnit.test("next loaded page should be selected when selectAll is enabled", (assert) => {
+QUnit.test('next loaded page should be selected when selectAll is enabled', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $selectAll.trigger("dxclick");
-    $moreButton.trigger("dxclick");
+    $selectAll.trigger('dxclick');
+    $moreButton.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is in selected state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 6, "all items are selected");
-    assert.strictEqual($list.find(".dx-list-item-selected").length, 4, "all items has selected class");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll checkbox is in selected state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 6, 'all items are selected');
+    assert.strictEqual($list.find('.dx-list-item-selected').length, 4, 'all items has selected class');
 });
 
-QUnit.test("selectAll should have active state", (assert) => {
+QUnit.test('selectAll should have active state', (assert) => {
     const clock = sinon.useFakeTimers();
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: new DataSource({
             store: [1, 2, 3, 4, 5, 6],
         }),
         showSelectionControls: true,
-        selectionMode: "all",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all");
+    const $selectAll = $list.find('.dx-list-select-all');
     const pointer = pointerMock($selectAll);
 
-    pointer.start("touch").down();
+    pointer.start('touch').down();
     clock.tick(100);
-    assert.ok($selectAll.hasClass("dx-state-active"), "selectAll has active state");
+    assert.ok($selectAll.hasClass('dx-state-active'), 'selectAll has active state');
     clock.restore();
 });
 
-QUnit.test("selectAll should not select items if they are not in current filter", (assert) => {
+QUnit.test('selectAll should not select items if they are not in current filter', (assert) => {
     const ds = new DataSource({
         store: [
-            { id: 0, text: "Item 1" },
-            { id: 1, text: "Item 2" },
-            { id: 2, text: "Item 3" }
+            { id: 0, text: 'Item 1' },
+            { id: 1, text: 'Item 2' },
+            { id: 2, text: 'Item 3' }
         ],
-        key: "id",
-        selectAllMode: "allPages",
-        filter: ["id", 1]
+        key: 'id',
+        selectAllMode: 'allPages',
+        filter: ['id', 1]
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
 
-    $selectAll.trigger("dxclick");
+    $selectAll.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), true, "selectAll sheckbox is in selected state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 1, "just filtered items should be selected");
-    assert.strictEqual($list.find(".dx-list-item-selected").length, 1, "selected items should have selected class");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll sheckbox is in selected state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 1, 'just filtered items should be selected');
+    assert.strictEqual($list.find('.dx-list-item-selected').length, 1, 'selected items should have selected class');
 });
 
-QUnit.test("selectAll checkbox should change it's state to undefined when one item was deselected", (assert) => {
+QUnit.test('selectAll checkbox should change it\'s state to undefined when one item was deselected', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
-    const $checkBox = $list.find(".dx-checkbox").eq(1);
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkBox = $list.find('.dx-checkbox').eq(1);
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $selectAll.trigger("dxclick");
-    $moreButton.trigger("dxclick");
-    $checkBox.trigger("dxclick");
+    $selectAll.trigger('dxclick');
+    $moreButton.trigger('dxclick');
+    $checkBox.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is in undefined state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 5, "all of selected items are in the option");
-    assert.strictEqual($list.find(".dx-list-item-selected").length, 3, "all selected items has selected class");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox is in undefined state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 5, 'all of selected items are in the option');
+    assert.strictEqual($list.find('.dx-list-item-selected').length, 3, 'all selected items has selected class');
 });
 
-QUnit.test("selectAll should change state after page loading when all items was selected in the previous page", (assert) => {
+QUnit.test('selectAll should change state after page loading when all items was selected in the previous page', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
-    const $checkBox = $list.find(".dx-checkbox:gt(0)");
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkBox = $list.find('.dx-checkbox:gt(0)');
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $checkBox.trigger("dxclick");
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is in undefined state");
+    $checkBox.trigger('dxclick');
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox is in undefined state');
 
-    $moreButton.trigger("dxclick");
+    $moreButton.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is in undefined state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 2, "all of selected items are in the option");
-    assert.strictEqual($list.find(".dx-list-item-selected").length, 2, "all selected items has selected class");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox is in undefined state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 2, 'all of selected items are in the option');
+    assert.strictEqual($list.find('.dx-list-item-selected').length, 2, 'all selected items has selected class');
 });
 
-QUnit.test("selectAll should change state after page loading if selectAllMode was changed", (assert) => {
+QUnit.test('selectAll should change state after page loading if selectAllMode was changed', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "page"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'page'
     });
 
-    $list.dxList("option", "selectAllMode", "allPages");
+    $list.dxList('option', 'selectAllMode', 'allPages');
 
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
-    const $checkBox = $list.find(".dx-checkbox").eq(1);
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    const $checkBox = $list.find('.dx-checkbox').eq(1);
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $selectAll.trigger("dxclick");
-    $moreButton.trigger("dxclick");
-    $checkBox.trigger("dxclick");
+    $selectAll.trigger('dxclick');
+    $moreButton.trigger('dxclick');
+    $checkBox.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is in undefined state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 5, "all of selected items are in the option");
-    assert.strictEqual($list.find(".dx-list-item-selected").length, 3, "all selected items has selected class");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox is in undefined state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 5, 'all of selected items are in the option');
+    assert.strictEqual($list.find('.dx-list-item-selected').length, 3, 'all selected items has selected class');
 });
 
-QUnit.test("items should starts from first page after selectAllMode was changed", (assert) => {
+QUnit.test('items should starts from first page after selectAllMode was changed', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "page"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'page'
     });
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $moreButton.trigger("dxclick");
-    $list.dxList("option", "selectAllMode", "allPages");
+    $moreButton.trigger('dxclick');
+    $list.dxList('option', 'selectAllMode', 'allPages');
 
-    assert.deepEqual($list.dxList("option", "items"), [1, 2], "items starts from the first page");
+    assert.deepEqual($list.dxList('option', 'items'), [1, 2], 'items starts from the first page');
 });
 
-QUnit.test("more button is shown if selectAllMode was changed after load allpage", (assert) => {
+QUnit.test('more button is shown if selectAllMode was changed after load allpage', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6],
         pageSize: 4,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
-        pageLoadMode: "nextButton",
-        selectAllMode: "page"
+        selectionMode: 'all',
+        pageLoadMode: 'nextButton',
+        selectAllMode: 'page'
     });
-    let $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    let $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $moreButton.trigger("dxclick");
-    $list.dxList("option", "selectAllMode", "allPages");
-    $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    $moreButton.trigger('dxclick');
+    $list.dxList('option', 'selectAllMode', 'allPages');
+    $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    assert.ok($moreButton.length, "morebutton is shown");
+    assert.ok($moreButton.length, 'morebutton is shown');
 });
 
-QUnit.test("selectAll and unselectAll should log warning if selectAllMode is allPages and data is grouped", (assert) => {
+QUnit.test('selectAll and unselectAll should log warning if selectAllMode is allPages and data is grouped', (assert) => {
     const ds = new DataSource({
-        store: [{ key: "1", items: ["1_1", "1_2"] }, { key: "2", items: ["2_1", "2_2"] }],
+        store: [{ key: '1', items: ['1_1', '1_2'] }, { key: '2', items: ['2_1', '2_2'] }],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         grouped: true,
         showSelectionControls: true,
-        selectionMode: "all",
-        selectAllMode: "allPages"
+        selectionMode: 'all',
+        selectAllMode: 'allPages'
     });
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
 
-    sinon.spy(errors, "log");
+    sinon.spy(errors, 'log');
 
     // act
-    $selectAll.trigger("dxclick");
+    $selectAll.trigger('dxclick');
 
     // assert
     assert.strictEqual(errors.log.callCount, 1);
-    assert.strictEqual(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is in selected state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+    assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll checkbox is in selected state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'items are not selected');
 
 
     // act
-    $selectAll.trigger("dxclick");
+    $selectAll.trigger('dxclick');
 
     // assert
     assert.strictEqual(errors.log.callCount, 2);
-    assert.strictEqual(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), false, "selectAll checkbox is in selected state");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+    assert.strictEqual(errors.log.lastCall.args[0], 'W1010', 'Warning about selectAllMode allPages and grouped data');
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), false, 'selectAll checkbox is in selected state');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'items are not selected');
 
     errors.log.restore();
 });
 
-QUnit.module("item select decorator with all selection mode");
+QUnit.module('item select decorator with all selection mode');
 
-QUnit.test("render selectAll item when showSelectedAll is true", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('render selectAll item when showSelectedAll is true', (assert) => {
+    const $list = $('#list').dxList({
         items: [],
         showSelectionControls: true,
-        selectionMode: "all",
-        selectAllText: "Test"
+        selectionMode: 'all',
+        selectAllText: 'Test'
     });
-    const $multipleContainer = $list.find(".dx-list-select-all");
+    const $multipleContainer = $list.find('.dx-list-select-all');
 
-    assert.ok($multipleContainer.is(":hidden"), "container for SelectAll is hidden");
+    assert.ok($multipleContainer.is(':hidden'), 'container for SelectAll is hidden');
 });
 
-QUnit.test("selectAll updated on init", (assert) => {
+QUnit.test('selectAll updated on init', (assert) => {
     const items = [0, 1];
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
 
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), false, "selectAll updated after init");
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), false, 'selectAll updated after init');
 });
 
-QUnit.test("selectAll should be removed when editEnabled switched off", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('selectAll should be removed when editEnabled switched off', (assert) => {
+    const $list = $('#list').dxList({
         items: [0, 1],
         showSelectionControls: false,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
 
-    assert.strictEqual($list.find(".dx-list-select-all").length, 0, "selectAll not rendered");
+    assert.strictEqual($list.find('.dx-list-select-all').length, 0, 'selectAll not rendered');
 
-    $list.dxList("option", "showSelectionControls", true);
-    assert.strictEqual($list.find(".dx-list-select-all").length, 1, "selectAll rendered");
+    $list.dxList('option', 'showSelectionControls', true);
+    assert.strictEqual($list.find('.dx-list-select-all').length, 1, 'selectAll rendered');
 
-    $list.dxList("option", "showSelectionControls", false);
-    assert.strictEqual($list.find(".dx-list-select-all").length, 0, "selectAll not rendered");
+    $list.dxList('option', 'showSelectionControls', false);
+    assert.strictEqual($list.find('.dx-list-select-all').length, 0, 'selectAll not rendered');
 });
 
-QUnit.test("selectAll selects all items", (assert) => {
+QUnit.test('selectAll selects all items', (assert) => {
     const items = [0, 1];
 
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    $checkbox.trigger("dxclick");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    $checkbox.trigger('dxclick');
 
-    assert.deepEqual($list.dxList("option", "selectedItems"), items, "all items selected");
+    assert.deepEqual($list.dxList('option', 'selectedItems'), items, 'all items selected');
 });
 
-QUnit.test("selectAll triggers callback when selects all items", (assert) => {
+QUnit.test('selectAll triggers callback when selects all items', (assert) => {
     const items = [0, 1];
 
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
-        selectionMode: "all",
+        selectionMode: 'all',
         onSelectAllValueChanged: (args) => {
-            assert.strictEqual(args.value, true, "all items selected");
+            assert.strictEqual(args.value, true, 'all items selected');
         }
     });
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    $checkbox.trigger("dxclick");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    $checkbox.trigger('dxclick');
 });
 
-QUnit.test("selectAll unselect all items when all items selected", (assert) => {
+QUnit.test('selectAll unselect all items when all items selected', (assert) => {
     const items = [0, 1];
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         selectedItems: items.slice(),
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
 
-    $checkbox.trigger("dxclick");
-    assert.strictEqual($list.dxList("option", "selectedItems").length, 0, "all items unselected");
+    $checkbox.trigger('dxclick');
+    assert.strictEqual($list.dxList('option', 'selectedItems').length, 0, 'all items unselected');
 });
 
-QUnit.test("selectAll triggers callback when unselect all items when all items selected", (assert) => {
+QUnit.test('selectAll triggers callback when unselect all items when all items selected', (assert) => {
     const items = [0, 1];
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         selectedItems: items.slice(),
         showSelectionControls: true,
-        selectionMode: "all",
+        selectionMode: 'all',
         onSelectAllValueChanged: (args) => {
-            assert.strictEqual(args.value, false, "all items selected");
+            assert.strictEqual(args.value, false, 'all items selected');
         }
     });
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
 
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
 });
 
-QUnit.test("selectAll selects all items when click on item", (assert) => {
+QUnit.test('selectAll selects all items when click on item', (assert) => {
     const items = [0, 1];
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $selectAll = $list.find(".dx-list-select-all");
+    const $selectAll = $list.find('.dx-list-select-all');
 
-    $selectAll.trigger("dxclick");
+    $selectAll.trigger('dxclick');
 
-    assert.deepEqual($list.dxList("option", "selectedItems"), items, "all items selected");
+    assert.deepEqual($list.dxList('option', 'selectedItems'), items, 'all items selected');
 });
 
-QUnit.test("selectAll selects all items when click on checkBox and selectionType is item", (assert) => {
+QUnit.test('selectAll selects all items when click on checkBox and selectionType is item', (assert) => {
     const items = [0, 1];
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
 
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
 
-    assert.deepEqual($list.dxList("option", "selectedItems"), items, "all items selected");
+    assert.deepEqual($list.dxList('option', 'selectedItems'), items, 'all items selected');
 });
 
-QUnit.test("selectAll checkbox is selected when all items selected", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('selectAll checkbox is selected when all items selected', (assert) => {
+    const $list = $('#list').dxList({
         items: [0, 1],
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $items = $list.find(".dx-list-item");
+    const $items = $list.find('.dx-list-item');
 
-    $items.trigger("dxclick");
+    $items.trigger('dxclick');
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), true, "selectAll checkbox selected");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox selected');
 });
 
-QUnit.test("selectAll checkbox is selected when all items selected (ds w/o totalCount)", (assert) => {
+QUnit.test('selectAll checkbox is selected when all items selected (ds w/o totalCount)', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4],
         pageSize: 4,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $items = $list.find(".dx-list-item");
+    const $items = $list.find('.dx-list-item');
 
-    $items.trigger("dxclick");
+    $items.trigger('dxclick');
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), true, "selectAll checkbox selected");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox selected');
 });
 
-QUnit.test("selectAll checkbox is selected when all items selected (ds with totalCount)", (assert) => {
+QUnit.test('selectAll checkbox is selected when all items selected (ds with totalCount)', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4],
         pageSize: 4,
         paginate: true,
         requireTotalCount: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $items = $list.find(".dx-list-item");
+    const $items = $list.find('.dx-list-item');
 
-    $items.trigger("dxclick");
+    $items.trigger('dxclick');
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), true, "selectAll checkbox checked");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), true, 'selectAll checkbox checked');
 });
 
-QUnit.test("", (assert) => {
+QUnit.test('', (assert) => {
     const ds = new DataSource({
         store: [1, 2, 3, 4],
         pageSize: 2,
         paginate: true
     });
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: ds,
         showSelectionControls: true,
-        selectionMode: "all",
+        selectionMode: 'all',
         onSelectAllValueChanged: (args) => {
             return false;
         }
     });
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
 
-    $checkbox.trigger("dxclick");
+    $checkbox.trigger('dxclick');
 
-    assert.deepEqual($list.dxList("option", "selectedItems"), [], "no items was selected");
+    assert.deepEqual($list.dxList('option', 'selectedItems'), [], 'no items was selected');
 });
 
-QUnit.test("selectAll checkbox has indeterminate state when not all items selected", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('selectAll checkbox has indeterminate state when not all items selected', (assert) => {
+    const $list = $('#list').dxList({
         items: [0, 1],
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $items = $list.find(".dx-list-item");
+    const $items = $list.find('.dx-list-item');
 
-    $items.trigger("dxclick"); // NOTE: select all
-    $items.eq(0).trigger("dxclick"); // NOTE: unselect first
+    $items.trigger('dxclick'); // NOTE: select all
+    $items.eq(0).trigger('dxclick'); // NOTE: unselect first
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), undefined, "selectAll checkbox has indeterminate state");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox has indeterminate state');
 });
 
-QUnit.test("selectAll checkbox is unselected when all items unselected", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('selectAll checkbox is unselected when all items unselected', (assert) => {
+    const $list = $('#list').dxList({
         items: [0, 1],
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
-    const $items = $list.find(".dx-list-item");
+    const $items = $list.find('.dx-list-item');
 
-    $items.trigger("dxclick"); // NOTE: select all
-    $items.trigger("dxclick"); // NOTE: unselect all
+    $items.trigger('dxclick'); // NOTE: select all
+    $items.trigger('dxclick'); // NOTE: unselect all
 
-    const $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
-    assert.strictEqual($checkbox.dxCheckBox("option", "value"), false, "selectAll checkbox is unselected");
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    assert.strictEqual($checkbox.dxCheckBox('option', 'value'), false, 'selectAll checkbox is unselected');
 });
 
-QUnit.test("selectAll checkbox should be updated after load next page", (assert) => {
-    const $list = $("#list").dxList({
+QUnit.test('selectAll checkbox should be updated after load next page', (assert) => {
+    const $list = $('#list').dxList({
         dataSource: new DataSource({
             store: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             paginate: true,
             pageSize: 3
         }),
-        pageLoadMode: "nextButton",
+        pageLoadMode: 'nextButton',
         showSelectionControls: true,
-        selectionMode: "all"
+        selectionMode: 'all'
     });
 
-    const $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
-    $selectAll.trigger("dxclick");
+    const $selectAll = $list.find('.dx-list-select-all .dx-checkbox');
+    $selectAll.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is selected");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), true, 'selectAll checkbox is selected');
 
-    const $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
+    const $moreButton = $list.find('.dx-list-next-button > .dx-button').eq(0);
 
-    $moreButton.trigger("dxclick");
+    $moreButton.trigger('dxclick');
 
-    assert.strictEqual($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is selected");
+    assert.strictEqual($selectAll.dxCheckBox('option', 'value'), undefined, 'selectAll checkbox is selected');
 });
 
-QUnit.test("onContentReady event should be called after update the state Select All checkbox", (assert) => {
+QUnit.test('onContentReady event should be called after update the state Select All checkbox', (assert) => {
     const clock = sinon.useFakeTimers();
-    const $list = $("#list").dxList({
+    const $list = $('#list').dxList({
         dataSource: {
             load: () => {
                 const d = $.Deferred();
@@ -2422,27 +2422,27 @@ QUnit.test("onContentReady event should be called after update the state Select 
             }
         },
         showSelectionControls: true,
-        selectionMode: "all",
+        selectionMode: 'all',
         onContentReady: (e) => {
-            $(e.element).find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", undefined);
+            $(e.element).find('.dx-list-select-all-checkbox').dxCheckBox('instance').option('value', undefined);
         }
     });
 
     clock.tick(100);
 
-    assert.ok($list.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+    assert.ok($list.find('.dx-list-select-all-checkbox').hasClass('dx-checkbox-indeterminate'), 'checkbox in an indeterminate state');
 
     clock.restore();
 });
 
 
-QUnit.module("item select decorator with single selection mode");
+QUnit.module('item select decorator with single selection mode');
 
-const SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton";
+const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
-QUnit.test("item click changes radio button state only to true in single selection mode", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('item click changes radio button state only to true in single selection mode', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         showSelectionControls: true,
         selectionMode: 'single'
     });
@@ -2450,33 +2450,33 @@ QUnit.test("item click changes radio button state only to true in single selecti
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
 
-    $item.trigger("dxclick");
-    $item.trigger("dxclick");
+    $item.trigger('dxclick');
+    $item.trigger('dxclick');
 
-    const radioButton = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_RADIO_BUTTON_CLASS)).dxRadioButton("instance");
+    const radioButton = $item.children(toSelector(LIST_ITEM_BEFORE_BAG_CLASS)).children(toSelector(SELECT_RADIO_BUTTON_CLASS)).dxRadioButton('instance');
 
-    assert.strictEqual(radioButton.option("value"), true, "item selected");
+    assert.strictEqual(radioButton.option('value'), true, 'item selected');
 });
 
-QUnit.test("keyboard navigation should work with without selectAll checkbox", (assert) => {
-    const $list = $("#templated-list").dxList({
+QUnit.test('keyboard navigation should work with without selectAll checkbox', (assert) => {
+    const $list = $('#templated-list').dxList({
         focusStateEnabled: true,
-        items: ["0", "1"],
+        items: ['0', '1'],
         showSelectionControls: true,
         selectionMode: 'single'
     });
-    const instance = $list.dxList("instance");
+    const instance = $list.dxList('instance');
     const keyboard = keyboardMock($list);
 
     keyboard
-        .press("down")
-        .press("enter");
+        .press('down')
+        .press('enter');
 
-    assert.deepEqual(instance.option("selectedItems"), ["1"], "selection is correct");
+    assert.deepEqual(instance.option('selectedItems'), ['1'], 'selection is correct');
 });
 
 
-QUnit.module("reordering decorator", {
+QUnit.module('reordering decorator', {
     beforeEach: () => {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -2487,9 +2487,9 @@ QUnit.module("reordering decorator", {
     }
 });
 
-const REORDER_HANDLE_CLASS = "dx-list-reorder-handle";
-const REOREDERING_ITEM_CLASS = "dx-list-item-reordering";
-const REOREDERING_ITEM_GHOST_CLASS = "dx-list-item-ghost-reordering";
+const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
+const REOREDERING_ITEM_CLASS = 'dx-list-item-reordering';
+const REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
 
 const reorderingPointerMock = ($item, clock, usePixel) => {
     const itemOffset = $item.offset().top;
@@ -2529,9 +2529,9 @@ const topTranslation = ($item) => {
     return translator.locate($item).top;
 };
 
-QUnit.test("reordering class should be present on item during drag", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('reordering class should be present on item during drag', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2540,14 +2540,14 @@ QUnit.test("reordering class should be present on item during drag", (assert) =>
 
     pointer.dragStart().drag(10);
     this.clock.tick();
-    assert.ok($item.hasClass(REOREDERING_ITEM_CLASS), "class was added");
+    assert.ok($item.hasClass(REOREDERING_ITEM_CLASS), 'class was added');
     pointer.dragEnd();
-    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), "class was removed");
+    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), 'class was removed');
 });
 
-QUnit.test("reordering should not be possible if item disabled", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: [{ text: "0", disabled: true }],
+QUnit.test('reordering should not be possible if item disabled', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: [{ text: '0', disabled: true }],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2555,12 +2555,12 @@ QUnit.test("reordering should not be possible if item disabled", (assert) => {
     const pointer = reorderingPointerMock($item, this.clock, true);
 
     pointer.dragStart().drag(10);
-    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), "class was not added");
+    assert.ok(!$item.hasClass(REOREDERING_ITEM_CLASS), 'class was not added');
 });
 
-QUnit.test("list item should be duplicated on drag start", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('list item should be duplicated on drag start', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2571,21 +2571,21 @@ QUnit.test("list item should be duplicated on drag start", (assert) => {
 
     this.clock.tick();
     let $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
-    assert.strictEqual($ghostItem.text(), $item.text(), "correct item was duplicated");
-    assert.strictEqual($ghostItem.position().top, $item.position().top + 10, "correct ghost position");
-    assert.ok(!$ghostItem.hasClass(REOREDERING_ITEM_CLASS), "reordering class is not present");
+    assert.strictEqual($ghostItem.text(), $item.text(), 'correct item was duplicated');
+    assert.strictEqual($ghostItem.position().top, $item.position().top + 10, 'correct ghost position');
+    assert.ok(!$ghostItem.hasClass(REOREDERING_ITEM_CLASS), 'reordering class is not present');
 
     pointer.dragEnd();
     $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
-    assert.strictEqual($items.length, 1, "duplicate item was removed");
+    assert.strictEqual($items.length, 1, 'duplicate item was removed');
 });
 
-QUnit.test("cached items doesn't contains a ghost item after reordering", (assert) => {
-    const $list = $("#list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('cached items doesn\'t contains a ghost item after reordering', (assert) => {
+    const $list = $('#list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const pointer = reorderingPointerMock($items.first(), this.clock);
 
@@ -2595,13 +2595,13 @@ QUnit.test("cached items doesn't contains a ghost item after reordering", (asser
 
     const cachedItems = list._itemElements();
 
-    assert.strictEqual(cachedItems.length, 3, "Cached items contains 3 items");
-    assert.notOk(cachedItems.hasClass(REOREDERING_ITEM_GHOST_CLASS), "Cached items isn't contain a ghost item");
+    assert.strictEqual(cachedItems.length, 3, 'Cached items contains 3 items');
+    assert.notOk(cachedItems.hasClass(REOREDERING_ITEM_GHOST_CLASS), 'Cached items isn\'t contain a ghost item');
 });
 
-QUnit.test("ghost item should be moved by drag", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('ghost item should be moved by drag', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2610,21 +2610,21 @@ QUnit.test("ghost item should be moved by drag", (assert) => {
 
     pointer.dragStart().drag(10);
 
-    assert.strictEqual($list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS)).length, 0, "ghost item should be rendered async");
+    assert.strictEqual($list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS)).length, 0, 'ghost item should be rendered async');
 
     this.clock.tick();
     const $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
     const startPosition = topTranslation($ghostItem);
 
     pointer.drag(20);
-    assert.strictEqual(topTranslation($ghostItem), startPosition + 20, "ghost item was moved");
+    assert.strictEqual(topTranslation($ghostItem), startPosition + 20, 'ghost item was moved');
 
     pointer.dragEnd();
 });
 
-QUnit.test("item position should be reset after drag", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0"],
+QUnit.test('item position should be reset after drag', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2632,12 +2632,12 @@ QUnit.test("item position should be reset after drag", (assert) => {
     const pointer = reorderingPointerMock($item, this.clock, true);
 
     pointer.dragStart().drag(0, 10);
-    assert.strictEqual(topTranslation($item), 0, "position reset");
+    assert.strictEqual(topTranslation($item), 0, 'position reset');
 });
 
-QUnit.test("next item should be moved", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('next item should be moved', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2650,17 +2650,17 @@ QUnit.test("next item should be moved", (assert) => {
     const item2Position = $item2.position();
 
     pointer.dragStart(0.5).drag(0.4);
-    assert.deepEqual($item0.position(), item0Position, "first item was not moved");
-    assert.deepEqual($item2.position(), item2Position, "third item was not moved");
+    assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
+    assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
 
     pointer.drag(0.2);
-    assert.deepEqual($item0.position(), item0Position, "first item was not moved");
-    assert.deepEqual($item2.position(), item1Position, "third item was moved to position of second item");
+    assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
+    assert.deepEqual($item2.position(), item1Position, 'third item was moved to position of second item');
 });
 
-QUnit.test("prev item should be moved", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('prev item should be moved', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2673,17 +2673,17 @@ QUnit.test("prev item should be moved", (assert) => {
     const item2Position = $item2.position();
 
     pointer.dragStart(0.5).drag(-0.4);
-    assert.deepEqual($item0.position(), item0Position, "first item was not moved");
-    assert.deepEqual($item2.position(), item2Position, "third item was not moved");
+    assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
+    assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
 
     pointer.drag(-0.2);
-    assert.deepEqual($item0.position(), item1Position, "first item was moved to position of second item");
-    assert.deepEqual($item2.position(), item2Position, "third item was not moved");
+    assert.deepEqual($item0.position(), item1Position, 'first item was moved to position of second item');
+    assert.deepEqual($item2.position(), item2Position, 'third item was not moved');
 });
 
-QUnit.test("next item should be moved back if item moved to start position", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('next item should be moved back if item moved to start position', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2695,13 +2695,13 @@ QUnit.test("next item should be moved back if item moved to start position", (as
     const item2Position = $item2.position();
 
     pointer.dragStart(0.5).drag(0.6).drag(-0.2);
-    assert.deepEqual($item0.position(), item0Position, "first item was not moved");
-    assert.deepEqual($item2.position(), item2Position, "third item was moved to position of first item");
+    assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
+    assert.deepEqual($item2.position(), item2Position, 'third item was moved to position of first item');
 });
 
-QUnit.test("prev item should be moved back if item moved to start position", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('prev item should be moved back if item moved to start position', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2713,11 +2713,11 @@ QUnit.test("prev item should be moved back if item moved to start position", (as
     const item2Position = $item2.position();
 
     pointer.dragStart(0.5).drag(-0.6).drag(0.2);
-    assert.deepEqual($item0.position(), item0Position, "first item was not moved");
-    assert.deepEqual($item2.position(), item2Position, "third item was moved to position of first item");
+    assert.deepEqual($item0.position(), item0Position, 'first item was not moved');
+    assert.deepEqual($item2.position(), item2Position, 'third item was moved to position of first item');
 });
 
-QUnit.test("item should be moved with animation", (assert) => {
+QUnit.test('item should be moved with animation', (assert) => {
     const origFX = fx.animate;
     let animated = false;
     fx.animate = () => {
@@ -2726,8 +2726,8 @@ QUnit.test("item should be moved with animation", (assert) => {
     };
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0", "1", "2"],
+        const $list = $('#templated-list').dxList({
+            items: ['0', '1', '2'],
             allowItemReordering: true
         });
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2735,13 +2735,13 @@ QUnit.test("item should be moved with animation", (assert) => {
         const pointer = reorderingPointerMock($item1, this.clock);
 
         pointer.dragStart(0.5).drag(0.6);
-        assert.strictEqual(animated, true, "animation present");
+        assert.strictEqual(animated, true, 'animation present');
     } finally {
         fx.animate = origFX;
     }
 });
 
-QUnit.test("item should be dropped with animation", (assert) => {
+QUnit.test('item should be dropped with animation', (assert) => {
     const origFX = fx.animate;
     let animated = false;
     fx.animate = () => {
@@ -2750,8 +2750,8 @@ QUnit.test("item should be dropped with animation", (assert) => {
     };
 
     try {
-        const $list = $("#templated-list").dxList({
-            items: ["0", "1", "2"],
+        const $list = $('#templated-list').dxList({
+            items: ['0', '1', '2'],
             allowItemReordering: true
         });
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2761,21 +2761,21 @@ QUnit.test("item should be dropped with animation", (assert) => {
         pointer.dragStart(0.5).drag(0.6);
         animated = false;
         pointer.dragEnd();
-        assert.strictEqual(animated, true, "animation present");
+        assert.strictEqual(animated, true, 'animation present');
     } finally {
         fx.animate = origFX;
     }
 });
 
-QUnit.test("drop item should reorder list items with correct indexes", (assert) => {
-    const $list = $("#list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('drop item should reorder list items with correct indexes', (assert) => {
+    const $list = $('#list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     list.reorderItem = (itemElement, toItemElement) => {
-        assert.deepEqual($ghostItem.position(), toItemElement.position(), "animated to target");
+        assert.deepEqual($ghostItem.position(), toItemElement.position(), 'animated to target');
         assert.strictEqual(itemElement.text(), $item1.text());
         assert.strictEqual(toItemElement.text(), $item2.text());
     };
@@ -2791,9 +2791,9 @@ QUnit.test("drop item should reorder list items with correct indexes", (assert) 
     pointer.dragEnd();
 });
 
-QUnit.test("items should reset positions after dragend", (assert) => {
-    const $list = $("#list").dxList({
-        items: ["0", "1", "2"],
+QUnit.test('items should reset positions after dragend', (assert) => {
+    const $list = $('#list').dxList({
+        items: ['0', '1', '2'],
         allowItemReordering: true
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2805,13 +2805,13 @@ QUnit.test("items should reset positions after dragend", (assert) => {
     $.each($items, (index, item) => {
         const $item = $(item);
 
-        assert.deepEqual(topTranslation($item), 0, "position reset");
+        assert.deepEqual(topTranslation($item), 0, 'position reset');
     });
 });
 
 const REQEST_ANIMATION_FRAME_TIMEOUT = 10;
 
-QUnit.module("reordering decorator", {
+QUnit.module('reordering decorator', {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
         this.originalRAF = animationFrame.requestAnimationFrame;
@@ -2839,14 +2839,14 @@ const mockScrollViewForReordering = (list) => {
     const optionMethod = list.option;
 
     list.option = function(name, value) {
-        if(name === "height") {
+        if(name === 'height') {
             clientHeight = value;
         } else {
             return optionMethod.apply(this, arguments);
         }
     };
 
-    list.$element().dxScrollView("option", "pushBackValue", 0);
+    list.$element().dxScrollView('option', 'pushBackValue', 0);
 
     list.scrollTo = (y) => {
         scrollTop = y;
@@ -2865,12 +2865,12 @@ const mockScrollViewForReordering = (list) => {
     };
 };
 
-QUnit.test("list should be scrolled if drag near bottom continuously", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('list should be scrolled if drag near bottom continuously', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2879,19 +2879,19 @@ QUnit.test("list should be scrolled if drag near bottom continuously", (assert) 
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     pointer.dragStart(0.5);
     pointer.drag(1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(list.scrollTop(), 31, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), 31, 'list was scrolled');
 });
 
-QUnit.test("last item should be moved with scrolling", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('last item should be moved with scrolling', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2900,21 +2900,21 @@ QUnit.test("last item should be moved with scrolling", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
 
     pointer.dragStart(0.5);
 
     pointer.drag(1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, "item was moved");
+    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, 'item was moved');
 });
 
-QUnit.test("item should be moved without timeout if pointerType is mouse", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('item should be moved without timeout if pointerType is mouse', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2923,20 +2923,20 @@ QUnit.test("item should be moved without timeout if pointerType is mouse", (asse
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     pointer.dragStart(0.5);
     pointer.drag(1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
 
-    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, "item was moved");
+    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, 'item was moved');
 });
 
-QUnit.test("list should not be scrolled greater then scroll height", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('list should not be scrolled greater then scroll height', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2945,19 +2945,19 @@ QUnit.test("list should not be scrolled greater then scroll height", (assert) =>
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     pointer.dragStart(0.5);
     pointer.drag(1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 100);
-    assert.strictEqual(list.scrollTop(), itemHeight, "list was not scrolled grater than can");
+    assert.strictEqual(list.scrollTop(), itemHeight, 'list was not scrolled grater than can');
 });
 
-QUnit.test("list should be scrolled if drag near top continuously", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('list should be scrolled if drag near top continuously', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2966,20 +2966,20 @@ QUnit.test("list should be scrolled if drag near top continuously", (assert) => 
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     list.scrollTo(itemHeight);
     pointer.dragStart(0.5);
     pointer.drag(-1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(list.scrollTop(), itemHeight - 31, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), itemHeight - 31, 'list was scrolled');
 });
 
-QUnit.test("list should be scrolled less then scroll height", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('list should be scrolled less then scroll height', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -2988,21 +2988,21 @@ QUnit.test("list should be scrolled less then scroll height", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     list.scrollTo(itemHeight);
 
     pointer.dragStart(0.5);
     pointer.drag(-1.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 100);
-    assert.strictEqual(list.scrollTop(), 0, "list was not scrolled less than can");
+    assert.strictEqual(list.scrollTop(), 0, 'list was not scrolled less than can');
 });
 
-QUnit.test("animator should be stopped", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('animator should be stopped', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -3011,7 +3011,7 @@ QUnit.test("animator should be stopped", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
 
     pointer.dragStart(0.5);
     pointer.drag(1.81);
@@ -3020,15 +3020,15 @@ QUnit.test("animator should be stopped", (assert) => {
 
     pointer.drag(-0.81);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 10);
-    assert.strictEqual(list.scrollTop(), scrollTop, "list was not scrolled after moving");
+    assert.strictEqual(list.scrollTop(), scrollTop, 'list was not scrolled after moving');
 });
 
-QUnit.test("animator should be stopped on drag end", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('animator should be stopped on drag end', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -3037,18 +3037,18 @@ QUnit.test("animator should be stopped on drag end", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     pointer.dragStart(0.5).drag(1.81).dragEnd();
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 10);
-    assert.strictEqual(list.scrollTop(), 1, "list was not scrolled after drop");
+    assert.strictEqual(list.scrollTop(), 1, 'list was not scrolled after drop');
 });
 
-QUnit.test("scroll step should be adjusted if scroll bottom", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('scroll step should be adjusted if scroll bottom', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -3057,21 +3057,21 @@ QUnit.test("scroll step should be adjusted if scroll bottom", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     pointer.dragStart(0.5).drag(1.81);
-    assert.strictEqual(list.scrollTop(), 1, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), 1, 'list was scrolled');
 
     pointer.drag(0.6);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT);
-    assert.strictEqual(list.scrollTop(), 7, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), 7, 'list was scrolled');
 });
 
-QUnit.test("scroll step should be adjusted if scroll top", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
+QUnit.test('scroll step should be adjusted if scroll top', (assert) => {
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2', '3'],
         allowItemReordering: true
     });
-    const list = $list.dxList("instance");
+    const list = $list.dxList('instance');
 
     mockScrollViewForReordering(list);
 
@@ -3080,13 +3080,13 @@ QUnit.test("scroll step should be adjusted if scroll top", (assert) => {
     const itemHeight = $item.outerHeight();
     const pointer = reorderingPointerMock($item, this.clock);
 
-    list.option("height", itemHeight * 3);
+    list.option('height', itemHeight * 3);
     list.scrollTo(itemHeight);
 
     pointer.dragStart(0.5).drag(-1.81);
-    assert.strictEqual(list.scrollTop(), itemHeight - 1, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), itemHeight - 1, 'list was scrolled');
 
     pointer.drag(-0.6);
     this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT);
-    assert.strictEqual(list.scrollTop(), itemHeight - 7, "list was scrolled");
+    assert.strictEqual(list.scrollTop(), itemHeight - 7, 'list was scrolled');
 });

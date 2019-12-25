@@ -1,222 +1,222 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html(
+    $('#qunit-fixture').html(
         '<div id="scheduler">\
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
+require('common.css!');
+require('generic_light.css!');
 
-var noop = require("core/utils/common").noop,
-    DataSource = require("data/data_source/data_source").DataSource;
+var noop = require('core/utils/common').noop,
+    DataSource = require('data/data_source/data_source').DataSource;
 
-require("ui/scheduler/ui.scheduler");
+require('ui/scheduler/ui.scheduler');
 
-QUnit.module("Integration: View switcher", {
+QUnit.module('Integration: View switcher', {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
         };
     }
 });
 
-QUnit.test("View switcher should contain default 2 items if scheduler option 'views' is empty", function(assert) {
+QUnit.test('View switcher should contain default 2 items if scheduler option \'views\' is empty', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: false
     });
     var $element = $(this.instance.$element());
 
-    assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxTabs("instance").option("items").length, 2, "If 'views' option is empty views switcher contains default 2 items");
+    assert.equal($element.find('.dx-scheduler-header .dx-scheduler-view-switcher').dxTabs('instance').option('items').length, 2, 'If \'views\' option is empty views switcher contains default 2 items');
 });
 
-QUnit.test("View switcher should contain default items if scheduler option 'views' is empty, useDropDownViewSwitcher = true", function(assert) {
+QUnit.test('View switcher should contain default items if scheduler option \'views\' is empty, useDropDownViewSwitcher = true', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true
     });
     var $element = $(this.instance.$element());
 
-    assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items").length, 2, "If 'views' option is empty views switcher contains default 2 items");
+    assert.equal($element.find('.dx-scheduler-header .dx-scheduler-view-switcher').dxDropDownMenu('instance').option('items').length, 2, 'If \'views\' option is empty views switcher contains default 2 items');
 });
 
-QUnit.test("View switcher items count should be equal to option 'views' length", function(assert) {
+QUnit.test('View switcher items count should be equal to option \'views\' length', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: false
     });
-    this.instance.option("views", ["day", "week"]);
+    this.instance.option('views', ['day', 'week']);
     var $element = $(this.instance.$element());
 
-    assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxTabs("instance").option("items").length, 2, "View switcher has a right count of items");
+    assert.equal($element.find('.dx-scheduler-header .dx-scheduler-view-switcher').dxTabs('instance').option('items').length, 2, 'View switcher has a right count of items');
 });
 
-QUnit.test("View switcher items count should not be equal to option 'views' length, useDropDownViewSwitcher = true", function(assert) {
+QUnit.test('View switcher items count should not be equal to option \'views\' length, useDropDownViewSwitcher = true', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true,
-        views: ["day", "week"]
+        views: ['day', 'week']
     });
     var $element = $(this.instance.$element());
 
-    assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items").length, 2, "View switcher has a right count of items");
+    assert.equal($element.find('.dx-scheduler-header .dx-scheduler-view-switcher').dxDropDownMenu('instance').option('items').length, 2, 'View switcher has a right count of items');
 });
 
-QUnit.test("If view switcher has a single item it should be selected", function(assert) {
+QUnit.test('If view switcher has a single item it should be selected', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: false
     });
-    this.instance.option("views", ["day"]);
+    this.instance.option('views', ['day']);
     var $element = $(this.instance.$element());
 
-    assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab-selected").length, 1, "View switcher has a single selected item");
+    assert.equal($element.find('.dx-scheduler-header .dx-scheduler-view-switcher .dx-tab-selected').length, 1, 'View switcher has a single selected item');
 });
 
-QUnit.test("View switcher should select a correct item", function(assert) {
+QUnit.test('View switcher should select a correct item', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: false
     });
-    this.instance.option("views", ["day", "week"]);
-    this.instance.option("currentView", "week");
+    this.instance.option('views', ['day', 'week']);
+    this.instance.option('currentView', 'week');
 
     var $element = $(this.instance.$element());
-    var $secondItem = $element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab").eq(1);
+    var $secondItem = $element.find('.dx-scheduler-header .dx-scheduler-view-switcher .dx-tab').eq(1);
 
-    assert.ok($secondItem.hasClass("dx-tab-selected"), "View switcher selects a right item");
+    assert.ok($secondItem.hasClass('dx-tab-selected'), 'View switcher selects a right item');
 });
 
-QUnit.test("View switcher should update scheduler and header currentView correctly", function(assert) {
+QUnit.test('View switcher should update scheduler and header currentView correctly', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: false
     });
-    this.instance.option("views", ["day", "week"]);
-    this.instance.option("currentView", "day");
+    this.instance.option('views', ['day', 'week']);
+    this.instance.option('currentView', 'day');
 
     var $element = $(this.instance.$element());
-    var $secondItem = $element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab").eq(1);
-    $secondItem.trigger("dxclick");
+    var $secondItem = $element.find('.dx-scheduler-header .dx-scheduler-view-switcher .dx-tab').eq(1);
+    $secondItem.trigger('dxclick');
 
-    assert.equal(this.instance.option("currentView"), "week", "Scheduler has a correct current view");
-    assert.equal($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("currentView"), "week", "Scheduler header has a correct current view");
+    assert.equal(this.instance.option('currentView'), 'week', 'Scheduler has a correct current view');
+    assert.equal($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('currentView'), 'week', 'Scheduler header has a correct current view');
 });
 
-QUnit.test("View switcher should update scheduler and header currentView correctly, useDropDownViewSwitcher: true", function(assert) {
+QUnit.test('View switcher should update scheduler and header currentView correctly, useDropDownViewSwitcher: true', function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true,
-        views: ["day", "week"],
-        currentView: "day"
+        views: ['day', 'week'],
+        currentView: 'day'
     });
 
     var $element = $(this.instance.$element()),
-        $switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher"),
-        switcher = $switcher.dxDropDownMenu("instance");
+        $switcher = $element.find('.dx-dropdownmenu.dx-scheduler-view-switcher'),
+        switcher = $switcher.dxDropDownMenu('instance');
 
     switcher.open();
 
-    var $secondItem = $(switcher._popup.$content()).find(".dx-item").eq(1);
+    var $secondItem = $(switcher._popup.$content()).find('.dx-item').eq(1);
 
-    assert.deepEqual(switcher.option("items"), ["day", "week"], "Switcher items is correct on init");
+    assert.deepEqual(switcher.option('items'), ['day', 'week'], 'Switcher items is correct on init');
 
     switcher.open();
-    $secondItem.trigger("dxclick");
+    $secondItem.trigger('dxclick');
 
-    assert.equal(this.instance.option("currentView"), "week", "Scheduler has a correct current view");
-    assert.deepEqual(switcher.option("items"), ["day", "week"], "Switcher items is correct");
-    assert.equal($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("currentView"), "week", "Scheduler header has a correct current view");
+    assert.equal(this.instance.option('currentView'), 'week', 'Scheduler has a correct current view');
+    assert.deepEqual(switcher.option('items'), ['day', 'week'], 'Switcher items is correct');
+    assert.equal($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('currentView'), 'week', 'Scheduler header has a correct current view');
 });
 
-QUnit.test("View switcher should be initialized with correct items and selectedItem options, useDropDownViewSwitcher = false", function(assert) {
+QUnit.test('View switcher should be initialized with correct items and selectedItem options, useDropDownViewSwitcher = false', function(assert) {
     this.createInstance({
-        views: ["day", "week"],
-        currentView: "week",
+        views: ['day', 'week'],
+        currentView: 'week',
         useDropDownViewSwitcher: false
     });
     var $element = $(this.instance.$element());
-    assert.deepEqual($element.find(".dx-scheduler-view-switcher").dxTabs("instance").option("items"), ["day", "week"], "View switcher has a correct items");
-    assert.equal($element.find(".dx-scheduler-view-switcher").dxTabs("instance").option("selectedItem"), "week", "View switcher has a selectedItem");
+    assert.deepEqual($element.find('.dx-scheduler-view-switcher').dxTabs('instance').option('items'), ['day', 'week'], 'View switcher has a correct items');
+    assert.equal($element.find('.dx-scheduler-view-switcher').dxTabs('instance').option('selectedItem'), 'week', 'View switcher has a selectedItem');
 });
 
-QUnit.test("View switcher should be initialized with correct items options, useDropDownViewSwitcher = true", function(assert) {
+QUnit.test('View switcher should be initialized with correct items options, useDropDownViewSwitcher = true', function(assert) {
     this.createInstance({
-        views: ["day", "week"],
-        currentView: "week",
+        views: ['day', 'week'],
+        currentView: 'week',
         useDropDownViewSwitcher: true
     });
     var $element = $(this.instance.$element());
-    assert.deepEqual($element.find(".dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items"), ["day", "week"], "View switcher has a correct items");
+    assert.deepEqual($element.find('.dx-scheduler-view-switcher').dxDropDownMenu('instance').option('items'), ['day', 'week'], 'View switcher has a correct items');
 });
 
-QUnit.test("dataSource should be filtered if 'currentView' option is changed", function(assert) {
+QUnit.test('dataSource should be filtered if \'currentView\' option is changed', function(assert) {
     var dataSource = new DataSource({
         store: [{
             startDate: new Date(2015, 3, 1),
             endDate: new Date(2015, 3, 1, 0, 30),
-            text: "Item 1",
+            text: 'Item 1',
             ownerId: 1
         },
         {
             startDate: new Date(2015, 3, 1),
-            text: "Item 2",
+            text: 'Item 2',
             ownerId: 3
         },
         {
             startDate: new Date(2015, 4, 1),
-            text: "Item 3",
+            text: 'Item 3',
             ownerId: 1
         }
         ]
     });
 
     this.createInstance({
-        views: ["day", "week"],
-        currentView: "week",
+        views: ['day', 'week'],
+        currentView: 'week',
         currentDate: new Date(2015, 3, 1),
         dataSource: dataSource,
-        groups: ["ownerId"],
+        groups: ['ownerId'],
         remoteFiltering: true,
         resources: [
             {
-                field: "ownerId",
+                field: 'ownerId',
                 dataSource: [
                     {
-                        text: "Jack",
+                        text: 'Jack',
                         id: 1,
-                        color: "red"
+                        color: 'red'
                     }
                 ]
             }
         ]
     });
 
-    this.instance.option("currentView", "day");
+    this.instance.option('currentView', 'day');
 
     assert.deepEqual(dataSource.items(), [{
         startDate: new Date(2015, 3, 1),
-        text: "Item 1",
+        text: 'Item 1',
         ownerId: 1,
         endDate: new Date(2015, 3, 1, 0, 30)
-    }], "Data is filtered");
+    }], 'Data is filtered');
 });
 
-QUnit.test("Appointment should be rerendered only once if 'currentView' option is changed", function(assert) {
+QUnit.test('Appointment should be rerendered only once if \'currentView\' option is changed', function(assert) {
     var options = {
-        views: ["month", "week"],
-        currentView: "week",
+        views: ['month', 'week'],
+        currentView: 'week',
         currentDate: new Date(2015, 3, 1),
         dataSource: new DataSource({
             store: [{
                 startDate: new Date(2015, 3, 1),
                 endDate: new Date(2015, 3, 1, 0, 30),
-                text: "Item 1"
+                text: 'Item 1'
             }]
         }),
         onAppointmentRendered: noop
     };
 
-    var renderedStub = sinon.stub(options, "onAppointmentRendered");
+    var renderedStub = sinon.stub(options, 'onAppointmentRendered');
 
     this.createInstance(options);
 
-    this.instance.option("currentView", "month");
+    this.instance.option('currentView', 'month');
 
-    assert.equal(renderedStub.callCount, 2, "Appointment is rerendered only once");
+    assert.equal(renderedStub.callCount, 2, 'Appointment is rerendered only once');
 });

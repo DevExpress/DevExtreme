@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { foreachTree, formatValue, createPath } from "./ui.pivot_grid.utils";
-import { each } from "../../core/utils/iterator";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { foreachTree, formatValue, createPath } from './ui.pivot_grid.utils';
+import { each } from '../../core/utils/iterator';
 
 var FORMAT_DICTIONARY = {
-        number: "numeric",
-        date: "datetime"
+        number: 'numeric',
+        date: 'datetime'
     },
-    UNBIND_KEY = "dxPivotGridUnbinding";
+    UNBIND_KEY = 'dxPivotGridUnbinding';
 
 function getFormattedValue(path, fields) {
     var value = [],
@@ -48,9 +48,9 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
     var data = pivotGridDataSource.getData(),
         dataSource = [],
 
-        dataFields = pivotGridDataSource.getAreaFields("data"),
-        rowFields = pivotGridDataSource.getAreaFields("row"),
-        columnFields = pivotGridDataSource.getAreaFields("column"),
+        dataFields = pivotGridDataSource.getAreaFields('data'),
+        rowFields = pivotGridDataSource.getAreaFields('row'),
+        columnFields = pivotGridDataSource.getAreaFields('column'),
 
         columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
         rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }],
@@ -92,18 +92,18 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
 
                 visible: columnVisibility && rowVisibility
             },
-            seriesName = (mapOptions.inverted ? columnPathFormatted : rowPathFormatted).join(" - "),
-            argument = (mapOptions.inverted ? rowPathFormatted : columnPathFormatted).join("/");
+            seriesName = (mapOptions.inverted ? columnPathFormatted : rowPathFormatted).join(' - '),
+            argument = (mapOptions.inverted ? rowPathFormatted : columnPathFormatted).join('/');
 
         if(dataFields.length > 1) {
-            if(mapOptions.putDataFieldsInto === "args" || mapOptions.putDataFieldsInto === "both") {
-                argument += " | " + dataField.caption;
+            if(mapOptions.putDataFieldsInto === 'args' || mapOptions.putDataFieldsInto === 'both') {
+                argument += ' | ' + dataField.caption;
 
             }
 
-            if(mapOptions.putDataFieldsInto !== "args") {
-                seriesName += " | " + dataField.caption;
-                if(mapOptions.dataFieldsDisplayMode !== "singleAxis") {
+            if(mapOptions.putDataFieldsInto !== 'args') {
+                seriesName += ' | ' + dataField.caption;
+                if(mapOptions.dataFieldsDisplayMode !== 'singleAxis') {
                     axis = dataField.caption;
                 }
             }
@@ -181,8 +181,8 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
 }
 
 function createValueAxisOptions(dataSource, options) {
-    var dataFields = dataSource.getAreaFields("data");
-    if(options.putDataFieldsInto !== "args" && options.dataFieldsDisplayMode !== "singleAxis" || dataFields.length === 1) {
+    var dataFields = dataSource.getAreaFields('data');
+    if(options.putDataFieldsInto !== 'args' && options.dataFieldsDisplayMode !== 'singleAxis' || dataFields.length === 1) {
         var valueAxisSettings = [];
         each(dataFields, function(_, dataField) {
             var valueAxisOptions = {
@@ -198,7 +198,7 @@ function createValueAxisOptions(dataSource, options) {
                 };
             }
 
-            if(options.dataFieldsDisplayMode === "splitPanes") {
+            if(options.dataFieldsDisplayMode === 'splitPanes') {
                 valueAxisOptions.pane = dataField.caption;
             }
 
@@ -213,9 +213,9 @@ function createValueAxisOptions(dataSource, options) {
 
 function createPanesOptions(dataSource, options) {
     var panes = [];
-    var dataFields = dataSource.getAreaFields("data");
+    var dataFields = dataSource.getAreaFields('data');
 
-    if(dataFields.length > 1 && options.dataFieldsDisplayMode === "splitPanes" && options.putDataFieldsInto !== "args") {
+    if(dataFields.length > 1 && options.dataFieldsDisplayMode === 'splitPanes' && options.putDataFieldsInto !== 'args') {
         each(dataFields, function(_, dataField) {
             panes.push({
                 name: dataField.caption
@@ -246,13 +246,13 @@ function createChartOptions(dataSource, options) {
     chartOptions.dataSource = createChartDataSource(dataSource, options, axisDictionary);
 
     chartOptions.seriesTemplate = {
-        nameField: "series",
+        nameField: 'series',
         customizeSeries: function(seriesName) {
             var seriesOptions = {};
 
-            if(options.dataFieldsDisplayMode === "splitPanes") {
+            if(options.dataFieldsDisplayMode === 'splitPanes') {
                 seriesOptions.pane = axisDictionary[seriesName];
-            } else if(options.dataFieldsDisplayMode !== "singleAxis") {
+            } else if(options.dataFieldsDisplayMode !== 'singleAxis') {
                 seriesOptions.axis = axisDictionary[seriesName];
             }
 
@@ -273,11 +273,11 @@ function getChartInstance(chartElement) {
     }
 
     if(chartElement.NAME) {
-        return chartElement.NAME === "dxChart" && chartElement;
+        return chartElement.NAME === 'dxChart' && chartElement;
     }
 
     var element = $(chartElement);
-    return element.data("dxChart") && element.dxChart("instance");
+    return element.data('dxChart') && element.dxChart('instance');
 }
 
 function removeBinding(chart) {
@@ -305,7 +305,7 @@ module.exports = {
 
         var that = this,
             updateChart = function() {
-                integrationOptions.grandTotalText = that.option("texts.grandTotal");
+                integrationOptions.grandTotalText = that.option('texts.grandTotal');
                 var chartOptions = createChartOptions(that.getDataSource(), integrationOptions);
                 chart.option(chartOptions);
             },
@@ -319,16 +319,16 @@ module.exports = {
 
         removeBinding(chart);
 
-        that.on("changed", updateChart);
+        that.on('changed', updateChart);
         updateChart();
 
         disposeBinding = function() {
             chart.$element().removeData(UNBIND_KEY);
-            that.off("changed", updateChart);
+            that.off('changed', updateChart);
         };
 
-        chart.on("disposing", disposeBinding);
-        this.on("disposing", disposeBinding);
+        chart.on('disposing', disposeBinding);
+        this.on('disposing', disposeBinding);
 
         chart.$element().data(UNBIND_KEY, disposeBinding);
 

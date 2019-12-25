@@ -1,25 +1,25 @@
-import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
-import { when } from "../../core/utils/deferred";
-import eventsEngine from "../../events/core/events_engine";
-import { addNamespace } from "../../events/utils";
-import { name as contextMenuEventName } from "../../events/contextmenu";
-import { getDisplayFileSize } from "./ui.file_manager.utils.js";
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import { when } from '../../core/utils/deferred';
+import eventsEngine from '../../events/core/events_engine';
+import { addNamespace } from '../../events/utils';
+import { name as contextMenuEventName } from '../../events/contextmenu';
+import { getDisplayFileSize } from './ui.file_manager.utils.js';
 
-import FileManagerItemListBase from "./ui.file_manager.item_list";
+import FileManagerItemListBase from './ui.file_manager.item_list';
 
-const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = "dx-filemanager-thumbnails";
-const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = "dx-filemanager-thumbnails-view-port";
-const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = "dx-filemanager-thumbnails-container";
-const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = "dx-filemanager-thumbnails-item";
-const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = "dx-filemanager-thumbnails-item-content";
-const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-thumbnails-item-thumbnail";
-const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = "dx-filemanager-thumbnails-item-spacer";
-const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = "dx-filemanager-thumbnails-item-name";
-const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
-const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
+const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS = 'dx-filemanager-thumbnails';
+const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = 'dx-filemanager-thumbnails-view-port';
+const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = 'dx-filemanager-thumbnails-container';
+const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = 'dx-filemanager-thumbnails-item';
+const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = 'dx-filemanager-thumbnails-item-content';
+const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = 'dx-filemanager-thumbnails-item-thumbnail';
+const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = 'dx-filemanager-thumbnails-item-spacer';
+const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = 'dx-filemanager-thumbnails-item-name';
+const FILE_MANAGER_ITEM_SELECTED_CLASS = 'dx-filemanager-item-selected';
+const FILE_MANAGER_ITEM_FOCUSED_CLASS = 'dx-filemanager-item-focused';
 
-const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = "dxFileManager_thumbnails";
+const FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE = 'dxFileManager_thumbnails';
 
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
@@ -33,23 +33,23 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     _initMarkup() {
         super._initMarkup();
 
-        const multipleSelection = this.option("selectionMode") === "multiple";
+        const multipleSelection = this.option('selectionMode') === 'multiple';
         const controllerOptions = {
             onSelectionChanged: this._raiseSelectionChanged.bind(this)
         };
         const controllerClass = multipleSelection ? MultipleSelectionController : SingleSelectionController;
         this._selectionController = new controllerClass(controllerOptions);
 
-        this._$itemViewContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
+        this._$itemViewContainer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
 
-        this._$viewPort = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
+        this._$viewPort = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
         this._$viewPort.append(this._$itemViewContainer);
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
         const contextMenuEvent = addNamespace(contextMenuEventName, FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
-        const clickEvent = addNamespace("click", FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
+        const clickEvent = addNamespace('click', FILE_MANAGER_THUMBNAILS_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), contextMenuEvent, this._onContextMenu.bind(this));
         eventsEngine.on(this.$element(), clickEvent, this._onClick.bind(this));
 
@@ -174,7 +174,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _selectItemByItemElement($item, e) {
-        const index = $item.data("index");
+        const index = $item.data('index');
         this._selectItemByIndex(index, false, e);
     }
 
@@ -188,7 +188,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _onItemDblClick(e) {
         const $item = $(e.currentTarget);
-        const index = $item.data("index");
+        const index = $item.data('index');
         const item = this._items[index];
         this._raiseSelectedItemOpened(item);
     }
@@ -340,18 +340,18 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _renderItem(item) {
-        const $item = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
-            .attr("title", this._getTooltipText(item))
-            .data("index", item._state.index);
+        const $item = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
+            .attr('title', this._getTooltipText(item))
+            .data('index', item._state.index);
 
-        const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
+        const $itemContent = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
         const $itemThumbnail = this._getItemThumbnailContainer(item);
-        eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
+        eventsEngine.on($itemThumbnail, 'dragstart', this._disableDragging);
 
-        const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
+        const $itemSpacer = $('<div>').addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
 
-        const $itemName = $("<div>")
+        const $itemName = $('<div>')
             .addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS)
             .text(item.name);
 

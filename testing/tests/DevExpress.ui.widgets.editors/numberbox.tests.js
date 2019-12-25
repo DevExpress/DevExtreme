@@ -1,6 +1,6 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
-require("common.css!");
+require('common.css!');
 
 QUnit.testStart(function() {
     var markup =
@@ -10,10 +10,10 @@ QUnit.testStart(function() {
             <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-require("./numberBoxParts/common.tests.js");
-require("./numberBoxParts/mask.caret.tests.js");
-require("./numberBoxParts/mask.tests.js");
+require('./numberBoxParts/common.tests.js');
+require('./numberBoxParts/mask.caret.tests.js');
+require('./numberBoxParts/mask.tests.js');
 

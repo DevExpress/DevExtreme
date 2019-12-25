@@ -1,13 +1,13 @@
-import { toComparable } from "../../core/utils/data";
-import { keysEqual } from "../../data/utils";
-import { each } from "../../core/utils/iterator";
-import { extend } from "../../core/utils/extend";
-import { arrangeSortingInfo, multiLevelGroup } from "../../data/store_helper";
-import { combineFilters, normalizeSortingInfo } from "./ui.data_grid.core";
-import { GroupingHelper, createOffsetFilter } from "./ui.data_grid.grouping.core";
-import { createGroupFilter } from "./ui.data_grid.utils";
-import dataQuery from "../../data/query";
-import { when, Deferred } from "../../core/utils/deferred";
+import { toComparable } from '../../core/utils/data';
+import { keysEqual } from '../../data/utils';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import { arrangeSortingInfo, multiLevelGroup } from '../../data/store_helper';
+import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
+import { GroupingHelper, createOffsetFilter } from './ui.data_grid.grouping.core';
+import { createGroupFilter } from './ui.data_grid.utils';
+import dataQuery from '../../data/query';
+import { when, Deferred } from '../../core/utils/deferred';
 
 var loadTotalCount = function(dataSource, options) {
     var d = new Deferred(),
@@ -137,7 +137,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
         for(i = 0; i < items.length; i++) {
             item = items[i];
-            if("key" in item && item.items !== undefined) {
+            if('key' in item && item.items !== undefined) {
                 path.push(item.key);
                 if(additionalGroupInfo && pathEquals(additionalGroupInfo.path, path) && !item.isContinuation) {
                     additionalGroupInfo.offset = offset;
@@ -181,11 +181,11 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         for(i = 0; i < path.length; i++) {
             filterElement = [];
             for(j = 0; j <= i; j++) {
-                filterElement.push([groups[j].selector, i === j ? "<>" : "=", path[j]]);
+                filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
             }
             filter.push(combineFilters(filterElement));
         }
-        filter = combineFilters(filter, "or");
+        filter = combineFilters(filter, 'or');
 
         return combineFilters([filter, storeLoadOptions.filter]);
     };
@@ -366,7 +366,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 }
                 that.updateTotalItemsCount();
             }).fail(function() {
-                dataSource.fireEvent("loadError", arguments);
+                dataSource.fireEvent('loadError', arguments);
             });
         },
         allowCollapseAll: function() {

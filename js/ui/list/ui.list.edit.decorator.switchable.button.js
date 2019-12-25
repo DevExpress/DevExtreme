@@ -1,14 +1,14 @@
-var $ = require("../../core/renderer"),
-    fx = require("../../animation/fx"),
-    Button = require("../button"),
-    messageLocalization = require("../../localization/message"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    SwitchableEditDecorator = require("./ui.list.edit.decorator.switchable");
+var $ = require('../../core/renderer'),
+    fx = require('../../animation/fx'),
+    Button = require('../button'),
+    messageLocalization = require('../../localization/message'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    SwitchableEditDecorator = require('./ui.list.edit.decorator.switchable');
 
-var SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-switchable-delete-button-container",
-    SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = "dx-list-switchable-delete-button-wrapper",
-    SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS = "dx-list-switchable-delete-button-inner-wrapper",
-    SWITCHABLE_DELETE_BUTTON_CLASS = "dx-list-switchable-delete-button",
+var SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container',
+    SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = 'dx-list-switchable-delete-button-wrapper',
+    SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS = 'dx-list-switchable-delete-button-inner-wrapper',
+    SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button',
 
     SWITCHABLE_DELETE_BUTTON_ANIMATION_DURATION = 200;
 
@@ -17,14 +17,14 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
     _init: function() {
         this.callBase.apply(this, arguments);
 
-        var $buttonContainer = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS),
-            $buttonWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS),
-            $buttonInnerWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS),
-            $button = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_CLASS);
+        var $buttonContainer = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS),
+            $buttonWrapper = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS),
+            $buttonInnerWrapper = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS),
+            $button = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_CLASS);
 
         this._list._createComponent($button, Button, {
-            text: messageLocalization.format("dxListEditDecorator-delete"),
-            type: "danger",
+            text: messageLocalization.format('dxListEditDecorator-delete'),
+            type: 'danger',
             onClick: (function(e) {
                 this._deleteItem();
                 e.event.stopPropagation();
@@ -60,7 +60,7 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
             toValue = rtl ? listWidth - buttonWidth : 0;
 
         return fx.animate(this._$buttonContainer, {
-            type: "custom",
+            type: 'custom',
             duration: SWITCHABLE_DELETE_BUTTON_ANIMATION_DURATION,
             from: { right: fromValue },
             to: { right: toValue }
@@ -75,7 +75,7 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
             toValue = rtl ? listWidth : -buttonWidth;
 
         return fx.animate(this._$buttonContainer, {
-            type: "custom",
+            type: 'custom',
             duration: SWITCHABLE_DELETE_BUTTON_ANIMATION_DURATION,
             from: { right: fromValue },
             to: { right: toValue }
@@ -100,21 +100,21 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 });
 
 
-var TOGGLE_DELETE_SWITCH_CONTAINER_CLASS = "dx-list-toggle-delete-switch-container",
-    TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch";
+var TOGGLE_DELETE_SWITCH_CONTAINER_CLASS = 'dx-list-toggle-delete-switch-container',
+    TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 
 registerDecorator(
-    "delete",
-    "toggle",
+    'delete',
+    'toggle',
     SwitchableButtonEditDecorator.inherit({
 
         beforeBag: function(config) {
             var $itemElement = config.$itemElement,
                 $container = config.$container;
 
-            var $toggle = $("<div>").addClass(TOGGLE_DELETE_SWITCH_CLASS);
+            var $toggle = $('<div>').addClass(TOGGLE_DELETE_SWITCH_CLASS);
             this._list._createComponent($toggle, Button, {
-                icon: "toggle-delete",
+                icon: 'toggle-delete',
                 onClick: (function(e) {
                     fx.stop(this._$buttonContainer, false);
                     this._toggleDeleteReady($itemElement);
@@ -132,8 +132,8 @@ registerDecorator(
 
 
 registerDecorator(
-    "delete",
-    "slideButton",
+    'delete',
+    'slideButton',
     SwitchableButtonEditDecorator.inherit({
 
         _shouldHandleSwipe: true,

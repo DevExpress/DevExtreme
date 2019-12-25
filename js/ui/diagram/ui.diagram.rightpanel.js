@@ -1,13 +1,13 @@
-import $ from "../../core/renderer";
-import DiagramPanel from "./diagram.panel";
-import Accordion from "../accordion";
-import Form from "../form";
-import DiagramCommands from "./ui.diagram.commands";
-import { extend } from "../../core/utils/extend";
-import DiagramBar from "./diagram_bar";
+import $ from '../../core/renderer';
+import DiagramPanel from './diagram.panel';
+import Accordion from '../accordion';
+import Form from '../form';
+import DiagramCommands from './ui.diagram.commands';
+import { extend } from '../../core/utils/extend';
+import DiagramBar from './diagram_bar';
 
-const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
-const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
+const DIAGRAM_RIGHT_PANEL_CLASS = 'dx-diagram-right-panel';
+const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = 'dx-diagram-right-panel-begin-group';
 
 class DiagramRightPanel extends DiagramPanel {
     _init() {
@@ -18,14 +18,14 @@ class DiagramRightPanel extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
-        const $accordion = $("<div>")
+        const $accordion = $('<div>')
             .appendTo(this.$element());
 
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
         return [{
-            title: "Page Properties",
+            title: 'Page Properties',
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }
@@ -33,7 +33,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._accordionInstance = this._createComponent($container, Accordion, {
             multiple: true,
             collapsible: true,
-            displayExpr: "title",
+            displayExpr: 'title',
             dataSource: this._getAccordionDataSource(),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element)
         });
@@ -63,12 +63,12 @@ class DiagramRightPanel extends DiagramPanel {
         if(item.getValue && item.setValue) {
             this._valueConverters[item.command] = { getValue: item.getValue, setValue: item.setValue };
         }
-        if(item.widget === "dxSelectBox") {
+        if(item.widget === 'dxSelectBox') {
             return {
                 editorOptions: {
                     dataSource: item.items,
-                    displayExpr: "title",
-                    valueExpr: "value"
+                    displayExpr: 'title',
+                    valueExpr: 'value'
                 }
             };
         }
@@ -95,7 +95,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._updateLocked = true;
         var editorInstance = this._formInstance.getEditor(key.toString());
         editorInstance.option('items', items.map(item => {
-            var value = (typeof item.value === "object") ? JSON.stringify(item.value) : item.value;
+            var value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
             return {
                 'value': value,
                 'title': item.text
@@ -104,7 +104,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._updateLocked = false;
     }
     _setEnabled(enabled) {
-        this._formInstance.option("disabled", !enabled);
+        this._formInstance.option('disabled', !enabled);
     }
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {

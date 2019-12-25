@@ -61,7 +61,7 @@ function gulpDefault_QUnitCI(callback) {
 }
 
 if(process.env['DEVEXTREME_QUNIT_CI']) {
-    console.warn("Using QUnit CI mode for gulp default!");
+    console.warn('Using QUnit CI mode for gulp default!');
     gulp.task('default', gulpDefault_QUnitCI);
 } else {
     gulp.task('default', gulpDefault);

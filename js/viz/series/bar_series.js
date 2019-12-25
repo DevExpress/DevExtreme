@@ -1,7 +1,7 @@
-var extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    scatterSeries = require("./scatter_series"),
-    areaSeries = require("./area_series").chart.area,
+var extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    scatterSeries = require('./scatter_series'),
+    areaSeries = require('./area_series').chart.area,
     chartSeries = scatterSeries.chart,
     polarSeries = scatterSeries.polar,
     _extend = extend,
@@ -23,14 +23,14 @@ var baseBarSeriesMethods = {
             base = chartSeries._parsePointStyle.call(this, style, color, defaultBorderColor);
         base.fill = color;
         base.hatching = style.hatching;
-        base.dashStyle = style.border && style.border.dashStyle || "solid";
+        base.dashStyle = style.border && style.border.dashStyle || 'solid';
         delete base.r;
 
         return base;
     },
 
     _applyMarkerClipRect: function(settings) {
-        settings["clip-path"] = null;
+        settings['clip-path'] = null;
     },
 
     _setGroupsSettings: function(animationEnabled, firstDrawing) {
@@ -98,7 +98,7 @@ var baseBarSeriesMethods = {
         return options;
     },
 
-    _defaultAggregator: "sum",
+    _defaultAggregator: 'sum',
 
     _defineDrawingState() {},
 
@@ -110,13 +110,13 @@ var baseBarSeriesMethods = {
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
     _getAffineCoordOptions: function() {
         var rotated = this._options.rotated,
-            direction = rotated ? "X" : "Y",
+            direction = rotated ? 'X' : 'Y',
             settings = {
                 scaleX: rotated ? 0.001 : 1,
                 scaleY: rotated ? 1 : 0.001
             };
 
-        settings["translate" + direction] = this.getValueAxis().getTranslator().translate("canvas_position_default");
+        settings['translate' + direction] = this.getValueAxis().getTranslator().translate('canvas_position_default');
 
         return settings;
     },
@@ -150,8 +150,8 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
         let oppositeCoord = null;
         const { rotated } = this._options;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
-        const coordName = isOpposite ? "vy" : "vx";
-        const oppositeCoordName = isOpposite ? "vx" : "vy";
+        const coordName = isOpposite ? 'vy' : 'vx';
+        const oppositeCoordName = isOpposite ? 'vx' : 'vy';
         const points = this.getPoints();
 
         for(let i = 0; i < points.length; i++) {
@@ -198,7 +198,7 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
             markersSettings = that._createPointStyles(that._getMarkerGroupOptions()).normal,
             groupSettings;
 
-        markersSettings["class"] = "dxc-markers";
+        markersSettings['class'] = 'dxc-markers';
         that._applyMarkerClipRect(markersSettings);
         groupSettings = _extend({}, markersSettings);
         delete groupSettings.opacity; // T110796

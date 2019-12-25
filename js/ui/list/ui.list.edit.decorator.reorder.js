@@ -1,14 +1,14 @@
-var $ = require("../../core/renderer"),
-    each = require("../../core/utils/iterator").each,
-    eventsEngine = require("../../events/core/events_engine"),
-    translator = require("../../animation/translator"),
-    fx = require("../../animation/fx"),
-    dragEvents = require("../../events/drag"),
-    mathUtils = require("../../core/utils/math"),
-    Animator = require("../scroll_view/animator"),
-    eventUtils = require("../../events/utils"),
-    registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator");
+var $ = require('../../core/renderer'),
+    each = require('../../core/utils/iterator').each,
+    eventsEngine = require('../../events/core/events_engine'),
+    translator = require('../../animation/translator'),
+    fx = require('../../animation/fx'),
+    dragEvents = require('../../events/drag'),
+    mathUtils = require('../../core/utils/math'),
+    Animator = require('../scroll_view/animator'),
+    eventUtils = require('../../events/utils'),
+    registerDecorator = require('./ui.list.edit.decorator_registry').register,
+    EditDecorator = require('./ui.list.edit.decorator');
 
 
 var ReorderScrollAnimator = Animator.inherit({
@@ -30,24 +30,24 @@ var ReorderScrollAnimator = Animator.inherit({
 });
 
 
-var LIST_EDIT_DECORATOR = "dxListEditDecorator",
+var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
     DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, LIST_EDIT_DECORATOR),
     DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, LIST_EDIT_DECORATOR),
     DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, LIST_EDIT_DECORATOR),
 
-    REORDER_HANDLE_CONTAINER_CLASS = "dx-list-reorder-handle-container",
-    REORDER_HANDLE_CLASS = "dx-list-reorder-handle",
+    REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container',
+    REORDER_HANDLE_CLASS = 'dx-list-reorder-handle',
 
-    REOREDERING_ITEM_CLASS = "dx-list-item-reordering",
-    REOREDERING_ITEM_GHOST_CLASS = "dx-list-item-ghost-reordering";
+    REOREDERING_ITEM_CLASS = 'dx-list-item-reordering',
+    REOREDERING_ITEM_GHOST_CLASS = 'dx-list-item-ghost-reordering';
 
 registerDecorator(
-    "reorder",
-    "default",
+    'reorder',
+    'default',
     EditDecorator.inherit({
 
         _init: function() {
-            this._groupedEnabled = this._list.option("grouped");
+            this._groupedEnabled = this._list.option('grouped');
 
             this._initAnimator();
         },
@@ -70,18 +70,18 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 $container = config.$container;
 
-            var $handle = $("<div>").addClass(REORDER_HANDLE_CLASS);
+            var $handle = $('<div>').addClass(REORDER_HANDLE_CLASS);
 
             var lockedDrag = false;
-            eventsEngine.on($handle, "dxpointerdown", function(e) {
+            eventsEngine.on($handle, 'dxpointerdown', function(e) {
                 lockedDrag = !eventUtils.isMouseEvent(e);
             });
-            eventsEngine.on($handle, "dxhold", { timeout: 30 }, function(e) {
+            eventsEngine.on($handle, 'dxhold', { timeout: 30 }, function(e) {
                 e.cancel = true;
                 lockedDrag = false;
             });
 
-            eventsEngine.on($handle, DRAG_START_EVENT_NAME, { direction: "vertical", immediate: true }, (function(e) {
+            eventsEngine.on($handle, DRAG_START_EVENT_NAME, { direction: 'vertical', immediate: true }, (function(e) {
                 if(lockedDrag) {
                     e.cancel = true;
                     return;
@@ -97,7 +97,7 @@ registerDecorator(
         },
 
         _dragStartHandler: function($itemElement, e) {
-            if($itemElement.is(".dx-state-disabled, .dx-state-disabled *")) {
+            if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
                 e.cancel = true;
                 return;
             }
@@ -263,14 +263,14 @@ registerDecorator(
                 fx.stop($item);
                 if(setupPosition) {
                     fx.animate($item, {
-                        type: "slide",
+                        type: 'slide',
                         to: { top: this._elementHeight * -currentDirection },
                         duration: 300
                     });
                 }
                 if(resetPosition) {
                     fx.animate($item, {
-                        type: "slide",
+                        type: 'slide',
                         to: { top: 0 },
                         duration: 300
                     });
@@ -307,7 +307,7 @@ registerDecorator(
             this._scrollAnimator.stop();
 
             fx.animate(this._$ghostItem, {
-                type: "slide",
+                type: 'slide',
                 to: { top: this._startGhostPosition + this._getLastElementPosition() - this._getDraggingElementPosition() },
                 duration: 300
             }).done((function() {
@@ -392,7 +392,7 @@ registerDecorator(
         },
 
         getExcludedSelectors: function(selectors) {
-            selectors.push("." + REOREDERING_ITEM_GHOST_CLASS);
+            selectors.push('.' + REOREDERING_ITEM_GHOST_CLASS);
         },
 
         dispose: function() {

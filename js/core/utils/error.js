@@ -1,9 +1,9 @@
-var extend = require("./extend").extend,
-    consoleUtils = require("./console"),
-    stringUtils = require("./string"),
-    version = require("../version");
+var extend = require('./extend').extend,
+    consoleUtils = require('./console'),
+    stringUtils = require('./string'),
+    version = require('../version');
 
-var ERROR_URL = "http://js.devexpress.com/error/" + version.split(".").slice(0, 2).join("_") + "/";
+var ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
 module.exports = function(baseErrors, errors) {
 
@@ -16,15 +16,15 @@ module.exports = function(baseErrors, errors) {
         },
 
         log: function(id) {
-            var method = "log";
+            var method = 'log';
 
             if(/^E\d+$/.test(id)) {
-                method = "error";
+                method = 'error';
             } else if(/^W\d+$/.test(id)) {
-                method = "warn";
+                method = 'warn';
             }
 
-            consoleUtils.logger[method](method === "log" ? id : combineMessage([].slice.call(arguments)));
+            consoleUtils.logger[method](method === 'log' ? id : combineMessage([].slice.call(arguments)));
         }
     };
 
@@ -40,7 +40,7 @@ module.exports = function(baseErrors, errors) {
     };
 
     var formatMessage = function(id, details) {
-        return stringUtils.format.apply(this, ["{0} - {1}. See:\n{2}", id, details, getErrorUrl(id)]);
+        return stringUtils.format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
     };
 
     var makeError = function(args) {

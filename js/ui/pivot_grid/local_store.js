@@ -1,22 +1,22 @@
-import { when, Deferred } from "../../core/utils/deferred";
-import { aggregators } from "../../data/utils";
-import dataQuery from "../../data/query";
-import { deserializeDate } from "../../core/utils/date_serialization";
-import { DataSource } from "../../data/data_source/data_source";
-import CustomStore from "../../data/custom_store";
-import { compileGetter, toComparable } from "../../core/utils/data";
-import Class from "../../core/class";
-import { noop } from "../../core/utils/common";
-import { isNumeric, isDefined, isString } from "../../core/utils/type";
-import { each } from "../../core/utils/iterator";
+import { when, Deferred } from '../../core/utils/deferred';
+import { aggregators } from '../../data/utils';
+import dataQuery from '../../data/query';
+import { deserializeDate } from '../../core/utils/date_serialization';
+import { DataSource } from '../../data/data_source/data_source';
+import CustomStore from '../../data/custom_store';
+import { compileGetter, toComparable } from '../../core/utils/data';
+import Class from '../../core/class';
+import { noop } from '../../core/utils/common';
+import { isNumeric, isDefined, isString } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
 import { getFiltersByPath,
     setFieldProperty,
     setDefaultFieldValueFormatting,
     storeDrillDownMixin,
-    discoverObjectFields } from "./ui.pivot_grid.utils";
-import ArrayStore from "../../data/array_store";
+    discoverObjectFields } from './ui.pivot_grid.utils';
+import ArrayStore from '../../data/array_store';
 
-const PATH_DELIMETER = "/./";
+const PATH_DELIMETER = '/./';
 
 exports.LocalStore = Class.inherit((function() {
 
@@ -39,7 +39,7 @@ exports.LocalStore = Class.inherit((function() {
     };
 
     function getDataSelector(dataField) {
-        return dataField.indexOf(".") !== -1 ? compileGetter(dataField) : function(data) { return data[dataField]; };
+        return dataField.indexOf('.') !== -1 ? compileGetter(dataField) : function(data) { return data[dataField]; };
     }
 
     function getDateValue(dataSelector) {
@@ -96,7 +96,7 @@ exports.LocalStore = Class.inherit((function() {
 
                 setDefaultFieldValueFormatting(field);
 
-                setFieldProperty(field, "selector", fieldSelector);
+                setFieldProperty(field, 'selector', fieldSelector);
             }
         });
     }
@@ -123,7 +123,7 @@ exports.LocalStore = Class.inherit((function() {
 
         if(dimension) {
             dimensionValue = dimension.selector(options.data);
-            pathHash = pathHash !== undefined ? pathHash + PATH_DELIMETER + dimensionValue : dimensionValue + "";
+            pathHash = pathHash !== undefined ? pathHash + PATH_DELIMETER + dimensionValue : dimensionValue + '';
 
             hierarchyItem = addHierarchyItem(dimensionValue, children, pathHash, options.childrenHash);
 
@@ -141,10 +141,10 @@ exports.LocalStore = Class.inherit((function() {
     function generateHierarchyItems(data, loadOptions, headers, headerName) {
         var result = [0],
             expandIndex = loadOptions.headerName === headerName ? loadOptions.path.length : 0,
-            expandedPaths = headerName === "rows" ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths,
+            expandedPaths = headerName === 'rows' ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths,
             options = {
                 data: data,
-                childrenHash: headers[headerName + "Hash"],
+                childrenHash: headers[headerName + 'Hash'],
                 dimensions: loadOptions[headerName],
                 expandedPathsHash: loadOptions.headerName !== headerName && expandedPaths && expandedPaths.hash
             };
@@ -159,8 +159,8 @@ exports.LocalStore = Class.inherit((function() {
             rowIndex,
             columnIndex;
 
-        var rowIndexes = generateHierarchyItems(data, options, headers, "rows");
-        var columnIndexes = generateHierarchyItems(data, options, headers, "columns");
+        var rowIndexes = generateHierarchyItems(data, options, headers, 'rows');
+        var columnIndexes = generateHierarchyItems(data, options, headers, 'columns');
 
         for(y = 0; y < rowIndexes.length; y++) {
             rowIndex = rowIndexes[y];
@@ -178,7 +178,7 @@ exports.LocalStore = Class.inherit((function() {
         if(expandedPaths) {
             var hash = expandedPaths.hash = {};
             expandedPaths.forEach(function(path) {
-                var pathValue = path.map(function(value) { return value + ""; }).join(PATH_DELIMETER);
+                var pathValue = path.map(function(value) { return value + ''; }).join(PATH_DELIMETER);
                 hash[pathValue] = true;
             });
         }
@@ -199,26 +199,26 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function getAggregator(field) {
-        if(field.summaryType === "custom") {
+        if(field.summaryType === 'custom') {
             field.calculateCustomSummary = field.calculateCustomSummary || noop;
 
             return {
                 seed: function() {
                     var options = {
-                        summaryProcess: "start",
+                        summaryProcess: 'start',
                         totalValue: undefined
                     };
                     field.calculateCustomSummary(options);
                     return options;
                 },
                 step: function(options, value) {
-                    options.summaryProcess = "calculate";
+                    options.summaryProcess = 'calculate';
                     options.value = value;
                     field.calculateCustomSummary(options);
                     return options;
                 },
                 finalize: function(options) {
-                    options.summaryProcess = "finalize";
+                    options.summaryProcess = 'finalize';
                     delete options.value;
                     field.calculateCustomSummary(options);
                     return options.totalValue;
@@ -235,7 +235,7 @@ exports.LocalStore = Class.inherit((function() {
             var cellValue = cellField.selector(data);
 
             var aggregator = getAggregator(cellField),
-                isAggregatorSeedFunction = typeof aggregator.seed === "function";
+                isAggregatorSeedFunction = typeof aggregator.seed === 'function';
 
             for(var cellSetIndex = 0; cellSetIndex < aggregationCells.length; cellSetIndex++) {
                 var cell = aggregationCells[cellSetIndex];
@@ -314,7 +314,7 @@ exports.LocalStore = Class.inherit((function() {
                         break;
                     }
                 }
-                return field.filterType === "exclude" ? !result : result;
+                return field.filterType === 'exclude' ? !result : result;
             };
 
             filterValues.length && filters.push(filter);
@@ -422,7 +422,7 @@ exports.LocalStore = Class.inherit((function() {
             }
         };
 
-        dataSource.on("customizeStoreLoadOptions", customizeStoreLoadOptionsHandler);
+        dataSource.on('customizeStoreLoadOptions', customizeStoreLoadOptionsHandler);
 
         if(!dataSource.isLoaded() || reload) {
             var loadDeferred = reload ? dataSource.load() : dataSource.reload();
@@ -435,13 +435,13 @@ exports.LocalStore = Class.inherit((function() {
             d.resolve(filterDataSource(dataSource, fieldSelectors));
         }
         return d.always(function() {
-            dataSource.off("customizeStoreLoadOptions", customizeStoreLoadOptionsHandler);
+            dataSource.off('customizeStoreLoadOptions', customizeStoreLoadOptionsHandler);
         });
     }
 
     function fillSelectorsByFields(selectors, fields) {
         fields.forEach(function(field) {
-            if(field.dataField && field.dataType === "date") {
+            if(field.dataField && field.dataType === 'date') {
                 var valueSelector = getDateValue(getDataSelector(field.dataField));
                 selectors[field.dataField] = function(data) { return valueSelector(data); };
             }
@@ -454,7 +454,7 @@ exports.LocalStore = Class.inherit((function() {
         if(Array.isArray(options)) {
             fillSelectorsByFields(selectors, options);
         } else if(options) {
-            ["rows", "columns", "filters"].forEach(function(area) {
+            ['rows', 'columns', 'filters'].forEach(function(area) {
                 options[area] && fillSelectorsByFields(selectors, options[area]);
             });
         }

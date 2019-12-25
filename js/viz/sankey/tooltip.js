@@ -1,5 +1,5 @@
-var _extend = require("../../core/utils/extend").extend,
-    isFunction = require("../../core/utils/type").isFunction,
+var _extend = require('../../core/utils/extend').extend,
+    isFunction = require('../../core/utils/type').isFunction,
     defaultCustomizeLinkTooltip = function(info) {
         return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
     },
@@ -20,7 +20,7 @@ var _extend = require("../../core/utils/extend").extend,
 export function setTooltipCustomOptions(sankey) {
     sankey.prototype._setTooltipOptions = function() {
         var tooltip = this._tooltip,
-            options = tooltip && this._getOption("tooltip");
+            options = tooltip && this._getOption('tooltip');
         tooltip && tooltip.update(_extend({}, options, {
             customizeTooltip: function(args) {
                 if(args.type === 'node') {

@@ -1,12 +1,12 @@
-var typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    config = require("../../core/config"),
-    extend = require("../../core/utils/extend").extend,
-    queryAdapters = require("../query_adapters"),
-    odataUtils = require("./utils"),
+var typeUtils = require('../../core/utils/type'),
+    iteratorUtils = require('../../core/utils/iterator'),
+    config = require('../../core/config'),
+    extend = require('../../core/utils/extend').extend,
+    queryAdapters = require('../query_adapters'),
+    odataUtils = require('./utils'),
     serializePropName = odataUtils.serializePropName,
-    errors = require("../errors").errors,
-    dataUtils = require("../utils"),
+    errors = require('../errors').errors,
+    dataUtils = require('../utils'),
     isFunction = typeUtils.isFunction;
 
 var DEFAULT_PROTOCOL_VERSION = 2;
@@ -18,49 +18,49 @@ var compileCriteria = (function() {
 
     var createBinaryOperationFormatter = function(op) {
         return function(prop, val) {
-            return prop + " " + op + " " + val;
+            return prop + ' ' + op + ' ' + val;
         };
     };
 
     var createStringFuncFormatter = function(op, reverse) {
         return function(prop, val) {
-            var bag = [op, "("];
+            var bag = [op, '('];
 
             if(forceLowerCase) {
-                prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
+                prop = prop.indexOf('tolower(') === -1 ? 'tolower(' + prop + ')' : prop;
                 val = val.toLowerCase();
             }
 
             if(reverse) {
-                bag.push(val, ",", prop);
+                bag.push(val, ',', prop);
             } else {
-                bag.push(prop, ",", val);
+                bag.push(prop, ',', val);
             }
 
-            bag.push(")");
-            return bag.join("");
+            bag.push(')');
+            return bag.join('');
         };
     };
 
     var formatters = {
-        "=": createBinaryOperationFormatter("eq"),
-        "<>": createBinaryOperationFormatter("ne"),
-        ">": createBinaryOperationFormatter("gt"),
-        ">=": createBinaryOperationFormatter("ge"),
-        "<": createBinaryOperationFormatter("lt"),
-        "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith"),
-        "endswith": createStringFuncFormatter("endswith")
+        '=': createBinaryOperationFormatter('eq'),
+        '<>': createBinaryOperationFormatter('ne'),
+        '>': createBinaryOperationFormatter('gt'),
+        '>=': createBinaryOperationFormatter('ge'),
+        '<': createBinaryOperationFormatter('lt'),
+        '<=': createBinaryOperationFormatter('le'),
+        'startswith': createStringFuncFormatter('startswith'),
+        'endswith': createStringFuncFormatter('endswith')
     };
 
     var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", true),
-        "notcontains": createStringFuncFormatter("not substringof", true)
+        'contains': createStringFuncFormatter('substringof', true),
+        'notcontains': createStringFuncFormatter('not substringof', true)
     });
 
     var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains"),
-        "notcontains": createStringFuncFormatter("not contains")
+        'contains': createStringFuncFormatter('contains'),
+        'notcontains': createStringFuncFormatter('not contains')
     });
 
     var compileBinary = function(criteria) {
@@ -73,7 +73,7 @@ var compileCriteria = (function() {
             formatter = formatters[op.toLowerCase()];
 
         if(!formatter) {
-            throw errors.Error("E4003", op);
+            throw errors.Error('E4003', op);
         }
 
         var fieldName = criteria[0],
@@ -94,11 +94,11 @@ var compileCriteria = (function() {
         var op = criteria[0],
             crit = compileCore(criteria[1]);
 
-        if(op === "!") {
-            return "not (" + crit + ")";
+        if(op === '!') {
+            return 'not (' + crit + ')';
         }
 
-        throw errors.Error("E4003", op);
+        throw errors.Error('E4003', op);
     };
 
     var compileGroup = function(criteria) {
@@ -110,19 +110,19 @@ var compileCriteria = (function() {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
-                    throw new errors.Error("E4019");
+                    throw new errors.Error('E4019');
                 }
 
-                bag.push("(" + compileCore(criterion) + ")");
+                bag.push('(' + compileCore(criterion) + ')');
 
                 groupOperator = nextGroupOperator;
-                nextGroupOperator = "and";
+                nextGroupOperator = 'and';
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? "and" : "or";
+                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? 'and' : 'or';
             }
         });
 
-        return bag.join(" " + groupOperator + " ");
+        return bag.join(' ' + groupOperator + ' ');
     };
 
     var compileCore = function(criteria) {
@@ -179,17 +179,17 @@ var createODataQueryAdapter = function(queryOptions) {
 
         if(!_countQuery) {
             if(_sorting.length) {
-                result["$orderby"] = _sorting.join(",");
+                result['$orderby'] = _sorting.join(',');
             }
             if(_skip) {
-                result["$skip"] = _skip;
+                result['$skip'] = _skip;
             }
             if(_take !== undefined) {
-                result["$top"] = _take;
+                result['$top'] = _take;
             }
 
-            result["$select"] = odataUtils.generateSelect(_oDataVersion, _select) || undefined;
-            result["$expand"] = odataUtils.generateExpand(_oDataVersion, _expand, _select) || undefined;
+            result['$select'] = odataUtils.generateSelect(_oDataVersion, _select) || undefined;
+            result['$expand'] = odataUtils.generateExpand(_oDataVersion, _expand, _select) || undefined;
         }
 
         if(_criteria.length) {
@@ -197,19 +197,19 @@ var createODataQueryAdapter = function(queryOptions) {
                 fieldTypes = queryOptions && queryOptions.fieldTypes,
                 filterToLower = queryOptions && queryOptions.filterToLower;
 
-            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
+            result['$filter'] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
 
         if(_countQuery) {
-            result["$top"] = 0;
+            result['$top'] = 0;
         }
 
         if(queryOptions.requireTotalCount || _countQuery) {
             // todo: tests!!!
             if(_oDataVersion !== 4) {
-                result["$inlinecount"] = "allpages";
+                result['$inlinecount'] = 'allpages';
             } else {
-                result["$count"] = "true";
+                result['$count'] = 'true';
             }
         }
 
@@ -219,7 +219,7 @@ var createODataQueryAdapter = function(queryOptions) {
     function tryLiftSelect(tasks) {
         var selectIndex = -1;
         for(var i = 0; i < tasks.length; i++) {
-            if(tasks[i].name === "select") {
+            if(tasks[i].name === 'select') {
                 selectIndex = i;
                 break;
             }
@@ -228,7 +228,7 @@ var createODataQueryAdapter = function(queryOptions) {
         if(selectIndex < 0 || !isFunction(tasks[selectIndex].args[0])) return;
 
         var nextTask = tasks[1 + selectIndex];
-        if(!nextTask || nextTask.name !== "slice") return;
+        if(!nextTask || nextTask.name !== 'slice') return;
 
         tasks[1 + selectIndex] = tasks[selectIndex];
         tasks[selectIndex] = nextTask;
@@ -270,13 +270,13 @@ var createODataQueryAdapter = function(queryOptions) {
                     desc = !!args[i][1],
                     rule;
 
-                if(typeof getter !== "string") {
+                if(typeof getter !== 'string') {
                     return false;
                 }
 
                 rule = serializePropName(getter);
                 if(desc) {
-                    rule += " desc";
+                    rule += ' desc';
                 }
 
                 rules = rules || [];
@@ -309,7 +309,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(_criteria.length) {
-                _criteria.push("and");
+                _criteria.push('and');
             }
 
             _criteria.push(criterion);

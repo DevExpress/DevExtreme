@@ -1,44 +1,44 @@
-import $ from "../../core/renderer";
-import Widget from "../widget/ui.widget";
-import Drawer from "../drawer";
-import registerComponent from "../../core/component_registrator";
-import { extend } from "../../core/utils/extend";
+import $ from '../../core/renderer';
+import Widget from '../widget/ui.widget';
+import Drawer from '../drawer';
+import registerComponent from '../../core/component_registrator';
+import { extend } from '../../core/utils/extend';
 import typeUtils from '../../core/utils/type';
 import dataCoreUtils from '../../core/utils/data';
-import DiagramToolbar from "./ui.diagram.toolbar";
-import DiagramLeftPanel from "./ui.diagram.leftpanel";
-import DiagramRightPanel from "./ui.diagram.rightpanel";
-import DiagramContextMenu from "./ui.diagram.contextmenu";
-import NodesOption from "./ui.diagram.nodes";
-import EdgesOptions from "./ui.diagram.edges";
-import Tooltip from "../tooltip";
-import { getDiagram } from "./diagram_importer";
-import { hasWindow, getWindow } from "../../core/utils/window";
-import eventsEngine from "../../events/core/events_engine";
-import eventUtils from "../../events/utils";
+import DiagramToolbar from './ui.diagram.toolbar';
+import DiagramLeftPanel from './ui.diagram.leftpanel';
+import DiagramRightPanel from './ui.diagram.rightpanel';
+import DiagramContextMenu from './ui.diagram.contextmenu';
+import NodesOption from './ui.diagram.nodes';
+import EdgesOptions from './ui.diagram.edges';
+import Tooltip from '../tooltip';
+import { getDiagram } from './diagram_importer';
+import { hasWindow, getWindow } from '../../core/utils/window';
+import eventsEngine from '../../events/core/events_engine';
+import eventUtils from '../../events/utils';
 
-const DIAGRAM_CLASS = "dx-diagram";
-const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
-const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
-const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
-const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
-const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
+const DIAGRAM_CLASS = 'dx-diagram';
+const DIAGRAM_FULLSCREEN_CLASS = 'dx-diagram-fullscreen';
+const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + '-toolbar-wrapper';
+const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + '-content-wrapper';
+const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + '-drawer-wrapper';
+const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + '-content';
 
-const DIAGRAM_KEY_FIELD = "id";
-const DIAGRAM_TEXT_FIELD = "text";
-const DIAGRAM_TYPE_FIELD = "type";
-const DIAGRAM_PARENT_KEY_FIELD = "parentId";
-const DIAGRAM_ITEMS_FIELD = "items";
-const DIAGRAM_FROM_FIELD = "from";
-const DIAGRAM_TO_FIELD = "to";
+const DIAGRAM_KEY_FIELD = 'id';
+const DIAGRAM_TEXT_FIELD = 'text';
+const DIAGRAM_TYPE_FIELD = 'type';
+const DIAGRAM_PARENT_KEY_FIELD = 'parentId';
+const DIAGRAM_ITEMS_FIELD = 'items';
+const DIAGRAM_FROM_FIELD = 'from';
+const DIAGRAM_TO_FIELD = 'to';
 
-const DIAGRAM_CONNECTION_POINT_SIDES = ["north", "east", "south", "west"];
+const DIAGRAM_CONNECTION_POINT_SIDES = ['north', 'east', 'south', 'west'];
 
-const DIAGRAM_NAMESPACE = "dxDiagramEvent";
-const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange", DIAGRAM_NAMESPACE);
-const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("msfullscreenchange", DIAGRAM_NAMESPACE);
-const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("webkitfullscreenchange", DIAGRAM_NAMESPACE);
-const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("mozfullscreenchange", DIAGRAM_NAMESPACE);
+const DIAGRAM_NAMESPACE = 'dxDiagramEvent';
+const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('fullscreenchange', DIAGRAM_NAMESPACE);
+const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('msfullscreenchange', DIAGRAM_NAMESPACE);
+const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('webkitfullscreenchange', DIAGRAM_NAMESPACE);
+const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace('mozfullscreenchange', DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -54,20 +54,20 @@ class Diagram extends Widget {
 
         this._renderToolbar();
 
-        const $contentWrapper = $("<div>")
+        const $contentWrapper = $('<div>')
             .addClass(DIAGRAM_CONTENT_WRAPPER_CLASS)
             .appendTo(this.$element());
 
         this._renderLeftPanel($contentWrapper);
 
-        const $drawerWrapper = $("<div>")
+        const $drawerWrapper = $('<div>')
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        const $drawer = $("<div>")
+        const $drawer = $('<div>')
             .appendTo($drawerWrapper);
 
-        const $content = $("<div>")
+        const $content = $('<div>')
             .addClass(DIAGRAM_CONTENT_CLASS)
             .appendTo($drawer);
 
@@ -78,19 +78,19 @@ class Diagram extends Widget {
         !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
     _renderToolbar() {
-        const $toolbarWrapper = $("<div>")
+        const $toolbarWrapper = $('<div>')
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
-            export: this.option("export")
+            export: this.option('export')
         });
     }
     _renderLeftPanel($parent) {
         const isServerSide = !hasWindow();
 
-        const $leftPanel = $("<div>")
+        const $leftPanel = $('<div>')
             .appendTo($parent);
 
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
@@ -110,17 +110,17 @@ class Diagram extends Widget {
     _createTooltips($container, targets) {
         targets.each((index, element) => {
             var $target = $(element);
-            const $tooltip = $("<div>")
-                .html($target.attr("title"))
+            const $tooltip = $('<div>')
+                .html($target.attr('title'))
                 .appendTo($container);
             this._tooltipInstance = this._createComponent($tooltip, Tooltip, {
                 target: $target,
-                showEvent: "mouseenter",
-                hideEvent: "mouseleave",
-                position: "top",
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                position: 'top',
                 animation: {
-                    show: { type: "fade", from: 0, to: 1, delay: 500 },
-                    hide: { type: "fade", from: 1, to: 0, delay: 100 }
+                    show: { type: 'fade', from: 0, to: 1, delay: 500 },
+                    hide: { type: 'fade', from: 1, to: 0, delay: 100 }
                 }
             });
         });
@@ -137,8 +137,8 @@ class Diagram extends Widget {
     _renderRightPanel($parent) {
         const drawer = this._createComponent($parent, Drawer, {
             closeOnOutsideClick: true,
-            openedStateMode: "overlap",
-            position: "right",
+            openedStateMode: 'overlap',
+            position: 'right',
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
                     onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
@@ -147,8 +147,8 @@ class Diagram extends Widget {
             }
         });
 
-        this._toolbarInstance.option("onWidgetCommand", (e) => {
-            if(e.name === "options") {
+        this._toolbarInstance.option('onWidgetCommand', (e) => {
+            if(e.name === 'options') {
                 drawer.toggle();
             }
         });
@@ -159,7 +159,7 @@ class Diagram extends Widget {
     }
 
     _renderContextMenu($mainElement) {
-        const $contextMenu = $("<div>")
+        const $contextMenu = $('<div>')
             .appendTo(this.$element());
         this._createComponent($contextMenu, DiagramContextMenu, {
             container: $mainElement,
@@ -197,9 +197,9 @@ class Diagram extends Widget {
             delete this._nodesOption;
             delete this._nodes;
         }
-        if(this.option("nodes.dataSource")) {
+        if(this.option('nodes.dataSource')) {
             this._nodesOption = new NodesOption(this);
-            this._nodesOption.option("dataSource", this.option("nodes.dataSource"));
+            this._nodesOption.option('dataSource', this.option('nodes.dataSource'));
             this._nodesOption._refreshDataSource();
         }
     }
@@ -209,9 +209,9 @@ class Diagram extends Widget {
             delete this._edgesOption;
             delete this._edges;
         }
-        if(this.option("edges.dataSource")) {
+        if(this.option('edges.dataSource')) {
             this._edgesOption = new EdgesOptions(this);
-            this._edgesOption.option("dataSource", this.option("edges.dataSource"));
+            this._edgesOption.option('dataSource', this.option('edges.dataSource'));
             this._edgesOption._refreshDataSource();
         }
     }
@@ -230,11 +230,11 @@ class Diagram extends Widget {
     }
 
     _getDataSources() {
-        return this.option("dataSources") || {};
+        return this.option('dataSources') || {};
     }
     _createDiagramDataSource(parameters) {
-        const key = parameters.key || "0";
-        const title = parameters.title || "Data Source";
+        const key = parameters.key || '0';
+        const title = parameters.title || 'Data Source';
         const nodes = parameters.nodes || {};
         const edges = parameters.edges || {};
 
@@ -270,14 +270,14 @@ class Diagram extends Widget {
 
         var dataSources = this._getDataSources();
         dataSources[key] = data;
-        this.option("dataSources", dataSources);
+        this.option('dataSources', dataSources);
     }
     _getDataSourceLayoutType(layout) {
         const { DataLayoutType } = getDiagram();
         switch(layout) {
-            case "tree":
+            case 'tree':
                 return DataLayoutType.Tree;
-            case "sugiyama":
+            case 'sugiyama':
                 return DataLayoutType.Sugiyama;
         }
     }
@@ -288,7 +288,7 @@ class Diagram extends Widget {
             this._diagramInstance.commandManager.getCommand(DiagramCommand.CloseDataSource).execute(key);
 
             delete dataSources[key];
-            this.option("dataSources", dataSources);
+            this.option('dataSources', dataSources);
         }
     }
 
@@ -325,25 +325,25 @@ class Diagram extends Widget {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
             nodeDataImporter: {
-                getKey: this._createOptionGetter("nodes.keyExpr"),
-                setKey: this._createOptionSetter("nodes.keyExpr"),
-                getText: this._createOptionGetter("nodes.textExpr"),
-                setText: this._createOptionSetter("nodes.textExpr"),
-                getType: this._createOptionGetter("nodes.typeExpr"),
-                setType: this._createOptionSetter("nodes.typeExpr"),
+                getKey: this._createOptionGetter('nodes.keyExpr'),
+                setKey: this._createOptionSetter('nodes.keyExpr'),
+                getText: this._createOptionGetter('nodes.textExpr'),
+                setText: this._createOptionSetter('nodes.textExpr'),
+                getType: this._createOptionGetter('nodes.typeExpr'),
+                setType: this._createOptionSetter('nodes.typeExpr'),
 
-                getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
-                setParentKey: this._createOptionSetter("nodes.parentKeyExpr"),
-                getItems: this._createOptionGetter("nodes.itemsExpr"),
-                setItems: this._createOptionSetter("nodes.itemsExpr")
+                getParentKey: this._createOptionGetter('nodes.parentKeyExpr'),
+                setParentKey: this._createOptionSetter('nodes.parentKeyExpr'),
+                getItems: this._createOptionGetter('nodes.itemsExpr'),
+                setItems: this._createOptionSetter('nodes.itemsExpr')
             },
             edgeDataImporter: {
-                getKey: this._createOptionGetter("edges.keyExpr"),
-                setKey: this._createOptionSetter("edges.keyExpr"),
-                getFrom: this._createOptionGetter("edges.fromExpr"),
-                setFrom: this._createOptionSetter("edges.fromExpr"),
-                getTo: this._createOptionGetter("edges.toExpr"),
-                setTo: this._createOptionSetter("edges.toExpr")
+                getKey: this._createOptionGetter('edges.keyExpr'),
+                setKey: this._createOptionSetter('edges.keyExpr'),
+                getFrom: this._createOptionGetter('edges.fromExpr'),
+                setFrom: this._createOptionSetter('edges.fromExpr'),
+                getTo: this._createOptionGetter('edges.toExpr'),
+                setTo: this._createOptionSetter('edges.toExpr')
             },
             layoutType: this._getDataBindingLayoutType()
         };
@@ -351,8 +351,8 @@ class Diagram extends Widget {
     }
     _getDataBindingLayoutType() {
         const { DataLayoutType } = getDiagram();
-        switch(this.option("layout")) {
-            case "sugiyama":
+        switch(this.option('layout')) {
+            case 'sugiyama':
                 return DataLayoutType.Sugiyama;
             default:
                 return DataLayoutType.Tree;
@@ -372,7 +372,7 @@ class Diagram extends Widget {
     }
 
     _getCustomShapes() {
-        return this.option("customShapes") || [];
+        return this.option('customShapes') || [];
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
@@ -701,7 +701,7 @@ class Diagram extends Widget {
              * @type Enums.DiagramAutoLayout
              * @default "tree"
              */
-            layout: "tree",
+            layout: 'tree',
 
             /**
             * @name dxDiagramOptions.customShapes
@@ -790,13 +790,13 @@ class Diagram extends Widget {
              * @name dxDiagramOptions.export
              * @type object
              */
-            "export": {
+            'export': {
                 /**
                  * @name dxDiagramOptions.export.fileName
                  * @type string
                  * @default "Diagram"
                  */
-                fileName: "Diagram",
+                fileName: 'Diagram',
                 /**
                  * @name dxDiagramOptions.export.proxyUrl
                  * @type string
@@ -808,10 +808,10 @@ class Diagram extends Widget {
     }
 
     _createDataChangeAction() {
-        this._dataChangeAction = this._createActionByOption("onDataChanged");
+        this._dataChangeAction = this._createActionByOption('onDataChanged');
     }
     _raiseDataChangeAction() {
-        if(!this.option("onDataChanged")) return;
+        if(!this.option('onDataChanged')) return;
 
         if(!this._dataChangeAction) {
             this._createDataChangeAction();
@@ -852,38 +852,38 @@ class Diagram extends Widget {
     }
     _raiseToolboxDragStart() {
         if(this._leftPanel) {
-            this._leftPanel.$element().addClass("dx-skip-gesture-event");
+            this._leftPanel.$element().addClass('dx-skip-gesture-event');
         }
     }
     _raiseToolboxDragEnd() {
         if(this._leftPanel) {
-            this._leftPanel.$element().removeClass("dx-skip-gesture-event");
+            this._leftPanel.$element().removeClass('dx-skip-gesture-event');
         }
     }
 
     _optionChanged(args) {
         switch(args.name) {
-            case "nodes":
+            case 'nodes':
                 this._refreshNodesDataSource();
                 break;
-            case "edges":
+            case 'edges':
                 this._refreshEdgesDataSource();
                 break;
-            case "layout":
+            case 'layout':
                 this._refreshDataSources();
                 break;
-            case "customShapes":
+            case 'customShapes':
                 this._updateCustomShapes(args.value, args.previousValue);
                 this._invalidateLeftPanel();
                 break;
-            case "onDataChanged":
+            case 'onDataChanged':
                 this._createDataChangeAction();
                 break;
-            case "dataSources":
+            case 'dataSources':
                 this._invalidateLeftPanel();
                 break;
-            case "export":
-                this._toolbarInstance.option("export", this.option("export"));
+            case 'export':
+                this._toolbarInstance.option('export', this.option('export'));
                 break;
             default:
                 super._optionChanged(args);
@@ -891,5 +891,5 @@ class Diagram extends Widget {
     }
 }
 
-registerComponent("dxDiagram", Diagram);
+registerComponent('dxDiagram', Diagram);
 module.exports = Diagram;

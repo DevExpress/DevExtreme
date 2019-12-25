@@ -1,11 +1,11 @@
-import BasePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.base";
-import AdaptivePositioningStrategy from "./ui.scheduler.appointmentsPositioning.strategy.adaptive";
-import { extend } from "../../../core/utils/extend";
-import errors from "../../widget/ui.errors";
-import dateUtils from "../../../core/utils/date";
-import { isNumeric } from "../../../core/utils/type";
-import typeUtils from "../../../core/utils/type";
-import themes from "../../themes";
+import BasePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.base';
+import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.strategy.adaptive';
+import { extend } from '../../../core/utils/extend';
+import errors from '../../widget/ui.errors';
+import dateUtils from '../../../core/utils/date';
+import { isNumeric } from '../../../core/utils/type';
+import typeUtils from '../../../core/utils/type';
+import themes from '../../themes';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -24,7 +24,7 @@ class BaseRenderingStrategy {
     }
 
     _initPositioningStrategy() {
-        this._positioningStrategy = this.instance.fire("isAdaptive") ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
+        this._positioningStrategy = this.instance.fire('isAdaptive') ? new AdaptivePositioningStrategy(this) : new BasePositioningStrategy(this);
     }
 
     getPositioningStrategy() {
@@ -51,7 +51,7 @@ class BaseRenderingStrategy {
     }
 
     getDirection() {
-        return "horizontal";
+        return 'horizontal';
     }
 
     createTaskPositionMap(items) {
@@ -82,7 +82,7 @@ class BaseRenderingStrategy {
     }
 
     _getDeltaWidth(args, initialSize) {
-        var intervalWidth = this.instance.fire("getResizableStep") || this.getAppointmentMinSize(),
+        var intervalWidth = this.instance.fire('getResizableStep') || this.getAppointmentMinSize(),
             initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);
@@ -108,8 +108,8 @@ class BaseRenderingStrategy {
         var position = this._getAppointmentCoordinates(item),
             allDay = this.isAllDay(item),
             result = [],
-            startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
+            startDate = new Date(this.instance.fire('getField', 'startDate', item)),
+            isRecurring = !!this.instance.fire('getField', 'recurrenceRule', item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j], isRecurring),
@@ -128,7 +128,7 @@ class BaseRenderingStrategy {
                     width: width
                 })) {
 
-                    appointmentReduced = "head";
+                    appointmentReduced = 'head';
 
                     initialRowIndex = position[j].rowIndex;
                     initialCellIndex = position[j].cellIndex;
@@ -182,7 +182,7 @@ class BaseRenderingStrategy {
             top: 0,
             left: 0
         }];
-        this.instance.fire("needCoordinates", {
+        this.instance.fire('needCoordinates', {
             startDate: this.startDate(itemData),
             originalStartDate: this.startDate(itemData, true),
             appointmentData: itemData,
@@ -195,7 +195,7 @@ class BaseRenderingStrategy {
     }
 
     _isRtl() {
-        return this.instance.option("rtlEnabled");
+        return this.instance.option('rtlEnabled');
     }
 
     _getAppointmentParts() {
@@ -240,7 +240,7 @@ class BaseRenderingStrategy {
     }
 
     cropAppointmentWidth(width, cellWidth) {
-        if(this.instance.fire("isGroupedByDate")) {
+        if(this.instance.fire('isGroupedByDate')) {
             width = cellWidth;
         }
 
@@ -251,143 +251,164 @@ class BaseRenderingStrategy {
         const result = [];
 
         const round = value => Math.round(value * 100) / 100;
-        const createSortedItem = (rowIndex, cellIndex, top, left, position, isStart, allDay, tmpIndex) => {
+        const createItem = (rowIndex, cellIndex, top, left, bottom, right, position, allDay) => {
             return {
                 i: rowIndex,
                 j: cellIndex,
                 top: round(top),
                 left: round(left),
+                bottom: round(bottom),
+                right: round(right),
                 cellPosition: position,
-                isStart: isStart,
                 allDay: allDay,
-                __tmpIndex: tmpIndex
             };
         };
-
-        let tmpIndex = 0; // unstable sorting fix
 
         for(let rowIndex = 0, rowCount = positionList.length; rowIndex < rowCount; rowIndex++) {
             for(let cellIndex = 0, cellCount = positionList[rowIndex].length; cellIndex < cellCount; cellIndex++) {
                 const { top, left, height, width, cellPosition, allDay } = positionList[rowIndex][cellIndex];
 
-                const start = createSortedItem(rowIndex, cellIndex, top, left, cellPosition, true, allDay, tmpIndex);
-                tmpIndex++;
-
-                const end = createSortedItem(rowIndex, cellIndex, top + height, left + width, cellPosition, false, allDay, tmpIndex);
-                tmpIndex++;
-
-                result.push(start, end);
+                result.push(createItem(rowIndex, cellIndex, top, left, top + height, left + width, cellPosition, allDay));
             }
         }
 
         return result.sort((a, b) => this._sortCondition(a, b));
     }
 
-    _fixUnstableSorting(comparisonResult, a, b) {
-        if(comparisonResult === 0) {
-            if(a.__tmpIndex < b.__tmpIndex) return -1;
-            if(a.__tmpIndex > b.__tmpIndex) return 1;
-        }
-        return comparisonResult;
-    }
-
     _sortCondition() {
     }
 
-    _rowCondition(a, b) {
+    _getConditions(a, b) {
         var isSomeEdge = this._isSomeEdge(a, b);
 
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
+        return {
+            columnCondition: isSomeEdge || this._normalizeCondition(a.left, b.left),
+            rowCondition: isSomeEdge || this._normalizeCondition(a.top, b.top),
+            cellPositionCondition: isSomeEdge || this._normalizeCondition(a.cellPosition, b.cellPosition)
+        };
+    }
+
+    _rowCondition(a, b) {
+        var conditions = this._getConditions(a, b);
+        return conditions.columnCondition || conditions.rowCondition;
     }
 
     _columnCondition(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
-
-        var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
-            rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
+        var conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition;
     }
 
     _isSomeEdge(a, b) {
         return a.i === b.i && a.j === b.j;
     }
 
-    _normalizeCondition(first, second, isSomeEdge) {
+    _normalizeCondition(first, second) {
         // NOTE: ie & ff pixels
         var result = first - second;
+        return Math.abs(result) > 1 ? result : 0;
+    }
 
-        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
+    _isItemsCross(item, currentItem, orientation) {
+        const side_1 = Math.floor(item[orientation[0]]);
+        const side_2 = Math.floor(item[orientation[1]]);
+        return item[orientation[2]] === currentItem[orientation[2]] && (
+            (side_1 <= currentItem[orientation[0]] && side_2 > currentItem[orientation[0]]) ||
+                (side_1 < currentItem[orientation[1]] && side_2 >= currentItem[orientation[1]] || (
+                    side_1 === currentItem[orientation[0]] && side_2 === currentItem[orientation[1]]
+                ))
+        );
+    }
+
+    _getOrientation() {
+        return ['top', 'bottom', 'left'];
     }
 
     _getResultPositions(sortedArray) {
-        var stack = [],
-            indexes = [],
-            result = [],
-            intersectPositions = [],
-            intersectPositionCount = 0,
+        var result = [],
+            i,
             sortedIndex = 0,
-            position;
+            currentItem,
+            indexes,
+            itemIndex,
+            maxIndexInStack = 0,
+            stack = {},
+            orientation = this._getOrientation();
 
-        for(var i = 0; i < sortedArray.length; i++) {
-            var current = sortedArray[i],
-                j;
-
-            if(current.isStart) {
-                position = undefined;
-                for(j = 0; j < indexes.length; j++) {
-                    if(!indexes[j]) {
-
-                        position = j;
-                        indexes[j] = true;
-                        break;
-                    }
-                }
-
-                if(position === undefined) {
-
-                    position = indexes.length;
-
-                    indexes.push(true);
-
-                    for(j = 0; j < stack.length; j++) {
-                        stack[j].count++;
-                    }
-                }
-
-                stack.push({
-                    index: position,
-                    count: indexes.length,
-                    i: current.i,
-                    j: current.j,
-                    sortedIndex: this._skipSortedIndex(position) ? null : sortedIndex++
-                });
-
-                if(intersectPositionCount < indexes.length) {
-                    intersectPositionCount = indexes.length;
-                }
+        var findFreeIndex = (indexes, index) => {
+            var isFind = indexes.some((item) => {
+                return item === index;
+            });
+            if(isFind) {
+                return findFreeIndex(indexes, ++index);
             } else {
-                var removeIndex = this._findIndexByKey(stack, "i", "j", current.i, current.j),
-                    resultItem = stack[removeIndex];
-
-                stack.splice(removeIndex, 1);
-
-                indexes[resultItem.index] = false;
-                intersectPositions.push(resultItem);
-
-                if(!stack.length) {
-                    indexes = [];
-                    for(var k = 0; k < intersectPositions.length; k++) {
-                        intersectPositions[k].count = intersectPositionCount;
-                    }
-                    intersectPositions = [];
-                    intersectPositionCount = 0;
-                }
-
-                result.push(resultItem);
-
+                return index;
             }
+        };
+
+        var startNewStack = (currentItem) => {
+            stack.items = [createItem(currentItem)];
+            stack.left = currentItem.left;
+            stack.right = currentItem.right;
+            stack.top = currentItem.top;
+            stack.bottom = currentItem.bottom;
+        };
+
+        var createItem = (currentItem, index) => {
+            var currentIndex = index || 0;
+            return {
+                index: currentIndex,
+                i: currentItem.i,
+                j: currentItem.j,
+                left: currentItem.left,
+                right: currentItem.right,
+                top: currentItem.top,
+                bottom: currentItem.bottom,
+                sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
+            };
+        };
+
+        var pushItemsInResult = (items) => {
+            items.forEach((item) => {
+                result.push({
+                    index: item.index,
+                    count: maxIndexInStack + 1,
+                    i: item.i,
+                    j: item.j,
+                    sortedIndex: item.sortedIndex
+                });
+            });
+        };
+
+        for(i = 0; i < sortedArray.length; i++) {
+            currentItem = sortedArray[i];
+            indexes = [];
+
+            if(!stack.items) {
+                startNewStack(currentItem);
+            } else {
+                if(this._isItemsCross(stack, currentItem, orientation)) {
+                    stack.items.forEach((item, index) => {
+                        if(this._isItemsCross(item, currentItem, orientation)) {
+                            indexes.push(item.index);
+                        }
+                    });
+                    itemIndex = indexes.length ? findFreeIndex(indexes, 0) : 0;
+                    stack.items.push(createItem(currentItem, itemIndex));
+                    maxIndexInStack = Math.max(itemIndex, maxIndexInStack);
+                    stack.left = Math.min(stack.left, currentItem.left);
+                    stack.right = Math.max(stack.right, currentItem.right);
+                    stack.top = Math.min(stack.top, currentItem.top);
+                    stack.bottom = Math.max(stack.bottom, currentItem.bottom);
+                } else {
+                    pushItemsInResult(stack.items);
+                    stack = {};
+                    startNewStack(currentItem);
+                    maxIndexInStack = 0;
+                }
+            }
+        }
+        if(stack.items) {
+            pushItemsInResult(stack.items);
         }
 
         return result.sort(function(a, b) {
@@ -398,7 +419,7 @@ class BaseRenderingStrategy {
     }
 
     _skipSortedIndex(index) {
-        return this.instance.fire("getMaxAppointmentsPerCell") && index > this._getMaxAppointmentCountPerCell() - 1;
+        return this.instance.fire('getMaxAppointmentsPerCell') && index > this._getMaxAppointmentCountPerCell() - 1;
     }
 
     _findIndexByKey(arr, iKey, jKey, iValue, jValue) {
@@ -453,14 +474,14 @@ class BaseRenderingStrategy {
     startDate(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
             rangeStartDate = this.instance._getStartDate(appointment, skipNormalize),
-            text = this.instance.fire("getField", "text", appointment);
+            text = this.instance.fire('getField', 'text', appointment);
 
         if((startDate && rangeStartDate > startDate) || !startDate) {
             startDate = rangeStartDate;
         }
 
         if(isNaN(startDate.getTime())) {
-            throw errors.Error("E1032", text);
+            throw errors.Error('E1032', text);
         }
 
         return startDate;
@@ -494,7 +515,7 @@ class BaseRenderingStrategy {
         }
 
         if(!this.isAllDay(appointment)) {
-            var viewEndDate = dateUtils.roundToHour(this.instance.fire("getEndViewDate"));
+            var viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
@@ -505,7 +526,7 @@ class BaseRenderingStrategy {
     }
 
     _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-        var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+        var daylightDiff = this.instance.fire('getDaylightOffset', startDate, endDate);
         return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
     }
 
@@ -514,12 +535,12 @@ class BaseRenderingStrategy {
     }
 
     _calculateDurationByDaylightDiff(duration, diff) {
-        return duration + diff * toMs("minute");
+        return duration + diff * toMs('minute');
     }
 
     _getAppointmentDurationInMs(startDate, endDate, allDay) {
         var result;
-        this.instance.fire("getAppointmentDurationInMs", {
+        this.instance.fire('getAppointmentDurationInMs', {
             startDate: startDate,
             endDate: endDate,
             allDay: allDay,
@@ -532,7 +553,7 @@ class BaseRenderingStrategy {
     }
 
     _getMaxNeighborAppointmentCount() {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
         if(!overlappingMode) {
             var outerAppointmentWidth = this.getCompactAppointmentDefaultWidth() + this.getCompactAppointmentLeftOffset();
             return Math.floor(this.getDropDownAppointmentWidth() / outerAppointmentWidth);
@@ -548,8 +569,8 @@ class BaseRenderingStrategy {
                 top: coordinates.top,
                 left: coordinates.left,
                 index: coordinates.appointmentReduced === 'tail' ?
-                    coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex :
-                    coordinates.groupIndex + "-" + coordinates.rowIndex + "-" + coordinates.cellIndex + "-tail",
+                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex :
+                    coordinates.groupIndex + '-' + coordinates.rowIndex + '-' + coordinates.cellIndex + '-tail',
                 isAllDay: isAllDay
             };
         }
@@ -622,7 +643,7 @@ class BaseRenderingStrategy {
             top = coordinates.top + compactAppointmentTopOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentLeftOffset) + compactAppointmentLeftOffset;
 
-            if(this.instance.fire("isAdaptive")) {
+            if(this.instance.fire('isAdaptive')) {
                 coordinates.top = top;
                 coordinates.left = coordinates.left + compactAppointmentLeftOffset;
             }
@@ -646,7 +667,7 @@ class BaseRenderingStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
             offsets = this._getOffsets(),
             appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
@@ -660,7 +681,7 @@ class BaseRenderingStrategy {
         }
 
         var topOffset = (1 - ratio) * maxHeight;
-        if(overlappingMode === "auto" || isNumeric(overlappingMode)) {
+        if(overlappingMode === 'auto' || isNumeric(overlappingMode)) {
             ratio = 1;
             maxHeight = maxHeight - appointmentDefaultOffset;
             topOffset = appointmentDefaultOffset;
@@ -690,12 +711,12 @@ class BaseRenderingStrategy {
     }
 
     needSeparateAppointment(allDay) {
-        return this.instance.fire("isGroupedByDate") && allDay;
+        return this.instance.fire('isGroupedByDate') && allDay;
     }
 
     _getMaxAppointmentCountPerCell() {
         if(!this._maxAppointmentCountPerCell) {
-            var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell'),
                 appointmentCountPerCell;
 
             if(!overlappingMode) {
@@ -704,10 +725,10 @@ class BaseRenderingStrategy {
             if(isNumeric(overlappingMode)) {
                 appointmentCountPerCell = overlappingMode;
             }
-            if(overlappingMode === "auto") {
+            if(overlappingMode === 'auto') {
                 appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
             }
-            if(overlappingMode === "unlimited") {
+            if(overlappingMode === 'unlimited') {
                 appointmentCountPerCell = undefined;
             }
 
@@ -726,7 +747,7 @@ class BaseRenderingStrategy {
     }
 
     _isCompactTheme() {
-        return (themes.current() || "").split(".").pop() === "compact";
+        return (themes.current() || '').split('.').pop() === 'compact';
     }
 
     _getAppointmentDefaultOffset() {

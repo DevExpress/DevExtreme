@@ -22,4 +22,4 @@
 * @export default
 */
 
-module.exports = require("./widget/template_engine_registry").setTemplateEngine;
+module.exports = require('./widget/template_engine_registry').setTemplateEngine;

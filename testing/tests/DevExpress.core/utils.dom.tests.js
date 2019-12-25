@@ -1,24 +1,24 @@
-import $ from "jquery";
-import domUtils from "core/utils/dom";
-import domAdapter from "core/dom_adapter";
-import support from "core/utils/support";
-import styleUtils from "core/utils/style";
-import devices from "core/devices";
-import initMobileViewport from "mobile/init_mobile_viewport";
-import keyboardMock from "../../helpers/keyboardMock.js";
+import $ from 'jquery';
+import domUtils from 'core/utils/dom';
+import domAdapter from 'core/dom_adapter';
+import support from 'core/utils/support';
+import styleUtils from 'core/utils/style';
+import devices from 'core/devices';
+import initMobileViewport from 'mobile/init_mobile_viewport';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
-QUnit.module("createMarkup");
+QUnit.module('createMarkup');
 
-QUnit.test("createMarkupFromString", function(assert) {
+QUnit.test('createMarkupFromString', function(assert) {
     var originalWinJS = window.WinJS,
-        str = "<div>test</div>",
+        str = '<div>test</div>',
         $resultElement;
 
     try {
         window.WinJS = undefined;
         $resultElement = domUtils.createMarkupFromString(str);
         assert.equal($resultElement.length, 1);
-        assert.equal($resultElement.text(), "test");
+        assert.equal($resultElement.text(), 'test');
 
         window.WinJS = {
             Utilities: {
@@ -29,79 +29,79 @@ QUnit.test("createMarkupFromString", function(assert) {
         };
         $resultElement = domUtils.createMarkupFromString(str);
         assert.equal($resultElement.length, 1);
-        assert.equal($resultElement.text(), "test");
+        assert.equal($resultElement.text(), 'test');
     } finally {
         window.WinJS = originalWinJS;
     }
 });
 
-QUnit.test("normalizeTemplateElement with script element", function(assert) {
+QUnit.test('normalizeTemplateElement with script element', function(assert) {
     var domElement = document.createElement('script');
 
-    domElement.innerHTML = "Test";
+    domElement.innerHTML = 'Test';
 
     var $result = domUtils.normalizeTemplateElement(domElement);
 
-    assert.equal($result.text(), "Test", "template based on script element works fine");
+    assert.equal($result.text(), 'Test', 'template based on script element works fine');
 });
 
 
-QUnit.module("clipboard");
+QUnit.module('clipboard');
 
-QUnit.test("get text from clipboard", function(assert) {
-    var clipboardText = "";
+QUnit.test('get text from clipboard', function(assert) {
+    var clipboardText = '';
 
-    var $input = $("<input>").appendTo("#qunit-fixture");
+    var $input = $('<input>').appendTo('#qunit-fixture');
     var keyboard = keyboardMock($input);
 
-    $input.on("paste", function(e) {
+    $input.on('paste', function(e) {
         clipboardText = domUtils.clipboardText(e);
     });
 
-    keyboard.paste("test");
+    keyboard.paste('test');
 
-    assert.equal(clipboardText, "test", "text from clipboard is correct");
+    assert.equal(clipboardText, 'test', 'text from clipboard is correct');
 });
 
 
-QUnit.module("selection");
+QUnit.module('selection');
 
-QUnit.test("clearSelection should not run if selectionType is 'Caret'", function(assert) {
+QUnit.test('clearSelection should not run if selectionType is \'Caret\'', function(assert) {
     var originalGetSelection = window.getSelection;
 
     try {
         var cleared = 0,
             selectionMockObject = {
                 empty: function() { cleared++; },
-                type: "Range"
+                type: 'Range'
             };
 
         window.getSelection = function() { return selectionMockObject; };
 
         domUtils.clearSelection();
-        assert.equal(cleared, 1, "selection should clear if type is Range");
+        assert.equal(cleared, 1, 'selection should clear if type is Range');
 
-        selectionMockObject.type = "Caret";
+        selectionMockObject.type = 'Caret';
         domUtils.clearSelection();
 
-        assert.equal(cleared, 1, "selection should not clear if type is Caret");
+        assert.equal(cleared, 1, 'selection should not clear if type is Caret');
 
     } finally {
         window.getSelection = originalGetSelection;
     }
 });
 
-QUnit.test("resetActiveElement should not throw an error in IE", function(assert) {
-    var getActiveElement = sinon.stub(domAdapter, "getActiveElement").returns({
+QUnit.test('resetActiveElement should not throw an error in IE', function(assert) {
+    var getActiveElement = sinon.stub(domAdapter, 'getActiveElement').returns({
         blur: function() {
-            throw "IE throws an 'Incorrect Function' exception in blur method";
+            throw 'IE throws an \'Incorrect Function\' exception in blur method';
         }
     });
-    var bodyBlur = sinon.spy(document.body, "blur");
+    var bodyBlur = sinon.spy(document.body, 'blur');
 
     try {
         domUtils.resetActiveElement();
-        assert.strictEqual(bodyBlur.callCount, 1, "body should be blured if blur function on element does not work");
+        assert.strictEqual(bodyBlur.callCount, 1, 'body should be blured if blur function on element does not work');
     } finally {
         bodyBlur.restore();
         getActiveElement.restore();
@@ -109,74 +109,74 @@ QUnit.test("resetActiveElement should not throw an error in IE", function(assert
 });
 
 
-QUnit.module("initMobileViewPort");
+QUnit.module('initMobileViewPort');
 
-QUnit.test("allowSelection should be detected by realDevice", function(assert) {
-    if(!support.supportProp("userSelect")) {
+QUnit.test('allowSelection should be detected by realDevice', function(assert) {
+    if(!support.supportProp('userSelect')) {
         assert.expect(0);
         return;
     }
 
-    var $viewPort = $("<div>").addClass("dx-viewport");
+    var $viewPort = $('<div>').addClass('dx-viewport');
     var originalRealDevice = devices.real();
     var originalCurrentDevice = devices.current();
 
-    $viewPort.appendTo("#qunit-fixture");
+    $viewPort.appendTo('#qunit-fixture');
 
     try {
-        devices.real({ platform: "ios", deviceType: "mobile" });
-        devices.current({ platform: "generic", deviceType: "desktop" });
+        devices.real({ platform: 'ios', deviceType: 'mobile' });
+        devices.current({ platform: 'generic', deviceType: 'desktop' });
 
         initMobileViewport();
 
-        assert.equal($viewPort.css(styleUtils.styleProp("userSelect")), "none", "allow selection detected by real device");
+        assert.equal($viewPort.css(styleUtils.styleProp('userSelect')), 'none', 'allow selection detected by real device');
     } finally {
         devices.real(originalRealDevice);
         devices.current(originalCurrentDevice);
     }
 });
 
-QUnit.test("dont prevent touch move on win10 devices", function(assert) {
+QUnit.test('dont prevent touch move on win10 devices', function(assert) {
     if(!support.touch) {
         assert.expect(0);
         return;
     }
 
-    var $viewPort = $("<div>").addClass("dx-viewport");
+    var $viewPort = $('<div>').addClass('dx-viewport');
     var originalRealDevice = devices.real();
 
-    $viewPort.appendTo("#qunit-fixture");
+    $viewPort.appendTo('#qunit-fixture');
 
     try {
         var isPointerMoveDefaultPrevented = null;
-        $(document).off(".dxInitMobileViewport");
+        $(document).off('.dxInitMobileViewport');
 
-        devices.real({ platform: "win", version: [10], deviceType: "mobile" });
+        devices.real({ platform: 'win', version: [10], deviceType: 'mobile' });
 
         initMobileViewport();
 
-        $(document).on("dxpointermove", function(e) {
+        $(document).on('dxpointermove', function(e) {
             isPointerMoveDefaultPrevented = e.isDefaultPrevented();
         });
-        var pointerEvent = $.Event("dxpointermove", { pointers: [1, 2], pointerType: "touch" });
-        $("body").trigger(pointerEvent);
-        assert.strictEqual(isPointerMoveDefaultPrevented, false, "default behaviour is not prevented");
+        var pointerEvent = $.Event('dxpointermove', { pointers: [1, 2], pointerType: 'touch' });
+        $('body').trigger(pointerEvent);
+        assert.strictEqual(isPointerMoveDefaultPrevented, false, 'default behaviour is not prevented');
     } finally {
         devices.real(originalRealDevice);
     }
 });
 
 
-QUnit.module("Contains");
+QUnit.module('Contains');
 
-QUnit.test("it correctly detect the html element", function(assert) {
+QUnit.test('it correctly detect the html element', function(assert) {
     var html = document.documentElement;
 
-    assert.ok(domUtils.contains(document, html), "Document contains the html element");
+    assert.ok(domUtils.contains(document, html), 'Document contains the html element');
 });
 
-QUnit.test("it correctly detect the body element", function(assert) {
+QUnit.test('it correctly detect the body element', function(assert) {
     var body = document.body;
 
-    assert.ok(domUtils.contains(document, body), "Document contains the body element");
+    assert.ok(domUtils.contains(document, body), 'Document contains the body element');
 });

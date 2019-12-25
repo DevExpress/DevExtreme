@@ -1,7 +1,7 @@
-import dateUtils from "../../../core/utils/date";
-import { each } from "../../../core/utils/iterator";
-import arrayUtils from "../../../core/utils/array";
-import BaseAppointmentsStrategy from "./ui.scheduler.appointments.strategy.base";
+import dateUtils from '../../../core/utils/date';
+import { each } from '../../../core/utils/iterator';
+import arrayUtils from '../../../core/utils/array';
+import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 
 class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     getAppointmentMinSize() {
@@ -21,8 +21,8 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     createTaskPositionMap(appointments) {
 
         if(appointments.length) {
-            var height = this.instance.fire("getAgendaVerticalStepHeight"),
-                appointmentsByResources = this.instance.fire("groupAppointmentsByResources", appointments),
+            var height = this.instance.fire('getAgendaVerticalStepHeight'),
+                appointmentsByResources = this.instance.fire('groupAppointmentsByResources', appointments),
                 groupedAppts = [];
 
             each(appointmentsByResources, function(i, appts) {
@@ -61,7 +61,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
         appointments.forEach(function(appt, index) {
             result.push([{
                 height: height,
-                width: "100%",
+                width: '100%',
                 sortedIndex: sortedIndex++,
                 groupIndex: this._calculateGroupIndex(index, appointmentsByResources)
             }]);
@@ -100,7 +100,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _isRtl() {
-        return this.instance.option("rtlEnabled");
+        return this.instance.option('rtlEnabled');
     }
 
     _getAppointmentParts() {
@@ -164,7 +164,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
             indexes: [],
             parts: []
         };
-        var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointments);
+        var groupedAppointments = this.instance.fire('groupAppointmentsByResources', appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
         each(groupedAppointments, function(groupIndex, currentAppointments) {
@@ -177,10 +177,10 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
             }
 
             each(currentAppointments, function(index, appointment) {
-                var startDate = this.instance.fire("getField", "startDate", appointment),
-                    endDate = this.instance.fire("getField", "endDate", appointment);
+                var startDate = this.instance.fire('getField', 'startDate', appointment),
+                    endDate = this.instance.fire('getField', 'endDate', appointment);
 
-                this.instance.fire("fixWrongEndDate", appointment, startDate, endDate);
+                this.instance.fire('fixWrongEndDate', appointment, startDate, endDate);
 
                 needClearSettings && delete appointment.settings;
 
@@ -204,10 +204,10 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
 
                 for(var j = 0; j < appointmentCount; j++) {
                     var appointmentData = currentAppointments[j].settings || currentAppointments[j],
-                        appointmentIsLong = this.instance.fire("appointmentTakesSeveralDays", currentAppointments[j]),
-                        appointmentIsRecurrence = this.instance.fire("getField", "recurrenceRule", currentAppointments[j]);
+                        appointmentIsLong = this.instance.fire('appointmentTakesSeveralDays', currentAppointments[j]),
+                        appointmentIsRecurrence = this.instance.fire('getField', 'recurrenceRule', currentAppointments[j]);
 
-                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
+                    if(this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {
                         groupResult[i] += 1;
                     }
                 }

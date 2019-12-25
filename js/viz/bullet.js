@@ -1,1 +1,1 @@
-module.exports = require("./sparklines/bullet");
+module.exports = require('./sparklines/bullet');

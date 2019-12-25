@@ -1,44 +1,44 @@
-var domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    clickEvent = require("../../events/click"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    consts = require("../components/consts"),
+var domAdapter = require('../../core/dom_adapter'),
+    eventsEngine = require('../../events/core/events_engine'),
+    clickEvent = require('../../events/click'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    consts = require('../components/consts'),
     eventsConsts = consts.events,
 
-    vizUtils = require("../core/utils"),
-    pointerEvents = require("../../events/pointer"),
-    holdEvent = require("../../events/hold"),
-    addNamespace = require("../../events/utils").addNamespace,
-    isDefined = require("../../core/utils/type").isDefined,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
+    vizUtils = require('../core/utils'),
+    pointerEvents = require('../../events/pointer'),
+    holdEvent = require('../../events/hold'),
+    addNamespace = require('../../events/utils').addNamespace,
+    isDefined = require('../../core/utils/type').isDefined,
+    _normalizeEnum = require('../core/utils').normalizeEnum,
     _floor = Math.floor,
     _each = each,
-    _noop = require("../../core/utils/common").noop,
+    _noop = require('../../core/utils/common').noop,
 
     HOVER_STATE = consts.states.hoverMark,
     NORMAL_STATE = consts.states.normalMark,
 
-    EVENT_NS = "dxChartTracker",
-    DOT_EVENT_NS = "." + EVENT_NS,
+    EVENT_NS = 'dxChartTracker',
+    DOT_EVENT_NS = '.' + EVENT_NS,
     POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS),
-    LEGEND_CLICK = "legendClick",
-    SERIES_CLICK = "seriesClick",
-    POINT_CLICK = "pointClick",
-    POINT_DATA = "chart-data-point",
-    SERIES_DATA = "chart-data-series",
-    ARG_DATA = "chart-data-argument",
+    LEGEND_CLICK = 'legendClick',
+    SERIES_CLICK = 'seriesClick',
+    POINT_CLICK = 'pointClick',
+    POINT_DATA = 'chart-data-point',
+    SERIES_DATA = 'chart-data-series',
+    ARG_DATA = 'chart-data-argument',
     DELAY = 100,
 
-    NONE_MODE = "none",
-    ALL_ARGUMENT_POINTS_MODE = "allargumentpoints",
-    INCLUDE_POINTS_MODE = "includepoints",
-    EXLUDE_POINTS_MODE = "excludepoints",
+    NONE_MODE = 'none',
+    ALL_ARGUMENT_POINTS_MODE = 'allargumentpoints',
+    INCLUDE_POINTS_MODE = 'includepoints',
+    EXLUDE_POINTS_MODE = 'excludepoints',
     LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
 function getData(event, dataKey) {
     var target = event.target;
-    return (target.tagName === "tspan" ? target.parentNode : target)[dataKey];
+    return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
 }
 
 function eventCanceled(event, target) {
@@ -295,7 +295,7 @@ var baseTrackerPrototype = {
             that._hoveredArgument = argument;
             that._argumentIndex = argumentIndex;
             that._notifySeries({
-                action: "pointHover",
+                action: 'pointHover',
                 notifyLegend: that._notifyLegendOnHoverArgument,
                 target: {
                     argument: argument,
@@ -316,7 +316,7 @@ var baseTrackerPrototype = {
         if(isDefined(that._hoveredArgument)) {
             hoverMode = that._getArgumentHoverMode();
             that._notifySeries({
-                action: "clearPointHover",
+                action: 'clearPointHover',
                 notifyLegend: that._notifyLegendOnHoverArgument,
                 target: {
                     fullState: NORMAL_STATE,
@@ -386,7 +386,7 @@ var baseTrackerPrototype = {
                 return;
             }
         } else if(point) {
-            if(e.type !== pointerEvents.move && e.pointerType !== "touch") {
+            if(e.type !== pointerEvents.move && e.pointerType !== 'touch') {
                 return;
             }
             if(that.hoveredSeries) {
@@ -436,7 +436,7 @@ var baseTrackerPrototype = {
         } else if(axis && axis.coordsIn(x, y)) {
             var argument = getData(e, ARG_DATA);
             if(isDefined(argument)) {
-                that._eventTrigger("argumentAxisClick", { argument: argument, event: e });
+                that._eventTrigger('argumentAxisClick', { argument: argument, event: e });
             }
         } else if(series) {
             point = point || series.getPointByCoord(x, y);
@@ -566,7 +566,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _setStuckSeries: function(e, series, x, y) {
-        if(e.pointerType !== "mouse") {
+        if(e.pointerType !== 'mouse') {
             this._stuckSeries = null;
         } else {
             this._stuckSeries = (series || this._stuckSeries) || this._getSeriesForShared(x, y);

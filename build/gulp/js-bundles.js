@@ -41,7 +41,7 @@ function processBundles(bundles) {
 
 function processDevBundles(bundles) {
     return bundles.map(function(bundle) {
-        return "js" + bundle;
+        return 'js' + bundle;
     });
 }
 
@@ -50,7 +50,7 @@ function muteWebPack() {
 
 gulp.task('version-replace', ['transpile'], function() {
     return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
-        .pipe(replace("%VERSION%", context.version.script))
+        .pipe(replace('%VERSION%', context.version.script))
         .pipe(gulp.dest('./'));
 });
 

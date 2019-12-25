@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import { compileGetter, compileSetter } from "../../core/utils/data";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import devices from "../../core/devices";
-import iconUtils from "../../core/utils/icon";
-import HierarchicalDataAdapter from "./ui.data_adapter";
-import CollectionWidget from "../collection/ui.collection_widget.edit";
-import BindableTemplate from "../widget/bindable_template";
-import { isFunction } from "../../core/utils/type";
-import { noop } from "../../core/utils/common";
+import $ from '../../core/renderer';
+import { compileGetter, compileSetter } from '../../core/utils/data';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import devices from '../../core/devices';
+import iconUtils from '../../core/utils/icon';
+import HierarchicalDataAdapter from './ui.data_adapter';
+import CollectionWidget from '../collection/ui.collection_widget.edit';
+import BindableTemplate from '../widget/bindable_template';
+import { isFunction } from '../../core/utils/type';
+import { noop } from '../../core/utils/common';
 
-const DISABLED_STATE_CLASS = "dx-state-disabled";
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 /**
 * @name HierarchicalCollectionWidget
@@ -29,7 +29,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             * @type string|function
             * @default 'id'
             */
-            keyExpr: "id",
+            keyExpr: 'id',
 
             /**
             * @name HierarchicalCollectionWidgetOptions.displayExpr
@@ -37,28 +37,28 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             * @type_function_param1 item:object
             * @default 'text'
             */
-            displayExpr: "text",
+            displayExpr: 'text',
 
             /**
             * @name HierarchicalCollectionWidgetOptions.selectedExpr
             * @type string|function
             * @default 'selected'
             */
-            selectedExpr: "selected",
+            selectedExpr: 'selected',
 
             /**
             * @name HierarchicalCollectionWidgetOptions.disabledExpr
             * @type string|function
             * @default 'disabled'
             */
-            disabledExpr: "disabled",
+            disabledExpr: 'disabled',
 
             /**
             * @name HierarchicalCollectionWidgetOptions.itemsExpr
             * @type string|function
             * @default 'items'
             */
-            itemsExpr: "items",
+            itemsExpr: 'items',
 
             /**
              * @name HierarchicalCollectionWidgetOptions.hoverStateEnabled
@@ -67,8 +67,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
              */
             hoverStateEnabled: true,
 
-            parentIdExpr: "parentId",
-            expandedExpr: "expanded"
+            parentIdExpr: 'parentId',
+            expandedExpr: 'expanded'
         });
     },
 
@@ -76,7 +76,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
+                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
                 },
                 options: {
                     /**
@@ -112,7 +112,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                     getters: accessors.getters,
                     setters: accessors.setters
                 },
-                items: this.option("items")
+                items: this.option('items')
             }, this._getDataAdapterOptions()));
     },
 
@@ -121,16 +121,16 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _initDynamicTemplates: function() {
         var that = this;
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, itemData) {
+        this._defaultTemplates['item'] = new BindableTemplate(function($container, itemData) {
             $container
                 .html(itemData.html)
                 .append(this._getIconContainer(itemData))
                 .append(this._getTextContainer(itemData))
                 .append(this._getPopoutContainer(itemData));
             that._addContentClasses(itemData, $container.parent());
-        }.bind(this), ["text", "html", "items", "icon"], this.option("integrationOptions.watchMethod"), {
-            "text": this._displayGetter,
-            "items": this._itemsGetter
+        }.bind(this), ['text', 'html', 'items', 'icon'], this.option('integrationOptions.watchMethod'), {
+            'text': this._displayGetter,
+            'items': this._itemsGetter
         });
     },
 
@@ -139,7 +139,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getTextContainer: function(itemData) {
-        return $("<span>").text(itemData.text);
+        return $('<span>').text(itemData.text);
     },
 
     _getPopoutContainer: noop,
@@ -156,7 +156,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        return ["key", "selected", "items", "disabled", "parentId", "expanded"];
+        return ['key', 'selected', 'items', 'disabled', 'parentId', 'expanded'];
     },
 
     _getChildNodes: function(node) {
@@ -174,9 +174,9 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _compileAccessor: function(optionName) {
-        var getter = "_" + optionName + "Getter",
-            setter = "_" + optionName + "Setter",
-            optionExpr = this.option(optionName + "Expr");
+        var getter = '_' + optionName + 'Getter',
+            setter = '_' + optionName + 'Setter',
+            optionExpr = this.option(optionName + 'Expr');
 
         if(!optionExpr) {
             this[getter] = noop;
@@ -200,15 +200,15 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
             };
 
         each(this._getAccessors(), function(_, accessor) {
-            var getterName = "_" + accessor + "Getter",
-                setterName = "_" + accessor + "Setter",
-                newAccessor = accessor === "parentId" ? "parentKey" : accessor;
+            var getterName = '_' + accessor + 'Getter',
+                setterName = '_' + accessor + 'Setter',
+                newAccessor = accessor === 'parentId' ? 'parentKey' : accessor;
 
             accessors.getters[newAccessor] = that[getterName];
             accessors.setters[newAccessor] = that[setterName];
         });
 
-        accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
+        accessors.getters['display'] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
 
         return accessors;
     },
@@ -233,22 +233,22 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "displayExpr":
-            case "keyExpr":
+            case 'displayExpr':
+            case 'keyExpr':
                 this._initAccessors();
                 this._initDynamicTemplates();
                 this.repaint();
                 break;
-            case "itemsExpr":
-            case "selectedExpr":
-            case "disabledExpr":
-            case "expandedExpr":
-            case "parentIdExpr":
+            case 'itemsExpr':
+            case 'selectedExpr':
+            case 'disabledExpr':
+            case 'expandedExpr':
+            case 'parentIdExpr':
                 this._initAccessors();
                 this._initDataAdapter();
                 this.repaint();
                 break;
-            case "items":
+            case 'items':
                 this._initDataAdapter();
                 this.callBase(args);
                 break;

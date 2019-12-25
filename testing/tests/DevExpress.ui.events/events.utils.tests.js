@@ -1,5 +1,5 @@
-import $ from "jquery";
-import { compare } from "core/utils/version";
+import $ from 'jquery';
+import { compare } from 'core/utils/version';
 import {
     eventData,
     eventDelta,
@@ -7,9 +7,9 @@ import {
     addNamespace,
     normalizeKeyName,
     getChar
-} from "events/utils";
-import pointerMock from "../../helpers/pointerMock.js";
-import nativePointerMock from "../../helpers/nativePointerMock.js";
+} from 'events/utils';
+import pointerMock from '../../helpers/pointerMock.js';
+import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 const { test, testStart, testInActiveWindow } = QUnit;
 
@@ -19,19 +19,19 @@ testStart(() => {
             <div id="element"></div>
         </div>`;
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
-QUnit.module("event utils", () => {
-    test("mouse support methods", assert => {
+QUnit.module('event utils', () => {
+    test('mouse support methods', assert => {
         const time = new Date().valueOf(),
-            e1 = nativePointerMock().eventMock("mousemove", {
+            e1 = nativePointerMock().eventMock('mousemove', {
                 pageX: 1,
                 pageY: 2,
                 timeStamp: time,
                 which: 2
             }),
-            e2 = nativePointerMock().eventMock("mousemove", {
+            e2 = nativePointerMock().eventMock('mousemove', {
                 pageX: 2,
                 pageY: 1,
                 timeStamp: time + 50,
@@ -41,21 +41,21 @@ QUnit.module("event utils", () => {
             data2 = eventData(e2),
             delta = eventDelta(data1, data2);
 
-        assert.equal(data1.x, 1, "eventData x");
-        assert.equal(data1.y, 2, "eventData y");
-        assert.ok(data1.time, "eventData time");
+        assert.equal(data1.x, 1, 'eventData x');
+        assert.equal(data1.y, 2, 'eventData y');
+        assert.ok(data1.time, 'eventData time');
 
-        assert.ok(needSkipEvent(e1), "skip event");
-        assert.ok(!needSkipEvent(e2), "do not skip event");
+        assert.ok(needSkipEvent(e1), 'skip event');
+        assert.ok(!needSkipEvent(e2), 'do not skip event');
 
-        assert.equal(delta.x, 1, "eventDelta x");
-        assert.equal(delta.y, -1, "eventDelta y");
+        assert.equal(delta.x, 1, 'eventDelta x');
+        assert.equal(delta.y, -1, 'eventDelta y');
         assert.ok(delta.time, 50);
     });
 
     if(compare($.fn.jquery, [3]) < 0) {
-        test("touch support methods", assert => {
-            const e1 = nativePointerMock().eventMock("touchmove", {
+        test('touch support methods', assert => {
+            const e1 = nativePointerMock().eventMock('touchmove', {
                     touches: [{
                         pageX: 1,
                         pageY: 2
@@ -64,367 +64,367 @@ QUnit.module("event utils", () => {
                 }),
                 data1 = eventData(e1);
 
-            assert.equal(data1.x, 1, "eventData x");
-            assert.equal(data1.y, 2, "eventData y");
-            assert.ok(data1.time, "eventData time");
+            assert.equal(data1.x, 1, 'eventData x');
+            assert.equal(data1.y, 2, 'eventData y');
+            assert.ok(data1.time, 'eventData time');
 
-            assert.ok(!needSkipEvent(e1), "do not skip event");
+            assert.ok(!needSkipEvent(e1), 'do not skip event');
         });
     }
 
-    test("mspointer support methods", assert => {
-        const e1 = nativePointerMock().eventMock("MSPointerMove", {
+    test('mspointer support methods', assert => {
+        const e1 = nativePointerMock().eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
             pointerType: 2
         });
 
-        nativePointerMock().eventMock("MSPointerMove", {
+        nativePointerMock().eventMock('MSPointerMove', {
             pageX: 1,
             pageY: 2
         });
 
         const data1 = eventData(e1);
 
-        assert.equal(data1.x, 1, "eventData x");
-        assert.equal(data1.y, 2, "eventData y");
-        assert.ok(data1.time, "eventData time");
+        assert.equal(data1.x, 1, 'eventData x');
+        assert.equal(data1.y, 2, 'eventData y');
+        assert.ok(data1.time, 'eventData time');
     });
 
-    test("pointer support methods", assert => {
-        const e1 = nativePointerMock().eventMock("pointermove", {
+    test('pointer support methods', assert => {
+        const e1 = nativePointerMock().eventMock('pointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
-            pointerType: "touch"
+            pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock("pointermove", {
+        nativePointerMock().eventMock('pointermove', {
             pageX: 1,
             pageY: 2
         });
 
         const data1 = eventData(e1);
 
-        assert.equal(data1.x, 1, "eventData x");
-        assert.equal(data1.y, 2, "eventData y");
-        assert.ok(data1.time, "eventData time");
+        assert.equal(data1.x, 1, 'eventData x');
+        assert.equal(data1.y, 2, 'eventData y');
+        assert.ok(data1.time, 'eventData time');
     });
 
-    test("dxpointer support methods", assert => {
-        const e1 = nativePointerMock().eventMock("dxpointermove", {
+    test('dxpointer support methods', assert => {
+        const e1 = nativePointerMock().eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2,
             timeStamp: new Date().valueOf(),
-            pointerType: "touch"
+            pointerType: 'touch'
         });
 
-        nativePointerMock().eventMock("dxpointermove", {
+        nativePointerMock().eventMock('dxpointermove', {
             pageX: 1,
             pageY: 2
         });
 
         const data1 = eventData(e1);
 
-        assert.equal(data1.x, 1, "eventData x");
-        assert.equal(data1.y, 2, "eventData y");
-        assert.ok(data1.time, "eventData time");
+        assert.equal(data1.x, 1, 'eventData x');
+        assert.equal(data1.y, 2, 'eventData y');
+        assert.ok(data1.time, 'eventData time');
     });
 
-    test("addNamespace method", assert => {
-        const event = addNamespace("custom", "Widget"),
-            severalEventsByString = addNamespace("custom1 custom2", "Widget"),
-            severalEventsByArray = addNamespace(["custom1", "custom2"], "Widget");
+    test('addNamespace method', assert => {
+        const event = addNamespace('custom', 'Widget'),
+            severalEventsByString = addNamespace('custom1 custom2', 'Widget'),
+            severalEventsByArray = addNamespace(['custom1', 'custom2'], 'Widget');
 
-        assert.equal(event, "custom.Widget", "custom event name");
-        assert.equal(severalEventsByString, "custom1.Widget custom2.Widget", "several custom event names");
-        assert.equal(severalEventsByArray, "custom1.Widget custom2.Widget", "several custom event names");
+        assert.equal(event, 'custom.Widget', 'custom event name');
+        assert.equal(severalEventsByString, 'custom1.Widget custom2.Widget', 'several custom event names');
+        assert.equal(severalEventsByArray, 'custom1.Widget custom2.Widget', 'several custom event names');
     });
 
     [
         {
-            testData: { key: "Up" },
-            expected: "upArrow",
-            comment: "IE11 API"
+            testData: { key: 'Up' },
+            expected: 'upArrow',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Left" },
-            expected: "leftArrow",
-            comment: "IE11 API"
+            testData: { key: 'Left' },
+            expected: 'leftArrow',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Right" },
-            expected: "rightArrow",
-            comment: "IE11 API"
+            testData: { key: 'Right' },
+            expected: 'rightArrow',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Down" },
-            expected: "downArrow",
-            comment: "IE11 API"
+            testData: { key: 'Down' },
+            expected: 'downArrow',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Del" },
-            expected: "del",
-            comment: "IE11 API"
+            testData: { key: 'Del' },
+            expected: 'del',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Subtract" },
-            expected: "minus",
-            comment: "IE11 API"
+            testData: { key: 'Subtract' },
+            expected: 'minus',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Esc" },
-            expected: "escape",
-            comment: "IE11 API"
+            testData: { key: 'Esc' },
+            expected: 'escape',
+            comment: 'IE11 API'
         },
         {
-            testData: { key: "Backspace" },
-            expected: "backspace",
-            comment: "Standard API"
+            testData: { key: 'Backspace' },
+            expected: 'backspace',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Tab" },
-            expected: "tab",
-            comment: "Standard API"
+            testData: { key: 'Tab' },
+            expected: 'tab',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Enter" },
-            expected: "enter",
-            comment: "Standard API"
+            testData: { key: 'Enter' },
+            expected: 'enter',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Escape" },
-            expected: "escape",
-            comment: "Standard API"
+            testData: { key: 'Escape' },
+            expected: 'escape',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "PageUp" },
-            expected: "pageUp",
-            comment: "Standard API"
+            testData: { key: 'PageUp' },
+            expected: 'pageUp',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "PageDown" },
-            expected: "pageDown",
-            comment: "Standard API"
+            testData: { key: 'PageDown' },
+            expected: 'pageDown',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "End" },
-            expected: "end",
-            comment: "Standard API"
+            testData: { key: 'End' },
+            expected: 'end',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Home" },
-            expected: "home",
-            comment: "Standard API"
+            testData: { key: 'Home' },
+            expected: 'home',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "ArrowLeft" },
-            expected: "leftArrow",
-            comment: "Standard API"
+            testData: { key: 'ArrowLeft' },
+            expected: 'leftArrow',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "ArrowUp" },
-            expected: "upArrow",
-            comment: "Standard API"
+            testData: { key: 'ArrowUp' },
+            expected: 'upArrow',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "ArrowRight" },
-            expected: "rightArrow",
-            comment: "Standard API"
+            testData: { key: 'ArrowRight' },
+            expected: 'rightArrow',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "ArrowDown" },
-            expected: "downArrow",
-            comment: "Standard API"
+            testData: { key: 'ArrowDown' },
+            expected: 'downArrow',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "f" },
-            expected: "F",
-            comment: "Standard API"
+            testData: { key: 'f' },
+            expected: 'F',
+            comment: 'Standard API'
         },
         {
-            testData: { key: " " },
-            expected: "space",
-            comment: "Standard API"
+            testData: { key: ' ' },
+            expected: 'space',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "a" },
-            expected: "A",
-            comment: "Standard API"
+            testData: { key: 'a' },
+            expected: 'A',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "*" },
-            expected: "asterisk",
-            comment: "Standard API"
+            testData: { key: '*' },
+            expected: 'asterisk',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "-" },
-            expected: "minus",
-            comment: "Standard API"
+            testData: { key: '-' },
+            expected: 'minus',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Control" },
-            expected: "control",
-            comment: "Standard API"
+            testData: { key: 'Control' },
+            expected: 'control',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Alt" },
-            expected: "alt",
-            comment: "Standard API"
+            testData: { key: 'Alt' },
+            expected: 'alt',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "Shift" },
-            expected: "shift",
-            comment: "Standard API"
+            testData: { key: 'Shift' },
+            expected: 'shift',
+            comment: 'Standard API'
         },
         {
-            testData: { key: "ArrowUp", which: 36 },
-            expected: "upArrow",
-            comment: "'key' attribute is prior"
+            testData: { key: 'ArrowUp', which: 36 },
+            expected: 'upArrow',
+            comment: '\'key\' attribute is prior'
         },
         {
             testData: { },
             expected: undefined,
-            comment: "return undefined in case event has no 'key' or 'which' attribute"
+            comment: 'return undefined in case event has no \'key\' or \'which\' attribute'
         },
         // Legacy & iOS 10.2-
         {
             testData: { which: 8 },
-            expected: "backspace",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'backspace',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 9 },
-            expected: "tab",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'tab',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 13 },
-            expected: "enter",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'enter',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 27 },
-            expected: "escape",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'escape',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 33 },
-            expected: "pageUp",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'pageUp',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 34 },
-            expected: "pageDown",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'pageDown',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 35 },
-            expected: "end",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'end',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 36 },
-            expected: "home",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'home',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 37 },
-            expected: "leftArrow",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'leftArrow',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 38 },
-            expected: "upArrow",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'upArrow',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 39 },
-            expected: "rightArrow",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'rightArrow',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 40 },
-            expected: "downArrow",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'downArrow',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 46 },
-            expected: "del",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'del',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 32 },
-            expected: "space",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'space',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 70 },
-            expected: "F",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'F',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 65 },
-            expected: "A",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'A',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 106 },
-            expected: "asterisk",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'asterisk',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 109 },
-            expected: "minus",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'minus',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 189 },
-            expected: "minus",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'minus',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 173 },
-            expected: "minus",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'minus',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 16 },
-            expected: "shift",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'shift',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 17 },
-            expected: "control",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'control',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         },
         {
             testData: { which: 18 },
-            expected: "alt",
-            comment: "'which' attribute used where 'key' attribute unsupported"
+            expected: 'alt',
+            comment: '\'which\' attribute used where \'key\' attribute unsupported'
         }
     ].forEach(({ testData, expected, comment }) => {
-        test(`normalizeKeyName(${testData.key || testData.which || "undefined"}) method should normalize key name based on "key" or "which" field`, (assert) => {
+        test(`normalizeKeyName(${testData.key || testData.which || 'undefined'}) method should normalize key name based on "key" or "which" field`, (assert) => {
             assert.strictEqual(normalizeKeyName(testData), expected, comment);
         });
     });
 
-    test("getChar method should get char based on 'key' or 'which' attribute", assert => {
-        assert.strictEqual(getChar({ key: "z" }), "z");
-        assert.strictEqual(getChar({ which: 50 }), "2");
-        assert.strictEqual(getChar({ key: "z", which: 50 }), "z", "'key' attribute is prior");
+    test('getChar method should get char based on \'key\' or \'which\' attribute', assert => {
+        assert.strictEqual(getChar({ key: 'z' }), 'z');
+        assert.strictEqual(getChar({ which: 50 }), '2');
+        assert.strictEqual(getChar({ key: 'z', which: 50 }), 'z', '\'key\' attribute is prior');
 
     });
 });
 
-QUnit.module("skip mousewheel event test", () => {
+QUnit.module('skip mousewheel event test', () => {
     const needSkipMouseWheel = element => {
         const mouse = pointerMock(element);
         let needSkip;
 
         element.on({
-            "dxmousewheel": e => {
+            'dxmousewheel': e => {
                 needSkip = needSkipEvent(e);
             }
         });
@@ -435,18 +435,18 @@ QUnit.module("skip mousewheel event test", () => {
 
     const checkSkippedMouseWheelEvent = ($container, selector) => needSkipMouseWheel($container.find(selector).first());
 
-    testInActiveWindow("needSkipEvent returns true for number input wheel", assert => {
+    testInActiveWindow('needSkipEvent returns true for number input wheel', assert => {
         if(!/webkit/i.exec(navigator.userAgent)) {
-            assert.ok(true, "this test run only in webkit");
+            assert.ok(true, 'this test run only in webkit');
             return;
         }
 
         let element;
 
         try {
-            element = $("<input type='number' />")
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+            element = $('<input type=\'number\' />')
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
             assert.ok(needSkipMouseWheel(element));
         } finally {
@@ -454,12 +454,12 @@ QUnit.module("skip mousewheel event test", () => {
         }
     });
 
-    testInActiveWindow("needSkipEvent returns true for text input wheel", assert => {
+    testInActiveWindow('needSkipEvent returns true for text input wheel', assert => {
         let element;
         try {
-            element = $("<input type='text' />")
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+            element = $('<input type=\'text\' />')
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
             assert.ok(!needSkipMouseWheel(element));
         } finally {
@@ -467,17 +467,17 @@ QUnit.module("skip mousewheel event test", () => {
         }
     });
 
-    testInActiveWindow("needSkipEvent returns true for textarea input wheel", assert => {
+    testInActiveWindow('needSkipEvent returns true for textarea input wheel', assert => {
         if(!/webkit/i.exec(navigator.userAgent)) {
-            assert.ok(true, "this test run only in webkit");
+            assert.ok(true, 'this test run only in webkit');
             return;
         }
 
         let element;
         try {
-            element = $("<textarea></textarea>")
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+            element = $('<textarea></textarea>')
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
             assert.ok(needSkipMouseWheel(element));
         } finally {
@@ -485,17 +485,17 @@ QUnit.module("skip mousewheel event test", () => {
         }
     });
 
-    testInActiveWindow("needSkipEvent returns true for select input wheel", assert => {
+    testInActiveWindow('needSkipEvent returns true for select input wheel', assert => {
         if(!/webkit/i.exec(navigator.userAgent)) {
-            assert.ok(true, "this test run only in webkit");
+            assert.ok(true, 'this test run only in webkit');
             return;
         }
 
         let element;
         try {
-            element = $("<select><option /><option /><option /></select>")
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+            element = $('<select><option /><option /><option /></select>')
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
             assert.ok(needSkipMouseWheel(element));
         } finally {
@@ -503,7 +503,7 @@ QUnit.module("skip mousewheel event test", () => {
         }
     });
 
-    testInActiveWindow("needSkipEvent returns false for contentEditable element", assert => {
+    testInActiveWindow('needSkipEvent returns false for contentEditable element', assert => {
         let $element;
         try {
             $element = $(`
@@ -514,18 +514,18 @@ QUnit.module("skip mousewheel event test", () => {
                     </div>
                 </div>
             `)
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
-            assert.notOk(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
-            assert.notOk(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
-            assert.notOk(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'h'), 'event is skipped for the h tag');
+            assert.notOk(checkSkippedMouseWheelEvent($element, '.text'), 'event is skipped for the element with the \'text\' class name');
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'b'), 'event is skipped for the b tag');
         } catch(e) {
             $element.remove();
         }
     });
 
-    testInActiveWindow("needSkipEvent returns false for element with contenteditable false", assert => {
+    testInActiveWindow('needSkipEvent returns false for element with contenteditable false', assert => {
         let $element;
         try {
             $element = $(`
@@ -536,18 +536,18 @@ QUnit.module("skip mousewheel event test", () => {
                     </div>
                 </div>
             `)
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
-            assert.notOk(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
-            assert.notOk(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
-            assert.notOk(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'h'), 'event is skipped for the h tag');
+            assert.notOk(checkSkippedMouseWheelEvent($element, '.text'), 'event is skipped for the element with the \'text\' class name');
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'b'), 'event is skipped for the b tag');
         } catch(e) {
             $element.remove();
         }
     });
 
-    testInActiveWindow("needSkipEvent returns false for the contentEditable element when this element is not focused", assert => {
+    testInActiveWindow('needSkipEvent returns false for the contentEditable element when this element is not focused', assert => {
         let $element;
         try {
             $element = $(`
@@ -557,24 +557,24 @@ QUnit.module("skip mousewheel event test", () => {
                         <b>Bold</b>
                     </div>
                 </div>
-            `).appendTo("#qunit-fixture");
+            `).appendTo('#qunit-fixture');
 
-            assert.notOk(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
-            assert.notOk(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
-            assert.notOk(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'h'), 'event is skipped for the h tag');
+            assert.notOk(checkSkippedMouseWheelEvent($element, '.text'), 'event is skipped for the element with the \'text\' class name');
+            assert.notOk(checkSkippedMouseWheelEvent($element, 'b'), 'event is skipped for the b tag');
         } catch(e) {
             $element.remove();
         }
     });
 });
 
-QUnit.module("skip mouse event tests", () => {
+QUnit.module('skip mouse event tests', () => {
     const needSkipMouseDown = element => {
         const mouse = nativePointerMock(element);
         let needSkip;
 
         element.on({
-            "mousedown": e => {
+            'mousedown': e => {
                 needSkip = needSkipEvent(e);
             }
         });
@@ -582,44 +582,44 @@ QUnit.module("skip mouse event tests", () => {
         return needSkip;
     };
 
-    test("needSkipEvent returns true for input click", assert => {
-        const element = $("<input type='text' />");
+    test('needSkipEvent returns true for input click', assert => {
+        const element = $('<input type=\'text\' />');
         assert.ok(needSkipMouseDown(element));
     });
 
-    test("needSkipEvent returns true for textarea click", assert => {
-        const element = $("<textarea></textarea>");
+    test('needSkipEvent returns true for textarea click', assert => {
+        const element = $('<textarea></textarea>');
         assert.ok(needSkipMouseDown(element));
     });
 
-    test("needSkipEvent returns true for select click", assert => {
-        const element = $("<select><option /><option /><option /></select>");
+    test('needSkipEvent returns true for select click', assert => {
+        const element = $('<select><option /><option /><option /></select>');
         assert.ok(needSkipMouseDown(element));
     });
 
-    test("needSkipEvent returns false for div click", assert => {
-        const element = $("<div />");
+    test('needSkipEvent returns false for div click', assert => {
+        const element = $('<div />');
         assert.ok(!needSkipMouseDown(element));
     });
 
-    test("needSkipEvent returns true for .dx-skip-gesture-event click", assert => {
-        const element = $("<div class='dx-skip-gesture-event' />");
+    test('needSkipEvent returns true for .dx-skip-gesture-event click', assert => {
+        const element = $('<div class=\'dx-skip-gesture-event\' />');
         assert.ok(needSkipMouseDown(element));
     });
 
-    test("needSkipEvent returns true for nested in .dx-skip-gesture-event click", assert => {
-        const element = $("<div />").appendTo("<div class='dx-skip-gesture-event' />");
+    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', assert => {
+        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
         assert.ok(needSkipMouseDown(element));
     });
 });
 
-QUnit.module("skip pointer event tests", () => {
+QUnit.module('skip pointer event tests', () => {
     const needSkipPointerDown = element => {
         const mouse = nativePointerMock(element);
         let needSkip;
 
         element.on({
-            "touchstart": e => {
+            'touchstart': e => {
                 needSkip = needSkipEvent(e);
             }
         });
@@ -627,17 +627,17 @@ QUnit.module("skip pointer event tests", () => {
         return needSkip;
     };
 
-    testInActiveWindow("needSkipEvent returns true for focused input click (B254465)", assert => {
+    testInActiveWindow('needSkipEvent returns true for focused input click (B254465)', assert => {
         if(!/webkit/i.exec(navigator.userAgent)) {
-            assert.ok(true, "this test run only in webkit");
+            assert.ok(true, 'this test run only in webkit');
             return;
         }
 
         let element;
         try {
-            element = $("<input type='text' />")
-                .appendTo("#qunit-fixture")
-                .trigger("focus");
+            element = $('<input type=\'text\' />')
+                .appendTo('#qunit-fixture')
+                .trigger('focus');
 
             assert.ok(needSkipPointerDown(element));
         } finally {
@@ -645,124 +645,124 @@ QUnit.module("skip pointer event tests", () => {
         }
     });
 
-    test("needSkipEvent returns false for not focused input click", assert => {
-        const element = $("<input type='text' />");
+    test('needSkipEvent returns false for not focused input click', assert => {
+        const element = $('<input type=\'text\' />');
         assert.ok(!needSkipPointerDown(element));
     });
 
-    test("needSkipEvent returns false for div click", assert => {
-        const element = $("<div />");
+    test('needSkipEvent returns false for div click', assert => {
+        const element = $('<div />');
         assert.ok(!needSkipPointerDown(element));
     });
 
-    test("needSkipEvent returns true for .dx-skip-gesture-event click", assert => {
-        const element = $("<div class='dx-skip-gesture-event' />");
+    test('needSkipEvent returns true for .dx-skip-gesture-event click', assert => {
+        const element = $('<div class=\'dx-skip-gesture-event\' />');
         assert.ok(needSkipPointerDown(element));
     });
 
-    test("needSkipEvent returns true for nested in .dx-skip-gesture-event click", assert => {
-        const element = $("<div />").appendTo("<div class='dx-skip-gesture-event' />");
+    test('needSkipEvent returns true for nested in .dx-skip-gesture-event click', assert => {
+        const element = $('<div />').appendTo('<div class=\'dx-skip-gesture-event\' />');
         assert.ok(needSkipPointerDown(element));
     });
 });
 
 if(compare($.fn.jquery, [3]) < 0) {
-    QUnit.module("JQuery integration", () => {
+    QUnit.module('JQuery integration', () => {
         const W3CEventProps = [
-                "bubbles",
-                "cancelable",
-                "currentTarget",
-                "eventPhase",
-                "target",
-                "timeStamp",
-                "type",
-                "preventDefault",
-                "stopPropagation"
+                'bubbles',
+                'cancelable',
+                'currentTarget',
+                'eventPhase',
+                'target',
+                'timeStamp',
+                'type',
+                'preventDefault',
+                'stopPropagation'
             ],
 
             W3CUIEventProps = W3CEventProps.concat([
-                "detail",
-                "view"
+                'detail',
+                'view'
             ]),
 
             W3CMouseEventProps = W3CUIEventProps.concat([
-                "altKey",
-                "button",
-                "clientX",
-                "clientY",
-                "ctrlKey",
-                "metaKey",
-                "relatedTarget",
-                "screenX",
-                "screenY",
-                "shiftKey"
+                'altKey',
+                'button',
+                'clientX',
+                'clientY',
+                'ctrlKey',
+                'metaKey',
+                'relatedTarget',
+                'screenX',
+                'screenY',
+                'shiftKey'
             ]),
 
             W3CTouchEventProps = W3CUIEventProps.concat([
-                "altKey",
-                "changedTouches",
-                "ctrlKey",
-                "metaKey",
-                "shiftKey",
-                "targetTouches",
-                "touches"
+                'altKey',
+                'changedTouches',
+                'ctrlKey',
+                'metaKey',
+                'shiftKey',
+                'targetTouches',
+                'touches'
             ]),
 
             W3CPointerEventProps = W3CMouseEventProps.concat([
-                "pointerId",
-                "pointerType",
-                "width",
-                "height",
-                "pressure",
-                "tiltX",
-                "tiltY",
-                "isPrimary"
+                'pointerId',
+                'pointerType',
+                'width',
+                'height',
+                'pressure',
+                'tiltX',
+                'tiltY',
+                'isPrimary'
             ]),
 
             jQueryAdditionalProps = [
-                "originalEvent",
+                'originalEvent',
 
-                "stopPropagation",
-                "isPropagationStopped",
-                "stopImmediatePropagation",
-                "isImmediatePropagationStopped",
-                "preventDefault",
-                "isDefaultPrevented",
+                'stopPropagation',
+                'isPropagationStopped',
+                'stopImmediatePropagation',
+                'isImmediatePropagationStopped',
+                'preventDefault',
+                'isDefaultPrevented',
 
-                "result",
-                "data",
+                'result',
+                'data',
 
-                "relatedTarget",
-                "delegateTarget",
-                "originalTarget",
+                'relatedTarget',
+                'delegateTarget',
+                'originalTarget',
 
-                "which",
-                "button",
-                "charCode",
+                'which',
+                'button',
+                'charCode',
 
-                "pageX",
-                "pageY",
+                'pageX',
+                'pageY',
 
-                "clientX",
-                "clientY",
+                'clientX',
+                'clientY',
 
-                "offsetX",
-                "offsetY",
+                'offsetX',
+                'offsetY',
 
-                "screenX",
-                "screenY",
+                'screenX',
+                'screenY',
 
-                "prevValue"
+                'prevValue'
             ];
 
 
-        if("ontouchstart" in window && !('callPhantom' in window)) {
-            $.each(["touchstart", "touchmove", "touchend", "touchcancel"], (index, eventName) => {
+        if('ontouchstart' in window && !('callPhantom' in window)) {
+            $.each(['touchstart', 'touchmove', 'touchend', 'touchcancel'], (index, eventName) => {
                 test(`'${eventName}' event has all properties according to W3C (http://www.w3.org/TR/touch-eventUtils/)`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(W3CTouchEventProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -771,10 +771,10 @@ if(compare($.fn.jquery, [3]) < 0) {
                 });
 
                 test(`'${eventName}' event has all jQuery properties`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(jQueryAdditionalProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -785,11 +785,11 @@ if(compare($.fn.jquery, [3]) < 0) {
                 test(`'${eventName}' should be unsubscribed by namespace`, assert => {
                     assert.expect(0);
 
-                    const element = $("#element")
-                        .on(eventName + ".Test", (e) => {
+                    const element = $('#element')
+                        .on(eventName + '.Test', (e) => {
                             assert.ok(false);
                         })
-                        .off(".Test")
+                        .off('.Test')
                         .get(0);
 
                     nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
@@ -798,12 +798,12 @@ if(compare($.fn.jquery, [3]) < 0) {
         }
 
         if(navigator.msPointerEnabled) {
-            $.each(["MSPointerDown", "MSPointerMove", "MSPointerUp"], (index, eventName) => {
+            $.each(['MSPointerDown', 'MSPointerMove', 'MSPointerUp'], (index, eventName) => {
                 test(`'${eventName}' event has all properties according to W3C (http://www.w3.org/TR/pointerevents/)`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(W3CPointerEventProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -812,10 +812,10 @@ if(compare($.fn.jquery, [3]) < 0) {
                 });
 
                 test(`'${eventName}' event has all jQuery properties`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(jQueryAdditionalProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -826,11 +826,11 @@ if(compare($.fn.jquery, [3]) < 0) {
                 test(`'${eventName}' should be unsubscribed by namespace`, assert => {
                     assert.expect(0);
 
-                    const element = $("#element")
-                        .on(eventName + ".Test", (e) => {
+                    const element = $('#element')
+                        .on(eventName + '.Test', (e) => {
                             assert.ok(false);
                         })
-                        .off(".Test")
+                        .off('.Test')
                         .get(0);
 
                     nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
@@ -839,12 +839,12 @@ if(compare($.fn.jquery, [3]) < 0) {
         }
 
         if(navigator.pointerEnabled) {
-            $.each(["pointerdown", "pointermove", "pointerup"], function(index, eventName) {
+            $.each(['pointerdown', 'pointermove', 'pointerup'], function(index, eventName) {
                 test(`'${eventName}' event has all properties according to W3C (http://www.w3.org/TR/pointerevents/)`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(W3CPointerEventProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -853,10 +853,10 @@ if(compare($.fn.jquery, [3]) < 0) {
                 });
 
                 test(`'${eventName}' event has all jQuery properties`, assert => {
-                    const element = $("#element")
+                    const element = $('#element')
                         .on(eventName, (e) => {
                             $.each(jQueryAdditionalProps, function() {
-                                assert.ok(this in e, "event has '" + this + "' property");
+                                assert.ok(this in e, 'event has \'' + this + '\' property');
                             });
                         })
                         .get(0);
@@ -867,11 +867,11 @@ if(compare($.fn.jquery, [3]) < 0) {
                 test(`'${eventName}' should be unsubscribed by namespace`, assert => {
                     assert.expect(0);
 
-                    const element = $("#element")
-                        .on(eventName + ".Test", (e) => {
+                    const element = $('#element')
+                        .on(eventName + '.Test', (e) => {
                             assert.ok(false);
                         })
-                        .off(".Test")
+                        .off('.Test')
                         .get(0);
 
                     nativePointerMock.simulateEvent(element, eventName, { touches: [1], changedTouches: [1] });
@@ -880,19 +880,19 @@ if(compare($.fn.jquery, [3]) < 0) {
         }
     });
 
-    QUnit.module("regressions", () => {
-        $.each("touchstart touchend touchmove touchcancel".split(" "), (_, eventName) => {
-            test(eventName + " - some event properties should not be undefined", assert => {
+    QUnit.module('regressions', () => {
+        $.each('touchstart touchend touchmove touchcancel'.split(' '), (_, eventName) => {
+            test(eventName + ' - some event properties should not be undefined', assert => {
                 const event = $.event.fix({ type: eventName, touches: [], changedTouches: [{ screenX: 123, screenY: 321, clientX: 345, clientY: 543, pageX: 678, pageY: 876 }] });
 
-                assert.equal(event.screenX, 123, "event.screenX is defined");
-                assert.equal(event.screenY, 321, "event.screenY is defined");
+                assert.equal(event.screenX, 123, 'event.screenX is defined');
+                assert.equal(event.screenY, 321, 'event.screenY is defined');
 
-                assert.equal(event.clientX, 345, "event.clientX is defined");
-                assert.equal(event.clientY, 543, "event.clientY is defined");
+                assert.equal(event.clientX, 345, 'event.clientX is defined');
+                assert.equal(event.clientY, 543, 'event.clientY is defined');
 
-                assert.equal(event.pageX, 678, "event.pageX is defined");
-                assert.equal(event.pageY, 876, "event.pageY is defined");
+                assert.equal(event.pageX, 678, 'event.pageX is defined');
+                assert.equal(event.pageY, 876, 'event.pageY is defined');
             });
         });
     });

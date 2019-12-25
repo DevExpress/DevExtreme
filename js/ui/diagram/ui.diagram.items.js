@@ -1,5 +1,5 @@
-import Component from "../../core/component";
-import DataHelperMixin from "../../data_helper";
+import Component from '../../core/component';
+import DataHelperMixin from '../../data_helper';
 
 class ItemsOption extends Component {
     constructor(diagramWidget) {

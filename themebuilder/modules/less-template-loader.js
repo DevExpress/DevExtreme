@@ -1,11 +1,11 @@
-const LessPluginAutoPrefix = require("less-plugin-autoprefix");
+const LessPluginAutoPrefix = require('less-plugin-autoprefix');
 
-const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
-const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
-const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
+const BOOTSTRAP_SCSS_PATH = 'bootstrap/scss/';
+const THEMEBUILDER_LESS_PATH = 'devextreme-themebuilder/data/less/';
+const SWATCH_SELECTOR_PREFIX = '.dx-swatch-';
 
 const createModifyVars = modifyVars => {
-    let result = "";
+    let result = '';
     for(let key in modifyVars) {
         if(Object.prototype.hasOwnProperty.call(modifyVars, key)) {
             result += `@${key}: ${modifyVars[key]};`;
@@ -16,12 +16,12 @@ const createModifyVars = modifyVars => {
 
 const addSwatchClass = (less, swatchSelector, modifyVars) => {
     if(!swatchSelector) return less;
-    return swatchSelector + "{" + less + createModifyVars(modifyVars) + "}";
+    return swatchSelector + '{' + less + createModifyVars(modifyVars) + '}';
 };
 
 class LessFontPlugin {
     process(css) {
-        return css.replace(/(\f)(\d+)/g, "\\f$2");
+        return css.replace(/(\f)(\d+)/g, '\\f$2');
     }
 }
 
@@ -33,18 +33,18 @@ class LessMetadataPreCompilerPlugin {
     }
 
     process(less, context) {
-        if(context && context.fileInfo.filename !== "input") {
+        if(context && context.fileInfo.filename !== 'input') {
             return less;
         }
 
-        less += "#devexpress-metadata-compiler{";
+        less += '#devexpress-metadata-compiler{';
         for(let key in this._metadata) {
             if(Object.prototype.hasOwnProperty.call(this._metadata, key)) {
                 let value = this._metadata[key];
-                less += key + ": " + value + ";";
+                less += key + ': ' + value + ';';
             }
         }
-        less += "}";
+        less += '}';
         return addSwatchClass(less, this.swatchSelector, this.modifyVars);
     }
 }
@@ -57,8 +57,8 @@ class LessMetadataPostCompilerPlugin {
     }
 
     process(css) {
-        let metadataRegex = new RegExp("(?:" + this.swatchSelector + "\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}");
-        metadataRegex.exec(css)[1].split(";").forEach(item => {
+        let metadataRegex = new RegExp('(?:' + this.swatchSelector + '\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}');
+        metadataRegex.exec(css)[1].split(';').forEach(item => {
             let rule = getCompiledRule(item);
             for(let key in rule) {
                 if(Object.prototype.hasOwnProperty.call(rule, key)) {
@@ -68,20 +68,20 @@ class LessMetadataPostCompilerPlugin {
         });
 
         if(this.swatchSelector) {
-            const escapedSelector = this.swatchSelector.replace(".", "\\.");
+            const escapedSelector = this.swatchSelector.replace('.', '\\.');
 
-            const customStylesDuplicateRegex = new RegExp(`\\s+${escapedSelector}\\s+\\.dx-theme-.*?-typography\\s+\\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?`, "g");
-            const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, "gm");
+            const customStylesDuplicateRegex = new RegExp(`\\s+${escapedSelector}\\s+\\.dx-theme-.*?-typography\\s+\\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?`, 'g');
+            const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, 'gm');
             const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
 
             css = css
-                .replace(swatchOrderRegex, "$1$3$2$4")
-                .replace(customStylesDuplicateRegex, "")
-                .replace(/\s\.dx-theme-.*?-typography/g, "")
-                .replace(themeMarkerRegex, "$1" + this.colorScheme + "$3");
+                .replace(swatchOrderRegex, '$1$3$2$4')
+                .replace(customStylesDuplicateRegex, '')
+                .replace(/\s\.dx-theme-.*?-typography/g, '')
+                .replace(themeMarkerRegex, '$1' + this.colorScheme + '$3');
         }
 
-        return css.replace(metadataRegex, "");
+        return css.replace(metadataRegex, '');
     }
 }
 
@@ -91,7 +91,7 @@ const getCompiledRule = cssString => {
     let ruleRegex = /([-\w\d]*)\s*:\s*(.*)\s*/;
     let matches = ruleRegex.exec(cssString);
     if(matches) {
-        result["@" + matches[1]] = matches[2];
+        result['@' + matches[1]] = matches[2];
     } else {
         result = null;
     }
@@ -105,7 +105,7 @@ class LessTemplateLoader {
         this.sassCompiler = config.sassCompiler;
         this.themeBuilderLessPath = config.lessPath ? config.lessPath : THEMEBUILDER_LESS_PATH;
         this.bootstrapScssPath = config.scssPath ? config.scssPath : BOOTSTRAP_SCSS_PATH;
-        this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : "";
+        this.swatchSelector = config.makeSwatch ? SWATCH_SELECTOR_PREFIX + config.outColorScheme : '';
         this.outColorScheme = config.outColorScheme;
         this.version = version;
     }
@@ -117,12 +117,12 @@ class LessTemplateLoader {
 
             if(Array.isArray(modifiedItems)) {
                 modifiedItems.forEach(item => {
-                    modifyVars[item.key.replace("@", "")] = item.value;
+                    modifyVars[item.key.replace('@', '')] = item.value;
                 });
             }
 
             metadata.forEach((metaItem => {
-                metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+                metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
             }));
 
             return this.compileLess(less, modifyVars, metadataVariables);
@@ -131,12 +131,12 @@ class LessTemplateLoader {
 
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
-            const browsersList = require("../package.json").browserslist;
+            const browsersList = require('../package.json').browserslist;
             let compiledMetadata = {};
             let options = {};
 
             // while using `less/lib/less-browser`, the global options are not passed to the `render` method, lets do it by ourselves
-            if(this.lessCompiler.options && typeof (this.lessCompiler.options) === "object") {
+            if(this.lessCompiler.options && typeof (this.lessCompiler.options) === 'object') {
                 Object.assign(options, this.lessCompiler.options);
             }
 
@@ -196,10 +196,10 @@ class LessTemplateLoader {
     }
 
     analyzeBootstrapTheme(theme, colorScheme, metadata, bootstrapMetadata, customLessContent, version) {
-        let metadataVariables = "";
+        let metadataVariables = '';
         for(let key in bootstrapMetadata) {
             if(Object.prototype.hasOwnProperty.call(bootstrapMetadata, key)) {
-                metadataVariables += bootstrapMetadata[key] + ": dx-empty" + (version === 4 ? " !default" : "") + ";";
+                metadataVariables += bootstrapMetadata[key] + ': dx-empty' + (version === 4 ? ' !default' : '') + ';';
             }
         }
 
@@ -210,7 +210,7 @@ class LessTemplateLoader {
                 for(let key in compiledMetadata) {
                     if(Object.prototype.hasOwnProperty.call(compiledMetadata, key)) {
                         let value = compiledMetadata[key];
-                        if(value !== "dx-empty") {
+                        if(value !== 'dx-empty') {
                             modifyVars[key] = value;
                         }
                     }
@@ -220,7 +220,7 @@ class LessTemplateLoader {
                     let metadataVariables = {};
 
                     metadata.forEach(metaItem => {
-                        metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+                        metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
                     });
 
                     this.compileLess(less, modifyVars, metadataVariables).then(data => {
@@ -236,8 +236,8 @@ class LessTemplateLoader {
             if(version === 3) {
                 this.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
-                let defaultBootstrapVariablesUrl = this.bootstrapScssPath + "_variables.scss",
-                    defaultBootstrapFunctionsUrl = this.bootstrapScssPath + "_functions.scss";
+                let defaultBootstrapVariablesUrl = this.bootstrapScssPath + '_variables.scss',
+                    defaultBootstrapFunctionsUrl = this.bootstrapScssPath + '_functions.scss';
 
                 Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
@@ -250,8 +250,8 @@ class LessTemplateLoader {
     }
 
     _loadLess(theme, colorScheme) {
-        let themeName = (theme ? theme + "-" : "");
-        return this._loadLessByFileName("theme-builder-" + themeName + colorScheme + ".less");
+        let themeName = (theme ? theme + '-' : '');
+        return this._loadLessByFileName('theme-builder-' + themeName + colorScheme + '.less');
     }
 
     _loadLessByFileName(fileName) {
@@ -259,11 +259,11 @@ class LessTemplateLoader {
     }
 
     _makeInfoHeader() {
-        let generatedBy = "* Generated by the DevExpress ThemeBuilder";
-        let versionString = "* Version: " + this.version;
-        let link = "* http://js.devexpress.com/ThemeBuilder/";
+        let generatedBy = '* Generated by the DevExpress ThemeBuilder';
+        let versionString = '* Version: ' + this.version;
+        let link = '* http://js.devexpress.com/ThemeBuilder/';
 
-        return ["/*", generatedBy, versionString, link, "*/"].join("\n") + "\n\n";
+        return ['/*', generatedBy, versionString, link, '*/'].join('\n') + '\n\n';
     }
 }
 
