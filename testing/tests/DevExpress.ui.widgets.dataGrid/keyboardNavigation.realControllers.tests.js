@@ -1,3 +1,12 @@
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -7,12 +16,12 @@ import $ from 'jquery';
 import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import pointerEvents from 'events/pointer';
-import { setupDataGridModules } from '../../../helpers/dataGridMocks.js';
+import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
     triggerKeyDown,
     focusCell,
-    dataGridWrapper } from '../../../helpers/grid/keyboardNavigationHelper.js';
+    dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 QUnit.module('Real DataController and ColumnsController', {
     setupModule: function() {
