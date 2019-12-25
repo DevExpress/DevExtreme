@@ -1,18 +1,27 @@
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
 import 'common.css!';
 import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
 import $ from 'jquery';
-import { setupDataGridModules } from '../../../helpers/dataGridMocks.js';
-import keyboardMock from '../../../helpers/keyboardMock.js';
+import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import {
     testInDesktop,
     triggerKeyDown,
     fireKeyDown,
     focusCell,
     dataGridWrapper,
-    getTextSelection } from '../../../helpers/grid/keyboardNavigationHelper.js';
+    getTextSelection } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 QUnit.module('Customize keyboard navigation', {
     setupModule: function() {
