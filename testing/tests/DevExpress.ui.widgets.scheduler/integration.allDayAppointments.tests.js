@@ -1581,3 +1581,34 @@ QUnit.test('New allDay appointment should be rendered correctly when groupByDate
     assert.ok($(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').length === 1, 'Appointment is in `allDayAppointments` container');
     assert.ok(translator.locate($appointment).top === 0, 'Appointment is on top of it`s container');
 });
+
+QUnit.test('Recurrence allDay appointment should be rendered correctly (T831801)', function(assert) {
+    const appointment = {
+        text: 'a',
+        startDate: new Date(2020, 1, 9, 1),
+        endDate: new Date(2020, 1, 9, 2),
+        recurrenceRule: 'FREQ=DAILY'
+    };
+    const newAppointment = {
+        text: 'a',
+        startDate: new Date(2020, 1, 9),
+        endDate: new Date(2020, 1, 9, 1),
+        allDay: true,
+        recurrenceRule: 'FREQ=DAILY'
+    };
+
+    const scheduler = createInstance({
+        currentDate: new Date(2020, 1, 9),
+        views: ['week'],
+        currentView: 'week',
+        groupByDate: true,
+        startDayHour: 1,
+        dataSource: [appointment]
+    });
+
+    scheduler.instance.updateAppointment(appointment, newAppointment);
+
+    let appointmentCount = scheduler.appointments.getAppointmentCount();
+
+    assert.equal(appointmentCount, 7, 'Appointments are OK');
+});
