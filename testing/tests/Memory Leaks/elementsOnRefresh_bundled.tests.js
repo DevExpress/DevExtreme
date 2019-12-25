@@ -24,12 +24,12 @@ $.each(DevExpress.ui, function(componentName) {
                 originalDomElements,
                 newDomElements;
 
-            this.clock.tick(300);
+            this.clock.tick(1000);
             originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
 
             component._refresh();
 
-            this.clock.tick(300);
+            this.clock.tick(1000);
             newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
             if(newDomElements.length === originalDomElements.length) {
                 assert.ok(true, 'After an option changes and causes re-rendering, no additional dom elements must be created');
