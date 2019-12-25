@@ -3229,7 +3229,6 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
     // arrange
     const that = this;
     const done = assert.async();
-    let promiseInitNewRowCallCount = 0;
     let initNewRowCallCount = 0;
 
     that.options.editing = {
@@ -3238,18 +3237,11 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
     };
 
     that.options.onInitNewRow = (e) => {
-        if((promiseInitNewRowCallCount + initNewRowCallCount) % 2 === 0) {
-            const deferred = $.Deferred();
-
-            e.promise = deferred.done(function() {
-                promiseInitNewRowCallCount++;
-            });
-
-            deferred.resolve();
-
-        } else {
+        const deferred = $.Deferred();
+        e.promise = deferred.done(function() {
             initNewRowCallCount++;
-        }
+        });
+        deferred.resolve();
     };
 
     that.rowsView.render($('#container'));
@@ -3267,8 +3259,7 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
 
         // assert
         assert.equal(that.getVisibleRows().length, 12, 'added new 5 rows');
-        assert.equal(promiseInitNewRowCallCount, 3, 'onInitNewRow with promise called 3 times');
-        assert.equal(initNewRowCallCount, 2, 'onInitNewRow without promise called 2 times');
+        assert.equal(initNewRowCallCount, 5, 'onInitNewRow called 5 times');
         done();
 
         return $.Deferred().resolve();

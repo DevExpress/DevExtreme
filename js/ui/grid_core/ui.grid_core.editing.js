@@ -863,9 +863,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that.saveEditData().done(function() {
                     // T804894
                     if(!that.hasChanges()) {
-                        that.addRow(parentKey).done(() => {
-                            deferred.resolve();
-                        });
+                        that.addRow(parentKey).done(deferred.resolve).fail(deferred.reject);
                     }
                 });
                 return deferred.promise();
@@ -874,7 +872,7 @@ var EditingController = modules.ViewController.inherit((function() {
             that.refresh();
 
             if(!that._allowRowAdding()) {
-                return deferred.reject();
+                return deferred.reject('cancel');
             }
 
             if(!key) {
@@ -884,9 +882,11 @@ var EditingController = modules.ViewController.inherit((function() {
             when(that._initNewRow(param, parentKey)).done(() => {
                 if(that._allowRowAdding()) {
                     that._addRowCore(param.data, parentKey, oldEditRowIndex);
+                } else {
+                    deferred.reject('cancel');
                 }
                 deferred.resolve();
-            });
+            }).fail(deferred.reject);
 
             return deferred.promise();
         },
