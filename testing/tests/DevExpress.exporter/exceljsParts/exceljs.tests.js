@@ -1932,7 +1932,7 @@ QUnit.module('API', moduleConfig, () => {
                     { value: '2019/10/9', expected: dateValue },
                     { value: dateTimeValue.getTime(), expected: dateTimeValue }
                 ].forEach((date) => {
-                    QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format}, gridCellValue: ${JSON.stringify(date)}, ${testCaption}`, function(assert) {
+                    QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format}, cell.value: ${JSON.stringify(date.value)} ${testCaption}`, function(assert) {
                         const done = assert.async();
 
                         const ds = [{ f1: date.value }];
