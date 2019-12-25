@@ -2142,6 +2142,42 @@ QUnit.test('Dragging an item to another sortable and back when it is alone in th
     assert.strictEqual(items2.first().attr('id'), 'item7', 'second list - first item');
 });
 
+// T846161
+QUnit.test('The onRemove event should be fired when dragging the item from sortable to draggable', function(assert) {
+    // arrange
+    let onRemoveSpy = sinon.spy(),
+        onDragEndSpy = sinon.spy();
+
+    const draggable = this.createDraggable({
+        filter: '.draggable',
+        group: 'shared'
+    }, $('#items'));
+
+    const sortable = this.createSortable({
+        filter: '.draggable',
+        group: 'shared',
+        onRemove: onRemoveSpy,
+        onDragEnd: onDragEndSpy
+    }, $('#items2'));
+
+    // act
+    const $sortableElement = sortable.$element();
+    pointerMock($sortableElement.children().eq(0)).start().down($sortableElement.offset().left, 0).move(-50, 0).up();
+
+    // assert
+    assert.strictEqual(onRemoveSpy.callCount, 1, 'onRemove event is called');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable, 'onRemove arg - fromComponent');
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, draggable, 'onRemove arg - toComponent');
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 0, 'onRemove arg - fromIndex');
+    assert.ok(isNaN(onRemoveSpy.getCall(0).args[0].toIndex), 'onRemove arg - toIndex');
+    assert.strictEqual(onDragEndSpy.callCount, 1, 'onDragEnd event is called');
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].fromComponent, sortable, 'onDragEnd arg - fromComponent');
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'onDragEnd arg - toComponent');
+    assert.strictEqual(onDragEndSpy.getCall(0).args[0].fromIndex, 0, 'onDragEndSpy arg - fromIndex');
+    assert.ok(isNaN(onDragEndSpy.getCall(0).args[0].toIndex), 'onDragEndSpy arg - toIndex');
+});
+
+
 function getModuleConfigForTestsWithScroll(elementSelector, scrollSelector) {
     return {
         beforeEach: function() {
