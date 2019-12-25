@@ -38,7 +38,7 @@
 .dx-dropdownbutton {
     height: @MATERIAL_BUTTON_HEIGHT;
 
-    .dx-buttongroup-last-item.dx-buttongroup-last-item .dx-button-content {
+    .dx-buttongroup-last-item .dx-button-content {
         padding-right: 0;
 
         .dx-rtl & {
@@ -46,17 +46,25 @@
         }
     }
 
-    .dx-button-has-icon.dx-button-has-text {
+    .dx-button-has-icon.dx-button-has-text,
+    .dx-button-has-text {
+        min-width: 0;
+
         .dx-button-content {
             padding-left: 8px;
-            padding-right: 8px;
+            padding-right: 0;
+
+            .dx-icon.dx-icon-right {
+                .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE);
+
+                margin-left: 0;
+            }
+
+            .dx-rtl & {
+                padding-left: 0;
+                padding-right: 8px;
+            }
         }
-    }
-
-    .dx-icon.dx-icon-right {
-        .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
-
-        margin-left: 0;
     }
 }
 
