@@ -4,7 +4,7 @@ import { extend } from '../core/utils/extend';
 import ButtonView from './test-button.p';
 import * as Preact from 'preact';
 
-export default class Button extends Widget {
+class Button extends Widget {
     _initMarkup() { }
 
     _render() {
@@ -34,7 +34,7 @@ export default class Button extends Widget {
         }
 
         Preact.render(view(
-            Object.assign({}, options, {
+            extend({}, options, {
                 onClick: this._createActionByOption('onClick', {
                     excludeValidators: ['readOnly'],
                     afterExecute: () => {
@@ -68,3 +68,5 @@ function view(options) {
 }
 
 registerComponent('dxTestButton', Button);
+
+module.exports = Button;

@@ -169,7 +169,7 @@ export default class Button {
     @Prop() text?: string;
     @Prop() type?: string;
     @Prop() width?: string;
-    @Prop() elementAttr?: any = {};
+    @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() visible?: boolean = true;
 
     // @Template() contentRender?: any;

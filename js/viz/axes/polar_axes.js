@@ -372,7 +372,7 @@ circularAxes = polarAxes.circular = {
             angle = this._translator.translate(value, -offset),
             coords = convertPolarToXY(this.getCenter(), startAngle, angle, this.getRadius());
 
-        return { x: coords.x, y: coords.y, angle: angle + startAngle - HALF_PI_ANGLE };
+        return { x: coords.x, y: coords.y, angle: this.getTranslatedAngle(angle) };
     },
 
     _getAdjustedStripLabelCoords: function(strip) {
@@ -438,6 +438,11 @@ circularAxes = polarAxes.circular = {
 
     shift: function(margins) {
         this._axisGroup.attr({ translateX: margins.right, translateY: margins.bottom });
+    },
+
+    getTranslatedAngle(angle) {
+        const startAngle = this.getAngles()[0];
+        return angle + startAngle - HALF_PI_ANGLE;
     }
 };
 

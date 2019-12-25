@@ -449,10 +449,10 @@
         "dxDiagram-shapeConnector": "Соединитель",
         "dxDiagram-shapeOr": "Или",
         "dxDiagram-shapeSummingJunction": "Суммирование",
-        "dxDiagram-shapeContainer": "Контейнер",
+        "dxDiagram-shapeContainerDefaultText": "Контейнер",
         "dxDiagram-shapeVerticalContainer": "Вертикальный контейнер",
         "dxDiagram-shapeHorizontalContainer": "Горизонтальный контейнер",
-        "dxDiagram-shapeCard": "Имя человека",
+        "dxDiagram-shapeCardDefaultText": "Имя человека",
         "dxDiagram-shapeCardWithImageOnLeft": "Карточка с изображением слева",
         "dxDiagram-shapeCardWithImageOnTop": "Карточка с изображением сверху",
         "dxDiagram-shapeCardWithImageOnRight": "Карточка с изображением справа"

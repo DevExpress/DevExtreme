@@ -8316,7 +8316,7 @@ QUnit.testInActiveWindow('Height virtual table should be updated to show validat
 
     // assert
     $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, 'height main table');
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3.01, 'height main table');
 
     dataGrid.closeEditCell();
     this.clock.tick();
@@ -17136,6 +17136,45 @@ QUnit.test('rowTemplate via dxTemplate should works with masterDetail template',
     assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
 });
 
+// T821418
+QUnit.test('rowTemplate with tbody should works with virtual scrolling', function(assert) {
+    // arrange, act
+    const data = [...Array(20)].map((_, i) => ({ id: i + 1 }));
+    const rowHeight = 50;
+    const dataGrid = createDataGrid({
+        height: rowHeight,
+        loadingTimeout: undefined,
+        dataSource: data,
+        columns: ['id'],
+        scrolling: {
+            mode: 'virtual',
+            useNative: false
+        },
+        paging: {
+            pageSize: 2
+        },
+        rowTemplate: function(container, options) {
+            $(container).append(`<tbody class='dx-row'><tr style="height: ${rowHeight}px"><td>${options.data.id}</td></tr></tbody>`);
+        }
+    });
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 4 * rowHeight });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 3, 'first visible row');
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '3', 'first visible cell text');
+    assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 2, 'virtual row count');
+
+    // act
+    dataGrid.getScrollable().scrollTo({ top: 0 });
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row');
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), '1', 'first visible cell text');
+    assert.strictEqual($(dataGrid.element()).find('tbody.dx-virtual-row').length, 1, 'virtual row count');
+});
+
 // T120698
 QUnit.test('totalCount', function(assert) {
     // arrange, act
@@ -18165,6 +18204,34 @@ QUnit.test('Pressing symbol keys inside detail grid editor does not change maste
 
     // assert
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, 'Master grid focusedCellPosition is not changed');
+});
+
+QUnit.test('Should open master detail by click if row is edited in row mode (T845240)', function(assert) {
+    ['click', 'dblClick'].forEach(startEditAction => {
+        // arrange
+        const masterDetailClass = 'master-detail-test';
+        this.dataGrid.option({
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1 }],
+            startEditAction: startEditAction,
+            masterDetail: {
+                enabled: true,
+                template: function(container, options) {
+                    $(`<div class="${masterDetailClass}">Test</div>`).appendTo(container);
+                }
+            }
+        });
+
+        // assert
+        assert.notOk($(this.dataGrid.$element()).find('.' + masterDetailClass).length, 'Master detail is not displayed');
+
+        // act
+        this.dataGrid.editRow(0);
+        $(this.dataGrid.getCellElement(0, 0)).trigger('dxclick');
+
+        // assert
+        assert.ok($(this.dataGrid.$element()).find('.' + masterDetailClass).length, 'Master detail is displayed');
+    });
 });
 
 QUnit.test('DataGrid should regenerate columns and apply filter after dataSource change if columns autogenerate', function(assert) {

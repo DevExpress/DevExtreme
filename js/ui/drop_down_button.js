@@ -265,8 +265,8 @@ let DropDownButton = Widget.inherit({
         this._compileDisplayGetter();
         this._initDataSource();
         this._itemsToDataSource();
-        this._initInnerOptionCache('buttonGroupOptions');
-        this._initInnerOptionCache('dropDownOptions');
+        this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
+        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
     },
 
     _initTemplates() {
@@ -323,7 +323,7 @@ let DropDownButton = Widget.inherit({
         this._loadSingle(this.option('keyExpr'), selectedItemKey)
             .done(d.resolve)
             .fail(() => {
-                d.resolve(this.option('selectedItem'));
+                d.resolve(null);
             });
 
         return d.promise();
@@ -370,7 +370,6 @@ let DropDownButton = Widget.inherit({
         if(this.option('splitButton')) {
             items.push({
                 icon: 'spindown',
-                width: 26,
                 elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
             });
         }
@@ -416,7 +415,7 @@ let DropDownButton = Widget.inherit({
 
                 $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
             }
-        }, this._getInnerOptionsCache('buttonGroupOptions'));
+        }, this._options.cache('buttonGroupOptions'));
     },
 
     _renderPopupContent() {
@@ -466,7 +465,7 @@ let DropDownButton = Widget.inherit({
                     y: -1
                 }
             }
-        }, this._getInnerOptionsCache('dropDownOptions'));
+        }, this._options.cache('dropDownOptions'));
     },
 
     _listOptions() {
@@ -656,10 +655,10 @@ let DropDownButton = Widget.inherit({
                 this._compileKeyGetter();
                 break;
             case 'buttonGroupOptions':
-                this._innerOptionChanged(this._buttonGroup, args);
+                this._innerWidgetOptionChanged(this._buttonGroup, args);
                 break;
             case 'dropDownOptions':
-                this._innerOptionChanged(this._popup, args);
+                this._innerWidgetOptionChanged(this._popup, args);
                 break;
             case 'opened':
                 this.toggle(value);

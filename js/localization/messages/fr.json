@@ -482,10 +482,10 @@
         "dxDiagram-shapeConnector": "Connecteur",
         "dxDiagram-shapeOr": "Ou",
         "dxDiagram-shapeSummingJunction": "Jonction de sommation",
-        "dxDiagram-shapeContainer": "Récipient",
+        "dxDiagram-shapeContainerDefaultText": "Récipient",
         "dxDiagram-shapeVerticalContainer": "Conteneur vertical",
         "dxDiagram-shapeHorizontalContainer": "Conteneur horizontal",
-        "dxDiagram-shapeCard": "Nom de la personne",
+        "dxDiagram-shapeCardDefaultText": "Nom de la personne",
         "dxDiagram-shapeCardWithImageOnLeft": "Carte avec image à gauche",
         "dxDiagram-shapeCardWithImageOnTop": "Carte avec image sur le dessus",
         "dxDiagram-shapeCardWithImageOnRight": "Carte avec image à droite"
