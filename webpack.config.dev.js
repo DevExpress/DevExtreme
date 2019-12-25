@@ -18,8 +18,8 @@ module.exports = Object.assign({
             use: {
                 loader: 'babel-loader',
                 options: {
-                    "plugins": [
-                        ["transform-react-jsx", { "pragma": "Preact.h" }]
+                    'plugins': [
+                        ['transform-react-jsx', { 'pragma': 'Preact.h' }]
                     ]
                 }
             }
