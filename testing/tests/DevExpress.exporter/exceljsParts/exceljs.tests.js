@@ -6430,81 +6430,50 @@ QUnit.module('API', moduleConfig, () => {
         });
     });
 
-    QUnit.test('LoadPanel - localization message', function(assert) {
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-        const locale = localization.locale();
+    [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
+        QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
+            const done = assert.async();
+            const ds = [{ f1: 'f1_1' }];
+            const locale = localization.locale();
 
-        try {
-            localization.loadMessages(ja);
-            localization.locale('ja');
-
-            const dataGrid = $('#dataGrid').dxDataGrid({
-                dataSource: ds,
-                loadingTimeout: undefined,
-                showColumnHeaders: false
-            }).dxDataGrid('instance');
-
-            let actualLoadPanelSettingsOnExporting;
-
-            const loadPanelOnShownHandler = () => {
-                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
-            };
-
-            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: 'エクスポート...' });
-
-            exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
-                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
-                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
-                done();
-            });
-        } finally {
-            localization.locale(locale);
-        }
-    });
-
-    QUnit.test('LoadPanel - customize localization message', function(assert) {
-        const done = assert.async();
-        const ds = [{ f1: 'f1_1' }];
-        const locale = localization.locale();
-
-        try {
-            messageLocalization.load({
-                'ja': {
-                    'dxDataGrid-exporting': '!CUSTOM MESSAGE!'
+            try {
+                if(localizationText.type === 'default') {
+                    localization.loadMessages(ja);
+                } else {
+                    messageLocalization.load({
+                        'ja': {
+                            'dxDataGrid-exporting': '!CUSTOM TEXT!'
+                        }
+                    });
                 }
-            });
-            localization.locale('ja');
 
-            const dataGrid = $('#dataGrid').dxDataGrid({
-                dataSource: ds,
-                loadingTimeout: undefined,
-                showColumnHeaders: false
-            }).dxDataGrid('instance');
+                localization.locale('ja');
 
-            let actualLoadPanelSettingsOnExporting;
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid('instance');
 
-            const loadPanelOnShownHandler = () => {
-                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
-            };
+                let actualLoadPanelText;
 
-            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
-            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, { animation: null, onShown: loadPanelOnShownHandler, enabled: true, text: '!CUSTOM MESSAGE!' });
+                const loadPanelOnShownHandler = () => {
+                    actualLoadPanelText = dataGrid.option('loadPanel').text;
+                };
 
-            exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
-                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
-                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
-                done();
-            });
-        } finally {
-            localization.locale(locale);
-        }
+                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+
+                exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
+                    assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
+                    done();
+                });
+            } finally {
+                localization.locale(locale);
+            }
+        });
     });
 
-    QUnit.test('LoadPanel - custom settings, loadPanel: { enabled: true, text: \'Export to .xlsx...\'}', function(assert) {
+    QUnit.test('LoadPanel - loadPanel: { enabled: true, text: \'Export to .xlsx...\'}', function(assert) {
         const done = assert.async();
         const ds = [{ f1: 'f1_1' }];
 
@@ -6531,7 +6500,7 @@ QUnit.module('API', moduleConfig, () => {
         });
     });
 
-    QUnit.test('LoadPanel - hide on Exporting, loadPanel: { enabled: false }', function(assert) {
+    QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
         assert.expect();
         const done = assert.async();
         const ds = [{ f1: 'f1_1' }];

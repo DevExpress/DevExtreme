@@ -27,7 +27,7 @@ function exportDataGrid(options) {
         }
     } = options;
 
-    let cachedLoadPanelOptions = extend({}, component.option('loadPanel'));
+    let initialLoadPanelOptions = extend({}, component.option('loadPanel'));
     component.option('loadPanel', loadPanel);
 
     let rowsView = component.getView('rowsView');
@@ -94,7 +94,7 @@ function exportDataGrid(options) {
 
             resolve(cellsRange);
         }).always(() => {
-            component.option('loadPanel', cachedLoadPanelOptions);
+            component.option('loadPanel', initialLoadPanelOptions);
         });
     });
 }
