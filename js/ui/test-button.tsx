@@ -1,4 +1,4 @@
-import { Component, Prop, Event, InternalState, Listen, React, Template } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, Listen, React, Template } from "../../declarations/component_declaration/common";
 import { getDocument } from '../core/dom_adapter';
 import { getImageSourceType } from '../core/utils/icon';
 import { isDefined } from '../core/utils/type';
