@@ -641,7 +641,7 @@ QUnit.module('common use cases', {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), 'Trial for Visual Studio', 'action button has been changed');
     });
 
-    QUnit.test('custom item should be redefined after selection if useSelectMode is changed to true at runtime', function(assert) {
+    QUnit.test('custom item should be redefined after selection if useSelectMode is changed to true at runtime', (assert) => {
         this.dropDownButton.option({
             useSelectMode: false,
             opened: true
@@ -935,7 +935,7 @@ QUnit.module('items changing', {
         assert.strictEqual(loadHandler.callCount, loadCount, 'load was not called');
     });
 
-    QUnit.test('items changing with useSelectMode: false should not lead to datasource loading', function(assert) {
+    QUnit.test('items changing with useSelectMode: false should not lead to datasource loading', (assert) => {
         const data = [{
             id: 1,
             name: 'Item 1'
