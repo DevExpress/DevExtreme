@@ -3529,24 +3529,31 @@ QUnit.test('Reload dataSource when one expanded group and one group level exist'
 });
 
 // T454240
-QUnit.test('Exception when store not returned groupCount', function(assert) {
+QUnit.test('Error when store not returned groupCount', function(assert) {
     // arrange
+    assert.expect(1);
+
     var dataSource = this.createDataSource({
         group: 'field2'
     }, { skipGroupCount: true });
 
     // act
-    try {
-        dataSource.load();
-        assert.ok(false, 'exception should be rised');
-    } catch(e) {
-        assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
-    }
+    dataSource.load()
+        .done(() => {
+            // assert
+            assert.ok(false, 'exception should be rised');
+        })
+        .fail((e) => {
+            // assert
+            assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
+        });
 });
 
 // T477410
-QUnit.test('Exception when store not returned groupCount during expand not last level group', function(assert) {
+QUnit.test('Error when store not returned groupCount during expand not last level group', function(assert) {
     // arrange
+    assert.expect(1);
+
     var brokeOptions = {};
     var dataSource = this.createDataSource({
         group: ['field1', 'field2']
@@ -3557,12 +3564,15 @@ QUnit.test('Exception when store not returned groupCount during expand not last 
     // act
     brokeOptions.skipGroupCount = true;
 
-    try {
-        dataSource.changeRowExpand([1]);
-        assert.ok(false, 'exception should be rised');
-    } catch(e) {
-        assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
-    }
+    dataSource.changeRowExpand([1])
+        .done(() => {
+            // assert
+            assert.ok(false, 'exception should be rised');
+        })
+        .fail((e) => {
+            // assert
+            assert.ok(e.message.indexOf('E4022') >= 0, 'name of error');
+        });
 });
 
 // T477410
