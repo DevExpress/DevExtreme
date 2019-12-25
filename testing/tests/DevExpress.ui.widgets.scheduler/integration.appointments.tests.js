@@ -3777,7 +3777,9 @@ QUnit.test('Multi-day appointment should be rendered when started after endDayHo
     });
 
     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 4, 'Appointments are rendered');
-    assert.strictEqual($(this.scheduler.appointments.getAppointment(1)).position().left, $(this.scheduler.appointments.getAppointment(2)).position().left, 'Appointments have same left coordinate');
+    assert.strictEqual($(this.scheduler.appointments.getAppointment(0)).position().left, $(this.scheduler.appointments.getAppointment(3)).position().left, 'Appointments have same left coordinate');
+    assert.strictEqual($(this.scheduler.appointments.getAppointment(0)).innerWidth(), $(this.scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with equal coords have same width');
+    assert.strictEqual($(this.scheduler.appointments.getAppointment(1)).innerWidth(), $(this.scheduler.appointments.getAppointment(3)).innerWidth(), 'Appointments with defferent coords have same width');
 });
 
 QUnit.test('Appointment with equal startDate and endDate should render with 1 minute duration (T817857)', function(assert) {
