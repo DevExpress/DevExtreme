@@ -34,7 +34,7 @@ const subscribes = {
     needCoordinates: function(options) {
         let appointmentData = options.appointmentData,
             startDate = options.startDate,
-            endDate = this._getEndDate(appointmentData, true),
+            endDate = this._getEndDate(appointmentData),
             recurrenceRule = this.fire('getField', 'recurrenceRule', appointmentData),
             recurrenceException = this._getRecurrenceException(appointmentData),
             dateRange = this._workSpace.getDateRange(),
@@ -808,8 +808,8 @@ const subscribes = {
                 tailDuration;
 
             if(isDifferentDate) {
-                let startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
-                let hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
+                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
+                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
 
                 tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
 
