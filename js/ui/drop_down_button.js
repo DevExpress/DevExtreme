@@ -642,14 +642,12 @@ let DropDownButton = Widget.inherit({
     },
 
     _selectModeChanged(value) {
-        if(this._list) {
-            this._setListOption('selectionMode', value ? 'single' : 'none');
-            if(value) {
-                const selectedItemKey = this.option('selectedItemKey');
-                this._setListOption('selectedItemKeys', selectedItemKey ? [selectedItemKey] : []);
-            }
-        }
-        if(!value) {
+        if(value) {
+            this._setListOption('selectionMode', 'single');
+            const selectedItemKey = this.option('selectedItemKey');
+            this._setListOption('selectedItemKeys', selectedItemKey ? [selectedItemKey] : []);
+        } else {
+            this._setListOption('selectionMode', 'none');
             this.option({
                 'selectedItemKey': undefined,
                 'selectedItem': undefined
