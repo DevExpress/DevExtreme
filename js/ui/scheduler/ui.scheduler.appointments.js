@@ -341,8 +341,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
             endDate = data.endDate;
         }
 
-        var currentData = extend(data, { startDate: startDate, endDate: endDate });
-        var formatText = this.getText(currentData, currentData, 'TIME');
+        const currentData = extend(data, { startDate: startDate, endDate: endDate });
+        const formatText = this.getText(currentData, currentData, 'TIME');
 
         $('<div>')
             .text(this._createAppointmentTitle(data))
@@ -376,12 +376,12 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     getText(data, currentData, format) {
-        const isAllDay = data.allDay,
-            text = this._createAppointmentTitle(data),
-            startDateTimeZone = data.startDateTimeZone,
-            endDateTimeZone = data.endDateTimeZone,
-            startDate = this.invoke('convertDateByTimezone', currentData.startDate, startDateTimeZone),
-            endDate = this.invoke('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        const isAllDay = data.allDay;
+        const text = this._createAppointmentTitle(data);
+        const startDateTimeZone = data.startDateTimeZone;
+        const endDateTimeZone = data.endDateTimeZone;
+        const startDate = this.invoke('convertDateByTimezone', currentData.startDate, startDateTimeZone);
+        const endDate = this.invoke('convertDateByTimezone', currentData.endDate, endDateTimeZone);
         return {
             text: text,
             formatDate: this._formatDates(startDate, endDate, isAllDay, format)
@@ -393,8 +393,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         const formatTypes = {
             'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+                const dateTimeFormat = 'mediumdatemediumtime';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
 
                 const endDateString = (startDate.getDate() === endDate.getDate()) ?
                     dateLocalization.format(endDate, 'shorttime') :
@@ -406,9 +406,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
             },
             'DATE': function() {
-                const dateTimeFormat = 'monthAndDay',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat),
-                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+                const dateTimeFormat = 'monthAndDay';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
+                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
 
                 const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
                     ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
@@ -442,11 +442,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _executeItemRenderAction: function(index, itemData, itemElement) {
         const action = this._getItemRenderAction();
         if(action) {
-            action({
-                appointmentElement: itemElement,
-                appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, itemElement)
-            });
+            action(this.invoke('mapAppointmentFields', { itemData: itemData, itemElement: itemElement }));
         }
         delete this._currentAppointmentSettings;
     },
@@ -831,14 +827,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const virtualCoordinates = virtualGroup.coordinates;
             const $container = virtualGroup.isAllDay ? this.option('allDayContainer') : this.$element();
             const left = virtualCoordinates.left;
-
             const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
             const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-            let rtlOffset = 0;
-
-            if(this.option('rtlEnabled')) {
-                rtlOffset = buttonWidth;
-            }
+            const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
 
             this.notifyObserver('renderCompactAppointments', {
                 $container: $container,
@@ -848,10 +839,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 },
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
-                itemTemplate: this.option('itemTemplate'),
                 width: buttonWidth - this.option('_collectorOffset'),
                 height: buttonHeight,
                 onAppointmentClick: this.option('onItemClick'),
+                dragBehavior: this.option('dragBehavior'),
+                allowDrag: this.option('allowDrag'),
                 isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
                 applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
             });
