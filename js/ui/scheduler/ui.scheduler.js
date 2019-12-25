@@ -2495,9 +2495,9 @@ const Scheduler = Widget.inherit({
     },
 
     _getRecurrencePart(appointments, startDate) {
-        return appointments.some(appointment => {
+        return appointments.filter(appointment => {
             return appointment.data('dxAppointmentStartDate').getTime() === startDate.getTime();
-        });
+        })[0];
     },
 
     setTargetedAppointmentResources: function(targetedAppointment, appointmentElement, appointmentIndex) {

@@ -37,3 +37,47 @@ test(`Drag-n-drop in the "month" view`, async t => {
     currentView: "month",
     dataSource: dataSource
 }));
+
+test(`Drag recurrent appointment occurrence from collector (T832887)`, async t => {
+    const scheduler = new Scheduler("#container");
+    const appointment = scheduler.getAppointment("Recurrence two");
+    const collector = scheduler.getAppointmentCollector("2");
+    const appointmentTooltip = scheduler.appointmentTooltip;
+    const appointmentTooltipItem = appointmentTooltip.getListItem("Recurrence two");
+    const popup = scheduler.getDialog();
+
+    await t
+        .click(collector.element)
+        .expect(appointmentTooltip.isVisible()).ok()
+        .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 2))
+        .expect(appointmentTooltipItem.element.exists).notOk()
+        .click(popup.appointment)
+        .expect(appointment.element.exists).ok()
+        .expect(appointment.date.startTime).eql("5:00 AM")
+        .expect(appointment.date.endTime).eql("7:00 AM")
+
+}).before(() => createScheduler({
+    views: ["week"],
+    currentView: "week",
+    firstDayOfWeek: 2,
+    startDayHour: 4,
+    maxAppointmentsPerCell: 1,
+    dataSource: [{
+        text: "Recurrence one",
+        startDate: new Date(2019, 2, 26, 8, 0),
+        endDate: new Date(2019, 2, 26, 10, 0),
+        recurrenceException: "",
+        recurrenceRule: "FREQ=DAILY"
+    }, {
+        text: "Non-recurrent appointment",
+        startDate: new Date(2019, 2, 26, 7, 0),
+        endDate: new Date(2019, 2, 26, 11, 0),
+    }, {
+        text: "Recurrence two",
+        startDate: new Date(2019, 2, 26, 8, 0),
+        endDate: new Date(2019, 2, 26, 10, 0),
+        recurrenceException: "",
+        recurrenceRule: "FREQ=DAILY"
+    }],
+    currentDate: new Date(2019, 2, 26), 
+}));
