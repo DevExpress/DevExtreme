@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
-
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
@@ -19,17 +19,304 @@
     <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>-->
 
+    <!-- <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.2/jszip.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.6/quill.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/1.7.0/exceljs.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <style>
+        #native-container, #native-scrollable {
+            width: 200px;
+            height: 200px;
+            border: 1px solid grey;
+        }
+
+        img {
+    height: 100px;
+    display: block;
+}
+
+        /* #gridContainer{
+            width: 500px;
+        } */
+    </style>
 </head>
+
 <body>
-    <div id="button"></div>
+
+
+    <div id="exceljsbutton"></div>
+    <hr>
+    <div id="gridContainer"></div>
+
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+        $(function () {
+            const dateFormats = ["millisecond", "second", "minute", "hour", "day", "month", "year", "quarter", "monthAndDay", "monthAndYear", "quarterAndYear", "shotDate", "shortTime", "longDateLongTime", "shotDateShortTime", "dayOfWeek"];
+            const date = new Date(2019, 9, 9, 9, 9, 9, 9);
+            const ds = [
+                    { f1: "=СУММ(1+1)", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2", f4: "f4_1" }
+                ];
+
+                var dataSource = [];
+  for(var i = 0; i < 10000; i++) {
+    dataSource[i] = {};
+    for(var j = 0; j < 50; j++) {
+      dataSource[i]["f" + j] = i + j;
+    }
+  }
+
+
+            var rowViews;
+
+            $("#exceljsbutton").dxButton({
+                type: "danger",
+                text: "ExcelJSExport",
+                onClick: () => {
+                    exportToExcel($("#gridContainer").dxDataGrid("instance"));
+                }
+            })
+
+            function exportToExcel(component) {
+                component.option("loadPanel.enabled", true);
+                rowViews.option("loadPanel.animation", null);
+                rowViews.setLoading(true, "Export to .xlsx")
+
+                var workbook = new ExcelJS.Workbook();
+                var worksheet = workbook.addWorksheet('Main sheet');
+                
+                setTimeout(() => { // for demonstrate only
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: component,
+                        worksheet: worksheet
+                    }).then(function () {
+                        rowViews.setLoading(true, "Save to file...")
+                        workbook.xlsx.writeBuffer().then(function (buffer) {
+                            new Promise((resolve) => {
+                                saveAs(new Blob([buffer], { type: "application/octet-stream" }), "ExcelJSFormat.xlsx");
+
+                                resolve();
+                            }).then(() => {
+                                rowViews.setLoading(true, "File saved")
+                                rowViews.setLoading(false);
+                            })
+                        });
+                    });
+                }, 1000);
+            }
+
+
+            $("#gridContainer").dxDataGrid({
+                dataSource: [{ a: 1 }, { a: 2 }, { a: 3 }],
+                showBorders: true,
+                // loadPanel: {
+                //     enabled: true,
+                //     text: "Load data..."
+                // },
+                // paging: {
+                //     enabled: true
+                // },
+                onContentReady: function(e) {
+                    rowViews = e.component.getView("rowsView");
+                },
+                onExporting: function(e) {
+                    //exportToExcel(e.component);
+
+                    var workbook = new ExcelJS.Workbook();
+                    var worksheet = workbook.addWorksheet('Main sheet');
+                    
+                    e.component.option("loadPanel.onShown", function(e) {
+                        console.log('e.component.shown:', e.component);
+                    })
+                    console.log('e.component :', e.component);
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: e.component,
+                        worksheet: worksheet
+                    }).then(function (range) {
+                        console.log('range :', range);
+                        workbook.xlsx.writeBuffer().then(function (buffer) {
+                            console.log('"loadStart" :', "loadStart");
+                            new Promise((resolve) => {
+                                saveAs(new Blob([buffer], { type: "application/octet-stream" }), "ExcelJSFormat.xlsx");
+
+                                resolve();
+                            }).then(() => {
+                                console.log('"loadEnd" :', "loadEnd");
+                            })
+                        });
+                    });
+
+                    e.cancel = true;
+                },
+                export: {
+                    enabled: true,
+                    fileName: "DefaultFormat"
+                }
             });
+
+            // dateFormats
+            // const dateFormats = ["millisecond", "second", "minute", "hour", "day", "month", "year", "quarter", "monthAndDay", "monthAndYear", "quarterAndYear", "shotDate", "shortTime", "longDateLongTime", "shotDateShortTime", "dayOfWeek"];
+            // const date = new Date(2019, 9, 9, 9, 9, 9, 9);
+            // const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
+            // $("#exceljsbutton").dxButton({
+            //     type: "danger",
+            //     text: "ExcelJSExport",
+            //     onClick: () => {
+            //         var workbook = new ExcelJS.Workbook();
+            //         var worksheet = workbook.addWorksheet('Main sheet');
+
+            //         DevExpress.excelExporter.exportDataGrid({
+            //             component: $("#gridContainer").dxDataGrid("instance"),
+            //             worksheet: worksheet,
+            //             customizeCell: (e) => {
+            //                 console.log('E :', e);
+            //             }
+            //         }).then(function () {
+            //             workbook.xlsx.writeBuffer().then(function (buffer) {
+            //                 saveAs(new Blob([buffer], { type: "application/octet-stream" }), "ExcelJSFormat.xlsx");
+            //             });
+            //         });
+            //     }
+            // })
+            // console.log('object :', dateFormats.map((format, index) => { return { dataField: "f1", dataType: "number", format: format }; }));
+            // $("#gridContainer").dxDataGrid({
+            //     dataSource: ds,
+            //     columns: [
+            //         { dataField: "f1", dataType: "number", format: { type: "currency", currency: "RUB" } },
+            //         { dataField: "f2", dataType: "number", format: { type: "currency", currency: "RUB" } },
+            //         { dataField: "f3", dataType: "number", format: { type: "currency", currency: "RUB" } },
+            //         { dataField: "f4", dataType: "number", format: { type: "currency", currency: "RUB" } },
+            //         { dataField: "f5", dataType: "number", format: { type: "currency", currency: "RUB" } },
+            //         { dataField: "f6", dataType: "number", format: { type: "currency", currency: "RUB" } }
+            //     ],
+            //     showColumnHeaders: false,
+            //     export: {
+            //         enabled: true,
+            //         fileName: "DefaultFormat"
+            //     },
+            //     // onExporting: e => {
+            //     //     var workbook = new ExcelJS.Workbook();    
+            //     //     var worksheet = workbook.addWorksheet('Main sheet');
+
+            //     //     DevExpress.excelExporter.exportDataGrid({
+            //     //         component: e.component,
+            //     //         worksheet: worksheet,
+            //     //         keepColumnWidths: true
+            //     //     }).then(function() {
+            //     //         workbook.xlsx.writeBuffer().then(function(buffer) {
+            //     //             saveAs(new Blob([buffer], { type: "application/octet-stream" }), "DefaultFormat.xlsx");
+            //     //         });
+            //     //     });
+            //     //     e.cancel = true;
+            //     // }
+            // });
         });
+
+var employees = [{
+    "ID": 1,
+    "FirstName": "John",
+    "LastName": "Heart",
+    "Prefix": "Mr.",
+    "Position": "CEO",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/01.png",
+    "BirthDate": "1964/03/16",
+    "HireDate": "1995/01/15",
+    "Notes": "John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.\r\n\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.",
+    "Address": "351 S Hill St."
+}, {
+    "ID": 20,
+    "FirstName": "Olivia",
+    "LastName": "Peyton",
+    "Prefix": "Mrs.",
+    "Position": "Sales Assistant",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/09.png",
+    "BirthDate": "1981/06/03",
+    "HireDate": "2012/05/14",
+    "Notes": "Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.",
+    "Address": "807 W Paseo Del Mar"
+}, {
+    "ID": 4,
+    "FirstName": "Robert",
+    "LastName": "Reagan",
+    "Prefix": "Mr.",
+    "Position": "CMO",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/03.png",
+    "BirthDate": "1974/09/07",
+    "HireDate": "2002/11/08",
+    "Notes": "Robert was recently voted the CMO of the year by CMO Magazine. He is a proud member of the DevAV Management Team.\r\n\r\nRobert is a championship BBQ chef, so when you get the chance ask him for his secret recipe.",
+    "Address": "4 Westmoreland Pl."
+}, {
+    "ID": 5,
+    "FirstName": "Greta",
+    "LastName": "Sims",
+    "Prefix": "Ms.",
+    "Position": "HR Manager",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/04.png",
+    "BirthDate": "1977/11/22",
+    "HireDate": "1998/04/23",
+    "Notes": "Greta has been DevAV's HR Manager since 2003. She joined DevAV from Sonee Corp.\r\n\r\nGreta is currently training for the NYC marathon. Her best marathon time is 4 hours. Go Greta.",
+    "Address": "1700 S Grandview Dr."
+}, {
+    "ID": 6,
+    "FirstName": "Brett",
+    "LastName": "Wade",
+    "Prefix": "Mr.",
+    "Position": "IT Manager",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/05.png",
+    "BirthDate": "1968/12/01",
+    "HireDate": "2009/03/06",
+    "Notes": "Brett came to DevAv from Microsoft and has led our IT department since 2012.\r\n\r\nWhen he is not working hard for DevAV, he coaches Little League (he was a high school pitcher).",
+    "Address": "1120 Old Mill Rd."
+}, {
+    "ID": 7,
+    "FirstName": "Sandra",
+    "LastName": "Johnson",
+    "Prefix": "Mrs.",
+    "Position": "Controller",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/06.png",
+    "BirthDate": "1974/11/15",
+    "HireDate": "2005/05/11",
+    "Notes": "Sandra is a CPA and has been our controller since 2008. She loves to interact with staff so if you've not met her, be certain to say hi.\r\n\r\nSandra has 2 daughters both of whom are accomplished gymnasts.",
+    "Address": "4600 N Virginia Rd."
+}, {
+    "ID": 10,
+    "FirstName": "Kevin",
+    "LastName": "Carter",
+    "Prefix": "Mr.",
+    "Position": "Shipping Manager",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/07.png",
+    "BirthDate": "1978/01/09",
+    "HireDate": "2009/08/11",
+    "Notes": "Kevin is our hard-working shipping manager and has been helping that department work like clockwork for 18 months.\r\n\r\nWhen not in the office, he is usually on the basketball court playing pick-up games.",
+    "Address": "424 N Main St."
+}, {
+    "ID": 11,
+    "FirstName": "Cynthia",
+    "LastName": "Stanwick",
+    "Prefix": "Ms.",
+    "Position": "HR Assistant",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/08.png",
+    "BirthDate": "1985/06/05",
+    "HireDate": "2008/03/24",
+    "Notes": "Cindy joined us in 2008 and has been in the HR department for 2 years. \r\n\r\nShe was recently awarded employee of the month. Way to go Cindy!",
+    "Address": "2211 Bonita Dr."
+}, {
+    "ID": 30,
+    "FirstName": "Kent",
+    "LastName": "Samuelson",
+    "Prefix": "Dr.",
+    "Position": "Ombudsman",
+    "Picture": "https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/employees/02.png",
+    "BirthDate": "1972/09/11",
+    "HireDate": "2009/04/22",
+    "Notes": "As our ombudsman, Kent is on the front-lines solving customer problems and helping our partners address issues out in the field.    He is a classically trained musician and is a member of the Chamber Orchestra.",
+    "Address": "12100 Mora Dr"
+}
+];
     </script>
 </body>
+
 </html>
