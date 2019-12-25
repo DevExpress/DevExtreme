@@ -1,15 +1,15 @@
-var lineSeries = require("./line_series").chart.line,
-    scatterSeries = require("./scatter_series").chart,
-    areaSeries = require("./area_series").chart.area,
-    barSeries = require("./bar_series"),
+var lineSeries = require('./line_series').chart.line,
+    scatterSeries = require('./scatter_series').chart,
+    areaSeries = require('./area_series').chart.area,
+    barSeries = require('./bar_series'),
     chartBarSeries = barSeries.chart.bar,
     polarBarSeries = barSeries.polar.bar,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
 
     _extend = extend,
     _each = each,
-    _noop = require("../../core/utils/common").noop;
+    _noop = require('../../core/utils/common').noop;
 
 exports.chart = {};
 exports.chart.bubble = _extend({}, scatterSeries, {
@@ -74,11 +74,11 @@ exports.chart.bubble = _extend({}, scatterSeries, {
     },
 
     getValueFields: function() {
-        return [this._options.valueField || "val"];
+        return [this._options.valueField || 'val'];
     },
 
     getSizeField: function() {
-        return this._options.sizeField || "size";
+        return this._options.sizeField || 'size';
     },
 
     _animate: function() {

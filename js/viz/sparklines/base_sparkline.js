@@ -1,31 +1,31 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    domAdapter = require("../../core/dom_adapter"),
-    ready = require("../../core/utils/ready_callbacks").add,
-    isFunction = require("../../core/utils/type").isFunction,
-    BaseWidget = require("../core/base_widget"),
-    extend = require("../../core/utils/extend").extend,
+var eventsEngine = require('../../events/core/events_engine'),
+    domAdapter = require('../../core/dom_adapter'),
+    ready = require('../../core/utils/ready_callbacks').add,
+    isFunction = require('../../core/utils/type').isFunction,
+    BaseWidget = require('../core/base_widget'),
+    extend = require('../../core/utils/extend').extend,
 
     DEFAULT_LINE_SPACING = 2,
     DEFAULT_EVENTS_DELAY = 100,
 
-    eventUtils = require("../../events/utils"),
-    translator2DModule = require("../translators/translator2d"),
+    eventUtils = require('../../events/utils'),
+    translator2DModule = require('../translators/translator2d'),
 
     _extend = extend,
-    _noop = require("../../core/utils/common").noop;
+    _noop = require('../../core/utils/common').noop;
 
 function generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled) {
     var lineSpacing = fontOptions.lineSpacing,
         lineHeight = ((lineSpacing !== undefined && lineSpacing !== null) ? lineSpacing : DEFAULT_LINE_SPACING) + fontOptions.size;
 
     return function(customizeObject) {
-        var html = "",
+        var html = '',
             vt = customizeObject.valueText;
         for(var i = 0; i < vt.length; i += 2) {
-            html += "<tr><td>" + vt[i] + "</td><td style='width: 15px'></td><td style='text-align: " + (rtlEnabled ? "left" : "right") + "'>" + vt[i + 1] + "</td></tr>";
+            html += '<tr><td>' + vt[i] + '</td><td style=\'width: 15px\'></td><td style=\'text-align: ' + (rtlEnabled ? 'left' : 'right') + '\'>' + vt[i + 1] + '</td></tr>';
         }
 
-        return { html: "<table style='border-spacing:0px; line-height: " + lineHeight + "px'>" + html + "</table>" };
+        return { html: '<table style=\'border-spacing:0px; line-height: ' + lineHeight + 'px\'>' + html + '</table>' };
     };
 }
 
@@ -35,7 +35,7 @@ function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnab
     if(isFunction(customizeTooltip)) {
         return function(customizeObject) {
             var res = customizeTooltip.call(customizeObject, customizeObject);
-            if(!("html" in res) && !("text" in res)) {
+            if(!('html' in res) && !('text' in res)) {
                 _extend(res, defaultCustomizeTooltip.call(customizeObject, customizeObject));
             }
             return res;
@@ -71,12 +71,12 @@ var BaseSparkline = BaseWidget.inherit({
     _getLayoutItems: _noop,
     _useLinks: false,
 
-    _themeDependentChanges: ["OPTIONS"],
+    _themeDependentChanges: ['OPTIONS'],
 
     _initCore: function() {
         var that = this;
         that._tooltipTracker = that._renderer.root;
-        that._tooltipTracker.attr({ "pointer-events": "visible" });
+        that._tooltipTracker.attr({ 'pointer-events': 'visible' });
         that._createHtmlElements();
         that._initTooltipEvents();
 
@@ -94,14 +94,14 @@ var BaseSparkline = BaseWidget.inherit({
         this._ranges = null;
     },
 
-    _optionChangesOrder: ["OPTIONS"],
+    _optionChangesOrder: ['OPTIONS'],
 
     _change_OPTIONS: function() {
         this._prepareOptions();
-        this._change(["UPDATE"]);
+        this._change(['UPDATE']);
     },
 
-    _customChangesOrder: ["UPDATE"],
+    _customChangesOrder: ['UPDATE'],
 
     _change_UPDATE: function() {
         this._update();
@@ -130,7 +130,7 @@ var BaseSparkline = BaseWidget.inherit({
 
     _applySize: function(rect) {
         this._allOptions.size = { width: rect[2] - rect[0], height: rect[3] - rect[1] };
-        this._change(["UPDATE"]);
+        this._change(['UPDATE']);
     },
 
     _setupResizeHandler: _noop,
@@ -212,18 +212,18 @@ var BaseSparkline = BaseWidget.inherit({
 
 // for ie11
 var menuEvents = {
-    "contextmenu.sparkline-tooltip": function(event) {
+    'contextmenu.sparkline-tooltip': function(event) {
         if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
             event.preventDefault();
         }
     },
-    "MSHoldVisual.sparkline-tooltip": function(event) {
+    'MSHoldVisual.sparkline-tooltip': function(event) {
         event.preventDefault();
     }
 };
 
 var mouseEvents = {
-    "mouseover.sparkline-tooltip": function(event) {
+    'mouseover.sparkline-tooltip': function(event) {
         isPointerDownCalled = false;
         var widget = event.data.widget;
         widget._x = event.pageX;
@@ -231,7 +231,7 @@ var mouseEvents = {
         widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
         widget._showTooltip();
     },
-    "mouseout.sparkline-tooltip": function(event) {
+    'mouseout.sparkline-tooltip': function(event) {
         if(isPointerDownCalled) {
             return;
         }
@@ -242,7 +242,7 @@ var mouseEvents = {
 };
 
 var mouseMoveEvents = {
-    "mousemove.sparkline-tooltip": function(event) {
+    'mousemove.sparkline-tooltip': function(event) {
         var widget = event.data.widget;
         widget._x = event.pageX;
         widget._y = event.pageY;
@@ -281,18 +281,18 @@ var active_touch_tooltip_widget = null,
 
 
 var touchEvents = {
-    "pointerdown.sparkline-tooltip": touchStartTooltipProcessing,
-    "touchstart.sparkline-tooltip": touchStartTooltipProcessing
+    'pointerdown.sparkline-tooltip': touchStartTooltipProcessing,
+    'touchstart.sparkline-tooltip': touchStartTooltipProcessing
 };
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
-        "pointerdown.sparkline-tooltip": function() {
+        'pointerdown.sparkline-tooltip': function() {
             isPointerDownCalled = true;
             touchStartDocumentProcessing();
         },
-        "touchstart.sparkline-tooltip": touchStartDocumentProcessing,
-        "pointerup.sparkline-tooltip": touchEndDocumentProcessing,
-        "touchend.sparkline-tooltip": touchEndDocumentProcessing
+        'touchstart.sparkline-tooltip': touchStartDocumentProcessing,
+        'pointerup.sparkline-tooltip': touchEndDocumentProcessing,
+        'touchend.sparkline-tooltip': touchEndDocumentProcessing
     });
 });
 
@@ -305,7 +305,7 @@ module.exports._DEBUG_reset = function() {
 ///#ENDDEBUG
 
 // PLUGINS_SECTION
-BaseSparkline.addPlugin(require("../core/tooltip").plugin);
+BaseSparkline.addPlugin(require('../core/tooltip').plugin);
 
 // These are sparklines specifics on using tooltip - they cannot be omitted because of tooltip laziness.
 var _initTooltip = BaseSparkline.prototype._initTooltip;
@@ -326,9 +326,9 @@ BaseSparkline.prototype._setTooltipRendererOptions = function() {
 };
 BaseSparkline.prototype._setTooltipOptions = function() {
     var tooltip = this._tooltip,
-        options = tooltip && this._getOption("tooltip");
+        options = tooltip && this._getOption('tooltip');
     tooltip && tooltip.update(_extend({}, options, {
-        customizeTooltip: generateCustomizeTooltipCallback(options.customizeTooltip, options.font, this.option("rtlEnabled")),
+        customizeTooltip: generateCustomizeTooltipCallback(options.customizeTooltip, options.font, this.option('rtlEnabled')),
         enabled: options.enabled && this._isTooltipEnabled()
     }));
 };
@@ -363,7 +363,7 @@ BaseSparkline.prototype._hideTooltip = function(delay) {
 
 // PLUGINS_SECTION
 // T422022
-var exportPlugin = extend(true, {}, require("../core/export").plugin, {
+var exportPlugin = extend(true, {}, require('../core/export').plugin, {
     init: _noop,
     dispose: _noop,
     customize: null,

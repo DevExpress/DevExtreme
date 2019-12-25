@@ -1,20 +1,20 @@
-import $ from "../../core/renderer";
-import { isDefined } from "../../core/utils/type";
-import { inArray } from "../../core/utils/array";
-import { each } from "../../core/utils/iterator";
-import { AreaItem } from "./ui.pivot_grid.area_item";
+import $ from '../../core/renderer';
+import { isDefined } from '../../core/utils/type';
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
+import { AreaItem } from './ui.pivot_grid.area_item';
 
-var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
-    PIVOTGRID_AREA_COLUMN_CLASS = "dx-pivotgrid-horizontal-headers",
-    PIVOTGRID_AREA_ROW_CLASS = "dx-pivotgrid-vertical-headers",
-    PIVOTGRID_TOTAL_CLASS = "dx-total",
-    PIVOTGRID_GRAND_TOTAL_CLASS = "dx-grandtotal",
-    PIVOTGRID_ROW_TOTAL_CLASS = "dx-row-total",
-    PIVOTGRID_EXPANDED_CLASS = "dx-pivotgrid-expanded",
-    PIVOTGRID_COLLAPSED_CLASS = "dx-pivotgrid-collapsed",
-    PIVOTGRID_LAST_CELL_CLASS = "dx-last-cell",
-    PIVOTGRID_VERTICAL_SCROLL_CLASS = "dx-vertical-scroll",
-    PIVOTGRID_EXPAND_BORDER = "dx-expand-border";
+var PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area',
+    PIVOTGRID_AREA_COLUMN_CLASS = 'dx-pivotgrid-horizontal-headers',
+    PIVOTGRID_AREA_ROW_CLASS = 'dx-pivotgrid-vertical-headers',
+    PIVOTGRID_TOTAL_CLASS = 'dx-total',
+    PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal',
+    PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total',
+    PIVOTGRID_EXPANDED_CLASS = 'dx-pivotgrid-expanded',
+    PIVOTGRID_COLLAPSED_CLASS = 'dx-pivotgrid-collapsed',
+    PIVOTGRID_LAST_CELL_CLASS = 'dx-last-cell',
+    PIVOTGRID_VERTICAL_SCROLL_CLASS = 'dx-vertical-scroll',
+    PIVOTGRID_EXPAND_BORDER = 'dx-expand-border';
 
 
 function getCellPath(tableElement, cell) {
@@ -29,7 +29,7 @@ function getCellPath(tableElement, cell) {
 
 exports.HorizontalHeadersArea = AreaItem.inherit({
     _getAreaName: function() {
-        return "column";
+        return 'column';
     },
 
     _getAreaClassName: function() {
@@ -49,7 +49,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
             classArray = options.classArray;
 
         if(options.cellIndex === options.cellsCount - 1) {
-            cssArray.push((options.rtlEnabled ? 'border-left:' : 'border-right:') + "0px");
+            cssArray.push((options.rtlEnabled ? 'border-left:' : 'border-right:') + '0px');
         }
 
         if((cell.rowspan === rowsCount - options.rowIndex) || (options.rowIndex + 1 === rowsCount)) {
@@ -74,11 +74,11 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
     },
 
     _getMainElementMarkup: function() {
-        return "<thead class='" + this._getAreaClassName() + "'>";
+        return '<thead class=\'' + this._getAreaClassName() + '\'>';
     },
 
     _getCloseMainElementMarkup: function() {
-        return "</thead>";
+        return '</thead>';
     },
 
     setVirtualContentParams: function(params) {
@@ -107,7 +107,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
                 useSimulatedScrollbar: false,
                 showScrollbar: false,
                 bounceEnabled: false,
-                direction: "horizontal",
+                direction: 'horizontal',
                 updateManually: true
             });
         }
@@ -115,7 +115,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
 
     processScrollBarSpacing: function(scrollBarWidth) {
         var that = this,
-            groupAlignment = that.option("rtlEnabled") ? "right" : "left";
+            groupAlignment = that.option('rtlEnabled') ? 'right' : 'left';
 
         if(that._groupWidth) {
             that.groupWidth(that._groupWidth - scrollBarWidth);
@@ -142,7 +142,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
 
         offset -= parseInt(tableElement[0].style.left, 10) || 0;
 
-        each(tableElement.find("td"), function(_, td) {
+        each(tableElement.find('td'), function(_, td) {
             if(td.colSpan === 1 && td.offsetLeft <= offset && td.offsetWidth + td.offsetLeft > offset) {
                 cell = td;
                 return false;
@@ -175,12 +175,12 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
         }
 
         if(options.cell.isWhiteSpace) {
-            options.classArray.push("dx-white-space-column");
+            options.classArray.push('dx-white-space-column');
         }
     },
 
     _getAreaName: function() {
-        return "row";
+        return 'row';
     },
 
     setVirtualContentParams: function(params) {
@@ -208,7 +208,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
                 useSimulatedScrollbar: false,
                 showScrollbar: false,
                 bounceEnabled: false,
-                direction: "vertical",
+                direction: 'vertical',
                 updateManually: true
             });
         }
@@ -241,7 +241,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
 
         offset -= parseInt(tableElement[0].style.top, 10) || 0;
 
-        each(tableElement.find("tr"), function(_, tr) {
+        each(tableElement.find('tr'), function(_, tr) {
             var td = tr.childNodes[tr.childNodes.length - 1];
 
             if(td && td.rowSpan === 1 && td.offsetTop <= offset && td.offsetHeight + td.offsetTop > offset) {
@@ -265,11 +265,11 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
     },
 
     _getMainElementMarkup: function() {
-        return "<tbody class='" + this._getAreaClassName() + "'>";
+        return '<tbody class=\'' + this._getAreaClassName() + '\'>';
     },
 
     _getCloseMainElementMarkup: function() {
-        return "</tbody>";
+        return '</tbody>';
     },
 
     updateColspans: function(columnCount) {

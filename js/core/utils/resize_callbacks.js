@@ -1,8 +1,8 @@
-var windowUtils = require("./window"),
-    domAdapter = require("../dom_adapter"),
-    Callbacks = require("./callbacks"),
-    readyCallbacks = require("./ready_callbacks"),
-    callOnce = require("./call_once");
+var windowUtils = require('./window'),
+    domAdapter = require('../dom_adapter'),
+    Callbacks = require('./callbacks'),
+    readyCallbacks = require('./ready_callbacks'),
+    callOnce = require('./call_once');
 
 var resizeCallbacks = (function() {
     var prevSize,
@@ -15,10 +15,10 @@ var resizeCallbacks = (function() {
     }
 
     var formatSize = function() {
-        var documentElement = domAdapter.getDocumentElement();
+        var window = windowUtils.getWindow();
         return {
-            width: documentElement.clientWidth,
-            height: documentElement.clientHeight
+            width: window.innerWidth,
+            height: window.innerHeight,
         };
     };
 
@@ -54,7 +54,7 @@ var resizeCallbacks = (function() {
 
         readyCallbacks.add(function() {
             if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(windowUtils.getWindow(), "resize", handleResize);
+                removeListener = domAdapter.listen(windowUtils.getWindow(), 'resize', handleResize);
             }
         });
 

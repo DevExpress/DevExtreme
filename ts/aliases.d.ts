@@ -1,3 +1,10 @@
+declare module DevExpress {
+    /** @deprecated Use DevExpress.events.dxEvent instead */
+    export type dxEvent = DevExpress.events.dxEvent
+    /** @deprecated Use DevExpress.events.event instead */
+    export type event = DevExpress.events.event
+}
+
 declare module DevExpress.viz {
     /** @deprecated Use DevExpress.viz.ChartSeries instead */
     export type dxChartSeries =  DevExpress.viz.ChartSeries;
@@ -40,7 +47,7 @@ declare module DevExpress.viz {
         export type dxChartValueAxisStrips = DevExpress.viz.dxChartValueAxisStrips;
         export type dxChartValueAxisStripsLabel = DevExpress.viz.dxChartValueAxisStripsLabel;
         export type dxChartValueAxisTitle = DevExpress.viz.dxChartValueAxisTitle;
-        
+
         export type dxPieChartOptions = DevExpress.viz.dxPieChartOptions;
         export type dxPieChartAdaptiveLayout = DevExpress.viz.dxPieChartAdaptiveLayout;
         export type dxPieChartLegend = DevExpress.viz.dxPieChartLegend;
@@ -86,12 +93,12 @@ declare module DevExpress.viz {
         export type dxCircularGaugeRangeContainer = DevExpress.viz.dxCircularGaugeRangeContainer;
         export type dxCircularGaugeScale = DevExpress.viz.dxCircularGaugeScale;
         export type dxCircularGaugeScaleLabel = DevExpress.viz.dxCircularGaugeScaleLabel;
-    
+
         export type dxLinearGaugeOptions = DevExpress.viz.dxLinearGaugeOptions;
         export type dxLinearGaugeRangeContainer = DevExpress.viz.dxLinearGaugeRangeContainer;
         export type dxLinearGaugeScale = DevExpress.viz.dxLinearGaugeScale;
         export type dxLinearGaugeScaleLabel = DevExpress.viz.dxLinearGaugeScaleLabel;
-        
+
         export type dxBarGaugeOptions = DevExpress.viz.dxBarGaugeOptions;
         export type dxBarGaugeTooltip = DevExpress.viz.dxBarGaugeTooltip;
     }

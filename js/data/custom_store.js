@@ -1,23 +1,23 @@
-var $ = require("../core/renderer"),
-    dataUtils = require("./utils"),
-    arrayUtils = require("./array_utils"),
-    isFunction = require("../core/utils/type").isFunction,
-    config = require("../core/config"),
-    errors = require("./errors").errors,
-    Store = require("./abstract_store"),
-    arrayQuery = require("./array_query"),
-    queryByOptions = require("./store_helper").queryByOptions,
-    deferredUtils = require("../core/utils/deferred"),
+var $ = require('../core/renderer'),
+    dataUtils = require('./utils'),
+    arrayUtils = require('./array_utils'),
+    isFunction = require('../core/utils/type').isFunction,
+    config = require('../core/config'),
+    errors = require('./errors').errors,
+    Store = require('./abstract_store'),
+    arrayQuery = require('./array_query'),
+    queryByOptions = require('./store_helper').queryByOptions,
+    deferredUtils = require('../core/utils/deferred'),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     fromPromise = deferredUtils.fromPromise;
 
-var TOTAL_COUNT = "totalCount",
-    LOAD = "load",
-    BY_KEY = "byKey",
-    INSERT = "insert",
-    UPDATE = "update",
-    REMOVE = "remove";
+var TOTAL_COUNT = 'totalCount',
+    LOAD = 'load',
+    BY_KEY = 'byKey',
+    INSERT = 'insert',
+    UPDATE = 'update',
+    REMOVE = 'remove';
 
 function isPromise(obj) {
     return obj && isFunction(obj.then);
@@ -29,12 +29,12 @@ function trivialPromise(value) {
 
 function ensureRequiredFuncOption(name, obj) {
     if(!isFunction(obj)) {
-        throw errors.Error("E4011", name);
+        throw errors.Error('E4011', name);
     }
 }
 
 function throwInvalidUserFuncResult(name) {
-    throw errors.Error("E4012", name);
+    throw errors.Error('E4012', name);
 }
 
 function createUserFuncFailureHandler(pendingDeferred) {
@@ -55,7 +55,7 @@ function createUserFuncFailureHandler(pendingDeferred) {
         if(arg instanceof Error) {
             error = arg;
         } else {
-            error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || "Unknown error");
+            error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || 'Unknown error');
         }
 
         if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
@@ -89,7 +89,7 @@ function invokeUserTotalCountFunc(store, options) {
         userResult;
 
     if(!isFunction(userFunc)) {
-        throw errors.Error("E4021");
+        throw errors.Error('E4021');
     }
 
     userResult = userFunc.apply(store, [options]);
@@ -147,7 +147,7 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
     options = options || { };
 
     var userFuncOptions = { };
-    if("userData" in options) {
+    if('userData' in options) {
         userFuncOptions.userData = options.userData;
     }
 
@@ -211,7 +211,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
             }
         }
 
-        pendingDeferred.reject(errors.Error("E4009"));
+        pendingDeferred.reject(errors.Error('E4009'));
     });
 }
 
@@ -311,7 +311,7 @@ var CustomStore = Store.inherit({
          * @type boolean
          * @default undefined
          */
-        this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === "raw";
+        this._useDefaultSearch = !!options.useDefaultSearch || options.loadMode === 'raw';
 
         /**
          * @name CustomStoreOptions.loadMode
@@ -381,7 +381,7 @@ var CustomStore = Store.inherit({
     },
 
     createQuery: function() {
-        throw errors.Error("E4010");
+        throw errors.Error('E4010');
     },
 
     /**
@@ -395,7 +395,7 @@ var CustomStore = Store.inherit({
     _totalCountImpl: function(options) {
         var d = new Deferred();
 
-        if(this._loadMode === "raw" && !this._totalCountFunc) {
+        if(this._loadMode === 'raw' && !this._totalCountFunc) {
             runRawLoadWithQuery(d, this, options, true);
         } else {
             invokeUserTotalCountFunc(this, options)
@@ -416,7 +416,7 @@ var CustomStore = Store.inherit({
     _loadImpl: function(options) {
         var d = new Deferred();
 
-        if(this._loadMode === "raw") {
+        if(this._loadMode === 'raw') {
             runRawLoadWithQuery(d, this, options, false);
         } else {
             invokeUserLoad(this, options)
@@ -444,7 +444,7 @@ var CustomStore = Store.inherit({
     },
 
     _byKeyViaLoad: function() {
-        return this._loadMode === "raw" && !this._byKeyFunc;
+        return this._loadMode === 'raw' && !this._byKeyFunc;
     },
 
     _insertImpl: function(values) {

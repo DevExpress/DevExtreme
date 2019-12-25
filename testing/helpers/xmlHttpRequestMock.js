@@ -54,14 +54,14 @@ window.XMLHttpRequestMock = function() {
         this.uploaded = false;
         this.uploadAborted = false;
         this.uploadFailed = false;
-        if("withCredentials" in (new RealXMLHttpRequest())) {
+        if('withCredentials' in (new RealXMLHttpRequest())) {
             this.withCredentials = false;
         }
 
         this._timeout = null;
 
         this._getLoadedSize = function() {
-            return (this.onProgressCallCount + 1) * this._stepSize;
+            return Math.floor((this.onProgressCallCount + 1) * this._stepSize);
         };
 
         this._isStatusError = function() {
@@ -84,8 +84,8 @@ window.XMLHttpRequestMock = function() {
 
             this.loadedSize = progressEvent.loaded;
             this.onProgressCallCount++;
-            if(this.upload["onprogress"]) {
-                this.upload["onprogress"](progressEvent);
+            if(this.upload['onprogress']) {
+                this.upload['onprogress'](progressEvent);
             }
 
             if(progressEvent.loaded >= progressEvent.total) {
@@ -100,7 +100,7 @@ window.XMLHttpRequestMock = function() {
                 this.upload.onload(progressEvent);
                 this.readyState = 4;
                 this.status = STATUS;
-                this["onreadystatechange"](readyStateEvent);
+                this['onreadystatechange'](readyStateEvent);
             } else {
                 this._timeout = setTimeout($.proxy(this._progressHandler, this), PROGRESS_INTERVAL);
             }
@@ -123,7 +123,7 @@ window.XMLHttpRequestMock = function() {
             this.upload.onerror(errorEvent);
             this.status = STATUS;
             this.readyState = 4;
-            this["onreadystatechange"](readyStateEvent);
+            this['onreadystatechange'](readyStateEvent);
         };
 
         this.setRequestHeader = function(name, value) {
@@ -138,7 +138,7 @@ window.XMLHttpRequestMock = function() {
 
         this.send = function(data) {
             if(!this._opened) {
-                throw Error("Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED.");
+                throw Error('Failed to execute \'send\' on \'XMLHttpRequest\': The object\'s state must be OPENED.');
             }
 
             this.uploadStarted = true;
@@ -156,23 +156,23 @@ window.XMLHttpRequestMock = function() {
             this._fileSize = file && file.size;
 
             this._stepSize = this._fileSize * PROGRESS_INTERVAL / LOAD_TIMEOUT;
-            this.upload["onloadstart"]();
+            this.upload['onloadstart']();
             this._progressHandler();
         };
 
         this.abort = function() {
             this.uploadAborted = true;
-            this.upload["onabort"]();
+            this.upload['onabort']();
         };
 
-        this["onreadystatechange"] = function() {};
+        this['onreadystatechange'] = function() {};
 
         this.upload = {
-            "onabort": function() {},
-            "onprogress": function() {},
-            "onload": function() {},
-            "onerror": function() {},
-            "onloadstart": function() {}
+            'onabort': function() {},
+            'onprogress': function() {},
+            'onload': function() {},
+            'onerror': function() {},
+            'onloadstart': function() {}
         };
 
         xhrList.push(this);
@@ -195,7 +195,7 @@ window.FormDataMock = function() {
         this.fields = [];
 
         this.append = function(fieldName, fieldValue) {
-            this.fields.push({ "fieldName": fieldName, "fieldValue": fieldValue });
+            this.fields.push({ 'fieldName': fieldName, 'fieldValue': fieldValue });
         };
 
         this.getTopElement = function() {

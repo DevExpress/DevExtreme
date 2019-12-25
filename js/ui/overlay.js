@@ -5,4 +5,4 @@
 * @module ui/overlay
 * @hidden
 */
-module.exports = require("./overlay/ui.overlay");
+module.exports = require('./overlay/ui.overlay');

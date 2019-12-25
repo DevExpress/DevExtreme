@@ -1,0 +1,34 @@
+name: QUnit IE
+
+on: [push]
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        CONSTEL: [ export, misc, ui, ui.editors, ui.grid, ui.scheduler, viz ]
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run npm install
+      run: npm install
+    - name: Transpile tests
+      run: node .\node_modules\gulp\bin\gulp.js transpile-tests
+    - name: Run npm run build
+      env:
+        DEVEXTREME_QUNIT_CI: true
+      run: npm run build
+    - name: Run QUnit tests
+      env:
+        CONSTEL: ${{ matrix.CONSTEL }}
+      run: |
+        $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -passthru -RedirectStandardOutput "output.txt"
+        $url = "http://localhost:20050/run?notimers=true&nojquery=true&constellation=$env:CONSTEL"
+        Start-Sleep -s 3
+        & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
+        Wait-Process -InputObject $runner
+        Get-Content -Path .\output.txt
+        exit $runner.ExitCode

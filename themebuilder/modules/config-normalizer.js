@@ -1,22 +1,22 @@
 /* global console */
 /* eslint no-console: 0 */
 
-const commands = require("./commands");
-const themes = require("./themes");
+const commands = require('./commands');
+const themes = require('./themes');
 
-const DEFAULT_OUT_COLOR_SCHEME = "custom-scheme";
+const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 
-const extname = filename => filename.substring(filename.lastIndexOf("."));
+const extname = filename => filename.substring(filename.lastIndexOf('.'));
 
 const getBootstrapConfig = fileName => {
     const extension = extname(fileName);
     let bootstrap = false;
     let version = 0;
 
-    if(extension === ".scss") {
+    if(extension === '.scss') {
         bootstrap = true;
         version = 4;
-    } else if(extension === ".less") {
+    } else if(extension === '.less') {
         bootstrap = true;
         version = 3;
     }
@@ -25,8 +25,8 @@ const getBootstrapConfig = fileName => {
 };
 
 const getOutParameters = (command, themeName, config) => {
-    let outputFile = config.outputFile || "";
-    let outColorScheme = config.outputColorScheme || "";
+    let outputFile = config.outputFile || '';
+    let outColorScheme = config.outputColorScheme || '';
     let fileFormat = config.outputFormat || extname(outputFile).substr(1);
 
     const makeSwatch = !!config.makeSwatch;
@@ -42,19 +42,19 @@ const getOutParameters = (command, themeName, config) => {
     if(!fileFormat) {
         switch(command) {
             case commands.BUILD_THEME:
-                fileFormat = "css";
+                fileFormat = 'css';
                 break;
             case commands.BUILD_VARS:
-                fileFormat = "less";
+                fileFormat = 'less';
                 break;
             case commands.BUILD_META:
-                fileFormat = "json";
+                fileFormat = 'json';
                 break;
         }
     }
 
     if(!outputFile) {
-        outputFile = "dx." + themeName + "." + outColorScheme + "." + fileFormat;
+        outputFile = 'dx.' + themeName + '.' + outColorScheme + '.' + fileFormat;
     }
 
     return {
@@ -67,14 +67,14 @@ const getOutParameters = (command, themeName, config) => {
 };
 
 const getThemeAndColorScheme = config => {
-    let themeName = "generic";
-    let colorScheme = "light";
+    let themeName = 'generic';
+    let colorScheme = 'light';
     let foundTheme = null;
 
     if(config.baseTheme) {
-        const dotIndex = config.baseTheme.indexOf(".");
+        const dotIndex = config.baseTheme.indexOf('.');
         const passedThemeName = config.baseTheme.substr(0, dotIndex);
-        const passedColorScheme = config.baseTheme.substr(dotIndex + 1).replace(/\./g, "-");
+        const passedColorScheme = config.baseTheme.substr(dotIndex + 1).replace(/\./g, '-');
 
         console.log(passedThemeName, passedColorScheme);
 
@@ -100,11 +100,11 @@ const getThemeAndColorScheme = config => {
     };
 };
 
-const normalizePath = path => path + (path[path.length - 1] !== "/" ? "/" : "");
+const normalizePath = path => path + (path[path.length - 1] !== '/' ? '/' : '');
 
 const parseConfig = config => {
     const command = config.command;
-    const metadataFilePath = config.inputFile || "";
+    const metadataFilePath = config.inputFile || '';
     const themeInfo = getThemeAndColorScheme(config);
     const bootstrapConfig = getBootstrapConfig(metadataFilePath);
     const output = getOutParameters(command, themeInfo.themeName, config);

@@ -1,12 +1,12 @@
-import "common.css!";
-import "ui/scroll_view/ui.scrollable";
+import 'common.css!';
+import 'ui/scroll_view/ui.scrollable';
 
-import $ from "jquery";
-import memoryLeaksHelper from "../../helpers/memoryLeaksHelper.js";
-import virtualScrollingCore, { VirtualScrollController } from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
-import browser from "core/utils/browser";
-import devices from "core/devices";
-import renderer from "core/renderer";
+import $ from 'jquery';
+import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
+import virtualScrollingCore, { VirtualScrollController } from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import browser from 'core/utils/browser';
+import devices from 'core/devices';
+import renderer from 'core/renderer';
 
 const mockComponent = {
         option: sinon.stub()
@@ -52,7 +52,7 @@ function resetMock(mock) {
 
 var moduleConfig = {
     beforeEach: function() {
-        mockComponent.option.withArgs("scrolling.mode").returns("virtual");
+        mockComponent.option.withArgs('scrolling.mode').returns('virtual');
 
         mockDataSource.pageSize.returns(DEFAULT_PAGE_SIZE);
         mockDataSource.items.returns([]);
@@ -82,25 +82,25 @@ var moduleConfig = {
 };
 
 
-QUnit.module("VirtualScrollingController. Virtual scrolling mode", moduleConfig);
+QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig);
 
-QUnit.test("viewportItemsize get/set", function(assert) {
+QUnit.test('viewportItemsize get/set', function(assert) {
 
     assert.ok(this.scrollController);
 
-    assert.strictEqual(this.scrollController.viewportItemSize(), 20, "Default item size");
-    assert.strictEqual(this.scrollController.viewportItemSize(30), 30, "set item size");
-    assert.strictEqual(this.scrollController.viewportItemSize(), 30, "get item size after setting");
+    assert.strictEqual(this.scrollController.viewportItemSize(), 20, 'Default item size');
+    assert.strictEqual(this.scrollController.viewportItemSize(30), 30, 'set item size');
+    assert.strictEqual(this.scrollController.viewportItemSize(), 30, 'get item size after setting');
 });
 
-QUnit.test("viewportSize get/set", function(assert) {
+QUnit.test('viewportSize get/set', function(assert) {
 
-    assert.strictEqual(this.scrollController.viewportSize(), 0, "Default viewport size");
-    assert.strictEqual(this.scrollController.viewportSize(30), 30, "set viewport size");
-    assert.strictEqual(this.scrollController.viewportSize(), 30, "get viewport size after setting");
+    assert.strictEqual(this.scrollController.viewportSize(), 0, 'Default viewport size');
+    assert.strictEqual(this.scrollController.viewportSize(30), 30, 'set viewport size');
+    assert.strictEqual(this.scrollController.viewportSize(), 30, 'get viewport size after setting');
 });
 
-QUnit.test("Load", function(assert) {
+QUnit.test('Load', function(assert) {
     this.scrollController.viewportSize(12);
     this.scrollController.load();
 
@@ -113,13 +113,13 @@ QUnit.test("Load", function(assert) {
     assert.strictEqual(this.scrollController.endPageIndex(), 1);
 
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("Load with removeInvisiblePages is true", function(assert) {
-    mockComponent.option.withArgs("scrolling.removeInvisiblePages").returns(true);
+QUnit.test('Load with removeInvisiblePages is true', function(assert) {
+    mockComponent.option.withArgs('scrolling.removeInvisiblePages').returns(true);
 
     this.scrollController.viewportSize(12);
     this.scrollController.load();
@@ -155,7 +155,7 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
 //    }]);
 // });
 
-QUnit.test("setContentSize. No items", function(assert) {
+QUnit.test('setContentSize. No items', function(assert) {
     this.scrollController.viewportSize(12);
     this.scrollController.setContentSize(0);
 
@@ -165,7 +165,7 @@ QUnit.test("setContentSize. No items", function(assert) {
     assert.strictEqual(virtualContentSize, DEFAULT_TOTAL_ITEMS_COUNT * this.scrollController.viewportItemSize());
 });
 
-QUnit.test("setContentSize. When items", function(assert) {
+QUnit.test('setContentSize. When items', function(assert) {
     this.scrollController.viewportSize(12);
     this.scrollController.load();
 
@@ -178,11 +178,11 @@ QUnit.test("setContentSize. When items", function(assert) {
     assert.strictEqual(this.scrollController.getContentOffset(), 0);
 });
 
-QUnit.module("Virtual scrolling", {
+QUnit.module('Virtual scrolling', {
     beforeEach: function() {
         moduleConfig.beforeEach.call(this);
 
-        mockComponent.option.withArgs("scrolling.renderingThreshold").returns(70);
+        mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
         this.scrollController.viewportSize(12);
         this.scrollController.load();
@@ -197,7 +197,7 @@ QUnit.module("Virtual scrolling", {
     }
 });
 
-QUnit.test("set/get viewportPosition", function(assert) {
+QUnit.test('set/get viewportPosition', function(assert) {
 
     var defaultViewportPosition = this.scrollController.getViewportPosition();
 
@@ -205,12 +205,12 @@ QUnit.test("set/get viewportPosition", function(assert) {
 
     var viewportPosition = this.scrollController.getViewportPosition();
 
-    assert.strictEqual(defaultViewportPosition, 0, "default viewportPosition");
+    assert.strictEqual(defaultViewportPosition, 0, 'default viewportPosition');
 
-    assert.strictEqual(viewportPosition, 50, "viewport position after set");
+    assert.strictEqual(viewportPosition, 50, 'viewport position after set');
 });
 
-QUnit.test("setViewport position. Scroll in in the viewport area", function(assert) {
+QUnit.test('setViewport position. Scroll in in the viewport area', function(assert) {
     this.scrollController.setViewportPosition(230);
     this.scrollController.setViewportPosition(0);
     this.scrollController.setViewportPosition(this.contentSize - 1);
@@ -224,7 +224,7 @@ QUnit.test("setViewport position. Scroll in in the viewport area", function(asse
 });
 
 
-QUnit.test("setViewport position. Scroll to second loaded page", function(assert) {
+QUnit.test('setViewport position. Scroll to second loaded page', function(assert) {
     this.scrollController.setViewportPosition(this.contentSize);
 
     assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 3 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
@@ -236,12 +236,12 @@ QUnit.test("setViewport position. Scroll to second loaded page", function(assert
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("setViewport position. Scroll to third page after scroll to second page", function(assert) {
+QUnit.test('setViewport position. Scroll to third page after scroll to second page', function(assert) {
     this.scrollController.setViewportPosition(this.contentSize);
     this.scrollController.setViewportPosition(this.contentSize * 2);
 
@@ -254,14 +254,14 @@ QUnit.test("setViewport position. Scroll to third page after scroll to second pa
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("Scroll with timeout", function(assert) {
+QUnit.test('Scroll with timeout', function(assert) {
     var clock = sinon.useFakeTimers();
-    mockComponent.option.withArgs("scrolling.timeout").returns(100);
+    mockComponent.option.withArgs('scrolling.timeout').returns(100);
     mockDataSource.changingDuration.returns(200);
     this.scrollController.setViewportPosition(this.contentSize);
     this.scrollController.setViewportPosition(this.contentSize * 3);
@@ -279,16 +279,16 @@ QUnit.test("Scroll with timeout", function(assert) {
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 
     clock.restore();
 });
 
-QUnit.test("Scroll with fast rendering", function(assert) {
+QUnit.test('Scroll with fast rendering', function(assert) {
     var clock = sinon.useFakeTimers();
-    mockComponent.option.withArgs("scrolling.timeout").returns(200);
+    mockComponent.option.withArgs('scrolling.timeout').returns(200);
 
     mockDataSource.changingDuration.returns(150);
 
@@ -309,17 +309,17 @@ QUnit.test("Scroll with fast rendering", function(assert) {
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 
     clock.restore();
 });
 
-QUnit.test("Scroll with rendering faster then rendering thresholdTime. Far scrolling", function(assert) {
+QUnit.test('Scroll with rendering faster then rendering thresholdTime. Far scrolling', function(assert) {
     var clock = sinon.useFakeTimers();
-    mockComponent.option.withArgs("scrolling.timeout").returns(200);
-    mockComponent.option.withArgs("scrolling.renderingThreshold").returns(70);
+    mockComponent.option.withArgs('scrolling.timeout').returns(200);
+    mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
     mockDataSource.changingDuration.returns(69);
 
@@ -338,10 +338,10 @@ QUnit.test("Scroll with rendering faster then rendering thresholdTime. Far scrol
 });
 
 
-QUnit.test("Scroll with rendering faster then rendering thresholdTime. Near scrolling", function(assert) {
+QUnit.test('Scroll with rendering faster then rendering thresholdTime. Near scrolling', function(assert) {
     var clock = sinon.useFakeTimers();
-    mockComponent.option.withArgs("scrolling.timeout").returns(200);
-    mockComponent.option.withArgs("scrolling.renderingThreshold").returns(70);
+    mockComponent.option.withArgs('scrolling.timeout').returns(200);
+    mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
     mockDataSource.changingDuration.returns(69);
 
@@ -358,10 +358,10 @@ QUnit.test("Scroll with rendering faster then rendering thresholdTime. Near scro
     clock.restore();
 });
 
-QUnit.test("Scroll with rendering slower then rendering thresholdTime. Near scrolling", function(assert) {
+QUnit.test('Scroll with rendering slower then rendering thresholdTime. Near scrolling', function(assert) {
     var clock = sinon.useFakeTimers();
-    mockComponent.option.withArgs("scrolling.timeout").returns(200);
-    mockComponent.option.withArgs("scrolling.renderingThreshold").returns(70);
+    mockComponent.option.withArgs('scrolling.timeout').returns(200);
+    mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
     mockDataSource.changingDuration.returns(71);
 
@@ -375,8 +375,8 @@ QUnit.test("Scroll with rendering slower then rendering thresholdTime. Near scro
     clock.restore();
 });
 
-QUnit.test("setViewport position. Scroll to second loaded page. cache disabled", function(assert) {
-    mockComponent.option.withArgs("scrolling.removeInvisiblePages").returns(true);
+QUnit.test('setViewport position. Scroll to second loaded page. cache disabled', function(assert) {
+    mockComponent.option.withArgs('scrolling.removeInvisiblePages').returns(true);
 
     this.scrollController.setViewportPosition(this.contentSize);
 
@@ -390,14 +390,14 @@ QUnit.test("setViewport position. Scroll to second loaded page. cache disabled",
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
 // T818578
-QUnit.test("setViewport position. Scroll to third page visible. cache disabled. Preload page count is 3", function(assert) {
-    mockComponent.option.withArgs("scrolling.removeInvisiblePages").returns(true);
+QUnit.test('setViewport position. Scroll to third page visible. cache disabled. Preload page count is 3', function(assert) {
+    mockComponent.option.withArgs('scrolling.removeInvisiblePages').returns(true);
 
     this.scrollController.viewportSize(40);
 
@@ -412,13 +412,13 @@ QUnit.test("setViewport position. Scroll to third page visible. cache disabled. 
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("setViewport position. Scroll to third page after scroll to second page. cache disabled", function(assert) {
-    mockComponent.option.withArgs("scrolling.removeInvisiblePages").returns(true);
+QUnit.test('setViewport position. Scroll to third page after scroll to second page. cache disabled', function(assert) {
+    mockComponent.option.withArgs('scrolling.removeInvisiblePages').returns(true);
 
     this.scrollController.setViewportPosition(this.contentSize);
 
@@ -432,10 +432,10 @@ QUnit.test("setViewport position. Scroll to third page after scroll to second pa
     assert.ok(mockDataSource.load.called);
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
-    assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{ changeType: "append", items: [], removeCount: 20 }]);
+    assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{ changeType: 'append', items: [], removeCount: 20 }]);
 });
 
-QUnit.test("setViewport position. Scroll to far page", function(assert) {
+QUnit.test('setViewport position. Scroll to far page', function(assert) {
     this.scrollController.setViewportPosition(this.contentSize * 8 + 220);
 
     assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
@@ -447,12 +447,12 @@ QUnit.test("setViewport position. Scroll to far page", function(assert) {
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("getVirtualContentSize after far scroll if itemSizes are not equal to virtual item size", function(assert) {
+QUnit.test('getVirtualContentSize after far scroll if itemSizes are not equal to virtual item size', function(assert) {
     var realItemSize = 10;
     var realItemSizes = Array.apply(null, Array(20)).map(() => realItemSize);
 
@@ -463,7 +463,7 @@ QUnit.test("getVirtualContentSize after far scroll if itemSizes are not equal to
     assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize() - realItemSizes.length) * this.scrollController.viewportItemSize() + 2 * realItemSizes.length * realItemSize);
 });
 
-QUnit.test("setViewport position. Scroll up", function(assert) {
+QUnit.test('setViewport position. Scroll up', function(assert) {
     this.scrollController.setViewportPosition(this.contentSize * 8 + 220);
     mockDataSource.load.reset();
     this.externalDataChangedHandler.reset();
@@ -479,12 +479,12 @@ QUnit.test("setViewport position. Scroll up", function(assert) {
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "prepend",
+        changeType: 'prepend',
         items: []
     }]);
 });
 
-QUnit.test("setViewport position. DataSource with too many items", function(assert) {
+QUnit.test('setViewport position. DataSource with too many items', function(assert) {
     mockDataSource.totalItemsCount.returns(100000000000);
 
     this.scrollController.setContentSize(this.contentSize);
@@ -501,13 +501,13 @@ QUnit.test("setViewport position. DataSource with too many items", function(asse
 
     assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
     assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
-        changeType: "append",
+        changeType: 'append',
         items: []
     }]);
 });
 
-QUnit.test("Scroll with timeout. Disposing", function(assert) {
-    mockComponent.option.withArgs("scrolling.timeout").returns(100);
+QUnit.test('Scroll with timeout. Disposing', function(assert) {
+    mockComponent.option.withArgs('scrolling.timeout').returns(100);
 
     this.scrollController.setViewportPosition(this.contentSize * 2);
 
@@ -517,7 +517,7 @@ QUnit.test("Scroll with timeout. Disposing", function(assert) {
 });
 
 
-QUnit.module("Subscribe to external scrollable events", {
+QUnit.module('Subscribe to external scrollable events', {
     beforeEach: function() {
         moduleConfig.beforeEach.call(this);
         this.scrollController.viewportSize(12);
@@ -528,7 +528,7 @@ QUnit.module("Subscribe to external scrollable events", {
         this.externalDataChangedHandler.reset();
         this.clock = sinon.useFakeTimers(),
 
-        this.$fixtureElement = $("<div>").appendTo("body");
+        this.$fixtureElement = $('<div>').appendTo('body');
 
     },
 
@@ -540,7 +540,7 @@ QUnit.module("Subscribe to external scrollable events", {
 });
 
 
-QUnit.test("Window scroll event", function(assert) {
+QUnit.test('Window scroll event', function(assert) {
     if(devices.real().ios || ('callPhantom' in window)) {
         // TODO reanimate for ios
         assert.ok(true);
@@ -550,64 +550,64 @@ QUnit.test("Window scroll event", function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
     var $element = this.$fixtureElement.height(30000);
 
     this.scrollController.subscribeToWindowScrollEvents(this.$fixtureElement);
 
-    $(window).on("scroll", assertFunction);
+    $(window).on('scroll', assertFunction);
 
     $(window).scrollTop(24000);
 
     function assertFunction() {
-        assert.strictEqual(scrollController.getViewportPosition(), 24000 - $element.offset().top, "viewport position should be correct");
+        assert.strictEqual(scrollController.getViewportPosition(), 24000 - $element.offset().top, 'viewport position should be correct');
 
-        $(window).off("scroll", assertFunction);
+        $(window).off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("Native scroll event", function(assert) {
+QUnit.test('Native scroll event', function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController,
         $fixtureElement = this.$fixtureElement;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement);
+    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
-    this.$fixtureElement.height(10000).css("overflow", "auto");
+    this.$fixtureElement.height(10000).css('overflow', 'auto');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    $(this.$fixtureElement).on("scroll", assertFunction);
+    $(this.$fixtureElement).on('scroll', assertFunction);
     // act
     this.$fixtureElement.scrollTop(24000);
 
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000 - 300, 1);
 
-        $($fixtureElement).off("scroll", assertFunction);
+        $($fixtureElement).off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("Native scroll event. Scrolling before the subscribed element", function(assert) {
+QUnit.test('Native scroll event. Scrolling before the subscribed element', function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController,
         $fixtureElement = this.$fixtureElement;
 
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement);
+    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
-    this.$fixtureElement.height(10000).css("overflow", "auto");
+    this.$fixtureElement.height(10000).css('overflow', 'auto');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    this.$fixtureElement.on("scroll", assertFunction);
+    this.$fixtureElement.on('scroll', assertFunction);
 
 
     this.$fixtureElement.scrollTop(150);
@@ -616,23 +616,23 @@ QUnit.test("Native scroll event. Scrolling before the subscribed element", funct
     function assertFunction() {
         assert.strictEqual(scrollController.getViewportPosition(), 0);
 
-        $fixtureElement.off("scroll", assertFunction);
+        $fixtureElement.off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("dxScrollable scroll event", function(assert) {
+QUnit.test('dxScrollable scroll event', function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = renderer("<div>").height(40000).appendTo(this.$fixtureElement),
-        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable("instance");
+    var $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement),
+        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    scrollable.on("scroll", assertFunction);
+    scrollable.on('scroll', assertFunction);
 
     scrollable.scrollTo(24000);
 
@@ -641,13 +641,13 @@ QUnit.test("dxScrollable scroll event", function(assert) {
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000 - 300, 1);
 
-        scrollable.off("scroll", assertFunction);
+        scrollable.off('scroll', assertFunction);
         done();
     }
 });
 
 
-QUnit.test("ScrollTo when window scroll subscription", function(assert) {
+QUnit.test('ScrollTo when window scroll subscription', function(assert) {
     if(devices.real().ios || ('callPhantom' in window)) {
         // TODO reanimate for ios
         assert.ok(true);
@@ -657,13 +657,13 @@ QUnit.test("ScrollTo when window scroll subscription", function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
     var $element = this.$fixtureElement.height(30000);
 
     this.scrollController.subscribeToWindowScrollEvents(this.$fixtureElement);
 
-    $(window).on("scroll", assertFunction);
+    $(window).on('scroll', assertFunction);
 
     var elementOffset = $element.offset().top;
 
@@ -674,15 +674,15 @@ QUnit.test("ScrollTo when window scroll subscription", function(assert) {
         assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
         assert.roughEqual(windowScrollTop, 24000 + elementOffset, 1);
 
-        $(window).off("scroll", assertFunction);
+        $(window).off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("ScrollTo when window scroll subscription. before the subscribed element", function(assert) {
+QUnit.test('ScrollTo when window scroll subscription. before the subscribed element', function(assert) {
     var scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(30000);
 
@@ -693,43 +693,43 @@ QUnit.test("ScrollTo when window scroll subscription. before the subscribed elem
     assert.strictEqual(scrollController.getViewportPosition(), 0);
 });
 
-QUnit.test("Scroll to when native scroll", function(assert) {
+QUnit.test('Scroll to when native scroll', function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController,
         $fixtureElement = this.$fixtureElement;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement);
+    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
-    this.$fixtureElement.height(10000).css("overflow", "auto");
+    this.$fixtureElement.height(10000).css('overflow', 'auto');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    $(this.$fixtureElement).on("scroll", assertFunction);
+    $(this.$fixtureElement).on('scroll', assertFunction);
 
     scrollController.scrollTo(24000);
 
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
 
-        $($fixtureElement).off("scroll", assertFunction);
+        $($fixtureElement).off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("ScrollTo when dxScrollable scroll", function(assert) {
+QUnit.test('ScrollTo when dxScrollable scroll', function(assert) {
     var done = assert.async(),
         scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = renderer("<div>").height(40000).appendTo(this.$fixtureElement),
-        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable("instance");
+    var $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement),
+        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    scrollable.on("scroll", assertFunction);
+    scrollable.on('scroll', assertFunction);
 
     scrollController.scrollTo(24000);
 
@@ -738,23 +738,23 @@ QUnit.test("ScrollTo when dxScrollable scroll", function(assert) {
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
 
-        scrollable.off("scroll", assertFunction);
+        scrollable.off('scroll', assertFunction);
         done();
     }
 });
 
-QUnit.test("Scroll To after disposing", function(assert) {
+QUnit.test('Scroll To after disposing', function(assert) {
     var scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement);
+    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
-    this.$fixtureElement.height(10000).css("overflow", "auto");
+    this.$fixtureElement.height(10000).css('overflow', 'auto');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    $(this.$fixtureElement).on("scroll", assertFunction);
+    $(this.$fixtureElement).on('scroll', assertFunction);
     // act
     scrollController.dispose();
 
@@ -763,18 +763,18 @@ QUnit.test("Scroll To after disposing", function(assert) {
     assert.strictEqual(scrollController.getViewportPosition(), 0);
 
     function assertFunction() {
-        assert.ok(false, "unexpected scrolling");
+        assert.ok(false, 'unexpected scrolling');
     }
 });
 
-QUnit.test("Remove subscription on disposing", function(assert) {
+QUnit.test('Remove subscription on disposing', function(assert) {
     var scrollController = this.scrollController;
 
-    $("<div>").height(300).appendTo(this.$fixtureElement);
+    $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement);
+    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
-    this.$fixtureElement.height(10000).css("overflow", "auto");
+    this.$fixtureElement.height(10000).css('overflow', 'auto');
 
     var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
     this.scrollController.subscribeToWindowScrollEvents($element);
@@ -785,11 +785,11 @@ QUnit.test("Remove subscription on disposing", function(assert) {
 });
 
 // T470971
-QUnit.test("Content height limit for different browsers", function(assert) {
+QUnit.test('Content height limit for different browsers', function(assert) {
     // act, assert
-    assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, "content height limit for ie");
-    assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, "content height limit for firefox");
-    assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, "content height limit for other browsers");
+    assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, 'content height limit for ie');
+    assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, 'content height limit for firefox');
+    assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, 'content height limit for other browsers');
     virtualScrollingCore.getPixelRatio = () => 2;
-    assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, "content height limit depends on devicePixelRatio for other browsers"); // T692460
+    assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, 'content height limit depends on devicePixelRatio for other browsers'); // T692460
 });

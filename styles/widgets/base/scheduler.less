@@ -286,8 +286,9 @@
         }
 
         .dx-scheduler-group-header-content {
-            height: 100%;
-            width: 100%;
+            width: inherit;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .dx-scheduler-date-table-scrollable,
@@ -873,12 +874,8 @@
                 justify-content: flex-start;
                 align-items: flex-start;
                 text-align: left;
-
-                > div {
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
+                overflow: hidden;
+                text-overflow: ellipsis;
                 border: none;
                 border-top: @SCHEDULER_BASE_BORDER;
             }
@@ -1841,6 +1838,7 @@
         &.dx-state-disabled {
             cursor: default;
             opacity: 0.6;
+            pointer-events: auto;
         }
     }
 

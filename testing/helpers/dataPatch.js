@@ -1,6 +1,6 @@
 /* global jQuery */
 
-var dataStrategy = require("core/element_data");
+var dataStrategy = require('core/element_data');
 
 var originalCleanData;
 

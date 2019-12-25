@@ -1,4 +1,4 @@
-import typeUtils from "core/utils/type";
+import typeUtils from 'core/utils/type';
 
 function assign(target) {
     if(!typeUtils.isDefined(target)) {

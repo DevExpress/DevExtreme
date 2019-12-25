@@ -1,56 +1,62 @@
-import $ from "jquery";
-import { deserializeDate } from "core/utils/date_serialization";
-import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
+import $ from 'jquery';
+import { deserializeDate } from 'core/utils/date_serialization';
+import { FileManagerItem } from 'ui/file_manager/file_provider/file_provider';
+
+import FileReaderMock from './fileManager/file_reader.mock.js';
 
 export const Consts = {
-    WIDGET_CLASS: "dx-filemanager",
-    TOOLBAR_CLASS: "dx-filemanager-toolbar",
-    GENERAL_TOOLBAR_CLASS: "dx-filemanager-general-toolbar",
-    FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
-    CONTAINER_CLASS: "dx-filemanager-container",
-    DRAWER_PANEL_CONTENT_CLASS: "dx-drawer-panel-content",
-    DRAWER_CONTENT_CLASS: "dx-drawer-content",
-    DIRS_PANEL_CLASS: "dx-filemanager-dirs-panel",
-    DIRS_TREE_CLASS: "dx-filemanager-dirs-tree",
-    ITEMS_VIEW_CLASS: "dx-filemanager-files-view",
-    DIALOG_CLASS: "dx-filemanager-dialog",
-    THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
-    THUMBNAILS_ITEM_NAME_CLASS: "dx-filemanager-thumbnails-item-name",
-    GRID_DATA_ROW_CLASS: "dx-data-row",
-    FILE_ACTION_BUTTON_CLASS: "dx-filemanager-file-actions-button",
-    FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
-    FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
-    BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
-    BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
-    BREADCRUMBS_SEPARATOR_ITEM_CLASS: "dx-filemanager-breadcrumbs-separator-item",
-    ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
-    FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
-    INACTIVE_AREA_CLASS: "dx-filemanager-inactive-area",
-    CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
-    TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
-    DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
-    POPUP_NORMAL_CLASS: "dx-popup-normal",
-    POPUP_BOTTOM_CLASS: "dx-popup-bottom",
-    BUTTON_CLASS: "dx-button",
-    BUTTON_TEXT_CLASS: "dx-button-text",
-    SELECT_BOX_CLASS: "dx-selectbox",
-    TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input",
-    MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
-    CONTEXT_MENU_CLASS: "dx-context-menu",
-    MENU_ITEM_CLASS: "dx-menu-item",
-    MENU_ITEM_WITH_SUBMENU_CLASS: "dx-menu-item-has-submenu",
-    SUBMENU_CLASS: "dx-submenu",
-    SELECTION_CLASS: "dx-selection",
-    SPLITTER_CLASS: "dx-splitter",
-    DISABLED_STATE_CLASS: "dx-state-disabled",
-    UPLOAD_ICON_CLASS: "dx-icon-upload",
-    DROPDOWN_MENU_BUTTON_CLASS: "dx-dropdownmenu-button",
-    DROPDOWN_MENU_LIST_CLASS: "dx-dropdownmenu-list",
-    DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content",
-    DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item",
-    SCROLLABLE_ClASS: "dx-scrollable"
+    WIDGET_CLASS: 'dx-filemanager',
+    TOOLBAR_CLASS: 'dx-filemanager-toolbar',
+    NATIVE_TOOLBAR_CLASS: 'dx-toolbar',
+    GENERAL_TOOLBAR_CLASS: 'dx-filemanager-general-toolbar',
+    FILE_TOOLBAR_CLASS: 'dx-filemanager-file-toolbar',
+    CONTAINER_CLASS: 'dx-filemanager-container',
+    DRAWER_PANEL_CONTENT_CLASS: 'dx-drawer-panel-content',
+    DRAWER_CONTENT_CLASS: 'dx-drawer-content',
+    DIRS_PANEL_CLASS: 'dx-filemanager-dirs-panel',
+    DIRS_TREE_CLASS: 'dx-filemanager-dirs-tree',
+    ITEMS_VIEW_CLASS: 'dx-filemanager-files-view',
+    DIALOG_CLASS: 'dx-filemanager-dialog',
+    THUMBNAILS_ITEM_CLASS: 'dx-filemanager-thumbnails-item',
+    THUMBNAILS_ITEM_NAME_CLASS: 'dx-filemanager-thumbnails-item-name',
+    GRID_DATA_ROW_CLASS: 'dx-data-row',
+    FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
+    FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
+    BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',
+    BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: 'dx-filemanager-breadcrumbs-parent-folder-item',
+    BREADCRUMBS_SEPARATOR_ITEM_CLASS: 'dx-filemanager-breadcrumbs-separator-item',
+    ITEMS_GRID_VIEW_CLASS: 'dx-filemanager-files-view',
+    FOCUSED_ITEM_CLASS: 'dx-filemanager-focused-item',
+    INACTIVE_AREA_CLASS: 'dx-filemanager-inactive-area',
+    CUSTOM_THUMBNAIL_CLASS: 'dx-filemanager-item-custom-thumbnail',
+    TOOLBAR_SEPARATOR_ITEM: 'dx-filemanager-toolbar-separator-item',
+    DETAILS_ITEM_NAME_CLASS: 'dx-filemanager-details-item-name',
+    POPUP_NORMAL_CLASS: 'dx-popup-normal',
+    POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
+    BUTTON_CLASS: 'dx-button',
+    BUTTON_TEXT_CLASS: 'dx-button-text',
+    DROP_DOWN_BUTTON_CLASS: 'dx-dropdownbutton',
+    DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
+    TEXT_EDITOR_INPUT_CLASS: 'dx-texteditor-input',
+    MENU_ITEM_WITH_TEXT_CLASS: 'dx-menu-item-has-text',
+    CONTEXT_MENU_CLASS: 'dx-context-menu',
+    MENU_ITEM_CLASS: 'dx-menu-item',
+    MENU_ITEM_WITH_SUBMENU_CLASS: 'dx-menu-item-has-submenu',
+    SUBMENU_CLASS: 'dx-submenu',
+    SELECTION_CLASS: 'dx-selection',
+    SPLITTER_CLASS: 'dx-splitter',
+    DISABLED_STATE_CLASS: 'dx-state-disabled',
+    UPLOAD_ICON_CLASS: 'dx-icon-upload',
+    DROPDOWN_MENU_BUTTON_CLASS: 'dx-dropdownmenu-button',
+    DROPDOWN_MENU_LIST_CLASS: 'dx-dropdownmenu-list',
+    DROPDOWN_MENU_CONTENT_CLASS: 'dx-scrollview-content',
+    DROPDOWN_MENU_LIST_ITEM_CLASS: 'dx-list-item',
+    SCROLLABLE_ClASS: 'dx-scrollable',
+    EDITING_CONTAINER: 'dx-filemanager-editing-container',
+    FILE_UPLOADER_INPUT: 'dx-fileuploader-input'
 };
-const showMoreButtonText = "\u22EE";
+const showMoreButtonText = '\u22EE';
 
 export class FileManagerWrapper {
 
@@ -59,7 +65,7 @@ export class FileManagerWrapper {
     }
 
     getInstance() {
-        return this._$element.dxFileManager("instance");
+        return this._$element.dxFileManager('instance');
     }
 
     getDirsPanel() {
@@ -86,8 +92,8 @@ export class FileManagerWrapper {
     }
 
     getFolderNodeText(index, inDialog) {
-        const text = this.getFolderNode(index, inDialog).text() || "";
-        return text.replace(showMoreButtonText, "");
+        const text = this.getFolderNode(index, inDialog).text() || '';
+        return text.replace(showMoreButtonText, '');
     }
 
     getFolderToggles(inDialog) {
@@ -135,12 +141,12 @@ export class FileManagerWrapper {
     }
 
     getToolbarElements() {
-        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
+        return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getGeneralToolbarElements() {
         const _$generalToolbar = this.getToolbar().children().first();
-        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}, .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
+        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getToolbarButton(text) {
@@ -191,8 +197,18 @@ export class FileManagerWrapper {
         return this.getDetailsItemList().find(`.${Consts.SCROLLABLE_ClASS}`);
     }
 
+    getDetailsItemsNames() {
+        return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`);
+    }
+
+    getDetailsItemNamesTexts() {
+        return this.getDetailsItemsNames()
+            .map((_, name) => $(name).text())
+            .get();
+    }
+
     getDetailsItemName(index) {
-        return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`).eq(index).text();
+        return this.getDetailsItemsNames().eq(index).text();
     }
 
     getRowActionButtonInDetailsView(index) {
@@ -201,11 +217,11 @@ export class FileManagerWrapper {
     }
 
     getSelectCheckBoxInDetailsView(index) {
-        return this.getRowInDetailsView(index).find("td").eq(0);
+        return this.getRowInDetailsView(index).find('td').eq(0);
     }
 
     getRowNameCellInDetailsView(index) {
-        return this.getRowInDetailsView(index).find("td").eq(1);
+        return this.getRowInDetailsView(index).find('td').eq(1);
     }
 
     getRowsInDetailsView() {
@@ -221,13 +237,20 @@ export class FileManagerWrapper {
     }
 
     getColumnHeaderInDetailsView(index) {
-        return this._$element.find("[id*=dx-col]").eq(index);
+        return this._$element.find('[id*=dx-col]').eq(index);
+    }
+
+    getDetailsCellText(columnCaption, rowIndex) {
+        const $itemList = this.getDetailsItemList();
+        const columnIndex = $itemList.find(`.dx-header-row > td:contains('${columnCaption}')`).index();
+        const $row = this.getRowInDetailsView(rowIndex + 1);
+        return $row.children('td').eq(columnIndex).text();
     }
 
     getContextMenuItems(visible) {
         let selector = `.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_CLASS}`;
         if(visible) {
-            selector += ":visible";
+            selector += ':visible';
         }
         return $(selector);
     }
@@ -256,17 +279,17 @@ export class FileManagerWrapper {
         const $splitter = this.getSplitter();
         const $drawerContent = this.getDrawerPanelContent();
         if(!pointerType) {
-            pointerType = "mouse";
+            pointerType = 'mouse';
         }
 
-        $splitter.trigger($.Event("dxpointerdown", { pointerType }));
+        $splitter.trigger($.Event('dxpointerdown', { pointerType }));
         const contentRect = $drawerContent[0].getBoundingClientRect();
-        $splitter.trigger($.Event("dxpointermove", {
+        $splitter.trigger($.Event('dxpointermove', {
             pointerType,
             pageX: contentRect.right - parseFloat($splitter.css('margin-left')) + delta
         }));
 
-        $splitter.trigger($.Event("dxpointerup", { pointerType }));
+        $splitter.trigger($.Event('dxpointerup', { pointerType }));
     }
 
     isSplitterActive() {
@@ -285,6 +308,17 @@ export class FileManagerWrapper {
         return $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
+    getUploadInput() {
+        return $(`.${Consts.EDITING_CONTAINER} .${Consts.FILE_UPLOADER_INPUT}`);
+    }
+
+    setUploadInputFile(files) {
+        const $input = this.getUploadInput();
+        $input.val(files[0].name);
+        $input.prop('files', files);
+        $input.trigger('change');
+    }
+
 }
 
 export class FileManagerProgressPanelWrapper {
@@ -295,28 +329,28 @@ export class FileManagerProgressPanelWrapper {
 
     getInfos() {
         return this._$element
-            .find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info")
+            .find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info')
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
     }
 
     getSeparators() {
-        return this._$element.find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator");
+        return this._$element.find('.dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator');
     }
 
     findProgressBoxes($container) {
         return $container
-            .children(".dx-filemanager-progress-box")
+            .children('.dx-filemanager-progress-box')
             .map((_, element) => new FileManagerProgressPanelProgressBoxWrapper($(element)))
             .get();
     }
 
     findError($container) {
-        return $container.find(".dx-filemanager-progress-box-error");
+        return $container.find('.dx-filemanager-progress-box-error');
     }
 
     get $closeButton() {
-        return this._$element.find(".dx-filemanager-progress-panel-close-button");
+        return this._$element.find('.dx-filemanager-progress-panel-close-button');
     }
 
 }
@@ -328,13 +362,13 @@ export class FileManagerProgressPanelInfoWrapper {
     }
 
     get common() {
-        const $common = this._$element.find(".dx-filemanager-progress-panel-common");
+        const $common = this._$element.find('.dx-filemanager-progress-panel-common');
         return new FileManagerProgressPanelProgressBoxWrapper($common);
     }
 
     get details() {
         return this._$element
-            .find(".dx-filemanager-progress-panel-details > .dx-filemanager-progress-box")
+            .find('.dx-filemanager-progress-panel-details > .dx-filemanager-progress-box')
             .map((_, detailsInfo) => new FileManagerProgressPanelProgressBoxWrapper($(detailsInfo)))
             .get();
     }
@@ -352,7 +386,7 @@ export class FileManagerProgressPanelProgressBoxWrapper {
     }
 
     get $commonText() {
-        return this._$element.find(".dx-filemanager-progress-box-common");
+        return this._$element.find('.dx-filemanager-progress-box-common');
     }
 
     get commonText() {
@@ -360,39 +394,39 @@ export class FileManagerProgressPanelProgressBoxWrapper {
     }
 
     get $progressBar() {
-        return this._$element.find(".dx-filemanager-progress-box-progress-bar");
+        return this._$element.find('.dx-filemanager-progress-box-progress-bar');
     }
 
     get progressBar() {
-        return this.$progressBar.dxProgressBar("instance");
+        return this.$progressBar.dxProgressBar('instance');
     }
 
     get progressBarStatusText() {
-        return this.$progressBar.find(".dx-progressbar-status").text();
+        return this.$progressBar.find('.dx-progressbar-status').text();
     }
 
     get progressBarValue() {
-        return this.progressBar.option("value");
+        return this.progressBar.option('value');
     }
 
     get $closeButton() {
-        return this._$element.find(".dx-filemanager-progress-box-close-button");
+        return this._$element.find('.dx-filemanager-progress-box-close-button');
     }
 
     get closeButton() {
-        return this.$closeButton.dxButton("instance");
+        return this.$closeButton.dxButton('instance');
     }
 
     get closeButtonVisible() {
-        return this.closeButton.option("visible");
+        return this.closeButton.option('visible');
     }
 
     get $image() {
-        return this._$element.find(".dx-filemanager-progress-box-image");
+        return this._$element.find('.dx-filemanager-progress-box-image');
     }
 
     get $error() {
-        return this._$element.find(".dx-filemanager-progress-box-error");
+        return this._$element.find('.dx-filemanager-progress-box-error');
     }
 
     get errorText() {
@@ -423,7 +457,7 @@ export class FileManagerBreadcrumbsWrapper {
     }
 
     getPath() {
-        let result = "";
+        let result = '';
         const $elements = this.getItems();
         $elements.each((_, element) => {
             const name = $(element).text();
@@ -442,45 +476,45 @@ export const stringify = obj => {
     if(Array.isArray(obj)) {
         const content = obj
             .map(item => stringify(item))
-            .join(",\n");
+            .join(',\n');
         return `[ ${content} ]`;
     }
 
-    if(typeof obj !== "object") {
+    if(typeof obj !== 'object') {
         return JSON.stringify(obj);
     }
 
     let props = Object
         .keys(obj)
         .map(key => `${key}: ${stringify(obj[key])}`)
-        .join(", ");
+        .join(', ');
     return `{ ${props} }`;
 };
 
 export const createTestFileSystem = () => {
     return [
         {
-            name: "Folder 1",
+            name: 'Folder 1',
             isDirectory: true,
             items: [
                 {
-                    name: "Folder 1.1",
+                    name: 'Folder 1.1',
                     isDirectory: true,
                     items: [
                         {
-                            name: "Folder 1.1.1",
+                            name: 'Folder 1.1.1',
                             isDirectory: true,
                             items: [
                                 {
-                                    name: "Folder 1.1.1.1",
+                                    name: 'Folder 1.1.1.1',
                                     isDirectory: true,
                                     items: [
                                         {
-                                            name: "Folder 1.1.1.1.1",
+                                            name: 'Folder 1.1.1.1.1',
                                             isDirectory: true,
                                             items: [
                                                 {
-                                                    name: "Special deep file.txt",
+                                                    name: 'Special deep file.txt',
                                                     isDirectory: false,
                                                     size: 600
                                                 }
@@ -491,58 +525,58 @@ export const createTestFileSystem = () => {
                             ]
                         },
                         {
-                            name: "File 1-1.txt",
+                            name: 'File 1-1.txt',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-2.txt",
+                            name: 'File 1-2.txt',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-3.png",
+                            name: 'File 1-3.png',
                             isDirectory: false
                         },
                         {
-                            name: "File 1-4.jpg",
+                            name: 'File 1-4.jpg',
                             isDirectory: false
                         }]
                 },
                 {
-                    name: "Folder 1.2",
+                    name: 'Folder 1.2',
                     isDirectory: true
                 },
                 {
-                    name: "File 1-1.txt",
+                    name: 'File 1-1.txt',
                     isDirectory: false
                 },
                 {
-                    name: "File 1-2.jpg",
+                    name: 'File 1-2.jpg',
                     isDirectory: false
                 }]
         },
         {
-            name: "Folder 2",
+            name: 'Folder 2',
             isDirectory: true,
             items: [
                 {
-                    name: "File 2-1.jpg",
+                    name: 'File 2-1.jpg',
                     isDirectory: false
                 }]
         },
         {
-            name: "Folder 3",
+            name: 'Folder 3',
             isDirectory: true
         },
         {
-            name: "File 1.txt",
+            name: 'File 1.txt',
             isDirectory: false
         },
         {
-            name: "File 2.jpg",
+            name: 'File 2.jpg',
             isDirectory: false
         },
         {
-            name: "File 3.xml",
+            name: 'File 3.xml',
             isDirectory: false
         }
     ];
@@ -553,16 +587,10 @@ export const createUploaderFiles = count => {
 
     for(let i = 0; i < count; i++) {
         const size = 300000 + i * 200000;
-        const file = {
-            name: `Upload file ${i}.txt`,
-            size,
-            slice: (startPos, endPos) => ({
-                fileIndex: i,
-                startPos,
-                endPos,
-                size: Math.min(endPos, size) - startPos
-            })
-        };
+        const fileName = `Upload file ${i}.txt`;
+        const content = generateString(size, i.toString());
+
+        const file = createFileObject(fileName, content);
         result.push(file);
     }
 
@@ -571,16 +599,16 @@ export const createUploaderFiles = count => {
 
 export const createSampleFileItems = () => {
     const filesPathInfo = [
-        { key: "Root", name: "Root" },
-        { key: "Root/Files", name: "Files" },
+        { key: 'Root', name: 'Root' },
+        { key: 'Root/Files', name: 'Files' },
     ];
 
     const itemData = [
-        { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
-        { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
-        { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
-        { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1, pathInfo: filesPathInfo },
-        { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1, pathInfo: filesPathInfo }
+        { id: 'Root\\Files\\Documents', name: 'Documents', dateModified: '2019-02-14T07:44:15.4265625Z', isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: 'Root\\Files\\Images', name: 'Images', dateModified: '2019-02-14T07:44:15.4885105Z', isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: 'Root\\Files\\Music', name: 'Music', dateModified: '2019-02-14T07:44:15.4964648Z', isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: 'Root\\Files\\Description.rtf', name: 'Description.rtf', dateModified: '2017-02-09T09:38:46.3772529Z', isDirectory: false, size: 1, pathInfo: filesPathInfo },
+        { id: 'Root\\Files\\Article.txt', name: 'Article.txt', dateModified: '2017-02-09T09:38:46.3772529Z', isDirectory: false, size: 1, pathInfo: filesPathInfo }
     ];
 
     const fileManagerItems = [
@@ -605,4 +633,49 @@ const createFileManagerItem = (parentPath, dataObj) => {
     return item;
 };
 
+export const createFileObject = (fileName, content) => {
+    const result = new window.Blob([content], { type: 'application/octet-stream' });
+    result.name = fileName;
+    result.lastModified = (new Date()).getTime();
+    result._dxContent = content;
+    return result;
+};
 
+export const generateString = (size, content) => {
+    if(!size) {
+        return '';
+    }
+
+    let result = content;
+
+    if(result === undefined) {
+        result = 'A';
+    }
+
+    if(result.length < size) {
+        const count = Math.ceil(size / result.length);
+        result = new Array(count + 1).join(result);
+    }
+
+    if(result.length > size) {
+        result = result.substr(0, size);
+    }
+
+    return result;
+};
+
+export const createUploadInfo = (file, chunkIndex, customData, chunkSize) => {
+    chunkIndex = chunkIndex || 0;
+    customData = customData || {};
+    chunkSize = chunkSize || 200000;
+
+    const bytesUploaded = chunkIndex * chunkSize;
+    const chunkCount = Math.ceil(file.size / chunkSize);
+    const chunkBlob = file.slice(bytesUploaded, Math.min(file.size, bytesUploaded + chunkSize));
+
+    return { bytesUploaded, chunkCount, customData, chunkBlob, chunkIndex };
+};
+
+export const stubFileReader = object => {
+    sinon.stub(object, '_createFileReader', () => new FileReaderMock());
+};

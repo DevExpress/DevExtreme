@@ -1,7 +1,7 @@
-var window = require("../../core/utils/window").getWindow();
-var typeUtils = require("../utils/type");
+var window = require('../../core/utils/window').getWindow();
+var typeUtils = require('../utils/type');
 
-var SPECIAL_HEIGHT_VALUES = ["auto", "none", "inherit", "initial"];
+var SPECIAL_HEIGHT_VALUES = ['auto', 'none', 'inherit', 'initial'];
 
 var getSizeByStyles = function(elementStyles, styles) {
     var result = 0;
@@ -14,20 +14,20 @@ var getSizeByStyles = function(elementStyles, styles) {
 };
 
 var getElementBoxParams = function(name, elementStyles) {
-    var beforeName = name === "width" ? "Left" : "Top";
-    var afterName = name === "width" ? "Right" : "Bottom";
+    var beforeName = name === 'width' ? 'Left' : 'Top';
+    var afterName = name === 'width' ? 'Right' : 'Bottom';
 
     return {
-        padding: getSizeByStyles(elementStyles, ["padding" + beforeName, "padding" + afterName]),
-        border: getSizeByStyles(elementStyles, ["border" + beforeName + "Width", "border" + afterName + "Width"]),
-        margin: getSizeByStyles(elementStyles, ["margin" + beforeName, "margin" + afterName]),
+        padding: getSizeByStyles(elementStyles, ['padding' + beforeName, 'padding' + afterName]),
+        border: getSizeByStyles(elementStyles, ['border' + beforeName + 'Width', 'border' + afterName + 'Width']),
+        margin: getSizeByStyles(elementStyles, ['margin' + beforeName, 'margin' + afterName]),
     };
 };
 
 var getBoxSizingOffset = function(name, elementStyles, boxParams) {
     var size = elementStyles[name];
 
-    if(elementStyles.boxSizing === "border-box" && size.length && size[size.length - 1] !== "%") {
+    if(elementStyles.boxSizing === 'border-box' && size.length && size[size.length - 1] !== '%') {
         return boxParams.border + boxParams.padding;
     }
 
@@ -70,10 +70,10 @@ var getContainerHeight = function(container) {
 };
 
 var parseHeight = function(value, container) {
-    if(value.indexOf("px") > 0) {
-        value = parseInt(value.replace("px", ""));
-    } else if(value.indexOf("%") > 0) {
-        value = parseInt(value.replace("%", "")) * getContainerHeight(container) / 100;
+    if(value.indexOf('px') > 0) {
+        value = parseInt(value.replace('px', ''));
+    } else if(value.indexOf('%') > 0) {
+        value = parseInt(value.replace('%', '')) * getContainerHeight(container) / 100;
     } else if(!isNaN(value)) {
         value = parseInt(value);
     }
@@ -98,14 +98,14 @@ var getHeightWithOffset = function(value, offset, container) {
         return Math.max(0, value + offset);
     }
 
-    var operationString = offset < 0 ? " - " : " ";
+    var operationString = offset < 0 ? ' - ' : ' ';
 
-    return "calc(" + value + operationString + Math.abs(offset) + "px)";
+    return 'calc(' + value + operationString + Math.abs(offset) + 'px)';
 };
 
 var addOffsetToMaxHeight = function(value, offset, container) {
     var maxHeight = getHeightWithOffset(value, offset, container);
-    return maxHeight !== null ? maxHeight : "none";
+    return maxHeight !== null ? maxHeight : 'none';
 };
 
 var addOffsetToMinHeight = function(value, offset, container) {
@@ -118,7 +118,7 @@ var getVerticalOffsets = function(element, withMargins) {
         return 0;
     }
 
-    var boxParams = getElementBoxParams("height", window.getComputedStyle(element));
+    var boxParams = getElementBoxParams('height', window.getComputedStyle(element));
 
     return boxParams.padding
         + boxParams.border

@@ -1,20 +1,20 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    translator2DModule = require("viz/translators/translator2d"),
-    rangeModule = require("viz/translators/range"),
-    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer"),
-    chartMocks = require("../../helpers/chartMocks.js"),
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    translator2DModule = require('viz/translators/translator2d'),
+    rangeModule = require('viz/translators/range'),
+    multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer'),
+    chartMocks = require('../../helpers/chartMocks.js'),
     MockAxis = chartMocks.MockAxis,
     insertMockFactory = chartMocks.insertMockFactory,
     restoreMockFactory = chartMocks.restoreMockFactory;
 
-require("viz/chart");
+require('viz/chart');
 
 QUnit.testStart(function() {
     var markup =
         '<div id="chartContainer" style="width: 300px; height: 150px;"></div>';
 
-    $("#qunit-fixture").html(markup);
+    $('#qunit-fixture').html(markup);
 });
 
 function setupMocks() {
@@ -286,9 +286,9 @@ QUnit.test('No synchronization for non-number tickValues', function(assert) {
 });
 
 // T684665
-QUnit.test("No syncronize axis if viewport have field 'action' with value 'zoom'", function(assert) {
+QUnit.test('No syncronize axis if viewport have field \'action\' with value \'zoom\'', function(assert) {
     var mockFunctions = {
-        getViewport: function(instance) { instance.returns({ action: "zoom" }); }
+        getViewport: function(instance) { instance.returns({ action: 'zoom' }); }
     };
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -1844,7 +1844,7 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
     });
 });
 
-QUnit.test("Add minor ticks", function(assert) {
+QUnit.test('Add minor ticks', function(assert) {
     var tickValues1 = [0, 1, 2],
         tickValue2 = [0, 1, 2, 3];
 

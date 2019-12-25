@@ -1,1 +1,1 @@
-require("../DevExpress.ui.widgets/gantt.markup.tests.js");
+require('../DevExpress.ui.widgets/gantt.markup.tests.js');

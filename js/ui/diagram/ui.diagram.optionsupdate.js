@@ -1,5 +1,5 @@
-import DiagramBar from "./diagram_bar";
-import { getDiagram } from "./diagram_importer";
+import DiagramBar from './diagram_bar';
+import { getDiagram } from './diagram_importer';
 
 class DiagramOptionsUpdateBar extends DiagramBar {
     constructor(owner) {
@@ -7,58 +7,58 @@ class DiagramOptionsUpdateBar extends DiagramBar {
 
         const { DiagramCommand } = getDiagram();
         this.commandOptions = {};
-        this.commandOptions[DiagramCommand.Fullscreen] = "fullScreen";
+        this.commandOptions[DiagramCommand.Fullscreen] = 'fullScreen';
         this.commandOptions[DiagramCommand.ZoomLevel] = function(value) {
-            if(typeof this._getOption("zoomLevel") === "object") {
-                this._setOption("zoomLevel.value", value);
+            if(typeof this._getOption('zoomLevel') === 'object') {
+                this._setOption('zoomLevel.value', value);
             } else {
-                this._setOption("zoomLevel", value);
+                this._setOption('zoomLevel', value);
             }
         };
         this.commandOptions[DiagramCommand.SwitchAutoZoom] = function(value) {
             const { AutoZoomMode } = getDiagram();
             switch(value) {
                 case AutoZoomMode.FitContent:
-                    this._setOption("autoZoom", "fitContent");
+                    this._setOption('autoZoom', 'fitContent');
                     break;
                 case AutoZoomMode.FitToWidth:
-                    this._setOption("autoZoom", "fitWidth");
+                    this._setOption('autoZoom', 'fitWidth');
                     break;
                 case AutoZoomMode.Disabled:
-                    this._setOption("autoZoom", "disabled");
+                    this._setOption('autoZoom', 'disabled');
                     break;
             }
         };
-        this.commandOptions[DiagramCommand.ToggleSimpleView] = "simpleView";
-        this.commandOptions[DiagramCommand.ShowGrid] = "showGrid";
-        this.commandOptions[DiagramCommand.SnapToGrid] = "snapToGrid";
+        this.commandOptions[DiagramCommand.ToggleSimpleView] = 'simpleView';
+        this.commandOptions[DiagramCommand.ShowGrid] = 'showGrid';
+        this.commandOptions[DiagramCommand.SnapToGrid] = 'snapToGrid';
         this.commandOptions[DiagramCommand.GridSize] = function(value) {
-            if(typeof this._getOption("gridSize") === "object") {
-                this._setOption("gridSize.value", value);
+            if(typeof this._getOption('gridSize') === 'object') {
+                this._setOption('gridSize.value', value);
             } else {
-                this._setOption("gridSize", value);
+                this._setOption('gridSize', value);
             }
         };
-        this.commandOptions[DiagramCommand.ViewUnits] = "viewUnits";
-        this.commandOptions[DiagramCommand.PageSize] = "pageSize";
+        this.commandOptions[DiagramCommand.ViewUnits] = 'viewUnits';
+        this.commandOptions[DiagramCommand.PageSize] = 'pageSize';
         this.commandOptions[DiagramCommand.PageLandscape] = function(value) {
-            this._setOption("pageOrientation", value ? "landscape" : "portrait");
+            this._setOption('pageOrientation', value ? 'landscape' : 'portrait');
         };
         this.commandOptions[DiagramCommand.ViewUnits] = function(value) {
             const { DiagramUnit } = getDiagram();
             switch(value) {
                 case DiagramUnit.In:
-                    this._setOption("viewUnits", "in");
+                    this._setOption('viewUnits', 'in');
                     break;
                 case DiagramUnit.Cm:
-                    this._setOption("viewUnits", "cm");
+                    this._setOption('viewUnits', 'cm');
                     break;
                 case DiagramUnit.Px:
-                    this._setOption("viewUnits", "px");
+                    this._setOption('viewUnits', 'px');
                     break;
             }
         };
-        this.commandOptions[DiagramCommand.PageColor] = "pageColor";
+        this.commandOptions[DiagramCommand.PageColor] = 'pageColor';
 
         this._updateLock = 0;
     }
@@ -70,7 +70,7 @@ class DiagramOptionsUpdateBar extends DiagramBar {
 
         this.beginUpdate();
         try {
-            if(typeof this.commandOptions[key] === "function") {
+            if(typeof this.commandOptions[key] === 'function') {
                 this.commandOptions[key].call(this, value);
             } else {
                 this._setOption(this.commandOptions[key], value);

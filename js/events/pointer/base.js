@@ -1,10 +1,10 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    browser = require("../../core/utils/browser"),
-    domAdapter = require("../../core/dom_adapter"),
-    Class = require("../../core/class"),
-    eventUtils = require("../utils");
+var eventsEngine = require('../../events/core/events_engine'),
+    browser = require('../../core/utils/browser'),
+    domAdapter = require('../../core/dom_adapter'),
+    Class = require('../../core/class'),
+    eventUtils = require('../utils');
 
-var POINTER_EVENTS_NAMESPACE = "dxPointerEvents";
+var POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
 
 var BaseStrategy = Class.inherit({
@@ -19,8 +19,8 @@ var BaseStrategy = Class.inherit({
     _isNoBubble: function() {
         var eventName = this._eventName;
 
-        return eventName === "dxpointerenter" ||
-               eventName === "dxpointerleave";
+        return eventName === 'dxpointerenter' ||
+               eventName === 'dxpointerleave';
     },
 
     _handler: function(e) {
@@ -93,7 +93,7 @@ var BaseStrategy = Class.inherit({
 
         element = this.noBubble ? element : domAdapter.getDocument();
 
-        if(this._originalEvents !== "." + POINTER_EVENTS_NAMESPACE) {
+        if(this._originalEvents !== '.' + POINTER_EVENTS_NAMESPACE) {
             eventsEngine.off(element, this._originalEvents, this._getSelector());
         }
     },

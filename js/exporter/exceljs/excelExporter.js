@@ -1,3 +1,3 @@
-import { exportDataGrid } from "./exportDataGrid";
+import { exportDataGrid } from './exportDataGrid';
 
 export { exportDataGrid };

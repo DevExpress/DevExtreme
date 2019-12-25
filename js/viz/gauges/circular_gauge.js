@@ -1,16 +1,16 @@
 var _isFinite = isFinite,
-    registerComponent = require("../../core/component_registrator"),
-    objectUtils = require("../../core/utils/object"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    dxBaseGauge = require("./base_gauge").dxBaseGauge,
-    dxGauge = require("./common").dxGauge,
-    vizUtils = require("../core/utils"),
+    registerComponent = require('../../core/component_registrator'),
+    objectUtils = require('../../core/utils/object'),
+    extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    dxBaseGauge = require('./base_gauge').dxBaseGauge,
+    dxGauge = require('./common').dxGauge,
+    vizUtils = require('../core/utils'),
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
-    circularIndicatorsModule = require("./circular_indicators"),
-    createIndicatorCreator = require("./common").createIndicatorCreator,
-    CircularRangeContainer = require("./circular_range_container"),
+    circularIndicatorsModule = require('./circular_indicators'),
+    createIndicatorCreator = require('./common').createIndicatorCreator,
+    CircularRangeContainer = require('./circular_range_container'),
 
     _abs = Math.abs,
     _max = Math.max,
@@ -44,7 +44,7 @@ function getSides(startAngle, endAngle) {
 }
 
 var dxCircularGauge = dxGauge.inherit({
-    _rootClass: "dxg-circular-gauge",
+    _rootClass: 'dxg-circular-gauge',
 
     _factoryMethods: {
         rangeContainer: 'createCircularRangeContainer',
@@ -52,14 +52,14 @@ var dxCircularGauge = dxGauge.inherit({
     },
     _gridSpacingFactor: 17,
     _scaleTypes: {
-        type: "polarAxes",
-        drawingType: "circular"
+        type: 'polarAxes',
+        drawingType: 'circular'
     },
 
     _getThemeManagerOptions() {
         let options = this.callBase.apply(this, arguments);
 
-        options.subTheme = "_circular";
+        options.subTheme = '_circular';
         return options;
     },
 
@@ -69,9 +69,9 @@ var dxCircularGauge = dxGauge.inherit({
             textParams = this._scale.measureLabels(extend({}, this._canvas)),
             tickCorrection = length;
 
-        if(scaleOptions.orientation === "inside") {
+        if(scaleOptions.orientation === 'inside') {
             tickCorrection = 0;
-        } else if(scaleOptions.orientation === "center") {
+        } else if(scaleOptions.orientation === 'center') {
             tickCorrection = 0.5 * length;
         }
 
@@ -81,7 +81,7 @@ var dxCircularGauge = dxGauge.inherit({
 
     _setupCodomain: function() {
         var that = this,
-            geometry = that.option("geometry") || {},
+            geometry = that.option('geometry') || {},
             startAngle = geometry.startAngle,
             endAngle = geometry.endAngle,
             sides;
@@ -129,10 +129,10 @@ var dxCircularGauge = dxGauge.inherit({
     _getTicksCoefficients: function(options) {
         var coefs = { inner: 0, outer: 1 };
 
-        if(options.orientation === "inside") {
+        if(options.orientation === 'inside') {
             coefs.inner = 1;
             coefs.outer = 0;
-        } else if(options.orientation === "center") {
+        } else if(options.orientation === 'center') {
             coefs.inner = coefs.outer = 0.5;
         }
 
@@ -284,15 +284,15 @@ var indicators = dxCircularGauge.prototype._factory.indicators = {};
 dxCircularGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
 indicators._default = circularIndicatorsModule._default;
-indicators["rectangleneedle"] = circularIndicatorsModule["rectangleneedle"];
-indicators["triangleneedle"] = circularIndicatorsModule["triangleneedle"];
-indicators["twocolorneedle"] = circularIndicatorsModule["twocolorneedle"];
-indicators["trianglemarker"] = circularIndicatorsModule["trianglemarker"];
-indicators["textcloud"] = circularIndicatorsModule["textcloud"];
-indicators["rangebar"] = circularIndicatorsModule["rangebar"];
+indicators['rectangleneedle'] = circularIndicatorsModule['rectangleneedle'];
+indicators['triangleneedle'] = circularIndicatorsModule['triangleneedle'];
+indicators['twocolorneedle'] = circularIndicatorsModule['twocolorneedle'];
+indicators['trianglemarker'] = circularIndicatorsModule['trianglemarker'];
+indicators['textcloud'] = circularIndicatorsModule['textcloud'];
+indicators['rangebar'] = circularIndicatorsModule['rangebar'];
 
 dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
 
-registerComponent("dxCircularGauge", dxCircularGauge);
+registerComponent('dxCircularGauge', dxCircularGauge);
 
 module.exports = dxCircularGauge;

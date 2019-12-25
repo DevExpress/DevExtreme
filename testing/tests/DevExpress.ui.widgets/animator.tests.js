@@ -1,9 +1,9 @@
-var Animator = require("ui/scroll_view/animator"),
-    animationFrame = require("animation/frame");
+var Animator = require('ui/scroll_view/animator'),
+    animationFrame = require('animation/frame');
 
 var REQEST_ANIMATION_FRAME_TIMEOUT = 10;
 
-QUnit.module("Animator", {
+QUnit.module('Animator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.originalRAF = animationFrame.requestAnimationFrame;
@@ -18,7 +18,7 @@ QUnit.module("Animator", {
     }
 });
 
-QUnit.test("basic", function(assert) {
+QUnit.test('basic', function(assert) {
     assert.expect(1);
 
     var stepsAmount = 10;
@@ -33,7 +33,7 @@ QUnit.test("basic", function(assert) {
             },
 
             _complete: function() {
-                assert.ok(true, "animation executed");
+                assert.ok(true, 'animation executed');
             }
         }),
         animator = new TestAnimator();
@@ -42,7 +42,7 @@ QUnit.test("basic", function(assert) {
     this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
 });
 
-QUnit.test("stop", function(assert) {
+QUnit.test('stop', function(assert) {
     assert.expect(2);
 
     var stepsAmount = 10;
@@ -60,12 +60,12 @@ QUnit.test("stop", function(assert) {
             },
 
             _stop: function() {
-                assert.ok(true, "animation stopped");
-                assert.equal(stepsAmount, 5, "animation stopped with right iteration amount");
+                assert.ok(true, 'animation stopped');
+                assert.equal(stepsAmount, 5, 'animation stopped with right iteration amount');
             },
 
             _complete: function() {
-                assert.ok(false, "complete shouldn`t be fired");
+                assert.ok(false, 'complete shouldn`t be fired');
             }
         }),
         animator = new TestAnimator();
@@ -74,7 +74,7 @@ QUnit.test("stop", function(assert) {
     this.clock.tick(10 * REQEST_ANIMATION_FRAME_TIMEOUT);
 });
 
-QUnit.test("infinite execution without isFinished callback", function(assert) {
+QUnit.test('infinite execution without isFinished callback', function(assert) {
     assert.expect(2);
 
     var completed = 0,
@@ -95,12 +95,12 @@ QUnit.test("infinite execution without isFinished callback", function(assert) {
 
     this.clock.tick(500);
 
-    assert.equal(completed, 0, "complete was not called");
-    assert.ok(stepCount > 0, "animation is working");
+    assert.equal(completed, 0, 'complete was not called');
+    assert.ok(stepCount > 0, 'animation is working');
     animator.stop();
 });
 
-QUnit.test("animation without step callback", function(assert) {
+QUnit.test('animation without step callback', function(assert) {
     assert.expect(2);
 
     var completed = 0,
@@ -121,7 +121,7 @@ QUnit.test("animation without step callback", function(assert) {
 
     this.clock.tick(500);
 
-    assert.equal(completed, 0, "complete was not called");
-    assert.ok(stepCount > 0, "animation is working");
+    assert.equal(completed, 0, 'complete was not called');
+    assert.ok(stepCount > 0, 'animation is working');
     animator.stop();
 });

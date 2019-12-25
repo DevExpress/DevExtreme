@@ -1,16 +1,16 @@
-import { getDocument } from "../../core/dom_adapter";
-import { isDefined } from "../../core/utils/type";
-import { Tooltip } from "../core/tooltip";
-import { extend } from "../../core/utils/extend";
-import { patchFontOptions } from "./utils";
-import { Plaque } from "./plaque";
-import pointerEvents from "../../events/pointer";
-import dragEvents from "../../events/drag";
-import { addNamespace } from "../../events/utils";
-import eventsEngine from "../../events/core/events_engine";
+import { getDocument } from '../../core/dom_adapter';
+import { isDefined } from '../../core/utils/type';
+import { Tooltip } from '../core/tooltip';
+import { extend } from '../../core/utils/extend';
+import { patchFontOptions } from './utils';
+import { Plaque } from './plaque';
+import pointerEvents from '../../events/pointer';
+import dragEvents from '../../events/drag';
+import { addNamespace } from '../../events/utils';
+import eventsEngine from '../../events/core/events_engine';
 
-const EVENT_NS = "annotations";
-const DOT_EVENT_NS = "." + EVENT_NS;
+const EVENT_NS = 'annotations';
+const DOT_EVENT_NS = '.' + EVENT_NS;
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 
@@ -69,11 +69,11 @@ function coreAnnotation(options, contentTemplate) {
 
 function getTemplateFunction(options, widget) {
     let template;
-    if(options.type === "text") {
+    if(options.type === 'text') {
         template = function(item, groupElement) {
             const text = widget._renderer
                 .text(item.text)
-                .attr({ "class": item.cssClass })
+                .attr({ 'class': item.cssClass })
                 .append({ element: groupElement });
 
             if(item.width > 0 || item.height > 0) {
@@ -83,7 +83,7 @@ function getTemplateFunction(options, widget) {
                 });
             }
         };
-    } else if(options.type === "image") {
+    } else if(options.type === 'image') {
         template = function(item, groupElement) {
             const { width, height, url, location } = item.image || {};
             const { width: outerWidth, height: outerHeight } = item;
@@ -91,10 +91,10 @@ function getTemplateFunction(options, widget) {
             const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
 
             widget._renderer
-                .image(0, 0, imageWidth, imageHeight, url, location || "center")
+                .image(0, 0, imageWidth, imageHeight, url, location || 'center')
                 .append({ element: groupElement });
         };
-    } else if(options.type === "custom") {
+    } else if(options.type === 'custom') {
         template = options.template;
     }
 
@@ -124,7 +124,7 @@ export const __test_utils = {
 ///#ENDDEBUG
 
 const chartPlugin = {
-    name: "annotations_chart",
+    name: 'annotations_chart',
     init() {},
     dispose() {},
     members: {
@@ -133,8 +133,8 @@ const chartPlugin = {
                 offsetX: annotation.offsetX,
                 offsetY: annotation.offsetY
             };
-            const argCoordName = this._options.rotated ? "y" : "x";
-            const valCoordName = this._options.rotated ? "x" : "y";
+            const argCoordName = this._options.silent('rotated') ? 'y' : 'x';
+            const valCoordName = this._options.silent('rotated') ? 'x' : 'y';
             const argAxis = this.getArgumentAxis();
             const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
@@ -217,7 +217,7 @@ const chartPlugin = {
     }
 };
 const corePlugin = {
-    name: "annotations_core",
+    name: 'annotations_core',
     init() {
         this._annotations = {
             items: [],
@@ -235,7 +235,7 @@ const corePlugin = {
         };
 
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-        const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
+        const tooltipOptions = extend({}, this._themeManager.getOptions('tooltip'));
 
         tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
 
@@ -249,7 +249,7 @@ const corePlugin = {
     },
     extenders: {
         _createHtmlStructure() {
-            this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
+            this._annotationsGroup = this._renderer.g().attr({ 'class': `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, 'annotations').linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
             eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
@@ -269,44 +269,44 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            const items = this._getOption("annotations");
+            const items = this._getOption('annotations');
             if(!items || !items.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'));
         },
         _getAnnotationCoords() { return {}; }
     },
     customize(constructor) {
         constructor.addChange({
-            code: "ANNOTATIONITEMS",
+            code: 'ANNOTATIONITEMS',
             handler() {
-                this._requestChange(["ANNOTATIONS"]);
+                this._requestChange(['ANNOTATIONS']);
             },
             isOptionChange: true,
-            option: "annotations"
+            option: 'annotations'
         });
 
         constructor.addChange({
-            code: "ANNOTATIONSSETTINGS",
+            code: 'ANNOTATIONSSETTINGS',
             handler() {
-                this._requestChange(["ANNOTATIONS"]);
+                this._requestChange(['ANNOTATIONS']);
             },
             isOptionChange: true,
-            option: "commonAnnotationSettings"
+            option: 'commonAnnotationSettings'
         });
 
         constructor.addChange({
-            code: "ANNOTATIONS",
+            code: 'ANNOTATIONS',
             handler() {
                 this._buildAnnotations();
-                this._change(["FORCE_RENDER"]);
+                this._change(['FORCE_RENDER']);
             },
             isThemeDependent: true,
             isOptionChange: true
         });
     },
-    fontFields: ["commonAnnotationSettings.font"]
+    fontFields: ['commonAnnotationSettings.font']
 };
 
 export const plugins = {

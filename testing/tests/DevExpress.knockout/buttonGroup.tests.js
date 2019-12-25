@@ -1,15 +1,15 @@
-import $ from "jquery";
-import ko from "knockout";
+import $ from 'jquery';
+import ko from 'knockout';
 
-import "ui/button_group";
-import "integration/knockout";
+import 'ui/button_group';
+import 'integration/knockout';
 
-QUnit.module("Render", () => {
+QUnit.module('Render', () => {
     // T831205
-    QUnit.test("Widget rendering when buttonTemplate is used", function(assert) {
+    QUnit.test('Widget rendering when buttonTemplate is used', function(assert) {
         const items = [
-            { text: "Item_1" },
-            { text: "Item_2" }
+            { text: 'Item_1' },
+            { text: 'Item_2' }
         ];
 
         const markup =
@@ -19,20 +19,20 @@ QUnit.module("Render", () => {
             </div>\
         </div>';
 
-        $(markup).appendTo($("#qunit-fixture"));
+        $(markup).appendTo($('#qunit-fixture'));
 
-        const $element = $("#buttongroup-with-template");
+        const $element = $('#buttongroup-with-template');
 
         ko.applyBindings({ items: items }, $element[0]);
 
-        const itemElements = $element.find(".dx-item");
+        const itemElements = $element.find('.dx-item');
 
         assert.equal(itemElements.length, 2);
-        assert.equal(itemElements.eq(0).text().trim(), "Item_1", "item[0].text");
-        assert.equal(itemElements.eq(1).text().trim(), "Item_2", "item[1].text");
+        assert.equal(itemElements.eq(0).text().trim(), 'Item_1', 'item[0].text');
+        assert.equal(itemElements.eq(1).text().trim(), 'Item_2', 'item[1].text');
 
-        $element.find(".dx-template-wrapper").each((index, templateWrapper) => {
-            assert.equal($(templateWrapper).parent().is(itemElements.eq(index)), true, "container for template is button");
+        $element.find('.dx-template-wrapper').each((index, templateWrapper) => {
+            assert.equal($(templateWrapper).parent().is(itemElements.eq(index)), true, 'container for template is button');
         });
     });
 });

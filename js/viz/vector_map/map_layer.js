@@ -1,23 +1,23 @@
-import { noop } from "../../core/utils/common";
-import { extend } from "../../core/utils/extend";
-import { each } from "../../core/utils/iterator";
-import DataHelperMixin from "../../data_helper";
-import { isFunction as _isFunction } from "../../core/utils/type";
-import { isDefined as _isDefined } from "../../core/utils/type";
-import DeferredModule from "../../core/utils/deferred";
+import { noop } from '../../core/utils/common';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import DataHelperMixin from '../../data_helper';
+import { isFunction as _isFunction } from '../../core/utils/type';
+import { isDefined as _isDefined } from '../../core/utils/type';
+import DeferredModule from '../../core/utils/deferred';
 import { parseScalar as _parseScalar,
     patchFontOptions as _patchFontOptions,
     normalizeEnum as _normalizeEnum
-} from "../core/utils";
+} from '../core/utils';
 
 const _noop = noop;
 const _extend = extend;
 const _each = each;
 const _concat = Array.prototype.concat;
 
-const TYPE_AREA = "area";
-const TYPE_LINE = "line";
-const TYPE_MARKER = "marker";
+const TYPE_AREA = 'area';
+const TYPE_LINE = 'line';
+const TYPE_MARKER = 'marker';
 
 const STATE_DEFAULT = 0;
 const STATE_HOVERED = 1;
@@ -27,9 +27,9 @@ const STATE_TO_INDEX = [0, 1, 2, 2];
 const TOLERANCE = 1;
 
 const SELECTIONS = {
-    "none": null,
-    "single": -1,
-    "multiple": NaN
+    'none': null,
+    'single': -1,
+    'multiple': NaN
 };
 
 const _isArray = Array.isArray;
@@ -90,7 +90,7 @@ ArraySource.prototype = {
     },
 
     getBBox: function(index) {
-        return arguments.length === 0 ? undefined : this.raw[index]["bbox"];
+        return arguments.length === 0 ? undefined : this.raw[index]['bbox'];
     }
 };
 
@@ -118,7 +118,7 @@ GeoJsonSource.prototype = {
     },
 
     getBBox: function(index) {
-        return arguments.length === 0 ? this.raw["bbox"] : this.raw.features[index]["bbox"];
+        return arguments.length === 0 ? this.raw['bbox'] : this.raw.features[index]['bbox'];
     }
 };
 
@@ -158,12 +158,12 @@ function customizeHandles(proxies, callback, widget) {
 
 // TODO: Consider moving it inside a strategy
 function setAreaLabelVisibility(label) {
-    label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE && label.size[1] / label.spaceSize[1] < TOLERANCE ? null : "hidden" });
+    label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE && label.size[1] / label.spaceSize[1] < TOLERANCE ? null : 'hidden' });
 }
 
 // TODO: Consider moving it inside a strategy
 function setLineLabelVisibility(label) {
-    label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE || label.size[1] / label.spaceSize[1] < TOLERANCE ? null : "hidden" });
+    label.text.attr({ visibility: label.size[0] / label.spaceSize[0] < TOLERANCE || label.size[1] / label.spaceSize[1] < TOLERANCE ? null : 'hidden' });
 }
 
 function getDataValue(proxy, dataField) {
@@ -187,9 +187,9 @@ function guessTypeByData(sample) {
     var type = TYPE_TO_TYPE_MAP[sample.type],
         coordinates = sample.coordinates;
     if(!type) {
-        if(typeof coordinates[0] === "number") {
+        if(typeof coordinates[0] === 'number') {
             type = TYPE_MARKER;
-        } else if(typeof coordinates[0][0] === "number") {
+        } else if(typeof coordinates[0][0] === 'number') {
             type = TYPE_LINE;
         } else {
             type = TYPE_AREA;
@@ -215,7 +215,7 @@ var selectStrategy = function(options, data) {
             elementType = strategiesByElementType[type][elementType] ? elementType : strategiesByElementType[type]._default;
             _extend(strategy, strategiesByElementType[type][elementType]);
             strategy.elementType = elementType;
-            strategy.fullType += ":" + elementType;
+            strategy.fullType += ':' + elementType;
         }
     }
     return strategy;
@@ -246,7 +246,7 @@ strategiesByType[TYPE_AREA] = {
     transformLabel: transformAreaLabel,
 
     draw: function(context, figure, data) {
-        figure.root = context.renderer.path([], "area").data(context.dataKey, data);
+        figure.root = context.renderer.path([], 'area').data(context.dataKey, data);
     },
 
     refresh: _noop,
@@ -263,15 +263,15 @@ strategiesByType[TYPE_AREA] = {
             opacity = pick(settings.opacity, null);
         return {
             root: [
-                { "class": "dxm-area", stroke: borderColor, "stroke-width": borderWidth, fill: color, opacity: opacity },
-                { "class": "dxm-area dxm-area-hovered", stroke: settings.hoveredBorderColor || borderColor, "stroke-width": pick(settings.hoveredBorderWidth, borderWidth), fill: settings.hoveredColor || color, opacity: pick(settings.hoveredOpacity, opacity) },
-                { "class": "dxm-area dxm-area-selected", stroke: settings.selectedBorderColor || borderColor, "stroke-width": pick(settings.selectedBorderWidth, borderWidth), fill: settings.selectedColor || color, opacity: pick(settings.selectedOpacity, opacity) }
+                { 'class': 'dxm-area', stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
+                { 'class': 'dxm-area dxm-area-hovered', stroke: settings.hoveredBorderColor || borderColor, 'stroke-width': pick(settings.hoveredBorderWidth, borderWidth), fill: settings.hoveredColor || color, opacity: pick(settings.hoveredOpacity, opacity) },
+                { 'class': 'dxm-area dxm-area-selected', stroke: settings.selectedBorderColor || borderColor, 'stroke-width': pick(settings.selectedBorderWidth, borderWidth), fill: settings.selectedColor || color, opacity: pick(settings.selectedOpacity, opacity) }
             ]
         };
     },
 
     setState: function(figure, styles, state) {
-        applyElementState(figure, styles, state, "root");
+        applyElementState(figure, styles, state, 'root');
     },
 
     hasLabelsGroup: true,
@@ -291,7 +291,7 @@ strategiesByType[TYPE_LINE] = {
     transformLabel: transformLineLabel,
 
     draw: function(context, figure, data) {
-        figure.root = context.renderer.path([], "line").data(context.dataKey, data);
+        figure.root = context.renderer.path([], 'line').data(context.dataKey, data);
     },
 
     refresh: _noop,
@@ -307,15 +307,15 @@ strategiesByType[TYPE_LINE] = {
             opacity = pick(settings.opacity, null);
         return {
             root: [
-                { "class": "dxm-line", stroke: color, "stroke-width": width, opacity: opacity },
-                { "class": "dxm-line dxm-line-hovered", stroke: settings.hoveredColor || settings.hoveredBorderColor || color, "stroke-width": pick(settings.hoveredBorderWidth, width), opacity: pick(settings.hoveredOpacity, opacity) },
-                { "class": "dxm-line dxm-line-selected", stroke: settings.selectedColor || settings.selectedBorderColor || color, "stroke-width": pick(settings.selectedBorderWidth, width), opacity: pick(settings.selectedOpacity, opacity) }
+                { 'class': 'dxm-line', stroke: color, 'stroke-width': width, opacity: opacity },
+                { 'class': 'dxm-line dxm-line-hovered', stroke: settings.hoveredColor || settings.hoveredBorderColor || color, 'stroke-width': pick(settings.hoveredBorderWidth, width), opacity: pick(settings.hoveredOpacity, opacity) },
+                { 'class': 'dxm-line dxm-line-selected', stroke: settings.selectedColor || settings.selectedBorderColor || color, 'stroke-width': pick(settings.selectedBorderWidth, width), opacity: pick(settings.selectedOpacity, opacity) }
             ]
         };
     },
 
     setState: function(figure, styles, state) {
-        applyElementState(figure, styles, state, "root");
+        applyElementState(figure, styles, state, 'root');
     },
 
     hasLabelsGroup: true,
@@ -348,9 +348,9 @@ strategiesByType[TYPE_MARKER] = {
     getStyles: function(settings) {
         var styles = {
             root: [
-                { "class": "dxm-marker" },
-                { "class": "dxm-marker dxm-marker-hovered" },
-                { "class": "dxm-marker dxm-marker-selected" }
+                { 'class': 'dxm-marker' },
+                { 'class': 'dxm-marker dxm-marker-hovered' },
+                { 'class': 'dxm-marker dxm-marker-selected' }
             ]
         };
         this._getStyles(styles, settings);
@@ -358,7 +358,7 @@ strategiesByType[TYPE_MARKER] = {
     },
 
     setState: function(figure, styles, state) {
-        applyElementState(figure, styles, state, "root");
+        applyElementState(figure, styles, state, 'root');
         this._setState(figure, styles, state);
     },
 
@@ -375,20 +375,20 @@ strategiesByType[TYPE_MARKER] = {
 var strategiesByGeometry = {};
 strategiesByGeometry[TYPE_AREA] = function(sample) {
     var coordinates = sample.coordinates;
-    return { project: coordinates[0] && coordinates[0][0] && coordinates[0][0][0] && typeof coordinates[0][0][0][0] === "number" ? projectMultiPolygon : projectPolygon };
+    return { project: coordinates[0] && coordinates[0][0] && coordinates[0][0][0] && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon : projectPolygon };
 };
 strategiesByGeometry[TYPE_LINE] = function(sample) {
     var coordinates = sample.coordinates;
-    return { project: coordinates[0] && coordinates[0][0] && typeof coordinates[0][0][0] === "number" ? projectPolygon : projectLineString };
+    return { project: coordinates[0] && coordinates[0][0] && typeof coordinates[0][0][0] === 'number' ? projectPolygon : projectLineString };
 };
 
 var strategiesByElementType = {};
 strategiesByElementType[TYPE_MARKER] = {
-    _default: "dot",
+    _default: 'dot',
 
     dot: {
         setup: function(context) {
-            context.filter = context.renderer.shadowFilter("-40%", "-40%", "180%", "200%", 0, 1, 1, "#000000", 0.2);
+            context.filter = context.renderer.shadowFilter('-40%', '-40%', '180%', '200%', 0, 1, 1, '#000000', 0.2);
         },
 
         reset: function(context) {
@@ -418,20 +418,20 @@ strategiesByElementType[TYPE_MARKER] = {
                 backColor = style.backColor || null,
                 backOpacity = pick(style.backOpacity, null);
             styles.dot = [
-                { r: size / 2, stroke: borderColor, "stroke-width": borderWidth, fill: color, opacity: opacity },
-                { r: hoveredSize / 2, stroke: style.hoveredBorderColor || borderColor, "stroke-width": pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || color, opacity: pick(style.hoveredOpacity, opacity) },
-                { r: selectedSize / 2, stroke: style.selectedBorderColor || borderColor, "stroke-width": pick(style.selectedBorderWidth, borderWidth), fill: style.selectedColor || color, opacity: pick(style.selectedOpacity, opacity) }
+                { r: size / 2, stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
+                { r: hoveredSize / 2, stroke: style.hoveredBorderColor || borderColor, 'stroke-width': pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || color, opacity: pick(style.hoveredOpacity, opacity) },
+                { r: selectedSize / 2, stroke: style.selectedBorderColor || borderColor, 'stroke-width': pick(style.selectedBorderWidth, borderWidth), fill: style.selectedColor || color, opacity: pick(style.selectedOpacity, opacity) }
             ];
             styles.back = [
-                { r: size / 2, stroke: "none", "stroke-width": 0, fill: backColor, opacity: backOpacity },
-                { r: hoveredBackSize / 2, stroke: "none", "stroke-width": 0, fill: backColor, opacity: backOpacity },
-                { r: selectedBackSize / 2, stroke: "none", "stroke-width": 0, fill: backColor, opacity: backOpacity }
+                { r: size / 2, stroke: 'none', 'stroke-width': 0, fill: backColor, opacity: backOpacity },
+                { r: hoveredBackSize / 2, stroke: 'none', 'stroke-width': 0, fill: backColor, opacity: backOpacity },
+                { r: selectedBackSize / 2, stroke: 'none', 'stroke-width': 0, fill: backColor, opacity: backOpacity }
             ];
         },
 
         _setState: function(figure, styles, state) {
-            applyElementState(figure, styles, state, "dot");
-            applyElementState(figure, styles, state, "back");
+            applyElementState(figure, styles, state, 'dot');
+            applyElementState(figure, styles, state, 'back');
         }
     },
 
@@ -450,14 +450,14 @@ strategiesByElementType[TYPE_MARKER] = {
                 borderWidth = pick(style.borderWidth, null),
                 opacity = pick(style.opacity, null);
             styles.bubble = [
-                { stroke: borderColor, "stroke-width": borderWidth, fill: color, opacity: opacity },
-                { stroke: style.hoveredBorderColor || borderColor, "stroke-width": pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || style.color, opacity: pick(style.hoveredOpacity, opacity) },
-                { stroke: style.selectedBorderColor || borderColor, "stroke-width": pick(style.selectedBorderWidth, borderWidth), fill: style.selectedColor || style.color, opacity: pick(style.selectedOpacity, opacity) }
+                { stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
+                { stroke: style.hoveredBorderColor || borderColor, 'stroke-width': pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || style.color, opacity: pick(style.hoveredOpacity, opacity) },
+                { stroke: style.selectedBorderColor || borderColor, 'stroke-width': pick(style.selectedBorderWidth, borderWidth), fill: style.selectedColor || style.color, opacity: pick(style.selectedOpacity, opacity) }
             ];
         },
 
         _setState: function(figure, styles, state) {
-            applyElementState(figure, styles, state, "bubble");
+            applyElementState(figure, styles, state, 'bubble');
         },
 
         arrange: function(context, handles) {
@@ -528,7 +528,7 @@ strategiesByElementType[TYPE_MARKER] = {
             values.forEach(function(item, i) {
                 start = end;
                 end += zeroSum ? sum : (item || 0) / sum * 360;
-                renderer.arc(0, 0, 0, r, start, end).attr({ "stroke-linejoin": "round", fill: colors[i] }).data(dataKey, data).append(pie);
+                renderer.arc(0, 0, 0, r, start, end).attr({ 'stroke-linejoin': 'round', fill: colors[i] }).data(dataKey, data).append(pie);
             });
             figure.border.attr({ r: r });
         },
@@ -543,15 +543,15 @@ strategiesByElementType[TYPE_MARKER] = {
                 { opacity: pick(style.selectedOpacity, opacity) }
             ];
             styles.border = [
-                { stroke: borderColor, "stroke-width": borderWidth },
-                { stroke: style.hoveredBorderColor || borderColor, "stroke-width": pick(style.hoveredBorderWidth, borderWidth) },
-                { stroke: style.selectedBorderColor || borderColor, "stroke-width": pick(style.selectedBorderWidth, borderWidth) }
+                { stroke: borderColor, 'stroke-width': borderWidth },
+                { stroke: style.hoveredBorderColor || borderColor, 'stroke-width': pick(style.hoveredBorderWidth, borderWidth) },
+                { stroke: style.selectedBorderColor || borderColor, 'stroke-width': pick(style.selectedBorderWidth, borderWidth) }
             ];
         },
 
         _setState: function(figure, styles, state) {
-            applyElementState(figure, styles, state, "pie");
-            applyElementState(figure, styles, state, "border");
+            applyElementState(figure, styles, state, 'pie');
+            applyElementState(figure, styles, state, 'border');
         },
 
         arrange: function(context, handles) {
@@ -568,20 +568,20 @@ strategiesByElementType[TYPE_MARKER] = {
                 }
             }
             if(count > 0) {
-                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
+                palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: 'alternate' });
                 values = palette.generateColors(count);
 
                 context.settings._colors = values;
-                context.grouping.color = { callback: _noop, field: "", partition: [], values: [] };
-                context.params.dataExchanger.set(context.name, "color", { partition: [], values: values });
+                context.grouping.color = { callback: _noop, field: '', partition: [], values: [] };
+                context.params.dataExchanger.set(context.name, 'color', { partition: [], values: values });
             }
         }
     },
 
     image: {
         _draw: function(ctx, figure, data) {
-            figure.image = ctx.renderer.image(null, null, null, null, null, "center")
-                .attr({ "pointer-events": "visible" })// T567545
+            figure.image = ctx.renderer.image(null, null, null, null, null, 'center')
+                .attr({ 'pointer-events': 'visible' })// T567545
                 .data(ctx.dataKey, data)
                 .append(figure.root);
         },
@@ -603,7 +603,7 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         _setState: function(figure, styles, state) {
-            applyElementState(figure, styles, state, "image");
+            applyElementState(figure, styles, state, 'image');
         }
     }
 };
@@ -747,7 +747,7 @@ function combineSettings(common, partial) {
 function processCommonSettings(context, options) {
     var themeManager = context.params.themeManager,
         strategy = context.str,
-        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme("layer:" + strategy.fullType)), options),
+        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme('layer:' + strategy.fullType)), options),
         colors,
         i,
         palette;
@@ -789,7 +789,7 @@ function dropGrouping(context) {
 }
 
 var groupByColor = function(context) {
-    performGrouping(context, context.settings.colorGroups, "color", context.settings.colorGroupingField, function(count) {
+    performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, function(count) {
         var _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count),
             i,
             list = [];
@@ -802,7 +802,7 @@ var groupByColor = function(context) {
 
 var groupBySize = function(context, valueCallback) {
     var settings = context.settings;
-    performGrouping(context, settings.sizeGroups, "size", valueCallback || settings.sizeGroupingField, function(count) {
+    performGrouping(context, settings.sizeGroups, 'size', valueCallback || settings.sizeGroupingField, function(count) {
         var minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0,
             maxSize = settings.maxSize >= minSize ? _Number(settings.maxSize) : 0,
             i = 0,
@@ -874,7 +874,7 @@ var MapLayer = function(params, container, name, index) {
         selection: null,
         grouping: {},
         // TODO: Link name should be built upon layer index rather than name
-        root: params.renderer.g().attr({ "class": "dxm-layer" }).linkOn(container, name).linkAppend()
+        root: params.renderer.g().attr({ 'class': 'dxm-layer' }).linkOn(container, name).linkAppend()
     };
     that._container = container;
     that._options = {};
@@ -895,16 +895,16 @@ MapLayer.prototype = _extend({
     _onProjection: function() {
         var that = this;
         that._removeHandlers = that._params.projection.on({
-            "engine": function() {
+            'engine': function() {
                 that._project();
             },
-            "screen": function() {
+            'screen': function() {
                 that._transform();
             },
-            "center": function() {
+            'center': function() {
                 that._transformCore();
             },
-            "zoom": function() {
+            'zoom': function() {
                 that._transform();
             }
         });
@@ -960,7 +960,7 @@ MapLayer.prototype = _extend({
         var that = this;
         options = that._options = options || {};
         that._dataSourceLoaded = new DeferredModule.Deferred();
-        if("dataSource" in options && options.dataSource !== that._options_dataSource) {
+        if('dataSource' in options && options.dataSource !== that._options_dataSource) {
             that._options_dataSource = options.dataSource;
             that._params.notifyDirty();
             that._specificDataSourceOption = wrapToDataSource(options.dataSource);
@@ -1002,7 +1002,7 @@ MapLayer.prototype = _extend({
         if(context.hasSeparateLabel) {
             if(!context.labelRoot) {
                 // TODO: Link name should be built upon layer index rather than name
-                context.labelRoot = context.renderer.g().attr({ "class": "dxm-layer-labels" }).linkOn(that._container, { name: context.name + "-labels", after: context.name }).linkAppend();
+                context.labelRoot = context.renderer.g().attr({ 'class': 'dxm-layer-labels' }).linkOn(that._container, { name: context.name + '-labels', after: context.name }).linkAppend();
                 that._transformCore();
             }
         } else {
@@ -1129,7 +1129,7 @@ MapLayer.prototype = _extend({
     },
 
     raiseClick: function(i, dxEvent) {
-        this._params.eventTrigger("click", {
+        this._params.eventTrigger('click', {
             target: this._handles[i].proxy,
             event: dxEvent
         });
@@ -1262,7 +1262,7 @@ MapLayerElement.prototype = {
             if(!label) {
                 label = that._label = {
                     root: context.labelRoot || that._fig.root,
-                    text: context.renderer.text().attr({ "class": "dxm-label" }),
+                    text: context.renderer.text().attr({ 'class': 'dxm-label' }),
                     size: [0, 0]
                 };
                 if(context.hasSeparateLabel) {
@@ -1270,14 +1270,14 @@ MapLayerElement.prototype = {
                     that._transformLabel();
                 }
             }
-            label.value = _String(that.proxy.text || that.proxy.attribute(labelSettings.dataField) || "");
+            label.value = _String(that.proxy.text || that.proxy.attribute(labelSettings.dataField) || '');
             if(label.value) {
                 // The data should be set when the element is created but it requires changes in the Renderer
                 label.text.attr({ text: label.value, x: 0, y: 0 }).css(_patchFontOptions(labelSettings.font)).attr({
-                    align: "center",
+                    align: 'center',
                     stroke: labelSettings.stroke,
-                    "stroke-width": labelSettings["stroke-width"],
-                    "stroke-opacity": labelSettings["stroke-opacity"]
+                    'stroke-width': labelSettings['stroke-width'],
+                    'stroke-opacity': labelSettings['stroke-opacity']
                 }).data(context.dataKey, that._data).append(label.root);
                 label.settings = settings;
             }
@@ -1339,7 +1339,7 @@ MapLayerElement.prototype = {
             that._state = setFlag(that._state, STATE_HOVERED, newState);
             that._setState();
             that._setForeground();
-            raiseChanged(that._ctx, that, newState, "hoverChanged");
+            raiseChanged(that._ctx, that, newState, 'hoverChanged');
         }
         return that;
     },
@@ -1363,7 +1363,7 @@ MapLayerElement.prototype = {
                 that._setState();
                 that._setForeground();
                 if(!_noEvent) {
-                    raiseChanged(that._ctx, that, newState, "selectionChanged");
+                    raiseChanged(that._ctx, that, newState, 'selectionChanged');
                 }
             }
         }
@@ -1506,8 +1506,8 @@ export function MapLayerCollection(params) {
     that._layerByName = {};
     that._rect = [0, 0, 0, 0];
     that._clip = renderer.clipRect();
-    that._background = renderer.rect().attr({ "class": "dxm-background" }).data(params.dataKey, { name: "background" }).append(renderer.root);
-    that._container = renderer.g().attr({ "class": "dxm-layers", "clip-path": that._clip.id }).append(renderer.root).enableLinks();
+    that._background = renderer.rect().attr({ 'class': 'dxm-background' }).data(params.dataKey, { name: 'background' }).append(renderer.root);
+    that._container = renderer.g().attr({ 'class': 'dxm-layers', 'clip-path': that._clip.id }).append(renderer.root).enableLinks();
     that._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
     that._dataReady = params.dataReady;
 }
@@ -1526,7 +1526,7 @@ MapLayerCollection.prototype = {
     _subscribeToTracker: function(tracker, renderer, eventTrigger) {
         var that = this;
         that._offTracker = tracker.on({
-            "click": function(arg) {
+            'click': function(arg) {
                 // TODO: Adjust `x` and `y` inside the Tracker
                 var offset = renderer.getRootOffset(),
                     layer = that.byName(arg.data.name);
@@ -1535,17 +1535,17 @@ MapLayerCollection.prototype = {
                 // TODO: Remove the "raiseClick" method
                 if(layer) {
                     layer.raiseClick(arg.data.index, arg.$event);
-                } else if(arg.data.name === "background") {
-                    eventTrigger("click", { event: arg.$event });
+                } else if(arg.data.name === 'background') {
+                    eventTrigger('click', { event: arg.$event });
                 }
             },
-            "hover-on": function(arg) {
+            'hover-on': function(arg) {
                 var layer = that.byName(arg.data.name);
                 if(layer) {
                     layer.hoverItem(arg.data.index, true);
                 }
             },
-            "hover-off": function(arg) {
+            'hover-off': function(arg) {
                 var layer = that.byName(arg.data.name);
                 if(layer) {
                     layer.hoverItem(arg.data.index, false);
@@ -1571,7 +1571,7 @@ MapLayerCollection.prototype = {
             that._layerByName = layerByName = {};
             that._layers = layers = [];
             for(let i = 0, ii = optionList.length; i < ii; ++i) {
-                const name = getName(optionList, i) || ("map-layer-" + i);
+                const name = getName(optionList, i) || ('map-layer-' + i);
                 const layer = layers[i] = new MapLayer(that._params, that._container, name, i);
                 layerByName[name] = layer;
             }
@@ -1593,7 +1593,7 @@ MapLayerCollection.prototype = {
     },
 
     setBackgroundOptions: function(options) {
-        this._background.attr({ stroke: options.borderColor, "stroke-width": options.borderWidth, fill: options.color });
+        this._background.attr({ stroke: options.borderColor, 'stroke-width': options.borderWidth, fill: options.color });
         this._borderWidth = _max(options.borderWidth, 0);
         this._updateClip();
     },

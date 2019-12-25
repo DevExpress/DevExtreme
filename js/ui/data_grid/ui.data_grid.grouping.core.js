@@ -1,8 +1,8 @@
-import $ from "../../core/renderer";
-import Class from "../../core/class";
-import gridCore from "./ui.data_grid.core";
-import { normalizeSortingInfo } from "../../data/utils";
-import { when } from "../../core/utils/deferred";
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import gridCore from './ui.data_grid.core';
+import { normalizeSortingInfo } from '../../data/utils';
+import { when } from '../../core/utils/deferred';
 
 exports.createOffsetFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),
@@ -19,17 +19,17 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
             selector = groups[j].selector;
             if(i === j && (path[j] === null || path[j] === false || path[j] === true)) {
                 if(path[j] === false) {
-                    filterElement.push([selector, "=", groups[j].desc ? true : null]);
+                    filterElement.push([selector, '=', groups[j].desc ? true : null]);
                 } else if(path[j] ? !groups[j].desc : groups[j].desc) {
-                    filterElement.push([selector, "<>", path[j]]);
+                    filterElement.push([selector, '<>', path[j]]);
                 } else {
-                    filterElement.push([selector, "<>", null]);
-                    filterElement.push([selector, "=", null]);
+                    filterElement.push([selector, '<>', null]);
+                    filterElement.push([selector, '=', null]);
                 }
             } else {
-                currentFilter = [selector, i === j ? (groups[j].desc ? ">" : "<") : "=", path[j]];
-                if(currentFilter[1] === "<") {
-                    filterElement.push([currentFilter, "or", [selector, "=", null]]);
+                currentFilter = [selector, i === j ? (groups[j].desc ? '>' : '<') : '=', path[j]];
+                if(currentFilter[1] === '<') {
+                    filterElement.push([currentFilter, 'or', [selector, '=', null]]);
                 } else {
                     filterElement.push(currentFilter);
                 }
@@ -38,7 +38,7 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
         filter.push(gridCore.combineFilters(filterElement));
     }
 
-    filter = gridCore.combineFilters(filter, "or");
+    filter = gridCore.combineFilters(filter, 'or');
 
     return gridCore.combineFilters([filter, storeLoadOptions.filter]);
 };
@@ -149,9 +149,9 @@ exports.GroupingHelper = Class.inherit((function() {
             return !this._isVirtualPaging() || !item.isContinuation;
         },
         _isVirtualPaging: function() {
-            var scrollingMode = this._dataSource.option("scrolling.mode");
+            var scrollingMode = this._dataSource.option('scrolling.mode');
 
-            return scrollingMode === "virtual" || scrollingMode === "infinite";
+            return scrollingMode === 'virtual' || scrollingMode === 'infinite';
         },
         itemsCount: function() {
             var dataSourceAdapter = this._dataSource,
@@ -256,7 +256,7 @@ exports.GroupingHelper = Class.inherit((function() {
                 groupIndex,
                 storeLoadOptions = options.storeLoadOptions,
                 groups = normalizeSortingInfo(storeLoadOptions.group || []),
-                oldGroups = "_group" in that ? normalizeSortingInfo(that._group || []) : groups,
+                oldGroups = '_group' in that ? normalizeSortingInfo(that._group || []) : groups,
                 groupsCount = Math.min(oldGroups.length, groups.length);
 
             that._group = storeLoadOptions.group;

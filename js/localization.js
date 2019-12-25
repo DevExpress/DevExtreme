@@ -1,8 +1,8 @@
-let core = require("./localization/core");
-let message = require("./localization/message");
-let number = require("./localization/number");
-let date = require("./localization/date");
-require("./localization/currency");
+let core = require('./localization/core');
+let message = require('./localization/message');
+let number = require('./localization/number');
+let date = require('./localization/date');
+require('./localization/currency');
 
 /**
 * @name localization
@@ -99,10 +99,10 @@ exports.number = number;
 exports.date = date;
 
 exports.disableIntl = () => {
-    if(number.engine() === "intl") {
+    if(number.engine() === 'intl') {
         number.resetInjection();
     }
-    if(date.engine() === "intl") {
+    if(date.engine() === 'intl') {
         date.resetInjection();
     }
 };

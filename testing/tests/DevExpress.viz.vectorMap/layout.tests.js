@@ -1,5 +1,5 @@
-var $ = require("jquery"),
-    layoutModule = require("viz/vector_map/layout");
+var $ = require('jquery'),
+    layoutModule = require('viz/vector_map/layout');
 
 QUnit.module('LayoutControl', {
     beforeEach: function() {

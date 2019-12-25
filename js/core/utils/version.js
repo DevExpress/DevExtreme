@@ -1,10 +1,10 @@
 exports.compare = function(x, y, maxLevel) {
 
     function normalizeArg(value) {
-        if(typeof value === "string") {
-            return value.split(".");
+        if(typeof value === 'string') {
+            return value.split('.');
         }
-        if(typeof value === "number") {
+        if(typeof value === 'number') {
             return [value];
         }
         return value;

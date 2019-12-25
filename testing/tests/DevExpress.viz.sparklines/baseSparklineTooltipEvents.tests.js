@@ -1,22 +1,22 @@
 /* global createTestContainer */
 
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    baseSparkline = require("viz/sparklines/base_sparkline"),
-    eventsEngine = require("events/core/events_engine"),
-    devices = require("core/devices"),
+var $ = require('jquery'),
+    vizMocks = require('../../helpers/vizMocks.js'),
+    rendererModule = require('viz/core/renderers/renderer'),
+    baseSparkline = require('viz/sparklines/base_sparkline'),
+    eventsEngine = require('events/core/events_engine'),
+    devices = require('core/devices'),
     DEFAULT_EVENTS_DELAY = 100;
 
-require("viz/sparkline");
+require('viz/sparkline');
 
-var fixture = $("<div>")
-    .attr("id", "qunit-fixture")
-    .appendTo($("body"));
+var fixture = $('<div>')
+    .attr('id', 'qunit-fixture')
+    .appendTo($('body'));
 
 
-$("<div>")
-    .attr("id", "container")
+$('<div>')
+    .attr('id', 'container')
     .css({ width: 250, height: 100 })
     .appendTo(fixture);
 
@@ -33,7 +33,7 @@ var environment = {
         // this._originalRendererType = dxSparkline.prototype._rendererType;
         this.$container = createTestContainer('#container');
         this.createSparkline = function(options) {
-            return this.$container.dxSparkline(options).dxSparkline("instance");
+            return this.$container.dxSparkline(options).dxSparkline('instance');
         };
         // dxSparkline.prototype._rendererType = vizMocks.Renderer;
         this.triggerDocument = function(name) {
@@ -169,7 +169,7 @@ QUnit.test('Hide tooltip on scroll without delay', function(assert) {
     var originalPlatform = devices.real().platform;
 
     try {
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
         assert.expect(2);
         var sparkline = this.createSparkline({
                 dataSource: [4, 8, 6, 9, 5],
@@ -188,17 +188,17 @@ QUnit.test('Hide tooltip on scroll without delay', function(assert) {
             assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 0, 'Hide timeout set 1 time');
         };
         that.trigger('mouseover', tracker);
-        eventsEngine.trigger(sparkline.$element(), "scroll");
+        eventsEngine.trigger(sparkline.$element(), 'scroll');
     } finally {
         devices.real({ platform: originalPlatform });
     }
 });
 
-QUnit.test("Should not crash on parent scroll if tooltip was not shown", function(assert) {
+QUnit.test('Should not crash on parent scroll if tooltip was not shown', function(assert) {
     var originalPlatform = devices.real().platform;
 
     try {
-        devices.real({ platform: "generic" });
+        devices.real({ platform: 'generic' });
         assert.expect(0);
         var sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 5],
@@ -207,7 +207,7 @@ QUnit.test("Should not crash on parent scroll if tooltip was not shown", functio
             }
         });
 
-        eventsEngine.trigger(sparkline.$element(), "scroll");
+        eventsEngine.trigger(sparkline.$element(), 'scroll');
     } finally {
         devices.real({ platform: originalPlatform });
     }
@@ -305,7 +305,7 @@ QUnit.test('Touchstart', function(assert) {
         tracker = sparkline._tooltipTracker;
 
 
-    this.trigger("touchstart", tracker);
+    this.trigger('touchstart', tracker);
     assert.equal(tooltipShown.callCount, 1);
 });
 
@@ -321,7 +321,7 @@ QUnit.test('Pointerdown', function(assert) {
         }),
         tracker = sparkline._tooltipTracker;
 
-    this.trigger("pointerdown", tracker);
+    this.trigger('pointerdown', tracker);
     assert.equal(tooltipShown.callCount, 1);
 });
 
@@ -341,8 +341,8 @@ QUnit.test('Quick touchend', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("touchstart", tracker);
-    this.triggerDocument("touchend");
+    this.trigger('touchstart', tracker);
+    this.triggerDocument('touchend');
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
@@ -362,8 +362,8 @@ QUnit.test('Quick pointerup', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("pointerdown", tracker);
-    this.triggerDocument("pointerup");
+    this.trigger('pointerdown', tracker);
+    this.triggerDocument('pointerup');
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
@@ -381,7 +381,7 @@ QUnit.test('Touchstart in another place', function(assert) {
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
     sparkline._DEBUG_showCallback = function() {
-        that.triggerDocument("touchstart");
+        that.triggerDocument('touchstart');
         that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
@@ -389,7 +389,7 @@ QUnit.test('Touchstart in another place', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("touchstart", tracker);
+    this.trigger('touchstart', tracker);
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
@@ -407,7 +407,7 @@ QUnit.test('Pointerdown in another place', function(assert) {
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
     sparkline._DEBUG_showCallback = function() {
-        that.triggerDocument("pointerdown");
+        that.triggerDocument('pointerdown');
         that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
@@ -415,7 +415,7 @@ QUnit.test('Pointerdown in another place', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("pointerdown", tracker);
+    this.trigger('pointerdown', tracker);
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
@@ -433,7 +433,7 @@ QUnit.test('Touchstart on document after tooltip showing', function(assert) {
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
     sparkline._DEBUG_showCallback = function() {
-        that.triggerDocument("touchstart");
+        that.triggerDocument('touchstart');
         that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
@@ -441,7 +441,7 @@ QUnit.test('Touchstart on document after tooltip showing', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("touchstart", tracker);
+    this.trigger('touchstart', tracker);
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
@@ -459,7 +459,7 @@ QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
     sparkline._DEBUG_showCallback = function() {
-        that.triggerDocument("pointerdown");
+        that.triggerDocument('pointerdown');
         that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
@@ -467,6 +467,6 @@ QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
         assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout set 1 time');
     };
 
-    this.trigger("pointerdown", tracker);
+    this.trigger('pointerdown', tracker);
     this.clock.tick(DEFAULT_EVENTS_DELAY);
 });

@@ -1,6 +1,6 @@
-var eventRegistratorCallbacks = require("../../events/core/event_registrator_callbacks"),
-    eventsEngine = require("../../events/core/events_engine"),
-    ngModule = require("./module");
+var eventRegistratorCallbacks = require('../../events/core/event_registrator_callbacks'),
+    eventsEngine = require('../../events/core/events_engine'),
+    ngModule = require('./module');
 
 eventRegistratorCallbacks.add(function(name) {
     var ngEventName = name.slice(0, 2) + name.charAt(2).toUpperCase() + name.slice(3);
@@ -10,7 +10,7 @@ eventRegistratorCallbacks.add(function(name) {
                 handler,
                 eventOptions = { };
 
-            if(attrValue.charAt(0) === "{") {
+            if(attrValue.charAt(0) === '{') {
                 eventOptions = scope.$eval(attrValue);
                 handler = $parse(eventOptions.execute);
             } else {
