@@ -612,6 +612,10 @@ var getDatesOfInterval = function(startDate, endDate, step) {
     var currentDate = new Date(startDate.getTime()),
         result = [];
 
+    if(startDate.getTime() === endDate.getTime()) {
+        result.push(new Date(startDate.getTime()));
+    }
+
     while(currentDate < endDate) {
         result.push(new Date(currentDate.getTime()));
 
