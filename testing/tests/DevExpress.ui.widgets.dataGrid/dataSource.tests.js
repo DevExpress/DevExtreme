@@ -3531,6 +3531,8 @@ QUnit.test('Reload dataSource when one expanded group and one group level exist'
 // T454240
 QUnit.test('Error when store not returned groupCount', function(assert) {
     // arrange
+    assert.expect(1);
+
     var dataSource = this.createDataSource({
         group: 'field2'
     }, { skipGroupCount: true });
@@ -3550,6 +3552,8 @@ QUnit.test('Error when store not returned groupCount', function(assert) {
 // T477410
 QUnit.test('Error when store not returned groupCount during expand not last level group', function(assert) {
     // arrange
+    assert.expect(1);
+
     var brokeOptions = {};
     var dataSource = this.createDataSource({
         group: ['field1', 'field2']
