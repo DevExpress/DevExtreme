@@ -533,11 +533,11 @@ class BaseRenderingStrategy {
             }
         }
 
-        var currentDayViewEndHour = new Date(endDate);
-        currentDayViewEndHour = new Date(currentDayViewEndHour.setHours(this.instance.option('endDayHour'), 0, 0));
+        var currentViewEndTime = new Date(endDate);
+        currentViewEndTime = new Date(currentViewEndTime.setHours(this.instance.option('endDayHour'), 0, 0));
 
-        if(endDate.getTime() > currentDayViewEndHour.getTime()) {
-            endDate = currentDayViewEndHour;
+        if(endDate.getTime() > currentViewEndTime.getTime()) {
+            endDate = currentViewEndTime;
         }
 
         return endDate;
