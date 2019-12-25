@@ -82,8 +82,14 @@ class TreeViewTestWrapper {
     }
 
     checkSelectedKeys(expectedSelectedKeys, additionalErrorMessage) {
-        const actualSelectedKeys = this.instance.getSelectedNodesKeys();
-        assert.deepEqual(actualSelectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+        const selectedKeys = this.instance.getSelectedNodesKeys();
+        assert.deepEqual(selectedKeys.sort(), expectedSelectedKeys.sort(), 'getSelectedNodesKeys method ' + additionalErrorMessage);
+
+        const selectedKeysByAdapter = this.instance._dataAdapter.getSelectedNodesKeys();
+        assert.deepEqual(selectedKeysByAdapter.sort(), expectedSelectedKeys.sort(), 'selectedKeys from dataAdapter' + additionalErrorMessage);
+
+        const selectedKeysByNodes = this.instance.getSelectedNodes().map(node => { return node.key; });
+        assert.deepEqual(selectedKeysByNodes.sort(), expectedSelectedKeys.sort(), 'getSelectedNodes method ' + additionalErrorMessage);
     }
 
     checkEventLog(expectedEventLog, additionalErrorMessage) {
