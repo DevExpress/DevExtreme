@@ -13404,6 +13404,55 @@ QUnit.test('row should rendered after editing if scrolling mode is virtual', fun
     assert.equal(dataGrid.hasEditData(), false, 'no unsaved data');
 });
 
+// T837104
+QUnit.test('Update should work after scrolling if scrolling mode is infinite and refresh mode is repaint', function(assert) {
+    var dataGrid = createDataGrid({
+        height: 100,
+        loadingTimeout: undefined,
+        remoteOperations: true,
+        dataSource: {
+            key: 'id',
+            load(options) {
+                var items = [];
+
+                for(var i = options.skip; i < options.skip + options.take; i++) {
+                    let id = i + 1;
+                    items.push({ id: id, name: 'test ' + id });
+                }
+
+                return items;
+            },
+            update() {
+            }
+        },
+        paging: {
+            pageSize: 5
+        },
+        scrolling: {
+            mode: 'infinite',
+            useNative: false
+        },
+        editing: {
+            allowUpdating: true,
+            refreshMode: 'repaint'
+        }
+    });
+
+    // act
+    dataGrid.cellValue(0, 'name', 'updated');
+    dataGrid.saveEditData();
+    dataGrid.getScrollable().scrollTo({ top: 10000 });
+    dataGrid.getScrollable().scrollTo({ top: 10000 });
+    dataGrid.cellValue(9, 'name', 'updated');
+    dataGrid.saveEditData();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { id: 1, name: 'updated' }, 'row 1 is updated');
+    assert.deepEqual(dataGrid.getVisibleRows()[1].data, { id: 2, name: 'test 2' }, 'row 2 is not updated');
+    assert.deepEqual(dataGrid.getVisibleRows()[9].data, { id: 10, name: 'updated' }, 'row 10 is updated');
+});
+
 QUnit.test('Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only', function(assert) {
     // arrange, act
 
