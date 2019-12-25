@@ -31,7 +31,9 @@ function exportDataGrid(options) {
     component.option('loadPanel', loadPanel);
 
     let rowsView = component.getView('rowsView');
-    rowsView.option('loadPanel.animation', null);
+    if('animation' in rowsView.option('loadPanel')) {
+        rowsView.option('loadPanel.animation', null);
+    }
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
