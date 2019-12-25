@@ -157,7 +157,7 @@ function checkItemsLocation($toolbarElement, expected) {
                     }),
                     toolbar = $toolbar.dxToolbar('instance');
 
-                const getExpectedToolbarItems = (location, locateInMenu) => {
+                const getExpectedCountConfig = (location, locateInMenu) => {
                     if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
                         return {
                             menuItemsCount: 1,
@@ -175,16 +175,16 @@ function checkItemsLocation($toolbarElement, expected) {
                     };
                 };
 
-                checkItemsLocation($toolbar, getExpectedToolbarItems(location, locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig(location, locateInMenu));
 
                 toolbar.option('items[0].location', 'center');
-                checkItemsLocation($toolbar, getExpectedToolbarItems('center', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('center', locateInMenu));
 
                 toolbar.option('items[0].location', 'after');
-                checkItemsLocation($toolbar, getExpectedToolbarItems('after', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('after', locateInMenu));
 
                 toolbar.option('items[0].location', 'before');
-                checkItemsLocation($toolbar, getExpectedToolbarItems('before', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('before', locateInMenu));
             });
         });
     });
