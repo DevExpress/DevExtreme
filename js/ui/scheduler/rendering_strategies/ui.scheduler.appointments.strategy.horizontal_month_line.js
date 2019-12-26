@@ -8,14 +8,12 @@ const MILLISECONDS_IN_MINUTE = 60000;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        let startDate = new Date(this.startDate(appointment, false, position));
-        const endDate = new Date(this.endDate(appointment, position, isRecurring));
+        const startDate = dateUtils.trimTime(new Date(this.startDate(appointment, false, position)));
+        const endDate = new Date(this.endDate(appointment, position, isRecurring, true));
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
-        startDate = dateUtils.trimTime(startDate);
-
-        let width = Math.ceil(this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY) * cellWidth;
-        width = this.cropAppointmentWidth(width, cellWidth);
+        const duration = this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY;
+        const width = this.cropAppointmentWidth(Math.ceil(duration) * cellWidth, cellWidth);
 
         return width;
     }

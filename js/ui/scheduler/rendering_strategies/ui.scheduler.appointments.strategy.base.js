@@ -495,14 +495,15 @@ class BaseRenderingStrategy {
         return startDate;
     }
 
-    endDate(appointment, position, isRecurring) {
-        let endDate = this.instance._getEndDate(appointment);
+    endDate(appointment, position, isRecurring, ignoreViewDates = false) {
+        let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
         const realStartDate = this.startDate(appointment, true);
         const viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
             const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate;
             const recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate;
+
             let fullDuration = viewStartDate.getTime() > endDate.getTime() ?
                 this.instance.fire('getField', 'endDate', appointment).getTime() - this.instance.fire('getField', 'startDate', appointment).getTime() :
                 endDate.getTime() - realStartDate.getTime();
@@ -530,6 +531,12 @@ class BaseRenderingStrategy {
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
             }
+        }
+
+        const currentViewEndTime = new Date(new Date(endDate).setHours(this.instance.option('endDayHour'), 0, 0));
+
+        if(endDate.getTime() > currentViewEndTime.getTime()) {
+            endDate = currentViewEndTime;
         }
 
         return endDate;

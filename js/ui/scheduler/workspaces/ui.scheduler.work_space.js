@@ -2147,10 +2147,14 @@ const SchedulerWorkSpace = Widget.inherit({
     },
 
     getTimeShift: function(date) {
-        const cellDuration = this.getCellDuration();
         const currentDayStart = new Date(date);
 
-        currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
+        const cellDuration = this.getCellDuration();
+        const currentDayEndHour = new Date(new Date(date).setHours(this.option('endDayHour'), 0, 0));
+
+        if(date.getTime() <= currentDayEndHour.getTime()) {
+            currentDayStart.setHours(this.option('startDayHour'), 0, 0, 0);
+        }
 
         const currentDateTime = date.getTime();
         const currentDayStartTime = currentDayStart.getTime();

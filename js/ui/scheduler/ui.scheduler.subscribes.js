@@ -795,7 +795,8 @@ const subscribes = {
             let tailDuration;
 
             if(isDifferentDate) {
-                const hiddenDayDuration = dayDuration - visibleDayDuration;
+                const startDateEndHour = new Date(new Date(startDate).setHours(this.option('endDayHour'), 0, 0));
+                const hiddenDayDuration = dayDuration - visibleDayDuration - (startDate.getTime() > startDateEndHour.getTime() ? startDate.getTime() - startDateEndHour.getTime() : 0);
 
                 tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
 
