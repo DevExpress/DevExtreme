@@ -10,7 +10,6 @@
             "jsx": true
         }
     },
-    
     "plugins": [
         "spellcheck"
     ],
