@@ -405,7 +405,7 @@ configs.forEach(config => {
 
                 let expectedKeys = [1];
                 let expectedNodes = [1];
-                let expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+                let expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                 if(!config.expanded) {
                     expectedNodes = [];
                 }
@@ -422,12 +422,12 @@ configs.forEach(config => {
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     expectedKeys = [];
-                    expectedCallbacks = [];
+                    expectedEventLog = [];
                     expectedNodes = [];
                 }
                 wrapper.checkSelectedKeys(expectedKeys, 'after selectItem(1)');
                 wrapper.checkSelectedNodes(expectedNodes, 'after selectItem(1)');
-                wrapper.checkEventLog(expectedCallbacks, 'after selectItem(1)');
+                wrapper.checkEventLog(expectedEventLog, 'after selectItem(1)');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -593,18 +593,18 @@ configs.forEach(config => {
             wrapper.instance.unselectItem(1);
 
             let expectedKeys = [0],
-                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+                expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
             }
             if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                 // unexpected result
                 expectedKeys = [0];
-                expectedCallbacks = [];
+                expectedEventLog = [];
             }
             wrapper.checkSelectedKeys(expectedKeys, 'after unselectItem(1)');
             wrapper.checkSelectedNodes(expectedKeys, 'after unselectItem(1)');
-            wrapper.checkEventLog(expectedCallbacks, 'after unselectItem(1)');
+            wrapper.checkEventLog(expectedEventLog, 'after unselectItem(1)');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
