@@ -150,7 +150,7 @@ function checkItemsLocation($toolbar, expected) {
 
 ['before', 'center', 'after', undefined].forEach((location) => {
     ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
-        [10, 1000].forEach((toolbarWidth) => {
+        [10 /* not enough space to show items */, 1000 /* enough space to show items */].forEach((toolbarWidth) => {
             QUnit.test(`Change item location at runtime (T844890), location: ${location}, locateInMenu: ${locateInMenu}, width: ${toolbarWidth}`, function(assert) {
                 const ITEM_WIDTH = 100;
                 const $toolbar = this.element.dxToolbar({
