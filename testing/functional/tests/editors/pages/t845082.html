@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List Tests T845082</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        <div id="list"></div>
+        <script>
+            $(function(){
+                const list = $('#list').dxList({
+                    dataSource: new DevExpress.data.DataSource({
+                        store: data,
+                        group: 'group'
+                    }),
+                    itemDragging: {
+                        allowReordering: true
+                    },
+                    collapsibleGroups: true,
+                    grouped: true
+                });
+            });
+
+            const data = [
+                { group: 'group1', text: 'value11' },
+                {
+                    group: 'group1',
+                    text: 'value12',
+                    template: (data, index, element) => $('<div>').appendTo(element).dxList({
+                        items: ['value121', 'value122', 'value123'],
+                        itemTemplate: (data, index, element) => {
+                            $(element)
+                                .text(data)
+                                .parent()
+                                .addClass("nested-item");
+                        }
+                    })
+                },
+                { group: 'group1', text: 'value13' }
+            ];
+        </script>
+    </body>
+</html>
