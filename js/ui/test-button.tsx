@@ -1,4 +1,4 @@
-import { Component, Prop, Event, InternalState, Listen, React, Template } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, Listen, React } from "../component_declaration/common";
 import { getDocument } from '../core/dom_adapter';
 import { getImageSourceType } from '../core/utils/icon';
 import { isDefined } from '../core/utils/type';
@@ -40,6 +40,7 @@ const getImageContainerJSX = (source: string) => {
         return (<i className={`${ICON_CLASS} ${ICON_CLASS}-${source}`}></i>);
     if(type === 'svg')
         return (<i className={`${ICON_CLASS} ${SVG_ICON_CLASS}`}>{source}></i>);
+    return null;
 }
 
 // from core/utils/icon - END
