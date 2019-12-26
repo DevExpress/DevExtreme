@@ -166,8 +166,9 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
                     }
                 };
 
-                const defaultLocation = location || 'center';
-                checkItemsLocation($toolbar, { [defaultLocation]: 1 });
+                const expectedInitial = {};
+                expectedInitial[location || 'center'] = 1;
+                checkItemsLocation($toolbar, expectedInitial);
 
                 toolbar.option('items[0].location', 'center');
                 checkItemsLocation($toolbar, { center: 1 });
