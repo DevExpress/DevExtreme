@@ -18,7 +18,11 @@ gulp.task('generate-components', function() {
     const tsProject = gulpTypeScript.createProject('build/gulp/preact.tsconfig.json');
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
-        .pipe(plumber())
+        .pipe(plumber({
+            errorHandler: function() {
+
+            }
+        }))
         .pipe(tsProject({
             error(e) {
                 if(!knownErrors.some(i => e.message.endsWith(i))) {

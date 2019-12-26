@@ -95,6 +95,7 @@ function patchTheme(theme) {
         tooltip: { font: {} },
         'chart:common': {},
         'chart:common:axis': { grid: {}, minorGrid: {}, tick: {}, minorTick: {}, title: { font: {} }, label: { font: {} } },
+        'chart:common:annotation': { font: {}, border: {} },
         chart: { commonSeriesSettings: { candlestick: {} } },
         pie: {},
         polar: {},
@@ -135,6 +136,7 @@ function patchTheme(theme) {
     _each(['chart', 'polar'], function(_, section) {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
+        mergeObject(theme[section], 'commonAnnotationSettings', null, theme['chart:common:annotation']);
     });
     mergeObject(theme.rangeSelector.chart, 'commonSeriesSettings', theme.chart);
     mergeObject(theme.rangeSelector.chart, 'dataPrepareSettings', theme.chart);

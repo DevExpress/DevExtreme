@@ -1213,7 +1213,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     // #region DOM_Manipulation
     _isCellValid: function($cell, isClick) {
-        if(isElementDefined($cell)) {
+        if(isElementDefined($cell) && this._columnsController) {
             var rowsView = this.getView('rowsView'),
                 $row = $cell.parent(),
                 visibleColumns = this._columnsController.getVisibleColumns(),
@@ -1542,7 +1542,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getCell: function(cellPosition) {
-        if(this._focusedView && cellPosition) {
+        if(this._focusedView && this._dataController && cellPosition) {
             return this._focusedView.getCell({
                 rowIndex: cellPosition.rowIndex - this._dataController.getRowIndexOffset(),
                 columnIndex: cellPosition.columnIndex,

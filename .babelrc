@@ -3,7 +3,8 @@
     "plugins": [
         "transform-es2015-modules-commonjs",
          "add-module-exports",
-        ["transform-react-jsx", { "pragma": "Preact.h" }]
+        ["transform-react-jsx", { "pragma": "Preact.h" }],
+        "transform-object-assign"
     ],
     "ignore": ["**/*.json", "**/sinon.js", "**/*.tsx"]
 }

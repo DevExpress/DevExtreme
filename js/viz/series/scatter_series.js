@@ -765,5 +765,23 @@ exports.polar = _extend({}, baseScatterMethods, {
             minY: canvas.top,
             maxY: canvas.height - canvas.bottom
         };
+    },
+
+    getSeriesPairCoord(params, isArgument) {
+        let coords = null;
+        const paramName = isArgument ? 'argument' : 'radius';
+        const points = this.getVisiblePoints();
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf() ? { x: p.x, y: p.y } : undefined;
+
+            if(_isDefined(tmpPoint)) {
+                coords = tmpPoint;
+                break;
+            }
+        }
+
+        return coords;
     }
 });

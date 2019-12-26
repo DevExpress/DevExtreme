@@ -77,6 +77,20 @@ registerTheme({
             color: WHITE
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: '#929292'
+        },
+        border: {
+            color: BORDER_COLOR
+        },
+        color: SOME_GREY,
+        shadow: {
+            opacity: 0.008,
+            offsetY: 4,
+            blur: 8
+        }
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -91,20 +105,6 @@ registerTheme({
         zoomAndPan: {
             dragBoxStyle: {
                 color: WHITE
-            }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: '#929292'
-            },
-            border: {
-                color: BORDER_COLOR
-            },
-            color: SOME_GREY,
-            shadow: {
-                opacity: 0.008,
-                offsetY: 4,
-                blur: 8
             }
         }
     },

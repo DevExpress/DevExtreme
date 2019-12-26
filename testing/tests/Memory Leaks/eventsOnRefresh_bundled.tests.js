@@ -24,11 +24,11 @@ $.each(DevExpress.ui, function(componentName) {
                 originalEventSubscriptions,
                 newEventSubscriptions;
 
-            this.clock.tick(0);
+            this.clock.tick(100);
             originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             component._refresh();
-            this.clock.tick(0);
+            this.clock.tick(100);
             newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After an option changes and causes re-rendering, no additional event subscriptions must be created');
