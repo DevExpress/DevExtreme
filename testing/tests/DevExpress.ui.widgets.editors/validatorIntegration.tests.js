@@ -51,17 +51,14 @@ var Fixture = Class.inherit({
     }
 });
 
-
-(function() {
-    QUnit.module('Regression', {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
-    });
-
+QUnit.module('Regression', {
+    beforeEach: function() {
+        this.fixture = new Fixture();
+    },
+    afterEach: function() {
+        this.fixture.teardown();
+    }
+}, () => {
     QUnit.test('dateBox and Validator', function(assert) {
         this.fixture.createInstance('dxDateBox', { pickerType: 'calendar' }, { validationRules: [{ type: 'required' }] });
 
@@ -224,7 +221,6 @@ var Fixture = Class.inherit({
         });
     });
 
-
     QUnit.test('NumberBox.reset should validate the default value', function(assert) {
         const validationCallback = sinon.spy();
         this.fixture.createInstance('dxNumberBox', { }, {
@@ -240,6 +236,7 @@ var Fixture = Class.inherit({
         // When we decide to break this behavior, we can add "dxNumberBox" to the editors array in the test case above and delete this test.
         assert.ok(validationCallback.called, 'validationCallback should be called after dxNumberBox.reset');
     });
+
     QUnit.test('Validator.reset should not validate the default NumberBox value', function(assert) {
         const validationCallback = sinon.spy();
         this.fixture.createInstance('dxNumberBox', { }, {
@@ -253,4 +250,5 @@ var Fixture = Class.inherit({
 
         assert.notOk(validationCallback.called, 'validationCallback should not be called');
     });
-})('Regression');
+});
+
