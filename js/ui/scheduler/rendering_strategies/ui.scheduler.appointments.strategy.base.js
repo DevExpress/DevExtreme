@@ -487,17 +487,15 @@ class BaseRenderingStrategy {
         return startDate;
     }
 
-    endDate(appointment, position, isRecurring) {
-        var endDate = this.instance._getEndDate(appointment),
-            realStartDate = this.startDate(appointment, true),
+    endDate(appointment, position, isRecurring, ignoreViewDates = false) {
+        let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
+        const realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
-            var recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
+            const recurrencePartStartDate = position ? position.initialStartDate || position.startDate : realStartDate,
                 recurrencePartCroppedByViewStartDate = position ? position.startDate : realStartDate,
-                fullDuration = endDate.getTime() - realStartDate.getTime();
-
-            fullDuration = this._adjustDurationByDaylightDiff(fullDuration, realStartDate, endDate);
+                fullDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - realStartDate.getTime(), realStartDate, endDate);
 
             endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()));
 
@@ -506,7 +504,7 @@ class BaseRenderingStrategy {
             }
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartCroppedByViewStartDate.getTime() < viewStartDate.getTime()) {
-                var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime(),
+                const headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartCroppedByViewStartDate.getTime(),
                     tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
@@ -515,10 +513,16 @@ class BaseRenderingStrategy {
         }
 
         if(!this.isAllDay(appointment)) {
-            var viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
+            const viewEndDate = dateUtils.roundToHour(this.instance.fire('getEndViewDate'));
 
             if(endDate > viewEndDate) {
                 endDate = viewEndDate;
+            }
+
+            const currentViewEndTime = new Date(new Date(endDate).setHours(this.instance.option('endDayHour'), 0, 0));
+
+            if(endDate.getTime() > currentViewEndTime.getTime()) {
+                endDate = currentViewEndTime;
             }
         }
 
