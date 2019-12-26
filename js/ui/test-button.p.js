@@ -10,6 +10,7 @@ const getImageContainerJSX = (source) => {
     if(type === 'fontIcon') { return (Preact.h('i', { className: `${ICON_CLASS} ${source}` })); }
     if(type === 'dxIcon') { return (Preact.h('i', { className: `${ICON_CLASS} ${ICON_CLASS}-${source}` })); }
     if(type === 'svg') { return (Preact.h('i', { className: `${ICON_CLASS} ${SVG_ICON_CLASS}` }, source)); }
+    return null;
 };
 const getCssClasses = (model) => {
     const classNames = ['dx-widget', 'dx-button'];
