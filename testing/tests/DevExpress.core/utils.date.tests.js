@@ -614,7 +614,7 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
     assert.deepEqual(dates[4], new Date(2018, 8, 4, 12, 13, 0), 'Date in interval is correct');
 });
 
-QUnit.test('the getDatesBetween method should return firstDate if firstDate=lastDate', function(assert) {
+QUnit.test('the getDatesBetween method should return firstDate if firstDate=lastDate(T845632)', function(assert) {
     const startDate = new Date(2018, 7, 31, 12, 13, 0),
         endDate = new Date(2018, 7, 31, 12, 13, 0);
 
