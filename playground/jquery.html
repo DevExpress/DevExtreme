@@ -22,53 +22,14 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 <body>
-    <input type="button" value="Change item location" onclick="clickHandler1();" />
-    <input type="button" value="Change item visible" onclick="clickHandler2();" />
-    <div class="dx-viewport demo-container">
-        <div id="toolbar1"></div>
-        <div id="toolbar2"></div>
-    </div>
-
-
+    <div id="button"></div>
     <script>
-function clickHandler1(){
-  toolbar = $("#toolbar2").dxToolbar('instance');
-  debugger;  
-  var items = toolbar.option('items');
-  //items[0].location = 'after';
-  toolbar.option('items[0].location', 'before'); 
-  //toolbar.repaint();
-}
-
-function clickHandler2(){
-  toolbar = $("#toolbar2").dxToolbar('instance');
-  debugger;  
-  var items = toolbar.option('items');
-  //items[0].visible = false;
-  toolbar.option('items[0].visible', false); 
-  //toolbar.repaint();  
-}
-
-$(function(){
-    $("#toolbar1").dxToolbar({
-        width: 1,
-        items: [{
-                        locateInMenu: 'auto', 
-                        location: 'after',
-                        text: 'toolbar item'
-
-                    }]
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
-    $("#toolbar2").dxToolbar({
-        width: 1000,
-        items: [{
-                        locateInMenu: 'auto', 
-                        location: 'after',
-                        text: 'toolbar item'
-
-                    }]
-            });            
-});
+        });
     </script>
 </body>
 </html>
