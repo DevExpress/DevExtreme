@@ -90,7 +90,7 @@ QUnit.module('Basics', () => {
     });
 
     QUnit.test('Calendar should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
-        const $element = $('<div>').appendTo('body'), spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
+        const $element = $('<div>').appendTo('body'); const spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         this.view = new Views['month']($element, {
             date: new Date(2017, 11, 11),
@@ -132,7 +132,7 @@ QUnit.module('MonthView', {
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
-        const secondDate = new Date(2013, 9, 1), secondDateCell = this.$element.find('table').find('td').eq(1);
+        const secondDate = new Date(2013, 9, 1); const secondDateCell = this.$element.find('table').find('td').eq(1);
         this.view.option('value', secondDate);
         assert.ok(secondDateCell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
     });
@@ -148,14 +148,14 @@ QUnit.module('MonthView', {
     });
 
     QUnit.test('changing contouredDate must add CALENDAR_CONTOURED_DATE_CLASS class to a cell', function(assert) {
-        const date = new Date(2013, 9, 1), dateCell = this.$element.find('table').find('td').eq(1);
+        const date = new Date(2013, 9, 1); const dateCell = this.$element.find('table').find('td').eq(1);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must remove CALENDAR_CONTOURED_DATE_CLASS class from the old cell', function(assert) {
-        const date = new Date(2013, 9, 1), newDate = new Date(2013, 9, 2), dateCell = this.$element.find('table').find('td').eq(1);
+        const date = new Date(2013, 9, 1); const newDate = new Date(2013, 9, 2); const dateCell = this.$element.find('table').find('td').eq(1);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
@@ -204,21 +204,21 @@ QUnit.module('YearView', {
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
-        const secondDate = new Date(2013, 1, 1), secondDateCell = this.$element.find('table').find('td').eq(1);
+        const secondDate = new Date(2013, 1, 1); const secondDateCell = this.$element.find('table').find('td').eq(1);
 
         this.view.option('value', secondDate);
         assert.ok(secondDateCell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must add CALENDAR_CONTOURED_DATE_CLASS class to a cell', function(assert) {
-        const date = new Date(2013, 4, 1), dateCell = this.$element.find('table').find('td').eq(4);
+        const date = new Date(2013, 4, 1); const dateCell = this.$element.find('table').find('td').eq(4);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must remove CALENDAR_CONTOURED_DATE_CLASS class from the old cell', function(assert) {
-        const date = new Date(2013, 9, 1), newDate = new Date(2013, 4, 1), dateCell = this.$element.find('table').find('td').eq(9);
+        const date = new Date(2013, 9, 1); const newDate = new Date(2013, 4, 1); const dateCell = this.$element.find('table').find('td').eq(9);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
@@ -255,21 +255,21 @@ QUnit.module('DecadeView', {
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
-        const secondDate = new Date(2010, 1, 1), secondDateCell = this.$element.find('table').find('td').eq(1);
+        const secondDate = new Date(2010, 1, 1); const secondDateCell = this.$element.find('table').find('td').eq(1);
 
         this.view.option('value', secondDate);
         assert.ok(secondDateCell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must add CALENDAR_CONTOURED_DATE_CLASS class to a cell', function(assert) {
-        const date = new Date(2012, 1, 1), dateCell = this.$element.find('table').find('td').eq(3);
+        const date = new Date(2012, 1, 1); const dateCell = this.$element.find('table').find('td').eq(3);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must remove CALENDAR_CONTOURED_DATE_CLASS class from the old cell', function(assert) {
-        const date = new Date(2012, 1, 1), newDate = new Date(2016, 1, 1), dateCell = this.$element.find('table').find('td').eq(3);
+        const date = new Date(2012, 1, 1); const newDate = new Date(2016, 1, 1); const dateCell = this.$element.find('table').find('td').eq(3);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
@@ -328,14 +328,14 @@ QUnit.module('CenturyView', {
     });
 
     QUnit.test('changing contouredDate must add CALENDAR_CONTOURED_DATE_CLASS class to a cell', function(assert) {
-        const date = new Date(2030, 1, 1), dateCell = this.$element.find('table').find('td').eq(4);
+        const date = new Date(2030, 1, 1); const dateCell = this.$element.find('table').find('td').eq(4);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
     });
 
     QUnit.test('changing contouredDate must remove CALENDAR_CONTOURED_DATE_CLASS class from the old cell', function(assert) {
-        const date = new Date(2030, 1, 1), newDate = new Date(2050, 1, 1), dateCell = this.$element.find('table').find('td').eq(4);
+        const date = new Date(2030, 1, 1); const newDate = new Date(2050, 1, 1); const dateCell = this.$element.find('table').find('td').eq(4);
 
         this.view.option('contouredDate', date);
         assert.ok(dateCell.hasClass(CALENDAR_CONTOURED_DATE_CLASS));
@@ -376,7 +376,7 @@ QUnit.module('MonthView min/max', {
     });
 
     QUnit.test('monthView should not allow to navigate to a date earlier than min and later than max via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', this.min);
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -412,14 +412,14 @@ QUnit.module('MonthView disabledDates', {
 }, () => {
 
     QUnit.test('monthView should not allow to select disabled dates via pointer events', function(assert) {
-        const disabledDays = [1, 2, 3, 4], dateCells = this.$element.find('table').find('td');
+        const disabledDays = [1, 2, 3, 4]; const dateCells = this.$element.find('table').find('td');
 
         pointerMock(dateCells[0]).click();
         assert.ok(disabledDays.indexOf(this.view.option('value').getDate()));
     });
 
     QUnit.test('monthView should not allow to navigate to a disabled date', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', new Date(2010, 10, 5));
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -451,14 +451,14 @@ QUnit.module('MonthView disabledDates as array', {
     }
 }, () => {
     QUnit.test('monthView should not allow to select disabled dates via pointer events', function(assert) {
-        const disabledDays = [1, 2, 3, 4], dateCells = this.$element.find('table').find('td');
+        const disabledDays = [1, 2, 3, 4]; const dateCells = this.$element.find('table').find('td');
 
         pointerMock(dateCells[0]).click();
         assert.ok(disabledDays.indexOf(this.view.option('value').getDate()));
     });
 
     QUnit.test('monthView should not allow to navigate to a disabled date', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', new Date(2010, 10, 5));
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -486,7 +486,7 @@ QUnit.module('YearView min/max', {
     }
 }, () => {
     QUnit.test('yearView should not allow to navigate to a date earlier than min and later than max via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', this.min);
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -521,7 +521,7 @@ QUnit.module('YearView disabledDates', {
     }
 }, () => {
     QUnit.test('yearView should not allow to navigate to a disabled date via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', new Date(2015, 3, 15));
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -550,7 +550,7 @@ QUnit.module('DecadeView min/max', {
     }
 }, () => {
     QUnit.test('decadeView should not allow to navigate to a date earlier than min and later than max via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', this.min);
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -585,7 +585,7 @@ QUnit.module('DecadeView disabledDates', {
     }
 }, () => {
     QUnit.test('decadeView should not allow to navigate to a disabled date via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', new Date(2015, 3, 15));
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -613,7 +613,7 @@ QUnit.module('CenturyView min/max', {
     }
 }, () => {
     QUnit.test('centuryView should not allow to navigate to a date earlier than min and later than max via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', this.min);
         triggerKeydown(UP_ARROW_KEY_CODE, $element);
@@ -646,7 +646,7 @@ QUnit.module('CenturyView disabledDates', {
     }
 }, () => {
     QUnit.test('centuryView should not allow to navigate to a disabled date via keyboard events', function(assert) {
-        const $element = this.$element, view = this.view;
+        const $element = this.$element; const view = this.view;
 
         view.option('contouredDate', new Date(2070, 0, 15));
         triggerKeydown(UP_ARROW_KEY_CODE, $element);

@@ -1214,19 +1214,19 @@ const KeyboardNavigationController = core.ViewController.inherit({
     // #region DOM_Manipulation
     _isCellValid: function($cell, isClick) {
         if(isElementDefined($cell) && this._columnsController) {
-            const rowsView = this.getView('rowsView'),
-                  $row = $cell.parent(),
-                  visibleColumns = this._columnsController.getVisibleColumns(),
-                  columnIndex = rowsView.getCellIndex($cell),
-                  column = visibleColumns[columnIndex],
-                  visibleColumnCount = this._getVisibleColumnCount(),
-                  editingController = this._editingController,
-                  isMasterDetailRow = isDetailRow($row),
-                  isShowWhenGrouped = column && column.showWhenGrouped,
-                  isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row),
-                  isValidGroupSpaceColumn = function() {
-                      return !isMasterDetailRow && column && (!isDefined(column.groupIndex) || isShowWhenGrouped && isDataCell) || parseInt($cell.attr('colspan')) > 1;
-                  };
+            const rowsView = this.getView('rowsView');
+            const $row = $cell.parent();
+            const visibleColumns = this._columnsController.getVisibleColumns();
+            const columnIndex = rowsView.getCellIndex($cell);
+            const column = visibleColumns[columnIndex];
+            const visibleColumnCount = this._getVisibleColumnCount();
+            const editingController = this._editingController;
+            const isMasterDetailRow = isDetailRow($row);
+            const isShowWhenGrouped = column && column.showWhenGrouped;
+            const isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row);
+            const isValidGroupSpaceColumn = function() {
+                return !isMasterDetailRow && column && (!isDefined(column.groupIndex) || isShowWhenGrouped && isDataCell) || parseInt($cell.attr('colspan')) > 1;
+            };
 
             if(this._isMasterDetailCell($cell)) {
                 return true;

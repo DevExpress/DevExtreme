@@ -53,7 +53,7 @@ QUnit.module('render', {
             ]
         });
 
-        const labelElement = this.element.find('.' + TOOLBAR_ITEM_CLASS)[0], labelMaxWidth = parseInt(labelElement.style.maxWidth);
+        const labelElement = this.element.find('.' + TOOLBAR_ITEM_CLASS)[0]; const labelMaxWidth = parseInt(labelElement.style.maxWidth);
 
         labelElement.style.maxWidth = '';
 
@@ -77,7 +77,7 @@ QUnit.module('render', {
         assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
         assert.equal($label.children().eq(0).css('overflow'), 'hidden');
 
-        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS), beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width, afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS); const beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width; const afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
 
         assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
         assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
@@ -104,7 +104,7 @@ QUnit.module('render', {
         assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
         assert.equal($label.children().eq(0).css('overflow'), 'hidden');
 
-        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS), beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width, afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS); const beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width; const afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
 
         assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
         assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
@@ -116,13 +116,13 @@ QUnit.module('render', {
 
     QUnit.test('Center element has correct margin with RTL', function(assert) {
         const element = this.element.dxToolbar({
-                      rtlEnabled: true,
-                      items: [
-                          { location: 'before', text: 'before' },
-                          { location: 'center', text: 'center' }
-                      ]
-                  }),
-              margin = element.find('.' + TOOLBAR_CLASS + '-center').get(0).style.margin;
+            rtlEnabled: true,
+            items: [
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
+            ]
+        });
+        const margin = element.find('.' + TOOLBAR_CLASS + '-center').get(0).style.margin;
 
         assert.equal(margin, '0px auto', 'aligned by center');
     });
@@ -134,16 +134,16 @@ QUnit.module('render', {
         ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const element = this.element.dxToolbar({
-                      items: [{
-                          location: 'before',
-                          widget: 'dxButton',
-                          options: {
-                              type: 'default',
-                              text: 'Back'
-                          }
-                      }]
-                  }),
-              button = element.find('.dx-button').first();
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
+                    text: 'Back'
+                }
+            }]
+        });
+        const button = element.find('.dx-button').first();
 
         assert.ok(button.hasClass('dx-button-mode-text'));
 
@@ -154,14 +154,14 @@ QUnit.module('render', {
 
     QUnit.test('Toolbar with compact mode has the compact class', function(assert) {
         const $toolbar = this.element.dxToolbar({
-                      items: [
-                          { location: 'before', text: 'before' },
-                          { location: 'center', text: 'center' }
-                      ],
-                      compactMode: true,
-                      width: 20
-                  }),
-              toolbar = $toolbar.dxToolbar('instance');
+            items: [
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
+            ],
+            compactMode: true,
+            width: 20
+        });
+        const toolbar = $toolbar.dxToolbar('instance');
 
         assert.ok($toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar with compact mode and small width has the compact class');
 
@@ -180,16 +180,16 @@ QUnit.module('render', {
 
     QUnit.test('Buttons has default style in generic theme', function(assert) {
         const element = this.element.dxToolbar({
-                      items: [{
-                          location: 'before',
-                          widget: 'dxButton',
-                          options: {
-                              type: 'default',
-                              text: 'Back'
-                          }
-                      }]
-                  }),
-              button = element.find('.dx-button');
+            items: [{
+                location: 'before',
+                widget: 'dxButton',
+                options: {
+                    type: 'default',
+                    text: 'Back'
+                }
+            }]
+        });
+        const button = element.find('.dx-button');
 
         assert.notOk(button.hasClass('dx-button-mode-text'));
     });
@@ -300,7 +300,7 @@ QUnit.module('toolbar with menu', {
             submenuType: 'dropDownMenu'
         });
 
-        const $button = this.element.find('.' + DROP_DOWN_MENU_CLASS), ddMenu = $button.dxDropDownMenu('instance'), position = ddMenu.option('popupPosition');
+        const $button = this.element.find('.' + DROP_DOWN_MENU_CLASS); const ddMenu = $button.dxDropDownMenu('instance'); const position = ddMenu.option('popupPosition');
 
         assert.equal(position.at, 'bottom right', 'at position is correct');
         assert.equal(position.my, 'top right', 'my position is correct');
@@ -411,21 +411,21 @@ QUnit.module('widget sizing render', () => {
     });
 
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxToolbar({ width: 400 }), instance = $element.dxToolbar('instance');
+        const $element = $('#widget').dxToolbar({ width: 400 }); const instance = $element.dxToolbar('instance');
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual($element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('root with custom width', function(assert) {
-        const $element = $('#widthRootStyle').dxToolbar(), instance = $element.dxToolbar('instance');
+        const $element = $('#widthRootStyle').dxToolbar(); const instance = $element.dxToolbar('instance');
 
         assert.strictEqual(instance.option('width'), undefined);
         assert.strictEqual($element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxToolbar(), instance = $element.dxToolbar('instance'), customWidth = 400;
+        const $element = $('#widget').dxToolbar(); const instance = $element.dxToolbar('instance'); const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -434,15 +434,15 @@ QUnit.module('widget sizing render', () => {
 
     QUnit.test('text should crop in the label inside the toolbar on toolbar\'s width changing', function(assert) {
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', text: 'Before long text label' },
-                          { location: 'after', text: 'after' }
-                      ],
-                      width: 300
-                  }),
-              instance = $element.dxToolbar('instance'),
-              $before = $element.find('.dx-toolbar-before').eq(0),
-              $after = $element.find('.dx-toolbar-after').eq(0);
+            items: [
+                { location: 'before', text: 'Before long text label' },
+                { location: 'after', text: 'after' }
+            ],
+            width: 300
+        });
+        const instance = $element.dxToolbar('instance');
+        const $before = $element.find('.dx-toolbar-before').eq(0);
+        const $after = $element.find('.dx-toolbar-after').eq(0);
 
         instance.option('width', 100);
 
@@ -451,13 +451,13 @@ QUnit.module('widget sizing render', () => {
 
     QUnit.test('text should crop in the label inside the toolbar on window\'s width changing', function(assert) {
         const $element = $('#widget').width(300).dxToolbar({
-                      items: [
-                          { location: 'before', text: 'Before long text label' },
-                          { location: 'after', text: 'after' }
-                      ]
-                  }),
-              $before = $element.find('.dx-toolbar-before').eq(0),
-              $after = $element.find('.dx-toolbar-after').eq(0);
+            items: [
+                { location: 'before', text: 'Before long text label' },
+                { location: 'after', text: 'after' }
+            ]
+        });
+        const $before = $element.find('.dx-toolbar-before').eq(0);
+        const $after = $element.find('.dx-toolbar-after').eq(0);
 
         $element.width(100);
         resizeCallbacks.fire();
@@ -475,7 +475,7 @@ QUnit.module('widget sizing render', () => {
             width: 359
         });
 
-        const $center = $element.find('.dx-toolbar-center').eq(0), $label = $center.children('.dx-toolbar-label').eq(0), $after = $element.find('.dx-toolbar-after').eq(0);
+        const $center = $element.find('.dx-toolbar-center').eq(0); const $label = $center.children('.dx-toolbar-label').eq(0); const $after = $element.find('.dx-toolbar-after').eq(0);
 
         assert.ok(Math.floor($label.position().left + $label.outerWidth()) <= Math.floor($element.outerWidth() - $after.outerWidth()), 'label is positioned correctly');
     });
@@ -589,15 +589,15 @@ QUnit.module('adaptivity', {
 }, () => {
     QUnit.test('center section should be at correct position for huge after section', function(assert) {
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $('<div>').width(50); } },
-                          { location: 'center', template: function() { return $('<div>').width(50); } },
-                          { location: 'after', template: function() { return $('<div>').width(200); } },
-                      ],
-                      width: 400
-                  }),
-              $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0),
-              $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
+            items: [
+                { location: 'before', template: function() { return $('<div>').width(50); } },
+                { location: 'center', template: function() { return $('<div>').width(50); } },
+                { location: 'after', template: function() { return $('<div>').width(200); } },
+            ],
+            width: 400
+        });
+        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
+        const $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
 
         assert.equal($center.offset().left + $center.outerWidth(), $after.offset().left, 'center has correct position');
     });
@@ -615,22 +615,22 @@ QUnit.module('adaptivity', {
 
         $element.dxToolbar('option', 'width', 1000);
 
-        const elementCenter = $element.offset().left + $element.outerWidth() * 0.5, itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
+        const elementCenter = $element.offset().left + $element.outerWidth() * 0.5; const itemCenter = $item.offset().left + $item.outerWidth() * 0.5;
 
         assert.equal(itemCenter, elementCenter, 'item has correct position');
     });
 
     QUnit.test('center section should be at correct position for huge before section', function(assert) {
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $('<div>').width(200); } },
-                          { location: 'center', template: function() { return $('<div>').width(50); } },
-                          { location: 'after', template: function() { return $('<div>').width(50); } },
-                      ],
-                      width: 400
-                  }),
-              $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0),
-              $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
+            items: [
+                { location: 'before', template: function() { return $('<div>').width(200); } },
+                { location: 'center', template: function() { return $('<div>').width(50); } },
+                { location: 'after', template: function() { return $('<div>').width(50); } },
+            ],
+            width: 400
+        });
+        const $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0);
+        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
 
 
         assert.equal($center.offset().left, $before.offset().left + $before.outerWidth(), 'center has correct position');
@@ -639,15 +639,15 @@ QUnit.module('adaptivity', {
     QUnit.test('center section should be at correct position for huge after section after change size', function(assert) {
         const $item = $('<div>').width(200);
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $('<div>').width(50); } },
-                          { location: 'center', template: function() { return $('<div>').width(50); } },
-                          { location: 'after', template: function() { return $item; } },
-                      ],
-                      width: 400
-                  }),
-              $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0),
-              $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
+            items: [
+                { location: 'before', template: function() { return $('<div>').width(50); } },
+                { location: 'center', template: function() { return $('<div>').width(50); } },
+                { location: 'after', template: function() { return $item; } },
+            ],
+            width: 400
+        });
+        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
+        const $after = $element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS).eq(0);
 
         $item.width(190);
         resizeCallbacks.fire();
@@ -658,15 +658,15 @@ QUnit.module('adaptivity', {
     QUnit.test('center section should be at correct position for huge before section after change size', function(assert) {
         const $item = $('<div>').width(200);
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $item; } },
-                          { location: 'center', template: function() { return $('<div>').width(50); } },
-                          { location: 'after', template: function() { return $('<div>').width(50); } },
-                      ],
-                      width: 400
-                  }),
-              $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0),
-              $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
+            items: [
+                { location: 'before', template: function() { return $item; } },
+                { location: 'center', template: function() { return $('<div>').width(50); } },
+                { location: 'after', template: function() { return $('<div>').width(50); } },
+            ],
+            width: 400
+        });
+        const $before = $element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS).eq(0);
+        const $center = $element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS).eq(0);
 
         $item.width(190);
         resizeCallbacks.fire();
@@ -871,16 +871,16 @@ QUnit.module('adaptivity', {
 
     QUnit.test('visibility of dropdown menu should be changed if overflow items was hidden/shown after resize', function(assert) {
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $('<div>').width(100); } },
-                          { location: 'center', template: function() { return $('<div>').width(150); } },
-                          { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
-                          { location: 'center', template: function() { return $('<div>').width(100); } },
-                          { location: 'after', template: function() { return $('<div>').width(100); } },
-                      ],
-                      width: 400
-                  }),
-              $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
+            items: [
+                { location: 'before', template: function() { return $('<div>').width(100); } },
+                { location: 'center', template: function() { return $('<div>').width(150); } },
+                { location: 'center', locateInMenu: 'auto', template: function() { return $('<div>').width(100); } },
+                { location: 'center', template: function() { return $('<div>').width(100); } },
+                { location: 'after', template: function() { return $('<div>').width(100); } },
+            ],
+            width: 400
+        });
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
 
         $element.dxToolbar('option', 'width', 1000);
         assert.ok($dropDownMenu.is(':hidden'), 'menu is hidden');
@@ -902,7 +902,7 @@ QUnit.module('adaptivity', {
             width: 400
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
@@ -920,7 +920,7 @@ QUnit.module('adaptivity', {
             width: 1000
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), 'item was rendered in menu');
@@ -965,7 +965,7 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -990,7 +990,7 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
         dropDown.open();
 
         $($beforeItem).trigger('dxclick');
@@ -1008,7 +1008,7 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1033,7 +1033,7 @@ QUnit.module('adaptivity', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1048,7 +1048,7 @@ QUnit.module('adaptivity', {
     QUnit.test('overflow item should rendered with correct template in menu and in toolbar', function(assert) {
         assert.expect(4);
 
-        const $toolbarTemplate = $('<div>').width(500), $menuTemplate = $('<div>');
+        const $toolbarTemplate = $('<div>').width(500); const $menuTemplate = $('<div>');
 
         const $element = $('#widget').dxToolbar({
             items: [
@@ -1066,7 +1066,7 @@ QUnit.module('adaptivity', {
 
         $element.dxToolbar('option', 'width', 400);
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.option('onItemRendered', function(args) {
             assert.ok($.contains($(args.itemElement).get(0), $menuTemplate.get(0)), 'item was rendered in menu');
@@ -1093,7 +1093,7 @@ QUnit.module('adaptivity', {
         });
 
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         if(!dropDown.option('focusStateEnabled')) {
             assert.expect(0);
@@ -1103,7 +1103,7 @@ QUnit.module('adaptivity', {
 
         dropDown.open();
 
-        const $item1 = $('.dx-list-item').eq(0), $item2 = $('.dx-list-item').eq(1);
+        const $item1 = $('.dx-list-item').eq(0); const $item2 = $('.dx-list-item').eq(1);
 
         $($item2).trigger('dxpointerdown');
         this.clock.tick();
@@ -1117,7 +1117,7 @@ QUnit.module('adaptivity', {
             items: [{ locateInMenu: 'always', text: 'item1' }]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.open();
         dropDown.close();
@@ -1132,8 +1132,8 @@ QUnit.module('adaptivity', {
         assert.expect(3);
 
         const $element = $('#widget').dxToolbar({
-                items: [{ locateInMenu: 'always', text: 'item1', visible: false }]
-            });
+            items: [{ locateInMenu: 'always', text: 'item1', visible: false }]
+        });
 
         let $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
 
@@ -1189,13 +1189,13 @@ QUnit.module('adaptivity', {
         ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
         const $element = $('#widget').dxToolbar({
-                      items: [
-                          { location: 'before', template: function() { return $('<div>').width(300); } },
-                          { location: 'before', locateInMenu: 'auto', template: function() { return $input; } }
-                      ],
-                      width: 300
-                  }),
-              dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
+            items: [
+                { location: 'before', template: function() { return $('<div>').width(300); } },
+                { location: 'before', locateInMenu: 'auto', template: function() { return $input; } }
+            ],
+            width: 300
+        });
+        const dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS).dxDropDownMenu('instance');
 
         dropDown.open();
         $input.focus();
@@ -1215,7 +1215,7 @@ QUnit.module('adaptivity', {
             ]
         });
 
-        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDownMenu.dxDropDownMenu('instance');
+        const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDownMenu.dxDropDownMenu('instance');
 
         dropDown.open();
 
@@ -1303,7 +1303,7 @@ QUnit.module('default template', {
             width: 100
         });
 
-        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS), dropDown = $dropDown.dxDropDownMenu('instance');
+        const $dropDown = $element.find('.' + DROP_DOWN_MENU_CLASS); const dropDown = $dropDown.dxDropDownMenu('instance');
 
         dropDown.open();
         const $items = $('.dx-dropdownmenu-list .dx-list-item');

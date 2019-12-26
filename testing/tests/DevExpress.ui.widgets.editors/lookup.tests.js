@@ -152,7 +152,7 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup, $field = this.$field;
+        const popup = this.popup; const $field = this.$field;
 
         assert.ok(popup.option('visible'), 'popup shows on click');
 
@@ -181,7 +181,7 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const popup = this.popup, $field = this.$field;
+        const popup = this.popup; const $field = this.$field;
 
         $field.trigger('dxclick');
         assert.ok(!popup.option('visible'), 'popup hides on click');
@@ -198,7 +198,7 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        let $firstItem = $(this.$list.find('.dx-list-item')[0]), $secondItem = $(this.$list.find('.dx-list-item')[1]);
+        let $firstItem = $(this.$list.find('.dx-list-item')[0]); let $secondItem = $(this.$list.find('.dx-list-item')[1]);
 
         $firstItem = $(this.$list.find('.dx-list-item')[0]);
         $($firstItem).trigger('dxclick');
@@ -344,17 +344,17 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('class selected', function(assert) {
-        const items = [1, 2],
-              lookup = this.element
-                  .dxLookup({
-                      dataSource: items,
-                      value: items[1]
-                  })
-                  .dxLookup('instance');
+        const items = [1, 2];
+        const lookup = this.element
+            .dxLookup({
+                dataSource: items,
+                value: items[1]
+            })
+            .dxLookup('instance');
 
         this.togglePopup();
 
-        const $firstItem = $(lookup._list.$element().find('.dx-list-item')[0]), $secondItem = $(lookup._list.$element().find('.dx-list-item')[1]);
+        const $firstItem = $(lookup._list.$element().find('.dx-list-item')[0]); const $secondItem = $(lookup._list.$element().find('.dx-list-item')[1]);
 
         assert.ok($secondItem.hasClass(LIST_ITEM_SELECTED_CLASS), 'class selected was added');
 
@@ -365,19 +365,19 @@ QUnit.module('Lookup', {
 
     QUnit.test('complex items', function(assert) {
         const items = [{
-                      value: 1,
-                      text: 'one'
-                  }, {
-                      value: 2,
-                      text: 'two'
-                  }],
-              lookup = this.element
-                  .dxLookup({
-                      dataSource: items,
-                      displayExpr: 'text',
-                      valueExpr: 'value'
-                  })
-                  .dxLookup('instance');
+            value: 1,
+            text: 'one'
+        }, {
+            value: 2,
+            text: 'two'
+        }];
+        const lookup = this.element
+            .dxLookup({
+                dataSource: items,
+                displayExpr: 'text',
+                valueExpr: 'value'
+            })
+            .dxLookup('instance');
 
         assert.equal(this.$field.text(), lookup.option('placeholder'), 'no field text if no selected value');
 
@@ -423,13 +423,13 @@ QUnit.module('Lookup', {
 
     QUnit.test('selectedItem should be changed correctly with composite keys and valueExpr', function(assert) {
         const data = [
-                      { ID1: 1, ID2: 21 },
-                      { ID1: 2, ID2: 22 }
-                  ],
-              store = new ArrayStore({
-                  key: ['ID1', 'ID2'],
-                  data: data
-              });
+            { ID1: 1, ID2: 21 },
+            { ID1: 2, ID2: 22 }
+        ];
+        const store = new ArrayStore({
+            key: ['ID1', 'ID2'],
+            data: data
+        });
 
         this.element.dxLookup({
             dataSource: store,
@@ -440,7 +440,7 @@ QUnit.module('Lookup', {
 
         instance.open();
 
-        const $popup = $('.dx-popup-wrapper'), $listItems = $popup.find('.dx-list-item');
+        const $popup = $('.dx-popup-wrapper'); const $listItems = $popup.find('.dx-list-item');
 
         $($listItems.eq(1)).trigger('dxclick');
 
@@ -449,20 +449,20 @@ QUnit.module('Lookup', {
 
     QUnit.test('valueExpr calculating', function(assert) {
         const store = new ArrayStore({
-                      key: 'k',
-                      data: [
-                          { k: 1, v: 'a' },
-                          { k: 2, v: 'b' }
-                      ]
-                  }),
-              dataSource = new DataSource({
-                  store: store,
-                  paginate: false
-              }),
-              lookup = this.element.dxLookup({
-                  dataSource: [1, 2],
-                  value: 1
-              }).dxLookup('instance');
+            key: 'k',
+            data: [
+                { k: 1, v: 'a' },
+                { k: 2, v: 'b' }
+            ]
+        });
+        const dataSource = new DataSource({
+            store: store,
+            paginate: false
+        });
+        const lookup = this.element.dxLookup({
+            dataSource: [1, 2],
+            value: 1
+        }).dxLookup('instance');
 
         assert.equal(this.$field.text(), 1, 'if option valueExpr and store key are not defined, use \'this\' as valueExpr');
 
@@ -764,17 +764,17 @@ QUnit.module('Lookup', {
 
     QUnit.test('userDataSource: lookup with not defined value', function(assert) {
         // arrange
-        const lookupKeys = [],
-              userDataSource = {
-                  load: function(loadOptions) {
-                      return [];
-                  },
+        const lookupKeys = [];
+        const userDataSource = {
+            load: function(loadOptions) {
+                return [];
+            },
 
-                  lookup: function(key) {
-                      lookupKeys.push(key);
-                      return null;
-                  }
-              };
+            lookup: function(key) {
+                lookupKeys.push(key);
+                return null;
+            }
+        };
 
         // act
         this.instance.option({
@@ -809,7 +809,7 @@ QUnit.module('Lookup', {
 
         this.togglePopup();
 
-        const loadTriggeredAtStart = loadTriggered, search = this.search;
+        const loadTriggeredAtStart = loadTriggered; const search = this.search;
 
         search.option('value', 't');
         this.clock.tick(300);
@@ -841,41 +841,41 @@ QUnit.module('Lookup', {
 
     QUnit.test('UserDateSource with map, minSearchLength > 0', function(assert) {
         const items = [
-                      {
-                          id: 1,
-                          name: 'Tom',
-                          lastName: 'Smith'
-                      },
-                      {
-                          id: 2,
-                          name: 'James',
-                          lastName: 'Adams'
-                      },
-                      {
-                          id: 3,
-                          name: 'Joe',
-                          lastName: 'Doe'
-                      }
-                  ],
-              dataSource = new DataSource({
-                  store: items,
-                  map: function(item) {
-                      return {
-                          value: item.id,
-                          text: item.name + ' ' + item.lastName
-                      };
-                  }
-              });
+            {
+                id: 1,
+                name: 'Tom',
+                lastName: 'Smith'
+            },
+            {
+                id: 2,
+                name: 'James',
+                lastName: 'Adams'
+            },
+            {
+                id: 3,
+                name: 'Joe',
+                lastName: 'Doe'
+            }
+        ];
+        const dataSource = new DataSource({
+            store: items,
+            map: function(item) {
+                return {
+                    value: item.id,
+                    text: item.name + ' ' + item.lastName
+                };
+            }
+        });
 
         dataSource.load();
 
-        const store = new ArrayStore(dataSource.items()),
-              lookupDataSource = new DataSource({
-                  load: function(loadOptions) {
-                      return store.load(loadOptions.searchValue ? { filter: ['text', 'contains', loadOptions.searchValue] } : null);
-                  },
-                  lookup: $.proxy(dataSource.lookup, dataSource)
-              });
+        const store = new ArrayStore(dataSource.items());
+        const lookupDataSource = new DataSource({
+            load: function(loadOptions) {
+                return store.load(loadOptions.searchValue ? { filter: ['text', 'contains', loadOptions.searchValue] } : null);
+            },
+            lookup: $.proxy(dataSource.lookup, dataSource)
+        });
 
         this.instance.option({
             dataSource: lookupDataSource,
@@ -897,15 +897,15 @@ QUnit.module('Lookup', {
 
     QUnit.test('value onValueChanged callback', function(assert) {
         const items = [
-                {
-                    id: 1,
-                    name: 'Tom'
-                },
-                {
-                    id: 2,
-                    name: 'James'
-                }
-            ];
+            {
+                id: 1,
+                name: 'Tom'
+            },
+            {
+                id: 2,
+                name: 'James'
+            }
+        ];
 
         const lookup = this.element
             .dxLookup({
@@ -984,14 +984,14 @@ QUnit.module('Lookup', {
 
     QUnit.test('lookup with Done does not closed after item click', function(assert) {
         const lookup = this.element.dxLookup({
-                      dataSource: [1, 2, 3],
-                      value: 1,
-                      showClearButton: false,
-                      applyValueMode: 'useButtons',
-                      showCancelButton: false,
-                      opened: true
-                  }).dxLookup('instance'),
-              $list = lookup._$list;
+            dataSource: [1, 2, 3],
+            value: 1,
+            showClearButton: false,
+            applyValueMode: 'useButtons',
+            showCancelButton: false,
+            opened: true
+        }).dxLookup('instance');
+        const $list = lookup._$list;
 
         $($list.find('.dx-list-item').eq(1)).trigger('dxclick');
         assert.ok(lookup.option('opened'), 'popup dont hide after click');
@@ -1011,7 +1011,7 @@ QUnit.module('Lookup', {
 
         openPopupWithList(lookup);
 
-        const $firstListItem = $(lookup._list.$element().find('.dx-list-item').eq(0)), mouse = pointerMock($firstListItem).start();
+        const $firstListItem = $(lookup._list.$element().find('.dx-list-item').eq(0)); const mouse = pointerMock($firstListItem).start();
 
         mouse.down().move(0, 10).up();
         this.clock.tick(500);
@@ -1022,20 +1022,20 @@ QUnit.module('Lookup', {
 
     QUnit.test('regression: B236007 (check that selection item in one lookup do not effect to another)', function(assert) {
         const $firstLookup = $('#lookup').dxLookup({
-                      items: ['1', '2', '3'],
-                      value: '1'
-                  }),
-              firstLookup = $firstLookup.dxLookup('instance'),
-              $secondLookup = $('#secondLookup').dxLookup({
-                  items: ['1', '2', '3'],
-                  value: '2'
-              }),
-              secondLookup = $secondLookup.dxLookup('instance');
+            items: ['1', '2', '3'],
+            value: '1'
+        });
+        const firstLookup = $firstLookup.dxLookup('instance');
+        const $secondLookup = $('#secondLookup').dxLookup({
+            items: ['1', '2', '3'],
+            value: '2'
+        });
+        const secondLookup = $secondLookup.dxLookup('instance');
 
         openPopupWithList(firstLookup);
         assert.equal($('.' + LIST_ITEM_SELECTED_CLASS).length, 1);
 
-        const $firstListItem = $(firstLookup._list.$element().find('.dx-list-item').eq(0)), mouse = pointerMock($firstListItem);
+        const $firstListItem = $(firstLookup._list.$element().find('.dx-list-item').eq(0)); const mouse = pointerMock($firstListItem);
         mouse.start().down().move(0, 10).up();
 
         openPopupWithList(secondLookup);
@@ -1242,7 +1242,7 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('lookup empty class is attached when no item is selected', function(assert) {
-        const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: 'placeholder' }), lookup = $lookup.dxLookup('instance'), LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
+        const $lookup = this.element.dxLookup({ dataSource: [1, 2, 3], showClearButton: true, placeholder: 'placeholder' }); const lookup = $lookup.dxLookup('instance'); const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 
         assert.ok($lookup.hasClass(LOOKUP_EMPTY_CLASS), 'Lookup without preselected value has empty class');
 
@@ -1377,7 +1377,7 @@ QUnit.module('Lookup', {
     });
 
     QUnit.test('Check popup position for Material theme when fullScreen option is true ', function(assert) {
-        const isMaterialStub = sinon.stub(themes, 'isMaterial'), $lookup = $('#lookup');
+        const isMaterialStub = sinon.stub(themes, 'isMaterial'); const $lookup = $('#lookup');
 
         isMaterialStub.returns(true);
 
@@ -1447,11 +1447,11 @@ QUnit.module('Lookup', {
 QUnit.module('hidden input', () => {
     QUnit.test('the hidden input should get correct value on widget value change', function(assert) {
         const $element = $('#lookup').dxLookup({
-                      items: [1, 2, 3],
-                      value: 2
-                  }),
-              instance = $element.dxLookup('instance'),
-              $input = $element.find('input[type=\'hidden\']');
+            items: [1, 2, 3],
+            value: 2
+        });
+        const instance = $element.dxLookup('instance');
+        const $input = $element.find('input[type=\'hidden\']');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
@@ -1460,12 +1460,12 @@ QUnit.module('hidden input', () => {
 
 QUnit.module('the \'name\' option', () => {
     QUnit.test('hidden input should get correct \'name\' attribute after the \'name\' option is changed', function(assert) {
-        const expectedName = 'lookup',
-              $element = $('#lookup').dxLookup({
-                  name: 'initialName'
-              }),
-              instance = $element.dxLookup('instance'),
-              $input = $element.find('input[type=\'hidden\']');
+        const expectedName = 'lookup';
+        const $element = $('#lookup').dxLookup({
+            name: 'initialName'
+        });
+        const instance = $element.dxLookup('instance');
+        const $input = $element.find('input[type=\'hidden\']');
 
         instance.option('name', expectedName);
         assert.equal($input.attr('name'), expectedName, 'input has correct \'name\' attribute');
@@ -1585,9 +1585,9 @@ QUnit.module('options', {
 
     QUnit.test('searchPlaceholder', function(assert) {
         const instance = $('#lookup').dxLookup({
-                dataSource: [1, 2, 3],
-                searchPlaceholder: 'searchPlaceHolderTest'
-            }).dxLookup('instance');
+            dataSource: [1, 2, 3],
+            searchPlaceholder: 'searchPlaceHolderTest'
+        }).dxLookup('instance');
 
         let search;
 
@@ -1602,9 +1602,9 @@ QUnit.module('options', {
 
     QUnit.test('searchEnabled', function(assert) {
         const instance = $('#lookup').dxLookup({
-                opened: true,
-                dataSource: []
-            }).dxLookup('instance');
+            opened: true,
+            dataSource: []
+        }).dxLookup('instance');
 
         let popup;
         let $search;
@@ -1627,14 +1627,14 @@ QUnit.module('options', {
         }
 
         const instance = $('#lookup').dxLookup({
-                      items: [1, 11, 111],
-                      deferRendering: false,
-                      opened: true,
-                      cleanSearchOnOpening: true
-                  }).dxLookup('instance'),
-              searchBox = instance._searchBox,
-              $list = instance._$list,
-              $listItems = $list.find('.dx-list-item');
+            items: [1, 11, 111],
+            deferRendering: false,
+            opened: true,
+            cleanSearchOnOpening: true
+        }).dxLookup('instance');
+        const searchBox = instance._searchBox;
+        const $list = instance._$list;
+        const $listItems = $list.find('.dx-list-item');
 
         searchBox.option('value', 1);
         $($listItems.eq(2)).trigger('dxpointerdown');
@@ -1709,12 +1709,12 @@ QUnit.module('options', {
 
     QUnit.test('displayExpr, valueExpr', function(assert) {
         const items = [{
-                number: 1,
-                caption: 'one'
-            }, {
-                number: 2,
-                caption: 'two'
-            }];
+            number: 1,
+            caption: 'one'
+        }, {
+            number: 2,
+            caption: 'two'
+        }];
 
         const instance = $('#lookup').dxLookup({
             dataSource: items,
@@ -1743,7 +1743,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('value', function(assert) {
-        const items = [1, 2, 3], instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance'), $field = $(instance._$field);
+        const items = [1, 2, 3]; const instance = $('#lookup').dxLookup({ dataSource: items }).dxLookup('instance'); const $field = $(instance._$field);
 
         assert.equal($field.text(), instance.option('placeholder'), 'no field text if no selected value');
 
@@ -1758,12 +1758,12 @@ QUnit.module('options', {
     });
 
     QUnit.test('value in field should be selected', function(assert) {
-        const date = new Date(),
-              items = [date],
-              instance = $('#lookup').dxLookup({
-                  dataSource: items,
-                  value: date
-              }).dxLookup('instance');
+        const date = new Date();
+        const items = [date];
+        const instance = $('#lookup').dxLookup({
+            dataSource: items,
+            value: date
+        }).dxLookup('instance');
 
         $(instance._$field).trigger('dxclick');
 
@@ -1774,18 +1774,18 @@ QUnit.module('options', {
 
     QUnit.test('value with dataSource', function(assert) {
         const dataSource = new DataSource({
-                      store: [1, 2],
-                      pageSize: 1,
-                      paginate: false
-                  }),
-              instance = $('#lookup').dxLookup({
-                  dataSource: dataSource,
-                  value: 2
-              }).dxLookup('instance');
+            store: [1, 2],
+            pageSize: 1,
+            paginate: false
+        });
+        const instance = $('#lookup').dxLookup({
+            dataSource: dataSource,
+            value: 2
+        }).dxLookup('instance');
 
         $(instance._$field).trigger('dxclick');
 
-        const $firstItem = $(instance._list._itemElements()[0]), $secondItem = $(instance._list._itemElements()[1]), $field = $(instance._$field);
+        const $firstItem = $(instance._list._itemElements()[0]); const $secondItem = $(instance._list._itemElements()[1]); const $field = $(instance._$field);
 
         assert.ok($secondItem.hasClass(LIST_ITEM_SELECTED_CLASS), 'class selected was added');
         assert.ok(!$firstItem.hasClass(LIST_ITEM_SELECTED_CLASS), 'class selected was not added to unselected item');
@@ -1800,23 +1800,23 @@ QUnit.module('options', {
 
     QUnit.test('value with dataSource and complex items', function(assert) {
         const dataSource = new DataSource({
-                      store: [
-                          { value: 1 },
-                          { value: 2 }
-                      ],
-                      pageSize: 1,
-                      paginate: false
-                  }),
-              instance = $('#lookup').dxLookup({
-                  dataSource: dataSource,
-                  displayExpr: 'value',
-                  valueExpr: 'value',
-                  value: 2
-              }).dxLookup('instance');
+            store: [
+                { value: 1 },
+                { value: 2 }
+            ],
+            pageSize: 1,
+            paginate: false
+        });
+        const instance = $('#lookup').dxLookup({
+            dataSource: dataSource,
+            displayExpr: 'value',
+            valueExpr: 'value',
+            value: 2
+        }).dxLookup('instance');
 
         $(instance._$field).trigger('dxclick');
 
-        const $firstItem = $(instance._list.$element().find('.dx-list-item')[0]), $secondItem = $(instance._list.$element().find('.dx-list-item')[1]), $field = $(instance._$field);
+        const $firstItem = $(instance._list.$element().find('.dx-list-item')[0]); const $secondItem = $(instance._list.$element().find('.dx-list-item')[1]); const $field = $(instance._$field);
 
         assert.ok(!$firstItem.hasClass(LIST_ITEM_SELECTED_CLASS), 'class selected was not added to unselected item');
         assert.ok($secondItem.hasClass(LIST_ITEM_SELECTED_CLASS), 'class selected was added');
@@ -1863,7 +1863,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('items after null data source', function(assert) {
-        const items2 = [4, 5], instance = $('#lookup').dxLookup({}).dxLookup('instance');
+        const items2 = [4, 5]; const instance = $('#lookup').dxLookup({}).dxLookup('instance');
 
         instance.option('items', items2);
 
@@ -1888,10 +1888,10 @@ QUnit.module('options', {
 
     QUnit.test('fullScreen', function(assert) {
         const instance = $('#lookup').dxLookup({
-                dataSource: [],
-                fullScreen: true,
-                usePopover: false
-            }).dxLookup('instance');
+            dataSource: [],
+            fullScreen: true,
+            usePopover: false
+        }).dxLookup('instance');
 
         let popup;
 
@@ -1919,17 +1919,17 @@ QUnit.module('options', {
     });
 
     QUnit.test('minSearchLength', function(assert) {
-        const placeholder = 'placeholder',
-              instance = $('#lookup').dxLookup({
-                  dataSource: ['abc', 'def'],
-                  minSearchLength: 3,
-                  searchTimeout: 0,
-                  placeholder: placeholder
-              }).dxLookup('instance');
+        const placeholder = 'placeholder';
+        const instance = $('#lookup').dxLookup({
+            dataSource: ['abc', 'def'],
+            minSearchLength: 3,
+            searchTimeout: 0,
+            placeholder: placeholder
+        }).dxLookup('instance');
 
         $(instance._$field).trigger('dxclick');
 
-        const search = instance._searchBox, $field = $(instance._$field), $list = $(instance._list.$element());
+        const search = instance._searchBox; const $field = $(instance._$field); const $list = $(instance._list.$element());
 
         assert.equal($list.find('.dx-list-item').filter(':visible').length, 0, 'No items are expected to be shown');
         assert.equal($field.text(), placeholder);
@@ -2057,10 +2057,10 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('popup should not be hidden after outsideClick', function(assert) {
-        const $lookup = $('#lookupOptions'),
-              instance = $lookup.dxLookup({
-                  dataSource: [1, 2, 3]
-              }).dxLookup('instance');
+        const $lookup = $('#lookupOptions');
+        const instance = $lookup.dxLookup({
+            dataSource: [1, 2, 3]
+        }).dxLookup('instance');
 
         openPopupWithList(instance);
 
@@ -2071,12 +2071,12 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('lookup popup should be hidden after click outside was present', function(assert) {
-        const $lookup = $('#lookupOptions'),
-              instance = $lookup.dxLookup({
-                  closeOnOutsideClick: true,
-                  visible: true,
-                  usePopover: false
-              }).dxLookup('instance');
+        const $lookup = $('#lookupOptions');
+        const instance = $lookup.dxLookup({
+            closeOnOutsideClick: true,
+            visible: true,
+            usePopover: false
+        }).dxLookup('instance');
 
         openPopupWithList(instance);
 
@@ -2105,15 +2105,15 @@ QUnit.module('popup options', {
 
     QUnit.test('custom titleTemplate option is set correctly on init', function(assert) {
         const $lookup = $('#lookupOptions').dxLookup({
-                      titleTemplate: function(titleElement) {
-                          assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
-                          let result = '<div class=\'test-title-renderer\'>';
-                          result += '<h1>Title</h1>';
-                          result += '</div>';
-                          return result;
-                      }
-                  }),
-              instance = $lookup.dxLookup('instance');
+            titleTemplate: function(titleElement) {
+                assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
+                let result = '<div class=\'test-title-renderer\'>';
+                result += '<h1>Title</h1>';
+                result += '</div>';
+                return result;
+            }
+        });
+        const instance = $lookup.dxLookup('instance');
 
         openPopupWithList(instance);
 
@@ -2125,7 +2125,7 @@ QUnit.module('popup options', {
     QUnit.test('custom titleTemplate and onTitleRendered option is set correctly by options', function(assert) {
         assert.expect(2);
 
-        const $lookup = $('#lookupOptions').dxLookup(), instance = $lookup.dxLookup('instance');
+        const $lookup = $('#lookupOptions').dxLookup(); const instance = $lookup.dxLookup('instance');
 
         instance.option('onTitleRendered', function(e) {
             assert.ok(true, 'option \'onTitleRendered\' successfully passed to the popup widget raised on titleTemplate');
@@ -2317,7 +2317,7 @@ QUnit.module('list options', {
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)), list = $list.dxList('instance');
+        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
 
         assert.equal(list.option('pageLoadMode'), 'scrollBottom', 'pageLoadMode was bounced');
         instance.option('pageLoadMode', 'nextButton');
@@ -2350,17 +2350,17 @@ QUnit.module('list options', {
 
     QUnit.test('group options bouncing', function(assert) {
         const dataSource = [{ key: 'header1', items: ['1', '2'] },
-                      { key: 'header2', items: ['1', '2'] }],
-              $lookup = $('#lookupOptions').dxLookup({
-                  dataSource: dataSource,
-                  grouped: true,
-                  groupTemplate: 'testGroupTemplate'
-              }),
-              instance = $lookup.dxLookup('instance');
+            { key: 'header2', items: ['1', '2'] }];
+        const $lookup = $('#lookupOptions').dxLookup({
+            dataSource: dataSource,
+            grouped: true,
+            groupTemplate: 'testGroupTemplate'
+        });
+        const instance = $lookup.dxLookup('instance');
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)), list = $list.dxList('instance');
+        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
 
         assert.equal(list.option('grouped'), true, 'grouped was bounced');
 
@@ -2381,7 +2381,7 @@ QUnit.module('list options', {
 
 QUnit.module('Native scrolling', () => {
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
-        const data = [], done = assert.async();
+        const data = []; const done = assert.async();
 
         for(let i = 100; i >= 0; i--) {
             data.push(i);
@@ -2475,7 +2475,7 @@ QUnit.module('widget sizing render', () => {
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxLookup(), instance = $element.dxLookup('instance'), customWidth = 400;
+        const $element = $('#widget').dxLookup(); const instance = $element.dxLookup('instance'); const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -2498,13 +2498,13 @@ QUnit.module('focus policy', {
         }
 
         const instance = $('#widget').dxLookup({
-                      items: [1, 2, 3],
-                      opened: true,
-                      searchEnabled: false
-                  }).dxLookup('instance'),
-              $list = $($(instance.content()).find('.dx-list')),
-              $listItems = $list.find('.dx-item'),
-              list = $list.dxList('instance');
+            items: [1, 2, 3],
+            opened: true,
+            searchEnabled: false
+        }).dxLookup('instance');
+        const $list = $($(instance.content()).find('.dx-list'));
+        const $listItems = $list.find('.dx-item');
+        const list = $list.dxList('instance');
 
         $($listItems.eq(1)).trigger('dxclick');
         instance.open();
@@ -2514,21 +2514,21 @@ QUnit.module('focus policy', {
 
     QUnit.test('field method returning overlay content', function(assert) {
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance'),
-              $field = instance.field();
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
+        const $field = instance.field();
 
         assert.ok($field.hasClass(LOOKUP_FIELD_CLASS), 'field has class dx-texteditor-input');
     });
 
     QUnit.testInActiveWindow('lookup search get focus on opening', function(assert) {
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         instance.focus();
         assert.ok($element.hasClass(FOCUSED_CLASS), '\'focus\' method focus field with closed overlay');
@@ -2541,10 +2541,10 @@ QUnit.module('focus policy', {
 
     QUnit.testInActiveWindow('lookup field should get focus when popup was closed', function(assert) {
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true,
-                      opened: true
-                  }),
-              instance = $element.dxLookup('instance');
+            focusStateEnabled: true,
+            opened: true
+        });
+        const instance = $element.dxLookup('instance');
 
         instance.close();
 
@@ -2555,11 +2555,11 @@ QUnit.module('focus policy', {
         assert.expect(1);
 
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true,
-                      opened: true
-                  }),
-              instance = $element.dxLookup('instance'),
-              $content = $(instance._popup.$content());
+            focusStateEnabled: true,
+            opened: true
+        });
+        const instance = $element.dxLookup('instance');
+        const $content = $(instance._popup.$content());
 
         $($content).on('dxpointerdown', function(e) {
             assert.ok(!e.isDefaultPrevented(), 'elements inside popup get focus');
@@ -2581,11 +2581,11 @@ QUnit.module('keyboard navigation', {
         assert.expect(2);
 
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true
-                  }),
-              instance = $element.dxLookup('instance'),
-              $field = $(instance._$field).focusin(),
-              keyboard = keyboardMock($field);
+            focusStateEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
+        const $field = $(instance._$field).focusin();
+        const keyboard = keyboardMock($field);
 
         assert.ok(!instance.option('opened'));
         keyboard.keyDown('enter');
@@ -2597,11 +2597,11 @@ QUnit.module('keyboard navigation', {
         assert.expect(2);
 
         const $element = $('#widget').dxLookup({
-                      focusStateEnabled: true
-                  }),
-              instance = $element.dxLookup('instance'),
-              $field = $(instance._$field).focusin(),
-              keyboard = keyboardMock($field);
+            focusStateEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
+        const $field = $(instance._$field).focusin();
+        const keyboard = keyboardMock($field);
 
         assert.ok(!instance.option('opened'));
         keyboard.keyDown('space');
@@ -2611,11 +2611,11 @@ QUnit.module('keyboard navigation', {
 
     QUnit.testInActiveWindow('lookup search field focused after open popup', function(assert) {
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         assert.ok(instance.option('opened'));
         assert.ok(instance._$searchBox.hasClass(FOCUSED_CLASS), 'searchBox has focus after open popup');
@@ -2628,12 +2628,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      items: [1, 2, 3],
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
         keyboard.keyDown('down');
@@ -2648,12 +2648,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      items: [1, 2, 3],
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         $(instance._$list).focus();
         assert.ok(instance._$list.find('.dx-list-item').eq(0).hasClass(FOCUSED_CLASS), 'list-item is focused after focusing on list');
@@ -2671,12 +2671,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      items: [1, 2, 3],
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
         keyboard.keyDown('down');
@@ -2693,12 +2693,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      items: [1, 2, 3],
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
         keyboard.keyDown('down');
@@ -2715,12 +2715,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const $element = $('#widget').dxLookup({
-                      opened: true,
-                      items: [1, 2, 3],
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }),
-              instance = $element.dxLookup('instance');
+            opened: true,
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            searchEnabled: true
+        });
+        const instance = $element.dxLookup('instance');
 
         instance.option('searchEnabled', false);
 
@@ -2732,12 +2732,12 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('space key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
         const instance = $('#lookup').dxLookup({
-                      items: [0, 1, 2],
-                      readOnly: true,
-                      focusStateEnabled: true
-                  }).dxLookup('instance'),
-              $field = $(instance._$field).focusin(),
-              keyboard = keyboardMock($field);
+            items: [0, 1, 2],
+            readOnly: true,
+            focusStateEnabled: true
+        }).dxLookup('instance');
+        const $field = $(instance._$field).focusin();
+        const keyboard = keyboardMock($field);
 
         keyboard.keyDown('space');
         assert.ok(!instance.option('opened'), 'when we press space key - popup is still hidden');
@@ -2749,12 +2749,12 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('enter key press on readOnly lookup doesn\'t toggle popup visibility', function(assert) {
         const instance = $('#lookup').dxLookup({
-                      items: [0, 1, 2],
-                      readOnly: true,
-                      focusStateEnabled: true
-                  }).dxLookup('instance'),
-              $field = $(instance._$field).focusin(),
-              keyboard = keyboardMock($field);
+            items: [0, 1, 2],
+            readOnly: true,
+            focusStateEnabled: true
+        }).dxLookup('instance');
+        const $field = $(instance._$field).focusin();
+        const keyboard = keyboardMock($field);
 
         keyboard.keyDown('enter');
         assert.ok(!instance.option('opened'), 'when we press enter key - popup is still hidden');
@@ -2766,12 +2766,12 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('escape key press close overlay with search enabled', function(assert) {
         const instance = $('#lookup').dxLookup({
-                      items: [0, 1, 2],
-                      opened: true,
-                      focusStateEnabled: true,
-                      searchEnabled: true
-                  }).dxLookup('instance'),
-              keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
+            items: [0, 1, 2],
+            opened: true,
+            focusStateEnabled: true,
+            searchEnabled: true
+        }).dxLookup('instance');
+        const keyboard = keyboardMock(instance._$searchBox.find('.dx-texteditor-input'));
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -2786,12 +2786,12 @@ QUnit.module('keyboard navigation', {
         }
 
         const instance = $('#lookup').dxLookup({
-                      items: [0, 1, 2],
-                      opened: true,
-                      focusStateEnabled: true,
-                      searchEnabled: false
-                  }).dxLookup('instance'),
-              keyboard = keyboardMock(instance._$list);
+            items: [0, 1, 2],
+            opened: true,
+            focusStateEnabled: true,
+            searchEnabled: false
+        }).dxLookup('instance');
+        const keyboard = keyboardMock(instance._$list);
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
@@ -2801,10 +2801,10 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('T320459 - the \'space\' key press should prevent default behavior while navigating list', function(assert) {
         const lookup = $('#lookup').dxLookup({
-                items: [1, 2, 3],
-                opened: true,
-                focusStateEnabled: true
-            }).dxLookup('instance');
+            items: [1, 2, 3],
+            opened: true,
+            focusStateEnabled: true
+        }).dxLookup('instance');
 
         const $popupInput = $($(lookup.content()).find('.' + TEXTEDITOR_INPUT_CLASS));
         const keyboard = keyboardMock($popupInput);
@@ -2829,9 +2829,9 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('T320459 - the \'space\' key press on editor should prevent default behavior', function(assert) {
         const lookup = $('#lookup').dxLookup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }).dxLookup('instance');
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        }).dxLookup('instance');
 
         const $input = $(lookup.field());
         const keyboard = keyboardMock($input);
@@ -2998,7 +2998,7 @@ QUnit.module('Validation', {
     }
 }, () => {
     QUnit.test('Validation message', function(assert) {
-        const $element = $('#widget').dxLookup(), instance = $element.dxLookup('instance');
+        const $element = $('#widget').dxLookup(); const instance = $element.dxLookup('instance');
 
         instance.option({
             isValid: false,
@@ -3010,7 +3010,7 @@ QUnit.module('Validation', {
     });
 
     QUnit.test('widget should render with \'validationError === null\'', function(assert) {
-        const $element = $('#widget').dxLookup(), instance = $element.dxLookup('instance');
+        const $element = $('#widget').dxLookup(); const instance = $element.dxLookup('instance');
 
         instance.option({
             isValid: true,
@@ -3021,8 +3021,8 @@ QUnit.module('Validation', {
     });
 
     QUnit.test('Pending indicator is rendered', function(assert) {
-        const $element = $('#widget').dxLookup(),
-            instance = $element.dxLookup('instance');
+        const $element = $('#widget').dxLookup();
+        const instance = $element.dxLookup('instance');
 
         instance.option('validationStatus', 'pending');
         assert.ok($element.find('.dx-pending-indicator').dxLoadIndicator('instance').option('visible'));
@@ -3044,16 +3044,16 @@ QUnit.module('Validation', {
         }];
 
         const $element = $('#widget').dxLookup({
-                      dataSource: new DataSource({
-                          store: data,
-                          key: 'ID',
-                          group: 'Assigned'
-                      }),
-                      grouped: true,
-                      displayExpr: 'Subject',
-                      opened: true
-                  }),
-              instance = $element.dxLookup('instance');
+            dataSource: new DataSource({
+                store: data,
+                key: 'ID',
+                group: 'Assigned'
+            }),
+            grouped: true,
+            displayExpr: 'Subject',
+            opened: true
+        });
+        const instance = $element.dxLookup('instance');
 
         $('.dx-list-item .dx-list-item-content').eq(2).trigger('dxclick');
 

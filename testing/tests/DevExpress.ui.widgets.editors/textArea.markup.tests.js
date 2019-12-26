@@ -52,7 +52,7 @@ QUnit.module('rendering', () => {
 
 QUnit.module('init properties', () => {
     QUnit.test('disabled', function(assert) {
-        const $element = $('#textarea').dxTextArea({ disabled: true }), $input = $element.find('.' + INPUT_CLASS);
+        const $element = $('#textarea').dxTextArea({ disabled: true }); const $input = $element.find('.' + INPUT_CLASS);
 
         assert.ok($input.prop('disabled'));
     });
@@ -65,9 +65,9 @@ QUnit.module('init properties', () => {
 
     QUnit.test('inputAttr', function(assert) {
         const $textArea = $('#textarea').dxTextArea({
-                      inputAttr: { id: 'testId' }
-                  }),
-              $input = $textArea.find('.' + INPUT_CLASS);
+            inputAttr: { id: 'testId' }
+        });
+        const $input = $textArea.find('.' + INPUT_CLASS);
 
         assert.equal($input.attr('id'), 'testId', 'Attr ID was created on Init');
     });
@@ -81,7 +81,7 @@ QUnit.module('init properties', () => {
     });
 
     QUnit.test('readOnly', function(assert) {
-        const $element = $('#textarea').dxTextArea({ readOnly: true }), $input = $element.find('.' + INPUT_CLASS);
+        const $element = $('#textarea').dxTextArea({ readOnly: true }); const $input = $element.find('.' + INPUT_CLASS);
 
         assert.ok($input.prop('readOnly'));
     });
@@ -89,27 +89,27 @@ QUnit.module('init properties', () => {
 
 QUnit.module('widget sizing render', () => {
     QUnit.test('constructor', function(assert) {
-        const $element = $('#textarea').dxTextArea({ width: 400 }), elementStyles = $element.get(0).style;
+        const $element = $('#textarea').dxTextArea({ width: 400 }); const elementStyles = $element.get(0).style;
 
         assert.strictEqual(elementStyles.width, '400px', 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('the \'minHeight\' option works correctly', function(assert) {
         const $element = $('#textarea').dxTextArea({
-                      minHeight: 30,
-                      height: 0
-                  }),
-              elementStyles = $element.get(0).style;
+            minHeight: 30,
+            height: 0
+        });
+        const elementStyles = $element.get(0).style;
 
         assert.equal(elementStyles.minHeight, '30px', 'widget min-height is correct');
     });
 
     QUnit.test('the \'maxHeight\' option works correctly', function(assert) {
         const $element = $('#textarea').dxTextArea({
-                      maxHeight: 30,
-                      height: 100
-                  }),
-              elementStyles = $element.get(0).style;
+            maxHeight: 30,
+            height: 100
+        });
+        const elementStyles = $element.get(0).style;
 
         assert.equal(elementStyles.maxHeight, '30px', 'widget max-height is correct');
     });

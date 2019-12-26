@@ -1,4 +1,4 @@
-const extend = require('../../core/utils/extend').extend, each = require('../../core/utils/iterator').each, scatterSeries = require('./scatter_series'), areaSeries = require('./area_series').chart.area, vizUtils = require('../core/utils'), chartSeries = scatterSeries.chart, polarSeries = scatterSeries.polar, _isDefined = require('../../core/utils/type').isDefined, _extend = extend, _each = each;
+const extend = require('../../core/utils/extend').extend; const each = require('../../core/utils/iterator').each; const scatterSeries = require('./scatter_series'); const areaSeries = require('./area_series').chart.area; const vizUtils = require('../core/utils'); const chartSeries = scatterSeries.chart; const polarSeries = scatterSeries.polar; const _isDefined = require('../../core/utils/type').isDefined; const _extend = extend; const _each = each;
 
 exports.chart = {};
 exports.polar = {};

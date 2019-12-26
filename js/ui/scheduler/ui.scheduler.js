@@ -71,7 +71,7 @@ const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
-const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss', UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
+const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss'; const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const VIEWS_CONFIG = {
     day: {
@@ -1958,19 +1958,19 @@ const Scheduler = Widget.inherit({
     },
 
     isAppointmentInAllDayPanel: function(appointmentData) {
-        const workSpace = this._workSpace,
-            itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
+        const workSpace = this._workSpace;
+        const itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
 
         return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
     },
 
     getText(data, currentData) {
-        const isAllDay = this.fire('getField', 'allDay', data),
-            text = this.fire('getField', 'text', data),
-            startDateTimeZone = this.fire('getField', 'startDateTimeZone', data),
-            endDateTimeZone = this.fire('getField', 'endDateTimeZone', data),
-            startDate = this.fire('convertDateByTimezone', this.fire('getField', 'startDate', currentData), startDateTimeZone),
-            endDate = this.fire('convertDateByTimezone', this.fire('getField', 'endDate', currentData), endDateTimeZone);
+        const isAllDay = this.fire('getField', 'allDay', data);
+        const text = this.fire('getField', 'text', data);
+        const startDateTimeZone = this.fire('getField', 'startDateTimeZone', data);
+        const endDateTimeZone = this.fire('getField', 'endDateTimeZone', data);
+        const startDate = this.fire('convertDateByTimezone', this.fire('getField', 'startDate', currentData), startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', this.fire('getField', 'endDate', currentData), endDateTimeZone);
         return {
             text: text,
             formatDate: this._formatDate(startDate, endDate, isAllDay)
@@ -2887,8 +2887,8 @@ const Scheduler = Widget.inherit({
     },
 
     createTooltipDragBehavior(e) {
-        let dragElement,
-            $element = $(e.element);
+        let dragElement;
+        let $element = $(e.element);
 
         if(this._allowDragging()) {
             const dragBehavior = this.getWorkSpace().dragBehavior;
@@ -2908,8 +2908,8 @@ const Scheduler = Widget.inherit({
                     return dragElement;
                 },
                 onDragStart: (e) => {
-                    const event = e.event,
-                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    const event = e.event;
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
                     if(itemData && !itemData.data.disabled) {
                         event.data = event.data || {};

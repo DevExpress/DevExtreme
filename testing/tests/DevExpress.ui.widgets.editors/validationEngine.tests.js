@@ -55,11 +55,11 @@ QUnit.module('General', () => {
 
 QUnit.module('Required rule', () => {
     const testInvalidRequiredRules = function(invalidValue, assert) {
-        const customMessage = 'This is really-really required field.',
-              result = testInvalidRule({
-                  type: 'required',
-                  message: customMessage
-              }, invalidValue, assert);
+        const customMessage = 'This is really-really required field.';
+        const result = testInvalidRule({
+            type: 'required',
+            message: customMessage
+        }, invalidValue, assert);
 
         assert.equal(result.brokenRule.message, customMessage);
 
@@ -708,15 +708,15 @@ QUnit.module('Common types ', () => {
 
 QUnit.module('Custom rule with user\'s callback', () => {
     QUnit.test('Can be validated positively', function(assert) {
-        const customCallback = sinon.spy(function() { return true; }),
-              validator = {},
-              value = 'Some custom value',
-              rule = {
-                  type: 'custom',
-                  validationCallback: customCallback,
-                  validator: validator
-              },
-              result = ValidationEngine.validate(value, [rule]);
+        const customCallback = sinon.spy(function() { return true; });
+        const validator = {};
+        const value = 'Some custom value';
+        const rule = {
+            type: 'custom',
+            validationCallback: customCallback,
+            validator: validator
+        };
+        const result = ValidationEngine.validate(value, [rule]);
 
 
         assert.ok(result, 'Result is defined');
@@ -728,12 +728,12 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Can be validated negatively', function(assert) {
-        const customCallback = sinon.spy(function() { return false; }),
-              value = 'Some custom value',
-              result = testInvalidRule({
-                  type: 'custom',
-                  validationCallback: customCallback
-              }, value, assert);
+        const customCallback = sinon.spy(function() { return false; });
+        const value = 'Some custom value';
+        const result = testInvalidRule({
+            type: 'custom',
+            validationCallback: customCallback
+        }, value, assert);
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -741,14 +741,14 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Can be validated negatively with custom message', function(assert) {
-        const customCallback = sinon.spy(function() { return false; }),
-              value = 'Some custom value',
-              customMessage = 'Value does not satisfy our custom validation scenario',
-              result = testInvalidRule({
-                  type: 'custom',
-                  message: customMessage,
-                  validationCallback: customCallback
-              }, value, assert);
+        const customCallback = sinon.spy(function() { return false; });
+        const value = 'Some custom value';
+        const customMessage = 'Value does not satisfy our custom validation scenario';
+        const result = testInvalidRule({
+            type: 'custom',
+            message: customMessage,
+            validationCallback: customCallback
+        }, value, assert);
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -756,58 +756,58 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Default message', function(assert) {
-        const customCallback = sinon.spy(function() { return false; }),
-              value = 'Some custom value',
-              result = testInvalidRule({
-                  type: 'custom',
-                  validationCallback: customCallback
-              }, value, assert);
+        const customCallback = sinon.spy(function() { return false; });
+        const value = 'Some custom value';
+        const result = testInvalidRule({
+            type: 'custom',
+            validationCallback: customCallback
+        }, value, assert);
 
         assert.equal(result.brokenRule.message, 'Value is invalid');
     });
 
     QUnit.test('Default message with name', function(assert) {
-        const customCallback = sinon.spy(function() { return false; }),
-              value = 'Some custom value',
-              result = testInvalidRule({
-                  type: 'custom',
-                  validationCallback: customCallback
-              }, value, assert, 'Customer Code');
+        const customCallback = sinon.spy(function() { return false; });
+        const value = 'Some custom value';
+        const result = testInvalidRule({
+            type: 'custom',
+            validationCallback: customCallback
+        }, value, assert, 'Customer Code');
 
         assert.equal(result.brokenRule.message, 'Customer Code is invalid');
     });
 
     QUnit.test('Custom validation rule when value is array', function(assert) {
-        const customCallback = sinon.stub().returns(false),
-              value = ['test1', 'test2'],
-              result = testInvalidRule({
-                  type: 'custom',
-                  validationCallback: customCallback
-              }, value, assert, 'Customer Code');
+        const customCallback = sinon.stub().returns(false);
+        const value = ['test1', 'test2'];
+        const result = testInvalidRule({
+            type: 'custom',
+            validationCallback: customCallback
+        }, value, assert, 'Customer Code');
 
         assert.equal(result.brokenRule.message, 'Customer Code is invalid');
         assert.deepEqual(customCallback.getCall(0).args[0].value, value, 'value is correct');
     });
 
     QUnit.test('Validation callback must have extra parameters in arguments when validator has \'dataGetter\' option', function(assert) {
-        const customCallback = sinon.spy(function() { return true; }),
-            data = { field1: 'test1', field2: 'test2' },
-            validator = {
-                option: function(optionName) {
-                    if(optionName === 'dataGetter') {
-                        return function() {
-                            return data;
-                        };
-                    }
+        const customCallback = sinon.spy(function() { return true; });
+        const data = { field1: 'test1', field2: 'test2' };
+        const validator = {
+            option: function(optionName) {
+                if(optionName === 'dataGetter') {
+                    return function() {
+                        return data;
+                    };
                 }
-            },
-            value = 'Some custom value',
-            rule = {
-                type: 'custom',
-                validationCallback: customCallback,
-                validator: validator
-            },
-            result = ValidationEngine.validate(value, [rule]);
+            }
+        };
+        const value = 'Some custom value';
+        const rule = {
+            type: 'custom',
+            validationCallback: customCallback,
+            validator: validator
+        };
+        const result = ValidationEngine.validate(value, [rule]);
 
 
         assert.ok(result, 'Result is defined');
@@ -1052,19 +1052,19 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Can be validated positively', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(true);
-                return d.promise();
-            }),
-            validator = {},
-            value = 'Some custom value',
-            rule = {
-                type: 'async',
-                validationCallback: customCallback,
-                validator: validator
-            },
-            result = testAsyncRules([rule], value, assert),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(true);
+            return d.promise();
+        });
+        const validator = {};
+        const value = 'Some custom value';
+        const rule = {
+            type: 'async',
+            validationCallback: customCallback,
+            validator: validator
+        };
+        const result = testAsyncRules([rule], value, assert);
+        const done = assert.async();
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -1084,17 +1084,17 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Can be validated negatively', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(false);
-                return d.promise();
-            }),
-            value = 'Some custom value',
-            rule = {
-                type: 'async',
-                validationCallback: customCallback
-            },
-            result = testAsyncRules([rule], value, assert),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(false);
+            return d.promise();
+        });
+        const value = 'Some custom value';
+        const rule = {
+            type: 'async',
+            validationCallback: customCallback
+        };
+        const result = testAsyncRules([rule], value, assert);
+        const done = assert.async();
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -1116,19 +1116,19 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Can be validated negatively with custom message', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(false);
-                return d.promise();
-            }),
-            value = 'Some custom value',
-            customMessage = 'Value does not satisfy our custom validation scenario',
-            rule = {
-                type: 'async',
-                message: customMessage,
-                validationCallback: customCallback
-            },
-            result = testAsyncRules([rule], value, assert),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(false);
+            return d.promise();
+        });
+        const value = 'Some custom value';
+        const customMessage = 'Value does not satisfy our custom validation scenario';
+        const rule = {
+            type: 'async',
+            message: customMessage,
+            validationCallback: customCallback
+        };
+        const result = testAsyncRules([rule], value, assert);
+        const done = assert.async();
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -1150,53 +1150,53 @@ QUnit.module('Async rule with user\'s callback', () => {
 
 
     QUnit.test('Can be validated negatively with a custom message from validationCallback', function(assert) {
-        const customMessage = 'Value does not satisfy our custom validation scenario',
-            value = 'Some custom value',
-            rules = [
-                {
-                    type: 'async',
-                    validationCallback: sinon.spy(function() {
-                        const d = new Deferred();
-                        d.resolve({
-                            isValid: false,
-                            message: customMessage
-                        });
-                        return d.promise();
-                    })
-                },
-                {
-                    type: 'async',
-                    validationCallback: sinon.spy(function() {
-                        const d = new Deferred();
-                        d.reject({
-                            isValid: false,
-                            message: customMessage
-                        });
-                        return d.promise();
-                    })
-                },
-                {
-                    type: 'async',
-                    validationCallback: sinon.spy(function() {
-                        const d = new Deferred();
-                        d.reject(customMessage);
-                        return d.promise();
-                    })
-                },
-                {
-                    type: 'async',
-                    validationCallback: sinon.spy(function() {
-                        const d = new Deferred();
-                        d.reject({
-                            isValid: true,
-                            message: customMessage
-                        });
-                        return d.promise();
-                    })
-                }
-            ],
-            result = testAsyncRules(rules, value, assert),
-            done = assert.async();
+        const customMessage = 'Value does not satisfy our custom validation scenario';
+        const value = 'Some custom value';
+        const rules = [
+            {
+                type: 'async',
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.resolve({
+                        isValid: false,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            },
+            {
+                type: 'async',
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject({
+                        isValid: false,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            },
+            {
+                type: 'async',
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject(customMessage);
+                    return d.promise();
+                })
+            },
+            {
+                type: 'async',
+                validationCallback: sinon.spy(function() {
+                    const d = new Deferred();
+                    d.reject({
+                        isValid: true,
+                        message: customMessage
+                    });
+                    return d.promise();
+                })
+            }
+        ];
+        const result = testAsyncRules(rules, value, assert);
+        const done = assert.async();
 
         result.complete.then((res) => {
             assert.equal(res.brokenRules[0].message, customMessage);
@@ -1212,19 +1212,19 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Default message with name', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
-            }),
-            value = 'Some custom value',
-            rule = {
-                type: 'async',
-                validationCallback: customCallback
-            },
-            result = testAsyncRules([rule], value, assert, 'Customer Code'),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        });
+        const value = 'Some custom value';
+        const rule = {
+            type: 'async',
+            validationCallback: customCallback
+        };
+        const result = testAsyncRules([rule], value, assert, 'Customer Code');
+        const done = assert.async();
 
         result.complete.then((res) => {
             assert.equal(result.brokenRules[0].message, 'Customer Code is invalid');
@@ -1233,18 +1233,18 @@ QUnit.module('Async rule with user\'s callback', () => {
     });
 
     QUnit.test('Async rule cannot be validated when a sync rule is invalid', function(assert) {
-        const customCallback = sinon.spy(),
-            value = '',
-            rules = [
-                {
-                    type: 'async',
-                    validationCallback: customCallback
-                },
-                {
-                    type: 'required'
-                }
-            ],
-            result = ValidationEngine.validate(value, rules);
+        const customCallback = sinon.spy();
+        const value = '';
+        const rules = [
+            {
+                type: 'async',
+                validationCallback: customCallback
+            },
+            {
+                type: 'required'
+            }
+        ];
+        const result = ValidationEngine.validate(value, rules);
 
         assert.notOk(customCallback.calledOnce, 'Validation callback was not called');
         assert.notOk(result.complete, 'result.complete is not defined');
@@ -1254,28 +1254,28 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Only async rules should be broken', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
-            }),
-            value = 'Some value',
-            rules = [
-                {
-                    type: 'async',
-                    validationCallback: customCallback
-                },
-                {
-                    type: 'required'
-                },
-                {
-                    type: 'async',
-                    validationCallback: customCallback
-                }
-            ],
-            result = ValidationEngine.validate(value, rules),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        });
+        const value = 'Some value';
+        const rules = [
+            {
+                type: 'async',
+                validationCallback: customCallback
+            },
+            {
+                type: 'required'
+            },
+            {
+                type: 'async',
+                validationCallback: customCallback
+            }
+        ];
+        const result = ValidationEngine.validate(value, rules);
+        const done = assert.async();
 
         assert.equal(result.pendingRules.length, 2);
         assert.ok(customCallback.calledTwice, 'Validation callback was called twice');
@@ -1289,30 +1289,30 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Two async rules should be broken', function(assert) {
         const customCallback1 = function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        };
+        const customCallback2 = function() {
+            const d = new Deferred();
+            d.reject(false);
+            return d.promise();
+        };
+        const value = 'Some value';
+        const rules = [
+            {
+                type: 'async',
+                validationCallback: customCallback1
             },
-            customCallback2 = function() {
-                const d = new Deferred();
-                d.reject(false);
-                return d.promise();
-            },
-            value = 'Some value',
-            rules = [
-                {
-                    type: 'async',
-                    validationCallback: customCallback1
-                },
-                {
-                    type: 'async',
-                    validationCallback: customCallback2
-                }
-            ],
-            result = ValidationEngine.validate(value, rules),
-            done = assert.async();
+            {
+                type: 'async',
+                validationCallback: customCallback2
+            }
+        ];
+        const result = ValidationEngine.validate(value, rules);
+        const done = assert.async();
 
         assert.equal(result.pendingRules.length, 2);
         result.complete.then((res) => {
@@ -1323,41 +1323,41 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Three async rules should be broken', function(assert) {
         const customCallback1 = function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        };
+        const customCallback2 = function() {
+            const d = new Deferred();
+            d.reject();
+            return d.promise();
+        };
+        const customCallback3 = function() {
+            const d = new Deferred();
+            d.reject({
+                isValid: false
+            });
+            return d.promise();
+        };
+        const value = 'Some value';
+        const rules = [
+            {
+                type: 'async',
+                validationCallback: customCallback1
             },
-            customCallback2 = function() {
-                const d = new Deferred();
-                d.reject();
-                return d.promise();
+            {
+                type: 'async',
+                validationCallback: customCallback2
             },
-            customCallback3 = function() {
-                const d = new Deferred();
-                d.reject({
-                    isValid: false
-                });
-                return d.promise();
-            },
-            value = 'Some value',
-            rules = [
-                {
-                    type: 'async',
-                    validationCallback: customCallback1
-                },
-                {
-                    type: 'async',
-                    validationCallback: customCallback2
-                },
-                {
-                    type: 'async',
-                    validationCallback: customCallback3
-                }
-            ],
-            result = ValidationEngine.validate(value, rules),
-            done = assert.async();
+            {
+                type: 'async',
+                validationCallback: customCallback3
+            }
+        ];
+        const result = ValidationEngine.validate(value, rules);
+        const done = assert.async();
 
         assert.equal(result.pendingRules.length, 3);
         result.complete.then((res) => {
@@ -1368,26 +1368,26 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('One rule is reevaluated', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
-            }),
-            value = 'Some value',
-            rules = [
-                {
-                    type: 'async',
-                    reevaluate: false,
-                    validationCallback: customCallback
-                },
-                {
-                    type: 'async',
-                    validationCallback: customCallback
-                }
-            ],
-            result = testAsyncRules(rules, value, assert),
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        });
+        const value = 'Some value';
+        const rules = [
+            {
+                type: 'async',
+                reevaluate: false,
+                validationCallback: customCallback
+            },
+            {
+                type: 'async',
+                validationCallback: customCallback
+            }
+        ];
+        const result = testAsyncRules(rules, value, assert);
+        const done = assert.async();
 
         assert.ok(result, 'Result is defined');
         assert.ok(customCallback.calledTwice, 'Validation callback was called twice');
@@ -1402,29 +1402,29 @@ QUnit.module('Async rule with user\'s callback', () => {
 
     QUnit.test('Validation callback must have extra parameters in arguments when validator has \'dataGetter\' option', function(assert) {
         const customCallback = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve({
-                    isValid: false
-                });
-                return d.promise();
-            }),
-            data = { field1: 'test1', field2: 'test2' },
-            validator = {
-                option: function(optionName) {
-                    if(optionName === 'dataGetter') {
-                        return function() {
-                            return data;
-                        };
-                    }
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        });
+        const data = { field1: 'test1', field2: 'test2' };
+        const validator = {
+            option: function(optionName) {
+                if(optionName === 'dataGetter') {
+                    return function() {
+                        return data;
+                    };
                 }
-            },
-            value = 'Some custom value',
-            rule = {
-                type: 'async',
-                validationCallback: customCallback,
-                validator: validator
-            },
-            result = ValidationEngine.validate(value, [rule]);
+            }
+        };
+        const value = 'Some custom value';
+        const rule = {
+            type: 'async',
+            validationCallback: customCallback,
+            validator: validator
+        };
+        const result = ValidationEngine.validate(value, [rule]);
 
         assert.ok(result, 'Result is defined');
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
@@ -1440,14 +1440,14 @@ QUnit.module('Async rule with user\'s callback', () => {
 
 QUnit.module('State of validated rules', () => {
     QUnit.test('Rule should not be revalidated if no value changed - invalid value', function(assert) {
-        const handler = sinon.spy(function() { return false; }),
-              value = '25',
-              message = 'Custom error message',
-              rule = {
-                  type: 'custom',
-                  message: message,
-                  validationCallback: handler
-              };
+        const handler = sinon.spy(function() { return false; });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'custom',
+            message: message,
+            validationCallback: handler
+        };
 
         // act
         ValidationEngine.validate(value, [rule]);
@@ -1461,12 +1461,12 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Rule should not be revalidated if no value changed - valid value', function(assert) {
-        const handler = sinon.spy(function() { return true; }),
-              value = '25',
-              rule = {
-                  type: 'custom',
-                  validationCallback: handler
-              };
+        const handler = sinon.spy(function() { return true; });
+        const value = '25';
+        const rule = {
+            type: 'custom',
+            validationCallback: handler
+        };
 
         // act
         ValidationEngine.validate(value, [rule]);
@@ -1478,12 +1478,12 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Rule should  be revalidated after value change - valid value', function(assert) {
-        const handler = sinon.spy(function() { return true; }),
-              value = '25',
-              rule = {
-                  type: 'custom',
-                  validationCallback: handler
-              };
+        const handler = sinon.spy(function() { return true; });
+        const value = '25';
+        const rule = {
+            type: 'custom',
+            validationCallback: handler
+        };
 
         // act
         ValidationEngine.validate(value, [rule]);
@@ -1496,18 +1496,18 @@ QUnit.module('State of validated rules', () => {
 
     QUnit.test('Async rule should be revalidated if no value changed - invalid value', function(assert) {
         const handler = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(false);
-                return d.promise();
-            }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'async',
-                message: message,
-                validationCallback: handler
-            },
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(false);
+            return d.promise();
+        });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'async',
+            message: message,
+            validationCallback: handler
+        };
+        const done = assert.async();
 
         const result1 = ValidationEngine.validate(value, [rule]);
         result1.complete.then(() => {
@@ -1524,18 +1524,18 @@ QUnit.module('State of validated rules', () => {
 
     QUnit.test('Async rule should be revalidated if no value changed - valid value', function(assert) {
         const handler = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(true);
-                return d.promise();
-            }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'async',
-                message: message,
-                validationCallback: handler
-            },
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(true);
+            return d.promise();
+        });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'async',
+            message: message,
+            validationCallback: handler
+        };
+        const done = assert.async();
 
         const result1 = ValidationEngine.validate(value, [rule]);
         result1.complete.then(() => {
@@ -1550,19 +1550,19 @@ QUnit.module('State of validated rules', () => {
 
     QUnit.test('Async rule should not be revalidated if no value changed - invalid value - reevaluate disabled', function(assert) {
         const handler = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(false);
-                return d.promise();
-            }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'async',
-                message: message,
-                reevaluate: false,
-                validationCallback: handler
-            },
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(false);
+            return d.promise();
+        });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'async',
+            message: message,
+            reevaluate: false,
+            validationCallback: handler
+        };
+        const done = assert.async();
 
         const result1 = ValidationEngine.validate(value, [rule]);
         result1.complete.then((res) => {
@@ -1577,19 +1577,19 @@ QUnit.module('State of validated rules', () => {
 
     QUnit.test('Async rule should not be revalidated if no value changed - valid value - reevaluate disabled', function(assert) {
         const handler = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(true);
-                return d.promise();
-            }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'async',
-                message: message,
-                reevaluate: false,
-                validationCallback: handler
-            },
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(true);
+            return d.promise();
+        });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'async',
+            message: message,
+            reevaluate: false,
+            validationCallback: handler
+        };
+        const done = assert.async();
 
         const result1 = ValidationEngine.validate(value, [rule]);
         result1.complete.then((res) => {
@@ -1602,18 +1602,18 @@ QUnit.module('State of validated rules', () => {
 
     QUnit.test('Async rule should  be revalidated after value change - valid value', function(assert) {
         const handler = sinon.spy(function() {
-                const d = new Deferred();
-                d.resolve(true);
-                return d.promise();
-            }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'async',
-                message: message,
-                validationCallback: handler
-            },
-            done = assert.async();
+            const d = new Deferred();
+            d.resolve(true);
+            return d.promise();
+        });
+        const value = '25';
+        const message = 'Custom error message';
+        const rule = {
+            type: 'async',
+            message: message,
+            validationCallback: handler
+        };
+        const done = assert.async();
 
         const result = ValidationEngine.validate(value, [rule]);
         result.complete.then((res) => {
@@ -1625,15 +1625,15 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('If first rule fails, second one should not be evaluated', function(assert) {
-        const handler = sinon.spy(function() { return true; }),
-              value = '',
-              rule1 = {
-                  type: 'required'
-              },
-              rule2 = {
-                  type: 'custom',
-                  validationCallback: handler
-              };
+        const handler = sinon.spy(function() { return true; });
+        const value = '';
+        const rule1 = {
+            type: 'required'
+        };
+        const rule2 = {
+            type: 'custom',
+            validationCallback: handler
+        };
 
         // act
         const result1 = ValidationEngine.validate(value, [rule1, rule2]);
@@ -1644,15 +1644,15 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('If first rule failed on last check, second one should not be evaluated', function(assert) {
-        const handler = sinon.spy(function() { return true; }),
-              emptyValue = '',
-              rule1 = {
-                  type: 'required'
-              },
-              rule2 = {
-                  type: 'custom',
-                  validationCallback: handler
-              };
+        const handler = sinon.spy(function() { return true; });
+        const emptyValue = '';
+        const rule1 = {
+            type: 'required'
+        };
+        const rule2 = {
+            type: 'custom',
+            validationCallback: handler
+        };
 
         // act
         ValidationEngine.validate(emptyValue, [rule1, rule2]);
@@ -1664,12 +1664,12 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Compare rule should be reevaluated on each call', function(assert) {
-        const value = 'somevalue',
-              handler = sinon.spy(function() { return value; }),
-              rule = {
-                  type: 'compare',
-                  comparisonTarget: handler
-              };
+        const value = 'somevalue';
+        const handler = sinon.spy(function() { return value; });
+        const rule = {
+            type: 'compare',
+            comparisonTarget: handler
+        };
 
         ValidationEngine.validate(value, [rule]);
         // act
@@ -1687,7 +1687,7 @@ QUnit.module('Groups', {
     }
 }, () => {
     QUnit.test('Simple group - can register validator in group', function(assert) {
-        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1700,7 +1700,7 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Simple group - validator should not be duplicated in group', function(assert) {
-        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1741,7 +1741,7 @@ QUnit.module('Groups', {
 
 
     QUnit.test('Simple group - call validateGroup method', function(assert) {
-        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup'; const validator = sinon.createStubInstance(Validator);
 
         validator.on = sinon.stub();
         validator.off = sinon.stub();
@@ -1790,7 +1790,7 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Event Validated should be triggered', function(assert) {
-        const group = {}, validator = sinon.createStubInstance(Validator), rule = { type: 'required', isValid: false }, handler = sinon.spy();
+        const group = {}; const validator = sinon.createStubInstance(Validator); const rule = { type: 'required', isValid: false }; const handler = sinon.spy();
         validator.on = sinon.stub();
         validator.off = sinon.stub();
         validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
@@ -1836,7 +1836,7 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Remove registered group', function(assert) {
-        const group = 'group1', validator = sinon.createStubInstance(Validator);
+        const group = 'group1'; const validator = sinon.createStubInstance(Validator);
         ValidationEngine.registerValidatorInGroup(group, validator);
 
         // act
@@ -1935,19 +1935,19 @@ QUnit.module('ignoreEmptyValue option', () => {
     });
 
     QUnit.test('Use the option for the Async rule', function(assert) {
-        const customCallback1 = sinon.spy(function() { return false; }),
-            customCallback2 = sinon.spy(function() { return new Deferred().resolve().promise(); }),
-            result = ValidationEngine.validate('', [{
-                type: 'async',
-                message: 'A message',
-                validationCallback: customCallback1,
-                ignoreEmptyValue: true
-            }, {
-                type: 'async',
-                message: 'A message',
-                validationCallback: customCallback2
-            }]),
-            done = assert.async();
+        const customCallback1 = sinon.spy(function() { return false; });
+        const customCallback2 = sinon.spy(function() { return new Deferred().resolve().promise(); });
+        const result = ValidationEngine.validate('', [{
+            type: 'async',
+            message: 'A message',
+            validationCallback: customCallback1,
+            ignoreEmptyValue: true
+        }, {
+            type: 'async',
+            message: 'A message',
+            validationCallback: customCallback2
+        }]);
+        const done = assert.async();
 
         assert.ok(result, 'Result is defined');
         assert.ok(result.isValid, 'IsValid');

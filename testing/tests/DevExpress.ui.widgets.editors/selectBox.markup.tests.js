@@ -55,12 +55,12 @@ const moduleSetup = {
 
 QUnit.module('rendering', moduleSetup, () => {
     QUnit.test('markup init', function(assert) {
-        const $element = $('#selectBox').dxSelectBox(), instance = $element.dxSelectBox('instance');
+        const $element = $('#selectBox').dxSelectBox(); const instance = $element.dxSelectBox('instance');
 
         assert.ok($element.hasClass(WIDGET_CLASS));
 
         if(hasWindow()) {
-            const $list = $element.find('.dx-list'), $popup = $(instance._popup.$element());
+            const $list = $element.find('.dx-list'); const $popup = $(instance._popup.$element());
 
             assert.ok($popup.hasClass(POPUP_CLASS));
             assert.ok($list.is(':hidden'), 'when start list is hidden');
@@ -87,60 +87,60 @@ QUnit.module('rendering', moduleSetup, () => {
 
 QUnit.module('hidden input', moduleSetup, () => {
     QUnit.test('a hidden input should be rendered', function(assert) {
-        const $element = $('#selectBox').dxSelectBox(), $input = $element.find('input[type=\'hidden\']');
+        const $element = $('#selectBox').dxSelectBox(); const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.length, 1, 'a hidden input is rendered');
     });
 
     QUnit.test('the hidden input should have correct value on widget init', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
-                      items: [1, 2, 3],
-                      value: 2
-                  }),
-              $input = $element.find('input[type=\'hidden\']');
+            items: [1, 2, 3],
+            value: 2
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), '2', 'input value is correct');
     });
 
     QUnit.test('the hidden input should get display text as value if widget value is an object', function(assert) {
-        const items = [{ id: 1, text: 'one' }],
-              $element = $('#selectBox').dxSelectBox({
-                  items: items,
-                  value: items[0],
-                  valueExpr: 'this',
-                  displayExpr: 'text'
-              }),
-              $input = $element.find('input[type=\'hidden\']');
+        const items = [{ id: 1, text: 'one' }];
+        const $element = $('#selectBox').dxSelectBox({
+            items: items,
+            value: items[0],
+            valueExpr: 'this',
+            displayExpr: 'text'
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), items[0].text, 'input value is correct');
     });
 
     QUnit.test('the submit value must be equal to the value of the widget', function(assert) {
-        const items = ['test'],
-              $element = $('#selectBox').dxSelectBox({
-                  items: items,
-                  value: items[0],
-                  valueExpr: 'this',
-                  displayExpr: function(item) {
-                      if(item) {
-                          return item + '123';
-                      }
-                  }
-              }),
-              $input = $element.find('input[type=\'hidden\']');
+        const items = ['test'];
+        const $element = $('#selectBox').dxSelectBox({
+            items: items,
+            value: items[0],
+            valueExpr: 'this',
+            displayExpr: function(item) {
+                if(item) {
+                    return item + '123';
+                }
+            }
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.deepEqual($input.val(), items[0], 'input value is correct');
     });
 
     QUnit.test('the hidden input should get value in respect of the \'valueExpr\' option', function(assert) {
-        const items = [{ id: 1, text: 'one' }],
-              $element = $('#selectBox').dxSelectBox({
-                  items: items,
-                  value: items[0].id,
-                  valueExpr: 'id',
-                  displayExpr: 'text'
-              }),
-              $input = $element.find('input[type=\'hidden\']');
+        const items = [{ id: 1, text: 'one' }];
+        const $element = $('#selectBox').dxSelectBox({
+            items: items,
+            value: items[0].id,
+            valueExpr: 'id',
+            displayExpr: 'text'
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), items[0].id, 'input value is correct');
     });
@@ -148,11 +148,11 @@ QUnit.module('hidden input', moduleSetup, () => {
 
 QUnit.module('widget options', moduleSetup, () => {
     QUnit.test('widget hidden input should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-              $element = $('#selectBox').dxSelectBox({
-                  name: expectedName
-              }),
-              $input = $element.find('input[type=\'hidden\']');
+        const expectedName = 'some_name';
+        const $element = $('#selectBox').dxSelectBox({
+            name: expectedName
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });
@@ -216,20 +216,20 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('check fieldTemplate', function(assert) {
         const $element = $('#selectBoxFieldTemplate').dxSelectBox({
-                      dataSource: [
-                          { ID: 1, name: 'First' },
-                          { ID: 2, name: 'Second' },
-                          { ID: 3, name: 'Third' }
-                      ],
-                      fieldTemplate: function(selectedItem) {
-                          return $('<div id=\'myfield\'>').dxTextBox({
-                              value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
-                          });
-                      },
-                      valueExpr: 'ID',
-                      value: 1
-                  }),
-              $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
+            dataSource: [
+                { ID: 1, name: 'First' },
+                { ID: 2, name: 'Second' },
+                { ID: 3, name: 'Third' }
+            ],
+            fieldTemplate: function(selectedItem) {
+                return $('<div id=\'myfield\'>').dxTextBox({
+                    value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
+                });
+            },
+            valueExpr: 'ID',
+            value: 1
+        });
+        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
 
         assert.equal($input.val(), '1 - First', 'value is correct');
     });

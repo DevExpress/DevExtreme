@@ -15,7 +15,7 @@ const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
 QUnit.module('markup', () => {
     QUnit.test('resizable render', function(assert) {
-        const $resizable = $('#resizable').dxResizable({}), position = $resizable.get(0).style.position;
+        const $resizable = $('#resizable').dxResizable({}); const position = $resizable.get(0).style.position;
 
         assert.ok($resizable.hasClass(RESIZABLE_CLASS), 'dx-resizable class attached');
         assert.notStrictEqual(position, 'static', 'position of element should not be static');
@@ -57,9 +57,9 @@ QUnit.module('markup', () => {
 
     QUnit.test('resizable should have corner handles when need', function(assert) {
         const $resizable = $('#resizable').dxResizable({
-                      handles: 'right bottom'
-                  }),
-              instance = $resizable.dxResizable('instance');
+            handles: 'right bottom'
+        });
+        const instance = $resizable.dxResizable('instance');
 
         const isHandleExist = function(handles) {
             const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CORNER_CLASS + '-' + handles);

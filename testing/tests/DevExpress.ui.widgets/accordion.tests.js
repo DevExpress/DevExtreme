@@ -88,10 +88,10 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
     QUnit.test('item content is hidden when item is not opened', function(assert) {
         const instance = this.$element.dxAccordion({
-                      items: this.items,
-                      selectedIndex: 0
-                  }).dxAccordion('instance'),
-              $items = this.$element.find('.' + ACCORDION_ITEM_CLASS);
+            items: this.items,
+            selectedIndex: 0
+        }).dxAccordion('instance');
+        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS);
 
         instance.expandItem(1);
 
@@ -145,12 +145,12 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
     QUnit.test('Item body should be rendered on item opening when the \'deferRendering\' option is true', function(assert) {
         const $element = this.$element.dxAccordion({
-                      items: this.items,
-                      selectedIndex: 0,
-                      multiple: false,
-                      deferRendering: true
-                  }),
-              instance = $element.dxAccordion('instance');
+            items: this.items,
+            selectedIndex: 0,
+            multiple: false,
+            deferRendering: true
+        });
+        const instance = $element.dxAccordion('instance');
 
         instance.option('selectedIndex', 1);
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2, 'body is rendered for just opened item');
@@ -158,12 +158,12 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
     QUnit.test('Item body should be rendered on item changing when the \'deferRendering\' option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
-                      items: this.items,
-                      selectedIndex: 0,
-                      multiple: false,
-                      deferRendering: true
-                  }),
-              instance = $element.dxAccordion('instance');
+            items: this.items,
+            selectedIndex: 0,
+            multiple: false,
+            deferRendering: true
+        });
+        const instance = $element.dxAccordion('instance');
 
         instance.option('items[0].title', 'Changed Title');
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
@@ -171,12 +171,12 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
     QUnit.test('Item body should be rendered on item changing and selectionChanging when the \'deferRendering\' option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
-                      items: this.items,
-                      selectedIndex: 0,
-                      multiple: false,
-                      deferRendering: true
-                  }),
-              instance = $element.dxAccordion('instance');
+            items: this.items,
+            selectedIndex: 0,
+            multiple: false,
+            deferRendering: true
+        });
+        const instance = $element.dxAccordion('instance');
 
         instance.option('items[1].title', 'Changed Title');
         instance.option('selectedIndex', 1);
@@ -399,7 +399,7 @@ QUnit.module('widget options', moduleSetup, () => {
             collapsible: false
         });
 
-        const $element = this.$element, $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
+        const $element = this.$element; const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
 
         $($titles.eq(1)).trigger('dxclick');
 
@@ -432,7 +432,7 @@ QUnit.module('widget options', moduleSetup, () => {
                 animationDuration: 1000
             });
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1), $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
@@ -467,17 +467,17 @@ QUnit.module('widget options', moduleSetup, () => {
     });
 
     QUnit.test('height option in \'auto\' mode', function(assert) {
-        const $element = $('#html-template-accordion'),
-              instance = $element.dxAccordion({
-                  items: [
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' },
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' }
-                  ],
-                  height: 'auto',
-                  selectedIndex: 0
-              }).dxAccordion('instance');
+        const $element = $('#html-template-accordion');
+        const instance = $element.dxAccordion({
+            items: [
+                { title: '', html: '<div style="height: 50px">' },
+                { title: '', html: '<div style="height: 100px">' },
+                { title: '', html: '<div style="height: 50px">' },
+                { title: '', html: '<div style="height: 100px">' }
+            ],
+            height: 'auto',
+            selectedIndex: 0
+        }).dxAccordion('instance');
 
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).eq(0).height(), 50, 'opened item content height is correct');
         assert.equal(instance.itemElements().eq(0).get(0).style.height, '', 'auto height set');
@@ -489,19 +489,19 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode', function(assert) {
         const items = [
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' },
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' }
-                  ],
-              widgetHeight = 500,
-              $element = $('#html-template-accordion'),
-              instance = $element.dxAccordion({
-                  items: items,
-                  height: widgetHeight,
-                  selectedIndex: 0
-              }).dxAccordion('instance'),
-              closedItemsHeight = $element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight() * (items.length - 1);
+            { title: '', html: '<div style="height: 50px">' },
+            { title: '', html: '<div style="height: 100px">' },
+            { title: '', html: '<div style="height: 50px">' },
+            { title: '', html: '<div style="height: 100px">' }
+        ];
+        const widgetHeight = 500;
+        const $element = $('#html-template-accordion');
+        const instance = $element.dxAccordion({
+            items: items,
+            height: widgetHeight,
+            selectedIndex: 0
+        }).dxAccordion('instance');
+        const closedItemsHeight = $element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight() * (items.length - 1);
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(0).outerHeight(), widgetHeight - closedItemsHeight, 'opened item content height is correct');
         assert.notEqual(instance.itemElements().eq(0).get(0).style.height, '', 'auto height not set');
@@ -513,18 +513,18 @@ QUnit.module('widget options', moduleSetup, () => {
     });
 
     QUnit.test('height option in \'auto\' mode when widget is multiple', function(assert) {
-        const $element = $('#html-template-accordion'),
-              instance = $element.dxAccordion({
-                  items: [
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' },
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' }
-                  ],
-                  height: 'auto',
-                  selectedIndex: 0,
-                  multiple: true
-              }).dxAccordion('instance');
+        const $element = $('#html-template-accordion');
+        const instance = $element.dxAccordion({
+            items: [
+                { title: '', html: '<div style="height: 50px">' },
+                { title: '', html: '<div style="height: 100px">' },
+                { title: '', html: '<div style="height: 50px">' },
+                { title: '', html: '<div style="height: 100px">' }
+            ],
+            height: 'auto',
+            selectedIndex: 0,
+            multiple: true
+        }).dxAccordion('instance');
 
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).eq(0).height(), 50, 'opened item content height is correct');
 
@@ -534,25 +534,25 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('height option in static mode when widget is multiple', function(assert) {
         const items = [
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' },
-                      { title: '', html: '<div style="height: 50px">' },
-                      { title: '', html: '<div style="height: 100px">' }
-                  ],
-              widgetHeight = 500,
-              $element = $('#html-template-accordion'),
-              instance = $element.dxAccordion({
-                  items: items,
-                  height: widgetHeight,
-                  selectedIndex: 0,
-                  multiple: true
-              }).dxAccordion('instance'),
-              closedItemHeight = $element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight();
+            { title: '', html: '<div style="height: 50px">' },
+            { title: '', html: '<div style="height: 100px">' },
+            { title: '', html: '<div style="height: 50px">' },
+            { title: '', html: '<div style="height: 100px">' }
+        ];
+        const widgetHeight = 500;
+        const $element = $('#html-template-accordion');
+        const instance = $element.dxAccordion({
+            items: items,
+            height: widgetHeight,
+            selectedIndex: 0,
+            multiple: true
+        }).dxAccordion('instance');
+        const closedItemHeight = $element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight();
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(0).outerHeight(), widgetHeight - closedItemHeight * (items.length - 1), 'opened item content height is correct');
 
         instance.expandItem(1);
-        const openedItemsCount = 2, closedItemsCount = items.length - openedItemsCount;
+        const openedItemsCount = 2; const closedItemsCount = items.length - openedItemsCount;
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(0).outerHeight(), (widgetHeight - closedItemHeight * closedItemsCount) / openedItemsCount, 'opened item content height is correct');
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight(), (widgetHeight - closedItemHeight * closedItemsCount) / openedItemsCount, 'opened item content height is correct');
@@ -615,11 +615,11 @@ QUnit.module('widget options changed', moduleSetup, () => {
     });
 
     QUnit.test('itemTitleTemplate option changed', function(assert) {
-        const $element = $('#templated-accordion'),
-              instance = $element.dxAccordion({
-                  items: this.items,
-                  itemTitleTemplate: 'title'
-              }).dxAccordion('instance');
+        const $element = $('#templated-accordion');
+        const instance = $element.dxAccordion({
+            items: this.items,
+            itemTitleTemplate: 'title'
+        }).dxAccordion('instance');
 
         instance.option('itemTitleTemplate', 'newTemplate');
 
@@ -629,11 +629,11 @@ QUnit.module('widget options changed', moduleSetup, () => {
     });
 
     QUnit.test('itemTemplate option changed', function(assert) {
-        const $element = $('#templated-accordion'),
-              instance = $element.dxAccordion({
-                  items: this.items,
-                  itemTemplate: 'content'
-              }).dxAccordion('instance');
+        const $element = $('#templated-accordion');
+        const instance = $element.dxAccordion({
+            items: this.items,
+            itemTemplate: 'content'
+        }).dxAccordion('instance');
 
         instance.option('itemTemplate', 'newTemplate');
 
@@ -692,10 +692,10 @@ QUnit.module('widget options changed', moduleSetup, () => {
 
     QUnit.test('collapsible option changed', function(assert) {
         const instance = this.$element.dxAccordion({
-                      items: this.items,
-                      collapsible: true
-                  }).dxAccordion('instance'),
-              $titles = this.$element.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            items: this.items,
+            collapsible: true
+        }).dxAccordion('instance');
+        const $titles = this.$element.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
         $($titles.eq(1)).trigger('dxclick');
         instance.option('collapsible', false);
@@ -714,7 +714,7 @@ QUnit.module('widget options changed', moduleSetup, () => {
         try {
             instance.option('animationDuration', 1000);
 
-            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1), $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            const $item = this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1); const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
             assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), 'content is hidden before animation is started');
 
@@ -792,11 +792,11 @@ QUnit.module('widget options changed', moduleSetup, () => {
     });
 
     QUnit.test('subscribe on the itemClick event when a title of item is changed', function(assert) {
-        const itemClickStub = sinon.stub(),
-            instance = this.$element.dxAccordion({
-                items: this.items,
-                onItemTitleClick: itemClickStub
-            }).dxAccordion('instance');
+        const itemClickStub = sinon.stub();
+        const instance = this.$element.dxAccordion({
+            items: this.items,
+            onItemTitleClick: itemClickStub
+        }).dxAccordion('instance');
 
         instance.option('items[0].title', 'New title');
 
@@ -860,7 +860,7 @@ QUnit.module('widget behavior', moduleSetup, () => {
         }).dxAccordion('instance');
 
         instance.collapseItem(0);
-        let $items = this.$element.find('.' + ACCORDION_ITEM_BODY_CLASS), itemsVisible = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS).length;
+        let $items = this.$element.find('.' + ACCORDION_ITEM_BODY_CLASS); let itemsVisible = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS).length;
 
         assert.ok($items.eq(0).is(':visible'), 'specified item is not closed in non-collapsible mode');
         assert.equal(itemsVisible, 1, 'one item is opened');
@@ -916,7 +916,7 @@ QUnit.module('widget behavior', moduleSetup, () => {
     });
 
     QUnit.test('\'onItemClick\' firing conditions', function(assert) {
-        let titleActionFired = 0, itemActionFired = 0;
+        let titleActionFired = 0; let itemActionFired = 0;
 
         this.$element.dxAccordion({
             items: this.items,
@@ -1002,11 +1002,11 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.expect(1);
 
         const instance = this.$element.dxAccordion({
-                      items: this.items,
-                      focusStateEnabled: true,
-                      selectedIndex: 0
-                  }).dxAccordion('instance'),
-              keyboard = keyboardMock(this.$element);
+            items: this.items,
+            focusStateEnabled: true,
+            selectedIndex: 0
+        }).dxAccordion('instance');
+        const keyboard = keyboardMock(this.$element);
 
         $(this.$element).trigger('focusin');
         keyboard.keyDown('down');
@@ -1018,9 +1018,9 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria-multiselectable property', function(assert) {
         const $element = $('#accordion').dxAccordion({
-                      multiple: false
-                  }),
-              instance = $element.dxAccordion('instance');
+            multiple: false
+        });
+        const instance = $element.dxAccordion('instance');
 
         assert.equal($element.attr('aria-multiselectable'), 'false', 'multiselectable on init');
 
@@ -1030,12 +1030,12 @@ QUnit.module('aria accessibility', () => {
 
     QUnit.test('body should be hidden if item is closed', function(assert) {
         const accordion = new Accordion($('#accordion'), {
-                      items: [{ title: 'Title 1', text: 'Text 1' }],
-                      collapsible: true,
-                      selectedIndex: -1,
-                      deferRendering: false
-                  }),
-              $itemBody = accordion.itemElements().eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
+            items: [{ title: 'Title 1', text: 'Text 1' }],
+            collapsible: true,
+            selectedIndex: -1,
+            deferRendering: false
+        });
+        const $itemBody = accordion.itemElements().eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
 
         accordion.expandItem(0);
         assert.equal($itemBody.attr('aria-hidden'), 'false', 'body readable');

@@ -48,7 +48,7 @@ QUnit.module('Pager', {
     };
 
     QUnit.test('Default options init', function(assert) {
-        const $pager = $('#container').dxPager(), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager(); const instance = $pager.dxPager('instance');
 
         assert.ok(instance.option('visible'), 'visible');
         assert.equal(instance.option('pageIndex'), 1, 'pageIndex');
@@ -62,7 +62,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Markup init', function(assert) {
-        const $pager = $('#container').dxPager(), $pageSizeButton = $pager.find('.dx-page-size').first(), $pageNumberButton = $pager.find('.dx-page').eq(2);
+        const $pager = $('#container').dxPager(); const $pageSizeButton = $pager.find('.dx-page-size').first(); const $pageNumberButton = $pager.find('.dx-page').eq(2);
 
         assert.ok($pager.hasClass('dx-pager'), 'pager class');
         assert.notStrictEqual($pager.css('display'), 'none', 'element is visible');
@@ -88,13 +88,13 @@ QUnit.module('Pager', {
 
     QUnit.test('Events are called', function(assert) {
         const $pager = $('#container').dxPager({
-                pageIndexChanged: function(pageIndex) {
-                    testPageIndex = pageIndex;
-                },
-                pageSizeChanged: function(pageSize) {
-                    testPageSize = pageSize;
-                }
-            });
+            pageIndexChanged: function(pageIndex) {
+                testPageIndex = pageIndex;
+            },
+            pageSizeChanged: function(pageSize) {
+                testPageSize = pageSize;
+            }
+        });
 
         let testPageIndex = null;
         let testPageSize = null;
@@ -126,14 +126,14 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Pager is rendered if pages count equals one and more page exists', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 1, hasKnownLastPage: false }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 1, hasKnownLastPage: false }); const instance = $pager.dxPager('instance');
 
         assert.strictEqual($pager.find('.dx-pages').length, 1, 'pager is rendered');
         assert.ok(this.checkPages(instance._pages, [1, '>'], '1'), 'pages');
     });
 
     QUnit.test('Pager second render', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 5 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 5 }); const instance = $pager.dxPager('instance');
 
         instance._render();
 
@@ -142,20 +142,20 @@ QUnit.module('Pager', {
 
 
     QUnit.test('Get pages when pages count more maxPagesCount', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13 }); const instance = $pager.dxPager('instance');
 
         assert.ok(this.checkPages(instance._pages, [1, 2, 3, 4, 5, 13], '1'), 'pages');
     });
 
     QUnit.test('Get pages when pages count more maxPagesCount and more page exists', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13, hasKnownLastPage: false }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13, hasKnownLastPage: false }); const instance = $pager.dxPager('instance');
 
         assert.ok(this.checkPages(instance._pages, [1, 2, 3, 4, 5, 13, '>'], '1'), 'pages');
     });
 
     // B232538
     QUnit.test('Get pages when pages count more maxPagesCount after pages count is changed', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 1 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 1 }); const instance = $pager.dxPager('instance');
 
         instance.option('pageCount', 13);
 
@@ -163,7 +163,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Get pages when more page does not exist after changed', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13, hasKnownLastPage: false }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13, hasKnownLastPage: false }); const instance = $pager.dxPager('instance');
 
         instance.option({ pageCount: 14, hasKnownLastPage: true });
 
@@ -171,13 +171,13 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Get pages when pages count less maxPagesCount', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 7 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 7 }); const instance = $pager.dxPager('instance');
 
         assert.ok(this.checkPages(instance._pages, [1, 2, 3, 4, 5, 6, 7], '1'), 'pages');
     });
 
     QUnit.test('SelectPageByValue', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13 }), instance = $pager.dxPager('instance'), pages = instance._pages;
+        const $pager = $('#container').dxPager({ maxPagesCount: 10, pageCount: 13 }); const instance = $pager.dxPager('instance'); const pages = instance._pages;
 
         // assert
         assert.ok(this.checkPages(pages, [1, 2, 3, 4, 5, 13], '1'), 'page value = 1');
@@ -359,7 +359,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('render pager on changed event', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 0 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 0 }); const instance = $pager.dxPager('instance');
 
         assert.strictEqual($('.dx-pages').length, 0);
 
@@ -388,7 +388,7 @@ QUnit.module('Pager', {
     QUnit.test('Page sizes render when pageSizes is false', function(assert) {
         $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, pageSizes: false });
 
-        const pageSizesElements = $('.dx-page-size'), pageSizesContainer = $('.dx-page-sizes');
+        const pageSizesElements = $('.dx-page-size'); const pageSizesContainer = $('.dx-page-sizes');
 
         assert.equal(pageSizesContainer.length, 0, 'page sizes container elements count');
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
@@ -397,7 +397,7 @@ QUnit.module('Pager', {
     QUnit.test('Page sizes render when showPageSizes is false', function(assert) {
         $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageIndex: 1, showPageSizes: false, pageSizes: [5, 10, 20] });
 
-        const pageSizesElements = $('.dx-page-size'), pageSizesContainer = $('.dx-page-sizes');
+        const pageSizesElements = $('.dx-page-size'); const pageSizesContainer = $('.dx-page-sizes');
 
         assert.equal(pageSizesContainer.length, 0, 'page sizes container elements count');
         assert.equal(pageSizesElements.length, 0, 'page size elements count');
@@ -483,7 +483,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Correct selected page when page index is not contains in the pages', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 25, pageIndex: 1, pageSizes: [5, 10, 20] }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 25, pageIndex: 1, pageSizes: [5, 10, 20] }); const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 16);
 
@@ -511,7 +511,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Refresh pages after page size is changed_B233925', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1, pageSizes: [5, 10, 20] }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1, pageSizes: [5, 10, 20] }); const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 13);
         instance.option('pageCount', 13);
@@ -527,13 +527,13 @@ QUnit.module('Pager', {
     // B239491
     QUnit.test('Pager has negative pages when pages count is changed', function(assert) {
         const $pager = $('#container').dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 1,
-                      pageIndex: 1,
-                      visible: false,
-                      hasKnownLastPage: false
-                  }),
-              instance = $pager.dxPager('instance');
+            maxPagesCount: 8,
+            pageCount: 1,
+            pageIndex: 1,
+            visible: false,
+            hasKnownLastPage: false
+        });
+        const instance = $pager.dxPager('instance');
 
         instance.option({
             hasKnownLastPage: true,
@@ -552,7 +552,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Selected page is not reset_B237051', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 15, pageIndex: 1 }); const instance = $pager.dxPager('instance');
 
         instance.option('pageCount', 1);
         instance.option('pageCount', 15);
@@ -567,7 +567,7 @@ QUnit.module('Pager', {
 
     // B239176
     QUnit.test('Click separator page_B239176', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 8 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 8 }); const instance = $pager.dxPager('instance');
 
         $('.dx-separator').first().trigger('dxclick');
 
@@ -576,7 +576,7 @@ QUnit.module('Pager', {
 
     // B239176
     QUnit.test('Click  page parent container_B239176', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 8 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 7, pageCount: 8 }); const instance = $pager.dxPager('instance');
 
         $('.dx-pages').first().trigger('dxclick');
 
@@ -585,7 +585,7 @@ QUnit.module('Pager', {
 
     // B239176
     QUnit.test('Click page size parent container_B239176', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20] }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20] }); const instance = $pager.dxPager('instance');
 
         $('.dx-page-sizes').first().trigger('dxclick');
 
@@ -601,7 +601,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Next page index via navigate button', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }); const instance = $pager.dxPager('instance');
 
         instance._nextPage('next');
         instance._nextPage('next');
@@ -616,7 +616,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Focus selected page', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }), $pages = $pager.find('.dx-pages > .dx-page');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }); const $pages = $pager.find('.dx-pages > .dx-page');
 
         for(let i = 0; i < $pages.length; ++i) {
             assert.equal($($pages[i]).attr('tabindex'), 0, 'page tabindex');
@@ -624,7 +624,7 @@ QUnit.module('Pager', {
     });
 
     QUnit.test('Back page index via navigate button', function(assert) {
-        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }); const instance = $pager.dxPager('instance');
 
         instance.option('pageIndex', 8);
         instance._nextPage('prev');
@@ -704,7 +704,7 @@ QUnit.module('Pager', {
 
     // T804551
     QUnit.test('Pointer up and click on page button', function(assert) {
-        const $pager = $('#container').dxPager({ pageCount: 20 }), instance = $pager.dxPager('instance');
+        const $pager = $('#container').dxPager({ pageCount: 20 }); const instance = $pager.dxPager('instance');
 
         // act
         $pager.find('.dx-page').eq(4).trigger('dxpointerup');
@@ -766,12 +766,12 @@ QUnit.module('Pager', {
 
     QUnit.test('Prev button is disabled when first page is chosen (Rtl mode)', function(assert) {
         const $pager = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showNavigationButtons: true,
-                rtlEnabled: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showNavigationButtons: true,
+            rtlEnabled: true
+        });
 
         let $button;
         const instance = $pager.dxPager('instance');
@@ -823,10 +823,10 @@ QUnit.module('Pager', {
 
     QUnit.test('Page info text is changed when totalCount is changed', function(assert) {
         const $pager = $('#container').dxPager({
-                      maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)'
-                  }),
-              instance = $pager.dxPager('instance');
+            maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showInfo: true, totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)'
+        });
+        const instance = $pager.dxPager('instance');
 
         instance.option('totalCount', 89);
         assert.equal($('.dx-info').text(), 'Page 1 of 10 (89 items)');
@@ -834,18 +834,18 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of'
-                  }),
-              $pageSizeChooser = $pager.find('.dx-page-sizes').children().first(),
-              $pageIndex = $('.dx-page-index'),
-              $pageInfoText = $('.dx-info-text'),
-              $pagesCount = $('.dx-pages-count');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of'
+        });
+        const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
+        const $pageIndex = $('.dx-page-index');
+        const $pageInfoText = $('.dx-info-text');
+        const $pagesCount = $('.dx-pages-count');
 
         assert.ok($pageSizeChooser.dxSelectBox('instance'), 'use selectBox for choose page sizes');
         assert.ok($pageIndex.dxNumberBox('instance'), 'use numberBox for page index');
@@ -858,18 +858,18 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode without the page sizes and info', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: false,
-                      showPageSizes: false,
-                      totalCount: 86,
-                      pagesCountText: 'of'
-                  }),
-              $pageSizeChooser = $pager.find('.dx-page-sizes').children().first(),
-              $pageIndex = $('.dx-page-index'),
-              $pageInfoText = $('.dx-info-text'),
-              $pagesCount = $('.dx-pages-count');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: false,
+            showPageSizes: false,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
+        const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
+        const $pageIndex = $('.dx-page-index');
+        const $pageInfoText = $('.dx-info-text');
+        const $pagesCount = $('.dx-pages-count');
 
         assert.ok(!$pageSizeChooser.dxSelectBox('instance'), 'use selectBox for choose page sizes');
         assert.ok($pageIndex.dxNumberBox('instance'), 'use numberBox for page index');
@@ -889,7 +889,7 @@ QUnit.module('Pager', {
             pagesCountText: 'of'
         });
 
-        const editor = $('.dx-page-index').dxNumberBox('instance'), $pagesCount = $('.dx-pages-count');
+        const editor = $('.dx-page-index').dxNumberBox('instance'); const $pagesCount = $('.dx-pages-count');
 
         $($pagesCount).trigger('dxclick');
 
@@ -899,16 +899,16 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode when re-render', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                pageSize: 10,
-                showInfo: true,
-                totalCount: 86,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            pageSize: 10,
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
 
         let $pageSizeChooser;
         let $pageInfoText;
@@ -930,15 +930,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Check page sizes', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      pageSize: 10,
-                      totalCount: 86,
-                      pagesCountText: 'of'
-                  }),
-              $pageSizeChooser = $pager.find('.dx-page-sizes').children().first(),
-              selectBox = $pageSizeChooser.dxSelectBox('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            pageSize: 10,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
+        const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
+        const selectBox = $pageSizeChooser.dxSelectBox('instance');
 
         selectBox.open();
 
@@ -950,16 +950,16 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Check page sizes width', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      pageSize: 10,
-                      totalCount: 86,
-                      pagesCountText: 'of'
-                  }),
-              pager = $pager.dxPager('instance'),
-              $pageSizeChooser = $pager.find('.dx-page-sizes').children().first(),
-              selectBox = $pageSizeChooser.dxSelectBox('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            pageSize: 10,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
+        const pager = $pager.dxPager('instance');
+        const $pageSizeChooser = $pager.find('.dx-page-sizes').children().first();
+        const selectBox = $pageSizeChooser.dxSelectBox('instance');
 
         assert.equal(selectBox.option('width'), Number($('.dx-page-sizes').css('min-width').replace('px', '')) + 20);
 
@@ -993,13 +993,13 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Change page size via option method', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [7, 10, 13, 25],
-                pageSize: 10,
-                totalCount: 86,
-                pagesCountText: 'of'
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [7, 10, 13, 25],
+            pageSize: 10,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
 
         let $pageSizeChooser;
         let selectBox;
@@ -1014,13 +1014,13 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Change page sizes via option method', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [7, 10, 13, 25],
-                pageSize: 10,
-                totalCount: 86,
-                pagesCountText: 'of'
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [7, 10, 13, 25],
+            pageSize: 10,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
 
         let $pageSizeChooser;
         let selectBox;
@@ -1038,29 +1038,29 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Check page index', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      totalCount: 86,
-                      pageIndex: 73,
-                      pagesCountText: 'of'
-                  }),
-              $pageIndex = $pager.find('.dx-page-index'),
-              numberBox = $pageIndex.dxNumberBox('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            totalCount: 86,
+            pageIndex: 73,
+            pagesCountText: 'of'
+        });
+        const $pageIndex = $pager.find('.dx-page-index');
+        const numberBox = $pageIndex.dxNumberBox('instance');
 
         assert.equal(numberBox.option('value'), 73);
     });
 
     QUnit.test('Light mode. Check page index width', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      totalCount: 86,
-                      pageIndex: 73,
-                      pagesCountText: 'of'
-                  }),
-              pager = $pager.dxPager('instance'),
-              $pageIndex = $pager.find('.dx-page-index'),
-              numberBox = $pageIndex.dxNumberBox('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            totalCount: 86,
+            pageIndex: 73,
+            pagesCountText: 'of'
+        });
+        const pager = $pager.dxPager('instance');
+        const $pageIndex = $pager.find('.dx-page-index');
+        const numberBox = $pageIndex.dxNumberBox('instance');
 
         assert.equal(numberBox.option('width'), Number($('.dx-page-index').css('min-width').replace('px', '')) + 20);
 
@@ -1094,15 +1094,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode. Change page index via option', function(assert) {
         const $pager = $('#container').width(PAGER_LIGHT_MODE_WIDTH).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      pageSize: 5,
-                      totalCount: 86,
-                      pagesCountText: 'of'
-                  }),
-              $pageIndex = $pager.find('.dx-page-index'),
-              numberBox = $pageIndex.dxNumberBox('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            pageSize: 5,
+            totalCount: 86,
+            pagesCountText: 'of'
+        });
+        const $pageIndex = $pager.find('.dx-page-index');
+        const numberBox = $pageIndex.dxNumberBox('instance');
 
         $pager.dxPager('instance').option('pageIndex', 79);
 
@@ -1125,7 +1125,7 @@ QUnit.module('Pager', {
             }
         });
 
-        const $nextButton = $('.dx-next-button'), $prevButton = $('.dx-prev-button');
+        const $nextButton = $('.dx-next-button'); const $prevButton = $('.dx-prev-button');
 
         $($nextButton).trigger('dxclick');
 
@@ -1172,16 +1172,16 @@ QUnit.module('Pager', {
 
     QUnit.test('Apply light mode when width of pager is less of min width', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of',
-                      showNavigationButtons: true
-                  }),
-              pager = $pager.dxPager('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
+        const pager = $pager.dxPager('instance');
 
         assert.equal(pager.option('lightModeEnabled'), false, 'lightModeEnabled by default');
         assert.ok(!pager._isLightMode, 'isLightMode');
@@ -1194,15 +1194,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Apply light mode when width equal optimal pager\'s width', function(assert) {
         const $pager = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showInfo: true,
-                totalCount: 86,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
 
         let optimalPagerWidth;
         const pager = $pager.dxPager('instance');
@@ -1217,33 +1217,33 @@ QUnit.module('Pager', {
 
     QUnit.test('Apply light mode when pager is first rendered', function(assert) {
         const $pager = $('#container').width(100).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of',
-                      showNavigationButtons: true
-                  }),
-              pager = $pager.dxPager('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
+        const pager = $pager.dxPager('instance');
 
         assert.equal(pager.option('lightModeEnabled'), true, 'lightModeEnabled is enabled');
     });
 
     QUnit.test('Pager is rendered in a normal view after light mode when pageCount is changed', function(assert) {
         const $pager = $('#container').width(460).dxPager({
-                      maxPagesCount: 10,
-                      pageCount: 5,
-                      pageSize: 8,
-                      pageSizes: [5, 8, 15, 30],
-                      showInfo: true,
-                      totalCount: 40,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of',
-                      showNavigationButtons: true
-                  }),
-              pager = $pager.dxPager('instance');
+            maxPagesCount: 10,
+            pageCount: 5,
+            pageSize: 8,
+            pageSizes: [5, 8, 15, 30],
+            showInfo: true,
+            totalCount: 40,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
+        const pager = $pager.dxPager('instance');
 
         pager.option({ pageCount: 10, pageIndexChanged: commonUtils.noop });
         pager.option({ pageCount: 5, pageIndexChanged: commonUtils.noop });
@@ -1253,15 +1253,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Light mode is applied only one', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showInfo: true,
-                totalCount: 86,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
 
         let called = 0;
         const pager = $pager.dxPager('instance');
@@ -1289,16 +1289,16 @@ QUnit.module('Pager', {
 
     QUnit.test('Cancel light mode when width of pager is more of min width', function(assert) {
         const $pager = $('#container').width(100).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of',
-                      showNavigationButtons: true
-                  }),
-              pager = $pager.dxPager('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
+        const pager = $pager.dxPager('instance');
 
         assert.equal(pager.option('lightModeEnabled'), true, 'lightModeEnabled is enabled');
 
@@ -1310,15 +1310,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Cancel light mode is only one', function(assert) {
         const $pager = $('#container').width(100).dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showInfo: true,
-                totalCount: 86,
-                infoText: 'Page {0} of {1} ({2} items)',
-                pagesCountText: 'of',
-                showNavigationButtons: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of',
+            showNavigationButtons: true
+        });
 
         let called = 0;
         const pager = $pager.dxPager('instance');
@@ -1346,15 +1346,15 @@ QUnit.module('Pager', {
 
     QUnit.test('Hide the info element when it does not fit in a container', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of'
-                  }),
-              pager = $pager.dxPager('instance');
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of'
+        });
+        const pager = $pager.dxPager('instance');
 
         $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
         pager._dimensionChanged();
@@ -1365,16 +1365,16 @@ QUnit.module('Pager', {
 
     QUnit.test('Show the info element when it is fit in a container', function(assert) {
         const $pager = $('#container').width(1000).dxPager({
-                      maxPagesCount: 8,
-                      pageCount: 10,
-                      pageSizes: [5, 10, 20],
-                      showInfo: true,
-                      totalCount: 86,
-                      infoText: 'Page {0} of {1} ({2} items)',
-                      pagesCountText: 'of'
-                  }),
-              pager = $pager.dxPager('instance'),
-              infoWidth = pager._$info.width();
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: 'Page {0} of {1} ({2} items)',
+            pagesCountText: 'of'
+        });
+        const pager = $pager.dxPager('instance');
+        const infoWidth = pager._$info.width();
 
         $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
         pager._dimensionChanged();
@@ -1388,13 +1388,13 @@ QUnit.module('Pager', {
 
     QUnit.test('LightMode.Prev button is disabled when first page is chosen ', function(assert) {
         const $pager = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showNavigationButtons: true,
-                pagesCountText: 'of',
-                lightModeEnabled: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showNavigationButtons: true,
+            pagesCountText: 'of',
+            lightModeEnabled: true
+        });
 
         let isPageChanged;
         const $button = $('.dx-prev-button');
@@ -1412,13 +1412,13 @@ QUnit.module('Pager', {
 
     QUnit.test('LightMode.Next button is disabled when first page is chosen ', function(assert) {
         const $pager = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showNavigationButtons: true,
-                pagesCountText: 'of',
-                lightModeEnabled: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showNavigationButtons: true,
+            pagesCountText: 'of',
+            lightModeEnabled: true
+        });
 
         let isPageChanged;
         let $button;
@@ -1458,12 +1458,12 @@ QUnit.module('Pager', {
 
     QUnit.test('Navigate buttons with rtl', function(assert) {
         const $pager = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showNavigationButtons: true,
-                rtlEnabled: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showNavigationButtons: true,
+            rtlEnabled: true
+        });
 
         const instance = $pager.dxPager('instance');
         let $button;
@@ -1485,12 +1485,12 @@ QUnit.module('Pager', {
 
     QUnit.test('dxPager render with RTL', function(assert) {
         const pagerElement = $('#container').dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showNavigationButtons: true,
-                rtlEnabled: true
-            });
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showNavigationButtons: true,
+            rtlEnabled: true
+        });
 
         const pagerInstance = pagerElement.dxPager('instance');
         let rtlTestSample = {};

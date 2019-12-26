@@ -54,10 +54,10 @@ QUnit.module('options', {
 }, () => {
     QUnit.test('correct value display in status after option changed', function(assert) {
         const $progressBar = this.$element.dxProgressBar({
-                      value: 10
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance'),
-              $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+            value: 10
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
+        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
 
         progressBar.option('value', 30);
         assert.equal($status.text(), 'Progress: ' + progressBar.option('value') + '%', 'status text has been change right');
@@ -67,13 +67,13 @@ QUnit.module('options', {
         assert.expect(6);
 
         const $progressBar = this.$element.dxProgressBar({
-                      value: 10,
-                      statusFormat: function(value) {
-                          return 'Customised value: ' + value * 100;
-                      }
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance'),
-              $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+            value: 10,
+            statusFormat: function(value) {
+                return 'Customised value: ' + value * 100;
+            }
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
+        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
         assert.equal($status.text(), 'Customised value: ' + progressBar.option('value'), 'status text is right');
 
         progressBar.option('value', 50);
@@ -161,9 +161,9 @@ QUnit.module('states', {
         assert.expect(5);
 
         const $progressBar = this.$element.dxProgressBar({
-                      value: 10
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance');
+            value: 10
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
 
         const renderedIndeterminateSegmentContainersCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length;
         let renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
@@ -186,11 +186,11 @@ QUnit.module('states', {
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria properties after options changed', function(assert) {
         const $element = $('#progressbar').dxProgressBar({
-                      min: 32,
-                      max: 137,
-                      value: 58
-                  }),
-              instance = $element.dxProgressBar('instance');
+            min: 32,
+            max: 137,
+            value: 58
+        });
+        const instance = $element.dxProgressBar('instance');
 
         instance.option({
             min: 33,

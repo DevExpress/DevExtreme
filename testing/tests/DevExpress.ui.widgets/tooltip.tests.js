@@ -93,9 +93,9 @@ QUnit.module('overlay integration', {
 }, () => {
     QUnit.test('tooltip should be closed on outside click if closeOnOutsideClick is true', function(assert) {
         const $tooltip = $('#tooltip').dxTooltip({
-                      closeOnOutsideClick: true
-                  }),
-              instance = $tooltip.dxTooltip('instance');
+            closeOnOutsideClick: true
+        });
+        const instance = $tooltip.dxTooltip('instance');
 
         instance.show();
         $('#qunit-fixture').trigger('dxpointerdown');
@@ -124,7 +124,7 @@ QUnit.module('base z-index', () => {
     QUnit.test('tooltip should have correct z-index', function(assert) {
         Tooltip.baseZIndex(10000);
 
-        const tooltip = new Tooltip($('#tooltip'), { visible: true }), $tooltipContent = tooltip.overlayContent();
+        const tooltip = new Tooltip($('#tooltip'), { visible: true }); const $tooltipContent = tooltip.overlayContent();
 
         assert.equal($tooltipContent.css('zIndex'), 10001, 'tooltip\'s z-index is correct');
     });
@@ -140,7 +140,7 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria-describedby property should be set on target when tooltip is visible', function(assert) {
-        const $target = $('#target'), $element = $('#tooltip');
+        const $target = $('#target'); const $element = $('#tooltip');
         new Tooltip($element, { target: '#target', visible: false });
         const $overlay = $element.find('.dx-overlay-content');
 

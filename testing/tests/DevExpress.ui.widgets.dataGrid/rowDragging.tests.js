@@ -585,10 +585,10 @@ QUnit.test('Placeholder should be placed correctly if scrollLeft > 0', function(
 // T837848
 QUnit.test('The placeholder should be placed correctly when there are grouping and hidden group summary rows', function(assert) {
     // arrange
-    let rowsView,
-        onDragChangeSpy = sinon.spy(),
-        $testElement = $('#container'),
-        $placeholderElement;
+    let rowsView;
+    let onDragChangeSpy = sinon.spy();
+    let $testElement = $('#container');
+    let $placeholderElement;
 
     this.options.grouping = { autoExpandAll: true };
     this.options.rowDragging.onDragChange = onDragChangeSpy;
@@ -762,8 +762,8 @@ QUnit.test('Command drag cell should have cursor \'grabbing/pointer\' for draggi
 
 QUnit.test('Drag icon should not be displayed for group footer', function(assert) {
     // arrange
-    let rowsView,
-        $testElement = $('#container');
+    let rowsView;
+    let $testElement = $('#container');
 
     this.options.grouping = { autoExpandAll: true };
     this.options.columns[0] = { dataField: 'field1', groupIndex: 0 };

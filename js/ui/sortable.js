@@ -288,8 +288,8 @@ const Sortable = Draggable.inherit({
 
                 if(freeSize < sourceElementSize) {
                     if(isVertical) {
-                        let items = this._getItems(),
-                            $lastItem = $(this._getPrevVisibleItem(items));
+                        let items = this._getItems();
+                        let $lastItem = $(this._getPrevVisibleItem(items));
 
                         this._$modifiedItem = $lastItem;
                         this._modifiedItemMargin = $lastItem.get(0).style.marginBottom;
@@ -433,13 +433,13 @@ const Sortable = Draggable.inherit({
     },
 
     _getItemPoints: function() {
-        let that = this,
-            result,
-            isVertical = that._isVerticalOrientation(),
-            itemElements = that._getItems(),
-            visibleItemElements = itemElements.filter(isElementVisible),
-            $draggableItem = this._getDraggableElement(),
-            draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
+        let that = this;
+        let result;
+        let isVertical = that._isVerticalOrientation();
+        let itemElements = that._getItems();
+        let visibleItemElements = itemElements.filter(isElementVisible);
+        let $draggableItem = this._getDraggableElement();
+        let draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
         result = visibleItemElements
             .map((item, visibleIndex) => {
@@ -747,14 +747,14 @@ const Sortable = Draggable.inherit({
     },
 
     _movePlaceholder: function() {
-        let that = this,
-            $placeholderElement = that._$placeholderElement || that._createPlaceholder(),
-            items = that._getItems(),
-            toIndex = that.option('toIndex'),
-            itemElement = items[toIndex],
-            isVerticalOrientation = that._isVerticalOrientation(),
-            position = null,
-            leftMargin = 0;
+        let that = this;
+        let $placeholderElement = that._$placeholderElement || that._createPlaceholder();
+        let items = that._getItems();
+        let toIndex = that.option('toIndex');
+        let itemElement = items[toIndex];
+        let isVerticalOrientation = that._isVerticalOrientation();
+        let position = null;
+        let leftMargin = 0;
 
         that._updatePlaceholderSizes($placeholderElement, itemElement);
 

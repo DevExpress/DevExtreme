@@ -89,9 +89,9 @@ const ValidatingController = modules.Controller.inherit((function() {
             let brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                let column = brokenRule.column,
-                    isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped,
-                    isVisibleColumn = column && column.visible;
+                let column = brokenRule.column;
+                let isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
+                let isVisibleColumn = column && column.visible;
 
                 if(!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
                     brokenRulesMessages.push(brokenRule.message);
@@ -466,7 +466,7 @@ module.exports = {
                 },
 
                 _createInvisibleColumnValidators: function(editData) {
-                    const validatingController = this.getController('validating'), columnsController = this.getController('columns'), invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand), groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1), invisibleColumnValidators = [];
+                    const validatingController = this.getController('validating'); const columnsController = this.getController('columns'); const invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand); const groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1); const invisibleColumnValidators = [];
 
                     invisibleColumns.push(...groupColumns);
 

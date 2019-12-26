@@ -45,7 +45,7 @@ QUnit.module('Checkbox markup', () => {
     });
 
     QUnit.test('a hidden input should be rendered', function(assert) {
-        const $element = $('#checkbox').dxCheckBox(), $input = $element.find('input');
+        const $element = $('#checkbox').dxCheckBox(); const $input = $element.find('input');
 
         assert.equal($input.length, 1, 'input is rendered');
         assert.equal($input.attr('type'), 'hidden', 'type attribute of hidden input');
@@ -59,7 +59,7 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('aria checked attributes', function(assert) {
-        const $element = $('#checkbox').dxCheckBox({ value: true }), instance = $element.dxCheckBox('instance');
+        const $element = $('#checkbox').dxCheckBox({ value: true }); const instance = $element.dxCheckBox('instance');
 
         assert.equal($element.attr('aria-checked'), 'true', 'checked state is correct');
 

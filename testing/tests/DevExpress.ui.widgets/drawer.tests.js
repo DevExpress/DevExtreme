@@ -105,8 +105,8 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('drawer should preserve content', function(assert) {
-        const $content = $('#drawer #content'),
-            $element = $('#drawer').dxDrawer();
+        const $content = $('#drawer #content');
+        const $element = $('#drawer').dxDrawer();
 
         assert.equal($content[0], $element.find('#content')[0]);
     });
@@ -201,12 +201,12 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('incomplete animation should be stopped after toggling visibility', function(assert) {
-        let origFxStop = fx.stop,
-            panelStopCalls = 0,
-            contentStopCalls = 0,
-            overlayContentStopCalls = 0,
-            shaderStopCalls = 0,
-            isJumpedToEnd = false;
+        let origFxStop = fx.stop;
+        let panelStopCalls = 0;
+        let contentStopCalls = 0;
+        let overlayContentStopCalls = 0;
+        let shaderStopCalls = 0;
+        let isJumpedToEnd = false;
 
         const $element = $('#drawer').dxDrawer({
             opened: false,
@@ -260,12 +260,12 @@ QUnit.module('Drawer behavior', () => {
             shading: true
         });
 
-        let origFxStop = fx.stop,
-            panelStopCalls = 0,
-            contentStopCalls = 0,
-            overlayContentStopCalls = 0,
-            shaderStopCalls = 0,
-            isJumpedToEnd = false;
+        let origFxStop = fx.stop;
+        let panelStopCalls = 0;
+        let contentStopCalls = 0;
+        let overlayContentStopCalls = 0;
+        let shaderStopCalls = 0;
+        let isJumpedToEnd = false;
 
         const instance = $element.dxDrawer('instance');
         fx.stop = function($element, jumpToEnd) {
@@ -312,11 +312,11 @@ QUnit.module('Drawer behavior', () => {
             shading: true
         });
 
-        let origFxStop = fx.stop,
-            panelStopCalls = 0,
-            contentStopCalls = 0,
-            shaderStopCalls = 0,
-            isJumpedToEnd = false;
+        let origFxStop = fx.stop;
+        let panelStopCalls = 0;
+        let contentStopCalls = 0;
+        let shaderStopCalls = 0;
+        let isJumpedToEnd = false;
 
         const instance = $element.dxDrawer('instance');
         fx.stop = function($element, jumpToEnd) {
@@ -1013,10 +1013,10 @@ QUnit.module('Rtl', () => {
 
     QUnit.test('drawer panel overlay should have right position config', function(assert) {
         let drawer = $('#drawer').dxDrawer({
-                openedStateMode: 'overlap',
-                rtlEnabled: true
-            }).dxDrawer('instance'),
-            overlay = drawer.getOverlay();
+            openedStateMode: 'overlap',
+            rtlEnabled: true
+        }).dxDrawer('instance');
+        let overlay = drawer.getOverlay();
 
         assert.equal(overlay.option('position').my, 'top left');
         assert.equal(overlay.option('position').at, 'top left');
@@ -1086,12 +1086,12 @@ QUnit.module('Rtl', () => {
 QUnit.module('CloseOnOutsideClick', () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
         const drawer = $('#drawer').dxDrawer({
-                      closeOnOutsideClick: false,
-                      opened: true,
-                      shading: true
-                  })
-                      .dxDrawer('instance'),
-              $content = drawer.viewContent();
+            closeOnOutsideClick: false,
+            opened: true,
+            shading: true
+        })
+            .dxDrawer('instance');
+        const $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
         assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
@@ -1106,13 +1106,13 @@ QUnit.module('CloseOnOutsideClick', () => {
 
     QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
         const drawer = $('#drawer').dxDrawer({
-                      closeOnOutsideClick: () => {
-                          return false;
-                      },
-                      opened: true
-                  })
-                      .dxDrawer('instance'),
-              $content = drawer.viewContent();
+            closeOnOutsideClick: () => {
+                return false;
+            },
+            opened: true
+        })
+            .dxDrawer('instance');
+        const $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
         assert.equal(drawer.option('opened'), true, 'drawer is not hidden');

@@ -95,7 +95,7 @@ QUnit.module('Color Box', {
     }
 }, () => {
     QUnit.test('Render with hex value', function(assert) {
-        const $colorBox = showColorBox.call(this, { value: '#000000' }), $input = $colorBox.find('.' + COLOR_BOX_INPUT_CLASS);
+        const $colorBox = showColorBox.call(this, { value: '#000000' }); const $input = $colorBox.find('.' + COLOR_BOX_INPUT_CLASS);
 
         assert.equal($input.val(), '#000000');
         $colorBox.dxColorBox('instance').option('value', '#ff0000');
@@ -115,7 +115,7 @@ QUnit.module('Color Box', {
 
         showColorBox.call(this);
 
-        const $overlay = getColorBoxOverlay(), $applyButton = $overlay.find('.dx-colorview-buttons-container .dx-colorview-apply-button'), colorBoxInstance = this.element.dxColorBox('instance');
+        const $overlay = getColorBoxOverlay(); const $applyButton = $overlay.find('.dx-colorview-buttons-container .dx-colorview-apply-button'); const colorBoxInstance = this.element.dxColorBox('instance');
 
         colorBoxInstance._colorView._currentColor = new Color('#ff0000');
         $($applyButton).trigger('dxclick');
@@ -126,7 +126,7 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('If value is not \'null\' color result preview should not have a special css class', function(assert) {
-        const $colorBox = this.element.dxColorBox(), $colorInputContainer = $colorBox.find('.' + COLOR_BOX_INPUT_CONTAINER_CLASS);
+        const $colorBox = this.element.dxColorBox(); const $colorInputContainer = $colorBox.find('.' + COLOR_BOX_INPUT_CONTAINER_CLASS);
 
         $colorBox.dxColorBox('instance').option('value', '#ff0000');
 
@@ -151,7 +151,7 @@ QUnit.module('Color Box', {
 
     QUnit.test('Render color picker container', function(assert) {
         showColorBox.call(this);
-        const $overlay = getColorBoxOverlay(), $colorPickerContainer = $overlay.find('.dx-colorview-container'), $alphaChannelScale = $overlay.find('.dx-colorview-alpha-channel-scale'), $alphaChannelInput = $overlay.find('.dx-colorview-alpha-channel-input'), $alphaChannelLabel = $overlay.find('.dx-colorview-alpha-label');
+        const $overlay = getColorBoxOverlay(); const $colorPickerContainer = $overlay.find('.dx-colorview-container'); const $alphaChannelScale = $overlay.find('.dx-colorview-alpha-channel-scale'); const $alphaChannelInput = $overlay.find('.dx-colorview-alpha-channel-input'); const $alphaChannelLabel = $overlay.find('.dx-colorview-alpha-label');
 
         assert.equal($colorPickerContainer.length, 1);
         assert.equal($alphaChannelScale.length, 0);
@@ -165,14 +165,14 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('Click on apply button', function(assert) {
-        const onValueChangedHandler = sinon.spy(noop), onApplyButtonClickHandler = sinon.spy(noop);
+        const onValueChangedHandler = sinon.spy(noop); const onApplyButtonClickHandler = sinon.spy(noop);
 
         showColorBox.call(this, {
             onValueChanged: onValueChangedHandler,
             onApplyButtonClick: onApplyButtonClickHandler
         });
 
-        const $overlayContent = getColorBoxOverlayContent(), $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button'), colorBoxInstance = this.element.dxColorBox('instance'), newColor = '#A600F3'.toLowerCase();
+        const $overlayContent = getColorBoxOverlayContent(); const $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button'); const colorBoxInstance = this.element.dxColorBox('instance'); const newColor = '#A600F3'.toLowerCase();
 
         colorBoxInstance._colorView.option('value', newColor);
 
@@ -195,7 +195,7 @@ QUnit.module('Color Box', {
 
         this.updateColorInput('hex', 'f0f0f0');
 
-        const $overlayContent = getColorBoxOverlayContent(), $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
+        const $overlayContent = getColorBoxOverlayContent(); const $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
 
         $($cancelButton).trigger('dxclick');
         assert.ok($('.' + COLOR_BOX_OVERLAY_CLASS).is(':hidden'));
@@ -218,7 +218,7 @@ QUnit.module('Color Box', {
 
         const $overlayContent = getColorBoxOverlayContent();
 
-        const $colorChooserMarker = $overlayContent.find('.dx-colorview-palette-handle'), $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
+        const $colorChooserMarker = $overlayContent.find('.dx-colorview-palette-handle'); const $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
 
         move($colorChooserMarker, {
             left: 220,
@@ -243,7 +243,7 @@ QUnit.module('Color Box', {
 
         const $overlayContent = getColorBoxOverlayContent();
 
-        const $alphaHandle = $overlayContent.find('.dx-colorview-alpha-channel-handle'), $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
+        const $alphaHandle = $overlayContent.find('.dx-colorview-alpha-channel-handle'); const $cancelButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
 
         move($alphaHandle, {
             left: 70,
@@ -267,7 +267,7 @@ QUnit.module('Color Box', {
             editAlphaChannel: true
         });
 
-        const $overlay = getColorBoxOverlay(), $hueHandle = $overlay.find('.dx-colorview-hue-scale-handle');
+        const $overlay = getColorBoxOverlay(); const $hueHandle = $overlay.find('.dx-colorview-hue-scale-handle');
 
         move($hueHandle, {
             left: 0,
@@ -280,10 +280,10 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
-        const spy = sinon.spy(noop),
-              colorBox = showColorBox.call(this, {
-                  onValueChanged: spy
-              }).dxColorBox('instance');
+        const spy = sinon.spy(noop);
+        const colorBox = showColorBox.call(this, {
+            onValueChanged: spy
+        }).dxColorBox('instance');
 
         colorBox.option('value', '#00ff00');
 
@@ -344,7 +344,7 @@ QUnit.module('Color Box', {
 
     QUnit.test('Validate value of colorbox input', function(assert) {
         this.element.dxColorBox({ value: '#ff0000' });
-        const $colorBoxInput = $('.' + COLOR_BOX_INPUT_CLASS), $colorBoxResultsPreview = $('.' + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
+        const $colorBoxInput = $('.' + COLOR_BOX_INPUT_CLASS); const $colorBoxResultsPreview = $('.' + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
 
         $($colorBoxInput.val('unknown value')).trigger('change');
 
@@ -354,7 +354,7 @@ QUnit.module('Color Box', {
 
     QUnit.test('Validate value of colorbox hex-input', function(assert) {
         this.element.dxColorBox({ value: '#ff0000' });
-        const $colorBoxInput = $('.' + COLOR_BOX_INPUT_CLASS), $colorBoxResultsPreview = $('.' + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
+        const $colorBoxInput = $('.' + COLOR_BOX_INPUT_CLASS); const $colorBoxResultsPreview = $('.' + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
 
         $($colorBoxInput.val('#zzzzzz')).trigger('change');
 
@@ -367,7 +367,7 @@ QUnit.module('Color Box', {
             applyValueMode: 'instantly'
         });
 
-        const $overlay = getColorBoxOverlay(), $colorChooserMarker = $overlay.find('.dx-colorview-palette-handle');
+        const $overlay = getColorBoxOverlay(); const $colorChooserMarker = $overlay.find('.dx-colorview-palette-handle');
 
         move($colorChooserMarker, {
             left: 220,
@@ -422,7 +422,7 @@ QUnit.module('Color Box', {
 
 
     QUnit.test('Option changes', function(assert) {
-        const colorBox = showColorBox.call(this).dxColorBox('instance'), onCancelButtonClick = noop, onApplyButtonClick = noop;
+        const colorBox = showColorBox.call(this).dxColorBox('instance'); const onCancelButtonClick = noop; const onApplyButtonClick = noop;
 
         $.each([
             { name: 'value', value: '#ff0000' },
@@ -438,7 +438,7 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('\'applyButtonText\' and \'cancelButtonText\' options change should update UI', function(assert) {
-        const colorBox = showColorBox.call(this).dxColorBox('instance'), applyText = 'Test Done', cancelText = 'Test Cancel';
+        const colorBox = showColorBox.call(this).dxColorBox('instance'); const applyText = 'Test Done'; const cancelText = 'Test Cancel';
 
         colorBox.option('applyButtonText', applyText);
         colorBox.close();
@@ -479,7 +479,7 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('T169171 - rendering of many drop buttons', function(assert) {
-        const $colorBox = this.element.dxColorBox({}), colorBox = $colorBox.dxColorBox('instance');
+        const $colorBox = this.element.dxColorBox({}); const colorBox = $colorBox.dxColorBox('instance');
 
         assert.equal($colorBox.find('.dx-dropdowneditor-button').length, 1, 'only one button is rendered');
 
@@ -493,9 +493,9 @@ QUnit.module('Color Box', {
 
     QUnit.test('Color changed in preview if value is valid', function(assert) {
         const $colorBox = this.element.dxColorBox({
-                      value: '#f00'
-                  }),
-              colorBox = $colorBox.dxColorBox('instance');
+            value: '#f00'
+        });
+        const colorBox = $colorBox.dxColorBox('instance');
 
         const $colorPreview = $colorBox.find('.dx-colorbox-color-result-preview');
         const $input = $colorBox.find('.' + TEXTEDITOR_INPUT_CLASS);
@@ -519,14 +519,14 @@ QUnit.module('Color Box', {
     });
 
     QUnit.test('ColorBox set the right stylingMode option to ColorView (default)', function(assert) {
-        const $colorBox = $('#color-box').dxColorBox({ value: 'red' }), colorBox = $colorBox.dxColorBox('instance');
+        const $colorBox = $('#color-box').dxColorBox({ value: 'red' }); const colorBox = $colorBox.dxColorBox('instance');
 
         colorBox.open();
         assert.equal(colorBox._colorView.option('stylingMode'), 'outlined');
     });
 
     QUnit.test('ColorBox set the right stylingMode option to ColorView (custom)', function(assert) {
-        const $colorBox = $('#color-box').dxColorBox({ value: 'red', stylingMode: 'underlined' }), colorBox = $colorBox.dxColorBox('instance');
+        const $colorBox = $('#color-box').dxColorBox({ value: 'red', stylingMode: 'underlined' }); const colorBox = $colorBox.dxColorBox('instance');
 
         colorBox.open();
         assert.equal(colorBox._colorView.option('stylingMode'), 'underlined');
@@ -570,7 +570,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('enter key test on inputs', function(assert) {
         assert.expect(10);
 
-        const instance = this.instance, $input = this.$element.find('.dx-texteditor-input');
+        const instance = this.instance; const $input = this.$element.find('.dx-texteditor-input');
         instance.option({
             opened: true,
             value: 'rgba(153, 72, 70, 1)',
@@ -648,7 +648,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('arrow right and left test', function(assert) {
-        let $handler, handlerOffset;
+        let $handler; let handlerOffset;
 
         this.instance.option({
             opened: true,
@@ -716,7 +716,7 @@ QUnit.module('Regressions', {
     }
 }, () => {
     QUnit.test('T171573', function(assert) {
-        const $colorBox = $('#color-box').dxColorBox({ value: 'red' }), colorBox = $colorBox.dxColorBox('instance');
+        const $colorBox = $('#color-box').dxColorBox({ value: 'red' }); const colorBox = $colorBox.dxColorBox('instance');
 
         assert.equal(colorBox.option('value'), 'red');
 
@@ -732,7 +732,7 @@ QUnit.module('Regressions', {
         colorBox.open();
 
         const colorView = colorBox._colorView;
-        const $overlayContent = getColorBoxOverlayContent(), $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
+        const $overlayContent = getColorBoxOverlayContent(); const $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
 
         $($applyButton).trigger('dxclick');
 
@@ -744,11 +744,11 @@ QUnit.module('Regressions', {
             value: '#ff0000'
         }).dxColorBox('instance');
 
-        const $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS)), keyboard = keyboardMock($input);
+        const $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS)); const keyboard = keyboardMock($input);
 
         colorBox.open();
 
-        const $overlayContent = getColorBoxOverlayContent(), $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
+        const $overlayContent = getColorBoxOverlayContent(); const $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
 
         $($applyButton).trigger('dxclick');
 
@@ -764,11 +764,11 @@ QUnit.module('Regressions', {
             value: '#326b8a'
         }).dxColorBox('instance');
 
-        const $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS)), keyboard = keyboardMock($input);
+        const $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS)); const keyboard = keyboardMock($input);
 
         colorBox.open();
 
-        const $overlayContent = getColorBoxOverlayContent(), $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
+        const $overlayContent = getColorBoxOverlayContent(); const $applyButton = $overlayContent.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
 
         $($applyButton).trigger('dxclick');
 
@@ -781,13 +781,13 @@ QUnit.module('Regressions', {
 
     QUnit.test('value should be reseted after popup closing when \'applyValueMode\' is \'useButtons\' (T806577)', function(assert) {
         const colorBox = $('#color-box').dxColorBox({
-                value: '#aabbcc',
-                applyValueMode: 'useButtons',
-                opened: true
-            }).dxColorBox('instance'),
-            $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS)),
-            colorView = $('.dx-colorview').dxColorView('instance'),
-            keyboard = keyboardMock($input);
+            value: '#aabbcc',
+            applyValueMode: 'useButtons',
+            opened: true
+        }).dxColorBox('instance');
+        const $input = $(colorBox.$element().find('.' + TEXTEDITOR_INPUT_CLASS));
+        const colorView = $('.dx-colorview').dxColorView('instance');
+        const keyboard = keyboardMock($input);
 
         colorView.option('value', '#ffffff');
         colorBox.close();

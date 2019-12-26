@@ -45,20 +45,20 @@ const toSelector = cssClass => `.${cssClass}`;
 QUnit.module('general', () => {
     QUnit.test('mouseup switch selected tab', function(assert) {
         const tabsElement = $('#tabs').dxTabs({
-                      items: [
-                          { text: '0' },
-                          { text: '1' },
-                          { text: '2' }
-                      ]
-                  }),
-              tabsInstance = tabsElement.dxTabs('instance');
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' }
+            ]
+        });
+        const tabsInstance = tabsElement.dxTabs('instance');
 
         $.each(tabsInstance.option('items'), function(clickedTabIndex) {
             const tabs = $(tabsInstance._itemElements());
             tabs.eq(clickedTabIndex).trigger('dxclick');
 
             tabs.each(function(tabIndex) {
-                const tab = $(this), isClickedTab = tabIndex === clickedTabIndex;
+                const tab = $(this); const isClickedTab = tabIndex === clickedTabIndex;
 
                 assert.ok(isClickedTab ? tab.hasClass(TAB_SELECTED_CLASS) : !tab.hasClass(TAB_SELECTED_CLASS), 'tab selected state');
             });
@@ -69,15 +69,15 @@ QUnit.module('general', () => {
 
     QUnit.test('repeated click doesn\'t change selected tab state', function(assert) {
         const tabsElement = $('#tabs').dxTabs({
-                      items: [
-                          { text: '0' },
-                          { text: '1' },
-                          { text: '2' }
-                      ]
-                  }),
-              tabsInstance = tabsElement.dxTabs('instance');
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' }
+            ]
+        });
+        const tabsInstance = tabsElement.dxTabs('instance');
 
-        const tabElements = $(tabsInstance._itemElements()), tabElement = tabElements.eq(1);
+        const tabElements = $(tabsInstance._itemElements()); const tabElement = tabElements.eq(1);
 
         tabElement.trigger('dxclick');
 
@@ -91,16 +91,16 @@ QUnit.module('general', () => {
 
     QUnit.test('disabled tab can\'t be selected by click', function(assert) {
         const tabsElement = $('#tabs').dxTabs({
-                      items: [
-                          { text: '1' },
-                          {
-                              text: '2',
-                              disabled: true
-                          },
-                          { text: '3' }
-                      ]
-                  }),
-              tabsInstance = tabsElement.dxTabs('instance');
+            items: [
+                { text: '1' },
+                {
+                    text: '2',
+                    disabled: true
+                },
+                { text: '3' }
+            ]
+        });
+        const tabsInstance = tabsElement.dxTabs('instance');
 
         const tabElements = $(tabsInstance._itemElements());
 
@@ -196,7 +196,7 @@ QUnit.module('tab select action', () => {
     QUnit.test('regression: B251795', function(assert) {
         assert.expect(2);
 
-        let itemClickFired = 0, itemSelectFired = 0;
+        let itemClickFired = 0; let itemSelectFired = 0;
 
         const $tabs = $('#tabs').dxTabs({
             items: [1, 2, 3],
@@ -224,17 +224,17 @@ QUnit.module('tab select action', () => {
 
     QUnit.test('Tabs in multiple mode', function(assert) {
         const $element = $('#widget').dxTabs({
-                      items: [
-                          { text: 'user' },
-                          { text: 'analytics' },
-                          { text: 'customers' },
-                          { text: 'search' },
-                          { text: 'favorites' }
-                      ], width: 400,
-                      selectionMode: 'multiple',
-                      selectedIndex: 2
-                  }),
-              instance = $element.dxTabs('instance');
+            items: [
+                { text: 'user' },
+                { text: 'analytics' },
+                { text: 'customers' },
+                { text: 'search' },
+                { text: 'favorites' }
+            ], width: 400,
+            selectionMode: 'multiple',
+            selectedIndex: 2
+        });
+        const instance = $element.dxTabs('instance');
 
         assert.equal(instance.option('selectedItem').text, 'customers', 'was selected correct item');
 
@@ -252,12 +252,12 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
 
         assert.ok($scrollable.length, 'scroll created');
         assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), 'wrapper class added');
@@ -266,10 +266,10 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('tabs should be wrapped into scrollable for some disabled items', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2', disabled: true }, { text: 'item 3', disabled: true }, { text: 'item 4', disabled: true }],
-                      width: 200
-                  }),
-              $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+            items: [{ text: 'item 1' }, { text: 'item 2', disabled: true }, { text: 'item 3', disabled: true }, { text: 'item 4', disabled: true }],
+            width: 200
+        });
+        const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
 
         assert.ok($scrollable.length, 'scroll created');
         assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), 'wrapper class added');
@@ -287,15 +287,15 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('scrollable should have correct option scrollByContent', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      scrollingEnabled: true,
-                      scrollByContent: true,
-                      width: 100
-                  }),
-              instance = $element.dxTabs('instance'),
-              $scrollable = $element.children('.' + SCROLLABLE_CLASS),
-              scrollable = $scrollable.dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            scrollingEnabled: true,
+            scrollByContent: true,
+            width: 100
+        });
+        const instance = $element.dxTabs('instance');
+        const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+        const scrollable = $scrollable.dxScrollable('instance');
 
         assert.ok(scrollable.option('scrollByContent'), 'scrollByContent was set');
 
@@ -354,13 +354,13 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('right nav button should be rendered if showNavButtons=true and possible to scroll right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.children().eq(-1);
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.children().eq(-1);
 
         assert.ok($button.hasClass(TABS_NAV_BUTTON_CLASS), 'nav class added');
         assert.ok($button.hasClass(TABS_RIGHT_NAV_BUTTON_CLASS), 'right class added');
@@ -368,14 +368,14 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('click on right nav button should scroll tabs to right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         $($button).trigger('dxclick');
         assert.equal(scrollable.scrollLeft(), TAB_OFFSET, 'scroll position is correct');
@@ -383,15 +383,15 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('hold on right nav button should scroll tabs to right to end', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
-                          { text: 'item 5' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
+                { text: 'item 5' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         this.clock = sinon.useFakeTimers();
 
@@ -407,13 +407,13 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('left nav button should be rendered if showNavButtons=true and possible to scroll left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.children().eq(0);
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.children().eq(0);
 
         assert.ok($button.hasClass(TABS_NAV_BUTTON_CLASS), 'nav class added');
         assert.ok($button.hasClass(TABS_LEFT_NAV_BUTTON_CLASS), 'left class added');
@@ -421,14 +421,14 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('click on left nav button should scroll tabs to left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         scrollable.update();
         scrollable.scrollTo(TAB_OFFSET);
@@ -438,15 +438,15 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('hold on left nav button should scroll tabs to left to end', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
-                          { text: 'item 5' }, { text: 'item 6' }, { text: 'item 7' }, { text: 'item 8' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' },
+                { text: 'item 5' }, { text: 'item 6' }, { text: 'item 7' }, { text: 'item 8' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         this.clock = sinon.useFakeTimers();
 
@@ -465,14 +465,14 @@ QUnit.module('horizontal scrolling', () => {
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
         assert.expect(1);
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
-                      selectedIndex: 0,
-                      wordWrap: false,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              instance = $element.dxTabs('instance'),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            selectedIndex: 0,
+            wordWrap: false,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const instance = $element.dxTabs('instance');
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         scrollable.scrollToElement = function($item) {
             assert.equal($item.get(0), instance.itemElements().eq(3).get(0), 'scrolled to item');
@@ -482,26 +482,26 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('tabs should not be wrapped into scrollable if all items are visible', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }],
-                      wordWrap: false,
-                      scrollingEnabled: true,
-                      width: 250
-                  }),
-              $scrollable = $element.children('.' + SCROLLABLE_CLASS);
+            items: [{ text: 'item 1' }, { text: 'item 2' }],
+            wordWrap: false,
+            scrollingEnabled: true,
+            width: 250
+        });
+        const $scrollable = $element.children('.' + SCROLLABLE_CLASS);
 
         assert.equal($scrollable.length, 0, 'scroll was not created');
     });
 
     QUnit.test('left button should be disabled if scrollPosition == 0', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         assert.ok($button.dxButton('instance').option('disabled'));
 
@@ -514,14 +514,14 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('right button should be disabled if scrollPosition == scrollWidth', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS),
-              scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
+        const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
         assert.ok(!$button.dxButton('instance').option('disabled'));
 
@@ -534,13 +534,13 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('button should update disabled state after dxresize', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
-                      wordWrap: false,
-                      showNavButtons: true,
-                      scrollingEnabled: true,
-                      width: 100
-                  }),
-              $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+            wordWrap: false,
+            showNavButtons: true,
+            scrollingEnabled: true,
+            width: 100
+        });
+        const $button = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS);
 
         $button.dxButton('instance').option('disabled', true);
 
@@ -550,12 +550,12 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('tabs should not be refreshed after dimension changed', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }],
-                      scrollingEnabled: true,
-                      visible: true,
-                      width: 100
-                  }),
-              instance = $element.dxTabs('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }],
+            scrollingEnabled: true,
+            visible: true,
+            width: 100
+        });
+        const instance = $element.dxTabs('instance');
 
         instance.itemElements().data('rendered', true);
 
@@ -567,12 +567,12 @@ QUnit.module('horizontal scrolling', () => {
 
     QUnit.test('tabs should hide navigation if scrollable is not allowed after resize', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-                      items: [{ text: 'item 1' }, { text: 'item 2' }],
-                      scrollingEnabled: true,
-                      visible: true,
-                      width: 100
-                  }),
-              instance = $element.dxTabs('instance');
+            items: [{ text: 'item 1' }, { text: 'item 2' }],
+            scrollingEnabled: true,
+            visible: true,
+            width: 100
+        });
+        const instance = $element.dxTabs('instance');
 
         instance.option('width', 700);
 
@@ -582,16 +582,16 @@ QUnit.module('horizontal scrolling', () => {
     });
 
     QUnit.test('tabs should scroll to the selected item on init', function(assert) {
-        const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }, { text: 'item 5' }],
-              $element = $('#scrollableTabs').dxTabs({
-                  items: items,
-                  scrollingEnabled: true,
-                  visible: true,
-                  selectedItem: items[3],
-                  width: 200
-              });
+        const items = [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }, { text: 'item 5' }];
+        const $element = $('#scrollableTabs').dxTabs({
+            items: items,
+            scrollingEnabled: true,
+            visible: true,
+            selectedItem: items[3],
+            width: 200
+        });
 
-        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3), itemOffset = Math.round($item.offset().left), contentLeft = Math.round($element.offset().left), contentRight = Math.round(contentLeft + $element.outerWidth());
+        const $item = $element.find('.' + TABS_ITEM_CLASS).eq(3); const itemOffset = Math.round($item.offset().left); const contentLeft = Math.round($element.offset().left); const contentRight = Math.round(contentLeft + $element.outerWidth());
 
         assert.ok(itemOffset <= contentRight - $item.outerWidth(), 'item offset is lower than right boundary');
         assert.ok(itemOffset > contentLeft, 'item offset is greater than left boundary');
@@ -609,7 +609,7 @@ QUnit.module('RTL', () => {
             width: 100
         });
 
-        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'), rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'); const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
 
         assert.equal(leftButtonIcon, BUTTON_NEXT_ICON, 'Left button icon is OK');
         assert.equal(rightButtonIcon, BUTTON_PREV_ICON, 'Right button icon is OK');
@@ -627,7 +627,7 @@ QUnit.module('RTL', () => {
 
         $element.dxTabs('option', 'rtlEnabled', false);
 
-        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'), rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
+        const leftButtonIcon = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS).dxButton('option', 'icon'); const rightButtonIcon = $element.find('.' + TABS_RIGHT_NAV_BUTTON_CLASS).dxButton('option', 'icon');
 
         assert.equal(leftButtonIcon, BUTTON_PREV_ICON, 'Left button icon is OK');
         assert.equal(rightButtonIcon, BUTTON_NEXT_ICON, 'Right button icon is OK');

@@ -89,7 +89,7 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('list should be rendered before onContentReady of the popup', function(assert) {
-            const ddMenu = this.element.dxDropDownMenu('instance'), initialPopupOptions = ddMenu._popupOptions;
+            const ddMenu = this.element.dxDropDownMenu('instance'); const initialPopupOptions = ddMenu._popupOptions;
             try {
                 ddMenu._popupOptions = function() {
                     return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
@@ -150,7 +150,7 @@ const testRendering = function(usePopover) {
         });
 
         QUnit.test('RTL support', function(assert) {
-            const RTL_SELECTOR = '.dx-rtl', DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
+            const RTL_SELECTOR = '.dx-rtl'; const DROPDOWNMENU_POPUP_WRAPPER_SELECTOR = '.dx-dropdownmenu-popup-wrapper';
             this.element.dxDropDownMenu({
                 dataSource: new ArrayStore([
                     'Item 0',
@@ -189,7 +189,7 @@ const testRendering = function(usePopover) {
                 usePopover: usePopover
             });
 
-            const $overlay = $('.dx-overlay-content').first(), overlayTop = $overlay.offset().top, buttonBottom = $button.offset().top + $button.outerHeight();
+            const $overlay = $('.dx-overlay-content').first(); const overlayTop = $overlay.offset().top; const buttonBottom = $button.offset().top + $button.outerHeight();
 
             assert.ok(overlayTop > buttonBottom);
         });
@@ -204,11 +204,11 @@ const testRendering = function(usePopover) {
             });
 
             const $element = $('#dropDownMenu').dxDropDownMenu({
-                          menuWidget: TestComponent,
-                          opened: true,
-                          items: [1, 2]
-                      }),
-                  instance = $element.dxDropDownMenu('instance');
+                menuWidget: TestComponent,
+                opened: true,
+                items: [1, 2]
+            });
+            const instance = $element.dxDropDownMenu('instance');
 
             instance.close();
             assert.ok($element.find('.' + testComponentClass).length, 'collection menu was rendered');
@@ -393,7 +393,7 @@ QUnit.module('position', {
             assert.ok(true, 'unnecessary test on mobile devices');
             return;
         }
-        const element = $('#dropDownMenu').dxDropDownMenu(), instance = element.dxDropDownMenu('instance'), defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
+        const element = $('#dropDownMenu').dxDropDownMenu(); const instance = element.dxDropDownMenu('instance'); const defaultPosition = { my: 'top center', at: 'bottom center', collision: 'fit flip', offset: { v: 4 } };
 
         assert.deepEqual(defaultPosition, instance.option('popupPosition'));
         assert.notOk(instance.option('usePopover'));
@@ -401,8 +401,8 @@ QUnit.module('position', {
 
     QUnit.test('check position for LTR and RTL', function(assert) {
         const element = $('#dropDownMenu').dxDropDownMenu({
-                usePopover: false,
-            });
+            usePopover: false,
+        });
 
         const instance = element.dxDropDownMenu('instance');
         let positionConfig;
@@ -449,7 +449,7 @@ QUnit.module('behavior', moduleConfig(), () => {
         });
         this.toggleMenu();
 
-        const popup = this.popup, $list = this.$list;
+        const popup = this.popup; const $list = this.$list;
 
         assert.equal(popup.option('visible'), true, 'popup is visible');
 
@@ -547,7 +547,7 @@ QUnit.module('integration', () => {
             opened: true
         });
 
-        const $popover = $('.dx-popover'), $target = $($popover.dxPopover('option', 'target'));
+        const $popover = $('.dx-popover'); const $target = $($popover.dxPopover('option', 'target'));
 
         assert.equal($target.get(0), $dropDownMenu.get(0), 'popover target is drop down menu button');
     });
@@ -602,7 +602,7 @@ QUnit.module('integration', () => {
             onItemRendered: noop,
             opened: true
         };
-        const itemRenderedCallback = sinon.stub(options, 'onItemRendered'), dropDownMenu = $('#dropDownMenu').dxDropDownMenu(options).dxDropDownMenu('instance'), itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
+        const itemRenderedCallback = sinon.stub(options, 'onItemRendered'); const dropDownMenu = $('#dropDownMenu').dxDropDownMenu(options).dxDropDownMenu('instance'); const itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
 
         assert.equal(itemRenderedCallback.callCount, 2, 'onItemRendered was fired');
         assert.equal(dropDownMenu._list.element(), itemRenderedCallbackArgs.element, 'onItemRendered was fired in the right context');
@@ -626,7 +626,7 @@ QUnit.module('integration', () => {
 
 QUnit.module('regression', moduleConfig(), () => {
     QUnit.test('B233109: dropDownMenu menu interference', function(assert) {
-        const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance'), ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance'), $button1 = $(ddMenu1._button.$element()), $button2 = $(ddMenu2._button.$element()), popup1 = ddMenu1._popup, popup2 = ddMenu2._popup;
+        const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance'); const ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance'); const $button1 = $(ddMenu1._button.$element()); const $button2 = $(ddMenu2._button.$element()); const popup1 = ddMenu1._popup; const popup2 = ddMenu2._popup;
 
         ddMenu1.close();
         ddMenu2.close();
@@ -698,14 +698,14 @@ QUnit.module('widget sizing render', {
 }, () => {
     QUnit.test('constructor', function(assert) {
         const $element = $('#dropDownMenu').dxDropDownMenu({
-                      items: [
-                          'Item 0',
-                          'Item 1',
-                          'Item 2'
-                      ],
-                      width: 400
-                  }),
-              instance = $element.dxDropDownMenu('instance');
+            items: [
+                'Item 0',
+                'Item 1',
+                'Item 2'
+            ],
+            width: 400
+        });
+        const instance = $element.dxDropDownMenu('instance');
 
         instance.open();
 
@@ -715,14 +715,14 @@ QUnit.module('widget sizing render', {
 
     QUnit.test('change width', function(assert) {
         const $element = $('#dropDownMenu').dxDropDownMenu({
-                      items: [
-                          'Item 0',
-                          'Item 1',
-                          'Item 2'
-                      ]
-                  }),
-              instance = $element.dxDropDownMenu('instance'),
-              customWidth = 400;
+            items: [
+                'Item 0',
+                'Item 1',
+                'Item 2'
+            ]
+        });
+        const instance = $element.dxDropDownMenu('instance');
+        const customWidth = 400;
 
         instance.option('width', customWidth);
         instance.open();
@@ -838,7 +838,7 @@ QUnit.module('keyboard navigation', {
 
     QUnit.test('No exceptions on \'tab\' key pressing when popup is not opened', function(assert) {
         assert.expect(0);
-        const instance = $('#dropDownMenuKeyboard').dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu('instance'), $element = $(instance.$element()), keyboard = keyboardMock($element);
+        const instance = $('#dropDownMenuKeyboard').dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu('instance'); const $element = $(instance.$element()); const keyboard = keyboardMock($element);
 
         keyboard.keyDown('tab');
     });
@@ -908,10 +908,10 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria-activedescendant on widget should point to focused list item', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true }), instance = $element.dxDropDownMenu('instance');
+        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3], opened: true }); const instance = $element.dxDropDownMenu('instance');
         instance.close();
 
-        const $listItem = $element.find('.dx-list-item:first'), list = $element.find('.dx-list').dxList('instance');
+        const $listItem = $element.find('.dx-list-item:first'); const list = $element.find('.dx-list').dxList('instance');
 
         instance.open();
         list.option('focusedElement', $listItem);
@@ -921,7 +921,7 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria-expanded property', function(assert) {
-        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3] }), instance = $element.dxDropDownMenu('instance');
+        const $element = $('#dropDownMenu').dxDropDownMenu({ items: [1, 2, 3] }); const instance = $element.dxDropDownMenu('instance');
 
         instance.close();
         assert.equal($element.attr('aria-expanded'), 'false', 'collapsed by default');

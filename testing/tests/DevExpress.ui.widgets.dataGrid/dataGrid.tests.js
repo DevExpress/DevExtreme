@@ -18994,7 +18994,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation error hightlighting should not disappear after scrolling', function(assert) {
         // arrange
-        let $input, dataGrid, $firstCell;
+        let $input; let dataGrid; let $firstCell;
 
         dataGrid = createDataGrid(this.gridOptions);
 
@@ -19053,7 +19053,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation error hightlighting should disappear after scrolling if newly added row failed validation', function(assert) {
         // arrange
-        let $input, dataGrid, $firstCell;
+        let $input; let dataGrid; let $firstCell;
 
         dataGrid = createDataGrid(this.gridOptions);
 
@@ -19108,7 +19108,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Cell edit mode', function(assert) {
         // arrange
-        let $input, dataGrid, $firstCell;
+        let $input; let dataGrid; let $firstCell;
 
         this.addHiddenColumn();
 
@@ -19170,7 +19170,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Batch edit mode', function(assert) {
         // arrange
-        let $input, dataGrid, $firstCell, $saveButton, $errorRow;
+        let $input; let dataGrid; let $firstCell; let $saveButton; let $errorRow;
 
         this.gridOptions.editing.mode = 'batch';
         this.addHiddenColumn();
@@ -19317,8 +19317,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
 
-        let onRowValidatingArguments = onRowValidatingSpy.args[0][0],
-            brokenRules = onRowValidatingArguments.brokenRules;
+        let onRowValidatingArguments = onRowValidatingSpy.args[0][0];
+        let brokenRules = onRowValidatingArguments.brokenRules;
 
         assert.equal(brokenRules.length, 2, 'brokenRules length');
 
@@ -19423,8 +19423,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
 
-        let onRowValidatingArguments = onRowValidatingSpy.args[0][0],
-            brokenRules = onRowValidatingArguments.brokenRules;
+        let onRowValidatingArguments = onRowValidatingSpy.args[0][0];
+        let brokenRules = onRowValidatingArguments.brokenRules;
 
         assert.equal(brokenRules.length, 1, 'brokenRules length');
 

@@ -350,7 +350,7 @@ QUnit.module('CenturyView', {
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
-        const secondDate = new Date(2010, 1, 1), secondDateCell = this.$element.find('table').find('td').eq(2);
+        const secondDate = new Date(2010, 1, 1); const secondDateCell = this.$element.find('table').find('td').eq(2);
 
         this.view.option('value', secondDate);
         assert.ok(secondDateCell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
@@ -385,7 +385,7 @@ QUnit.module('MonthView min/max', {
     }
 }, () => {
     QUnit.test('monthView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '31123426272829301234567891011');
     });
@@ -414,7 +414,7 @@ QUnit.module('MonthView disabledDates', {
     }
 }, () => {
     QUnit.test('monthView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '12341234');
     });
@@ -444,7 +444,7 @@ QUnit.module('MonthView disabledDates as array', {
     }
 }, () => {
     QUnit.test('monthView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1234');
     });
@@ -474,7 +474,7 @@ QUnit.module('YearView min/max', {
     });
 
     QUnit.test('yearView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, 'AugSepOctNovDec');
     });
@@ -506,7 +506,7 @@ QUnit.module('YearView disabledDates', {
     });
 
     QUnit.test('yearView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, 'JanFebMar');
     });
@@ -536,7 +536,7 @@ QUnit.module('DecadeView min/max', {
     });
 
     QUnit.test('decadeView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '200920102011201220192020');
     });
@@ -568,7 +568,7 @@ QUnit.module('DecadeView disabledDates', {
     });
 
     QUnit.test('decadeView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '2009201020112012');
     });
@@ -598,7 +598,7 @@ QUnit.module('CenturyView min/max', {
     });
 
     QUnit.test('centuryView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1990 - 19992080 - 20892090 - 20992100 - 2109');
     });
@@ -630,7 +630,7 @@ QUnit.module('CenturyView disabledDates', {
     });
 
     QUnit.test('centuryView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        const dateCells = this.$element.find('table').find('td'), dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td'); const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1990 - 19992000 - 2009');
     });

@@ -575,7 +575,7 @@
 (function checkSinonFakeTimers() {
 
     QUnit.testStart(function() {
-        const dateOnTestStart = Date, after = QUnit.config.current.after;
+        const dateOnTestStart = Date; const after = QUnit.config.current.after;
 
         QUnit.config.current.after = function() {
             if(dateOnTestStart !== Date) {

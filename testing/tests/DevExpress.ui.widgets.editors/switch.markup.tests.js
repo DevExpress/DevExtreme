@@ -110,7 +110,7 @@ QUnit.module('Switch markup', () => {
     QUnit.test('default ui state', function(assert) {
         const element = $('#switch').dxSwitch();
 
-        const inner = element.find(INNER_SELECTOR), handle = element.find(HANDLE_SELECTOR);
+        const inner = element.find(INNER_SELECTOR); const handle = element.find(HANDLE_SELECTOR);
 
         assert.strictEqual(UIState(inner, handle), false, 'Default UI state is right');
     });
@@ -122,14 +122,14 @@ QUnit.module('Switch markup', () => {
             value: true
         });
 
-        const inner = element.find(INNER_SELECTOR), handle = element.find(HANDLE_SELECTOR);
+        const inner = element.find(INNER_SELECTOR); const handle = element.find(HANDLE_SELECTOR);
 
         assert.strictEqual(UIState(inner, handle), true, 'UI state with options is right');
     });
 
 
     QUnit.test('a hidden input should be rendered', function(assert) {
-        const $element = $('#switch').dxSwitch(), $input = $element.find('input');
+        const $element = $('#switch').dxSwitch(); const $input = $element.find('input');
 
         assert.equal($input.length, 1, 'input is rendered');
         assert.equal($input.attr('type'), 'hidden', 'input type is \'hidden\'');
@@ -137,18 +137,18 @@ QUnit.module('Switch markup', () => {
 
     QUnit.test('input should be able to get the \'true\' value', function(assert) {
         const $element = $('#switch').dxSwitch({
-                      value: true
-                  }),
-              $input = $element.find('input');
+            value: true
+        });
+        const $input = $element.find('input');
 
         assert.equal($input.val(), 'true', 'the input value is \'true\'');
     });
 
     QUnit.test('input should be able to get the \'false\' value', function(assert) {
         const $element = $('#switch').dxSwitch({
-                      value: false
-                  }),
-              $input = $element.find('input');
+            value: false
+        });
+        const $input = $element.find('input');
 
         assert.equal($input.val(), 'false', 'the input value is \'false\'');
     });
@@ -163,11 +163,11 @@ QUnit.module('aria accessibility', () => {
 
     QUnit.test('aria properties', function(assert) {
         const $element = $('#switch').dxSwitch({
-                      switchedOnText: 'on test',
-                      switchedOffText: 'off test',
-                      value: true
-                  }),
-              instance = $element.dxSwitch('instance');
+            switchedOnText: 'on test',
+            switchedOffText: 'off test',
+            value: true
+        });
+        const instance = $element.dxSwitch('instance');
 
         assert.equal($element.attr('aria-label'), 'on test', 'aria \'on state\' label is correct');
         assert.equal($element.attr('aria-pressed'), 'true', 'aria \'on state\' pressed attribute is correct');

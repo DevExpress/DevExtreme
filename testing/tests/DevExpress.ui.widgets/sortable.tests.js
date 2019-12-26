@@ -2284,8 +2284,8 @@ QUnit.test('Dragging an item to another sortable and back when it is alone in th
 // T846161
 QUnit.test('The onRemove event should be fired when dragging the item from sortable to draggable', function(assert) {
     // arrange
-    let onRemoveSpy = sinon.spy(),
-        onDragEndSpy = sinon.spy();
+    let onRemoveSpy = sinon.spy();
+    let onDragEndSpy = sinon.spy();
 
     const draggable = this.createDraggable({
         filter: '.draggable',

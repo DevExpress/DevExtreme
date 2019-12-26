@@ -51,23 +51,23 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('render slideoutView content', function(assert) {
-        const $element = $('#slideOutView').dxSlideOutView({}), $content = $element.find('.' + SLIDEOUTVIEW_CONTENT_CLASS);
+        const $element = $('#slideOutView').dxSlideOutView({}); const $content = $element.find('.' + SLIDEOUTVIEW_CONTENT_CLASS);
 
         assert.equal($.trim($content.text()), 'Test Content', 'slideoutview content was rendered');
     });
 
     QUnit.test('slideoutView preserve content', function(assert) {
-        const $content = $('#slideOutView #content'),
-            $element = $('#slideOutView').dxSlideOutView({});
+        const $content = $('#slideOutView #content');
+        const $element = $('#slideOutView').dxSlideOutView({});
 
         assert.equal($content[0], $element.find('#content')[0]);
     });
 
     QUnit.test('custom content template for menu should be rendered correctly', function(assert) {
         const $element = $('#contentTemplate').dxSlideOutView({
-                      menuTemplate: 'customMenu'
-                  }),
-              $menu = $($element.dxSlideOutView('instance').menuContent());
+            menuTemplate: 'customMenu'
+        });
+        const $menu = $($element.dxSlideOutView('instance').menuContent());
 
         assert.equal($.trim($menu.text()), 'Test Menu Template', 'menu content text is correct');
     });
@@ -86,21 +86,21 @@ QUnit.module('rendering', () => {
 
     QUnit.test('custom content template for content should be rendered correctly', function(assert) {
         const $element = $('#contentTemplate').dxSlideOutView({
-                      contentTemplate: 'customContent'
-                  }),
-              $content = $($element.dxSlideOutView('instance').content());
+            contentTemplate: 'customContent'
+        });
+        const $content = $($element.dxSlideOutView('instance').content());
 
         assert.equal($.trim($content.text()), 'Test Content Template', 'content text is correct');
     });
 
     QUnit.test('render right menu position', function(assert) {
         const $element = $('#contentTemplate').dxSlideOutView({
-                      menuPosition: 'inverted',
-                      menuVisible: true
-                  }),
-              instance = $element.dxSlideOutView('instance'),
-              $content = $(instance.content()),
-              $menuContent = $(instance.menuContent());
+            menuPosition: 'inverted',
+            menuVisible: true
+        });
+        const instance = $element.dxSlideOutView('instance');
+        const $content = $(instance.content());
+        const $menuContent = $(instance.menuContent());
 
         assert.notOk($menuContent.hasClass(SLIDEOUTVIEW_CLASS + '-left'), 'there is no left menu position class');
         assert.ok($menuContent.hasClass(SLIDEOUTVIEW_CLASS + '-right'), 'right menu position class added');

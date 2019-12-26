@@ -56,7 +56,7 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria label for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0), $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
         assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
@@ -74,7 +74,7 @@ QUnit.module('aria accessibility', {
     });
 
     QUnit.test('aria level for items', function(assert) {
-        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0), $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
+        const $node1 = this.$element.find('.' + NODE_CLASS).eq(0); const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($node1.attr('aria-level'), '1', 'level set correct');
         assert.equal($node2.attr('aria-level'), '2', 'level set correct');
@@ -124,9 +124,9 @@ QUnit.module('markup', {
 }, () => {
     QUnit.test('TreeView should render correctly without items', function(assert) {
         const $treeView = initTree({
-                      items: undefined
-                  }),
-              $scrollableContent = $treeView.find('.dx-scrollable-content');
+            items: undefined
+        });
+        const $scrollableContent = $treeView.find('.dx-scrollable-content');
 
         assert.equal($scrollableContent.find('.dx-empty-message').length, 1, 'empty message should be shown inside scrollable content');
     });
@@ -159,7 +159,7 @@ QUnit.module('markup', {
             parentIdExpr: 'parent'
         });
 
-        const $node = $treeView.find('.' + NODE_CLASS).eq(0), $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0), $item = $node.children('.' + ITEM_CLASS).eq(0);
+        const $node = $treeView.find('.' + NODE_CLASS).eq(0); const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0); const $item = $node.children('.' + ITEM_CLASS).eq(0);
 
         assert.equal($node.data('item-id'), '2', 'keyExpr works');
         assert.equal($item.text(), 'Item 1', 'displayExpr works');
@@ -175,10 +175,10 @@ QUnit.module('markup', {
 
     QUnit.test('Render scrollable container', function(assert) {
         const $treeView = initTree({
-                      items: this.treeItems,
-                      keyExpr: 'key'
-                  }),
-              $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
+            items: this.treeItems,
+            keyExpr: 'key'
+        });
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
 
         assert.ok($rootNode.parent().hasClass('dx-scrollable-content'));
         assert.ok($treeView.find('.dx-scrollable').length, 1);
@@ -193,11 +193,11 @@ QUnit.module('markup', {
 
     QUnit.test('Render html item', function(assert) {
         const $treeView = initTree({
-                      items: [{ id: 1, html: '<b>Hello</b>' }]
-                  }),
-              $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS),
-              $node = $itemContainer.find('.' + NODE_CLASS).eq(0),
-              $item = $node.find('.' + ITEM_CLASS);
+            items: [{ id: 1, html: '<b>Hello</b>' }]
+        });
+        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS);
+        const $node = $itemContainer.find('.' + NODE_CLASS).eq(0);
+        const $item = $node.find('.' + ITEM_CLASS);
 
         assert.equal($item.text(), 'Hello', 'created');
     });
@@ -207,7 +207,7 @@ QUnit.module('markup', {
             items: this.plainItems,
             keyExpr: 'key'
         });
-        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS), $nodes = $itemContainer.find('.' + NODE_CLASS), $items = $nodes.find('.' + ITEM_CLASS);
+        const $itemContainer = $treeView.find('.' + NODE_CONTAINER_CLASS); const $nodes = $itemContainer.find('.' + NODE_CLASS); const $items = $nodes.find('.' + ITEM_CLASS);
 
         assert.equal($items.length, 16);
         assert.equal($($items[0]).find('span').text(), 'Animals');
@@ -233,7 +233,7 @@ QUnit.module('markup', {
             keyExpr: 'key'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'), $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0), $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1), $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1); const $firstNestedNode = $rootNodeFirstItem.find('> .' + NODE_CONTAINER_CLASS);
 
         assert.ok(!$rootNodeFirstItem.hasClass(IS_LEAF));
         assert.ok($rootNodeSecondItem.hasClass(IS_LEAF));
@@ -251,7 +251,7 @@ QUnit.module('markup', {
             items: this.treeItems,
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'), $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0), $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0); const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
 
         assert.equal($rootNodeFirstItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
         assert.equal($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
@@ -267,7 +267,7 @@ QUnit.module('markup', {
             }]
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'), $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child'); const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
         assert.ok($icon.hasClass('dx-state-disabled'));
     });
@@ -298,7 +298,7 @@ QUnit.module('markup', {
             parentIdExpr: 'parentId'
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'), $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
+        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
 
         assert.equal($treeView.find('.' + NODE_CONTAINER_CLASS).length, 5);
         assert.equal($rootNodeItems.length, 3);
@@ -316,7 +316,7 @@ QUnit.module('markup', {
             }
         });
 
-        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'), $firstRootNode = $rootNodeContainer.find('li').first(), $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
+        const $rootNodeContainer = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first'); const $firstRootNode = $rootNodeContainer.find('li').first(); const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
 
         assert.equal($firstItem.length, 1);
         assert.equal($firstItem.text(), 'Item 1');
@@ -341,34 +341,34 @@ QUnit.module('markup', {
 
     QUnit.test('Disabled class is added when disabledExpr is used', function(assert) {
         const $treeView = initTree({
-                      items: [{ id: 1, text: 'item 1', isDisabled: true }],
-                      disabledExpr: 'isDisabled'
-                  }),
-              $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+            items: [{ id: 1, text: 'item 1', isDisabled: true }],
+            disabledExpr: 'isDisabled'
+        });
+        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
 
         assert.ok($item.hasClass('dx-state-disabled'));
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used with custom template', function(assert) {
         const $treeView = initTree({
-                      items: [{ id: 1, text: 'item 1', isDisabled: true }],
-                      disabledExpr: 'isDisabled',
-                      itemTemplate: function() {
-                          return '123';
-                      }
-                  }),
-              $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+            items: [{ id: 1, text: 'item 1', isDisabled: true }],
+            disabledExpr: 'isDisabled',
+            itemTemplate: function() {
+                return '123';
+            }
+        });
+        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
 
         assert.ok($item.hasClass('dx-state-disabled'));
     });
 
     QUnit.test('toggle visibility icon should not render for invisible item (T323491)', function(assert) {
         const $treeView = initTree({
-                      items: [
-                          { text: 'item 1', visible: false, items: [{ text: 'item 11' }] },
-                          { text: 'item 1', items: [{ text: 'item 21' }] }],
-                  }),
-              $icons = $treeView.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
+            items: [
+                { text: 'item 1', visible: false, items: [{ text: 'item 11' }] },
+                { text: 'item 1', items: [{ text: 'item 21' }] }],
+        });
+        const $icons = $treeView.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
 
         assert.equal($icons.length, 1, 'only one icon should be rendered');
     });
@@ -389,30 +389,30 @@ QUnit.module('markup', {
 
     QUnit.test('treeView consider store sorting', function(assert) {
         const data = [
-                      { id: 1, parentId: 0, text: 'Bikes', expanded: true },
-                      { id: 4, parentId: 3, text: 'BMW' },
-                      { id: 13, parentId: 3, text: 'Audi' },
-                      { id: 3, parentId: 0, text: 'Cars', expanded: true },
-                      { id: 11, parentId: 10, text: 'YX 1' },
-                      { id: 12, parentId: 10, text: 'YX 2' },
-                      { id: 14, parentId: 13, text: 'A1' },
-                      { id: 15, parentId: 13, text: 'A5' },
-                      { id: 2, parentId: 0, text: 'Motobikes', expanded: true },
-                      { id: 5, parentId: 4, text: 'X1' },
-                      { id: 6, parentId: 4, text: 'X5' },
-                      { id: 7, parentId: 4, text: 'X6' },
-                      { id: 10, parentId: 2, text: 'Yamaha' },
-                      { id: 8, parentId: 1, text: 'Stels' },
-                      { id: 9, parentId: 2, text: 'Honda' }
-                  ],
-              treeView = initTree({
-                  dataSource: { store: data, sort: 'text' },
-                  dataStructure: 'plain',
-                  parentIdExpr: 'parentId',
-                  keyExpr: 'id'
-              }).dxTreeView('instance'),
-              $items = $(treeView.$element()).find('.dx-treeview-item'),
-              expectedValues = ['Bikes', 'Stels', 'Cars', 'Audi', 'BMW', 'Motobikes', 'Honda', 'Yamaha'];
+            { id: 1, parentId: 0, text: 'Bikes', expanded: true },
+            { id: 4, parentId: 3, text: 'BMW' },
+            { id: 13, parentId: 3, text: 'Audi' },
+            { id: 3, parentId: 0, text: 'Cars', expanded: true },
+            { id: 11, parentId: 10, text: 'YX 1' },
+            { id: 12, parentId: 10, text: 'YX 2' },
+            { id: 14, parentId: 13, text: 'A1' },
+            { id: 15, parentId: 13, text: 'A5' },
+            { id: 2, parentId: 0, text: 'Motobikes', expanded: true },
+            { id: 5, parentId: 4, text: 'X1' },
+            { id: 6, parentId: 4, text: 'X5' },
+            { id: 7, parentId: 4, text: 'X6' },
+            { id: 10, parentId: 2, text: 'Yamaha' },
+            { id: 8, parentId: 1, text: 'Stels' },
+            { id: 9, parentId: 2, text: 'Honda' }
+        ];
+        const treeView = initTree({
+            dataSource: { store: data, sort: 'text' },
+            dataStructure: 'plain',
+            parentIdExpr: 'parentId',
+            keyExpr: 'id'
+        }).dxTreeView('instance');
+        const $items = $(treeView.$element()).find('.dx-treeview-item');
+        const expectedValues = ['Bikes', 'Stels', 'Cars', 'Audi', 'BMW', 'Motobikes', 'Honda', 'Yamaha'];
 
         $.each($items, function(index, item) {
             assert.equal($(item).text(), expectedValues[index], 'Correct item');
@@ -421,65 +421,65 @@ QUnit.module('markup', {
 
     QUnit.test('Render \'selectAll\' item', function(assert) {
         const $treeView = initTree({
-                      showCheckBoxesMode: 'selectAll',
-                      dataSource: this.treeItems
-                  }),
-              $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
+            showCheckBoxesMode: 'selectAll',
+            dataSource: this.treeItems
+        });
+        const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.equal($selectAll.length, 1);
     });
 
     QUnit.test('On initialization \'selectAll\' item should be selected if all items are selected', function(assert) {
-        const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2', selected: true }],
-              $treeView = initTree({
-                  showCheckBoxesMode: 'selectAll',
-                  dataSource: data
-              }),
-              $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
+        const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2', selected: true }];
+        const $treeView = initTree({
+            showCheckBoxesMode: 'selectAll',
+            dataSource: data
+        });
+        const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.ok($selectAll.hasClass('dx-checkbox-checked'));
     });
 
     QUnit.test('On initialization \'selectAll\' item should be unselected if all items are unselected', function(assert) {
-        const data = [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2' }],
-              $treeView = initTree({
-                  showCheckBoxesMode: 'selectAll',
-                  dataSource: data
-              }),
-              $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
+        const data = [{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2' }];
+        const $treeView = initTree({
+            showCheckBoxesMode: 'selectAll',
+            dataSource: data
+        });
+        const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.notOk($selectAll.hasClass('dx-checkbox-indeterminate'));
         assert.notOk($selectAll.hasClass('dx-checkbox-checked'));
     });
 
     QUnit.test('On initialization \'selectAll\' item should have intermediate state if at least one item is selected', function(assert) {
-        const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2' }],
-              $treeView = initTree({
-                  showCheckBoxesMode: 'selectAll',
-                  dataSource: data
-              }),
-              $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
+        const data = [{ id: 1, text: 'item 1', selected: true }, { id: 2, text: 'item 2' }];
+        const $treeView = initTree({
+            showCheckBoxesMode: 'selectAll',
+            dataSource: data
+        });
+        const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
     });
 
     QUnit.test('On initialization \'selectAll\' item should have intermediate state if at least one item is selected (ierarchical)', function(assert) {
         const data = [{
-                      id: '1',
-                      expanded: true,
-                      items: [{
-                          id: '1_1',
-                          selected: true
-                      }, {
-                          id: '1_2',
-                          selected: false
-                      }]
-                  }],
-              $treeView = initTree({
-                  showCheckBoxesMode: 'selectAll',
-                  dataSource: data
-              }),
-              $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
+            id: '1',
+            expanded: true,
+            items: [{
+                id: '1_1',
+                selected: true
+            }, {
+                id: '1_2',
+                selected: false
+            }]
+        }];
+        const $treeView = initTree({
+            showCheckBoxesMode: 'selectAll',
+            dataSource: data
+        });
+        const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
     });

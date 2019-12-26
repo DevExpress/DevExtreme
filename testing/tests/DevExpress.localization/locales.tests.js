@@ -20,43 +20,43 @@ QUnit.test('Four locales should be linked', function(assert) {
 });
 
 const compareLocales = function(first, second, assert) {
-    const cultures = messageLocalization.getMessagesByLocales(),
-          firstLocaleMessages = cultures[first],
-          secondLocaleMessages = cultures[second],
-          knownMatchingKeys = [
-              'OK',
-              'dxDataGrid-editingConfirmDeleteTitle',
-              'dxFileUploader-kb',
-              'dxFileUploader-Mb',
-              'dxFileUploader-Gb',
-              'dxDataGrid-summaryMin',
-              'dxDataGrid-summaryMax',
-              'dxDataGrid-summaryAvg',
-              'dxDataGrid-trueText',
-              'dxDataGrid-falseText',
-              'dxDataGrid-headerFilterOK',
-              'dxForm-optionalMark',
-              'dxScheduler-switcherAgenda',
-              'dxPivotGrid-dataNotAvailable',
-              'dxFilterBuilder-and',
-              'dxFilterBuilder-or',
-              'dxFilterBuilder-notAnd',
-              'dxFilterBuilder-notOr',
-              'dxHtmlEditor-dialogImageUrlField',
-              'dxHtmlEditor-dialogLinkUrlField',
-              'dxHtmlEditor-dialogLinkTextField',
-              'dxDiagram-commandExport',
-              'dxDiagram-commandAutoLayoutHorizontal',
-              'dxDiagram-unitIn',
-              'dxDiagram-unitCm',
-              'dxDiagram-unitPx',
-              'dxDiagram-dialogButtonOK',
-              'dxDiagram-shapeOr',
-              'dxDiagram-shapeText',
-              'dxDiagram-shapeEllipse',
-              'dxDiagram-shapeContainerDefaultText',
-              'dxFileManager-listDetailsColumnCaptionName'
-          ];
+    const cultures = messageLocalization.getMessagesByLocales();
+    const firstLocaleMessages = cultures[first];
+    const secondLocaleMessages = cultures[second];
+    const knownMatchingKeys = [
+        'OK',
+        'dxDataGrid-editingConfirmDeleteTitle',
+        'dxFileUploader-kb',
+        'dxFileUploader-Mb',
+        'dxFileUploader-Gb',
+        'dxDataGrid-summaryMin',
+        'dxDataGrid-summaryMax',
+        'dxDataGrid-summaryAvg',
+        'dxDataGrid-trueText',
+        'dxDataGrid-falseText',
+        'dxDataGrid-headerFilterOK',
+        'dxForm-optionalMark',
+        'dxScheduler-switcherAgenda',
+        'dxPivotGrid-dataNotAvailable',
+        'dxFilterBuilder-and',
+        'dxFilterBuilder-or',
+        'dxFilterBuilder-notAnd',
+        'dxFilterBuilder-notOr',
+        'dxHtmlEditor-dialogImageUrlField',
+        'dxHtmlEditor-dialogLinkUrlField',
+        'dxHtmlEditor-dialogLinkTextField',
+        'dxDiagram-commandExport',
+        'dxDiagram-commandAutoLayoutHorizontal',
+        'dxDiagram-unitIn',
+        'dxDiagram-unitCm',
+        'dxDiagram-unitPx',
+        'dxDiagram-dialogButtonOK',
+        'dxDiagram-shapeOr',
+        'dxDiagram-shapeText',
+        'dxDiagram-shapeEllipse',
+        'dxDiagram-shapeContainerDefaultText',
+        'dxFileManager-listDetailsColumnCaptionName'
+    ];
 
     $.each(firstLocaleMessages, function(name, value) {
         const otherLocalValue = secondLocaleMessages[name];

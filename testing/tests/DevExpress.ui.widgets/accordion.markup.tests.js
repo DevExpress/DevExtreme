@@ -52,7 +52,7 @@ QUnit.module('widget markup', moduleSetup, () => {
             items: this.items
         });
 
-        const $container = this.$element.find('.' + ACCORDION_WRAPPER_CLASS), $items = $container.find('.' + ACCORDION_ITEM_CLASS);
+        const $container = this.$element.find('.' + ACCORDION_WRAPPER_CLASS); const $items = $container.find('.' + ACCORDION_ITEM_CLASS);
 
         assert.equal($items.length, 3, 'items were added');
         assert.equal($items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS).length, 1, 'container has item title');
@@ -75,7 +75,7 @@ QUnit.module('widget markup', moduleSetup, () => {
             selectedIndex: 0
         }).dxAccordion('instance');
 
-        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS), $openedItems = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS);
+        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS); const $openedItems = this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS);
 
         assert.ok($items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'first item is opened so it has \'item opened\' class');
         assert.equal($openedItems.length, 1, 'only opened item has \'item opened\' class');
@@ -185,7 +185,7 @@ QUnit.module('widget options', moduleSetup, () => {
             dataSource: this.items
         });
 
-        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS), $title = $items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS), $content = $items.eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
+        const $items = this.$element.find('.' + ACCORDION_ITEM_CLASS); const $title = $items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS); const $content = $items.eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
 
         assert.equal($items.length, this.items.length, 'all items is rendered');
         assert.equal($title.text(), this.items[0].title, 'title text is correct');
@@ -198,7 +198,7 @@ QUnit.module('widget options', moduleSetup, () => {
             collapsible: false
         });
 
-        const $element = this.$element, $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
+        const $element = this.$element; const $titles = $element.find('.' + ACCORDION_ITEM_CLASS);
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLOSED_CLASS).length, $titles.length - 1, 'one item content is visible');
     });
@@ -233,9 +233,9 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('Value from plain data source is should be encoded', function(assert) {
         const $accordion = $('#accordion').dxAccordion({
-                      dataSource: ['<b>Test item</b>']
-                  }),
-              $titleTemplate = $accordion.find('.' + ACCORDION_ITEM_TITLE_CLASS);
+            dataSource: ['<b>Test item</b>']
+        });
+        const $titleTemplate = $accordion.find('.' + ACCORDION_ITEM_TITLE_CLASS);
 
         assert.equal($titleTemplate.text(), '<b>Test item</b>');
     });
@@ -280,21 +280,21 @@ QUnit.module('aria accessibility', () => {
 
     QUnit.test('role for items', function(assert) {
         const $element = $('#accordion').dxAccordion({
-                      items: [{ title: 'Title 1', text: 'Text 1' }]
-                  }),
-              $item = $element.find('.dx-accordion-item');
+            items: [{ title: 'Title 1', text: 'Text 1' }]
+        });
+        const $item = $element.find('.dx-accordion-item');
 
         assert.equal($item.attr('role'), 'tab', 'role for item is correct');
     });
 
     QUnit.test('body should be hidden if item is closed', function(assert) {
         const accordion = new Accordion($('#accordion'), {
-                      items: [{ title: 'Title 1', text: 'Text 1' }],
-                      collapsible: true,
-                      selectedIndex: -1,
-                      deferRendering: false
-                  }),
-              $itemBody = accordion.itemElements().eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
+            items: [{ title: 'Title 1', text: 'Text 1' }],
+            collapsible: true,
+            selectedIndex: -1,
+            deferRendering: false
+        });
+        const $itemBody = accordion.itemElements().eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS);
 
         assert.equal($itemBody.attr('aria-hidden'), 'true', 'body not readable');
     });

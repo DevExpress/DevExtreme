@@ -559,8 +559,8 @@ configs.forEach(config => {
 
             wrapper.instance.unselectItem(1);
 
-            let expectedKeys = [0],
-                expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
+            let expectedKeys = [0];
+            let expectedCallbacks = ['itemSelectionChanged', 'selectionChanged'];
             if(config.selectNodesRecursive) {
                 expectedKeys = [];
             }

@@ -37,24 +37,24 @@ QUnit.module('markup', () => {
     });
 
     QUnit.test('wrapper should be rendered', function(assert) {
-        const $multiView = $('#multiView').dxMultiView(), $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const $multiView = $('#multiView').dxMultiView(); const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS));
 
         assert.equal($wrapper.length, 1, 'wrapper was rendered');
     });
 
     QUnit.test('item container should be rendered', function(assert) {
-        const $multiView = $('#multiView').dxMultiView(), $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS)), $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $multiView = $('#multiView').dxMultiView(); const $wrapper = $multiView.children(toSelector(MULTIVIEW_WRAPPER_CLASS)); const $itemContainer = $wrapper.children(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
         assert.equal($itemContainer.length, 1, 'item container was rendered');
     });
 
     QUnit.test('items should be rendered', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
-                      items: [1, 2],
-                      selectedIndex: 0
-                  }),
-              $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-              $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+            items: [1, 2],
+            selectedIndex: 0
+        });
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
 
         assert.equal($items.length, 2, 'items was rendered');
         assert.equal($items.eq(0).find(toSelector(MULTIVIEW_ITEM_CONTENT_CLASS)).length, 1, 'rendered item has item content inside');
@@ -63,12 +63,12 @@ QUnit.module('markup', () => {
 
     QUnit.test('item templates should be applied', function(assert) {
         const $multiView = $('#customMultiViewWithTemplate').dxMultiView({
-                      items: [{ template: $('#template1') }, { template: $('#template2') }],
-                      selectedIndex: 1,
-                      deferRendering: false
-                  }),
-              $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS)),
-              $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
+            items: [{ template: $('#template1') }, { template: $('#template2') }],
+            selectedIndex: 1,
+            deferRendering: false
+        });
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+        const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
 
         assert.equal($items.eq(0).text(), 'Test1', 'element has correct content');
         assert.equal($items.eq(1).text(), 'Test2', 'element has correct content');
@@ -76,15 +76,15 @@ QUnit.module('markup', () => {
 
     QUnit.test('inner multiview items should not be overlapped by nested multiview items', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
-                      items: [1, 2, 3, 4],
-                      selectedIndex: 3,
-                      itemTemplate: function() {
-                          return $('<div>').dxMultiView({
-                              items: [1, 2]
-                          });
-                      }
-                  }),
-              $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
+            items: [1, 2, 3, 4],
+            selectedIndex: 3,
+            itemTemplate: function() {
+                return $('<div>').dxMultiView({
+                    items: [1, 2]
+                });
+            }
+        });
+        const $itemContainer = $multiView.find(toSelector(MULTIVIEW_ITEM_CONTAINER_CLASS));
 
         const $items = $itemContainer.children(toSelector(MULTIVIEW_ITEM_CLASS));
         assert.ok(!$items.eq(3).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS), 'correct item selected');
@@ -92,10 +92,10 @@ QUnit.module('markup', () => {
 
     QUnit.test('only selected item should be visible', function(assert) {
         const $multiView = $('#multiView').dxMultiView({
-                      items: [1, 2, 3],
-                      selectedIndex: 0
-                  }),
-              $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+            items: [1, 2, 3],
+            selectedIndex: 0
+        });
+        const $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
 
         assert.ok(!$items.eq(0).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
         assert.ok($items.eq(1).hasClass(MULTIVIEW_ITEM_HIDDEN_CLASS));
@@ -120,19 +120,19 @@ QUnit.module('markup', () => {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role for each item', function(assert) {
-        const $multiView = $('#multiView').dxMultiView({ items: [1, 2] }), $item = $multiView.find('.dx-item:first');
+        const $multiView = $('#multiView').dxMultiView({ items: [1, 2] }); const $item = $multiView.find('.dx-item:first');
 
         assert.equal($item.attr('role'), 'tabpanel');
     });
 
     QUnit.test('inactive item should have aria-hidden attribute', function(assert) {
         const $element = $('#multiView').dxMultiView({
-                      items: [1, 2],
-                      selectedIndex: 0,
-                      animationEnabled: false
-                  }),
-              $item0 = $element.find('.dx-multiview-item:eq(0)'),
-              $item1 = $element.find('.dx-multiview-item:eq(1)');
+            items: [1, 2],
+            selectedIndex: 0,
+            animationEnabled: false
+        });
+        const $item0 = $element.find('.dx-multiview-item:eq(0)');
+        const $item1 = $element.find('.dx-multiview-item:eq(1)');
 
         assert.equal($item0.attr('aria-hidden'), undefined, 'aria-hidden does not exist for 1st item');
         assert.equal($item1.attr('aria-hidden'), 'true', 'aria-hidden is true for 2nd item');

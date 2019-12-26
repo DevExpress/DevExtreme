@@ -1037,7 +1037,7 @@ QUnit.test('resourceCellTemplate should work correct in timeline view', function
         }
     });
 
-    const $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0), $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
+    const $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0); const $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
 
     assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
@@ -1997,9 +1997,9 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
 
     let headerCells = this.scheduler.workSpace.groups.getGroupHeaders();
 
-    let firstHeaderCell = headerCells.eq(0),
-        fifthHeaderCell = headerCells.eq(4),
-        dateTableCell = this.scheduler.workSpace.getCells().eq(0);
+    let firstHeaderCell = headerCells.eq(0);
+    let fifthHeaderCell = headerCells.eq(4);
+    let dateTableCell = this.scheduler.workSpace.getCells().eq(0);
 
     assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
     assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');

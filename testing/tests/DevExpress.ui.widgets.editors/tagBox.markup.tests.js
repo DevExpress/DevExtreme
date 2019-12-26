@@ -56,7 +56,7 @@ QUnit.module('base markup', moduleSetup, () => {
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
         assert.equal($tagContainer.length, 1, 'tagbox should have tag container');
 
-        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS), $tagContent = $tags.find('.' + TAGBOX_TAG_CONTENT_CLASS);
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS); const $tagContent = $tags.find('.' + TAGBOX_TAG_CONTENT_CLASS);
 
         assert.equal($tagContent.length, 2, 'each tag has tag content');
         assert.deepEqual(this.getTexts($tagContent), ['1', '2'], 'each tag content has correct text');
@@ -100,16 +100,16 @@ QUnit.module('base markup', moduleSetup, () => {
 
     QUnit.test('tagBox should render tags with the custom displayExpr for simple items', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3],
-                      displayExpr: function(item) {
-                          if(item === 1) {
-                              return 'one';
-                          }
-                          return item;
-                      },
-                      value: [1, 2]
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3],
+            displayExpr: function(item) {
+                if(item === 1) {
+                    return 'one';
+                }
+                return item;
+            },
+            value: [1, 2]
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.length, 2, 'two tags should be rendered');
         assert.equal($tags.eq(0).text(), 'one', 'Check value of the first tag');
@@ -118,17 +118,17 @@ QUnit.module('base markup', moduleSetup, () => {
 
     QUnit.test('tagBox should render tags with the custom displayExpr for object items', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [{ value: 1 }, { value: 2 }, { value: 3 }],
-                      displayExpr: function(item) {
-                          if(item.value === 1) {
-                              return 'one';
-                          }
-                          return item.value;
-                      },
-                      valueExpr: 'value',
-                      value: [1, 2]
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [{ value: 1 }, { value: 2 }, { value: 3 }],
+            displayExpr: function(item) {
+                if(item.value === 1) {
+                    return 'one';
+                }
+                return item.value;
+            },
+            valueExpr: 'value',
+            value: [1, 2]
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.length, 2, 'two tags should be rendered');
         assert.equal($tags.eq(0).text(), 'one', 'Check value of the first tag');
@@ -137,12 +137,12 @@ QUnit.module('base markup', moduleSetup, () => {
 
     QUnit.test('tagBox should not render an empty tag when item is not found in the dataSource', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [{ id: 1, text: 'item 1' }],
-                      valueExpr: 'id',
-                      displayExpr: 'text',
-                      value: [1, 4]
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [{ id: 1, text: 'item 1' }],
+            valueExpr: 'id',
+            displayExpr: 'text',
+            value: [1, 4]
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.length, 1, 'only one tag should be rendered');
         assert.equal($tags.text(), 'item 1', 'first tag should be rendered');
@@ -150,10 +150,10 @@ QUnit.module('base markup', moduleSetup, () => {
 
     QUnit.test('placeholder should be rendered', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      dataSource: ['item1', 'item2', 'item3'],
-                      value: []
-                  }),
-              $placeholder = $tagBox.find('.dx-placeholder');
+            dataSource: ['item1', 'item2', 'item3'],
+            value: []
+        });
+        const $placeholder = $tagBox.find('.dx-placeholder');
 
         assert.equal($placeholder.length, 1, 'placeholder has been rendered');
     });
@@ -176,26 +176,26 @@ QUnit.module('select element', moduleSetup, () => {
     });
 
     QUnit.test('an option element should be rendered for each selected item', function(assert) {
-        const items = ['eins', 'zwei', 'drei'],
-              $options = $('#tagBox')
-                  .dxTagBox({
-                      items: items,
-                      value: [items[0], items[2]]
-                  })
-                  .find('option');
+        const items = ['eins', 'zwei', 'drei'];
+        const $options = $('#tagBox')
+            .dxTagBox({
+                items: items,
+                value: [items[0], items[2]]
+            })
+            .find('option');
 
         assert.equal($options.length, 2, 'option elements count is correct');
     });
 
     QUnit.test('option elements should have correct \'value\' attributes', function(assert) {
-        const items = ['eins', 'zwei', 'drei'],
-              value = [items[0], items[2]],
-              $options = $('#tagBox')
-                  .dxTagBox({
-                      items: items,
-                      value: value
-                  })
-                  .find('option');
+        const items = ['eins', 'zwei', 'drei'];
+        const value = [items[0], items[2]];
+        const $options = $('#tagBox')
+            .dxTagBox({
+                items: items,
+                value: value
+            })
+            .find('option');
 
         $options.each(function(index) {
             assert.equal(this.value, value[index], 'the \'value\' attribute is correct for the option ' + index);
@@ -203,14 +203,14 @@ QUnit.module('select element', moduleSetup, () => {
     });
 
     QUnit.test('option elements should have the \'selected\' attributes', function(assert) {
-        const items = ['eins', 'zwei', 'drei'],
-              value = [items[0], items[2]],
-              $options = $('#tagBox')
-                  .dxTagBox({
-                      items: items,
-                      value: value
-                  })
-                  .find('option');
+        const items = ['eins', 'zwei', 'drei'];
+        const value = [items[0], items[2]];
+        const $options = $('#tagBox')
+            .dxTagBox({
+                items: items,
+                value: value
+            })
+            .find('option');
 
         $options.each(function(index) {
             assert.ok(this.hasAttribute('selected'), 'the \'selected\' attribute is set for the option ' + index);
@@ -218,16 +218,16 @@ QUnit.module('select element', moduleSetup, () => {
     });
 
     QUnit.test('option elements should have displayed text of selected items as value if the \'valueExpr\' option is \'this\'', function(assert) {
-        const items = [{ id: 1, text: 'eins' }, { id: 2, text: 'zwei' }, { id: 3, text: 'drei' }],
-              value = [items[0], items[2]],
-              $options = $('#tagBox')
-                  .dxTagBox({
-                      items: items,
-                      value: value,
-                      valueExpr: 'this',
-                      displayExpr: 'text'
-                  })
-                  .find('option');
+        const items = [{ id: 1, text: 'eins' }, { id: 2, text: 'zwei' }, { id: 3, text: 'drei' }];
+        const value = [items[0], items[2]];
+        const $options = $('#tagBox')
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: 'this',
+                displayExpr: 'text'
+            })
+            .find('option');
 
         assert.equal($options.length, value.length, 'all options are rendered');
 
@@ -237,20 +237,20 @@ QUnit.module('select element', moduleSetup, () => {
     });
 
     QUnit.test('the submit value must be equal to the value of the widget', function(assert) {
-        const items = ['test-1', 'test-2', 'test-3'],
-              value = [items[0], items[2]],
-              $options = $('#tagBox')
-                  .dxTagBox({
-                      items: items,
-                      value: value,
-                      valueExpr: 'this',
-                      displayExpr: function(item) {
-                          if(item) {
-                              return item.split('-').join('+');
-                          }
-                      }
-                  })
-                  .find('option');
+        const items = ['test-1', 'test-2', 'test-3'];
+        const value = [items[0], items[2]];
+        const $options = $('#tagBox')
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: 'this',
+                displayExpr: function(item) {
+                    if(item) {
+                        return item.split('-').join('+');
+                    }
+                }
+            })
+            .find('option');
 
         assert.equal($options.length, value.length, 'all options are rendered');
 
@@ -260,11 +260,11 @@ QUnit.module('select element', moduleSetup, () => {
     });
 
     QUnit.test('select element should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-              $element = $('#tagBox').dxTagBox({
-                  name: expectedName
-              }),
-              $select = $element.find('select');
+        const expectedName = 'some_name';
+        const $element = $('#tagBox').dxTagBox({
+            name: expectedName
+        });
+        const $select = $element.find('select');
 
         assert.equal($select.attr('name'), expectedName, 'the select element \'name\' attribute has correct value');
     });
@@ -273,11 +273,11 @@ QUnit.module('select element', moduleSetup, () => {
 QUnit.module('multitag', moduleSetup, () => {
     QUnit.test('tagBox should display one tag after limit overflow', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      value: [1, 2, 4],
-                      maxDisplayedTags: 2
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tag.length, 1, 'only one tag should be displayed');
         assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), 'the tag has correct css class');
@@ -286,11 +286,11 @@ QUnit.module('multitag', moduleSetup, () => {
 
     QUnit.test('multitag should be rendered always when maxDisplayedTags is 0', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      maxDisplayedTags: 0,
-                      value: [1]
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            maxDisplayedTags: 0,
+            value: [1]
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tag.length, 1, 'one tag is selected');
         assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), 'one selected tag is multitag');
@@ -300,32 +300,32 @@ QUnit.module('multitag', moduleSetup, () => {
         assert.expect(5);
 
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      value: [1, 2, 4],
-                      maxDisplayedTags: 2,
-                      onMultiTagPreparing: function(e) {
-                          assert.equal(e.component.NAME, 'dxTagBox', 'component is correct');
-                          assert.equal(isRenderer(e.multiTagElement), !!config().useJQuery, 'tagElement is correct');
-                          assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), 'element is correct');
-                          assert.deepEqual(e.selectedItems, [1, 2, 4], 'selectedItems are correct');
-                          e.text = 'custom text';
-                      }
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2,
+            onMultiTagPreparing: function(e) {
+                assert.equal(e.component.NAME, 'dxTagBox', 'component is correct');
+                assert.equal(isRenderer(e.multiTagElement), !!config().useJQuery, 'tagElement is correct');
+                assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), 'element is correct');
+                assert.deepEqual(e.selectedItems, [1, 2, 4], 'selectedItems are correct');
+                e.text = 'custom text';
+            }
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.deepEqual($tag.text(), 'custom text', 'custom text is displayed');
     });
 
     QUnit.test('multi tag should not be rendered if e.cancel is true', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      value: [1, 2, 4],
-                      maxDisplayedTags: 2,
-                      onMultiTagPreparing: function(e) {
-                          e.cancel = true;
-                      }
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2,
+            onMultiTagPreparing: function(e) {
+                e.cancel = true;
+            }
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tag.length, 3, '3 tags was rendered');
         assert.deepEqual(this.getTexts($tag), ['1', '2', '4'], 'tags have correct text');
@@ -333,12 +333,12 @@ QUnit.module('multitag', moduleSetup, () => {
 
     QUnit.test('multi tag should be rendered after max number of tags if showMultiTagOnly is false', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      value: [1, 2, 4],
-                      maxDisplayedTags: 2,
-                      showMultiTagOnly: false
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tag.length, 2, '2 tags rendered');
         assert.deepEqual(this.getTexts($tag), ['1', '2 more'], 'tags have correct text');
@@ -346,12 +346,12 @@ QUnit.module('multitag', moduleSetup, () => {
 
     QUnit.test('only multi tag should be shown when showMultiTagOnly option is true', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [1, 2, 3, 4],
-                      value: [1, 2, 4],
-                      maxDisplayedTags: 2,
-                      showMultiTagOnly: true
-                  }),
-              $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxDisplayedTags: 2,
+            showMultiTagOnly: true
+        });
+        const $tag = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tag.length, 1, '1 tag rendered');
         assert.deepEqual($tag.text(), '3 selected', 'text is correct');
@@ -361,38 +361,38 @@ QUnit.module('multitag', moduleSetup, () => {
 QUnit.module('option dependent appearance', moduleSetup, () => {
     QUnit.test('displayExpr and valueExpr options should work correctly', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      dataSource: [{
-                          'ID': 1,
-                          'Name': 'Item 1'
-                      }, {
-                          'ID': 2,
-                          'Name': 'Item 2'
-                      }],
-                      displayExpr: 'Name',
-                      valueExpr: 'ID',
-                      value: [2]
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            dataSource: [{
+                'ID': 1,
+                'Name': 'Item 1'
+            }, {
+                'ID': 2,
+                'Name': 'Item 2'
+            }],
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+            value: [2]
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.text(), 'Item 2', 'tag is correct');
     });
 
     QUnit.test('tag should have correct value when item value is zero', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: [0, 1, 2, 3],
-                      value: [0]
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: [0, 1, 2, 3],
+            value: [0]
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.text(), '0', 'selected item is correct');
     });
 
     QUnit.test('tag should have correct value when item value is an empty string', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
-                      items: ['', 1, 2, 3],
-                      value: ['']
-                  }),
-              $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
+            items: ['', 1, 2, 3],
+            value: ['']
+        });
+        const $tags = $tagBox.find('.' + TAGBOX_TAG_CLASS);
 
         assert.equal($tags.length, 1, 'empty string value was successfully selected');
     });
@@ -408,16 +408,16 @@ QUnit.module('option dependent appearance', moduleSetup, () => {
 
     QUnit.test('tag template option should work', function(assert) {
         const $element = $('#tagBox').dxTagBox({
-                      items: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
-                      displayExpr: 'text',
-                      valueExpr: 'id',
-                      opened: true,
-                      value: [1, 2],
-                      tagTemplate: function(tagData, tagElement) {
-                          return '<div class=\'custom-item\'><div class=\'product-name\'>!' + tagData.text + '</div>';
-                      }
-                  }),
-              $tagContainer = $element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+            items: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
+            displayExpr: 'text',
+            valueExpr: 'id',
+            opened: true,
+            value: [1, 2],
+            tagTemplate: function(tagData, tagElement) {
+                return '<div class=\'custom-item\'><div class=\'product-name\'>!' + tagData.text + '</div>';
+            }
+        });
+        const $tagContainer = $element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         assert.equal($.trim($tagContainer.text()), '!one!two', 'selected values are rendered correctly');
     });

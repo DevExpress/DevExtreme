@@ -101,11 +101,11 @@ QUnit.module('The \'name\' option', {
     }
 }, () => {
     QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-              $element = this.$element.dxCalendar({
-                  name: expectedName
-              }),
-              $input = $element.find('input');
+        const expectedName = 'some_name';
+        const $element = this.$element.dxCalendar({
+            name: expectedName
+        });
+        const $input = $element.find('input');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });

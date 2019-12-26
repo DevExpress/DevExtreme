@@ -33,9 +33,9 @@ QUnit.module('options', {
         assert.expect(2);
 
         const $trackBar = this.$element.dxTrackBar({
-                      value: 10
-                  }),
-              trackBar = $trackBar.dxTrackBar('instance');
+            value: 10
+        });
+        const trackBar = $trackBar.dxTrackBar('instance');
 
         assert.equal(trackBar.option('value'), 10, 'value option is right');
 
@@ -47,10 +47,10 @@ QUnit.module('options', {
         assert.expect(4);
 
         const $trackBar = this.$element.dxTrackBar({
-                      min: 20,
-                      max: 150
-                  }),
-              trackBar = $trackBar.dxTrackBar('instance');
+            min: 20,
+            max: 150
+        });
+        const trackBar = $trackBar.dxTrackBar('instance');
 
         assert.equal(trackBar.option('min'), 20, 'min option is right');
 
@@ -67,10 +67,10 @@ QUnit.module('options', {
         assert.expect(4);
 
         const $trackBar = this.$element.dxTrackBar({
-                      min: 20,
-                      max: 150
-                  }),
-              trackBar = $trackBar.dxTrackBar('instance');
+            min: 20,
+            max: 150
+        });
+        const trackBar = $trackBar.dxTrackBar('instance');
 
         assert.equal(trackBar.option('value'), 20, 'value option change to min value after set min > value');
 
@@ -88,12 +88,12 @@ QUnit.module('options', {
         assert.expect(2);
 
         const $trackBar = this.$element.dxTrackBar({
-                      value: 10,
-                      min: 0,
-                      max: 100
-                  }).css('width', 100),
-              trackBar = $trackBar.dxTrackBar('instance'),
-              $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+            value: 10,
+            min: 0,
+            max: 100
+        }).css('width', 100);
+        const trackBar = $trackBar.dxTrackBar('instance');
+        const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
 
         assert.equal($range.width(), trackBar.option('value'), 'range width is right');
 
@@ -105,12 +105,12 @@ QUnit.module('options', {
         assert.expect(3);
 
         const $trackBar = this.$element.dxTrackBar({
-                      value: 40,
-                      min: 20,
-                      max: 100
-                  }).css('width', 100),
-              trackBar = $trackBar.dxTrackBar('instance'),
-              $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+            value: 40,
+            min: 20,
+            max: 100
+        }).css('width', 100);
+        const trackBar = $trackBar.dxTrackBar('instance');
+        const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
 
         assert.equal($range.width(), 25, 'range width is right');
 

@@ -63,7 +63,7 @@ QUnit.module('markup', () => {
         browser.msie = false;
 
         try {
-            const element = $('#textbox').dxTextBox({ maxLength: '5' }), input = element.find('.' + INPUT_CLASS);
+            const element = $('#textbox').dxTextBox({ maxLength: '5' }); const input = element.find('.' + INPUT_CLASS);
             assert.equal(input.attr('maxLength'), '5');
         } finally {
             devices.real(originalDevices);
@@ -72,7 +72,7 @@ QUnit.module('markup', () => {
     });
 
     QUnit.test('set width via constructor', function(assert) {
-        const $element = $('#textbox').dxTextBox({ width: 400 }), elementStyles = $element.get(0).style;
+        const $element = $('#textbox').dxTextBox({ width: 400 }); const elementStyles = $element.get(0).style;
 
         assert.strictEqual(elementStyles.width, '400px', '\'width\' style of the element must be equal to custom width');
     });

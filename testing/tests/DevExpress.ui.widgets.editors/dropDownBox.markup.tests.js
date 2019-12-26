@@ -92,7 +92,7 @@ QUnit.module('hidden input', moduleConfig, () => {
             value: 2
         });
 
-        const instance = this.$element.dxDropDownBox('instance'), $input = this.$element.find('input[type=\'hidden\']');
+        const instance = this.$element.dxDropDownBox('instance'); const $input = this.$element.find('input[type=\'hidden\']');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
@@ -149,33 +149,33 @@ QUnit.module('hidden input', moduleConfig, () => {
 
 
     QUnit.test('the hidden input should get correct values if async data source is used', function(assert) {
-        const data = [0, 1, 2, 3, 4],
-              initialValue = 2,
-              newValue = 4,
-              timeout = 100,
-              store = new CustomStore({
-                  load: function() {
-                      const d = $.Deferred();
-                      setTimeout(function() {
-                          d.resolve(data);
-                      }, timeout);
-                      return d.promise();
-                  },
-                  byKey: function(key) {
-                      const d = $.Deferred();
-                      setTimeout(function() {
-                          d.resolve(key);
-                      }, timeout);
-                      return d.promise();
-                  }
-              }),
-              $element = this.$element.dxDropDownBox({
-                  dataSource: store,
-                  value: initialValue,
-                  valueExpr: 'id',
-                  displayExpr: 'name'
-              }),
-              instance = $element.dxDropDownBox('instance');
+        const data = [0, 1, 2, 3, 4];
+        const initialValue = 2;
+        const newValue = 4;
+        const timeout = 100;
+        const store = new CustomStore({
+            load: function() {
+                const d = $.Deferred();
+                setTimeout(function() {
+                    d.resolve(data);
+                }, timeout);
+                return d.promise();
+            },
+            byKey: function(key) {
+                const d = $.Deferred();
+                setTimeout(function() {
+                    d.resolve(key);
+                }, timeout);
+                return d.promise();
+            }
+        });
+        const $element = this.$element.dxDropDownBox({
+            dataSource: store,
+            value: initialValue,
+            valueExpr: 'id',
+            displayExpr: 'name'
+        });
+        const instance = $element.dxDropDownBox('instance');
 
         this.clock.tick(timeout);
 
@@ -189,11 +189,11 @@ QUnit.module('hidden input', moduleConfig, () => {
 
 QUnit.module('the \'name\' option', moduleConfig, () => {
     QUnit.test('widget hidden input should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-              $element = this.$element.dxDropDownBox({
-                  name: expectedName
-              }),
-              $input = $element.find('input[type=\'hidden\']');
+        const expectedName = 'some_name';
+        const $element = this.$element.dxDropDownBox({
+            name: expectedName
+        });
+        const $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });

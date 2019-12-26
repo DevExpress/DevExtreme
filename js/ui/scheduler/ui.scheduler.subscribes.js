@@ -186,8 +186,8 @@ const subscribes = {
     deleteAppointment: function(options) {
         options.$appointment = $(options.target);
 
-        const appointmentData = options.data,
-            singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
+        const appointmentData = options.data;
+        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
 
         this.checkAndDeleteAppointment(appointmentData, singleAppointmentData);
     },

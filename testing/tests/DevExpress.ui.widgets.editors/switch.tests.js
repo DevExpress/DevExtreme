@@ -109,7 +109,7 @@ QUnit.module('widget init', {
     });
 
     QUnit.test('switchedOnText/switchedOffText options changing', function(assert) {
-        const $element = $('#switch').dxSwitch({}), instance = $element.dxSwitch('instance');
+        const $element = $('#switch').dxSwitch({}); const instance = $element.dxSwitch('instance');
 
         instance.option('switchedOnText', '1');
         assert.equal($element.find('.' + LABEL_ON_CLASS).text(), '1');
@@ -202,7 +202,7 @@ QUnit.module('invisible container', {
     }
 }, () => {
     QUnit.test('the position of handle for invisible and visible switch should be equal', function(assert) {
-        const $visibleElement = $('#switch').dxSwitch(), $invisibleElement = $('#invisibleSwitch').dxSwitch();
+        const $visibleElement = $('#switch').dxSwitch(); const $invisibleElement = $('#invisibleSwitch').dxSwitch();
 
         $invisibleElement.css('display', 'block');
         assert.equal($visibleElement.find('.' + HANDLE_CLASS).position().left, $invisibleElement.find('.' + HANDLE_CLASS).position().left);
@@ -212,10 +212,10 @@ QUnit.module('invisible container', {
 QUnit.module('hidden input', () => {
     QUnit.test('the hidden input should change its value on widget value change', function(assert) {
         const $element = $('#switch').dxSwitch({
-                      value: true
-                  }),
-              instance = $element.dxSwitch('instance'),
-              $input = $element.find('input');
+            value: true
+        });
+        const instance = $element.dxSwitch('instance');
+        const $input = $element.find('input');
 
         instance.option('value', false);
         assert.equal($input.val(), 'false', 'input value has been changed');
@@ -227,11 +227,11 @@ QUnit.module('hidden input', () => {
 
 QUnit.module('the \'name\' option', () => {
     QUnit.test('widget input should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-              $element = $('#switch').dxSwitch({
-                  name: expectedName
-              }),
-              $input = $element.find('input');
+        const expectedName = 'some_name';
+        const $element = $('#switch').dxSwitch({
+            name: expectedName
+        });
+        const $input = $element.find('input');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });
@@ -359,7 +359,7 @@ QUnit.module('interaction', {
         const originalAnimation = fx.animate;
         const clock = sinon.useFakeTimers();
         try {
-            const element = this.element, instance = element.dxSwitch('instance');
+            const element = this.element; const instance = element.dxSwitch('instance');
 
             instance.option('value', false);
 
@@ -376,7 +376,7 @@ QUnit.module('interaction', {
     });
 
     QUnit.test('widget should be active while handle is swiped', function(assert) {
-        const $element = this.element, pointer = this.mouse, clock = sinon.useFakeTimers();
+        const $element = this.element; const pointer = this.mouse; const clock = sinon.useFakeTimers();
 
         try {
             pointer.start().down().swipeStart().up();
@@ -401,7 +401,7 @@ QUnit.module('interaction', {
 
         pointer.start().down().move(offset, 0);
 
-        const innerTransform = $innerWrapper.get(0).style.transform, handleTransform = $handle.get(0).style.transform;
+        const innerTransform = $innerWrapper.get(0).style.transform; const handleTransform = $handle.get(0).style.transform;
 
         assert.equal(innerTransform, 'translateX(-25%)', 'Inner position is right');
         assert.equal(handleTransform, 'translateX(-50%)', 'Handle position is right');
@@ -420,14 +420,14 @@ QUnit.module('interaction', {
 
         pointer.start().down().move(offset, 0).up();
 
-        const innerTransform = $innerWrapper.get(0).style.transform, handleTransform = $handle.get(0).style.transform;
+        const innerTransform = $innerWrapper.get(0).style.transform; const handleTransform = $handle.get(0).style.transform;
 
         assert.equal(innerTransform, 'translateX(0%)', 'Inner position is right');
         assert.equal(handleTransform, 'translateX(-100%)', 'Handle position is right');
     });
 
     QUnit.test('click on disabled switch has no effect', function(assert) {
-        const element = this.element, instance = element.dxSwitch('instance');
+        const element = this.element; const instance = element.dxSwitch('instance');
 
         instance.option('value', false);
         instance.option('disabled', true);
@@ -452,7 +452,7 @@ QUnit.module('RTL', {
     }
 }, () => {
     QUnit.test('click switches state', function(assert) {
-        const $element = this.element, instance = this.element.dxSwitch('instance');
+        const $element = this.element; const instance = this.element.dxSwitch('instance');
 
         $element.trigger('dxclick');
         assert.equal(instance.option('value'), false);
@@ -463,7 +463,7 @@ QUnit.module('RTL', {
     });
 
     QUnit.test('swipe switches state', function(assert) {
-        const $element = this.element, instance = this.element.dxSwitch('instance');
+        const $element = this.element; const instance = this.element.dxSwitch('instance');
 
         this.mouse.start().swipeStart().swipeEnd(1);
         assert.equal(instance.option('value'), false);
@@ -476,14 +476,14 @@ QUnit.module('RTL', {
 
 QUnit.module('widget sizing render', () => {
     QUnit.test('constructor', function(assert) {
-        const $element = $('#widget').dxSwitch({ width: 400 }), instance = $element.dxSwitch('instance');
+        const $element = $('#widget').dxSwitch({ width: 400 }); const instance = $element.dxSwitch('instance');
 
         assert.strictEqual(instance.option('width'), 400);
         assert.strictEqual($element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
     QUnit.test('change width', function(assert) {
-        const $element = $('#widget').dxSwitch(), instance = $element.dxSwitch('instance'), customWidth = 400;
+        const $element = $('#widget').dxSwitch(); const instance = $element.dxSwitch('instance'); const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -503,11 +503,11 @@ QUnit.module('keyboard navigation', {
         assert.expect(5);
 
         const $element = $('#widget').dxSwitch({
-                      focusStateEnabled: true,
-                      value: false
-                  }),
-              instance = $element.dxSwitch('instance'),
-              keyboard = keyboardMock($element);
+            focusStateEnabled: true,
+            value: false
+        });
+        const instance = $element.dxSwitch('instance');
+        const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
 
@@ -531,12 +531,12 @@ QUnit.module('keyboard navigation', {
         assert.expect(2);
 
         const $element = $('#widget').dxSwitch({
-                      focusStateEnabled: true,
-                      value: false,
-                      rtlEnabled: true
-                  }),
-              instance = $element.dxSwitch('instance'),
-              keyboard = keyboardMock($element);
+            focusStateEnabled: true,
+            value: false,
+            rtlEnabled: true
+        });
+        const instance = $element.dxSwitch('instance');
+        const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
 

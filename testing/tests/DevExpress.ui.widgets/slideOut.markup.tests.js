@@ -46,7 +46,7 @@ QUnit.module('render widget', {
     });
 
     QUnit.test('update items during beginUpdate/endUpdate should refresh list only once', function(assert) {
-        const $slideOut = this.$element.dxSlideOut({}), instance = $slideOut.dxSlideOut('instance');
+        const $slideOut = this.$element.dxSlideOut({}); const instance = $slideOut.dxSlideOut('instance');
 
         instance.beginUpdate();
         instance.option('items', [1]);

@@ -35,7 +35,7 @@ QUnit.module('init', {
     }
 }, () => {
     QUnit.test('rendered markup', function(assert) {
-        const $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true }), $content = $element.dxLoadPanel('instance').$content();
+        const $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true }); const $content = $element.dxLoadPanel('instance').$content();
 
         assert.ok($element.hasClass(LOADPANEL_CLASS));
         assert.ok($content.hasClass(LOADPANEL_CONTENT_CLASS), 'Load Indicator created');
@@ -69,11 +69,11 @@ QUnit.module('init', {
 
     QUnit.test('visible changes visibility', function(assert) {
         const $loadPanel = $('#loadPanel').dxLoadPanel({
-                      message: '',
-                      visible: false
-                  }),
-              loadPanel = $loadPanel.dxLoadPanel('instance'),
-              $content = loadPanel.$content();
+            message: '',
+            visible: false
+        });
+        const loadPanel = $loadPanel.dxLoadPanel('instance');
+        const $content = loadPanel.$content();
 
         assert.ok(!$content.is(':visible'));
 
@@ -89,10 +89,10 @@ QUnit.module('init', {
 
     QUnit.test('visible changes visibility option', function(assert) {
         const element = $('#loadPanel2').dxLoadPanel({
-                      visible: false,
-                      message: 'Text'
-                  }),
-              $content = element.dxLoadPanel('instance').$content();
+            visible: false,
+            message: 'Text'
+        });
+        const $content = element.dxLoadPanel('instance').$content();
 
         const loadIndicator = element.dxLoadPanel('instance');
 
@@ -184,13 +184,13 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('LoadPanel with custom indicator', function(assert) {
-        const url = '../../testing/content/customLoadIndicator.png',
-              instance = this.element
-                  .dxLoadPanel({
-                      showIndicator: true,
-                      indicatorSrc: url
-                  })
-                  .dxLoadPanel('instance');
+        const url = '../../testing/content/customLoadIndicator.png';
+        const instance = this.element
+            .dxLoadPanel({
+                showIndicator: true,
+                indicatorSrc: url
+            })
+            .dxLoadPanel('instance');
         instance.show();
 
         const loadIndicatorInstance = this.instance.$content().find('.dx-loadindicator').dxLoadIndicator().dxLoadIndicator('instance');
@@ -202,13 +202,13 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('Load panel should not close on esc button when focusStateEnabled is true', function(assert) {
         const instance = this.element
-                      .dxLoadPanel({
-                          focusStateEnabled: true,
-                          width: 1,
-                          height: 1,
-                          visible: true
-                      }).dxLoadPanel('instance'),
-              keyboard = keyboardMock(instance.$content());
+            .dxLoadPanel({
+                focusStateEnabled: true,
+                width: 1,
+                height: 1,
+                visible: true
+            }).dxLoadPanel('instance');
+        const keyboard = keyboardMock(instance.$content());
 
         keyboard.keyDown('esc');
 
@@ -295,9 +295,9 @@ QUnit.module('delay', {
         const delayTimeout = 500;
 
         const $loadPanel = $('#loadPanel').dxLoadPanel({
-                      delay: delayTimeout
-                  }),
-              $content = $loadPanel.dxLoadPanel('$content');
+            delay: delayTimeout
+        });
+        const $content = $loadPanel.dxLoadPanel('$content');
 
         $loadPanel.dxLoadPanel('show');
         $loadPanel.dxLoadPanel('hide');

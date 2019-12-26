@@ -69,7 +69,7 @@ QUnit.module('render', moduleOptions, () => {
 
         const slider = el.dxRangeSlider('instance');
 
-        const handleStart = el.find('.' + SLIDER_HANDLE_CLASS).eq(0), handleEnd = el.find('.' + SLIDER_HANDLE_CLASS).eq(1), range = el.find('.' + SLIDER_RANGE_CLASS);
+        const handleStart = el.find('.' + SLIDER_HANDLE_CLASS).eq(0); const handleEnd = el.find('.' + SLIDER_HANDLE_CLASS).eq(1); const range = el.find('.' + SLIDER_RANGE_CLASS);
 
         assert.equal(handleStart.position().left, 0);
         assert.equal(handleEnd.position().left, 960);
@@ -132,14 +132,14 @@ QUnit.module('render', moduleOptions, () => {
 QUnit.module('slider with tooltip', () => {
     QUnit.test('tooltip default rendering', function(assert) {
         const $slider = $('#slider').dxRangeSlider({
-                      tooltip: {
-                          enabled: true,
-                          showMode: 'always'
-                      },
-                      useInkRipple: false
-                  }),
-              $handle = $slider.find('.' + SLIDER_HANDLE_CLASS),
-              $tooltips = $handle.find('.' + TOOLTIP_CLASS);
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            },
+            useInkRipple: false
+        });
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
+        const $tooltips = $handle.find('.' + TOOLTIP_CLASS);
 
         assert.equal($tooltips.length, 2);
         assert.ok(Tooltip.getInstance($tooltips.eq(0)));
@@ -180,7 +180,7 @@ QUnit.module('user interaction', () => {
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS), $range = $element.find('.' + SLIDER_RANGE_CLASS), pointer = pointerMock($wrapper);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
 
         pointer.start().down($wrapper.offset().left + 40, $wrapper.offset().top).move(40);
         assert.equal($range.position().left, 60);
@@ -204,7 +204,7 @@ QUnit.module('user interaction', () => {
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS), $range = $element.find('.' + SLIDER_RANGE_CLASS), pointer = pointerMock($wrapper);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
 
         pointer.start().down($wrapper.offset().left + 80, $wrapper.offset().top).move(-40);
         assert.equal($range.position().left, 40);
@@ -223,7 +223,7 @@ QUnit.module('user interaction', () => {
             useInkRipple: false
         });
 
-        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS), $range = $element.find('.' + SLIDER_RANGE_CLASS), pointer = pointerMock($wrapper);
+        const $wrapper = $element.find('.' + SLIDER_WRAPPER_CLASS); const $range = $element.find('.' + SLIDER_RANGE_CLASS); const pointer = pointerMock($wrapper);
 
         pointer.start().down($wrapper.offset().left + 40, $wrapper.offset().top).move(40);
         assert.equal($range.position().left, 60);
@@ -297,18 +297,18 @@ QUnit.module('focus policy', moduleOptions, () => {
         assert.expect(2);
 
         const $rangeSlider = $('#slider').dxRangeSlider({
-                      max: 100,
-                      min: 0,
-                      start: 40,
-                      end: 60,
-                      width: 100,
-                      focusStateEnabled: true,
-                      useInkRipple: false
-                  }),
-              $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS),
-              $leftHandle = $handles.eq(0),
-              $rightHandle = $handles.eq(1),
-              pointer = pointerMock($rangeSlider);
+            max: 100,
+            min: 0,
+            start: 40,
+            end: 60,
+            width: 100,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
+        const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
+        const $leftHandle = $handles.eq(0);
+        const $rightHandle = $handles.eq(1);
+        const pointer = pointerMock($rangeSlider);
 
         pointer.start().down($rangeSlider.offset().left + 20, $rangeSlider.offset().top).up();
         assert.ok($leftHandle.hasClass('dx-state-focused'), 'left handle has focus class after click on track');
@@ -323,14 +323,14 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.expect(8);
 
         const $rangeSlider = $('#slider').dxRangeSlider({
-                min: 10,
-                max: 90,
-                start: 50,
-                end: 80,
-                step: 3,
-                focusStateEnabled: true,
-                useInkRipple: false
-            });
+            min: 10,
+            max: 90,
+            start: 50,
+            end: 80,
+            step: 3,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
@@ -374,14 +374,14 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.expect(6);
 
         const $rangeSlider = $('#slider').dxRangeSlider({
-                min: 10,
-                max: 90,
-                start: 50,
-                end: 80,
-                keyStep: 1,
-                focusStateEnabled: true,
-                useInkRipple: false
-            });
+            min: 10,
+            max: 90,
+            start: 50,
+            end: 80,
+            keyStep: 1,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
@@ -420,15 +420,15 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.expect(8);
 
         const $rangeSlider = $('#slider').dxRangeSlider({
-                rtlEnabled: true,
-                min: 10,
-                max: 90,
-                start: 50,
-                end: 80,
-                step: 3,
-                focusStateEnabled: true,
-                useInkRipple: false
-            });
+            rtlEnabled: true,
+            min: 10,
+            max: 90,
+            start: 50,
+            end: 80,
+            step: 3,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
@@ -472,15 +472,15 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.expect(6);
 
         const $rangeSlider = $('#slider').dxRangeSlider({
-                rtlEnabled: true,
-                min: 10,
-                max: 90,
-                start: 50,
-                end: 80,
-                keyStep: 1,
-                focusStateEnabled: true,
-                useInkRipple: false
-            });
+            rtlEnabled: true,
+            min: 10,
+            max: 90,
+            start: 50,
+            end: 80,
+            keyStep: 1,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
 
         const rangeSlider = $rangeSlider.dxRangeSlider('instance');
         const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
@@ -516,15 +516,15 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
 
     QUnit.testInActiveWindow('Handle should not stop when start = end and we move start handle right via keyboard', function(assert) {
         const $rangeSlider = $('#slider').dxRangeSlider({
-                      start: 29,
-                      end: 30,
-                      focusStateEnabled: true,
-                      useInkRipple: false
-                  }),
-              rangeSlider = $rangeSlider.dxRangeSlider('instance'),
-              $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS),
-              $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS),
-              keyboard = keyboardMock($startHandle);
+            start: 29,
+            end: 30,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
+        const rangeSlider = $rangeSlider.dxRangeSlider('instance');
+        const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
+        const $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS);
+        const keyboard = keyboardMock($startHandle);
 
         $('.' + SLIDER_HANDLE_CLASS).css({
             'width': '1px',
@@ -543,16 +543,16 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
 
     QUnit.testInActiveWindow('Handle should not stop when start = end and we move end handle right via keyboard RTL', function(assert) {
         const $rangeSlider = $('#slider').dxRangeSlider({
-                      rtlEnabled: true,
-                      start: 30,
-                      end: 31,
-                      focusStateEnabled: true,
-                      useInkRipple: false
-                  }),
-              rangeSlider = $rangeSlider.dxRangeSlider('instance'),
-              $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS),
-              $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS),
-              keyboard = keyboardMock($endHandle);
+            rtlEnabled: true,
+            start: 30,
+            end: 31,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
+        const rangeSlider = $rangeSlider.dxRangeSlider('instance');
+        const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
+        const $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS);
+        const keyboard = keyboardMock($endHandle);
 
         $('.' + SLIDER_HANDLE_CLASS).css({
             'width': '1px',
@@ -571,16 +571,16 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
 
     QUnit.testInActiveWindow('Handle should not stop when start = end and we move start handle left via keyboard RTL', function(assert) {
         const $rangeSlider = $('#slider').dxRangeSlider({
-                      rtlEnabled: true,
-                      start: 29,
-                      end: 30,
-                      focusStateEnabled: true,
-                      useInkRipple: false
-                  }),
-              rangeSlider = $rangeSlider.dxRangeSlider('instance'),
-              $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS),
-              $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS),
-              keyboard = keyboardMock($startHandle);
+            rtlEnabled: true,
+            start: 29,
+            end: 30,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
+        const rangeSlider = $rangeSlider.dxRangeSlider('instance');
+        const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
+        const $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS);
+        const keyboard = keyboardMock($startHandle);
 
         $('.' + SLIDER_HANDLE_CLASS).css({
             'width': '1px',
@@ -600,15 +600,15 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
 
     QUnit.testInActiveWindow('Handle should not stop when start = end and we move end handle left via keyboard', function(assert) {
         const $rangeSlider = $('#slider').dxRangeSlider({
-                      start: 30,
-                      end: 31,
-                      focusStateEnabled: true,
-                      useInkRipple: false
-                  }),
-              rangeSlider = $rangeSlider.dxRangeSlider('instance'),
-              $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS),
-              $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS),
-              keyboard = keyboardMock($endHandle);
+            start: 30,
+            end: 31,
+            focusStateEnabled: true,
+            useInkRipple: false
+        });
+        const rangeSlider = $rangeSlider.dxRangeSlider('instance');
+        const $startHandle = $rangeSlider.find('.' + RANGE_SLIDER_START_HANDLE_CLASS);
+        const $endHandle = $rangeSlider.find('.' + RANGE_SLIDER_END_HANDLE_CLASS);
+        const keyboard = keyboardMock($endHandle);
 
         $('.' + SLIDER_HANDLE_CLASS).css({
             'width': '1px',
@@ -706,7 +706,7 @@ QUnit.module('regressions', {
     QUnit.test('only one handler must be highlighted on pressing (B230410)', function(assert) {
         const module = this;
 
-        const leftHandle = module.leftHandle, rightHandle = module.rightHandle;
+        const leftHandle = module.leftHandle; const rightHandle = module.rightHandle;
 
         let mouse = pointerMock(leftHandle).start().move(leftHandle.offset().left).down();
         module.clock.tick(FEEDBACK_SHOW_TIMEOUT);
@@ -750,7 +750,7 @@ QUnit.module('regressions', {
             'end': 50
         });
 
-        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)), hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2, hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
+        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)); const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2; const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
 
         mouse
             .start()
@@ -828,9 +828,9 @@ QUnit.module('regressions', {
             'end': 50
         });
 
-        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)), hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2, hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
+        const mouse = pointerMock(module.element.find('.' + SLIDER_WRAPPER_CLASS)); const hX = module.rightHandle.offset().left + module.rightHandle.outerWidth() / 2; const hY = module.rightHandle.offset().top + module.rightHandle.outerHeight() / 2;
 
-        const leftHandle = module.leftHandle, rightHandle = module.rightHandle;
+        const leftHandle = module.leftHandle; const rightHandle = module.rightHandle;
 
         assert.equal(leftHandle.hasClass('dx-state-active'), false);
         assert.equal(rightHandle.hasClass('dx-state-active'), false);
@@ -992,7 +992,7 @@ QUnit.module('RTL', moduleOptions, () => {
 
         const slider = $element.dxRangeSlider('instance');
 
-        const $handleStart = $element.find('.' + SLIDER_HANDLE_CLASS).eq(0), $handleEnd = $element.find('.' + SLIDER_HANDLE_CLASS).eq(1), $range = $element.find('.' + SLIDER_RANGE_CLASS);
+        const $handleStart = $element.find('.' + SLIDER_HANDLE_CLASS).eq(0); const $handleEnd = $element.find('.' + SLIDER_HANDLE_CLASS).eq(1); const $range = $element.find('.' + SLIDER_RANGE_CLASS);
 
         assert.ok($element.hasClass('dx-rtl'));
         assert.equal($handleStart.position().left, 960 - $handleStart.outerWidth() / 2);
@@ -1047,14 +1047,14 @@ QUnit.module('RTL', moduleOptions, () => {
 
     QUnit.test('correct handle is moved by click in RTL mode (T106708)', function(assert) {
         const $element = $('#slider').dxRangeSlider({
-                      min: 0,
-                      max: 100,
-                      start: 25,
-                      end: 75,
-                      rtlEnabled: true,
-                      useInkRipple: false
-                  }).css('width', 100),
-              pointer = pointerMock($element).start();
+            min: 0,
+            max: 100,
+            start: 25,
+            end: 75,
+            rtlEnabled: true,
+            useInkRipple: false
+        }).css('width', 100);
+        const pointer = pointerMock($element).start();
 
         pointer.move(10 + $element.offset().left).down().up();
 
@@ -1070,12 +1070,12 @@ QUnit.module('RTL', moduleOptions, () => {
 
 QUnit.module('option value', () => {
     QUnit.test('onValueChanged event should be fired with correct arguments', function(assert) {
-        const start = 15,
-              end = 45,
-              $element = $('#slider').dxRangeSlider({
-                  value: [0, end]
-              }),
-              instance = $element.dxRangeSlider('instance');
+        const start = 15;
+        const end = 45;
+        const $element = $('#slider').dxRangeSlider({
+            value: [0, end]
+        });
+        const instance = $element.dxRangeSlider('instance');
 
         instance.option('onValueChanged', function(args) {
             assert.deepEqual(args.value, [start, end], 'value argument got correct value');

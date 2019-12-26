@@ -20,9 +20,9 @@ const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 QUnit.module('value changing', () => {
     QUnit.test('widget should be selected if value is changed dynamically', function(assert) {
         const $radioButton = $('#radioButton').dxRadioButton({
-                      value: false
-                  }),
-              radioButton = $('#radioButton').dxRadioButton('instance');
+            value: false
+        });
+        const radioButton = $('#radioButton').dxRadioButton('instance');
 
         radioButton.option('value', true);
         assert.ok($radioButton.hasClass(RADIO_BUTTON_CHECKED_CLASS), 'selected class added');
@@ -46,11 +46,11 @@ QUnit.module('interaction', () => {
         assert.expect(2);
 
         const $radioButton = $('#radioButton').dxRadioButton({
-                      onValueChanged: function(e) {
-                          assert.ok(e.event, 'event present');
-                      }
-                  }),
-              radioButton = $('#radioButton').dxRadioButton('instance');
+            onValueChanged: function(e) {
+                assert.ok(e.event, 'event present');
+            }
+        });
+        const radioButton = $('#radioButton').dxRadioButton('instance');
 
         $radioButton.trigger('dxclick');
         assert.equal(radioButton.option('value'), true, 'value changed');
@@ -58,8 +58,8 @@ QUnit.module('interaction', () => {
 
     QUnit.test('value can be changed only to true', function(assert) {
         const $radioButton = $('#radioButton').dxRadioButton({
-                  }),
-              radioButton = $('#radioButton').dxRadioButton('instance');
+        });
+        const radioButton = $('#radioButton').dxRadioButton('instance');
 
         $radioButton.trigger('dxclick');
         $radioButton.trigger('dxclick');
@@ -72,11 +72,11 @@ QUnit.module('keyboard navigation', () => {
         assert.expect(1);
 
         const $element = $('#radioButton').dxRadioButton({
-                      focusStateEnabled: true,
-                      value: false
-                  }),
-              instance = $element.dxRadioButton('instance'),
-              keyboard = keyboardMock($element);
+            focusStateEnabled: true,
+            value: false
+        });
+        const instance = $element.dxRadioButton('instance');
+        const keyboard = keyboardMock($element);
 
         $element.trigger('focusin');
         keyboard.keyDown('space');

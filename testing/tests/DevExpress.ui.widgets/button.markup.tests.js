@@ -44,10 +44,10 @@ QUnit.module('Button markup', () => {
 
     QUnit.test('init with options', function(assert) {
         const element = $('#button').dxButton({
-                      text: 'text',
-                      icon: 'home'
-                  }),
-              buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
+            text: 'text',
+            icon: 'home'
+        });
+        const buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
 
         assert.equal($.trim(buttonContent.find('.' + BUTTON_TEXT_CLASS).text()), 'text');
         assert.ok(element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with icon has icon class');
@@ -55,16 +55,16 @@ QUnit.module('Button markup', () => {
     });
 
     QUnit.test('submit element should have tabindex attribute', function(assert) {
-        const $element = $('#button').dxButton({ useSubmitBehavior: true }), $submitElement = $element.find('input');
+        const $element = $('#button').dxButton({ useSubmitBehavior: true }); const $submitElement = $element.find('input');
 
         assert.equal($submitElement.attr('tabindex'), -1, 'submit input is not focusable');
     });
 
     QUnit.test('class added from type (back)', function(assert) {
         const element = $('#button').dxButton({
-                      type: 'back'
-                  }),
-              buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
+            type: 'back'
+        });
+        const buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
 
         assert.ok(element.hasClass(BUTTON_BACK_CLASS), 'class was added');
         assert.ok(buttonContent.find('.dx-icon').length, 'icon class was added');
@@ -217,11 +217,11 @@ QUnit.module('aria accessibility', () => {
 
     QUnit.test('aria-label attribute', function(assert) {
         const $element = $('#button').dxButton({
-                      text: 'test',
-                      icon: 'find',
-                      type: 'danger'
-                  }),
-              instance = $element.dxButton('instance');
+            text: 'test',
+            icon: 'find',
+            type: 'danger'
+        });
+        const instance = $element.dxButton('instance');
 
         assert.equal($element.attr('aria-label'), 'test', 'aria label for all params is correct');
 

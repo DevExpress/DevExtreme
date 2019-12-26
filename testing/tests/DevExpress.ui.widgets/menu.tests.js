@@ -166,15 +166,15 @@ QUnit.module('Render content delimiters', {
         }
 
         const menu = createMenuInWindow({
-                      showSubmenuMode: 'onHover',
-                      items: [{
-                          text: 'item 1', items: [
-                              { text: 'item 11', items: [{ text: 'item 111' }] },
-                              { text: 'item 12' }
-                          ]
-                      }]
-                  }),
-              $rootMenuItem = menu.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            showSubmenuMode: 'onHover',
+            items: [{
+                text: 'item 1', items: [
+                    { text: 'item 11', items: [{ text: 'item 111' }] },
+                    { text: 'item 12' }
+                ]
+            }]
+        });
+        const $rootMenuItem = menu.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         // Opening all submenu levels
         $rootMenuItem.trigger('dxclick');
@@ -183,7 +183,7 @@ QUnit.module('Render content delimiters', {
         hoverSubmenuItemByIndex(firstLevelSubmenu, 0);
         this.clock.tick(ANIMATION_TIMEOUT);
 
-        const $items = firstLevelSubmenu.itemElements(), $border = $rootMenuItem.find('.' + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
+        const $items = firstLevelSubmenu.itemElements(); const $border = $rootMenuItem.find('.' + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
 
         assert.equal($items.length, 3, 'all menus are rendered');
         assert.ok($border.is(':visible'), 'border is visible');
@@ -206,19 +206,19 @@ QUnit.module('Menu rendering', {
 }, () => {
     QUnit.test('Render items with custom model', function(assert) {
         const menu = createMenu({
-                items: [{
-                    name: 'item 1',
-                    child: [{
-                        name: 'item 11',
-                        child: [
-                            { name: 'item 111' }
-                        ]
-                    }]
-                }],
-                displayExpr: 'name',
-                itemsExpr: 'child',
-                showFirstSubmenuMode: 'onClick'
-            });
+            items: [{
+                name: 'item 1',
+                child: [{
+                    name: 'item 11',
+                    child: [
+                        { name: 'item 111' }
+                    ]
+                }]
+            }],
+            displayExpr: 'name',
+            itemsExpr: 'child',
+            showFirstSubmenuMode: 'onClick'
+        });
 
         const $item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         let submenu;
@@ -241,7 +241,7 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Do not render menu with empty items', function(assert) {
-        const menu = createMenu({ items: [] }), submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS), root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
+        const menu = createMenu({ items: [] }); const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS); const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
 
         assert.ok(menu);
         assert.equal(submenus.length, 0, 'no levels');
@@ -249,7 +249,7 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Do not render submenu with empty items', function(assert) {
-        const menu = createMenu({ items: [{ text: 'item1' }, { text: 'item2', items: [] }] }), submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS), root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
+        const menu = createMenu({ items: [{ text: 'item1' }, { text: 'item2', items: [] }] }); const submenus = $(menu.element).find('.' + DX_SUBMENU_CLASS); const root = $(menu.element).find('.' + DX_MENU_HORIZONTAL);
 
         assert.ok(menu);
         assert.equal(submenus.length, 0, 'no levels');
@@ -257,19 +257,19 @@ QUnit.module('Menu rendering', {
     });
 
     QUnit.test('Don\'t create submenu on rendering', function(assert) {
-        const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] }), $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const menu = createMenu({ items: [{ text: 'item1', items: [{}] }] }); const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         assert.equal($rootMenuItem.children('.' + DX_CONTEXT_MENU_CLASS).length, 0);
     });
 
     QUnit.test('Render custom template for submenu items', function(assert) {
         const $menu = $('#menuWithCustomTemplates').dxMenu({
-                showFirstSubmenuMode: 'onClick',
-                items: [{
-                    text: 'item1',
-                    items: [{ template: 'custom' }]
-                }]
-            });
+            showFirstSubmenuMode: 'onClick',
+            items: [{
+                text: 'item1',
+                items: [{ template: 'custom' }]
+            }]
+        });
 
         const rootMenuItem = $($menu.dxMenu('instance').$element()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         let submenu;
@@ -282,13 +282,13 @@ QUnit.module('Menu rendering', {
 
     QUnit.test('Render custom template via script (T195165)', function(assert) {
         const $menu = $('#menu').dxMenu({
-                showFirstSubmenuMode: 'onClick',
-                dataSource: [
-                    {
-                        text: 'Open Menu',
-                        items: [{ selectable: false, disabled: false, template: $('#menuScriptTemplate') }]
-                    }]
-            });
+            showFirstSubmenuMode: 'onClick',
+            dataSource: [
+                {
+                    text: 'Open Menu',
+                    items: [{ selectable: false, disabled: false, template: $('#menuScriptTemplate') }]
+                }]
+        });
 
         const rootMenuItem = $($menu.dxMenu('instance').$element()).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         let submenu;
@@ -301,9 +301,9 @@ QUnit.module('Menu rendering', {
 
     QUnit.test('Render horizontal menu with default submenuDirection', function(assert) {
         const menu = createMenuInWindow({
-                showFirstSubmenuMode: 'onClick',
-                items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
-            });
+            showFirstSubmenuMode: 'onClick',
+            items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
+        });
 
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
         let submenu;
@@ -321,10 +321,10 @@ QUnit.module('Menu rendering', {
         fixtures.simple.create();
 
         const $menu = $('#what').dxMenu({
-                orientation: 'vertical',
-                showFirstSubmenuMode: 'onClick',
-                items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
-            });
+            orientation: 'vertical',
+            showFirstSubmenuMode: 'onClick',
+            items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
+        });
 
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
         let submenu;
@@ -342,13 +342,13 @@ QUnit.module('Menu rendering', {
         fixtures.simple.create();
 
         const $menu = $('#what').dxMenu({
-                showFirstSubmenuMode: 'onClick',
-                submenuDirection: 'leftOrTop',
-                items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
-            }).css({
-                top: 100,
-                left: 100
-            });
+            showFirstSubmenuMode: 'onClick',
+            submenuDirection: 'leftOrTop',
+            items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }]
+        }).css({
+            top: 100,
+            left: 100
+        });
 
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
         let submenu;
@@ -367,9 +367,9 @@ QUnit.module('Menu rendering', {
         fixtures.simple.create();
 
         const $menu = $('#what').dxMenu({ orientation: 'vertical', showFirstSubmenuMode: 'onClick', submenuDirection: 'leftOrTop', items: [{ text: 'itemA', items: [{ text: 'itemA-A' }] }] }).css({
-                top: 100,
-                left: 100
-            });
+            top: 100,
+            left: 100
+        });
 
         const rootMenuItem = $($menu.find('.' + DX_MENU_ITEM_CLASS)[0]);
         let submenu;
@@ -437,24 +437,24 @@ QUnit.module('Menu - selection', {
     QUnit.test('Menu should not crash when items changed (T310030)', function(assert) {
         if(!isDeviceDesktop(assert)) return;
 
-        const items = [{ text: 'root', selected: false, items: [{ text: 'submenu' }] }],
-              changedItems = [{ text: 'root1', selected: true, items: [{ text: 'submenu1' }] }],
-              menu = createMenu({
-                  items: items,
-                  selectionMode: 'single',
-                  showFirstSubmenuMode: 'onHover',
-                  selectByClick: true,
-                  onItemClick: function(e) {
-                      e.component.option('items', changedItems);
-                  }
-              }),
-              $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const items = [{ text: 'root', selected: false, items: [{ text: 'submenu' }] }];
+        const changedItems = [{ text: 'root1', selected: true, items: [{ text: 'submenu1' }] }];
+        const menu = createMenu({
+            items: items,
+            selectionMode: 'single',
+            showFirstSubmenuMode: 'onHover',
+            selectByClick: true,
+            onItemClick: function(e) {
+                e.component.option('items', changedItems);
+            }
+        });
+        const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         $($rootItem).trigger('dxpointermove');
         this.clock.tick(0);
 
-        const submenu = getSubMenuInstance($rootItem), $submenuItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
+        const submenu = getSubMenuInstance($rootItem); const $submenuItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_CLASS).eq(0));
 
         $($submenuItem).trigger('dxclick');
         assert.ok(true, 'menu does not crash');
@@ -462,18 +462,18 @@ QUnit.module('Menu - selection', {
 
     QUnit.test('Try to set selected state of several items via item.selected option 2', function(assert) {
         const items = [
-                { text: 'item1', selected: true },
-                {
-                    text: 'item2',
-                    items: [
-                        { text: 'item2-1', selected: true },
-                        {
-                            text: 'item2-2',
-                            items: [{ text: 'item2-2-1', selected: true }]
-                        }
-                    ]
-                },
-                { text: 'item3', selected: true }];
+            { text: 'item1', selected: true },
+            {
+                text: 'item2',
+                items: [
+                    { text: 'item2-1', selected: true },
+                    {
+                        text: 'item2-2',
+                        items: [{ text: 'item2-2-1', selected: true }]
+                    }
+                ]
+            },
+            { text: 'item3', selected: true }];
 
         let menu;
         let $items;
@@ -490,10 +490,10 @@ QUnit.module('Menu - selection', {
 
     QUnit.test('Selection in different submenus', function(assert) {
         const items = [
-                { text: 'root1', items: [{ text: 'item1-1' }] },
-                { text: 'root2', items: [{ text: 'item2-1' }] },
-                { text: 'root3', items: [{ text: 'item3-1' }] }
-            ];
+            { text: 'root1', items: [{ text: 'item1-1' }] },
+            { text: 'root2', items: [{ text: 'item2-1' }] },
+            { text: 'root3', items: [{ text: 'item3-1' }] }
+        ];
 
         const menu = createMenu({
             items: items,
@@ -537,20 +537,20 @@ QUnit.module('Menu - selection', {
 
     QUnit.test('Change selection in submenu (T310158)', function(assert) {
         const items = [
-                      { text: 'root1', items: [{ text: 'item1-1', selected: true }] },
-                      { text: 'root2', items: [{ text: 'item2-1' }] },
-                      { text: 'root3', items: [{ text: 'item3-1' }] }
-                  ],
-              menu = createMenu({
-                  items: items,
-                  showFirstSubmenuMode: 'onClick',
-                  selectByClick: true,
-                  selectionMode: 'single'
-              }),
-              $item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            { text: 'root1', items: [{ text: 'item1-1', selected: true }] },
+            { text: 'root2', items: [{ text: 'item2-1' }] },
+            { text: 'root3', items: [{ text: 'item3-1' }] }
+        ];
+        const menu = createMenu({
+            items: items,
+            showFirstSubmenuMode: 'onClick',
+            selectByClick: true,
+            selectionMode: 'single'
+        });
+        const $item1 = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($item1).trigger('dxclick');
-        const submenu = getSubMenuInstance($item1), $nestedItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_SELECTED_CLASS));
+        const submenu = getSubMenuInstance($item1); const $nestedItem = $($(submenu._overlay.content()).find('.' + DX_MENU_ITEM_SELECTED_CLASS));
 
         submenu.unselectItem($nestedItem.get(0));
 
@@ -595,9 +595,9 @@ QUnit.module('Menu - selection', {
 
     QUnit.test('Change selection via API function .select()', function(assert) {
         const items = [
-                { text: 'root1', items: [{ text: 'item1-1' }] },
-                { text: 'root2', items: [{ text: 'item2-1' }] }
-            ];
+            { text: 'root1', items: [{ text: 'item1-1' }] },
+            { text: 'root2', items: [{ text: 'item2-1' }] }
+        ];
 
         const menu = createMenu({
             items: items,
@@ -665,19 +665,19 @@ QUnit.module('Menu - selection', {
 
     // T420860
     QUnit.test('It should be possible to select nested submenu by itemData', function(assert) {
-        const items = [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111', selectable: true }] }] }],
-              menu = createMenu({
-                  items: items,
-                  onItemClick: function(e) {
-                      if(e.itemData.selectable) {
-                          e.component.selectItem(e.itemData);
-                      }
-                  }
-              }),
-              $rootItem = menu.instance.itemsContainer().find('.' + DX_MENU_ITEM_CLASS).eq(0),
-              getSubmenuItem = function(submenu, index) {
-                  return $(submenu.itemsContainer()).find('.' + DX_MENU_ITEM_CLASS).eq(index);
-              };
+        const items = [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111', selectable: true }] }] }];
+        const menu = createMenu({
+            items: items,
+            onItemClick: function(e) {
+                if(e.itemData.selectable) {
+                    e.component.selectItem(e.itemData);
+                }
+            }
+        });
+        const $rootItem = menu.instance.itemsContainer().find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const getSubmenuItem = function(submenu, index) {
+            return $(submenu.itemsContainer()).find('.' + DX_MENU_ITEM_CLASS).eq(index);
+        };
 
         try {
             fx.off = false;
@@ -729,12 +729,12 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Submenu should be shown on touch click', function(assert) {
         const menu = createMenu({
-                      showFirstSubmenuMode: 'onClick',
-                      items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }]
-                  }),
-              $itemsContainer = menu.instance.itemsContainer(),
-              $rootItem = menu.instance.itemElements().eq(0),
-              e = $.Event('dxpointerdown', { target: $rootItem.get(0) });
+            showFirstSubmenuMode: 'onClick',
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }]
+        });
+        const $itemsContainer = menu.instance.itemsContainer();
+        const $rootItem = menu.instance.itemElements().eq(0);
+        const e = $.Event('dxpointerdown', { target: $rootItem.get(0) });
 
         $($itemsContainer).trigger(e);
         assert.notOk(e.isDefaultPrevented(), 'item pointerdown should not be prevented');
@@ -804,30 +804,30 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Fire submenu events for all levels', function(assert) {
-        const handlerShowing = sinon.stub(),
-              handlerShown = sinon.stub(),
-              handlerHiding = sinon.stub(),
-              handlerHidden = sinon.stub(),
-              options = {
-                  showFirstSubmenuMode: 'onClick',
-                  showSubmenuMode: 'onClick',
-                  items: [{
-                      text: 'rootItem',
-                      items: [{
-                          text: 'item1',
-                          items: [{ text: 'item1-1' }]
-                      }, {
-                          text: 'item2',
-                          items: [{ text: 'item2-1' }],
-                      }]
-                  }],
-                  onSubmenuShowing: handlerShowing,
-                  onSubmenuShown: handlerShown,
-                  onSubmenuHiding: handlerHiding,
-                  onSubmenuHidden: handlerHidden
-              },
-              menu = createMenu(options),
-              $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const handlerShowing = sinon.stub();
+        const handlerShown = sinon.stub();
+        const handlerHiding = sinon.stub();
+        const handlerHidden = sinon.stub();
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: 'onClick',
+            items: [{
+                text: 'rootItem',
+                items: [{
+                    text: 'item1',
+                    items: [{ text: 'item1-1' }]
+                }, {
+                    text: 'item2',
+                    items: [{ text: 'item2-1' }],
+                }]
+            }],
+            onSubmenuShowing: handlerShowing,
+            onSubmenuShown: handlerShown,
+            onSubmenuHiding: handlerHiding,
+            onSubmenuHidden: handlerHidden
+        };
+        const menu = createMenu(options);
+        const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         // show submenu
         $($rootItem).trigger('dxclick');
@@ -836,7 +836,7 @@ QUnit.module('Menu tests', {
         assert.equal(handlerHiding.callCount, 0);
         assert.equal(handlerHidden.callCount, 0);
 
-        const submenu = getSubMenuInstance($rootItem), $submenuItems = submenu.itemElements();
+        const submenu = getSubMenuInstance($rootItem); const $submenuItems = submenu.itemElements();
 
         // show second level first time
         $($submenuItems.eq(0)).trigger('dxclick');
@@ -854,12 +854,12 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('only visible submenu should be hidden on outside click', function(assert) {
-        const hiddenHandler = sinon.spy(),
-              menu = createMenu({
-                  items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }],
-                  onSubmenuHidden: hiddenHandler
-              }),
-              $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const hiddenHandler = sinon.spy();
+        const menu = createMenu({
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }],
+            onSubmenuHidden: hiddenHandler
+        });
+        const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootItem).trigger('dxclick');
         $(document).trigger('dxpointerdown');
@@ -954,17 +954,17 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Show submenu and sub-submenu by default', function(assert) {
         const items = [
-                {
-                    text: 'itemA',
-                    items: [
-                        {
-                            text: 'itemA-A',
-                            items: [
-                                { text: 'itemA-A-A' }
-                            ]
-                        }
-                    ]
-                }];
+            {
+                text: 'itemA',
+                items: [
+                    {
+                        text: 'itemA-A',
+                        items: [
+                            { text: 'itemA-A-A' }
+                        ]
+                    }
+                ]
+            }];
 
         const options = { items: items };
         const menu = createMenu(options);
@@ -988,17 +988,17 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Show submenu and sub-submenu on hover', function(assert) {
         const items = [
-                {
-                    text: 'itemA',
-                    items: [
-                        {
-                            text: 'itemA-A',
-                            items: [
-                                { text: 'itemA-A-A' }
-                            ]
-                        }
-                    ]
-                }];
+            {
+                text: 'itemA',
+                items: [
+                    {
+                        text: 'itemA-A',
+                        items: [
+                            { text: 'itemA-A-A' }
+                        ]
+                    }
+                ]
+            }];
 
         const options = { showFirstSubmenuMode: 'onHover', items: items };
         const menu = createMenu(options);
@@ -1027,14 +1027,14 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Do not show submenu on hover if item is disabled', function(assert) {
         const items = [
-                {
-                    text: 'itemB',
-                    disabled: true,
-                    items: [
-                        { text: 'itemB-A' }
-                    ]
-                }
-            ];
+            {
+                text: 'itemB',
+                disabled: true,
+                items: [
+                    { text: 'itemB-A' }
+                ]
+            }
+        ];
 
         const menu = createMenu({ showFirstSubmenuMode: 'onHover', items: items });
         const rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
@@ -1051,17 +1051,17 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Show submenu on hover and sub-submenu onClick', function(assert) {
         const items = [
-                {
-                    text: 'itemA',
-                    items: [
-                        {
-                            text: 'itemA-A',
-                            items: [
-                                { text: 'itemA-A-A' }
-                            ]
-                        }
-                    ]
-                }];
+            {
+                text: 'itemA',
+                items: [
+                    {
+                        text: 'itemA-A',
+                        items: [
+                            { text: 'itemA-A-A' }
+                        ]
+                    }
+                ]
+            }];
 
         const options = { showFirstSubmenuMode: 'onHover', showSubmenuMode: 'onClick', items: items };
         const menu = createMenu(options);
@@ -1114,10 +1114,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
-                      showFirstSubmenuMode: 'onHover'
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
+            showFirstSubmenuMode: 'onHover'
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
         $($rootMenuItem).trigger($.Event('dxpointermove', { pointers: [ 1 ] }));
@@ -1133,10 +1133,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
-                      showFirstSubmenuMode: 'onHover'
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
+            showFirstSubmenuMode: 'onHover'
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
         $($rootMenuItem).trigger('dxpointermove');
@@ -1155,10 +1155,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
         $($rootMenuItem).trigger('dxpointermove');
@@ -1172,10 +1172,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 500 }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 500 }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
         $($rootMenuItem).trigger('dxpointermove');
@@ -1192,14 +1192,14 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
-                      showSubmenuMode: { name: 'onHover', delay: 500 }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
+            showSubmenuMode: { name: 'onHover', delay: 500 }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootMenuItem).trigger('dxclick');
 
-        const submenu = getSubMenuInstance($rootMenuItem), $itemsContainer = submenu.itemsContainer(), $rootItem = submenu.itemElements().eq(0);
+        const submenu = getSubMenuInstance($rootMenuItem); const $itemsContainer = submenu.itemsContainer(); const $rootItem = submenu.itemElements().eq(0);
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
 
@@ -1214,14 +1214,14 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [
-                          { text: 'Item 1', items: [{ text: 'Item 11' }] },
-                          { text: 'Item 2' },
-                          { text: 'Item 3', items: [{ text: 'Item 21' }] }
-                      ],
-                      showFirstSubmenuMode: { name: 'onHover', delay: { show: 100, hide: 500 } }
-                  }),
-              $rootMenuItems = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+            items: [
+                { text: 'Item 1', items: [{ text: 'Item 11' }] },
+                { text: 'Item 2' },
+                { text: 'Item 3', items: [{ text: 'Item 21' }] }
+            ],
+            showFirstSubmenuMode: { name: 'onHover', delay: { show: 100, hide: 500 } }
+        });
+        const $rootMenuItems = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItems.eq(0).get(0) }));
         $($rootMenuItems.eq(0)).trigger('dxpointermove');
@@ -1243,10 +1243,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: { show: 500, hide: 400 } }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111' }] }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: { show: 500, hide: 400 } }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootMenuItem).trigger('dxclick');
         let submenu = getSubMenuInstance($rootMenuItem);
@@ -1261,11 +1261,11 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 },
-                      hideSubmenuOnMouseLeave: true
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
         $($rootMenuItem.eq(0)).trigger('dxpointermove');
@@ -1285,11 +1285,11 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 },
-                      hideSubmenuOnMouseLeave: true
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
         $($rootMenuItem.eq(0)).trigger('dxpointermove');
@@ -1314,11 +1314,11 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 },
-                      hideSubmenuOnMouseLeave: true
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
 
         $(menu.element).trigger($.Event('click', { target: $rootMenuItem.eq(0).get(0) }));
         $(menu.element).trigger($.Event('mouseleave', { target: $rootMenuItem.eq(0).get(0), relatedTarget: $rootMenuItem.eq(0).children()[2] }));
@@ -1330,10 +1330,10 @@ QUnit.module('Menu tests', {
 
     QUnit.test('Menu should show after it\'s submenu has been selected', function(assert) {
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
-                      showFirstSubmenuMode: { name: 'onClick', delay: 0 }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2' }],
+            showFirstSubmenuMode: { name: 'onClick', delay: 0 }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $($rootMenuItem).trigger('dxclick');
 
@@ -1351,10 +1351,10 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 }
-                  }),
-              $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 }
+        });
+        const $rootMenuItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
         $(menu.element).trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
         $($rootMenuItem.eq(0)).trigger('dxpointermove');
@@ -1378,19 +1378,19 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu = createMenu({
-                      items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2', items: [{ text: 'item 11' }] }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 50 }
-                  }),
-              hoverMenuItem = function($item) {
-                  $(menu.element).trigger($.Event('dxhoverstart', { target: $item.get(0) }));
-                  $($item).trigger('dxpointermove');
-              },
-              $rootMenuItems = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
+            items: [{ text: 'Item 1', items: [{ text: 'item 11' }] }, { text: 'Item 2', items: [{ text: 'item 11' }] }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 50 }
+        });
+        const hoverMenuItem = function($item) {
+            $(menu.element).trigger($.Event('dxhoverstart', { target: $item.get(0) }));
+            $($item).trigger('dxpointermove');
+        };
+        const $rootMenuItems = $(menu.element).find('.' + DX_MENU_ITEM_CLASS);
 
         hoverMenuItem($rootMenuItems.eq(0));
         this.clock.tick(50);
 
-        const submenu = getSubMenuInstance($rootMenuItems.eq(0)), $submenuItem = submenu.itemElements().eq(0);
+        const submenu = getSubMenuInstance($rootMenuItems.eq(0)); const $submenuItem = submenu.itemElements().eq(0);
 
         hoverMenuItem($rootMenuItems.eq(1));
         this.clock.tick(25);
@@ -1403,10 +1403,10 @@ QUnit.module('Menu tests', {
 
     QUnit.test('click should not be blocked on menu\'s item', function(assert) {
         const menu = createMenu({
-                      items: [{ text: 'Item 1' }]
-                  }),
-              $item = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0),
-              clickHandler = sinon.stub();
+            items: [{ text: 'Item 1' }]
+        });
+        const $item = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const clickHandler = sinon.stub();
 
         try {
             $(document).on('click', clickHandler);
@@ -1422,16 +1422,16 @@ QUnit.module('Menu tests', {
         if(!isDeviceDesktop(assert)) return;
 
         const menu$ = $('#menu').dxMenu({
-                      items: [{
-                          text: 'Item 1',
-                          items: [{
-                              disabled: true, text: 'item 1_1'
-                          }]
-                      }],
-                      showFirstSubmenuMode: { name: 'onHover', delay: 0 },
-                      hideSubmenuOnMouseLeave: true
-                  }),
-              $rootMenuItem = $(menu$).find('.' + DX_MENU_ITEM_CLASS);
+            items: [{
+                text: 'Item 1',
+                items: [{
+                    disabled: true, text: 'item 1_1'
+                }]
+            }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItem = $(menu$).find('.' + DX_MENU_ITEM_CLASS);
 
         menu$.trigger($.Event('dxhoverstart', { target: $rootMenuItem.get(0) }));
 
@@ -1729,7 +1729,7 @@ QUnit.module('keyboard navigation', {
         this.keyboard
             .press('right');
 
-        const $item1 = $(this.$element).find('.' + DX_MENU_ITEM_CLASS).eq(0), submenu = getSubMenuInstance($item1);
+        const $item1 = $(this.$element).find('.' + DX_MENU_ITEM_CLASS).eq(0); const submenu = getSubMenuInstance($item1);
 
         assert.ok(submenu.option('visible'), 'submenu is visible');
 
@@ -1834,7 +1834,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         assert.ok($button.is(':visible'), 'hamburger button is visible on init');
         assert.ok($treeview.is(':hidden'), 'treeview is hidden on init');
@@ -1848,7 +1848,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: false
         });
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS), $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -1863,7 +1863,7 @@ QUnit.module('adaptivity: render', {
 
         menu.option('adaptivityEnabled', false);
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS), $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS), $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -1888,7 +1888,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $overlayContent = $treeview.closest('.dx-overlay-content');
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $overlayContent = $treeview.closest('.dx-overlay-content');
 
         assert.ok($overlayContent.hasClass(DX_ADAPTIVE_MODE_CLASS), 'overlay container has correct class');
     });
@@ -1900,7 +1900,7 @@ QUnit.module('adaptivity: render', {
             rtlEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(), overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('position').at, 'bottom right', 'at position is correct');
         assert.equal(overlay.option('position').my, 'top right', 'my position is correct');
@@ -1912,7 +1912,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(), overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('position').collision, 'flipfit', 'collision strategy is correct');
     });
@@ -1924,19 +1924,19 @@ QUnit.module('adaptivity: render', {
             rtlEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(), overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
 
         assert.ok(overlay.option('closeOnTargetScroll'), 'overlay should close on target scroll');
     });
 
     QUnit.test('Width option should transfer to the adaptive overlay', function(assert) {
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true,
-                      rtlEnabled: true
-                  }),
-              $overlay = this.$element.find('.dx-overlay').first(),
-              overlay = $overlay.dxOverlay('instance');
+            items: this.items,
+            adaptivityEnabled: true,
+            rtlEnabled: true
+        });
+        const $overlay = this.$element.find('.dx-overlay').first();
+        const overlay = $overlay.dxOverlay('instance');
 
         menu.option('width', 301);
 
@@ -1950,7 +1950,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $overlay = this.$element.find('.dx-overlay').first(), overlay = $overlay.dxOverlay('instance');
+        const $overlay = this.$element.find('.dx-overlay').first(); const overlay = $overlay.dxOverlay('instance');
 
         assert.equal(overlay.option('deferRendering'), false, 'defer rendering is disabled for overlay');
     });
@@ -1974,7 +1974,7 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS), $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
+        const $adaptiveContainer = this.$element.find('.' + DX_ADAPTIVE_MODE_CLASS); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS);
 
         assert.equal($button.length, 0, 'button was not rendered');
         assert.equal($treeview.length, 0, 'treeview was not rendered');
@@ -1987,10 +1987,10 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100), windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700), offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(100); const windowHeight = sinon.stub(renderer.fn, 'innerHeight').returns(700); const offset = sinon.stub(renderer.fn, 'offset').returns({ left: 0, top: 200 });
 
         try {
-            const overlay = this.$element.find('.dx-overlay').dxOverlay('instance'), maxHeight = overlay.option('maxHeight');
+            const overlay = this.$element.find('.dx-overlay').dxOverlay('instance'); const maxHeight = overlay.option('maxHeight');
 
             assert.ok(Math.floor(maxHeight()) < windowHeight(), 'maxHeight is correct');
             assert.ok(overlay._wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), 'special class for overlay wrapper');
@@ -2092,15 +2092,15 @@ QUnit.module('adaptivity: transfer options', {
 
     QUnit.test('Some menu options should be transferred to the treeview as is on init', function(assert) {
         const options = [
-                      'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
-                      'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
-                      'itemsExpr', 'itemTemplate', 'selectedExpr',
-                      'selectionMode', 'tabIndex', 'visible'
-                  ],
-              menuOptions = {
-                  items: this.items,
-                  adaptivityEnabled: true
-              };
+            'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation',
+            'disabled', 'displayExpr', 'displayExpr', 'focusStateEnabled', 'hint', 'hoverStateEnabled',
+            'itemsExpr', 'itemTemplate', 'selectedExpr',
+            'selectionMode', 'tabIndex', 'visible'
+        ];
+        const menuOptions = {
+            items: this.items,
+            adaptivityEnabled: true
+        };
 
         $.each(options, function(_, option) {
             menuOptions[option] = 'value';
@@ -2108,7 +2108,7 @@ QUnit.module('adaptivity: transfer options', {
 
         new Menu(this.$element, menuOptions);
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), treeview = $treeview.dxTreeView('instance');
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const treeview = $treeview.dxTreeView('instance');
 
         $.each(options, function(_, option) {
             assert.equal(treeview.option(option), 'value', 'option ' + option + ' was transferred on init');
@@ -2124,14 +2124,14 @@ QUnit.module('adaptivity: transfer options', {
         ];
 
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true
-                  }),
-              that = this;
+            items: this.items,
+            adaptivityEnabled: true
+        });
+        const that = this;
 
         $.each(options, function(_, option) {
             menu.option(option, 'value2');
-            const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), treeview = $treeview.dxTreeView('instance');
+            const $treeview = that.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const treeview = $treeview.dxTreeView('instance');
 
             assert.equal(treeview.option(option), 'value2', 'option ' + option + ' was transferred dynamically');
         });
@@ -2139,12 +2139,12 @@ QUnit.module('adaptivity: transfer options', {
 
     QUnit.test('selectByClick option should be transferred to the treeview', function(assert) {
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true,
-                      selectByClick: false
-                  }),
-              $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0),
-              treeview = $treeview.dxTreeView('instance');
+            items: this.items,
+            adaptivityEnabled: true,
+            selectByClick: false
+        });
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const treeview = $treeview.dxTreeView('instance');
 
         assert.notOk(treeview.option('selectByClick'), 'selectByClick is correct on init');
 
@@ -2155,11 +2155,11 @@ QUnit.module('adaptivity: transfer options', {
 
     QUnit.test('animationEnabled option should be true in the dxTreeView if animation option in the dxMenu is not null', function(assert) {
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true
-                  }),
-              $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0),
-              treeview = $treeview.dxTreeView('instance');
+            items: this.items,
+            adaptivityEnabled: true
+        });
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const treeview = $treeview.dxTreeView('instance');
 
         assert.strictEqual(treeview.option('animationEnabled'), true, 'animation is enabled in the dxTreeView by default');
 
@@ -2268,7 +2268,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $($button).trigger('dxclick');
 
@@ -2284,7 +2284,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $($button).trigger('dxclick');
         $($button).trigger('dxclick');
@@ -2301,7 +2301,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $item = this.$element.find('.' + DX_TREEVIEW_ITEM_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $item = this.$element.find('.' + DX_TREEVIEW_ITEM_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $($item).trigger('dxclick');
@@ -2316,7 +2316,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $(document).trigger('dxpointerdown');
@@ -2331,7 +2331,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $($button).trigger('dxpointerdown');
@@ -2377,11 +2377,11 @@ QUnit.module('adaptivity: behavior', {
         $('#qunit-fixture').width(500);
 
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true,
-                      visible: false
-                  }),
-              $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+            items: this.items,
+            adaptivityEnabled: true,
+            visible: false
+        });
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $('#qunit-fixture').width(50);
         menu.option('visible', true);
@@ -2411,11 +2411,11 @@ QUnit.module('adaptivity: behavior', {
         $('#qunit-fixture').width(500);
 
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true,
-                      visible: false
-                  }),
-              $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+            items: this.items,
+            adaptivityEnabled: true,
+            visible: false
+        });
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $('#qunit-fixture').width(50);
         $itemsContainer.width(50);
@@ -2429,11 +2429,11 @@ QUnit.module('adaptivity: behavior', {
         $('#qunit-fixture').width(500);
 
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: false,
-                      visible: false
-                  }),
-              $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
+            items: this.items,
+            adaptivityEnabled: false,
+            visible: false
+        });
+        const $itemsContainer = this.$element.find('.' + DX_MENU_HORIZONTAL).eq(0);
 
         $('#qunit-fixture').width(50);
         menu.option('visible', true);
@@ -2482,7 +2482,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
 
         $($button).trigger('dxclick');
         $('#qunit-fixture').width(500);
@@ -2497,7 +2497,7 @@ QUnit.module('adaptivity: behavior', {
             adaptivityEnabled: true
         });
 
-        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0), $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0), $item2 = $treeview.find('.dx-treeview-item').eq(1), overlay = this.$element.find('.dx-overlay').dxOverlay('instance'), overlayPositioned = sinon.stub(), $overlayContent = $(overlay.content());
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0); const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0); const $item2 = $treeview.find('.dx-treeview-item').eq(1); const overlay = this.$element.find('.dx-overlay').dxOverlay('instance'); const overlayPositioned = sinon.stub(); const $overlayContent = $(overlay.content());
 
         overlay.on('positioned', overlayPositioned);
 
@@ -2515,11 +2515,11 @@ QUnit.module('adaptivity: behavior', {
 
     QUnit.test('Adaptive width limit should contain only root items', function(assert) {
         const menu = new Menu(this.$element, {
-                      items: this.items,
-                      adaptivityEnabled: true
-                  }),
-              $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
-              $item2 = menu.itemsContainer().find('.' + DX_MENU_ITEM_CLASS).eq(1);
+            items: this.items,
+            adaptivityEnabled: true
+        });
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $item2 = menu.itemsContainer().find('.' + DX_MENU_ITEM_CLASS).eq(1);
 
         $('#qunit-fixture').width(50);
         resizeCallbacks.fire();

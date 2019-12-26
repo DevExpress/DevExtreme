@@ -34,7 +34,7 @@ QUnit.module('indicator with browser animation', {
     });
 
     QUnit.test('render animated indicator markup', function(assert) {
-        const $indicator = $('#loadIndicator'), loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
+        const $indicator = $('#loadIndicator'); const loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
 
         assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
         assert.equal($indicator.find('.' + LOADINDICATOR_ICON).length, 1, 'Icon div created');
@@ -45,9 +45,9 @@ QUnit.module('indicator with browser animation', {
 
     QUnit.test('visible changes visibility option', function(assert) {
         const $indicator = $('#loadIndicator').dxLoadIndicator({
-                      visible: false
-                  }),
-              loadIndicator = $indicator.dxLoadIndicator('instance');
+            visible: false
+        });
+        const loadIndicator = $indicator.dxLoadIndicator('instance');
 
         assert.ok($indicator.is(':hidden'));
 

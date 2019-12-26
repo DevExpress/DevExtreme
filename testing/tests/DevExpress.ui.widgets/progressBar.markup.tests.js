@@ -43,9 +43,9 @@ QUnit.module('ProgressBar markup', {
         assert.expect(2);
 
         const $progressBar = this.$element.dxProgressBar({
-                      showStatus: false
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance');
+            showStatus: false
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
 
         assert.equal($progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS)).length, 0, 'Status div hasn\'t been created');
 
@@ -55,23 +55,23 @@ QUnit.module('ProgressBar markup', {
 
     QUnit.test('value display in status', function(assert) {
         const $progressBar = this.$element.dxProgressBar({
-                      value: 10
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance'),
-              $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+            value: 10
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
+        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
 
         assert.equal($status.text(), 'Progress: ' + progressBar.option('value') + '%', 'status text is right');
     });
 
     QUnit.test('custom status format', function(assert) {
         const $progressBar = this.$element.dxProgressBar({
-                      value: 10,
-                      statusFormat: function(value) {
-                          return 'Customised value: ' + value * 100;
-                      }
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance'),
-              $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+            value: 10,
+            statusFormat: function(value) {
+                return 'Customised value: ' + value * 100;
+            }
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
+        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
         assert.equal($status.text(), 'Customised value: ' + progressBar.option('value'), 'status text is right');
     });
 
@@ -80,7 +80,7 @@ QUnit.module('ProgressBar markup', {
             'left', 'right', 'bottom left', 'bottom right', 'bottom center', 'top left', 'top right', 'top center'
         ];
 
-        const $progressBar = this.$element.dxProgressBar({}), progressBar = $progressBar.dxProgressBar('instance'), $wrapper = $progressBar.find('.' + PROGRESSBAR_WRAPPER_CLASS);
+        const $progressBar = this.$element.dxProgressBar({}); const progressBar = $progressBar.dxProgressBar('instance'); const $wrapper = $progressBar.find('.' + PROGRESSBAR_WRAPPER_CLASS);
 
         $.each(possiblePositions, function(_, position) {
             progressBar.option('statusPosition', position);
@@ -100,11 +100,11 @@ QUnit.module('ProgressBar markup', {
         assert.expect(2);
 
         const $progressBar = this.$element.dxProgressBar({
-                      value: null
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance');
+            value: null
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length, defaultSegmentCount = progressBar.option('_animatingSegmentCount');
+        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length; const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal($progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length, 1, 'Segment wrapper has been created');
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'Segments have been created');
@@ -112,12 +112,12 @@ QUnit.module('ProgressBar markup', {
 
     QUnit.test('render indeterminate state with default option segments count', function(assert) {
         const $progressBar = this.$element.dxProgressBar({
-                      value: undefined,
-                      showStatus: false
-                  }),
-              progressBar = $progressBar.dxProgressBar('instance');
+            value: undefined,
+            showStatus: false
+        });
+        const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length, defaultSegmentCount = progressBar.option('_animatingSegmentCount');
+        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length; const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'dxProgressBar have been created with correct segment count');
     });

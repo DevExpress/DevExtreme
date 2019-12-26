@@ -985,7 +985,7 @@ QUnit.module('Templates', () => {
             value: [1],
             searchEnabled: true,
             fieldTemplate(itemData, container) {
-                const $textBox = $('<div>').dxTextBox(), $field = $('<div>Test<div/>');
+                const $textBox = $('<div>').dxTextBox(); const $field = $('<div>Test<div/>');
 
                 assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
                 $(container).append($field).append($textBox);
