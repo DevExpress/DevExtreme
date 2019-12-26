@@ -1,5 +1,5 @@
-const renderer = require('core/renderer');
-const typeUtils = require('core/utils/type');
+import renderer from 'core/renderer';
+import typeUtils from 'core/utils/type';
 
 const originalCSSMethod = renderer.fn.css;
 

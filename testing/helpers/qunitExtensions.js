@@ -385,7 +385,8 @@
             }
         };
 
-        for(const name in methodHooks) {
+        let name;
+        for(name in methodHooks) {
             window[name] = createMethodWrapper(window[name], methodHooks[name]);
         }
 

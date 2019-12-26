@@ -1,7 +1,9 @@
-const jQuery = require('jquery');
-const compareVersions = require('../core/utils/version').compare;
-const errors = require('../core/utils/error');
-const useJQuery = require('./jquery/use_jquery')();
+import jQuery from 'jquery';
+import { compare as compareVersions } from '../core/utils/version';
+import errors from '../core/utils/error';
+import useJQueryMethod from './jquery/use_jquery';
+
+const useJQuery = useJQueryMethod();
 
 if(useJQuery && compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
     throw errors.Error('E0012');

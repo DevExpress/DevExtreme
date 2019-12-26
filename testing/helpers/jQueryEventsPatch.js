@@ -1,6 +1,6 @@
 /* global jQuery */
 
-const eventsEngine = require('events/core/events_engine');
+import eventsEngine from 'events/core/events_engine';
 
 let originalJQueryEvent;
 const originalJQueryMethods = {};

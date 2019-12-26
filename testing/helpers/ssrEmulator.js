@@ -1,6 +1,6 @@
-const domAdapter = require('core/dom_adapter');
-const windowUtils = require('core/utils/window');
-const serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
+import serverSideDOMAdapter from './serverSideDOMAdapterPatch.js';
 
 (function emulateNoContains() {
     const originalContains = Element.prototype.contains;

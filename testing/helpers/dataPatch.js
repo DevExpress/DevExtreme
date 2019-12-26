@@ -1,6 +1,6 @@
 /* global jQuery */
 
-const dataStrategy = require('core/element_data');
+import dataStrategy from 'core/element_data';
 
 let originalCleanData;
 
