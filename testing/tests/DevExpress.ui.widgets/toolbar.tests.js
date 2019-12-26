@@ -142,10 +142,10 @@ function checkItemsLocation($toolbar, expected) {
     const $afterItems = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
     const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
 
-    QUnit.assert.equal($beforeItems.length, expected.beforeItemsCount, 'items count with before location value');
-    QUnit.assert.equal($centerItems.length, expected.centerItemsCount, 'items count with center location value');
-    QUnit.assert.equal($afterItems.length, expected.afterItemsCount, 'items count with after location value');
-    QUnit.assert.equal($menuItems.length, expected.menuItemsCount, 'menu items count');
+    QUnit.assert.equal($beforeItems.length, expected.beforeItemsCount || 0, 'items count with before location value');
+    QUnit.assert.equal($centerItems.length, expected.centerItemsCount || 0, 'items count with center location value');
+    QUnit.assert.equal($afterItems.length, expected.afterItemsCount || 0, 'items count with after location value');
+    QUnit.assert.equal($menuItems.length, expected.menuItemsCount || 0, 'menu items count');
 }
 
 ['before', 'center', 'after', undefined].forEach((location) => {
@@ -154,41 +154,33 @@ function checkItemsLocation($toolbar, expected) {
             QUnit.test(`Change item location at runtime (T844890), location: ${location}, locateInMenu: ${locateInMenu}, width: ${toolbarWidth}`, function(assert) {
                 const ITEM_WIDTH = 100;
                 const $toolbar = this.element.dxToolbar({
-                        items: [
-                            { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH },
-                        ],
+                        items: [ { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH } ],
                         width: toolbarWidth
                     }),
                     toolbar = $toolbar.dxToolbar('instance');
 
-                const getExpectedCountConfig = (location, locateInMenu) => {
+                const getExpectedCountConfig = (location) => {
                     if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
-                        return {
-                            menuItemsCount: 1,
-                            beforeItemsCount: 0,
-                            centerItemsCount: 0,
-                            afterItemsCount: 0
-                        };
+                        return { menuItemsCount: 1 };
                     }
 
                     return {
-                        menuItemsCount: 0,
                         beforeItemsCount: location === 'before' ? 1 : 0,
                         centerItemsCount: (location === 'center' || location === undefined) ? 1 : 0,
                         afterItemsCount: location === 'after' ? 1 : 0
                     };
                 };
 
-                checkItemsLocation($toolbar, getExpectedCountConfig(location, locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig(location));
 
                 toolbar.option('items[0].location', 'center');
-                checkItemsLocation($toolbar, getExpectedCountConfig('center', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('center'));
 
                 toolbar.option('items[0].location', 'after');
-                checkItemsLocation($toolbar, getExpectedCountConfig('after', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('after'));
 
                 toolbar.option('items[0].location', 'before');
-                checkItemsLocation($toolbar, getExpectedCountConfig('before', locateInMenu));
+                checkItemsLocation($toolbar, getExpectedCountConfig('before'));
             });
         });
     });
