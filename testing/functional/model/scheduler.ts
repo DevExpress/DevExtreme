@@ -239,7 +239,7 @@ export default class Scheduler extends Widget {
         return this.dateTableRows.nth(rowIndex).find(`.${CLASS.dateTableCell}`).nth(cellIndex);
     }
 
-    getallDayTableCell(cellIndex: number = 0): Selector {
+    getAllDayTableCell(cellIndex: number = 0): Selector {
         return this.allDayTableCells.nth(cellIndex);
     }
 
