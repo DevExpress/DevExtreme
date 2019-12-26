@@ -10,7 +10,7 @@ module.exports = {
             diagnostics: false, // set to true to enable type checking
         }
     },
-    moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     preset: 'ts-jest',
     setupFiles: [
         path.join(__dirname, './testing/renovation/setup-enzyme.js'),

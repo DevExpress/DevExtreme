@@ -10,8 +10,7 @@ const DEST = 'js';
 
 const knownErrors = [
     'Cannot find module \'preact\'.',
-    'Cannot find module \'preact/hooks\'.',
-    'Cannot find module \'csstype\'.'
+    'Cannot find module \'preact/hooks\'.'
 ];
 
 gulp.task('generate-components', function() {
@@ -25,7 +24,7 @@ gulp.task('generate-components', function() {
         }))
         .pipe(tsProject({
             error(e) {
-                if(!knownErrors.some(i => e.message.endsWith(i))) {
+                if(!knownErrors.some(i => e.message.endsWith(i)) && e.message.indexOf('node_modules/@types') === -1) {
                     console.log(e.message);
                 }
             },

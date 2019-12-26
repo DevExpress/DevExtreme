@@ -63,7 +63,7 @@ const getAttributes = (attrs) => {
     }
     return elementAttributes;
 };
-const viewModelFunction = (model) => {
+export const viewModelFunction = (model) => {
     let icon;
     if(model.icon || model.type === 'back') {
         icon = getImageContainerJSX(model.icon || 'back');
@@ -72,7 +72,7 @@ const viewModelFunction = (model) => {
     return Object.assign({}, model, { elementAttributes, cssClasses: getCssClasses(model), style: { width: model.width,
         height: model.height }, icon });
 };
-const viewFunction = (viewModel) => (Preact.h('div', Object.assign({}, viewModel.elementAttr, { className: viewModel.cssClasses, title: viewModel.hint, style: viewModel.style, hidden: !viewModel.visible, onPointerOver: viewModel.onPointerOver, onPointerOut: viewModel.onPointerOut, onPointerDown: viewModel.onPointerDown, onClick: viewModel.onClickHandler }), viewModel.contentRender && (Preact.h('div', { className: 'dx-button-content' },
+export const viewFunction = (viewModel) => (Preact.h('div', Object.assign({}, viewModel.elementAttr, { className: viewModel.cssClasses, title: viewModel.hint, style: viewModel.style, hidden: !viewModel.visible, onPointerOver: viewModel.onPointerOver, onPointerOut: viewModel.onPointerOut, onPointerDown: viewModel.onPointerDown, onClick: viewModel.onClickHandler }), viewModel.contentRender && (Preact.h('div', { className: 'dx-button-content' },
     Preact.h(viewModel.contentRender, { icon: viewModel.icon, text: viewModel.text }))) || (Preact.h('div', { className: 'dx-button-content' },
     viewModel.icon,
     viewModel.text && Preact.h('span', { className: 'dx-button-text' }, viewModel.text)))));

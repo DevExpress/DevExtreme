@@ -1,7 +1,7 @@
 import Button, { viewModelFunction, viewFunction } from '../../js/ui/test-button';
 
-// import * as React from 'react';
-import { shallow } from 'enzyme';
+import React from 'react';
+import { mount, shallow } from 'enzyme';
 
 describe('Button', () => {
     it('should render text', () => {
@@ -11,6 +11,18 @@ describe('Button', () => {
         const tree = shallow(viewFunction(viewModelFunction(model)));
 
         expect(tree.find('.dx-button-text').text()).toBe('My button');
+    });
+
+    it('should render template', () => {
+        const model = new Button();
+        model.text = 'My button';
+
+        model.contentRender = ({text}) => (<div className="custom-content">{text}</div>);
+
+        const tree = mount(viewFunction(viewModelFunction(model)));
+
+        expect(tree.find('.dx-button-content').children().props().text).toBe('My button');
+        expect(tree.find('.dx-button-content .custom-content').text()).toBe('My button');
     });
 
     it('should have dx-widget class', () => {
