@@ -1622,8 +1622,8 @@ declare module DevExpress.fileProvider {
     }
     /** @name ArrayFileProvider.Options */
     export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
-        /** @name ArrayFileProvider.Options.content */
-        content?: string | Function;
+        /** @name ArrayFileProvider.Options.contentExpr */
+        contentExpr?: string | Function;
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
         /** @name ArrayFileProvider.Options.itemsExpr */
@@ -9054,6 +9054,8 @@ declare module DevExpress.viz {
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /** @name dxPolarChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPolarChartAdaptiveLayout;
+        /** @name dxPolarChart.Options.annotations */
+        annotations?: Array<dxPolarChartAnnotationConfig | any>;
         /** @name dxPolarChart.Options.argumentAxis */
         argumentAxis?: dxPolarChartArgumentAxis;
         /** @name dxPolarChart.Options.barGroupPadding */
@@ -9063,6 +9065,8 @@ declare module DevExpress.viz {
         /** @deprecated */
         /** @name dxPolarChart.Options.barWidth */
         barWidth?: number;
+        /** @name dxPolarChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
         /** @name dxPolarChart.Options.commonSeriesSettings */
@@ -9434,6 +9438,18 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
         /** @name dxPolarChart.resetVisualRange() */
         resetVisualRange(): void;
+    }
+    /** @name dxPolarChartAnnotationConfig */
+    export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
+        /** @name dxPolarChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPolarChartCommonAnnotationConfig */
+    export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+        /** @name dxPolarChartCommonAnnotationConfig.angle */
+        angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.radius */
+        radius?: number;
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {

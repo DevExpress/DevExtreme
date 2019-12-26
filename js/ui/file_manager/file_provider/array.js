@@ -43,7 +43,7 @@ class ArrayFileProvider extends FileProvider {
          * @type string|function(fileItem)
          */
         /**
-         * @name ArrayFileProviderOptions.content
+         * @name ArrayFileProviderOptions.contentExpr
          * @type string|function(fileItem)
          */
 
