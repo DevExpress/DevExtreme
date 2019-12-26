@@ -864,9 +864,6 @@ module.exports = function() {
     QUnit.test('format: several words', function(assert) {
         assert.equal(localization.formatNumber(0, { type: 'currency thousands', currency: undefined, precision: 0 }), '$0K');
     });
-    QUnit.test('getOpenXmlCurrencyFormat', function(assert) {
-        assert.equal(numberLocalization.getOpenXmlCurrencyFormat(), '$#,##0{0}_);\\($#,##0{0}\\)');
-    });
 
     QUnit.module('Localization custom functions');
 
