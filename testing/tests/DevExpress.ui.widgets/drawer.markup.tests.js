@@ -35,143 +35,144 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('rendering');
+QUnit.module('rendering', () => {
+    QUnit.test('render drawer', assert => {
+        const $element = $('#drawer').dxDrawer({});
 
-QUnit.test('render drawer', assert => {
-    const $element = $('#drawer').dxDrawer({});
-
-    assert.ok($element.hasClass(DRAWER_CLASS), 'drawer rendered');
-    assert.equal($element.find('.' + DRAWER_WRAPPER_CLASS).length, 1, 'drawer has wrapper');
-    assert.equal($element.find('.' + DRAWER_PANEL_CONTENT_CLASS).length, 1, 'drawer has panel container');
-    assert.equal($element.find('.' + DRAWER_CONTENT_CLASS).length, 1, 'drawer has content');
-});
-
-QUnit.test('drawer should have correct mode class by default', assert => {
-    const $element = $('#drawer').dxDrawer();
-
-    assert.ok($element.hasClass(DRAWER_CLASS + '-shrink'), 'drawer class is correct');
-});
-
-QUnit.test('drawer should have correct revealMode class by default', assert => {
-    const $element = $('#drawer').dxDrawer();
-
-    assert.ok($element.hasClass(DRAWER_CLASS + '-slide'), 'drawer class is correct');
-});
-
-QUnit.test('render drawer content', assert => {
-    const $element = $('#drawer').dxDrawer({});
-    const $content = $element.find('.' + DRAWER_CONTENT_CLASS);
-
-    assert.equal($content.text().trim(), 'Test Content', 'drawer content was rendered');
-});
-
-
-QUnit.test('opened class should be applied correctly', assert => {
-    const $element = $('#drawer').dxDrawer({
-        opened: true
+        assert.ok($element.hasClass(DRAWER_CLASS), 'drawer rendered');
+        assert.equal($element.find('.' + DRAWER_WRAPPER_CLASS).length, 1, 'drawer has wrapper');
+        assert.equal($element.find('.' + DRAWER_PANEL_CONTENT_CLASS).length, 1, 'drawer has panel container');
+        assert.equal($element.find('.' + DRAWER_CONTENT_CLASS).length, 1, 'drawer has content');
     });
 
-    const instance = $element.dxDrawer('instance');
+    QUnit.test('drawer should have correct mode class by default', assert => {
+        const $element = $('#drawer').dxDrawer();
 
-    assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, 'drawer has opened class');
-
-    instance.option('opened', false);
-
-    assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, 'drawer hasn\'t opened class');
-});
-
-QUnit.test('custom template for panel should be rendered correctly', assert => {
-    const $element = $('#contentTemplate').dxDrawer({
-        template: 'customPanel'
+        assert.ok($element.hasClass(DRAWER_CLASS + '-shrink'), 'drawer class is correct');
     });
 
-    const $panel = $($element.dxDrawer('instance').content());
+    QUnit.test('drawer should have correct revealMode class by default', assert => {
+        const $element = $('#drawer').dxDrawer();
 
-    assert.equal($panel.text().trim(), 'Test panel Template', 'panel content text is correct');
-});
+        assert.ok($element.hasClass(DRAWER_CLASS + '-slide'), 'drawer class is correct');
+    });
 
-QUnit.test('templates should be dom nodes without jQuery', assert => {
-    assert.expect(2);
-    $('#contentTemplate').dxDrawer({
-        template(element) {
-            assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
-        },
-        contentTemplate(element) {
-            assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
-        }
+    QUnit.test('render drawer content', assert => {
+        const $element = $('#drawer').dxDrawer({});
+        const $content = $element.find('.' + DRAWER_CONTENT_CLASS);
+
+        assert.equal($content.text().trim(), 'Test Content', 'drawer content was rendered');
+    });
+
+
+    QUnit.test('opened class should be applied correctly', assert => {
+        const $element = $('#drawer').dxDrawer({
+            opened: true
+        });
+
+        const instance = $element.dxDrawer('instance');
+
+        assert.ok($element.hasClass(OPENED_STATE_CLASS), 1, 'drawer has opened class');
+
+        instance.option('opened', false);
+
+        assert.notOk($element.hasClass(OPENED_STATE_CLASS), 1, 'drawer hasn\'t opened class');
+    });
+
+    QUnit.test('custom template for panel should be rendered correctly', assert => {
+        const $element = $('#contentTemplate').dxDrawer({
+            template: 'customPanel'
+        });
+
+        const $panel = $($element.dxDrawer('instance').content());
+
+        assert.equal($panel.text().trim(), 'Test panel Template', 'panel content text is correct');
+    });
+
+    QUnit.test('templates should be dom nodes without jQuery', assert => {
+        assert.expect(2);
+        $('#contentTemplate').dxDrawer({
+            template(element) {
+                assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
+            },
+            contentTemplate(element) {
+                assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
+            }
+        });
+    });
+
+    QUnit.test('custom content template for content should be rendered correctly', assert => {
+        const $element = $('#contentTemplate').dxDrawer({
+            contentTemplate: 'customContent'
+        });
+
+        const $content = $($element.dxDrawer('instance').viewContent());
+
+        assert.equal($content.text().trim(), 'Test Content Template', 'content text is correct');
+    });
+
+    QUnit.test('render panel positions', assert => {
+        const $element = $('#contentTemplate').dxDrawer({
+            position: 'right',
+            openedStateMode: 'shrink',
+            opened: true
+        });
+        const instance = $element.dxDrawer('instance');
+
+        assert.notOk($element.hasClass(DRAWER_CLASS + '-left'), 'there is no left panel position class');
+        assert.ok($element.hasClass(DRAWER_CLASS + '-right'), 'right panel position class added');
+
+        instance.option('position', 'top');
+
+        assert.notOk($element.hasClass(DRAWER_CLASS + '-right'), 'right panel position class has been removed');
+        assert.notOk($element.hasClass(DRAWER_CLASS + '-left'), 'right panel position class has been removed');
+        assert.ok($element.hasClass(DRAWER_CLASS + '-top'), 'top panel position class added');
+    });
+
+    QUnit.test('shader should be rendered by default if panel is visible', assert => {
+        const $element = $('#drawer').dxDrawer({
+            opened: true
+        });
+
+        assert.equal($element.find('.' + DRAWER_SHADER_CLASS).length, 1, 'drawer has shader');
+    });
+
+    QUnit.test('shader should not be rendered if shading = false', assert => {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: false
+        });
+
+        assert.equal($element.find('.' + DRAWER_SHADER_CLASS).length, 1, 'drawer has shader');
     });
 });
 
-QUnit.test('custom content template for content should be rendered correctly', assert => {
-    const $element = $('#contentTemplate').dxDrawer({
-        contentTemplate: 'customContent'
+QUnit.module('push mode', () => {
+    QUnit.test('drawer should have correct class depending on mode', assert => {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'push'
+        });
+
+        assert.ok($element.hasClass(DRAWER_CLASS + '-push'), 'drawer class is correct');
+    });
+});
+
+QUnit.module('overlap mode', () => {
+    QUnit.test('drawer should have correct class depending on mode', assert => {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'overlap'
+        });
+
+        assert.ok($element.hasClass(DRAWER_CLASS + '-overlap'), 'drawer class is correct');
     });
 
-    const $content = $($element.dxDrawer('instance').viewContent());
+    QUnit.test('drawer panel should be overlay in overlap mode', assert => {
+        const drawer = $('#drawer').dxDrawer({
+            openedStateMode: 'overlap'
+        }).dxDrawer('instance');
 
-    assert.equal($content.text().trim(), 'Test Content Template', 'content text is correct');
-});
-
-QUnit.test('render panel positions', assert => {
-    const $element = $('#contentTemplate').dxDrawer({
-        position: 'right',
-        openedStateMode: 'shrink',
-        opened: true
+        const $panel = drawer.content();
+        assert.ok($($panel).hasClass('dx-overlay'), 'drawer panel is overlay');
     });
-    const instance = $element.dxDrawer('instance');
-
-    assert.notOk($element.hasClass(DRAWER_CLASS + '-left'), 'there is no left panel position class');
-    assert.ok($element.hasClass(DRAWER_CLASS + '-right'), 'right panel position class added');
-
-    instance.option('position', 'top');
-
-    assert.notOk($element.hasClass(DRAWER_CLASS + '-right'), 'right panel position class has been removed');
-    assert.notOk($element.hasClass(DRAWER_CLASS + '-left'), 'right panel position class has been removed');
-    assert.ok($element.hasClass(DRAWER_CLASS + '-top'), 'top panel position class added');
 });
 
-QUnit.test('shader should be rendered by default if panel is visible', assert => {
-    const $element = $('#drawer').dxDrawer({
-        opened: true
-    });
-
-    assert.equal($element.find('.' + DRAWER_SHADER_CLASS).length, 1, 'drawer has shader');
-});
-
-QUnit.test('shader should not be rendered if shading = false', assert => {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: false
-    });
-
-    assert.equal($element.find('.' + DRAWER_SHADER_CLASS).length, 1, 'drawer has shader');
-});
-
-QUnit.module('push mode');
-
-QUnit.test('drawer should have correct class depending on mode', assert => {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'push'
-    });
-
-    assert.ok($element.hasClass(DRAWER_CLASS + '-push'), 'drawer class is correct');
-});
-
-QUnit.module('overlap mode');
-
-QUnit.test('drawer should have correct class depending on mode', assert => {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'overlap'
-    });
-
-    assert.ok($element.hasClass(DRAWER_CLASS + '-overlap'), 'drawer class is correct');
-});
-
-QUnit.test('drawer panel should be overlay in overlap mode', assert => {
-    const drawer = $('#drawer').dxDrawer({
-        openedStateMode: 'overlap'
-    }).dxDrawer('instance');
-
-    const $panel = drawer.content();
-    assert.ok($($panel).hasClass('dx-overlay'), 'drawer panel is overlay');
-});

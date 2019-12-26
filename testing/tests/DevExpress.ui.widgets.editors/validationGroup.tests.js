@@ -37,22 +37,23 @@ QUnit.module('General', {
     beforeEach: function() {
         this.fixture = new Fixture();
     }
-});
+}, () => {
+    QUnit.test('validator should find group after dxshown event is triggered', function(assert) {
+        var $container = $('#dxValidationGroup');
+        var group = this.fixture.createGroup($container);
+        var $validator = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        });
+        var validator = $validator.dxValidator('instance');
+        validator.validate = sinon.spy(validator.validate);
 
-QUnit.test('validator should find group after dxshown event is triggered', function(assert) {
-    var $container = $('#dxValidationGroup');
-    var group = this.fixture.createGroup($container);
-    var $validator = $('<div>').dxValidator({
-        adapter: sinon.createStubInstance(DefaultAdapter)
+        // act
+        $validator.appendTo($container);
+        domUtils.triggerShownEvent($container);
+        ValidationEngine.validateGroup(group);
+
+        // assert
+        assert.ok(validator.validate.calledOnce, 'Validator should be validated as part of group');
     });
-    var validator = $validator.dxValidator('instance');
-    validator.validate = sinon.spy(validator.validate);
-
-    // act
-    $validator.appendTo($container);
-    domUtils.triggerShownEvent($container);
-    ValidationEngine.validateGroup(group);
-
-    // assert
-    assert.ok(validator.validate.calledOnce, 'Validator should be validated as part of group');
 });
+
