@@ -136,18 +136,6 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
     assert.equal(margin, '0px auto', 'aligned by center');
 });
 
-function checkItemsLocation($toolbar, expected) {
-    const $beforeItems = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
-    const $centerItems = $toolbar.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
-    const $afterItems = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
-    const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
-
-    QUnit.assert.equal($beforeItems.length, expected.beforeItemsCount || 0, 'items count with before location value');
-    QUnit.assert.equal($centerItems.length, expected.centerItemsCount || 0, 'items count with center location value');
-    QUnit.assert.equal($afterItems.length, expected.afterItemsCount || 0, 'items count with after location value');
-    QUnit.assert.equal($menuItems.length, expected.menuItemsCount || 0, 'menu items count');
-}
-
 ['before', 'center', 'after', undefined].forEach((location) => {
     ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
         [10 /* not enough space to show items */, 1000 /* enough space to show items */].forEach((toolbarWidth) => {
@@ -159,28 +147,35 @@ function checkItemsLocation($toolbar, expected) {
                     }),
                     toolbar = $toolbar.dxToolbar('instance');
 
-                const getExpectedCountConfig = (location) => {
-                    if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
-                        return { menuItemsCount: 1 };
-                    }
+                const checkItemsLocation = ($toolbar, expected) => {
+                    const $beforeItems = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                    const $centerItems = $toolbar.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                    const $afterItems = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                    const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
 
-                    return {
-                        beforeItemsCount: location === 'before' ? 1 : 0,
-                        centerItemsCount: (location === 'center' || location === undefined) ? 1 : 0,
-                        afterItemsCount: location === 'after' ? 1 : 0
-                    };
+                    if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
+                        QUnit.assert.equal($menuItems.length, 1, 'menu items count for ');
+                        QUnit.assert.equal($beforeItems.length, 0, 'items count with before location value');
+                        QUnit.assert.equal($centerItems.length, 0, 'items count with center location value');
+                        QUnit.assert.equal($afterItems.length, 0, 'items count with after location value');
+                    } else {
+                        QUnit.assert.equal($menuItems.length, 0, 'menu items count');
+                        QUnit.assert.equal($beforeItems.length, expected.before || 0, 'items count with before location value');
+                        QUnit.assert.equal($centerItems.length, expected.center || 0, 'items count with center location value');
+                        QUnit.assert.equal($afterItems.length, expected.after || 0, 'items count with after location value');
+                    }
                 };
 
-                checkItemsLocation($toolbar, getExpectedCountConfig(location));
+                checkItemsLocation($toolbar, { [location]: 1 });
 
                 toolbar.option('items[0].location', 'center');
-                checkItemsLocation($toolbar, getExpectedCountConfig('center'));
+                checkItemsLocation($toolbar, { center: 1 });
 
                 toolbar.option('items[0].location', 'after');
-                checkItemsLocation($toolbar, getExpectedCountConfig('after'));
+                checkItemsLocation($toolbar, { after: 1 });
 
                 toolbar.option('items[0].location', 'before');
-                checkItemsLocation($toolbar, getExpectedCountConfig('before'));
+                checkItemsLocation($toolbar, { before: 1 });
             });
         });
     });
