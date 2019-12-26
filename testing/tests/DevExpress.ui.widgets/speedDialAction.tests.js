@@ -843,18 +843,18 @@ QUnit.module('add index option', {
     });
 });
 
-QUnit.module('check action buttons events', (hooks) => {
-    hooks.beforeEach(() => {
+QUnit.module('check action buttons events', {
+    beforeEach: function() {
         fx.off = true;
-    }),
+    },
 
-    hooks.afterEach(() => {
+    afterEach: function() {
         fx.off = false;
 
         $('#fab-one').dxSpeedDialAction('instance').dispose();
         $('#fab-two').dxSpeedDialAction('instance').dispose();
-    }),
-
+    }
+}, () => {
     QUnit.test('trigger and args', function(assert) {
         const contentReadyStub = sinon.stub();
         const contentReadyHandlerStub = sinon.stub();
