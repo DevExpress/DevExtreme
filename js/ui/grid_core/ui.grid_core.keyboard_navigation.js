@@ -479,7 +479,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(this._focusCell($cell)) {
             if(!this._isRowEditMode() && isEditingAllowed) {
-                this._editingController.editCell(this.getVisibleRowIndex(), this._focusedCellPosition.columnIndex);
+                this._editingController.editCell(this.getVisibleRowIndex(), this.getVisibleColumnIndex());
             } else {
                 this._focusInteractiveElement($cell, eventArgs.shift);
             }
@@ -531,8 +531,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return isOriginalHandlerRequired;
     },
     _getNextCellByTabKey: function($event, direction, elementType) {
-        var $cell = this._getNextCell(direction, elementType),
-            args = $cell && this._fireFocusedCellChanging($event, $cell, true);
+        let $cell = this._getNextCell(direction, elementType);
+        const args = $cell && this._fireFocusedCellChanging($event, $cell, true);
 
         if(!args || args.cancel) {
             return;
@@ -1390,14 +1390,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
     // #region Editing
     _startEditing: function(eventArgs, fastEditingKey) {
         var focusedCellPosition = this._focusedCellPosition,
-            rowIndex = this.getVisibleRowIndex(),
-            row = this._dataController.items()[rowIndex],
-            column = this._columnsController.getVisibleColumns()[focusedCellPosition.columnIndex],
+            visibleRowIndex = this.getVisibleRowIndex(),
+            visibleColumnIndex = this.getVisibleColumnIndex(),
+            row = this._dataController.items()[visibleRowIndex],
+            column = this._columnsController.getVisibleColumns()[visibleColumnIndex],
             isAllowEditing = this._editingController.allowUpdating({ row: row }) && column && column.allowEditing;
 
         if(isAllowEditing) {
             if(this._isRowEditMode()) {
-                this._editingController.editRow(rowIndex);
+                this._editingController.editRow(visibleRowIndex);
             } else if(focusedCellPosition) {
                 this._startEditingCell(eventArgs, fastEditingKey);
             }
@@ -1407,7 +1408,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _startEditingCell: function(eventArgs, fastEditingKey) {
         var that = this,
             rowIndex = this.getVisibleRowIndex(),
-            colIndex = this._focusedCellPosition.columnIndex,
+            colIndex = this.getVisibleColumnIndex(),
             deferred;
 
         this._fastEditingStarted = isDefined(fastEditingKey);
