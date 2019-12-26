@@ -24,12 +24,12 @@ $.each(DevExpress.ui, function(componentName) {
                 originalDomElements,
                 newDomElements;
 
-            this.clock.tick(1000);
+            this.clock.tick(0);
             originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
 
             component._refresh();
 
-            this.clock.tick(1000);
+            this.clock.tick(0);
             newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
             if(newDomElements.length === originalDomElements.length) {
                 assert.ok(true, 'After an option changes and causes re-rendering, no additional dom elements must be created');
@@ -37,6 +37,7 @@ $.each(DevExpress.ui, function(componentName) {
                 assert.ok(false, memoryLeaksHelper.compareDomElements(originalDomElements, newDomElements));
             }
             memoryLeaksHelper.destroyTestNode(testNode);
+            this.clock.tick(100);
         });
     }
 });
