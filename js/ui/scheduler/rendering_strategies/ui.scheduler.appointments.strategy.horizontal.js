@@ -15,22 +15,18 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize(),
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize(),
             allDay = this.instance.fire('getField', 'allDay', appointment),
-            width;
+            startDate = this.startDate(appointment, false, position),
+            endDate = this.endDate(appointment, position, isRecurring, true);
 
-        var startDate = this.startDate(appointment, false, position),
-            endDate = this.endDate(appointment, position, isRecurring),
-            appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
+        let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
 
-        var cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute'),
-            durationInCells = appointmentDuration / cellDuration;
-
-        width = durationInCells * cellWidth;
-
-        width = this.cropAppointmentWidth(width, cellWidth);
+        const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute'),
+            durationInCells = appointmentDuration / cellDuration,
+            width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
     }
