@@ -23,20 +23,12 @@
 </head>
 <body>
     <div id="button"></div>
-    <div id="test-button"></div>
     <script>
         $(function() {
-            const options = {
+            $("#button").dxButton({
                 text: 'Click me!',
-                elementAttr: { data: '1', class: "dx-XXXX", onClick: () => console.log('click') },
-                onClick: function() { alert("clicked"); },
-                type: 'back',
-                icon: 'favorites',
-                hint: 'HINT!!!',
-            };
-
-            $("#button").dxButton(options);
-            $("#test-button").dxTestButton(options);
+                onClick: function() { alert("clicked"); }
+            });
         });
     </script>
 </body>
