@@ -137,6 +137,7 @@
         "dxDataGrid-columnFixingRightPosition": "Προς τα δεξιά",
         "dxDataGrid-exportTo": "Εξαγωγή",
         "dxDataGrid-exportToExcel": "Εξαγωγή σε Excel",
+        "dxDataGrid-exporting": "Εξαγωγή...",
         "dxDataGrid-excelFormat": "Αρχείο Excel",
         "dxDataGrid-selectedRows": "Επιλεγμένες γραμμές",
         "dxDataGrid-exportSelectedRows": "Εξαγωγή επιλεγμένων γραμμών",
