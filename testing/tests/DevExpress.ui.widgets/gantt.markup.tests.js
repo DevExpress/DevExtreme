@@ -20,11 +20,12 @@ QUnit.module('rendering', {
     afterEach: function() {
         this.element.remove();
     }
+}, () => {
+    QUnit.test('base elements should be rendered correctly', function(assert) {
+        const $element = this.element.dxGantt();
+
+        assert.ok($element.hasClass(GANTT_CLASS), 'element has a widget-specific class');
+        assert.equal($element.find('.' + GANTT_VIEW_CLASS).length, 1, 'ganttView wrapper attached');
+    });
 });
 
-QUnit.test('base elements should be rendered correctly', function(assert) {
-    const $element = this.element.dxGantt();
-
-    assert.ok($element.hasClass(GANTT_CLASS), 'element has a widget-specific class');
-    assert.equal($element.find('.' + GANTT_VIEW_CLASS).length, 1, 'ganttView wrapper attached');
-});

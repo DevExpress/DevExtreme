@@ -20,16 +20,17 @@ function createMenu(options) {
     return { instance: instance, element: element };
 }
 
-QUnit.module('Menu markup');
+QUnit.module('Menu markup', () => {
+    QUnit.test('Create menu with default css', function(assert) {
+        var menuBase = createMenu();
 
-QUnit.test('Create menu with default css', function(assert) {
-    var menuBase = createMenu();
+        assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
+    });
 
-    assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
+    QUnit.test('Render custom CSS class', function(assert) {
+        var menu = createMenu({ cssClass: 'testCssClass' });
+
+        assert.ok(menu.element.hasClass('testCssClass'));
+    });
 });
 
-QUnit.test('Render custom CSS class', function(assert) {
-    var menu = createMenu({ cssClass: 'testCssClass' });
-
-    assert.ok(menu.element.hasClass('testCssClass'));
-});
