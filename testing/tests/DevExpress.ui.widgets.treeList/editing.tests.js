@@ -16,6 +16,7 @@ import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
+import ArrayStore from 'data/array_store';
 
 fx.off = true;
 
@@ -48,7 +49,7 @@ const setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editorFactory', 'validating', 'errorHandling'], {
+        setupTreeListModules(that, ['data', 'columns', 'rows', 'selection', 'headerPanel', 'masterDetail', 'editing', 'editorFactory', 'validating', 'errorHandling', 'search'], {
             initViews: true
         });
     };
@@ -861,6 +862,62 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
     assert.notOk($(this.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell isn\'t editable');
 });
 
+[false, true].forEach(function(remoteOperations) {
+    // T836724
+    QUnit.test('The added nodes should be displayed when there is a filter and remoteOperations is ' + remoteOperations, function(assert) {
+        // arrange
+        var $rowElements,
+            $testElement = $('#treeList'),
+            store = new ArrayStore({
+                data: [
+                    { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+                    { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+                    { id: 3, field1: 'test3', field2: 3, field3: new Date(2001, 0, 3) },
+                ],
+                key: 'id'
+            });
+
+        this.options.expandedRowKeys = [1];
+        this.options.remoteOperations = remoteOperations;
+        this.options.filterMode = 'fullBranch';
+        this.options.searchPanel = {
+            visible: true,
+            text: 'test1'
+        },
+        this.options.editing = {
+            mode: 'cell',
+            allowAdding: true
+        };
+        this.options.dataSource = {
+            load: (loadOptions) => store.load(loadOptions),
+            insert: (values) => store.insert(values)
+        };
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 2, 'row count');
+
+        // act
+        this.addRow(1);
+        this.saveEditData();
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 3, 'row count');
+
+        // act
+        this.addRow(1);
+        this.saveEditData();
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 4, 'row count');
+    });
+});
+
+
 ['reshape', 'repaint'].forEach(function(refreshMode) {
     QUnit.module('Refresh mode ' + refreshMode, { beforeEach: function() {
         const that = this;
@@ -897,7 +954,7 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         };
 
         that.setupTreeList = function() {
-            setupTreeListModules(that, ['data', 'columns', 'rows', 'editing'], {
+            setupTreeListModules(that, ['data', 'columns', 'rows', 'editing', 'editorFactory', 'search'], {
                 initViews: true
             });
         };
@@ -1061,5 +1118,51 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
         assert.strictEqual(rows[0].node.children.length, 2, 'row 0 children count');
         assert.strictEqual(rows[2].data.field1, 'test3', 'row 2 data is updated');
         assert.strictEqual(rows[2].node.parent, rows[0].node, 'row 2 node parent');
+    });
+
+    // T836724
+    QUnit.test('The added nodes should be displayed when there is a filter', function(assert) {
+        // arrange
+        var $rowElements,
+            $testElement = $('#treeList');
+
+        this.options.expandedRowKeys = [1];
+        this.options.filterMode = 'fullBranch';
+        this.options.searchPanel = {
+            visible: true,
+            text: 'test1'
+        },
+        this.options.editing = {
+            refreshMode: refreshMode,
+            mode: 'cell',
+            allowAdding: true
+        };
+        this.options.dataSource.store.data = [
+            { id: 1, field1: 'test1' },
+            { id: 2, parentId: 1, field1: 'test2' },
+            { id: 3, field1: 'test3' },
+        ];
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 2, 'row count');
+
+        // act
+        this.addRow(1);
+        this.saveEditData();
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 3, 'row count');
+
+        // act
+        this.addRow(1);
+        this.saveEditData();
+
+        // assert
+        $rowElements = $testElement.find('tbody > .dx-data-row');
+        assert.strictEqual($rowElements.length, 4, 'row count');
     });
 });

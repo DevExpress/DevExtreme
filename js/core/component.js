@@ -9,7 +9,7 @@ import Callbacks from './utils/callbacks';
 import { EventsStrategy } from './events_strategy';
 import publicComponentUtils from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';
-import { isFunction, isPlainObject, type, isDefined } from './utils/type';
+import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
 
 const getEventName = (actionName) => {
@@ -134,6 +134,8 @@ const Component = Class.inherit({
                 (option, info) => this._logDeprecatedWarning(option, info));
             this._options.onChanged(
                 (name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
+            this._options.onStartChange(() => this.beginUpdate());
+            this._options.onEndChange(() => this.endUpdate());
             this._options.addRules(this._defaultOptionsRules());
 
             if(options && options.onInitializing) {
@@ -455,18 +457,8 @@ const Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option(options, value) {
-        if(arguments.length < 2 && type(options) !== 'object') {
-            return this._options.option(options);
-        } else {
-            this.beginUpdate();
-
-            try {
-                this._options.option(options, value);
-            } finally {
-                this.endUpdate();
-            }
-        }
+    option(...args) {
+        return this._options.option(...args);
     },
 
     /**

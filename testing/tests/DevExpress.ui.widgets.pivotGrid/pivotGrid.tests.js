@@ -2688,8 +2688,13 @@ QUnit.test('T317921: dxPivotGrid - Scrollbar overlaps the last column when the d
 });
 
 QUnit.test('resize when height changed to no scroll', function(assert) {
-    const $pivotGridElement = $('#pivotGrid').height(200);
-    const pivotGrid = createPivotGrid(this.testOptions, assert);
+    this.testOptions.scrolling = {
+        useNative: false,
+        bounceEnabled: false
+    };
+
+    var $pivotGridElement = $('#pivotGrid').height(200),
+        pivotGrid = createPivotGrid(this.testOptions, assert);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
     assert.equal(pivotGrid.$element().find('.dx-area-data-cell').css('borderBottomWidth'), '0px', 'data area border bottom width');
@@ -2697,10 +2702,6 @@ QUnit.test('resize when height changed to no scroll', function(assert) {
 
     const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
 
-    scrollable.option({
-        useNative: false,
-        bounceEnabled: false
-    });
     scrollable.scrollTo(10);
 
     // act
@@ -2714,11 +2715,7 @@ QUnit.test('resize when height changed to no scroll', function(assert) {
     assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-data-cell').css('borderBottomWidth')) > 0, 'data area border bottom width');
     assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width');
 
-    if(devices.real().ios) {
-        assert.roughEqual(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 1.2, 'client height equal scroll height');
-    } else {
-        assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
-    }
+    assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
 
     assert.strictEqual(pivotGrid._dataArea.groupElement().dxScrollable('scrollTop'), 0);
     assert.strictEqual(pivotGrid._rowsArea.groupElement().dxScrollable('scrollTop'), 0);

@@ -250,6 +250,10 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
                 if(!options.cachedStoreData) {
                     this._isChildrenLoaded = {};
+
+                    if(this._isReload) {
+                        this._nodeByKey = {};
+                    }
                 }
 
                 if(this.option('expandNodesOnFiltering') && (operationTypes.filtering || this._isReload && options.storeLoadOptions.filter)) {

@@ -93,6 +93,15 @@ registerTheme({
             color: WHITE
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: WHITE
+        },
+        border: {
+            color: WHITE
+        },
+        color: BLACK
+    },
     chart: {
         commonSeriesSettings: {
         },
@@ -118,15 +127,6 @@ registerTheme({
                 color: WHITE,
                 opacity: 0.7
             }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: WHITE
-            },
-            border: {
-                color: WHITE
-            },
-            color: BLACK
         }
     },
     pie: {

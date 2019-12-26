@@ -330,6 +330,13 @@ initRender.prototype.append = function(element) {
 };
 
 initRender.prototype.prependTo = function(element) {
+    if(this.length > 1) {
+        for(var i = this.length - 1; i >= 0; i--) {
+            renderer(this[i]).prependTo(element);
+        }
+        return this;
+    }
+
     element = renderer(element);
     if(element[0]) {
         domAdapter.insertElement(element[0], this[0], element[0].firstChild);

@@ -54,129 +54,130 @@ const UIState = function(inner, handle) {
     }
 };
 
-QUnit.module('Switch markup');
+QUnit.module('Switch markup', () => {
+    QUnit.test('markup', function(assert) {
+        var element = $('#switch').dxSwitch();
 
-QUnit.test('markup', function(assert) {
-    const element = $('#switch').dxSwitch();
+        assert.ok(element.hasClass(SWITCH_CLASS));
 
-    assert.ok(element.hasClass(SWITCH_CLASS));
+        var wrapper = element.find('.' + WRAPPER_CLASS);
+        assert.equal(wrapper.length, 1);
 
-    const wrapper = element.find('.' + WRAPPER_CLASS);
-    assert.equal(wrapper.length, 1);
+        var container = wrapper.children();
+        assert.equal(container.length, 1);
+        assert.ok(container.hasClass(CONTAINER_CLASS));
 
-    const container = wrapper.children();
-    assert.equal(container.length, 1);
-    assert.ok(container.hasClass(CONTAINER_CLASS));
+        var inner = element.find(INNER_SELECTOR);
+        assert.ok(inner.length, 'Switch inner');
 
-    const inner = element.find(INNER_SELECTOR);
-    assert.ok(inner.length, 'Switch inner');
+        var labelOnEl = element.find(LABEL_ON_SELECTOR);
+        assert.ok(labelOnEl.length, 'Switch label');
 
-    const labelOnEl = element.find(LABEL_ON_SELECTOR);
-    assert.ok(labelOnEl.length, 'Switch label');
+        var handleEl = element.find(HANDLE_SELECTOR);
+        assert.ok(handleEl.length, 'Switch handle');
 
-    const handleEl = element.find(HANDLE_SELECTOR);
-    assert.ok(handleEl.length, 'Switch handle');
-
-    const labelOffEl = element.find(LABEL_OFF_SELECTOR);
-    assert.ok(labelOffEl.length, 'Switch label');
-});
-
-QUnit.test('default labels', function(assert) {
-    const element = $('#switch').dxSwitch();
-
-    const inner = element.find(INNER_SELECTOR);
-
-    const labelOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(labelOnEl.text()), 'ON');
-
-    const labelOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(labelOffEl.text()), 'OFF');
-});
-
-QUnit.test('switchedOnText/switchedOffText on init', function(assert) {
-    const element = $('#switch').dxSwitch({
-        switchedOnText: 'customOn',
-        switchedOffText: 'customOff'
+        var labelOffEl = element.find(LABEL_OFF_SELECTOR);
+        assert.ok(labelOffEl.length, 'Switch label');
     });
 
-    const inner = element.find(INNER_SELECTOR);
+    QUnit.test('default labels', function(assert) {
+        var element = $('#switch').dxSwitch();
 
-    const textOnEl = inner.find(LABEL_ON_SELECTOR);
-    assert.equal($.trim(textOnEl.text()), 'customOn');
+        var inner = element.find(INNER_SELECTOR);
 
-    const textOffEl = inner.find(LABEL_OFF_SELECTOR);
-    assert.equal($.trim(textOffEl.text()), 'customOff');
-});
+        var labelOnEl = inner.find(LABEL_ON_SELECTOR);
+        assert.equal($.trim(labelOnEl.text()), 'ON');
 
-QUnit.test('default ui state', function(assert) {
-    const element = $('#switch').dxSwitch();
-
-    const inner = element.find(INNER_SELECTOR);
-    const handle = element.find(HANDLE_SELECTOR);
-
-    assert.strictEqual(UIState(inner, handle), false, 'Default UI state is right');
-});
-
-QUnit.test('ui state with options', function(assert) {
-    const element = $('#switch').dxSwitch({
-        switchedOnText: 'customOn',
-        switchedOffText: 'customOff',
-        value: true
+        var labelOffEl = inner.find(LABEL_OFF_SELECTOR);
+        assert.equal($.trim(labelOffEl.text()), 'OFF');
     });
 
-    const inner = element.find(INNER_SELECTOR);
-    const handle = element.find(HANDLE_SELECTOR);
+    QUnit.test('switchedOnText/switchedOffText on init', function(assert) {
+        var element = $('#switch').dxSwitch({
+            switchedOnText: 'customOn',
+            switchedOffText: 'customOff'
+        });
 
-    assert.strictEqual(UIState(inner, handle), true, 'UI state with options is right');
-});
+        var inner = element.find(INNER_SELECTOR);
 
+        var textOnEl = inner.find(LABEL_ON_SELECTOR);
+        assert.equal($.trim(textOnEl.text()), 'customOn');
 
-QUnit.test('a hidden input should be rendered', function(assert) {
-    const $element = $('#switch').dxSwitch();
-    const $input = $element.find('input');
-
-    assert.equal($input.length, 1, 'input is rendered');
-    assert.equal($input.attr('type'), 'hidden', 'input type is \'hidden\'');
-});
-
-QUnit.test('input should be able to get the \'true\' value', function(assert) {
-    const $element = $('#switch').dxSwitch({
-        value: true
+        var textOffEl = inner.find(LABEL_OFF_SELECTOR);
+        assert.equal($.trim(textOffEl.text()), 'customOff');
     });
-    const $input = $element.find('input');
 
-    assert.equal($input.val(), 'true', 'the input value is \'true\'');
-});
+    QUnit.test('default ui state', function(assert) {
+        var element = $('#switch').dxSwitch();
 
-QUnit.test('input should be able to get the \'false\' value', function(assert) {
-    const $element = $('#switch').dxSwitch({
-        value: false
+        var inner = element.find(INNER_SELECTOR),
+            handle = element.find(HANDLE_SELECTOR);
+
+        assert.strictEqual(UIState(inner, handle), false, 'Default UI state is right');
     });
-    const $input = $element.find('input');
 
-    assert.equal($input.val(), 'false', 'the input value is \'false\'');
-});
+    QUnit.test('ui state with options', function(assert) {
+        var element = $('#switch').dxSwitch({
+            switchedOnText: 'customOn',
+            switchedOffText: 'customOff',
+            value: true
+        });
 
-QUnit.module('aria accessibility');
+        var inner = element.find(INNER_SELECTOR),
+            handle = element.find(HANDLE_SELECTOR);
 
-QUnit.test('aria role', function(assert) {
-    const $element = $('#switch').dxSwitch({});
-
-    assert.equal($element.attr('role'), 'button', 'aria role is correct');
-});
-
-QUnit.test('aria properties', function(assert) {
-    const $element = $('#switch').dxSwitch({
-        switchedOnText: 'on test',
-        switchedOffText: 'off test',
-        value: true
+        assert.strictEqual(UIState(inner, handle), true, 'UI state with options is right');
     });
-    const instance = $element.dxSwitch('instance');
 
-    assert.equal($element.attr('aria-label'), 'on test', 'aria \'on state\' label is correct');
-    assert.equal($element.attr('aria-pressed'), 'true', 'aria \'on state\' pressed attribute is correct');
 
-    instance.option('value', false);
-    assert.equal($element.attr('aria-label'), 'off test', 'aria \'off state\' label is correct');
-    assert.equal($element.attr('aria-pressed'), 'false', 'aria \'off state\' pressed attribute is correct');
+    QUnit.test('a hidden input should be rendered', function(assert) {
+        var $element = $('#switch').dxSwitch(),
+            $input = $element.find('input');
+
+        assert.equal($input.length, 1, 'input is rendered');
+        assert.equal($input.attr('type'), 'hidden', 'input type is \'hidden\'');
+    });
+
+    QUnit.test('input should be able to get the \'true\' value', function(assert) {
+        var $element = $('#switch').dxSwitch({
+                value: true
+            }),
+            $input = $element.find('input');
+
+        assert.equal($input.val(), 'true', 'the input value is \'true\'');
+    });
+
+    QUnit.test('input should be able to get the \'false\' value', function(assert) {
+        var $element = $('#switch').dxSwitch({
+                value: false
+            }),
+            $input = $element.find('input');
+
+        assert.equal($input.val(), 'false', 'the input value is \'false\'');
+    });
 });
+
+QUnit.module('aria accessibility', () => {
+    QUnit.test('aria role', function(assert) {
+        var $element = $('#switch').dxSwitch({});
+
+        assert.equal($element.attr('role'), 'button', 'aria role is correct');
+    });
+
+    QUnit.test('aria properties', function(assert) {
+        var $element = $('#switch').dxSwitch({
+                switchedOnText: 'on test',
+                switchedOffText: 'off test',
+                value: true
+            }),
+            instance = $element.dxSwitch('instance');
+
+        assert.equal($element.attr('aria-label'), 'on test', 'aria \'on state\' label is correct');
+        assert.equal($element.attr('aria-pressed'), 'true', 'aria \'on state\' pressed attribute is correct');
+
+        instance.option('value', false);
+        assert.equal($element.attr('aria-label'), 'off test', 'aria \'off state\' label is correct');
+        assert.equal($element.attr('aria-pressed'), 'false', 'aria \'off state\' pressed attribute is correct');
+    });
+});
+

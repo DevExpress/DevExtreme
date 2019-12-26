@@ -111,8 +111,11 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _sortCondition(a, b) {
-        const result = this._columnCondition(a, b);
-        return this._fixUnstableSorting(result, a, b);
+        return this._columnCondition(a, b);
+    }
+
+    _getOrientation() {
+        return ['left', 'right', 'top'];
     }
 
     _getMaxAppointmentWidth(startDate) {

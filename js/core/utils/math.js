@@ -141,6 +141,10 @@ function solveCubicEquation(a, b, c, d) {
     return roots;
 }
 
+function trunc(value) {
+    return Math.trunc ? Math.trunc(value) : (value > 0 ? Math.floor(value) : Math.ceil(value));
+}
+
 exports.sign = sign;
 exports.fitIntoRange = fitIntoRange;
 exports.inRange = inRange;
@@ -149,4 +153,4 @@ exports.getPrecision = getPrecision;
 exports.getExponent = getExponent;
 exports.getRoot = getRoot;
 exports.solveCubicEquation = solveCubicEquation;
-
+exports.trunc = trunc;

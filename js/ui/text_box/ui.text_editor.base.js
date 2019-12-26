@@ -517,11 +517,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _updateButtonsStyling: function(editorStylingMode) {
-        const that = this;
-
-        each(this.option('buttons'), function(_, buttonOptions) {
+        each(this.option('buttons'), (_, buttonOptions) => {
             if(buttonOptions.options && !buttonOptions.options.stylingMode) {
-                const buttonInstance = that.getButton(buttonOptions.name);
+                const buttonInstance = this.getButton(buttonOptions.name);
                 buttonInstance.option && buttonInstance.option('stylingMode', editorStylingMode === 'underlined' ? 'text' : 'contained');
             }
         });
@@ -651,13 +649,12 @@ const TextEditorBase = Editor.inherit({
     },
 
     _attachPlaceholderEvents: function() {
-        const that = this;
-        const startEvent = eventUtils.addNamespace(pointerEvents.up, that.NAME);
+        const startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
 
-        eventsEngine.on(that._$placeholder, startEvent, function() {
-            eventsEngine.trigger(that._input(), 'focus');
+        eventsEngine.on(this._$placeholder, startEvent, () => {
+            eventsEngine.trigger(this._input(), 'focus');
         });
-        that._toggleEmptinessEventHandler();
+        this._toggleEmptinessEventHandler();
     },
 
     _placeholder: function() {
@@ -680,16 +677,15 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderEvents: function() {
-        const that = this;
-        const $input = that._input();
+        const $input = this._input();
 
-        each(EVENTS_LIST, function(_, event) {
-            if(that.hasActionSubscription('on' + event)) {
+        each(EVENTS_LIST, (_, event) => {
+            if(this.hasActionSubscription('on' + event)) {
 
-                const action = that._createActionByOption('on' + event, { excludeValidators: ['readOnly'] });
+                const action = this._createActionByOption('on' + event, { excludeValidators: ['readOnly'] });
 
-                eventsEngine.on($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME), function(e) {
-                    if(that._disposed) {
+                eventsEngine.on($input, eventUtils.addNamespace(event.toLowerCase(), this.NAME), (e) => {
+                    if(this._disposed) {
                         return;
                     }
 
@@ -700,11 +696,10 @@ const TextEditorBase = Editor.inherit({
     },
 
     _refreshEvents: function() {
-        const that = this;
         const $input = this._input();
 
-        each(EVENTS_LIST, function(_, event) {
-            eventsEngine.off($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME));
+        each(EVENTS_LIST, (_, event) => {
+            eventsEngine.off($input, eventUtils.addNamespace(event.toLowerCase(), this.NAME));
         });
 
         this._renderEvents();
@@ -714,20 +709,33 @@ const TextEditorBase = Editor.inherit({
         this.option('text', this._input().val());
     },
 
-    _renderValueChangeEvent: function() {
-        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + 'TextChange');
-        const valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), this.NAME + 'ValueChange');
+    _keyDownHandler: function(e) {
+        const $input = this._input();
+        const isCtrlEnter = e.ctrlKey && eventUtils.normalizeKeyName(e) === 'enter';
+        const isNewValue = $input.val() !== this.option('value');
 
-        eventsEngine.on(this._input(), keyPressEvent, this._keyPressHandler.bind(this));
-        eventsEngine.on(this._input(), valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        if(isCtrlEnter && isNewValue) {
+            eventsEngine.trigger($input, 'change');
+        }
+    },
+
+    _renderValueChangeEvent: function() {
+        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
+        const valueChangeEvent = eventUtils.addNamespace(this.option('valueChangeEvent'), `${this.NAME}ValueChange`);
+        const keyDownEvent = eventUtils.addNamespace('keydown', `${this.NAME}TextChange`);
+        const $input = this._input();
+
+        eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
+        eventsEngine.on($input, valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        eventsEngine.on($input, keyDownEvent, this._keyDownHandler.bind(this));
     },
 
     _cleanValueChangeEvent: function() {
-        const eventNamespace = this.NAME + 'ValueChange';
-        const keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + 'TextChange');
+        const valueChangeNamespace = `.${this.NAME}ValueChange`;
+        const textChangeNamespace = `.${this.NAME}TextChange`;
 
-        eventsEngine.off(this._input(), '.' + eventNamespace);
-        eventsEngine.off(this._input(), keyPressEvent);
+        eventsEngine.off(this._input(), valueChangeNamespace);
+        eventsEngine.off(this._input(), textChangeNamespace);
     },
 
     _refreshValueChangeEvent: function() {
@@ -843,7 +851,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        const name = args.name;
+        const { name } = args;
 
         if(inArray(name.replace('on', ''), EVENTS_LIST) > -1) {
             this._refreshEvents();

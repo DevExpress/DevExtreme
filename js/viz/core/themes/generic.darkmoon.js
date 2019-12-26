@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: TITLE_COLOR
+        },
+        border: {
+            color: BORDER_COLOR
+        },
+        color: '#62789e'
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#73869e' }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: TITLE_COLOR
-            },
-            border: {
-                color: BORDER_COLOR
-            },
-            color: '#62789e'
         }
     },
     gauge: {

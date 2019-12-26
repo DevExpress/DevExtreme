@@ -190,7 +190,8 @@ const PivotGrid = Widget.inherit({
                 mode: 'standard',
                 /**
                  * @name dxPivotGridOptions.scrolling.useNative
-                 * @type boolean
+                 * @type boolean|Enums.Mode
+                 * @default "auto"
                  */
                 useNative: 'auto',
 

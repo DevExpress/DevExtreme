@@ -41,7 +41,7 @@ export default class AppointmentPopup {
 
     show(data, showButtons, processTimeZone) {
         this.state.appointment = {
-            data: data,
+            data: data || {},
             processTimeZone: processTimeZone
         };
 
@@ -154,21 +154,25 @@ export default class AppointmentPopup {
             AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
         }
 
-        const isReadOnly = this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
-
         return AppointmentForm.create(
             this.scheduler._createComponent.bind(this.scheduler),
             element,
-            isReadOnly,
+            this._isReadOnly(this.state.appointment.data),
             this._createAppointmentFormData(this.state.appointment.data)
         );
+    }
+
+    _isReadOnly(data) {
+        if(data && data.disabled) {
+            return true;
+        }
+        return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
     }
 
     _updateForm(appointmentData, isProcessTimeZone) {
         const allDay = this.scheduler.fire('getField', 'allDay', appointmentData);
         let startDate = this.scheduler.fire('getField', 'startDate', appointmentData);
         let endDate = this.scheduler.fire('getField', 'endDate', appointmentData);
-
 
         const formData = this._createAppointmentFormData(appointmentData);
 
@@ -196,7 +200,7 @@ export default class AppointmentPopup {
         formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
-        this._appointmentForm.option('readOnly', this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false);
+        this._appointmentForm.option('readOnly', this._isReadOnly(this.state.appointment.data));
 
         AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
 

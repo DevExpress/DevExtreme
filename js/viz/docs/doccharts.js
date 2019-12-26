@@ -3223,6 +3223,17 @@ const dxPolarChart = {
         shared: false
     },
     /**
+    * @name dxPolarChartOptions.commonAnnotationSettings
+    * @type dxPolarChartCommonAnnotationConfig
+    */
+    commonAnnotationSettings: undefined,
+    /**
+     * @name dxPolarChartOptions.annotations
+     * @type Array<dxPolarChartAnnotationConfig,object>
+     * @inherits dxPolarChartOptions.commonAnnotationSettings
+     */
+    annotations: [{}],
+    /**
     * @name dxPolarChartOptions.onSeriesHoverChanged
     * @extends Action
     * @type function(e)
@@ -3881,6 +3892,40 @@ const dxChartCommonAnnotationConfig = {
 const dxChartAnnotationConfig = {
     /**
     * @name dxChartAnnotationConfig.name
+    * @type string
+    * @default undefined
+    */
+    name: undefined
+};
+
+/**
+* @name dxPolarChartCommonAnnotationConfig
+* @type object
+* @inherits dxChartCommonAnnotationConfig
+*/
+var dxPolarChartCommonAnnotationConfig = {
+    /**
+    * @name dxPolarChartCommonAnnotationConfig.radius
+    * @type number
+    * @default undefined
+    */
+    radius: undefined,
+    /**
+     * @name dxPolarChartCommonAnnotationConfig.angle
+     * @type number
+     * @default undefined
+     */
+    angle: undefined
+};
+
+/**
+* @name dxPolarChartAnnotationConfig
+* @type object
+* @inherits dxPolarChartCommonAnnotationConfig
+*/
+var dxPolarChartAnnotationConfig = {
+    /**
+    * @name dxPolarChartAnnotationConfig.name
     * @type string
     * @default undefined
     */

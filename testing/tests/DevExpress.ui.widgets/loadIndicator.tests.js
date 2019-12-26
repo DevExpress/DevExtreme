@@ -27,55 +27,56 @@ QUnit.module('indicator with browser animation', {
         // Restoring support styleProp
         support.animation = this._defaultAnimation;
     }
-});
-
-QUnit.test('visibility of the LoadIndicator with initial value of the \'visible\' option equal to \'true\'', function(assert) {
-    const $element = $('#loadIndicator').dxLoadIndicator({ visible: true, viaImage: false });
-    assert.ok($element.is(':visible'));
-});
-
-QUnit.test('render animated indicator markup', function(assert) {
-    const $indicator = $('#loadIndicator');
-    const loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
-
-    assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
-    assert.equal($indicator.find('.' + LOADINDICATOR_ICON).length, 1, 'Icon div created');
-    assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
-    assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT + '1').length, 1, 'Numerated segment created');
-    assert.equal($indicator.find('.' + LOADINDICATOR_CONTENT_CLASS).length, 1, 'content is created');
-});
-
-QUnit.test('visible changes visibility option', function(assert) {
-    const $indicator = $('#loadIndicator').dxLoadIndicator({
-        visible: false
+}, () => {
+    QUnit.test('visibility of the LoadIndicator with initial value of the \'visible\' option equal to \'true\'', function(assert) {
+        var $element = $('#loadIndicator').dxLoadIndicator({ visible: true, viaImage: false });
+        assert.ok($element.is(':visible'));
     });
-    const loadIndicator = $indicator.dxLoadIndicator('instance');
 
-    assert.ok($indicator.is(':hidden'));
+    QUnit.test('render animated indicator markup', function(assert) {
+        var $indicator = $('#loadIndicator'),
+            loadIndicator = $indicator.dxLoadIndicator({ visible: false, viaImage: false }).dxLoadIndicator('instance');
 
-    loadIndicator.option('visible', false);
-    assert.ok($indicator.is(':hidden'));
+        assert.ok($indicator.hasClass(LOADINDICATOR_CLASS), 'Load Indicator initialized');
+        assert.equal($indicator.find('.' + LOADINDICATOR_ICON).length, 1, 'Icon div created');
+        assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT).length, loadIndicator.option('_animatingSegmentCount') + 1, 'Segments created');
+        assert.equal($indicator.find('.' + LOADINDICATOR_SEGMENT + '1').length, 1, 'Numerated segment created');
+        assert.equal($indicator.find('.' + LOADINDICATOR_CONTENT_CLASS).length, 1, 'content is created');
+    });
 
-    loadIndicator.option('visible', true);
-    assert.ok($indicator.is(':visible'));
+    QUnit.test('visible changes visibility option', function(assert) {
+        var $indicator = $('#loadIndicator').dxLoadIndicator({
+                visible: false
+            }),
+            loadIndicator = $indicator.dxLoadIndicator('instance');
 
-    loadIndicator.option('visible', false);
-    assert.ok($indicator.is(':hidden'));
-});
+        assert.ok($indicator.is(':hidden'));
 
-QUnit.module('Events');
+        loadIndicator.option('visible', false);
+        assert.ok($indicator.is(':hidden'));
 
-QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
-    const url = '../../testing/content/customLoadIndicator.png';
+        loadIndicator.option('visible', true);
+        assert.ok($indicator.is(':visible'));
 
-    assert.expect(2);
-
-    $('#loadIndicator').dxLoadIndicator({
-        visible: true,
-        indicatorSrc: url,
-        onContentReady: function(e) {
-            assert.ok($(e.element).find('.' + LOADINDICATOR_IMAGE).css('backgroundImage'));
-            assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
-        }
+        loadIndicator.option('visible', false);
+        assert.ok($indicator.is(':hidden'));
     });
 });
+
+QUnit.module('Events', () => {
+    QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
+        var url = '../../testing/content/customLoadIndicator.png';
+
+        assert.expect(2);
+
+        $('#loadIndicator').dxLoadIndicator({
+            visible: true,
+            indicatorSrc: url,
+            onContentReady: function(e) {
+                assert.ok($(e.element).find('.' + LOADINDICATOR_IMAGE).css('backgroundImage'));
+                assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
+            }
+        });
+    });
+});
+

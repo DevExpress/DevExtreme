@@ -1,3 +1,12 @@
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -10,11 +19,11 @@ import {
     setupDataGridModules,
     MockDataController,
     MockColumnsController,
-    MockSelectionController } from '../../../helpers/dataGridMocks.js';
+    MockSelectionController } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
     setupModules
-} from '../../../helpers/grid/keyboardNavigationHelper.js';
+} from '../../helpers/grid/keyboardNavigationHelper.js';
 
 QUnit.module('Rows view', {
     beforeEach: function() {

@@ -68,6 +68,15 @@ registerTheme({
             }
         }
     },
+    'chart:common:annotation': {
+        font: {
+            color: TITLE_COLOR
+        },
+        border: {
+            color: BORDER_COLOR
+        },
+        color: BACKGROUND_COLOR
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -76,15 +85,6 @@ registerTheme({
         },
         commonAxisSettings: {
             breakStyle: { color: '#c1c5c7' }
-        },
-        commonAnnotationSettings: {
-            font: {
-                color: TITLE_COLOR
-            },
-            border: {
-                color: BORDER_COLOR
-            },
-            color: BACKGROUND_COLOR
         }
     },
     rangeSelector: {

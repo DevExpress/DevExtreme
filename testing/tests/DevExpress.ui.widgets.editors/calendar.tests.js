@@ -2901,6 +2901,8 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.test('aria id on contoured cell after view change (T321824)', function(assert) {
+        const clock = sinon.useFakeTimers();
+
         try {
             fx.off = false;
 
@@ -2910,7 +2912,6 @@ QUnit.module('Aria accessibility', {
             });
 
             const keyboard = keyboardMock(this.$element);
-            const clock = sinon.useFakeTimers();
 
             keyboard.press('up');
             clock.tick(VIEW_ANIMATION_DURATION);
@@ -2923,6 +2924,7 @@ QUnit.module('Aria accessibility', {
 
         } finally {
             fx.off = true;
+            clock.restore();
         }
     });
 });

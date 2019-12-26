@@ -22,15 +22,16 @@ QUnit.module('TrackBar markup', {
     beforeEach: function() {
         this.$element = $('#trackbar');
     }
+}, () => {
+    QUnit.test('markup', function(assert) {
+        assert.expect(4);
+
+        var $trackBar = this.$element.dxTrackBar();
+
+        assert.ok($trackBar.hasClass(TRACKBAR_CLASS), 'dxTrackBar initialized');
+        assert.equal($trackBar.find(toSelector(TRACKBAR_CONTAINER_CLASS)).length, 1, 'Container has been created');
+        assert.equal($trackBar.find(toSelector(TRACKBAR_RANGE_CLASS)).length, 1, 'Range has been created');
+        assert.equal($trackBar.find(toSelector(TRACKBAR_WRAPPER_CLASS)).length, 1, 'Wrapper div has been created');
+    });
 });
 
-QUnit.test('markup', function(assert) {
-    assert.expect(4);
-
-    const $trackBar = this.$element.dxTrackBar();
-
-    assert.ok($trackBar.hasClass(TRACKBAR_CLASS), 'dxTrackBar initialized');
-    assert.equal($trackBar.find(toSelector(TRACKBAR_CONTAINER_CLASS)).length, 1, 'Container has been created');
-    assert.equal($trackBar.find(toSelector(TRACKBAR_RANGE_CLASS)).length, 1, 'Range has been created');
-    assert.equal($trackBar.find(toSelector(TRACKBAR_WRAPPER_CLASS)).length, 1, 'Wrapper div has been created');
-});

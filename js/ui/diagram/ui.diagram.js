@@ -662,10 +662,10 @@ class Diagram extends Widget {
         }
 
         if(Array.isArray(customShapes)) {
-            const that = this;
             this._diagramInstance.addCustomShapes(customShapes.map(
-                function(s) {
-                    const template = that._getTemplate(s.template);
+                (s) => {
+                    var templateOption = s.template || this.option('customShapeTemplate');
+                    var template = templateOption && this._getTemplate(templateOption);
                     return {
                         category: s.category,
                         type: s.type,
@@ -698,12 +698,12 @@ class Diagram extends Widget {
                         connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
                             return { 'x': pt.x, 'y': pt.y };
                         }),
-                        createTemplate: template && function(container, item) {
+                        createTemplate: template && ((container, item) => {
                             template.render({
-                                model: item,
+                                model: this._nativeItemToDiagramItem(item),
                                 container: domUtils.getPublicElement($(container))
                             });
-                        },
+                        }),
                         templateLeft: s.templateLeft,
                         templateTop: s.templateTop,
                         templateWidth: s.templateWidth,
@@ -980,11 +980,11 @@ class Diagram extends Widget {
         texts[ShapeTypes.Or] = messageLocalization.format('dxDiagram-shapeOr');
         texts[ShapeTypes.SummingJunction] = messageLocalization.format('dxDiagram-shapeSummingJunction');
         // Containers
-        texts[ShapeTypes.Container] = messageLocalization.format('dxDiagram-shapeContainer');
+        texts[ShapeTypes.Container] = messageLocalization.format('dxDiagram-shapeContainerDefaultText');
         texts[ShapeTypes.VerticalContainer] = messageLocalization.format('dxDiagram-shapeVerticalContainer');
         texts[ShapeTypes.HorizontalContainer] = messageLocalization.format('dxDiagram-shapeHorizontalContainer');
         // Shapes with images
-        texts[ShapeTypes.Card] = messageLocalization.format('dxDiagram-shapeCard');
+        texts[ShapeTypes.Card] = messageLocalization.format('dxDiagram-shapeCardDefaultText');
         texts[ShapeTypes.CardWithImageOnLeft] = messageLocalization.format('dxDiagram-shapeCardWithImageOnLeft');
         texts[ShapeTypes.CardWithImageOnTop] = messageLocalization.format('dxDiagram-shapeCardWithImageOnTop');
         texts[ShapeTypes.CardWithImageOnRight] = messageLocalization.format('dxDiagram-shapeCardWithImageOnRight');
@@ -1565,6 +1565,13 @@ class Diagram extends Widget {
                 * @type Number
                 */
             ],
+            /**
+            * @name dxDiagramOptions.customShapeTemplate
+            * @type template|function
+            * @type_function_param1 container:dxElement
+            * @type_function_param2 data:object
+            * @type_function_param2_field1 item:dxDiagramItem
+            */
             /**
             * @name dxDiagramOptions.toolbox
             * @type Object

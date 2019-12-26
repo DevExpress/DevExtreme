@@ -1,11 +1,13 @@
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const scatterSeries = require('./scatter_series');
-const areaSeries = require('./area_series').chart.area;
-const chartSeries = scatterSeries.chart;
-const polarSeries = scatterSeries.polar;
-const _extend = extend;
-const _each = each;
+var extend = require('../../core/utils/extend').extend,
+    each = require('../../core/utils/iterator').each,
+    scatterSeries = require('./scatter_series'),
+    areaSeries = require('./area_series').chart.area,
+    vizUtils = require('../core/utils'),
+    chartSeries = scatterSeries.chart,
+    polarSeries = scatterSeries.polar,
+    _isDefined = require('../../core/utils/type').isDefined,
+    _extend = extend,
+    _each = each;
 
 exports.chart = {};
 exports.polar = {};
@@ -203,6 +205,27 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         groupSettings = _extend({}, markersSettings);
         delete groupSettings.opacity; // T110796
         that._markersGroup.attr(groupSettings);
+    },
+
+    getSeriesPairCoord(params, isArgument) {
+        let coords = null;
+        const paramName = isArgument ? 'argument' : 'radius';
+        const points = this.getVisiblePoints();
+        const argAxis = this.getArgumentAxis();
+        const startAngle = argAxis.getAngles()[0];
+
+        for(let i = 0; i < points.length; i++) {
+            const p = points[i];
+            const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf() ?
+                vizUtils.convertPolarToXY(argAxis.getCenter(), startAngle, -argAxis.getTranslatedAngle(p.angle), p.radius) : undefined;
+
+            if(_isDefined(tmpPoint)) {
+                coords = tmpPoint;
+                break;
+            }
+        }
+
+        return coords;
     },
 
     _createLegendState: areaSeries._createLegendState,

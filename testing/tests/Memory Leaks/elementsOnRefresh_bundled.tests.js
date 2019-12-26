@@ -10,6 +10,9 @@ GoogleProvider.remapConstant('http://fakeUrl');
 QUnit.module('elementsOnRefresh', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
 

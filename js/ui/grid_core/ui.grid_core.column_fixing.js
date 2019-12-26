@@ -766,7 +766,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         let columns;
         let cellIndex = 0;
 
-        if($fixedTable && $fixedTable.find($cell).length) {
+        if($fixedTable && $cell.is('td') && $cell.closest($fixedTable).length) {
             columns = this.getFixedColumns();
 
             each(columns, function(index, column) {

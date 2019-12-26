@@ -92,13 +92,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _columnCondition(a, b) {
-        const isSomeEdge = this._isSomeEdge(a, b);
-
-        const columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge);
-        const rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
-        const cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, isSomeEdge);
-
-        return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition ? cellPositionCondition : a.isStart - b.isStart;
+        var conditions = this._getConditions(a, b);
+        return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
     }
 
     createTaskPositionMap(items) {

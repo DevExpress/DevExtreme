@@ -2,6 +2,7 @@ import fx from 'animation/fx';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import browser from 'core/utils/browser';
 import {
     createWrapper,
     initTestMarkup,
@@ -19,6 +20,67 @@ const {
 } = QUnit;
 
 testStart(() => initTestMarkup());
+
+const zoomModuleConfig = {
+    beforeEach() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach() {
+        fx.off = false;
+        window.document.body.style.zoom = 'normal';
+        this.clock.restore();
+    }
+};
+
+module('Browser zoom', zoomModuleConfig, () => {
+    if(!isDesktopEnvironment() || !browser.webkit) {
+        return;
+    }
+
+    const views = ['day', 'week'];
+    const createDataSource = () => [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2017, 4, 25, 9, 30),
+        endDate: new Date(2017, 4, 25, 11, 30)
+    }];
+
+    QUnit.test('Appointment should drag to above cell in browser zoom case(T833310)', function(assert) {
+        const scheduler = createWrapper({
+            views: views,
+            currentView: views[0],
+            dataSource: createDataSource(),
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600
+        });
+
+        scheduler.drawControl();
+        window.document.body.style.zoom = '125%';
+
+        views.forEach(view => {
+            scheduler.option('currentView', view);
+            scheduler.option('dataSource', createDataSource());
+
+            let appointment = scheduler.appointments.getAppointment();
+
+            assert.equal(scheduler.appointments.getDateText(), '9:30 AM - 11:30 AM', `appointment should have correct date on init in ${view}  view`);
+
+            const offset = appointment.offset();
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(offset.left, offset.top)
+                .move(0, -30);
+            pointer.up();
+
+            assert.equal(scheduler.appointments.getDateText(), '9:00 AM - 11:00 AM', `appointment should move to previous cell in ${view} view`);
+        });
+
+        scheduler.hideControl();
+    });
+});
 
 const moduleConfig = {
     beforeEach() {
@@ -408,6 +470,38 @@ module('Drag and drop appointments', moduleConfig, () => {
         const data = scheduler.instance.option('dataSource')[1];
         assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), 'start date is correct');
         assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), 'end date is correct');
+    });
+
+    QUnit.test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', function(assert) {
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+            currentView: 'month',
+            dataSource: [{
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0),
+                disabled: true,
+            },
+            {
+                text: 'Task 2',
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0),
+                disabled: true,
+            }],
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        scheduler.appointments.compact.click(0);
+        const compactAppointment = scheduler.appointments.compact.getAppointment();
+        const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
+
+        pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
+
+        const data = scheduler.instance.option('dataSource')[1];
+        assert.deepEqual(data.startDate, new Date(2015, 1, 9, 1, 0), 'start date is correct');
+        assert.deepEqual(data.endDate, new Date(2015, 1, 9, 2, 0), 'end date is correct');
     });
 
     QUnit.test('The recurring appointment should have correct position when dragging', function(assert) {

@@ -16,6 +16,8 @@ const _map = vizUtils.map;
 const _extend = extend;
 const _each = each;
 
+const { round, sqrt, pow, min, max, abs } = Math;
+
 exports.chart = {};
 exports.polar = {};
 
@@ -215,6 +217,13 @@ const lineMethods = {
         return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
             !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
             coord >= min && coord <= max : coord >= max && coord <= min;
+    }
+};
+
+var lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+    getPointCenterByArg(arg) {
+        const value = this.getArgumentAxis().getTranslator().translate(arg);
+        return { x: value, y: value };
     },
 
     getSeriesPairCoord(coord, isArgument) {
@@ -242,13 +251,6 @@ const lineMethods = {
         }
 
         return oppositeCoord;
-    }
-};
-
-const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
-    getPointCenterByArg(arg) {
-        const value = this.getArgumentAxis().getTranslator().translate(arg);
-        return { x: value, y: value };
     }
 });
 
@@ -517,24 +519,32 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         return angle >= 0 ? 360 - normAngle : -normAngle;
     },
 
-    _closeSegment: function(points) {
+    _closeSegment(points) {
         let point;
-        let differenceAngle;
 
         if(this._segments.length) {
             point = this._segments[0].line[0];
         } else {
             point = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
         }
-        if(points[points.length - 1].angle !== point.angle) {
-            if(normalizeAngle(Math.round(points[points.length - 1].angle)) === normalizeAngle(Math.round(point.angle))) {
-                point.angle = points[points.length - 1].angle;
-            } else {
-                differenceAngle = points[points.length - 1].angle - point.angle;
-                point.angle = points[points.length - 1].angle + this._getRemainingAngle(differenceAngle);
-            }
+        point = this._modifyReflectedPoint(point, points[points.length - 1]);
+        if(point) {
             points.push(point);
         }
+    },
+
+    _modifyReflectedPoint(point, lastPoint) {
+        if(lastPoint.angle === point.angle) {
+            return undefined;
+        }
+
+        if(normalizeAngle(round(lastPoint.angle)) === normalizeAngle(round(point.angle))) {
+            point.angle = lastPoint.angle;
+        } else {
+            const differenceAngle = lastPoint.angle - point.angle;
+            point.angle = lastPoint.angle + this._getRemainingAngle(differenceAngle);
+        }
+        return point;
     },
 
     _getTangentPoints: function(point, prevPoint, centerPoint) {
@@ -556,5 +566,120 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
         }
 
         return tangentPoints;
+    },
+
+    getSeriesPairCoord(params, isArgument) {
+        const that = this;
+        const argAxis = that.getArgumentAxis();
+        const paramName = isArgument ? 'angle' : 'radius';
+        const coordParam = params[paramName];
+        const centerPoint = argAxis.getCenter();
+        const getLengthByCoords = (p1, p2) => {
+            return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+        };
+        const isInsideInterval = (prevPoint, point, { x, y }) => {
+            return getLengthByCoords({ x, y }, centerPoint) <= argAxis.getRadius() &&
+                min(prevPoint.x, point.x) <= x && max(prevPoint.x, point.x) >= x &&
+                min(prevPoint.y, point.y) <= y && max(prevPoint.y, point.y) >= y;
+        };
+        let coords;
+
+        const neighborPoints = that.getNeighborPoints(coordParam, paramName);
+
+        if(neighborPoints.length === 1) {
+            coords = neighborPoints[0];
+        } else if(neighborPoints.length > 1) {
+            const prevPoint = neighborPoints[0];
+            const point = neighborPoints[1];
+
+            if(that.argumentAxisType !== DISCRETE && that.valueAxisType !== DISCRETE) {
+                let tan;
+                let stepAngle;
+
+                if(isArgument) {
+                    tan = (prevPoint.radius - point.radius) / (prevPoint.angle - point.angle);
+                    stepAngle = coordParam - point.angle;
+                } else {
+                    tan = (prevPoint.radius - point.radius) / (prevPoint.angle - point.angle);
+                    stepAngle = (coordParam - point.radius) / tan;
+                }
+                coords = getTangentPoint(point, prevPoint, centerPoint, tan, stepAngle);
+            } else {
+                if(isArgument) {
+                    const cosSin = vizUtils.getCosAndSin(-coordParam);
+                    const k1 = (point.y - prevPoint.y) / (point.x - prevPoint.x);
+                    const b1 = prevPoint.y - prevPoint.x * k1;
+                    const k2 = cosSin.sin / cosSin.cos;
+                    const b2 = centerPoint.y - k2 * centerPoint.x;
+
+                    const x = (b2 - b1) / (k1 - k2);
+                    const y = k1 * x + b1;
+                    if(isInsideInterval(prevPoint, point, { x, y })) {
+                        const quarter = abs(mathUtils.trunc((360 + coordParam) / 90) % 4);
+                        if(quarter === 0 && x >= centerPoint.x && y <= centerPoint.y ||
+                            quarter === 1 && x <= centerPoint.x && y <= centerPoint.y ||
+                            quarter === 2 && x <= centerPoint.x && y >= centerPoint.y ||
+                            quarter === 3 && x >= centerPoint.x && y >= centerPoint.y) {
+                            coords = { x, y };
+                        }
+                    }
+                } else {
+                    const k = (point.y - prevPoint.y) / (point.x - prevPoint.x);
+                    const y0 = prevPoint.y - prevPoint.x * k;
+
+                    const a = 1 + k * k;
+                    const b = -2 * centerPoint.x + 2 * k * y0 - 2 * k * centerPoint.y;
+                    const c = -pow(coordParam, 2) + pow(y0 - centerPoint.y, 2) + pow(centerPoint.x, 2);
+                    const d = b * b - 4 * a * c;
+                    if(d >= 0) {
+                        const x1 = (-b - sqrt(d)) / (2 * a);
+                        const x2 = (-b + sqrt(d)) / (2 * a);
+                        const y1 = k * x1 + y0;
+                        const y2 = k * x2 + y0;
+                        coords = isInsideInterval(prevPoint, point, { x: x1, y: y1 }) ? { x: x1, y: y1 } :
+                            (isInsideInterval(prevPoint, point, { x: x2, y: y2 }) ? { x: x2, y: y2 } : undefined);
+                    }
+                }
+            }
+        }
+
+        return coords;
+    },
+
+    getNeighborPoints(param, paramName) {
+        let points = this.getPoints();
+        let neighborPoints = [];
+
+        if(this.getOptions().closed) {
+            points = _extend(true, [], points);
+            const lastPoint = points[points.length - 1];
+            const firstPointCopy = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
+            const lastPointCopy = clonePoint(lastPoint, lastPoint.x, lastPoint.y, lastPoint.angle);
+            const rearwardRefPoint = this._modifyReflectedPoint(firstPointCopy, lastPoint);
+            const forwardRefPoint = this._modifyReflectedPoint(lastPointCopy, points[0]);
+            if(forwardRefPoint) {
+                points.unshift(forwardRefPoint);
+            }
+            if(rearwardRefPoint) {
+                points.push(rearwardRefPoint);
+            }
+        }
+
+        for(let i = 1; i < points.length; i++) {
+            if(points[i - 1][paramName] === param) {
+                neighborPoints.push(points[i - 1]);
+            } else if(points[i][paramName] === param) {
+                neighborPoints.push(points[i]);
+            } else if(points[i][paramName] > param && points[i - 1][paramName] < param ||
+                points[i - 1][paramName] > param && points[i][paramName] < param) {
+                neighborPoints.push(points[i - 1]);
+                neighborPoints.push(points[i]);
+            }
+            if(neighborPoints.length > 0) {
+                break;
+            }
+        }
+
+        return neighborPoints;
     }
 });

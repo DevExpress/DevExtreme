@@ -89,714 +89,714 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Drawer behavior');
+QUnit.module('Drawer behavior', () => {
+    QUnit.test('defaults', function(assert) {
+        const $element = $('#drawer').dxDrawer({});
+        const instance = $element.dxDrawer('instance');
 
-QUnit.test('defaults', function(assert) {
-    const $element = $('#drawer').dxDrawer({});
-    const instance = $element.dxDrawer('instance');
-
-    assert.equal(instance.option('revealMode'), 'slide', 'revealMode is OK');
-    assert.equal(instance.option('openedStateMode'), 'shrink', 'mode is OK');
-    assert.equal(instance.option('position'), 'left', 'position is OK');
-    assert.equal(instance.option('shading'), false, 'shading is OK');
-    assert.strictEqual(instance.option('minSize'), null, 'minSize is OK');
-    assert.strictEqual(instance.option('maxSize'), null, 'maxSize is OK');
-    assert.equal(instance.option('animationEnabled'), true, 'animationEnabled is OK');
-    assert.equal(instance.option('animationDuration'), 400, 'animationDuration is OK');
-});
-
-QUnit.test('drawer should preserve content', function(assert) {
-    const $content = $('#drawer #content');
-    const $element = $('#drawer').dxDrawer();
-
-    assert.equal($content[0], $element.find('#content')[0]);
-});
-
-QUnit.test('drawer shouldn\'t lose its content after repaint (T731771)', function(assert) {
-    let $button = $('#button').dxButton();
-
-    const $element = $('#drawerWithContent').dxDrawer();
-    const instance = $element.dxDrawer('instance');
-
-    instance.repaint();
-
-    $button = $element.find('.dx-button');
-
-    const buttonInstance = $button.dxButton('instance');
-
-    assert.ok(buttonInstance instanceof Button, 'button into drawer content wasn\'t clean after repaint');
-});
-
-QUnit.test('drawer tabIndex should be removed after _clean', function(assert) {
-    const $element = $('#drawer').dxDrawer();
-    const instance = $element.dxDrawer('instance');
-
-    instance._clean();
-
-    assert.equal($element.attr('tabIndex'), undefined, 'tabIndex was removed');
-});
-
-QUnit.test('subscribe on toggle function should fired at the end of animation', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false
+        assert.equal(instance.option('revealMode'), 'slide', 'revealMode is OK');
+        assert.equal(instance.option('openedStateMode'), 'shrink', 'mode is OK');
+        assert.equal(instance.option('position'), 'left', 'position is OK');
+        assert.equal(instance.option('shading'), false, 'shading is OK');
+        assert.strictEqual(instance.option('minSize'), null, 'minSize is OK');
+        assert.strictEqual(instance.option('maxSize'), null, 'maxSize is OK');
+        assert.equal(instance.option('animationEnabled'), true, 'animationEnabled is OK');
+        assert.equal(instance.option('animationDuration'), 400, 'animationDuration is OK');
     });
 
-    const instance = $element.dxDrawer('instance');
-    let count = 0;
-    const done = assert.async();
+    QUnit.test('drawer should preserve content', function(assert) {
+        const $content = $('#drawer #content'),
+            $element = $('#drawer').dxDrawer();
 
-    instance.toggle().then(() => {
-        count++;
-        assert.equal(count, 1, 'callback not fired at animation start');
-        done();
+        assert.equal($content[0], $element.find('#content')[0]);
     });
 
-    assert.equal(count, 0, 'callback not fired at animation start');
-});
+    QUnit.test('drawer shouldn\'t lose its content after repaint (T731771)', function(assert) {
+        let $button = $('#button').dxButton();
 
-QUnit.test('dxresize event should be fired for content at the end of animation', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false
+        const $element = $('#drawerWithContent').dxDrawer();
+        const instance = $element.dxDrawer('instance');
+
+        instance.repaint();
+
+        $button = $element.find('.dx-button');
+
+        const buttonInstance = $button.dxButton('instance');
+
+        assert.ok(buttonInstance instanceof Button, 'button into drawer content wasn\'t clean after repaint');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const triggerFunction = domUtils.triggerResizeEvent;
-    assert.expect(2);
+    QUnit.test('drawer tabIndex should be removed after _clean', function(assert) {
+        const $element = $('#drawer').dxDrawer();
+        const instance = $element.dxDrawer('instance');
 
-    try {
-        fx.off = true;
-        domUtils.triggerResizeEvent = ($element) => {
-            assert.ok(true, 'event was triggered');
-            assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
+        instance._clean();
+
+        assert.equal($element.attr('tabIndex'), undefined, 'tabIndex was removed');
+    });
+
+    QUnit.test('subscribe on toggle function should fired at the end of animation', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false
+        });
+
+        const instance = $element.dxDrawer('instance');
+        let count = 0;
+        const done = assert.async();
+
+        instance.toggle().then(() => {
+            count++;
+            assert.equal(count, 1, 'callback not fired at animation start');
+            done();
+        });
+
+        assert.equal(count, 0, 'callback not fired at animation start');
+    });
+
+    QUnit.test('dxresize event should be fired for content at the end of animation', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false
+        });
+
+        const instance = $element.dxDrawer('instance');
+        var triggerFunction = domUtils.triggerResizeEvent;
+        assert.expect(2);
+
+        try {
+            fx.off = true;
+            domUtils.triggerResizeEvent = ($element) => {
+                assert.ok(true, 'event was triggered');
+                assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
+            };
+
+            instance.toggle();
+
+        } finally {
+            fx.off = false;
+            domUtils.triggerResizeEvent = triggerFunction;
+        }
+    });
+
+    QUnit.test('dxresize event should be fired if there is no any animation', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            position: 'right'
+        });
+
+        const instance = $element.dxDrawer('instance');
+        var triggerFunction = domUtils.triggerResizeEvent;
+        assert.expect(2);
+
+        try {
+            domUtils.triggerResizeEvent = function($element) {
+                assert.ok(true, 'event was triggered');
+                assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
+            };
+
+            instance.option('position', 'left');
+
+        } finally {
+            domUtils.triggerResizeEvent = triggerFunction;
+        }
+    });
+
+    QUnit.test('incomplete animation should be stopped after toggling visibility', function(assert) {
+        let origFxStop = fx.stop,
+            panelStopCalls = 0,
+            contentStopCalls = 0,
+            overlayContentStopCalls = 0,
+            shaderStopCalls = 0,
+            isJumpedToEnd = false;
+
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            openedStateMode: 'overlap',
+            revealMode: 'expand',
+            shading: true
+        });
+
+        const instance = $element.dxDrawer('instance');
+        fx.stop = function($element, jumpToEnd) {
+            if(jumpToEnd) {
+                isJumpedToEnd = true;
+            }
+            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+                panelStopCalls++;
+            }
+            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+                contentStopCalls++;
+            }
+            if($element.hasClass('dx-overlay-content')) {
+                overlayContentStopCalls++;
+            }
+            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+                shaderStopCalls++;
+            }
         };
+
+        try {
+            fx.off = false;
+
+            instance.toggle();
+            instance.toggle();
+
+            assert.equal(panelStopCalls, 2, 'animation should stops before toggling visibility');
+            assert.equal(contentStopCalls, 2, 'animation should stops before toggling visibility');
+            assert.equal(overlayContentStopCalls, 2, 'animation should stops before toggling visibility');
+            assert.equal(shaderStopCalls, 2, 'animation should stops before toggling visibility');
+            assert.notOk(isJumpedToEnd, 'elements aren\'t returned to the end position after animation stopping');
+        } finally {
+            fx.off = true;
+            fx.stop = origFxStop;
+        }
+    });
+
+    QUnit.test('incomplete animation should be stopped after closing on outside click', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'overlap',
+            closeOnOutsideClick: true,
+            revealMode: 'expand',
+            shading: true
+        });
+
+        let origFxStop = fx.stop,
+            panelStopCalls = 0,
+            contentStopCalls = 0,
+            overlayContentStopCalls = 0,
+            shaderStopCalls = 0,
+            isJumpedToEnd = false;
+
+        const instance = $element.dxDrawer('instance');
+        fx.stop = function($element, jumpToEnd) {
+            if(jumpToEnd) {
+                isJumpedToEnd = true;
+            }
+            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+                panelStopCalls++;
+            }
+            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+                contentStopCalls++;
+            }
+            if($element.hasClass('dx-overlay-content')) {
+                overlayContentStopCalls++;
+            }
+            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+                shaderStopCalls++;
+            }
+        };
+
+        try {
+            fx.off = false;
+
+            $(instance.viewContent()).trigger('dxclick');
+
+            assert.equal(panelStopCalls, 2, 'animation should stops before closing');
+            assert.equal(contentStopCalls, 2, 'animation should stops before closing');
+            assert.equal(overlayContentStopCalls, 2, 'animation should stops before closing');
+            assert.equal(shaderStopCalls, 2, 'animation should stops before closing');
+            assert.notOk(isJumpedToEnd, 'elements aren\'t returned to the end position after animation stopping');
+        } finally {
+            fx.off = true;
+            fx.stop = origFxStop;
+        }
+    });
+
+    QUnit.test('incomplete animation should be stopped after changing modes', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'push',
+            animationDuration: 500,
+            closeOnOutsideClick: true,
+            revealMode: 'slide',
+            shading: true
+        });
+
+        let origFxStop = fx.stop,
+            panelStopCalls = 0,
+            contentStopCalls = 0,
+            shaderStopCalls = 0,
+            isJumpedToEnd = false;
+
+        const instance = $element.dxDrawer('instance');
+        fx.stop = function($element, jumpToEnd) {
+            isJumpedToEnd = jumpToEnd;
+
+            if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
+                panelStopCalls++;
+            }
+            if($element.hasClass(DRAWER_CONTENT_CLASS)) {
+                contentStopCalls++;
+            }
+            if($element.hasClass(DRAWER_SHADER_CLASS)) {
+                shaderStopCalls++;
+            }
+        };
+
+        try {
+            fx.off = false;
+
+            instance.option('openedStateMode', 'shrink');
+            instance.option('revealMode', 'expand');
+
+            assert.equal(panelStopCalls, 2, 'animation should stops before closing');
+            assert.equal(contentStopCalls, 2, 'animation should stops before closing');
+            assert.equal(shaderStopCalls, 2, 'animation should stops before closing');
+            assert.ok(isJumpedToEnd, 'elements are returned to the end position after animation stopping');
+        } finally {
+            fx.off = true;
+            fx.stop = origFxStop;
+        }
+    });
+
+    QUnit.test('drawer shouldn\'t fail after changing openedStateMode', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'push'
+        });
+        const instance = $element.dxDrawer('instance');
+
+        instance.option('openedStateMode', 'shrink');
+        instance.option('openedStateMode', 'overlap');
+
+        assert.ok(true, 'Drawer works correctly');
+    });
+
+    QUnit.test('target option', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'overlap'
+        });
+        const instance = $element.dxDrawer('instance');
+
+        assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-wrapper'), 'default target is ok');
+
+        instance.option('target', $element.find('.dx-drawer-content'));
+        assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
+    });
+
+    QUnit.test('content() function', function(assert) {
+        const $element = $('#drawer').dxDrawer({});
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+        assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, 'panel element');
+        assert.equal($panel.get(0), $(instance.content()).get(0), 'content function return correct DOMNode');
+    });
+
+    QUnit.test('viewContent() function', function(assert) {
+        const $element = $('#drawer').dxDrawer({});
+        const instance = $element.dxDrawer('instance');
+        const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
+
+        assert.equal($content.get(0), $(instance.viewContent()).get(0), 'content function return correct DOMNode');
+    });
+
+    QUnit.test('show() and hide() methods', function(assert) {
+        const $element = $('#drawer').dxDrawer({});
+        const instance = $element.dxDrawer('instance');
+
+        instance.show();
+        assert.equal(instance.option('opened'), true, 'panel was shown');
+
+        instance.hide();
+        assert.equal(instance.option('opened'), false, 'panel was hidden');
+    });
+
+    QUnit.test('toggle() method', function(assert) {
+        const $element = $('#drawer').dxDrawer({});
+        const instance = $element.dxDrawer('instance');
+        const opened = instance.option('opened');
 
         instance.toggle();
+        assert.equal(instance.option('opened'), !opened, 'panel was shown');
 
-    } finally {
-        fx.off = false;
-        domUtils.triggerResizeEvent = triggerFunction;
-    }
-});
-
-QUnit.test('dxresize event should be fired if there is no any animation', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        position: 'right'
+        instance.toggle();
+        assert.equal(instance.option('opened'), opened, 'panel was hidden');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const triggerFunction = domUtils.triggerResizeEvent;
-    assert.expect(2);
+    QUnit.test('wrapper content should be reversed if position = \'bottom\' or \'right\'', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'shrink'
+        });
+        const instance = $element.dxDrawer('instance');
 
-    try {
-        domUtils.triggerResizeEvent = function($element) {
-            assert.ok(true, 'event was triggered');
-            assert.equal($element, instance.viewContent(), 'Event was triggered for right element');
-        };
+        instance.option('position', 'right');
+        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        let $content = $wrapper.children();
+
+        assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(0).hasClass('dx-drawer-content'));
 
         instance.option('position', 'left');
 
-    } finally {
-        domUtils.triggerResizeEvent = triggerFunction;
-    }
-});
+        $content = $wrapper.children();
 
-QUnit.test('incomplete animation should be stopped after toggling visibility', function(assert) {
-    const origFxStop = fx.stop;
-    let panelStopCalls = 0;
-    let contentStopCalls = 0;
-    let overlayContentStopCalls = 0;
-    let shaderStopCalls = 0;
-    let isJumpedToEnd = false;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        openedStateMode: 'overlap',
-        revealMode: 'expand',
-        shading: true
+        assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(1).hasClass('dx-drawer-content'));
     });
 
-    const instance = $element.dxDrawer('instance');
-    fx.stop = function($element, jumpToEnd) {
-        if(jumpToEnd) {
-            isJumpedToEnd = true;
-        }
-        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
-            panelStopCalls++;
-        }
-        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
-            contentStopCalls++;
-        }
-        if($element.hasClass('dx-overlay-content')) {
-            overlayContentStopCalls++;
-        }
-        if($element.hasClass(DRAWER_SHADER_CLASS)) {
-            shaderStopCalls++;
-        }
-    };
-
-    try {
-        fx.off = false;
-
-        instance.toggle();
-        instance.toggle();
-
-        assert.equal(panelStopCalls, 2, 'animation should stops before toggling visibility');
-        assert.equal(contentStopCalls, 2, 'animation should stops before toggling visibility');
-        assert.equal(overlayContentStopCalls, 2, 'animation should stops before toggling visibility');
-        assert.equal(shaderStopCalls, 2, 'animation should stops before toggling visibility');
-        assert.notOk(isJumpedToEnd, 'elements aren\'t returned to the end position after animation stopping');
-    } finally {
-        fx.off = true;
-        fx.stop = origFxStop;
-    }
-});
-
-QUnit.test('incomplete animation should be stopped after closing on outside click', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        openedStateMode: 'overlap',
-        closeOnOutsideClick: true,
-        revealMode: 'expand',
-        shading: true
-    });
-
-    const origFxStop = fx.stop;
-    let panelStopCalls = 0;
-    let contentStopCalls = 0;
-    let overlayContentStopCalls = 0;
-    let shaderStopCalls = 0;
-    let isJumpedToEnd = false;
-
-    const instance = $element.dxDrawer('instance');
-    fx.stop = function($element, jumpToEnd) {
-        if(jumpToEnd) {
-            isJumpedToEnd = true;
-        }
-        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
-            panelStopCalls++;
-        }
-        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
-            contentStopCalls++;
-        }
-        if($element.hasClass('dx-overlay-content')) {
-            overlayContentStopCalls++;
-        }
-        if($element.hasClass(DRAWER_SHADER_CLASS)) {
-            shaderStopCalls++;
-        }
-    };
-
-    try {
-        fx.off = false;
-
-        $(instance.viewContent()).trigger('dxclick');
-
-        assert.equal(panelStopCalls, 2, 'animation should stops before closing');
-        assert.equal(contentStopCalls, 2, 'animation should stops before closing');
-        assert.equal(overlayContentStopCalls, 2, 'animation should stops before closing');
-        assert.equal(shaderStopCalls, 2, 'animation should stops before closing');
-        assert.notOk(isJumpedToEnd, 'elements aren\'t returned to the end position after animation stopping');
-    } finally {
-        fx.off = true;
-        fx.stop = origFxStop;
-    }
-});
-
-QUnit.test('incomplete animation should be stopped after changing modes', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        openedStateMode: 'push',
-        animationDuration: 500,
-        closeOnOutsideClick: true,
-        revealMode: 'slide',
-        shading: true
-    });
-
-    const origFxStop = fx.stop;
-    let panelStopCalls = 0;
-    let contentStopCalls = 0;
-    let shaderStopCalls = 0;
-    let isJumpedToEnd = false;
-
-    const instance = $element.dxDrawer('instance');
-    fx.stop = function($element, jumpToEnd) {
-        isJumpedToEnd = jumpToEnd;
-
-        if($element.hasClass(DRAWER_PANEL_CONTENT_CLASS)) {
-            panelStopCalls++;
-        }
-        if($element.hasClass(DRAWER_CONTENT_CLASS)) {
-            contentStopCalls++;
-        }
-        if($element.hasClass(DRAWER_SHADER_CLASS)) {
-            shaderStopCalls++;
-        }
-    };
-
-    try {
-        fx.off = false;
+    QUnit.test('wrapper content should be reversed if position = \'right\' and openedStateMode is changed', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'push',
+            position: 'right'
+        });
+        const instance = $element.dxDrawer('instance');
 
         instance.option('openedStateMode', 'shrink');
-        instance.option('revealMode', 'expand');
+        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        let $content = $wrapper.children();
 
-        assert.equal(panelStopCalls, 2, 'animation should stops before closing');
-        assert.equal(contentStopCalls, 2, 'animation should stops before closing');
-        assert.equal(shaderStopCalls, 2, 'animation should stops before closing');
-        assert.ok(isJumpedToEnd, 'elements are returned to the end position after animation stopping');
-    } finally {
+        assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(0).hasClass('dx-drawer-content'));
+
+        instance.option('position', 'left');
+
+        $content = $wrapper.children();
+
+        assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(1).hasClass('dx-drawer-content'));
+    });
+
+    QUnit.skip('drawer panel should be repositioned correctly after dimension changed,left position', function(assert) {
         fx.off = true;
-        fx.stop = origFxStop;
-    }
-});
 
-QUnit.test('drawer shouldn\'t fail after changing openedStateMode', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'push'
-    });
-    const instance = $element.dxDrawer('instance');
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            revealMode: 'slide',
+            openedStateMode: 'overlap',
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
 
-    instance.option('openedStateMode', 'shrink');
-    instance.option('openedStateMode', 'overlap');
+                return $div;
+            }
+        });
+        const $panelOverlayContent = $element.find('.dx-overlay-content');
 
-    assert.ok(true, 'Drawer works correctly');
-});
+        resizeCallbacks.fire();
 
-QUnit.test('target option', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'overlap'
-    });
-    const instance = $element.dxDrawer('instance');
+        assert.equal($panelOverlayContent.position().left, 0, 'panel overlay content position is OK');
 
-    assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-wrapper'), 'default target is ok');
-
-    instance.option('target', $element.find('.dx-drawer-content'));
-    assert.ok($(instance._overlay.option('position').of).hasClass('dx-drawer-content'), 'target is ok');
-});
-
-QUnit.test('content() function', function(assert) {
-    const $element = $('#drawer').dxDrawer({});
-    const instance = $element.dxDrawer('instance');
-    const $panel = $element.find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.content()), !!config().useJQuery, 'panel element');
-    assert.equal($panel.get(0), $(instance.content()).get(0), 'content function return correct DOMNode');
-});
-
-QUnit.test('viewContent() function', function(assert) {
-    const $element = $('#drawer').dxDrawer({});
-    const instance = $element.dxDrawer('instance');
-    const $content = $element.find('.' + DRAWER_CONTENT_CLASS).eq(0);
-
-    assert.equal($content.get(0), $(instance.viewContent()).get(0), 'content function return correct DOMNode');
-});
-
-QUnit.test('show() and hide() methods', function(assert) {
-    const $element = $('#drawer').dxDrawer({});
-    const instance = $element.dxDrawer('instance');
-
-    instance.show();
-    assert.equal(instance.option('opened'), true, 'panel was shown');
-
-    instance.hide();
-    assert.equal(instance.option('opened'), false, 'panel was hidden');
-});
-
-QUnit.test('toggle() method', function(assert) {
-    const $element = $('#drawer').dxDrawer({});
-    const instance = $element.dxDrawer('instance');
-    const opened = instance.option('opened');
-
-    instance.toggle();
-    assert.equal(instance.option('opened'), !opened, 'panel was shown');
-
-    instance.toggle();
-    assert.equal(instance.option('opened'), opened, 'panel was hidden');
-});
-
-QUnit.test('wrapper content should be reversed if position = \'bottom\' or \'right\'', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'shrink'
-    });
-    const instance = $element.dxDrawer('instance');
-
-    instance.option('position', 'right');
-    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
-    let $content = $wrapper.children();
-
-    assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(0).hasClass('dx-drawer-content'));
-
-    instance.option('position', 'left');
-
-    $content = $wrapper.children();
-
-    assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(1).hasClass('dx-drawer-content'));
-});
-
-QUnit.test('wrapper content should be reversed if position = \'right\' and openedStateMode is changed', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'push',
-        position: 'right'
-    });
-    const instance = $element.dxDrawer('instance');
-
-    instance.option('openedStateMode', 'shrink');
-    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
-    let $content = $wrapper.children();
-
-    assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(0).hasClass('dx-drawer-content'));
-
-    instance.option('position', 'left');
-
-    $content = $wrapper.children();
-
-    assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(1).hasClass('dx-drawer-content'));
-});
-
-QUnit.skip('drawer panel should be repositioned correctly after dimension changed,left position', function(assert) {
-    fx.off = true;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        revealMode: 'slide',
-        openedStateMode: 'overlap',
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    });
-    const $panelOverlayContent = $element.find('.dx-overlay-content');
-
-    resizeCallbacks.fire();
-
-    assert.equal($panelOverlayContent.position().left, 0, 'panel overlay content position is OK');
-
-    fx.off = false;
-});
-
-QUnit.skip('drawer panel should be repositioned correctly after dimension changed,top position', function(assert) {
-    fx.off = true;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        position: 'top',
-        revealMode: 'slide',
-        openedStateMode: 'overlap',
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    });
-    const $panelOverlayContent = $element.find('.dx-overlay-content');
-
-    resizeCallbacks.fire();
-
-    assert.equal($panelOverlayContent.position().top, 0, 'panel overlay content position is OK');
-
-    fx.off = false;
-});
-
-QUnit.test('drawer panel should have correct size after dimension changed,top position', function(assert) {
-    fx.off = true;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        position: 'top',
-        revealMode: 'expand',
-        openedStateMode: 'overlap',
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    });
-    const drawer = $element.dxDrawer('instance');
-    const $panelOverlayContent = $element.find('.dx-overlay-content');
-
-    resizeCallbacks.fire();
-
-    drawer.toggle();
-    assert.equal($panelOverlayContent.height(), 600, 'panel overlay height is OK');
-
-    fx.off = false;
-});
-
-QUnit.test('drawer panel should be repositioned correctly after dimension changed, right position', function(assert) {
-    fx.off = true;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        position: 'right',
-        revealMode: 'slide',
-        openedStateMode: 'overlap',
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    });
-    const instance = $element.dxDrawer('instance');
-    const $panelOverlayContent = $element.find('.dx-overlay-content');
-
-    resizeCallbacks.fire();
-    instance.option('revealMode', 'expand');
-    assert.equal($panelOverlayContent.css('left'), 'auto', 'panel overlay content position is OK');
-
-    fx.off = false;
-});
-
-QUnit.skip('drawer panel should be repositioned after dimension changed, right position', function(assert) {
-    fx.off = true;
-
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        revealMode: 'slide',
-        position: 'right',
-        openedStateMode: 'overlap',
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    });
-    const $panelOverlayContent = $element.find('.dx-overlay-content');
-
-    resizeCallbacks.fire();
-
-    assert.equal($panelOverlayContent.position().left, -200, 'panel overlay content position is OK');
-
-    fx.off = false;
-});
-
-QUnit.test('content container should have correct position if panel isn\'t visible', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false
+        fx.off = false;
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
+    QUnit.skip('drawer panel should be repositioned correctly after dimension changed,top position', function(assert) {
+        fx.off = true;
 
-    assert.equal(position($content), 0, 'container rendered at correct position');
-});
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            position: 'top',
+            revealMode: 'slide',
+            openedStateMode: 'overlap',
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
 
-QUnit.test('content container should have correct position if panel is visible', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true
+                return $div;
+            }
+        });
+        const $panelOverlayContent = $element.find('.dx-overlay-content');
+
+        resizeCallbacks.fire();
+
+        assert.equal($panelOverlayContent.position().top, 0, 'panel overlay content position is OK');
+
+        fx.off = false;
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
-    const $panel = $(instance.content());
+    QUnit.test('drawer panel should have correct size after dimension changed,top position', function(assert) {
+        fx.off = true;
 
-    assert.equal(position($content), $panel.width(), 'container rendered at correct position');
-});
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            position: 'top',
+            revealMode: 'expand',
+            openedStateMode: 'overlap',
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
 
-QUnit.test('content container should have correct position after resize', function(assert) {
-    const $element = $('#drawer2').dxDrawer({
-        width: '100%',
-        opened: true
+                return $div;
+            }
+        });
+        const drawer = $element.dxDrawer('instance');
+        const $panelOverlayContent = $element.find('.dx-overlay-content');
+
+        resizeCallbacks.fire();
+
+        drawer.toggle();
+        assert.equal($panelOverlayContent.height(), 600, 'panel overlay height is OK');
+
+        fx.off = false;
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
-    const elementWidth = $element.width();
+    QUnit.test('drawer panel should be repositioned correctly after dimension changed, right position', function(assert) {
+        fx.off = true;
 
-    $('#drawerContainer').width(elementWidth * 2);
-    resizeCallbacks.fire();
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            position: 'right',
+            revealMode: 'slide',
+            openedStateMode: 'overlap',
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
 
-    assert.equal(position($content), $(instance.content()).width(), 'container rendered at correct position');
-});
+                return $div;
+            }
+        });
+        const instance = $element.dxDrawer('instance');
+        const $panelOverlayContent = $element.find('.dx-overlay-content');
 
-QUnit.test('content container should have correct position if it is rendered in invisible container', function(assert) {
-    const $container = $('#drawerContainer');
-    const $element = $('#drawer2');
+        resizeCallbacks.fire();
+        instance.option('revealMode', 'expand');
+        assert.equal($panelOverlayContent.css('left'), 'auto', 'panel overlay content position is OK');
 
-    $container.detach();
-
-    const instance = $element.dxDrawer({
-        width: '100%',
-        opened: true,
-        maxSize: 50
-    }).dxDrawer('instance');
-
-    const $content = $(instance.viewContent());
-
-    $container.appendTo('#qunit-fixture');
-    $element.trigger('dxshown');
-
-    assert.equal(position($content), 50, 'container rendered at correct position');
-});
-
-QUnit.test('drawer panel should have correct width when panel content is wrapped by div with borders (T702576)', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        template: function($content) {
-            const $outerDiv = $('<div/>');
-            $('<div/>').css('height', 600).css('width', 200).appendTo($outerDiv);
-
-            return $outerDiv;
-        }
+        fx.off = false;
     });
 
-    const $panelContent = $element.find('.dx-drawer-panel-content').css('border', '10px solid black');
+    QUnit.skip('drawer panel should be repositioned after dimension changed, right position', function(assert) {
+        fx.off = true;
 
-    resizeCallbacks.fire();
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            revealMode: 'slide',
+            position: 'right',
+            openedStateMode: 'overlap',
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
 
-    assert.equal($panelContent.width(), 180, 'panel content has correct width');
-    assert.equal($panelContent.outerWidth(), 200, 'panel content has correct outerWidth');
-});
+                return $div;
+            }
+        });
+        const $panelOverlayContent = $element.find('.dx-overlay-content');
 
-QUnit.test('drawer panel should have correct width when async template is used', function(assert) {
-    const clock = sinon.useFakeTimers();
+        resizeCallbacks.fire();
 
-    $('#drawer').dxDrawer({
-        openedStateMode: 'push',
-        templatesRenderAsynchronously: true,
-        integrationOptions: {
-            templates: {
-                'panel': {
-                    render: function(args) {
-                        const $div = $('<div/>').appendTo(args.container);
-                        setTimeout(() => {
-                            $div.css('height', 600);
-                            $div.css('width', 200);
-                            args.onRendered();
-                        }, 100);
+        assert.equal($panelOverlayContent.position().left, -200, 'panel overlay content position is OK');
+
+        fx.off = false;
+    });
+
+    QUnit.test('content container should have correct position if panel isn\'t visible', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false
+        });
+
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+
+        assert.equal(position($content), 0, 'container rendered at correct position');
+    });
+
+    QUnit.test('content container should have correct position if panel is visible', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true
+        });
+
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+        const $panel = $(instance.content());
+
+        assert.equal(position($content), $panel.width(), 'container rendered at correct position');
+    });
+
+    QUnit.test('content container should have correct position after resize', function(assert) {
+        const $element = $('#drawer2').dxDrawer({
+            width: '100%',
+            opened: true
+        });
+
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+        const elementWidth = $element.width();
+
+        $('#drawerContainer').width(elementWidth * 2);
+        resizeCallbacks.fire();
+
+        assert.equal(position($content), $(instance.content()).width(), 'container rendered at correct position');
+    });
+
+    QUnit.test('content container should have correct position if it is rendered in invisible container', function(assert) {
+        const $container = $('#drawerContainer');
+        const $element = $('#drawer2');
+
+        $container.detach();
+
+        const instance = $element.dxDrawer({
+            width: '100%',
+            opened: true,
+            maxSize: 50
+        }).dxDrawer('instance');
+
+        const $content = $(instance.viewContent());
+
+        $container.appendTo('#qunit-fixture');
+        $element.trigger('dxshown');
+
+        assert.equal(position($content), 50, 'container rendered at correct position');
+    });
+
+    QUnit.test('drawer panel should have correct width when panel content is wrapped by div with borders (T702576)', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            template: function($content) {
+                var $outerDiv = $('<div/>');
+                $('<div/>').css('height', 600).css('width', 200).appendTo($outerDiv);
+
+                return $outerDiv;
+            }
+        });
+
+        const $panelContent = $element.find('.dx-drawer-panel-content').css('border', '10px solid black');
+
+        resizeCallbacks.fire();
+
+        assert.equal($panelContent.width(), 180, 'panel content has correct width');
+        assert.equal($panelContent.outerWidth(), 200, 'panel content has correct outerWidth');
+    });
+
+    QUnit.test('drawer panel should have correct width when async template is used', function(assert) {
+        var clock = sinon.useFakeTimers();
+
+        $('#drawer').dxDrawer({
+            openedStateMode: 'push',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'panel': {
+                        render: function(args) {
+                            var $div = $('<div/>').appendTo(args.container);
+                            setTimeout(() => {
+                                $div.css('height', 600);
+                                $div.css('width', 200);
+                                args.onRendered();
+                            }, 100);
+                        }
                     }
                 }
             }
-        }
+        });
+
+        clock.tick(100);
+        const $panel = $('#drawer').find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+        assert.equal($panel.width(), 200, 'panel has correct size');
+        clock.restore();
     });
 
-    clock.tick(100);
-    const $panel = $('#drawer').find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    QUnit.test('drawer panel should have correct width when async template is used, overlap mode', function(assert) {
+        var clock = sinon.useFakeTimers();
 
-    assert.equal($panel.width(), 200, 'panel has correct size');
-    clock.restore();
-});
-
-QUnit.test('drawer panel should have correct width when async template is used, overlap mode', function(assert) {
-    const clock = sinon.useFakeTimers();
-
-    $('#drawer').dxDrawer({
-        openedStateMode: 'overlap',
-        templatesRenderAsynchronously: true,
-        integrationOptions: {
-            templates: {
-                'panel': {
-                    render: function(args) {
-                        const $div = $('<div/>').appendTo(args.container);
-                        setTimeout(() => {
-                            $div.css('height', 600);
-                            $div.css('width', 200);
-                            args.onRendered();
-                        }, 100);
+        $('#drawer').dxDrawer({
+            openedStateMode: 'overlap',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'panel': {
+                        render: function(args) {
+                            var $div = $('<div/>').appendTo(args.container);
+                            setTimeout(() => {
+                                $div.css('height', 600);
+                                $div.css('width', 200);
+                                args.onRendered();
+                            }, 100);
+                        }
                     }
                 }
             }
-        }
+        });
+
+        clock.tick(100);
+        const $panelOverlayContent = $('#drawer').find('.dx-overlay-content');
+
+        assert.equal($panelOverlayContent.width(), 200, 'panel has correct size');
+        clock.restore();
     });
 
-    clock.tick(100);
-    const $panelOverlayContent = $('#drawer').find('.dx-overlay-content');
+    QUnit.test('drawer panel should have correct z-index when async template is used, overlap mode', function(assert) {
+        var clock = sinon.useFakeTimers();
 
-    assert.equal($panelOverlayContent.width(), 200, 'panel has correct size');
-    clock.restore();
-});
-
-QUnit.test('drawer panel should have correct z-index when async template is used, overlap mode', function(assert) {
-    const clock = sinon.useFakeTimers();
-
-    $('#drawer').dxDrawer({
-        openedStateMode: 'overlap',
-        templatesRenderAsynchronously: true,
-        integrationOptions: {
-            templates: {
-                'panel': {
-                    render: function(args) {
-                        const $div = $('<div/>').appendTo(args.container);
-                        setTimeout(() => {
-                            $div.css('height', 600);
-                            $div.css('width', 200);
-                            args.onRendered();
-                        }, 100);
+        $('#drawer').dxDrawer({
+            openedStateMode: 'overlap',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'panel': {
+                        render: function(args) {
+                            var $div = $('<div/>').appendTo(args.container);
+                            setTimeout(() => {
+                                $div.css('height', 600);
+                                $div.css('width', 200);
+                                args.onRendered();
+                            }, 100);
+                        }
                     }
                 }
             }
-        }
+        });
+
+        clock.tick(100);
+        const $panel = $('#drawer').find('.dx-drawer-panel-content');
+
+        assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
+        clock.restore();
     });
 
-    clock.tick(100);
-    const $panel = $('#drawer').find('.dx-drawer-panel-content');
+    QUnit.test('drawer panel should have correct margin when async template is used', function(assert) {
+        var clock = sinon.useFakeTimers();
 
-    assert.equal($panel.css('zIndex'), 1501, 'panel has correct zIndex');
-    clock.restore();
-});
-
-QUnit.test('drawer panel should have correct margin when async template is used', function(assert) {
-    const clock = sinon.useFakeTimers();
-
-    $('#drawer').dxDrawer({
-        openedStateMode: 'shrink',
-        templatesRenderAsynchronously: true,
-        opened: true,
-        integrationOptions: {
-            templates: {
-                'panel': {
-                    render: function(args) {
-                        const $div = $('<div/>').appendTo(args.container);
-                        setTimeout(() => {
-                            $div.css('height', 600);
-                            $div.css('width', 200);
-                            args.onRendered();
-                        }, 100);
+        $('#drawer').dxDrawer({
+            openedStateMode: 'shrink',
+            templatesRenderAsynchronously: true,
+            opened: true,
+            integrationOptions: {
+                templates: {
+                    'panel': {
+                        render: function(args) {
+                            var $div = $('<div/>').appendTo(args.container);
+                            setTimeout(() => {
+                                $div.css('height', 600);
+                                $div.css('width', 200);
+                                args.onRendered();
+                            }, 100);
+                        }
                     }
                 }
             }
-        }
+        });
+
+        clock.tick(100);
+        const $panel = $('#drawer').find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+        assert.equal($panel.css('marginLeft'), '0px', 'panel has correct margin');
+        clock.restore();
     });
 
-    clock.tick(100);
-    const $panel = $('#drawer').find('.' + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    QUnit.test('getting real panel position in accordance with rtlEnabled and position options', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            position: 'after'
+        });
+        const instance = $element.dxDrawer('instance');
 
-    assert.equal($panel.css('marginLeft'), '0px', 'panel has correct margin');
-    clock.restore();
-});
+        assert.equal(instance.getDrawerPosition(), 'right');
 
-QUnit.test('getting real panel position in accordance with rtlEnabled and position options', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        position: 'after'
+        instance.option('position', 'before');
+
+        assert.equal(instance.getDrawerPosition(), 'left');
+
+        instance.option('rtlEnabled', true);
+
+        assert.equal(instance.getDrawerPosition(), 'right');
+
+        instance.option('position', 'after');
+
+        assert.equal(instance.getDrawerPosition(), 'left');
     });
-    const instance = $element.dxDrawer('instance');
-
-    assert.equal(instance.getDrawerPosition(), 'right');
-
-    instance.option('position', 'before');
-
-    assert.equal(instance.getDrawerPosition(), 'left');
-
-    instance.option('rtlEnabled', true);
-
-    assert.equal(instance.getDrawerPosition(), 'right');
-
-    instance.option('position', 'after');
-
-    assert.equal(instance.getDrawerPosition(), 'left');
 });
 
 QUnit.module('Animation', {
@@ -806,325 +806,324 @@ QUnit.module('Animation', {
     afterEach() {
         animationCapturing.teardown();
     }
-});
+}, () => {
+    QUnit.test('animationEnabled option test', function(assert) {
+        fx.off = false;
 
-QUnit.test('animationEnabled option test', function(assert) {
-    fx.off = false;
+        const origFX = fx.animate;
+        let animated = false;
 
-    const origFX = fx.animate;
-    let animated = false;
+        fx.animate = () => {
+            animated = true;
+            return Promise.resolve();
+        };
 
-    fx.animate = () => {
-        animated = true;
-        return Promise.resolve();
-    };
+        try {
+            const $drawer = $('#drawer').dxDrawer({
+                opened: true,
+                animationEnabled: false
+            });
 
-    try {
+            const drawer = $drawer.dxDrawer('instance');
+
+            drawer.option('opened', false);
+
+            assert.equal(animated, false, 'animation was not present');
+
+            drawer.option('animationEnabled', true);
+            drawer.option('opened', true);
+
+            assert.equal(animated, true, 'animation present');
+        } finally {
+            fx.animate = origFX;
+        }
+    });
+
+    QUnit.test('animationDuration option test', function(assert) {
         const $drawer = $('#drawer').dxDrawer({
-            opened: true,
-            animationEnabled: false
+            opened: false,
+            animationEnabled: true,
+            openedStateMode: 'push'
         });
 
         const drawer = $drawer.dxDrawer('instance');
 
-        drawer.option('opened', false);
 
-        assert.equal(animated, false, 'animation was not present');
+        drawer.option('animationDuration', 300);
 
-        drawer.option('animationEnabled', true);
-        drawer.option('opened', true);
-
-        assert.equal(animated, true, 'animation present');
-    } finally {
-        fx.animate = origFX;
-    }
+        drawer.toggle();
+        assert.equal(this.capturedAnimations[0].duration, 300, 'duration is correct');
+        drawer.option('animationDuration', 10000);
+        drawer.toggle();
+        assert.equal(this.capturedAnimations[1].duration, 10000, 'duration is correct');
+    });
 });
 
-QUnit.test('animationDuration option test', function(assert) {
-    const $drawer = $('#drawer').dxDrawer({
-        opened: false,
-        animationEnabled: true,
-        openedStateMode: 'push'
+QUnit.module('Shader', () => {
+    QUnit.test('shader should be visible if drawer is opened and shading = true', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true
+        });
+
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+
+        assert.ok($shader.is(':visible'), 'shader is visible');
     });
 
-    const drawer = $drawer.dxDrawer('instance');
+    QUnit.test('shader should not be visible if drawer is closed', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            shading: true
+        });
 
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-    drawer.option('animationDuration', 300);
-
-    drawer.toggle();
-    assert.equal(this.capturedAnimations[0].duration, 300, 'duration is correct');
-    drawer.option('animationDuration', 10000);
-    drawer.toggle();
-    assert.equal(this.capturedAnimations[1].duration, 10000, 'duration is correct');
-});
-
-QUnit.module('Shader');
-
-QUnit.test('shader should be visible if drawer is opened and shading = true', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true
+        assert.ok($shader.is(':hidden'), 'shader is hidden');
+        assert.equal($shader.css('visibility'), 'hidden', 'shader is hidden');
     });
 
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('shader should have correct visibility after toggling state', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true,
+            animationEnabled: false
+        });
+        const instance = $element.dxDrawer('instance');
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-    assert.ok($shader.is(':visible'), 'shader is visible');
-});
+        instance.toggle();
 
-QUnit.test('shader should not be visible if drawer is closed', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        shading: true
+        assert.ok($shader.is(':hidden'), 'shader is hidden');
+        assert.equal($shader.css('visibility'), 'hidden', 'shader is hidden');
     });
 
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('shader should have correct opacity after toggling state', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true,
+            animationEnabled: false
+        });
+        const instance = $element.dxDrawer('instance');
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-    assert.ok($shader.is(':hidden'), 'shader is hidden');
-    assert.equal($shader.css('visibility'), 'hidden', 'shader is hidden');
-});
-
-QUnit.test('shader should have correct visibility after toggling state', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true,
-        animationEnabled: false
-    });
-    const instance = $element.dxDrawer('instance');
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-    instance.toggle();
-
-    assert.ok($shader.is(':hidden'), 'shader is hidden');
-    assert.equal($shader.css('visibility'), 'hidden', 'shader is hidden');
-});
-
-QUnit.test('shader should have correct opacity after toggling state', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true,
-        animationEnabled: false
-    });
-    const instance = $element.dxDrawer('instance');
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-    assert.equal($shader.css('opacity'), 1, 'shader has right opacity');
-    instance.toggle();
-    assert.equal($shader.css('opacity'), 0, 'shader has right opacity');
-});
-
-QUnit.test('shading option', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true
-    });
-    const instance = $element.dxDrawer('instance');
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-
-    assert.ok($shader.is(':visible'), 'shader is visible');
-
-    instance.option('shading', false);
-    assert.ok($shader.is(':hidden'), 'shader is hidden');
-});
-
-QUnit.test('click on shader should not close drawer', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true
+        assert.equal($shader.css('opacity'), 1, 'shader has right opacity');
+        instance.toggle();
+        assert.equal($shader.css('opacity'), 0, 'shader has right opacity');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('shading option', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true
+        });
+        const instance = $element.dxDrawer('instance');
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-    $shader.trigger('dxclick');
-    assert.ok(instance.option('opened'), 'drawer is opened');
-});
+        assert.ok($shader.is(':visible'), 'shader is visible');
 
-QUnit.test('shader should be visible during animation', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: false,
-        shading: true
+        instance.option('shading', false);
+        assert.ok($shader.is(':hidden'), 'shader is hidden');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('click on shader should not close drawer', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true
+        });
 
-    instance.show();
-    assert.ok($shader.is(':visible'), 'shader is visible during animation');
-});
+        const instance = $element.dxDrawer('instance');
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-QUnit.test('shader should have correct position', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        shading: true
+        $shader.trigger('dxclick');
+        assert.ok(instance.option('opened'), 'drawer is opened');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('shader should be visible during animation', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: false,
+            shading: true
+        });
 
-    assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
-});
+        const instance = $element.dxDrawer('instance');
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-QUnit.test('shader should have correct position after widget resize', function(assert) {
-    const $element = $('#drawer2').dxDrawer({
-        width: '100%',
-        opened: true,
-        shading: true
+        instance.show();
+        assert.ok($shader.is(':visible'), 'shader is visible during animation');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
-    const panelWidth = $(instance.content()).width();
+    QUnit.test('shader should have correct position', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            shading: true
+        });
 
-    $('#drawerContainer').width(panelWidth * 2);
-    resizeCallbacks.fire();
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-    assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
-});
-
-QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        openedStateMode: 'overlap',
-        shading: true
+        assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
     });
 
-    const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+    QUnit.test('shader should have correct position after widget resize', function(assert) {
+        const $element = $('#drawer2').dxDrawer({
+            width: '100%',
+            opened: true,
+            shading: true
+        });
 
-    assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
-});
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
+        const panelWidth = $(instance.content()).width();
 
-QUnit.module('Rtl');
+        $('#drawerContainer').width(panelWidth * 2);
+        resizeCallbacks.fire();
 
-QUnit.test('content should have correct position if panel is visible in rtl mode', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        opened: true,
-        openedStateMode: 'push',
-        rtlEnabled: true
+        assert.equal($shader.offset().left, $content.offset().left, 'shader has correct position');
     });
 
-    const instance = $element.dxDrawer('instance');
-    const $content = $(instance.viewContent());
-    const $panel = $(instance.content());
+    QUnit.test('shader should have correct zIndex in overlap mode', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'overlap',
+            shading: true
+        });
 
-    assert.equal(position($content), $panel.width(), 'container rendered at correct position');
-});
+        const $shader = $element.find('.' + DRAWER_SHADER_CLASS);
 
-QUnit.test('drawer panel overlay should have right position config', function(assert) {
-    const drawer = $('#drawer').dxDrawer({
-        openedStateMode: 'overlap',
-        rtlEnabled: true
-    }).dxDrawer('instance');
-    let overlay = drawer.getOverlay();
-
-    assert.equal(overlay.option('position').my, 'top left');
-    assert.equal(overlay.option('position').at, 'top left');
-
-    drawer.option('position', 'right');
-    overlay = drawer.getOverlay();
-
-    assert.equal(overlay.option('position').my, 'top left');
-    assert.equal(overlay.option('position').at, 'top right');
-});
-
-QUnit.test('minSize and maxSize should be rendered correctly in overlap mode rtl, slide', function(assert) {
-    fx.off = true;
-    const drawer = $('#drawer').dxDrawer({
-        openedStateMode: 'overlap',
-        minSize: 50,
-        maxSize: 300,
-        opened: false,
-        width: 500,
-        revealMode: 'slide',
-        rtlEnabled: true,
-        template: function($content) {
-            const $div = $('<div/>');
-            $div.css('height', 600);
-            $div.css('width', 200);
-
-            return $div;
-        }
-    }).dxDrawer('instance');
-
-    const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
-
-    assert.equal($panel.position().left, -150, 'panel has correct left when minSize and max size are set');
-
-    drawer.toggle();
-
-    assert.equal($panel.position().left, 100, 'panel has correct left when minSize and max size are set');
-
-    fx.off = false;
-});
-
-QUnit.test('wrapper content should be reversed if position = \'right\' and openedStateMode is changed, rtl', function(assert) {
-    const $element = $('#drawer').dxDrawer({
-        openedStateMode: 'push',
-        rtlEnabled: true,
-        position: 'left'
+        assert.equal($shader.css('zIndex'), 1500, 'shader has correct zIndex');
     });
-    const instance = $element.dxDrawer('instance');
-
-    instance.option('openedStateMode', 'shrink');
-
-    const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
-    let $content = $wrapper.children();
-
-    assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(0).hasClass('dx-drawer-content'));
-
-    instance.option('position', 'right');
-
-    $content = $wrapper.children();
-
-    assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
-    assert.ok($content.eq(1).hasClass('dx-drawer-content'));
 });
 
-QUnit.module('CloseOnOutsideClick');
+QUnit.module('Rtl', () => {
+    QUnit.test('content should have correct position if panel is visible in rtl mode', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            opened: true,
+            openedStateMode: 'push',
+            rtlEnabled: true
+        });
 
-QUnit.test('drawer should be hidden after click on content', function(assert) {
-    const drawer = $('#drawer').dxDrawer({
-        closeOnOutsideClick: false,
-        opened: true,
-        shading: true
-    })
-        .dxDrawer('instance');
-    const $content = drawer.viewContent();
+        const instance = $element.dxDrawer('instance');
+        const $content = $(instance.viewContent());
+        const $panel = $(instance.content());
 
-    $($content).trigger('dxclick');
-    assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
-    drawer.option('closeOnOutsideClick', true);
-
-    const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
-    $($content).trigger('dxclick');
-
-    assert.equal(drawer.option('opened'), false, 'drawer is hidden');
-    assert.ok($shader.is(':hidden'), 'shader is hidden');
-});
-
-QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
-    const drawer = $('#drawer').dxDrawer({
-        closeOnOutsideClick: () => {
-            return false;
-        },
-        opened: true
-    })
-        .dxDrawer('instance');
-    const $content = drawer.viewContent();
-
-    $($content).trigger('dxclick');
-    assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
-    drawer.option('closeOnOutsideClick', () => {
-        return true;
+        assert.equal(position($content), $panel.width(), 'container rendered at correct position');
     });
 
-    $($content).trigger('dxclick');
-    assert.equal(drawer.option('opened'), false, 'drawer is hidden');
+    QUnit.test('drawer panel overlay should have right position config', function(assert) {
+        let drawer = $('#drawer').dxDrawer({
+                openedStateMode: 'overlap',
+                rtlEnabled: true
+            }).dxDrawer('instance'),
+            overlay = drawer.getOverlay();
+
+        assert.equal(overlay.option('position').my, 'top left');
+        assert.equal(overlay.option('position').at, 'top left');
+
+        drawer.option('position', 'right');
+        overlay = drawer.getOverlay();
+
+        assert.equal(overlay.option('position').my, 'top left');
+        assert.equal(overlay.option('position').at, 'top right');
+    });
+
+    QUnit.test('minSize and maxSize should be rendered correctly in overlap mode rtl, slide', function(assert) {
+        fx.off = true;
+        let drawer = $('#drawer').dxDrawer({
+            openedStateMode: 'overlap',
+            minSize: 50,
+            maxSize: 300,
+            opened: false,
+            width: 500,
+            revealMode: 'slide',
+            rtlEnabled: true,
+            template: function($content) {
+                var $div = $('<div/>');
+                $div.css('height', 600);
+                $div.css('width', 200);
+
+                return $div;
+            }
+        }).dxDrawer('instance');
+
+        const $panel = $('.dx-drawer-panel-content.dx-overlay').eq(0);
+
+        assert.equal($panel.position().left, -150, 'panel has correct left when minSize and max size are set');
+
+        drawer.toggle();
+
+        assert.equal($panel.position().left, 100, 'panel has correct left when minSize and max size are set');
+
+        fx.off = false;
+    });
+
+    QUnit.test('wrapper content should be reversed if position = \'right\' and openedStateMode is changed, rtl', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            openedStateMode: 'push',
+            rtlEnabled: true,
+            position: 'left'
+        });
+        const instance = $element.dxDrawer('instance');
+
+        instance.option('openedStateMode', 'shrink');
+
+        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        let $content = $wrapper.children();
+
+        assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(0).hasClass('dx-drawer-content'));
+
+        instance.option('position', 'right');
+
+        $content = $wrapper.children();
+
+        assert.ok($content.eq(0).hasClass('dx-drawer-panel-content'));
+        assert.ok($content.eq(1).hasClass('dx-drawer-content'));
+    });
 });
 
+QUnit.module('CloseOnOutsideClick', () => {
+    QUnit.test('drawer should be hidden after click on content', function(assert) {
+        var drawer = $('#drawer').dxDrawer({
+                closeOnOutsideClick: false,
+                opened: true,
+                shading: true
+            })
+                .dxDrawer('instance'),
+            $content = drawer.viewContent();
+
+        $($content).trigger('dxclick');
+        assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
+        drawer.option('closeOnOutsideClick', true);
+
+        const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
+        $($content).trigger('dxclick');
+
+        assert.equal(drawer.option('opened'), false, 'drawer is hidden');
+        assert.ok($shader.is(':hidden'), 'shader is hidden');
+    });
+
+    QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
+        var drawer = $('#drawer').dxDrawer({
+                closeOnOutsideClick: () => {
+                    return false;
+                },
+                opened: true
+            })
+                .dxDrawer('instance'),
+            $content = drawer.viewContent();
+
+        $($content).trigger('dxclick');
+        assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
+        drawer.option('closeOnOutsideClick', () => {
+            return true;
+        });
+
+        $($content).trigger('dxclick');
+        assert.equal(drawer.option('opened'), false, 'drawer is hidden');
+    });
+});
 
 QUnit.module('Push mode', {
     beforeEach: function() {

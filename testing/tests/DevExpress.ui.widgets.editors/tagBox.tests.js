@@ -3215,10 +3215,31 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input).type('1');
-        $input.trigger('focusout');
         $('.dx-list-item').trigger('dxclick');
 
         assert.equal(instance.option('selectedItems').length, 1, 'selected items count');
+    });
+
+    QUnit.testInActiveWindow('Filter should not be canceled after Apply button click', function(assert) {
+        const items = ['111', '222', '333'];
+
+        const $element = $('#tagBox').dxTagBox({
+            searchTimeout: 0,
+            items,
+            searchEnabled: true,
+            showSelectionControls: true,
+            selectAllMode: 'allPages',
+            applyValueMode: 'useButtons'
+        });
+
+        const instance = $element.dxTagBox('instance');
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input).type('1');
+        $('.dx-list-item').trigger('dxclick');
+        $('.dx-button.dx-popup-done').trigger('dxclick');
+
+        assert.equal($(instance.content()).find('.dx-list-item').length, 1, 'filter was not cleared after Apply button click');
     });
 
     QUnit.test('filter should not be cleared when no focusout and no item selection happened', function(assert) {
@@ -4068,14 +4089,16 @@ QUnit.module('applyValueMode = \'useButtons\'', {
         });
 
         const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
+        const $doneButton = $('.dx-button.dx-popup-done');
 
         keyboardMock($input)
             .focus()
             .type('c');
 
         $('.dx-list-select-all-checkbox').trigger('dxclick');
-        $($input).trigger('focusout'); // Emulating the real behavior
-        $('.dx-button.dx-popup-done').trigger('dxclick');
+
+        $($input).trigger($.Event('focusout', { relatedTarget: $doneButton.get(0) }));
+        $doneButton.trigger('dxclick');
 
         assert.deepEqual(this.instance.option('value'), ['ac', 'bc'], 'value is applied correctly');
     });
@@ -5141,7 +5164,7 @@ QUnit.module('performance', () => {
         $('.dx-list-select-all-checkbox').trigger('dxclick');
 
         // assert
-        assert.equal(keyGetterCounter, 613, 'key getter call count');
+        assert.equal(keyGetterCounter, 513, 'key getter call count');
         assert.equal(isValueEqualsSpy.callCount, 0, '_isValueEquals is not called');
     });
 
@@ -5219,35 +5242,40 @@ QUnit.module('performance', () => {
     QUnit.test('initial items value should be loaded and selected when valueExpr = this and dataSource.key and deferred datasource is used', function(assert) {
         const clock = sinon.useFakeTimers();
 
-        const $tagBox = $('#tagBox').dxTagBox({
-            dataSource: {
-                load(loadOptions) {
-                    const d = $.Deferred();
+        try {
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource: {
+                    load(loadOptions) {
+                        const d = $.Deferred();
 
-                    setTimeout(() => {
-                        d.resolve(loadOptions.filter ? [] : [{ id: 1, text: 'item 1' }]);
-                    }, 500);
+                        setTimeout(() => {
+                            d.resolve(loadOptions.filter ? [] : [{ id: 1, text: 'item 1' }]);
+                        }, 500);
 
-                    return d.promise();
+                        return d.promise();
+                    },
+                    byKey() {
+                        const d = $.Deferred();
+
+                        setTimeout(() => {
+                            d.resolve({ id: 1, text: 'item 1' });
+                        }, 500);
+
+                        return d.promise();
+                    },
+                    key: 'id'
                 },
-                byKey() {
-                    const d = $.Deferred();
+                value: [{ id: 1, text: 'item 1' }],
+                valueExpr: 'this',
+                displayExpr: 'text'
+            });
 
-                    setTimeout(() => {
-                        d.resolve({ id: 1, text: 'item 1' });
-                    }, 500);
+            clock.tick(1000);
+            assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).text(), 'item 1');
 
-                    return d.promise();
-                },
-                key: 'id'
-            },
-            value: [{ id: 1, text: 'item 1' }],
-            valueExpr: 'this',
-            displayExpr: 'text'
-        });
-
-        clock.tick(1000);
-        assert.equal($tagBox.find('.' + TAGBOX_TAG_CLASS).text(), 'item 1');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('useSubmitBehavior option', function(assert) {

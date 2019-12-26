@@ -19,7 +19,9 @@ const CLONE_CLASS = 'clone';
 * @export default
 */
 
-const Sortable = Draggable.inherit({
+var isElementVisible = itemElement => $(itemElement).is(':visible');
+
+var Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             clone: true,
@@ -238,6 +240,13 @@ const Sortable = Draggable.inherit({
         }
     },
 
+    _getPrevVisibleItem: function(items, index) {
+        return items
+            .slice(0, index)
+            .reverse()
+            .filter(isElementVisible)[0];
+    },
+
     _dragStartHandler: function(e) {
         this.callBase.apply(this, arguments);
 
@@ -279,7 +288,8 @@ const Sortable = Draggable.inherit({
 
                 if(freeSize < sourceElementSize) {
                     if(isVertical) {
-                        const $lastItem = $(this._getItems()).last();
+                        let items = this._getItems(),
+                            $lastItem = $(this._getPrevVisibleItem(items));
 
                         this._$modifiedItem = $lastItem;
                         this._modifiedItemMargin = $lastItem.get(0).style.marginBottom;
@@ -408,10 +418,10 @@ const Sortable = Draggable.inherit({
         return sourceDraggable !== targetDraggable || this.option('allowReordering');
     },
 
-    _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
-        const allowReordering = dropInsideItem || this._allowReordering();
+    _isValidPoint: function(visibleIndex, draggableVisibleIndex, dropInsideItem) {
+        let allowReordering = dropInsideItem || this._allowReordering();
 
-        if(!allowReordering && itemPointIndex !== 0) {
+        if(!allowReordering && visibleIndex !== 0) {
             return false;
         }
 
@@ -419,42 +429,43 @@ const Sortable = Draggable.inherit({
             return true;
         }
 
-        const $draggableItem = this._getDraggableElement();
-        const draggableItemIndex = $items.indexOf($draggableItem.get(0));
-
-        return draggableItemIndex === -1 || itemPointIndex !== draggableItemIndex && (dropInsideItem || itemPointIndex !== (draggableItemIndex + 1));
+        return draggableVisibleIndex === -1 || visibleIndex !== draggableVisibleIndex && (dropInsideItem || visibleIndex !== (draggableVisibleIndex + 1));
     },
 
     _getItemPoints: function() {
-        const that = this;
-        let result;
-        const isVertical = that._isVerticalOrientation();
-        const $items = that._getItems();
+        let that = this,
+            result,
+            isVertical = that._isVerticalOrientation(),
+            itemElements = that._getItems(),
+            visibleItemElements = itemElements.filter(isElementVisible),
+            $draggableItem = this._getDraggableElement(),
+            draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
-        result = $items.map((item, index) => {
-            const offset = $(item).offset();
+        result = visibleItemElements
+            .map((item, visibleIndex) => {
+                const offset = $(item).offset();
 
-            return {
-                dropInsideItem: false,
-                left: offset.left,
-                top: offset.top,
-                index: index,
-                $item: $(item),
-                width: $(item).outerWidth(),
-                height: $(item).outerHeight(),
-                isValid: that._isValidPoint($items, index)
-            };
-        });
+                return {
+                    dropInsideItem: false,
+                    left: offset.left,
+                    top: offset.top,
+                    index: itemElements.indexOf(item),
+                    $item: $(item),
+                    width: $(item).outerWidth(),
+                    height: $(item).outerHeight(),
+                    isValid: that._isValidPoint(visibleIndex, draggableVisibleIndex)
+                };
+            });
 
         if(result.length) {
             const lastItem = result[result.length - 1];
 
             result.push({
                 dropInsideItem: false,
-                index: result.length,
+                index: itemElements.length,
                 top: isVertical ? lastItem.top + lastItem.height : lastItem.top,
                 left: !isVertical ? lastItem.left + lastItem.width : lastItem.left,
-                isValid: this._isValidPoint($items, result.length)
+                isValid: this._isValidPoint(visibleItemElements.length, draggableVisibleIndex)
             });
 
             if(this.option('allowDropInsideItem')) {
@@ -467,7 +478,7 @@ const Sortable = Draggable.inherit({
                             dropInsideItem: true,
                             top: Math.floor((points[i].top + points[i + 1].top) / 2),
                             left: Math.floor((points[i].left + points[i + 1].left) / 2),
-                            isValid: this._isValidPoint($items, i, true)
+                            isValid: this._isValidPoint(i, draggableVisibleIndex, true)
                         }));
                     }
                 }
@@ -736,15 +747,14 @@ const Sortable = Draggable.inherit({
     },
 
     _movePlaceholder: function() {
-        const that = this;
-        const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
-        const items = that._getItems();
-        const toIndex = that.option('toIndex');
-        const itemElement = items[toIndex];
-        const prevItemElement = items[toIndex - 1];
-        const isVerticalOrientation = that._isVerticalOrientation();
-        let position = null;
-        let leftMargin = 0;
+        let that = this,
+            $placeholderElement = that._$placeholderElement || that._createPlaceholder(),
+            items = that._getItems(),
+            toIndex = that.option('toIndex'),
+            itemElement = items[toIndex],
+            isVerticalOrientation = that._isVerticalOrientation(),
+            position = null,
+            leftMargin = 0;
 
         that._updatePlaceholderSizes($placeholderElement, itemElement);
 
@@ -753,9 +763,13 @@ const Sortable = Draggable.inherit({
 
             position = $itemElement.offset();
             leftMargin = parseFloat($itemElement.css('marginLeft'));
-        } else if(prevItemElement) {
-            position = $(prevItemElement).offset();
-            position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
+        } else {
+            let prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
+
+            if(prevVisibleItemElement) {
+                position = $(prevVisibleItemElement).offset();
+                position.top += isVerticalOrientation ? $(prevVisibleItemElement).outerHeight(true) : $(prevVisibleItemElement).outerWidth(true);
+            }
         }
 
         if(position && !that._isPositionVisible(position)) {

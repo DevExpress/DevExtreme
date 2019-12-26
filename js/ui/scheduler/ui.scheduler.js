@@ -51,6 +51,7 @@ import { BindableTemplate } from '../../core/templates/bindable_template';
 import themes from '../themes';
 import browser from '../../core/utils/browser';
 import { touch } from '../../core/utils/support';
+import { extendFromObject } from '../../core/utils/extend';
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -66,8 +67,12 @@ const RECURRENCE_EDITOR_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item`;
 const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item-opened`;
 const WIDGET_SMALL_WIDTH = 400;
 
-const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
-const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
+const LIST_ITEM_DATA_KEY = 'dxListItemData';
+const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
+const LIST_ITEM_CLASS = 'dx-list-item';
+
+var FULL_DATE_FORMAT = 'yyyyMMddTHHmmss',
+    UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const VIEWS_CONFIG = {
     day: {
@@ -1904,7 +1909,8 @@ const Scheduler = Widget.inherit({
         this._appointments = this._createComponent('<div>', SchedulerAppointments, this._appointmentsConfig());
         this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
 
-        this._appointmentTooltip = this.option('adaptivityEnabled') ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
+        this._appointmentTooltip = new (this.option('adaptivityEnabled') ?
+            MobileTooltipStrategy : DesktopTooltipStrategy)(this._getAppointmentTooltipOptions());
         this._appointmentPopup = new AppointmentPopup(this);
 
         if(this._isLoaded()) {
@@ -1917,6 +1923,82 @@ const Scheduler = Widget.inherit({
                 this._reloadDataSource();
             }).bind(this));
         }
+    },
+
+    _getAppointmentTooltipOptions: function() {
+        var that = this;
+        return {
+            createComponent: that._createComponent.bind(that),
+            container: that.$element(),
+            getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
+            addDefaultTemplates: that._templateManager.addDefaultTemplates.bind(that._templateManager),
+            getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
+            showAppointmentPopup: that.showAppointmentPopup.bind(that),
+            getText: that.getText.bind(that),
+            checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
+            getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
+            isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
+        };
+    },
+
+    checkAndDeleteAppointment(data, appointmentData) {
+        const that = this;
+        const startDate = that.fire('getField', 'startDate', appointmentData);
+        that._checkRecurringAppointment(data, appointmentData, startDate, (function() {
+            that.deleteAppointment(data);
+        }), true);
+    },
+
+    _getExtraAppointmentTooltipOptions: function() {
+        return {
+            rtlEnabled: this.option('rtlEnabled'),
+            focusStateEnabled: this.option('focusStateEnabled'),
+            editing: this.option('editing'),
+            offset: this.option('_appointmentTooltipOffset'),
+        };
+    },
+
+    isAppointmentInAllDayPanel: function(appointmentData) {
+        const workSpace = this._workSpace,
+            itTakesAllDay = this.appointmentTakesAllDay(appointmentData);
+
+        return itTakesAllDay && workSpace.supportAllDayRow() && workSpace.option('showAllDayPanel');
+    },
+
+    getText(data, currentData) {
+        const isAllDay = this.fire('getField', 'allDay', data),
+            text = this.fire('getField', 'text', data),
+            startDateTimeZone = this.fire('getField', 'startDateTimeZone', data),
+            endDateTimeZone = this.fire('getField', 'endDateTimeZone', data),
+            startDate = this.fire('convertDateByTimezone', this.fire('getField', 'startDate', currentData), startDateTimeZone),
+            endDate = this.fire('convertDateByTimezone', this.fire('getField', 'endDate', currentData), endDateTimeZone);
+        return {
+            text: text,
+            formatDate: this._formatDate(startDate, endDate, isAllDay)
+        };
+    },
+
+    _formatDate(startDate, endDate, isAllDay) {
+        let result = '';
+
+        this.fire('formatDates', {
+            startDate: startDate,
+            endDate: endDate,
+            formatType: this._getTypeFormat(startDate, endDate, isAllDay),
+            callback: value => result = value
+        });
+
+        return result;
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
     },
 
     _initMarkupCore: function(resources) {
@@ -2793,6 +2875,86 @@ const Scheduler = Widget.inherit({
                 (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
     },
 
+    raiseClickEvent(e) {
+        var config = {
+            itemData: e.itemData.data,
+            itemElement: e.itemElement
+        };
+        var createClickEvent = extendFromObject(this.fire('mapAppointmentFields', config), e, false);
+        delete createClickEvent.itemData;
+        delete createClickEvent.itemIndex;
+        delete createClickEvent.itemElement;
+        this._createActionByOption('onAppointmentClick')(createClickEvent);
+    },
+
+    createTooltipDragBehavior(e) {
+        let dragElement,
+            $element = $(e.element);
+
+        if(this._allowDragging()) {
+            const dragBehavior = this.getWorkSpace().dragBehavior;
+
+            dragBehavior && dragBehavior.addTo($element, {
+                filter: `.${LIST_ITEM_CLASS}`,
+                container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+                cursorOffset: () => {
+                    const $dragElement = $(dragElement);
+
+                    return {
+                        x: $dragElement.width() / 2,
+                        y: $dragElement.height() / 2
+                    };
+                },
+                dragTemplate: () => {
+                    return dragElement;
+                },
+                onDragStart: (e) => {
+                    const event = e.event,
+                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+                    if(itemData && !itemData.data.disabled) {
+                        event.data = event.data || {};
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
+
+                        dragBehavior.initialPosition = translator.locate($(dragElement));
+                        translator.resetPosition($(dragElement));
+
+                        this.hideAppointmentTooltip();
+                    }
+                },
+                onDragEnd: (e) => {
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    if(itemData && !itemData.data.disabled) {
+                        dragBehavior.onDragEnd(e);
+                    }
+                }
+            });
+        }
+    },
+
+    _createDragAppointment(itemData, settings) {
+        var appointments = this.getAppointmentsInstance();
+        var appointmentIndex = appointments.option('items').length;
+
+        settings[0].isCompact = false;
+        settings[0].virtual = false;
+
+        appointments._currentAppointmentSettings = settings;
+        appointments._renderItem(appointmentIndex, {
+            itemData: itemData,
+            settings: settings
+        });
+
+        var appointmentList = appointments._findItemElementByItem(itemData);
+        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
+    },
+
+    _getRecurrencePart(appointments, startDate) {
+        return appointments.some(appointment => {
+            return appointment.data('dxAppointmentStartDate').getTime() === startDate.getTime();
+        });
+    },
+
     setTargetedAppointmentResources: function(targetedAppointment, appointmentElement, appointmentIndex) {
         const groups = this._getCurrentViewOption('groups');
 
@@ -2891,12 +3053,18 @@ const Scheduler = Widget.inherit({
                 color: this._appointments._tryGetAppointmentColor(target),
                 data: appointmentData,
                 currentData: currentAppointmentData,
-            }], true);
+            }]);
         }
     },
 
-    showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
-        this._appointmentTooltip.show(target, data, isSingleBehavior);
+    showAppointmentTooltipCore: function(target, data, options) {
+        if(this._appointmentTooltip.isAlreadyShown(target)) {
+            this.hideAppointmentTooltip();
+        } else {
+            this._appointmentTooltip.show(
+                target, data, extend(this._getExtraAppointmentTooltipOptions(), options)
+            );
+        }
     },
 
     /**

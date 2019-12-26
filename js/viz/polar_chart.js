@@ -1,11 +1,14 @@
-const _noop = require('../core/utils/common').noop;
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const vizUtils = require('./core/utils');
-const AdvancedChart = require('./chart_components/advanced_chart').AdvancedChart;
-const DEFAULT_PANE_NAME = 'default';
+import { noop } from '../core/utils/common';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import vizUtils from './core/utils';
+import { AdvancedChart } from './chart_components/advanced_chart';
+import { isDefined } from '../core/utils/type';
 
-const dxPolarChart = AdvancedChart.inherit({
+const DEFAULT_PANE_NAME = 'default';
+const DOUBLE_PI_ANGLE = 360;
+
+var dxPolarChart = AdvancedChart.inherit({
     _themeSection: 'polar',
 
     _createPanes: function() {
@@ -158,16 +161,64 @@ const dxPolarChart = AdvancedChart.inherit({
         series.setClippingParams(this._panesClipRects.base[0].id, wideClipRect && wideClipRect.id, false, false);
     },
 
-    _applyPointMarkersAutoHiding: _noop,
+    getActualAngle(angle) {
+        return this.getArgumentAxis().getOptions().inverted ? DOUBLE_PI_ANGLE - angle : angle;
+    },
 
-    _createScrollBar: _noop,
+    getXYFromPolar(angle, radius, argument, value) {
+        let layoutInfo = {
+            angle: undefined,
+            radius: undefined,
+            x: undefined,
+            y: undefined
+        };
 
-    _isRotated: _noop,
+        if(!isDefined(angle) && !isDefined(radius) && !isDefined(argument) && !isDefined(value)) {
+            return layoutInfo;
+        }
 
-    _getCrosshairOptions: _noop,
+        const argAxis = this.getArgumentAxis();
+        const startAngle = argAxis.getAngles()[0];
+        let argAngle;
+        let translatedRadius;
 
-    _isLegendInside: _noop
+        if(isDefined(argument)) {
+            argAngle = argAxis.getTranslator().translate(argument);
+        } else if(isFinite(angle)) {
+            argAngle = this.getActualAngle(angle);
+        } else if(!isDefined(angle)) {
+            argAngle = 0;
+        }
+
+        if(isDefined(value)) {
+            translatedRadius = this.getValueAxis().getTranslator().translate(value);
+        } else if(isFinite(radius)) {
+            translatedRadius = radius;
+        } else if(!isDefined(radius)) {
+            translatedRadius = argAxis.getRadius();
+        }
+
+        if(isDefined(argAngle) && isDefined(translatedRadius)) {
+            const coords = vizUtils.convertPolarToXY(argAxis.getCenter(), startAngle, argAngle, translatedRadius);
+            extend(layoutInfo, coords, { angle: argAxis.getTranslatedAngle(argAngle), radius: translatedRadius });
+        }
+
+        return layoutInfo;
+    },
+
+    _applyPointMarkersAutoHiding: noop,
+
+    _createScrollBar: noop,
+
+    _isRotated: noop,
+
+    _getCrosshairOptions: noop,
+
+    _isLegendInside: noop
 });
+
+dxPolarChart.addPlugin(require('./core/annotations').plugins.core);
+dxPolarChart.addPlugin(require('./core/annotations').plugins.polarChart);
 
 registerComponent('dxPolarChart', dxPolarChart);
 

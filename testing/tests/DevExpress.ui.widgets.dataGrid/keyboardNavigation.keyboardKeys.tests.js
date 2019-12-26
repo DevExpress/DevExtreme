@@ -1,24 +1,34 @@
+QUnit.testStart(function() {
+    let markup = `
+        <div>
+            <div id="container" class="dx-datagrid"></div>
+        </div>`;
+
+    $('#qunit-fixture').html(markup);
+});
+
 import 'common.css!';
 import 'generic_light.css!';
 
+import $ from 'jquery';
+
 import 'ui/data_grid/ui.data_grid';
 
-import $ from 'jquery';
 import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import devices from 'core/devices';
-import keyboardMock from '../../../helpers/keyboardMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import browser from 'core/utils/browser';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
-import { setupDataGridModules, MockDataController } from '../../../helpers/dataGridMocks.js';
+import { setupDataGridModules, MockDataController } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
     setupModules,
     triggerKeyDown,
     focusCell,
     callViewsRenderCompleted,
-    dataGridWrapper } from '../../../helpers/grid/keyboardNavigationHelper.js';
+    dataGridWrapper } from '../../helpers/grid/keyboardNavigationHelper.js';
 
 const device = devices.real();
 
@@ -42,10 +52,11 @@ QUnit.module('Keyboard keys', {
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         if(this.dispose) {
             this.dispose();
         }
+
+        this.clock.restore();
     }
 }, function() {
     QUnit.testInActiveWindow('Save focusedCellPosition by click on self', function(assert) {

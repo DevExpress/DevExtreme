@@ -1622,8 +1622,8 @@ declare module DevExpress.fileProvider {
     }
     /** @name ArrayFileProvider.Options */
     export interface ArrayFileProviderOptions extends FileProviderOptions<ArrayFileProvider> {
-        /** @name ArrayFileProvider.Options.content */
-        content?: string | Function;
+        /** @name ArrayFileProvider.Options.contentExpr */
+        contentExpr?: string | Function;
         /** @name ArrayFileProvider.Options.data */
         data?: Array<any>;
         /** @name ArrayFileProvider.Options.itemsExpr */
@@ -2375,7 +2375,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.itemsExpr */
         itemsExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.keyExpr */
-        keyExpr?: string | ((item: any) => string);
+        keyExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
@@ -3123,6 +3123,8 @@ declare module DevExpress.ui {
         contextMenu?: { commands?: Array<'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'bringToFront' | 'sendToBack' | 'lock' | 'unlock' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage'>, enabled?: boolean };
         /** @name dxDiagram.Options.contextToolbox */
         contextToolbox?: { category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', enabled?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string> };
+        /** @name dxDiagram.Options.customShapeTemplate */
+        customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramItem }) => any);
         /** @name dxDiagram.Options.customShapes */
         customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxElement, data: { item?: dxDiagramItem }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string }>;
         /** @name dxDiagram.Options.edges */
@@ -3972,11 +3974,22 @@ declare module DevExpress.ui {
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
+        /** @name dxGantt.Options.timeMarkers */
+        timeMarkers?: Array<dxGanttTimeMarker>;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
+    }
+    /** @name dxGanttTimeMarker */
+    export interface dxGanttTimeMarker {
+        /** @name dxGanttTimeMarker.cssClass */
+        cssClass?: string;
+        /** @name dxGanttTimeMarker.dateTime */
+        dateTime?: Date | number | string | (() => Date | number | string);
+        /** @name dxGanttTimeMarker.title */
+        title?: string;
     }
     /** @name dxHtmlEditor.Options */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -9041,6 +9054,8 @@ declare module DevExpress.viz {
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /** @name dxPolarChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPolarChartAdaptiveLayout;
+        /** @name dxPolarChart.Options.annotations */
+        annotations?: Array<dxPolarChartAnnotationConfig | any>;
         /** @name dxPolarChart.Options.argumentAxis */
         argumentAxis?: dxPolarChartArgumentAxis;
         /** @name dxPolarChart.Options.barGroupPadding */
@@ -9050,6 +9065,8 @@ declare module DevExpress.viz {
         /** @deprecated */
         /** @name dxPolarChart.Options.barWidth */
         barWidth?: number;
+        /** @name dxPolarChart.Options.commonAnnotationSettings */
+        commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /** @name dxPolarChart.Options.commonAxisSettings */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
         /** @name dxPolarChart.Options.commonSeriesSettings */
@@ -9421,6 +9438,18 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
         /** @name dxPolarChart.resetVisualRange() */
         resetVisualRange(): void;
+    }
+    /** @name dxPolarChartAnnotationConfig */
+    export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
+        /** @name dxPolarChartAnnotationConfig.name */
+        name?: string;
+    }
+    /** @name dxPolarChartCommonAnnotationConfig */
+    export interface dxPolarChartCommonAnnotationConfig extends dxChartCommonAnnotationConfig {
+        /** @name dxPolarChartCommonAnnotationConfig.angle */
+        angle?: number;
+        /** @name dxPolarChartCommonAnnotationConfig.radius */
+        radius?: number;
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {

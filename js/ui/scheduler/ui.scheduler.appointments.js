@@ -108,10 +108,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _focusInHandler: function(e) {
-        if(this._targetIsDisabled(e)) {
-            e.stopPropagation();
-            return;
-        }
         clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
@@ -121,10 +117,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
         this._appointmentFocusedTimeout = setTimeout(function() {
             that.notifyObserver('appointmentFocused');
         });
-    },
-
-    _targetIsDisabled: function(e) {
-        return $(e.currentTarget).is('.dx-state-disabled, .dx-state-disabled *');
     },
 
     _focusOutHandler: function() {
@@ -236,8 +228,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _repaintAppointments: function(appointments) {
         const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(domAdapter.createDocumentFragment());
-        const commonFragment = $(domAdapter.createDocumentFragment());
+        const allDayFragment = $(this._getAppointmentContainer(true));
+        const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
             this._getAppointmentContainer(true).html('');
@@ -419,11 +411,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _processItemClick: function(e) {
         const $target = $(e.currentTarget);
         const data = this._getItemData($target);
-
-        if(this._targetIsDisabled(e)) {
-            e.stopPropagation();
-            return;
-        }
 
         if(e.type === 'keydown' || eventUtils.isFakeClickEvent(e)) {
             this.notifyObserver('showEditAppointmentPopup', { data: data, target: $target });

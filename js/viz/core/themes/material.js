@@ -257,6 +257,12 @@ registerTheme({
             color: WHITE
         }
     },
+    'chart:common:annotation': {
+        border: {
+            color: '#000'
+        },
+        color: '#000'
+    },
     chart: {
         commonPaneSettings: {
             border: {
@@ -272,12 +278,6 @@ registerTheme({
             dragBoxStyle: {
                 color: WHITE
             }
-        },
-        commonAnnotationSettings: {
-            border: {
-                color: '#000'
-            },
-            color: '#000'
         }
     },
     gauge: {

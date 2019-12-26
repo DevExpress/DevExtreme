@@ -144,6 +144,19 @@ test('Grouped list can not reorder items (T727360)', async t => {
         .expect(thirdGroup.getItem(1).text).eql('value31');
 });
 
+fixture `List T845082`
+    .page(url(__dirname, './pages/t845082.html'));
+
+test('Grouped List with nested List should able to reorder items (T845082)', async t => {
+    const list = new List('#list');
+    const group = list.getGroup();
+
+    await t
+        .expect(group.getItem(0).text).eql('value11')
+        .dragToElement(group.getItem().reorderHandle, group.getItem(1).element)
+        .expect(group.getItem(1).text).eql('value11')
+});
+
 fixture `List T815151`
     .page(url(__dirname, './pages/t815151.html'));
 
