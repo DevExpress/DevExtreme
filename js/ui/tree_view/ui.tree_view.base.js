@@ -1409,10 +1409,16 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemSelection: function(value, itemElement, dxEvent) {
+        if(this._setItemSelection(value, itemElement, dxEvent)) {
+            this._fireSelectionChanged();
+        }
+    },
+
+    _setItemSelection: function(value, itemElement, dxEvent) {
         const node = this._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
-            return;
+            return false;
         }
 
         if(!value && this._isLastRequired(node)) {
@@ -1422,7 +1428,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 checkbox && checkbox.option('value', true);
             }
-            return;
+            return false;
         }
 
         const selectedNodesKeys = this.getSelectedNodesKeys();
@@ -1443,7 +1449,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemData: node.internalFields.item
         });
 
-        this._fireSelectionChanged();
+        return true;
     },
 
     _getCheckBoxInstance: function($node) {
@@ -1979,10 +1985,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
 
         diff.toDeselect.forEach((key) => {
-            this._updateItemSelection(false, key);
+            this._setItemSelection(false, key);
         });
         diff.toSelect.forEach((key) => {
-            this._updateItemSelection(true, key);
+            this._setItemSelection(true, key);
         });
 
         if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
