@@ -353,15 +353,7 @@ class BaseRenderingStrategy {
             }
         };
 
-        const startNewStack = (currentItem) => {
-            stack.items = [createItem(currentItem)];
-            stack.left = currentItem.left;
-            stack.right = currentItem.right;
-            stack.top = currentItem.top;
-            stack.bottom = currentItem.bottom;
-        };
-
-        function createItem(currentItem, index) {
+        const createItem = (currentItem, index) => {
             const currentIndex = index || 0;
             return {
                 index: currentIndex,
@@ -373,8 +365,16 @@ class BaseRenderingStrategy {
                 bottom: currentItem.bottom,
                 sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
             };
-        }
+        };
 
+
+        const startNewStack = (currentItem) => {
+            stack.items = [createItem(currentItem)];
+            stack.left = currentItem.left;
+            stack.right = currentItem.right;
+            stack.top = currentItem.top;
+            stack.bottom = currentItem.bottom;
+        };
         const pushItemsInResult = (items) => {
             items.forEach((item) => {
                 result.push({
