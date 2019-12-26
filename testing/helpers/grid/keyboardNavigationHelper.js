@@ -152,9 +152,9 @@ export function fireKeyDown($target, key, ctrlKey) {
 }
 
 export function focusCell(columnIndex, rowIndex) {
-    var $element0 = this.rowsView.element(),
-        $row = $($element0.find('.dx-row')[rowIndex]);
-    $($row.find('td')[columnIndex]).trigger(CLICK_EVENT);
+    var $rowsView = this.rowsView.element(),
+        $row = $($rowsView.find('.dx-row')[rowIndex]);
+    $($row.find(`td:nth-child(${columnIndex + 1})`)).trigger(CLICK_EVENT);
 }
 
 export function getTextSelection(element) {

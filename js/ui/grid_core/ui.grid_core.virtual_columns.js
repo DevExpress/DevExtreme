@@ -221,6 +221,10 @@ var ColumnsControllerExtender = (function() {
 
             return visibleColumns;
         },
+        getColumnIndexOffset: function() {
+            const offset = this.getBeginPageIndex(this._position) * this.getColumnPageSize();
+            return offset > 0 ? offset - 1 : 0;
+        },
         dispose: function() {
             clearTimeout(this._changedTimeout);
             this.callBase.apply(this, arguments);

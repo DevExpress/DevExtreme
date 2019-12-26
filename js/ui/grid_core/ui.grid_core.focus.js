@@ -564,7 +564,7 @@ module.exports = {
                             }
                         });
                     } else if(paging) {
-                        if(isAutoNavigate) {
+                        if(isAutoNavigate || keyboardController._isNeedFocus) {
                             const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
                             const isValidRowIndexByKey = rowIndexByKey >= 0;
                             const focusedRowIndex = this.option('focusedRowIndex');
@@ -777,6 +777,7 @@ module.exports = {
                             }
 
                             rowIndex += that.getController('data').getRowIndexOffset();
+                            columnIndex += that.getController('columns').getColumnIndexOffset();
                             that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
                             const dataSource = that.component.getController('data')._dataSource;

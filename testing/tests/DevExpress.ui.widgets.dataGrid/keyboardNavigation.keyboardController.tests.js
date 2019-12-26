@@ -114,6 +114,8 @@ QUnit.module('Keyboard controller', {
             keyboardNavigation: {
                 enabled: true
             },
+            focusedRowIndex: -1,
+            focusedColumnIndex: -1,
             editing: {
             }
         };
@@ -405,25 +407,25 @@ QUnit.module('Keyboard controller', {
         navigationController._isNeedFocus = true;
 
         // act, assert
-        navigationController._focusedCellPosition = { columnIndex: 1, rowIndex: 0 };
+        navigationController.setFocusedCellPosition(0, 1);
         callViewsRenderCompleted(this.component._views);
         this.clock.tick();
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('input'), 'Interactive element is input');
 
         // act, assert
-        navigationController._focusedCellPosition = { columnIndex: 2, rowIndex: 0 };
+        navigationController.setFocusedCellPosition(0, 2);
         callViewsRenderCompleted(this.component._views);
         this.clock.tick();
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('textarea'), 'Interactive element is textarea');
 
         // act, assert
-        navigationController._focusedCellPosition = { columnIndex: 3, rowIndex: 0 };
+        navigationController.setFocusedCellPosition(0, 3);
         callViewsRenderCompleted(this.component._views);
         this.clock.tick();
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('a'), 'Interactive element is link');
 
         // act, assert
-        navigationController._focusedCellPosition = { columnIndex: 4, rowIndex: 0 };
+        navigationController.setFocusedCellPosition(0, 4);
         callViewsRenderCompleted(this.component._views);
         this.clock.tick();
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('select'), 'Interactive element is select');

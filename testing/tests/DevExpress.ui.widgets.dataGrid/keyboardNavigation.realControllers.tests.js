@@ -820,7 +820,7 @@ QUnit.module('Real DataController and ColumnsController', {
         this.clock.tick();
 
         // assert
-        assert.ok(!keyboardNavigationController._isNeedFocus, 'is key down');
+        assert.ok(keyboardNavigationController._isNeedFocus, 'is key down or click');
         assert.ok(keyboardNavigationController._isHiddenFocus, 'is hidden focus');
         assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, 'focusedCellPosition is empty');
         assert.equal($(rowsView.getCellElement(0, 0)).attr('tabIndex'), 0, 'expand cell has tab index');
@@ -852,18 +852,22 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         that.gridView.render($('#container'));
 
-        var $cell = $(that.rowsView.element().find('.dx-row').eq(1).find('td').eq(1));
+        let $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
-        this.triggerKeyDown('pageDown', false, false, $(':focus').get(0));
 
+        // assert
+        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'cell has focus-disabled class');
+
+        // act
+        this.triggerKeyDown('pageDown', false, false, $(':focus').get(0));
         this.clock.tick();
 
         // assert
-        $cell = that.rowsView.element().find('.dx-row').eq(1).find('td').eq(1);
+        $cell = $(this.getCellElement(1, 1));
         assert.equal($cell.text(), '888888');
         assert.strictEqual($cell.attr('tabIndex'), '0');
-        assert.ok($cell.is(':focus'), 'focus');
-        assert.ok($cell.hasClass('dx-cell-focus-disabled'));
+        assert.ok($cell.is(':focus'), 'focus', 'cell is focused');
+        assert.ok($cell.hasClass('dx-cell-focus-disabled'), 'cell has focus-disabled class');
         assert.ok(this.keyboardNavigationController._focusedCellPosition, 'focusedCellPosition');
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, 'cellIndex');
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, 'rowIndex');

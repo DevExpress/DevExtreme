@@ -2424,9 +2424,11 @@ QUnit.module('Keyboard keys', {
 
         var $lastCell = this.rowsView.element().find('.dx-row').filter(':visible').last().find('td').eq(1);
 
-        this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
+        this.keyboardNavigationController.setFocusedCellPosition(1, 1);
 
         // act
+        this.keyboardNavigationController._isNeedFocus = false; // ? ? ?
+
         var isPreventDefaultCalled = this.triggerKeyDown('tab', false, false, $lastCell).preventDefault;
         this.clock.tick();
 
@@ -3506,7 +3508,7 @@ QUnit.module('Keyboard keys', {
         this.keyboardNavigationController._isNeedFocus = true;
 
         // act
-        this.keyboardNavigationController._focusedCellPosition = { columnIndex: 0, rowIndex: 7 };
+        this.keyboardNavigationController.setFocusedCellPosition(7, 0);
         this.editorFactoryController._$focusedElement = $('<div/>');
         callViewsRenderCompleted(this._views);
         this.clock.tick();

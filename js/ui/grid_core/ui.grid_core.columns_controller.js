@@ -1957,6 +1957,9 @@ module.exports = {
                         return field;
                     });
                 },
+                getColumnIndexOffset: function() {
+                    return 0;
+                },
                 _getFixedColumnsCore: function() {
                     var that = this,
                         i,
