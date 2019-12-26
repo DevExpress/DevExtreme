@@ -47,7 +47,7 @@ function getItems(keyInfo, items, key, groupCount) {
 
 function generateDataByKeyMap(keyInfo, array) {
     if(keyInfo.key() && (!array._dataByKeyMap || array._dataByKeyMapLength !== array.length)) {
-        var dataByKeyMap = {};
+        const dataByKeyMap = {};
         for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
             dataByKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }

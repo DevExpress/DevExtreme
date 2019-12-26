@@ -52,11 +52,11 @@ define(function(require) {
             executeAsyncMock.teardown();
         }
     }, () => {
-        var excludedComponents = [
+        const excludedComponents = [
             'dxLayoutManager'
         ];
 
-        var getDefaultOptions = function(componentName) {
+        const getDefaultOptions = function(componentName) {
             switch(componentName) {
                 case 'dxValidator':
                     return { adapter: {} };
@@ -72,7 +72,7 @@ define(function(require) {
                 return;
             }
 
-            var widgetName = componentName.replace('dx', '').toLowerCase();
+            const widgetName = componentName.replace('dx', '').toLowerCase();
 
             if($.fn[componentName]) {
                 componentConstructor.prototype._defaultOptionsRules = function() {
@@ -80,16 +80,16 @@ define(function(require) {
                 };
 
                 QUnit.test(componentName, function(assert) {
-                    var done = assert.async();
+                    const done = assert.async();
 
-                    var $element = this.$element,
-                        component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance'),
-                        options = component.option(),
-                        optionCount = 0;
+                    const $element = this.$element;
+                    const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
+                    const options = component.option();
+                    let optionCount = 0;
 
                     component.QUnitAssert = assert;
 
-                    var classes = $element.attr('class').split(' ');
+                    const classes = $element.attr('class').split(' ');
 
                     $.each(classes, function(_, className) {
                         className = className.replace('dx-', '');
@@ -106,13 +106,13 @@ define(function(require) {
                     });
 
                     $.each(options, function(option) {
-                        var prevValue = options[option],
-                            newValue = prevValue;
+                        const prevValue = options[option];
+                        let newValue = prevValue;
 
                         // NOTE: some widgets doesn't support dataSource === null
                         if(option === 'dataSource') {
                         // NOTE: dxResponsiveBox supports only plain object in items
-                            var item = componentName === 'dxResponsiveBox' ? { text: 1 } : 1;
+                            let item = componentName === 'dxResponsiveBox' ? { text: 1 } : 1;
                             item = componentName === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                             newValue = new DataSource([item]);

@@ -8,7 +8,7 @@ import { isDefined } from '../core/utils/type';
 const DEFAULT_PANE_NAME = 'default';
 const DOUBLE_PI_ANGLE = 360;
 
-var dxPolarChart = AdvancedChart.inherit({
+const dxPolarChart = AdvancedChart.inherit({
     _themeSection: 'polar',
 
     _createPanes: function() {

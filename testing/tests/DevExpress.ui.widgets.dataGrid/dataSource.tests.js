@@ -3533,7 +3533,7 @@ QUnit.test('Error when store not returned groupCount', function(assert) {
     // arrange
     assert.expect(1);
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'field2'
     }, { skipGroupCount: true });
 
@@ -3554,8 +3554,8 @@ QUnit.test('Error when store not returned groupCount during expand not last leve
     // arrange
     assert.expect(1);
 
-    var brokeOptions = {};
-    var dataSource = this.createDataSource({
+    const brokeOptions = {};
+    const dataSource = this.createDataSource({
         group: ['field1', 'field2']
     }, brokeOptions);
 

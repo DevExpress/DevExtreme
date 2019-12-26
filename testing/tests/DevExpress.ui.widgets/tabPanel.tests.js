@@ -120,7 +120,7 @@ QUnit.module('rendering', {
 
     // T803640
     QUnit.test('content should be rendered if create widget inside deferUpdate (React)', function(assert) {
-        var $tabPanel;
+        let $tabPanel;
 
         deferUpdate(function() {
             $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({

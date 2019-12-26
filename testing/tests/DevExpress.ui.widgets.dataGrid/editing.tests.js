@@ -14352,7 +14352,7 @@ QUnit.testInActiveWindow('Focus on column with setCellValue should be preserved 
     this.clock.tick();
 
     // assert
-    var $editorElement = $(this.getCellElement(0, 0)).find('.dx-numberbox').first();
+    const $editorElement = $(this.getCellElement(0, 0)).find('.dx-numberbox').first();
     assert.ok($editorElement.hasClass('dx-state-focused'), 'first editor is focused');
 
     // act

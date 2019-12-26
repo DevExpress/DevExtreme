@@ -107,13 +107,13 @@ QUnit.module('rendering', {
     }
 }, () => {
     QUnit.test('template should be rendered correctly', function(assert) {
-        var element = this.element.dxTileView({
+        const element = this.element.dxTileView({
             items: prepareItems(items, configs.horizontal),
             itemTemplate: function(item) {
                 return 'Text is: ' + item.text;
             }
         });
-        var $items = element.find(TILEVIEW_ITEM_SELECTOR);
+        const $items = element.find(TILEVIEW_ITEM_SELECTOR);
 
         assert.equal($items.eq(0).text(), 'Text is: item1');
     });
@@ -132,7 +132,7 @@ $.each(configs, function(direction, config) {
         }
     }, () => {
         QUnit.test('items positions should be correct', function(assert) {
-            var element = this.element.dxTileView({
+            const element = this.element.dxTileView({
                 direction: direction,
                 height: 200,
                 width: 200,
@@ -141,7 +141,7 @@ $.each(configs, function(direction, config) {
 
             assert.ok(element.hasClass(TILEVIEW_CLASS));
 
-            var $items = element.find(TILEVIEW_ITEM_SELECTOR);
+            const $items = element.find(TILEVIEW_ITEM_SELECTOR);
             assert.equal($items.length, 10);
             assert.ok($items.eq(0).hasClass(TILEVIEW_ITEM_CLASS));
 

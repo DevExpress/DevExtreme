@@ -45,7 +45,7 @@ QUnit.module('General', () => {
 
 
     QUnit.test('Undefined validation rules', function(assert) {
-        var result = ValidationEngine.validate('CoolValue', undefined);
+        const result = ValidationEngine.validate('CoolValue', undefined);
 
         assert.ok(result, 'Result is defined');
         assert.strictEqual(result.isValid, true, 'Result is valid');
@@ -54,12 +54,12 @@ QUnit.module('General', () => {
 });
 
 QUnit.module('Required rule', () => {
-    var testInvalidRequiredRules = function(invalidValue, assert) {
-        var customMessage = 'This is really-really required field.',
-            result = testInvalidRule({
-                type: 'required',
-                message: customMessage
-            }, invalidValue, assert);
+    const testInvalidRequiredRules = function(invalidValue, assert) {
+        const customMessage = 'This is really-really required field.',
+              result = testInvalidRule({
+                  type: 'required',
+                  message: customMessage
+              }, invalidValue, assert);
 
         assert.equal(result.brokenRule.message, customMessage);
 
@@ -67,7 +67,7 @@ QUnit.module('Required rule', () => {
     };
 
     QUnit.test('Required - correct value', function(assert) {
-        var result = ValidationEngine.validate('CoolValue', [{
+        const result = ValidationEngine.validate('CoolValue', [{
             type: 'required',
             message: 'This is really-really required field.'
         }]);
@@ -96,7 +96,7 @@ QUnit.module('Required rule', () => {
 
 
     QUnit.test('Required - 0 (zero) is valid value', function(assert) {
-        var result = ValidationEngine.validate(0, [{
+        const result = ValidationEngine.validate(0, [{
             type: 'required'
         }]);
 
@@ -110,7 +110,7 @@ QUnit.module('Required rule', () => {
 
     QUnit.test('Required - spaces and tabs are accepted on trim: false', function(assert) {
 
-        var result = ValidationEngine.validate('   \t  ', [{
+        const result = ValidationEngine.validate('   \t  ', [{
             type: 'required',
             trim: false
         }]);
@@ -120,7 +120,7 @@ QUnit.module('Required rule', () => {
     });
 
     QUnit.test('Required - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'required'
         }, '', assert);
 
@@ -129,7 +129,7 @@ QUnit.module('Required rule', () => {
     });
 
     QUnit.test('Required - default English message with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'required'
         }, '', assert, 'Login');
 
@@ -140,7 +140,7 @@ QUnit.module('Required rule', () => {
 
 QUnit.module('Pattern rule', () => {
     QUnit.test('Pattern - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'pattern',
             pattern: /^[A-Z]+$/,
             message: 'Only capital letters are allowed'
@@ -150,7 +150,7 @@ QUnit.module('Pattern rule', () => {
     });
 
     QUnit.test('Pattern - valid', function(assert) {
-        var result = ValidationEngine.validate('ABC', [{
+        const result = ValidationEngine.validate('ABC', [{
             type: 'pattern',
             pattern: /^[A-Z]+$/,
             message: 'Only capital letters are allowed'
@@ -163,7 +163,7 @@ QUnit.module('Pattern rule', () => {
 
 
     QUnit.test('Pattern - valid, string', function(assert) {
-        var result = ValidationEngine.validate('ABC', [{
+        const result = ValidationEngine.validate('ABC', [{
             type: 'pattern',
             pattern: '^[A-Z]+$',
             message: 'Only capital letters are allowed'
@@ -175,7 +175,7 @@ QUnit.module('Pattern rule', () => {
     });
 
     QUnit.test('Pattern - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'pattern',
             pattern: /^[A-Z]+$/
         }, 'A1', assert);
@@ -184,7 +184,7 @@ QUnit.module('Pattern rule', () => {
     });
 
     QUnit.test('Pattern - default English message with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'pattern',
             pattern: /^[A-Z]+$/
         }, 'A1', assert, 'Product Code');
@@ -193,7 +193,7 @@ QUnit.module('Pattern rule', () => {
     });
 
     QUnit.test('Pattern - empty value should be valid', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'pattern',
             pattern: /^[A-Z]+$/
         }]);
@@ -206,7 +206,7 @@ QUnit.module('Pattern rule', () => {
 QUnit.module('Numeric rule', () => {
 
     QUnit.test('Numeric - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'numeric',
             message: 'Please enter numeric value'
         }, 'A1', assert);
@@ -215,7 +215,7 @@ QUnit.module('Numeric rule', () => {
     });
 
     QUnit.test('Numeric - valid', function(assert) {
-        var result = ValidationEngine.validate('123', [{
+        const result = ValidationEngine.validate('123', [{
             type: 'numeric',
             message: 'Please enter numeric value'
         }]);
@@ -226,7 +226,7 @@ QUnit.module('Numeric rule', () => {
     });
 
     QUnit.test('Numeric - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'numeric'
         }, 'A1', assert);
 
@@ -234,7 +234,7 @@ QUnit.module('Numeric rule', () => {
     });
 
     QUnit.test('Numeric - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'numeric'
         }, 'A1', assert, 'Age');
 
@@ -242,7 +242,7 @@ QUnit.module('Numeric rule', () => {
     });
 
     QUnit.test('Numeric - empty value should be valid', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'numeric',
             message: 'Please enter numeric value'
         }]);
@@ -254,7 +254,7 @@ QUnit.module('Numeric rule', () => {
 
 QUnit.module('Range rule - numeric', () => {
     QUnit.test('Range - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: 10,
             max: 100,
@@ -266,7 +266,7 @@ QUnit.module('Range rule - numeric', () => {
 
 
     QUnit.test('Range (min only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: 10,
             message: 'Please enter value inside of range'
@@ -277,7 +277,7 @@ QUnit.module('Range rule - numeric', () => {
 
 
     QUnit.test('Range (max only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             max: 100,
             message: 'Please enter value inside of range'
@@ -287,7 +287,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range - invalid (not a number)', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: 10,
             max: 100,
@@ -313,7 +313,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range (min and max) - valid', function(assert) {
-        var result = ValidationEngine.validate('55', [{
+        const result = ValidationEngine.validate('55', [{
             type: 'range',
             min: 10,
             max: 100,
@@ -326,7 +326,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range (max only) - valid', function(assert) {
-        var result = ValidationEngine.validate('55', [{
+        const result = ValidationEngine.validate('55', [{
             type: 'range',
             max: 100,
             message: 'Please enter value inside of range'
@@ -338,7 +338,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range (min only) - valid', function(assert) {
-        var result = ValidationEngine.validate('55', [{
+        const result = ValidationEngine.validate('55', [{
             type: 'range',
             min: 10,
             message: 'Please enter numeric value'
@@ -351,7 +351,7 @@ QUnit.module('Range rule - numeric', () => {
 
 
     QUnit.test('Range - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: 10,
             max: 100
@@ -361,7 +361,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range - default English message with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: 10,
             max: 100
@@ -371,7 +371,7 @@ QUnit.module('Range rule - numeric', () => {
     });
 
     QUnit.test('Range - empty value should be valid', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'range',
             min: 10,
             max: 100
@@ -384,7 +384,7 @@ QUnit.module('Range rule - numeric', () => {
 
 QUnit.module('Range rule - datetime', () => {
     QUnit.test('Range - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: new Date(2010, 1, 1),
             max: new Date(2014, 1, 1),
@@ -395,7 +395,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range (min only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             min: new Date(2010, 1, 1),
             message: 'Please enter value inside of range'
@@ -405,7 +405,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range (max only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'range',
             max: new Date(2014, 1, 1),
             message: 'Please enter value inside of range'
@@ -415,7 +415,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range (min and max) - valid', function(assert) {
-        var result = ValidationEngine.validate(new Date(2013, 1, 1), [{
+        const result = ValidationEngine.validate(new Date(2013, 1, 1), [{
             type: 'range',
             min: new Date(2012, 1, 1),
             max: new Date(2014, 1, 1),
@@ -428,7 +428,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range (max only) - valid', function(assert) {
-        var result = ValidationEngine.validate(new Date(2014, 1, 1), [{
+        const result = ValidationEngine.validate(new Date(2014, 1, 1), [{
             type: 'range',
             max: new Date(2016, 1, 1),
             message: 'Please enter value inside of range'
@@ -440,7 +440,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range (min only) - valid', function(assert) {
-        var result = ValidationEngine.validate(new Date(2016, 1, 1), [{
+        const result = ValidationEngine.validate(new Date(2016, 1, 1), [{
             type: 'range',
             min: new Date(2010, 1, 1),
             message: 'Please enter numeric value'
@@ -452,7 +452,7 @@ QUnit.module('Range rule - datetime', () => {
     });
 
     QUnit.test('Range - empty value should be valid', function(assert) {
-        var result = ValidationEngine.validate(null, [{
+        const result = ValidationEngine.validate(null, [{
             type: 'range',
             min: new Date(2010, 1, 1),
             max: new Date(2014, 1, 1),
@@ -465,7 +465,7 @@ QUnit.module('Range rule - datetime', () => {
 
 QUnit.module('StringLength rule', () => {
     QUnit.test('StringLength - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'stringLength',
             min: 2,
             max: 5,
@@ -476,7 +476,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength (min only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'stringLength',
             min: 4,
             message: 'Wrong length - custom message'
@@ -486,7 +486,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength (max only) - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'stringLength',
             max: 4,
             message: 'Wrong length - custom message'
@@ -510,7 +510,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - trim by default - valid', function(assert) {
-        var result = ValidationEngine.validate('Good                 ', [{
+        const result = ValidationEngine.validate('Good                 ', [{
             type: 'stringLength',
             min: 2,
             max: 5
@@ -520,7 +520,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - skipped trim - invalid', function(assert) {
-        var result = ValidationEngine.validate('Good        ', [{
+        const result = ValidationEngine.validate('Good        ', [{
             type: 'stringLength',
             min: 2,
             max: 5,
@@ -531,7 +531,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength (min and max) - valid', function(assert) {
-        var result = ValidationEngine.validate('It\'s OK', [{
+        const result = ValidationEngine.validate('It\'s OK', [{
             type: 'stringLength',
             min: 6,
             max: 8,
@@ -544,7 +544,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength (max only) - valid', function(assert) {
-        var result = ValidationEngine.validate('Short value.', [{
+        const result = ValidationEngine.validate('Short value.', [{
             type: 'stringLength',
             max: 20,
             message: 'Wrong length - custom message'
@@ -556,7 +556,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength (min only) - valid', function(assert) {
-        var result = ValidationEngine.validate('This is long sentence', [{
+        const result = ValidationEngine.validate('This is long sentence', [{
             type: 'stringLength',
             min: 10,
             message: 'Wrong length - custom message'
@@ -568,7 +568,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - exact value', function(assert) {
-        var result = ValidationEngine.validate('GBR', [{
+        const result = ValidationEngine.validate('GBR', [{
             type: 'stringLength',
             min: 3,
             max: 3
@@ -578,7 +578,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'stringLength',
             min: 2,
             max: 5
@@ -588,7 +588,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - default English message with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'stringLength',
             min: 4,
             max: 6
@@ -598,7 +598,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - undefined equal to 0 length', function(assert) {
-        var result = ValidationEngine.validate(undefined, [{
+        let result = ValidationEngine.validate(undefined, [{
             type: 'stringLength',
             min: 1,
             max: 10
@@ -615,7 +615,7 @@ QUnit.module('StringLength rule', () => {
     });
 
     QUnit.test('StringLength - null equal to 0 length', function(assert) {
-        var result = ValidationEngine.validate(null, [{
+        let result = ValidationEngine.validate(null, [{
             type: 'stringLength',
             min: 1,
             max: 5
@@ -634,7 +634,7 @@ QUnit.module('StringLength rule', () => {
 
 QUnit.module('Common types ', () => {
     QUnit.test('Email - valid', function(assert) {
-        var result = ValidationEngine.validate('john@example.com', [{
+        const result = ValidationEngine.validate('john@example.com', [{
             type: 'email',
             message: 'Set good-looking email'
         }]);
@@ -645,7 +645,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Email - invalid', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'email',
             message: 'Set good-looking email'
         }, 'john-example.com', assert);
@@ -654,7 +654,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Email - default English message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'email'
         }, 'john-example.com', assert);
 
@@ -662,7 +662,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Email - default English message - with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'email'
         }, 'john-example.com', assert, 'Customer Email');
 
@@ -670,7 +670,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Email - empty value should be valid', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'email'
         }]);
 
@@ -679,7 +679,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Array of emails should be valid', function(assert) {
-        var result = ValidationEngine.validate(['test@domain.com', 'test2@domain.com'], [{
+        const result = ValidationEngine.validate(['test@domain.com', 'test2@domain.com'], [{
             type: 'email'
         }]);
 
@@ -688,7 +688,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Array of emails with incorrect one should be invalid', function(assert) {
-        var result = ValidationEngine.validate(['testdomain.com', 'test2@domain.com'], [{
+        const result = ValidationEngine.validate(['testdomain.com', 'test2@domain.com'], [{
             type: 'email'
         }]);
 
@@ -697,7 +697,7 @@ QUnit.module('Common types ', () => {
     });
 
     QUnit.test('Empty array is invalid', function(assert) {
-        var result = ValidationEngine.validate([], [{
+        const result = ValidationEngine.validate([], [{
             type: 'required'
         }]);
 
@@ -708,15 +708,15 @@ QUnit.module('Common types ', () => {
 
 QUnit.module('Custom rule with user\'s callback', () => {
     QUnit.test('Can be validated positively', function(assert) {
-        var customCallback = sinon.spy(function() { return true; }),
-            validator = {},
-            value = 'Some custom value',
-            rule = {
-                type: 'custom',
-                validationCallback: customCallback,
-                validator: validator
-            },
-            result = ValidationEngine.validate(value, [rule]);
+        const customCallback = sinon.spy(function() { return true; }),
+              validator = {},
+              value = 'Some custom value',
+              rule = {
+                  type: 'custom',
+                  validationCallback: customCallback,
+                  validator: validator
+              },
+              result = ValidationEngine.validate(value, [rule]);
 
 
         assert.ok(result, 'Result is defined');
@@ -728,12 +728,12 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Can be validated negatively', function(assert) {
-        var customCallback = sinon.spy(function() { return false; }),
-            value = 'Some custom value',
-            result = testInvalidRule({
-                type: 'custom',
-                validationCallback: customCallback
-            }, value, assert);
+        const customCallback = sinon.spy(function() { return false; }),
+              value = 'Some custom value',
+              result = testInvalidRule({
+                  type: 'custom',
+                  validationCallback: customCallback
+              }, value, assert);
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -741,14 +741,14 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Can be validated negatively with custom message', function(assert) {
-        var customCallback = sinon.spy(function() { return false; }),
-            value = 'Some custom value',
-            customMessage = 'Value does not satisfy our custom validation scenario',
-            result = testInvalidRule({
-                type: 'custom',
-                message: customMessage,
-                validationCallback: customCallback
-            }, value, assert);
+        const customCallback = sinon.spy(function() { return false; }),
+              value = 'Some custom value',
+              customMessage = 'Value does not satisfy our custom validation scenario',
+              result = testInvalidRule({
+                  type: 'custom',
+                  message: customMessage,
+                  validationCallback: customCallback
+              }, value, assert);
 
         assert.ok(customCallback.calledOnce, 'Validation callback was called');
         assert.equal(customCallback.getCall(0).args[0].value, value, 'Correct value should be passed');
@@ -756,34 +756,34 @@ QUnit.module('Custom rule with user\'s callback', () => {
     });
 
     QUnit.test('Default message', function(assert) {
-        var customCallback = sinon.spy(function() { return false; }),
-            value = 'Some custom value',
-            result = testInvalidRule({
-                type: 'custom',
-                validationCallback: customCallback
-            }, value, assert);
+        const customCallback = sinon.spy(function() { return false; }),
+              value = 'Some custom value',
+              result = testInvalidRule({
+                  type: 'custom',
+                  validationCallback: customCallback
+              }, value, assert);
 
         assert.equal(result.brokenRule.message, 'Value is invalid');
     });
 
     QUnit.test('Default message with name', function(assert) {
-        var customCallback = sinon.spy(function() { return false; }),
-            value = 'Some custom value',
-            result = testInvalidRule({
-                type: 'custom',
-                validationCallback: customCallback
-            }, value, assert, 'Customer Code');
+        const customCallback = sinon.spy(function() { return false; }),
+              value = 'Some custom value',
+              result = testInvalidRule({
+                  type: 'custom',
+                  validationCallback: customCallback
+              }, value, assert, 'Customer Code');
 
         assert.equal(result.brokenRule.message, 'Customer Code is invalid');
     });
 
     QUnit.test('Custom validation rule when value is array', function(assert) {
-        var customCallback = sinon.stub().returns(false),
-            value = ['test1', 'test2'],
-            result = testInvalidRule({
-                type: 'custom',
-                validationCallback: customCallback
-            }, value, assert, 'Customer Code');
+        const customCallback = sinon.stub().returns(false),
+              value = ['test1', 'test2'],
+              result = testInvalidRule({
+                  type: 'custom',
+                  validationCallback: customCallback
+              }, value, assert, 'Customer Code');
 
         assert.equal(result.brokenRule.message, 'Customer Code is invalid');
         assert.deepEqual(customCallback.getCall(0).args[0].value, value, 'value is correct');
@@ -824,7 +824,7 @@ QUnit.module('Custom rule with user\'s callback', () => {
 
 QUnit.module('Compare rule', () => {
     QUnit.test('Simple equal tests - jquery way', function(assert) {
-        var result = ValidationEngine.validate('123', [{
+        const result = ValidationEngine.validate('123', [{
             type: 'compare',
             comparisonTarget: function() { return '123'; },
             message: 'Values should match'
@@ -834,7 +834,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type === passed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '===',
             comparisonTarget: function() { return '2'; },
@@ -845,7 +845,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type === failed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '===',
             comparisonTarget: function() { return 2; },
@@ -856,7 +856,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type != passed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '!=',
             comparisonTarget: function() { return 3; }
@@ -866,7 +866,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type != failed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '!=',
             comparisonTarget: function() { return 2; }
@@ -877,7 +877,7 @@ QUnit.module('Compare rule', () => {
 
 
     QUnit.test('Comparison type !== passed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '!==',
             comparisonTarget: function() { return 2; }
@@ -887,7 +887,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type !== failed', function(assert) {
-        var result = ValidationEngine.validate(2, [{
+        const result = ValidationEngine.validate(2, [{
             type: 'compare',
             comparisonType: '!==',
             comparisonTarget: function() { return 2; }
@@ -897,7 +897,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type > passed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '>',
             comparisonTarget: function() { return '1'; },
@@ -908,7 +908,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type > failed', function(assert) {
-        var result = ValidationEngine.validate('1', [{
+        const result = ValidationEngine.validate('1', [{
             type: 'compare',
             comparisonType: '>',
             comparisonTarget: function() { return '2'; },
@@ -919,7 +919,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type >= passed', function(assert) {
-        var result = ValidationEngine.validate('1', [{
+        const result = ValidationEngine.validate('1', [{
             type: 'compare',
             comparisonType: '>=',
             comparisonTarget: function() { return '1'; },
@@ -930,7 +930,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type >= failed', function(assert) {
-        var result = ValidationEngine.validate('1', [{
+        const result = ValidationEngine.validate('1', [{
             type: 'compare',
             comparisonType: '>=',
             comparisonTarget: function() { return '2'; },
@@ -941,7 +941,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type < passed', function(assert) {
-        var result = ValidationEngine.validate('1', [{
+        const result = ValidationEngine.validate('1', [{
             type: 'compare',
             comparisonType: '<',
             comparisonTarget: function() { return '2'; },
@@ -952,7 +952,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type < failed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '<',
             comparisonTarget: function() { return '1'; },
@@ -963,7 +963,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type <= passed', function(assert) {
-        var result = ValidationEngine.validate('1', [{
+        const result = ValidationEngine.validate('1', [{
             type: 'compare',
             comparisonType: '<=',
             comparisonTarget: function() { return '1'; },
@@ -974,7 +974,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Comparison type <= failed', function(assert) {
-        var result = ValidationEngine.validate('2', [{
+        const result = ValidationEngine.validate('2', [{
             type: 'compare',
             comparisonType: '<=',
             comparisonTarget: function() { return '1'; },
@@ -985,7 +985,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Default message', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'compare',
             comparisonTarget: function() { return '345'; }
         }, '123', assert);
@@ -995,7 +995,7 @@ QUnit.module('Compare rule', () => {
     });
 
     QUnit.test('Default message with name', function(assert) {
-        var result = testInvalidRule({
+        const result = testInvalidRule({
             type: 'compare',
             comparisonTarget: function() { return '345'; }
         }, '123', assert, 'Password Confirmation');
@@ -1440,18 +1440,18 @@ QUnit.module('Async rule with user\'s callback', () => {
 
 QUnit.module('State of validated rules', () => {
     QUnit.test('Rule should not be revalidated if no value changed - invalid value', function(assert) {
-        var handler = sinon.spy(function() { return false; }),
-            value = '25',
-            message = 'Custom error message',
-            rule = {
-                type: 'custom',
-                message: message,
-                validationCallback: handler
-            };
+        const handler = sinon.spy(function() { return false; }),
+              value = '25',
+              message = 'Custom error message',
+              rule = {
+                  type: 'custom',
+                  message: message,
+                  validationCallback: handler
+              };
 
         // act
         ValidationEngine.validate(value, [rule]);
-        var result2 = ValidationEngine.validate(value, [rule]);
+        const result2 = ValidationEngine.validate(value, [rule]);
 
         // assert
         assert.strictEqual(rule.isValid, false, 'Rule should be marked as invalid');
@@ -1461,12 +1461,12 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Rule should not be revalidated if no value changed - valid value', function(assert) {
-        var handler = sinon.spy(function() { return true; }),
-            value = '25',
-            rule = {
-                type: 'custom',
-                validationCallback: handler
-            };
+        const handler = sinon.spy(function() { return true; }),
+              value = '25',
+              rule = {
+                  type: 'custom',
+                  validationCallback: handler
+              };
 
         // act
         ValidationEngine.validate(value, [rule]);
@@ -1478,12 +1478,12 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Rule should  be revalidated after value change - valid value', function(assert) {
-        var handler = sinon.spy(function() { return true; }),
-            value = '25',
-            rule = {
-                type: 'custom',
-                validationCallback: handler
-            };
+        const handler = sinon.spy(function() { return true; }),
+              value = '25',
+              rule = {
+                  type: 'custom',
+                  validationCallback: handler
+              };
 
         // act
         ValidationEngine.validate(value, [rule]);
@@ -1625,18 +1625,18 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('If first rule fails, second one should not be evaluated', function(assert) {
-        var handler = sinon.spy(function() { return true; }),
-            value = '',
-            rule1 = {
-                type: 'required'
-            },
-            rule2 = {
-                type: 'custom',
-                validationCallback: handler
-            };
+        const handler = sinon.spy(function() { return true; }),
+              value = '',
+              rule1 = {
+                  type: 'required'
+              },
+              rule2 = {
+                  type: 'custom',
+                  validationCallback: handler
+              };
 
         // act
-        var result1 = ValidationEngine.validate(value, [rule1, rule2]);
+        const result1 = ValidationEngine.validate(value, [rule1, rule2]);
 
         // assert
         assert.strictEqual(result1.isValid, false, 'Result should be marked as invalid');
@@ -1644,19 +1644,19 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('If first rule failed on last check, second one should not be evaluated', function(assert) {
-        var handler = sinon.spy(function() { return true; }),
-            emptyValue = '',
-            rule1 = {
-                type: 'required'
-            },
-            rule2 = {
-                type: 'custom',
-                validationCallback: handler
-            };
+        const handler = sinon.spy(function() { return true; }),
+              emptyValue = '',
+              rule1 = {
+                  type: 'required'
+              },
+              rule2 = {
+                  type: 'custom',
+                  validationCallback: handler
+              };
 
         // act
         ValidationEngine.validate(emptyValue, [rule1, rule2]);
-        var result2 = ValidationEngine.validate(emptyValue, [rule1, rule2]);
+        const result2 = ValidationEngine.validate(emptyValue, [rule1, rule2]);
 
         // assert
         assert.strictEqual(result2.isValid, false, 'Result should be marked as invalid');
@@ -1664,16 +1664,16 @@ QUnit.module('State of validated rules', () => {
     });
 
     QUnit.test('Compare rule should be reevaluated on each call', function(assert) {
-        var value = 'somevalue',
-            handler = sinon.spy(function() { return value; }),
-            rule = {
-                type: 'compare',
-                comparisonTarget: handler
-            };
+        const value = 'somevalue',
+              handler = sinon.spy(function() { return value; }),
+              rule = {
+                  type: 'compare',
+                  comparisonTarget: handler
+              };
 
         ValidationEngine.validate(value, [rule]);
         // act
-        var result2 = ValidationEngine.validate(value, [rule]);
+        const result2 = ValidationEngine.validate(value, [rule]);
 
         // assert
         assert.strictEqual(result2.isValid, true, 'Result should be marked as valid');
@@ -1687,64 +1687,61 @@ QUnit.module('Groups', {
     }
 }, () => {
     QUnit.test('Simple group - can register validator in group', function(assert) {
-        var group = 'newGroup',
-            validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
 
         // assert
-        var groupConfig = ValidationEngine.getGroupConfig(group);
+        const groupConfig = ValidationEngine.getGroupConfig(group);
         assert.ok(groupConfig, 'Group was registered in Validation Engine');
         assert.equal(groupConfig.validators.length, 1, 'Single validator was registered in group Validation Engine');
         assert.strictEqual(groupConfig.validators[0], validator, 'Validator was registered in correct group');
     });
 
     QUnit.test('Simple group - validator should not be duplicated in group', function(assert) {
-        var group = 'newGroup',
-            validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(group, validator);
         ValidationEngine.registerValidatorInGroup(group, validator);
 
         // assert
-        var groupConfig = ValidationEngine.getGroupConfig(group);
+        const groupConfig = ValidationEngine.getGroupConfig(group);
         assert.ok(groupConfig, 'Group was registered in Validation Engine');
         assert.equal(groupConfig.validators.length, 1, 'Single validator was registered in group Validation Engine');
         assert.strictEqual(groupConfig.validators[0], validator, 'Validator was registered in correct group');
     });
 
     QUnit.test('Simple group - can register validator in undefined group', function(assert) {
-        var validator = sinon.createStubInstance(Validator);
+        const validator = sinon.createStubInstance(Validator);
 
         // act
         ValidationEngine.registerValidatorInGroup(undefined, validator);
 
         // assert
-        var groupConfig = ValidationEngine.getGroupConfig();
+        const groupConfig = ValidationEngine.getGroupConfig();
         assert.ok(groupConfig, 'Group was registered in Validation Engine');
         assert.equal(groupConfig.validators.length, 1, 'Single validator was registered in group Validation Engine');
         assert.strictEqual(groupConfig.validators[0], validator, 'Validator was registered in correct group');
     });
 
     QUnit.test('Simple group - remove validator registration', function(assert) {
-        var validator = sinon.createStubInstance(Validator);
+        const validator = sinon.createStubInstance(Validator);
         ValidationEngine.registerValidatorInGroup(undefined, validator);
 
         // act
         ValidationEngine.removeRegisteredValidator(undefined, validator);
 
         // assert
-        var groupConfig = ValidationEngine.getGroupConfig();
+        const groupConfig = ValidationEngine.getGroupConfig();
         assert.ok(groupConfig, 'Group still exist Validation Engine');
         assert.equal(groupConfig.validators.length, 0, 'Validator was unregistered');
     });
 
 
     QUnit.test('Simple group - call validateGroup method', function(assert) {
-        var group = 'newGroup',
-            validator = sinon.createStubInstance(Validator);
+        const group = 'newGroup', validator = sinon.createStubInstance(Validator);
 
         validator.on = sinon.stub();
         validator.off = sinon.stub();
@@ -1753,7 +1750,7 @@ QUnit.module('Groups', {
 
         ValidationEngine.registerValidatorInGroup(group, validator);
         // act
-        var result = ValidationEngine.validateGroup(group);
+        const result = ValidationEngine.validateGroup(group);
 
         // assert
         assert.ok(result, 'Group Result is defined');
@@ -1765,14 +1762,14 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Simple group - call validateGroup method for undefined group', function(assert) {
-        var validator = sinon.createStubInstance(Validator);
+        const validator = sinon.createStubInstance(Validator);
         validator.on = sinon.stub();
         validator.off = sinon.stub();
         validator.validate.returns({ isValid: false, brokenRule: { type: 'required', isValid: false }, brokenRules: [{ type: 'required', isValid: false }] });
 
         ValidationEngine.registerValidatorInGroup(undefined, validator);
         // act
-        var result = ValidationEngine.validateGroup();
+        const result = ValidationEngine.validateGroup();
 
         // assert
         assert.ok(result, 'Group Result is defined');
@@ -1793,10 +1790,7 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Event Validated should be triggered', function(assert) {
-        var group = {},
-            validator = sinon.createStubInstance(Validator),
-            rule = { type: 'required', isValid: false },
-            handler = sinon.spy();
+        const group = {}, validator = sinon.createStubInstance(Validator), rule = { type: 'required', isValid: false }, handler = sinon.spy();
         validator.on = sinon.stub();
         validator.off = sinon.stub();
         validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
@@ -1811,29 +1805,29 @@ QUnit.module('Groups', {
         assert.ok(handler.calledOnce, 'Handler should be called');
         assert.ok(handler.calledOn(ValidationEngine.getGroupConfig(group)), 'Group config should be passed as \'this\'');
 
-        var params = handler.getCall(0).args[0];
+        const params = handler.getCall(0).args[0];
         assert.strictEqual(params.isValid, false, 'IsValid should be passed');
         assert.deepEqual(params.brokenRules, [rule], 'Broken validation rules should be passed');
     });
 
     QUnit.test('Undefined group is defined by default', function(assert) {
         // act
-        var config = ValidationEngine.getGroupConfig();
+        const config = ValidationEngine.getGroupConfig();
 
         assert.ok(config, 'Config should be retrieved for undefined group');
     });
 
 
     QUnit.test('Simple group - call validate method on group config object', function(assert) {
-        var validator = sinon.createStubInstance(Validator);
+        const validator = sinon.createStubInstance(Validator);
         validator.on = sinon.stub();
         validator.off = sinon.stub();
         validator.validate.returns({ isValid: false, brokenRule: { type: 'required', isValid: false }, brokenRules: [{ type: 'required', isValid: false }] });
 
         ValidationEngine.registerValidatorInGroup(undefined, validator);
-        var groupConfig = ValidationEngine.getGroupConfig();
+        const groupConfig = ValidationEngine.getGroupConfig();
         // act
-        var result = groupConfig.validate();
+        const result = groupConfig.validate();
 
         // assert
         assert.ok(result, 'Group Result is defined');
@@ -1842,15 +1836,14 @@ QUnit.module('Groups', {
     });
 
     QUnit.test('Remove registered group', function(assert) {
-        var group = 'group1',
-            validator = sinon.createStubInstance(Validator);
+        const group = 'group1', validator = sinon.createStubInstance(Validator);
         ValidationEngine.registerValidatorInGroup(group, validator);
 
         // act
         ValidationEngine.removeGroup(group);
 
         // assert
-        var groupConfig = ValidationEngine.getGroupConfig(group);
+        const groupConfig = ValidationEngine.getGroupConfig(group);
         assert.ok(!groupConfig, 'Group config should be removed from the list');
     });
 });
@@ -1883,7 +1876,7 @@ QUnit.module('ignoreEmptyValue option', () => {
     });
 
     QUnit.test('Use the option for the StringLength rule', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'stringLength',
             message: 'A message',
             min: 2,
@@ -1896,7 +1889,7 @@ QUnit.module('ignoreEmptyValue option', () => {
     });
 
     QUnit.test('Use the option for the Compare rule', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'compare',
             message: 'A message',
             comparisonTarget: function() {
@@ -1920,7 +1913,7 @@ QUnit.module('ignoreEmptyValue option', () => {
     });
 
     QUnit.test('Use the option for the Custom rule', function(assert) {
-        var result = ValidationEngine.validate('', [{
+        const result = ValidationEngine.validate('', [{
             type: 'custom',
             message: 'A message',
             validationCallback: function() {

@@ -1,16 +1,16 @@
 /* eslint-disable no-console, no-undef, no-var, one-var*/
 
-var path = require('path');
+const path = require('path');
 
 function normalizeJsName(value) {
     return value.trim().replace('-', '_').replace(' ', '_');
 }
 
 function processFile(file, options, callback) {
-    var name = path.basename(file, path.extname(file));
+    const name = path.basename(file, path.extname(file));
     options.info('%s: started', name);
     parse(file, { precision: options.precision }, function(shapeData, errors) {
-        var content;
+        let content;
         options.info('%s: finished', name);
         errors && errors.forEach(function(e) {
             options.error('  ' + e);
@@ -33,7 +33,7 @@ function processFile(file, options, callback) {
 }
 
 function collectFiles(dir, done) {
-    var input = path.resolve(dir || '');
+    const input = path.resolve(dir || '');
     fs.stat(input, function(e, stat) {
         if(e) {
             done(e, []);
@@ -41,7 +41,7 @@ function collectFiles(dir, done) {
             done(null, checkFile(input) ? [path.resolve(path.dirname(input), normalizeFile(input))] : []);
         } else if(stat.isDirectory()) {
             fs.readdir(input, function(e, dirItems) {
-                var list = [];
+                const list = [];
                 dirItems.forEach(function(dirItem) {
                     if(checkFile(dirItem)) {
                         list.push(path.resolve(input, normalizeFile(dirItem)));
@@ -64,7 +64,7 @@ function collectFiles(dir, done) {
 }
 
 function importFile(file) {
-    var content;
+    let content;
     try {
         content = require(path.resolve(String(file)));
     } catch(_) { }
@@ -97,7 +97,7 @@ function prepareSettings(source, options) {
 }
 
 function processFiles(source, options, callback) {
-    var settings = prepareSettings(source, options && options.trim ? importFile(options) : options);
+    const settings = prepareSettings(source, options && options.trim ? importFile(options) : options);
     settings.info('Started');
     collectFiles(settings.input, function(e, files) {
         e && settings.error(e.message);
@@ -117,7 +117,7 @@ function processFiles(source, options, callback) {
 
 exports.processFiles = processFiles;
 
-var COMMAND_LINE_ARG_KEYS = [
+const COMMAND_LINE_ARG_KEYS = [
     { key: '--output', name: 'output', arg: true, desc: 'Destination directory' },
     { key: '--process-data', name: 'processData', arg: true, desc: 'Process parsed data' },
     { key: '--process-file-name', name: 'processFileName', arg: true, desc: 'Process output file name' },
@@ -131,14 +131,14 @@ var COMMAND_LINE_ARG_KEYS = [
 ];
 
 function parseCommandLineArgs() {
-    var args = process.argv.slice(2);
-    var options = { isEmpty: !args.length };
-    var map = {};
+    const args = process.argv.slice(2);
+    let options = { isEmpty: !args.length };
+    const map = {};
     args.forEach(function(arg, i) {
         map[arg] = args[i + 1] || true;
     });
     COMMAND_LINE_ARG_KEYS.forEach(function(info) {
-        var val = map[info.key];
+        const val = map[info.key];
         if(val) {
             options[info.name] = info.arg ? val : true;
         }
@@ -151,14 +151,14 @@ function parseCommandLineArgs() {
 }
 
 function printCommandLineHelp() {
-    var parts = ['node ', path.basename(process.argv[1]), ' Source '];
-    var lines = [];
-    var maxLength = Math.max.apply(null, COMMAND_LINE_ARG_KEYS.map(function(info) {
+    const parts = ['node ', path.basename(process.argv[1]), ' Source '];
+    const lines = [];
+    const maxLength = Math.max.apply(null, COMMAND_LINE_ARG_KEYS.map(function(info) {
         return info.key.length;
     })) + 2;
-    var message;
+    let message;
     COMMAND_LINE_ARG_KEYS.forEach(function(info) {
-        var key = info.key;
+        const key = info.key;
         parts.push(key, ' ');
         if(info.arg) {
             parts.push('<', key.slice(2), '>', ' ');
@@ -170,7 +170,7 @@ function printCommandLineHelp() {
 }
 
 function runFromConsole() {
-    var args = parseCommandLineArgs();
+    const args = parseCommandLineArgs();
     if(args) {
         processFiles(process.argv[2] || '', args);
     }

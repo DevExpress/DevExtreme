@@ -159,7 +159,7 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        var triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = domUtils.triggerResizeEvent;
         assert.expect(2);
 
         try {
@@ -184,7 +184,7 @@ QUnit.module('Drawer behavior', () => {
         });
 
         const instance = $element.dxDrawer('instance');
-        var triggerFunction = domUtils.triggerResizeEvent;
+        const triggerFunction = domUtils.triggerResizeEvent;
         assert.expect(2);
 
         try {
@@ -463,7 +463,7 @@ QUnit.module('Drawer behavior', () => {
             revealMode: 'slide',
             openedStateMode: 'overlap',
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -488,7 +488,7 @@ QUnit.module('Drawer behavior', () => {
             revealMode: 'slide',
             openedStateMode: 'overlap',
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -513,7 +513,7 @@ QUnit.module('Drawer behavior', () => {
             revealMode: 'expand',
             openedStateMode: 'overlap',
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -540,7 +540,7 @@ QUnit.module('Drawer behavior', () => {
             revealMode: 'slide',
             openedStateMode: 'overlap',
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -566,7 +566,7 @@ QUnit.module('Drawer behavior', () => {
             position: 'right',
             openedStateMode: 'overlap',
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -645,7 +645,7 @@ QUnit.module('Drawer behavior', () => {
         const $element = $('#drawer').dxDrawer({
             opened: true,
             template: function($content) {
-                var $outerDiv = $('<div/>');
+                const $outerDiv = $('<div/>');
                 $('<div/>').css('height', 600).css('width', 200).appendTo($outerDiv);
 
                 return $outerDiv;
@@ -661,7 +661,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('drawer panel should have correct width when async template is used', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         $('#drawer').dxDrawer({
             openedStateMode: 'push',
@@ -670,7 +670,7 @@ QUnit.module('Drawer behavior', () => {
                 templates: {
                     'panel': {
                         render: function(args) {
-                            var $div = $('<div/>').appendTo(args.container);
+                            const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
                                 $div.css('width', 200);
@@ -690,7 +690,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('drawer panel should have correct width when async template is used, overlap mode', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
@@ -699,7 +699,7 @@ QUnit.module('Drawer behavior', () => {
                 templates: {
                     'panel': {
                         render: function(args) {
-                            var $div = $('<div/>').appendTo(args.container);
+                            const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
                                 $div.css('width', 200);
@@ -719,7 +719,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('drawer panel should have correct z-index when async template is used, overlap mode', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
@@ -728,7 +728,7 @@ QUnit.module('Drawer behavior', () => {
                 templates: {
                     'panel': {
                         render: function(args) {
-                            var $div = $('<div/>').appendTo(args.container);
+                            const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
                                 $div.css('width', 200);
@@ -748,7 +748,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('drawer panel should have correct margin when async template is used', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         $('#drawer').dxDrawer({
             openedStateMode: 'shrink',
@@ -758,7 +758,7 @@ QUnit.module('Drawer behavior', () => {
                 templates: {
                     'panel': {
                         render: function(args) {
-                            var $div = $('<div/>').appendTo(args.container);
+                            const $div = $('<div/>').appendTo(args.container);
                             setTimeout(() => {
                                 $div.css('height', 600);
                                 $div.css('width', 200);
@@ -1039,7 +1039,7 @@ QUnit.module('Rtl', () => {
             revealMode: 'slide',
             rtlEnabled: true,
             template: function($content) {
-                var $div = $('<div/>');
+                const $div = $('<div/>');
                 $div.css('height', 600);
                 $div.css('width', 200);
 
@@ -1085,13 +1085,13 @@ QUnit.module('Rtl', () => {
 
 QUnit.module('CloseOnOutsideClick', () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
-        var drawer = $('#drawer').dxDrawer({
-                closeOnOutsideClick: false,
-                opened: true,
-                shading: true
-            })
-                .dxDrawer('instance'),
-            $content = drawer.viewContent();
+        const drawer = $('#drawer').dxDrawer({
+                      closeOnOutsideClick: false,
+                      opened: true,
+                      shading: true
+                  })
+                      .dxDrawer('instance'),
+              $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
         assert.equal(drawer.option('opened'), true, 'drawer is not hidden');
@@ -1105,14 +1105,14 @@ QUnit.module('CloseOnOutsideClick', () => {
     });
 
     QUnit.test('closeOnOutsideClick as function should be processed correctly', function(assert) {
-        var drawer = $('#drawer').dxDrawer({
-                closeOnOutsideClick: () => {
-                    return false;
-                },
-                opened: true
-            })
-                .dxDrawer('instance'),
-            $content = drawer.viewContent();
+        const drawer = $('#drawer').dxDrawer({
+                      closeOnOutsideClick: () => {
+                          return false;
+                      },
+                      opened: true
+                  })
+                      .dxDrawer('instance'),
+              $content = drawer.viewContent();
 
         $($content).trigger('dxclick');
         assert.equal(drawer.option('opened'), true, 'drawer is not hidden');

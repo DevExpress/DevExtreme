@@ -13360,16 +13360,16 @@ QUnit.test('row should rendered after editing if scrolling mode is virtual', fun
 
 // T837104
 QUnit.test('Update should work after scrolling if scrolling mode is infinite and refresh mode is repaint', function(assert) {
-    var dataGrid = createDataGrid({
+    const dataGrid = createDataGrid({
         height: 100,
         loadingTimeout: undefined,
         remoteOperations: true,
         dataSource: {
             key: 'id',
             load(options) {
-                var items = [];
+                const items = [];
 
-                for(var i = options.skip; i < options.skip + options.take; i++) {
+                for(let i = options.skip; i < options.skip + options.take; i++) {
                     let id = i + 1;
                     items.push({ id: id, name: 'test ' + id });
                 }
@@ -18994,9 +18994,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation error hightlighting should not disappear after scrolling', function(assert) {
         // arrange
-        var $input,
-            dataGrid,
-            $firstCell;
+        let $input, dataGrid, $firstCell;
 
         dataGrid = createDataGrid(this.gridOptions);
 
@@ -19055,9 +19053,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation error hightlighting should disappear after scrolling if newly added row failed validation', function(assert) {
         // arrange
-        var $input,
-            dataGrid,
-            $firstCell;
+        let $input, dataGrid, $firstCell;
 
         dataGrid = createDataGrid(this.gridOptions);
 
@@ -19112,9 +19108,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Cell edit mode', function(assert) {
         // arrange
-        var $input,
-            dataGrid,
-            $firstCell;
+        let $input, dataGrid, $firstCell;
 
         this.addHiddenColumn();
 
@@ -19176,11 +19170,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
     // T838674
     QUnit.test('Validation should work after editing row and scrolling if grid has hidden column with validationRules. Batch edit mode', function(assert) {
         // arrange
-        var $input,
-            dataGrid,
-            $firstCell,
-            $saveButton,
-            $errorRow;
+        let $input, dataGrid, $firstCell, $saveButton, $errorRow;
 
         this.gridOptions.editing.mode = 'batch';
         this.addHiddenColumn();
@@ -19251,11 +19241,12 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
     function rowAddingValidationWithInvalidHiddenColumnTest(that, assert, editMode) {
         // arrange
-        var $input,
-            dataGrid,
-            onRowValidatingSpy = sinon.spy(),
-            $errorRow,
-            $firstCell;
+        let $input;
+
+        let dataGrid;
+        const onRowValidatingSpy = sinon.spy();
+        let $errorRow;
+        let $firstCell;
 
         that.gridOptions.editing.mode = editMode;
         that.gridOptions.onRowValidating = onRowValidatingSpy;
@@ -19352,11 +19343,12 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
     function rowAddingValidationWithValidHiddenColumnTest(that, assert, editMode) {
         // arrange
-        var $input,
-            dataGrid,
-            onRowValidatingSpy = sinon.spy(),
-            $errorRow,
-            $firstCell;
+        let $input;
+
+        let dataGrid;
+        const onRowValidatingSpy = sinon.spy();
+        let $errorRow;
+        let $firstCell;
 
         that.addHiddenColumn();
 

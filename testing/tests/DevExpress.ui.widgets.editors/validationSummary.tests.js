@@ -125,7 +125,7 @@ QUnit.module('General', {
             validators: [validator1, validator2]
         });
 
-        var items = summary.option('items');
+        const items = summary.option('items');
 
         assert.ok(items, 'Items should exists');
         assert.equal(items.length, 3, 'Three messaged should be shown(several per validator)');

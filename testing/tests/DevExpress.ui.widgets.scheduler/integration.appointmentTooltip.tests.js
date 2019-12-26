@@ -293,7 +293,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
     });
 
     test('Click on tooltip-edit button should call scheduler._appointmentPopup and hide tooltip', function(assert) {
-        var data = new DataSource({
+        const data = new DataSource({
             store: getSampleData()
         });
 
@@ -302,12 +302,12 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             dataSource: data
         });
 
-        var stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
+        const stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
 
         scheduler.appointments.click(1);
         scheduler.tooltip.clickOnItem();
 
-        var args = stub.getCall(0).args;
+        const args = stub.getCall(0).args;
 
         assert.deepEqual(args[0], {
             startDate: new Date(2015, 1, 9, 11, 0),

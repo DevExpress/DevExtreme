@@ -630,7 +630,7 @@ QUnit.test('Duplicated elements should not be rendered when resources are loaded
                     fieldExpr: 'room',
                     dataSource: new CustomStore({
                         load: function() {
-                            var d = $.Deferred();
+                            const d = $.Deferred();
                             setTimeout(function() {
                                 d.resolve([{ id: 1 }]);
                             }, 100);
@@ -646,7 +646,7 @@ QUnit.test('Duplicated elements should not be rendered when resources are loaded
         this.instance.repaint();
         clock.tick(100);
 
-        var $workspace = this.instance.$element().find('.dx-scheduler-work-space');
+        const $workspace = this.instance.$element().find('.dx-scheduler-work-space');
         assert.equal($workspace.length, 1, 'Duplicated workSpace wasn\'t rendered');
     } finally {
         clock.restore();
@@ -896,7 +896,7 @@ QUnit.test('resourceCellTemplate should take cellElement with correct geometry i
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = $(cellElement);
+                const $cell = $(cellElement);
                 assert.equal($cell.outerWidth(), 99, 'Resource cell width is OK');
                 assert.roughEqual($cell.outerHeight(), 276, 1.001, 'Resource cell height is OK');
             }
@@ -1037,8 +1037,7 @@ QUnit.test('resourceCellTemplate should work correct in timeline view', function
         }
     });
 
-    var $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0),
-        $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
+    const $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0), $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
 
     assert.ok($cell1.hasClass('custom-group-cell-class'), 'first cell has right class');
     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
@@ -1958,7 +1957,7 @@ QUnit.test('Workspace view has correct viewEndDate with empty groups and groupBy
 });
 
 QUnit.test('Workspace view group header cells have same height as table cells (T837711)', function(assert) {
-    var priorityData = [
+    const priorityData = [
         {
             text: 'Low Priority',
             id: 1

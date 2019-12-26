@@ -220,7 +220,7 @@ const lineMethods = {
     }
 };
 
-var lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+const lineSeries = exports.chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
     getPointCenterByArg(arg) {
         const value = this.getArgumentAxis().getTranslator().translate(arg);
         return { x: value, y: value };

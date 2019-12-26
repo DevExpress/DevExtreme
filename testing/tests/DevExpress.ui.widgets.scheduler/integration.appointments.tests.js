@@ -645,7 +645,7 @@ QUnit.test('Appointment dates should not be normalized before sending to the det
 
     this.clock.tick();
 
-    var spy = sinon.spy(this.instance._appointmentPopup, 'show');
+    const spy = sinon.spy(this.instance._appointmentPopup, 'show');
 
     this.scheduler.appointments.click();
     this.clock.tick(300);

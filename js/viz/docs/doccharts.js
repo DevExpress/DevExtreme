@@ -3903,7 +3903,7 @@ const dxChartAnnotationConfig = {
 * @type object
 * @inherits dxChartCommonAnnotationConfig
 */
-var dxPolarChartCommonAnnotationConfig = {
+const dxPolarChartCommonAnnotationConfig = {
     /**
     * @name dxPolarChartCommonAnnotationConfig.radius
     * @type number
@@ -3923,7 +3923,7 @@ var dxPolarChartCommonAnnotationConfig = {
 * @type object
 * @inherits dxPolarChartCommonAnnotationConfig
 */
-var dxPolarChartAnnotationConfig = {
+const dxPolarChartAnnotationConfig = {
     /**
     * @name dxPolarChartAnnotationConfig.name
     * @type string

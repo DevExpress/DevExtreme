@@ -127,7 +127,7 @@ QUnit.module('Menu with templates', {
     });
 });
 
-var helper;
+let helper;
 
 QUnit.module('Aria accessibility', {
     beforeEach: function() {

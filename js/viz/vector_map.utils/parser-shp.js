@@ -1,10 +1,10 @@
 /* eslint-disable no-undef, no-unused-vars, no-var, one-var*/
 function parseShape(stream, errors) {
-    var timeStart;
-    var timeEnd;
-    var header;
-    var records = [];
-    var record;
+    let timeStart;
+    let timeEnd;
+    let header;
+    const records = [];
+    let record;
     try {
         timeStart = new Date();
         header = parseShapeHeader(stream);
@@ -49,13 +49,13 @@ function readPointShape(stream, record) {
 }
 
 function readPolyLineShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numParts = readInteger(stream);
-    var numPoints = readInteger(stream);
-    var parts = readIntegerArray(stream, numParts);
-    var points = readPointArray(stream, numPoints);
-    var rings = [];
-    var i;
+    const bBox = readBBox(stream);
+    const numParts = readInteger(stream);
+    const numPoints = readInteger(stream);
+    const parts = readIntegerArray(stream, numParts);
+    const points = readPointArray(stream, numPoints);
+    const rings = [];
+    let i;
     rings.length = numParts;
     for(i = 0; i < numParts; ++i) {
         rings[i] = points.slice(parts[i], parts[i + 1] || numPoints);
@@ -75,28 +75,28 @@ function readPointMShape(stream, record) {
 }
 
 function readMultiPointMShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numPoints = readInteger(stream);
-    var points = readPointArray(stream, numPoints);
-    var mBox = readPair(stream);
-    var mValues = readDoubleArray(stream, numPoints);
+    const bBox = readBBox(stream);
+    const numPoints = readInteger(stream);
+    const points = readPointArray(stream, numPoints);
+    const mBox = readPair(stream);
+    const mValues = readDoubleArray(stream, numPoints);
     record.bBox = bBox;
     record.mBox = mBox;
     record.coordinates = merge_XYM(points, mValues, numPoints);
 }
 
 function readPolyLineMShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numParts = readInteger(stream);
-    var numPoints = readInteger(stream);
-    var parts = readIntegerArray(stream, numParts);
-    var points = readPointArray(stream, numPoints);
-    var mBox = readPair(stream);
-    var mValues = readDoubleArray(stream, numPoints);
-    var rings = [];
-    var i;
-    var from;
-    var to;
+    const bBox = readBBox(stream);
+    const numParts = readInteger(stream);
+    const numPoints = readInteger(stream);
+    const parts = readIntegerArray(stream, numParts);
+    const points = readPointArray(stream, numPoints);
+    const mBox = readPair(stream);
+    const mValues = readDoubleArray(stream, numPoints);
+    const rings = [];
+    let i;
+    let from;
+    let to;
     rings.length = numParts;
     for(i = 0; i < numParts; ++i) {
         from = parts[i];
@@ -114,13 +114,13 @@ function readPointZShape(stream, record) {
 }
 
 function readMultiPointZShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numPoints = readInteger(stream);
-    var points = readPointArray(stream, numPoints);
-    var zBox = readPair(stream);
-    var zValues = readDoubleArray(stream, numPoints);
-    var mBox = readPair(stream);
-    var mValue = readDoubleArray(stream, numPoints);
+    const bBox = readBBox(stream);
+    const numPoints = readInteger(stream);
+    const points = readPointArray(stream, numPoints);
+    const zBox = readPair(stream);
+    const zValues = readDoubleArray(stream, numPoints);
+    const mBox = readPair(stream);
+    const mValue = readDoubleArray(stream, numPoints);
     record.bBox = bBox;
     record.zBox = zBox;
     record.mBox = mBox;
@@ -128,19 +128,19 @@ function readMultiPointZShape(stream, record) {
 }
 
 function readPolyLineZShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numParts = readInteger(stream);
-    var numPoints = readInteger(stream);
-    var parts = readIntegerArray(stream, numParts);
-    var points = readPointArray(stream, numPoints);
-    var zBox = readPair(stream);
-    var zValues = readDoubleArray(stream, numPoints);
-    var mBox = readPair(stream);
-    var mValues = readDoubleArray(stream, numPoints);
-    var rings = [];
-    var i;
-    var from;
-    var to;
+    const bBox = readBBox(stream);
+    const numParts = readInteger(stream);
+    const numPoints = readInteger(stream);
+    const parts = readIntegerArray(stream, numParts);
+    const points = readPointArray(stream, numPoints);
+    const zBox = readPair(stream);
+    const zValues = readDoubleArray(stream, numPoints);
+    const mBox = readPair(stream);
+    const mValues = readDoubleArray(stream, numPoints);
+    const rings = [];
+    let i;
+    let from;
+    let to;
     rings.length = numParts;
     for(i = 0; i < numParts; ++i) {
         from = parts[i];
@@ -154,19 +154,19 @@ function readPolyLineZShape(stream, record) {
 }
 
 function readMultiPatchShape(stream, record) {
-    var bBox = readBBox(stream);
-    var numParts = readInteger(stream);
-    var numPoints = readInteger(stream);
-    var parts = readIntegerArray(stream, numParts);
-    var partTypes = readIntegerArray(stream, numParts);
-    var points = readPointArray(stream, numPoints);
-    var zBox = readPair(stream);
-    var zValues = readDoubleArray(stream, numPoints);
-    var mBox = readPair(stream);
-    var rings = [];
-    var i;
-    var from;
-    var to;
+    const bBox = readBBox(stream);
+    const numParts = readInteger(stream);
+    const numPoints = readInteger(stream);
+    const parts = readIntegerArray(stream, numParts);
+    const partTypes = readIntegerArray(stream, numParts);
+    const points = readPointArray(stream, numPoints);
+    const zBox = readPair(stream);
+    const zValues = readDoubleArray(stream, numPoints);
+    const mBox = readPair(stream);
+    const rings = [];
+    let i;
+    let from;
+    let to;
     rings.length = numParts;
     for(i = 0; i < numParts; ++i) {
         from = parts[i];
@@ -180,7 +180,7 @@ function readMultiPatchShape(stream, record) {
     record.coordinates = rings;
 }
 
-var SHP_TYPES = {
+const SHP_TYPES = {
     0: 'Null',
     1: 'Point',
     3: 'PolyLine',
@@ -197,7 +197,7 @@ var SHP_TYPES = {
     31: 'MultiPatch'
 };
 
-var SHP_RECORD_PARSERS = {
+const SHP_RECORD_PARSERS = {
     0: noop,
     1: readPointShape,
     3: readPolyLineShape,
@@ -214,7 +214,7 @@ var SHP_RECORD_PARSERS = {
     31: readMultiPatchShape
 };
 
-var SHP_TYPE_TO_GEOJSON_TYPE_MAP = {
+const SHP_TYPE_TO_GEOJSON_TYPE_MAP = {
     'Null': 'Null',
     'Point': 'Point',
     'PolyLine': 'MultiLineString',
@@ -232,7 +232,7 @@ var SHP_TYPE_TO_GEOJSON_TYPE_MAP = {
 };
 
 function parseShapeHeader(stream) {
-    var header = {};
+    const header = {};
     header.fileCode = stream.ui32BE();
     stream.skip(20);
     header.fileLength = stream.ui32BE() << 1;
@@ -249,8 +249,8 @@ function readInteger(stream) {
 }
 
 function readIntegerArray(stream, length) {
-    var array = [];
-    var i;
+    const array = [];
+    let i;
     array.length = length;
     for(i = 0; i < length; ++i) {
         array[i] = readInteger(stream);
@@ -259,8 +259,8 @@ function readIntegerArray(stream, length) {
 }
 
 function readDoubleArray(stream, length) {
-    var array = [];
-    var i;
+    const array = [];
+    let i;
     array.length = length;
     for(i = 0; i < length; ++i) {
         array[i] = stream.f64LE();
@@ -277,8 +277,8 @@ function readPair(stream) {
 }
 
 function readPointArray(stream, count) {
-    var points = [];
-    var i;
+    const points = [];
+    let i;
     points.length = count;
     for(i = 0; i < count; ++i) {
         points[i] = readPair(stream);
@@ -287,8 +287,8 @@ function readPointArray(stream, count) {
 }
 
 function merge_XYM(xy, m, length) {
-    var array = [];
-    var i;
+    const array = [];
+    let i;
     array.length = length;
     for(i = 0; i < length; ++i) {
         array[i] = [xy[i][0], xy[i][1], m[i]];
@@ -297,8 +297,8 @@ function merge_XYM(xy, m, length) {
 }
 
 function merge_XYZM(xy, z, m, length) {
-    var array = [];
-    var i;
+    const array = [];
+    let i;
     array.length = length;
     for(i = 0; i < length; ++i) {
         array[i] = [xy[i][0], xy[i][1], z[i], m[i]];
@@ -307,10 +307,10 @@ function merge_XYZM(xy, z, m, length) {
 }
 
 function parseShapeRecord(stream, generalType, errors) {
-    var record = { number: stream.ui32BE() };
-    var length = stream.ui32BE() << 1;
-    var pos = stream.pos();
-    var type = stream.ui32LE();
+    let record = { number: stream.ui32BE() };
+    const length = stream.ui32BE() << 1;
+    let pos = stream.pos();
+    const type = stream.ui32LE();
 
     record.type_number = type;
     record.type = SHP_TYPES[type];

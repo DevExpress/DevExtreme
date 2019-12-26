@@ -7974,8 +7974,8 @@ QUnit.module('Remote Grouping', {
 
 // T320744
 QUnit.test('Error when CustomStore returns plain data and remote grouping enabled', function(assert) {
-    var storeLoadOptions,
-        onDataErrorOccurredSpy = sinon.spy();
+    let storeLoadOptions;
+    const onDataErrorOccurredSpy = sinon.spy();
 
     this.options = {
         dataSource: {
@@ -8019,8 +8019,8 @@ QUnit.test('Error when CustomStore returns plain data and remote grouping enable
 
 // T366766
 QUnit.test('Error when CustomStore returns groups without items', function(assert) {
-    var storeLoadOptions,
-        onDataErrorOccurredSpy = sinon.spy();
+    let storeLoadOptions;
+    const onDataErrorOccurredSpy = sinon.spy();
 
     this.options = {
         dataSource: {

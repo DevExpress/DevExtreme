@@ -511,7 +511,7 @@ QUnit.test('Appointments should be rendered without errors (T816873)', function(
         }
     );
 
-    var $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
+    const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
     assert.equal($appointments.length, 15, 'appointments should be rendered without errors');
 });
 

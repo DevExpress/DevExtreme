@@ -28,8 +28,8 @@ QUnit.module('swipeable', {
         'onCancel': 'cancel'
     }, function(key, value) {
         QUnit.test('\'' + key + '\' handler attached', function(assert) {
-            var called = 0,
-                options = {};
+            let called = 0;
+            const options = {};
 
             options[key] = function() {
                 called++;
@@ -42,12 +42,12 @@ QUnit.module('swipeable', {
         });
 
         QUnit.test('\'' + key + '\' option change', function(assert) {
-            var called = 0,
-                options = {};
+            let called = 0;
+            const options = {};
 
             options[key] = noop;
 
-            var swipeable = new Swipeable(this.element, options);
+            const swipeable = new Swipeable(this.element, options);
             this.element.trigger(swipeEvents.swipe + value);
             assert.equal(called, 0);
 
@@ -63,7 +63,7 @@ QUnit.module('swipeable', {
     QUnit.test('\'elastic\' option', function(assert) {
         assert.expect(2);
 
-        var swipeable = new Swipeable(this.element, {
+        const swipeable = new Swipeable(this.element, {
             elastic: true,
             onStart: function(e) {
                 e.event.maxRightOffset = 1;
@@ -99,7 +99,7 @@ QUnit.module('swipeable', {
     QUnit.test('\'itemSizeFunc\' option', function(assert) {
         assert.expect(2);
 
-        var swipeable = new Swipeable(this.element, {
+        const swipeable = new Swipeable(this.element, {
             itemSizeFunc: function() {
                 return 100;
             },

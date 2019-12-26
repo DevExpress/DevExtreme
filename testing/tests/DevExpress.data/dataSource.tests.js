@@ -1964,7 +1964,7 @@ QUnit.module('live update', {
 
     // T837104
     QUnit.test('push after adding items via array directly', function(assert) {
-        var store = this.initPlainDataSource().store();
+        const store = this.initPlainDataSource().store();
 
         store.push([
             { type: 'update', key: 1, data: { text: 'updated' } }

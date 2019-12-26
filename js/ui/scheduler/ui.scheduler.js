@@ -71,8 +71,7 @@ const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const LIST_ITEM_CLASS = 'dx-list-item';
 
-var FULL_DATE_FORMAT = 'yyyyMMddTHHmmss',
-    UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
+const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss', UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 
 const VIEWS_CONFIG = {
     day: {
@@ -1926,7 +1925,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getAppointmentTooltipOptions: function() {
-        var that = this;
+        const that = this;
         return {
             createComponent: that._createComponent.bind(that),
             container: that.$element(),
@@ -2876,11 +2875,11 @@ const Scheduler = Widget.inherit({
     },
 
     raiseClickEvent(e) {
-        var config = {
+        const config = {
             itemData: e.itemData.data,
             itemElement: e.itemElement
         };
-        var createClickEvent = extendFromObject(this.fire('mapAppointmentFields', config), e, false);
+        const createClickEvent = extendFromObject(this.fire('mapAppointmentFields', config), e, false);
         delete createClickEvent.itemData;
         delete createClickEvent.itemIndex;
         delete createClickEvent.itemElement;
@@ -2933,8 +2932,8 @@ const Scheduler = Widget.inherit({
     },
 
     _createDragAppointment(itemData, settings) {
-        var appointments = this.getAppointmentsInstance();
-        var appointmentIndex = appointments.option('items').length;
+        const appointments = this.getAppointmentsInstance();
+        const appointmentIndex = appointments.option('items').length;
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
@@ -2945,7 +2944,7 @@ const Scheduler = Widget.inherit({
             settings: settings
         });
 
-        var appointmentList = appointments._findItemElementByItem(itemData);
+        const appointmentList = appointments._findItemElementByItem(itemData);
         return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
     },
 

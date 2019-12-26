@@ -71,13 +71,13 @@ module.exports = Class.inherit({
     },
 
     _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
-        var filterLength = encodeURI(JSON.stringify(remoteFilter)).length,
-            needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest),
-            deferred = new Deferred(),
-            loadOptions = {
-                filter: needLoadAllData ? undefined : remoteFilter,
-                select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()
-            };
+        const filterLength = encodeURI(JSON.stringify(remoteFilter)).length,
+              needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest),
+              deferred = new Deferred(),
+              loadOptions = {
+                  filter: needLoadAllData ? undefined : remoteFilter,
+                  select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()
+              };
 
         if(remoteFilter && remoteFilter.length === 0) {
             deferred.resolve([]);

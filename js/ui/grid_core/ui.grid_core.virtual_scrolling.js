@@ -277,8 +277,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
 })();
 
-var VirtualScrollingRowsViewExtender = (function() {
-    var removeEmptyRows = function($emptyRows, className) {
+const VirtualScrollingRowsViewExtender = (function() {
+    const removeEmptyRows = function($emptyRows, className) {
         let rowCount,
             getRowParent = row => $(row).parent('.' + className).get(0),
             tBodies = $emptyRows.toArray().map(getRowParent).filter(row => row);

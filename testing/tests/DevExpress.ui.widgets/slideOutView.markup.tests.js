@@ -42,7 +42,7 @@ QUnit.testStart(function() {
 
 QUnit.module('rendering', () => {
     QUnit.test('render slideoutView', function(assert) {
-        var $element = $('#slideOutView').dxSlideOutView({});
+        const $element = $('#slideOutView').dxSlideOutView({});
 
         assert.ok($element.hasClass(SLIDEOUTVIEW_CLASS), 'slideoutview rendered');
         assert.equal($element.find('.' + SLIDEOUTVIEW_WRAPPER_CLASS).length, 1, 'slideoutview has wrapper');
@@ -51,8 +51,7 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('render slideoutView content', function(assert) {
-        var $element = $('#slideOutView').dxSlideOutView({}),
-            $content = $element.find('.' + SLIDEOUTVIEW_CONTENT_CLASS);
+        const $element = $('#slideOutView').dxSlideOutView({}), $content = $element.find('.' + SLIDEOUTVIEW_CONTENT_CLASS);
 
         assert.equal($.trim($content.text()), 'Test Content', 'slideoutview content was rendered');
     });
@@ -65,10 +64,10 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('custom content template for menu should be rendered correctly', function(assert) {
-        var $element = $('#contentTemplate').dxSlideOutView({
-                menuTemplate: 'customMenu'
-            }),
-            $menu = $($element.dxSlideOutView('instance').menuContent());
+        const $element = $('#contentTemplate').dxSlideOutView({
+                      menuTemplate: 'customMenu'
+                  }),
+              $menu = $($element.dxSlideOutView('instance').menuContent());
 
         assert.equal($.trim($menu.text()), 'Test Menu Template', 'menu content text is correct');
     });
@@ -86,22 +85,22 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('custom content template for content should be rendered correctly', function(assert) {
-        var $element = $('#contentTemplate').dxSlideOutView({
-                contentTemplate: 'customContent'
-            }),
-            $content = $($element.dxSlideOutView('instance').content());
+        const $element = $('#contentTemplate').dxSlideOutView({
+                      contentTemplate: 'customContent'
+                  }),
+              $content = $($element.dxSlideOutView('instance').content());
 
         assert.equal($.trim($content.text()), 'Test Content Template', 'content text is correct');
     });
 
     QUnit.test('render right menu position', function(assert) {
-        var $element = $('#contentTemplate').dxSlideOutView({
-                menuPosition: 'inverted',
-                menuVisible: true
-            }),
-            instance = $element.dxSlideOutView('instance'),
-            $content = $(instance.content()),
-            $menuContent = $(instance.menuContent());
+        const $element = $('#contentTemplate').dxSlideOutView({
+                      menuPosition: 'inverted',
+                      menuVisible: true
+                  }),
+              instance = $element.dxSlideOutView('instance'),
+              $content = $(instance.content()),
+              $menuContent = $(instance.menuContent());
 
         assert.notOk($menuContent.hasClass(SLIDEOUTVIEW_CLASS + '-left'), 'there is no left menu position class');
         assert.ok($menuContent.hasClass(SLIDEOUTVIEW_CLASS + '-right'), 'right menu position class added');
@@ -116,7 +115,7 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('shield should be rendered', function(assert) {
-        var $element = $('#slideOutView').dxSlideOutView({
+        const $element = $('#slideOutView').dxSlideOutView({
             menuVisible: true
         });
 

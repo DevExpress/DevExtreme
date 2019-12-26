@@ -450,9 +450,9 @@ module.exports = {
                 },
 
                 _getInvisibleColumns: function(editData) {
-                    var columnsController = this.getController('columns'),
-                        hasInvisibleRows,
-                        invisibleColumns = columnsController.getInvisibleColumns();
+                    const columnsController = this.getController('columns');
+                    let hasInvisibleRows;
+                    const invisibleColumns = columnsController.getInvisibleColumns();
 
                     if(this.isCellOrBatchEditMode()) {
                         hasInvisibleRows = editData.some((rowEditData) => {
@@ -466,11 +466,7 @@ module.exports = {
                 },
 
                 _createInvisibleColumnValidators: function(editData) {
-                    var validatingController = this.getController('validating'),
-                        columnsController = this.getController('columns'),
-                        invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand),
-                        groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
-                        invisibleColumnValidators = [];
+                    const validatingController = this.getController('validating'), columnsController = this.getController('columns'), invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand), groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1), invisibleColumnValidators = [];
 
                     invisibleColumns.push(...groupColumns);
 

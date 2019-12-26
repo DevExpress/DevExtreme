@@ -664,8 +664,8 @@ class Diagram extends Widget {
         if(Array.isArray(customShapes)) {
             this._diagramInstance.addCustomShapes(customShapes.map(
                 (s) => {
-                    var templateOption = s.template || this.option('customShapeTemplate');
-                    var template = templateOption && this._getTemplate(templateOption);
+                    const templateOption = s.template || this.option('customShapeTemplate');
+                    const template = templateOption && this._getTemplate(templateOption);
                     return {
                         category: s.category,
                         type: s.type,

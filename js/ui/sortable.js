@@ -19,9 +19,9 @@ const CLONE_CLASS = 'clone';
 * @export default
 */
 
-var isElementVisible = itemElement => $(itemElement).is(':visible');
+const isElementVisible = itemElement => $(itemElement).is(':visible');
 
-var Sortable = Draggable.inherit({
+const Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             clone: true,

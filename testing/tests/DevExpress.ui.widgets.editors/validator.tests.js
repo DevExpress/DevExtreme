@@ -34,13 +34,13 @@ QUnit.module('General', {
     }
 }, () => {
     QUnit.test('Validator exists', function(assert) {
-        var validator = this.fixture.createValidator();
+        const validator = this.fixture.createValidator();
         assert.ok(validator, 'Validator was created');
         assert.ok(validator.validate, 'Validation function is accessible');
     });
 
     QUnit.test('ValidationEngine can validate valid value against provided rules', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             validationRules: [{
                 type: 'required',
                 message: 'Please set validator\'s value'
@@ -49,7 +49,7 @@ QUnit.module('General', {
 
         this.fixture.stubAdapter.getValue.returns('hello');
 
-        var result = validator.validate();
+        const result = validator.validate();
 
         assert.strictEqual(validator.option('isValid'), true, 'Validator should be isValid');
         assert.strictEqual(result.isValid, true, 'Validator should be isValid - result');
@@ -58,16 +58,16 @@ QUnit.module('General', {
     });
 
     QUnit.test('ValidationEngine can validate Invalid against provided rules', function(assert) {
-        var errorMessage = 'Please set validator\'s value',
-            validator = this.fixture.createValidator({
-                value: '',
-                validationRules: [{
-                    type: 'required',
-                    message: errorMessage
-                }]
-            });
+        const errorMessage = 'Please set validator\'s value',
+              validator = this.fixture.createValidator({
+                  value: '',
+                  validationRules: [{
+                      type: 'required',
+                      message: errorMessage
+                  }]
+              });
 
-        var result = validator.validate();
+        const result = validator.validate();
 
         assert.strictEqual(validator.option('isValid'), false, 'Validator should be invalid');
         assert.strictEqual(result.isValid, false, 'Validator should be invalid - result');
@@ -77,7 +77,7 @@ QUnit.module('General', {
     });
 
     QUnit.test('Returned value should contain state, name, validation errors and validator reference', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             name: 'Login',
             validationRules: [{
                 type: 'required'
@@ -86,7 +86,7 @@ QUnit.module('General', {
         // act
 
         this.fixture.stubAdapter.getValue.returns('');
-        var result = validator.validate();
+        const result = validator.validate();
         // assert
         assert.ok(result, 'Result should be returned');
         assert.strictEqual(result.isValid, validator.option('isValid'), 'isValid flag should be passed');
@@ -97,17 +97,17 @@ QUnit.module('General', {
 
     QUnit.test('Validator with set validation group', function(assert) {
     // arrange
-        var validationGroup = {},
-            validator = this.fixture.createValidator({
-                validationRules: [{
-                    type: 'required'
-                }],
-                validationGroup: validationGroup
-            });
+        const validationGroup = {},
+              validator = this.fixture.createValidator({
+                  validationRules: [{
+                      type: 'required'
+                  }],
+                  validationGroup: validationGroup
+              });
 
         // act
         this.fixture.stubAdapter.getValue.returns('');
-        var result = ValidationEngine.validateGroup(validationGroup);
+        const result = ValidationEngine.validateGroup(validationGroup);
 
         // assert
         assert.ok(result, 'Result should be returned');
@@ -119,7 +119,7 @@ QUnit.module('General', {
 
     QUnit.test('Validator can be reset', function(assert) {
     // arrange
-        var validator = this.fixture.createValidator({ validationRules: [{ type: 'custom', validationCallback: function() { return false; } }] });
+        const validator = this.fixture.createValidator({ validationRules: [{ type: 'custom', validationCallback: function() { return false; } }] });
         validator.validate();
         // act
         validator.reset();
@@ -129,17 +129,17 @@ QUnit.module('General', {
     });
 
     QUnit.test('Validator should be validated after validationRules changed', function(assert) {
-        var validator = this.fixture.createValidator({ validationRules: [{ type: 'required', message: 'En' }] });
+        const validator = this.fixture.createValidator({ validationRules: [{ type: 'required', message: 'En' }] });
         validator.validate();
 
-        var spy = sinon.spy(validator, 'validate');
+        const spy = sinon.spy(validator, 'validate');
 
         validator.option('validationRules', [{ type: 'required', message: 'De' }]);
         assert.equal(spy.callCount, 1, 'validation performed');
     });
 
     QUnit.test('Untouched validator should not be validated after validationRules changed', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             validationRules: [{
                 type: 'custom',
                 validationCallback: function() { return true; },
@@ -147,7 +147,7 @@ QUnit.module('General', {
             }]
         });
 
-        var spy = sinon.spy(validator, 'validate');
+        const spy = sinon.spy(validator, 'validate');
 
         validator.option('validationRules', [{
             type: 'custom',
@@ -158,18 +158,18 @@ QUnit.module('General', {
     });
 
     QUnit.test('Options changing after validator creation', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             validationRules: [{
                 type: 'required',
                 message: 'Please set validator\'s value'
             }]
         });
 
-        var options = validator.option();
+        const options = validator.option();
 
-        for(var optionName in options) {
-            var prevValue = validator.option(optionName),
-                newValue = prevValue;
+        for(const optionName in options) {
+            const prevValue = validator.option(optionName);
+            let newValue = prevValue;
 
             if(optionName === 'width' || optionName === 'height') {
                 newValue = 555;
@@ -185,7 +185,7 @@ QUnit.module('General', {
     });
 
     QUnit.test('Internal validation rules are should be reset when validation rules are changed via the option', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             validationRules: [{ type: 'required' }]
         });
 
@@ -257,19 +257,19 @@ QUnit.module('Validator specific tests', {
     }
 }, () => {
     QUnit.test('changed Value (correct -> incorrect through options) should be validated', function(assert) {
-        var errorMessage = 'Please set validator\'s value',
-            validator = this.fixture.createValidator({
-                validationRules: [{
-                    type: 'required',
-                    message: 'Please set validator\'s value'
-                }]
-            });
+        const errorMessage = 'Please set validator\'s value',
+              validator = this.fixture.createValidator({
+                  validationRules: [{
+                      type: 'required',
+                      message: 'Please set validator\'s value'
+                  }]
+              });
 
         this.fixture.stubAdapter.getValue.returns('hello');
         validator.validate();
 
         this.fixture.stubAdapter.getValue.returns('');
-        var result = validator.validate();
+        const result = validator.validate();
 
         assert.strictEqual(validator.option('isValid'), false, 'Validator should be isValid');
         assert.ok(result.brokenRule, 'brokenRule should be passed as part of result');
@@ -277,7 +277,7 @@ QUnit.module('Validator specific tests', {
     });
 
     QUnit.test('changed Value (incorrect -> correct through options) should be validated', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             value: '',
             validationRules: [{
                 type: 'required',
@@ -290,14 +290,14 @@ QUnit.module('Validator specific tests', {
         validator.validate();
 
         this.fixture.stubAdapter.getValue.returns('hello');
-        var result = validator.validate();
+        const result = validator.validate();
 
         assert.strictEqual(result.isValid, true, 'Validator should be isValid');
         assert.ok(!result.brokenRule, 'brokenRule is null');
     });
 
     QUnit.test('Validator should be able to bypass validation', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             value: '',
             validationRules: [{
                 type: 'required',
@@ -307,19 +307,17 @@ QUnit.module('Validator specific tests', {
 
 
         this.fixture.stubAdapter.bypass.returns(true);
-        var result = validator.validate();
+        const result = validator.validate();
 
         assert.strictEqual(result.isValid, true, 'Validator should be able to bypass validation');
         assert.ok(!result.brokenRule, 'brokenRule is null');
     });
 
     QUnit.test('Validation rules are not modified after validate', function(assert) {
-        var value = '',
-            name = 'Login',
-            handler = sinon.stub();
+        const value = '', name = 'Login', handler = sinon.stub();
 
 
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             name: name,
             onValidated: handler,
             validationRules: [{ type: 'required' }]
@@ -332,7 +330,7 @@ QUnit.module('Validator specific tests', {
     });
 
     QUnit.test('Remote validation is worked correctly', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             validationRules: [{
                 type: 'custom',
                 validationCallback: function(params) {
@@ -362,7 +360,7 @@ QUnit.module('Registration in groups', {
 
     QUnit.test('Widget should be registered in a group', function(assert) {
     // act
-        var validator = this.fixture.createValidator();
+        const validator = this.fixture.createValidator();
         // assert
         assert.ok(ValidationEngine.getGroupConfig(), 'Group should be registered with default name');
         assert.strictEqual(ValidationEngine.getGroupConfig().validators[0], validator, 'Validator should be registered');
@@ -370,7 +368,7 @@ QUnit.module('Registration in groups', {
     });
 
     QUnit.test('Widget should be deregistered after disposing', function(assert) {
-        var validator = this.fixture.createValidator();
+        const validator = this.fixture.createValidator();
 
         // act
         validator._dispose();
@@ -380,7 +378,7 @@ QUnit.module('Registration in groups', {
 
     // T453506
     QUnit.test('Validator should be created in the root group if group was not found', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             modelByElement: function() { return 'ViewModel'; }
         });
 
@@ -391,7 +389,7 @@ QUnit.module('Registration in groups', {
     });
 
     QUnit.test('Widget should be able to reinit group registration', function(assert) {
-        var validator = this.fixture.createValidator({ validationGroup: '123' });
+        const validator = this.fixture.createValidator({ validationGroup: '123' });
 
         // act
         validator.option('validationGroup', '234');
@@ -402,7 +400,7 @@ QUnit.module('Registration in groups', {
     });
 
     QUnit.test('Widget should be able to reinit group registration', function(assert) {
-        var validator = this.fixture.createValidator({ validationGroup: '123' });
+        const validator = this.fixture.createValidator({ validationGroup: '123' });
         // act
         validator.option('validationGroup', undefined);
         // assert
@@ -419,13 +417,10 @@ QUnit.module('Events', {
     }
 }, () => {
     QUnit.test('Validated event should fire', function(assert) {
-        var value = '',
-            name = 'Login',
-            expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value },
-            handler = sinon.stub();
+        const value = '', name = 'Login', expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value }, handler = sinon.stub();
 
 
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
             name: name,
             onValidated: handler,
             validationRules: [{ type: 'required' }]
@@ -436,7 +431,7 @@ QUnit.module('Events', {
         validator.validate();
         // assert
         assert.ok(handler.calledOnce, 'Validated handler should be called');
-        var params = handler.getCall(0).args[0];
+        const params = handler.getCall(0).args[0];
         assert.ok(handler.calledOn(validator), 'Correct context of action');
         assert.strictEqual(params.validator, validator, 'Validator reference should be passed');
         assert.equal(params.value, value, 'Correct value was passed');
@@ -454,7 +449,7 @@ QUnit.module('Events', {
     });
 
     QUnit.test('Focused event should fire', function(assert) {
-        var validator = this.fixture.createValidator({
+        const validator = this.fixture.createValidator({
         });
 
         // act
@@ -467,19 +462,19 @@ QUnit.module('Events', {
 
     QUnit.test('validator.reset should fire event (to work correctly with dxValidationSummary)', function(assert) {
     // arrange
-        var handler = sinon.stub(),
-            validationRules = [{ type: 'custom', validationCallback: function() { return false; } }],
-            validator = this.fixture.createValidator({
-                onValidated: handler,
-                validationRules: validationRules
-            });
+        const handler = sinon.stub(),
+              validationRules = [{ type: 'custom', validationCallback: function() { return false; } }],
+              validator = this.fixture.createValidator({
+                  onValidated: handler,
+                  validationRules: validationRules
+              });
         validator.validate();
 
         // act
         validator.reset();
         // assert
         assert.ok(handler.calledTwice, 'Validated handler should be called two times - first one for validation, and second one for reset()');
-        var params = handler.getCall(1).args[0];
+        const params = handler.getCall(1).args[0];
         assert.ok(handler.calledOn(validator), 'Correct context of action');
         // assert.equal(params.value, value, "Correct value was passed");
         // assert.equal(params.name, name, "Name of Validator should be passed");
@@ -515,16 +510,16 @@ QUnit.module('Custom Adapters', {
     });
 
     QUnit.test('Attempt to set null adapter should throw exception', function(assert) {
-        var that = this,
-            validator = that.fixture.createValidator({
-                adapter: {
-                    getValue: noop,
-                    validationRequestsCallbacks: $.Callbacks()
-                },
-                validationRules: [{
-                    type: 'required'
-                }]
-            });
+        const that = this,
+              validator = that.fixture.createValidator({
+                  adapter: {
+                      getValue: noop,
+                      validationRequestsCallbacks: $.Callbacks()
+                  },
+                  validationRules: [{
+                      type: 'required'
+                  }]
+              });
         assert.throws(
             function() {
                 validator.option('adapter', null);
@@ -538,12 +533,12 @@ QUnit.module('Custom Adapters', {
 
 
     QUnit.test('Validation happens on firing callback, results are shown by our widgets (dxValidationSummary)', function(assert) {
-        var that = this,
-            adapter = {
-                getValue: sinon.stub(),
-                validationRequestsCallbacks: $.Callbacks()
-            },
-            validatedHandler = sinon.stub();
+        const that = this,
+              adapter = {
+                  getValue: sinon.stub(),
+                  validationRequestsCallbacks: $.Callbacks()
+              },
+              validatedHandler = sinon.stub();
 
         that.fixture.createValidator({
             adapter: adapter,
@@ -562,12 +557,12 @@ QUnit.module('Custom Adapters', {
     });
 
     QUnit.test('validator should validate value passed in the validation request', function(assert) {
-        var that = this,
-            adapter = {
-                getValue: sinon.stub(),
-                validationRequestsCallbacks: $.Callbacks()
-            },
-            validatedHandler = sinon.stub();
+        const that = this,
+              adapter = {
+                  getValue: sinon.stub(),
+                  validationRequestsCallbacks: $.Callbacks()
+              },
+              validatedHandler = sinon.stub();
 
         that.fixture.createValidator({
             adapter: adapter,
@@ -586,13 +581,13 @@ QUnit.module('Custom Adapters', {
     });
 
     QUnit.test('Validation happens on firing callback, result are applied through custom validator', function(assert) {
-        var that = this,
-            adapter = {
-                getValue: sinon.stub(),
-                validationRequestsCallbacks: $.Callbacks(),
-                applyValidationResults: sinon.stub()
-            },
-            validatedHandler = sinon.stub();
+        const that = this,
+              adapter = {
+                  getValue: sinon.stub(),
+                  validationRequestsCallbacks: $.Callbacks(),
+                  applyValidationResults: sinon.stub()
+              },
+              validatedHandler = sinon.stub();
 
         that.fixture.createValidator({
             adapter: adapter,
@@ -687,11 +682,11 @@ QUnit.module('Custom Adapters', {
     });
 
     QUnit.test('Validation happens on firing callback when validationRequestsCallbacks is array', function(assert) {
-        var that = this,
-            adapter = {
-                getValue: sinon.stub(),
-                validationRequestsCallbacks: []
-            };
+        const that = this,
+              adapter = {
+                  getValue: sinon.stub(),
+                  validationRequestsCallbacks: []
+              };
 
         that.fixture.createValidator({
             adapter: adapter,

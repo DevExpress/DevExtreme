@@ -287,7 +287,7 @@ class BaseRenderingStrategy {
     }
 
     _getConditions(a, b) {
-        var isSomeEdge = this._isSomeEdge(a, b);
+        const isSomeEdge = this._isSomeEdge(a, b);
 
         return {
             columnCondition: isSomeEdge || this._normalizeCondition(a.left, b.left),
@@ -297,12 +297,12 @@ class BaseRenderingStrategy {
     }
 
     _rowCondition(a, b) {
-        var conditions = this._getConditions(a, b);
+        const conditions = this._getConditions(a, b);
         return conditions.columnCondition || conditions.rowCondition;
     }
 
     _columnCondition(a, b) {
-        var conditions = this._getConditions(a, b);
+        const conditions = this._getConditions(a, b);
         return conditions.rowCondition || conditions.columnCondition;
     }
 
@@ -312,7 +312,7 @@ class BaseRenderingStrategy {
 
     _normalizeCondition(first, second) {
         // NOTE: ie & ff pixels
-        var result = first - second;
+        const result = first - second;
         return Math.abs(result) > 1 ? result : 0;
     }
 
@@ -332,18 +332,18 @@ class BaseRenderingStrategy {
     }
 
     _getResultPositions(sortedArray) {
-        var result = [],
-            i,
-            sortedIndex = 0,
-            currentItem,
-            indexes,
-            itemIndex,
-            maxIndexInStack = 0,
-            stack = {},
-            orientation = this._getOrientation();
+        const result = [];
+        let i;
+        let sortedIndex = 0;
+        let currentItem;
+        let indexes;
+        let itemIndex;
+        let maxIndexInStack = 0;
+        let stack = {};
+        const orientation = this._getOrientation();
 
-        var findFreeIndex = (indexes, index) => {
-            var isFind = indexes.some((item) => {
+        const findFreeIndex = (indexes, index) => {
+            const isFind = indexes.some((item) => {
                 return item === index;
             });
             if(isFind) {
@@ -353,7 +353,7 @@ class BaseRenderingStrategy {
             }
         };
 
-        var startNewStack = (currentItem) => {
+        const startNewStack = (currentItem) => {
             stack.items = [createItem(currentItem)];
             stack.left = currentItem.left;
             stack.right = currentItem.right;
@@ -362,7 +362,7 @@ class BaseRenderingStrategy {
         };
 
         var createItem = (currentItem, index) => {
-            var currentIndex = index || 0;
+            const currentIndex = index || 0;
             return {
                 index: currentIndex,
                 i: currentItem.i,
@@ -375,7 +375,7 @@ class BaseRenderingStrategy {
             };
         };
 
-        var pushItemsInResult = (items) => {
+        const pushItemsInResult = (items) => {
             items.forEach((item) => {
                 result.push({
                     index: item.index,

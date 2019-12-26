@@ -92,7 +92,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
     }
 
     _columnCondition(a, b) {
-        var conditions = this._getConditions(a, b);
+        const conditions = this._getConditions(a, b);
         return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
     }
 

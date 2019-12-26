@@ -22,13 +22,13 @@ function createMenu(options) {
 
 QUnit.module('Menu markup', () => {
     QUnit.test('Create menu with default css', function(assert) {
-        var menuBase = createMenu();
+        const menuBase = createMenu();
 
         assert.ok(menuBase.element.hasClass(DX_MENU_BASE_CLASS));
     });
 
     QUnit.test('Render custom CSS class', function(assert) {
-        var menu = createMenu({ cssClass: 'testCssClass' });
+        const menu = createMenu({ cssClass: 'testCssClass' });
 
         assert.ok(menu.element.hasClass('testCssClass'));
     });

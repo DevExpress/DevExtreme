@@ -26,7 +26,7 @@ QUnit.module('TrackBar markup', {
     QUnit.test('markup', function(assert) {
         assert.expect(4);
 
-        var $trackBar = this.$element.dxTrackBar();
+        const $trackBar = this.$element.dxTrackBar();
 
         assert.ok($trackBar.hasClass(TRACKBAR_CLASS), 'dxTrackBar initialized');
         assert.equal($trackBar.find(toSelector(TRACKBAR_CONTAINER_CLASS)).length, 1, 'Container has been created');

@@ -866,16 +866,18 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
     // T836724
     QUnit.test('The added nodes should be displayed when there is a filter and remoteOperations is ' + remoteOperations, function(assert) {
         // arrange
-        var $rowElements,
-            $testElement = $('#treeList'),
-            store = new ArrayStore({
-                data: [
-                    { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-                    { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-                    { id: 3, field1: 'test3', field2: 3, field3: new Date(2001, 0, 3) },
-                ],
-                key: 'id'
-            });
+        let $rowElements;
+
+        const $testElement = $('#treeList');
+
+        const store = new ArrayStore({
+            data: [
+                { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+                { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+                { id: 3, field1: 'test3', field2: 3, field3: new Date(2001, 0, 3) },
+            ],
+            key: 'id'
+        });
 
         this.options.expandedRowKeys = [1];
         this.options.remoteOperations = remoteOperations;
@@ -1123,8 +1125,9 @@ QUnit.test('Batch mode - Editing should not work when double-clicking on the sel
     // T836724
     QUnit.test('The added nodes should be displayed when there is a filter', function(assert) {
         // arrange
-        var $rowElements,
-            $testElement = $('#treeList');
+        let $rowElements;
+
+        const $testElement = $('#treeList');
 
         this.options.expandedRowKeys = [1];
         this.options.filterMode = 'fullBranch';

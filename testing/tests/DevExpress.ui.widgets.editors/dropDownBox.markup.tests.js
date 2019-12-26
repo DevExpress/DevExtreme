@@ -47,7 +47,7 @@ QUnit.module('dropDownBox markup', moduleConfig, () => {
             value: 1
         });
 
-        var $input = this.$element.find('.dx-texteditor-input');
+        const $input = this.$element.find('.dx-texteditor-input');
         assert.equal($input.val(), 'Item 1', 'expressions work');
     });
 
@@ -70,7 +70,7 @@ QUnit.module('hidden input', moduleConfig, () => {
     QUnit.test('a hidden input should be rendered', function(assert) {
         this.$element.dxDropDownBox();
 
-        var $input = this.$element.find('input[type=\'hidden\']');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         assert.equal($input.length, 1, 'a hidden input is rendered');
     });
@@ -81,7 +81,7 @@ QUnit.module('hidden input', moduleConfig, () => {
             value: 2
         });
 
-        var $input = this.$element.find('input[type=\'hidden\']');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), '2', 'input value is correct');
     });
@@ -92,15 +92,14 @@ QUnit.module('hidden input', moduleConfig, () => {
             value: 2
         });
 
-        var instance = this.$element.dxDropDownBox('instance'),
-            $input = this.$element.find('input[type=\'hidden\']');
+        const instance = this.$element.dxDropDownBox('instance'), $input = this.$element.find('input[type=\'hidden\']');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
     });
 
     QUnit.test('the hidden input should get display text as value if widget value is an object', function(assert) {
-        var items = [{ id: 1, text: 'one' }];
+        const items = [{ id: 1, text: 'one' }];
 
         this.$element.dxDropDownBox({
             items: items,
@@ -109,13 +108,13 @@ QUnit.module('hidden input', moduleConfig, () => {
             displayExpr: 'text'
         });
 
-        var $input = this.$element.find('input[type=\'hidden\']');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), items[0].text, 'input value is correct');
     });
 
     QUnit.test('the submit value must be equal to the value of the widget', function(assert) {
-        var items = ['test'];
+        const items = ['test'];
 
         this.$element.dxDropDownBox({
             items: items,
@@ -128,13 +127,13 @@ QUnit.module('hidden input', moduleConfig, () => {
             }
         });
 
-        var $input = this.$element.find('input[type=\'hidden\']');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         assert.deepEqual($input.val(), items[0], 'submit value should be equal to editor value');
     });
 
     QUnit.test('the hidden input should get value in respect of the \'valueExpr\' option', function(assert) {
-        var items = [{ id: 1, text: 'one' }];
+        const items = [{ id: 1, text: 'one' }];
 
         this.$element.dxDropDownBox({
             items: items,
@@ -143,40 +142,40 @@ QUnit.module('hidden input', moduleConfig, () => {
             displayExpr: 'text'
         });
 
-        var $input = this.$element.find('input[type=\'hidden\']');
+        const $input = this.$element.find('input[type=\'hidden\']');
 
         assert.equal($input.val(), items[0].id, 'input value is correct');
     });
 
 
     QUnit.test('the hidden input should get correct values if async data source is used', function(assert) {
-        var data = [0, 1, 2, 3, 4],
-            initialValue = 2,
-            newValue = 4,
-            timeout = 100,
-            store = new CustomStore({
-                load: function() {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve(data);
-                    }, timeout);
-                    return d.promise();
-                },
-                byKey: function(key) {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve(key);
-                    }, timeout);
-                    return d.promise();
-                }
-            }),
-            $element = this.$element.dxDropDownBox({
-                dataSource: store,
-                value: initialValue,
-                valueExpr: 'id',
-                displayExpr: 'name'
-            }),
-            instance = $element.dxDropDownBox('instance');
+        const data = [0, 1, 2, 3, 4],
+              initialValue = 2,
+              newValue = 4,
+              timeout = 100,
+              store = new CustomStore({
+                  load: function() {
+                      const d = $.Deferred();
+                      setTimeout(function() {
+                          d.resolve(data);
+                      }, timeout);
+                      return d.promise();
+                  },
+                  byKey: function(key) {
+                      const d = $.Deferred();
+                      setTimeout(function() {
+                          d.resolve(key);
+                      }, timeout);
+                      return d.promise();
+                  }
+              }),
+              $element = this.$element.dxDropDownBox({
+                  dataSource: store,
+                  value: initialValue,
+                  valueExpr: 'id',
+                  displayExpr: 'name'
+              }),
+              instance = $element.dxDropDownBox('instance');
 
         this.clock.tick(timeout);
 
@@ -190,11 +189,11 @@ QUnit.module('hidden input', moduleConfig, () => {
 
 QUnit.module('the \'name\' option', moduleConfig, () => {
     QUnit.test('widget hidden input should get the \'name\' attribute with a correct value', function(assert) {
-        var expectedName = 'some_name',
-            $element = this.$element.dxDropDownBox({
-                name: expectedName
-            }),
-            $input = $element.find('input[type=\'hidden\']');
+        const expectedName = 'some_name',
+              $element = this.$element.dxDropDownBox({
+                  name: expectedName
+              }),
+              $input = $element.find('input[type=\'hidden\']');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });

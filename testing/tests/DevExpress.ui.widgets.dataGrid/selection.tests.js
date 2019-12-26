@@ -2894,14 +2894,14 @@ QUnit.test('get isSelected rows after Select All when dataSource has no key', fu
 // T843852
 QUnit.test('SelectAll should not select all rows if filter by search is applied and filter length is larger than maxFilterLengthInRequest', function(assert) {
     // arrange
-    var data = [{
-            'id': '0', 'field1': '0', 'field2': '0'
-        }, {
-            'id': '1', 'field1': '1', 'field2': '1'
-        }, {
-            'id': '2', 'field1': '2', 'field2': '2'
-        }],
-        onSelectionChangedSpy = sinon.spy();
+    const data = [{
+                  'id': '0', 'field1': '0', 'field2': '0'
+              }, {
+                  'id': '1', 'field1': '1', 'field2': '1'
+              }, {
+                  'id': '2', 'field1': '2', 'field2': '2'
+              }],
+          onSelectionChangedSpy = sinon.spy();
 
     this.dataSource = createDataSource(data, { key: 'id' });
     this.dataController.setDataSource(this.dataSource);

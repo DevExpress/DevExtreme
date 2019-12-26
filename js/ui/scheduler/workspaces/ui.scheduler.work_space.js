@@ -2303,12 +2303,12 @@ const SchedulerWorkSpace = Widget.inherit({
 
     // NOTE: refactor leftIndex calculation
     getCellIndexByCoordinates: function(coordinates, allDay) {
-        var cellCount = this._getTotalCellCount(this._getGroupCount()),
-            cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount),
-            cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight(),
-            leftOffset = this._isRTL() || this.option('crossScrollingEnabled') ? 0 : this.getWorkSpaceLeftOffset(),
-            topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight)),
-            leftIndex = Math.floor((coordinates.left + 5 - leftOffset) / cellWidth);
+        const cellCount = this._getTotalCellCount(this._getGroupCount());
+        const cellWidth = Math.floor(this._getWorkSpaceWidth() / cellCount);
+        const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
+        const leftOffset = this._isRTL() || this.option('crossScrollingEnabled') ? 0 : this.getWorkSpaceLeftOffset();
+        const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
+        let leftIndex = Math.floor((coordinates.left + 5 - leftOffset) / cellWidth);
 
         if(this._isRTL()) {
             leftIndex = cellCount - leftIndex - 1;

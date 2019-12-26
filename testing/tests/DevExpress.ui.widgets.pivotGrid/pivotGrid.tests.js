@@ -2693,8 +2693,7 @@ QUnit.test('resize when height changed to no scroll', function(assert) {
         bounceEnabled: false
     };
 
-    var $pivotGridElement = $('#pivotGrid').height(200),
-        pivotGrid = createPivotGrid(this.testOptions, assert);
+    const $pivotGridElement = $('#pivotGrid').height(200), pivotGrid = createPivotGrid(this.testOptions, assert);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
     assert.equal(pivotGrid.$element().find('.dx-area-data-cell').css('borderBottomWidth'), '0px', 'data area border bottom width');
