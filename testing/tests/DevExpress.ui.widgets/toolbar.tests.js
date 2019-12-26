@@ -137,10 +137,10 @@ QUnit.module('render', {
             [10, 1000].forEach((toolbarWidth) => {
                 QUnit.test(`Change item location at runtime (T844890), location: ${location}, locateInMenu: ${locateInMenu}, width: ${toolbarWidth}`, function(assert) {
                     const $toolbar = this.element.dxToolbar({
-                            items: [ { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH } ],
-                            width: toolbarWidth
-                        }),
-                        toolbar = $toolbar.dxToolbar('instance');
+                        items: [ { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH } ],
+                        width: toolbarWidth
+                    });
+                    const toolbar = $toolbar.dxToolbar('instance');
 
                     const checkItemsLocation = ($toolbar, expected) => {
                         const $beforeItems = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
