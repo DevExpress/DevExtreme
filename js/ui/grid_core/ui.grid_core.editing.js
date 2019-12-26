@@ -179,7 +179,7 @@ const EditingController = modules.ViewController.inherit((function() {
     };
 
     function getButtonName(button) {
-        typeUtils.isObject(button) ? button.name : button;
+        return typeUtils.isObject(button) ? button.name : button;
     }
 
     const getEditorType = (item) => {

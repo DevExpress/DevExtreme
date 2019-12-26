@@ -13002,6 +13002,8 @@ QUnit.test('synchronous render and asynchronous updateDimensions during paging i
 
     sinon.spy(resizingController, 'updateDimensions');
 
+    contentReadyCount = 0;
+
     // act
     dataGrid.pageIndex(5);
 
