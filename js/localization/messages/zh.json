@@ -135,6 +135,7 @@
     "dxDataGrid-columnFixingRightPosition": "向右",
     "dxDataGrid-exportTo": "导出",
     "dxDataGrid-exportToExcel": "导出Excel文件",
+    "dxDataGrid-exporting": "导出...",
     "dxDataGrid-excelFormat": "Excel文件",
     "dxDataGrid-selectedRows": "已选行",
     "dxDataGrid-exportSelectedRows": "导出已选行",

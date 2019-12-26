@@ -123,6 +123,7 @@
         "dxDataGrid-columnFixingRightPosition": "右に固定",
         "dxDataGrid-exportTo": "エクスポート",
         "dxDataGrid-exportToExcel": "Excel ファイルにエクスポート",
+        "dxDataGrid-exporting": "エクスポート...",
         "dxDataGrid-excelFormat": "Excel ファイル",
         "dxDataGrid-selectedRows": "選択された行",
         "dxDataGrid-exportAll": "すべてのデータをエクスポート",
