@@ -97,7 +97,7 @@ function getCssClasses(model: any) {
     return classNames.concat(model.classNames).join(" ");
 }
 
-function viewModelFunction(model: Button) {
+export function viewModelFunction(model: Button) {
     return {
         cssClasses: getCssClasses(model),
         style: {
@@ -108,7 +108,7 @@ function viewModelFunction(model: Button) {
     };
 }
 
-function viewFunction(viewModel: Button & { cssClasses: string, style: { width?: string } }) {
+export function viewFunction(viewModel: Button & { cssClasses: string, style: { width?: string, height?: string } }) {
     let icon;
     if(viewModel.icon || viewModel.type === 'back') {
         icon = getImageContainerJSX(viewModel.icon || 'back');
