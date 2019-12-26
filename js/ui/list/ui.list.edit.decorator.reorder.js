@@ -23,14 +23,18 @@ registerDecorator(
 
             this._lockedDrag = false;
 
+            const filter = this._groupedEnabled ?
+                '> .dx-list-group > .dx-list-group-body > .dx-list-item' :
+                '> .dx-list-item';
+
             this._sortable = list._createComponent(list._scrollView.content(), Sortable, extend({
                 component: list,
                 contentTemplate: null,
                 allowReordering: false,
-                filter: '> .dx-list-item, > .dx-list-group > .dx-list-group-body > .dx-list-item',
+                filter,
                 container: list.$element(),
                 dragDirection: list.option('itemDragging.group') ? 'both' : 'vertical',
-                handle: '.' + REORDER_HANDLE_CLASS,
+                handle: `.${REORDER_HANDLE_CLASS}`,
                 dragTemplate: this._dragTemplate,
                 onDragStart: this._dragStartHandler.bind(this),
                 onDragChange: this._dragChangeHandler.bind(this),
