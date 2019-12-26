@@ -100,7 +100,8 @@ QUnit.test('maxOfArray, callback', function(assert) {
 });
 
 QUnit.test('Toposort and computing longest paths in graph', function(assert) {
-    let vertices; let expected;
+    let vertices;
+    let expected;
 
     logicModule.struct.hasCycle(noCycle0);
     vertices = logicModule.struct.computeLongestPaths(noCycle0);

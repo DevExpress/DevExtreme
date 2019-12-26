@@ -1581,7 +1581,8 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig);
 
 QUnit.test('Dragging item to another the sortable widget', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         dropFeedbackMode: 'push',
@@ -1617,7 +1618,8 @@ QUnit.test('Dragging item to another the sortable widget', function(assert) {
 
 QUnit.test('Dragging item to another the sortable widget when allowReordering is false', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         dropFeedbackMode: 'push',
@@ -1655,7 +1657,8 @@ QUnit.test('Dragging item to another the sortable widget when allowReordering is
 
 QUnit.test('Dragging item to another the sortable widget if dragTemplate contains scrollable', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         dropFeedbackMode: 'push',
@@ -1765,7 +1768,8 @@ QUnit.test('Dragging an item to another the sortable widget without free space w
 
 QUnit.test('Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         dropFeedbackMode: 'push',
@@ -1832,7 +1836,8 @@ QUnit.test('Dragging item to another the sortable widget when group as object', 
 
 QUnit.test('Dragging item should not work when another the sortable widget does not have a group', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -1855,7 +1860,8 @@ QUnit.test('Dragging item should not work when another the sortable widget does 
 
 QUnit.test('Dropping item to another the sortable widget', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -1882,7 +1888,8 @@ QUnit.test('Dropping item to another the sortable widget', function(assert) {
 
 QUnit.test('Dragging item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -1909,7 +1916,8 @@ QUnit.test('Dragging item to another the sortable widget with dropFeedbackMode i
 
 QUnit.test('Dropping item to another the sortable widget with dropFeedbackMode indicate', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -1938,7 +1946,8 @@ QUnit.test('Dropping item to another the sortable widget with dropFeedbackMode i
 
 QUnit.test('Dragging items between sortable widgets', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -2103,7 +2112,8 @@ QUnit.test('Update item points when dragging an item to another the sortable wid
 
 QUnit.test('Drag and drop item from draggable to sortable', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const draggable = this.createDraggable({
         filter: '.draggable',
@@ -2131,7 +2141,8 @@ QUnit.test('Drag and drop item from draggable to sortable', function(assert) {
 
 QUnit.test('Drag and drop item from sortable to draggable should not move item', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const draggable = this.createDraggable({
         filter: '.draggable',
@@ -2155,7 +2166,8 @@ QUnit.test('Drag and drop item from sortable to draggable should not move item',
 
 QUnit.test('Drag and drop item from sortable to draggable with drop handler', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const draggable = this.createDraggable({
         filter: '.draggable',
@@ -2187,7 +2199,8 @@ QUnit.test('Drag and drop item from sortable to draggable with drop handler', fu
 
 QUnit.test('Drag and drop item to empty sortable', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     const sortable1 = this.createSortable({
         filter: '.draggable',
@@ -2237,7 +2250,8 @@ QUnit.test('Placeholder should not visible on drag item to empty sortable', func
 
 QUnit.test('Dragging an item to another sortable and back when it is alone in the collection', function(assert) {
     // arrange
-    let items1; let items2;
+    let items1;
+    let items2;
 
     $('#items3').append('<div id=\'item7\' class=\'draggable\' style=\'width: 300px; height: 30px; background: blue;\'>item7</div>');
 

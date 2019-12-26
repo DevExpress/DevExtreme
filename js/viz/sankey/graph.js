@@ -4,7 +4,8 @@ const BLACK = 'black';
 
 const routines = {
     maxOfArray: function(arr, callback) {
-        let m = 0; let callback_function = (v) => { return v; };
+        let m = 0;
+        let callback_function = (v) => { return v; };
         if(callback) {
             callback_function = callback;
         }

@@ -262,7 +262,9 @@ function parseColor(color) {
         return [0, 0, 0, 0];
     }
 
-    let i = 0; const ii = standardColorTypes.length; let str;
+    let i = 0;
+    const ii = standardColorTypes.length;
+    let str;
     for(; i < ii; ++i) {
         str = standardColorTypes[i].re.exec(color);
         if(str) {
@@ -427,7 +429,9 @@ function hueToRgb(p, q, colorTint) {
 }
 
 function hslToRgb(h, s, l) {
-    let r; let g; let b;
+    let r;
+    let g;
+    let b;
 
     h = convertTo01Bounds(h, 360);
     s = convertTo01Bounds(s, 100);

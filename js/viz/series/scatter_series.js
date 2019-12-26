@@ -331,7 +331,8 @@ const baseScatterMethods = {
         const argumentField = this.getArgumentField();
         const tagField = this.getTagField();
         const areErrorBarsVisible = this.areErrorBarsVisible();
-        let lowValueField; let highValueField;
+        let lowValueField;
+        let highValueField;
 
         if(areErrorBarsVisible) {
             const errorBarOptions = this._options.valueErrorBar;

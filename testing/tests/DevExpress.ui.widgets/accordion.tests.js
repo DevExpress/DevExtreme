@@ -552,7 +552,8 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(0).outerHeight(), widgetHeight - closedItemHeight * (items.length - 1), 'opened item content height is correct');
 
         instance.expandItem(1);
-        const openedItemsCount = 2; const closedItemsCount = items.length - openedItemsCount;
+        const openedItemsCount = 2;
+        const closedItemsCount = items.length - openedItemsCount;
 
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(0).outerHeight(), (widgetHeight - closedItemHeight * closedItemsCount) / openedItemsCount, 'opened item content height is correct');
         assert.equal($element.find('.' + ACCORDION_ITEM_CLASS).eq(1).outerHeight(), (widgetHeight - closedItemHeight * closedItemsCount) / openedItemsCount, 'opened item content height is correct');
@@ -916,7 +917,8 @@ QUnit.module('widget behavior', moduleSetup, () => {
     });
 
     QUnit.test('\'onItemClick\' firing conditions', function(assert) {
-        let titleActionFired = 0; let itemActionFired = 0;
+        let titleActionFired = 0;
+        let itemActionFired = 0;
 
         this.$element.dxAccordion({
             items: this.items,

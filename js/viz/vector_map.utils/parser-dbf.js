@@ -85,7 +85,8 @@ function prepareDataBaseFileRecordParseData(header, errors) {
     const list = [];
     let i = 0;
     const ii = header.fields.length;
-    let item; let field;
+    let item;
+    let field;
     let totalLength = 0;
     for(i = 0; i < ii; ++i) {
         field = header.fields[i];

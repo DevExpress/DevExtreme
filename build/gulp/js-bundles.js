@@ -57,7 +57,8 @@ gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
 
 
 const createDebugBundlesStream = function(watch) {
-    let debugConfig; let bundles;
+    let debugConfig;
+    let bundles;
     if(watch) {
         debugConfig = Object.assign({}, webpackConfigDev);
         bundles = processDevBundles(DEBUG_BUNDLES);

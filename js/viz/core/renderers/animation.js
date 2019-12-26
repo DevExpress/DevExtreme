@@ -13,7 +13,8 @@ const animationSvgStep = {
         const to = params.to;
         let curSeg;
         let seg;
-        let i; let j;
+        let i;
+        let j;
         const segments = [];
 
         for(i = 0; i < from.length; i++) {

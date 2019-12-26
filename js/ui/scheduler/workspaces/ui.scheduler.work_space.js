@@ -1293,7 +1293,8 @@ const SchedulerWorkSpace = Widget.inherit({
         const templateCallbacks = [];
         const colspan = this.option('groupByDate') ? this._getGroupCount() : 1;
         const groupByDate = this.option('groupByDate');
-        let i; let j;
+        let i;
+        let j;
 
         if(!groupByDate) {
             for(j = 0; j < repeatCount; j++) {

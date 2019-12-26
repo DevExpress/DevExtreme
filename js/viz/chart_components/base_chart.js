@@ -183,7 +183,8 @@ function prepareOverlapStacks(rollingStocks) {
 }
 
 function moveRollingStock(rollingStocks, canvas) {
-    let i; let j;
+    let i;
+    let j;
     let currentRollingStock;
     let nextRollingStock;
     let currentBBox;

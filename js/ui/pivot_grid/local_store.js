@@ -155,7 +155,8 @@ exports.LocalStore = Class.inherit((function() {
 
     function generateAggregationCells(data, cells, headers, options) {
         const cellSet = [];
-        let x; let y;
+        let x;
+        let y;
         let rowIndex;
         let columnIndex;
 

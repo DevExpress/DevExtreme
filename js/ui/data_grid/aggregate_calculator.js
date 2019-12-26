@@ -19,7 +19,8 @@ function depthFirstSearch(i, depth, root, callback) {
 
 // NOTE: https://github.com/jquery/jquery/blame/master/src/core.js#L392
 function map(array, callback) {
-    let i; let result;
+    let i;
+    let result;
 
     if('map' in array) {
         return array.map(callback);
@@ -87,7 +88,8 @@ module.exports = Class.inherit({
     },
 
     _aggregate: function(aggregates, data, container) {
-        let i; let j;
+        let i;
+        let j;
         const length = data.items ? data.items.length : 0;
 
         for(i = 0; i < aggregates.length; i++) {

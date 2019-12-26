@@ -331,7 +331,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _rowDblClick: noop,
 
     _createColGroup: function(columns) {
-        let i; let j;
+        let i;
+        let j;
         const colgroupElement = $('<colgroup>');
         let colspan;
 

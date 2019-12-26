@@ -467,7 +467,12 @@ class Diagram extends Widget {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
         const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
-        let lineOptionGetter; let lineOptionSetter; let startLineEndingGetter; let startLineEndingSetter; let endLineEndingGetter; let endLineEndingSetter;
+        let lineOptionGetter;
+        let lineOptionSetter;
+        let startLineEndingGetter;
+        let startLineEndingSetter;
+        let endLineEndingGetter;
+        let endLineEndingSetter;
         const data = {
             nodeDataSource: this._nodesOption && this._nodesOption.getItems(),
             edgeDataSource: this._edgesOption && this._edgesOption.getItems(),

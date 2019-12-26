@@ -759,7 +759,8 @@ exports.DataController = Class.inherit((function() {
             const rowExpandedPaths = options.rowExpandedPaths;
             let levels = [];
             const expandedPathIndexes = {};
-            let i; let j;
+            let i;
+            let j;
             let path;
 
             rowExpandedPaths.forEach((path, index) => {

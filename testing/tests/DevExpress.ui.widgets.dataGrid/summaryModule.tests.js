@@ -1129,7 +1129,8 @@ QUnit.test('Total summary should be correctly updated after editing cell when th
 });
 
 const generateData = function(countRow) {
-    let i; let j = 1;
+    let i;
+    let j = 1;
     const result = [];
 
     for(i = 0; i < countRow; i++) {

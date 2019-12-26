@@ -205,7 +205,8 @@ const base64_encode = function(input) {
 
 function stringToByteArray(str) {
     const bytes = [];
-    let code; let i;
+    let code;
+    let i;
 
     for(i = 0; i < str.length; i++) {
         code = str.charCodeAt(i);

@@ -338,7 +338,8 @@ exports.AreaItem = Class.inherit({
         const processedCells = [];
         const result = [];
         const fillCells = function(cells, rowIndex, columnIndex, rowSpan, colSpan) {
-            let rowOffset; let columnOffset;
+            let rowOffset;
+            let columnOffset;
             for(rowOffset = 0; rowOffset < rowSpan; rowOffset++) {
                 for(columnOffset = 0; columnOffset < colSpan; columnOffset++) {
                     cells[rowIndex + rowOffset] = cells[rowIndex + rowOffset] || [];

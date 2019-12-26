@@ -178,7 +178,8 @@ QUnit.test('Palette is array of colors - return first color', function(assert) {
 
 QUnit.module('Palette', $.extend({}, environment, {
     checkPalette: function(assert, palette, expectedColors, message) {
-        let i = 0; const ii = expectedColors.length * 2;
+        let i = 0;
+        const ii = expectedColors.length * 2;
         const actual = [];
         const expected = expectedColors.concat(expectedColors);
         for(; i < ii; ++i) {
@@ -405,7 +406,9 @@ QUnit.test('Repeat colors', function(assert) {
 
 QUnit.module('DiscretePalette', $.extend({}, environment, {
     createColors: function(count) {
-        let i = 0; const step = Math.round(255 / count); let r = 0; let g = 32; let b = 64; const list = []; let color;
+        let i = 0;
+        const step = Math.round(255 / count); let r = 0;
+        let g = 32; let b = 64; const list = []; let color;
         for(; i < count; ++i) {
             color = new Color();
             color.r = r;

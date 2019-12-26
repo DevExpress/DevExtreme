@@ -295,7 +295,8 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
 }
 
 function calculateTranslatorRange(seriesDataSource, scaleOptions) {
-    let minValue; let maxValue;
+    let minValue;
+    let maxValue;
     let inverted = false;
     let startValue = scaleOptions.startValue;
     let endValue = scaleOptions.endValue;

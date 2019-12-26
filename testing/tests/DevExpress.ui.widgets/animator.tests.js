@@ -76,7 +76,8 @@ QUnit.module('Animator', {
     QUnit.test('infinite execution without isFinished callback', function(assert) {
         assert.expect(2);
 
-        let completed = 0; let stepCount = 0;
+        let completed = 0;
+        let stepCount = 0;
 
         const TestAnimator = Animator.inherit({
             _step: function() {
@@ -101,7 +102,9 @@ QUnit.module('Animator', {
     QUnit.test('animation without step callback', function(assert) {
         assert.expect(2);
 
-        let completed = 0; let stepCount = 0;
+        let completed = 0;
+
+        let stepCount = 0;
 
         const TestAnimator = Animator.inherit({
             _step: function() {

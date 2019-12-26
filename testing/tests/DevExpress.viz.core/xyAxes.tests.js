@@ -1028,7 +1028,8 @@ QUnit.test('horizontal axis, labels overlap, rotationAngle is 90', function(asse
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { rotationAngle: 90, overlappingBehavior: 'rotate', indentFromAxis: 0 } });
 
@@ -1121,7 +1122,8 @@ QUnit.test('vertical labels overlap but shouldn\'t rotate', function(assert) {
         { x: 0, y: 15, height: 10, width: 4 },
         { x: 0, y: 0, height: 10, width: 4 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', indentFromAxis: 0 } });
@@ -1310,7 +1312,8 @@ QUnit.test('Alignment of labels after their rotation and updating width of canva
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     const axis = this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'rotate', rotationAngle: 40 } });
 
@@ -1573,7 +1576,8 @@ QUnit.test('Labels overlap and rotate -45 degrees', function(assert) {
         { x: 45, y: 0, width: 10, height: 5 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
@@ -1592,7 +1596,8 @@ QUnit.test('Labels overlap and rotate -90 degrees', function(assert) {
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: 'auto' } });
 
@@ -1674,7 +1679,8 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
         { x: 30, y: 0, width: 10, height: 5 },
         { x: 40, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     // first draw
@@ -1736,7 +1742,8 @@ QUnit.test('Auto mode. After first draw - stagger, after second - rotate. Reset 
         { x: 45, y: 0, width: 10, height: 7 },
         { x: 60, y: 0, width: 10, height: 5 }
     ];
-    let texts; let i;
+    let texts;
+    let i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
 
     // first draw

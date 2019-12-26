@@ -472,7 +472,9 @@ function prepareValueIndicators_hardMode() {
     const that = this;
     const valueIndicators = that._valueIndicators || [];
     const userOptions = that.option('valueIndicators');
-    const optionList = []; let i = 0; let ii;
+    const optionList = [];
+    let i = 0;
+    let ii;
     for(ii = _isArray(userOptions) ? userOptions.length : 0; i < ii; ++i) {
         optionList.push(userOptions[i]);
     }

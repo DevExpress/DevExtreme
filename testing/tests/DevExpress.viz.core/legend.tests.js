@@ -300,7 +300,9 @@ QUnit.test('visible = false', function(assert) {
 });
 
 QUnit.test('Creates correct types of objects for series', function(assert) {
-    let marker; let text; let elements;
+    let marker;
+    let text;
+    let elements;
 
     this.createAndDrawLegend(200, 200);
 

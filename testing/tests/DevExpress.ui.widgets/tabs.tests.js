@@ -196,7 +196,8 @@ QUnit.module('tab select action', () => {
     QUnit.test('regression: B251795', function(assert) {
         assert.expect(2);
 
-        let itemClickFired = 0; let itemSelectFired = 0;
+        let itemClickFired = 0;
+        let itemSelectFired = 0;
 
         const $tabs = $('#tabs').dxTabs({
             items: [1, 2, 3],

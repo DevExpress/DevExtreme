@@ -212,7 +212,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Arrow Up key should decrease focusedRowIndex', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -241,7 +242,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Arrow keys should move focused row if columnHidingEnabled is true', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -277,7 +279,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Handle arrow keys without focused cell if focusedRowIndex and columnHidingEnabled is true', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -313,7 +316,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Arrow Down key should increase focusedRowIndex', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -340,7 +344,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Click by cell should focus the row', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.$element = function() {
@@ -699,7 +704,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should restore focused row when data without focused row was filtered', function(assert) {
-        let rowsView; let visibleRows;
+        let rowsView;
+        let visibleRows;
 
         // arrange
         this.data = [
@@ -741,7 +747,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should restore focused row when focused row data was filtered', function(assert) {
-        let rowsView; let visibleRows;
+        let rowsView;
+        let visibleRows;
 
         // arrange
         this.data = [
@@ -938,7 +945,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Not highlight cell by isHighlighted arg in the onFocusedCellChanging event by LeftArrow key', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -983,7 +992,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by LeftArrow key', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1035,7 +1046,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1086,7 +1099,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key and change newRowIndex, newColumnIndex', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1137,7 +1152,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging, onFocusedRowChanging by DownArrow key and change newRowIndex, newColumnIndex', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0; let focusedRowChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
+        let focusedRowChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1192,7 +1210,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpArrow key', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1249,7 +1269,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by DownArrow key', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1306,7 +1328,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpDownArrow keys may prevent change focused row', function(assert) {
-        let keyboardController; let focusedColumnChangingCount = 0; let focusedRowChangingCount = 0;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
+        let focusedRowChangingCount = 0;
 
         // arrange
         this.data = [
@@ -1357,7 +1381,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1417,7 +1444,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key in back order (shift presset)', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -1477,7 +1506,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key if cell is being edited', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -1533,7 +1564,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1597,7 +1631,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1666,7 +1703,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1727,7 +1767,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1796,7 +1839,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0; let columnIndex;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
+        let columnIndex;
 
         // arrange
         this.data = [
@@ -1857,7 +1903,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -1913,7 +1961,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -1977,7 +2027,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -2038,7 +2090,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -2091,7 +2145,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Group row should focused on focus()', function(assert) {
-        let keyboardController; let focusedCellChangingCount = 0;
+        let keyboardController;
+        let focusedCellChangingCount = 0;
 
         // arrange
         this.data = [
@@ -2130,7 +2185,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Highlight group row on focus()', function(assert) {
-        let keyboardController; let focusedCellChangingCount = 0;
+        let keyboardController;
+        let focusedCellChangingCount = 0;
 
         // arrange
         this.data = [
@@ -2170,7 +2226,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus()', function(assert) {
-        let focusedCellChangingCount = 0; let keyboardController;
+        let focusedCellChangingCount = 0;
+        let keyboardController;
         // arrange
         this.options = {
             focusedRowIndex: 1,
@@ -2197,7 +2254,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowIndex, focusedColumnIndex are not set', function(assert) {
-        let focusedCellChangingCount = 0; let keyboardController;
+        let focusedCellChangingCount = 0;
+        let keyboardController;
         // arrange
         this.options = {
             onFocusedCellChanging: function(e) {
@@ -2263,7 +2321,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key', function(assert) {
-        let rowsView; let focusedRowChangingCount = 0; let keyboardController;
+        let rowsView;
+        let focusedRowChangingCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -2310,7 +2370,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid - should restore previos row index after the focus losing (T804103)', function(assert) {
-        let rowsView; let focusedRowChangingCount = 0; let keyboardController;
+        let rowsView;
+        let focusedRowChangingCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [{ name: 'Alex' }, { name: 'Dan' }];
@@ -2354,7 +2416,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key when virtual scrolling is enabled', function(assert) {
         // arrange
-        let rowsView; let scrollable; let $scrollContainer; let focusedRowChangingCount = 0; let keyboardController;
+        let rowsView;
+        let scrollable;
+        let $scrollContainer; let focusedRowChangingCount = 0;
+        let keyboardController;
 
         this.data = generateItems(100);
 
@@ -2406,7 +2471,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by DownArrow key', function(assert) {
-        let rowsView; let focusedRowChangingCount = 0; let keyboardController;
+        let rowsView;
+        let focusedRowChangingCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -2453,7 +2520,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key', function(assert) {
-        let rowsView; let keyboardController; let focusedRowChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedRowChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -2517,7 +2586,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key in back order (shift presset)', function(assert) {
-        let rowsView; let keyboardController; let focusedRowChangingCounter = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedRowChangingCounter = 0;
 
         // arrange
         this.data = [
@@ -2581,7 +2652,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Setting cancel in onFocusedRowChanging event args should prevent change focused row', function(assert) {
-        let focusedRowChangingCount = 0; let focusedRowChangedCount = 0;
+        let focusedRowChangingCount = 0;
+        let focusedRowChangedCount = 0;
         // arrange
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
@@ -2844,7 +2916,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Setting cancel in onFocusedCellChanging event should prevent focusing next cell', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -2900,7 +2974,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should fire onFocusedCellChanging event if next focused cell is not valid', function(assert) {
-        let rowsView; let keyboardController; let onFocusedCellCount = 0;
+        let rowsView;
+        let keyboardController;
+        let onFocusedCellCount = 0;
 
         // arrange
         this.data = [
@@ -2951,7 +3027,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Fire onFocusedCellChanging by click', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -2994,7 +3072,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Highlight cell by isHighlighted arg in the onFocusedCellChanging event by click event', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
 
         // arrange
         this.data = [
@@ -3033,7 +3113,10 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('isHighlighted in the onFocusedCellChanged event', function(assert) {
-        let rowsView; let keyboardController; let focusedColumnChangingCount = 0; let focusedColumnChangedCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedColumnChangingCount = 0;
+        let focusedColumnChangedCount = 0;
 
         // arrange
         this.options = {
@@ -3067,7 +3150,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     // T818734
     QUnit.testInActiveWindow('onFocusedRowChanged and onFocusedRowChanging events should fire after enabling focusedRow if it was disabled on init', function(assert) {
         // arrange
-        let focusedRowChangedCount = 0; let focusedRowChangingCount = 0; let rowsView;
+        let focusedRowChangedCount = 0;
+        let focusedRowChangingCount = 0;
+        let rowsView;
 
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
@@ -3107,7 +3192,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event', function(assert) {
-        let rowsView; let focusedCellChangedCount = 0;
+        let rowsView;
+        let focusedCellChangedCount = 0;
 
         // arrange
         this.data = [
@@ -3148,7 +3234,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should fire if row index changed', function(assert) {
-        let rowsView; let focusedCellChangedCount = 0; let keyboardController;
+        let rowsView;
+        let focusedCellChangedCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -3196,7 +3284,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position not changed', function(assert) {
-        let rowsView; let focusedCellChangedCount = 0; let keyboardController;
+        let rowsView;
+        let focusedCellChangedCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -3315,7 +3405,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.test('Focused row should be visible if set focusedRowKey', function(assert) {
         // arrange
-        let rowsView; let counter = 0;
+        let rowsView;
+        let counter = 0;
 
         this.data = [
             { name: 'Alex', phone: '111111', room: 6 },
@@ -3351,7 +3442,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Keyboard navigation controller should find next cell if column index is wrong when jump from the group row', function(assert) {
-        let rowsView; let keyboardController; let $cell;
+        let rowsView;
+        let keyboardController;
+        let $cell;
 
         // arrange
         this.data = [
@@ -3400,7 +3493,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row bellow by arrowDown key if grid focused and if selection multiple', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -3445,7 +3539,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus inserted but not saved rows (T727182)', function(assert) {
-        let rowsView; let keyboardController;
+        let rowsView;
+        let keyboardController;
 
         this.options = {
             keyExpr: 'name',
@@ -3483,7 +3578,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.testInActiveWindow('DataGrid should reset focused row if \'e.newRowIndex\' is set to < 0 value in the onFocusedRowChanging event (T745451)', function(assert) {
         // arrange
-        let focusedRowChangingCount = 0; let rowsView;
+        let focusedRowChangingCount = 0;
+        let rowsView;
 
         this.$element = function() {
             return $('#container');
@@ -3578,7 +3674,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)', function(assert) {
-        let rowsView; let keyboardController; let focusedCellChangingCount = 0;
+        let rowsView;
+        let keyboardController;
+        let focusedCellChangingCount = 0;
 
         // arrange
         this.options = {
@@ -4293,7 +4391,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
-        let rowsView; let visibleRows; let keyboardController;
+        let rowsView;
+        let visibleRows;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -4337,7 +4437,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row by focusedRowKey if row key present in data after filter', function(assert) {
-        let rowsView; let visibleRows;
+        let rowsView;
+        let visibleRows;
 
         // arrange
         this.data = [
@@ -4382,7 +4483,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('DataGrid should focus the row below by arrowDown key if grid focused and grouping enabled', function(assert) {
-        let rowsView; let keyboardController; let $cell;
+        let rowsView;
+        let keyboardController;
+        let $cell;
 
         // arrange
         this.data = [
@@ -4673,7 +4776,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set', function(assert) {
-        let focusedCellChangingCount = 0; let keyboardController;
+        let focusedCellChangingCount = 0;
+        let keyboardController;
         // arrange
         this.options = {
             focusedRowIndex: 1,
@@ -4701,7 +4805,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set', function(assert) {
-        let focusedCellChangingCount = 0; let keyboardController;
+        let focusedCellChangingCount = 0;
+        let keyboardController;
         // arrange
         this.options = {
             focusedRowEnabled: true,
@@ -4836,7 +4941,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
     });
 
     QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position updates for not cell element', function(assert) {
-        let rowsView; let focusedCellChangedCount = 0; let keyboardController;
+        let rowsView;
+        let focusedCellChangedCount = 0;
+        let keyboardController;
 
         // arrange
         this.data = [
@@ -5191,7 +5298,9 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.testInActiveWindow('DataGrid should not focus adaptive rows', function(assert) {
         // arrange
-        let rowsView; let focusedRowChangingCount = 0; let focusedRowChangedCount = 0;
+        let rowsView;
+        let focusedRowChangingCount = 0;
+        let focusedRowChangedCount = 0;
 
         this.options = {
             width: 200,
@@ -5224,7 +5333,8 @@ QUnit.module('FocusedRow with real dataController, keyboard and columnsControlle
 
     QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is set to undefined', function(assert) {
         // arrange
-        let rowsView; let focusedRowChangedCallsCount = 0;
+        let rowsView;
+        let focusedRowChangedCallsCount = 0;
 
         this.options = {
             keyExpr: 'name',

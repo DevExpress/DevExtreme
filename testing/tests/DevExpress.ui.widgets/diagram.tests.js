@@ -562,7 +562,8 @@ QUnit.module('ClientSideEvents', {
         this.instance.option('edges.dataSource', [
             { key: '1', from: '123', to: '345' }
         ]);
-        let clickedItem; let dblClickedItem;
+        let clickedItem;
+        let dblClickedItem;
         this.instance.option('onItemClick', function(e) {
             clickedItem = e.item;
         });

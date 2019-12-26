@@ -294,7 +294,8 @@ QUnit.module('Header Filter', {
         };
 
         this.generateItems = function(count, duplicateCount) {
-            let i; let j;
+            let i;
+            let j;
 
             duplicateCount = duplicateCount || 1;
 

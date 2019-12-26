@@ -137,7 +137,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getPositionFromLocation: function(location) {
-        let x; let y;
+        let x;
+        let y;
         const isTop = location === 'top';
         if(!this._options.rotated) {
             x = this.x;

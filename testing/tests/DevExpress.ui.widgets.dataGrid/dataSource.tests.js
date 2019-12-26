@@ -3135,7 +3135,8 @@ QUnit.test('Load collapsed groups, expand second level item, expand third level 
 // T623492
 QUnit.test('Change page several times after expand groups if data is grouped by two fields', function(assert) {
     const array = [];
-    let i; let j;
+    let i;
+    let j;
     for(i = 0; i < 4; i++) {
         for(j = 0; j < 6; j++) {
             array.push({ group1: i, group2: 0, id: i * 9 + j + 1 });

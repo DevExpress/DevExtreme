@@ -320,18 +320,28 @@ exports.chart['spline'] = _extend({}, lineSeries, {
 
         if(pointsCopy.length !== 1) {
             pointsCopy.forEach(function(curPoint, i) {
-                let leftControlX; let leftControlY;
-                let rightControlX; let rightControlY;
+                let leftControlX;
+                let leftControlY;
+                let rightControlX;
+                let rightControlY;
                 const prevPoint = pointsCopy[i - 1];
                 const nextPoint = pointsCopy[i + 1];
                 let xCur;
                 let yCur;
-                let x1; let x2;
-                let y1; let y2;
+                let x1;
+                let x2;
+                let y1;
+                let y2;
                 const lambda = 0.5;
                 let curIsExtremum;
-                let leftPoint; let rightPoint;
-                let a; let b; let c; let xc; let yc; let shift;
+                let leftPoint;
+                let rightPoint;
+                let a;
+                let b;
+                let c;
+                let xc;
+                let yc;
+                let shift;
 
                 if(!i || i === pointsCopy.length - 1) {
                     bezierPoints.push(curPoint, curPoint);

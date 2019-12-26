@@ -188,7 +188,8 @@ QUnit.module('Positioning', $.extend({}, environment, {
         const elements = this.getBarsGroup().children;
         const trackers = this.getTrackersGroup().children;
         const step = elements.length / trackers.length;
-        let i = 0; const ii = trackers.length;
+        let i = 0;
+        const ii = trackers.length;
         let elementSettings;
         let message;
         for(; i < ii; ++i) {
@@ -241,7 +242,8 @@ QUnit.module('Positioning', $.extend({}, environment, {
         const elements = this.getBarsGroup().children;
         const trackers = this.getTrackersGroup().children;
         const step = elements.length / trackers.length;
-        let i = 0; const ii = trackers.length;
+        let i = 0;
+        const ii = trackers.length;
         let elementSettings;
         let message;
         for(; i < ii; ++i) {
@@ -674,7 +676,8 @@ QUnit.test('Half circle right - leave margin on left', function(assert) {
 QUnit.module('Colors', $.extend({}, environment, {
     checkColors: function(assert, backgroundColor, colors, lineColor, textColor) {
         const elements = this.getBarsGroup().children;
-        let i = 0; const ii = elements.length / 4;
+        let i = 0;
+        const ii = elements.length / 4;
         let message;
         for(; i < ii; ++i) {
             message = ' - ' + (i + 1);

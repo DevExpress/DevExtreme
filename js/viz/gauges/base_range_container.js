@@ -74,7 +74,8 @@ const BaseRangeContainer = BaseElement.inherit({
         });
 
         _each(list, function(_, item) {
-            let i; let ii;
+            let i;
+            let ii;
             let sub;
             let subs;
             let range;

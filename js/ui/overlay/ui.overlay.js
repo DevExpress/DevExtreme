@@ -1310,7 +1310,8 @@ const Overlay = Widget.inherit({
     },
 
     _renderWrapperDimensions: function() {
-        let wrapperWidth; let wrapperHeight;
+        let wrapperWidth;
+        let wrapperHeight;
         const $container = this._getContainer();
         if(!$container) {
             return;

@@ -764,7 +764,8 @@ const ColorView = Editor.inherit({
     },
 
     _updateColor: function(isHex, e) {
-        let rgba; let newColor;
+        let rgba;
+        let newColor;
 
         if(isHex) {
             newColor = this._validateHex('#' + this._hexInput.option('value'));

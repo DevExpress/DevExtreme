@@ -83,7 +83,8 @@ QUnit.module('general', moduleConfig, () => {
     });
 
     QUnit.test('displayTime', function(assert) {
-        let shown = 0; let hidden = 0;
+        let shown = 0;
+        let hidden = 0;
 
         this.instance.option({
             'displayTime': 100,

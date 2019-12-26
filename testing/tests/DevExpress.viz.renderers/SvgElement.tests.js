@@ -237,7 +237,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
         rect1.attr = sinon.spy(); rect1.animate = sinon.spy();
         rect2.attr = sinon.spy(); rect2.animate = sinon.spy();
         rect3.attr = sinon.spy(); rect3.animate = sinon.spy();
@@ -726,7 +732,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
@@ -788,7 +799,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
@@ -817,7 +833,12 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
@@ -1111,7 +1132,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1154,7 +1178,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1219,7 +1249,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
         const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
-        let result1; let result2; let result3; let result4;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1317,7 +1350,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1376,7 +1416,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1444,7 +1491,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
         const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
-        let result1; let result2; let result3; let result4; let result5; let result6; let result7; let result8;
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();

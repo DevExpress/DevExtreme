@@ -49,7 +49,8 @@ const assignValueToProperty = function(target, property, value, assignByReferenc
 
 // B239679, http://bugs.jquery.com/ticket/9477
 const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
-    let prevValue; let newValue;
+    let prevValue;
+    let newValue;
 
     for(const name in changes) {
         prevValue = target[name];

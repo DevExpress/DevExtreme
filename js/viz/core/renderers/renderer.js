@@ -555,7 +555,12 @@ function pathAttr(attrs) {
 
 function arcAttr(attrs) {
     const settings = this._settings;
-    let x; let y; let innerRadius; let outerRadius; let startAngle; let endAngle;
+    let x;
+    let y;
+    let innerRadius;
+    let outerRadius;
+    let startAngle;
+    let endAngle;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
@@ -716,7 +721,8 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
 }
 
 function adjustLineHeights(items) {
-    let i; let ii;
+    let i;
+    let ii;
     let currentItem = items[0];
     let item;
     for(i = 1, ii = items.length; i < ii; ++i) {
@@ -765,7 +771,9 @@ function parseMultiline(text) {
 }
 
 function createTspans(items, element, fieldName) {
-    let i; let ii; let item;
+    let i;
+    let ii;
+    let item;
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement('tspan');
@@ -1224,7 +1232,8 @@ function locateTextNodes(wrapper) {
     const items = wrapper._texts;
     const x = wrapper._settings.x;
     const lineHeight = wrapper._getLineHeight();
-    let i; let ii;
+    let i;
+    let ii;
     let item = items[0];
     setTextNodeAttribute(item, 'x', x);
     setTextNodeAttribute(item, 'y', wrapper._settings.y);
@@ -1271,7 +1280,9 @@ function strokeTextNodes(wrapper) {
     const stroke = wrapper._settings[KEY_STROKE];
     const strokeWidth = wrapper._settings[KEY_STROKE_WIDTH];
     const strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1;
-    let tspan; let i; let ii;
+    let tspan;
+    let i;
+    let ii;
     for(i = 0, ii = items.length; i < ii; ++i) {
         tspan = items[i].stroke;
         tspan.setAttribute(KEY_STROKE, stroke);

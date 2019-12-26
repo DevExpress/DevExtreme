@@ -439,7 +439,8 @@ QUnit.test('descending width', function(assert) {
 
 QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
     checkColors: function(assert, rangeColors, palette, expectedColors, paletteExtensionMode) {
-        let ranges; let list;
+        let ranges;
+        let list;
         const step = 100 / (rangeColors.length + 1);
         let pos = 0;
         ranges = $.map(rangeColors, function(color) {
