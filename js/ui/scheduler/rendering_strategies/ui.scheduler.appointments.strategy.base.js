@@ -496,8 +496,8 @@ class BaseRenderingStrategy {
     }
 
     endDate(appointment, position, isRecurring, ignoreViewDates = false) {
-        let endDate = this.instance._getEndDate(appointment, ignoreViewDates),
-            realStartDate = this.startDate(appointment, true),
+        let endDate = this.instance._getEndDate(appointment, ignoreViewDates);
+        const realStartDate = this.startDate(appointment, true),
             viewStartDate = this.startDate(appointment, false, position);
 
         if(viewStartDate.getTime() > endDate.getTime() || isRecurring) {
