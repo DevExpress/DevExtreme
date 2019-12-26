@@ -30,13 +30,17 @@ $('#qunit-fixture').html('<style>\
 
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
+const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
+const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const TOOLBAR_BEFORE_CONTAINER_CLASS = 'dx-toolbar-before';
 const TOOLBAR_AFTER_CONTAINER_CLASS = 'dx-toolbar-after';
 const TOOLBAR_CENTER_CONTAINER_CLASS = 'dx-toolbar-center';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const LIST_ITEM_CLASS = 'dx-list-item';
+
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
@@ -130,6 +134,53 @@ QUnit.module('render', {
             margin = element.find('.' + TOOLBAR_CLASS + '-center').get(0).style.margin;
 
         assert.equal(margin, '0px auto', 'aligned by center');
+    });
+
+    ['before', 'center', 'after', undefined].forEach((location) => {
+        ['never', 'auto', 'always', undefined].forEach((locateInMenu) => {
+            const ITEM_WIDTH = 100;
+            [10, 1000].forEach((toolbarWidth) => {
+                QUnit.test(`Change item location at runtime (T844890), location: ${location}, locateInMenu: ${locateInMenu}, width: ${toolbarWidth}`, function(assert) {
+                    const $toolbar = this.element.dxToolbar({
+                            items: [ { text: 'toolbar item', locateInMenu: locateInMenu, location: location, width: ITEM_WIDTH } ],
+                            width: toolbarWidth
+                        }),
+                        toolbar = $toolbar.dxToolbar('instance');
+
+                    const checkItemsLocation = ($toolbar, expected) => {
+                        const $beforeItems = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                        const $centerItems = $toolbar.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                        const $afterItems = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+                        const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
+
+                        if(locateInMenu === 'always' || (locateInMenu === 'auto' && toolbarWidth < ITEM_WIDTH)) {
+                            QUnit.assert.equal($menuItems.length, 1, 'menu items count for ');
+                            QUnit.assert.equal($beforeItems.length, 0, 'items count with before location value');
+                            QUnit.assert.equal($centerItems.length, 0, 'items count with center location value');
+                            QUnit.assert.equal($afterItems.length, 0, 'items count with after location value');
+                        } else {
+                            QUnit.assert.equal($menuItems.length, 0, 'menu items count');
+                            QUnit.assert.equal($beforeItems.length, expected.before || 0, 'items count with before location value');
+                            QUnit.assert.equal($centerItems.length, expected.center || 0, 'items count with center location value');
+                            QUnit.assert.equal($afterItems.length, expected.after || 0, 'items count with after location value');
+                        }
+                    };
+
+                    const expectedInitial = {};
+                    expectedInitial[location || 'center'] = 1;
+                    checkItemsLocation($toolbar, expectedInitial);
+
+                    toolbar.option('items[0].location', 'center');
+                    checkItemsLocation($toolbar, { center: 1 });
+
+                    toolbar.option('items[0].location', 'after');
+                    checkItemsLocation($toolbar, { after: 1 });
+
+                    toolbar.option('items[0].location', 'before');
+                    checkItemsLocation($toolbar, { before: 1 });
+                });
+            });
+        });
     });
 
     QUnit.test('buttons has text style in Material', function(assert) {

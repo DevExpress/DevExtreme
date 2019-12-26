@@ -330,6 +330,10 @@ var Toolbar = ToolbarBase.inherit({
             this.callBase(item, property, value);
             this._menuStrategy.renderMenuItems();
         }
+
+        if(property === 'location') {
+            this.repaint();
+        }
     },
 
     _isMenuItem: function(itemData) {
