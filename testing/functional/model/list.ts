@@ -12,7 +12,10 @@ const CLASS = {
     radioButtonChecked: 'dx-radiobutton-checked',
     reorderHandle: 'dx-list-reorder-handle',
     search: 'dx-list-search',
-    selectAllItem: 'dx-list-select-all'
+    selectAllItem: 'dx-list-select-all',
+
+    // Custom classes
+    nestedItem: 'nested-item'
 };
 
 class CheckBox {
@@ -67,7 +70,7 @@ class Group {
     constructor (element: Selector) {
         this.element = element;
         this.header =  element.find(`.${CLASS.groupHeader}`);
-        this.items = element.find(`.${CLASS.item}`);
+        this.items = element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);
     }
 
     getItem (index: number = 0): Item {
@@ -85,7 +88,7 @@ export default class List extends Widget {
     constructor (id: string|Selector) {
         super(id);
 
-        this.items = this.element.find(`.${CLASS.item}`);
+        this.items = this.element.find(`.${CLASS.item}:not(.${CLASS.nestedItem})`);
         this.searchInput = this.element.find(`.${CLASS.search} input`);
         this.selectAll = new Item(this.element.find(`.${CLASS.selectAllItem}`));
     }
