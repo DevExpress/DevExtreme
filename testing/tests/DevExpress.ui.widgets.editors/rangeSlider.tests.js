@@ -1098,6 +1098,9 @@ QUnit.module('option value', () => {
 
     QUnit.test('Exception shouldn\'t be throw when start value more than end value', function(assert) {
         try {
+            let startValue = null;
+            let endValue = null;
+
             const $rangeSlider = $('#slider').dxRangeSlider({
                 start: 10,
                 end: 20,
@@ -1109,13 +1112,13 @@ QUnit.module('option value', () => {
 
             const instance = $rangeSlider.dxRangeSlider('instance');
 
-            var startValue = $('#start-value').dxNumberBox({
+            startValue = $('#start-value').dxNumberBox({
                 onValueChanged: function(data) {
                     instance.option('start', data.value);
                 }
             }).dxNumberBox('instance');
 
-            var endValue = $('#end-value').dxNumberBox({
+            endValue = $('#end-value').dxNumberBox({
                 onValueChanged: function(data) {
                     instance.option('end', data.value);
                 }

@@ -22,13 +22,13 @@ QUnit.module('markup', () => {
     });
 
     QUnit.test('resizable should have correct handle for handles', function(assert) {
+        const $resizable = $('#resizable').dxResizable({ handles: 'all' });
+        const resizable = $resizable.dxResizable('instance');
+
         const isHandleExist = function(handleName) {
             const $handle = $resizable.find('.' + RESIZABLE_HANDLE_CLASS + '-' + handleName);
             return $handle.length === 1;
         };
-
-        var $resizable = $('#resizable').dxResizable({ handles: 'all' });
-        const resizable = $resizable.dxResizable('instance');
 
         assert.ok(isHandleExist('top'), 'top handle exists');
         assert.ok(isHandleExist('bottom'), 'bottom handle exists');

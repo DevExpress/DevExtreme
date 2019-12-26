@@ -247,7 +247,7 @@ const SchedulerTableCreator = {
 
         for(let i = 0; i < repeatCount * repeatByDate; i++) {
             for(let j = 0; j < itemCount; j++) {
-                const $container = $('<div>');
+                let $container = $('<div>');
                 const cell = {};
 
                 if(cellTemplate && cellTemplate.render) {

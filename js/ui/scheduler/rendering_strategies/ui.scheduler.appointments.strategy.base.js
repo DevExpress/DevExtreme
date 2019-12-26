@@ -361,7 +361,7 @@ class BaseRenderingStrategy {
             stack.bottom = currentItem.bottom;
         };
 
-        var createItem = (currentItem, index) => {
+        function createItem(currentItem, index) {
             const currentIndex = index || 0;
             return {
                 index: currentIndex,
@@ -373,7 +373,7 @@ class BaseRenderingStrategy {
                 bottom: currentItem.bottom,
                 sortedIndex: this._skipSortedIndex(currentIndex) ? null : sortedIndex++,
             };
-        };
+        }
 
         const pushItemsInResult = (items) => {
             items.forEach((item) => {

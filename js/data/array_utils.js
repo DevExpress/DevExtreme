@@ -48,7 +48,8 @@ function getItems(keyInfo, items, key, groupCount) {
 function generateDataByKeyMap(keyInfo, array) {
     if(keyInfo.key() && (!array._dataByKeyMap || array._dataByKeyMapLength !== array.length)) {
         const dataByKeyMap = {};
-        for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
+        const arrayLength = array.length;
+        for(let i = 0; i < arrayLength; i++) {
             dataByKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }
 
@@ -125,10 +126,9 @@ function update(keyInfo, array, key, data, isBatch) {
 
 function insert(keyInfo, array, data, index, isBatch) {
     let keyValue;
-    let obj;
     const keyExpr = keyInfo.key();
 
-    obj = isPlainObject(data) ? extend({}, data) : data;
+    const obj = isPlainObject(data) ? extend({}, data) : data;
 
     if(keyExpr) {
         keyValue = keyInfo.keyOf(obj);

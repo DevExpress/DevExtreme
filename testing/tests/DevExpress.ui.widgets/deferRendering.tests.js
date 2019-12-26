@@ -304,6 +304,7 @@ QUnit.module('dxDeferRendering', () => {
 
         const done = assert.async();
         let renderCount = 0;
+        let deferRendering = null;
 
         const options = {
             showLoadIndicator: true,
@@ -327,7 +328,7 @@ QUnit.module('dxDeferRendering', () => {
 
         const $test = $('#showLoadIndicator');
 
-        var deferRendering = $test
+        deferRendering = $test
             .find('.defer-rendering')
             .dxDeferRendering(options)
             .dxDeferRendering('instance');
