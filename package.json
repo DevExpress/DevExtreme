@@ -54,7 +54,7 @@
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
     "devextreme-generator": "^1.0.7",
-    "devextreme-internal-tools": "~1.2.0",
+    "devextreme-internal-tools": "~1.2.24",
     "eslint": "^6.0.0",
     "eslint-plugin-qunit": "^4.0.0",
     "eslint-plugin-spellcheck": "0.0.11",
