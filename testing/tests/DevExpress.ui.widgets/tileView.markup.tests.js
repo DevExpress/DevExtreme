@@ -117,56 +117,54 @@ QUnit.module('rendering', {
 
         assert.equal($items.eq(0).text(), 'Text is: item1');
     });
+});
 
+$.each(configs, function(direction, config) {
 
-    $.each(configs, function(direction, config) {
+    var getPosition = getPositionCreator(config);
 
-        var getPosition = getPositionCreator(config);
-
-        QUnit.module('rendering ' + direction, {
-            beforeEach: function() {
-                this.element = $('<div></div>').appendTo('body');
-            },
-            afterEach: function() {
-                this.element.remove();
-            }
-        }, () => {
-            QUnit.test('items positions should be correct', function(assert) {
-                var element = this.element.dxTileView({
-                    direction: direction,
-                    height: 200,
-                    width: 200,
-                    items: prepareItems(items, config)
-                });
-
-                assert.ok(element.hasClass(TILEVIEW_CLASS));
-
-                var $items = element.find(TILEVIEW_ITEM_SELECTOR);
-                assert.equal($items.length, 10);
-                assert.ok($items.eq(0).hasClass(TILEVIEW_ITEM_CLASS));
-
-                assert.equal(getPosition($items.eq(0), 'main'), DEFAULT_ITEMMARGIN, 'item 1');
-                assert.equal(getPosition($items.eq(0), 'cross'), DEFAULT_ITEMMARGIN, 'item 1');
-
-                assert.equal(getPosition($items.eq(1), 'main'), DEFAULT_ITEMMARGIN, 'item 2');
-                assert.equal(getPosition($items.eq(1), 'cross'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET, 'item 2');
-
-                assert.equal(getPosition($items.eq(2), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 3, 'item 3');
-                assert.equal(getPosition($items.eq(2), 'cross'), DEFAULT_ITEMMARGIN, 'item 3');
-
-                assert.equal(getPosition($items.eq(3), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 5, 'item 4');
-                assert.equal(getPosition($items.eq(3), 'cross'), DEFAULT_ITEMMARGIN, 'item 4');
-
-                assert.equal(getPosition($items.eq(4), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 7, 'item 5');
-                assert.equal(getPosition($items.eq(4), 'cross'), DEFAULT_ITEMMARGIN, 'item 5');
-
-                assert.equal(getPosition($items.eq(5), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 9, 'item 6');
-                assert.equal(getPosition($items.eq(5), 'cross'), DEFAULT_ITEMMARGIN, 'item 6');
-
-                assert.equal(getPosition($items.eq(6), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET, 'item 7');
-                assert.equal(getPosition($items.eq(6), 'cross'), DEFAULT_ITEMMARGIN, 'item 7');
+    QUnit.module('rendering ' + direction, {
+        beforeEach: function() {
+            this.element = $('<div></div>').appendTo('body');
+        },
+        afterEach: function() {
+            this.element.remove();
+        }
+    }, () => {
+        QUnit.test('items positions should be correct', function(assert) {
+            var element = this.element.dxTileView({
+                direction: direction,
+                height: 200,
+                width: 200,
+                items: prepareItems(items, config)
             });
+
+            assert.ok(element.hasClass(TILEVIEW_CLASS));
+
+            var $items = element.find(TILEVIEW_ITEM_SELECTOR);
+            assert.equal($items.length, 10);
+            assert.ok($items.eq(0).hasClass(TILEVIEW_ITEM_CLASS));
+
+            assert.equal(getPosition($items.eq(0), 'main'), DEFAULT_ITEMMARGIN, 'item 1');
+            assert.equal(getPosition($items.eq(0), 'cross'), DEFAULT_ITEMMARGIN, 'item 1');
+
+            assert.equal(getPosition($items.eq(1), 'main'), DEFAULT_ITEMMARGIN, 'item 2');
+            assert.equal(getPosition($items.eq(1), 'cross'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET, 'item 2');
+
+            assert.equal(getPosition($items.eq(2), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 3, 'item 3');
+            assert.equal(getPosition($items.eq(2), 'cross'), DEFAULT_ITEMMARGIN, 'item 3');
+
+            assert.equal(getPosition($items.eq(3), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 5, 'item 4');
+            assert.equal(getPosition($items.eq(3), 'cross'), DEFAULT_ITEMMARGIN, 'item 4');
+
+            assert.equal(getPosition($items.eq(4), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 7, 'item 5');
+            assert.equal(getPosition($items.eq(4), 'cross'), DEFAULT_ITEMMARGIN, 'item 5');
+
+            assert.equal(getPosition($items.eq(5), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET * 9, 'item 6');
+            assert.equal(getPosition($items.eq(5), 'cross'), DEFAULT_ITEMMARGIN, 'item 6');
+
+            assert.equal(getPosition($items.eq(6), 'main'), DEFAULT_ITEMMARGIN + DEFAULT_ITEMOFFSET, 'item 7');
+            assert.equal(getPosition($items.eq(6), 'cross'), DEFAULT_ITEMMARGIN, 'item 7');
         });
     });
 });
-
