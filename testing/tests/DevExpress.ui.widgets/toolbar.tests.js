@@ -30,9 +30,12 @@ $('#qunit-fixture').html('<style>\
 
 const TOOLBAR_CLASS = 'dx-toolbar';
 const TOOLBAR_ITEM_CLASS = 'dx-toolbar-item';
+const TOOLBAR_ITEM_INVISIBLE_CLASS = 'dx-toolbar-item-invisible';
+const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
 const TOOLBAR_BEFORE_CONTAINER_CLASS = 'dx-toolbar-before';
 const TOOLBAR_AFTER_CONTAINER_CLASS = 'dx-toolbar-after';
 const TOOLBAR_CENTER_CONTAINER_CLASS = 'dx-toolbar-center';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
@@ -134,10 +137,11 @@ QUnit.test('Center element has correct margin with RTL', function(assert) {
 });
 
 function checkItemsLocation($toolbar, expected) {
-    const $beforeItems = $toolbar.find('.' + TOOLBAR_CLASS + '-before .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $centerItems = $toolbar.find('.' + TOOLBAR_CLASS + '-center .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $afterItems = $toolbar.find('.' + TOOLBAR_CLASS + '-after .' + TOOLBAR_ITEM_CLASS).not('.dx-toolbar-item-invisible');
-    const $menuItems = $toolbar.find('.dx-toolbar-menu-container').not('.dx-state-invisible');
+    const $beforeItems = $toolbar.find(`.${TOOLBAR_BEFORE_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+    const $centerItems = $toolbar.find(`.${TOOLBAR_CENTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+    const $afterItems = $toolbar.find(`.${TOOLBAR_AFTER_CONTAINER_CLASS} .${TOOLBAR_ITEM_CLASS}`).not(`.${TOOLBAR_ITEM_INVISIBLE_CLASS}`);
+    const $menuItems = $toolbar.find(`.${TOOLBAR_MENU_CONTAINER_CLASS}`).not(`.${INVISIBLE_STATE_CLASS}`);
+
     QUnit.assert.equal($beforeItems.length, expected.beforeItemsCount, 'items count with before location value');
     QUnit.assert.equal($centerItems.length, expected.centerItemsCount, 'items count with center location value');
     QUnit.assert.equal($afterItems.length, expected.afterItemsCount, 'items count with after location value');
