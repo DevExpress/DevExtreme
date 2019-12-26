@@ -88,7 +88,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         that._columnsController = that.getController('columns');
 
         if(that.isKeyboardEnabled()) {
-            that.getController('editorFactory').focused.add(function($element) {
+            const editorFactory = that.getController('editorFactory');
+            const elementFocused = function($element) {
                 that.setupFocusedView();
 
                 if(that._isNeedScroll) {
@@ -97,7 +98,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         that._isNeedScroll = false;
                     }
                 }
-            });
+            };
+            editorFactory.focused.remove(elementFocused);
+            editorFactory.focused.add(elementFocused);
 
             that._updateFocusTimeout = null;
 
