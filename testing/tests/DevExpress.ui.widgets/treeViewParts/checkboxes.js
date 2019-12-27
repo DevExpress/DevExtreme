@@ -316,10 +316,8 @@ configs.forEach(config => {
                 }
 
                 if(isSelectByKeysFunction(selectFunc)) {
-                    expectedEventLog = config.selectNodesRecursive
-                        ? ['itemSelectionChanged', 'selectionChanged']
-                        : ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
-                    if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
                 }
@@ -506,10 +504,8 @@ configs.forEach(config => {
                 let expectedNodes = [];
                 let expectedEventLog = ['selectionChanged'];
                 if(isSelectByKeysFunction(unselectFunc)) {
-                    expectedEventLog = config.selectNodesRecursive
-                        ? ['itemSelectionChanged', 'selectionChanged']
-                        : ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
-                    if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
                 }
@@ -694,10 +690,8 @@ configs.forEach(config => {
 
                 let expectedEventLog = ['selectionChanged'];
                 if(isSelectByKeysFunction(selectFunc)) {
-                    expectedEventLog = config.selectNodesRecursive
-                        ? []
-                        : ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
-                    if(!config.expanded && isLazyDataSourceMode(wrapper)) {
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         // unexpected result
                         expectedEventLog = [];
                     }
@@ -809,24 +803,25 @@ configs.forEach(config => {
                     assert.ok('skip for single');
                     return;
                 }
+
                 let wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
-
                 selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
-                let expectedEventLog = ['selectionChanged'];
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                     // unexpected result
                     expectedKeys = [0];
                 }
-                if(isSelectByKeysFunction(selectFunc)) {
-                    expectedEventLog = config.selectNodesRecursive
-                        ? []
-                        : ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
 
+                let expectedEventLog = ['selectionChanged'];
+                if(isSelectByKeysFunction(selectFunc)) {
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive) {
+                        expectedEventLog = [];
+                    }
                     if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                         // unexpected result;
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
@@ -952,10 +947,10 @@ configs.forEach(config => {
                     expectedKeys = [0];
                 }
                 if(isSelectByKeysFunction(selectFunc)) {
-                    expectedEventLog = config.selectNodesRecursive
-                        ? []
-                        : ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
-
+                    expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                    if(config.selectNodesRecursive) {
+                        expectedEventLog = [];
+                    }
                     if(!config.expanded && isLazyDataSourceMode(wrapper)) {
                         // unexpected result;
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
