@@ -426,7 +426,7 @@ const subscribes = {
 
         if(endDate.getHours() >= endDayHour) {
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
-        } else if(startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60)) && !options.sameDate) {
+        } else if(!options.sameDate && startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
             updatedEndDate = new Date(updatedEndDate.getTime() - toMs('day'));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
