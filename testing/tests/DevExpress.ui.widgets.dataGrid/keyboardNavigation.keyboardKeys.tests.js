@@ -25,6 +25,7 @@ import { setupDataGridModules, MockDataController } from '../../helpers/dataGrid
 import {
     CLICK_EVENT,
     setupModules,
+    fireKeyDown,
     triggerKeyDown,
     focusCell,
     callViewsRenderCompleted,
@@ -1619,6 +1620,43 @@ QUnit.module('Keyboard keys', {
         });
 
         assert.ok(isLeftArrow, 'default behaviour is worked');
+    });
+
+    QUnit.testInActiveWindow('onKeyDown should fire event if grid is empty (T837977)', function(assert) {
+        // arrange
+        let keyDownFiresCount = 0,
+            $rowsView;
+
+        this.options = {
+            dataSource: [],
+            onKeyDown: () => ++keyDownFiresCount,
+            tabindex: 111
+        };
+
+        setupModules(this, { initViews: true });
+
+        this.gridView.render($('#container'));
+
+        this.clock.tick();
+
+        $rowsView = $(this.gridView.getView('rowsView').element());
+
+        // assert
+        assert.equal($rowsView.attr('tabindex'), 111, 'rowsView element has tabindex');
+
+        // act, assert
+        fireKeyDown($(':focus'), 'enter');
+        assert.equal(keyDownFiresCount, 0, 'onKeyDown not fired');
+
+        // act
+        $rowsView.focus();
+        fireKeyDown($(':focus'), 'enter');
+        // assert
+        assert.equal(keyDownFiresCount, 1, 'onKeyDown fired once');
+
+        // act, assert
+        fireKeyDown($(':focus'), 'Enter');
+        assert.equal(keyDownFiresCount, 2, 'onKeyDown fired twice');
     });
 
     QUnit.test('onKeyDown event customization (T824764)', function(assert) {

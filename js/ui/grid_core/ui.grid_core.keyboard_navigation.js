@@ -123,24 +123,30 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _initViewHandlers: function() {
-        var that = this,
+        let that = this,
             clickAction = that.createAction(that._clickHandler),
             rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
-            var $element = rowsView.element(),
+            let $rowsView = rowsView.element(),
                 isFullUpdate = !e || e.changeType === 'refresh',
                 isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name,
                 needUpdateFocus = false,
                 isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend'),
                 clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
                 $focusedElement = $(':focus'),
-                isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is('body'));
+                isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
 
-            eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
-            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
 
-            that._initKeyDownHandler($element, e => that._keyDownHandler(e));
+            that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
+
+            let isGridEmpty = !that._dataController.getVisibleRows().length;
+            if(isGridEmpty) {
+                let tabIndex = that.option('tabindex') || 0;
+                $rowsView.attr('tabindex', tabIndex);
+            }
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
@@ -1860,11 +1866,11 @@ module.exports = {
                 renderFocusState: function() {
                     var dataController = this._dataController,
                         rowIndex = this.option('focusedRowIndex') || 0,
-                        $element = this.element(),
+                        $rowsView = this.element(),
                         cellElements;
 
-                    if($element && !focused($element)) {
-                        $element.attr('tabIndex', null);
+                    if($rowsView && !focused($rowsView)) {
+                        $rowsView.attr('tabIndex', null);
                     }
 
                     if(rowIndex < 0 || rowIndex >= dataController.getVisibleRows().length) {
