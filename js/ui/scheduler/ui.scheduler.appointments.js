@@ -17,7 +17,6 @@ import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
 import eventUtils from '../../events/utils';
 import dblclickEvent from '../../events/double_click';
-import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
@@ -342,10 +341,10 @@ const SchedulerAppointments = CollectionWidget.inherit({
         }
 
         var currentData = extend(data, { startDate: startDate, endDate: endDate });
-        var formatText = this.getText(currentData, currentData, 'TIME');
+        var formatText = this.invoke('getText', currentData, currentData, 'TIME');
 
         $('<div>')
-            .text(this._createAppointmentTitle(data))
+            .text(this.invoke('createAppointmentTitle', data))
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
@@ -373,70 +372,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 .addClass(ALL_DAY_CONTENT_CLASS)
                 .prependTo($contentDetails);
         }
-    },
-
-    getText(data, currentData, format) {
-        const isAllDay = data.allDay,
-            text = this._createAppointmentTitle(data),
-            startDateTimeZone = data.startDateTimeZone,
-            endDateTimeZone = data.endDateTimeZone,
-            startDate = this.invoke('convertDateByTimezone', currentData.startDate, startDateTimeZone),
-            endDate = this.invoke('convertDateByTimezone', currentData.endDate, endDateTimeZone);
-        return {
-            text: text,
-            formatDate: this._formatDates(startDate, endDate, isAllDay, format)
-        };
-    },
-
-    _formatDates: function(startDate, endDate, isAllDay, format) {
-        const formatType = format || this._getTypeFormat(startDate, endDate, isAllDay);
-
-        const formatTypes = {
-            'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
-
-                return startDateString + endDateString;
-            },
-            'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
-            },
-            'DATE': function() {
-                const dateTimeFormat = 'monthAndDay',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat),
-                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
-            }
-        };
-
-        return formatTypes[formatType]();
-    },
-
-    _getTypeFormat(startDate, endDate, isAllDay) {
-        if(isAllDay) {
-            return 'DATE';
-        }
-        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
-            return 'TIME';
-        }
-        return 'DATETIME';
-    },
-
-    _createAppointmentTitle: function(data) {
-        if(typeUtils.isPlainObject(data)) {
-            return data.text;
-        }
-
-        return String(data);
     },
 
     _executeItemRenderAction: function(index, itemData, itemElement) {
@@ -844,6 +779,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 onAppointmentClick: this.option('onItemClick'),
                 dragBehavior: this.option('dragBehavior'),
                 allowDrag: this.option('allowDrag'),
+                cellWidth: this.invoke('getCellWidth'),
                 isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
                 applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
             });

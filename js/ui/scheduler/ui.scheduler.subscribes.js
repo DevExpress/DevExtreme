@@ -10,6 +10,7 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
+import dateLocalization from '../../localization/date';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -240,6 +241,69 @@ const subscribes = {
     // NOTE: T312051, remove after fix scrollable bug T324196
     appointmentFocused: function() {
         this._workSpace.restoreScrollTop();
+    },
+
+    getText(data, currentData, format) {
+        const isAllDay = data.allDay,
+            startDateTimeZone = data.startDateTimeZone,
+            endDateTimeZone = data.endDateTimeZone,
+            startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone),
+            endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        return {
+            text: this.fire('createAppointmentTitle', data),
+            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+        };
+    },
+
+    createAppointmentTitle: function(data) {
+        if(typeUtils.isPlainObject(data)) {
+            return data.text;
+        }
+
+        return String(data);
+    },
+
+    _formatDates(startDate, endDate, isAllDay, format) {
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
+
+        const formatTypes = {
+            'DATETIME': function() {
+                const dateTimeFormat = 'mediumdatemediumtime',
+                    startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+
+                const endDateString = (startDate.getDate() === endDate.getDate()) ?
+                    dateLocalization.format(endDate, 'shorttime') :
+                    dateLocalization.format(endDate, dateTimeFormat);
+
+                return startDateString + endDateString;
+            },
+            'TIME': function() {
+                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
+            },
+            'DATE': function() {
+                const dateTimeFormat = 'monthAndDay',
+                    startDateString = dateLocalization.format(startDate, dateTimeFormat),
+                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+
+                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
+                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
+                    '';
+
+                return startDateString + endDateString;
+            }
+        };
+
+        return formatTypes[formatType]();
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
     },
 
     getResizableAppointmentArea: function(options) {

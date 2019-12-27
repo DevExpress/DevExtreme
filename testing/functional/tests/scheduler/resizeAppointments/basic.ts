@@ -13,27 +13,23 @@ fixture `Resize appointments in the Scheduler basic views`
     await t
         .drag(resizableAppointment.resizableHandle.bottom, 0, 100)
         .expect(resizableAppointment.size.height).eql(`200px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`12:00 PM`)
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 12:00 PM`)
 
         .drag(resizableAppointment.resizableHandle.top, 0, 100)
         .expect(resizableAppointment.size.height).eql(`100px`)
-        .expect(resizableAppointment.date.startTime).eql(`11:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`12:00 PM`)
+        .expect(resizableAppointment.date.time).eql(`11:00 AM - 12:00 PM`)
 
         .drag(resizableAppointment.resizableHandle.top, 0, -100)
         .expect(resizableAppointment.size.height).eql(`200px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`12:00 PM`)
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 12:00 PM`)
 
         .drag(resizableAppointment.resizableHandle.bottom, 0, -100)
         .expect(resizableAppointment.size.height).eql(`100px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 11:00 AM`)
 
 }).before(() => createScheduler({
     views: [view],
-    currentView: view, 
+    currentView: view,
     dataSource: dataSource
 })));
 
@@ -44,26 +40,22 @@ test(`Resize in the "month" view`, async t => {
     await t
         .drag(resizableAppointment.resizableHandle.right, 100, 0)
         .expect(resizableAppointment.size.width).eql(`400px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 11:00 AM`)
 
         .drag(resizableAppointment.resizableHandle.left, 100, 0)
         .expect(resizableAppointment.size.width).eql(`200px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 11:00 AM`)
 
         .drag(resizableAppointment.resizableHandle.left, -100, 0)
         .expect(resizableAppointment.size.width).eql(`400px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 11:00 AM`)
 
         .drag(resizableAppointment.resizableHandle.right, -100, 0)
         .expect(resizableAppointment.size.width).eql(`200px`)
-        .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-        .expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
+        .expect(resizableAppointment.date.time).eql(`10:00 AM - 11:00 AM`);
 
 }).before(() => createScheduler({
     views: ['month'],
-    currentView: 'month', 
+    currentView: 'month',
     dataSource: dataSource
 }));

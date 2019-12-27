@@ -41,7 +41,7 @@ const CLASS = {
 
 class Appointment {
     element: Selector;
-    date: { startTime: Promise<string>, endTime: Promise<string> };
+    date: { time: Promise<string> };
     resizableHandle: { left: Selector, right: Selector, top: Selector, bottom: Selector };
     size: { width: Promise<string>, height: Promise<string> };
     isFocused: Promise<boolean>;
@@ -54,8 +54,7 @@ class Appointment {
         const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
         this.date = {
-            startTime: appointmentContentDate.nth(0).innerText,
-            endTime: appointmentContentDate.nth(2).innerText
+            time: appointmentContentDate.nth(0).innerText
         };
 
         this.resizableHandle = {

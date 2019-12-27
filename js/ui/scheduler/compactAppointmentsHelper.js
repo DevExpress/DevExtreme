@@ -91,15 +91,14 @@ export class CompactAppointmentsHelper {
     _createTooltipDragBehavior(options) {
         return (e) => {
             let dragElement;
-            const $element = $(e.element);
-            const dragBehavior = this.instance.getWorkSpace().dragBehavior;
+            const $element = $(e.element),
+                dragBehavior = this.instance.getWorkSpace().dragBehavior;
 
             dragBehavior.addTo($element, {
                 filter: `.${LIST_ITEM_CLASS}`,
                 container: this.instance.$element().find(`.${FIXED_CONTAINER_CLASS}`),
                 cursorOffset: () => {
                     const $dragElement = $(dragElement);
-
                     return {
                         x: $dragElement.width() / 2,
                         y: $dragElement.height() / 2
@@ -116,10 +115,8 @@ export class CompactAppointmentsHelper {
                         event.data = event.data || {};
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
 
-                        dragBehavior.initialPosition = translator.locate($(dragElement));
+                        dragBehavior.onDragStart(event.data);
                         translator.resetPosition($(dragElement));
-
-                        this.instance.hideAppointmentTooltip();
                     }
                 },
                 onDragEnd: (e) => {
@@ -139,24 +136,16 @@ export class CompactAppointmentsHelper {
         settings[0].isCompact = false;
         settings[0].virtual = false;
 
-        appointments._currentAppointmentSettings = settings;
         appointments._renderItem(appointmentIndex, {
             itemData: itemData,
             settings: settings
         });
 
-        const appointmentList = appointments._findItemElementByItem(itemData);
-        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
+        return appointments._findItemElementByItem(itemData)[0];
     }
 
-    _getRecurrencePart(appointments, startDate) {
-        return appointments.some(appointment => {
-            return appointment.data('dxAppointmentStartDate').getTime() === startDate.getTime();
-        });
-    }
-
-    _getCollectorOffset(width) {
-        return this.instance.fire('getCellWidth') - width - this._getCollectorRightOffset();
+    _getCollectorOffset(width, cellWidth) {
+        return cellWidth - width - this._getCollectorRightOffset();
     }
 
     _getCollectorRightOffset() {
@@ -212,13 +201,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset }) {
+    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width) : 0;
+        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
         this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
 
         return result;

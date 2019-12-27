@@ -1464,8 +1464,7 @@ const Scheduler = Widget.inherit({
     },
 
     _getAppointmentTooltipOptions: function() {
-        const that = this,
-            appointmentInstance = that.getAppointmentsInstance();
+        const that = this;
         return {
             createComponent: that._createComponent.bind(that),
             container: that.$element(),
@@ -1473,7 +1472,7 @@ const Scheduler = Widget.inherit({
             setDefaultTemplate: that.setDefaultTemplate.bind(that),
             getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
-            getText: appointmentInstance.getText.bind(appointmentInstance),
+            getText: (data, currentData, format) => that.fire('getText', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
