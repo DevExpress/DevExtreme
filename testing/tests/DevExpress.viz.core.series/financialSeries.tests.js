@@ -5,8 +5,8 @@ import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
 import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 
-var createPoint = function() {
-    var stub = sinon.createStubInstance(pointModule.Point);
+const createPoint = function() {
+    const stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
     stub.hasCoords.returns(true);
@@ -15,19 +15,19 @@ var createPoint = function() {
     stub._options = {};// see T243839
     return stub;
 };
-var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
+const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
 
-var environment = {
+const environment = {
     beforeEach: function() {
         insertMockFactory();
-        var mockPointIndex = 0;
+        let mockPointIndex = 0;
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [
             { date: 'arg1', high: 'high1', low: 'low1', open: 'open1', close: 'close1' }
         ];
         this.createPoint = sinon.stub(pointModule, 'Point', function() {
-            var stub = mockPoints[mockPointIndex++];
+            const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
             stub.isInVisibleArea.returns(true);
@@ -42,9 +42,9 @@ var environment = {
     }
 };
 
-var createSeries = function(options, renderSettings) {
+const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    var renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
 
     options = $.extend(true, {
         containerBackgroundColor: 'containerColor',
@@ -81,10 +81,10 @@ var createSeries = function(options, renderSettings) {
     return new Series(renderSettings, options);
 };
 
-var checkGroups = function(assert, series) {
-    var parentGroup = series._group,
-        renderer = series._renderer,
-        labelsGroup = series._extGroups.labelsGroup;
+const checkGroups = function(assert, series) {
+    const parentGroup = series._group;
+    const renderer = series._renderer;
+    const labelsGroup = series._extGroups.labelsGroup;
     assert.ok(parentGroup, 'series created without group');
 
     assert.equal(renderer.stub('g').callCount, 7);
@@ -107,14 +107,14 @@ var checkGroups = function(assert, series) {
 (function StockSeries() {
 
 
-    var seriesType = 'stock';
+    const seriesType = 'stock';
 
     QUnit.module('Creation', environment);
 
     QUnit.test('Creation financial point', function(assert) {
-        var series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } }),
-            data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4 }],
-            points;
+        const series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
+        const data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4 }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -130,12 +130,12 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Creation financial series with errorBars', function(assert) {
-        var series = createSeries({
-                errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' }, type: 'stock', argumentField: 'arg',
-                highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false }
-            }),
-            data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4, lowErrorField: 0, highErrorField: 4 }],
-            points;
+        const series = createSeries({
+            errorBars: { lowErrorValueField: 'lowErrorField', highErrorValueField: 'highErrorField' }, type: 'stock', argumentField: 'arg',
+            highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false }
+        });
+        const data = [{ arg: 1, h: 3, l: -10, o: 1, c: -4, lowErrorField: 0, highErrorField: 4 }];
+        let points;
 
         series.updateData(data);
         series.createPoints();
@@ -155,9 +155,9 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Creation financial point. Default fields', function(assert) {
-        var series = createSeries({ type: 'stock', reduction: { level: 'open' }, label: { visible: false } }),
-            data = [{ date: 1, high: 3, low: -10, open: 1, close: -4 }],
-            points;
+        const series = createSeries({ type: 'stock', reduction: { level: 'open' }, label: { visible: false } });
+        const data = [{ date: 1, high: 3, low: -10, open: 1, close: -4 }];
+        let points;
 
         series.updateData(data);
         series.createPoints();
@@ -174,7 +174,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('getMarginOptions', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: 'stock',
             reduction: { level: 'open' },
             label: { visible: false },
@@ -218,9 +218,9 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Creation financial point. Null values, ingoreEmptyPoints false', function(assert) {
-        var series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } }),
-            data = [{ arg: 1, h: null, l: null, o: null, c: null }],
-            points;
+        const series = createSeries({ type: 'stock', argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
+        const data = [{ arg: 1, h: null, l: null, o: null, c: null }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -234,9 +234,9 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Creation financial point. Null values, ingoreEmptyPoints true', function(assert) {
-        var series = createSeries({ type: 'stock', ignoreEmptyPoints: true, argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } }),
-            data = [{ arg: 1, h: null, l: null, o: null, c: null }],
-            points;
+        const series = createSeries({ type: 'stock', ignoreEmptyPoints: true, argumentField: 'arg', highValueField: 'h', lowValueField: 'l', openValueField: 'o', closeValueField: 'c', reduction: { level: 'open' }, label: { visible: false } });
+        const data = [{ arg: 1, h: null, l: null, o: null, c: null }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -257,7 +257,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw without data', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -270,7 +270,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw simple data without animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -292,7 +292,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw simple data with animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -315,7 +315,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create groups without animation. T101152', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -336,7 +336,7 @@ var checkGroups = function(assert, series) {
 
 
     QUnit.test('Create groups with animation. T101152', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -376,7 +376,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw without animation', function(assert) {
-        var series = this.series;
+        const series = this.series;
         // act
         series.draw(false);
         // assert
@@ -390,7 +390,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw with animation', function(assert) {
-        var series = this.series;
+        const series = this.series;
         // act
         series.draw(true);
         // assert
@@ -419,11 +419,11 @@ var checkGroups = function(assert, series) {
         },
         afterEach: environment.afterEach
     });
-    var checkPointData = function(assert, pointData, isReduction, index) {
+    const checkPointData = function(assert, pointData, isReduction, index) {
         assert.equal(pointData.isReduction, isReduction, 'point' + index + ' was created with incorrect reduction flag');
     };
     QUnit.test('Level is default (close)', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -447,7 +447,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is open', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -470,20 +470,20 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('double updateData', function(assert) {
-        var data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                { date: 4, o: 4, h: 9, l: 2, c: null },
-                { date: 5, o: 4, h: 9, l: 2, c: 5 }],
-            series = createSeries({
-                type: seriesType,
-                argumentField: 'date',
-                openValueField: 'o',
-                highValueField: 'h',
-                lowValueField: 'l',
-                closeValueField: 'c',
-                reduction: { color: 'green', level: 'open' }
-            });
+        const data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
+            { date: 2, o: 1, h: 7, l: 1, c: 6 },
+            { date: 3, o: 5, h: 5, l: 3, c: 3 },
+            { date: 4, o: 4, h: 9, l: 2, c: null },
+            { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+        const series = createSeries({
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            reduction: { color: 'green', level: 'open' }
+        });
         series.updateData(data);
         series.createPoints();
         // Act
@@ -500,7 +500,7 @@ var checkGroups = function(assert, series) {
         checkPointData(assert, this.createPoint.getCall(3).args[1], true, 3);
         checkPointData(assert, this.createPoint.getCall(4).args[1], false, 4);
 
-        var point = series._points;
+        const point = series._points;
         checkPointData(assert, point[0].update.lastCall.args[0], false, 0);
         checkPointData(assert, point[1].update.lastCall.args[0], true, 1);
         checkPointData(assert, point[2].update.lastCall.args[0], false, 2);
@@ -509,7 +509,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is high', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -533,7 +533,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is low', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -557,7 +557,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Check reduction if data source contains empty data items', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -600,7 +600,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Style in point', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -683,7 +683,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Style in point groups', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -736,7 +736,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. default colors', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -826,7 +826,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. with defined series color', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             color: 'seriesColor',
             type: seriesType,
@@ -917,7 +917,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. with defined series color with hatching', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             color: 'seriesColor',
             type: seriesType,
@@ -1012,7 +1012,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. with. Custom colors ', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -1120,7 +1120,7 @@ var checkGroups = function(assert, series) {
         afterEach: environment.afterEach
     });
     QUnit.test('Customize Point', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -1227,7 +1227,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('getValueFields default', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType
         });
 
@@ -1235,7 +1235,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('getValueFields', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             valueField: 'customValueField',
             openValueField: 'customOpenField',
@@ -1248,7 +1248,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('getArgumentField default', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType
         });
 
@@ -1256,7 +1256,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('getArgumentField', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'customArgumentField'
         });
@@ -1376,8 +1376,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Argument is undefined', function(assert) {
-        var data = [{ date: undefined, open: 1, close: 1, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: undefined, open: 1, close: 1, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1386,8 +1386,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Argument is null', function(assert) {
-        var data = [{ date: null, open: 1, close: 1, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: null, open: 1, close: 1, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1396,8 +1396,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Open is undefined', function(assert) {
-        var data = [{ date: 1, open: undefined, close: 1, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: undefined, close: 1, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1406,8 +1406,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Open is null', function(assert) {
-        var data = [{ date: 1, open: null, close: 1, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: null, close: 1, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1416,8 +1416,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Close is undefined', function(assert) {
-        var data = [{ date: 1, open: 1, close: undefined, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: undefined, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1426,8 +1426,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Close is null', function(assert) {
-        var data = [{ date: 1, open: 1, close: null, low: 1, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: null, low: 1, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1436,8 +1436,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Low is undefined', function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: undefined, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: 1, low: undefined, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1446,8 +1446,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Low is null', function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: null, high: 1 }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: 1, low: null, high: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1456,8 +1456,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('High is undefined', function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: 1, high: undefined }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: 1, low: 1, high: undefined }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1466,8 +1466,8 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('High is null', function(assert) {
-        var data = [{ date: 1, open: 1, close: 1, low: 1, high: null }],
-            series = createSeries(this.options);
+        const data = [{ date: 1, open: 1, close: 1, low: 1, high: null }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -1478,7 +1478,7 @@ var checkGroups = function(assert, series) {
     QUnit.module('Series visibility', environment);
 
     QUnit.test('Hide visible series', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: 'stock',
             argumentField: 'arg',
             visible: true,
@@ -1490,7 +1490,7 @@ var checkGroups = function(assert, series) {
 
         series.hide();
 
-        var points = series.getPoints();
+        const points = series.getPoints();
         // see T243839
         $.each(points, function(_, point) {
             assert.ok(point._options.visible === false);
@@ -1498,7 +1498,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Show invisible series', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: 'stock',
             argumentField: 'arg',
             visible: false,
@@ -1510,7 +1510,7 @@ var checkGroups = function(assert, series) {
 
         series.show();
 
-        var points = series.getPoints();
+        const points = series.getPoints();
         // see T243839
         $.each(points, function(_, point) {
             assert.ok(point._options.visible === true);
@@ -1520,7 +1520,7 @@ var checkGroups = function(assert, series) {
 
 (function CandleStick() {
 
-    var seriesType = 'candlestick';
+    const seriesType = 'candlestick';
 
     QUnit.module('CandleStick series. Draw', {
         beforeEach: environment.beforeEach,
@@ -1535,7 +1535,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw without data', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -1547,7 +1547,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw simple data without animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -1568,7 +1568,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw simple data with animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
@@ -1612,7 +1612,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw without animation', function(assert) {
-        var series = this.series;
+        const series = this.series;
         // act
         series.draw(false);
         // assert
@@ -1626,7 +1626,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Draw with animation', function(assert) {
-        var series = this.series;
+        const series = this.series;
         // act
         series.draw(true);
         // assert
@@ -1652,11 +1652,11 @@ var checkGroups = function(assert, series) {
         },
         afterEach: environment.afterEach
     });
-    var checkPointData = function(assert, pointData, isReduction, index) {
+    const checkPointData = function(assert, pointData, isReduction, index) {
         assert.equal(pointData.isReduction, isReduction, 'point' + index + ' was created with incorrect reduction flag');
     };
     QUnit.test('Level is default (close)', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -1680,7 +1680,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is open', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -1703,20 +1703,20 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('double updateData', function(assert) {
-        var data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                { date: 4, o: 4, h: 9, l: 2, c: null },
-                { date: 5, o: 4, h: 9, l: 2, c: 5 }],
-            series = createSeries({
-                type: seriesType,
-                argumentField: 'date',
-                openValueField: 'o',
-                highValueField: 'h',
-                lowValueField: 'l',
-                closeValueField: 'c',
-                reduction: { color: 'green', level: 'open' }
-            });
+        const data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
+            { date: 2, o: 1, h: 7, l: 1, c: 6 },
+            { date: 3, o: 5, h: 5, l: 3, c: 3 },
+            { date: 4, o: 4, h: 9, l: 2, c: null },
+            { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+        const series = createSeries({
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            reduction: { color: 'green', level: 'open' }
+        });
         series.updateData(data);
         series.createPoints();
         // Act
@@ -1733,7 +1733,7 @@ var checkGroups = function(assert, series) {
         checkPointData(assert, this.createPoint.getCall(3).args[1], true, 3);
         checkPointData(assert, this.createPoint.getCall(4).args[1], false, 4);
 
-        var point = series._points;
+        const point = series._points;
         checkPointData(assert, point[0].update.lastCall.args[0], false, 0);
         checkPointData(assert, point[1].update.lastCall.args[0], true, 1);
         checkPointData(assert, point[2].update.lastCall.args[0], false, 2);
@@ -1742,7 +1742,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is high', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -1766,7 +1766,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Level is low', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'date',
             openValueField: 'o',
@@ -1804,7 +1804,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Point in style', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -1895,7 +1895,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Style in point groups', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',
@@ -1951,23 +1951,23 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. default colors', function(assert) {
-        var series = createSeries({
-                mainSeriesColor: 'mainSeriesColor',
-                type: seriesType,
-                argumentField: 'date',
-                openValueField: 'o',
-                highValueField: 'h',
-                lowValueField: 'l',
-                closeValueField: 'c',
-                hoverStyle: {
-                    width: 'h-width'
-                },
-                selectionStyle: { width: 's-width' },
-                width: 'n-width',
-                reduction: { color: 'reduction', level: 'high' },
-                innerColor: 'innerColor'
-            }),
-            styles;
+        const series = createSeries({
+            mainSeriesColor: 'mainSeriesColor',
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            hoverStyle: {
+                width: 'h-width'
+            },
+            selectionStyle: { width: 's-width' },
+            width: 'n-width',
+            reduction: { color: 'reduction', level: 'high' },
+            innerColor: 'innerColor'
+        });
+        let styles;
         series.updateData(this.data);
         series.createPoints();
 
@@ -2011,19 +2011,19 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. with defined series color', function(assert) {
-        var series = createSeries({
-                mainSeriesColor: 'mainSeriesColor',
-                color: 'seriesColor',
-                type: seriesType,
-                argumentField: 'date',
-                openValueField: 'o',
-                highValueField: 'h',
-                lowValueField: 'l',
-                closeValueField: 'c',
-                reduction: { color: 'reduction', level: 'high' },
-                innerColor: 'innerColor'
-            }),
-            styles;
+        const series = createSeries({
+            mainSeriesColor: 'mainSeriesColor',
+            color: 'seriesColor',
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            reduction: { color: 'reduction', level: 'high' },
+            innerColor: 'innerColor'
+        });
+        let styles;
 
         series.updateData(this.data);
         series.createPoints();
@@ -2067,24 +2067,24 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Create Point styles. with Custom colors ', function(assert) {
-        var series = createSeries({
-                mainSeriesColor: 'mainSeriesColor',
-                type: seriesType,
-                argumentField: 'date',
-                openValueField: 'o',
-                highValueField: 'h',
-                lowValueField: 'l',
-                closeValueField: 'c',
-                hoverStyle: {
-                    color: 'h-color',
-                },
-                selectionStyle: {
-                    color: 's-color'
-                },
-                reduction: { color: 'reduction', level: 'high' },
-                innerColor: 'innerColor'
-            }, { renderer: this.renderer }),
-            styles;
+        const series = createSeries({
+            mainSeriesColor: 'mainSeriesColor',
+            type: seriesType,
+            argumentField: 'date',
+            openValueField: 'o',
+            highValueField: 'h',
+            lowValueField: 'l',
+            closeValueField: 'c',
+            hoverStyle: {
+                color: 'h-color',
+            },
+            selectionStyle: {
+                color: 's-color'
+            },
+            reduction: { color: 'reduction', level: 'high' },
+            innerColor: 'innerColor'
+        }, { renderer: this.renderer });
+        let styles;
         series.updateData(this.data);
         series.createPoints();
 
@@ -2140,7 +2140,7 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test('Customize Point', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             mainSeriesColor: 'mainSeriesColor',
             type: seriesType,
             argumentField: 'date',

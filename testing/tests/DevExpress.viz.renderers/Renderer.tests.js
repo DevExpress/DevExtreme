@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    animation = require('viz/core/renderers/animation'),
-    renderers = require('viz/core/renderers/renderer'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    browser = require('core/utils/browser');
+const $ = require('jquery');
+const animation = require('viz/core/renderers/animation');
+const renderers = require('viz/core/renderers/renderer');
+const vizMocks = require('../../helpers/vizMocks.js');
+const browser = require('core/utils/browser');
 
 $('<div>')
     .attr('id', 'qunit-fixture')
@@ -22,7 +22,7 @@ QUnit.testDone(function() {
     renderers.SvgElement.reset && renderers.SvgElement.reset();
 });
 
-var elementsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
+const elementsName = ['SvgElement', 'RectSvgElement', 'PathSvgElement', 'ArcSvgElement', 'TextSvgElement'];
 
 function setMockElements() {
     function wrapElement(elementName) {
@@ -49,7 +49,7 @@ function resetMockElements() {
 
 animation.AnimationController = vizMocks.stubClass(animation.AnimationController);
 
-var Renderer = renderers.Renderer;
+const Renderer = renderers.Renderer;
 
 QUnit.module('Renderer common API', {
     before: setMockElements,
@@ -67,7 +67,7 @@ QUnit.module('Renderer common API', {
 QUnit.test('Creation', function(assert) {
     // arrange
     // act
-    var renderer = this.createRenderer({
+    const renderer = this.createRenderer({
         cssClass: 'my-super-class',
         pathModified: 'yes',
         container: this.container
@@ -109,7 +109,7 @@ QUnit.test('Creation', function(assert) {
 
 QUnit.test('setOptions', function(assert) {
     // arrange
-    var renderer = this.createRenderer({
+    const renderer = this.createRenderer({
         rtl: 'yes',
         encodeHtml: 'yes',
         cssClass: 'my-super-class',
@@ -141,8 +141,8 @@ QUnit.test('setOptions', function(assert) {
 
 QUnit.test('Update animation options', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        result;
+    const renderer = this.createRenderer();
+    let result;
     renderer.setOptions({ animation: { enabled: false, duration: 2000, easing: 'linear' } });
 
     // act
@@ -155,8 +155,8 @@ QUnit.test('Update animation options', function(assert) {
 
 QUnit.test('Animation enabled', function(assert) {
     // arrange
-    var renderer1 = this.createRenderer(),
-        renderer2 = this.createRenderer();
+    const renderer1 = this.createRenderer();
+    const renderer2 = this.createRenderer();
     renderer2.setOptions({ animation: { enabled: false } });
 
     // act/assert
@@ -166,10 +166,10 @@ QUnit.test('Animation enabled', function(assert) {
 
 QUnit.test('stopAllAnimations', function(assert) {
     // arrange
-    var renderer1 = this.createRenderer(),
-        renderer2 = this.createRenderer(),
-        result1,
-        result2;
+    const renderer1 = this.createRenderer();
+    const renderer2 = this.createRenderer();
+    let result1;
+    let result2;
 
     // act
     result1 = renderer1.stopAllAnimations();
@@ -186,11 +186,11 @@ QUnit.test('stopAllAnimations', function(assert) {
 
 QUnit.test('animateElement', function(assert) {
     // arrange
-    var element = { a: 'a' },
-        params = { b: 'b' },
-        options = { c: 'c' },
-        renderer = this.createRenderer(),
-        result;
+    const element = { a: 'a' };
+    const params = { b: 'b' };
+    const options = { c: 'c' };
+    const renderer = this.createRenderer();
+    let result;
 
     // act
     result = renderer.animateElement(element, params, options);
@@ -205,8 +205,8 @@ QUnit.test('animateElement', function(assert) {
 
 QUnit.test('Resize with wrong size', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        result;
+    const renderer = this.createRenderer();
+    let result;
 
     renderer.root.stub('attr').reset();
 
@@ -220,8 +220,8 @@ QUnit.test('Resize with wrong size', function(assert) {
 
 QUnit.test('Resize with good size', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        result;
+    const renderer = this.createRenderer();
+    let result;
 
     renderer.root.stub('attr').reset();
 
@@ -237,8 +237,8 @@ QUnit.test('Resize with good size', function(assert) {
 // Q558365
 QUnit.test('Svg method', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        svgString;
+    const renderer = this.createRenderer();
+    let svgString;
 
     renderer.root.stub('markup').returns('root\'s markup');
 
@@ -252,8 +252,8 @@ QUnit.test('Svg method', function(assert) {
 
 QUnit.test('getRootOffset', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        offset;
+    const renderer = this.createRenderer();
+    let offset;
 
     renderer.root.stub('getOffset').returns({ top: 5, left: 10 });
 
@@ -266,10 +266,10 @@ QUnit.test('getRootOffset', function(assert) {
 });
 
 QUnit.test('Disposing', function(assert) {
-    var renderer = this.createRenderer(),
-        animationControllerDisposed = false,
-        rootDispose,
-        defsDispose;
+    const renderer = this.createRenderer();
+    let animationControllerDisposed = false;
+    let rootDispose;
+    let defsDispose;
 
     rootDispose = renderer.root.stub('dispose');
     defsDispose = renderers.SvgElement.getCall(1).returnValue.stub('dispose');
@@ -282,16 +282,16 @@ QUnit.test('Disposing', function(assert) {
     assert.ok(rootDispose.called);
     assert.ok(defsDispose.called);
     assert.ok(animationControllerDisposed);
-    for(var key in renderer) {
+    for(const key in renderer) {
         assert.strictEqual(renderer[key], null);
     }
 });
 
 QUnit.test('onEndAnimation', function(assert) {
     // arrange
-    var renderer = this.createRenderer(),
-        endAnimation = 'endAnimation',
-        animationControllerEndAnimationStub;
+    const renderer = this.createRenderer();
+    const endAnimation = 'endAnimation';
+    let animationControllerEndAnimationStub;
 
     // act
     renderer.onEndAnimation(endAnimation);
@@ -372,7 +372,7 @@ QUnit.test('Unlock / first call of two', function(assert) {
 
 QUnit.test('Backup container does not stay in DOM', function(assert) {
     this.renderer.lock();
-    var container = this.renderer.root.append.lastCall.args[0].element;
+    const container = this.renderer.root.append.lastCall.args[0].element;
     this.renderer.unlock();
 
     assert.strictEqual(container.parentNode, null);
@@ -380,8 +380,8 @@ QUnit.test('Backup container does not stay in DOM', function(assert) {
 
 QUnit.test('Several renderers share same backup container', function(assert) {
     this.renderer.lock();
-    var container = this.renderer.root.append.lastCall.args[0].element,
-        renderer = new Renderer({ container: document.createElement('div') });
+    const container = this.renderer.root.append.lastCall.args[0].element;
+    const renderer = new Renderer({ container: document.createElement('div') });
 
     renderer.lock();
 
@@ -400,7 +400,7 @@ QUnit.module('Fix sharping', {
     before: setMockElements,
     after: resetMockElements,
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.boundingRect = { left: 123.76, top: 2.15 };
         this.container = document.createElement('div');
         sinon.stub(this.container, 'getBoundingClientRect', function() {
@@ -412,7 +412,7 @@ QUnit.module('Fix sharping', {
 QUnit.test('Compensate root coordinates on creation', function(assert) {
     // arrange
     // act
-    var renderer = new Renderer({
+    const renderer = new Renderer({
         container: this.container
     });
 
@@ -431,7 +431,7 @@ QUnit.test('Compensate root coordinates on creation', function(assert) {
 
 QUnit.test('Compensate root coordinates on Unlock', function(assert) {
     // arrange
-    var renderer = new Renderer({
+    const renderer = new Renderer({
         container: this.container
     });
     renderer.lock();
@@ -458,7 +458,7 @@ QUnit.test('Compensate root coordinates on Unlock', function(assert) {
 
 QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) {
     // arrange
-    var renderer = new Renderer({
+    const renderer = new Renderer({
         container: this.container
     });
     this.boundingRect = { left: 123.34, top: 2.5 };
@@ -483,7 +483,7 @@ QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) 
 
 QUnit.test('Remove compensation before getting markup, compensate again after', function(assert) {
     // arrange
-    var renderer = new Renderer({
+    const renderer = new Renderer({
         container: this.container
     });
     this.boundingRect = { left: 123.34, top: 2.5 };
@@ -529,7 +529,7 @@ QUnit.module('Renderer drawing API', {
     before: setMockElements,
 
     beforeEach: function() {
-        var container = document.createElement('div');
+        const container = document.createElement('div');
         this.renderer = new Renderer({ container: container });
     },
 
@@ -538,7 +538,7 @@ QUnit.module('Renderer drawing API', {
 
 QUnit.test('rect without params', function(assert) {
     // act
-    var rect = this.renderer.rect();
+    const rect = this.renderer.rect();
 
     // assert
     assert.ok(rect, 'rect element is created');
@@ -552,7 +552,7 @@ QUnit.test('rect without params', function(assert) {
 
 QUnit.test('rect with params', function(assert) {
     // act
-    var rect = this.renderer.rect(10, 20, 30, 40);
+    const rect = this.renderer.rect(10, 20, 30, 40);
 
     // assert
     assert.ok(rect, 'rect element is created');
@@ -565,7 +565,7 @@ QUnit.test('rect with params', function(assert) {
 });
 
 QUnit.test('simple rect', function(assert) {
-    var rect = this.renderer.simpleRect();
+    const rect = this.renderer.simpleRect();
 
     assert.ok(rect instanceof renderers.SvgElement, 'instance type');
     assert.deepEqual(rect.ctorArgs, [this.renderer, 'rect', undefined], 'tag name');
@@ -573,7 +573,7 @@ QUnit.test('simple rect', function(assert) {
 
 QUnit.test('circle without params', function(assert) {
     // act
-    var circle = this.renderer.circle();
+    const circle = this.renderer.circle();
 
     // assert
     assert.ok(circle, 'circle element is created');
@@ -587,7 +587,7 @@ QUnit.test('circle without params', function(assert) {
 
 QUnit.test('circle with params', function(assert) {
     // act
-    var circle = this.renderer.circle(10, 20, 30);
+    const circle = this.renderer.circle(10, 20, 30);
 
     // assert
     assert.ok(circle, 'circle element is created');
@@ -601,7 +601,7 @@ QUnit.test('circle with params', function(assert) {
 
 QUnit.test('g', function(assert) {
     // act
-    var group = this.renderer.g();
+    const group = this.renderer.g();
 
     // assert
     assert.ok(group, 'group element is created');
@@ -614,7 +614,7 @@ QUnit.test('g', function(assert) {
 
 QUnit.test('image without params', function(assert) {
     // act
-    var image = this.renderer.image();
+    const image = this.renderer.image();
 
     // assert
     assert.ok(image, 'image element is created');
@@ -633,7 +633,7 @@ QUnit.test('image without params', function(assert) {
 
 QUnit.test('image with params', function(assert) {
     // act
-    var image = this.renderer.image(10, 20, 30, 40, '/test.jpg', 'Center');
+    const image = this.renderer.image(10, 20, 30, 40, '/test.jpg', 'Center');
 
     // assert
     assert.ok(image, 'image element is created');
@@ -652,7 +652,7 @@ QUnit.test('image with params', function(assert) {
 
 QUnit.test('pattern, with right hatching, default width, step and opacity', function(assert) {
     // act
-    var pattern = this.renderer.pattern('red', { direction: 'RighT' });
+    const pattern = this.renderer.pattern('red', { direction: 'RighT' });
 
     // assert
     assert.ok(pattern, 'pattern element is created');
@@ -687,7 +687,7 @@ QUnit.test('pattern, with right hatching, default width, step and opacity', func
 
 QUnit.test('pattern, with right hatching', function(assert) {
     // act
-    var pattern = this.renderer.pattern('red', { direction: 'RighT', width: 2, step: 3, opacity: 0.6 });
+    const pattern = this.renderer.pattern('red', { direction: 'RighT', width: 2, step: 3, opacity: 0.6 });
 
     // assert
     assert.ok(pattern, 'pattern element is created');
@@ -722,7 +722,7 @@ QUnit.test('pattern, with right hatching', function(assert) {
 
 QUnit.test('pattern, with left hatching', function(assert) {
     // act
-    var pattern = this.renderer.pattern('red', { direction: 'LefT', width: 2, step: 3, opacity: 0.6 });
+    const pattern = this.renderer.pattern('red', { direction: 'LefT', width: 2, step: 3, opacity: 0.6 });
 
     // assert
     assert.strictEqual(pattern.path.stub('attr').callCount, 1, 'pattern.path\'s attr called once');
@@ -731,7 +731,7 @@ QUnit.test('pattern, with left hatching', function(assert) {
 
 QUnit.test('clipRect with params', function(assert) {
     // act
-    var clipRect = this.renderer.clipRect(10, 20, 30, 40);
+    const clipRect = this.renderer.clipRect(10, 20, 30, 40);
 
     // assert
     assert.ok(clipRect, 'clipRect element is created');
@@ -757,7 +757,7 @@ QUnit.test('clipRect with params', function(assert) {
 
 QUnit.test('clipRect disposing', function(assert) {
     // arrange
-    var clipRect = this.renderer.clipRect(10, 20, 30, 40);
+    const clipRect = this.renderer.clipRect(10, 20, 30, 40);
     clipRect.clipPath.stub('dispose').reset();
 
     // act
@@ -770,7 +770,7 @@ QUnit.test('clipRect disposing', function(assert) {
 QUnit.test('shadowFilter with params', function(assert) {
     // arrange
     // act
-    var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
+    const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
 
     // assert
     // main filter
@@ -837,8 +837,8 @@ QUnit.test('shadowFilter with params', function(assert) {
 
 QUnit.test('shadowFilter change filter attr function (full list of params)', function(assert) {
     // arrange
-    var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6),
-        result;
+    const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
+    let result;
     shadow.gaussianBlur.stub('attr').reset();
     shadow.offset.stub('attr').reset();
     shadow.flood.stub('attr').reset();
@@ -871,8 +871,8 @@ QUnit.test('shadowFilter change filter attr function (full list of params)', fun
 
 QUnit.test('shadowFilter change filter attr function (short list of params)', function(assert) {
     // arrange
-    var shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6),
-        result;
+    const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
+    let result;
     shadow.gaussianBlur.stub('attr').reset();
     shadow.offset.stub('attr').reset();
     shadow.flood.stub('attr').reset();
@@ -901,7 +901,7 @@ QUnit.test('shadowFilter change filter attr function (short list of params)', fu
 });
 
 QUnit.test('brightFilter', function(assert) {
-    var filter = this.renderer.brightFilter();
+    const filter = this.renderer.brightFilter();
 
     assert.ok(filter instanceof renderers.SvgElement);
     assert.deepEqual(filter.ctorArgs, [this.renderer, 'filter', undefined]);
@@ -938,7 +938,7 @@ QUnit.test('brightFilter. applying settings', function(assert) {
 });
 
 QUnit.test('getGrayScaleFilter. first time creation', function(assert) {
-    var filter = this.renderer.getGrayScaleFilter();
+    const filter = this.renderer.getGrayScaleFilter();
 
     assert.ok(filter instanceof renderers.SvgElement);
     assert.deepEqual(filter.ctorArgs, [this.renderer, 'filter', undefined]);
@@ -952,9 +952,9 @@ QUnit.test('getGrayScaleFilter. first time creation', function(assert) {
 });
 
 QUnit.test('getGrayScaleFilter. call twice - only one filter created', function(assert) {
-    var filter = this.renderer.getGrayScaleFilter(),
-        id = filter.id,
-        filter2;
+    const filter = this.renderer.getGrayScaleFilter();
+    const id = filter.id;
+    let filter2;
 
     filter2 = this.renderer.getGrayScaleFilter();
 
@@ -966,7 +966,7 @@ QUnit.test('path without params', function(assert) {
     // arrange
 
     // act
-    var path = this.renderer.path();
+    const path = this.renderer.path();
 
     // assert
     assert.ok(path, 'path element is created');
@@ -980,10 +980,10 @@ QUnit.test('path without params', function(assert) {
 
 QUnit.test('path with params', function(assert) {
     // arrange
-    var points = [10, 20];
+    const points = [10, 20];
 
     // act
-    var path = this.renderer.path(points, 'bezier');
+    const path = this.renderer.path(points, 'bezier');
 
     // assert
     assert.ok(path, 'path element is created');
@@ -999,7 +999,7 @@ QUnit.test('arc without params', function(assert) {
     // arrange
 
     // act
-    var arc = this.renderer.arc();
+    const arc = this.renderer.arc();
 
     // assert
     assert.ok(arc, 'arc element is created');
@@ -1022,7 +1022,7 @@ QUnit.test('arc with params', function(assert) {
     // arrange
 
     // act
-    var arc = this.renderer.arc(1000, 2000, 50, 100, 90, 180);
+    const arc = this.renderer.arc(1000, 2000, 50, 100, 90, 180);
 
     // assert
     assert.ok(arc, 'arc element is created');
@@ -1045,7 +1045,7 @@ QUnit.test('text without params', function(assert) {
     // arrange
 
     // act
-    var text = this.renderer.text();
+    const text = this.renderer.text();
 
     // assert
     assert.ok(text, 'text element is created');
@@ -1061,7 +1061,7 @@ QUnit.test('text with params', function(assert) {
     // arrange
 
     // act
-    var text = this.renderer.text('simple text', 10, 20);
+    const text = this.renderer.text('simple text', 10, 20);
 
     // assert
     assert.ok(text, 'text element is created');
@@ -1077,7 +1077,7 @@ QUnit.test('text with params. text argument is 0', function(assert) {
     // arrange
 
     // act
-    var text = this.renderer.text(0, 10, 20);
+    const text = this.renderer.text(0, 10, 20);
 
     // assert
     assert.ok(text, 'text element is created');
@@ -1093,7 +1093,7 @@ QUnit.test('text with params. text argument is null', function(assert) {
     // arrange
 
     // act
-    var text = this.renderer.text(null, 10, 20);
+    const text = this.renderer.text(null, 10, 20);
 
     // assert
     assert.ok(text, 'text element is created');
@@ -1108,7 +1108,7 @@ QUnit.module('Hatching', {
     before: setMockElements,
 
     beforeEach: function() {
-        var container = document.createElement('div');
+        const container = document.createElement('div');
         this.renderer = new Renderer({ container: container });
         this.renderer.initHatching();
     },
@@ -1180,14 +1180,14 @@ if('pushState' in history) {
 
     QUnit.test('FixPath API. Do not fix IRIs on disposed elements', function(assert) {
         // arrange
-        var renderer = this.createRenderer(true),
-            element = renderer.rect(0, 0, 0, 0).attr({
-                'fill': 'DevExpress_12'
-            }).append(renderer.root),
+        const renderer = this.createRenderer(true);
+        const element = renderer.rect(0, 0, 0, 0).attr({
+            'fill': 'DevExpress_12'
+        }).append(renderer.root);
 
-            href = window.location.href,
-            oldUrl = href.split('#')[0],
-            newUrl = href.split('?')[0] + '?testparam=2';
+        const href = window.location.href;
+        const oldUrl = href.split('#')[0];
+        const newUrl = href.split('?')[0] + '?testparam=2';
 
         window.history.pushState('', document.title, newUrl);
 

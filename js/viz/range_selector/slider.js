@@ -1,18 +1,18 @@
-var commonModule = require('./common'),
-    animationSettings = commonModule.utils.animationSettings,
-    formatValue = commonModule.formatValue,
-    SliderMarker = require('./slider_marker'),
-    support = require('../../core/utils/support'),
+const commonModule = require('./common');
+const animationSettings = commonModule.utils.animationSettings;
+const formatValue = commonModule.formatValue;
+const SliderMarker = require('./slider_marker');
+const support = require('../../core/utils/support');
 
-    SPLITTER_WIDTH = 8,
-    TOUCH_SPLITTER_WIDTH = 20;
+const SPLITTER_WIDTH = 8;
+const TOUCH_SPLITTER_WIDTH = 20;
 
 function getSliderTrackerWidth(sliderHandleWidth) {
     return support.touchEvents || support.pointer ? TOUCH_SPLITTER_WIDTH : (SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH);
 }
 
 function Slider(params, index) {
-    var that = this;
+    const that = this;
     that._translator = params.translator;
     that._sliderGroup = params.renderer.g().attr({ 'class': 'slider' }).append(params.root);
     that._line = params.renderer.path(null, 'line').append(that._sliderGroup);
@@ -29,10 +29,10 @@ Slider.prototype = {
     },
 
     applyPosition: function(isAnimated) {
-        var that = this,
-            slider = that._sliderGroup,
-            tracker = that._tracker,
-            attrs = { translateX: that._position };
+        const that = this;
+        const slider = that._sliderGroup;
+        const tracker = that._tracker;
+        const attrs = { translateX: that._position };
 
         that._marker.setPosition(that._position);
         if(isAnimated) {
@@ -54,7 +54,7 @@ Slider.prototype = {
     },
 
     update: function(verticalRange, sliderHandleOptions, sliderMarkerOptions) {
-        var that = this;
+        const that = this;
         that._formatOptions = { format: sliderMarkerOptions.format, customizeText: sliderMarkerOptions.customizeText };
         that._marker.applyOptions(sliderMarkerOptions, that._translator.getScreenRange());
         that._colors = [sliderMarkerOptions.invalidRangeColor, sliderHandleOptions.color];
@@ -63,7 +63,7 @@ Slider.prototype = {
             'stroke-width': sliderHandleOptions.width, stroke: sliderHandleOptions.color, 'stroke-opacity': sliderHandleOptions.opacity, sharp: 'h',
             points: [0, 0, 0, verticalRange[1] - verticalRange[0]]
         });
-        var trackerWidth = getSliderTrackerWidth(sliderHandleOptions.width);
+        const trackerWidth = getSliderTrackerWidth(sliderHandleOptions.width);
         that._tracker.attr({ x: -trackerWidth / 2, y: 0, width: trackerWidth, height: verticalRange[1] - verticalRange[0], translateY: verticalRange[0] });
     },
 

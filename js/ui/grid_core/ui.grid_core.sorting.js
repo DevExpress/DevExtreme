@@ -26,8 +26,8 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         if($(event.currentTarget).parent().get(0) !== $row.get(0)) {
             return;
         }
-        var that = this,
-            keyName = null;
+        const that = this;
+        let keyName = null;
         const $cellElementFromEvent = $(event.currentTarget);
         const rowIndex = $cellElementFromEvent.parent().index();
         let columnIndex = -1;

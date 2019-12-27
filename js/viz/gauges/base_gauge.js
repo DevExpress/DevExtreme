@@ -1,13 +1,13 @@
-var _Number = Number,
-    _getAppropriateFormat = require('../core/utils').getAppropriateFormat,
-    extend = require('../../core/utils/extend').extend,
-    translator1DModule = require('../translators/translator1d'),
-    _extend = extend,
-    BaseWidget = require('../core/base_widget'),
-    themeManagerModule = require('./theme_manager'),
-    Tracker = require('./tracker');
+const _Number = Number;
+const _getAppropriateFormat = require('../core/utils').getAppropriateFormat;
+const extend = require('../../core/utils/extend').extend;
+const translator1DModule = require('../translators/translator1d');
+const _extend = extend;
+const BaseWidget = require('../core/base_widget');
+const themeManagerModule = require('./theme_manager');
+const Tracker = require('./tracker');
 
-var dxBaseGauge = BaseWidget.inherit({
+const dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
     _themeSection: 'gauge',
@@ -17,8 +17,8 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _initCore: function() {
-        var that = this,
-            root = that._renderer.root;
+        const that = this;
+        const root = that._renderer.root;
 
         that._valueChangingLocker = 0;
         that._translator = that._factory.createTranslator();
@@ -41,19 +41,19 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _setTrackerCallbacks: function() {
-        var that = this,
-            renderer = that._renderer,
-            tooltip = that._tooltip;
+        const that = this;
+        const renderer = that._renderer;
+        const tooltip = that._tooltip;
 
         that._tracker.setCallbacks({
             'tooltip-show': function(target, info) {
-                var tooltipParameters = target.getTooltipParameters(),
-                    offset = renderer.getRootOffset(),
-                    formatObject = _extend({
-                        value: tooltipParameters.value,
-                        valueText: tooltip.formatValue(tooltipParameters.value),
-                        color: tooltipParameters.color
-                    }, info);
+                const tooltipParameters = target.getTooltipParameters();
+                const offset = renderer.getRootOffset();
+                const formatObject = _extend({
+                    value: tooltipParameters.value,
+                    valueText: tooltip.formatValue(tooltipParameters.value),
+                    color: tooltipParameters.color
+                }, info);
 
                 return tooltip.show(formatObject, {
                     x: tooltipParameters.x + offset.left,
@@ -73,7 +73,7 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _disposeCore: function() {
-        var that = this;
+        const that = this;
         that._themeManager.dispose();
         that._tracker.dispose();
 
@@ -81,13 +81,13 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _cleanCore: function() {
-        var that = this;
+        const that = this;
         that._tracker.deactivate();
         that._cleanContent();
     },
 
     _renderCore: function() {
-        var that = this;
+        const that = this;
         if(!that._isValidDomain) return;
 
         that._renderContent();
@@ -105,13 +105,13 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _setContentSize: function() {
-        var that = this;
+        const that = this;
         that._resizing = that._noAnimation = that._changes.count() === 2;
         that.callBase.apply(that, arguments);
     },
 
     _applySize: function(rect) {
-        var that = this;
+        const that = this;
         ///#DEBUG
         that._DEBUG_rootRect = rect;
         ///#ENDDEBUG
@@ -122,7 +122,7 @@ var dxBaseGauge = BaseWidget.inherit({
         // The following code dirtily preserves layout cache for the outer backward.
         // The appropriate solution is to remove heavy rendering from "_applySize" - it should be done later during some other change processing.
         // It would be even better to somehow defer any inside option changes - so they all are applied after all changes are processed.
-        var layoutCache = that._layout._cache;
+        const layoutCache = that._layout._cache;
         that._cleanCore();
         that._renderCore();
         that._layout._cache = that._layout._cache || layoutCache;
@@ -153,7 +153,7 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _setupDomain: function() {
-        var that = this;
+        const that = this;
         that._setupDomainCore();
         // T130599
         that._isValidDomain = isFinite(1 / (that._translator.getDomain()[1] - that._translator.getDomain()[0]));
@@ -164,7 +164,7 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _applyMostlyTotalChange: function() {
-        var that = this;
+        const that = this;
         that._setupCodomain();
         that._setupAnimationSettings();
         that._setupDefaultFormat();
@@ -172,8 +172,8 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _setupAnimationSettings: function() {
-        var that = this,
-            option = that.option('animation');
+        const that = this;
+        let option = that.option('animation');
         that._animationSettings = null;
         if(option === undefined || option) {
             option = _extend({
@@ -190,7 +190,7 @@ var dxBaseGauge = BaseWidget.inherit({
     },
 
     _setupDefaultFormat: function() {
-        var domain = this._translator.getDomain();
+        const domain = this._translator.getDomain();
         this._defaultFormatOptions = _getAppropriateFormat(domain[0], domain[1], this._getApproximateScreenRange());
     },
 
@@ -219,13 +219,13 @@ var dxBaseGauge = BaseWidget.inherit({
 
 exports.dxBaseGauge = dxBaseGauge;
 
-var _format = require('../../format_helper').format;
+const _format = require('../../format_helper').format;
 
 //  TODO: find a better place for it
-var formatValue = function(value, options, extra) {
+const formatValue = function(value, options, extra) {
     options = options || {};
-    var text = _format(value, options.format),
-        formatObject;
+    const text = _format(value, options.format);
+    let formatObject;
     if(typeof options.customizeText === 'function') {
         formatObject = _extend({ value: value, valueText: text }, extra);
         return String(options.customizeText.call(formatObject, formatObject));
@@ -234,9 +234,9 @@ var formatValue = function(value, options, extra) {
 };
 
 //  TODO: find a better place for it
-var getSampleText = function(translator, options) {
-    var text1 = formatValue(translator.getDomainStart(), options),
-        text2 = formatValue(translator.getDomainEnd(), options);
+const getSampleText = function(translator, options) {
+    const text1 = formatValue(translator.getDomainStart(), options);
+    const text2 = formatValue(translator.getDomainEnd(), options);
     return text1.length >= text2.length ? text1 : text2;
 };
 
@@ -248,10 +248,10 @@ exports.compareArrays = function(array1, array2) {
 };
 
 function compareArraysElements(array1, array2) {
-    var i,
-        ii = array1.length,
-        array1ValueIsNaN,
-        array2ValueIsNaN;
+    let i;
+    const ii = array1.length;
+    let array1ValueIsNaN;
+    let array2ValueIsNaN;
 
     for(i = 0; i < ii; ++i) {
         array1ValueIsNaN = array1[i] !== array1[i];
@@ -273,7 +273,7 @@ dxBaseGauge.addPlugin(require('../core/tooltip').plugin);
 dxBaseGauge.addPlugin(require('../core/loading_indicator').plugin);
 
 // These are gauges specifics on using tooltip - they require refactoring.
-var _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;
+const _setTooltipOptions = dxBaseGauge.prototype._setTooltipOptions;
 dxBaseGauge.prototype._setTooltipOptions = function() {
     _setTooltipOptions.apply(this, arguments);
     this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());

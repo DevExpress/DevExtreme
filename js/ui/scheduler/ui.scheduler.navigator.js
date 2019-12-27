@@ -1,57 +1,57 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    isNumeric = require('../../core/utils/type').isNumeric,
-    errors = require('../widget/ui.errors'),
-    dateUtils = require('../../core/utils/date'),
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    registerComponent = require('../../core/component_registrator'),
-    devices = require('../../core/devices'),
-    Widget = require('../widget/ui.widget'),
-    Button = require('../button'),
-    Calendar = require('../calendar'),
-    Popover = require('../popover'),
-    Popup = require('../popup'),
-    publisherMixin = require('./ui.scheduler.publisher_mixin'),
-    dateLocalization = require('../../localization/date'),
-    isDefined = require('../../core/utils/type').isDefined;
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const isNumeric = require('../../core/utils/type').isNumeric;
+const errors = require('../widget/ui.errors');
+const dateUtils = require('../../core/utils/date');
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const registerComponent = require('../../core/component_registrator');
+const devices = require('../../core/devices');
+const Widget = require('../widget/ui.widget');
+const Button = require('../button');
+const Calendar = require('../calendar');
+const Popover = require('../popover');
+const Popup = require('../popup');
+const publisherMixin = require('./ui.scheduler.publisher_mixin');
+const dateLocalization = require('../../localization/date');
+const isDefined = require('../../core/utils/type').isDefined;
 
-var ELEMENT_CLASS = 'dx-scheduler-navigator',
-    CALENDAR_CLASS = 'dx-scheduler-navigator-calendar',
-    NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next',
-    CAPTION_BUTTON_CLASS = 'dx-scheduler-navigator-caption',
-    PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous',
-    CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover',
+const ELEMENT_CLASS = 'dx-scheduler-navigator';
+const CALENDAR_CLASS = 'dx-scheduler-navigator-calendar';
+const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
+const CAPTION_BUTTON_CLASS = 'dx-scheduler-navigator-caption';
+const PREVIOUS_BUTTON_CLASS = 'dx-scheduler-navigator-previous';
+const CALENDAR_POPOVER_CLASS = 'dx-scheduler-navigator-calendar-popover';
 
-    MONDAY_INDEX = 1;
+const MONDAY_INDEX = 1;
 
-var getDefaultFirstDayOfWeekIndex = function(shift) {
+const getDefaultFirstDayOfWeekIndex = function(shift) {
     return shift ? MONDAY_INDEX : dateLocalization.firstDayOfWeekIndex();
 };
 
-var getDateMonthFormat = function(short) {
+const getDateMonthFormat = function(short) {
     return function(date) {
-        var monthName = dateLocalization.getMonthNames(short ? 'abbreviated' : 'wide')[date.getMonth()];
+        const monthName = dateLocalization.getMonthNames(short ? 'abbreviated' : 'wide')[date.getMonth()];
         return [dateLocalization.format(date, 'day'), monthName].join(' ');
     };
 };
 
-var getMonthYearFormat = function(date) {
+const getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames('abbreviated')[date.getMonth()] + ' ' + dateLocalization.format(date, 'year');
 };
 
 var getCaptionFormat = function(short, intervalCount, duration) {
-    var dateMonthFormat = getDateMonthFormat(short);
+    const dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(intervalCount > 1) {
-            var lastIntervalDate = new Date(date),
-                defaultViewDuration = duration;
+            const lastIntervalDate = new Date(date);
+            const defaultViewDuration = duration;
             lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
 
-            var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
-                useShortFormat = isDifferentMonthDates || short,
-                firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : 'd'),
-                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat));
+            const isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth();
+            const useShortFormat = isDifferentMonthDates || short;
+            const firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : 'd');
+            const lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat));
 
             return firstWeekDateText + '-' + lastWeekDateText;
         }
@@ -60,14 +60,14 @@ var getCaptionFormat = function(short, intervalCount, duration) {
     };
 };
 
-var getWeekCaption = function(date, shift, rejectWeekend) {
-    var firstDayOfWeek = this.option('firstDayOfWeek'),
-        firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
+const getWeekCaption = function(date, shift, rejectWeekend) {
+    const firstDayOfWeek = this.option('firstDayOfWeek');
+    let firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
 
     if(firstDayOfWeekIndex === 0 && rejectWeekend) firstDayOfWeekIndex = MONDAY_INDEX;
 
-    var firstWeekDate = dateUtils.getFirstWeekDate(date, firstDayOfWeekIndex),
-        weekendDuration = 2;
+    let firstWeekDate = dateUtils.getFirstWeekDate(date, firstDayOfWeekIndex);
+    const weekendDuration = 2;
 
     if(rejectWeekend) {
         firstWeekDate = dateUtils.normalizeDateByWeek(firstWeekDate, date);
@@ -77,8 +77,8 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
         firstWeekDate.setDate(firstWeekDate.getDate() + (7 - firstDayOfWeek + 1));
     }
 
-    var lastWeekDate = new Date(firstWeekDate),
-        intervalCount = this.option('intervalCount');
+    let lastWeekDate = new Date(firstWeekDate);
+    const intervalCount = this.option('intervalCount');
 
     shift = shift || 6;
 
@@ -96,11 +96,11 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
 };
 
 var formatCaptionByMonths = function(lastDate, firstDate) {
-    var isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth(),
-        isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear(),
-        useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat'),
-        lastDateText,
-        firstDateText;
+    const isDifferentMonthDates = firstDate.getMonth() !== lastDate.getMonth();
+    const isDifferentYears = firstDate.getFullYear() !== lastDate.getFullYear();
+    const useShortFormat = isDifferentMonthDates || this.option('_useShortDateFormat');
+    let lastDateText;
+    let firstDateText;
 
     if(isDifferentYears) {
         firstDateText = dateLocalization.format(firstDate, getCaptionFormat(true));
@@ -113,19 +113,19 @@ var formatCaptionByMonths = function(lastDate, firstDate) {
     return firstDateText + '-' + lastDateText;
 };
 
-var getMonthCaption = function(date) {
-    var firstDate = new Date(dateUtils.getFirstMonthDate(date)),
-        lastDate = new Date(dateUtils.getLastMonthDate(firstDate)),
-        text;
+const getMonthCaption = function(date) {
+    const firstDate = new Date(dateUtils.getFirstMonthDate(date));
+    let lastDate = new Date(dateUtils.getLastMonthDate(firstDate));
+    let text;
 
     if(this.option('intervalCount') > 1) {
         lastDate = new Date(firstDate);
         lastDate.setMonth(firstDate.getMonth() + this.option('intervalCount') - 1);
         lastDate = new Date(dateUtils.getLastMonthDate(lastDate));
 
-        var isSameYear = firstDate.getYear() === lastDate.getYear(),
-            lastDateText = getMonthYearFormat(lastDate),
-            firstDateText = isSameYear ? dateLocalization.getMonthNames('abbreviated')[firstDate.getMonth()] : getMonthYearFormat(firstDate);
+        const isSameYear = firstDate.getYear() === lastDate.getYear();
+        const lastDateText = getMonthYearFormat(lastDate);
+        const firstDateText = isSameYear ? dateLocalization.getMonthNames('abbreviated')[firstDate.getMonth()] : getMonthYearFormat(firstDate);
 
         text = firstDateText + '-' + lastDateText;
     } else {
@@ -139,12 +139,12 @@ var getMonthCaption = function(date) {
     };
 };
 
-var dateGetter = function(date, offset) {
+const dateGetter = function(date, offset) {
     return new Date(date[this.setter](date[this.getter]() + offset));
 };
 
-var getConfig = function(step) {
-    var agendaDuration;
+const getConfig = function(step) {
+    let agendaDuration;
 
     switch(step) {
         case 'day':
@@ -154,7 +154,7 @@ var getConfig = function(step) {
                 getter: 'getDate',
                 getDate: dateGetter,
                 getCaption: function(date) {
-                    var format = getCaptionFormat(false, this.option('intervalCount'), this._getConfig().duration);
+                    const format = getCaptionFormat(false, this.option('intervalCount'), this._getConfig().duration);
 
                     return {
                         text: dateLocalization.format(date, format),
@@ -187,13 +187,13 @@ var getConfig = function(step) {
                 setter: 'setMonth',
                 getter: 'getMonth',
                 getDate: function(date, offset) {
-                    var currentDate = date.getDate();
+                    const currentDate = date.getDate();
 
                     date.setDate(1);
 
                     date = dateGetter.call(this, date, offset);
 
-                    var lastDate = dateUtils.getLastMonthDay(date);
+                    const lastDate = dateUtils.getLastMonthDay(date);
                     date.setDate(currentDate < lastDate ? currentDate : lastDate);
                     return date;
                 },
@@ -209,10 +209,10 @@ var getConfig = function(step) {
                 getter: 'getDate',
                 getDate: dateGetter,
                 getCaption: function(date) {
-                    var format = getCaptionFormat(this.option('_useShortDateFormat')),
-                        firstDate = new Date(date),
-                        lastDate = new Date(date),
-                        text;
+                    const format = getCaptionFormat(this.option('_useShortDateFormat'));
+                    const firstDate = new Date(date);
+                    const lastDate = new Date(date);
+                    let text;
 
                     if(agendaDuration > 1) {
                         lastDate.setDate(lastDate.getDate() + agendaDuration - 1);
@@ -231,7 +231,7 @@ var getConfig = function(step) {
     }
 };
 
-var SchedulerNavigator = Widget.inherit({
+const SchedulerNavigator = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -302,7 +302,7 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _initButtons: function() {
-        var $next = $('<div>').addClass(NEXT_BUTTON_CLASS);
+        const $next = $('<div>').addClass(NEXT_BUTTON_CLASS);
 
         this._next = this._createComponent($next, Button, {
             icon: 'chevronnext',
@@ -312,14 +312,14 @@ var SchedulerNavigator = Widget.inherit({
             integrationOptions: {}
         });
 
-        var $caption = $('<div>').addClass(CAPTION_BUTTON_CLASS);
+        const $caption = $('<div>').addClass(CAPTION_BUTTON_CLASS);
         this._caption = this._createComponent($caption, Button, {
             focusStateEnabled: this.option('focusStateEnabled'),
             tabIndex: this.option('tabIndex'),
             integrationOptions: {}
         });
 
-        var $prev = $('<div>').addClass(PREVIOUS_BUTTON_CLASS);
+        const $prev = $('<div>').addClass(PREVIOUS_BUTTON_CLASS);
         this._prev = this._createComponent($prev, Button, {
             icon: 'chevronprev',
             onClick: this._updateCurrentDate.bind(this, -1),
@@ -336,9 +336,9 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _updateButtonsState: function() {
-        var min = this.option('min'),
-            max = this.option('max'),
-            caption = this._getConfig().getCaption.call(this, this.option('displayedDate') || this.option('date'));
+        let min = this.option('min');
+        let max = this.option('max');
+        const caption = this._getConfig().getCaption.call(this, this.option('displayedDate') || this.option('date'));
 
         min = min ? dateUtils.trimTime(min) : min;
         max = max ? dateUtils.trimTime(max) : max;
@@ -350,16 +350,16 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _updateCurrentDate: function(direction) {
-        var date = this._getNextDate(direction);
+        const date = this._getNextDate(direction);
 
         dateUtils.normalizeDate(date, this.option('min'), this.option('max'));
         this.notifyObserver('currentDateUpdated', date);
     },
 
     _getNextDate: function(direction, initialDate = null) {
-        var stepConfig = this._getConfig(),
-            offset = stepConfig.duration * direction,
-            date = stepConfig.getDate(new Date(initialDate || this.option('date')), offset);
+        const stepConfig = this._getConfig();
+        const offset = stepConfig.duration * direction;
+        const date = stepConfig.getDate(new Date(initialDate || this.option('date')), offset);
 
         return date;
     },
@@ -380,9 +380,9 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _renderPopover: function() {
-        var overlayType = !devices.current().generic ? Popup : Popover;
+        const overlayType = !devices.current().generic ? Popup : Popover;
 
-        var popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
+        const popoverContainer = $('<div>').addClass(CALENDAR_POPOVER_CLASS);
         this._popover = this._createComponent(popoverContainer, overlayType, {
             onContentReady: this._popoverContentReadyHandler.bind(this),
             defaultOptionsRules: [
@@ -435,11 +435,11 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _renderCaption: function() {
-        var date = this.option('displayedDate') || this.option('date'),
-            captionConfig = this._getConfig().getCaption.call(this, date),
-            customizationFunction = this.option('customizeDateNavigatorText');
+        const date = this.option('displayedDate') || this.option('date');
+        const captionConfig = this._getConfig().getCaption.call(this, date);
+        const customizationFunction = this.option('customizeDateNavigatorText');
 
-        var caption = typeUtils.isFunction(customizationFunction) ? customizationFunction(captionConfig) : captionConfig.text;
+        const caption = typeUtils.isFunction(customizationFunction) ? customizationFunction(captionConfig) : captionConfig.text;
 
         this._caption.option({
             text: caption,
@@ -457,17 +457,17 @@ var SchedulerNavigator = Widget.inherit({
         this._calendarKeyboardProcessor = this._caption._keyboardProcessor.attachChildProcessor();
         this._setCalendarOption('_keyboardProcessor', this._calendarKeyboardProcessor);
 
-        var that = this,
-            executeHandler = function() {
-                if(that._popover.$content().is(':hidden')) {
-                    that._popover.show();
-                } else {
-                    return true;
-                }
-            },
-            tabHandler = function() {
-                that._popover.hide();
-            };
+        const that = this;
+        const executeHandler = function() {
+            if(that._popover.$content().is(':hidden')) {
+                that._popover.show();
+            } else {
+                return true;
+            }
+        };
+        const tabHandler = function() {
+            that._popover.hide();
+        };
 
         this._caption.registerKeyHandler('enter', executeHandler);
         this._caption.registerKeyHandler('space', executeHandler);
@@ -481,8 +481,8 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _getConfig: function() {
-        var step = this.option('step'),
-            config = getConfig.call(this, step);
+        const step = this.option('step');
+        const config = getConfig.call(this, step);
 
         if(!config) {
             throw errors.Error('E1033', step);

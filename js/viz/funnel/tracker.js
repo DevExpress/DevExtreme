@@ -1,8 +1,8 @@
-var proto = require('./funnel').prototype,
-    Tracker = require('../components/tracker').Tracker,
-    DATA_KEY_BASE = '__funnel_data_',
-    isDefined = require('../../core/utils/type').isDefined,
-    dataKeyModifier = 0;
+const proto = require('./funnel').prototype;
+const Tracker = require('../components/tracker').Tracker;
+const DATA_KEY_BASE = '__funnel_data_';
+const isDefined = require('../../core/utils/type').isDefined;
+let dataKeyModifier = 0;
 
 proto._eventsMap.onItemClick = { name: 'itemClick' };
 proto._eventsMap.onLegendClick = { name: 'legendClick' };
@@ -10,23 +10,23 @@ proto._eventsMap.onLegendClick = { name: 'legendClick' };
 exports.plugin = {
     name: 'tracker',
     init: function() {
-        var that = this,
-            dataKey = DATA_KEY_BASE + dataKeyModifier++,
-            getProxyData = function(e) {
-                var rootOffset = that._renderer.getRootOffset(),
-                    x = Math.floor(e.pageX - rootOffset.left),
-                    y = Math.floor(e.pageY - rootOffset.top);
+        const that = this;
+        const dataKey = DATA_KEY_BASE + dataKeyModifier++;
+        const getProxyData = function(e) {
+            const rootOffset = that._renderer.getRootOffset();
+            const x = Math.floor(e.pageX - rootOffset.left);
+            const y = Math.floor(e.pageY - rootOffset.top);
 
-                return that._hitTestTargets(x, y);
-            };
+            return that._hitTestTargets(x, y);
+        };
 
         that._tracker = new Tracker({
             widget: that,
             root: that._renderer.root,
             getData: function(e, tooltipData) {
-                var target = e.target,
-                    data = target[dataKey],
-                    proxyData;
+                const target = e.target;
+                const data = target[dataKey];
+                let proxyData;
                 if(isDefined(data)) {
                     return data;
                 }
@@ -42,9 +42,9 @@ exports.plugin = {
                 return that._items[index];
             },
             click: function(e) {
-                var proxyData = getProxyData(e.event),
-                    dataType = proxyData && proxyData.type,
-                    event = dataType === 'legend' ? 'legendClick' : 'itemClick';
+                const proxyData = getProxyData(e.event);
+                const dataType = proxyData && proxyData.type;
+                const event = dataType === 'legend' ? 'legendClick' : 'itemClick';
 
                 that._eventTrigger(event, {
                     item: e.node,
@@ -64,7 +64,7 @@ exports.plugin = {
     },
     extenders: {
         _change_TILING: function() {
-            var dataKey = this._dataKey;
+            const dataKey = this._dataKey;
             this._items.forEach(function(item, index) {
                 item.element.data(dataKey, index);
             });

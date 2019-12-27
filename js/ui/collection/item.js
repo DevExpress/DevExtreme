@@ -1,15 +1,15 @@
-var $ = require('../../core/renderer'),
-    Class = require('../../core/class'),
-    each = require('../../core/utils/iterator').each,
-    publicComponentUtils = require('../../core/utils/public_component');
+const $ = require('../../core/renderer');
+const Class = require('../../core/class');
+const each = require('../../core/utils/iterator').each;
+const publicComponentUtils = require('../../core/utils/public_component');
 
-var INVISIBLE_STATE_CLASS = 'dx-state-invisible',
-    DISABLED_STATE_CLASS = 'dx-state-disabled',
-    ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
 
-var forcibleWatcher = function(watchMethod, fn, callback) {
-    var filteredCallback = (function() {
-        var oldValue;
+const forcibleWatcher = function(watchMethod, fn, callback) {
+    const filteredCallback = (function() {
+        let oldValue;
         return function(value) {
             if(oldValue !== value) {
                 callback(value, oldValue);
@@ -26,7 +26,7 @@ var forcibleWatcher = function(watchMethod, fn, callback) {
     };
 };
 
-var CollectionItem = Class.inherit({
+const CollectionItem = Class.inherit({
 
     ctor: function($element, options, rawData) {
         this._$element = $element;
@@ -39,7 +39,7 @@ var CollectionItem = Class.inherit({
     },
 
     _render: function() {
-        var $placeholder = $('<div>').addClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
+        const $placeholder = $('<div>').addClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
         this._$element.append($placeholder);
 
         this._watchers = [];
@@ -52,10 +52,10 @@ var CollectionItem = Class.inherit({
     },
 
     _startWatcher: function(field, render) {
-        var rawData = this._rawData,
-            exprGetter = this._options.fieldGetter(field);
+        const rawData = this._rawData;
+        const exprGetter = this._options.fieldGetter(field);
 
-        var watcher = forcibleWatcher(this._options.watchMethod(), function() {
+        const watcher = forcibleWatcher(this._options.watchMethod(), function() {
             return exprGetter(rawData);
         }, function(value, oldValue) {
             this._dirty = true;
@@ -82,7 +82,7 @@ var CollectionItem = Class.inherit({
     },
 
     _updateOwnerFocus: function(isDisabled) {
-        var ownerComponent = this._options.owner;
+        const ownerComponent = this._options.owner;
 
         if(ownerComponent && isDisabled) {
             ownerComponent._resetItemFocus(this._$element);

@@ -1,34 +1,34 @@
-var getNumberFormatter = require('localization/ldml/number').getFormatter,
-    getNumberFormat = require('localization/ldml/number').getFormat,
-    getDateParser = require('localization/ldml/date.parser').getParser,
-    getRegExpInfo = require('localization/ldml/date.parser').getRegExpInfo,
-    getDateFormatter = require('localization/ldml/date.formatter').getFormatter,
-    getDateFormat = require('localization/ldml/date.format').getFormat,
-    dateParts = require('localization/default_date_names'),
-    numberLocalization = require('localization/number'),
-    extend = require('core/utils/extend').extend;
+const getNumberFormatter = require('localization/ldml/number').getFormatter;
+const getNumberFormat = require('localization/ldml/number').getFormat;
+const getDateParser = require('localization/ldml/date.parser').getParser;
+const getRegExpInfo = require('localization/ldml/date.parser').getRegExpInfo;
+const getDateFormatter = require('localization/ldml/date.formatter').getFormatter;
+const getDateFormat = require('localization/ldml/date.format').getFormat;
+const dateParts = require('localization/default_date_names');
+const numberLocalization = require('localization/number');
+const extend = require('core/utils/extend').extend;
 
 require('localization/currency');
 
 QUnit.module('date parser');
 
 QUnit.test('parse with escaped chars', function(assert) {
-    var date = new Date(2018, 10, 12, 14, 15, 16),
-        parser = getDateParser('EEEE, d. MMMM yyyy \'um\' H:mm:ss', dateParts);
+    const date = new Date(2018, 10, 12, 14, 15, 16);
+    const parser = getDateParser('EEEE, d. MMMM yyyy \'um\' H:mm:ss', dateParts);
 
     assert.deepEqual(parser('Monday, 12. November 2018 um 14:15:16'), date, 'parse correct date string');
 });
 
 QUnit.test('parse with escaped pattern chars', function(assert) {
-    var date = new Date(2018, 0, 1, 0, 0, 0),
-        parser = getDateParser('\'dd\' yyyy', dateParts);
+    const date = new Date(2018, 0, 1, 0, 0, 0);
+    const parser = getDateParser('\'dd\' yyyy', dateParts);
 
     assert.deepEqual(parser('dd 2018'), date, 'parse correct date string');
 });
 
 QUnit.test('parse dd/MM/yyyy format', function(assert) {
-    var parser = getDateParser('dd/MM/yyyy'),
-        date = new Date(2017, 8, 22);
+    const parser = getDateParser('dd/MM/yyyy');
+    const date = new Date(2017, 8, 22);
 
     assert.deepEqual(parser('22/09/2017'), date, 'parse correct date string');
     assert.deepEqual(parser('22/9/2017'), date, 'parse with short month');
@@ -40,7 +40,7 @@ QUnit.test('parse dd/MM/yyyy format', function(assert) {
 });
 
 QUnit.test('case insensitive date parsing for months', function(assert) {
-    var parser = getDateParser('MMM', dateParts);
+    const parser = getDateParser('MMM', dateParts);
 
     assert.deepEqual(parser('nov').getMonth(), 10, 'lower case');
     assert.deepEqual(parser('Nov').getMonth(), 10, 'capitalized');
@@ -48,19 +48,19 @@ QUnit.test('case insensitive date parsing for months', function(assert) {
 });
 
 QUnit.test('case insensitive date parsing for part of day', function(assert) {
-    var _dateParts = extend({}, dateParts, {
-            getPeriodNames: function() {
-                return ['am', 'pm'];
-            }
-        }),
-        parser = getDateParser('aaaa', _dateParts);
+    const _dateParts = extend({}, dateParts, {
+        getPeriodNames: function() {
+            return ['am', 'pm'];
+        }
+    });
+    const parser = getDateParser('aaaa', _dateParts);
 
     assert.equal(parser('am').getHours(), 0);
 });
 
 QUnit.test('getFormat', function(assert) {
-    var checkFormat = function(format, customDateParts) {
-        var formatter = getDateFormatter(format, customDateParts || dateParts);
+    const checkFormat = function(format, customDateParts) {
+        const formatter = getDateFormatter(format, customDateParts || dateParts);
         assert.strictEqual(getDateFormat(formatter), format, format);
     };
 
@@ -100,7 +100,7 @@ QUnit.test('getFormat', function(assert) {
 QUnit.module('number formatter');
 
 QUnit.test('integer with non-required digits', function(assert) {
-    var formatter = getNumberFormatter('#');
+    const formatter = getNumberFormatter('#');
 
     assert.strictEqual(formatter(null), '', 'format an empty value');
     assert.strictEqual(formatter(NaN), '', 'NaN value should not be formatted');
@@ -113,7 +113,7 @@ QUnit.test('integer with non-required digits', function(assert) {
 });
 
 QUnit.test('integer with required digits', function(assert) {
-    var formatter = getNumberFormatter('000');
+    const formatter = getNumberFormatter('000');
 
     assert.strictEqual(formatter(null), '', 'format an empty value');
     assert.strictEqual(formatter(NaN), '', 'NaN value should not be formatted');
@@ -125,7 +125,7 @@ QUnit.test('integer with required digits', function(assert) {
 });
 
 QUnit.test('float with precision formatting', function(assert) {
-    var formatter = getNumberFormatter('#.00');
+    const formatter = getNumberFormatter('#.00');
 
     assert.strictEqual(formatter(null), '', 'format an empty value');
     assert.strictEqual(formatter(NaN), '', 'NaN value should not be formatted');
@@ -142,14 +142,14 @@ QUnit.test('float with precision formatting', function(assert) {
 });
 
 QUnit.test('extra large float part formatting', function(assert) {
-    var formatter = getNumberFormatter('#0.####################');
+    const formatter = getNumberFormatter('#0.####################');
 
     assert.strictEqual(formatter(1.1), '1.1', 'float format is correct');
     assert.strictEqual(formatter(1), '1', 'integer format is correct');
 });
 
 QUnit.test('float with precision formatting and required integer digit', function(assert) {
-    var formatter = getNumberFormatter('#0.00');
+    const formatter = getNumberFormatter('#0.00');
 
     assert.strictEqual(formatter(5), '5.00', 'format integer');
     assert.strictEqual(formatter(0), '0.00', 'format zero');
@@ -157,7 +157,7 @@ QUnit.test('float with precision formatting and required integer digit', functio
 });
 
 QUnit.test('float with required an non-required digits in float part', function(assert) {
-    var formatter = getNumberFormatter('#0.0#');
+    const formatter = getNumberFormatter('#0.0#');
 
     assert.strictEqual(formatter(1), '1.0', 'format integer');
     assert.strictEqual(formatter(1.2), '1.2', 'format float with 1 digit');
@@ -166,7 +166,7 @@ QUnit.test('float with required an non-required digits in float part', function(
 });
 
 QUnit.test('different positive and negative formatting', function(assert) {
-    var formatter = getNumberFormatter('#0.000;(#0.000)');
+    const formatter = getNumberFormatter('#0.000;(#0.000)');
 
     assert.strictEqual(formatter(0), '0.000', 'format zero');
     assert.strictEqual(formatter(-0), '(0.000)', 'format negative zero');
@@ -177,7 +177,7 @@ QUnit.test('different positive and negative formatting', function(assert) {
 });
 
 QUnit.test('escaping format', function(assert) {
-    var formatter = getNumberFormatter('#\'x #0% x\'');
+    const formatter = getNumberFormatter('#\'x #0% x\'');
 
     assert.strictEqual(formatter(15), '15x #0% x', 'special chars was escaped');
 });
@@ -189,7 +189,7 @@ QUnit.test('escaped point in format', function(assert) {
 });
 
 QUnit.test('percent formatting with leading zero', function(assert) {
-    var formatter = getNumberFormatter('#0.#%;(#0.#%)');
+    const formatter = getNumberFormatter('#0.#%;(#0.#%)');
 
     assert.strictEqual(formatter(0), '0%', 'format zero');
     assert.strictEqual(formatter(0.1), '10%', 'format less than 100');
@@ -199,7 +199,7 @@ QUnit.test('percent formatting with leading zero', function(assert) {
 });
 
 QUnit.test('escaped percent formatting', function(assert) {
-    var formatter = getNumberFormatter('#0.#\'%\'');
+    let formatter = getNumberFormatter('#0.#\'%\'');
     assert.strictEqual(formatter(0.5), '0.5%', 'percent was escaped');
 
     formatter = getNumberFormatter('#0.#\'x % x\'');
@@ -207,7 +207,7 @@ QUnit.test('escaped percent formatting', function(assert) {
 });
 
 QUnit.test('simple group', function(assert) {
-    var formatter = getNumberFormatter('#,##0');
+    const formatter = getNumberFormatter('#,##0');
 
     assert.strictEqual(formatter(123), '123', 'format integer without groups');
     assert.strictEqual(formatter(1234), '1,234', 'format integer with 1 group');
@@ -215,7 +215,7 @@ QUnit.test('simple group', function(assert) {
 });
 
 QUnit.test('complex group', function(assert) {
-    var formatter = getNumberFormatter('#,##,##0');
+    const formatter = getNumberFormatter('#,##,##0');
 
     assert.strictEqual(formatter(123), '123', 'format integer without groups');
     assert.strictEqual(formatter(1234), '1,234', 'format integer with 1 group');
@@ -223,7 +223,7 @@ QUnit.test('complex group', function(assert) {
 });
 
 QUnit.test('different positive and negative formatting with groups', function(assert) {
-    var formatter = getNumberFormatter('#,##0;(#,##0)');
+    const formatter = getNumberFormatter('#,##0;(#,##0)');
 
     assert.strictEqual(formatter(0), '0', 'format zero');
     assert.strictEqual(formatter(-0), '(0)', 'format negative zero');
@@ -234,7 +234,7 @@ QUnit.test('different positive and negative formatting with groups', function(as
 });
 
 QUnit.test('custom separators', function(assert) {
-    var formatter = getNumberFormatter('#,##0.##', { thousandsSeparator: ' ', decimalSeparator: ',' });
+    const formatter = getNumberFormatter('#,##0.##', { thousandsSeparator: ' ', decimalSeparator: ',' });
 
     assert.strictEqual(formatter(0), '0', 'number without separators');
     assert.strictEqual(formatter(0.12), '0,12', 'number with decimal separator');
@@ -243,8 +243,8 @@ QUnit.test('custom separators', function(assert) {
 });
 
 QUnit.test('getFormat for ldml number formatters', function(assert) {
-    var checkFormat = function(format, ldmlFormat) {
-        var formatter = getNumberFormatter(format);
+    const checkFormat = function(format, ldmlFormat) {
+        const formatter = getNumberFormatter(format);
         assert.strictEqual(getNumberFormat(formatter), ldmlFormat || format, format);
     };
 
@@ -268,20 +268,20 @@ QUnit.test('getFormat for ldml number formatters', function(assert) {
 });
 
 QUnit.test('getFormat for currency if separators are russion', function(assert) {
-    var formatter = getNumberFormatter('#,##0.00 $', { thousandsSeparator: ' ', decimalSeparator: ',' });
+    const formatter = getNumberFormatter('#,##0.00 $', { thousandsSeparator: ' ', decimalSeparator: ',' });
 
     assert.strictEqual(getNumberFormat(formatter), '#,##0.00 $', 'format is correct');
 });
 
 QUnit.test('getFormat for currency if separators are deutsch', function(assert) {
-    var formatter = getNumberFormatter('#,##0.00 $', { thousandsSeparator: '.', decimalSeparator: ',' });
+    const formatter = getNumberFormatter('#,##0.00 $', { thousandsSeparator: '.', decimalSeparator: ',' });
 
     assert.strictEqual(getNumberFormat(formatter), '#,##0.00 $', 'format is correct');
 });
 
 QUnit.test('getFormat for build-in number formats', function(assert) {
-    var checkFormat = function(format, ldmlFormat) {
-        var formatter = function(value) {
+    const checkFormat = function(format, ldmlFormat) {
+        const formatter = function(value) {
             return numberLocalization.format(value, format);
         };
         assert.strictEqual(getNumberFormat(formatter), ldmlFormat, JSON.stringify(format));
@@ -296,7 +296,7 @@ QUnit.test('getFormat for build-in number formats', function(assert) {
 });
 
 QUnit.test('getFormat for function number formats', function(assert) {
-    var checkFormat = function(formatter, ldmlFormat) {
+    const checkFormat = function(formatter, ldmlFormat) {
         assert.strictEqual(getNumberFormat(formatter), ldmlFormat, ldmlFormat);
     };
 
@@ -311,7 +311,7 @@ QUnit.test('getFormat for function number formats', function(assert) {
 QUnit.module('getRegExpInfo method');
 
 QUnit.test('getRegExpInfo should return correct pattern set when stub is in the end', function(assert) {
-    var regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
+    const regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
     assert.deepEqual(regExpInfo.patterns, [
         'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
     ]);

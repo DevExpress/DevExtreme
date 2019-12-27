@@ -5,15 +5,15 @@ import $ from 'jquery';
 QUnit.module('Checkboxes');
 
 QUnit.test('Set intermediate state for parent if at least a one child is selected', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
 
     assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
@@ -24,17 +24,17 @@ QUnit.test('Set intermediate state for parent if at least a one child is selecte
 });
 
 QUnit.test('selectNodesRecursive = false', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         selectNodesRecursive: false,
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
 
     assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
@@ -45,16 +45,16 @@ QUnit.test('selectNodesRecursive = false', function(assert) {
 });
 
 QUnit.test('Remove intermediate state from parent if all children are unselected', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
     $(checkboxes[3]).trigger('dxclick');
     $(checkboxes[4]).trigger('dxclick');
@@ -74,15 +74,15 @@ QUnit.test('Remove intermediate state from parent if all children are unselected
 });
 
 QUnit.test('Parent node should be selected if all children are selected', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[4]).trigger('dxclick');
     $(checkboxes[3]).trigger('dxclick');
 
@@ -94,15 +94,15 @@ QUnit.test('Parent node should be selected if all children are selected', functi
 });
 
 QUnit.test('All children should be selected/unselected after click on parent node', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].items[0].expanded = true;
     data[0].items[1].items[1].expanded = true;
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
 
     $(checkboxes[2]).trigger('dxclick');
 
@@ -118,16 +118,16 @@ QUnit.test('All children should be selected/unselected after click on parent nod
 });
 
 QUnit.test('Regression: incorrect parent state', function(assert) {
-    var data = $.extend(true, [], data2);
+    const data = $.extend(true, [], data2);
     data[2].expanded = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         dataSource: data,
         dataStructure: 'plain',
         showCheckBoxesMode: 'normal'
     });
 
-    var checkboxes = $treeView.find('.dx-checkbox');
+    const checkboxes = $treeView.find('.dx-checkbox');
 
     $(checkboxes[3]).trigger('dxclick');
     $(checkboxes[4]).trigger('dxclick');
@@ -140,12 +140,12 @@ QUnit.test('Regression: incorrect parent state', function(assert) {
 });
 
 QUnit.test('T173381', function(assert) {
-    var $treeView = initTree({
-            items: [
-                {
-                    id: 777, text: 'root', items: [
-                        {
-                            id: 1, text: 'a', items:
+    const $treeView = initTree({
+        items: [
+            {
+                id: 777, text: 'root', items: [
+                    {
+                        id: 1, text: 'a', items:
                             [
                                 {
                                     id: 11, text: 'a.1', expanded: true,
@@ -155,20 +155,20 @@ QUnit.test('T173381', function(assert) {
                                     ]
                                 },
                                 { id: 12, text: 'a.2' }]
-                        },
-                        {
-                            id: 2, text: 'b', expanded: true,
-                            items: [
-                                { id: 21, text: 'b.1' },
-                                { id: 22, text: 'b.2' }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            showCheckBoxesMode: 'normal'
-        }),
-        checkboxes = $treeView.find('.dx-checkbox');
+                    },
+                    {
+                        id: 2, text: 'b', expanded: true,
+                        items: [
+                            { id: 21, text: 'b.1' },
+                            { id: 22, text: 'b.2' }
+                        ]
+                    }
+                ]
+            }
+        ],
+        showCheckBoxesMode: 'normal'
+    });
+    const checkboxes = $treeView.find('.dx-checkbox');
 
     $(checkboxes[2]).trigger('dxclick');
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
@@ -181,13 +181,13 @@ QUnit.test('T173381', function(assert) {
 });
 
 QUnit.test('T195986', function(assert) {
-    var $treeView = initTree({
-            items: [
-                {
-                    id: 777, text: 'root', expanded: true, selected: true,
-                    items: [
-                        {
-                            id: 1, text: 'a', expanded: true, selected: true, items:
+    const $treeView = initTree({
+        items: [
+            {
+                id: 777, text: 'root', expanded: true, selected: true,
+                items: [
+                    {
+                        id: 1, text: 'a', expanded: true, selected: true, items:
                             [
                                 {
                                     id: 11, text: 'a.1', expanded: true, selected: true,
@@ -197,13 +197,13 @@ QUnit.test('T195986', function(assert) {
                                     ]
                                 }
                             ]
-                        }
-                    ]
-                }
-            ],
-            showCheckBoxesMode: 'normal'
-        }),
-        checkboxes = $treeView.find('.dx-checkbox');
+                    }
+                ]
+            }
+        ],
+        showCheckBoxesMode: 'normal'
+    });
+    const checkboxes = $treeView.find('.dx-checkbox');
     $(checkboxes[3]).trigger('dxclick');
     assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
 
@@ -212,22 +212,22 @@ QUnit.test('T195986', function(assert) {
 });
 
 QUnit.test('Selection works correct with custom rootValue', function(assert) {
-    var data = [
-            { id: 0, parentId: 'none', text: 'Animals' },
-            { id: 1, parentId: 0, text: 'Cat' },
-            { id: 2, parentId: 0, text: 'Dog' },
-            { id: 3, parentId: 0, text: 'Cow' },
-            { id: 4, parentId: 'none', text: 'Birds' }
-        ],
-        treeView = initTree({
-            dataSource: data,
-            dataStructure: 'plain',
-            showCheckBoxesMode: 'normal',
-            rootValue: 'none'
-        }).dxTreeView('instance'),
-        $icon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0),
-        $checkbox,
-        nodes;
+    const data = [
+        { id: 0, parentId: 'none', text: 'Animals' },
+        { id: 1, parentId: 0, text: 'Cat' },
+        { id: 2, parentId: 0, text: 'Dog' },
+        { id: 3, parentId: 0, text: 'Cow' },
+        { id: 4, parentId: 'none', text: 'Birds' }
+    ];
+    const treeView = initTree({
+        dataSource: data,
+        dataStructure: 'plain',
+        showCheckBoxesMode: 'normal',
+        rootValue: 'none'
+    }).dxTreeView('instance');
+    const $icon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+    let $checkbox;
+    let nodes;
 
     $icon.trigger('dxclick');
     assert.equal(treeView.option('items').length, 5);
@@ -246,7 +246,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
             QUnit.test('Initialization', function(assert) {
                 const testSamples = [{ selected: true, expectedSelected: [0, 1] }, { selectedOption: false, expectedSelected: [] } ];
                 testSamples.forEach((testData) => {
-                    let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                    const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: true, selected: testData.selected },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: true, selected: testData.selected }]);
                     options['showCheckBoxesMode'] = 'normal';
@@ -259,7 +259,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
             });
 
             function runSelectItemTest(argumentGetter) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: 'item1', parentId: 2, selected: true, expanded: true },
                     { id: 2, text: 'item1_1', parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -282,7 +282,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
             });
 
             QUnit.test('selectAll', function(assert) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: 'item1', parentId: 2, selected: false, expanded: true },
                     { id: 2, text: 'item1_1', parentId: 1, selected: false, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -293,7 +293,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
             });
 
             function runUnselectItemTest(argumentGetter) {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: 'item1', parentId: 2, selected: true, expanded: true },
                     { id: 2, text: 'item1_1', parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);
@@ -316,7 +316,7 @@ QUnit.test('Selection works correct with custom rootValue', function(assert) {
             });
 
             QUnit.test('unselectAll', function() {
-                let options = createOptions({ dataSourceOption, virtualModeEnabled }, [
+                const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                     { id: 1, text: 'item1', parentId: 2, selected: true, expanded: true },
                     { id: 2, text: 'item1_1', parentId: 1, selected: true, expanded: true }]);
                 const wrapper = new TreeViewTestWrapper(options);

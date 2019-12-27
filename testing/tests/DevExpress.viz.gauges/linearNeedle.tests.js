@@ -1,13 +1,13 @@
-var vizMocks = require('../../helpers/vizMocks.js'),
-    linearIndicatorsModule = require('viz/gauges/linear_indicators'),
-    Translator1D = require('viz/translators/translator1d').Translator1D;
+const vizMocks = require('../../helpers/vizMocks.js');
+const linearIndicatorsModule = require('viz/gauges/linear_indicators');
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var needle,
-    renderer,
-    owner,
-    tracker,
-    translator,
-    options;
+let needle;
+let renderer;
+let owner;
+let tracker;
+let translator;
+let options;
 
 QUnit.module('RectangleNeedle', {
     beforeEach: function() {
@@ -17,7 +17,7 @@ QUnit.module('RectangleNeedle', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 300, 400);
+        const translator = new Translator1D(0, 100, 300, 400);
         needle = new linearIndicatorsModule.rectangle({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,

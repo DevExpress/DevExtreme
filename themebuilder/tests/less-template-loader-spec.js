@@ -39,8 +39,8 @@ const scssCompiler = {
 
 describe('LessTemplateLoader', () => {
     it('analyzeBootstrapTheme - bootstrap 3', () => {
-        let lessFileContent = '@body-bg: #000;';
-        let config = {
+        const lessFileContent = '@body-bg: #000;';
+        const config = {
             isBootstrap: true,
             bootstrapVersion: 3,
             lessCompiler: lessCompiler,
@@ -51,8 +51,8 @@ describe('LessTemplateLoader', () => {
                 });
             }
         };
-        let bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap-metadata.js');
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap-metadata.js');
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
             themeName,
@@ -69,8 +69,8 @@ describe('LessTemplateLoader', () => {
     });
 
     it('analyzeBootstrapTheme - bootstrap 4', () => {
-        let sassFileContent = '$body-bg: #000;';
-        let config = {
+        const sassFileContent = '$body-bg: #000;';
+        const config = {
             isBootstrap: true,
             bootstrapVersion: 4,
             lessCompiler: lessCompiler,
@@ -93,8 +93,8 @@ describe('LessTemplateLoader', () => {
                 });
             }
         };
-        let bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap4-metadata.js');
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const bootstrapMetadata = require('../data/bootstrap-metadata/bootstrap4-metadata.js');
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.analyzeBootstrapTheme(
             themeName,
@@ -111,7 +111,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - variable change', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: () => {
@@ -122,7 +122,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -137,7 +137,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - variable change, color swatch', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -150,7 +150,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -163,7 +163,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - variable change, color swatch, typography and special classes', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -184,7 +184,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -205,7 +205,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - default less path', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: path => {
@@ -216,7 +216,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -227,7 +227,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - custom less path', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             lessPath: 'my/custom/path/',
@@ -239,7 +239,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -250,14 +250,14 @@ describe('LessTemplateLoader', () => {
     });
 
     it('compileLess', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
             makeSwatch: true,
         };
 
-        let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+        const less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
         div { color: @base-bg; }
         .dx-theme-accent-as-text-color { color: @base-bg; }
         .dx-theme-generic-typography {
@@ -267,13 +267,13 @@ describe('LessTemplateLoader', () => {
             }
         }`;
 
-        let metadataVariables = {};
+        const metadataVariables = {};
 
         metadata.forEach(metaItem => {
             metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
             assert.equal(data.css, `.dx-swatch-my-custom div {
@@ -291,11 +291,11 @@ describe('LessTemplateLoader', () => {
     });
 
     it('compileScss', () => {
-        let config = {
+        const config = {
             sassCompiler: scssCompiler
         };
 
-        let scss = `$body-bg: #fff; $body-color:#0f0;
+        const scss = `$body-bg: #fff; $body-color:#0f0;
         div { color: $body-bg; }
         .dx-theme-accent-as-text-color { color: $body-bg; }
         .dx-theme-generic-typography {
@@ -305,7 +305,7 @@ describe('LessTemplateLoader', () => {
             }
         }`;
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileScss(scss, {
             'base-bg': '$body-bg',
@@ -331,13 +331,13 @@ describe('LessTemplateLoader', () => {
     });
 
     it('_makeInfoHeader', () => {
-        let lessTemplateLoader = new LessTemplateLoader({}, '18.2.0');
-        let expectedHeader = '/*\n* Generated by the DevExpress ThemeBuilder\n* Version: 18.2.0\n* http://js.devexpress.com/ThemeBuilder/\n*/\n\n';
+        const lessTemplateLoader = new LessTemplateLoader({}, '18.2.0');
+        const expectedHeader = '/*\n* Generated by the DevExpress ThemeBuilder\n* Version: 18.2.0\n* http://js.devexpress.com/ThemeBuilder/\n*/\n\n';
         assert.equal(lessTemplateLoader._makeInfoHeader(), expectedHeader);
     });
 
     it('load - change color scheme in theme marker', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -359,7 +359,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -388,12 +388,12 @@ describe('LessTemplateLoader', () => {
             'rootpath': 'modified_path/'
         };
 
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: compilerWithOptions
         };
 
-        let less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+        const less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
         @font-face {
             font-family: 'DXIcons';
             src: url(~"icons/generic.woff2") format('woff2'),
@@ -403,13 +403,13 @@ describe('LessTemplateLoader', () => {
             font-style: normal;
         }`;
 
-        let metadataVariables = {};
+        const metadataVariables = {};
 
         metadata.forEach(metaItem => {
             metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
         });
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
             assert.equal(data.css, `@font-face {
@@ -423,7 +423,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - do not change the order of cascade\'s classes by swatch class (T692470) - checkbox case', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -440,7 +440,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -456,7 +456,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - do not change the order of cascade\'s classes by swatch class (T692470) - underlined editor case', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -476,7 +476,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -492,7 +492,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -509,7 +509,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -524,7 +524,7 @@ describe('LessTemplateLoader', () => {
     });
 
     it('load - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case with extra selector', () => {
-        let config = {
+        const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             outColorScheme: 'my-custom',
@@ -541,7 +541,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config);
+        const lessTemplateLoader = new LessTemplateLoader(config);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,
@@ -598,7 +598,7 @@ describe('LessTemplateLoader', () => {
             }
         };
 
-        let lessTemplateLoader = new LessTemplateLoader(config, version);
+        const lessTemplateLoader = new LessTemplateLoader(config, version);
         lessTemplateLoader._makeInfoHeader = emptyHeader;
         return lessTemplateLoader.load(
             themeName,

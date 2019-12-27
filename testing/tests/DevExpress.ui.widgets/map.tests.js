@@ -1,9 +1,9 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="map"></div>';
 
     $('#qunit-fixture').html(markup);

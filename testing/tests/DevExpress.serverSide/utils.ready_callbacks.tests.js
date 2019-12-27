@@ -1,4 +1,4 @@
-var readyCallbacks = require('core/utils/ready_callbacks');
+const readyCallbacks = require('core/utils/ready_callbacks');
 
 QUnit.module('readyCallbacks injection', {
     afterEach: function() {

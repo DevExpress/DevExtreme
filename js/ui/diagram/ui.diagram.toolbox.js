@@ -25,7 +25,7 @@ const DiagramToolbox = {
     },
 
     getGroups: function(groups) {
-        var defaultGroups = this.groups;
+        const defaultGroups = this.groups;
         if(groups) {
             return groups.map(function(g) {
                 if(typeof g === 'string') {

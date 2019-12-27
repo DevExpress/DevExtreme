@@ -1,21 +1,21 @@
-var $ = require('../renderer'),
-    readyCallbacks = require('./ready_callbacks'),
-    ready = readyCallbacks.add,
-    changeCallback = require('./callbacks')(),
-    $originalViewPort = $();
+const $ = require('../renderer');
+const readyCallbacks = require('./ready_callbacks');
+const ready = readyCallbacks.add;
+const changeCallback = require('./callbacks')();
+let $originalViewPort = $();
 
 var value = (function() {
-    var $current;
+    let $current;
 
     return function(element) {
         if(!arguments.length) {
             return $current;
         }
 
-        var $element = $(element);
+        const $element = $(element);
         $originalViewPort = $element;
-        var isNewViewportFound = !!$element.length;
-        var prevViewPort = value();
+        const isNewViewportFound = !!$element.length;
+        const prevViewPort = value();
         $current = isNewViewportFound ? $element : $('body');
         changeCallback.fire(isNewViewportFound ? value() : $(), prevViewPort);
     };

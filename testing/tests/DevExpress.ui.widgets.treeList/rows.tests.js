@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -19,8 +19,8 @@ import { setupTreeListModules, MockColumnsController, MockDataController } from 
 
 fx.off = true;
 
-var setupModule = function() {
-    var that = this;
+const setupModule = function() {
+    const that = this;
 
     that.items = [
         { data: { field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0, isExpanded: true, level: 0, node: { level: 0, hasChildren: true } },
@@ -40,7 +40,7 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
 };
 
@@ -48,10 +48,10 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
 
 QUnit.test('Render rows when all items collapsed', function(assert) {
     // arrange
-    var $iconElement,
-        $cellElements,
-        $rowElements,
-        $testElement = $('#treeList');
+    let $iconElement;
+    let $cellElements;
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.items = this.items.slice(0, 1);
     this.items[0].isExpanded = false;
@@ -74,10 +74,10 @@ QUnit.test('Render rows when all items collapsed', function(assert) {
 
 QUnit.test('Render rows when all items expanded', function(assert) {
     // arrange
-    var $iconElement,
-        $cellElements,
-        $rowElements,
-        $testElement = $('#treeList');
+    let $iconElement;
+    let $cellElements;
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
 
@@ -108,7 +108,7 @@ QUnit.test('Render rows when all items expanded', function(assert) {
 
 QUnit.module('Expand/Collapse rows', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.options = {
             dataSource: [
@@ -133,8 +133,8 @@ QUnit.module('Expand/Collapse rows', {
 
 QUnit.test('Expand row', function(assert) {
     // arrange
-    var $rowElements,
-        $testElement = $('#treeList');
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -157,8 +157,8 @@ QUnit.test('Expand row', function(assert) {
 
 QUnit.test('Collapse row', function(assert) {
     // arrange
-    var $rowElements,
-        $testElement = $('#treeList');
+    let $rowElements;
+    const $testElement = $('#treeList');
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -190,7 +190,7 @@ QUnit.test('Collapse row', function(assert) {
 
 QUnit.test('Expand row on row click when edit mode is \'batch\'', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',
@@ -210,7 +210,7 @@ QUnit.test('Expand row on row click when edit mode is \'batch\'', function(asser
 
 QUnit.test('Collapse row on row click when edit mode is \'batch\'', function(assert) {
     // arrange
-    var $testElement = $('#treeList');
+    const $testElement = $('#treeList');
 
     this.options.editing = {
         mode: 'batch',

@@ -330,7 +330,7 @@ function adjustIntervalDateTime(interval, multipliers, _, gapSize) {
 
     multipliers = multipliers || getDataTimeMultipliers(gapSize);
 
-    for(let key in multipliers) {
+    for(const key in multipliers) {
         result = multipliers[key].reduce(numbersReducer(interval, key), result);
         if(result) {
             break;
@@ -512,7 +512,7 @@ function filterTicks(ticks, breaks) {
             const tmpTicks = [];
             let i;
             for(i = result[1]; i < ticks.length; i++) {
-                let tickValue = ticks[i];
+                const tickValue = ticks[i];
 
                 if(tickValue < b.from) {
                     tmpTicks.push(tickValue);

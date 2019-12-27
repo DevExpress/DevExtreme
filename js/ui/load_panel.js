@@ -1,22 +1,22 @@
-var $ = require('../core/renderer'),
-    noop = require('../core/utils/common').noop,
-    messageLocalization = require('../localization/message'),
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    LoadIndicator = require('./load_indicator'),
-    Overlay = require('./overlay'),
-    Deferred = require('../core/utils/deferred').Deferred,
-    themes = require('./themes');
+const $ = require('../core/renderer');
+const noop = require('../core/utils/common').noop;
+const messageLocalization = require('../localization/message');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const LoadIndicator = require('./load_indicator');
+const Overlay = require('./overlay');
+const Deferred = require('../core/utils/deferred').Deferred;
+const themes = require('./themes');
 
-var LOADPANEL_CLASS = 'dx-loadpanel',
-    LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper',
-    LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator',
-    LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message',
-    LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content',
-    LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper',
-    LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
+const LOADPANEL_CLASS = 'dx-loadpanel';
+const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
+const LOADPANEL_INDICATOR_CLASS = 'dx-loadpanel-indicator';
+const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
+const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
+const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
+const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
-var LoadPanel = Overlay.inherit({
+const LoadPanel = Overlay.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), {
@@ -138,14 +138,14 @@ var LoadPanel = Overlay.inherit({
     },
 
     _show: function() {
-        var delay = this.option('delay');
+        const delay = this.option('delay');
 
         if(!delay) {
             return this.callBase();
         }
 
-        var deferred = new Deferred();
-        var callBase = this.callBase.bind(this);
+        const deferred = new Deferred();
+        const callBase = this.callBase.bind(this);
 
         this._clearShowTimeout();
         this._showTimeout = setTimeout(function() {
@@ -171,11 +171,11 @@ var LoadPanel = Overlay.inherit({
             return;
         }
 
-        var message = this.option('message');
+        const message = this.option('message');
 
         if(!message) return;
 
-        var $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
+        const $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
             .text(message);
 
         this._$contentWrapper.append($message);

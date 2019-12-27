@@ -13,9 +13,9 @@ import {
     SCROLLBAR_HORIZONTAL_CLASS
 } from './scrollable.constants.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
                 <div class="content2"></div>\
@@ -37,18 +37,18 @@ var moduleConfig = {
 QUnit.module('mouse wheel', moduleConfig);
 
 QUnit.test('mousewheel for vertical direction', function(assert) {
-    var distance = 10;
+    const distance = 10;
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
 
     $scrollable.dxScrollable({
         useNative: false,
         direction: 'vertical',
         inertiaEnabled: false
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     pointerMock($container)
         .start()
@@ -59,8 +59,8 @@ QUnit.test('mousewheel for vertical direction', function(assert) {
 
 // T737554
 QUnit.test('preventDefault should be called on immediate mousewheel at the end of content', function(assert) {
-    var $scrollable = $('#scrollable');
-    var lastWheelEventArgs;
+    const $scrollable = $('#scrollable');
+    let lastWheelEventArgs;
     $scrollable.on('dxmousewheel', function(e) {
         lastWheelEventArgs = e;
     });
@@ -71,11 +71,11 @@ QUnit.test('preventDefault should be called on immediate mousewheel at the end o
         inertiaEnabled: false,
         bounceEnabled: false
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
-    var pointer = pointerMock($container)
+    const pointer = pointerMock($container)
         .start()
         .wheel(-50);
 
@@ -87,8 +87,8 @@ QUnit.test('preventDefault should be called on immediate mousewheel at the end o
 
 // T737554
 QUnit.test('preventDefault should not be called on delayed mousewheel at the end of content', function(assert) {
-    var $scrollable = $('#scrollable');
-    var lastWheelEventArgs;
+    const $scrollable = $('#scrollable');
+    let lastWheelEventArgs;
     $scrollable.on('dxmousewheel', function(e) {
         lastWheelEventArgs = e;
     });
@@ -99,11 +99,11 @@ QUnit.test('preventDefault should not be called on delayed mousewheel at the end
         inertiaEnabled: false,
         bounceEnabled: false
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
-    var pointer = pointerMock($container)
+    const pointer = pointerMock($container)
         .start()
         .wheel(-50);
 
@@ -116,9 +116,9 @@ QUnit.test('preventDefault should not be called on delayed mousewheel at the end
 });
 
 QUnit.test('mousewheel calls update before validation', function(assert) {
-    var distance = 10;
+    const distance = 10;
 
-    var $scrollable = $('#scrollable').height(1000);
+    const $scrollable = $('#scrollable').height(1000);
     $scrollable.children().height(10);
 
     $scrollable.dxScrollable({
@@ -127,9 +127,9 @@ QUnit.test('mousewheel calls update before validation', function(assert) {
         inertiaEnabled: false,
         bounceEnabled: false
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS).children().height(2000);
 
     pointerMock($container)
@@ -140,8 +140,8 @@ QUnit.test('mousewheel calls update before validation', function(assert) {
 });
 
 QUnit.test('mousewheel scrolls correctly when mouse is located over scrollbar', function(assert) {
-    var distance = 10;
-    var $scrollable = $('#scrollable');
+    const distance = 10;
+    const $scrollable = $('#scrollable');
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -149,9 +149,9 @@ QUnit.test('mousewheel scrolls correctly when mouse is located over scrollbar', 
         inertiaEnabled: false,
         scrollByThumb: true
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     pointerMock($scrollbar)
         .start()
@@ -161,8 +161,8 @@ QUnit.test('mousewheel scrolls correctly when mouse is located over scrollbar', 
 });
 
 QUnit.test('mousewheel for horizontal direction', function(assert) {
-    var distance = 10;
-    var $scrollable = $('#scrollable');
+    const distance = 10;
+    const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
 
@@ -171,9 +171,9 @@ QUnit.test('mousewheel for horizontal direction', function(assert) {
         inertiaEnabled: false,
         direction: 'horizontal'
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     pointerMock($container)
         .start()
@@ -183,9 +183,9 @@ QUnit.test('mousewheel for horizontal direction', function(assert) {
 });
 
 QUnit.test('mousewheel for both direction scrolls vertical', function(assert) {
-    var distance = 10;
+    const distance = 10;
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -193,9 +193,9 @@ QUnit.test('mousewheel for both direction scrolls vertical', function(assert) {
         inertiaEnabled: false,
         scrollByContent: false
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     pointerMock($container)
         .start()
@@ -206,19 +206,19 @@ QUnit.test('mousewheel for both direction scrolls vertical', function(assert) {
 });
 
 QUnit.test('mousewheel default behavior prevented', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false
     });
 
-    var wheelHandler = function(e) {
+    const wheelHandler = function(e) {
         assert.ok(e.isDefaultPrevented(), 'mousewheel is prevented');
     };
 
     try {
         $(document).on('dxmousewheel', wheelHandler);
 
-        var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
         pointerMock($container)
             .start()
             .wheel(-10);
@@ -229,7 +229,7 @@ QUnit.test('mousewheel default behavior prevented', function(assert) {
 });
 
 QUnit.test('mousewheel does not prevent default behavior when scroll is disabled', function(assert) {
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.height(100);
     $scrollable.wrapInner('<div>').children().height(50);
 
@@ -238,14 +238,14 @@ QUnit.test('mousewheel does not prevent default behavior when scroll is disabled
         disabled: true
     });
 
-    var wheelHandler = function(e) {
+    const wheelHandler = function(e) {
         assert.equal(e.isDefaultPrevented(), false, 'mousewheel is not prevented');
     };
 
     try {
         $(document).on('dxmousewheel', wheelHandler);
 
-        var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+        const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
         pointerMock($container)
             .start()
             .wheel(-10);
@@ -256,20 +256,20 @@ QUnit.test('mousewheel does not prevent default behavior when scroll is disabled
 });
 
 QUnit.test('mousewheel prevented only for event handled by scrollable', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnable: false,
         disabled: true
     });
 
-    var wheelHandler = function(e) {
+    const wheelHandler = function(e) {
         assert.equal(e.isDefaultPrevented(), false, 'mousewheel is not prevented');
     };
 
     try {
         $(document).on('dxmousewheel', wheelHandler);
 
-        var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+        const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
         pointerMock($container)
             .start()
             .wheel(-10);
@@ -280,12 +280,12 @@ QUnit.test('mousewheel prevented only for event handled by scrollable', function
 });
 
 QUnit.test('mousewheel triggers scroll event on container', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false
     });
 
-    var scrollFired = 0,
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    let scrollFired = 0;
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     $container.on('scroll', function(e) {
         scrollFired++;
@@ -300,10 +300,10 @@ QUnit.test('mousewheel triggers scroll event on container', function(assert) {
 });
 
 QUnit.test('mousewheel scroll parent scrollable when children scroll reach bounce', function(assert) {
-    var scrollableCounter = 0;
-    var parentScrollableCounter = 0;
-    var $scrollable = $('#scrollable').height(50);
-    var $parentScrollable = $scrollable.wrap('<div>').parent().height(25);
+    let scrollableCounter = 0;
+    let parentScrollableCounter = 0;
+    const $scrollable = $('#scrollable').height(50);
+    const $parentScrollable = $scrollable.wrap('<div>').parent().height(25);
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -324,7 +324,7 @@ QUnit.test('mousewheel scroll parent scrollable when children scroll reach bounc
 
     $parentScrollable.dxScrollable('scrollTo', 1);
 
-    var $wrapper = $scrollable.find('.' + SCROLLABLE_WRAPPER_CLASS);
+    const $wrapper = $scrollable.find('.' + SCROLLABLE_WRAPPER_CLASS);
 
     pointerMock($wrapper).start().wheel(10);
 
@@ -333,10 +333,10 @@ QUnit.test('mousewheel scroll parent scrollable when children scroll reach bounc
 });
 
 QUnit.test('scrollable prevented when it is stretched', function(assert) {
-    var scrollableCounter = 0;
-    var innerScrollableCounter = 0;
-    var $scrollable = $('#scrollable').height(50);
-    var $innerScrollable = $('<div>').height(75).appendTo($scrollable);
+    let scrollableCounter = 0;
+    let innerScrollableCounter = 0;
+    const $scrollable = $('#scrollable').height(50);
+    const $innerScrollable = $('<div>').height(75).appendTo($scrollable);
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -363,9 +363,9 @@ QUnit.test('scrollable prevented when it is stretched', function(assert) {
 });
 
 QUnit.test('scroll should work on mousewheel after draging on horizontal bar', function(assert) {
-    var distance = 10;
+    const distance = 10;
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -374,10 +374,10 @@ QUnit.test('scroll should work on mousewheel after draging on horizontal bar', f
         scrollByContent: false,
         scrollByThumb: true
     });
-    var scrollable = $scrollable.dxScrollable('instance');
+    const scrollable = $scrollable.dxScrollable('instance');
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var $scrollbar = $scrollable.find('.' + SCROLLBAR_HORIZONTAL_CLASS + ' .dx-scrollable-scroll');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scrollbar = $scrollable.find('.' + SCROLLBAR_HORIZONTAL_CLASS + ' .dx-scrollable-scroll');
 
     pointerMock($scrollbar).start().down().move(-distance).up();
 
@@ -440,8 +440,8 @@ if(devices.current().deviceType === 'desktop') {
         }
 
         QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
-            let helper = new ValidateMouseWheelEventTestHelper(direction, true);
-            let event = helper.getEvent();
+            const helper = new ValidateMouseWheelEventTestHelper(direction, true);
+            const event = helper.getEvent();
 
             event.delta = 1;
             assert.strictEqual(!!helper.strategy.validate(event), false, 'validate result when event.delta = 1');
@@ -451,9 +451,9 @@ if(devices.current().deviceType === 'desktop') {
         });
 
         QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
-            let helper = new ValidateMouseWheelEventTestHelper(direction, true);
-            let event = helper.getEvent();
-            let $container = helper.getScrollableContainer();
+            const helper = new ValidateMouseWheelEventTestHelper(direction, true);
+            const event = helper.getEvent();
+            const $container = helper.getScrollableContainer();
 
             $container.scrollTop(50);
             $container.scrollLeft(50);
@@ -466,9 +466,9 @@ if(devices.current().deviceType === 'desktop') {
         });
 
         QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
-            let helper = new ValidateMouseWheelEventTestHelper(direction, true);
-            let event = helper.getEvent();
-            let $container = helper.getScrollableContainer();
+            const helper = new ValidateMouseWheelEventTestHelper(direction, true);
+            const event = helper.getEvent();
+            const $container = helper.getScrollableContainer();
 
             $container.scrollTop(25);
             $container.scrollLeft(25);
@@ -483,7 +483,7 @@ if(devices.current().deviceType === 'desktop') {
         [-10, 10].forEach((wheelDelta) => {
             QUnit.test(`WheelDelta -> browser.zoom - 100% - direction:${direction}, wheelDelta: ${wheelDelta}`, (assert) => {
                 const helper = new ValidateMouseWheelEventTestHelper(direction, false);
-                let $container = helper.getScrollableContainer();
+                const $container = helper.getScrollableContainer();
 
                 $container.scrollTop(25);
                 $container.scrollLeft(25);
@@ -496,7 +496,7 @@ if(devices.current().deviceType === 'desktop') {
 
             QUnit.test(`Delta -> browser.zoom - 150% - direction:${direction}, wheelDelta: ${wheelDelta}`, (assert) => {
                 const helper = new ValidateMouseWheelEventTestHelper(direction, false);
-                let $container = helper.getScrollableContainer();
+                const $container = helper.getScrollableContainer();
                 $container.scrollTop(25);
                 $container.scrollLeft(25);
 
@@ -508,7 +508,7 @@ if(devices.current().deviceType === 'desktop') {
 
             QUnit.test(`Delta -> browser.zoom - 75% - direction:${direction}, wheelDelta: ${wheelDelta}`, (assert) => {
                 const helper = new ValidateMouseWheelEventTestHelper(direction, false);
-                let $container = helper.getScrollableContainer();
+                const $container = helper.getScrollableContainer();
                 $container.scrollTop(25);
                 $container.scrollLeft(25);
 

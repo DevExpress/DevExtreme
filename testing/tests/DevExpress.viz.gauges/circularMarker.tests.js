@@ -1,14 +1,14 @@
-var noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    circularIndicatorsModule = require('viz/gauges/circular_indicators'),
-    getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo,
-    Translator1D = require('viz/translators/translator1d').Translator1D;
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const circularIndicatorsModule = require('viz/gauges/circular_indicators');
+const getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var marker,
-    renderer,
-    owner,
-    tracker,
-    options;
+let marker;
+let renderer;
+let owner;
+let tracker;
+let options;
 
 QUnit.module('TriangleMarker', {
     beforeEach: function() {
@@ -18,7 +18,7 @@ QUnit.module('TriangleMarker', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 180, 0);
+        const translator = new Translator1D(0, 100, 180, 0);
         marker = new circularIndicatorsModule['trianglemarker']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
@@ -98,8 +98,8 @@ QUnit.test('not valid radius (not rendered)', function(assert) {
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
-    var x = 200 + Math.cos(Math.PI * 0.75) * 86,
-        y = 100 - Math.sin(Math.PI * 0.75) * 86;
+    const x = 200 + Math.cos(Math.PI * 0.75) * 86;
+    const y = 100 - Math.sin(Math.PI * 0.75) * 86;
     assert.deepEqual(marker.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 6, color: 'black', value: 25 });
 });
 
@@ -111,7 +111,7 @@ QUnit.module('TextCloudMarker', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 180, 0);
+        const translator = new Translator1D(0, 100, 180, 0);
         marker = new circularIndicatorsModule['textcloud']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class', notifiers: { dirty: noop, ready: noop, changed: noop } });
         this.layout = {
             x: 200,
@@ -132,9 +132,9 @@ QUnit.module('TextCloudMarker', {
             },
             currentValue: 25
         };
-        var baseCreateText = renderer.stub('text');
+        const baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
-            var text = baseCreateText.apply(this, arguments);
+            const text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
             return text;
         });
@@ -168,7 +168,7 @@ QUnit.test('measure (string-like numbers)', function(assert) {
 });
 
 QUnit.test('render', function(assert) {
-    var tc = getTextCloudInfo({
+    const tc = getTextCloudInfo({
         x: 200 + 80 * Math.cos(Math.PI * 3 / 4),
         y: 100 - 80 * Math.sin(Math.PI * 3 / 4),
         textWidth: 40,

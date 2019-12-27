@@ -1,8 +1,8 @@
-var translator = require('../../animation/translator'),
-    fx = require('../../animation/fx'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    EditDecorator = require('./ui.list.edit.decorator'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const translator = require('../../animation/translator');
+const fx = require('../../animation/fx');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
 
 registerDecorator(
@@ -13,8 +13,8 @@ registerDecorator(
         _shouldHandleSwipe: true,
 
         _renderItemPosition: function($itemElement, offset, animate) {
-            var deferred = new Deferred(),
-                itemOffset = offset * this._itemElementWidth;
+            const deferred = new Deferred();
+            const itemOffset = offset * this._itemElementWidth;
 
             if(animate) {
                 fx.animate($itemElement, {
@@ -43,7 +43,7 @@ registerDecorator(
         },
 
         _swipeEndHandler: function($itemElement, args) {
-            var offset = args.targetOffset;
+            const offset = args.targetOffset;
 
             this._renderItemPosition($itemElement, offset, true).done((function($itemElement, offset) {
                 if(Math.abs(offset)) {

@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('common.css!');
 require('generic_light.css!');

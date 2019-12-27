@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    holdEvent = require('events/hold'),
-    pointerMock = require('../../helpers/pointerMock.js');
+const $ = require('jquery');
+const holdEvent = require('events/hold');
+const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="element"></div>\
         </div>\
@@ -29,9 +29,9 @@ QUnit.module('hold', {
 });
 
 QUnit.test('default', function(assert) {
-    var fired = 0,
-        element = this.element,
-        pointer = pointerMock(element);
+    let fired = 0;
+    const element = this.element;
+    const pointer = pointerMock(element);
 
     element.on(holdEvent.name, function() {
         fired++;
@@ -53,15 +53,15 @@ QUnit.test('default', function(assert) {
 });
 
 QUnit.test('custom timeout', function(assert) {
-    var fired = 0;
+    let fired = 0;
 
-    var element = this.element.on(holdEvent.name, { timeout: 10 }, function() {
+    const element = this.element.on(holdEvent.name, { timeout: 10 }, function() {
         assert.equal(++fired, 1);
     });
 
     assert.ok(!fired);
 
-    var pointer = pointerMock(element);
+    const pointer = pointerMock(element);
 
     pointer
         .start()
@@ -73,8 +73,8 @@ QUnit.test('custom timeout', function(assert) {
 });
 
 QUnit.test('handler has right args', function(assert) {
-    var element = this.element,
-        pointer = pointerMock(element);
+    const element = this.element;
+    const pointer = pointerMock(element);
 
     element.on(holdEvent.name, { timeout: 10 }, function(e) {
         assert.strictEqual(e.target, element[0]);
@@ -90,17 +90,17 @@ QUnit.test('handler has right args', function(assert) {
 });
 
 QUnit.test('delegated handlers', function(assert) {
-    var element = this.element,
-        container = this.container;
+    const element = this.element;
+    const container = this.container;
 
-    var nested = element.append('<div>').children();
+    const nested = element.append('<div>').children();
 
     container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
         assert.strictEqual(e.target, nested[0]);
         assert.strictEqual(e.delegateTarget, container[0]);
     });
 
-    var pointer = pointerMock(nested);
+    const pointer = pointerMock(nested);
 
     pointer
         .start()
@@ -114,14 +114,14 @@ QUnit.test('delegated handlers', function(assert) {
 QUnit.test('hold event should be fired if content scrolled less then 5 pixels', function(assert) {
     assert.expect(1);
 
-    var element = this.element,
-        container = this.container;
+    const element = this.element;
+    const container = this.container;
 
     container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
         assert.ok(true, 'hold should not be fired');
     });
 
-    var pointer = pointerMock(element);
+    const pointer = pointerMock(element);
 
     pointer
         .start()
@@ -135,14 +135,14 @@ QUnit.test('hold event should be fired if content scrolled less then 5 pixels', 
 QUnit.test('hold event should not be fired if content scrolled more then 5 pixels', function(assert) {
     assert.expect(0);
 
-    var element = this.element,
-        container = this.container;
+    const element = this.element;
+    const container = this.container;
 
     container.on(holdEvent.name, '#element', { timeout: 10 }, function(e) {
         assert.ok(false, 'hold should not be fired');
     });
 
-    var pointer = pointerMock(element);
+    const pointer = pointerMock(element);
 
     pointer
         .start()
@@ -155,9 +155,9 @@ QUnit.test('hold event should not be fired if content scrolled more then 5 pixel
 });
 
 QUnit.test('event stopPropagation', function(assert) {
-    var $element = $('#element');
-    var $container = $('#container');
-    var holdFired = 0;
+    const $element = $('#element');
+    const $container = $('#container');
+    let holdFired = 0;
 
     $container.on(holdEvent.name, function(e) {
         holdFired++;
@@ -168,7 +168,7 @@ QUnit.test('event stopPropagation', function(assert) {
         e.stopPropagation();
     });
 
-    var pointer = pointerMock($element);
+    const pointer = pointerMock($element);
 
     pointer
         .start()
@@ -182,7 +182,7 @@ QUnit.test('event stopPropagation', function(assert) {
 });
 
 QUnit.test('hold with multitouch', function(assert) {
-    var count = 0;
+    let count = 0;
     $('#parent').on(holdEvent.name, function() {
         count++;
     });
@@ -195,7 +195,7 @@ QUnit.test('hold with multitouch', function(assert) {
 });
 
 QUnit.test('hold was prevented after second finger was moved', function(assert) {
-    var count = 0;
+    let count = 0;
     $('#parent').on(holdEvent.name, function() {
         count++;
     });
@@ -208,8 +208,8 @@ QUnit.test('hold was prevented after second finger was moved', function(assert) 
 });
 
 QUnit.test('several handlers on one element', function(assert) {
-    var count = 0;
-    var $element = $('#element');
+    let count = 0;
+    const $element = $('#element');
 
     $element.on(holdEvent.name, function() {
         count++;

@@ -1,15 +1,15 @@
-var errors = require('../../core/errors'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    inArray = require('../../core/utils/array').inArray,
-    isDefined = require('../../core/utils/type').isDefined,
-    dateUtils = require('../../core/utils/date');
+const errors = require('../../core/errors');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const inArray = require('../../core/utils/array').inArray;
+const isDefined = require('../../core/utils/type').isDefined;
+const dateUtils = require('../../core/utils/date');
 
-var toMs = dateUtils.dateToMilliseconds;
+const toMs = dateUtils.dateToMilliseconds;
 
-var leastDaysInWeek = 4;
+const leastDaysInWeek = 4;
 
-var intervalMap = {
+const intervalMap = {
     secondly: 'seconds',
     minutely: 'minutes',
     hourly: 'hours',
@@ -19,7 +19,7 @@ var intervalMap = {
     yearly: 'years'
 };
 
-var dateSetterMap = {
+const dateSetterMap = {
     'bysecond': function(date, value) {
         date.setSeconds(value);
     },
@@ -34,11 +34,11 @@ var dateSetterMap = {
     },
     'bymonthday': function(date, value) {
         if(value < 0) {
-            var initialDate = new Date(date);
+            const initialDate = new Date(date);
 
             setDateByNegativeValue(initialDate, 1, -1);
 
-            var daysInMonth = initialDate.getDate();
+            const daysInMonth = initialDate.getDate();
 
             if(daysInMonth >= Math.abs(value)) {
                 setDateByNegativeValue(date, 1, value);
@@ -52,19 +52,19 @@ var dateSetterMap = {
         }
     },
     'byday': function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
-        var appointmentDayOfWeek = date.getDay(),
-            weekStart = days[appointmentWeekStart];
+        const appointmentDayOfWeek = date.getDay();
+        const weekStart = days[appointmentWeekStart];
 
         byDay += ((byDay >= weekStart) === weekStart > appointmentDayOfWeek) ? 7 : 0;
 
         date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
     },
     'byweekno': function(date, weekNumber, weekStart) {
-        var initialDate = new Date(date),
-            firstYearDate = new Date(initialDate.setMonth(0, 1)),
-            dayShift = firstYearDate.getDay() - days[weekStart],
-            firstDayOfYear = firstYearDate.getTime() - dayShift * toMs('day'),
-            newFirstYearDate = dayShift + 1;
+        const initialDate = new Date(date);
+        const firstYearDate = new Date(initialDate.setMonth(0, 1));
+        const dayShift = firstYearDate.getDay() - days[weekStart];
+        const firstDayOfYear = firstYearDate.getTime() - dayShift * toMs('day');
+        const newFirstYearDate = dayShift + 1;
 
         if(newFirstYearDate > leastDaysInWeek) {
             date.setTime(firstDayOfYear + weekNumber * 7 * toMs('day'));
@@ -72,7 +72,7 @@ var dateSetterMap = {
             date.setTime(firstDayOfYear + (weekNumber - 1) * 7 * toMs('day'));
         }
 
-        var timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs('minute');
+        const timezoneDiff = (date.getTimezoneOffset() - firstYearDate.getTimezoneOffset()) * toMs('minute');
         timezoneDiff && date.setTime(date.getTime() + timezoneDiff);
     },
     'byyearday': function(date, dayOfYear) {
@@ -82,7 +82,7 @@ var dateSetterMap = {
 };
 
 var setDateByNegativeValue = function(date, month, value) {
-    var initialDate = new Date(date);
+    const initialDate = new Date(date);
 
     date.setMonth(date.getMonth() + month);
 
@@ -93,7 +93,7 @@ var setDateByNegativeValue = function(date, month, value) {
     date.setDate(value + 1);
 };
 
-var dateGetterMap = {
+const dateGetterMap = {
     'bysecond': function(date) {
         return date.getSeconds();
     },
@@ -113,10 +113,10 @@ var dateGetterMap = {
         return date.getDay();
     },
     'byweekno': function(date, weekStart) {
-        var daysFromYearStart,
-            current = new Date(date),
-            diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1,
-            dayInMilliseconds = toMs('day');
+        let daysFromYearStart;
+        const current = new Date(date);
+        let diff = leastDaysInWeek - current.getDay() + days[weekStart] - 1;
+        const dayInMilliseconds = toMs('day');
 
         if(date.getDay() < days[weekStart]) {
             diff -= 7;
@@ -125,34 +125,34 @@ var dateGetterMap = {
         current.setHours(0, 0, 0);
         current.setDate(current.getDate() + diff);
 
-        var yearStart = new Date(current.getFullYear(), 0, 1),
-            timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
+        const yearStart = new Date(current.getFullYear(), 0, 1);
+        const timezoneDiff = (yearStart.getTimezoneOffset() - current.getTimezoneOffset()) * toMs('minute');
 
         daysFromYearStart = 1 + (current - yearStart + timezoneDiff) / dayInMilliseconds;
 
         return Math.ceil(daysFromYearStart / 7);
     },
     'byyearday': function(date) {
-        var yearStart = new Date(date.getFullYear(), 0, 0),
-            timezoneDiff = date.getTimezoneOffset() - yearStart.getTimezoneOffset(),
-            diff = date - yearStart - timezoneDiff * toMs('minute'),
-            dayLength = toMs('day');
+        const yearStart = new Date(date.getFullYear(), 0, 0);
+        const timezoneDiff = date.getTimezoneOffset() - yearStart.getTimezoneOffset();
+        const diff = date - yearStart - timezoneDiff * toMs('minute');
+        const dayLength = toMs('day');
 
         return Math.floor(diff / dayLength);
     }
 };
 
-var ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'],
-    freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'],
-    days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 },
-    daysNames = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR', 6: 'SA' };
+const ruleNames = ['freq', 'interval', 'byday', 'byweekno', 'byyearday', 'bymonth', 'bymonthday', 'count', 'until', 'byhour', 'byminute', 'bysecond', 'bysetpos', 'wkst'];
+const freqNames = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SECONDLY', 'MINUTELY', 'HOURLY'];
+var days = { SU: 0, MO: 1, TU: 2, WE: 3, TH: 4, FR: 5, SA: 6 };
+const daysNames = { 0: 'SU', 1: 'MO', 2: 'TU', 3: 'WE', 4: 'TH', 5: 'FR', 6: 'SA' };
 
-var getTimeZoneOffset = function() {
+const getTimeZoneOffset = function() {
     return new Date().getTimezoneOffset();
 };
 
-var dateInRecurrenceRange = function(options) {
-    var result = [];
+const dateInRecurrenceRange = function(options) {
+    let result = [];
 
     if(options.rule) {
         result = getDatesByRecurrence(options);
@@ -161,11 +161,11 @@ var dateInRecurrenceRange = function(options) {
     return !!result.length;
 };
 
-var normalizeInterval = function(rule) {
-    var interval = rule.interval,
-        freq = rule.freq,
-        intervalObject = {},
-        intervalField = intervalMap[freq.toLowerCase()];
+const normalizeInterval = function(rule) {
+    const interval = rule.interval;
+    const freq = rule.freq;
+    const intervalObject = {};
+    let intervalField = intervalMap[freq.toLowerCase()];
 
     if(freq === 'MONTHLY' && rule['byday']) {
         intervalField = intervalMap['daily'];
@@ -175,30 +175,30 @@ var normalizeInterval = function(rule) {
     return intervalObject;
 };
 
-var getDatesByRecurrenceException = function(ruleValues, date) {
-    var result = [];
+const getDatesByRecurrenceException = function(ruleValues, date) {
+    const result = [];
 
-    for(var i = 0, len = ruleValues.length; i < len; i++) {
+    for(let i = 0, len = ruleValues.length; i < len; i++) {
         result[i] = getDateByAsciiString(ruleValues[i], date);
     }
 
     return result;
 };
 
-var dateIsRecurrenceException = function(date, recurrenceException) {
-    var result = false;
+const dateIsRecurrenceException = function(date, recurrenceException) {
+    let result = false;
 
     if(!recurrenceException) {
         return result;
     }
 
-    var splitDates = recurrenceException.split(','),
-        exceptDates = getDatesByRecurrenceException(splitDates, date),
-        shortFormat = /\d{8}$/;
+    const splitDates = recurrenceException.split(',');
+    const exceptDates = getDatesByRecurrenceException(splitDates, date);
+    const shortFormat = /\d{8}$/;
 
-    for(var i = 0, len = exceptDates.length; i < len; i++) {
+    for(let i = 0, len = exceptDates.length; i < len; i++) {
         if(splitDates[i].match(shortFormat)) {
-            var diffs = getDatePartDiffs(date, exceptDates[i]);
+            const diffs = getDatePartDiffs(date, exceptDates[i]);
 
             if(diffs.years === 0 && diffs.months === 0 && diffs.days === 0) {
                 result = true;
@@ -213,9 +213,9 @@ var dateIsRecurrenceException = function(date, recurrenceException) {
     return result;
 };
 
-var doNextIteration = function(date, startIntervalDate, endIntervalDate, recurrenceRule, iterationCount) {
-    var matchCountIsCorrect = true,
-        dateInInterval;
+const doNextIteration = function(date, startIntervalDate, endIntervalDate, recurrenceRule, iterationCount) {
+    let matchCountIsCorrect = true;
+    let dateInInterval;
 
     endIntervalDate = endIntervalDate.getTime();
 
@@ -237,12 +237,12 @@ var doNextIteration = function(date, startIntervalDate, endIntervalDate, recurre
 };
 
 var getDatesByRecurrence = function(options) {
-    var result = [],
-        recurrenceRule = getRecurrenceRule(options.rule),
-        iterationResult = {},
-        rule = recurrenceRule.rule,
-        recurrenceStartDate = options.start,
-        dateRules;
+    let result = [];
+    const recurrenceRule = getRecurrenceRule(options.rule);
+    let iterationResult = {};
+    const rule = recurrenceRule.rule;
+    const recurrenceStartDate = options.start;
+    let dateRules;
 
     if(!recurrenceRule.isValid || !rule.freq) {
         return result;
@@ -251,9 +251,9 @@ var getDatesByRecurrence = function(options) {
     rule.interval = normalizeInterval(rule);
     dateRules = splitDateRules(rule, options.firstDayOfWeek);
 
-    var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
+    const duration = options.end ? options.end.getTime() - options.start.getTime() : toMs('day');
 
-    var config = {
+    const config = {
         exception: options.exception,
         min: options.min,
         dateRules: dateRules,
@@ -264,7 +264,7 @@ var getDatesByRecurrence = function(options) {
     };
 
     if(dateRules.length && rule.count) {
-        var iteration = 0;
+        let iteration = 0;
 
         getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
@@ -276,7 +276,7 @@ var getDatesByRecurrence = function(options) {
     } else {
         getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
-                var iteration = 0;
+                let iteration = 0;
 
                 while(doNextIteration(currentDate, recurrenceStartDate, options.max, rule, iteration)) {
                     iteration++;
@@ -319,7 +319,7 @@ var pushToResult = function(iteration, iterationResult, currentDate, i, config, 
 
 var checkDate = function(currentDate, i, config, verifiedField) {
     if(!dateIsRecurrenceException(currentDate, config.exception)) {
-        var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
+        const duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
 
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
             return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule['wkst']);
@@ -330,12 +330,12 @@ var checkDate = function(currentDate, i, config, verifiedField) {
 };
 
 var filterDatesBySetPos = function(dates, bySetPos) {
-    var resultArray = [];
+    const resultArray = [];
 
     bySetPos.split(',').forEach(function(index) {
         index = Number(index);
 
-        var dateIndex = (index > 0) ? index - 1 : dates.length + index;
+        const dateIndex = (index > 0) ? index - 1 : dates.length + index;
 
         if(dates[dateIndex]) {
             resultArray.push(dates[dateIndex]);
@@ -352,8 +352,8 @@ var correctDate = function(originalDate, date) {
 };
 
 var incrementDate = function(date, originalStartDate, rule, iterationStep) {
-    var initialDate = new Date(date),
-        needCorrect = true;
+    const initialDate = new Date(date);
+    let needCorrect = true;
 
     date = dateUtils.addInterval(date, rule.interval);
 
@@ -362,7 +362,7 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
     }
 
     if(rule.freq === 'MONTHLY' && !rule['byday']) {
-        var expectedDate = originalStartDate.getDate();
+        let expectedDate = originalStartDate.getDate();
 
         if(rule['bymonthday']) {
             expectedDate = Number(rule['bymonthday'].split(',')[iterationStep]);
@@ -379,13 +379,13 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
 
     if(rule.freq === 'YEARLY') {
         if(rule['byyearday']) {
-            var dayNumber = Number(rule['byyearday'].split(',')[iterationStep]);
+            const dayNumber = Number(rule['byyearday'].split(',')[iterationStep]);
             dateSetterMap['byyearday'](date, dayNumber);
         }
 
-        var dateRules = splitDateRules(rule);
+        const dateRules = splitDateRules(rule);
 
-        for(var field in dateRules[iterationStep]) {
+        for(const field in dateRules[iterationStep]) {
             dateSetterMap[field] && dateSetterMap[field](date, dateRules[iterationStep][field], rule['wkst']);
         }
     }
@@ -405,7 +405,7 @@ var getDatePartDiffs = function(date1, date2) {
 };
 
 var getRecurrenceRule = function(recurrence) {
-    var result = {
+    const result = {
         rule: {},
         isValid: false
     };
@@ -418,7 +418,7 @@ var getRecurrenceRule = function(recurrence) {
     return result;
 };
 
-var loggedWarnings = [];
+const loggedWarnings = [];
 
 var validateRRule = function(rule, recurrence) {
     if(brokenRuleNameExists(rule) ||
@@ -436,8 +436,8 @@ var validateRRule = function(rule, recurrence) {
 };
 
 var wrongUntilRule = function(rule) {
-    var wrongUntil = false,
-        until = rule.until;
+    let wrongUntil = false;
+    const until = rule.until;
 
     if(until !== undefined && !(until instanceof Date)) {
         wrongUntil = true;
@@ -447,8 +447,8 @@ var wrongUntilRule = function(rule) {
 };
 
 var wrongCountRule = function(rule) {
-    var wrongCount = false,
-        count = rule.count;
+    let wrongCount = false;
+    const count = rule.count;
 
     if(count && typeof count === 'string') {
         wrongCount = true;
@@ -458,8 +458,8 @@ var wrongCountRule = function(rule) {
 };
 
 var wrongByMonthDayRule = function(rule) {
-    var wrongByMonthDay = false,
-        byMonthDay = rule['bymonthday'];
+    let wrongByMonthDay = false;
+    const byMonthDay = rule['bymonthday'];
 
     if(byMonthDay && isNaN(parseInt(byMonthDay))) {
         wrongByMonthDay = true;
@@ -469,8 +469,8 @@ var wrongByMonthDayRule = function(rule) {
 };
 
 var wrongByMonth = function(rule) {
-    var wrongByMonth = false,
-        byMonth = rule['bymonth'];
+    let wrongByMonth = false;
+    const byMonth = rule['bymonth'];
 
     if(byMonth && isNaN(parseInt(byMonth))) {
         wrongByMonth = true;
@@ -480,8 +480,8 @@ var wrongByMonth = function(rule) {
 };
 
 var wrongIntervalRule = function(rule) {
-    var wrongInterval = false,
-        interval = rule.interval;
+    let wrongInterval = false;
+    const interval = rule.interval;
 
     if(interval && typeof interval === 'string') {
         wrongInterval = true;
@@ -491,8 +491,8 @@ var wrongIntervalRule = function(rule) {
 };
 
 var wrongDayOfWeek = function(rule) {
-    var daysByRule = daysFromByDayRule(rule),
-        brokenDaysExist = false;
+    const daysByRule = daysFromByDayRule(rule);
+    let brokenDaysExist = false;
 
     each(daysByRule, function(_, day) {
         if(!Object.prototype.hasOwnProperty.call(days, day)) {
@@ -505,7 +505,7 @@ var wrongDayOfWeek = function(rule) {
 };
 
 var brokenRuleNameExists = function(rule) {
-    var brokenRuleExists = false;
+    let brokenRuleExists = false;
 
     each(rule, function(ruleName) {
         if(inArray(ruleName, ruleNames) === -1) {
@@ -525,26 +525,26 @@ var logBrokenRule = function(recurrence) {
 };
 
 var parseRecurrenceRule = function(recurrence) {
-    var ruleObject = {},
-        ruleParts = recurrence.split(';');
+    const ruleObject = {};
+    const ruleParts = recurrence.split(';');
 
-    for(var i = 0, len = ruleParts.length; i < len; i++) {
+    for(let i = 0, len = ruleParts.length; i < len; i++) {
 
-        var rule = ruleParts[i].split('='),
-            ruleName = rule[0].toLowerCase(),
-            ruleValue = rule[1];
+        const rule = ruleParts[i].split('=');
+        const ruleName = rule[0].toLowerCase();
+        const ruleValue = rule[1];
 
         ruleObject[ruleName] = ruleValue;
     }
 
-    var count = parseInt(ruleObject.count);
+    const count = parseInt(ruleObject.count);
 
     if(!isNaN(count)) {
         ruleObject.count = count;
     }
 
     if(ruleObject.interval) {
-        var interval = parseInt(ruleObject.interval);
+        const interval = parseInt(ruleObject.interval);
         if(!isNaN(interval)) {
             ruleObject.interval = interval;
         }
@@ -564,15 +564,15 @@ var getDateByAsciiString = function(string, initialDate) {
         return string;
     }
 
-    var arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
+    const arrayDate = string.match(/(\d{4})(\d{2})(\d{2})(T(\d{2})(\d{2})(\d{2}))?(Z)?/);
 
     if(!arrayDate) {
         return null;
     }
 
-    var isUTC = arrayDate[8] !== undefined,
-        currentOffset = initialDate ? initialDate.getTimezoneOffset() : resultUtils.getTimeZoneOffset(),
-        date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
+    const isUTC = arrayDate[8] !== undefined;
+    let currentOffset = initialDate ? initialDate.getTimezoneOffset() : resultUtils.getTimeZoneOffset();
+    let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
 
     currentOffset = currentOffset * 60000;
 
@@ -601,7 +601,7 @@ var prepareDateArrayToParse = function(arrayDate) {
 };
 
 var daysFromByDayRule = function(rule) {
-    var result = [];
+    let result = [];
 
     if(rule['byday']) {
         if(Array.isArray(rule['byday'])) {
@@ -614,8 +614,8 @@ var daysFromByDayRule = function(rule) {
     return result;
 };
 
-var getAsciiStringByDate = function(date) {
-    var currentOffset = resultUtils.getTimeZoneOffset() * 60000;
+const getAsciiStringByDate = function(date) {
+    const currentOffset = resultUtils.getTimeZoneOffset() * 60000;
 
     date = new Date(date.getTime() + currentOffset);
     return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
@@ -623,7 +623,7 @@ var getAsciiStringByDate = function(date) {
 };
 
 var splitDateRules = function(rule, firstDayOfWeek = null) {
-    var result = [];
+    let result = [];
 
     if(isDefined(firstDayOfWeek)) {
         rule['fdow'] = firstDayOfWeek;
@@ -634,22 +634,22 @@ var splitDateRules = function(rule, firstDayOfWeek = null) {
     }
 
     if(rule['byweekno'] && !rule['byday']) {
-        var dayNames = Object.keys(days);
+        const dayNames = Object.keys(days);
 
-        for(var i = 0; i < days[rule['wkst']]; i++) {
+        for(let i = 0; i < days[rule['wkst']]; i++) {
             dayNames.push(dayNames.shift());
         }
 
         rule['byday'] = dayNames.join(',');
     }
 
-    for(var field in dateSetterMap) {
+    for(const field in dateSetterMap) {
         if(!rule[field]) {
             continue;
         }
 
-        var ruleFieldValues = rule[field].split(','),
-            ruleArray = getDateRuleArray(field, ruleFieldValues);
+        const ruleFieldValues = rule[field].split(',');
+        const ruleArray = getDateRuleArray(field, ruleFieldValues);
 
         result = result.length ? extendObjectArray(ruleArray, result) : ruleArray;
     }
@@ -658,9 +658,9 @@ var splitDateRules = function(rule, firstDayOfWeek = null) {
 };
 
 var getDateRuleArray = function(field, values) {
-    var result = [];
-    for(var i = 0, length = values.length; i < length; i++) {
-        var dateRule = {};
+    const result = [];
+    for(let i = 0, length = values.length; i < length; i++) {
+        const dateRule = {};
         dateRule[field] = handleRuleFieldValue(field, values[i]);
         result.push(dateRule);
     }
@@ -668,7 +668,7 @@ var getDateRuleArray = function(field, values) {
 };
 
 var handleRuleFieldValue = function(field, value) {
-    var result = parseInt(value);
+    let result = parseInt(value);
 
     if(field === 'bymonth') {
         result -= 1;
@@ -682,10 +682,10 @@ var handleRuleFieldValue = function(field, value) {
 };
 
 var extendObjectArray = function(firstArray, secondArray) {
-    var result = [];
+    const result = [];
 
-    for(var i = 0, firstArrayLength = firstArray.length; i < firstArrayLength; i++) {
-        for(var j = 0, secondArrayLength = secondArray.length; j < secondArrayLength; j++) {
+    for(let i = 0, firstArrayLength = firstArray.length; i < firstArrayLength; i++) {
+        for(let j = 0, secondArrayLength = secondArray.length; j < secondArrayLength; j++) {
             result.push(extend({}, firstArray[i], secondArray[j]));
         }
     }
@@ -693,13 +693,13 @@ var extendObjectArray = function(firstArray, secondArray) {
 };
 
 var getDatesByRules = function(dateRules, startDate, rule) {
-    var result = [];
+    let result = [];
 
-    for(var i = 0, len = dateRules.length; i < len; i++) {
-        var current = dateRules[i],
-            updatedDate = prepareDate(startDate, dateRules, rule['wkst']);
+    for(let i = 0, len = dateRules.length; i < len; i++) {
+        const current = dateRules[i];
+        const updatedDate = prepareDate(startDate, dateRules, rule['wkst']);
 
-        for(var field in current) {
+        for(const field in current) {
             dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule['wkst'], rule.freq, rule['fdow']);
         }
 
@@ -718,25 +718,25 @@ var getDatesByRules = function(dateRules, startDate, rule) {
 };
 
 var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) {
-    var result = [],
-        count = rule.count,
-        counter = 0,
-        date = prepareDate(startDate, dateRules, rule['wkst']);
+    const result = [];
+    const count = rule.count;
+    let counter = 0;
+    let date = prepareDate(startDate, dateRules, rule['wkst']);
 
     while(counter < count) {
-        var dates = getDatesByRules(dateRules, date, rule);
+        const dates = getDatesByRules(dateRules, date, rule);
 
-        var checkedDates = [];
+        const checkedDates = [];
         for(var i = 0; i < dates.length; i++) {
             if(dates[i].getTime() >= recurrenceStartDate.getTime()) {
                 checkedDates.push(dates[i]);
             }
         }
-        var length = checkedDates.length;
+        const length = checkedDates.length;
 
         counter = counter + length;
 
-        var delCount = counter - count;
+        const delCount = counter - count;
         if(counter > count) {
             checkedDates.splice(length - delCount, delCount);
         }
@@ -745,7 +745,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
             result.push(checkedDates[i]);
         }
 
-        var interval = rule.interval;
+        let interval = rule.interval;
 
         if(Object.keys(interval)[0] === 'days') {
             interval = { weeks: 1 };
@@ -758,8 +758,8 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 };
 
 var prepareDate = function(startDate, dateRules, weekStartRule) {
-    var date = new Date(startDate),
-        day = date.getDay();
+    const date = new Date(startDate);
+    const day = date.getDay();
 
     if(dateRules.length && isDefined(dateRules[0]['byday'])) {
         date.setDate(date.getDate() - day + days[weekStartRule] - (day < days[weekStartRule] ? 7 : 0));
@@ -771,14 +771,14 @@ var prepareDate = function(startDate, dateRules, weekStartRule) {
 };
 
 var checkDateByRule = function(date, rules, weekStart) {
-    var result = false;
+    let result = false;
 
-    for(var i = 0; i < rules.length; i++) {
-        var current = rules[i],
-            currentRuleResult = true;
+    for(let i = 0; i < rules.length; i++) {
+        const current = rules[i];
+        let currentRuleResult = true;
 
-        for(var field in current) {
-            var processNegative = field === 'bymonthday' && current[field] < 0;
+        for(const field in current) {
+            const processNegative = field === 'bymonthday' && current[field] < 0;
 
             if(dateGetterMap[field] && (!processNegative && current[field] !== dateGetterMap[field](date, weekStart))) {
                 currentRuleResult = false;
@@ -789,14 +789,14 @@ var checkDateByRule = function(date, rules, weekStart) {
     return result || !rules.length;
 };
 
-var getRecurrenceString = function(object) {
+const getRecurrenceString = function(object) {
     if(!object || !object.freq) {
         return;
     }
 
-    var result = '';
-    for(var field in object) {
-        var value = object[field];
+    let result = '';
+    for(const field in object) {
+        let value = object[field];
 
         if(field === 'interval' && value < 2) {
             continue;

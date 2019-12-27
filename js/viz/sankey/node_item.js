@@ -1,14 +1,14 @@
-var states = ['normal', 'hover'],
-    isDefined = require('../../core/utils/type').isDefined;
+const states = ['normal', 'hover'];
+const isDefined = require('../../core/utils/type').isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions) {
 
-    let border = itemOptions.border,
-        baseBorder = itemBaseOptions.border,
-        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
-        borderWidth = isDefined(border.width) ? border.width : baseBorder.width,
-        borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1),
-        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
+    const border = itemOptions.border;
+    const baseBorder = itemBaseOptions.border;
+    const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
+    const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
+    const borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1);
+    const opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
 
     return {
         fill: itemOptions.color || color,
@@ -21,19 +21,19 @@ function compileAttrs(color, itemOptions, itemBaseOptions) {
 }
 
 function compileLabelAttrs(labelOptions, filter, node) {
-    var _patchFontOptions = require('../core/utils').patchFontOptions;
+    const _patchFontOptions = require('../core/utils').patchFontOptions;
 
     if(labelOptions.useNodeColors) {
         labelOptions.font.color = node.color;
     }
 
-    var borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false,
-        borderWidth = isDefined(labelOptions.border.width) ? labelOptions.border.width : 0,
-        borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color,
-        borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1,
-        attr = {
-            filter: filter
-        };
+    const borderVisible = isDefined(labelOptions.border.visible) ? labelOptions.border.visible : false;
+    const borderWidth = isDefined(labelOptions.border.width) ? labelOptions.border.width : 0;
+    const borderColor = isDefined(labelOptions.border.color) ? labelOptions.border.color : labelOptions.font.color;
+    const borderOpacity = isDefined(labelOptions.border.opacity) ? labelOptions.border.opacity : 1;
+    const attr = {
+        filter: filter
+    };
 
     if(borderVisible && borderWidth) {
         attr.stroke = borderColor;
@@ -48,8 +48,8 @@ function compileLabelAttrs(labelOptions, filter, node) {
 }
 
 function Node(widget, params) {
-    var that = this,
-        widgetOffset = widget._renderer.getRootOffset();
+    const that = this;
+    const widgetOffset = widget._renderer.getRootOffset();
 
     that.code = 0;
     that.widget = widget;

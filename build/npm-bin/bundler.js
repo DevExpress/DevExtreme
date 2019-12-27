@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-var path = require('path'),
-    webpack = require('webpack'),
-    webpackVersion = require('webpack/package.json').version;
+const path = require('path');
+const webpack = require('webpack');
+const webpackVersion = require('webpack/package.json').version;
 
-var outputDir = process.cwd(),
-    sourcesDir = path.join(__dirname, '..'),
-    bundle = process.argv.length > 2 ? process.argv[2] : 'dx.custom';
+const outputDir = process.cwd();
+const sourcesDir = path.join(__dirname, '..');
+let bundle = process.argv.length > 2 ? process.argv[2] : 'dx.custom';
 
 bundle = bundle.replace(/.config.js$/, '');
 
-var baseConfig = require('./webpack.config.js');
-var createConfig = function(outputFile, mode) {
-    var config = Object.assign({}, baseConfig);
+const baseConfig = require('./webpack.config.js');
+const createConfig = function(outputFile, mode) {
+    const config = Object.assign({}, baseConfig);
 
     if(webpackVersion.split('.')[0] >= 4) {
         config.mode = mode;
@@ -48,7 +48,7 @@ webpack([
         throw err;
     }
 
-    var jsonStats = stats.toJson();
+    const jsonStats = stats.toJson();
     if(jsonStats.errors.length) {
         console.log('\'' + bundle + '\' bundles creation failed!\n\n' + jsonStats.errors.join('\n\n'));
     } else {

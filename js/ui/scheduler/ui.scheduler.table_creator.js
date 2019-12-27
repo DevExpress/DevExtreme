@@ -13,7 +13,7 @@ const SchedulerTableCreator = {
 
     insertAllDayRow: function(allDayElements, tableBody, index) {
         if(allDayElements[index]) {
-            var row = allDayElements[index].find(ROW_SELECTOR);
+            let row = allDayElements[index].find(ROW_SELECTOR);
 
             if(!row.length) {
                 row = $(domAdapter.createElement(ROW_SELECTOR));
@@ -25,14 +25,14 @@ const SchedulerTableCreator = {
     },
 
     makeTable: function(options) {
-        var tableBody = domAdapter.createElement('tbody'),
-            templateCallbacks = [],
-            row,
-            rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount,
-            allDayElementIndex = 0,
-            allDayElements = options.allDayElements,
-            groupIndex = options.groupIndex,
-            rowCount = options.rowCount;
+        const tableBody = domAdapter.createElement('tbody');
+        const templateCallbacks = [];
+        let row;
+        const rowCountInGroup = options.groupCount ? options.rowCount / options.groupCount : options.rowCount;
+        let allDayElementIndex = 0;
+        const allDayElements = options.allDayElements;
+        const groupIndex = options.groupIndex;
+        const rowCount = options.rowCount;
 
         $(options.container).append(tableBody);
 
@@ -41,18 +41,18 @@ const SchedulerTableCreator = {
             allDayElementIndex++;
         }
 
-        for(var i = 0; i < rowCount; i++) {
+        for(let i = 0; i < rowCount; i++) {
             row = domAdapter.createElement(ROW_SELECTOR);
             tableBody.appendChild(row);
 
-            var isLastRowInGroup = (i + 1) % rowCountInGroup === 0;
+            const isLastRowInGroup = (i + 1) % rowCountInGroup === 0;
 
             if(options.rowClass) {
                 row.className = options.rowClass;
             }
 
-            for(var j = 0; j < options.cellCount; j++) {
-                var td = domAdapter.createElement('td');
+            for(let j = 0; j < options.cellCount; j++) {
+                const td = domAdapter.createElement('td');
                 row.appendChild(td);
 
                 if(options.cellClass) {
@@ -64,9 +64,9 @@ const SchedulerTableCreator = {
                 }
 
 
-                var cellDataObject,
-                    dataKey,
-                    dataValue;
+                var cellDataObject;
+                var dataKey;
+                var dataValue;
 
                 if(options.getCellData) {
                     cellDataObject = options.getCellData(td, i, j, groupIndex);
@@ -76,7 +76,7 @@ const SchedulerTableCreator = {
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
-                    var templateOptions = {
+                    const templateOptions = {
                         model: {
                             text: options.getCellText ? options.getCellText(i, j) : '',
                             date: options.getCellDate ? options.getCellDate(i) : undefined
@@ -122,7 +122,7 @@ const SchedulerTableCreator = {
     },
 
     makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
-        var rows = [];
+        let rows = [];
 
         if(type === this.VERTICAL) {
             rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
@@ -134,19 +134,19 @@ const SchedulerTableCreator = {
     },
 
     makeGroupedTableFromJSON: function(type, data, config) {
-        var table,
-            cellStorage = [],
-            rowIndex = 0;
+        let table;
+        const cellStorage = [];
+        let rowIndex = 0;
 
         config = config || {};
 
-        var cellTag = config.cellTag || 'td',
-            childrenField = config.childrenField || 'children',
-            titleField = config.titleField || 'title',
-            groupTableClass = config.groupTableClass,
-            groupRowClass = config.groupRowClass,
-            groupCellClass = config.groupCellClass,
-            groupCellCustomContent = config.groupCellCustomContent;
+        const cellTag = config.cellTag || 'td';
+        const childrenField = config.childrenField || 'children';
+        const titleField = config.titleField || 'title';
+        const groupTableClass = config.groupTableClass;
+        const groupRowClass = config.groupRowClass;
+        const groupCellClass = config.groupCellClass;
+        const groupCellCustomContent = config.groupCellCustomContent;
 
         function createTable() {
             table = domAdapter.createElement('table');
@@ -164,7 +164,7 @@ const SchedulerTableCreator = {
         }
 
         function createCell(text, childCount, index, data) {
-            var cell = {
+            const cell = {
                 element: domAdapter.createElement(cellTag),
                 childCount: childCount
             };
@@ -173,7 +173,7 @@ const SchedulerTableCreator = {
                 cell.element.className = groupCellClass;
             }
 
-            var cellText = domAdapter.createTextNode(text);
+            const cellText = domAdapter.createTextNode(text);
             if(typeof groupCellCustomContent === 'function') {
                 groupCellCustomContent(cell.element, cellText, index, data);
             } else {
@@ -184,9 +184,9 @@ const SchedulerTableCreator = {
         }
 
         function generateCells(data) {
-            for(var i = 0; i < data.length; i++) {
-                var childCount = getChildCount(data[i]),
-                    cell = createCell(data[i][titleField], childCount, i, data[i]);
+            for(let i = 0; i < data.length; i++) {
+                const childCount = getChildCount(data[i]);
+                const cell = createCell(data[i][titleField], childCount, i, data[i]);
 
                 if(!cellStorage[rowIndex]) {
                     cellStorage[rowIndex] = [];
@@ -203,16 +203,16 @@ const SchedulerTableCreator = {
 
         function putCellsToRows() {
             cellStorage.forEach(function(cells) {
-                var row = domAdapter.createElement(ROW_SELECTOR);
+                const row = domAdapter.createElement(ROW_SELECTOR);
                 if(groupRowClass) {
                     row.className = groupRowClass;
                 }
 
-                var rowspans = [];
+                const rowspans = [];
 
-                for(var i = cells.length - 1; i >= 0; i--) {
-                    var prev = cells[i + 1],
-                        rowspan = cells[i].childCount;
+                for(let i = cells.length - 1; i >= 0; i--) {
+                    const prev = cells[i + 1];
+                    let rowspan = cells[i].childCount;
                     if(prev && prev.childCount) {
                         rowspan *= prev.childCount;
                     }
@@ -241,17 +241,17 @@ const SchedulerTableCreator = {
 
     _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
 
-        let cells = [],
-            items = group.items,
-            itemCount = items.length;
+        const cells = [];
+        const items = group.items;
+        const itemCount = items.length;
 
         for(let i = 0; i < repeatCount * repeatByDate; i++) {
             for(let j = 0; j < itemCount; j++) {
-                let $container = $('<div>'),
-                    cell = {};
+                let $container = $('<div>');
+                const cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
-                    let templateOptions = {
+                    const templateOptions = {
                         model: items[j],
                         container: getPublicElement($container),
                         index: i * itemCount + j
@@ -279,11 +279,11 @@ const SchedulerTableCreator = {
     },
 
     _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate) {
-        var cellTemplates = [],
-            repeatCount = 1,
-            cellsArray = [];
+        const cellTemplates = [];
+        let repeatCount = 1;
+        const cellsArray = [];
 
-        var cellIterator = function(cell) {
+        const cellIterator = function(cell) {
             if(cell.template) {
                 cellTemplates.push(cell.template);
             }
@@ -294,21 +294,21 @@ const SchedulerTableCreator = {
                 repeatCount = groups[i - 1].items.length * repeatCount;
             }
 
-            var cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+            const cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
             cells.forEach(cellIterator);
             cellsArray.push(cells);
         }
 
-        var rows = [],
-            groupCount = cellsArray.length;
+        const rows = [];
+        const groupCount = cellsArray.length;
 
         for(let i = 0; i < groupCount; i++) {
             rows.push($('<div>').addClass(cssClasses.groupHeaderRowClass));
         }
 
         for(let i = groupCount - 1; i >= 0; i--) {
-            var currentColumnLength = cellsArray[i].length;
-            for(var j = 0; j < currentColumnLength; j++) {
+            const currentColumnLength = cellsArray[i].length;
+            for(let j = 0; j < currentColumnLength; j++) {
                 rows[i].append(cellsArray[i][j].element);
             }
         }
@@ -320,13 +320,13 @@ const SchedulerTableCreator = {
     },
 
     _makeHorizontalGroupedRows: function(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
-        var repeatCount = 1,
-            groupCount = groups.length,
-            rows = [],
-            cellTemplates = [],
-            repeatByDate = groupByDate ? cellCount : 1;
+        let repeatCount = 1;
+        const groupCount = groups.length;
+        const rows = [];
+        const cellTemplates = [];
+        const repeatByDate = groupByDate ? cellCount : 1;
 
-        var cellIterator = function(cell) {
+        const cellIterator = function(cell) {
             if(cell.template) {
                 cellTemplates.push(cell.template);
             }
@@ -335,12 +335,12 @@ const SchedulerTableCreator = {
         };
 
 
-        for(var i = 0; i < groupCount; i++) {
+        for(let i = 0; i < groupCount; i++) {
             if(i > 0) {
                 repeatCount = groups[i - 1].items.length * repeatCount;
             }
 
-            var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
+            const cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
 
             rows.push(
                 $('<tr>')
@@ -349,11 +349,11 @@ const SchedulerTableCreator = {
             );
         }
 
-        var maxCellCount = rows[groupCount - 1].find('th').length;
+        const maxCellCount = rows[groupCount - 1].find('th').length;
 
-        for(var j = 0; j < groupCount; j++) {
-            var $cell = rows[j].find('th'),
-                colspan = maxCellCount / $cell.length;
+        for(let j = 0; j < groupCount; j++) {
+            const $cell = rows[j].find('th');
+            let colspan = maxCellCount / $cell.length;
 
             if(!groupByDate) {
                 colspan = colspan * cellCount;
@@ -374,17 +374,17 @@ const SchedulerTableCreator = {
         repeatByDate = repeatByDate || 1;
         repeatCount = repeatCount * repeatByDate;
 
-        var cells = [],
-            items = group.items,
-            itemCount = items.length;
+        const cells = [];
+        const items = group.items;
+        const itemCount = items.length;
 
-        for(var i = 0; i < repeatCount; i++) {
-            for(var j = 0; j < itemCount; j++) {
-                var $container = $('<div>'),
-                    cell = {};
+        for(let i = 0; i < repeatCount; i++) {
+            for(let j = 0; j < itemCount; j++) {
+                let $container = $('<div>');
+                const cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
-                    var templateOptions = {
+                    const templateOptions = {
                         model: items[j],
                         container: getPublicElement($container),
                         index: i * itemCount + j

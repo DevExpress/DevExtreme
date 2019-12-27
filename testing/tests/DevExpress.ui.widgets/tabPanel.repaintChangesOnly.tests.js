@@ -40,14 +40,14 @@ QUnit.module('repaintChangesOnly', {
         };
         this.checkTitleRendered = (assert, expectedCalls) => {
             assert.equal(this.titleRenderedSpy.callCount, expectedCalls.length, 'titleRenderedSpy.callCount');
-            let calls = this.titleRenderedSpy.getCalls();
+            const calls = this.titleRenderedSpy.getCalls();
             for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
                 assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i], `titleRenderedSpy.calls[${i}].itemData`);
             }
         };
         this.checkItemRendered = (assert, expectedCalls) => {
             assert.equal(this.itemRenderedSpy.callCount, expectedCalls.length, 'itemRenderedSpy.callCount');
-            let calls = this.itemRenderedSpy.getCalls();
+            const calls = this.itemRenderedSpy.getCalls();
             for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
                 assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i].data, `itemRenderedSpy.call[${i}].itemData`);
                 assert.equal(calls[i].args[0].itemIndex, expectedCalls[i].index, `itemRenderedSpy.call[${i}].itemIndex`);
@@ -55,7 +55,7 @@ QUnit.module('repaintChangesOnly', {
         };
         this.checkItemDeleted = (assert, expectedCalls) => {
             assert.equal(this.itemDeletedSpy.callCount, expectedCalls.length, 'itemDeletedSpy.callCount');
-            let calls = this.itemDeletedSpy.getCalls();
+            const calls = this.itemDeletedSpy.getCalls();
             for(let i = 0; i < expectedCalls.length && i < calls.length; i++) {
                 assert.deepEqual(calls[i].args[0].itemData, expectedCalls[i], `itemDeletedSpy.call[${i}].itemData`);
             }
@@ -71,7 +71,7 @@ QUnit.module('repaintChangesOnly', {
 
 }, () => {
     ['items', 'dataSource'].forEach(dataSourcePropertyName => {
-        let testContext = `, option(${dataSourcePropertyName})`;
+        const testContext = `, option(${dataSourcePropertyName})`;
 
         // T731713, T744678
         QUnit.test('[] -> [{1}]' + testContext, function(assert) {

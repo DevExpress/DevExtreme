@@ -4,19 +4,19 @@ import { inArray } from '../../core/utils/array';
 import { isDefined } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 
-var PAGER_CLASS = 'pager',
-    MAX_PAGES_COUNT = 10;
+const PAGER_CLASS = 'pager';
+const MAX_PAGES_COUNT = 10;
 
-var PagerView = modules.View.inherit({
+const PagerView = modules.View.inherit({
     init: function() {
-        var that = this,
-            dataController = that.getController('data');
+        const that = this;
+        const dataController = that.getController('data');
 
         that._isVisible = false;
 
         dataController.changed.add(function(e) {
             if(e && e.repaintChangesOnly) {
-                var pager = that._getPager();
+                const pager = that._getPager();
                 if(pager) {
                     pager.option({
                         pageCount: dataController.pageCount(),
@@ -33,44 +33,44 @@ var PagerView = modules.View.inherit({
     },
 
     _getPager: function() {
-        var $element = this.element();
+        const $element = this.element();
         return $element && $element.data('dxPager');
     },
 
     _renderCore: function() {
-        var that = this,
-            $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS)),
-            pagerOptions = that.option('pager') || {},
-            dataController = that.getController('data'),
-            keyboardController = that.getController('keyboardNavigation'),
-            options = {
-                maxPagesCount: MAX_PAGES_COUNT,
-                pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
-                pageCount: dataController.pageCount(),
-                pageSize: dataController.pageSize(),
-                showPageSizes: pagerOptions.showPageSizeSelector,
-                showInfo: pagerOptions.showInfo,
-                pagesNavigatorVisible: pagerOptions.visible,
-                showNavigationButtons: pagerOptions.showNavigationButtons,
-                pageSizes: that.getPageSizes(),
-                totalCount: dataController.totalCount(),
-                hasKnownLastPage: dataController.hasKnownLastPage(),
-                pageIndexChanged: function(pageIndex) {
-                    if(dataController.pageIndex() !== pageIndex - 1) {
-                        setTimeout(function() {
-                            dataController.pageIndex(pageIndex - 1);
-                        });
-                    }
-                },
-                pageSizeChanged: function(pageSize) {
+        const that = this;
+        const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
+        const pagerOptions = that.option('pager') || {};
+        const dataController = that.getController('data');
+        const keyboardController = that.getController('keyboardNavigation');
+        const options = {
+            maxPagesCount: MAX_PAGES_COUNT,
+            pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
+            pageCount: dataController.pageCount(),
+            pageSize: dataController.pageSize(),
+            showPageSizes: pagerOptions.showPageSizeSelector,
+            showInfo: pagerOptions.showInfo,
+            pagesNavigatorVisible: pagerOptions.visible,
+            showNavigationButtons: pagerOptions.showNavigationButtons,
+            pageSizes: that.getPageSizes(),
+            totalCount: dataController.totalCount(),
+            hasKnownLastPage: dataController.hasKnownLastPage(),
+            pageIndexChanged: function(pageIndex) {
+                if(dataController.pageIndex() !== pageIndex - 1) {
                     setTimeout(function() {
-                        dataController.pageSize(pageSize);
+                        dataController.pageIndex(pageIndex - 1);
                     });
-                },
-                onKeyDown: e => keyboardController && keyboardController.executeAction('onKeyDown', e),
-                useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
-                useKeyboard: this.option('keyboardNavigation.enabled')
-            };
+                }
+            },
+            pageSizeChanged: function(pageSize) {
+                setTimeout(function() {
+                    dataController.pageSize(pageSize);
+                });
+            },
+            onKeyDown: e => keyboardController && keyboardController.executeAction('onKeyDown', e),
+            useLegacyKeyboardNavigation: this.option('useLegacyKeyboardNavigation'),
+            useKeyboard: this.option('keyboardNavigation.enabled')
+        };
 
         if(isDefined(pagerOptions.infoText)) {
             options.infoText = pagerOptions.infoText;
@@ -80,11 +80,11 @@ var PagerView = modules.View.inherit({
     },
 
     getPageSizes: function() {
-        var that = this,
-            dataController = that.getController('data'),
-            pagerOptions = that.option('pager'),
-            allowedPageSizes = pagerOptions && pagerOptions.allowedPageSizes,
-            pageSize = dataController.pageSize();
+        const that = this;
+        const dataController = that.getController('data');
+        const pagerOptions = that.option('pager');
+        const allowedPageSizes = pagerOptions && pagerOptions.allowedPageSizes;
+        const pageSize = dataController.pageSize();
 
         if(!isDefined(that._pageSizes) || inArray(pageSize, that._pageSizes) === -1) {
             that._pageSizes = [];
@@ -100,11 +100,11 @@ var PagerView = modules.View.inherit({
     },
 
     isVisible: function() {
-        var that = this,
-            dataController = that.getController('data'),
-            pagerOptions = that.option('pager'),
-            pagerVisible = pagerOptions && pagerOptions.visible,
-            scrolling = that.option('scrolling');
+        const that = this;
+        const dataController = that.getController('data');
+        const pagerOptions = that.option('pager');
+        let pagerVisible = pagerOptions && pagerOptions.visible;
+        const scrolling = that.option('scrolling');
 
         if(that._isVisible) {
             return true;
@@ -125,13 +125,13 @@ var PagerView = modules.View.inherit({
     },
 
     optionChanged: function(args) {
-        var that = this,
-            name = args.name,
-            isPager = name === 'pager',
-            isPaging = name === 'paging',
-            isDataSource = name === 'dataSource',
-            isScrolling = name === 'scrolling',
-            dataController = that.getController('data');
+        const that = this;
+        const name = args.name;
+        const isPager = name === 'pager';
+        const isPaging = name === 'paging';
+        const isDataSource = name === 'dataSource';
+        const isScrolling = name === 'scrolling';
+        const dataController = that.getController('data');
 
         if(isPager || isPaging || isScrolling || isDataSource) {
             args.handled = true;

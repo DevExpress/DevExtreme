@@ -19,7 +19,7 @@ class MetadataRepository {
     }
 
     init(themes) {
-        let promises = [];
+        const promises = [];
 
         themes.forEach(theme => {
             promises.push(new Promise(resolve => {
@@ -42,7 +42,7 @@ class MetadataRepository {
 
     updateData(data, theme) {
         data.forEach(item => {
-            let dataItem = this.getDataItemByKey(item.key, theme);
+            const dataItem = this.getDataItemByKey(item.key, theme);
             if(item) dataItem.Value = item.value;
         });
     }

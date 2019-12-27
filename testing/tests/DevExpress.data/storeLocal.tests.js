@@ -1,6 +1,6 @@
-var LocalStore = require('data/local_store');
+const LocalStore = require('data/local_store');
 
-var TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
+const TEST_NAME = '65DFE188-D178-11E1-A097-51216288709B';
 
 QUnit.test('name option is required', function(assert) {
     assert.throws(function() {
@@ -9,7 +9,7 @@ QUnit.test('name option is required', function(assert) {
 });
 
 QUnit.test('LocalStore with data option (T418633)', function(assert) {
-    var store = new LocalStore({
+    const store = new LocalStore({
         key: 'id',
         name: TEST_NAME,
         immediate: true,
@@ -22,7 +22,7 @@ QUnit.test('LocalStore with data option (T418633)', function(assert) {
 });
 
 QUnit.test('immediate flush', function(assert) {
-    var store1 = new LocalStore({
+    const store1 = new LocalStore({
         key: 'id',
         name: TEST_NAME,
         immediate: true
@@ -33,10 +33,10 @@ QUnit.test('immediate flush', function(assert) {
     store1.update(1, { b: 'b' });
     store1.remove(2);
 
-    var store2 = new LocalStore({ name: TEST_NAME, immediate: true });
+    const store2 = new LocalStore({ name: TEST_NAME, immediate: true });
     assert.deepEqual(store2._array, [{ id: 1, a: 'a', b: 'b' }]);
 
-    var store3 = new LocalStore({
+    const store3 = new LocalStore({
         name: TEST_NAME,
         immediate: true
     });

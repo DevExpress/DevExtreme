@@ -11,8 +11,8 @@ import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
 
 function setupCanvasStub(drawnElements, paths) {
-    var prototype = window.CanvasRenderingContext2D.prototype,
-        canvasPrototype = window.HTMLCanvasElement.prototype;
+    const prototype = window.CanvasRenderingContext2D.prototype;
+    const canvasPrototype = window.HTMLCanvasElement.prototype;
 
     // image
     sinon.stub(prototype, 'drawImage', function(img, x, y, width, height) {
@@ -45,7 +45,7 @@ function setupCanvasStub(drawnElements, paths) {
         });
     });
     sinon.stub(prototype, 'fill', function() {
-        var style = {
+        const style = {
             fillStyle: this.fillStyle,
             globalAlpha: this.globalAlpha
         };
@@ -185,12 +185,12 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     function getFontParam(fontString, paramType) {
-        var patterns = {
-                weight: '(bold|bolder)',
-                style: '(italic|oblique)',
-                size: '(\\d+[px|em|pt]+)'
-            },
-            matches = patterns[paramType] &&
+        const patterns = {
+            weight: '(bold|bolder)',
+            style: '(italic|oblique)',
+            size: '(\\d+[px|em|pt]+)'
+        };
+        const matches = patterns[paramType] &&
                 fontString.match(new RegExp(patterns[paramType], 'i'));
 
         return matches && matches[0];
@@ -213,17 +213,17 @@ function setupCanvasStub(drawnElements, paths) {
 
     // texts
     sinon.stub(prototype, 'fillText', function() {
-        var tempFont = this.font.replace(/px\s/g, 'px__'),
-            fontParts = tempFont.split('__'),
-            style = {
-                weight: getFontParam(fontParts[0], 'weight'),
-                style: getFontParam(fontParts[0], 'style'),
-                size: getFontParam(fontParts[0], 'size'),
-                font: fontParts[1].replace(/,\s+/g, ','),
-                fillStyle: this.fillStyle,
-                textAlign: this.textAlign,
-                globalAlpha: this.globalAlpha
-            };
+        const tempFont = this.font.replace(/px\s/g, 'px__');
+        const fontParts = tempFont.split('__');
+        const style = {
+            weight: getFontParam(fontParts[0], 'weight'),
+            style: getFontParam(fontParts[0], 'style'),
+            size: getFontParam(fontParts[0], 'size'),
+            font: fontParts[1].replace(/,\s+/g, ','),
+            fillStyle: this.fillStyle,
+            textAlign: this.textAlign,
+            globalAlpha: this.globalAlpha
+        };
 
         if(this.shadowBlur) {
             style.shadow = {
@@ -242,19 +242,19 @@ function setupCanvasStub(drawnElements, paths) {
     });
 
     sinon.stub(prototype, 'strokeText', function() {
-        var tempFont = this.font.replace(/px\s/g, 'px__'),
-            fontParts = tempFont.split('__'),
-            style = {
-                weight: getFontParam(fontParts[0], 'weight'),
-                style: getFontParam(fontParts[0], 'style'),
-                size: getFontParam(fontParts[0], 'size'),
-                font: fontParts[1].replace(/,\s+/g, ','),
-                fillStyle: this.fillStyle,
-                strokeStyle: this.strokeStyle,
-                lineWidth: this.lineWidth,
-                textAlign: this.textAlign,
-                globalAlpha: this.globalAlpha
-            };
+        const tempFont = this.font.replace(/px\s/g, 'px__');
+        const fontParts = tempFont.split('__');
+        const style = {
+            weight: getFontParam(fontParts[0], 'weight'),
+            style: getFontParam(fontParts[0], 'style'),
+            size: getFontParam(fontParts[0], 'size'),
+            font: fontParts[1].replace(/,\s+/g, ','),
+            fillStyle: this.fillStyle,
+            strokeStyle: this.strokeStyle,
+            lineWidth: this.lineWidth,
+            textAlign: this.textAlign,
+            globalAlpha: this.globalAlpha
+        };
 
         if(this.shadowBlur) {
             style.shadow = {
@@ -292,8 +292,8 @@ function setupCanvasStub(drawnElements, paths) {
 }
 
 function teardownCanvasStub() {
-    var prototype = window.CanvasRenderingContext2D.prototype,
-        canvasPrototype = window.HTMLCanvasElement.prototype;
+    const prototype = window.CanvasRenderingContext2D.prototype;
+    const canvasPrototype = window.HTMLCanvasElement.prototype;
 
     // image
     prototype.drawImage.restore();
@@ -354,14 +354,14 @@ QUnit.module('Svg to image to canvas', {
 });
 
 QUnit.test('toDataURL ImageQuality', function(assert) {
-    var done = assert.async(),
-        imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, { format: 'png' });
+    const done = assert.async();
+    const imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, { format: 'png' });
 
     assert.expect(2);
     $.when(imageBlob).done(function() {
         try {
-            var spy = window.HTMLCanvasElement.prototype.toDataURL.getCall(0),
-                args = spy.args;
+            const spy = window.HTMLCanvasElement.prototype.toDataURL.getCall(0);
+            const args = spy.args;
 
             assert.equal(args[0], 'image/png', 'Mime type correct');
             assert.equal(args[1], 1, 'Image quality is correct');
@@ -378,14 +378,14 @@ QUnit.test('Special symbols drown on canvas correct', function(assert) {
         return;
     }
 
-    var that = this,
-        done = assert.async(),
-        imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
-            {
-                width: 500,
-                height: 250,
-                format: 'png'
-            });
+    const that = this;
+    const done = assert.async();
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<g class=\'dxc-title\' transform=\'translate(0,0)\'><text x=\'0\' y=\'30\' transform=\'translate(160,0)\' text-anchor=\'middle\'>Специальные символы</text></g>' + testingMarkupEnd,
+        {
+            width: 500,
+            height: 250,
+            format: 'png'
+        });
 
     assert.expect(2);
     $.when(imageBlob).done(function() {
@@ -404,21 +404,21 @@ QUnit.test('Defined background', function(assert) {
         return;
     }
 
-    var that = this,
-        done = assert.async(),
-        imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
-            {
-                width: 560,
-                height: 290,
-                margin: 10,
-                format: 'png',
-                backgroundColor: '#ff0000'
-            });
+    const that = this;
+    const done = assert.async();
+    const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
+        {
+            width: 560,
+            height: 290,
+            margin: 10,
+            format: 'png',
+            backgroundColor: '#ff0000'
+        });
 
     assert.expect(3);
     $.when(imageBlob).done(function() {
         try {
-            var backgroundElem = that.drawnElements[0];
+            const backgroundElem = that.drawnElements[0];
 
             assert.equal(backgroundElem.type, 'fillRect', 'Fill rect');
             assert.deepEqual(backgroundElem.args, {
@@ -449,7 +449,7 @@ QUnit.module('Svg to canvas', {
         this.getComputedStyle && this.getComputedStyle.restore();
     },
     stubGetComputedStyle: function(testElement, testStyle) {
-        var getComputedStyle = window.getComputedStyle;
+        const getComputedStyle = window.getComputedStyle;
 
         this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(element) {
             if(element === testElement) {
@@ -461,10 +461,10 @@ QUnit.module('Svg to canvas', {
 });
 
 QUnit.test('Path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(8);
     $.when(imageBlob).done(function(blob) {
@@ -502,10 +502,10 @@ QUnit.test('Path', function(assert) {
 });
 
 QUnit.test('Path with missed L directive', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 200 100 300 200 L 331 280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 200 100 300 200 L 331 280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(7);
     $.when(imageBlob).done(function(blob) {
@@ -544,10 +544,10 @@ QUnit.test('Path with missed L directive', function(assert) {
 });
 
 QUnit.test('Path with no spaces between directives and with comma separated coords', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M36,181L184,98,200,100,300,200L331,280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M36,181L184,98,200,100,300,200L331,280" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(7);
     $.when(imageBlob).done(function(blob) {
@@ -586,10 +586,10 @@ QUnit.test('Path with no spaces between directives and with comma separated coor
 });
 
 QUnit.test('Closed path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z" stroke-width="2" stroke="#FF0000" fill="none"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z" stroke-width="2" stroke="#FF0000" fill="none"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
@@ -605,10 +605,10 @@ QUnit.test('Closed path', function(assert) {
 });
 
 QUnit.test('Several closed paths (T809807)', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z M 36 181 L 184 98 L 331 280 Z" stroke-width="2" stroke="#FF0000" fill="none"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z M 36 181 L 184 98 L 331 280 Z" stroke-width="2" stroke="#FF0000" fill="none"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -623,10 +623,10 @@ QUnit.test('Several closed paths (T809807)', function(assert) {
 });
 
 QUnit.test('Filled path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z" stroke-width="0" stroke="none" opacity="0.5" fill="#ff0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z" stroke-width="0" stroke="none" opacity="0.5" fill="#ff0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
@@ -643,10 +643,10 @@ QUnit.test('Filled path', function(assert) {
 });
 
 QUnit.test('Bezier path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 61 53 C 61 53 45 53 87 50 C 29 45 71 47 13 26" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 61 53 C 61 53 45 53 87 50 C 29 45 71 47 13 26" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(4);
     $.when(imageBlob).done(function(blob) {
@@ -682,10 +682,10 @@ QUnit.test('Bezier path', function(assert) {
 });
 
 QUnit.test('Path with fill none and parent fill', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<g fill="#FF0000"><path d="M 86 373 C 86 373 124 373 143 369 C 161.66666666666666 364.3746312684366 180.33333333333334 368 199 345 C 217.66666666666666 322 236.33333333333334 267.1666666666667 255 231 C 273.6666666666667 194.83333333333334 292.3333333333333 150.13569321533922 311 128 C 330 105.46902654867256 368 97 368 97" fill="none" stroke="#955f71" stroke-width="2"></path></g>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g fill="#FF0000"><path d="M 86 373 C 86 373 124 373 143 369 C 161.66666666666666 364.3746312684366 180.33333333333334 368 199 345 C 217.66666666666666 322 236.33333333333334 267.1666666666667 255 231 C 273.6666666666667 194.83333333333334 292.3333333333333 150.13569321533922 311 128 C 330 105.46902654867256 368 97 368 97" fill="none" stroke="#955f71" stroke-width="2"></path></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -705,10 +705,10 @@ QUnit.test('Path with fill none and parent fill', function(assert) {
 });
 
 QUnit.test('Arc path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 A 15 15 0 0 0 14 15 L 99 15 A 0 0 0 0 1 99 15" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 A 15 15 0 0 0 14 15 L 99 15 A 0 0 0 0 1 99 15" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(15);
     $.when(imageBlob).done(function(blob) {
@@ -764,10 +764,10 @@ QUnit.test('Arc path', function(assert) {
 });
 
 QUnit.test('Arc path (relative coords)', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 a 15 15 0 0 0 -2 -13 L 99 15 a 0 0 0 0 1 0 0" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 10 10 L 20 20 16 28 a 15 15 0 0 0 -2 -13 L 99 15 a 0 0 0 0 1 0 0" stroke-width="1" stroke="#ffffff" stroke-linejoin="round" fill="#ff0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(12);
     $.when(imageBlob).done(function(blob) {
@@ -815,10 +815,10 @@ QUnit.test('Arc path (relative coords)', function(assert) {
 });
 
 QUnit.test('Skip unknown command', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 V8 Z" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 V8 Z" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(9);
     $.when(imageBlob).done(function() {
@@ -859,11 +859,11 @@ QUnit.test('Skip unknown command', function(assert) {
 });
 
 QUnit.test('Rect', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="81" y="24" width="118" height="168" transform="translate(250,230)" stroke-dasharray="8,6" opacity="0.5" stroke-width="12" stroke="#955f71" fill="#955f71"></rect>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="81" y="24" width="118" height="168" transform="translate(250,230)" stroke-dasharray="8,6" opacity="0.5" stroke-width="12" stroke="#955f71" fill="#955f71"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(10);
     $.when(imageBlob).done(function(blob) {
@@ -905,10 +905,10 @@ QUnit.test('Rect', function(assert) {
 });
 
 QUnit.test('Image margins', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<rect x="81" y="24" width="118" height="168" transform="translate(250,230)" stroke-dasharray="8,6" opacity="0.5" stroke-width="12" stroke="#955f71" fill="#955f71"></rect>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="81" y="24" width="118" height="168" transform="translate(250,230)" stroke-dasharray="8,6" opacity="0.5" stroke-width="12" stroke="#955f71" fill="#955f71"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
@@ -922,12 +922,12 @@ QUnit.test('Image margins', function(assert) {
 });
 
 QUnit.test('Rect with cornerRadius', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="21" y="100" rx="10" ry="10" width="118" height="168" transform="translate(250,230)" stroke-width="7" stroke="#955f71" fill="#955f71"></rect>'
-                                    + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="21" y="100" rx="10" ry="10" width="118" height="168" transform="translate(250,230)" stroke-width="7" stroke="#955f71" fill="#955f71"></rect>'
+                                    + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(10);
     $.when(imageBlob).done(function(blob) {
@@ -977,12 +977,12 @@ QUnit.test('Rect with cornerRadius', function(assert) {
 });
 
 QUnit.test('Rect width cornerRadius exceed 1/2 height or 1/2 width', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="21" y="100" rx="30" ry="30" width="118" height="30" transform="translate(250,230)" stroke-width="7" stroke="#955f71" fill="#955f71"></rect>'
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="21" y="100" rx="30" ry="30" width="118" height="30" transform="translate(250,230)" stroke-width="7" stroke="#955f71" fill="#955f71"></rect>'
                                     + '<rect x="21" y="100" rx="30" ry="30" width="50" height="100" transform="translate(250,230)" stroke-width="7" stroke="#955f71" fill="#955f71"></rect>'
-                                    + testingMarkupEnd,
-        imageBlob = getData(markup);
+                                    + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
@@ -997,13 +997,13 @@ QUnit.test('Rect width cornerRadius exceed 1/2 height or 1/2 width', function(as
 });
 
 QUnit.test('Stroke-opacity / Fill-opacity', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="21" y="100" width="118" height="30" transform="translate(250,230)" stroke-width="7" stroke-opacity="0.7" fill-opacity="0.5" stroke="#955f71" fill="#955f71"></rect>'
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="21" y="100" width="118" height="30" transform="translate(250,230)" stroke-width="7" stroke-opacity="0.7" fill-opacity="0.5" stroke="#955f71" fill="#955f71"></rect>'
                                     + '<rect x="21" y="100" width="118" height="30" transform="translate(250,230)" stroke-width="7" opacity="0.5" stroke="#955f71" fill="#955f71"></rect>'
                                     + '<rect x="21" y="100" width="118" height="30" transform="translate(250,230)" stroke-width="7" stroke-opacity="0.7" fill-opacity="0.5" opacity="0.5" stroke="#955f71" fill="#955f71"></rect>'
-                                    + testingMarkupEnd,
-        imageBlob = getData(markup);
+                                    + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(6);
     $.when(imageBlob).done(function(blob) {
@@ -1028,9 +1028,9 @@ QUnit.test('Filter shadow', function(assert) {
         return;
     }
 
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
                     '<defs>' +
                     '<filter id="testFilter1" x="-40%" y="-40%" width="180%" height="200%" transform="translate(0,0)"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="1"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feOffset><feFlood result="floodResult" flood-color="#223387" flood-opacity="0.2"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter>' +
                     '<filter id="testFilter1-part-1" x="-40%" y="-40%" width="180%" height="200%" transform="translate(0,0)"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="1"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feOffset><feFlood result="floodResult" flood-color="#223387" flood-opacity="0.2"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter>' +
@@ -1039,8 +1039,8 @@ QUnit.test('Filter shadow', function(assert) {
                     '<circle cx="0" cy="0" r="4" transform="translate(0,0)" filter="none" stroke="none" stroke-width="0" fill="#ffffff" opacity="0.32"></circle>' +
                     '<circle cx="0" cy="0" r="4" transform="translate(0,0)" filter="url(#testFilter1-part-2)" stroke="#ffffff" stroke-width="2" fill="#ba4d51"></circle>' +
                     '<circle cx="20" cy="20" r="4" filter="url(someurlpart#testFilter2-part-1)" fill="#ba4d51"></circle>' +
-                    testingMarkupEnd,
-        imageBlob = getData(markup);
+                    testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(4);
     $.when(imageBlob).done(function(blob) {
@@ -1096,10 +1096,10 @@ QUnit.test('lineargradient', function(assert) {
 });
 
 QUnit.test('Circle', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<circle cx="0" cy="0" r="140" transform="translate(250,230)" stroke-dasharray="5,10" opacity="0.5" fill="#F05B41" stroke="#955f71"></circle>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<circle cx="0" cy="0" r="140" transform="translate(250,230)" stroke-dasharray="5,10" opacity="0.5" fill="#F05B41" stroke="#955f71"></circle>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(5);
     $.when(imageBlob).done(function(blob) {
@@ -1135,11 +1135,11 @@ QUnit.test('Circle', function(assert) {
 });
 
 QUnit.test('Image with xlink:href', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(8);
     $.when(imageBlob).done(function(blob) {
@@ -1174,10 +1174,10 @@ QUnit.test('Image with xlink:href', function(assert) {
 });
 
 QUnit.test('Image with href', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -1200,10 +1200,10 @@ QUnit.test('Image with href', function(assert) {
 });
 
 QUnit.test('Image with 404 href', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/wrongurl" visibility="visible"></image>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/wrongurl" visibility="visible"></image>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(1);
     $.when(imageBlob).done(function(blob) {
@@ -1216,10 +1216,10 @@ QUnit.test('Image with 404 href', function(assert) {
 });
 
 QUnit.test('Export image in group', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(5);
     $.when(imageBlob).done(() => {
@@ -1236,8 +1236,8 @@ QUnit.test('Export image in group', function(assert) {
 });
 
 QUnit.test('Export draws into hidden canvas', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
 
     getData(markup).then(done);
 
@@ -1245,17 +1245,17 @@ QUnit.test('Export draws into hidden canvas', function(assert) {
 });
 
 QUnit.test('Text', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="20" y="30" text-anchor="middle" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(12);
     $.when(imageBlob).done(function(blob) {
         try {
             assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
 
-            var textElem = that.drawnElements[1];
+            const textElem = that.drawnElements[1];
 
             assert.equal(textElem.style.weight, 'bold', 'Style weight');
 
@@ -1277,16 +1277,16 @@ QUnit.test('Text', function(assert) {
 });
 
 QUnit.test('Text offset position calculation with start alignment', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text x="10" y="30" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
             '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
 
-            testingMarkupEnd,
-        imageBlob = getData(markup),
-        canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0],
-        ctx = canvas.getContext('2d');
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0];
+    const ctx = canvas.getContext('2d');
 
     ctx.font = '28px sans-serif';
 
@@ -1294,8 +1294,8 @@ QUnit.test('Text offset position calculation with start alignment', function(ass
 
     $.when(imageBlob).done(function(blob) {
         try {
-            var part1Width = ctx.measureText('World').width,
-                part2Width = ctx.measureText('Population').width;
+            const part1Width = ctx.measureText('World').width;
+            const part2Width = ctx.measureText('Population').width;
 
             assert.equal(that.drawnElements.length, 4, 'Canvas elements count');
 
@@ -1317,12 +1317,12 @@ QUnit.test('Text offset position calculation with start alignment', function(ass
 });
 
 QUnit.test('Text with default coordinates', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">Text</text>' +
-            testingMarkupEnd,
-        imageBlob = getData(markup);
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(2);
 
@@ -1337,9 +1337,9 @@ QUnit.test('Text with default coordinates', function(assert) {
 });
 
 QUnit.test('tspan element inside other tspan', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text x="100" y="100" text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
             '<tspan x="0" y="30" text-anchor="start">' +
             '<tspan>Imports, Dec 2014 - May 2015</tspan>' +
@@ -1351,8 +1351,8 @@ QUnit.test('tspan element inside other tspan', function(assert) {
             '</tspan>' +
 
             '</text > ' +
-            testingMarkupEnd,
-        imageBlob = getData(markup);
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(6);
 
@@ -1372,15 +1372,15 @@ QUnit.test('tspan element inside other tspan', function(assert) {
 });
 
 QUnit.test('Text offset position calculation with center alignment', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text x="10" y="30" text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
             '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
-            testingMarkupEnd,
-        imageBlob = getData(markup),
-        canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0],
-        ctx = canvas.getContext('2d');
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0];
+    const ctx = canvas.getContext('2d');
 
     ctx.font = '28px sans-serif';
 
@@ -1388,10 +1388,10 @@ QUnit.test('Text offset position calculation with center alignment', function(as
 
     $.when(imageBlob).done(function(blob) {
         try {
-            var part1Width = ctx.measureText('World').width,
-                part2Width = ctx.measureText('Population').width,
-                part3Width = ctx.measureText('by Decade').width,
-                center = (part1Width + part2Width + part3Width) / 2;
+            const part1Width = ctx.measureText('World').width;
+            const part2Width = ctx.measureText('Population').width;
+            const part3Width = ctx.measureText('by Decade').width;
+            const center = (part1Width + part2Width + part3Width) / 2;
 
             assert.equal(that.drawnElements.length, 4, 'Canvas elements count');
 
@@ -1410,16 +1410,16 @@ QUnit.test('Text offset position calculation with center alignment', function(as
 });
 
 QUnit.test('Text offset position calculation with end alignment', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text x="10" y="30" text-anchor="end" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
             '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
 
-            testingMarkupEnd,
-        imageBlob = getData(markup),
-        canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0],
-        ctx = canvas.getContext('2d');
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const canvas = $('<canvas width=\'1000\' height=\'1000\'>').appendTo('#qunit-fixture')[0];
+    const ctx = canvas.getContext('2d');
 
     ctx.font = '28px sans-serif';
 
@@ -1427,10 +1427,10 @@ QUnit.test('Text offset position calculation with end alignment', function(asser
 
     $.when(imageBlob).done(function(blob) {
         try {
-            var part1Width = ctx.measureText('World').width,
-                part2Width = ctx.measureText('Population').width,
-                part3Width = ctx.measureText('by Decade').width,
-                commonWidth = (part1Width + part2Width + part3Width);
+            const part1Width = ctx.measureText('World').width;
+            const part2Width = ctx.measureText('Population').width;
+            const part3Width = ctx.measureText('by Decade').width;
+            const commonWidth = (part1Width + part2Width + part3Width);
 
             assert.equal(that.drawnElements.length, 4, 'Canvas elements count');
 
@@ -1452,9 +1452,9 @@ QUnit.test('Text offset position calculation with end alignment', function(asser
 });
 
 QUnit.test('Multiline text', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
             '<text x="10" y="30" text-anchor="start" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
             '<tspan x="10" y="30">World </tspan>' +
             '<tspan x="10" dy="28">Populationby</tspan>' +
@@ -1463,8 +1463,8 @@ QUnit.test('Multiline text', function(assert) {
             '<tspan x="10" dy="16">Populationby</tspan>' +
             '</text>' +
 
-            testingMarkupEnd,
-        imageBlob = getData(markup);
+            testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(11);
 
@@ -1495,13 +1495,13 @@ QUnit.test('Multiline text', function(assert) {
 
 // T434703
 QUnit.test('Text with big amount of spaces', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="48" y="393" transform="translate(0,0)" style="fill:#ffffff;font-size:12px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;cursor:default;" text-anchor="middle"><tspan x="48" y="393">              </tspan><tspan style="font-weight:bold;">Sold in Coal</tspan><tspan x="48" dy="12">              204.8 retained by India</tspan><tspan x="48" dy="12">            </tspan></text>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="48" y="393" transform="translate(0,0)" style="fill:#ffffff;font-size:12px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;cursor:default;" text-anchor="middle"><tspan x="48" y="393">              </tspan><tspan style="font-weight:bold;">Sold in Coal</tspan><tspan x="48" dy="12">              204.8 retained by India</tspan><tspan x="48" dy="12">            </tspan></text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     function checkLines(lines) {
-        for(var i = 1; i < that.drawnElements.length; i++) {
+        for(let i = 1; i < that.drawnElements.length; i++) {
             assert.equal(that.drawnElements[i].type, 'text', 'The ' + i + ' element on canvas is text');
 
             assert.equal(that.drawnElements[i].args[0], lines[i - 1], i - 1 + 'line. Text');
@@ -1520,15 +1520,15 @@ QUnit.test('Text with big amount of spaces', function(assert) {
 });
 
 QUnit.test('Stroke text', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="50" y="50" text-anchor="start" stroke-width="5" style="fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;"><tspan style="font-weight: bold; font-style: italic; " stroke-opacity="0.7">Age</tspan></text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(14);
     $.when(imageBlob).done(function(blob) {
         try {
-            var strokeText = that.drawnElements[2];
+            const strokeText = that.drawnElements[2];
 
             assert.equal(that.drawnElements.length, 3, 'Canvas elements count');
             assert.equal(strokeText.type, 'strokeText', 'The third element on canvas is strokeText');
@@ -1555,9 +1555,9 @@ QUnit.test('Stroke text', function(assert) {
 
 // T697125
 QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart +
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart +
         '<defs>' +
         '<filter id="testFilter1" x="-40%" y="-40%" width="180%" height="200%" transform="translate(0,0)"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="1"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feOffset><feFlood result="floodResult" flood-color="#223387" flood-opacity="0.2"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter>' +
         '</defs>' +
@@ -1566,8 +1566,8 @@ QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
         '<tspan x="0" dy="13px" stroke="#f2f2f2" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round">Text2</tspan>' +
         '<tspan x="0" y="0">Text1</tspan>' +
         '<tspan x="0" dy="13px">Text2</tspan>' +
-        '</text>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+        '</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     $.when(imageBlob).done(function(blob) {
         try {
@@ -1691,17 +1691,17 @@ QUnit.test('Multiline text with shadow and stroked texts', function(assert) {
 });
 
 QUnit.test('Text with ellipsis', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="50" y="30" transform="translate(0,0)" text-anchor="middle" style="font-size:28px;font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:200;fill:#232323;cursor:default;">Test...<title>Test test</title></text>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="50" y="30" transform="translate(0,0)" text-anchor="middle" style="font-size:28px;font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:200;fill:#232323;cursor:default;">Test...<title>Test test</title></text>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(5);
     $.when(imageBlob).done(function(blob) {
         try {
             assert.equal(that.drawnElements.filter(function(e) { return e.type === 'text'; }).length, 1, 'Canvas text elements count');
 
-            var text = that.drawnElements[1];
+            const text = that.drawnElements[1];
             assert.equal(text.type, 'text', 'Type of first element');
             assert.equal(text.args[0], 'Test...', 'Text');
             assert.equal(text.args[1], 50, 'X coord');
@@ -1713,9 +1713,9 @@ QUnit.test('Text with ellipsis', function(assert) {
 });
 
 QUnit.test('Text with title does not break context. T450370', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<text x="50" y="30" transform="translate(0,0)" text-anchor="middle" style="font-size:28px;font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:200;fill:#232323;cursor:default;">Test...<title>Test test</title></text>' + testingMarkupEnd,
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="50" y="30" transform="translate(0,0)" text-anchor="middle" style="font-size:28px;font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:200;fill:#232323;cursor:default;">Test...<title>Test test</title></text>' + testingMarkupEnd;
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(2);
     $.when(getData(markup)).done(function(blob) {
@@ -1729,10 +1729,10 @@ QUnit.test('Text with title does not break context. T450370', function(assert) {
 });
 
 QUnit.test('Text with °. On error behavior', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(100,10) rotate(270,100,10)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Temperature, °C</text>' + testingMarkupEnd,
-        imageBlob = getData(markup, browser.msie);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(100,10) rotate(270,100,10)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Temperature, °C</text>' + testingMarkupEnd;
+    const imageBlob = getData(markup, browser.msie);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -1747,10 +1747,10 @@ QUnit.test('Text with °. On error behavior', function(assert) {
 });
 
 QUnit.test('Text decoration', function(assert) {
-    var that = this,
-        done = assert.async(),
-        context = window.CanvasRenderingContext2D.prototype,
-        markup = testingMarkupStart + '<text x="0" y="50" style="font-family:\'Segoe UI Light\'" text-anchor="start"><tspan>Before text... </tspan>'
+    const that = this;
+    const done = assert.async();
+    const context = window.CanvasRenderingContext2D.prototype;
+    const markup = testingMarkupStart + '<text x="0" y="50" style="font-family:\'Segoe UI Light\'" text-anchor="start"><tspan>Before text... </tspan>'
             + '<tspan x="500" y="90" text-anchor="end" style="text-decoration:underline; font-size:38px; fill:#23FF23;">Underlined text</tspan>'
             + '<tspan x="250" y="30" text-anchor="center" style="text-decoration:overline; font-size:24px; fill:#AAFF23;">Overlined text</tspan>'
             + '<tspan x="0" y="160" text-anchor="start" style="text-decoration:line-through; font-size:14px; fill:#23FFFF;">Line-through text</tspan>'
@@ -1764,18 +1764,18 @@ QUnit.test('Text decoration', function(assert) {
         width: 50
     });
 
-    var imageBlob = getData(markup, {
+    const imageBlob = getData(markup, {
         width: 500, height: 250, format: 'png'
     });
 
     assert.expect(29);
     $.when(imageBlob).done(function(blob) {
         try {
-            var underlineDecoration = that.drawnElements[3],
-                overlineDecoration = that.drawnElements[6],
-                lineThroughDecoration = that.drawnElements[9],
-                noDisplayDecoration = that.drawnElements[13],
-                noFillDecoration = that.drawnElements[16];
+            const underlineDecoration = that.drawnElements[3];
+            const overlineDecoration = that.drawnElements[6];
+            const lineThroughDecoration = that.drawnElements[9];
+            const noDisplayDecoration = that.drawnElements[13];
+            const noFillDecoration = that.drawnElements[16];
 
             // Text decoration common assert
             assert.equal(that.drawnElements.length, 18, 'Canvas elements count');
@@ -1825,10 +1825,10 @@ QUnit.test('Text decoration', function(assert) {
 });
 
 QUnit.test('Nested groups', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<g><g stroke-width="4" stroke="#00FF00" opacity="0.5" fill="#ff0000" stroke-linejoin="round"><path d="M 100 20 L 150 25 L 200 58 L 250 40 L 300 30 L 350 12"></path><path d="M 100 10 L 150 15 L 200 48 L 250 30 L 300 20 L 350 2" stroke-width="2" stroke="#FF0000" opacity="1" fill="#0000ff" stroke-linejoin="miter"></path></g></g>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g><g stroke-width="4" stroke="#00FF00" opacity="0.5" fill="#ff0000" stroke-linejoin="round"><path d="M 100 20 L 150 25 L 200 58 L 250 40 L 300 30 L 350 12"></path><path d="M 100 10 L 150 15 L 200 48 L 250 30 L 300 20 L 350 2" stroke-width="2" stroke="#FF0000" opacity="1" fill="#0000ff" stroke-linejoin="miter"></path></g></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(9);
     $.when(imageBlob).done(function(blob) {
@@ -1866,10 +1866,10 @@ QUnit.test('Nested groups', function(assert) {
 });
 
 QUnit.test('Nested translate options', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<g transform="translate(10,10)"><g transform="translate(20,20)"><rect transform="translate(30,30)" x="0" y="0" width="50" height="50" fill="#FF0000"></rect><rect transform="translate(60,0)" x="0" y="0" width="50" height="50" fill="#0000FF"></rect></g><g transform="translate(40,0)"><rect transform="translate(30,30)" x="0" y="0" width="50" height="50" fill="#00FF00"></rect></g></g>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g transform="translate(10,10)"><g transform="translate(20,20)"><rect transform="translate(30,30)" x="0" y="0" width="50" height="50" fill="#FF0000"></rect><rect transform="translate(60,0)" x="0" y="0" width="50" height="50" fill="#0000FF"></rect></g><g transform="translate(40,0)"><rect transform="translate(30,30)" x="0" y="0" width="50" height="50" fill="#00FF00"></rect></g></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(9);
     $.when(imageBlob).done(function(blob) {
@@ -1892,10 +1892,10 @@ QUnit.test('Nested translate options', function(assert) {
 });
 
 QUnit.test('Order of clip and translate', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<defs><clipPath id="DevExpress_13"><rect x="62" y="78" width="736" height="309" transform="translate(0,0)"></rect></clipPath></defs><g fill="#00ced1" stroke="#00ced1" stroke-width="0" clip-path="url(#DevExpress_13)"><circle cx="0" cy="0" r="28" opacity="0.5" transform="translate(404,245)"></circle></g>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><clipPath id="DevExpress_13"><rect x="62" y="78" width="736" height="309" transform="translate(0,0)"></rect></clipPath></defs><g fill="#00ced1" stroke="#00ced1" stroke-width="0" clip-path="url(#DevExpress_13)"><circle cx="0" cy="0" r="28" opacity="0.5" transform="translate(404,245)"></circle></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(13);
     $.when(imageBlob).done(function(blob) {
@@ -1921,11 +1921,11 @@ QUnit.test('Order of clip and translate', function(assert) {
 });
 
 QUnit.test('Filled paths with clip path', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<defs><clipPath id="clippath1-part-1"><rect x="0" y="0" width="500" height="30"></rect></clipPath><clipPath id="clippath2"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><path d="M 100 10 L 150 15 L 350 2" clip-path="url(someurl#clippath1-part-1)" stroke-width="2" stroke="#FF0000" fill="#0000FF" opacity="0.5"></path><path d="M 100 20 L 150 25 L 350 12" clip-path="url(#clippath2)" stroke-width="2" stroke="#00FF00" fill="#00FF00" opacity="0.5"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        canvasPrototype = window.CanvasRenderingContext2D.prototype;
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><clipPath id="clippath1-part-1"><rect x="0" y="0" width="500" height="30"></rect></clipPath><clipPath id="clippath2"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><path d="M 100 10 L 150 15 L 350 2" clip-path="url(someurl#clippath1-part-1)" stroke-width="2" stroke="#FF0000" fill="#0000FF" opacity="0.5"></path><path d="M 100 20 L 150 25 L 350 12" clip-path="url(#clippath2)" stroke-width="2" stroke="#00FF00" fill="#00FF00" opacity="0.5"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const canvasPrototype = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(19);
     $.when(imageBlob).done(function(blob) {
@@ -1970,10 +1970,10 @@ QUnit.test('Filled paths with clip path', function(assert) {
 });
 
 QUnit.test('Rect with pattern', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="6" height="6"><rect x="0" y="0" width="6" height="6" fill="#ffa500" opacity="0.75"></rect><path d="M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9" stroke-width="2" stroke="#ffa500"></path></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(someurl#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3-hatching-2" width="6" height="6"><rect x="0" y="0" width="6" height="6" fill="#ffa500" opacity="0.75"></rect><path d="M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9" stroke-width="2" stroke="#ffa500"></path></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(someurl#DevExpress_3-hatching-2)" stroke="#ffa500"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(10);
     $.when(imageBlob).done(function(blob) {
@@ -2009,11 +2009,11 @@ QUnit.test('Rect with pattern', function(assert) {
 });
 
 QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<defs><pattern id="DevExpress_3" width="6" height="6"><rect x="0" y="0" width="6" height="6" fill="#ffa500" opacity="0.75"></rect><path d="M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9" stroke-width="2" stroke="#ffa500"></path></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3)" stroke="#ffa500"></rect>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype,
-        canvas;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<defs><pattern id="DevExpress_3" width="6" height="6"><rect x="0" y="0" width="6" height="6" fill="#ffa500" opacity="0.75"></rect><path d="M 3 -3 L -3 3 M 0 6 L 6 0 M 9 3 L 3 9" stroke-width="2" stroke="#ffa500"></path></pattern></defs><rect x="10" y="10" width="70" height="150" stroke-width="0" fill="url(#DevExpress_3)" stroke="#ffa500"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
+    let canvas;
 
     assert.expect(2);
     $.when(imageBlob).done(function(blob) {
@@ -2028,10 +2028,10 @@ QUnit.test('Pattern canvas has same siza as pattern', function(assert) {
 });
 
 QUnit.test('Rotated elements', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     assert.expect(15);
     $.when(imageBlob).done(function(blob) {
@@ -2063,10 +2063,10 @@ QUnit.test('Rotated elements', function(assert) {
 });
 
 QUnit.test('Scaled elements', function(assert) {
-    var done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5) scale(2)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125) scale(3, 0.5)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd,
-        imageBlob = getData(markup),
-        context = window.CanvasRenderingContext2D.prototype;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5) scale(2)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125) scale(3, 0.5)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+    const context = window.CanvasRenderingContext2D.prototype;
 
     $.when(imageBlob).done(function(blob) {
         try {
@@ -2084,10 +2084,10 @@ QUnit.test('Scaled elements', function(assert) {
 });
 
 QUnit.test('Elements with visibility', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<g visibility="hidden"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect><rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect></g>' + testingMarkupEnd,
-        imageBlob = getData(markup);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g visibility="hidden"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect><rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
 
     assert.expect(3);
     $.when(imageBlob).done(function(blob) {
@@ -2134,10 +2134,10 @@ QUnit.test('Do not export elements with \'hidden-for-export\' attribute', functi
 });
 
 QUnit.test('Defined background color', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: 'png', backgroundColor: '#ff0000', margin: 10 }, true);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd;
+    const imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: 'png', backgroundColor: '#ff0000', margin: 10 }, true);
 
     assert.expect(4);
     $.when(imageBlob).done(function(blob) {
@@ -2161,10 +2161,10 @@ QUnit.test('Defined background color', function(assert) {
 });
 
 QUnit.test('Undefined background color', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: 'png', backgroundColor: '#123456' });
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd;
+    const imageBlob = imageCreator.getData(markup, { width: 500, height: 250, format: 'png', backgroundColor: '#123456' });
 
     assert.expect(1);
     $.when(imageBlob).done(function(blob) {
@@ -2180,10 +2180,10 @@ QUnit.test('Undefined background color', function(assert) {
 });
 
 QUnit.test('Export.color option', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        imageBlob = getData(markup, { color: '#aaaaaa' });
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd;
+    const imageBlob = getData(markup, { color: '#aaaaaa' });
 
     assert.expect(1);
     $.when(imageBlob).done(function(blob) {
@@ -2205,11 +2205,11 @@ QUnit.test('getData returns Blob when it supported by Browser', function(assert)
     }
 
     // arrange. act
-    var deferred,
-        done = assert.async(),
-        _getBlob = imageCreator._getBlob,
-        _getBase64 = imageCreator._getBase64,
-        testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    let deferred;
+    const done = assert.async();
+    const _getBlob = imageCreator._getBlob;
+    const _getBase64 = imageCreator._getBase64;
+    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
 
     imageCreator._getBlob = function() {
         return 'blobData';
@@ -2241,11 +2241,11 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
     }
 
     // arrange. act
-    var deferred,
-        done = assert.async(),
-        _getBlob = imageCreator._getBlob,
-        _getBase64 = imageCreator._getBase64,
-        testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    let deferred;
+    const done = assert.async();
+    const _getBlob = imageCreator._getBlob;
+    const _getBase64 = imageCreator._getBase64;
+    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
 
     imageCreator._getBlob = function() {
         return 'blobData';
@@ -2277,11 +2277,11 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
     }
 
     // arrange. act
-    var deferred,
-        done = assert.async(),
-        _getBlob = imageCreator._getBlob,
-        _getBase64 = imageCreator._getBase64,
-        testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
+    let deferred;
+    const done = assert.async();
+    const _getBlob = imageCreator._getBlob;
+    const _getBase64 = imageCreator._getBase64;
+    const testingMarkup = '<svg xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' version=\'1.1\' fill=\'none\' stroke=\'none\' stroke-width=\'0\' class=\'dxc dxc-chart\' style=\'line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;\' width=\'500\' height=\'250\'><text>test</text></svg>';
 
     imageCreator._getBlob = function() {
         return 'blobData';
@@ -2307,21 +2307,21 @@ QUnit.test('getData returns Base64 when Blob not supported by Browser', function
 });
 
 QUnit.test('Read computed style of elements if export target is attached element', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd,
-        element = new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<text x="20" y="30" style="font-style: italic; font-size:16px; font-family:\'Segoe UI Light\', \'Helvetica Neue Light\', \'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana; font-weight:bold; fill:#232323; opacity: 0.3;">Test</text>' + testingMarkupEnd;
+    const element = new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
 
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });
 
     // act
-    var imageBlob = getData(element);
+    const imageBlob = getData(element);
 
     assert.expect(9);
     $.when(imageBlob).done(function() {
         try {
-            var textElem = that.drawnElements[1];
+            const textElem = that.drawnElements[1];
 
             assert.equal(textElem.style.weight, 'bold', 'Style weight');
 
@@ -2340,16 +2340,16 @@ QUnit.test('Read computed style of elements if export target is attached element
 });
 
 QUnit.test('Read computed style of elements. Ignore default opacity', function(assert) {
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="20" y="30" width="100" height="200" fill="#232323" stroke="#454545" stroke-width="1" stroke-opacity="0.5" fill-opacity="0.5" opacity="0.3" ></rect>' + testingMarkupEnd,
-        element = new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="20" y="30" width="100" height="200" fill="#232323" stroke="#454545" stroke-width="1" stroke-opacity="0.5" fill-opacity="0.5" opacity="0.3" ></rect>' + testingMarkupEnd;
+    const element = new window.DOMParser().parseFromString(markup, 'image/svg+xml').childNodes[0];
 
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'opacity': '1', 'stroke-opacity': '0.1', 'fill-opacity': '' });
 
     // act
-    var imageBlob = getData(element);
+    const imageBlob = getData(element);
 
     assert.expect(4);
     $.when(imageBlob).done(function() {
@@ -2366,10 +2366,10 @@ QUnit.test('Read computed style of elements. Ignore default opacity', function(a
 });
 
 QUnit.test('Processing of inner SVG', function(assert) {
-    var done = assert.async(),
-        markup = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="1" y="2" width="10" height="30"></rect></svg></svg>',
-        context = window.CanvasRenderingContext2D.prototype,
-        imageBlob = getData(markup);
+    const done = assert.async();
+    const markup = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="1" y="2" width="10" height="30"></rect></svg></svg>';
+    const context = window.CanvasRenderingContext2D.prototype;
+    const imageBlob = getData(markup);
 
     assert.expect(1);
     $.when(imageBlob).done(function() {
@@ -2384,10 +2384,10 @@ QUnit.test('Processing of inner SVG', function(assert) {
 
 // T403049
 QUnit.test('getElementOptions should work correctly with empty attributs element', function(assert) {
-    var done = assert.async();
-    var markup = '<svg>Brazil</svg>';
-    var parsedAttributes;
-    var imageBlob = imageCreator.getData(markup, {
+    const done = assert.async();
+    const markup = '<svg>Brazil</svg>';
+    let parsedAttributes;
+    const imageBlob = imageCreator.getData(markup, {
         __parseAttributesFn: function(attributes) {
             parsedAttributes = attributes;
             return {};
@@ -2407,18 +2407,18 @@ QUnit.test('getElementOptions should work correctly with empty attributs element
 QUnit.test('Can use custom parser', function(assert) {
     sinon.spy(svgUtils, 'getSvgElement');
 
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        svgToCanvas = sinon.spy(),
-        imageBlob = imageCreator.getData(markup, {
-            width: 500,
-            height: 250,
-            format: 'png',
-            backgroundColor: '#ff0000',
-            margin: 10,
-            svgToCanvas: svgToCanvas
-        }, true);
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd;
+    const svgToCanvas = sinon.spy();
+    const imageBlob = imageCreator.getData(markup, {
+        width: 500,
+        height: 250,
+        format: 'png',
+        backgroundColor: '#ff0000',
+        margin: 10,
+        svgToCanvas: svgToCanvas
+    }, true);
 
     $.when(imageBlob).done(() => {
         assert.equal(that.drawnElements.length, 1, 'Canvas elements count');

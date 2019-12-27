@@ -1,4 +1,4 @@
-var eventsEngine = require('./events/core/events_engine');
+const eventsEngine = require('./events/core/events_engine');
 
 /**
 * @name events

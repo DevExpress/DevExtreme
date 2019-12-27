@@ -1,7 +1,7 @@
-var _normalizeEnum = require('../core/utils').normalizeEnum,
+const _normalizeEnum = require('../core/utils').normalizeEnum;
 
-    algorithms = {},
-    defaultAlgorithm;
+const algorithms = {};
+let defaultAlgorithm;
 
 exports.getAlgorithm = function(name) {
     return algorithms[_normalizeEnum(name)] || defaultAlgorithm;

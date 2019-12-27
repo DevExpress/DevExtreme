@@ -63,7 +63,7 @@ module('Browser zoom', zoomModuleConfig, () => {
             scheduler.option('currentView', view);
             scheduler.option('dataSource', createDataSource());
 
-            let appointment = scheduler.appointments.getAppointment();
+            const appointment = scheduler.appointments.getAppointment();
 
             assert.equal(scheduler.appointments.getDateText(), '9:30 AM - 11:30 AM', `appointment should have correct date on init in ${view}  view`);
 
@@ -355,7 +355,7 @@ module('Drag and drop appointments', moduleConfig, () => {
                 scheduler.option('currentView', view.name);
 
                 [false, true].forEach(rtlEnabled => {
-                    let items = $.extend(true, [], data);
+                    const items = $.extend(true, [], data);
                     scheduler.option('rtlEnabled', rtlEnabled);
                     scheduler.option('dataSource', items);
 
@@ -553,7 +553,7 @@ module('Drag and drop appointments', moduleConfig, () => {
 
         // T835049
         QUnit.test('The appointment should have correct position after a drop when the store is asynchronous', function(assert) {
-            let data = [{
+            const data = [{
                 text: 'Task 1',
                 startDate: new Date(2015, 1, 1, 11, 0),
                 endDate: new Date(2015, 1, 1, 11, 30)
@@ -589,10 +589,10 @@ module('Drag and drop appointments', moduleConfig, () => {
 
             this.clock.tick(30);
 
-            let $appointment = scheduler.appointments.find('Task 1').first(),
-                positionBeforeDrag = getAbsolutePosition($appointment),
-                pointer = pointerMock($appointment).start(),
-                cellWidth = scheduler.workSpace.getCellWidth();
+            let $appointment = scheduler.appointments.find('Task 1').first();
+            const positionBeforeDrag = getAbsolutePosition($appointment);
+            const pointer = pointerMock($appointment).start();
+            const cellWidth = scheduler.workSpace.getCellWidth();
 
             pointer
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
@@ -648,10 +648,10 @@ module('Drag and drop appointments', moduleConfig, () => {
                 startDayHour: 9
             });
 
-            let $appointment = scheduler.appointments.find('Task 1').first(),
-                positionBeforeDrag = getAbsolutePosition($appointment),
-                pointer = pointerMock($appointment).start(),
-                cellHeight = scheduler.workSpace.getCellHeight();
+            let $appointment = scheduler.appointments.find('Task 1').first();
+            const positionBeforeDrag = getAbsolutePosition($appointment);
+            const pointer = pointerMock($appointment).start();
+            const cellHeight = scheduler.workSpace.getCellHeight();
 
             pointer
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
@@ -662,7 +662,7 @@ module('Drag and drop appointments', moduleConfig, () => {
             pointer.up();
 
             $appointment = scheduler.appointments.find('Task 1').first();
-            let positionAfterDrag = getAbsolutePosition($appointment);
+            const positionAfterDrag = getAbsolutePosition($appointment);
 
             assert.deepEqual(positionAfterDrag, {
                 left: positionBeforeDrag.left,

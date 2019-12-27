@@ -394,7 +394,7 @@ QUnit.module('general', {}, () => {
     });
 
     QUnit.test('dxTextEditor with wrong stylingMode option should set the class according to default option value', (assert) => {
-        let $textEditor = $('#texteditor').dxTextEditor({
+        const $textEditor = $('#texteditor').dxTextEditor({
             stylingMode: 'someWrongOptionValue'
         });
 

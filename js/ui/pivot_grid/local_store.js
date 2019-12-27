@@ -20,7 +20,7 @@ const PATH_DELIMETER = '/./';
 
 exports.LocalStore = Class.inherit((function() {
 
-    var DATE_INTERVAL_SELECTORS = {
+    const DATE_INTERVAL_SELECTORS = {
         'year': function(date) {
             return date && date.getFullYear();
         },
@@ -44,7 +44,7 @@ exports.LocalStore = Class.inherit((function() {
 
     function getDateValue(dataSelector) {
         return function(data) {
-            var value = dataSelector(data);
+            let value = dataSelector(data);
             if(value && !(value instanceof Date)) {
                 value = deserializeDate(value);
             }
@@ -54,12 +54,12 @@ exports.LocalStore = Class.inherit((function() {
 
     function prepareFields(fields) {
         each(fields || [], function(_, field) {
-            var fieldSelector,
-                intervalSelector,
-                dataField = field.dataField,
-                groupInterval,
-                levels = field.levels,
-                dataSelector;
+            let fieldSelector;
+            let intervalSelector;
+            const dataField = field.dataField;
+            let groupInterval;
+            const levels = field.levels;
+            let dataSelector;
 
             if(!field.selector) {
                 if(!dataField) {
@@ -74,17 +74,17 @@ exports.LocalStore = Class.inherit((function() {
 
                 if(field.dataType === 'date') {
                     intervalSelector = DATE_INTERVAL_SELECTORS[field.groupInterval];
-                    var valueSelector = getDateValue(dataSelector);
+                    const valueSelector = getDateValue(dataSelector);
 
                     fieldSelector = function(data) {
-                        var value = valueSelector(data);
+                        const value = valueSelector(data);
                         return intervalSelector ? intervalSelector(value) : value;
                     };
                 } else if(field.dataType === 'number') {
                     groupInterval = isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
                     fieldSelector = function(data) {
-                        var value = dataSelector(data);
+                        let value = dataSelector(data);
                         if(isString(value)) {
                             value = Number(value);
                         }
@@ -101,8 +101,8 @@ exports.LocalStore = Class.inherit((function() {
         });
     }
 
-    var addHierarchyItem = function(value, hierarchyItems, pathHash, childrenHash) {
-        var hierarchyItem = childrenHash[pathHash];
+    const addHierarchyItem = function(value, hierarchyItems, pathHash, childrenHash) {
+        let hierarchyItem = childrenHash[pathHash];
 
         if(!hierarchyItem) {
             hierarchyItem = {
@@ -116,10 +116,10 @@ exports.LocalStore = Class.inherit((function() {
     };
 
     function fillHierarchyItemIndexesCore(indexes, options, children, expandIndex, pathHash) {
-        var dimension = options.dimensions[expandIndex],
-            expandedPathsHash = options.expandedPathsHash,
-            dimensionValue,
-            hierarchyItem;
+        const dimension = options.dimensions[expandIndex];
+        const expandedPathsHash = options.expandedPathsHash;
+        let dimensionValue;
+        let hierarchyItem;
 
         if(dimension) {
             dimensionValue = dimension.selector(options.data);
@@ -139,28 +139,28 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function generateHierarchyItems(data, loadOptions, headers, headerName) {
-        var result = [0],
-            expandIndex = loadOptions.headerName === headerName ? loadOptions.path.length : 0,
-            expandedPaths = headerName === 'rows' ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths,
-            options = {
-                data: data,
-                childrenHash: headers[headerName + 'Hash'],
-                dimensions: loadOptions[headerName],
-                expandedPathsHash: loadOptions.headerName !== headerName && expandedPaths && expandedPaths.hash
-            };
+        const result = [0];
+        const expandIndex = loadOptions.headerName === headerName ? loadOptions.path.length : 0;
+        const expandedPaths = headerName === 'rows' ? loadOptions.rowExpandedPaths : loadOptions.columnExpandedPaths;
+        const options = {
+            data: data,
+            childrenHash: headers[headerName + 'Hash'],
+            dimensions: loadOptions[headerName],
+            expandedPathsHash: loadOptions.headerName !== headerName && expandedPaths && expandedPaths.hash
+        };
 
         fillHierarchyItemIndexesCore(result, options, headers[headerName], expandIndex);
         return result;
     }
 
     function generateAggregationCells(data, cells, headers, options) {
-        var cellSet = [],
-            x, y,
-            rowIndex,
-            columnIndex;
+        const cellSet = [];
+        let x; let y;
+        let rowIndex;
+        let columnIndex;
 
-        var rowIndexes = generateHierarchyItems(data, options, headers, 'rows');
-        var columnIndexes = generateHierarchyItems(data, options, headers, 'columns');
+        const rowIndexes = generateHierarchyItems(data, options, headers, 'rows');
+        const columnIndexes = generateHierarchyItems(data, options, headers, 'columns');
 
         for(y = 0; y < rowIndexes.length; y++) {
             rowIndex = rowIndexes[y];
@@ -176,9 +176,9 @@ exports.LocalStore = Class.inherit((function() {
 
     function fillHashExpandedPath(expandedPaths) {
         if(expandedPaths) {
-            var hash = expandedPaths.hash = {};
+            const hash = expandedPaths.hash = {};
             expandedPaths.forEach(function(path) {
-                var pathValue = path.map(function(value) { return value + ''; }).join(PATH_DELIMETER);
+                const pathValue = path.map(function(value) { return value + ''; }).join(PATH_DELIMETER);
                 hash[pathValue] = true;
             });
         }
@@ -204,7 +204,7 @@ exports.LocalStore = Class.inherit((function() {
 
             return {
                 seed: function() {
-                    var options = {
+                    const options = {
                         summaryProcess: 'start',
                         totalValue: undefined
                     };
@@ -230,15 +230,15 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function aggregationStep(measures, aggregationCells, data) {
-        for(var aggregatorIndex = 0; aggregatorIndex < measures.length; aggregatorIndex++) {
-            var cellField = measures[aggregatorIndex];
-            var cellValue = cellField.selector(data);
+        for(let aggregatorIndex = 0; aggregatorIndex < measures.length; aggregatorIndex++) {
+            const cellField = measures[aggregatorIndex];
+            const cellValue = cellField.selector(data);
 
-            var aggregator = getAggregator(cellField),
-                isAggregatorSeedFunction = typeof aggregator.seed === 'function';
+            const aggregator = getAggregator(cellField);
+            const isAggregatorSeedFunction = typeof aggregator.seed === 'function';
 
-            for(var cellSetIndex = 0; cellSetIndex < aggregationCells.length; cellSetIndex++) {
-                var cell = aggregationCells[cellSetIndex];
+            for(let cellSetIndex = 0; cellSetIndex < aggregationCells.length; cellSetIndex++) {
+                const cell = aggregationCells[cellSetIndex];
                 if(cell.length <= aggregatorIndex) {
                     cell[aggregatorIndex] = isAggregatorSeedFunction ? aggregator.seed() : aggregator.seed;
                 }
@@ -253,7 +253,7 @@ exports.LocalStore = Class.inherit((function() {
 
     function aggregationFinalize(measures, cells) {
         each(measures, function(aggregatorIndex, cellField) {
-            var aggregator = getAggregator(cellField);
+            const aggregator = getAggregator(cellField);
             if(aggregator.finalize) {
                 each(cells, function(_, row) {
                     each(row, function(_, cell) {
@@ -267,13 +267,13 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function areValuesEqual(filterValue, fieldValue) {
-        var valueOfFilter = filterValue && filterValue.valueOf(),
-            valueOfField = fieldValue && fieldValue.valueOf();
+        let valueOfFilter = filterValue && filterValue.valueOf();
+        let valueOfField = fieldValue && fieldValue.valueOf();
 
         if(Array.isArray(filterValue)) {
             fieldValue = fieldValue || [];
 
-            for(var i = 0; i < filterValue.length; i++) {
+            for(let i = 0; i < filterValue.length; i++) {
                 valueOfFilter = filterValue[i] && filterValue[i].valueOf();
                 valueOfField = fieldValue[i] && fieldValue[i].valueOf();
 
@@ -288,7 +288,7 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function getGroupValue(levels, data) {
-        var value = [];
+        const value = [];
         each(levels, function(_, field) {
             value.push(field.selector(data));
         });
@@ -296,19 +296,19 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function createDimensionFilters(dimension) {
-        var filters = [];
+        const filters = [];
         each(dimension, function(_, field) {
-            var filterValues = field.filterValues || [],
-                groupName = field.groupName,
-                filter;
+            const filterValues = field.filterValues || [];
+            const groupName = field.groupName;
+            let filter;
 
             if(groupName && isNumeric(field.groupIndex)) {
                 return;
             }
             filter = function(dataItem) {
-                var value = field.levels ? getGroupValue(field.levels, dataItem) : field.selector(dataItem),
-                    result = false;
-                for(var i = 0; i < filterValues.length; i++) {
+                const value = field.levels ? getGroupValue(field.levels, dataItem) : field.selector(dataItem);
+                let result = false;
+                for(let i = 0; i < filterValues.length; i++) {
                     if(areValuesEqual(filterValues[i], value)) {
                         result = true;
                         break;
@@ -323,14 +323,14 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function createFilter(options) {
-        var filters = createDimensionFilters(options.rows).concat(createDimensionFilters(options.columns)).concat(createDimensionFilters(options.filters)),
-            expandedDimensions = options[options.headerName],
-            path = options.path;
+        const filters = createDimensionFilters(options.rows).concat(createDimensionFilters(options.columns)).concat(createDimensionFilters(options.filters));
+        const expandedDimensions = options[options.headerName];
+        const path = options.path;
 
         if(expandedDimensions) {
             filters.push(function(dataItem) {
-                var expandValue;
-                for(var i = 0; i < path.length; i++) {
+                let expandValue;
+                for(let i = 0; i < path.length; i++) {
                     expandValue = expandedDimensions[i].selector(dataItem);
                     if(toComparable(expandValue, true) !== toComparable(path[i], true)) {
                         return false;
@@ -341,7 +341,7 @@ exports.LocalStore = Class.inherit((function() {
         }
 
         return function(dataItem) {
-            for(var i = 0; i < filters.length; i++) {
+            for(let i = 0; i < filters.length; i++) {
                 if(!filters[i](dataItem)) {
                     return false;
                 }
@@ -351,24 +351,24 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function loadCore(items, options, notifyProgress) {
-        var headers = {
-                columns: [],
-                rows: [],
-                columnsHash: { length: 1 },
-                rowsHash: { length: 1 }
-            },
-            values = [],
-            aggregationCells,
-            filter,
-            data,
-            d = new Deferred(),
-            i = 0;
+        const headers = {
+            columns: [],
+            rows: [],
+            columnsHash: { length: 1 },
+            rowsHash: { length: 1 }
+        };
+        const values = [];
+        let aggregationCells;
+        let filter;
+        let data;
+        const d = new Deferred();
+        let i = 0;
 
         filter = createFilter(options);
 
         function processData() {
-            var t = new Date(),
-                startIndex = i;
+            const t = new Date();
+            const startIndex = i;
 
             for(; i < items.length; i++) {
                 if(i > startIndex && i % 10000 === 0) {
@@ -403,7 +403,7 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function filterDataSource(dataSource, fieldSelectors) {
-        var filter = dataSource.filter();
+        let filter = dataSource.filter();
 
         if(dataSource.store() instanceof CustomStore && filter) {
             filter = processFilter(filter, fieldSelectors);
@@ -414,9 +414,9 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function loadDataSource(dataSource, fieldSelectors, reload) {
-        var d = new Deferred();
+        const d = new Deferred();
 
-        var customizeStoreLoadOptionsHandler = function(options) {
+        const customizeStoreLoadOptionsHandler = function(options) {
             if(dataSource.store() instanceof ArrayStore) {
                 options.storeLoadOptions.filter = processFilter(options.storeLoadOptions.filter, fieldSelectors);
             }
@@ -425,7 +425,7 @@ exports.LocalStore = Class.inherit((function() {
         dataSource.on('customizeStoreLoadOptions', customizeStoreLoadOptionsHandler);
 
         if(!dataSource.isLoaded() || reload) {
-            var loadDeferred = reload ? dataSource.load() : dataSource.reload();
+            const loadDeferred = reload ? dataSource.load() : dataSource.reload();
             when(loadDeferred).done(function() {
                 loadDataSource(dataSource, fieldSelectors).done(function() {
                     d.resolve(filterDataSource(dataSource, fieldSelectors));
@@ -442,14 +442,14 @@ exports.LocalStore = Class.inherit((function() {
     function fillSelectorsByFields(selectors, fields) {
         fields.forEach(function(field) {
             if(field.dataField && field.dataType === 'date') {
-                var valueSelector = getDateValue(getDataSelector(field.dataField));
+                const valueSelector = getDateValue(getDataSelector(field.dataField));
                 selectors[field.dataField] = function(data) { return valueSelector(data); };
             }
         });
     }
 
     function getFieldSelectors(options) {
-        var selectors = {};
+        const selectors = {};
 
         if(Array.isArray(options)) {
             fillSelectorsByFields(selectors, options);
@@ -471,7 +471,7 @@ exports.LocalStore = Class.inherit((function() {
             filter[0] = fieldSelectors[filter[0]];
         }
 
-        for(var i = 0; i < filter.length; i++) {
+        for(let i = 0; i < filter.length; i++) {
             filter[i] = processFilter(filter[i], fieldSelectors);
         }
         return filter;
@@ -485,9 +485,9 @@ exports.LocalStore = Class.inherit((function() {
         },
 
         getFields: function(fields) {
-            var that = this,
-                dataSource = that._dataSource,
-                d = new Deferred();
+            const that = this;
+            const dataSource = that._dataSource;
+            const d = new Deferred();
 
             loadDataSource(dataSource, getFieldSelectors(fields)).done(function(data) {
                 d.resolve(discoverObjectFields(data, fields));
@@ -501,9 +501,9 @@ exports.LocalStore = Class.inherit((function() {
         },
 
         load: function(options) {
-            var that = this,
-                dataSource = that._dataSource,
-                d = new Deferred();
+            const that = this;
+            const dataSource = that._dataSource;
+            const d = new Deferred();
 
             prepareLoadOption(options);
 
@@ -515,7 +515,7 @@ exports.LocalStore = Class.inherit((function() {
         },
 
         filter: function() {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
 
             return dataSource.filter.apply(dataSource, arguments);
         },
@@ -529,23 +529,23 @@ exports.LocalStore = Class.inherit((function() {
             params = params || {};
             prepareLoadOption(loadOptions);
 
-            var drillDownItems = [],
-                items = this._dataSource.items(),
-                item,
-                maxRowCount = params.maxRowCount,
-                customColumns = params.customColumns,
-                filter = createFilter(loadOptions),
-                pathFilter = createFilter({
-                    rows: getFiltersByPath(loadOptions.rows, params.rowPath),
-                    columns: getFiltersByPath(loadOptions.columns, params.columnPath),
-                    filters: []
-                });
+            const drillDownItems = [];
+            const items = this._dataSource.items();
+            let item;
+            const maxRowCount = params.maxRowCount;
+            const customColumns = params.customColumns;
+            const filter = createFilter(loadOptions);
+            const pathFilter = createFilter({
+                rows: getFiltersByPath(loadOptions.rows, params.rowPath),
+                columns: getFiltersByPath(loadOptions.columns, params.columnPath),
+                filters: []
+            });
 
-            for(var i = 0; i < items.length; i++) {
+            for(let i = 0; i < items.length; i++) {
                 if(pathFilter(items[i]) && filter(items[i])) {
                     if(customColumns) {
                         item = {};
-                        for(var j = 0; j < customColumns.length; j++) {
+                        for(let j = 0; j < customColumns.length; j++) {
                             item[customColumns[j]] = items[i][customColumns[j]];
                         }
                     } else {

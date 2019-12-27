@@ -1,10 +1,10 @@
-var $ = require('../../core/renderer'),
-    CollectionWidgetItem = require('../collection/item');
+const $ = require('../../core/renderer');
+const CollectionWidgetItem = require('../collection/item');
 
-var TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge',
-    BADGE_CLASS = 'dx-badge';
+const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
+const BADGE_CLASS = 'dx-badge';
 
-var TabsItem = CollectionWidgetItem.inherit({
+const TabsItem = CollectionWidgetItem.inherit({
 
     _renderWatchers: function() {
         this.callBase();
@@ -19,7 +19,7 @@ var TabsItem = CollectionWidgetItem.inherit({
             return;
         }
 
-        var $badge = $('<div>')
+        const $badge = $('<div>')
             .addClass(TABS_ITEM_BADGE_CLASS)
             .addClass(BADGE_CLASS)
             .text(badge);

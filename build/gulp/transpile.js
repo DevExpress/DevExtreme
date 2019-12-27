@@ -1,19 +1,19 @@
-var gulp = require('gulp');
-var babel = require('gulp-babel');
-var watch = require('gulp-watch');
-var replace = require('gulp-replace');
-var plumber = require('gulp-plumber');
-var path = require('path');
-var notify = require('gulp-notify');
+const gulp = require('gulp');
+const babel = require('gulp-babel');
+const watch = require('gulp-watch');
+const replace = require('gulp-replace');
+const plumber = require('gulp-plumber');
+const path = require('path');
+const notify = require('gulp-notify');
 
-var context = require('./context.js');
+const context = require('./context.js');
 
-var GLOB_TS = require('./ts').GLOB_TS;
-var SRC = ['js/**/*.*', '!' + GLOB_TS];
-var TESTS_PATH = 'testing';
-var TESTS_SRC = TESTS_PATH + '/**/*.js';
+const GLOB_TS = require('./ts').GLOB_TS;
+const SRC = ['js/**/*.*', '!' + GLOB_TS];
+const TESTS_PATH = 'testing';
+const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
-var VERSION_FILE_PATH = 'core/version.js';
+const VERSION_FILE_PATH = 'core/version.js';
 
 
 gulp.task('transpile', gulp.series('bundler-config', function() {

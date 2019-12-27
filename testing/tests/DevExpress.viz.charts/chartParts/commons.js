@@ -1,37 +1,37 @@
-var $ = require('jquery'),
-    vizMocks = require('../../../helpers/vizMocks.js'),
-    labelModule = require('viz/series/points/label'),
-    LabelCtor = new vizMocks.ObjectPool(labelModule.Label),
-    ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager),
-    layoutManagerModule = require('viz/chart_components/layout_manager'),
-    LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager),
-    vizUtils = require('viz/core/utils'),
-    StubTooltip = vizMocks.Tooltip,
-    seriesFamilyModule = require('viz/core/series_family'),
-    legendModule = require('viz/components/legend'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    tooltipModule = require('viz/core/tooltip'),
-    titleModule = require('viz/core/title'),
-    crosshairModule = require('viz/chart_components/crosshair'),
-    Crosshair = crosshairModule.Crosshair,
-    chartThemeManagerModule = require('viz/components/chart_theme_manager'),
-    scrollBarClassModule = require('viz/chart_components/scroll_bar'),
-    ScrollBarClass = scrollBarClassModule.ScrollBar,
-    trackerModule = require('viz/chart_components/tracker'),
-    ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker),
-    PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker),
-    chartModule = require('viz/chart'),
-    dataValidatorModule = require('viz/components/data_validator'),
-    chartMocks = require('../../../helpers/chartMocks.js'),
-    insertMockFactory = chartMocks.insertMockFactory,
-    resetMockFactory = chartMocks.resetMockFactory,
-    exportModule = require('viz/core/export'),
-    restoreMockFactory = chartMocks.restoreMockFactory;
+const $ = require('jquery');
+const vizMocks = require('../../../helpers/vizMocks.js');
+const labelModule = require('viz/series/points/label');
+const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);
+const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
+const layoutManagerModule = require('viz/chart_components/layout_manager');
+const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
+const vizUtils = require('viz/core/utils');
+const StubTooltip = vizMocks.Tooltip;
+const seriesFamilyModule = require('viz/core/series_family');
+const legendModule = require('viz/components/legend');
+const rendererModule = require('viz/core/renderers/renderer');
+const tooltipModule = require('viz/core/tooltip');
+const titleModule = require('viz/core/title');
+const crosshairModule = require('viz/chart_components/crosshair');
+const Crosshair = crosshairModule.Crosshair;
+const chartThemeManagerModule = require('viz/components/chart_theme_manager');
+const scrollBarClassModule = require('viz/chart_components/scroll_bar');
+const ScrollBarClass = scrollBarClassModule.ScrollBar;
+const trackerModule = require('viz/chart_components/tracker');
+const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
+const PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker);
+const chartModule = require('viz/chart');
+const dataValidatorModule = require('viz/components/data_validator');
+const chartMocks = require('../../../helpers/chartMocks.js');
+const insertMockFactory = chartMocks.insertMockFactory;
+const resetMockFactory = chartMocks.resetMockFactory;
+const exportModule = require('viz/core/export');
+const restoreMockFactory = chartMocks.restoreMockFactory;
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;
 
-var resetModules = exports.resetModules = function() {
+const resetModules = exports.resetModules = function() {
     trackerModule.ChartTracker.reset();
     trackerModule.PieTracker.reset();
 
@@ -43,7 +43,7 @@ var resetModules = exports.resetModules = function() {
 };
 
 function stubExport() {
-    var that = this;
+    const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([0, 0]);
     sinon.stub(exportModule, 'ExportMenu', function() {
@@ -55,10 +55,10 @@ stubExport();
 
 vizMocks.Element.prototype.updateRectangle = sinon.spy(window.vizMocks.Element.prototype.updateRectangle);
 
-var categories = ['First', 2005, 'Last'];
+const categories = ['First', 2005, 'Last'];
 exports.categories = categories;
 
-var baseEnvironment = {
+const baseEnvironment = {
     beforeEach: function() {
         this.$container = $('#chartContainer');
     }
@@ -70,14 +70,14 @@ rendererModule.Renderer = sinon.spy(function(parameters) {
 });
 
 titleModule.Title = sinon.spy(function(parameters) {
-    var title = new vizMocks.Title(parameters);
+    const title = new vizMocks.Title(parameters);
     title.stub('layoutOptions').returns({ horizontalAlignment: 'center', verticalAlignment: 'top' });
     title.stub('measure').returns([0, 0]);
     return title;
 });
 
 legendModule.Legend = sinon.spy(function(parameters) {
-    var legend = new vizMocks.Legend(parameters);
+    const legend = new vizMocks.Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
@@ -122,7 +122,7 @@ function setupMocks($container) {
 
 exports.environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         baseEnvironment.beforeEach.apply(that, arguments);
 
         setupMocks(that.$container);
@@ -172,8 +172,8 @@ exports.environment = {
         });
 
         sinon.stub(scrollBarClassModule, 'ScrollBar', function() {
-            var ScrollBar = vizMocks.stubClass(ScrollBarClass),
-                scrollBar = new ScrollBar();
+            const ScrollBar = vizMocks.stubClass(ScrollBarClass);
+            const scrollBar = new ScrollBar();
             scrollBar.stub('init').returns(scrollBar);
             scrollBar.stub('update').returns(scrollBar);
             scrollBar.stub('getMargins').returns({ left: 0, top: 0, right: 0, bottom: 0 });
@@ -208,7 +208,7 @@ exports.environment = {
         this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
             return that.themeManager;
         });
-        var family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
+        const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
         this.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
             family.pane = 'default';
             family.adjustSeriesDimensions = sinon.stub();
@@ -267,7 +267,7 @@ exports.environment = {
 
     mockValidateData: function() {
         this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data, groupsData) {
-            var categories = [];
+            const categories = [];
             if(data) {
                 data.forEach(function(item) {
                     categories.push(item.arg);

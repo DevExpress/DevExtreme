@@ -1,23 +1,23 @@
-var vizUtils = require('viz/core/utils');
+const vizUtils = require('viz/core/utils');
 
-var EPSILON = 1E-8,
-    PI = Math.PI;
+const EPSILON = 1E-8;
+const PI = Math.PI;
 
-var format = function() {
-    var args = arguments,
-        toString = function(arg) {
-            if(arg === null) return 'null';
-            if(arg === undefined) return 'undefined';
-            return arg.toString();
-        };
+const format = function() {
+    const args = arguments;
+    const toString = function(arg) {
+        if(arg === null) return 'null';
+        if(arg === undefined) return 'undefined';
+        return arg.toString();
+    };
     return args[0].replace(/{(\d+)}/g, function(match, i) { return toString(args[i + 1]); });
 };
 
 QUnit.module('Angular utils');
 
 QUnit.test('normalizeAngle', function(assert) {
-    var testNormalizeAngle = function(arg, expected) {
-        var actual = vizUtils.normalizeAngle(arg);
+    const testNormalizeAngle = function(arg, expected) {
+        const actual = vizUtils.normalizeAngle(arg);
         assert.roughEqual(actual, expected, EPSILON, format('{0} -> {1} ({2})', arg, actual, expected));
     };
 
@@ -36,8 +36,8 @@ QUnit.test('normalizeAngle', function(assert) {
 });
 
 QUnit.test('convertAngleToRendererSpace', function(assert) {
-    var testConvertAngleToRendererSpace = function(angle, expected) {
-        var actual = vizUtils.convertAngleToRendererSpace(angle);
+    const testConvertAngleToRendererSpace = function(angle, expected) {
+        const actual = vizUtils.convertAngleToRendererSpace(angle);
         assert.strictEqual(actual, expected, format('{0} -> {1} ({2})', angle, actual, expected));
     };
 
@@ -61,8 +61,8 @@ QUnit.test('convertAngleToRendererSpace', function(assert) {
 });
 
 QUnit.test('degreesToRadians', function(assert) {
-    var testDegreesToRadians = function(value, expected) {
-        var actual = vizUtils.degreesToRadians(value);
+    const testDegreesToRadians = function(value, expected) {
+        const actual = vizUtils.degreesToRadians(value);
         assert.roughEqual(actual, expected, EPSILON, format('{0} -> {1} ({2})', value, actual, expected));
     };
 
@@ -77,13 +77,13 @@ QUnit.test('degreesToRadians', function(assert) {
 });
 
 QUnit.test('getCosAndSin', function(assert) {
-    var testGetCosAndSin = function(value, expectedCos, expectedSin) {
-        var actual = vizUtils.getCosAndSin(value);
+    const testGetCosAndSin = function(value, expectedCos, expectedSin) {
+        const actual = vizUtils.getCosAndSin(value);
         assert.roughEqual(actual.cos, expectedCos, EPSILON, format('{0} -> {1} ({2}) (cos)', value, actual.cos, expectedCos));
         assert.roughEqual(actual.sin, expectedSin, EPSILON, format('{0} -> {1} ({2}) (sin)', value, actual.sin, expectedSin));
     };
-    var cos = Math.cos,
-        sin = Math.sin;
+    const cos = Math.cos;
+    const sin = Math.sin;
 
     testGetCosAndSin(0, cos(0), sin(0));
     testGetCosAndSin(90, cos(PI / 2), sin(PI / 2));
@@ -128,16 +128,16 @@ QUnit.test('getDecimalOrder', function(assert) {
 });
 
 QUnit.test('getDecimalOrder - extremal cases', function(assert) {
-    var x = -30;
+    let x = -30;
     for(;x <= 30; ++x) {
         assert.strictEqual(vizUtils.getDecimalOrder(Math.pow(10, x)), x, '1E' + x.toString());
     }
 });
 
 function testGetAppropriateFormat(assert, start, end, count, expectedFormat, expectedPrecision, message) {
-    var actual = vizUtils.getAppropriateFormat(start, end, count),
-        expected = { type: expectedFormat, precision: expectedPrecision },
-        extraMessage = start.toString() + ' to ' + end.toString() + ' as ' + count.toString();
+    const actual = vizUtils.getAppropriateFormat(start, end, count);
+    const expected = { type: expectedFormat, precision: expectedPrecision };
+    const extraMessage = start.toString() + ' to ' + end.toString() + ' as ' + count.toString();
     assert.deepEqual(actual, expected, message ? message + ' (' + extraMessage + ')' : extraMessage);
 }
 

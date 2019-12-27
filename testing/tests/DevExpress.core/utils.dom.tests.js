@@ -10,9 +10,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 QUnit.module('createMarkup');
 
 QUnit.test('createMarkupFromString', function(assert) {
-    var originalWinJS = window.WinJS,
-        str = '<div>test</div>',
-        $resultElement;
+    const originalWinJS = window.WinJS;
+    const str = '<div>test</div>';
+    let $resultElement;
 
     try {
         window.WinJS = undefined;
@@ -36,11 +36,11 @@ QUnit.test('createMarkupFromString', function(assert) {
 });
 
 QUnit.test('normalizeTemplateElement with script element', function(assert) {
-    var domElement = document.createElement('script');
+    const domElement = document.createElement('script');
 
     domElement.innerHTML = 'Test';
 
-    var $result = domUtils.normalizeTemplateElement(domElement);
+    const $result = domUtils.normalizeTemplateElement(domElement);
 
     assert.equal($result.text(), 'Test', 'template based on script element works fine');
 });
@@ -49,10 +49,10 @@ QUnit.test('normalizeTemplateElement with script element', function(assert) {
 QUnit.module('clipboard');
 
 QUnit.test('get text from clipboard', function(assert) {
-    var clipboardText = '';
+    let clipboardText = '';
 
-    var $input = $('<input>').appendTo('#qunit-fixture');
-    var keyboard = keyboardMock($input);
+    const $input = $('<input>').appendTo('#qunit-fixture');
+    const keyboard = keyboardMock($input);
 
     $input.on('paste', function(e) {
         clipboardText = domUtils.clipboardText(e);
@@ -67,14 +67,14 @@ QUnit.test('get text from clipboard', function(assert) {
 QUnit.module('selection');
 
 QUnit.test('clearSelection should not run if selectionType is \'Caret\'', function(assert) {
-    var originalGetSelection = window.getSelection;
+    const originalGetSelection = window.getSelection;
 
     try {
-        var cleared = 0,
-            selectionMockObject = {
-                empty: function() { cleared++; },
-                type: 'Range'
-            };
+        let cleared = 0;
+        const selectionMockObject = {
+            empty: function() { cleared++; },
+            type: 'Range'
+        };
 
         window.getSelection = function() { return selectionMockObject; };
 
@@ -92,12 +92,12 @@ QUnit.test('clearSelection should not run if selectionType is \'Caret\'', functi
 });
 
 QUnit.test('resetActiveElement should not throw an error in IE', function(assert) {
-    var getActiveElement = sinon.stub(domAdapter, 'getActiveElement').returns({
+    const getActiveElement = sinon.stub(domAdapter, 'getActiveElement').returns({
         blur: function() {
             throw 'IE throws an \'Incorrect Function\' exception in blur method';
         }
     });
-    var bodyBlur = sinon.spy(document.body, 'blur');
+    const bodyBlur = sinon.spy(document.body, 'blur');
 
     try {
         domUtils.resetActiveElement();
@@ -117,9 +117,9 @@ QUnit.test('allowSelection should be detected by realDevice', function(assert) {
         return;
     }
 
-    var $viewPort = $('<div>').addClass('dx-viewport');
-    var originalRealDevice = devices.real();
-    var originalCurrentDevice = devices.current();
+    const $viewPort = $('<div>').addClass('dx-viewport');
+    const originalRealDevice = devices.real();
+    const originalCurrentDevice = devices.current();
 
     $viewPort.appendTo('#qunit-fixture');
 
@@ -140,13 +140,13 @@ QUnit.test('allowSelection should be detected by realDevice', function(assert) {
 QUnit.module('Contains');
 
 QUnit.test('it correctly detect the html element', function(assert) {
-    var html = document.documentElement;
+    const html = document.documentElement;
 
     assert.ok(domUtils.contains(document, html), 'Document contains the html element');
 });
 
 QUnit.test('it correctly detect the body element', function(assert) {
-    var body = document.body;
+    const body = document.body;
 
     assert.ok(domUtils.contains(document, body), 'Document contains the body element');
 });

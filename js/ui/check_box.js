@@ -1,26 +1,26 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    devices = require('../core/devices'),
-    extend = require('../core/utils/extend').extend,
-    inkRipple = require('./widget/utils.ink_ripple'),
-    Editor = require('./editor/editor'),
-    registerComponent = require('../core/component_registrator'),
-    eventUtils = require('../events/utils'),
-    clickEvent = require('../events/click');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const devices = require('../core/devices');
+const extend = require('../core/utils/extend').extend;
+const inkRipple = require('./widget/utils.ink_ripple');
+const Editor = require('./editor/editor');
+const registerComponent = require('../core/component_registrator');
+const eventUtils = require('../events/utils');
+const clickEvent = require('../events/click');
 
-var CHECKBOX_CLASS = 'dx-checkbox',
-    CHECKBOX_ICON_CLASS = 'dx-checkbox-icon',
-    CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked',
-    CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container',
-    CHECKBOX_TEXT_CLASS = 'dx-checkbox-text',
-    CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text',
-    CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate',
-    CHECKBOX_FEEDBACK_HIDE_TIMEOUT = 100;
+const CHECKBOX_CLASS = 'dx-checkbox';
+const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
+const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
+const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
+const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
+const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
+const CHECKBOX_INDETERMINATE_CLASS = 'dx-checkbox-indeterminate';
+const CHECKBOX_FEEDBACK_HIDE_TIMEOUT = 100;
 
-var CheckBox = Editor.inherit({
+const CheckBox = Editor.inherit({
 
     _supportedKeys: function() {
-        var click = function(e) {
+        const click = function(e) {
             e.preventDefault();
             this._clickAction({ event: e });
         };
@@ -113,7 +113,7 @@ var CheckBox = Editor.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: element,
             event: dxEvent,
             wave: waveIndex
@@ -143,7 +143,7 @@ var CheckBox = Editor.inherit({
     },
 
     _renderText: function() {
-        var textValue = this.option('text');
+        const textValue = this.option('text');
 
         if(!textValue) {
             if(this._$text) {
@@ -164,8 +164,8 @@ var CheckBox = Editor.inherit({
     },
 
     _renderClick: function() {
-        var that = this,
-            eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
+        const that = this;
+        const eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
 
         that._clickAction = that._createAction(that._clickHandler);
 
@@ -176,16 +176,16 @@ var CheckBox = Editor.inherit({
     },
 
     _clickHandler: function(args) {
-        var that = args.component;
+        const that = args.component;
 
         that._saveValueChangeEvent(args.event);
         that.option('value', !that.option('value'));
     },
 
     _renderValue: function() {
-        var $element = this.$element(),
-            checked = this.option('value'),
-            indeterminate = checked === undefined;
+        const $element = this.$element();
+        const checked = this.option('value');
+        const indeterminate = checked === undefined;
 
         $element.toggleClass(CHECKBOX_CHECKED_CLASS, Boolean(checked));
         $element.toggleClass(CHECKBOX_INDETERMINATE_CLASS, indeterminate);

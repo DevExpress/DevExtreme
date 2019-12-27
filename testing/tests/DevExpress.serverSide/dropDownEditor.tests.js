@@ -1,9 +1,9 @@
 require('../DevExpress.ui.widgets.editors/dropDownEditor.markup.tests.js');
 
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
             <div id="dropDownEditorLazy"></div>\
         </div>';
@@ -12,10 +12,10 @@ QUnit.testStart(function() {
 });
 
 QUnit.test('there is no popup in markup on server', function(assert) {
-    var dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+    const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
         opened: true
     }).dxDropDownEditor('instance');
-    var $popup = $('.dx-popup');
+    const $popup = $('.dx-popup');
 
     assert.notOk($popup.length);
     assert.ok(!dropDownEditor._popup);

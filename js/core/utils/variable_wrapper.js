@@ -1,5 +1,5 @@
-var logger = require('./console').logger,
-    dependencyInjector = require('./dependency_injector');
+const logger = require('./console').logger;
+const dependencyInjector = require('./dependency_injector');
 
 module.exports = dependencyInjector({
     isWrapped: function() {

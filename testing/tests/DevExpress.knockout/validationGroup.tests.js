@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    ValidationEngine = require('ui/validation_engine');
+const $ = require('jquery');
+const ko = require('knockout');
+const ValidationEngine = require('ui/validation_engine');
 
 require('ui/text_box');
 require('ui/validation_group');
@@ -8,7 +8,7 @@ require('ui/validator');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="testcaseSingleGroup" data-bind="dxValidationGroup: {}">\
             <div id="knockoutTextBox" data-bind="dxTextBox: {}, dxValidator: {}"></div>\
         </div>\

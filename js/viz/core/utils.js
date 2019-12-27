@@ -1,91 +1,91 @@
-var noop = require('../../core/utils/common').noop,
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    mathUtils = require('../../core/utils/math'),
-    dateToMilliseconds = require('../../core/utils/date').dateToMilliseconds,
-    domAdapter = require('../../core/dom_adapter'),
-    Color = require('../../color'),
-    isDefined = typeUtils.isDefined,
-    isNumber = typeUtils.isNumeric,
-    isExponential = typeUtils.isExponential,
-    _math = Math,
-    _round = _math.round,
-    _sqrt = Math.sqrt;
+const noop = require('../../core/utils/common').noop;
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const mathUtils = require('../../core/utils/math');
+const dateToMilliseconds = require('../../core/utils/date').dateToMilliseconds;
+const domAdapter = require('../../core/dom_adapter');
+const Color = require('../../color');
+const isDefined = typeUtils.isDefined;
+const isNumber = typeUtils.isNumeric;
+const isExponential = typeUtils.isExponential;
+const _math = Math;
+const _round = _math.round;
+const _sqrt = Math.sqrt;
 
-var PI = Math.PI,
-    MAX_PIXEL_COUNT = 1E10,
-    PI_DIV_180 = PI / 180,
-    LN10 = Math.LN10;
+const PI = Math.PI;
+const MAX_PIXEL_COUNT = 1E10;
+const PI_DIV_180 = PI / 180;
+const LN10 = Math.LN10;
 
-var cosFunc = Math.cos,
-    sinFunc = Math.sin,
-    abs = Math.abs,
-    log = Math.log,
-    floor = Math.floor,
-    ceil = Math.ceil,
-    max = Math.max,
-    _isNaN = isNaN,
-    _Number = Number,
-    _NaN = NaN;
+const cosFunc = Math.cos;
+const sinFunc = Math.sin;
+const abs = Math.abs;
+const log = Math.log;
+const floor = Math.floor;
+const ceil = Math.ceil;
+const max = Math.max;
+const _isNaN = isNaN;
+const _Number = Number;
+const _NaN = NaN;
 
 const { adjust, sign } = mathUtils;
 const PANE_PADDING = 10;
 
-var getLog = function(value, base) {
+const getLog = function(value, base) {
     if(!value) {
         return _NaN;
     }
     return Math.log(value) / Math.log(base);
 };
 
-var getAdjustedLog10 = function(value) {
+const getAdjustedLog10 = function(value) {
     return adjust(getLog(value, 10));
 };
 
-var raiseTo = function(power, base) {
+const raiseTo = function(power, base) {
     return Math.pow(base, power);
 };
 
 //  Translates angle to [0, 360)
 //  Expects number, no validation
-var normalizeAngle = function(angle) {
+const normalizeAngle = function(angle) {
     return ((angle % 360) + 360) % 360;
 };
 
 //  Maps angle in trigonometric space to angle in 'renderer' space
 //  Expects numbers, no validation
-var convertAngleToRendererSpace = function(angle) {
+const convertAngleToRendererSpace = function(angle) {
     return 90 - angle;
 };
 
 //  Maps angle in degrees to angle in radians
 //  Expects number, no validation
-var degreesToRadians = function(value) {
+const degreesToRadians = function(value) {
     return PI * value / 180;
 };
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
-var getCosAndSin = function(angle) {
-    var angleInRadians = degreesToRadians(angle);
+const getCosAndSin = function(angle) {
+    const angleInRadians = degreesToRadians(angle);
     return { cos: cosFunc(angleInRadians), sin: sinFunc(angleInRadians) };
 };
 
 //  Because Math.log(1000) / Math.LN10 < 3 though it is exactly 3
 //  Same happens for 1E6, 1E9, 1E12, 1E13, 1E15, ...
-var DECIMAL_ORDER_THRESHOLD = 1E-14;
+const DECIMAL_ORDER_THRESHOLD = 1E-14;
 //    ____________________
 //   /       2          2
 // \/ (y2-y1)  + (x2-x1)
-var getDistance = function(x1, y1, x2, y2) {
-    var diffX = x2 - x1,
-        diffY = y2 - y1;
+const getDistance = function(x1, y1, x2, y2) {
+    const diffX = x2 - x1;
+    const diffY = y2 - y1;
     return Math.sqrt(diffY * diffY + diffX * diffX);
 };
 
-var getDecimalOrder = function(number) {
-    var n = abs(number), cn;
+const getDecimalOrder = function(number) {
+    let n = abs(number); let cn;
     if(!_isNaN(n)) {
         if(n > 0) {
             n = log(n) / LN10;
@@ -97,10 +97,10 @@ var getDecimalOrder = function(number) {
     return _NaN;
 };
 
-var getAppropriateFormat = function(start, end, count) {
-    var order = max(getDecimalOrder(start), getDecimalOrder(end)),
-        precision = -getDecimalOrder(abs(end - start) / count),
-        format;
+const getAppropriateFormat = function(start, end, count) {
+    const order = max(getDecimalOrder(start), getDecimalOrder(end));
+    let precision = -getDecimalOrder(abs(end - start) / count);
+    let format;
 
     if(!_isNaN(order) && !_isNaN(precision)) {
         if(abs(order) <= 4) {
@@ -117,7 +117,7 @@ var getAppropriateFormat = function(start, end, count) {
     return null;
 };
 
-var roundValue = function(value, precision) {
+const roundValue = function(value, precision) {
     if(precision > 20) {
         precision = 20;
     }
@@ -130,15 +130,15 @@ var roundValue = function(value, precision) {
     }
 };
 
-var getPower = function(value) {
+const getPower = function(value) {
     return value.toExponential().split('e')[1];
 };
 
 function map(array, callback) {
-    var i = 0,
-        len = array.length,
-        result = [],
-        value;
+    let i = 0;
+    const len = array.length;
+    const result = [];
+    let value;
 
     while(i < len) {
         value = callback(array[i], i);
@@ -157,7 +157,7 @@ function selectByKeys(object, keys) {
 }
 
 function decreaseFields(object, keys, eachDecrease, decrease) {
-    var dec = decrease;
+    let dec = decrease;
     each(keys, function(_, key) {
         if(object[key]) {
             object[key] -= eachDecrease;
@@ -186,36 +186,36 @@ function normalizeBBoxField(value) {
 }
 
 function normalizeBBox(bBox) {
-    var xl = normalizeBBoxField(floor(bBox.x)),
-        yt = normalizeBBoxField(floor(bBox.y)),
-        xr = normalizeBBoxField(ceil(bBox.width + bBox.x)),
-        yb = normalizeBBoxField(ceil(bBox.height + bBox.y)),
-        result = {
-            x: xl,
-            y: yt,
-            width: xr - xl,
-            height: yb - yt
-        };
+    const xl = normalizeBBoxField(floor(bBox.x));
+    const yt = normalizeBBoxField(floor(bBox.y));
+    const xr = normalizeBBoxField(ceil(bBox.width + bBox.x));
+    const yb = normalizeBBoxField(ceil(bBox.height + bBox.y));
+    const result = {
+        x: xl,
+        y: yt,
+        width: xr - xl,
+        height: yb - yt
+    };
     result.isEmpty = !result.x && !result.y && !result.width && !result.height;
     return result;
 }
 
 // Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
 function rotateBBox(bBox, center, angle) {
-    var cos = _Number(cosFunc(angle * PI_DIV_180).toFixed(3)),
-        sin = _Number(sinFunc(angle * PI_DIV_180).toFixed(3)),
-        w2 = bBox.width / 2,
-        h2 = bBox.height / 2,
-        centerX = bBox.x + w2,
-        centerY = bBox.y + h2,
-        w2_ = abs(w2 * cos) + abs(h2 * sin),
-        h2_ = abs(w2 * sin) + abs(h2 * cos),
-        // Note that the following slightly differs from theoretical formula:
-        // x' = x * cos - y * sin, y' = x * sin + y * cos
-        // That is because in svg y goes down (not up) - so sign of sin is reverted
-        // x' = x * cos + y * sin, y' = -x * sin + y * cos
-        centerX_ = center[0] + (centerX - center[0]) * cos + (centerY - center[1]) * sin,
-        centerY_ = center[1] - (centerX - center[0]) * sin + (centerY - center[1]) * cos;
+    const cos = _Number(cosFunc(angle * PI_DIV_180).toFixed(3));
+    const sin = _Number(sinFunc(angle * PI_DIV_180).toFixed(3));
+    const w2 = bBox.width / 2;
+    const h2 = bBox.height / 2;
+    const centerX = bBox.x + w2;
+    const centerY = bBox.y + h2;
+    const w2_ = abs(w2 * cos) + abs(h2 * sin);
+    const h2_ = abs(w2 * sin) + abs(h2 * cos);
+    // Note that the following slightly differs from theoretical formula:
+    // x' = x * cos - y * sin, y' = x * sin + y * cos
+    // That is because in svg y goes down (not up) - so sign of sin is reverted
+    // x' = x * cos + y * sin, y' = -x * sin + y * cos
+    const centerX_ = center[0] + (centerX - center[0]) * cos + (centerY - center[1]) * sin;
+    const centerY_ = center[1] - (centerX - center[0]) * sin + (centerY - center[1]) * cos;
     return normalizeBBox({
         x: centerX_ - w2_,
         y: centerY_ - h2_,
@@ -226,7 +226,7 @@ function rotateBBox(bBox, center, angle) {
 
 extend(exports, {
     decreaseGaps: function(object, keys, decrease) {
-        var arrayGaps;
+        let arrayGaps;
         do {
             arrayGaps = selectByKeys(object, keys);
             arrayGaps.push(_math.ceil(decrease / arrayGaps.length));
@@ -242,18 +242,18 @@ extend(exports, {
     },
 
     enumParser: function(values) {
-        var stored = {}, i, ii;
+        const stored = {}; let i; let ii;
         for(i = 0, ii = values.length; i < ii; ++i) {
             stored[normalizeEnum(values[i])] = 1;
         }
         return function(value, defaultValue) {
-            var _value = normalizeEnum(value);
+            const _value = normalizeEnum(value);
             return stored[_value] ? _value : defaultValue;
         };
     },
 
     patchFontOptions: function(options) {
-        var fontOptions = {};
+        const fontOptions = {};
         each(options || {}, function(key, value) {
             if(/^(cursor)$/i.test(key)) {
                 // TODO check other properties, add tests
@@ -301,21 +301,21 @@ extend(exports, {
     },
 
     convertXYToPolar: function(centerCoords, x, y) {
-        var radius = getDistance(centerCoords.x, centerCoords.y, x, y),
-            angle = _math.atan2(y - centerCoords.y, x - centerCoords.x);
+        const radius = getDistance(centerCoords.x, centerCoords.y, x, y);
+        const angle = _math.atan2(y - centerCoords.y, x - centerCoords.x);
 
         return { phi: _round(normalizeAngle(angle * 180 / _math.PI)), r: _round(radius) };
     },
 
     processSeriesTemplate: function(seriesTemplate, items) {
-        var customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
-            nameField = seriesTemplate.nameField,
-            generatedSeries = {},
-            seriesOrder = [],
-            series,
-            i = 0,
-            length,
-            data;
+        const customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
+        const nameField = seriesTemplate.nameField;
+        const generatedSeries = {};
+        const seriesOrder = [];
+        let series;
+        let i = 0;
+        let length;
+        let data;
 
         items = items || [];
         for(length = items.length; i < length; i++) {
@@ -329,7 +329,7 @@ extend(exports, {
             }
         }
         return map(seriesOrder, function(orderedName) {
-            var group = generatedSeries[orderedName];
+            const group = generatedSeries[orderedName];
             return extend(group, customizeSeries.call(null, group.name));
         });
     },
@@ -341,15 +341,15 @@ extend(exports, {
         startValue = isDefined(startValue) ? startValue : categories[0];
         endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
-        var categoriesValue = map(categories, function(category) {
-                return isDefined(category) ? category.valueOf() : null;
-            }),
-            visibleCategories,
-            indexStartValue = categoriesValue.indexOf(startValue.valueOf()),
-            indexEndValue = categoriesValue.indexOf(endValue.valueOf()),
-            swapBuf,
-            inverted = false,
-            lastIdx;
+        const categoriesValue = map(categories, function(category) {
+            return isDefined(category) ? category.valueOf() : null;
+        });
+        let visibleCategories;
+        let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
+        let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
+        let swapBuf;
+        let inverted = false;
+        let lastIdx;
 
         indexStartValue < 0 && (indexStartValue = 0);
         indexEndValue < 0 && (indexEndValue = categories.length - 1);
@@ -437,9 +437,9 @@ extend(exports, {
     },
 
     unique: function(array) {
-        var values = {};
+        const values = {};
         return map(array, function(item) {
-            var result = !values[item] ? item : null;
+            const result = !values[item] ? item : null;
             values[item] = true;
             return result;
         });
@@ -452,12 +452,12 @@ extend(exports, {
         //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
         //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
         //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
-        var isPositive = bBox.x + bBox.width / 2 >= center.x,
-            horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x,
-            verticalOffset1 = bBox.y - center.y,
-            verticalOffset2 = verticalOffset1 + dy,
-            horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2)),
-            dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
+        const isPositive = bBox.x + bBox.width / 2 >= center.x;
+        const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
+        const verticalOffset1 = bBox.y - center.y;
+        const verticalOffset2 = verticalOffset1 + dy;
+        const horizontalOffset2 = _round(_sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
+        const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
         return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
     },
 
@@ -496,13 +496,13 @@ function getAddFunction(range, correctZeroLevel) {
 
     if(range.axisType === 'logarithmic') {
         return function(rangeValue, marginValue, sign = 1) {
-            var log = getLogExt(rangeValue, range.base) + sign * marginValue;
+            const log = getLogExt(rangeValue, range.base) + sign * marginValue;
             return raiseToExt(log, range.base);
         };
     }
 
     return function(rangeValue, marginValue, sign = 1) {
-        var newValue = rangeValue + sign * marginValue;
+        const newValue = rangeValue + sign * marginValue;
         return correctZeroLevel && newValue * rangeValue <= 0 ? 0 : newValue;
     };
 }

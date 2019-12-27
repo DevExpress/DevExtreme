@@ -1,26 +1,26 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    Color = require('color'),
-    Browser = require('core/utils/browser'),
-    pointerMock = require('../../helpers/pointerMock.js'),
-    keyboardMock = require('../../helpers/keyboardMock.js'),
-    fx = require('animation/fx');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const Color = require('color');
+const Browser = require('core/utils/browser');
+const pointerMock = require('../../helpers/pointerMock.js');
+const keyboardMock = require('../../helpers/keyboardMock.js');
+const fx = require('animation/fx');
 
-var TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 require('common.css!');
 require('ui/color_box/color_view');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div class="dx-viewport"></div>\
             <div id="color-view"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var move = function($element, position) {
-    var parentOffset = $element.parent().offset();
+const move = function($element, position) {
+    const parentOffset = $element.parent().offset();
     pointerMock($element)
         .start()
         .down(parentOffset.left, parentOffset.top)
@@ -28,13 +28,13 @@ var move = function($element, position) {
         .up();
 };
 
-var click = function($element, position) {
+const click = function($element, position) {
     pointerMock($element)
         .start()
         .down($element.offset().left + position.left, $element.offset().top + position.top);
 };
 
-var showColorView = function(options) {
+const showColorView = function(options) {
     return this.element.dxColorView(options);
 };
 
@@ -44,7 +44,7 @@ QUnit.module('ColorView', {
         this.element = $('#color-view');
 
         this.checkInput = function($input, expected, assert) {
-            var inputInstance = $input[expected.inputType || 'dxNumberBox']('instance');
+            const inputInstance = $input[expected.inputType || 'dxNumberBox']('instance');
 
             assert.equal($input.length, 1, 'Editor is rendered');
             assert.ok(inputInstance, 'Editor is instance of dxNumberBox');
@@ -54,24 +54,24 @@ QUnit.module('ColorView', {
         };
 
         this.updateColorInput = function(inputAlias, value) {
-            var aliases = [
-                    'red',
-                    'green',
-                    'blue',
-                    'hex',
-                    'alpha'
-                ],
-                inputIndex = $.inArray(inputAlias, aliases),
+            const aliases = [
+                'red',
+                'green',
+                'blue',
+                'hex',
+                'alpha'
+            ];
+            const inputIndex = $.inArray(inputAlias, aliases);
 
-                $input = this.element.find('label ' + TEXTEDITOR_INPUT_SELECTOR).eq(inputIndex);
+            const $input = this.element.find('label ' + TEXTEDITOR_INPUT_SELECTOR).eq(inputIndex);
 
             $input.val(value);
             $input.trigger('change');
         };
 
         this.checkColor = function(expectedColor, assert) {
-            var colorPicker = this.element.dxColorView('instance'),
-                currentColor = colorPicker._currentColor;
+            const colorPicker = this.element.dxColorView('instance');
+            const currentColor = colorPicker._currentColor;
 
             assert.equal(currentColor.r, expectedColor.r, 'Red color is OK');
             assert.equal(colorPicker._rgbInputs[0]._input().val(), expectedColor.r, 'Red input is OK');
@@ -95,8 +95,8 @@ QUnit.module('ColorView', {
 }, () => {
     QUnit.test('Render html rows', function(assert) {
         showColorView.call(this);
-        var $colorPickerContainer = this.element.find('.dx-colorview-container'),
-            $rows = $colorPickerContainer.find('.dx-colorview-container-row');
+        const $colorPickerContainer = this.element.find('.dx-colorview-container');
+        const $rows = $colorPickerContainer.find('.dx-colorview-container-row');
 
         assert.equal($rows.length, 1);
     });
@@ -104,8 +104,8 @@ QUnit.module('ColorView', {
     QUnit.test('Render html rows with alpha channel', function(assert) {
         showColorView.call(this, { editAlphaChannel: true });
 
-        var $colorPickerContainer = this.element.find('.dx-colorview-container'),
-            $rows = $colorPickerContainer.find('.dx-colorview-container-row');
+        const $colorPickerContainer = this.element.find('.dx-colorview-container');
+        const $rows = $colorPickerContainer.find('.dx-colorview-container-row');
 
         assert.equal($rows.length, 2);
         assert.ok($rows.eq(1).hasClass('dx-colorview-alpha-channel-row'));
@@ -114,11 +114,11 @@ QUnit.module('ColorView', {
     QUnit.test('Render palette', function(assert) {
         showColorView.call(this, { value: '#9c2a2a' });
 
-        var $palette = this.element.find('.dx-colorview-palette'),
-            $gradientWhite = $palette.find('.dx-colorview-palette-gradient-white'),
-            $gradientBlack = $palette.find('.dx-colorview-palette-gradient-black'),
-            $colorChooser = $palette.find('.dx-colorview-palette-handle'),
-            paletteBackground = $palette.css('backgroundColor');
+        const $palette = this.element.find('.dx-colorview-palette');
+        const $gradientWhite = $palette.find('.dx-colorview-palette-gradient-white');
+        const $gradientBlack = $palette.find('.dx-colorview-palette-gradient-black');
+        const $colorChooser = $palette.find('.dx-colorview-palette-handle');
+        const paletteBackground = $palette.css('backgroundColor');
 
         assert.equal($palette.length, 1);
         assert.equal(new Color(paletteBackground).toHex(), '#ff0000');
@@ -131,8 +131,8 @@ QUnit.module('ColorView', {
 
     QUnit.test('Color chooser position', function(assert) {
         showColorView.call(this, { value: '#2C77B8' });
-        var $colorChooserMarker = $('.dx-colorview-palette-handle'),
-            markerPosition = $colorChooserMarker.position();
+        const $colorChooserMarker = $('.dx-colorview-palette-handle');
+        const markerPosition = $colorChooserMarker.position();
 
         assert.equal(markerPosition.left, 205);
         assert.equal(markerPosition.top, 70);
@@ -141,9 +141,9 @@ QUnit.module('ColorView', {
     QUnit.test('Render hue scale and hue scale handle', function(assert) {
         showColorView.call(this);
 
-        var $hueScale = this.element.find('.dx-colorview-hue-scale'),
-            $hueScaleWrapper = $hueScale.closest('.dx-colorview-hue-scale-wrapper'),
-            $hueScaleHandle = $hueScaleWrapper.find('.dx-colorview-hue-scale-handle');
+        const $hueScale = this.element.find('.dx-colorview-hue-scale');
+        const $hueScaleWrapper = $hueScale.closest('.dx-colorview-hue-scale-wrapper');
+        const $hueScaleHandle = $hueScaleWrapper.find('.dx-colorview-hue-scale-handle');
 
         assert.equal($hueScale.length, 1);
         assert.equal($hueScaleHandle.length, 1);
@@ -168,7 +168,7 @@ QUnit.module('ColorView', {
 
     QUnit.test('Render controls container', function(assert) {
         showColorView.call(this);
-        var $controlsContainer = this.element.find('.dx-colorview-controls-container');
+        const $controlsContainer = this.element.find('.dx-colorview-controls-container');
 
         assert.equal($controlsContainer.length, 1);
         assert.equal($controlsContainer.parent().attr('class'), 'dx-colorview-container-cell');
@@ -176,9 +176,9 @@ QUnit.module('ColorView', {
 
     QUnit.test('Render RGB inputs', function(assert) {
         showColorView.call(this, { value: '#00FFA9' });
-        var $red = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-red .dx-texteditor'),
-            $green = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-green .dx-texteditor'),
-            $blue = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-blue .dx-texteditor');
+        const $red = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-red .dx-texteditor');
+        const $green = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-green .dx-texteditor');
+        const $blue = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-blue .dx-texteditor');
 
         this.checkInput($red, {
             value: 0,
@@ -201,7 +201,7 @@ QUnit.module('ColorView', {
 
     QUnit.test('Render hex input', function(assert) {
         showColorView.call(this, { value: '#ff0000' });
-        var $hex = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-hex .dx-texteditor');
+        const $hex = this.element.find('.dx-colorview-controls-container label.dx-colorview-label-hex .dx-texteditor');
 
         this.checkInput($hex, {
             value: 'ff0000',
@@ -214,11 +214,11 @@ QUnit.module('ColorView', {
     QUnit.test('Render alpha channel scale and input', function(assert) {
         showColorView.call(this, { editAlphaChannel: true, value: 'rgba(255, 0, 0, 0.5)' });
 
-        var $alphaChannelScaleWrapper = this.element.find('.dx-colorview-alpha-channel-wrapper'),
-            $alphaChannelScale = $alphaChannelScaleWrapper.find('.dx-colorview-alpha-channel-scale'),
-            $alphaChannelLabel = this.element.find('.dx-colorview-alpha-channel-label'),
-            $alphaChannelHandle = this.element.find('.dx-colorview-alpha-channel-cell').find('.dx-colorview-alpha-channel-handle'),
-            $alphaChannelScaleBorder = this.element.find('.dx-colorview-alpha-channel-border');
+        const $alphaChannelScaleWrapper = this.element.find('.dx-colorview-alpha-channel-wrapper');
+        const $alphaChannelScale = $alphaChannelScaleWrapper.find('.dx-colorview-alpha-channel-scale');
+        const $alphaChannelLabel = this.element.find('.dx-colorview-alpha-channel-label');
+        const $alphaChannelHandle = this.element.find('.dx-colorview-alpha-channel-cell').find('.dx-colorview-alpha-channel-handle');
+        const $alphaChannelScaleBorder = this.element.find('.dx-colorview-alpha-channel-border');
 
         assert.equal($alphaChannelScaleWrapper.length, 1);
         assert.equal($alphaChannelScale.length, 1);
@@ -249,10 +249,10 @@ QUnit.module('ColorView', {
 
     QUnit.test('Render colors preview', function(assert) {
         showColorView.call(this);
-        var $colorPreviewContainer = this.element.find('.dx-colorview-color-preview-container'),
-            $colorPreviewContainerInner = this.element.find('.dx-colorview-color-preview-container-inner'),
-            $baseColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-current'),
-            $newColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-new');
+        const $colorPreviewContainer = this.element.find('.dx-colorview-color-preview-container');
+        const $colorPreviewContainerInner = this.element.find('.dx-colorview-color-preview-container-inner');
+        const $baseColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-current');
+        const $newColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-new');
 
         assert.equal($colorPreviewContainer.length, 1);
         assert.equal($colorPreviewContainerInner.length, 1);
@@ -264,9 +264,9 @@ QUnit.module('ColorView', {
 
     QUnit.test('Render colors preview with predefined values', function(assert) {
         showColorView.call(this, { value: '#fafafa', matchValue: '#dadada' });
-        var $colorPreviewContainerInner = this.element.find('.dx-colorview-color-preview-container-inner'),
-            $baseColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-current'),
-            $newColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-new');
+        const $colorPreviewContainerInner = this.element.find('.dx-colorview-color-preview-container-inner');
+        const $baseColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-current');
+        const $newColor = $colorPreviewContainerInner.find('.dx-colorview-color-preview-color-new');
 
         assert.equal(new Color($baseColor.css('backgroundColor')).toHex(), '#dadada');
         assert.equal(new Color($newColor.css('backgroundColor')).toHex(), '#fafafa');
@@ -277,9 +277,9 @@ QUnit.module('ColorView', {
             applyValueMode: 'instantly'
         });
 
-        var $applyButton = this.element.find('.dx-colorview-buttons-container .dx-colorview-apply-button'),
-            $cancelButton = this.element.find('.dx-colorview-buttons-container .dx-colorview-cancel-button'),
-            $htmlRows = this.element.find('.dx-colorview-container-row');
+        const $applyButton = this.element.find('.dx-colorview-buttons-container .dx-colorview-apply-button');
+        const $cancelButton = this.element.find('.dx-colorview-buttons-container .dx-colorview-cancel-button');
+        const $htmlRows = this.element.find('.dx-colorview-container-row');
 
         assert.equal($applyButton.length, 0);
         assert.equal($cancelButton.length, 0);
@@ -294,7 +294,7 @@ QUnit.module('ColorView', {
     QUnit.test('Color chooser position can be negative', function(assert) {
         showColorView.call(this);
 
-        var $colorChooserMarker = $('.dx-colorview-palette-handle');
+        const $colorChooserMarker = $('.dx-colorview-palette-handle');
 
         move($colorChooserMarker, {
             left: 220,
@@ -305,7 +305,7 @@ QUnit.module('ColorView', {
 
     QUnit.test('Update color values', function(assert) {
         showColorView.call(this, { value: '#2C77B8' });
-        var $colorChooserMarker = this.element.find('.dx-colorview-palette-handle');
+        const $colorChooserMarker = this.element.find('.dx-colorview-palette-handle');
 
         move($colorChooserMarker, {
             left: 220,
@@ -326,7 +326,7 @@ QUnit.module('ColorView', {
             editAlphaChannel: true
         });
 
-        var $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
+        const $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
 
         move($alphaHandle, {
             left: 143,
@@ -347,7 +347,7 @@ QUnit.module('ColorView', {
             value: 'green'
         });
 
-        var $palette = this.element.find('.dx-colorview-palette');
+        const $palette = this.element.find('.dx-colorview-palette');
 
         click($palette, {
             left: 170,
@@ -367,7 +367,7 @@ QUnit.module('ColorView', {
             value: 'green'
         });
 
-        var $hueScale = this.element.find('.dx-colorview-hue-scale');
+        const $hueScale = this.element.find('.dx-colorview-hue-scale');
 
         click($hueScale, {
             left: 0,
@@ -387,7 +387,7 @@ QUnit.module('ColorView', {
             editAlphaChannel: true
         });
 
-        var $alphaScale = this.element.find('.dx-colorview-alpha-channel-scale');
+        const $alphaScale = this.element.find('.dx-colorview-alpha-channel-scale');
 
         click($alphaScale, {
             left: 90,
@@ -515,15 +515,15 @@ QUnit.module('ColorView', {
             value: '#666666'
         });
 
-        var $hueScale = this.element.find('.dx-colorview-hue-scale'),
-            $palette = this.element.find('.dx-colorview-palette');
+        const $hueScale = this.element.find('.dx-colorview-hue-scale');
+        const $palette = this.element.find('.dx-colorview-palette');
 
         click($hueScale, {
             left: 0,
             top: 90
         });
 
-        var $paletteBackColor = new Color($palette.css('backgroundColor')).toHex();
+        const $paletteBackColor = new Color($palette.css('backgroundColor')).toHex();
         assert.equal($paletteBackColor, '#4800ff');
     });
 
@@ -532,15 +532,15 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('ColorPicker should can update value instantly', function(assert) {
-        var newColor = new Color('#ba2d2d'),
-            spy = sinon.spy(noop),
+        const newColor = new Color('#ba2d2d');
+        const spy = sinon.spy(noop);
 
-            colorPicker = showColorView.call(this, {
-                onValueChanged: spy,
-                applyValueMode: 'instantly'
-            }).dxColorView('instance'),
+        const colorPicker = showColorView.call(this, {
+            onValueChanged: spy,
+            applyValueMode: 'instantly'
+        }).dxColorView('instance');
 
-            $colorChooserMarker = $('.dx-colorview-palette-handle');
+        const $colorChooserMarker = $('.dx-colorview-palette-handle');
 
         move($colorChooserMarker, {
             left: 220,
@@ -559,7 +559,7 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('\'instantly\' mode should work for alpha channel', function(assert) {
-        var colorPicker = showColorView.call(this, {
+        const colorPicker = showColorView.call(this, {
             value: 'rgba(100, 100, 100, .2)',
             editAlphaChannel: true,
             applyValueMode: 'instantly'
@@ -571,7 +571,7 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('In \'instantly\' mode value should be updated if some input was updated', function(assert) {
-        var colorPicker = showColorView.call(this, {
+        const colorPicker = showColorView.call(this, {
             value: '#ff0000',
             applyValueMode: 'instantly'
         }).dxColorView('instance');
@@ -590,12 +590,12 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('Update \'applyValueMode\' option if editAlphaChannel is true', function(assert) {
-        var instance = showColorView.call(this, { editAlphaChannel: true }).dxColorView('instance');
+        const instance = showColorView.call(this, { editAlphaChannel: true }).dxColorView('instance');
 
         instance.option('applyValueMode', 'instantly');
         instance.option('applyValueMode', 'useButtons');
 
-        var $alphaChannelRow = this.element.find('.dx-colorview-container-row').eq(1);
+        const $alphaChannelRow = this.element.find('.dx-colorview-container-row').eq(1);
 
         assert.ok($alphaChannelRow.hasClass('dx-colorview-alpha-channel-row'));
         assert.equal($alphaChannelRow.find('.dx-colorview-alpha-channel-cell').length, 1);
@@ -607,7 +607,7 @@ QUnit.module('ColorView', {
             editAlphaChannel: true
         });
 
-        var $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
+        const $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
 
         move($alphaHandle, {
             left: 0,
@@ -629,7 +629,7 @@ QUnit.module('ColorView', {
             editAlphaChannel: true
         });
 
-        var $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
+        const $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
 
         move($alphaHandle, {
             left: 500,
@@ -640,11 +640,11 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('T104929', function(assert) {
-        var instance = showColorView.call(this, { editAlphaChannel: false }).dxColorView('instance');
+        const instance = showColorView.call(this, { editAlphaChannel: false }).dxColorView('instance');
 
         instance.option('editAlphaChannel', true);
 
-        var $htmlRows = this.element.find('.dx-colorview-container-row');
+        const $htmlRows = this.element.find('.dx-colorview-container-row');
 
         assert.equal($htmlRows.eq(1).find('.dx-colorview-alpha-channel-scale').length, 1);
         assert.equal($htmlRows.eq(1).find('.dx-colorview-alpha-channel-label .dx-texteditor').length, 1);
@@ -664,7 +664,7 @@ QUnit.module('ColorView', {
             value: 'rgba(255, 0, 0, 1)'
         });
 
-        var $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
+        const $alphaHandle = this.element.find('.dx-colorview-alpha-channel-handle');
 
         move($alphaHandle, {
             left: 70,
@@ -685,7 +685,7 @@ QUnit.module('ColorView', {
             value: '#001AFF'
         });
 
-        var $hueMarker = this.element.find('.dx-colorview-hue-scale-handle');
+        const $hueMarker = this.element.find('.dx-colorview-hue-scale-handle');
 
 
         move($hueMarker, {
@@ -707,16 +707,16 @@ QUnit.module('ColorView', {
             return;
         }
 
-        var colorView = showColorView.call(this, {
+        const colorView = showColorView.call(this, {
             value: 'rgba(94, 169, 219, 0.62)',
             editAlphaChannel: true
         }).dxColorView('instance');
 
         colorView.option('value', 'rgba(48, 84, 46, 0.19)');
 
-        var paletteHandlePosition = colorView._$paletteHandle.position(),
-            alphaChannelHandlePosition = colorView._$alphaChannelHandle.position(),
-            hueScaleHandlePosition = colorView._$hueScaleHandle.position();
+        const paletteHandlePosition = colorView._$paletteHandle.position();
+        const alphaChannelHandlePosition = colorView._$alphaChannelHandle.position();
+        const hueScaleHandlePosition = colorView._$hueScaleHandle.position();
 
         assert.equal(Math.floor(paletteHandlePosition.left), 116);
         assert.equal(Math.floor(paletteHandlePosition.top), 186);
@@ -729,12 +729,12 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('Preview for current color should be updated when value was changed', function(assert) {
-        var colorView = showColorView.call(this, {
+        const colorView = showColorView.call(this, {
             value: 'red',
             matchValue: 'red'
         }).dxColorView('instance');
-        var $baseColor = this.element.find('.dx-colorview-color-preview-color-current');
-        var $newColor = this.element.find('.dx-colorview-color-preview-color-new');
+        const $baseColor = this.element.find('.dx-colorview-color-preview-color-current');
+        const $newColor = this.element.find('.dx-colorview-color-preview-color-new');
 
         colorView.option('value', 'green');
         assert.equal(new Color($baseColor.css('backgroundColor')).toHex(), '#ff0000', 'base preview keeps initial match value');
@@ -742,9 +742,9 @@ QUnit.module('ColorView', {
     });
 
     QUnit.test('Click on label should not focus the input (T179488)', function(assert) {
-        var isDefaultPrevented;
+        let isDefaultPrevented;
         this.$element = $('#color-view').dxColorView({ focusStateEnabled: true });
-        var $label = this.$element.find('.dx-colorview-label-red');
+        const $label = this.$element.find('.dx-colorview-label-red');
 
         $label.on('dxclick', function(e) {
             isDefaultPrevented = e.isDefaultPrevented();
@@ -757,15 +757,15 @@ QUnit.module('ColorView', {
 
     QUnit.test('Color view renders the editors with default stylingMode', function(assert) {
         this.$element = $('#color-view').dxColorView({});
-        var $editors = this.$element.find('.dx-editor-outlined');
+        const $editors = this.$element.find('.dx-editor-outlined');
 
         assert.equal($editors.length, 4, 'the number of outlined editors is correct');
     });
 
     QUnit.test('Color view renders the editors according to stylingMode option', function(assert) {
         this.$element = $('#color-view').dxColorView({ stylingMode: 'underlined' });
-        var $editors = this.$element.find('.dx-editor-underlined');
-        var $outlinedEditors = this.$element.find('.dx-editor-outlined');
+        const $editors = this.$element.find('.dx-editor-underlined');
+        const $outlinedEditors = this.$element.find('.dx-editor-outlined');
 
         assert.equal($editors.length, 4, 'the number of underlined editors is correct');
         assert.equal($outlinedEditors.length, 0, 'there are no outlined editors');
@@ -931,7 +931,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('setting hueHandler to top position by keybord navigation change color correctly', function(assert) {
         this.instance.option('value', 'rgba(255 , 0, 4, 1)');
         this.$element.trigger(this.ctrlUp);
-        var topOffset = this.$hueMarker.offset().top;
+        const topOffset = this.$hueMarker.offset().top;
         this.$element.trigger(this.ctrlUp);
 
         assert.equal(topOffset, this.$hueMarker.offset().top, 'pressing on the \'ctrl+up\' in top position does not move handler');
@@ -944,7 +944,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('setting hueHandler to bottom position by keybord navigation change color correctly', function(assert) {
         this.instance.option('value', 'rgba(255, 4, 0, 1)');
         this.$element.trigger(this.ctrlDown);
-        var topOffset = this.$hueMarker.offset().top;
+        const topOffset = this.$hueMarker.offset().top;
         this.$element.trigger(this.ctrlDown);
 
         assert.equal(topOffset, this.$hueMarker.offset().top, 'pressing on the \'ctrl+down\' in bottom position does not move handler');
@@ -965,7 +965,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('setting paletteHandler to top position by keybord navigation change color correctly', function(assert) {
         this.instance.option('value', 'rgba(255,145,145,1)');
 
-        var topOffset = this.$paletteMarker.offset().top;
+        const topOffset = this.$paletteMarker.offset().top;
         this.keyboard.keyDown('up');
         assert.equal(topOffset, this.$paletteMarker.offset().top, 'pressing on the \'up\' in top position does not move handler');
 
@@ -986,7 +986,7 @@ QUnit.module('keyboard navigation', {
         this.instance.option('value', 'rgba(3,1,1,1)');
 
         this.keyboard.keyDown('down');
-        var topOffset = this.$paletteMarker.offset().top;
+        const topOffset = this.$paletteMarker.offset().top;
         this.keyboard.keyDown('down');
         assert.equal(topOffset, this.$paletteMarker.offset().top, 'pressing on the \'down\' in bottom position does not move handler');
 
@@ -1006,7 +1006,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('setting paletteHandler to left position by keybord navigation change color correctly', function(assert) {
         this.instance.option('value', 'rgba(140,140,140,1)');
 
-        var leftOffset = this.$paletteMarker.offset().left;
+        const leftOffset = this.$paletteMarker.offset().left;
         this.keyboard.keyDown('left');
 
         assert.equal(leftOffset, this.$paletteMarker.offset().left, 'pressing on the \'left\' in left position does not move handler');
@@ -1027,7 +1027,7 @@ QUnit.module('keyboard navigation', {
     QUnit.test('setting paletteHandler to right position by keybord navigation change color correctly', function(assert) {
         this.instance.option('value', 'rgba(130,0,0,1)');
 
-        var leftOffset = this.$paletteMarker.offset().left;
+        const leftOffset = this.$paletteMarker.offset().left;
         this.keyboard.keyDown('right');
 
         assert.equal(leftOffset, this.$paletteMarker.offset().left, 'pressing on the \'right\' in left position does not move handler');
@@ -1049,7 +1049,7 @@ QUnit.module('keyboard navigation', {
         this.instance.option('value', 'rgba(255, 0, 0, 0.01)');
 
         this.$element.trigger(this.ctrlRight);
-        var leftOffset = this.$alphaMarker.offset().left;
+        const leftOffset = this.$alphaMarker.offset().left;
         this.$element.trigger(this.ctrlRight);
 
         assert.equal(leftOffset, this.$alphaMarker.offset().left, 'pressing on the \'ctrl+right\' in right position does not move handler');
@@ -1063,7 +1063,7 @@ QUnit.module('keyboard navigation', {
         this.instance.option('value', 'rgba(255, 0, 0, 0.99)');
 
         this.$element.trigger(this.ctrlLeft);
-        var leftOffset = this.$alphaMarker.offset().left;
+        const leftOffset = this.$alphaMarker.offset().left;
         this.$element.trigger(this.ctrlLeft);
 
         assert.equal(leftOffset, this.$alphaMarker.offset().left, 'pressing on the \'ctrl+left\' in left position does not move handler');
@@ -1076,14 +1076,14 @@ QUnit.module('keyboard navigation', {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria labels for editors', function(assert) {
-        var $element = $('#color-view').dxColorView({
-                editAlphaChannel: true
-            }),
-            $r = $element.find('.dx-colorview-label-red .dx-numberbox'),
-            $g = $element.find('.dx-colorview-label-green .dx-numberbox'),
-            $b = $element.find('.dx-colorview-label-blue .dx-numberbox'),
-            $alpha = $element.find('.dx-colorview-alpha-channel-label .dx-numberbox'),
-            $code = $element.find('.dx-colorview-label-hex .dx-textbox');
+        const $element = $('#color-view').dxColorView({
+            editAlphaChannel: true
+        });
+        const $r = $element.find('.dx-colorview-label-red .dx-numberbox');
+        const $g = $element.find('.dx-colorview-label-green .dx-numberbox');
+        const $b = $element.find('.dx-colorview-label-blue .dx-numberbox');
+        const $alpha = $element.find('.dx-colorview-alpha-channel-label .dx-numberbox');
+        const $code = $element.find('.dx-colorview-label-hex .dx-textbox');
 
         assert.equal($r.attr('aria-label'), 'Red', 'red label is correct');
         assert.equal($g.attr('aria-label'), 'Green', 'green label is correct');

@@ -1,14 +1,14 @@
-var $ = require('jquery'),
-    renderer = require('core/renderer'),
-    eventsEngine = require('events/core/events_engine'),
-    fx = require('animation/fx'),
-    translator = require('animation/translator'),
-    animationFrame = require('animation/frame'),
-    support = require('core/utils/support'),
-    positionUtils = require('animation/position');
+const $ = require('jquery');
+const renderer = require('core/renderer');
+const eventsEngine = require('events/core/events_engine');
+const fx = require('animation/fx');
+const translator = require('animation/translator');
+const animationFrame = require('animation/frame');
+const support = require('core/utils/support');
+const positionUtils = require('animation/position');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<style>\
             .my-animation {\
                 -moz-transition-property: all;\
@@ -39,9 +39,9 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var SIMULATED_TRANSITIONEND_TIMEOUT_DATA_KEY = 'dxSimulatedTransitionTimeoutKey',
-    ANIM_QUEUE_KEY = 'dxAnimQueue',
-    ANIM_DATA_KEY = 'dxAnimData';
+const SIMULATED_TRANSITIONEND_TIMEOUT_DATA_KEY = 'dxSimulatedTransitionTimeoutKey';
+const ANIM_QUEUE_KEY = 'dxAnimQueue';
+const ANIM_DATA_KEY = 'dxAnimData';
 
 QUnit.module('frame transitions', {
     beforeEach: function() {
@@ -65,8 +65,8 @@ QUnit.module('frame transitions', {
 QUnit.test('basic animation', function(assert) {
     assert.expect(6);
 
-    var $element = $('#test'),
-        done = assert.async();
+    const $element = $('#test');
+    const done = assert.async();
 
     this.animate($element, {
         to: { left: 1000 },
@@ -98,9 +98,9 @@ QUnit.test('basic animation', function(assert) {
 QUnit.test('basic animation when window was scrolled', function(assert) {
     assert.expect(2);
 
-    var $container = $('#container'),
-        $wrapper = $('<div>').appendTo('body'),
-        $element = $('<div>').appendTo('body');
+    const $container = $('#container');
+    const $wrapper = $('<div>').appendTo('body');
+    const $element = $('<div>').appendTo('body');
 
     try {
         $wrapper.css({
@@ -114,10 +114,10 @@ QUnit.test('basic animation when window was scrolled', function(assert) {
         });
         $element.css({ height: 50, width: 50, top: '200px', background: 'blue' });
 
-        var initialTopPosition = $element.get(0).getBoundingClientRect().top,
-            initialLeftPosition = $element.get(0).getBoundingClientRect().left;
+        const initialTopPosition = $element.get(0).getBoundingClientRect().top;
+        const initialLeftPosition = $element.get(0).getBoundingClientRect().left;
 
-        var done = assert.async();
+        const done = assert.async();
 
         window.scrollBy(200, 200);
 
@@ -146,16 +146,16 @@ QUnit.test('basic animation when window was scrolled', function(assert) {
 QUnit.test('animation when window was scrolled', function(assert) {
     assert.expect(3);
 
-    var $wrapper = $('<div>').appendTo('body'),
-        $target = $('<div>').appendTo($wrapper),
-        $element = $('<div>').appendTo('body');
+    const $wrapper = $('<div>').appendTo('body');
+    const $target = $('<div>').appendTo($wrapper);
+    const $element = $('<div>').appendTo('body');
 
     try {
         $wrapper.css({ height: '150%', width: '150%', position: 'absolute', top: '0', left: '0' });
         $target.css({ height: 50, width: 50, position: 'absolute', top: '320px', left: '120px', background: 'green' });
         $element.css({ height: 50, width: 50, top: '200px', background: 'blue', position: 'absolute' });
 
-        var done = assert.async();
+        const done = assert.async();
         window.scrollBy(100, 200);
 
         this.animate($element, {
@@ -199,7 +199,7 @@ QUnit.test('animation when window was scrolled', function(assert) {
             },
             duration: 100,
             complete: function() {
-                var offset = $element.offset();
+                const offset = $element.offset();
                 assert.roughEqual(offset.top, 370, 1.5, 'top position after animation to the target element is correct');
                 assert.roughEqual(offset.left, 170, 1.5, 'left position after animation to the target element is correct');
                 done();
@@ -215,10 +215,10 @@ QUnit.test('animation when window was scrolled', function(assert) {
 });
 
 QUnit.test('draw callback', function(assert) {
-    var $element = $('#test'),
-        done = assert.async();
+    const $element = $('#test');
+    const done = assert.async();
 
-    var prop;
+    let prop;
     this.animate($element, {
         from: { prop: 0 },
         to: { prop: 1000 },
@@ -240,9 +240,9 @@ QUnit.test('draw callback', function(assert) {
 QUnit.test('Fallback to no animation strategy', function(assert) {
     assert.expect(1);
 
-    var $element = $('#test'),
-        result,
-        savedSupport = support.transition;
+    const $element = $('#test');
+    let result;
+    const savedSupport = support.transition;
 
     support.transition = function() { return false; };
 
@@ -261,8 +261,8 @@ QUnit.test('Fallback to no animation strategy', function(assert) {
 QUnit.test('animation from', function(assert) {
     assert.expect(3);
 
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     this.animate($element, {
         from: { left: -1000 },
@@ -286,7 +286,7 @@ QUnit.test('animation from', function(assert) {
 QUnit.test('isAnimating func', function(assert) {
     assert.expect(1);
 
-    var $element = renderer('#test');
+    const $element = renderer('#test');
 
     this.animate($element, {
         to: { left: 1000 },
@@ -299,7 +299,7 @@ QUnit.test('isAnimating func', function(assert) {
 QUnit.test('animation stop', function(assert) {
     assert.expect(1);
 
-    var $element = $('#test');
+    const $element = $('#test');
 
     this.animate($element, {
         to: { left: 1000 },
@@ -307,7 +307,7 @@ QUnit.test('animation stop', function(assert) {
     });
 
     this.clock.tick(250);
-    var leftAfterStop = $element.position().left;
+    const leftAfterStop = $element.position().left;
 
     fx.stop($element);
     this.clock.tick(250);
@@ -318,7 +318,7 @@ QUnit.test('animation stop', function(assert) {
 QUnit.test('animation stop with jump to the end', function(assert) {
     assert.expect(3);
 
-    var $element = $('#test');
+    const $element = $('#test');
 
     this.animate($element, {
         to: { left: 1000 },
@@ -340,7 +340,7 @@ QUnit.test('animation stop with jump to the end', function(assert) {
 QUnit.test('animation stop works even if called before animation start (delay case)', function(assert) {
     assert.expect(3);
 
-    var $element = $('#test');
+    const $element = $('#test');
 
     this.animate($element, {
         to: { left: 1000 },
@@ -365,7 +365,7 @@ QUnit.test('off flag', function(assert) {
     fx.off = true;
 
     try {
-        var element = $('#test');
+        const element = $('#test');
 
         this.animate(element, {
             to: { left: 1000 }
@@ -381,7 +381,7 @@ QUnit.test('off flag with delay (T265612)', function(assert) {
     fx.off = true;
 
     try {
-        var element = $('#test');
+        const element = $('#test');
 
         this.animate(element, {
             delay: 100,
@@ -395,8 +395,8 @@ QUnit.test('off flag with delay (T265612)', function(assert) {
 });
 
 QUnit.test('animation of \'translate\' prop', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $.when(this.animate($element, {
         from: { transform: 'translate(0, 0)' },
@@ -414,9 +414,9 @@ QUnit.test('animation of \'translate\' prop', function(assert) {
 QUnit.test('off flag, complete callback', function(assert) {
     fx.off = true;
     try {
-        var element = $('#test'),
-            called = 0,
-            args = null;
+        const element = $('#test');
+        let called = 0;
+        let args = null;
 
         this.animate(element, {
             to: { left: 1000 },
@@ -439,7 +439,7 @@ QUnit.test('off flag, complete callback', function(assert) {
 QUnit.test('complete triggered when \'from\' and \'to\' are equal', function(assert) {
     assert.expect(0);
 
-    var done = assert.async();
+    const done = assert.async();
 
     this.animate('#test', {
         type: 'slide',
@@ -457,10 +457,10 @@ QUnit.test('complete triggered when \'from\' and \'to\' are equal', function(ass
 QUnit.test('regressions: \'stop\' method w/o \'jumpToEnd\' should prevent \'complete\' triggering', function(assert) {
     fx.off = false;
 
-    var done = assert.async(),
-        called = 0,
-        element = $('#test'),
-        lastElementLeft;
+    const done = assert.async();
+    let called = 0;
+    const element = $('#test');
+    let lastElementLeft;
 
     this.animate(element, {
         from: { left: 100 },
@@ -497,7 +497,7 @@ QUnit.test('regressions: \'stop\' method w/o \'jumpToEnd\' should prevent \'comp
 QUnit.test('regressions: isAnimating should return false if animation is over', function(assert) {
     assert.expect(1);
 
-    var element = $('#test');
+    const element = $('#test');
 
     this.animate(element, {
         from: { left: 0 },
@@ -514,18 +514,18 @@ QUnit.test('regressions: isAnimating should return false if animation is over', 
 QUnit.test('regressions: element cleanup (memory leaks)', function(assert) {
     assert.expect(16);
 
-    var element = $('#test'),
-        clock = this.clock,
-        animate = this.animate;
+    const element = $('#test');
+    const clock = this.clock;
+    const animate = this.animate;
 
-    var checkElementCleaned = function() {
+    const checkElementCleaned = function() {
         assert.ok(!element.data(SIMULATED_TRANSITIONEND_TIMEOUT_DATA_KEY));
         assert.ok(!element.data(ANIM_DATA_KEY));
         assert.ok(!element.data(ANIM_QUEUE_KEY));
         assert.ok(!$._data(element, 'events'));
     };
 
-    var animateElement = function(duration) {
+    const animateElement = function(duration) {
         return animate(element, {
             from: { left: 0 },
             to: { left: 100 },
@@ -556,8 +556,8 @@ QUnit.test('regressions: element cleanup (memory leaks)', function(assert) {
 QUnit.test('position my/at/of style', function(assert) {
     assert.expect(2);
 
-    var $element = $('#test'),
-        $container = $('#container');
+    const $element = $('#test');
+    const $container = $('#container');
 
     this.animate($element, {
         from: {
@@ -598,8 +598,8 @@ if(support.transition()) {
     QUnit.test('basic animation', function(assert) {
         assert.expect(2);
 
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         this.animate($element, {
             to: { left: 1000 },
@@ -618,9 +618,9 @@ if(support.transition()) {
     QUnit.test('basic animation via CSS class', function(assert) {
         assert.expect(10);
 
-        var done = assert.async(),
-            cleanupWhen = $.Deferred(),
-            $element = $('#test');
+        const done = assert.async();
+        const cleanupWhen = $.Deferred();
+        const $element = $('#test');
 
         this.animate($element, {
             type: 'css',
@@ -650,10 +650,10 @@ if(support.transition()) {
     });
 
     QUnit.test('transition css property set to element on start of the animation (T317083)', function(assert) {
-        var done = assert.async(),
-            $element = $('#transitionPropTest');
+        const done = assert.async();
+        const $element = $('#transitionPropTest');
 
-        var animation = fx.createAnimation($element, {
+        const animation = fx.createAnimation($element, {
             type: 'css',
             from: 'my-animation',
             to: 'my-animation-active',
@@ -674,15 +674,15 @@ if(support.transition()) {
     QUnit.test('cleanupWhen option', function(assert) {
         assert.expect(10);
 
-        var that = this,
-            done = assert.async(),
-            $element = $('#test'),
-            config = {
-                from: 'my-animation',
-                to: 'my-animation-active',
-                duration: 1000
-            },
-            cleanupWhen = $.Deferred();
+        const that = this;
+        const done = assert.async();
+        const $element = $('#test');
+        const config = {
+            from: 'my-animation',
+            to: 'my-animation-active',
+            duration: 1000
+        };
+        const cleanupWhen = $.Deferred();
 
         this.animate($element, config).done(function() {
             assert.equal($element.position().left, 0);
@@ -714,8 +714,8 @@ if(support.transition()) {
     QUnit.test('animation from', function(assert) {
         assert.expect(2);
 
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         this.animate($element, {
             from: { left: -1000 },
@@ -734,7 +734,7 @@ if(support.transition()) {
     QUnit.test('isAnimating func', function(assert) {
         assert.expect(1);
 
-        var $element = renderer('#test');
+        const $element = renderer('#test');
 
         this.animate($element, {
             to: { left: 1000 },
@@ -748,8 +748,8 @@ if(support.transition()) {
     QUnit.test('animation stop', function(assert) {
         assert.expect(1);
 
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         this.animate($element, {
             to: { left: 1000 },
@@ -757,7 +757,7 @@ if(support.transition()) {
         });
 
         setTimeout(function() {
-            var leftAfterStop = $element.css('left');
+            const leftAfterStop = $element.css('left');
             fx.stop($element);
 
             setTimeout(function() {
@@ -770,8 +770,8 @@ if(support.transition()) {
     QUnit.test('animation stop with jump to the end', function(assert) {
         assert.expect(2);
 
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         this.animate($element, {
             to: { left: 1000 },
@@ -791,8 +791,8 @@ if(support.transition()) {
     QUnit.test('animation stop works even if called before animation start (timeout case)', function(assert) {
         assert.expect(1);
 
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         this.animate($element, {
             to: { left: 1000 },
@@ -812,7 +812,7 @@ if(support.transition()) {
         fx.off = true;
 
         try {
-            var element = $('#test');
+            const element = $('#test');
 
             this.animate(element, {
                 to: { left: 1000 }
@@ -825,8 +825,8 @@ if(support.transition()) {
     });
 
     QUnit.test('animation of \'translate\' prop', function(assert) {
-        var done = assert.async(),
-            $element = $('#test');
+        const done = assert.async();
+        const $element = $('#test');
 
         $.when(this.animate($element, {
             from: { transform: 'translate(0, 0)' },
@@ -842,9 +842,9 @@ if(support.transition()) {
     QUnit.test('off flag, complete callback', function(assert) {
         fx.off = true;
         try {
-            var element = $('#test'),
-                called = 0,
-                args = null;
+            const element = $('#test');
+            let called = 0;
+            let args = null;
 
             this.animate(element, {
                 to: { left: 1000 },
@@ -867,7 +867,7 @@ if(support.transition()) {
     QUnit.test('complete triggered when \'from\' and \'to\' are equal', function(assert) {
         assert.expect(0);
 
-        var done = assert.async();
+        const done = assert.async();
 
         this.animate('#test', {
             type: 'slide',
@@ -885,11 +885,11 @@ if(support.transition()) {
 
         fx.off = false;
 
-        var done = assert.async(),
-            called = 0,
-            element = $('#test'),
-            animate = this.animate,
-            lastElementLeft;
+        const done = assert.async();
+        let called = 0;
+        const element = $('#test');
+        const animate = this.animate;
+        let lastElementLeft;
 
         animate(element, {
             from: { left: 100 },
@@ -906,7 +906,7 @@ if(support.transition()) {
             return lastElementLeft > 0;
         }).done(function() {
             waitFor(function() {
-                var left = element.position().left;
+                const left = element.position().left;
                 return left > lastElementLeft || left === 900;
             }).done(function() {
                 fx.stop(element);
@@ -925,8 +925,8 @@ if(support.transition()) {
     });
 
     QUnit.test('regressions: isAnimating should return false if animation is over', function(assert) {
-        var done = assert.async(),
-            element = $('#test');
+        const done = assert.async();
+        const element = $('#test');
 
         this.animate(element, {
             from: { left: 0 },
@@ -940,18 +940,18 @@ if(support.transition()) {
     });
 
     QUnit.test('regressions: element cleanup (memory leaks)', function(assert) {
-        var done = assert.async(),
-            element = $('#test'),
-            animate = this.animate;
+        const done = assert.async();
+        const element = $('#test');
+        const animate = this.animate;
 
-        var checkElementCleaned = function() {
+        const checkElementCleaned = function() {
             assert.ok(!element.data(SIMULATED_TRANSITIONEND_TIMEOUT_DATA_KEY));
             assert.ok(!element.data(ANIM_DATA_KEY));
             assert.ok(!element.data(ANIM_QUEUE_KEY));
             assert.ok(!$._data(element, 'events'));
         };
 
-        var animateElement = function(duration) {
+        const animateElement = function(duration) {
             return animate(element, {
                 from: { left: 0 },
                 to: { left: 100 },
@@ -981,10 +981,10 @@ if(support.transition()) {
     QUnit.test('regression: animate result is rejected when element is disposed (T300400)', function(assert) {
         assert.expect(1);
 
-        var done = assert.async(),
-            $test = $('#test');
+        const done = assert.async();
+        const $test = $('#test');
 
-        var result = this.animate($test, {
+        const result = this.animate($test, {
             type: 'slide',
             from: { left: 0 },
             to: { left: 0 },
@@ -1002,13 +1002,13 @@ if(support.transition()) {
     QUnit.test('regression: the \'dxremove.dxFXStartAnimation\' event handler should be unsubscribed on node remove (T388920)', function(assert) {
         assert.expect(4);
 
-        var done = assert.async(),
-            $test = $('#test'),
-            testedEventName = 'dxremove.dxFXStartAnimation';
+        const done = assert.async();
+        const $test = $('#test');
+        const testedEventName = 'dxremove.dxFXStartAnimation';
 
         function eventUsedTimes(sinonSpy, eventName) {
-            var result = 0;
-            for(var i = 0; i < sinonSpy.callCount; i++) {
+            let result = 0;
+            for(let i = 0; i < sinonSpy.callCount; i++) {
                 if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
@@ -1019,7 +1019,7 @@ if(support.transition()) {
         sinon.spy(eventsEngine, 'on');
         sinon.spy(eventsEngine, 'off');
 
-        var animation = fx.createAnimation($test, {
+        const animation = fx.createAnimation($test, {
             type: 'slide',
             from: { left: 0 },
             to: { left: 100 },
@@ -1047,13 +1047,13 @@ if(support.transition()) {
     QUnit.test('regression: the \'dxremove.dxFXStartAnimation\' event handler should be unsubscribed on animation end (T388920)', function(assert) {
         assert.expect(2);
 
-        var done = assert.async(),
-            $test = $('#test'),
-            testedEventName = 'dxremove.dxFXStartAnimation';
+        const done = assert.async();
+        const $test = $('#test');
+        const testedEventName = 'dxremove.dxFXStartAnimation';
 
         function eventUsedTimes(sinonSpy, eventName) {
-            var result = 0;
-            for(var i = 0; i < sinonSpy.callCount; i++) {
+            let result = 0;
+            for(let i = 0; i < sinonSpy.callCount; i++) {
                 if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
@@ -1064,7 +1064,7 @@ if(support.transition()) {
         sinon.spy(eventsEngine, 'on');
         sinon.spy(eventsEngine, 'off');
 
-        var animation = fx.createAnimation($test, {
+        const animation = fx.createAnimation($test, {
             type: 'slide',
             from: { left: 0 },
             to: { left: 100 },
@@ -1088,7 +1088,7 @@ if(support.transition()) {
     QUnit.test('Check for timers (should clear timers on DOM node remove)', function(assert) {
         assert.expect(0);
 
-        var $test = $('#test');
+        const $test = $('#test');
 
         this.animate($test, {
             type: 'slide',
@@ -1099,9 +1099,9 @@ if(support.transition()) {
     });
 
     QUnit.test('position my/at/of style', function(assert) {
-        var done = assert.async(),
-            $element = $('#test'),
-            $container = $('#container');
+        const done = assert.async();
+        const $element = $('#test');
+        const $container = $('#container');
 
         this.animate($element, {
             from: {
@@ -1131,7 +1131,7 @@ if(support.transition()) {
     QUnit.test('animation should not be ended if transitionEnd event fired after previous animation in queue (Chrome bug)', function(assert) {
         assert.expect(0);
 
-        var $element = $('#test');
+        const $element = $('#test');
 
         this.animate($element, {
             to: { left: 100 },
@@ -1152,8 +1152,8 @@ QUnit.module('fx effects');
 QUnit.test('fade', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     fx.animate($element, {
         type: 'fade',
@@ -1169,8 +1169,8 @@ QUnit.test('fade', function(assert) {
 QUnit.test('fadeIn', function(assert) {
     assert.expect(2);
 
-    var done = assert.async(),
-        $element = $('#test').css('opacity', 0.5);
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
 
     fx.animate($element, {
         type: 'fadeIn',
@@ -1188,8 +1188,8 @@ QUnit.test('fadeIn', function(assert) {
 QUnit.test('fadeIn skipElementInitialStyles', function(assert) {
     assert.expect(2);
 
-    var done = assert.async(),
-        $element = $('#test').css('opacity', 0.5);
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 0.5);
 
     fx.animate($element, {
         type: 'fadeIn',
@@ -1208,10 +1208,10 @@ QUnit.test('fadeIn skipElementInitialStyles', function(assert) {
 QUnit.test('fade should change visibility before animation', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        $element = $('#test')
-            .css('opacity', 0)
-            .css('visibility', 'hidden');
+    const done = assert.async();
+    const $element = $('#test')
+        .css('opacity', 0)
+        .css('visibility', 'hidden');
 
     fx.animate($element, {
         type: 'fade',
@@ -1227,8 +1227,8 @@ QUnit.test('fade should change visibility before animation', function(assert) {
 QUnit.test('fadeOut', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        $element = $('#test').css('opacity', 1);
+    const done = assert.async();
+    const $element = $('#test').css('opacity', 1);
 
     fx.animate($element, {
         type: 'fadeOut',
@@ -1243,8 +1243,8 @@ QUnit.test('fadeOut', function(assert) {
 QUnit.test('pop should not reset translate', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     translator.move($element, {
         left: 20,
@@ -1272,8 +1272,8 @@ QUnit.test('pop should not reset translate', function(assert) {
 });
 
 QUnit.test('slide', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({ top: 10, left: 10 });
 
@@ -1283,7 +1283,7 @@ QUnit.test('slide', function(assert) {
         to: { left: 1000, top: 100 },
         duration: 100,
         complete: function() {
-            var pos = translator.locate($element);
+            const pos = translator.locate($element);
 
             assert.equal(pos.left, 1000);
             assert.equal(pos.top, 100);
@@ -1293,7 +1293,7 @@ QUnit.test('slide', function(assert) {
     });
 });
 
-var positions = {
+const positions = {
     'top': { my: 'bottom center', at: 'top center' },
     'bottom': { my: 'top center', at: 'bottom center' },
     'right': { my: 'left center', at: 'right center' },
@@ -1301,17 +1301,17 @@ var positions = {
 };
 $.each(['In', 'Out'], function(_, type) {
     $.each(positions, function(alias, position) {
-        var testPosition = function($element, assert) {
-            var pos = $element.offset(),
-                place = positionUtils.calculate($element, $.extend({ of: window }, position));
+        const testPosition = function($element, assert) {
+            const pos = $element.offset();
+            const place = positionUtils.calculate($element, $.extend({ of: window }, position));
 
             assert.equal(pos.left, place.h.location);
             assert.equal(pos.top, place.v.location);
         };
 
         QUnit.test('slide' + type + ' ' + alias, function(assert) {
-            var done = assert.async(),
-                $element = $('#test');
+            const done = assert.async();
+            const $element = $('#test');
 
             fx.animate($element, {
                 type: 'slide' + type,
@@ -1340,8 +1340,8 @@ $.each(['In', 'Out'], function(_, type) {
 });
 
 QUnit.test('slide with opacity', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     fx.animate($element, {
         type: 'slide',
@@ -1349,7 +1349,7 @@ QUnit.test('slide with opacity', function(assert) {
         to: { left: 100, opacity: 1 },
         duration: 100,
         complete: function() {
-            var pos = translator.locate($element);
+            const pos = translator.locate($element);
             assert.equal($element.css('opacity'), 1);
             assert.equal(pos.left, 100);
             done();
@@ -1359,8 +1359,8 @@ QUnit.test('slide with opacity', function(assert) {
 });
 
 QUnit.test('slide without from', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({ top: 10, left: 10 });
 
@@ -1369,7 +1369,7 @@ QUnit.test('slide without from', function(assert) {
         to: { left: 1000, top: 100 },
         duration: 100,
         complete: function() {
-            var pos = translator.locate($element);
+            const pos = translator.locate($element);
 
             assert.equal(pos.left, 1000);
             assert.equal(pos.top, 100);
@@ -1380,8 +1380,8 @@ QUnit.test('slide without from', function(assert) {
 });
 
 QUnit.test('slide with predefined CSS transform', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({ transform: 'translate3d(10px,10px,0px)' });
 
@@ -1390,7 +1390,7 @@ QUnit.test('slide with predefined CSS transform', function(assert) {
         to: { left: 1000, top: 100 },
         duration: 100,
         complete: function() {
-            var pos = translator.locate($element);
+            const pos = translator.locate($element);
 
             assert.equal(pos.left, 1000);
             assert.equal(pos.top, 100);
@@ -1401,8 +1401,8 @@ QUnit.test('slide with predefined CSS transform', function(assert) {
 });
 
 QUnit.test('slide with predefined top & left', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({
         top: 3,
@@ -1414,7 +1414,7 @@ QUnit.test('slide with predefined top & left', function(assert) {
         to: { left: 1000, top: 100 },
         duration: 100,
         complete: function() {
-            var pos = $element.position();
+            const pos = $element.position();
 
             assert.equal(pos.left, 1000);
             assert.equal(pos.top, 100);
@@ -1428,14 +1428,14 @@ QUnit.test('slide with predefined top & left', function(assert) {
 QUnit.module('relative animation');
 
 QUnit.test('slide', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     fx.animate($element, {
         type: 'slide',
         to: { left: '+=1000', top: '-=100' },
         complete: function() {
-            var pos = $element.position();
+            const pos = $element.position();
 
             assert.equal(pos.left, 1000);
             assert.equal(pos.top, -100);
@@ -1446,8 +1446,8 @@ QUnit.test('slide', function(assert) {
 });
 
 QUnit.test('slide with predefined top & left', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({ top: 3, left: 4 });
 
@@ -1455,7 +1455,7 @@ QUnit.test('slide with predefined top & left', function(assert) {
         type: 'slide',
         to: { left: '+=1000', top: '+=100' },
         complete: function() {
-            var pos = $element.position();
+            const pos = $element.position();
 
             assert.equal(pos.left, 1004);
             assert.equal(pos.top, 103);
@@ -1466,8 +1466,8 @@ QUnit.test('slide with predefined top & left', function(assert) {
 });
 
 QUnit.test('slide animate one axis', function(assert) {
-    var done = assert.async(),
-        $element = $('#test');
+    const done = assert.async();
+    const $element = $('#test');
 
     $element.css({ top: 3, left: 4 });
 
@@ -1476,7 +1476,7 @@ QUnit.test('slide animate one axis', function(assert) {
         to: { top: '+=100' },
         duration: 100,
         complete: function() {
-            var pos = $element.position();
+            const pos = $element.position();
 
             assert.equal(pos.left, 4);
             assert.equal(pos.top, 103);
@@ -1512,9 +1512,9 @@ QUnit.module('animation queue', {
 QUnit.test('animation for element is in queue by default', function(assert) {
     assert.expect(5);
 
-    var done = assert.async(),
-        $element = this.$element,
-        callBacksCount = 0;
+    const done = assert.async();
+    const $element = this.$element;
+    let callBacksCount = 0;
 
     this.firstAnimation($element, {
         start: function() {
@@ -1543,8 +1543,8 @@ QUnit.test('animation for element is in queue by default', function(assert) {
 });
 
 QUnit.test('stop queue animation without jumpToEnd', function(assert) {
-    var $element = this.$element,
-        callBacksCount = 0;
+    const $element = this.$element;
+    let callBacksCount = 0;
 
     this.firstAnimation($element, {
         start: function() {
@@ -1563,8 +1563,8 @@ QUnit.test('stop queue animation without jumpToEnd', function(assert) {
 
 
 QUnit.test('stop queue animation with jumpToEnd', function(assert) {
-    var $element = this.$element,
-        callBacksCount = 0;
+    const $element = this.$element;
+    let callBacksCount = 0;
 
     this.firstAnimation($element, {});
     this.secondAnimation($element, {
@@ -1578,8 +1578,8 @@ QUnit.test('stop queue animation with jumpToEnd', function(assert) {
 });
 
 QUnit.test('clear queue after stop', function(assert) {
-    var $element = this.$element,
-        callBacksCount = 0;
+    const $element = this.$element;
+    let callBacksCount = 0;
 
     this.firstAnimation($element, {});
     this.secondAnimation($element, {
@@ -1599,9 +1599,9 @@ QUnit.test('clear queue after stop', function(assert) {
 });
 
 QUnit.test('clear queue after stop on complete handler', function(assert) {
-    var done = assert.async(),
-        $element = this.$element,
-        callBacksCount = 0;
+    const done = assert.async();
+    const $element = this.$element;
+    let callBacksCount = 0;
 
     this.firstAnimation($element, {
         complete: function() {
@@ -1618,12 +1618,12 @@ QUnit.test('clear queue after stop on complete handler', function(assert) {
 });
 
 QUnit.test('animations should be pushed to queue correctly on complete handler', function(assert) {
-    var done = assert.async(),
-        d = $.Deferred(),
-        $element = this.$element,
-        firstAnimation = this.firstAnimation,
-        secondAnimation = this.secondAnimation,
-        log = [];
+    const done = assert.async();
+    const d = $.Deferred();
+    const $element = this.$element;
+    const firstAnimation = this.firstAnimation;
+    const secondAnimation = this.secondAnimation;
+    const log = [];
 
     firstAnimation($element, {
         start: function() {
@@ -1677,12 +1677,12 @@ QUnit.test('animations should be pushed to queue correctly on complete handler',
 });
 
 QUnit.test('animations should be pushed to queue after stop correctly on complete handler', function(assert) {
-    var done = assert.async(),
-        d = $.Deferred(),
-        $element = this.$element,
-        firstAnimation = this.firstAnimation,
-        secondAnimation = this.secondAnimation,
-        log = [];
+    const done = assert.async();
+    const d = $.Deferred();
+    const $element = this.$element;
+    const firstAnimation = this.firstAnimation;
+    const secondAnimation = this.secondAnimation;
+    const log = [];
 
     firstAnimation($element, {
         start: function() {
@@ -1740,7 +1740,7 @@ QUnit.test('animations should be pushed to queue after stop correctly on complet
 QUnit.module('regression');
 
 QUnit.test('\'from\'/\'to\' config validation', function(assert) {
-    var element = $('#test');
+    const element = $('#test');
 
     assert.throws(function() {
         fx.animate(element, {

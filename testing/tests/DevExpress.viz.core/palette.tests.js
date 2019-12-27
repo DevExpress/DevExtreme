@@ -4,7 +4,7 @@ import { registerPalette, generateColors, getPalette, createPalette, getDiscrete
 
 import errors from 'core/errors';
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.registerPalette = registerPalette;
         this.generateColors = generateColors;
@@ -178,9 +178,9 @@ QUnit.test('Palette is array of colors - return first color', function(assert) {
 
 QUnit.module('Palette', $.extend({}, environment, {
     checkPalette: function(assert, palette, expectedColors, message) {
-        var i = 0, ii = expectedColors.length * 2,
-            actual = [],
-            expected = expectedColors.concat(expectedColors);
+        let i = 0; const ii = expectedColors.length * 2;
+        const actual = [];
+        const expected = expectedColors.concat(expectedColors);
         for(; i < ii; ++i) {
             actual.push(palette.getNextColor());
         }
@@ -190,7 +190,7 @@ QUnit.module('Palette', $.extend({}, environment, {
 
 QUnit.test('Disposing', function(assert) {
     // arrange
-    var palette = this.createPalette(['green', 'red'], { useHighlight: true });
+    const palette = this.createPalette(['green', 'red'], { useHighlight: true });
 
     // act
     palette.dispose();
@@ -247,7 +247,7 @@ QUnit.test('Custom palette by array', function(assert) {
 
 QUnit.test('Lightening palette', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
+    const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -258,7 +258,7 @@ QUnit.test('Lightening palette', function(assert) {
 
 QUnit.test('Darkening palette after lightening', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
+    const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -276,7 +276,7 @@ QUnit.test('Darkening palette after lightening', function(assert) {
 
 QUnit.test('Extrapolate without passing count', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
+    const palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -287,7 +287,7 @@ QUnit.test('Extrapolate without passing count', function(assert) {
 
 QUnit.test('Extrapolate with passing count', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
+    const palette = this.createPalette(['green', 'red'], { extensionMode: 'extrapolate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(6), '#007300');
@@ -300,7 +300,7 @@ QUnit.test('Extrapolate with passing count', function(assert) {
 
 QUnit.test('Blend without passing count', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
+    const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -312,7 +312,7 @@ QUnit.test('Blend without passing count', function(assert) {
 
 QUnit.test('Blend with passing count', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
+    const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
 
     // assert
     assert.strictEqual(palette.getNextColor(6), 'green');
@@ -325,7 +325,7 @@ QUnit.test('Blend with passing count', function(assert) {
 
 QUnit.test('Recalculate palette if extension count is changed', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
+    const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend' });
     palette.getNextColor(6);
     palette.reset();
 
@@ -342,7 +342,7 @@ QUnit.test('Recalculate palette if extension count is changed', function(assert)
 
 QUnit.test('Blend with passing count. Keep last color in the end', function(assert) {
     // act
-    var palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend', keepLastColorInEnd: true });
+    const palette = this.createPalette(['green', 'red', 'yellow'], { extensionMode: 'blend', keepLastColorInEnd: true });
 
     // assert
     assert.strictEqual(palette.getNextColor(6), 'green');
@@ -355,7 +355,7 @@ QUnit.test('Blend with passing count. Keep last color in the end', function(asse
 
 QUnit.test('Lightening palette when color is too light', function(assert) {
     // act
-    var palette = this.createPalette(['white'], { useHighlight: true, extensionMode: 'Alternate' });
+    const palette = this.createPalette(['white'], { useHighlight: true, extensionMode: 'Alternate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'white');
@@ -364,7 +364,7 @@ QUnit.test('Lightening palette when color is too light', function(assert) {
 
 QUnit.test('Darken palette when color is too dark', function(assert) {
     // act
-    var palette = this.createPalette(['black'], { useHighlight: true, extensionMode: 'alternate' });
+    const palette = this.createPalette(['black'], { useHighlight: true, extensionMode: 'alternate' });
 
     // assert
     assert.strictEqual(palette.getNextColor(), 'black');
@@ -375,7 +375,7 @@ QUnit.test('Darken palette when color is too dark', function(assert) {
 
 QUnit.test('Reset palette', function(assert) {
     // arrange
-    var palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
+    const palette = this.createPalette(['green', 'red'], { useHighlight: true, extensionMode: 'alternate' });
     palette.getNextColor();
     palette.getNextColor();
     palette.getNextColor();
@@ -405,7 +405,7 @@ QUnit.test('Repeat colors', function(assert) {
 
 QUnit.module('DiscretePalette', $.extend({}, environment, {
     createColors: function(count) {
-        var i = 0, step = Math.round(255 / count), r = 0, g = 32, b = 64, list = [], color;
+        let i = 0; const step = Math.round(255 / count); let r = 0; let g = 32; let b = 64; const list = []; let color;
         for(; i < count; ++i) {
             color = new Color();
             color.r = r;
@@ -445,23 +445,23 @@ QUnit.test('palette is custom object', function(assert) {
 });
 
 QUnit.test('palette size is 1', function(assert) {
-    var start = new Color('#0f2e89'), end = new Color('#123fd7'),
-        palette = this.getDiscretePalette([start.toHex(), end.toHex()], 1);
+    const start = new Color('#0f2e89'); const end = new Color('#123fd7');
+    const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 1);
     assert.strictEqual(palette.getColor(0), start.blend(end, 0.5).toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), null, 'color 1');
 });
 
 QUnit.test('palette size is 2', function(assert) {
-    var start = new Color('#ad8902'), end = new Color('#37e90a'),
-        palette = this.getDiscretePalette([start.toHex(), end.toHex()], 2);
+    const start = new Color('#ad8902'); const end = new Color('#37e90a');
+    const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 2);
     assert.strictEqual(palette.getColor(0), start.toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), end.toHex(), 'color 1');
     assert.strictEqual(palette.getColor(2), null, 'color 2');
 });
 
 QUnit.test('palette size is 3', function(assert) {
-    var start = new Color('red'), end = new Color('blue'),
-        palette = this.getDiscretePalette([start.toHex(), end.toHex()], 3);
+    const start = new Color('red'); const end = new Color('blue');
+    const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 3);
     assert.strictEqual(palette.getColor(0), start.toHex(), 'color 0');
     assert.strictEqual(palette.getColor(1), start.blend(end, 0.5).toHex(), 'color 1');
     assert.strictEqual(palette.getColor(2), end.toHex(), 'color 2');
@@ -469,9 +469,9 @@ QUnit.test('palette size is 3', function(assert) {
 });
 
 QUnit.test('palette size is 51', function(assert) {
-    var start = new Color('#000102'), end = new Color('#fff901'),
-        palette = this.getDiscretePalette([start.toHex(), end.toHex()], 51),
-        i = 0;
+    const start = new Color('#000102'); const end = new Color('#fff901');
+    const palette = this.getDiscretePalette([start.toHex(), end.toHex()], 51);
+    let i = 0;
     for(; i < 51; ++i) {
         assert.strictEqual(palette.getColor(i), start.blend(end, i / 50).toHex(), 'color ' + i);
     }
@@ -484,16 +484,16 @@ QUnit.test('palette size is not valid', function(assert) {
 });
 
 QUnit.test('More than 2 colors in source', function(assert) {
-    var colors = this.createColors(5),
-        palette = this.getDiscretePalette(colors, 5);
+    const colors = this.createColors(5);
+    const palette = this.getDiscretePalette(colors, 5);
     $.each(colors, function(i, color) {
         assert.strictEqual(palette.getColor(i), color, 'color ' + i);
     });
 });
 
 QUnit.test('More than 2 colors in source / greater then size / 1', function(assert) {
-    var colors = this.createColors(7),
-        palette = this.getDiscretePalette(colors, 4);
+    const colors = this.createColors(7);
+    const palette = this.getDiscretePalette(colors, 4);
     assert.strictEqual(palette.getColor(0), colors[0], 'color 0');
     assert.strictEqual(palette.getColor(1), colors[2], 'color 1');
     assert.strictEqual(palette.getColor(2), colors[4], 'color 2');
@@ -501,16 +501,16 @@ QUnit.test('More than 2 colors in source / greater then size / 1', function(asse
 });
 
 QUnit.test('More than 2 colors in source / greater then size / 2', function(assert) {
-    var colors = this.createColors(4),
-        palette = this.getDiscretePalette(colors, 3);
+    const colors = this.createColors(4);
+    const palette = this.getDiscretePalette(colors, 3);
     assert.strictEqual(palette.getColor(0), colors[0], 'color 0');
     assert.strictEqual(palette.getColor(1), new Color(colors[1]).blend(colors[2], 1 / 2).toHex(), 'color 1');
     assert.strictEqual(palette.getColor(2), colors[3], 'color 2');
 });
 
 QUnit.test('More than 2 colors in source / less then size / 1', function(assert) {
-    var colors = this.createColors(3),
-        palette = this.getDiscretePalette(colors, 4);
+    const colors = this.createColors(3);
+    const palette = this.getDiscretePalette(colors, 4);
     assert.strictEqual(palette.getColor(0), colors[0], 'color 0');
     assert.strictEqual(palette.getColor(1), new Color(colors[0]).blend(colors[1], 2 / 3).toHex(), 'color 1');
     assert.strictEqual(palette.getColor(2), new Color(colors[1]).blend(colors[2], 1 / 3).toHex(), 'color 2');
@@ -518,8 +518,8 @@ QUnit.test('More than 2 colors in source / less then size / 1', function(assert)
 });
 
 QUnit.test('More than 2 colors in source / less then size / 2', function(assert) {
-    var colors = this.createColors(4),
-        palette = this.getDiscretePalette(colors, 5);
+    const colors = this.createColors(4);
+    const palette = this.getDiscretePalette(colors, 5);
     assert.strictEqual(palette.getColor(0), colors[0], 'color 0');
     assert.strictEqual(palette.getColor(1), new Color(colors[0]).blend(colors[1], 3 / 4).toHex(), 'color 1');
     assert.strictEqual(palette.getColor(2), new Color(colors[1]).blend(colors[2], 1 / 2).toHex(), 'color 2');
@@ -535,7 +535,7 @@ QUnit.test('not valid', function(assert) {
 });
 
 QUnit.test('predefined', function(assert) {
-    var palette = new getGradientPalette('violet');
+    const palette = new getGradientPalette('violet');
     assert.strictEqual(palette.getColor(0), _DEBUG_palettes['violet'].gradientSet[0], '0');
     assert.strictEqual(palette.getColor(1), _DEBUG_palettes['violet'].gradientSet[1], '1');
     assert.strictEqual(palette.getColor(0.7), new Color(_DEBUG_palettes['violet'].gradientSet[0]).blend(
@@ -552,7 +552,7 @@ QUnit.test('resolve theme palette', function(assert) {
 });
 
 QUnit.test('custom', function(assert) {
-    var palette = new getGradientPalette(['#00ff00', '#ff0000']);
+    const palette = new getGradientPalette(['#00ff00', '#ff0000']);
     assert.strictEqual(palette.getColor(0), '#00ff00', '0');
     assert.strictEqual(palette.getColor(1), '#ff0000', '1');
     assert.strictEqual(palette.getColor(0.3), new Color('#00ff00').blend('#ff0000', 0.3).toHex(), '0.3');
@@ -609,7 +609,7 @@ QUnit.test('Create palette with current case', function(assert) {
 
     this.currentPalette('Current Palette');
 
-    var p = this.createPalette(undefined, { extensionMode: 'alternate' });
+    const p = this.createPalette(undefined, { extensionMode: 'alternate' });
 
     assert.strictEqual(p.getNextColor(), 'c1');
 

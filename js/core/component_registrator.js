@@ -1,9 +1,9 @@
-var $ = require('./renderer');
-var callbacks = require('./component_registrator_callbacks');
-var errors = require('./errors');
-var publicComponentUtils = require('./utils/public_component');
+const $ = require('./renderer');
+const callbacks = require('./component_registrator_callbacks');
+const errors = require('./errors');
+const publicComponentUtils = require('./utils/public_component');
 
-var registerComponent = function(name, namespace, componentClass) {
+const registerComponent = function(name, namespace, componentClass) {
     if(!componentClass) {
         componentClass = namespace;
     } else {
@@ -14,24 +14,24 @@ var registerComponent = function(name, namespace, componentClass) {
     callbacks.fire(name, componentClass);
 };
 
-var registerRendererComponent = function(name, componentClass) {
+const registerRendererComponent = function(name, componentClass) {
     $.fn[name] = function(options) {
-        var isMemberInvoke = typeof options === 'string',
-            result;
+        const isMemberInvoke = typeof options === 'string';
+        let result;
 
         if(isMemberInvoke) {
-            var memberName = options,
-                memberArgs = [].slice.call(arguments).slice(1);
+            const memberName = options;
+            const memberArgs = [].slice.call(arguments).slice(1);
 
             this.each(function() {
-                var instance = componentClass.getInstance(this);
+                const instance = componentClass.getInstance(this);
 
                 if(!instance) {
                     throw errors.Error('E0009', name);
                 }
 
-                var member = instance[memberName],
-                    memberValue = member.apply(instance, memberArgs);
+                const member = instance[memberName];
+                const memberValue = member.apply(instance, memberArgs);
 
                 if(result === undefined) {
                     result = memberValue;
@@ -39,7 +39,7 @@ var registerRendererComponent = function(name, componentClass) {
             });
         } else {
             this.each(function() {
-                var instance = componentClass.getInstance(this);
+                const instance = componentClass.getInstance(this);
                 if(instance) {
                     instance.option(options);
                 } else {

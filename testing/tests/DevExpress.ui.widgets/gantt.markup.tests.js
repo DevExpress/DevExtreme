@@ -10,8 +10,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const GANTT_CLASS = 'dx-gantt',
-    GANTT_VIEW_CLASS = GANTT_CLASS + '-view';
+const GANTT_CLASS = 'dx-gantt';
+const GANTT_VIEW_CLASS = GANTT_CLASS + '-view';
 
 QUnit.module('rendering', {
     beforeEach: function() {

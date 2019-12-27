@@ -1,30 +1,30 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    chartThemeManagerModule = require('viz/components/chart_theme_manager'),
-    legendModule = require('viz/components/legend'),
-    seriesModule = require('viz/series/base_series'),
-    Series = seriesModule.Series,
-    seriesFamilyModule = require('viz/core/series_family'),
-    axisModule = require('viz/axes/base_axis'),
-    trackerModule = require('viz/chart_components/tracker'),
-    ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker),
-    dxPolarChart = require('viz/polar_chart'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    dataValidatorModule = require('viz/components/data_validator'),
-    rangeModule = require('viz/translators/range'),
-    tooltipModule = require('viz/core/tooltip'),
-    layoutManagerModule = require('viz/chart_components/layout_manager'),
-    stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip),
-    stubRange = sinon.createStubInstance(rangeModule.Range),
-    stubSeriesFamily = createStubSeriesFamily(),
-    stubThemeManager = createStubThemeManager(),
-    exportModule = require('viz/core/export'),
-    stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const chartThemeManagerModule = require('viz/components/chart_theme_manager');
+const legendModule = require('viz/components/legend');
+const seriesModule = require('viz/series/base_series');
+const Series = seriesModule.Series;
+const seriesFamilyModule = require('viz/core/series_family');
+const axisModule = require('viz/axes/base_axis');
+const trackerModule = require('viz/chart_components/tracker');
+const ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker);
+const dxPolarChart = require('viz/polar_chart');
+const rendererModule = require('viz/core/renderers/renderer');
+const dataValidatorModule = require('viz/components/data_validator');
+const rangeModule = require('viz/translators/range');
+const tooltipModule = require('viz/core/tooltip');
+const layoutManagerModule = require('viz/chart_components/layout_manager');
+const stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip);
+const stubRange = sinon.createStubInstance(rangeModule.Range);
+const stubSeriesFamily = createStubSeriesFamily();
+const stubThemeManager = createStubThemeManager();
+const exportModule = require('viz/core/export');
+const stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 
 legendModule.Legend = sinon.spy(function(parameters) {
-    var legend = new vizMocks.Legend(parameters);
+    const legend = new vizMocks.Legend(parameters);
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
@@ -36,7 +36,7 @@ trackerModule.ChartTracker = sinon.spy(function(parameters) {
 });
 
 function stubExport() {
-    var that = this;
+    const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([0, 0]);
     sinon.stub(exportModule, 'ExportMenu', function() {
@@ -52,7 +52,7 @@ function resetStub(stub) {
     });
 }
 function createStubThemeManager() {
-    var themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+    const themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
     themeManager.theme.withArgs('legend').returns({ title: {} });
     $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
@@ -73,7 +73,7 @@ function createStubThemeManager() {
     return themeManager;
 }
 function createSeries() {
-    var series = sinon.createStubInstance(Series);
+    const series = sinon.createStubInstance(Series);
     series.isUpdated = true;
     series.isVisible.returns(true);
     series.getPoints.returns([{ argument: 0, value: 1 }, { argument: 1, value: 2 }, { argument: 2, value: 3 }]);
@@ -86,14 +86,14 @@ function createSeries() {
     return series;
 }
 function createStubSeriesFamily() {
-    var family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
+    const family = sinon.createStubInstance(seriesFamilyModule.SeriesFamily);
     family.adjustSeriesDimensions = sinon.stub();
     family.adjustSeriesValues = sinon.stub();
     family.updateSeriesValues = sinon.stub();
     return family;
 }
 function createStubAxis() {
-    var stubAxis = sinon.createStubInstance(axisModule.Axis);
+    const stubAxis = sinon.createStubInstance(axisModule.Axis);
     stubAxis._options = { valueType: '' };
     stubAxis.getOptions = function() {
         return this._options;
@@ -109,7 +109,7 @@ function createStubAxis() {
     return stubAxis;
 }
 function checkAxisGroup(assert, createAxisArguments, chart) {
-    var renderOptions = createAxisArguments[0];
+    const renderOptions = createAxisArguments[0];
 
     $.each({
         axesContainerGroup: chart._axesGroup,
@@ -122,162 +122,162 @@ function checkAxisGroup(assert, createAxisArguments, chart) {
     assert.equal(renderOptions.incidentOccurred, chart._incidentOccurred);
 }
 
-var stubSeries = [createSeries(), createSeries()],
-    stubAxes = [createStubAxis(), createStubAxis()],
-    axesIndex,
-    environment = {
-        beforeEach: function() {
-            var that = this,
-                seriesIndex = 0,
-                defsSvgId = 0;
+const stubSeries = [createSeries(), createSeries()];
+const stubAxes = [createStubAxis(), createStubAxis()];
+let axesIndex;
+const environment = {
+    beforeEach: function() {
+        const that = this;
+        let seriesIndex = 0;
+        let defsSvgId = 0;
 
-            axesIndex = 0;
+        axesIndex = 0;
 
-            that.$container = $('#chartContainer');
+        that.$container = $('#chartContainer');
 
-            this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
-                resetStub(stubThemeManager);
-                that.themeManager = stubThemeManager;
-                return stubThemeManager;
-            });
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+            resetStub(stubThemeManager);
+            that.themeManager = stubThemeManager;
+            return stubThemeManager;
+        });
 
-            that.getDefsSvgId = function() {
-                return ++defsSvgId;
+        that.getDefsSvgId = function() {
+            return ++defsSvgId;
+        };
+        that.clipFunc = function() {
+            return {
+                id: 'DevExpress_' + that.getDefsSvgId(),
+                attr: sinon.spy(),
+                dispose: function() {}
             };
-            that.clipFunc = function() {
-                return {
-                    id: 'DevExpress_' + that.getDefsSvgId(),
-                    attr: sinon.spy(),
-                    dispose: function() {}
-                };
-            };
+        };
 
-            that.createRenderer = sinon.stub(rendererModule, 'Renderer', function() {
-                var stubRenderer = new vizMocks.Renderer();
-                stubRenderer.clipCircle = that.clipFunc;
-                stubRenderer.clipRect = that.clipFunc;
-                return stubRenderer;
+        that.createRenderer = sinon.stub(rendererModule, 'Renderer', function() {
+            const stubRenderer = new vizMocks.Renderer();
+            stubRenderer.clipCircle = that.clipFunc;
+            stubRenderer.clipRect = that.clipFunc;
+            return stubRenderer;
+        });
+
+        that.createTooltip = sinon.stub(tooltipModule, 'Tooltip', function() {
+            resetStub(stubTooltip);
+            return stubTooltip;
+        });
+
+        that.range = sinon.stub(rangeModule, 'Range', function() {
+            resetStub(stubRange);
+            stubRange.addRange = function() { this.min = 2; };
+            return stubRange;
+        });
+
+        that.createSeries = sinon.stub(seriesModule, 'Series', function(settings, seriesTheme) {
+            resetStub(stubSeries[seriesIndex]);
+            stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
+            if(seriesTheme.valueErrorBar) {
+                stubSeries[seriesIndex].areErrorBarsVisible.returns(true);
+            }
+            return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
+        });
+
+        that.createAxis = sinon.stub(axisModule, 'Axis', function() {
+            resetStub(stubAxes[axesIndex]);
+
+            stubAxes[axesIndex].getMargins.returns({
+                left: 50,
+                right: 50,
+                top: 70,
+                bottom: 70
             });
 
-            that.createTooltip = sinon.stub(tooltipModule, 'Tooltip', function() {
-                resetStub(stubTooltip);
-                return stubTooltip;
-            });
+            return stubAxes[axesIndex++];
+        });
 
-            that.range = sinon.stub(rangeModule, 'Range', function() {
-                resetStub(stubRange);
-                stubRange.addRange = function() { this.min = 2; };
-                return stubRange;
-            });
+        that.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
+            resetStub(stubSeriesFamily);
+            return stubSeriesFamily;
+        });
 
-            that.createSeries = sinon.stub(seriesModule, 'Series', function(settings, seriesTheme) {
-                resetStub(stubSeries[seriesIndex]);
-                stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
-                if(seriesTheme.valueErrorBar) {
-                    stubSeries[seriesIndex].areErrorBarsVisible.returns(true);
-                }
-                return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
-            });
+        that.createLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+            resetStub(stubLayoutManager);
+            return stubLayoutManager;
+        });
 
-            that.createAxis = sinon.stub(axisModule, 'Axis', function() {
-                resetStub(stubAxes[axesIndex]);
+        stubLayoutManager.needMoreSpaceForPanesCanvas.returns(false);
+        stubLayoutManager.layoutElements = sinon.spy(function() {
+            arguments[2]();
+            const size = stubLayoutManager.needMoreSpaceForPanesCanvas();
+            size && arguments[2](size);
+        });
+    },
+    afterEach: function() {
+        this.createThemeManager.reset();
+        this.createThemeManager.restore();
 
-                stubAxes[axesIndex].getMargins.returns({
-                    left: 50,
-                    right: 50,
-                    top: 70,
-                    bottom: 70
-                });
+        this.createSeries.reset();
+        this.createSeries.restore();
 
-                return stubAxes[axesIndex++];
-            });
+        this.createRenderer.reset();
+        this.createRenderer.restore();
 
-            that.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
-                resetStub(stubSeriesFamily);
-                return stubSeriesFamily;
-            });
+        this.range.reset();
+        this.range.restore();
 
-            that.createLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
-                resetStub(stubLayoutManager);
-                return stubLayoutManager;
-            });
+        this.createTooltip.reset();
+        this.createTooltip.restore();
 
-            stubLayoutManager.needMoreSpaceForPanesCanvas.returns(false);
-            stubLayoutManager.layoutElements = sinon.spy(function() {
-                arguments[2]();
-                var size = stubLayoutManager.needMoreSpaceForPanesCanvas();
-                size && arguments[2](size);
-            });
-        },
-        afterEach: function() {
-            this.createThemeManager.reset();
-            this.createThemeManager.restore();
+        this.createAxis.reset();
+        this.createAxis.restore();
 
-            this.createSeries.reset();
-            this.createSeries.restore();
+        this.createSeriesFamily.reset();
+        this.createSeriesFamily.restore();
 
-            this.createRenderer.reset();
-            this.createRenderer.restore();
+        this.createLayoutManager.reset();
+        this.createLayoutManager.restore();
 
-            this.range.reset();
-            this.range.restore();
+        trackerModule.ChartTracker.reset();
+        legendModule.Legend.reset();
+        exportModule.ExportMenu.reset();
 
-            this.createTooltip.reset();
-            this.createTooltip.restore();
-
-            this.createAxis.reset();
-            this.createAxis.restore();
-
-            this.createSeriesFamily.reset();
-            this.createSeriesFamily.restore();
-
-            this.createLayoutManager.reset();
-            this.createLayoutManager.restore();
-
-            trackerModule.ChartTracker.reset();
-            legendModule.Legend.reset();
-            exportModule.ExportMenu.reset();
-
-            stubLayoutManager.layoutElements.reset();
-        },
-        createPolarChart: function(options) {
-            var polarChart = new dxPolarChart(this.$container, options);
-            this.layoutManagers = this.createLayoutManager.returnValues;
-            return polarChart;
-        },
-        createSimplePolarChart: function(options) {
-            return this.createPolarChart($.extend({}, { dataSource: [], series: {}, argumentAxis: { startAngle: 0 } }, options));
-        }
-    };
+        stubLayoutManager.layoutElements.reset();
+    },
+    createPolarChart: function(options) {
+        const polarChart = new dxPolarChart(this.$container, options);
+        this.layoutManagers = this.createLayoutManager.returnValues;
+        return polarChart;
+    },
+    createSimplePolarChart: function(options) {
+        return this.createPolarChart($.extend({}, { dataSource: [], series: {}, argumentAxis: { startAngle: 0 } }, options));
+    }
+};
 
 QUnit.module('create Polar chart', environment);
 
 QUnit.test('create empty polar chart', function(assert) {
-    var chart = this.createPolarChart();
+    const chart = this.createPolarChart();
 
     assert.ok(chart);
     assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
 });
 
 QUnit.test('create series', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
     assert.equal(chart.getAllSeries().length, 1);
 });
 
 QUnit.test('create series with panes', function(assert) {
-    var chart = this.createSimplePolarChart({ series: { pane: '123' } });
+    const chart = this.createSimplePolarChart({ series: { pane: '123' } });
 
     assert.equal(chart.getAllSeries().length, 1);
 });
 
 QUnit.test('give series in groups to data validator', function(assert) {
-    var validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+    const validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
         return data || [];
     });
     try {
-        var chart = this.createSimplePolarChart(),
-            argumentAxis = this.createAxis.returnValues[0],
-            expected = [chart.getAllSeries()[0]];
+        const chart = this.createSimplePolarChart();
+        const argumentAxis = this.createAxis.returnValues[0];
+        const expected = [chart.getAllSeries()[0]];
         expected.argumentAxes = [argumentAxis];
         expected.argumentOptions = argumentAxis.getOptions();
 
@@ -307,23 +307,23 @@ QUnit.test('create spider series', function(assert) {
 });
 
 QUnit.test('give groups to theme', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(this.createSeries.args[0][0].seriesGroup, chart._seriesGroup);
     assert.equal(this.createSeries.args[0][0].labelsGroup, chart._labelsGroup);
 });
 
 QUnit.test('render', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.ok(chart.getSeriesByPos(0).draw.called);
 });
 
 QUnit.test('Actions sequence with series on render chart', function(assert) {
     // arrange
-    var chart = this.createSimplePolarChart(),
-        argumentAxis = chart._argumentAxes[0],
-        series = chart.getAllSeries()[0];
+    const chart = this.createSimplePolarChart();
+    const argumentAxis = chart._argumentAxes[0];
+    const series = chart.getAllSeries()[0];
 
     assert.ok(series.updateData.lastCall.calledBefore(argumentAxis.setBusinessRange.firstCall));
     assert.ok(argumentAxis.setBusinessRange.firstCall.calledAfter(series.createPoints.lastCall));
@@ -332,7 +332,7 @@ QUnit.test('Actions sequence with series on render chart', function(assert) {
 QUnit.test('draw series with correct translators and animation options', function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10, height: 10 });
     stubThemeManager.getOptions.withArgs('adaptiveLayout').returns({ keepLabels: false });
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart._renderer.animationEnabled());
     assert.equal(chart.getSeriesByPos(0).draw.args[0][1], true);
@@ -340,29 +340,29 @@ QUnit.test('draw series with correct translators and animation options', functio
 
 QUnit.test('draw series with correct translators and without animation', function(assert) {
     stubThemeManager.getOptions.withArgs('animation').returns({ enabled: false });
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
 QUnit.test('draw series without animation because exceed point limit ', function(assert) {
     stubThemeManager.getOptions.withArgs('animation').returns({ enabled: true, maxPointCountSupported: 1 });
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
 QUnit.test('pass legendcallback to series draw', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.deepEqual(chart.getAllSeries()[0].draw.args[0][2], chart.getAllSeries()[0], 'legend callback');
 });
 
 QUnit.test('create series with visibility changed', function(assert) {
-    var chart = this.createSimplePolarChart(),
-        processSeriesFamilySpy = sinon.spy(chart, '_processSeriesFamilies'),
-        populateBusinessRangeSpy = sinon.spy(chart, '_populateBusinessRange'),
-        renderSpy = sinon.spy(chart, '_doRender');
+    const chart = this.createSimplePolarChart();
+    const processSeriesFamilySpy = sinon.spy(chart, '_processSeriesFamilies');
+    const populateBusinessRangeSpy = sinon.spy(chart, '_populateBusinessRange');
+    const renderSpy = sinon.spy(chart, '_doRender');
     chart._renderer.stopAllAnimations = sinon.stub();
 
     assert.ok(chart.getSeriesByPos(0).visibilityChanged);
@@ -383,8 +383,8 @@ QUnit.test('Pass angles to axes. Process unnormalized angle', function(assert) {
             startAngle: -526
         }
     });
-    var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
-        valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
+    const argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0];
+    const valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
     assert.equal(argumentAxisOptions.startAngle, 194, 'startAngle', 'argumentAxis startAngle');
     assert.equal(argumentAxisOptions.endAngle, 554, 'endAngle', 'argumentAxis endAngle');
@@ -400,8 +400,8 @@ QUnit.test('Pass angles to axes. Process incorrect angle', function(assert) {
         }
     });
 
-    var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
-        valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
+    const argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0];
+    const valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
     assert.equal(argumentAxisOptions.startAngle, 0, 'startAngle', 'argumentAxis startAngle');
     assert.equal(argumentAxisOptions.endAngle, 360, 'endAngle', 'argumentAxis endAngle');
@@ -411,14 +411,14 @@ QUnit.test('Pass angles to axes. Process incorrect angle', function(assert) {
 });
 
 QUnit.test('create axes', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(chart._valueAxes.length, 1);
     assert.equal(chart._argumentAxes.length, 1);
 });
 
 QUnit.test('Pass axes to series', function(assert) {
-    var chart = this.createSimplePolarChart({ series: [{}, {}] });
+    const chart = this.createSimplePolarChart({ series: [{}, {}] });
 
     assert.strictEqual(this.createSeries.getCall(0).args[0].valueAxis, chart._valueAxes[0], 'value axis for first series');
     assert.strictEqual(this.createSeries.getCall(1).args[0].valueAxis, chart._valueAxes[0], 'value axis for second series');
@@ -428,7 +428,7 @@ QUnit.test('Pass axes to series', function(assert) {
 });
 
 QUnit.test('create argument and value axes with correct parameters', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(this.createAxis.firstCall.args[0].renderer, chart._renderer);
     assert.equal(this.createAxis.args[0][0].drawingType, 'circular', 'create argument axis like circular axis');
@@ -438,14 +438,14 @@ QUnit.test('create argument and value axes with correct parameters', function(as
 });
 
 QUnit.test('create axes with correct groups', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     checkAxisGroup(assert, this.createAxis.firstCall.args, chart);
     checkAxisGroup(assert, this.createAxis.secondCall.args, chart);
 });
 
 QUnit.test('draw Axes', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
     assert.deepEqual(chart._argumentAxes[0].draw.getCall(0).args, [{
@@ -499,7 +499,7 @@ QUnit.test('Adaptive layout', function(assert) {
     stubAxes[0].getMargins.onCall(2).returns({ left: 2, right: 2, top: 2, bottom: 2 });
     stubAxes[0].getCanvas.returns({ stubAxisCanvas: true });
 
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.deepEqual(stubLayoutManager.needMoreSpaceForPanesCanvas.getCall(0).args[0], [{ canvas: stubAxes[0].getCanvas() }]);
 
@@ -544,7 +544,7 @@ QUnit.test('Adaptive layout', function(assert) {
 });
 
 QUnit.test('create correct seriesFamily', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
@@ -555,7 +555,7 @@ QUnit.test('create correct seriesFamily', function(assert) {
 });
 
 QUnit.test('adjust series dimension in seriesFamily', function(assert) {
-    var chart = this.createSimplePolarChart(); // ,
+    const chart = this.createSimplePolarChart(); // ,
     // translators = {
     //     arg: chart.translator,
     //     val: chart.translator
@@ -571,7 +571,7 @@ QUnit.test('adjust series dimension in seriesFamily', function(assert) {
 });
 
 QUnit.test('require not need more space in canvas', function(assert) {
-    var chart = this.createSimplePolarChart();
+    const chart = this.createSimplePolarChart();
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
     assert.equal(chart._valueAxes[0].draw.callCount, 1);
@@ -579,8 +579,8 @@ QUnit.test('require not need more space in canvas', function(assert) {
 
 QUnit.test('set value axes spider ticks from argument axis', function(assert) {
     this.createSimplePolarChart();
-    var argumentAxis = this.createAxis.returnValues[0],
-        valueAxis = this.createAxis.returnValues[1];
+    const argumentAxis = this.createAxis.returnValues[0];
+    const valueAxis = this.createAxis.returnValues[1];
 
     assert.ok(valueAxis.setSpiderTicks.calledWith(argumentAxis.getSpiderTicks.returnValues[0]));
     assert.ok(valueAxis.setSpiderTicks.calledAfter(argumentAxis.draw));
@@ -589,8 +589,8 @@ QUnit.test('set value axes spider ticks from argument axis', function(assert) {
 
 QUnit.test('create axis with correct options', function(assert) {
     this.createSimplePolarChart({});
-    var argumentAxis = this.createAxis.returnValues[0],
-        valueAxis = this.createAxis.returnValues[1];
+    const argumentAxis = this.createAxis.returnValues[0];
+    const valueAxis = this.createAxis.returnValues[1];
 
     assert.strictEqual(argumentAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, true, 'boundary ticks for argument axis');
     assert.strictEqual(valueAxis.updateOptions.lastCall.args[0].showCustomBoundaryTicks, false, 'boundary ticks for value axis');
@@ -600,8 +600,8 @@ QUnit.test('create axis with correct options', function(assert) {
 
 QUnit.test('create axis with correct types. Spider axis', function(assert) {
     this.createSimplePolarChart({ useSpiderWeb: true });
-    var argumentAxis = this.createAxis.returnValues[0],
-        valueAxis = this.createAxis.returnValues[1];
+    const argumentAxis = this.createAxis.returnValues[0];
+    const valueAxis = this.createAxis.returnValues[1];
 
     assert.equal(this.createAxis.getCall(0).args[0].drawingType, 'circularSpider', 'create argument axis like circular axis');
     assert.equal(this.createAxis.getCall(1).args[0].drawingType, 'linearSpider', 'create value axis like circular axis');
@@ -616,7 +616,7 @@ QUnit.test('create constant lines and strips', function(assert) {
             stripStyle: { color: 'orange' }, constantLineStyle: { width: 5, color: 'green' }
         }
     });
-    var argumentAxis = this.createAxis.returnValues[0];
+    const argumentAxis = this.createAxis.returnValues[0];
 
     assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[0], { color: 'green', value: 3, width: 5 });
     assert.deepEqual(argumentAxis.updateOptions.lastCall.args[0].constantLines[1], { color: 'green', value: 4, width: 5 });
@@ -626,7 +626,7 @@ QUnit.test('create constant lines and strips', function(assert) {
 });
 
 QUnit.test('Create Tracker.', function(assert) {
-    var chart = this.createSimplePolarChart({
+    const chart = this.createSimplePolarChart({
         margin: {
             width: 800,
             height: 800,
@@ -645,10 +645,10 @@ QUnit.test('Create Tracker.', function(assert) {
         rotated: 'rotated'
     });
 
-    var tracker = trackerModule.ChartTracker.lastCall.returnValue;
+    const tracker = trackerModule.ChartTracker.lastCall.returnValue;
     assert.ok(tracker.stub('update').calledOnce, 'tracker update is called once');
 
-    var updateArg0 = tracker.stub('update').lastCall.args[0];
+    const updateArg0 = tracker.stub('update').lastCall.args[0];
     assert.equal(updateArg0.argumentAxis, chart._argumentAxes[0], 'argument axis');
     assert.equal(updateArg0.chart, chart, 'chart instances should be not passed');
     assert.equal(updateArg0.rotated, undefined, 'rotated');
@@ -681,15 +681,15 @@ QUnit.test('crosshair should not be enabled', function(assert) {
 });
 
 QUnit.test('ClipPaths. Hide series by pane clip path (out visual range)', function(assert) {
-    var chart = this.createSimplePolarChart({});
+    const chart = this.createSimplePolarChart({});
 
     assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ['DevExpress_3', null, false, false]);
 });
 
 QUnit.test('ClipPaths. Hide constant lines and strips (out visual range)', function(assert) {
     this.createSimplePolarChart({});
-    var argAxis = this.createAxis.returnValues[0],
-        valueAxis = this.createAxis.returnValues[1];
+    const argAxis = this.createAxis.returnValues[0];
+    const valueAxis = this.createAxis.returnValues[1];
 
     assert.equal(argAxis.applyClipRects.lastCall.args[0], 'DevExpress_2');
     assert.equal(argAxis.applyClipRects.lastCall.args[1], 'DevExpress_1', 'canvas clip path');
@@ -698,7 +698,7 @@ QUnit.test('ClipPaths. Hide constant lines and strips (out visual range)', funct
 });
 
 QUnit.test('ClipPaths. Hide error bars (out visual range)', function(assert) {
-    var chart = this.createSimplePolarChart({
+    const chart = this.createSimplePolarChart({
         series: [{
             valueErrorBar: {}
         }] });
@@ -707,7 +707,7 @@ QUnit.test('ClipPaths. Hide error bars (out visual range)', function(assert) {
 });
 
 QUnit.test('ClipPaths. Refresh clip path', function(assert) {
-    var chart = this.createSimplePolarChart({});
+    const chart = this.createSimplePolarChart({});
 
     chart.render({ force: true });
 

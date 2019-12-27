@@ -24,9 +24,9 @@ module.exports = (currencySymbol, accountingFormat) => {
         '\\¤': encodedCurrencySymbol
     };
 
-    let result = accountingFormat.split(';');
+    const result = accountingFormat.split(';');
     for(let i = 0; i < result.length; i++) {
-        for(let symbol in encodeSymbols) {
+        for(const symbol in encodeSymbols) {
             if(Object.prototype.hasOwnProperty.call(encodeSymbols, symbol)) {
                 result[i] = result[i].replace(new RegExp(symbol, 'g'), encodeSymbols[symbol]);
             }

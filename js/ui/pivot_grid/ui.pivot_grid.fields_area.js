@@ -6,11 +6,11 @@ import { capitalizeFirstLetter } from './ui.pivot_grid.utils';
 import Popup from '../popup';
 import Button from '../button';
 
-var DIV = '<div>';
+const DIV = '<div>';
 
 import './ui.pivot_grid.field_chooser_base';
 
-var AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
+const AREA_DRAG_CLASS = 'dx-pivotgrid-drag-action';
 
 function renderGroupConnector(field, nextField, prevField, $container) {
     if(prevField && prevField.groupName && prevField.groupName === field.groupName) {
@@ -42,19 +42,19 @@ exports.FieldsArea = AreaItem.inherit({
     },
 
     _renderButton: function(element) {
-        var that = this,
-            container = $('<td>').appendTo($('<tr>').appendTo(element)),
-            button = that.component._createComponent($(DIV).appendTo(container), Button, {
-                text: 'Fields',
-                icon: 'menu',
-                width: 'auto',
-                onClick: function() {
-                    var popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
-                    if(!popup.option('visible')) {
-                        popup.show();
-                    }
+        const that = this;
+        const container = $('<td>').appendTo($('<tr>').appendTo(element));
+        const button = that.component._createComponent($(DIV).appendTo(container), Button, {
+            text: 'Fields',
+            icon: 'menu',
+            width: 'auto',
+            onClick: function() {
+                const popup = that.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
+                if(!popup.option('visible')) {
+                    popup.show();
                 }
-            });
+            }
+        });
         button.$element().addClass('dx-pivotgrid-fields-area-hamburger');
     },
 
@@ -87,10 +87,10 @@ exports.FieldsArea = AreaItem.inherit({
     },
 
     _renderPopup: function(tableElement, row) {
-        var that = this,
-            button = tableElement.find('.dx-button'),
-            popupOptions = that._getPopupOptions(row, button),
-            FieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
+        const that = this;
+        const button = tableElement.find('.dx-button');
+        const popupOptions = that._getPopupOptions(row, button);
+        const FieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
 
         if(that._rowPopup) {
             that._rowPopup.$element().remove();
@@ -113,13 +113,13 @@ exports.FieldsArea = AreaItem.inherit({
     },
 
     _renderTableContent: function(tableElement, data) {
-        var that = this,
-            groupElement = this.groupElement(),
-            isVisible = this.isVisible(),
-            fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance'),
-            head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement),
-            area = that._area,
-            row = $('<tr>');
+        const that = this;
+        const groupElement = this.groupElement();
+        const isVisible = this.isVisible();
+        const fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase('instance');
+        const head = $('<thead>').addClass('dx-pivotgrid-fields-area-head').appendTo(tableElement);
+        const area = that._area;
+        const row = $('<tr>');
 
         groupElement.toggleClass('dx-hidden', !isVisible);
         tableElement.addClass('dx-area-field-container');
@@ -130,8 +130,8 @@ exports.FieldsArea = AreaItem.inherit({
 
         each(data, function(index, field) {
             if(field.area === area && field.visible !== false) {
-                var td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row')),
-                    indicators = td.find('.dx-column-indicators');
+                const td = $('<td>').append(fieldChooserBase.renderField(field, field.area === 'row'));
+                const indicators = td.find('.dx-column-indicators');
                 if(indicators.length && that._shouldCreateButton()) {
                     indicators.insertAfter(indicators.next());
                 }
