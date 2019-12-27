@@ -881,7 +881,12 @@ var FilterBuilder = Widget.inherit({
 
         this._createRemoveButton(() => {
             utils.removeItem(parent, condition);
-            $item.remove();
+            const isSingleChild = $item.parent().children().length === 1;
+            if(isSingleChild) {
+                $item.parent().remove();
+            } else {
+                $item.remove();
+            }
             this._updateFilter();
         }).appendTo($item);
         this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
