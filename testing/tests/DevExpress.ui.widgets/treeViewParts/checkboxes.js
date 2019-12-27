@@ -989,19 +989,20 @@ configs.forEach(config => {
                         return;
                     }
 
-                    const items = [];
                     const itemsCount = 3;
+                    const items = [];
                     for(let i = 0; i < itemsCount; i++) {
                         items.push({ id: i, text: `item${i}`, parentId: ROOT_ID, selected, expanded: config.expanded });
                     }
-                    let wrapper = createWrapper(config, {}, items);
 
+                    let wrapper = createWrapper(config, {}, items);
                     wrapper.instance.setSelectedNodesKeys(selectedKeys);
-                    let expectedEventLog = [];
+
                     const itemSelectionChangedEventCallCount = selected
                         ? itemsCount - selectedKeys.length
                         : selectedKeys.length;
 
+                    let expectedEventLog = [];
                     for(let i = 0; i < itemSelectionChangedEventCallCount; i++) {
                         expectedEventLog.push('itemSelectionChanged');
                     }
