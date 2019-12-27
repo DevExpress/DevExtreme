@@ -19,5 +19,6 @@ export const createScheduler = (options = {}) =>
         views: ['week'],
         currentView: 'week',
         groupByDate: true,
-        dataSource: []
+        dataSource: [],
+        width: 900
 	}, options));
