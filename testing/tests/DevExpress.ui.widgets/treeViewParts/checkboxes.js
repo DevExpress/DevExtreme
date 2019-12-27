@@ -510,9 +510,9 @@ configs.forEach(config => {
                     }
                 }
 
-                wrapper.checkSelectedKeys(expectedKeys, 'after unselectAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after unselectAll');
-                wrapper.checkEventLog(expectedEventLog, 'after unselectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+                wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -556,9 +556,9 @@ configs.forEach(config => {
                 }
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselectItem(0)');
-            wrapper.checkSelectedNodes(expectedNodes, 'after unselectItem(0)');
-            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after unselectItem(0)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+            wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
+            wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after unselect');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -598,9 +598,9 @@ configs.forEach(config => {
                 expectedKeys = [0];
                 expectedEventLog = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after unselectItem(1)');
-            wrapper.checkSelectedNodes(expectedKeys, 'after unselectItem(1)');
-            wrapper.checkEventLog(expectedEventLog, 'after unselectItem(1)');
+            wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
+            wrapper.checkSelectedNodes(expectedKeys, 'after unselect');
+            wrapper.checkEventLog(expectedEventLog, 'after unselect');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
@@ -635,9 +635,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedNodes = [0];
             }
-            wrapper.checkSelectedKeys(expectedKeys, ' - check via dataSource items');
+            wrapper.checkSelectedKeys(expectedKeys);
             wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], ' - check via dataSource items');
+            wrapper.checkEventLog([]);
         });
 
         QUnit.test('item1.selected: true -> expandAll', function() {
@@ -734,9 +734,9 @@ configs.forEach(config => {
                 if(isSelectByKeysFunction(unselectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                 }
-                wrapper.checkSelectedKeys([], 'after unselectAll');
-                wrapper.checkSelectedNodes([], 'after unselectAll');
-                wrapper.checkEventLog(expectedEventLog, 'after unselectAll');
+                wrapper.checkSelectedKeys([], 'after unselect');
+                wrapper.checkSelectedNodes([], 'after unselect');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -863,9 +863,9 @@ configs.forEach(config => {
                         expectedEventLog = [];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after unselectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog(expectedEventLog, 'after unselectAll');
+                wrapper.checkEventLog(expectedEventLog, 'after unselect');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -1012,7 +1012,7 @@ configs.forEach(config => {
             });
         });
 
-        QUnit.test('item1.selected: true, item2.selected:true -> setSelectedKey([key for item1_1]) -> expandAll', function(assert) {
+        QUnit.test('item1.selected: true, item2.selected:true -> setSelectedNodesKeys([key for item1_1]) -> expandAll', function(assert) {
             if(config.selectionMode === 'single') {
                 assert.ok('skip for single');
                 return;
@@ -1049,9 +1049,9 @@ configs.forEach(config => {
                     expectedEventLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after setSelectedKey([1])');
-            wrapper.checkSelectedNodes(expectedNodes, 'after setSelectedKey([1])');
-            wrapper.checkEventLog(expectedEventLog, 'after setSelectedKey([1])');
+            wrapper.checkSelectedKeys(expectedKeys, 'after select');
+            wrapper.checkSelectedNodes(expectedNodes, 'after select');
+            wrapper.checkEventLog(expectedEventLog, 'after select');
             wrapper.clearEventLog();
 
             wrapper.instance.expandAll();
