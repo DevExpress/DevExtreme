@@ -1,5 +1,5 @@
-var dateUtils = require('../../core/utils/date'),
-    days = [0, 1, 2, 3, 4, 5, 6];
+const dateUtils = require('../../core/utils/date');
+const days = [0, 1, 2, 3, 4, 5, 6];
 
 function getWeekendDays(workdays) {
     return days.filter(function(day) {
@@ -14,8 +14,8 @@ function getNextDayIndex(dayIndex) {
 }
 
 function dayBetweenWeekend(weekend, day) {
-    var start = weekend.start,
-        end = weekend.end;
+    let start = weekend.start;
+    const end = weekend.end;
 
     while(start !== end) {
         if(start === day) {
@@ -28,7 +28,7 @@ function dayBetweenWeekend(weekend, day) {
 }
 
 function getDaysDistance(day, end) {
-    var length = 0;
+    let length = 0;
 
     while(day !== end) {
         day = getNextDayIndex(day);
@@ -39,8 +39,8 @@ function getDaysDistance(day, end) {
 }
 
 function separateBreak(scaleBreak, day) {
-    var result = [],
-        dayEnd = new Date(day);
+    const result = [];
+    const dayEnd = new Date(day);
 
     dayEnd.setDate(day.getDate() + 1);
 
@@ -62,7 +62,7 @@ function separateBreak(scaleBreak, day) {
 }
 
 function getWeekEndDayIndices(workDays) {
-    var indices = getWeekendDays(workDays);
+    const indices = getWeekendDays(workDays);
 
     if(indices.length < 7) {
         while(getNextDayIndex(indices[indices.length - 1]) === indices[0]) {
@@ -74,42 +74,42 @@ function getWeekEndDayIndices(workDays) {
 }
 
 function generateDateBreaksForWeekend(min, max, weekendDayIndices) {
-    var day = min.getDate(),
-        breaks = [],
-        weekends = weekendDayIndices.reduce(function(obj, day) {
-            var currentWeekEnd = obj[1];
-            if(currentWeekEnd.start === undefined) {
-                currentWeekEnd = {
-                    start: day,
-                    end: getNextDayIndex(day)
-                };
-                obj[0].push(currentWeekEnd);
-                return [obj[0], currentWeekEnd];
-            } else if(currentWeekEnd.end === day) {
-                currentWeekEnd.end = getNextDayIndex(day);
-                return obj;
-            }
+    let day = min.getDate();
+    const breaks = [];
+    const weekends = weekendDayIndices.reduce(function(obj, day) {
+        let currentWeekEnd = obj[1];
+        if(currentWeekEnd.start === undefined) {
             currentWeekEnd = {
                 start: day,
                 end: getNextDayIndex(day)
             };
             obj[0].push(currentWeekEnd);
             return [obj[0], currentWeekEnd];
+        } else if(currentWeekEnd.end === day) {
+            currentWeekEnd.end = getNextDayIndex(day);
+            return obj;
+        }
+        currentWeekEnd = {
+            start: day,
+            end: getNextDayIndex(day)
+        };
+        obj[0].push(currentWeekEnd);
+        return [obj[0], currentWeekEnd];
 
-        }, [[], {}]);
+    }, [[], {}]);
 
     weekends[0].forEach(function(weekend) {
-        var currentDate = new Date(min);
+        let currentDate = new Date(min);
         currentDate = dateUtils.trimTime(currentDate);
 
         while(currentDate < max) {
             day = currentDate.getDay();
 
-            var date = currentDate.getDate();
+            const date = currentDate.getDate();
 
             if(dayBetweenWeekend(weekend, day)) {
-                var from = new Date(currentDate),
-                    to;
+                const from = new Date(currentDate);
+                let to;
 
                 currentDate.setDate(date + getDaysDistance(day, weekend.end));
 
@@ -129,21 +129,21 @@ function generateDateBreaksForWeekend(min, max, weekendDayIndices) {
 }
 
 function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
-    var result = breaks.slice(),
-        i,
-        processWorkDay = function(workday) {
-            workday = dateUtils.trimTime(new Date(workday));
-            if(result[i].from <= workday && result[i].to > workday) {
-                var separatedBreak = separateBreak(result[i], workday);
-                if(separatedBreak.length === 2) {
-                    result.splice(i, 1, separatedBreak[0], separatedBreak[1]);
-                } else if(separatedBreak.length === 1) {
-                    result.splice(i, 1, separatedBreak[0]);
-                } else {
-                    result.splice(i, 1);
-                }
+    const result = breaks.slice();
+    let i;
+    const processWorkDay = function(workday) {
+        workday = dateUtils.trimTime(new Date(workday));
+        if(result[i].from <= workday && result[i].to > workday) {
+            const separatedBreak = separateBreak(result[i], workday);
+            if(separatedBreak.length === 2) {
+                result.splice(i, 1, separatedBreak[0], separatedBreak[1]);
+            } else if(separatedBreak.length === 1) {
+                result.splice(i, 1, separatedBreak[0]);
+            } else {
+                result.splice(i, 1);
             }
-        };
+        }
+    };
 
     for(i = 0; i < result.length; i++) {
         exactWorkDays.forEach(processWorkDay);
@@ -153,18 +153,18 @@ function excludeWorkDaysFromWeekEndBreaks(breaks, exactWorkDays) {
 }
 
 function generateBreaksForHolidays(min, max, holidays, weekendDayIndices) {
-    var day,
-        dayInWeekend = function(dayIndex) {
-            return dayIndex === day;
-        },
-        adjustedMin = dateUtils.trimTime(min),
-        adjustedMax = dateUtils.trimTime(max);
+    let day;
+    const dayInWeekend = function(dayIndex) {
+        return dayIndex === day;
+    };
+    const adjustedMin = dateUtils.trimTime(min);
+    const adjustedMax = dateUtils.trimTime(max);
 
     adjustedMax.setDate(max.getDate() + 1);
 
     return holidays.reduce(function(breaks, holiday) {
-        var holidayStart,
-            holidayEnd;
+        let holidayStart;
+        let holidayEnd;
 
         holiday = new Date(holiday);
         day = holiday.getDay();
@@ -194,8 +194,8 @@ function calculateGaps(breaks) {
 }
 
 exports.generateDateBreaks = function(min, max, workWeek, singleWorkdays, holidays) {
-    var weekendDayIndices = getWeekEndDayIndices(workWeek),
-        breaks = generateDateBreaksForWeekend(min, max, weekendDayIndices);
+    const weekendDayIndices = getWeekEndDayIndices(workWeek);
+    const breaks = generateDateBreaksForWeekend(min, max, weekendDayIndices);
 
     breaks.push.apply(breaks, generateBreaksForHolidays(min, max, holidays || [], weekendDayIndices));
 

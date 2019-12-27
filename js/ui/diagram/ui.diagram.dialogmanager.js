@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { getDiagram } from './diagram_importer';
 import messageLocalization from '../../localization/message';
 
-var FileUploader = require('../file_uploader');
+const FileUploader = require('../file_uploader');
 import { getWindow } from '../../core/utils/window';
 
 const DiagramDialogManager = {
@@ -30,7 +30,7 @@ const DiagramDialogManager = {
             uploadMode: 'useForm',
             onValueChanged: function(e) {
                 const window = getWindow();
-                var reader = new window.FileReader();
+                const reader = new window.FileReader();
                 reader.onload = function(e) {
                     args.component._commandParameter = e.target.result;
                 };
@@ -40,7 +40,7 @@ const DiagramDialogManager = {
         return $uploader;
     },
     getDialogParameters(command) {
-        var commandIndex = this.getConfigurations().map(c => c.command).indexOf(command);
+        const commandIndex = this.getConfigurations().map(c => c.command).indexOf(command);
         if(commandIndex >= 0) {
             return this.getConfigurations()[commandIndex];
         } else {

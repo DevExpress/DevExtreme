@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    fx = require('animation/fx'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const $ = require('jquery');
+const ko = require('knockout');
+const fx = require('animation/fx');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('ui/drop_down_menu');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dropDownMenuKO" data-bind="dxDropDownMenu: { items: items, onContentReady: onContentReady, opened: opened }">\
             <div data-options="dxTemplate: { name: \'item\' }">\
                 <img  class="my-icon" data-bind="attr: { src: icon }" />\
@@ -50,7 +50,7 @@ QUnit.module('KO cases', {
 QUnit.test('custom item template', function(assert) {
     assert.expect(3);
 
-    var element = $('#dropDownMenuKO');
+    const element = $('#dropDownMenuKO');
 
     ko.applyBindings({
         items: [
@@ -69,8 +69,8 @@ QUnit.test('custom item template', function(assert) {
 
         ],
         onContentReady: function() {
-            var instance = element.dxDropDownMenu('instance'),
-                popupElement = instance._popup._wrapper();
+            const instance = element.dxDropDownMenu('instance');
+            const popupElement = instance._popup._wrapper();
 
             instance.close();
 
@@ -87,29 +87,29 @@ QUnit.test('custom item template', function(assert) {
 });
 
 QUnit.test('custom template name', function(assert) {
-    var vm = {
-            items: [
-                {
-                    text: '0',
-                    icon: 'http://1.png'
-                },
-                {
-                    text: '1',
-                    icon: 'http://1.png'
-                },
-                {
-                    text: '2',
-                    icon: 'http://3.png'
-                }
+    const vm = {
+        items: [
+            {
+                text: '0',
+                icon: 'http://1.png'
+            },
+            {
+                text: '1',
+                icon: 'http://1.png'
+            },
+            {
+                text: '2',
+                icon: 'http://3.png'
+            }
 
-            ],
-            itemTemplate: 'itemWithIcon'
-        },
-        $element = $('#dropDownMenuCustomTemplateName');
+        ],
+        itemTemplate: 'itemWithIcon'
+    };
+    const $element = $('#dropDownMenuCustomTemplateName');
 
     ko.applyBindings(vm, $element.get(0));
 
-    var instance = $element.dxDropDownMenu('instance');
+    const instance = $element.dxDropDownMenu('instance');
 
     $element.trigger('dxclick');
 
@@ -119,7 +119,7 @@ QUnit.test('custom template name', function(assert) {
 
 
 QUnit.test('dropdownmenu should delegate templates to child widgets (T131530)', function(assert) {
-    var $dropDownMenu = $('#T131530');
+    const $dropDownMenu = $('#T131530');
     ko.applyBindings({
         opened: true
     }, $dropDownMenu.get(0));

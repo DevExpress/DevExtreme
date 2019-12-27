@@ -1,34 +1,34 @@
-var windowUtils = require('./window'),
-    domAdapter = require('../dom_adapter'),
-    Callbacks = require('./callbacks'),
-    readyCallbacks = require('./ready_callbacks'),
-    callOnce = require('./call_once');
+const windowUtils = require('./window');
+const domAdapter = require('../dom_adapter');
+const Callbacks = require('./callbacks');
+const readyCallbacks = require('./ready_callbacks');
+const callOnce = require('./call_once');
 
-var resizeCallbacks = (function() {
-    var prevSize,
-        callbacks = Callbacks(),
-        originalCallbacksAdd = callbacks.add,
-        originalCallbacksRemove = callbacks.remove;
+const resizeCallbacks = (function() {
+    let prevSize;
+    const callbacks = Callbacks();
+    const originalCallbacksAdd = callbacks.add;
+    const originalCallbacksRemove = callbacks.remove;
 
     if(!windowUtils.hasWindow()) {
         return callbacks;
     }
 
-    var formatSize = function() {
-        var window = windowUtils.getWindow();
+    const formatSize = function() {
+        const window = windowUtils.getWindow();
         return {
             width: window.innerWidth,
             height: window.innerHeight,
         };
     };
 
-    var handleResize = function() {
-        var now = formatSize();
+    const handleResize = function() {
+        const now = formatSize();
         if(now.width === prevSize.width && now.height === prevSize.height) {
             return;
         }
 
-        var changedDimension;
+        let changedDimension;
         if(now.width === prevSize.width) {
             changedDimension = 'height';
         }
@@ -41,14 +41,14 @@ var resizeCallbacks = (function() {
         callbacks.fire(changedDimension);
     };
 
-    var setPrevSize = callOnce(function() {
+    const setPrevSize = callOnce(function() {
         prevSize = formatSize();
     });
 
-    var removeListener;
+    let removeListener;
 
     callbacks.add = function() {
-        var result = originalCallbacksAdd.apply(callbacks, arguments);
+        const result = originalCallbacksAdd.apply(callbacks, arguments);
 
         setPrevSize();
 
@@ -62,7 +62,7 @@ var resizeCallbacks = (function() {
     };
 
     callbacks.remove = function() {
-        var result = originalCallbacksRemove.apply(callbacks, arguments);
+        const result = originalCallbacksRemove.apply(callbacks, arguments);
 
         if(!callbacks.has() && removeListener) {
             removeListener();

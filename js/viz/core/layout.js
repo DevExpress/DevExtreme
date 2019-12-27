@@ -1,30 +1,30 @@
-var _normalizeEnum = require('./utils').normalizeEnum,
-    _min = Math.min,
-    _max = Math.max,
-    _round = Math.round,
+const _normalizeEnum = require('./utils').normalizeEnum;
+const _min = Math.min;
+const _max = Math.max;
+const _round = Math.round;
 
-    ALIGN_START = 0,
-    ALIGN_MIDDLE = 1,
-    ALIGN_END = 2,
+const ALIGN_START = 0;
+const ALIGN_MIDDLE = 1;
+const ALIGN_END = 2;
 
-    horizontalAlignmentMap = {
-        left: ALIGN_START,
-        center: ALIGN_MIDDLE,
-        right: ALIGN_END
-    },
+const horizontalAlignmentMap = {
+    left: ALIGN_START,
+    center: ALIGN_MIDDLE,
+    right: ALIGN_END
+};
 
-    verticalAlignmentMap = {
-        top: ALIGN_START,
-        center: ALIGN_MIDDLE,
-        bottom: ALIGN_END
-    },
+const verticalAlignmentMap = {
+    top: ALIGN_START,
+    center: ALIGN_MIDDLE,
+    bottom: ALIGN_END
+};
 
-    sideMap = {
-        horizontal: 0,
-        vertical: 1
-    },
+const sideMap = {
+    horizontal: 0,
+    vertical: 1
+};
 
-    slicersMap = {};
+const slicersMap = {};
 
 const BBOX_CEIL_CORRECTION = 2;
 
@@ -39,16 +39,16 @@ slicersMap[ALIGN_END] = function(a, b, size) {
 };
 
 function pickValue(value, map, defaultValue) {
-    var val = _normalizeEnum(value);
+    const val = _normalizeEnum(value);
     return val in map ? map[val] : defaultValue;
 }
 
 function normalizeLayoutOptions(options) {
-    var side = pickValue(options.side, sideMap, 1),
-        alignment = [
-            pickValue(options.horizontalAlignment, horizontalAlignmentMap, ALIGN_MIDDLE),
-            pickValue(options.verticalAlignment, verticalAlignmentMap, ALIGN_START)
-        ];
+    const side = pickValue(options.side, sideMap, 1);
+    const alignment = [
+        pickValue(options.horizontalAlignment, horizontalAlignmentMap, ALIGN_MIDDLE),
+        pickValue(options.verticalAlignment, verticalAlignmentMap, ALIGN_START)
+    ];
 
     return {
         side: side,
@@ -78,10 +78,10 @@ function getShrink(alignment, size) {
 }
 
 function processForward(item, rect, minSize) {
-    var side = item.side,
-        size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]),
-        minSide = item.position === 'indside' ? 0 : minSize[side],
-        isValid = size[side] < rect[2 + side] - rect[side] - minSide;
+    const side = item.side;
+    const size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]);
+    const minSide = item.position === 'indside' ? 0 : minSize[side];
+    const isValid = size[side] < rect[2 + side] - rect[side] - minSide;
 
     if(isValid) {
         if(item.position !== 'inside') {
@@ -93,10 +93,10 @@ function processForward(item, rect, minSize) {
 }
 
 function processRectBackward(item, rect, alignmentRect) {
-    var primarySide = item.side,
-        secondarySide = getConjugateSide(primarySide),
-        itemRect = [],
-        secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
+    const primarySide = item.side;
+    const secondarySide = getConjugateSide(primarySide);
+    const itemRect = [];
+    const secondary = getSlice(item.secondary, alignmentRect[secondarySide], alignmentRect[2 + secondarySide], item.size[secondarySide]);
 
     itemRect[primarySide] = _round(itemRect[2 + primarySide] = rect[item.primary + primarySide] + (item.position === 'inside' ? getShrink(item.primary, item.size[primarySide]) : 0));
     itemRect[item.primary + primarySide] = _round(rect[item.primary + primarySide] - getShrink(item.primary, item.size[primarySide]));
@@ -145,11 +145,11 @@ Layout.prototype = {
     // When any of options are changed targets have to be recreated and cycle has to be executed. But when container size is changed there is no
     // need to recreate targets - only cycle has to be executed.
     forward: function(targetRect, minSize) {
-        var rect = targetRect.slice(),
-            targets = createTargets(this._targets),
-            i,
-            ii = targets.length,
-            cache = [];
+        const rect = targetRect.slice();
+        const targets = createTargets(this._targets);
+        let i;
+        const ii = targets.length;
+        const cache = [];
 
         for(i = 0; i < ii; ++i) {
             if(processForward(targets[i], rect, minSize)) {
@@ -163,14 +163,14 @@ Layout.prototype = {
     },
 
     backward: function(targetRect, alignmentRect, size = [0, 0]) {
-        var backwardRect = targetRect.slice(),
-            fitRect = targetRect.slice(),
-            targets = this._cache,
-            targetSide = 0,
-            target,
-            i,
+        let backwardRect = targetRect.slice();
+        const fitRect = targetRect.slice();
+        const targets = this._cache;
+        let targetSide = 0;
+        let target;
+        let i;
 
-            ii = targets.length;
+        const ii = targets.length;
 
         for(i = 0; i < ii; ++i) {
             target = targets[i];
@@ -186,10 +186,10 @@ Layout.prototype = {
 };
 
 function createTargets(targets) {
-    var i,
-        ii = targets.length,
-        collection = [],
-        layout;
+    let i;
+    const ii = targets.length;
+    let collection = [];
+    let layout;
 
     for(i = 0; i < ii; ++i) {
         layout = targets[i].layoutOptions();
@@ -210,10 +210,10 @@ function createTargets(targets) {
 }
 
 function processWeakItems(collection) {
-    var weakItem = collection.filter(function(item) {
-            return item.weak === true;
-        })[0],
-        headerItem;
+    const weakItem = collection.filter(function(item) {
+        return item.weak === true;
+    })[0];
+    let headerItem;
 
     if(weakItem) {
         headerItem = collection.filter(function(item) {
@@ -241,9 +241,9 @@ function processBackwardHeaderRect(element, rect) {
 }
 
 function makeHeader(header, weakElement) {
-    var side = header.side,
-        primary = header.primary,
-        secondary = header.secondary;
+    const side = header.side;
+    const primary = header.primary;
+    const secondary = header.secondary;
 
     return {
         side: side,
@@ -271,7 +271,7 @@ function makeHeader(header, weakElement) {
                     return;
                 }
 
-                var weakRect = processBackwardHeaderRect(weakElement, fitRect, fitRect);
+                const weakRect = processBackwardHeaderRect(weakElement, fitRect, fitRect);
                 fitRect[2 + weakElement.primary] = weakRect[weakElement.primary];
                 const headerFitReact = processBackwardHeaderRect(header, fitRect, fitRect);
 

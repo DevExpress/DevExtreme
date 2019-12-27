@@ -1,21 +1,21 @@
-var gulp = require('gulp');
-var footer = require('gulp-footer');
-var eol = require('gulp-eol');
-var replace = require('gulp-replace');
-var merge = require('merge-stream');
-var file = require('gulp-file');
-var path = require('path');
-var ts = require('gulp-typescript');
-var through = require('through2');
-var lazyPipe = require('lazypipe');
+const gulp = require('gulp');
+const footer = require('gulp-footer');
+const eol = require('gulp-eol');
+const replace = require('gulp-replace');
+const merge = require('merge-stream');
+const file = require('gulp-file');
+const path = require('path');
+const ts = require('gulp-typescript');
+const through = require('through2');
+const lazyPipe = require('lazypipe');
 
-var context = require('./context.js');
-var headerPipes = require('./header-pipes.js');
-var compressionPipes = require('./compression-pipes.js');
-var version = require('../../package.json').version;
-var packagePath = context.RESULT_NPM_PATH + '/devextreme';
+const context = require('./context.js');
+const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
+const version = require('../../package.json').version;
+const packagePath = context.RESULT_NPM_PATH + '/devextreme';
 
-var TRANSPILED_GLOBS = [
+const TRANSPILED_GLOBS = [
     context.TRANSPILED_PATH + '/**/*.js',
     '!' + context.TRANSPILED_PATH + '/bundles/*.js',
     '!' + context.TRANSPILED_PATH + '/bundles/modules/parts/*.js',
@@ -23,12 +23,12 @@ var TRANSPILED_GLOBS = [
     '!' + context.TRANSPILED_PATH + '/viz/docs/*.js'
 ];
 
-var JSON_GLOBS = [
+const JSON_GLOBS = [
     'js/**/*.json',
     '!js/viz/vector_map.utils/*.*'
 ];
 
-var DIST_GLOBS = [
+const DIST_GLOBS = [
     'artifacts/**/*.*',
     '!' + context.TRANSPILED_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
@@ -52,12 +52,12 @@ var DIST_GLOBS = [
     '!artifacts/css/dx-gantt.*'
 ];
 
-var MODULES = require('./modules_metadata.json');
+const MODULES = require('./modules_metadata.json');
 
-var addDefaultExport = lazyPipe().pipe(function() {
+const addDefaultExport = lazyPipe().pipe(function() {
     return through.obj(function(chunk, enc, callback) {
-        var moduleName = chunk.relative.replace('.js', '').split('\\').join('/'),
-            moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
+        const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
+        const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
             chunk.contents = new Buffer(String(chunk.contents) + 'module.exports.default = module.exports;');
@@ -66,19 +66,19 @@ var addDefaultExport = lazyPipe().pipe(function() {
     });
 });
 
-var widgetNameByPath = require('./ts').widgetNameByPath;
-var generateJQueryAugmentation = require('./ts').generateJQueryAugmentation;
-var getAugmentationOptionsPath = require('./ts').getAugmentationOptionsPath;
+const widgetNameByPath = require('./ts').widgetNameByPath;
+const generateJQueryAugmentation = require('./ts').generateJQueryAugmentation;
+const getAugmentationOptionsPath = require('./ts').getAugmentationOptionsPath;
 
 gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
-    var tsModules = MODULES.map(function(moduleMeta) {
-        var relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
+    const tsModules = MODULES.map(function(moduleMeta) {
+        let relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
         if(!relPath.startsWith('../')) relPath = './' + relPath;
 
-        var exports = '';
+        let exports = '';
         if(moduleMeta.exports) {
-            var exportNames = Object.keys(moduleMeta.exports);
-            var exportProperties = exportNames.map(function(name) {
+            const exportNames = Object.keys(moduleMeta.exports);
+            const exportProperties = exportNames.map(function(name) {
                 const exportEntry = moduleMeta.exports[name];
 
                 if(name !== 'default') {
@@ -92,7 +92,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
                 let result = '';
 
                 if(exportEntry.isWidget) {
-                    var jQueryAugmentation = generateJQueryAugmentation(exportEntry.path);
+                    const jQueryAugmentation = generateJQueryAugmentation(exportEntry.path);
                     if(jQueryAugmentation) {
                         result += `declare global {\n${jQueryAugmentation}}\n`;
                     }
@@ -100,7 +100,7 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
 
                 result += `export default DevExpress.${exportEntry.path};`;
 
-                var widgetOptionsPath = getAugmentationOptionsPath(exportEntry.path);
+                const widgetOptionsPath = getAugmentationOptionsPath(exportEntry.path);
                 if(widgetOptionsPath) {
                     result += `\nexport type Options = DevExpress.${widgetOptionsPath};`;
                     result += '\n\n/** @deprecated use Options instead */';
@@ -113,8 +113,8 @@ gulp.task('npm-ts-modules-generator', gulp.series('ts-sources', function() {
             exports = '\n\n' + exportProperties.join('\n');
         }
 
-        var name = moduleMeta.name + '.d.ts',
-            content = 'import DevExpress from \'' + relPath + '\';' + exports;
+        const name = moduleMeta.name + '.d.ts';
+        let content = 'import DevExpress from \'' + relPath + '\';' + exports;
 
         if(moduleMeta.name === 'integration/jquery') {
             content = 'import \'jquery\';';
@@ -173,10 +173,10 @@ gulp.task('npm-sources', gulp.series('npm-ts-modules-generator', function() {
 }));
 
 gulp.task('npm-ts-modules-check', gulp.series('npm-ts-modules-generator', function() {
-    var content = 'import $ from \'jquery\';\n';
+    let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        var modulePath = '\'./npm/devextreme/' + moduleMeta.name + '\'';
+        const modulePath = '\'./npm/devextreme/' + moduleMeta.name + '\'';
         if(!moduleMeta.exports) {
             return 'import ' + modulePath + ';';
         }
@@ -184,16 +184,16 @@ gulp.task('npm-ts-modules-check', gulp.series('npm-ts-modules-generator', functi
         return Object.keys(moduleMeta.exports).map(function(name) {
             const exportEntry = moduleMeta.exports[name];
 
-            var uniqueIdentifier = moduleMeta.name
+            const uniqueIdentifier = moduleMeta.name
                 .replace(/\./g, '_')
                 .split('/')
                 .concat([name])
                 .join('__');
 
-            var importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
+            const importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
 
             const importStatement = `import ${importIdentifier} from ${modulePath};`;
-            var widgetName = widgetNameByPath(exportEntry.path);
+            const widgetName = widgetNameByPath(exportEntry.path);
             if(exportEntry.isWidget && widgetName) {
                 return `$('<div>').${widgetName}();\n${importStatement}`;
             }

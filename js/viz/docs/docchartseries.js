@@ -4,7 +4,7 @@
  * @inherits dxChartSeriesTypes.CommonSeries
  * @hidden
  */
-var chartSeries = {
+const chartSeries = {
     /**
     * @name ChartSeries.name
     * @type string
@@ -34,7 +34,7 @@ var chartSeries = {
 * @type object
 * @hidden
 */
-var commonSeries = {
+const commonSeries = {
     /**
     * @name dxChartSeriesTypes.CommonSeries.color
     * @type string
@@ -954,7 +954,7 @@ var commonSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var AreaSeries = {
+const AreaSeries = {
     /**
     * @name dxChartSeriesTypes.AreaSeries.label
     * @type object
@@ -1014,7 +1014,7 @@ var AreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var BarSeries = {
+const BarSeries = {
     /**
     * @name dxChartSeriesTypes.BarSeries.label
     * @type object
@@ -1062,7 +1062,7 @@ var BarSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var CandleStickSeries = {
+const CandleStickSeries = {
     /**
     * @name dxChartSeriesTypes.CandleStickSeries.argumentField
     * @type string
@@ -1152,7 +1152,7 @@ var CandleStickSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var FullStackedAreaSeries = {
+const FullStackedAreaSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedAreaSeries.point
     * @type object
@@ -1212,7 +1212,7 @@ var FullStackedAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var FullStackedSplineAreaSeries = {
+const FullStackedSplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point
     * @type object
@@ -1272,7 +1272,7 @@ var FullStackedSplineAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var FullStackedBarSeries = {
+const FullStackedBarSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedBarSeries.label
     * @type object
@@ -1326,7 +1326,7 @@ var FullStackedBarSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var FullStackedLineSeries = {
+const FullStackedLineSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedLineSeries.label
     * @type object
@@ -1374,7 +1374,7 @@ var FullStackedLineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var FullStackedSplineSeries = {
+const FullStackedSplineSeries = {
     /**
     * @name dxChartSeriesTypes.FullStackedSplineSeries.label
     * @type object
@@ -1423,7 +1423,7 @@ var FullStackedSplineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var LineSeries = {
+const LineSeries = {
     /**
     * @name dxChartSeriesTypes.LineSeries.label
     * @type object
@@ -1471,7 +1471,7 @@ var LineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var RangeAreaSeries = {
+const RangeAreaSeries = {
     /**
     * @name dxChartSeriesTypes.RangeAreaSeries.label
     * @type object
@@ -1531,7 +1531,7 @@ var RangeAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var RangeBarSeries = {
+const RangeBarSeries = {
     /**
     * @name dxChartSeriesTypes.RangeBarSeries.label
     * @type object
@@ -1579,7 +1579,7 @@ var RangeBarSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var ScatterSeries = {
+const ScatterSeries = {
     /**
     * @name dxChartSeriesTypes.ScatterSeries.label
     * @type object
@@ -1613,7 +1613,7 @@ var ScatterSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var SplineAreaSeries = {
+const SplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.SplineAreaSeries.label
     * @type object
@@ -1673,7 +1673,7 @@ var SplineAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var SplineSeries = {
+const SplineSeries = {
     /**
     * @name dxChartSeriesTypes.SplineSeries.label
     * @type object
@@ -1721,7 +1721,7 @@ var SplineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StackedAreaSeries = {
+const StackedAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedAreaSeries.label
     * @type object
@@ -1781,7 +1781,7 @@ var StackedAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StackedSplineAreaSeries = {
+const StackedSplineAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StackedSplineAreaSeries.label
     * @type object
@@ -1841,7 +1841,7 @@ var StackedSplineAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StackedBarSeries = {
+const StackedBarSeries = {
     /**
     * @name dxChartSeriesTypes.StackedBarSeries.label
     * @type object
@@ -1895,7 +1895,7 @@ var StackedBarSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StackedLineSeries = {
+const StackedLineSeries = {
     /**
     * @name dxChartSeriesTypes.StackedLineSeries.label
     * @type object
@@ -1943,7 +1943,7 @@ var StackedLineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StackedSplineSeries = {
+const StackedSplineSeries = {
     /**
     * @name dxChartSeriesTypes.StackedSplineSeries.label
     * @type object
@@ -1991,7 +1991,7 @@ var StackedSplineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StepAreaSeries = {
+const StepAreaSeries = {
     /**
     * @name dxChartSeriesTypes.StepAreaSeries.border
     * @type object
@@ -2099,7 +2099,7 @@ var StepAreaSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StepLineSeries = {
+const StepLineSeries = {
     /**
     * @name dxChartSeriesTypes.StepLineSeries.label
     * @type object
@@ -2147,7 +2147,7 @@ var StepLineSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var StockSeries = {
+const StockSeries = {
     /**
     * @name dxChartSeriesTypes.StockSeries.argumentField
     * @type string
@@ -2200,7 +2200,7 @@ var StockSeries = {
 * @type object
 * @inherits dxChartSeriesTypes.CommonSeries
 */
-var BubbleSeries = {
+const BubbleSeries = {
     /**
     * @name dxChartSeriesTypes.BubbleSeries.label
     * @type object

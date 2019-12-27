@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    TagBox = require('ui/tag_box'),
-    fx = require('animation/fx'),
-    ko = require('knockout');
+const $ = require('jquery');
+const TagBox = require('ui/tag_box');
+const fx = require('animation/fx');
+const ko = require('knockout');
 
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="tagBoxWithFieldTemplate" data-bind="dxTagBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\
             <div data-options="dxTemplate: { name: \'field\' }">\
                 <div data-bind="dxTextBox: {}"></div>\
@@ -22,9 +22,9 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
+const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 
-var moduleSetup = {
+const moduleSetup = {
     beforeEach: function() {
         TagBox.defaultOptions({ options: { deferRendering: false } });
         fx.off = true;
@@ -40,7 +40,7 @@ var moduleSetup = {
 QUnit.module('basic', moduleSetup);
 
 QUnit.test('fieldTemplate is bound to selected items', function(assert) {
-    var viewModel = {
+    const viewModel = {
         dataSource: [
             { key: 1, name: 'one' },
             { key: 2, name: 'two' },
@@ -49,7 +49,7 @@ QUnit.test('fieldTemplate is bound to selected items', function(assert) {
         value: [1, 2]
     };
 
-    var $selectBox = $('#tagBoxWithFieldTemplate');
+    const $selectBox = $('#tagBoxWithFieldTemplate');
     ko.applyBindings(viewModel, $selectBox.get(0));
 
     assert.equal($('#customField').text(), 'onetwo', 'fieldTemplate got item in viewModel');
@@ -61,7 +61,7 @@ QUnit.module('ko integration');
 QUnit.test('values should be provided to ko.observableArray', function(assert) {
     assert.expect(1);
 
-    var vm = {
+    const vm = {
         value: ko.observableArray([1, 2, 3])
     };
 
@@ -71,18 +71,18 @@ QUnit.test('values should be provided to ko.observableArray', function(assert) {
 
     ko.applyBindings(vm, $('#koTagBox').get(0));
 
-    var $close = $('#koTagBox').find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+    const $close = $('#koTagBox').find('.' + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
     $close.trigger('dxclick');
 });
 
 QUnit.test('$parent should be correct for tag', function(assert) {
-    var vm = {
+    const vm = {
         someValue: 'parent'
     };
 
-    var $markup = $('#koTagBoxWithTagTemplate');
+    const $markup = $('#koTagBoxWithTagTemplate');
     ko.applyBindings(vm, $markup.get(0));
 
-    var $tag = $markup.find('.dx-tag');
+    const $tag = $markup.find('.dx-tag');
     assert.equal($.trim($tag.text()), vm.someValue);
 });

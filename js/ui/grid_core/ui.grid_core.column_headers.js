@@ -7,23 +7,23 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { registerKeyboardAction } from './ui.grid_core.accessibility';
 
-var CELL_CONTENT_CLASS = 'text-content',
-    HEADERS_CLASS = 'headers',
-    NOWRAP_CLASS = 'nowrap',
-    ROW_CLASS_SELECTOR = '.dx-row',
-    HEADER_ROW_CLASS = 'dx-header-row',
-    COLUMN_LINES_CLASS = 'dx-column-lines',
-    CONTEXT_MENU_SORT_ASC_ICON = 'context-menu-sort-asc',
-    CONTEXT_MENU_SORT_DESC_ICON = 'context-menu-sort-desc',
-    CONTEXT_MENU_SORT_NONE_ICON = 'context-menu-sort-none',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    VISIBILITY_HIDDEN_CLASS = 'dx-visibility-hidden',
-    TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = 'dx-text-content-alignment-',
-    SORT_INDICATOR_CLASS = 'dx-sort-indicator',
-    SORT_INDEX_INDICATOR_CLASS = 'dx-sort-index-indicator',
-    HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter',
-    HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator',
-    MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
+const CELL_CONTENT_CLASS = 'text-content';
+const HEADERS_CLASS = 'headers';
+const NOWRAP_CLASS = 'nowrap';
+const ROW_CLASS_SELECTOR = '.dx-row';
+const HEADER_ROW_CLASS = 'dx-header-row';
+const COLUMN_LINES_CLASS = 'dx-column-lines';
+const CONTEXT_MENU_SORT_ASC_ICON = 'context-menu-sort-asc';
+const CONTEXT_MENU_SORT_DESC_ICON = 'context-menu-sort-desc';
+const CONTEXT_MENU_SORT_NONE_ICON = 'context-menu-sort-none';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const VISIBILITY_HIDDEN_CLASS = 'dx-visibility-hidden';
+const TEXT_CONTENT_ALIGNMENT_CLASS_PREFIX = 'dx-text-content-alignment-';
+const SORT_INDICATOR_CLASS = 'dx-sort-indicator';
+const SORT_INDEX_INDICATOR_CLASS = 'dx-sort-index-indicator';
+const HEADER_FILTER_CLASS_SELECTOR = '.dx-header-filter';
+const HEADER_FILTER_INDICATOR_CLASS = 'dx-header-filter-indicator';
+const MULTI_ROW_HEADER_CLASS = 'dx-header-multi-row';
 
 module.exports = {
     defaultOptions: function() {
@@ -44,22 +44,21 @@ module.exports = {
     },
     views: {
         columnHeadersView: columnsView.ColumnsView.inherit((function() {
-            var createCellContent = function(that, $cell, options) {
-                var showColumnLines,
-                    $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
+            const createCellContent = function(that, $cell, options) {
+                const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 that.setAria('role', 'presentation', $cellContent);
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
-                showColumnLines = that.option('showColumnLines');
+                const showColumnLines = that.option('showColumnLines');
                 return $cellContent[(showColumnLines || options.column.alignment === 'right') ? 'appendTo' : 'prependTo']($cell);
             };
 
-            var addCssClassesToCellContent = function(that, $cell, column, $cellContent) {
-                var $indicatorElements = that._getIndicatorElements($cell, true),
-                    $visibleIndicatorElements = that._getIndicatorElements($cell),
-                    indicatorCount = $indicatorElements && $indicatorElements.length,
-                    columnAlignment = that._getColumnAlignment(column.alignment);
+            function addCssClassesToCellContent(that, $cell, column, $cellContent) {
+                const $indicatorElements = that._getIndicatorElements($cell, true);
+                const $visibleIndicatorElements = that._getIndicatorElements($cell);
+                const indicatorCount = $indicatorElements && $indicatorElements.length;
+                const columnAlignment = that._getColumnAlignment(column.alignment);
 
                 $cellContent = $cellContent || $cell.children('.' + that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
@@ -69,14 +68,14 @@ module.exports = {
                     .toggleClass(SORT_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('sort')).length)
                     .toggleClass(SORT_INDEX_INDICATOR_CLASS, !!$visibleIndicatorElements.children().filter('.' + that._getIndicatorClassName('sortIndex')).length)
                     .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter('.' + that._getIndicatorClassName('headerFilter')).length);
-            };
+            }
 
             return {
                 _createTable: function() {
-                    var $table = this.callBase.apply(this, arguments);
+                    const $table = this.callBase.apply(this, arguments);
 
                     eventsEngine.on($table, 'mousedown selectstart', this.createAction(function(e) {
-                        var event = e.event;
+                        const event = e.event;
 
                         if(event.shiftKey) {
                             event.preventDefault();
@@ -91,11 +90,11 @@ module.exports = {
                 },
 
                 _getDefaultTemplate: function(column) {
-                    var that = this;
+                    const that = this;
 
                     return function($container, options) {
-                        var $content = column.command ? $container : createCellContent(that, $container, options),
-                            caption = column.command !== 'expand' && column.caption;
+                        const $content = column.command ? $container : createCellContent(that, $container, options);
+                        const caption = column.command !== 'expand' && column.caption;
 
                         if(caption) {
                             $content.text(caption);
@@ -110,15 +109,15 @@ module.exports = {
                 },
 
                 _processTemplate: function(template, options) {
-                    var that = this,
-                        resultTemplate,
-                        column = options.column,
-                        renderingTemplate = that.callBase(template);
+                    const that = this;
+                    let resultTemplate;
+                    const column = options.column;
+                    const renderingTemplate = that.callBase(template);
 
                     if(options.rowType === 'header' && renderingTemplate && column.headerCellTemplate && !column.command) {
                         resultTemplate = {
                             render: function(options) {
-                                var $content = createCellContent(that, options.container, options.model);
+                                const $content = createCellContent(that, options.container, options.model);
                                 renderingTemplate.render(extend({}, options, { container: $content }));
                             }
                         };
@@ -139,7 +138,7 @@ module.exports = {
                 },
 
                 _renderCell: function($row, options) {
-                    var $cell = this.callBase($row, options);
+                    const $cell = this.callBase($row, options);
 
                     if(options.row.rowType === 'header') {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
@@ -167,7 +166,7 @@ module.exports = {
                 },
 
                 _createRow: function(row) {
-                    var $row = this.callBase(row).toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
+                    const $row = this.callBase(row).toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
 
                     if(row.rowType === 'header') {
                         $row.addClass(HEADER_ROW_CLASS);
@@ -180,20 +179,20 @@ module.exports = {
                 },
 
                 _handleActionKeyDown: function(args) {
-                    var event = args.event,
-                        $target = $(event.target);
+                    const event = args.event;
+                    const $target = $(event.target);
 
                     this._lastActionElement = event.target;
 
                     if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-                        let headerFilterController = this.getController('headerFilter'),
-                            $column = $target.closest('td'),
-                            columnIndex = this.getColumnIndexByElement($column);
+                        const headerFilterController = this.getController('headerFilter');
+                        const $column = $target.closest('td');
+                        const columnIndex = this.getColumnIndexByElement($column);
                         if(columnIndex >= 0) {
                             headerFilterController.showHeaderFilterMenu(columnIndex, false);
                         }
                     } else {
-                        let $row = $target.closest(ROW_CLASS_SELECTOR);
+                        const $row = $target.closest(ROW_CLASS_SELECTOR);
                         this._processHeaderAction(event, $row);
                     }
 
@@ -201,8 +200,8 @@ module.exports = {
                 },
 
                 _renderCore: function() {
-                    var that = this,
-                        $container = that.element();
+                    const that = this;
+                    const $container = that.element();
 
                     if(that._tableElement && !that._dataController.isLoaded() && !that._hasRowElements) {
                         return;
@@ -225,7 +224,7 @@ module.exports = {
                 },
 
                 _renderRows: function() {
-                    var that = this;
+                    const that = this;
 
                     if(that._dataController.isLoaded() || that._hasRowElements) {
                         that.callBase.apply(that, arguments);
@@ -243,8 +242,8 @@ module.exports = {
                 },
 
                 _createCell: function(options) {
-                    var column = options.column,
-                        $cellElement = this.callBase.apply(this, arguments);
+                    const column = options.column;
+                    const $cellElement = this.callBase.apply(this, arguments);
 
                     column.rowspan > 1 && options.rowType === 'header' && $cellElement.attr('rowSpan', column.rowspan);
 
@@ -252,9 +251,9 @@ module.exports = {
                 },
 
                 _getRows: function() {
-                    var i,
-                        result = [],
-                        rowCount = this.getRowCount();
+                    let i;
+                    const result = [];
+                    const rowCount = this.getRowCount();
 
                     if(this.option('showColumnHeaders')) {
                         for(i = 0; i < rowCount; i++) {
@@ -272,8 +271,8 @@ module.exports = {
                 },
 
                 _columnOptionChanged: function(e) {
-                    var changeTypes = e.changeTypes,
-                        optionNames = e.optionNames;
+                    const changeTypes = e.changeTypes;
+                    const optionNames = e.optionNames;
 
                     if(changeTypes.grouping) {
                         this._isGroupingChanged = true;
@@ -292,7 +291,7 @@ module.exports = {
                 },
 
                 _alignCaptionByCenter: function($cell) {
-                    var $indicatorsContainer = this._getIndicatorContainer($cell, true);
+                    let $indicatorsContainer = this._getIndicatorContainer($cell, true);
 
                     if($indicatorsContainer && $indicatorsContainer.length) {
                         $indicatorsContainer.filter('.' + VISIBILITY_HIDDEN_CLASS).remove();
@@ -315,7 +314,7 @@ module.exports = {
                 },
 
                 _updateIndicator: function($cell, column, indicatorName) {
-                    var $indicatorElement = this.callBase.apply(this, arguments);
+                    const $indicatorElement = this.callBase.apply(this, arguments);
 
                     if(column.alignment === 'center') {
                         this._alignCaptionByCenter($cell);
@@ -327,7 +326,7 @@ module.exports = {
                 },
 
                 _getIndicatorContainer: function($cell, returnAll) {
-                    var $indicatorsContainer = this.callBase($cell);
+                    const $indicatorsContainer = this.callBase($cell);
 
                     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(':not(.' + VISIBILITY_HIDDEN_CLASS + ')');
                 },
@@ -337,8 +336,8 @@ module.exports = {
                 },
 
                 getHeadersRowHeight: function() {
-                    var $tableElement = this._getTableElement(),
-                        $headerRows = $tableElement && $tableElement.find('.' + HEADER_ROW_CLASS);
+                    const $tableElement = this._getTableElement();
+                    const $headerRows = $tableElement && $tableElement.find('.' + HEADER_ROW_CLASS);
 
                     return $headerRows && $headerRows.toArray().reduce(function(sum, headerRow) {
                         return sum + $(headerRow).height();
@@ -346,19 +345,19 @@ module.exports = {
                 },
 
                 getHeaderElement: function(index) {
-                    var columnElements = this.getColumnElements();
+                    const columnElements = this.getColumnElements();
 
                     return columnElements && columnElements.eq(index);
                 },
 
                 getColumnElements: function(index, bandColumnIndex) {
-                    var that = this,
-                        rowIndex,
-                        result,
-                        $cellElement,
-                        visibleColumns,
-                        columnsController = that._columnsController,
-                        rowCount = that.getRowCount();
+                    const that = this;
+                    let rowIndex;
+                    let result;
+                    let $cellElement;
+                    let visibleColumns;
+                    const columnsController = that._columnsController;
+                    const rowCount = that.getRowCount();
 
                     if(that.option('showColumnHeaders')) {
                         if(rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
@@ -379,22 +378,22 @@ module.exports = {
                 },
 
                 getColumnIndexByElement: function($cell) {
-                    let cellIndex = this.getCellIndex($cell),
-                        $row = $cell.closest('.dx-row'),
-                        rowIndex = $row[0].rowIndex,
-                        column = this.getColumns(rowIndex)[cellIndex];
+                    const cellIndex = this.getCellIndex($cell);
+                    const $row = $cell.closest('.dx-row');
+                    const rowIndex = $row[0].rowIndex;
+                    const column = this.getColumns(rowIndex)[cellIndex];
 
                     return column ? column.index : -1;
                 },
 
                 getVisibleColumnIndex: function(columnIndex, rowIndex) {
-                    var column = this.getColumns()[columnIndex];
+                    const column = this.getColumns()[columnIndex];
 
                     return column ? this._columnsController.getVisibleIndex(column.index, rowIndex) : -1;
                 },
 
                 getColumnWidths: function() {
-                    var $columnElements = this.getColumnElements();
+                    const $columnElements = this.getColumnElements();
 
                     if($columnElements && $columnElements.length) {
                         return this._getWidths($columnElements);
@@ -404,14 +403,14 @@ module.exports = {
                 },
 
                 allowDragging: function(column, sourceLocation, draggingPanels) {
-                    var i,
-                        rowIndex = column && this._columnsController.getRowIndex(column.index),
-                        columns = this.getColumns(rowIndex === 0 ? 0 : null),
-                        draggableColumnCount = 0,
-                        draggingPanel,
-                        allowDrag = function(column) {
-                            return column.allowReordering || column.allowGrouping || column.allowHiding;
-                        };
+                    let i;
+                    const rowIndex = column && this._columnsController.getRowIndex(column.index);
+                    const columns = this.getColumns(rowIndex === 0 ? 0 : null);
+                    let draggableColumnCount = 0;
+                    let draggingPanel;
+                    const allowDrag = function(column) {
+                        return column.allowReordering || column.allowGrouping || column.allowHiding;
+                    };
 
                     for(i = 0; i < columns.length; i++) {
                         if(allowDrag(columns[i])) {
@@ -436,9 +435,9 @@ module.exports = {
                 },
 
                 getBoundingRect: function() {
-                    var that = this,
-                        offset,
-                        $columnElements = that.getColumnElements();
+                    const that = this;
+                    let offset;
+                    const $columnElements = that.getColumnElements();
 
                     if($columnElements && $columnElements.length) {
                         offset = that._getTableElement().offset();
@@ -454,7 +453,7 @@ module.exports = {
                 },
 
                 getColumnCount: function() {
-                    var $columnElements = this.getColumnElements();
+                    const $columnElements = this.getColumnElements();
 
                     return $columnElements ? $columnElements.length : 0;
                 },
@@ -464,7 +463,7 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
-                    var that = this;
+                    const that = this;
 
                     switch(args.name) {
                         case 'showColumnHeaders':
@@ -483,10 +482,10 @@ module.exports = {
                 },
 
                 getContextMenuItems: function(options) {
-                    var that = this,
-                        column = options.column,
-                        onItemClick,
-                        sortingOptions;
+                    const that = this;
+                    const column = options.column;
+                    let onItemClick;
+                    let sortingOptions;
 
                     if(options.row && (options.row.rowType === 'header' || options.row.rowType === 'detailAdaptive')) {
                         sortingOptions = that.option('sorting');
@@ -511,22 +510,22 @@ module.exports = {
                 },
 
                 setRowsOpacity: function(columnIndex, value, rowIndex) {
-                    var that = this,
-                        i,
-                        columnElements,
-                        rowCount = that.getRowCount(),
-                        columns = that._columnsController.getColumns(),
-                        column = columns && columns[columnIndex],
-                        columnID = column && column.isBand && column.index,
-                        setColumnOpacity = function(index, column) {
-                            if(column.ownerBand === columnID) {
-                                columnElements.eq(index).css({ opacity: value });
+                    const that = this;
+                    let i;
+                    let columnElements;
+                    const rowCount = that.getRowCount();
+                    const columns = that._columnsController.getColumns();
+                    const column = columns && columns[columnIndex];
+                    const columnID = column && column.isBand && column.index;
+                    const setColumnOpacity = function(index, column) {
+                        if(column.ownerBand === columnID) {
+                            columnElements.eq(index).css({ opacity: value });
 
-                                if(column.isBand) {
-                                    that.setRowsOpacity(column.index, value, i + 1);
-                                }
+                            if(column.isBand) {
+                                that.setRowsOpacity(column.index, value, i + 1);
                             }
-                        };
+                        }
+                    };
 
                     if(isDefined(columnID)) {
                         rowIndex = rowIndex || 0;

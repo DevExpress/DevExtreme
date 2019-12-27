@@ -417,7 +417,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _initEditStrategy() {
-        let Strategy = MenuBaseEditStrategy;
+        const Strategy = MenuBaseEditStrategy;
         this._editStrategy = new Strategy(this);
     }
 
@@ -504,7 +504,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         if(nodes.length) {
             this.hasIcons = false;
 
-            let $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
+            const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
             let firstVisibleIndex = -1;
             let nextGroupFirstIndex = -1;
 
@@ -549,7 +549,6 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _renderItem(index, node, $nodeContainer, $nodeElement) {
         const items = this.option('items');
-        let $itemFrame;
 
         if(node.internalFields.item.visible === false) return;
         const $node = $nodeElement || this._createDOMElement($nodeContainer);
@@ -558,7 +557,7 @@ class MenuBase extends HierarchicalCollectionWidget {
             $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
         }
 
-        $itemFrame = super._renderItem(index, node.internalFields.item, $node);
+        const $itemFrame = super._renderItem(index, node.internalFields.item, $node);
 
         if(node.internalFields.item === this.option('selectedItem')) {
             $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);
@@ -693,9 +692,9 @@ class MenuBase extends HierarchicalCollectionWidget {
         switch(args.name) {
             case 'showSubmenuMode':
                 break;
-            case 'selectedItem':
-                var node = this._dataAdapter.getNodeByItem(args.value);
-                var selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
+            case 'selectedItem': {
+                const node = this._dataAdapter.getNodeByItem(args.value);
+                const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
 
                 if(node && node.internalFields.key !== selectedKey) {
                     if(node.selectable === false) break;
@@ -707,6 +706,7 @@ class MenuBase extends HierarchicalCollectionWidget {
                     this._updateSelectedItems();
                 }
                 break;
+            }
             case 'cssClass':
             case 'position':
             case 'selectByClick':

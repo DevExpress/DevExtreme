@@ -1,25 +1,25 @@
 /* global google */
 
-var $ = require('../../core/renderer'),
-    window = require('../../core/utils/window').getWindow(),
-    noop = require('../../core/utils/common').noop,
-    devices = require('../../core/devices'),
-    Promise = require('../../core/polyfills/promise'),
-    extend = require('../../core/utils/extend').extend,
-    map = require('../../core/utils/iterator').map,
-    DynamicProvider = require('./provider.dynamic'),
-    errors = require('../widget/ui.errors'),
-    Color = require('../../color'),
-    ajax = require('../../core/utils/ajax'),
-    isDefined = require('../../core/utils/type').isDefined;
+const $ = require('../../core/renderer');
+const window = require('../../core/utils/window').getWindow();
+const noop = require('../../core/utils/common').noop;
+const devices = require('../../core/devices');
+const Promise = require('../../core/polyfills/promise');
+const extend = require('../../core/utils/extend').extend;
+const map = require('../../core/utils/iterator').map;
+const DynamicProvider = require('./provider.dynamic');
+const errors = require('../widget/ui.errors');
+const Color = require('../../color');
+const ajax = require('../../core/utils/ajax');
+const isDefined = require('../../core/utils/type').isDefined;
 
-var GOOGLE_MAP_READY = '_googleScriptReady';
-var GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?callback=' + GOOGLE_MAP_READY;
-var INFO_WINDOW_CLASS = 'gm-style-iw';
+const GOOGLE_MAP_READY = '_googleScriptReady';
+let GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?callback=' + GOOGLE_MAP_READY;
+const INFO_WINDOW_CLASS = 'gm-style-iw';
 
-var CustomMarker;
+let CustomMarker;
 
-var initCustomMarkerClass = function() {
+const initCustomMarkerClass = function() {
     CustomMarker = function(options) {
         this._position = options.position;
         this._offset = options.offset;
@@ -38,7 +38,7 @@ var initCustomMarkerClass = function() {
     CustomMarker.prototype = new google.maps.OverlayView();
 
     CustomMarker.prototype.onAdd = function() {
-        var $pane = $(this.getPanes().overlayMouseTarget);
+        const $pane = $(this.getPanes().overlayMouseTarget);
         $pane.append(this._$overlayContainer);
 
         this._clickListener = google.maps.event.addDomListener(this._$overlayContainer.get(0), 'click', (function(e) {
@@ -56,7 +56,7 @@ var initCustomMarkerClass = function() {
     };
 
     CustomMarker.prototype.draw = function() {
-        var position = this.getProjection().fromLatLngToDivPixel(this._position);
+        const position = this.getProjection().fromLatLngToDivPixel(this._position);
 
         this._$overlayContainer.css({
             left: position.x + this._offset.left,
@@ -67,17 +67,17 @@ var initCustomMarkerClass = function() {
 };
 
 
-var googleMapsLoaded = function() {
+const googleMapsLoaded = function() {
     return window.google && window.google.maps;
 };
 
-var googleMapsLoader;
+let googleMapsLoader;
 
 
-var GoogleProvider = DynamicProvider.inherit({
+const GoogleProvider = DynamicProvider.inherit({
 
     _mapType: function(type) {
-        var mapTypes = {
+        const mapTypes = {
             hybrid: google.maps.MapTypeId.HYBRID,
             roadmap: google.maps.MapTypeId.ROADMAP,
             satellite: google.maps.MapTypeId.SATELLITE
@@ -86,7 +86,7 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     _movementMode: function(type) {
-        var movementTypes = {
+        const movementTypes = {
             driving: google.maps.TravelMode.DRIVING,
             walking: google.maps.TravelMode.WALKING
         };
@@ -95,7 +95,7 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _resolveLocation: function(location) {
         return new Promise(function(resolve) {
-            var latLng = this._getLatLng(location);
+            const latLng = this._getLatLng(location);
             if(latLng) {
                 resolve(new google.maps.LatLng(latLng.lat, latLng.lng));
             } else {
@@ -114,7 +114,7 @@ var GoogleProvider = DynamicProvider.inherit({
                 return;
             }
 
-            var geocoder = new google.maps.Geocoder();
+            const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ 'address': location }, function(results, status) {
                 if(status === google.maps.GeocoderStatus.OK) {
                     resolve(results[0].geometry.location);
@@ -165,7 +165,7 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _loadMapScript: function() {
         return new Promise(function(resolve) {
-            var key = this._keyOption('google');
+            const key = this._keyOption('google');
 
             window[GOOGLE_MAP_READY] = resolve;
             ajax.sendRequest({
@@ -184,7 +184,7 @@ var GoogleProvider = DynamicProvider.inherit({
     _init: function() {
         return new Promise(function(resolve) {
             this._resolveLocation(this._option('center')).then(function(center) {
-                var showDefaultUI = this._option('controls');
+                const showDefaultUI = this._option('controls');
 
                 this._map = new google.maps.Map(this._$container[0], {
                     zoom: this._option('zoom'),
@@ -192,7 +192,7 @@ var GoogleProvider = DynamicProvider.inherit({
                     disableDefaultUI: !showDefaultUI
                 });
 
-                var listener = google.maps.event.addListener(this._map, 'idle', function() {
+                const listener = google.maps.event.addListener(this._map, 'idle', function() {
                     resolve(listener);
                 });
             }.bind(this));
@@ -207,10 +207,10 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     _boundsChangeHandler: function() {
-        var bounds = this._map.getBounds();
+        const bounds = this._map.getBounds();
         this._option('bounds', this._normalizeLocationRect(bounds));
 
-        var center = this._map.getCenter();
+        const center = this._map.getCenter();
         this._option('center', this._normalizeLocation(center));
 
         if(!this._preventZoomChangeEvent) {
@@ -223,7 +223,7 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     updateDimensions: function() {
-        var center = this._option('center');
+        const center = this._option('center');
         google.maps.event.trigger(this._map, 'resize');
         this._option('center', center);
 
@@ -241,7 +241,7 @@ var GoogleProvider = DynamicProvider.inherit({
             this._resolveLocation(this._option('bounds.northEast')),
             this._resolveLocation(this._option('bounds.southWest'))
         ]).then(function(result) {
-            var bounds = new google.maps.LatLngBounds();
+            const bounds = new google.maps.LatLngBounds();
             bounds.extend(result[0]);
             bounds.extend(result[1]);
 
@@ -263,7 +263,7 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     updateControls: function() {
-        var showDefaultUI = this._option('controls');
+        const showDefaultUI = this._option('controls');
 
         this._map.setOptions({
             disableDefaultUI: !showDefaultUI
@@ -273,8 +273,8 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     isEventsCanceled: function(e) {
-        var gestureHandling = this._map && this._map.get('gestureHandling');
-        var isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
+        const gestureHandling = this._map && this._map.get('gestureHandling');
+        const isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
         if(isInfoWindowContent || devices.real().deviceType !== 'desktop' && gestureHandling === 'cooperative') {
             return false;
         }
@@ -283,7 +283,7 @@ var GoogleProvider = DynamicProvider.inherit({
 
     _renderMarker: function(options) {
         return this._resolveLocation(options.location).then(function(location) {
-            var marker;
+            let marker;
             if(options.html) {
                 marker = new CustomMarker({
                     map: this._map,
@@ -302,11 +302,11 @@ var GoogleProvider = DynamicProvider.inherit({
                 });
             }
 
-            var infoWindow = this._renderTooltip(marker, options.tooltip);
-            var listener;
+            const infoWindow = this._renderTooltip(marker, options.tooltip);
+            let listener;
             if(options.onClick || options.tooltip) {
-                var markerClickAction = this._mapWidget._createAction(options.onClick || noop),
-                    markerNormalizedLocation = this._normalizeLocation(location);
+                const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+                const markerNormalizedLocation = this._normalizeLocation(location);
 
                 listener = google.maps.event.addListener(marker, 'click', function() {
                     markerClickAction({
@@ -334,7 +334,7 @@ var GoogleProvider = DynamicProvider.inherit({
 
         options = this._parseTooltipOptions(options);
 
-        var infoWindow = new google.maps.InfoWindow({
+        const infoWindow = new google.maps.InfoWindow({
             content: options.text
         });
         if(options.visible) {
@@ -356,13 +356,13 @@ var GoogleProvider = DynamicProvider.inherit({
             return this._resolveLocation(point);
         }.bind(this))).then(function(locations) {
             return new Promise(function(resolve) {
-                var origin = locations.shift(),
-                    destination = locations.pop(),
-                    waypoints = map(locations, function(location) {
-                        return { location: location, stopover: true };
-                    });
+                const origin = locations.shift();
+                const destination = locations.pop();
+                const waypoints = map(locations, function(location) {
+                    return { location: location, stopover: true };
+                });
 
-                var request = {
+                const request = {
                     origin: origin,
                     destination: destination,
                     waypoints: waypoints,
@@ -372,21 +372,21 @@ var GoogleProvider = DynamicProvider.inherit({
 
                 new google.maps.DirectionsService().route(request, function(response, status) {
                     if(status === google.maps.DirectionsStatus.OK) {
-                        var color = new Color(options.color || this._defaultRouteColor()).toHex(),
-                            directionOptions = {
-                                directions: response,
-                                map: this._map,
-                                suppressMarkers: true,
-                                preserveViewport: true,
-                                polylineOptions: {
-                                    strokeWeight: options.weight || this._defaultRouteWeight(),
-                                    strokeOpacity: options.opacity || this._defaultRouteOpacity(),
-                                    strokeColor: color
-                                }
-                            };
+                        const color = new Color(options.color || this._defaultRouteColor()).toHex();
+                        const directionOptions = {
+                            directions: response,
+                            map: this._map,
+                            suppressMarkers: true,
+                            preserveViewport: true,
+                            polylineOptions: {
+                                strokeWeight: options.weight || this._defaultRouteWeight(),
+                                strokeOpacity: options.opacity || this._defaultRouteOpacity(),
+                                strokeColor: color
+                            }
+                        };
 
-                        var route = new google.maps.DirectionsRenderer(directionOptions),
-                            bounds = response.routes[0].bounds;
+                        const route = new google.maps.DirectionsRenderer(directionOptions);
+                        const bounds = response.routes[0].bounds;
 
                         resolve({
                             instance: route,
@@ -412,13 +412,13 @@ var GoogleProvider = DynamicProvider.inherit({
         this._updateBounds();
 
         if(this._bounds && this._option('autoAdjust')) {
-            var zoomBeforeFitting = this._map.getZoom();
+            const zoomBeforeFitting = this._map.getZoom();
             this._preventZoomChangeEvent = true;
 
             this._map.fitBounds(this._bounds);
             this._boundsChangeHandler();
 
-            var zoomAfterFitting = this._map.getZoom();
+            const zoomAfterFitting = this._map.getZoom();
             if(zoomBeforeFitting < zoomAfterFitting) {
                 this._map.setZoom(zoomBeforeFitting);
             } else {

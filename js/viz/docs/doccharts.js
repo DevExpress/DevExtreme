@@ -4,7 +4,7 @@
 * @module viz/chart
 * @export default
 */
-var dxChart = {
+const dxChart = {
     /**
     * @name dxChartOptions.seriesTemplate
     * @type object
@@ -2071,7 +2071,7 @@ var dxChart = {
 * @module viz/pie_chart
 * @export default
 */
-var dxPieChart = {/**
+const dxPieChart = {/**
     * @name dxPieChartMethods.getInnerRadius
     * @publicName getInnerRadius()
     * @return number
@@ -2247,7 +2247,7 @@ var dxPieChart = {/**
 * @module viz/polar_chart
 * @export default
 */
-var dxPolarChart = {
+const dxPolarChart = {
     /**
     * @name dxPolarChartOptions.seriesTemplate
     * @type object
@@ -3311,7 +3311,7 @@ var dxPolarChart = {
 * @hidden
 * @inherits BaseWidget, DataHelperMixin
 */
-var BaseChart = {
+const BaseChart = {
     /**
     * @name BaseChartOptions.onDone
     * @extends Action
@@ -3601,7 +3601,7 @@ var BaseChart = {
 * @name dxChartCommonAnnotationConfig
 * @type object
 */
-var dxChartCommonAnnotationConfig = {
+const dxChartCommonAnnotationConfig = {
     /**
     * @name dxChartCommonAnnotationConfig.type
     * @type Enums.AnnotationType
@@ -3889,7 +3889,7 @@ var dxChartCommonAnnotationConfig = {
 * @type object
 * @inherits dxChartCommonAnnotationConfig
 */
-var dxChartAnnotationConfig = {
+const dxChartAnnotationConfig = {
     /**
     * @name dxChartAnnotationConfig.name
     * @type string
@@ -3903,7 +3903,7 @@ var dxChartAnnotationConfig = {
 * @type object
 * @inherits dxChartCommonAnnotationConfig
 */
-var dxPolarChartCommonAnnotationConfig = {
+const dxPolarChartCommonAnnotationConfig = {
     /**
     * @name dxPolarChartCommonAnnotationConfig.radius
     * @type number
@@ -3923,7 +3923,7 @@ var dxPolarChartCommonAnnotationConfig = {
 * @type object
 * @inherits dxPolarChartCommonAnnotationConfig
 */
-var dxPolarChartAnnotationConfig = {
+const dxPolarChartAnnotationConfig = {
     /**
     * @name dxPolarChartAnnotationConfig.name
     * @type string

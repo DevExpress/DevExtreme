@@ -16,9 +16,9 @@ import {
     SCROLLABLE_NATIVE_CLASS
 } from './scrollable.constants.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
                 <div class="content2"></div>\
@@ -37,10 +37,10 @@ var moduleConfig = {
     }
 };
 
-var getScrollOffset = function($scrollable) {
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        location = translator.locate($content);
+const getScrollOffset = function($scrollable) {
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const location = translator.locate($content);
 
     return {
         top: location.top - $container.scrollTop(),
@@ -51,7 +51,7 @@ var getScrollOffset = function($scrollable) {
 QUnit.module('useNative', moduleConfig);
 
 QUnit.test('scrollable render', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
 
@@ -59,27 +59,27 @@ QUnit.test('scrollable render', function(assert) {
 });
 
 QUnit.test('simulated scroll does not work when using native', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
 
-    var mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start(),
-        distance = -10,
-        startLocation = getScrollOffset($scrollable);
+    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
+    const distance = -10;
+    const startLocation = getScrollOffset($scrollable);
 
     mouse
         .down()
         .move(0, distance)
         .up();
 
-    var location = getScrollOffset($scrollable);
+    const location = getScrollOffset($scrollable);
     assert.equal(location.top, startLocation.top, 'scroll does not move');
 });
 
 QUnit.test('scroll action fired for simulated scroller during native scroll', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         inertiaEnabled: false,
         useNative: false,
         onScroll: function(args) {
@@ -94,16 +94,16 @@ QUnit.test('scroll action fired for simulated scroller during native scroll', fu
 QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
     assert.expect(2);
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         onScroll: function() {
             assert.ok(true, 'scroll fired');
         }
     });
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    var pointer = pointerMock($container).start().wheel(10);
+    const pointer = pointerMock($container).start().wheel(10);
 
     $container.scrollTop(10);
     pointer.wheel(10);
@@ -112,14 +112,14 @@ QUnit.test('scroll action fired when scrollable scrolling', function(assert) {
 QUnit.test('scroll action does not fired when scroll location does not changed', function(assert) {
     assert.expect(1);
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         onScroll: function() {
             assert.ok(true, 'scroll fired');
         }
     });
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     pointerMock($container)
         .start()
@@ -128,10 +128,10 @@ QUnit.test('scroll action does not fired when scroll location does not changed',
 });
 
 QUnit.test('scrollBy', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var instance = $scrollable.dxScrollable('instance');
+    const instance = $scrollable.dxScrollable('instance');
 
     instance.scrollBy(10);
     assert.equal(instance.scrollTop(), 10, 'container has correctly position');
@@ -141,10 +141,10 @@ QUnit.test('scrollBy', function(assert) {
 });
 
 QUnit.test('scrollTo', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var instance = $scrollable.dxScrollable('instance');
+    const instance = $scrollable.dxScrollable('instance');
 
     $scrollable.dxScrollable('scrollTo', 10);
     assert.equal(instance.scrollTop(), 10, 'container has correctly position');
@@ -154,7 +154,7 @@ QUnit.test('scrollTo', function(assert) {
 });
 
 QUnit.test('useSimulatedScrollbar = false do not create scrollbars when useNative true', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: false
     });
@@ -163,7 +163,7 @@ QUnit.test('useSimulatedScrollbar = false do not create scrollbars when useNativ
 });
 
 QUnit.test('useSimulatedScrollbar = true create scrollbars when useNative true', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
@@ -172,7 +172,7 @@ QUnit.test('useSimulatedScrollbar = true create scrollbars when useNative true',
 });
 
 QUnit.test('useSimulatedScrollbar = false remove old scrollbars when useNative true', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
@@ -183,7 +183,7 @@ QUnit.test('useSimulatedScrollbar = false remove old scrollbars when useNative t
 });
 
 QUnit.test('simulatedScrollbar direction', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
@@ -203,14 +203,14 @@ QUnit.test('simulatedScrollbar direction', function(assert) {
 });
 
 QUnit.test('simulatedScrollbar visibility', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
 
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS),
-        scrollbar = Scrollbar.getInstance($scrollbar);
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS);
+    const scrollbar = Scrollbar.getInstance($scrollbar);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     assert.equal(scrollbar.option('visible'), false, 'on start thumb is hidden');
 
@@ -222,18 +222,18 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
 });
 
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {
-    var containerHeight = 50,
-        contentHeight = 100,
-        scrollHeight = (containerHeight / contentHeight) * containerHeight;
+    const containerHeight = 50;
+    const contentHeight = 100;
+    const scrollHeight = (containerHeight / contentHeight) * containerHeight;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -244,19 +244,19 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
 });
 
 QUnit.test('moving scrollable moves scrollbar', function(assert) {
-    var containerHeight = 50,
-        contentHeight = 100,
-        distance = 10,
-        scrollbarDistance = distance * (containerHeight / contentHeight);
+    const containerHeight = 50;
+    const contentHeight = 100;
+    const distance = 10;
+    const scrollbarDistance = distance * (containerHeight / contentHeight);
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         useSimulatedScrollbar: true
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
 
     $container.height(containerHeight);
     $content.height(contentHeight);
@@ -265,18 +265,18 @@ QUnit.test('moving scrollable moves scrollbar', function(assert) {
     $scrollable.dxScrollable('scrollTo', 2 * distance);
     $container.trigger('scroll');
 
-    var location = translator.locate($scroll);
+    const location = translator.locate($scroll);
     assert.equal(location.top, 2 * scrollbarDistance, 'scrollbar follows pointer everytime');
 });
 
 QUnit.test('scrollbar appears for simulated scrolling even when useSimulatedScrollbar is false', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         useSimulatedScrollbar: false,
         inertiaEnabled: false
     });
 
-    var scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
+    const scrollbar = Scrollbar.getInstance($scrollable.find('.' + SCROLLBAR_VERTICAL_CLASS));
 
     assert.equal(scrollbar.option('visible'), false, 'scrollbar is hidden before scrolling');
 
@@ -289,10 +289,10 @@ QUnit.test('scrollbar appears for simulated scrolling even when useSimulatedScro
 });
 
 QUnit.test('scrollOffset', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var instance = $scrollable.dxScrollable('instance');
+    const instance = $scrollable.dxScrollable('instance');
 
     instance.scrollTo(10);
 
@@ -300,38 +300,38 @@ QUnit.test('scrollOffset', function(assert) {
 });
 
 QUnit.test('scrollHeight', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
+    const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
     $content.css('padding', '10px');
 
     assert.equal($scrollable.dxScrollable('scrollHeight'), $content.outerHeight() - 2 * $scrollable.dxScrollable('option', 'pushBackValue'), 'scroll height equals to content height');
 });
 
 QUnit.test('clientHeight', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     assert.equal($scrollable.dxScrollable('clientHeight'), $container.height(), 'client height equals to container height');
 });
 
 QUnit.test('scrollWidth', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
+    const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
 
     assert.equal($scrollable.dxScrollable('scrollWidth'), $content.width(), 'scroll width equals to content width');
 });
 
 QUnit.test('clientWidth', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true
     });
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     $container.css({ overflowY: 'hidden' });
 
@@ -339,8 +339,8 @@ QUnit.test('clientWidth', function(assert) {
 });
 
 QUnit.test('scroll reachedTop true only at the top', function(assert) {
-    var currentScrollTopState = true;
-    var $scrollable = $('#scrollable').dxScrollable({
+    let currentScrollTopState = true;
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         onScroll: function(e) {
             assert.equal(e.reachedLeft, undefined, 'reached left is not defined');
@@ -349,7 +349,7 @@ QUnit.test('scroll reachedTop true only at the top', function(assert) {
         }
     });
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
     $container.trigger('scroll');
 
     currentScrollTopState = false;
@@ -362,8 +362,8 @@ QUnit.test('scroll reachedTop true only at the top', function(assert) {
 }),
 
 QUnit.test('scroll reachedBottom true only at the bottom', function(assert) {
-    var currentScrollBottomState = false;
-    var $scrollable = $('#scrollable').dxScrollable({
+    let currentScrollBottomState = false;
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: true,
         onScroll: function(e) {
             assert.equal(e.reachedLeft, undefined, 'reached left is not defined');
@@ -371,10 +371,10 @@ QUnit.test('scroll reachedBottom true only at the bottom', function(assert) {
             assert.equal(e.reachedBottom, currentScrollBottomState, 'reached bottom is correct');
         }
     });
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    var $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
-    var containerSize = $container.prop('clientHeight');
-    var contentSize = $content.outerHeight();
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
+    const containerSize = $container.prop('clientHeight');
+    const contentSize = $content.outerHeight();
 
     $container.trigger('scroll');
 
@@ -388,9 +388,9 @@ QUnit.test('scroll reachedBottom true only at the bottom', function(assert) {
 });
 
 QUnit.test('scroll reachedLeft true only at the left border', function(assert) {
-    var currentScrollLeftState = true;
+    let currentScrollLeftState = true;
 
-    var $scrollable = $('#scrollable').width(100);
+    const $scrollable = $('#scrollable').width(100);
     $scrollable.children().width(200);
 
     $scrollable.dxScrollable({
@@ -403,7 +403,7 @@ QUnit.test('scroll reachedLeft true only at the left border', function(assert) {
         }
     });
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
     $container.trigger('scroll');
 
@@ -417,9 +417,9 @@ QUnit.test('scroll reachedLeft true only at the left border', function(assert) {
 });
 
 QUnit.test('scroll reachedRight true only at the right border', function(assert) {
-    var currentScrollLeftState = false;
+    let currentScrollLeftState = false;
 
-    var $scrollable = $('#scrollable').width(100);
+    const $scrollable = $('#scrollable').width(100);
     $scrollable.children().width(200);
 
     $scrollable.dxScrollable({
@@ -432,10 +432,10 @@ QUnit.test('scroll reachedRight true only at the right border', function(assert)
         }
     });
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    var $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
-    var containerSize = $container.prop('clientWidth');
-    var contentSize = $content.outerWidth();
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const $content = $('.' + SCROLLABLE_CONTENT_CLASS, $scrollable);
+    const containerSize = $container.prop('clientWidth');
+    const contentSize = $content.outerWidth();
 
     $container.trigger('scroll');
 
@@ -450,12 +450,12 @@ QUnit.test('scroll reachedRight true only at the right border', function(assert)
 });
 
 QUnit.test('scroll args are correct', function(assert) {
-    var top = true,
-        left = true,
-        right = false,
-        bottom = false;
-    var lastScrollEventArgs;
-    var $scrollable = $('#scrollable').width(100);
+    let top = true;
+    let left = true;
+    let right = false;
+    let bottom = false;
+    let lastScrollEventArgs;
+    const $scrollable = $('#scrollable').width(100);
     $scrollable.children().width(200);
 
     $scrollable.dxScrollable({
@@ -466,18 +466,18 @@ QUnit.test('scroll args are correct', function(assert) {
         }
     });
 
-    var checkLastScrollEvent = function() {
+    const checkLastScrollEvent = function() {
         assert.equal(lastScrollEventArgs.reachedTop, top, 'reached top is correct');
         assert.equal(lastScrollEventArgs.reachedRight, right, 'reached right is correct');
         assert.equal(lastScrollEventArgs.reachedBottom, bottom, 'reached bottom is correct');
         assert.equal(lastScrollEventArgs.reachedLeft, left, 'reached left is correct');
     };
 
-    var $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable),
-        containerWidth = $container.prop('clientWidth'),
-        contentWidth = $container.prop('scrollWidth'),
-        containerHeight = $container.prop('clientHeight'),
-        contentHeight = $container.prop('scrollHeight');
+    const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollable);
+    const containerWidth = $container.prop('clientWidth');
+    const contentWidth = $container.prop('scrollWidth');
+    const containerHeight = $container.prop('clientHeight');
+    const contentHeight = $container.prop('scrollHeight');
 
     assert.ok(!lastScrollEventArgs, 'scroll was not triggered on start');
 

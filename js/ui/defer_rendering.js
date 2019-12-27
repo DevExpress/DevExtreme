@@ -1,34 +1,34 @@
-var $ = require('../core/renderer'),
-    domAdapter = require('../core/dom_adapter'),
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    eventsEngine = require('../events/core/events_engine'),
-    registerComponent = require('../core/component_registrator'),
-    commonUtils = require('../core/utils/common'),
-    extend = require('../core/utils/extend').extend,
-    each = require('../core/utils/iterator').each,
-    domUtils = require('../core/utils/dom'),
-    TransitionExecutorModule = require('../animation/transition_executor/transition_executor'),
-    Widget = require('./widget/ui.widget'),
-    LoadIndicator = require('./load_indicator'),
-    isPromise = require('../core/utils/type').isPromise,
-    deferredUtils = require('../core/utils/deferred'),
-    Deferred = deferredUtils.Deferred;
+const $ = require('../core/renderer');
+const domAdapter = require('../core/dom_adapter');
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const eventsEngine = require('../events/core/events_engine');
+const registerComponent = require('../core/component_registrator');
+const commonUtils = require('../core/utils/common');
+const extend = require('../core/utils/extend').extend;
+const each = require('../core/utils/iterator').each;
+const domUtils = require('../core/utils/dom');
+const TransitionExecutorModule = require('../animation/transition_executor/transition_executor');
+const Widget = require('./widget/ui.widget');
+const LoadIndicator = require('./load_indicator');
+const isPromise = require('../core/utils/type').isPromise;
+const deferredUtils = require('../core/utils/deferred');
+const Deferred = deferredUtils.Deferred;
 
-var WIDGET_CLASS = 'dx-widget',
-    DEFER_RENDERING_CLASS = 'dx-deferrendering',
-    PENDING_RENDERING_CLASS = 'dx-pending-rendering',
-    PENDING_RENDERING_MANUAL_CLASS = 'dx-pending-rendering-manual',
-    PENDING_RENDERING_ACTIVE_CLASS = 'dx-pending-rendering-active',
-    VISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-visible-while-pending-rendering',
-    INVISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-invisible-while-pending-rendering',
-    LOADINDICATOR_CONTAINER_CLASS = 'dx-loadindicator-container',
-    DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS = 'dx-deferrendering-loadindicator-container',
-    DEFER_DEFER_RENDERING_LOAD_INDICATOR = 'dx-deferrendering-load-indicator',
+const WIDGET_CLASS = 'dx-widget';
+const DEFER_RENDERING_CLASS = 'dx-deferrendering';
+const PENDING_RENDERING_CLASS = 'dx-pending-rendering';
+const PENDING_RENDERING_MANUAL_CLASS = 'dx-pending-rendering-manual';
+const PENDING_RENDERING_ACTIVE_CLASS = 'dx-pending-rendering-active';
+const VISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-visible-while-pending-rendering';
+const INVISIBLE_WHILE_PENDING_RENDERING_CLASS = 'dx-invisible-while-pending-rendering';
+const LOADINDICATOR_CONTAINER_CLASS = 'dx-loadindicator-container';
+const DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS = 'dx-deferrendering-loadindicator-container';
+const DEFER_DEFER_RENDERING_LOAD_INDICATOR = 'dx-deferrendering-load-indicator';
 
-    ANONYMOUS_TEMPLATE_NAME = 'content',
+const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-    ACTIONS = ['onRendered', 'onShown'];
+const ACTIONS = ['onRendered', 'onShown'];
 
 /**
 * @name dxDeferRendering
@@ -36,7 +36,7 @@ var WIDGET_CLASS = 'dx-widget',
 * @module ui/defer_rendering
 * @export default
 */
-var DeferRendering = Widget.inherit({
+const DeferRendering = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -101,11 +101,11 @@ var DeferRendering = Widget.inherit({
     },
 
     _initRender: function() {
-        var that = this,
-            $element = this.$element(),
-            renderWhen = this.option('renderWhen');
+        const that = this;
+        const $element = this.$element();
+        const renderWhen = this.option('renderWhen');
 
-        var doRender = function() {
+        const doRender = function() {
             return that._renderDeferredContent();
         };
 
@@ -146,9 +146,9 @@ var DeferRendering = Widget.inherit({
     },
 
     _renderDeferredContent: function() {
-        var that = this,
-            $element = this.$element(),
-            result = new Deferred();
+        const that = this;
+        const $element = this.$element();
+        const result = new Deferred();
 
         $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
@@ -157,7 +157,7 @@ var DeferRendering = Widget.inherit({
         this._renderTask = commonUtils.executeAsync(function() {
             that._renderImpl()
                 .done(function() {
-                    var shownArgs = { element: $element };
+                    const shownArgs = { element: $element };
                     that._actions.onShown([shownArgs]);
                     result.resolve(shownArgs);
                 })
@@ -170,7 +170,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _isElementInViewport: function(element) {
-        var rect = element.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
 
         return rect.bottom >= 0 &&
             rect.right >= 0 &&
@@ -179,11 +179,11 @@ var DeferRendering = Widget.inherit({
     },
 
     _animate: function() {
-        var that = this,
-            $element = this.$element(),
-            animation = windowUtils.hasWindow() && this.option('animation'),
-            staggerItemSelector = this.option('staggerItemSelector'),
-            animatePromise;
+        const that = this;
+        const $element = this.$element();
+        const animation = windowUtils.hasWindow() && this.option('animation');
+        const staggerItemSelector = this.option('staggerItemSelector');
+        let animatePromise;
 
         that.transitionExecutor.stop();
 
@@ -206,12 +206,12 @@ var DeferRendering = Widget.inherit({
     },
 
     _renderImpl: function() {
-        var $element = this.$element(),
-            renderedArgs = {
-                element: $element
-            };
+        const $element = this.$element();
+        const renderedArgs = {
+            element: $element
+        };
 
-        var contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
+        const contentTemplate = this._getTemplate(this._templateManager.anonymousTemplateName);
 
         if(contentTemplate) {
             contentTemplate.render({
@@ -229,8 +229,8 @@ var DeferRendering = Widget.inherit({
     },
 
     _setLoadingState: function() {
-        var $element = this.$element(),
-            hasCustomLoadIndicator = !!$element.find('.' + VISIBLE_WHILE_PENDING_RENDERING_CLASS).length;
+        const $element = this.$element();
+        const hasCustomLoadIndicator = !!$element.find('.' + VISIBLE_WHILE_PENDING_RENDERING_CLASS).length;
 
         $element.addClass(PENDING_RENDERING_CLASS);
         if(!hasCustomLoadIndicator) {
@@ -254,7 +254,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _setRenderedState: function() {
-        var $element = this.$element();
+        const $element = this.$element();
 
         if(this._$loadIndicator) {
             this._$loadIndicator.remove();
@@ -267,8 +267,8 @@ var DeferRendering = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value,
-            previousValue = args.previousValue;
+        const value = args.value;
+        const previousValue = args.previousValue;
 
         switch(args.name) {
             case 'renderWhen':
@@ -289,7 +289,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _renderOrAnimate: function() {
-        var result;
+        let result;
 
         if(this._isRendered) {
             this._setRenderedState();

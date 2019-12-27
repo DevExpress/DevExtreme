@@ -11,7 +11,7 @@ import arrayUtils from './array_utils';
 * @module data/array_store
 * @export default
 */
-var ArrayStore = Store.inherit({
+const ArrayStore = Store.inherit({
     ctor: function(options) {
         if(Array.isArray(options)) {
             options = { data: options };
@@ -21,7 +21,7 @@ var ArrayStore = Store.inherit({
 
         this.callBase(options);
 
-        var initialArray = options.data;
+        const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
             throw errors.Error('E4006');
         }
@@ -45,7 +45,7 @@ var ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        var index = arrayUtils.indexByKey(this, this._array, key);
+        const index = arrayUtils.indexByKey(this, this._array, key);
 
         if(index === -1) {
             return rejectedPromise(errors.Error('E4009'));

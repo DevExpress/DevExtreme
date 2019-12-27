@@ -11,22 +11,22 @@ import { extend } from '../../core/utils/extend';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { isElementInCurrentGrid } from './ui.grid_core.utils';
 
-var EDITOR_INLINE_BLOCK = 'dx-editor-inline-block',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    FOCUS_OVERLAY_CLASS = 'focus-overlay',
-    CONTENT_CLASS = 'content',
-    FOCUSED_ELEMENT_CLASS = 'dx-focused',
-    ROW_CLASS = 'dx-row',
-    MODULE_NAMESPACE = 'dxDataGridEditorFactory',
-    UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEvent.name].join(' '), MODULE_NAMESPACE),
-    POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target',
-    POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none',
-    DX_HIDDEN = 'dx-hidden';
+const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const FOCUS_OVERLAY_CLASS = 'focus-overlay';
+const CONTENT_CLASS = 'content';
+const FOCUSED_ELEMENT_CLASS = 'dx-focused';
+const ROW_CLASS = 'dx-row';
+const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
+const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEvent.name].join(' '), MODULE_NAMESPACE);
+const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
+const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
+const DX_HIDDEN = 'dx-hidden';
 
-var EditorFactory = modules.ViewController.inherit({
+const EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
-        const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus',
-            focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus`;
+        const rowSelector = this.option('focusedRowEnabled') ? 'tr[tabindex]:focus' : 'tr[tabindex]:not(.dx-data-row):focus';
+        const focusedElementSelector = `td[tabindex]:focus, ${rowSelector}, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus`;
 
         // T181706
         return $dataGridElement.find(focusedElementSelector);
@@ -37,10 +37,10 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocusCore: function() {
-        var $focus = this._$focusedElement,
-            $dataGridElement = this.component && this.component.$element(),
-            $focusCell,
-            hideBorders;
+        let $focus = this._$focusedElement;
+        const $dataGridElement = this.component && this.component.$element();
+        let $focusCell;
+        let hideBorders;
 
         if($dataGridElement) {
             // this selector is specific to IE
@@ -64,8 +64,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocus: function(e) {
-        var that = this,
-            isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+        const that = this;
+        const isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
         that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 
@@ -101,7 +101,7 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     focus: function($element, hideBorder) {
-        var that = this;
+        const that = this;
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -126,8 +126,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     renderFocusOverlay: function($element, hideBorder) {
-        var that = this,
-            focusOverlayPosition;
+        const that = this;
+        let focusOverlayPosition;
 
         if(!isElementInCurrentGrid(this, $element)) {
             return;
@@ -141,9 +141,9 @@ var EditorFactory = modules.ViewController.inherit({
             that._$focusOverlay.addClass(DX_HIDDEN);
         } else if($element.length) {
             // align "left bottom" for IE, align "right bottom" for Mozilla
-            var align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top',
-                $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS)),
-                elemCoord = $element[0].getBoundingClientRect();
+            const align = browser.msie ? 'left bottom' : browser.mozilla ? 'right bottom' : 'left top';
+            const $content = $element.closest('.' + that.addWidgetPrefix(CONTENT_CLASS));
+            const elemCoord = $element[0].getBoundingClientRect();
 
             that._$focusOverlay
                 .removeClass(DX_HIDDEN)
@@ -167,7 +167,7 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     resize: function() {
-        var $focusedElement = this._$focusedElement;
+        const $focusedElement = this._$focusedElement;
 
         if($focusedElement) {
             this.focus($focusedElement);
@@ -191,8 +191,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _attachContainerEventHandlers: function() {
-        var that = this,
-            $container = that.component && that.component.$element();
+        const that = this;
+        const $container = that.component && that.component.$element();
 
         if($container) {
             // T179518
@@ -205,10 +205,10 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _focusOverlayEventProxy: function(e) {
-        var $target = $(e.target),
-            $currentTarget = $(e.currentTarget),
-            element,
-            needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
+        const $target = $(e.target);
+        const $currentTarget = $(e.currentTarget);
+        let element;
+        const needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
         if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 

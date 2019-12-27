@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    ko = require('knockout');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const ko = require('knockout');
 
 require('ui/button');
 require('ui/tree_view');
 require('integration/knockout');
 
 QUnit.test('T198402: Binding to properties of the view model not working from within a dxTreeView itemTemplate', function(assert) {
-    var $element = $('<div data-bind=\'dxTreeView: { dataSource: dataSource, itemTemplate: itemTemplate } \'></div>').appendTo('#qunit-fixture');
-    var onClickSpy = sinon.spy(noop);
-    var viewModel = {
+    const $element = $('<div data-bind=\'dxTreeView: { dataSource: dataSource, itemTemplate: itemTemplate } \'></div>').appendTo('#qunit-fixture');
+    const onClickSpy = sinon.spy(noop);
+    const viewModel = {
         dataSource: ko.observableArray([
             { Id: 1, Name: 'Name1' },
             { Id: 2, Name: 'Name2' },

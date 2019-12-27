@@ -12,7 +12,7 @@ tiling.addAlgorithm('stub', stubAlgorithm);
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
 export function createFunnel(options) {
-    var defaultOptions = {
+    const defaultOptions = {
         legend: {
             visible: false
         },
@@ -24,7 +24,7 @@ export function createFunnel(options) {
 
 export const environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
 
         stubAlgorithm.normalizeValues.reset();
@@ -61,7 +61,7 @@ function checkNumbersWithError(actual, expected, error) {
 }
 
 QUnit.assert.checkItem = function(actual, expected, error, message) {
-    var check = true, i;
+    let check = true; let i;
     if(!error) {
         error = 0.1;
     }

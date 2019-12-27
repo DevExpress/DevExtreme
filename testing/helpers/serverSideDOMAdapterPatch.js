@@ -1,16 +1,16 @@
-var domAdapter = require('core/dom_adapter');
-var readyCallbacks = require('core/utils/ready_callbacks');
+const domAdapter = require('core/dom_adapter');
+const readyCallbacks = require('core/utils/ready_callbacks');
 
-var documentMock = (function() {
-    var documentMock = {
+const documentMock = (function() {
+    const documentMock = {
         isDocumentMock: true
     };
 
-    var errorFunc = function() {
+    const errorFunc = function() {
         throw new Error('Document fields using is prevented');
     };
 
-    for(var field in document) {
+    for(const field in document) {
         Object.defineProperty(documentMock, field, {
             get: errorFunc,
             set: errorFunc
@@ -37,7 +37,7 @@ exports.set = function() {
         },
 
         querySelectorAll: function(element) {
-            var args = Array.prototype.slice.call(arguments, 0);
+            const args = Array.prototype.slice.call(arguments, 0);
 
             if(element.isDocumentMock) {
                 args[0] = document;
@@ -46,7 +46,7 @@ exports.set = function() {
         },
 
         listen: function(element, event, callback, useCapture) {
-            var args = Array.prototype.slice.call(arguments, 0);
+            const args = Array.prototype.slice.call(arguments, 0);
 
             if(element.isWindowMock) {
                 args[0] = {};
@@ -63,7 +63,7 @@ exports.set = function() {
         },
 
         createElement: function(tagName, context) {
-            var args = Array.prototype.slice.call(arguments, 0);
+            const args = Array.prototype.slice.call(arguments, 0);
             if(context && context.isDocumentMock) {
                 args[1] = document;
             }

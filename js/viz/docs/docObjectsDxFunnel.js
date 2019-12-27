@@ -3,7 +3,7 @@
 * @name dxFunnelItem
 * @publicName Item
 */
-var Item = {
+const Item = {
     /**
     * @name dxFunnelItemFields.argument
     * @type string|Date|number
@@ -67,7 +67,7 @@ var Item = {
 * @type object
 * @inherits BaseLegendItem
 */
-var legendItem = {
+const legendItem = {
     /**
     * @name FunnelLegendItem.item
     * @type dxFunnelItem

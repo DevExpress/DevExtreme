@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -10,9 +10,9 @@ QUnit.testStart(function() {
 require('common.css!');
 require('generic_light.css!');
 
-var fx = require('animation/fx'),
-    dragEvents = require('events/drag'),
-    DataSource = require('data/data_source/data_source').DataSource;
+const fx = require('animation/fx');
+const dragEvents = require('events/drag');
+const DataSource = require('data/data_source/data_source').DataSource;
 
 require('ui/scheduler/ui.scheduler');
 
@@ -39,9 +39,9 @@ QUnit.module('Integration: recurrence rules validation', {
 });
 
 QUnit.test('Incorrect recurrence rule should not be applied', function(assert) {
-    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
+    const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
-    var data = new DataSource({
+    const data = new DataSource({
         store: [item]
     });
 
@@ -51,23 +51,23 @@ QUnit.test('Incorrect recurrence rule should not be applied', function(assert) {
 });
 
 QUnit.test('Appointment with incorrect recurrence rule should not have specific class', function(assert) {
-    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
+    const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
-    var data = new DataSource({
+    const data = new DataSource({
         store: [item]
     });
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
 
     assert.notOk($appointment.hasClass('dx-scheduler-appointment-recurrence'), 'Appointment has not specific class');
 });
 
 QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', function(assert) {
-    var item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;INTERVAL=1;AA=2' };
+    const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;INTERVAL=1;AA=2' };
 
-    var data = new DataSource({
+    const data = new DataSource({
         store: [item]
     });
 
@@ -77,7 +77,7 @@ QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', fun
 });
 
 QUnit.test('Confirmation dialog should not be shown if rrule is invalid', function(assert) {
-    var data = new DataSource({
+    const data = new DataSource({
         store: [
             {
                 text: 'Task 1',

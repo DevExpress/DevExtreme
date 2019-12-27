@@ -75,23 +75,23 @@ viewPort($('#qunit-fixture').addClass('dx-viewport'));
 
 executeAsyncMock.setup();
 
-const POPUP_CLASS = 'dx-popup',
-    POPUP_WRAPPER_CLASS = 'dx-popup-wrapper',
-    POPUP_CONTENT_CLASS = 'dx-popup-content',
-    OVERLAY_CONTENT_CLASS = 'dx-overlay-content',
-    OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper',
-    POPUP_BOTTOM_CLASS = 'dx-popup-bottom',
-    POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen',
-    POPUP_TITLE_CLASS = 'dx-popup-title',
-    POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton',
-    POPUP_NORMAL_CLASS = 'dx-popup-normal',
-    POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height',
-    POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height',
-    PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling',
+const POPUP_CLASS = 'dx-popup';
+const POPUP_WRAPPER_CLASS = 'dx-popup-wrapper';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
+const POPUP_FULL_SCREEN_CLASS = 'dx-popup-fullscreen';
+const POPUP_TITLE_CLASS = 'dx-popup-title';
+const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
+const POPUP_NORMAL_CLASS = 'dx-popup-normal';
+const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
+const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-    POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable',
+const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
-    viewport = function() { return $('.dx-viewport'); };
+const viewport = function() { return $('.dx-viewport'); };
 
 const toSelector = function(cssClass) {
     return '.' + cssClass;
@@ -137,9 +137,9 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('default options', function(assert) {
-        const $popup = $('#popup').dxPopup({ title: 'Any header', visible: true }),
-            instance = $popup.dxPopup('instance'),
-            $overlayContent = instance.$content().parent();
+        const $popup = $('#popup').dxPopup({ title: 'Any header', visible: true });
+        const instance = $popup.dxPopup('instance');
+        const $overlayContent = instance.$content().parent();
 
         assert.equal(instance.option('title'), 'Any header');
         assert.equal(instance.option('title'), $overlayContent.children().eq(0).text());
@@ -149,9 +149,9 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('content template', function(assert) {
-        const $popup = $('#popupWithContentTmpl').dxPopup({ visible: true }),
-            instance = $popup.dxPopup('instance'),
-            $content = instance.$content();
+        const $popup = $('#popupWithContentTmpl').dxPopup({ visible: true });
+        const instance = $popup.dxPopup('instance');
+        const $content = instance.$content();
 
         instance.show();
 
@@ -161,10 +161,10 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('title and content template', function(assert) {
-        const $popup = $('#popupWithTitleAndContentTmpl').dxPopup({ visible: true }),
-            instance = $popup.dxPopup('instance'),
-            $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
-            $content = instance.$content();
+        const $popup = $('#popupWithTitleAndContentTmpl').dxPopup({ visible: true });
+        const instance = $popup.dxPopup('instance');
+        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $content = instance.$content();
 
         assert.equal($title.children().length, 1);
         assert.ok($title.find('.testTitle').length);
@@ -186,11 +186,11 @@ QUnit.module('basic', () => {
         devices.current('androidPhone');
 
         const $popup = $('#popup').dxPopup({
-                toolbarItems: [{ shortcut: 'done' }, { shortcut: 'cancel' }],
-                animation: null,
-                visible: true
-            }),
-            instance = $popup.dxPopup('instance');
+            toolbarItems: [{ shortcut: 'done' }, { shortcut: 'cancel' }],
+            animation: null,
+            visible: true
+        });
+        const instance = $popup.dxPopup('instance');
 
         let $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
@@ -205,15 +205,15 @@ QUnit.module('basic', () => {
     QUnit.test('buttons should be rendered correctly after toolbar was repainted', function(assert) {
         devices.current('desktop');
         const $popup = $('#popup').dxPopup({
-                visible: true,
-                toolbarItems: [
-                    { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-                    { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-                    { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+            visible: true,
+            toolbarItems: [
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
-            }),
-            instance = $popup.dxPopup('instance'),
-            $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
+        });
+        const instance = $popup.dxPopup('instance');
+        const $popupBottom = instance.$content().parent().find('.dx-popup-bottom');
 
         $popupBottom.dxToolbarBase('repaint');
         assert.equal($popupBottom.text(), 'TodayOKCancel', 'buttons order is correct');
@@ -221,8 +221,8 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('Check that title do not render twice or more, Q553652', function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, title: 'test' }),
-            instance = $popup.dxPopup('instance');
+        const $popup = $('#popup').dxPopup({ visible: true, title: 'test' });
+        const instance = $popup.dxPopup('instance');
 
         assert.equal(instance.option('title'), 'test', 'title is test');
         assert.equal($(toSelector(POPUP_TITLE_CLASS), viewport()).length, 1, 'there can be only one title');
@@ -236,8 +236,8 @@ QUnit.module('basic', () => {
     });
 
     QUnit.test('close button is not shown when title is not displayed', function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: false }),
-            $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, $popup);
+        const $popup = $('#popup').dxPopup({ visible: true, closeButton: true, showTitle: false });
+        const $closeButton = $('.' + POPUP_TITLE_CLOSEBUTTON_CLASS, $popup);
 
         assert.equal($closeButton.length, 0, 'close button element');
     });
@@ -254,8 +254,8 @@ QUnit.module('basic', () => {
             toolbarItems: [{ text: 'top text', toolbar: 'top', location: 'center' }]
         });
 
-        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS),
-            $titleToolbar = $popupWrapper.find('.' + POPUP_TITLE_CLASS);
+        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS);
+        const $titleToolbar = $popupWrapper.find('.' + POPUP_TITLE_CLASS);
 
         assert.ok($titleToolbar.hasClass('dx-toolbar'), 'top toolbar is present');
         assert.equal($titleToolbar.text(), 'top text', 'top toolbar has correct content');
@@ -267,8 +267,8 @@ QUnit.module('basic', () => {
             toolbarItems: [{ text: 'bottom text', toolbar: 'bottom', location: 'center' }]
         });
 
-        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS),
-            $bottomToolbar = $popupWrapper.find('.' + POPUP_BOTTOM_CLASS);
+        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS);
+        const $bottomToolbar = $popupWrapper.find('.' + POPUP_BOTTOM_CLASS);
 
         assert.ok($bottomToolbar.hasClass('dx-toolbar'), 'bottom toolbar is present');
         assert.equal($bottomToolbar.text(), 'bottom text', 'bottom toolbar has correct content');
@@ -305,8 +305,8 @@ QUnit.module('basic', () => {
             toolbarItems: [{ text: 'sample', location: 'center' }]
         });
 
-        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS),
-            $titleToolbar = $popupWrapper.find('.' + POPUP_TITLE_CLASS);
+        const $popupWrapper = $('.' + POPUP_WRAPPER_CLASS);
+        const $titleToolbar = $popupWrapper.find('.' + POPUP_TITLE_CLASS);
 
         const instance = $('#popup').dxPopup('instance');
 
@@ -316,32 +316,32 @@ QUnit.module('basic', () => {
 
     QUnit.test('toolbar must receive \'rtlEnabled\' option from dxPopup', function(assert) {
         const $popup = $('#popup').dxPopup({
-                visible: true,
-                rtlEnabled: true,
-                toolbarItems: [
-                    { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-                    { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-                    { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+            visible: true,
+            rtlEnabled: true,
+            toolbarItems: [
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
-            }),
-            instance = $popup.dxPopup('instance'),
-            toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
+        });
+        const instance = $popup.dxPopup('instance');
+        const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
 
         assert.ok(toolbarInstance.option('rtlEnabled'), 'toolbar\'s \'rtlEnabled\' option is true');
     });
 
     QUnit.test('toolbar must receive \'rtlEnabled\' from dxPopup after optionChanged', function(assert) {
         const $popup = $('#popup').dxPopup({
-                visible: true,
-                rtlEnabled: true,
-                deferRendering: false,
-                toolbarItems: [
-                    { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-                    { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-                    { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+            visible: true,
+            rtlEnabled: true,
+            deferRendering: false,
+            toolbarItems: [
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
-            }),
-            instance = $popup.dxPopup('instance');
+        });
+        const instance = $popup.dxPopup('instance');
 
         instance.option('rtlEnabled', false);
         const toolbarInstance = instance.$content().parent().find('.dx-popup-bottom').dxToolbarBase('instance');
@@ -406,13 +406,13 @@ QUnit.module('dimensions', {
     QUnit.test('content must not overlap bottom buttons', function(assert) {
         devices.current('desktop');
         const $popup = $('#popup').dxPopup({
-                toolbarItems: [{ shortcut: 'cancel' }, { shortcut: 'done' }, { shortcut: 'clear' }],
-                showCloseButton: true,
-                visible: true
-            }),
-            instance = $popup.dxPopup('instance'),
-            $popupContent = instance.$content(),
-            $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
+            toolbarItems: [{ shortcut: 'cancel' }, { shortcut: 'done' }, { shortcut: 'clear' }],
+            showCloseButton: true,
+            visible: true
+        });
+        const instance = $popup.dxPopup('instance');
+        const $popupContent = instance.$content();
+        const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
         assert.equal($popupContent.outerHeight() + $popupBottom.outerHeight(true), $popupContent.outerHeight(true), 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
@@ -477,8 +477,8 @@ QUnit.module('dimensions', {
             bottomTemplate: floatingTemplate
         }).dxPopup('instance').$content();
 
-        const contentPaddings = $content.outerHeight() - $content.height(),
-            computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
+        const contentPaddings = $content.outerHeight() - $content.height();
+        const computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
 
         const realContentHeight = floatingTemplate().appendTo('#qunit-fixture').get(0).getBoundingClientRect().height;
         assert.ok(Math.abs(computedContentHeight - realContentHeight) < 0.02, computedContentHeight + ' ' + realContentHeight);
@@ -490,9 +490,9 @@ QUnit.module('dimensions', {
             'visible': true
         }).dxPopup('instance');
 
-        const $popupContent = instance.$content(),
-            $overlayContent = $popupContent.parent(),
-            $contentElement = $('<div>').height(50);
+        const $popupContent = instance.$content();
+        const $overlayContent = $popupContent.parent();
+        const $contentElement = $('<div>').height(50);
 
         $popupContent.append($contentElement);
         instance.option('height', 'auto');
@@ -501,20 +501,20 @@ QUnit.module('dimensions', {
 
     QUnit.test('minHeight should affect popup content height correctly', function(assert) {
         const $popup = $('#popup').dxPopup({
-                visible: true,
-                width: 'auto',
-                height: 'auto',
-                minHeight: 400,
-                toolbarItems: [{ text: 'text', toolbar: 'top', location: 'center' }, { text: 'text', toolbar: 'bottom', location: 'center' }],
-                titleTemplate: function() { return $('<div>').width('100%').height(100); },
-                bottomTemplate: function() { return $('<div>').width('100%').height(100); },
-                contentTemplate: function() { return $('<div>').width(1000).height(0); }
-            }),
-            instance = $popup.dxPopup('instance'),
-            $popupContent = instance.$content(),
-            $overlayContent = $popupContent.parent(),
-            $popupTitle = $overlayContent.find('.dx-popup-title'),
-            $popupBottom = $overlayContent.find('.dx-popup-bottom');
+            visible: true,
+            width: 'auto',
+            height: 'auto',
+            minHeight: 400,
+            toolbarItems: [{ text: 'text', toolbar: 'top', location: 'center' }, { text: 'text', toolbar: 'bottom', location: 'center' }],
+            titleTemplate: function() { return $('<div>').width('100%').height(100); },
+            bottomTemplate: function() { return $('<div>').width('100%').height(100); },
+            contentTemplate: function() { return $('<div>').width(1000).height(0); }
+        });
+        const instance = $popup.dxPopup('instance');
+        const $popupContent = instance.$content();
+        const $overlayContent = $popupContent.parent();
+        const $popupTitle = $overlayContent.find('.dx-popup-title');
+        const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
             $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
@@ -524,20 +524,20 @@ QUnit.module('dimensions', {
 
     QUnit.test('maxHeight should affect popup content height correctly', function(assert) {
         const $popup = $('#popup').dxPopup({
-                visible: true,
-                width: 'auto',
-                height: 'auto',
-                maxHeight: 400,
-                toolbarItems: [{ text: 'text', toolbar: 'top', location: 'center' }, { text: 'text', toolbar: 'bottom', location: 'center' }],
-                titleTemplate: function() { return $('<div>').width('100%').height(100); },
-                bottomTemplate: function() { return $('<div>').width('100%').height(100); },
-                contentTemplate: function() { return $('<div>').width(1000).height(1000); }
-            }),
-            instance = $popup.dxPopup('instance'),
-            $popupContent = instance.$content(),
-            $overlayContent = $popupContent.parent(),
-            $popupTitle = $overlayContent.find('.dx-popup-title'),
-            $popupBottom = $overlayContent.find('.dx-popup-bottom');
+            visible: true,
+            width: 'auto',
+            height: 'auto',
+            maxHeight: 400,
+            toolbarItems: [{ text: 'text', toolbar: 'top', location: 'center' }, { text: 'text', toolbar: 'bottom', location: 'center' }],
+            titleTemplate: function() { return $('<div>').width('100%').height(100); },
+            bottomTemplate: function() { return $('<div>').width('100%').height(100); },
+            contentTemplate: function() { return $('<div>').width(1000).height(1000); }
+        });
+        const instance = $popup.dxPopup('instance');
+        const $popupContent = instance.$content();
+        const $overlayContent = $popupContent.parent();
+        const $popupTitle = $overlayContent.find('.dx-popup-title');
+        const $popupBottom = $overlayContent.find('.dx-popup-bottom');
 
         assert.equal(
             $popupContent.outerHeight(true) + $popupTitle.outerHeight(true) + $popupBottom.outerHeight(true),
@@ -604,16 +604,16 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('popup height can be changed according to the content if height = auto', function(assert) {
-        const $content = $('<div>').attr('id', 'content'),
-            popup = $('#popup').dxPopup({
-                visible: true,
-                showTitle: true,
-                title: 'Information',
-                height: 'auto',
-                contentTemplate: () => $content.append($('<div>').height(50)),
-                maxHeight: 400,
-                minHeight: 50
-            }).dxPopup('instance');
+        const $content = $('<div>').attr('id', 'content');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            showTitle: true,
+            title: 'Information',
+            height: 'auto',
+            contentTemplate: () => $content.append($('<div>').height(50)),
+            maxHeight: 400,
+            minHeight: 50
+        }).dxPopup('instance');
 
         const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
         const popupHeight = $popup.height();
@@ -641,23 +641,23 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
-        const $content = $('<div>').attr('id', 'content'),
-            popup = $('#popup').dxPopup({
-                visible: true,
-                height: 'auto',
-                showTitle: true,
-                title: 'Information',
-                toolbarItems: [{ shortcut: 'cancel' }],
-                contentTemplate: () => $content,
-                maxHeight: 300,
-                minHeight: 150
-            }).dxPopup('instance');
+        const $content = $('<div>').attr('id', 'content');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            height: 'auto',
+            showTitle: true,
+            title: 'Information',
+            toolbarItems: [{ shortcut: 'cancel' }],
+            contentTemplate: () => $content,
+            maxHeight: 300,
+            minHeight: 150
+        }).dxPopup('instance');
 
-        const $popup = popup.$content().parent(),
-            $popupContent = popup.$content(),
-            topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
-            bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight(),
-            popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const $popup = popup.$content().parent();
+        const $popupContent = popup.$content();
+        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight();
+        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight();
+        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
 
         let popupContentHeight = $popupContent.innerHeight();
 
@@ -676,22 +676,22 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('popup height should support any maxHeight and minHeight option values if height = auto', function(assert) {
         devices.current('desktop');
-        const $content = $('<div>').attr('id', 'content'),
-            popup = $('#popup').dxPopup({
-                visible: true,
-                height: 'auto',
-                showTitle: true,
-                title: 'Information',
-                contentTemplate: () => $content,
-                maxHeight: '90%',
-                minHeight: '50%'
-            }).dxPopup('instance');
+        const $content = $('<div>').attr('id', 'content');
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            height: 'auto',
+            showTitle: true,
+            title: 'Information',
+            contentTemplate: () => $content,
+            maxHeight: '90%',
+            minHeight: '50%'
+        }).dxPopup('instance');
 
-        const $popup = popup.$content().parent(),
-            windowHeight = $(window).innerHeight(),
-            $popupContent = popup.$content(),
-            topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
-            popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const $popup = popup.$content().parent();
+        const windowHeight = $(window).innerHeight();
+        const $popupContent = popup.$content();
+        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight();
+        const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
 
         assert.roughEqual($popup.height(), windowHeight * 0.5, 1, 'minimum popup height in percentages');
 
@@ -931,9 +931,9 @@ QUnit.module('options changed callbacks', {
 
         $('<iframe>').attr('src', 'about:blank').appendTo(popupContent);
 
-        const iFrame = document.getElementsByTagName('iframe')[0],
-            iFrameDoc = iFrame.contentWindow.document,
-            element = document.createElement('div');
+        const iFrame = document.getElementsByTagName('iframe')[0];
+        const iFrameDoc = iFrame.contentWindow.document;
+        const element = document.createElement('div');
 
         if(iFrameDoc.body === null || iFrameDoc.body === undefined) {
             iFrameDoc.write('<body></body>');
@@ -957,8 +957,8 @@ QUnit.module('options changed callbacks', {
             visible: true
         });
 
-        const $overlayContent = this.instance.$content().parent(),
-            $wrapper = $overlayContent.parent().get(0);
+        const $overlayContent = this.instance.$content().parent();
+        const $wrapper = $overlayContent.parent().get(0);
 
         assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), 'wrappers width specified');
         assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), 'wrappers height specified');
@@ -1001,8 +1001,8 @@ QUnit.module('options changed callbacks', {
             this.instance.option('toolbarItems', [{ shortcut: buttonType }]);
             this.instance.show();
 
-            const $bottomBar = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_BOTTOM_CLASS),
-                $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.dx-button.dx-popup-' + buttonType);
+            const $bottomBar = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.' + POPUP_BOTTOM_CLASS);
+            const $button = $(toSelector(POPUP_WRAPPER_CLASS), viewport()).find('.dx-button.dx-popup-' + buttonType);
 
             assert.equal($bottomBar.length, 1, 'Bottom bar rendered');
             assert.ok($(toSelector(POPUP_WRAPPER_CLASS), viewport()).hasClass('dx-popup-' + buttonType + '-visible'), 'popup has according class');
@@ -1012,10 +1012,10 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('buttons close button', function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true }),
-            instance = $popup.dxPopup('instance'),
-            $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
-            $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
+        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true });
+        const instance = $popup.dxPopup('instance');
+        const $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
+        const $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
 
         assert.equal($title.find('.dx-button').length, 1, 'title has close button');
         assert.equal($closeButton.length, 1, 'close button element');
@@ -1025,9 +1025,9 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('showCloseButton option', function(assert) {
-        let $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] }),
-            instance = $popup.dxPopup('instance'),
-            $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
+        const $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] });
+        const instance = $popup.dxPopup('instance');
+        let $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Need to show close button by default');
 
         instance.option('showCloseButton', true);
@@ -1057,8 +1057,8 @@ QUnit.module('options changed callbacks', {
 
     $.each(['cancel', 'clear', 'done'], function(_, buttonType) {
         QUnit.test('fire specific action and hide popup' + buttonType + ' button is clicked', function(assert) {
-            let buttonClickFired = 0,
-                popupHideFired = 0;
+            let buttonClickFired = 0;
+            let popupHideFired = 0;
 
             this.instance.option('toolbarItems', [{ shortcut: buttonType, onClick: function() { buttonClickFired++; } }]);
             this.instance.hide = function() {
@@ -1078,8 +1078,8 @@ QUnit.module('options changed callbacks', {
         this.instance.option('visible', true);
 
         const $container = this.instance.$content().parent();
-        let $popupTitle = $container.find('.' + POPUP_TITLE_CLASS),
-            $popupBottom = $container.find('.' + POPUP_BOTTOM_CLASS);
+        let $popupTitle = $container.find('.' + POPUP_TITLE_CLASS);
+        let $popupBottom = $container.find('.' + POPUP_BOTTOM_CLASS);
 
         assert.ok(!$popupTitle.hasClass('.dx-toolbar'), 'top toolbar is not initialized when buttons is empty');
         assert.equal($popupBottom.length, 0, 'bottom toolbar is not rendered when buttons is empty');
@@ -1181,16 +1181,16 @@ QUnit.module('resize', {
 }, () => {
     QUnit.test('popup content should update height after resize', function(assert) {
         const $popup = $('#popup').dxPopup({
-                resizeEnabled: true,
-                showTitle: false,
-                visible: true,
-                showCloseButton: false,
-                toolbarItems: []
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent(),
-            $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right'),
-            pointer = pointerMock($handle).start();
+            resizeEnabled: true,
+            showTitle: false,
+            visible: true,
+            showCloseButton: false,
+            toolbarItems: []
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
+        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
+        const pointer = pointerMock($handle).start();
 
         pointer.dragStart().drag(-100, -100);
         assert.roughEqual(popup.$content().outerHeight(), $overlayContent.height(), 0.1, 'size of popup and overlay is equal');
@@ -1198,17 +1198,17 @@ QUnit.module('resize', {
 
     QUnit.test('popup content position should be reset after show/hide', function(assert) {
         const $popup = $('#popup').dxPopup({
-                resizeEnabled: true,
-                height: 'auto'
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent();
+            resizeEnabled: true,
+            height: 'auto'
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
 
         popup.$content().append($('<div>').height(10));
         popup.show();
-        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right'),
-            pointer = pointerMock($handle),
-            position = $overlayContent.offset();
+        const $handle = $overlayContent.find('.dx-resizable-handle-corner-bottom-right');
+        const pointer = pointerMock($handle);
+        const position = $overlayContent.offset();
         pointer.start().dragStart().drag(-100, -100).dragEnd();
 
         popup.hide();
@@ -1217,21 +1217,21 @@ QUnit.module('resize', {
     });
 
     QUnit.test('resize callbacks', function(assert) {
-        let onResizeStartFired = 0,
-            onResizeFired = 0,
-            onResizeEndFired = 0,
+        let onResizeStartFired = 0;
+        let onResizeFired = 0;
+        let onResizeEndFired = 0;
 
-            instance = $('#popup').dxPopup({
-                resizeEnabled: true,
-                visible: true,
-                onResizeStart: function() { onResizeStartFired++; },
-                onResize: function() { onResizeFired++; },
-                onResizeEnd: function() { onResizeEndFired++; }
-            }).dxPopup('instance'),
+        const instance = $('#popup').dxPopup({
+            resizeEnabled: true,
+            visible: true,
+            onResizeStart: function() { onResizeStartFired++; },
+            onResize: function() { onResizeFired++; },
+            onResizeEnd: function() { onResizeEndFired++; }
+        }).dxPopup('instance');
 
-            $content = instance.overlayContent(),
-            $handle = $content.find('.dx-resizable-handle-top'),
-            pointer = pointerMock($handle);
+        const $content = instance.overlayContent();
+        const $handle = $content.find('.dx-resizable-handle-top');
+        const pointer = pointerMock($handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1251,11 +1251,11 @@ QUnit.module('drag popup by title', {
 }, () => {
     QUnit.test('class should be added if drag is enabled', function(assert) {
         const $popup = $('#popup').dxPopup({
-                dragEnabled: true,
-                visible: true
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent();
+            dragEnabled: true,
+            visible: true
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
 
         assert.ok($overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
 
@@ -1265,14 +1265,14 @@ QUnit.module('drag popup by title', {
 
     QUnit.test('popup should be dragged by title', function(assert) {
         const $popup = $('#popup').dxPopup({
-                dragEnabled: true,
-                visible: true
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent(),
-            $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS)),
-            pointer = pointerMock($title),
-            position = $overlayContent.position();
+            dragEnabled: true,
+            visible: true
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
+        const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS));
+        const pointer = pointerMock($title);
+        const position = $overlayContent.position();
 
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
@@ -1284,13 +1284,13 @@ QUnit.module('drag popup by title', {
 
     QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
         const $popup = $('#popup').dxPopup({
-                dragEnabled: true,
-                visible: true
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent(),
-            pointer = pointerMock(popup.$content()),
-            position = $overlayContent.position();
+            dragEnabled: true,
+            visible: true
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
+        const pointer = pointerMock(popup.$content());
+        const position = $overlayContent.position();
 
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
@@ -1302,17 +1302,17 @@ QUnit.module('drag popup by title', {
 
     QUnit.test('popup should be dragged if title was changed', function(assert) {
         const $popup = $('#popup').dxPopup({
-                dragEnabled: true,
-                visible: true
-            }),
-            popup = $popup.dxPopup('instance'),
-            $overlayContent = popup.$content().parent(),
-            position = $overlayContent.position();
+            dragEnabled: true,
+            visible: true
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
+        const position = $overlayContent.position();
 
         popup.option('title', 'newTitle');
 
-        const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS)),
-            pointer = pointerMock($title);
+        const $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS));
+        const pointer = pointerMock($title);
 
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
@@ -1419,19 +1419,19 @@ QUnit.module('templates', () => {
         assert.expect(6);
 
         const $element = $('#popup').dxPopup({
-                visible: true,
-                titleTemplate: function(titleElement) {
-                    let result = '<div class=\'test-title-renderer\'>';
-                    result += '<h1>Title</h1>';
-                    result += '</div>';
+            visible: true,
+            titleTemplate: function(titleElement) {
+                let result = '<div class=\'test-title-renderer\'>';
+                result += '<h1>Title</h1>';
+                result += '</div>';
 
-                    assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
+                assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
 
-                    return result;
-                }
-            }),
-            instance = $element.dxPopup('instance'),
-            $popupContent = instance.$content().parent();
+                return result;
+            }
+        });
+        const instance = $element.dxPopup('instance');
+        const $popupContent = instance.$content().parent();
 
         assert.equal($popupContent.find(toSelector('test-title-renderer')).length, 1, 'option \'titleTemplate\'  was set successfully');
 
@@ -1455,18 +1455,18 @@ QUnit.module('templates', () => {
 
     QUnit.test('\'bottomTemplate\' options test', function(assert) {
         const $element = $('#popup').dxPopup({
-                visible: true,
-                toolbarItems: [{ text: 'bottom text', toolbar: 'bottom', location: 'center' }],
-                bottomTemplate: function(titleElement) {
-                    let result = '<div class=\'test-bottom-renderer\'>';
-                    result += '<h1>bottom</h1>';
-                    result += '</div>';
+            visible: true,
+            toolbarItems: [{ text: 'bottom text', toolbar: 'bottom', location: 'center' }],
+            bottomTemplate: function(titleElement) {
+                let result = '<div class=\'test-bottom-renderer\'>';
+                result += '<h1>bottom</h1>';
+                result += '</div>';
 
-                    return result;
-                }
-            }),
-            instance = $element.dxPopup('instance'),
-            $popupContent = instance.$content().parent();
+                return result;
+            }
+        });
+        const instance = $element.dxPopup('instance');
+        const $popupContent = instance.$content().parent();
 
         assert.equal($popupContent.find(toSelector('test-bottom-renderer')).length, 1, 'option \'bottomTemplate\'  was set successfully');
 

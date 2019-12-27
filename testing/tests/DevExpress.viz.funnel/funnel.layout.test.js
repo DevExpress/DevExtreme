@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    common = require('./commonParts/common.js'),
-    commonEnvironment = common.environment,
-    createFunnel = common.createFunnel,
-    stubAlgorithm = common.stubAlgorithm,
-    legendModule = require('viz/components/legend'),
-    titleModule = require('viz/core/title'),
-    exportModule = require('viz/core/export'),
-    labelEnvironment = require('./commonParts/label.js').labelEnvironment,
-    dxFunnel = require('viz/funnel/funnel');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const common = require('./commonParts/common.js');
+const commonEnvironment = common.environment;
+const createFunnel = common.createFunnel;
+const stubAlgorithm = common.stubAlgorithm;
+const legendModule = require('viz/components/legend');
+const titleModule = require('viz/core/title');
+const exportModule = require('viz/core/export');
+const labelEnvironment = require('./commonParts/label.js').labelEnvironment;
+const dxFunnel = require('viz/funnel/funnel');
 
 dxFunnel.addPlugin(legendModule.plugin);
 dxFunnel.addPlugin(titleModule.plugin);
 dxFunnel.addPlugin(exportModule.plugin);
 
 function stubLegend() {
-    var that = this;
+    const that = this;
     that.legend = new vizMocks.Legend();
     that.legend.stub('coordsIn').returns(true);
     that.legend.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
@@ -26,7 +26,7 @@ function stubLegend() {
 }
 
 function stubTitle() {
-    var that = this;
+    const that = this;
     that.title = new vizMocks.Title();
     that.title.stub('measure').returns([200, 50]);
     sinon.stub(titleModule, 'Title', function() {
@@ -35,7 +35,7 @@ function stubTitle() {
 }
 
 function stubExport() {
-    var that = this;
+    const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([50, 50]);
     sinon.stub(exportModule, 'ExportMenu', function() {

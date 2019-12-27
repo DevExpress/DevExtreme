@@ -1,12 +1,12 @@
 /* global currentAssert */
 
-var $ = require('jquery'),
-    animationFrame = require('animation/frame'),
-    commonUtils = require('core/utils/common'),
-    typeUtils = require('core/utils/type'),
-    animationModule = require('viz/core/renderers/animation'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    vizMocks = require('../../helpers/vizMocks.js');
+const $ = require('jquery');
+const animationFrame = require('animation/frame');
+const commonUtils = require('core/utils/common');
+const typeUtils = require('core/utils/type');
+const animationModule = require('viz/core/renderers/animation');
+const rendererModule = require('viz/core/renderers/renderer');
+const vizMocks = require('../../helpers/vizMocks.js');
 
 (function() {
     QUnit.module('AnimationController', {
@@ -16,8 +16,8 @@ var $ = require('jquery'),
             this.Animation = function(ticks, complete, options) {
                 ticks = ticks || 1;
 
-                var that = this,
-                    assert = currentAssert();
+                const that = this;
+                const assert = currentAssert();
 
                 that.options = options;
                 that.tick = function(now) {
@@ -58,9 +58,9 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Creation', function(assert) {
-        var element = { elementObject: true };
+        const element = { elementObject: true };
 
-        var animationController = this.createAnimationController(element);
+        const animationController = this.createAnimationController(element);
 
         assert.ok(animationController);
         assert.equal(animationController._animationCount, 0);
@@ -69,10 +69,10 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Creation. Two Controllers', function(assert) {
-        var animationController = this.createAnimationController();
+        const animationController = this.createAnimationController();
         animationController.addAnimation(new this.Animation());
         // act
-        var animationController1 = new this.AnimationController();
+        const animationController1 = new this.AnimationController();
 
         assert.ok(animationController1);
         assert.equal(animationController1._animationCount, 0);
@@ -82,12 +82,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Add animation', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation = new this.Animation(),
-            animationStartedCount = 0;
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation = new this.Animation();
+        let animationStartedCount = 0;
 
-        var timeOutId = setTimeout(function() {
+        const timeOutId = setTimeout(function() {
             assert.ok(false, 'animation not started');
             doAssert();
         }, 2000);
@@ -111,8 +111,8 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Disposing', function(assert) {
-        var animationController = this.createAnimationController(),
-            srcStop = animationController.stop;
+        const animationController = this.createAnimationController();
+        const srcStop = animationController.stop;
 
         animationController.addAnimation(new this.Animation());
         animationController.stop = function() {
@@ -127,12 +127,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Add animations', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animations = [new this.Animation(), new this.Animation(), new this.Animation(), new this.Animation()],
-            animationStartedCount = 0;
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animations = [new this.Animation(), new this.Animation(), new this.Animation(), new this.Animation()];
+        let animationStartedCount = 0;
 
-        var timeOutId = setTimeout(function() {
+        const timeOutId = setTimeout(function() {
             assert.ok(false, 'animation not started');
             doAssert();
         }, 2000);
@@ -143,7 +143,7 @@ var $ = require('jquery'),
             doAssert();
         };
         // Act
-        for(var i = 0; i < animations.length; i++) {
+        for(let i = 0; i < animations.length; i++) {
             animationController.addAnimation(animations[i]);
         }
 
@@ -160,10 +160,10 @@ var $ = require('jquery'),
 
     QUnit.test('Stop animations', function(assert) {
         assert.expect(6);
-        var animationController = this.createAnimationController(),
-            animation1 = new this.Animation(),
-            animation2 = new this.Animation(),
-            cancelRequestAnimationFrameSpy = sinon.spy();
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation();
+        const animation2 = new this.Animation();
+        const cancelRequestAnimationFrameSpy = sinon.spy();
 
         animationController.addAnimation(new this.Animation());
         this.mockCancelAnimationFrame(cancelRequestAnimationFrameSpy);
@@ -180,9 +180,9 @@ var $ = require('jquery'),
 
     QUnit.test('Stop animations with lock', function(assert) {
         assert.expect(4);
-        var animationController = this.createAnimationController(),
-            animation1 = new this.Animation(undefined, undefined, {}),
-            animation2 = new this.Animation(undefined, undefined, {});
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(undefined, undefined, {});
+        const animation2 = new this.Animation(undefined, undefined, {});
 
         animationController.addAnimation(animation1);
         animationController.addAnimation(animation2);
@@ -196,12 +196,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('lock with unstoppable = true', function(assert) {
-        var animationController = this.createAnimationController(),
-            animation1 = new this.Animation(undefined, undefined, {}),
-            animation2 = new this.Animation(undefined, undefined, {
-                unstoppable: true
-            }),
-            originalStop = animationController.stop;
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(undefined, undefined, {});
+        const animation2 = new this.Animation(undefined, undefined, {
+            unstoppable: true
+        });
+        const originalStop = animationController.stop;
 
         animationController.stop = sinon.spy();
 
@@ -219,12 +219,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('lock with unstoppable = false', function(assert) {
-        var animationController = this.createAnimationController(),
-            animation1 = new this.Animation(undefined, undefined, {}),
-            animation2 = new this.Animation(undefined, undefined, {
-                unstoppable: false
-            }),
-            originalStop = animationController.stop;
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(undefined, undefined, {});
+        const animation2 = new this.Animation(undefined, undefined, {
+            unstoppable: false
+        });
+        const originalStop = animationController.stop;
 
         animation2.ignoreLock = false;
         animationController.stop = sinon.spy();
@@ -243,11 +243,11 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Run animation', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation1 = new this.Animation(8),
-            tickCount = 0,
-            srcStopAnimation = animationController.stop;
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(8);
+        let tickCount = 0;
+        const srcStopAnimation = animationController.stop;
 
         this.mockRequestAnimationFrame(function(callBack) {
             tickCount++;
@@ -266,12 +266,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Run animations with different duration', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation1 = new this.Animation(8),
-            animation2 = new this.Animation(40),
-            tickCount = 0,
-            srcStopAnimation = animationController.stop;
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(8);
+        const animation2 = new this.Animation(40);
+        let tickCount = 0;
+        const srcStopAnimation = animationController.stop;
 
         this.mockRequestAnimationFrame(function(callBack) {
             tickCount++;
@@ -293,20 +293,20 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Add new animation after complete all animations', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation1 = new this.Animation(8),
-            animation2 = new this.Animation(40),
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(8);
+        const animation2 = new this.Animation(40);
 
-            animation3 = new this.Animation(10),
-            animation4 = new this.Animation(12),
-            tickCount = 0;
+        const animation3 = new this.Animation(10);
+        const animation4 = new this.Animation(12);
+        let tickCount = 0;
 
         this.mockRequestAnimationFrame(function(callBack) {
             tickCount++;
             callBack();
         });
-        var baseStop = animationController.stop;
+        const baseStop = animationController.stop;
         animationController.stop = function() {
             baseStop.call(animationController);
             animationController.stop = function() {
@@ -334,11 +334,11 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Run animations with different duration. Check behaviour after complete first animation', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation1 = new this.Animation(8),
-            animation2 = new this.Animation(40),
-            tickCount = 0;
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation1 = new this.Animation(8);
+        const animation2 = new this.Animation(40);
+        let tickCount = 0;
 
         this.mockRequestAnimationFrame(function(callBack) {
             if(tickCount++ === 8) {
@@ -364,12 +364,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Create Animation', function(assert) {
-        var element = {},
-            animationController = this.createAnimationController(element),
-            params = { someParameter: true },
-            options = { someOption: true };
+        const element = {};
+        const animationController = this.createAnimationController(element);
+        const params = { someParameter: true };
+        const options = { someOption: true };
         animationController._loop = commonUtils.noop;
-        var oldAnimation = new this.Animation();
+        const oldAnimation = new this.Animation();
         element.animation = oldAnimation;
 
         // Act
@@ -377,7 +377,7 @@ var $ = require('jquery'),
         // Assert
         assert.ok(oldAnimation.stopped, 'old animation must be stopped');
         assert.deepEqual(oldAnimation.stopArguments, [], 'old animation must be stopped with break parameter');
-        var newAnimation = element.animation;
+        const newAnimation = element.animation;
         assert.ok(newAnimation && (newAnimation !== oldAnimation));
         assert.deepEqual(newAnimation.options, options);
         assert.deepEqual(newAnimation.params, params);
@@ -386,8 +386,8 @@ var $ = require('jquery'),
     });
 
     QUnit.test('endAnimation without animation', function(assert) {
-        var animationController = this.createAnimationController(),
-            endAnimation = sinon.stub();
+        const animationController = this.createAnimationController();
+        const endAnimation = sinon.stub();
 
         animationController.onEndAnimation(endAnimation);
 
@@ -395,8 +395,8 @@ var $ = require('jquery'),
     });
 
     QUnit.test('endAnimation with animation', function(assert) {
-        var animationController = this.createAnimationController(),
-            endAnimation = sinon.stub();
+        const animationController = this.createAnimationController();
+        const endAnimation = sinon.stub();
 
         animationController.addAnimation(new this.Animation());
 
@@ -406,14 +406,14 @@ var $ = require('jquery'),
     });
 
     QUnit.testInActiveWindow('endAnimation after complete animation', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            animation = new this.Animation(2),
-            endAnimation = sinon.stub(),
-            complete = function() {
-                endAnimation();
-                doAssert();
-            };
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const animation = new this.Animation(2);
+        const endAnimation = sinon.stub();
+        const complete = function() {
+            endAnimation();
+            doAssert();
+        };
 
         animationController.addAnimation(animation);
         animationController.onEndAnimation(complete);
@@ -425,18 +425,18 @@ var $ = require('jquery'),
     });
 
     QUnit.testInActiveWindow('endAnimation after complete second animation', function(assert) {
-        var done = assert.async(),
-            animationController = this.createAnimationController(),
-            completeAnimation = function() {
-                animationController.addAnimation(secondAnimation);
-            },
-            firstAnimation = new this.Animation(2, completeAnimation),
-            secondAnimation = new this.Animation(3),
-            endAnimation = sinon.stub(),
-            complete = function() {
-                endAnimation();
-                doAssert();
-            };
+        const done = assert.async();
+        const animationController = this.createAnimationController();
+        const completeAnimation = function() {
+            animationController.addAnimation(secondAnimation);
+        };
+        const firstAnimation = new this.Animation(2, completeAnimation);
+        const secondAnimation = new this.Animation(3);
+        const endAnimation = sinon.stub();
+        const complete = function() {
+            endAnimation();
+            doAssert();
+        };
 
         animationController.addAnimation(firstAnimation);
         animationController.onEndAnimation(complete);
@@ -450,12 +450,12 @@ var $ = require('jquery'),
 })();
 
 (function() {
-    var environment = {
+    const environment = {
         beforeEach: function() {
-            var that = this;
+            const that = this;
             this.Animation = animationModule.Animation;
             this.createAnimation = function(element, params, options) {
-                var animation = new this.Animation(element, params, options);
+                const animation = new this.Animation(element, params, options);
 
                 animation._calcProgress = function() {
                     return Math.min(1, this._progress + 0.4);
@@ -507,7 +507,7 @@ var $ = require('jquery'),
     QUnit.module('Animation', environment);
 
     QUnit.test('Creation', function(assert) {
-        var animation = new this.Animation(this.element, this.params, this.options);
+        const animation = new this.Animation(this.element, this.params, this.options);
 
         assert.ok(animation);
         assert.deepEqual(animation.params, this.params);
@@ -519,12 +519,12 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Start', function(assert) {
-        var animation = new this.Animation(this.element, this.params, this.options),
-            firstTick = animation.tick,
-            secondTick;
+        const animation = new this.Animation(this.element, this.params, this.options);
+        const firstTick = animation.tick;
+        let secondTick;
 
         // Act
-        var result = animation.tick(new Date().getTime());
+        const result = animation.tick(new Date().getTime());
         secondTick = animation.tick;
         // Assert
         assert.ok(new Date() - animation._startTime < 1000);
@@ -534,7 +534,7 @@ var $ = require('jquery'),
 
 
     QUnit.test('Calculate animation progress', function(assert) {
-        var animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 10000 }));
+        const animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 10000 }));
         animation._startTime = new Date(2013, 0, 1, 0, 0, 0, 0);
         // Act,Assert
         assert.roughEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 0, 250).getTime()), 0.025, 0.01);
@@ -546,7 +546,7 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Calculate animation progress when animation duration is 0', function(assert) {
-        var animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 0 }));
+        const animation = new this.Animation(this.element, this.params, $.extend(this.options, { duration: 0 }));
         animation._startTime = new Date(2013, 0, 1, 0, 0, 0, 0);
         // Act,Assert
         assert.strictEqual(animation._calcProgress(new Date(2013, 0, 1, 0, 0, 0, 250).getTime()), 1);
@@ -566,53 +566,53 @@ var $ = require('jquery'),
     }
 
     QUnit.test('Step', function(assert) {
-        var animation = this.createAnimation(this.element, this.params, this.options);
+        const animation = this.createAnimation(this.element, this.params, this.options);
         // Act
         animation.tick();
         animation.tick();
         animation.tick();
         // Assert
-        var animateAction1 = this.animateAttributeParameters._Arguments[0];
+        const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
-        var animateAction2 = this.animateAttributeParameters._Arguments[1];
+        const animateAction2 = this.animateAttributeParameters._Arguments[1];
         assertAnimationAction(assert, animateAction2, this.element, this.params['_'], 0.8, { _Progress: 0.4 }, '_', 2);
     });
 
     QUnit.test('Step. same params', function(assert) {
-        var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
+        const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
         // Act
         animation.tick();
         animation.tick();
         animation.tick();
         // Assert
-        var animateAction1 = this.animateAttributeParameters._Arguments[0];
+        const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
-        var animateAction11 = this.animateAttributeParameters.baseArguments[0];
+        const animateAction11 = this.animateAttributeParameters.baseArguments[0];
         assertAnimationAction(assert, animateAction11, this.element, this.params['x'], 0.4, { _Progress: 0.4 }, 'x', 11);
 
-        var animateAction2 = this.animateAttributeParameters._Arguments[1];
+        const animateAction2 = this.animateAttributeParameters._Arguments[1];
         assertAnimationAction(assert, animateAction2, this.element, this.params['_'], 0.8, { _Progress: 0.4, baseProgress: 0.4 }, '_', 2);
 
-        var animateAction21 = this.animateAttributeParameters.baseArguments[1];
+        const animateAction21 = this.animateAttributeParameters.baseArguments[1];
         assertAnimationAction(assert, animateAction21, this.element, this.params['x'], 0.8, { _Progress: 0.8, baseProgress: 0.4 }, 'x', 21);
     });
 
     QUnit.test('Stop. Break Animations', function(assert) {
         this.options.complete = sinon.stub();
-        var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
+        const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
         // Act
         animation.tick();
         animation.tick();
         animation.stop();
         // Assert
-        var animateAction1 = this.animateAttributeParameters._Arguments[0];
+        const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
-        var animateAction11 = this.animateAttributeParameters.baseArguments[0];
+        const animateAction11 = this.animateAttributeParameters.baseArguments[0];
         assertAnimationAction(assert, animateAction11, this.element, this.params['x'], 0.4, { _Progress: 0.4 }, 'x', 11);
-        var completeAction = this.animateAttributeParameters.completeArguments[0];
+        const completeAction = this.animateAttributeParameters.completeArguments[0];
         assert.equal(completeAction[0], this.element);
         assert.deepEqual(completeAction[1], { _Progress: 0.4, baseProgress: 0.4 });
         assert.ok(this.options.complete.calledOnce);
@@ -620,58 +620,58 @@ var $ = require('jquery'),
 
     QUnit.test('Stop. Break Animations with disable user complete', function(assert) {
         this.options.complete = sinon.stub();
-        var animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
+        const animation = this.createAnimation(this.element, $.extend(true, this.params, { x: { from: 10, to: 12 } }), this.options);
         // Act
         animation.tick();
         animation.tick();
         animation.stop(true);
         // Assert
-        var animateAction1 = this.animateAttributeParameters._Arguments[0];
+        const animateAction1 = this.animateAttributeParameters._Arguments[0];
         assertAnimationAction(assert, animateAction1, this.element, this.params['_'], 0.4, {}, '_', 1);
 
-        var animateAction11 = this.animateAttributeParameters.baseArguments[0];
+        const animateAction11 = this.animateAttributeParameters.baseArguments[0];
         assertAnimationAction(assert, animateAction11, this.element, this.params['x'], 0.4, { _Progress: 0.4 }, 'x', 11);
 
-        var completeAction = this.animateAttributeParameters.completeArguments[0];
+        const completeAction = this.animateAttributeParameters.completeArguments[0];
         assert.equal(completeAction[0], this.element);
         assert.deepEqual(completeAction[1], { _Progress: 0.4, baseProgress: 0.4 });
         assert.ok(!this.options.complete.called);
     });
 
     QUnit.test('Synchronize animation', function(assert) {
-        var animation = this.createAnimation(this.element, this.params, this.options),
-            synchronizeTimeValue;
+        const animation = this.createAnimation(this.element, this.params, this.options);
+        let synchronizeTimeValue;
         animation._calcProgress = function(now) { synchronizeTimeValue = now; return 1; };
         animation.tick();
         // Act
-        var now = new Date().getTime();
+        const now = new Date().getTime();
         animation.tick(now);
         // Assert
         assert.deepEqual(synchronizeTimeValue, now);
     });
 
     QUnit.test('Last tick', function(assert) {
-        var animation = this.createAnimation(this.element, this.params, this.options);
+        const animation = this.createAnimation(this.element, this.params, this.options);
         animation._calcProgress = function() { return 1; };
         animation.tick();
         // Act
-        var result = animation.tick();
+        const result = animation.tick();
         // Assert
         assert.ok(!result);
         assert.equal(animation.tick, animationModule.noop);
-        var completeAction = this.animateAttributeParameters.completeArguments[0];
+        const completeAction = this.animateAttributeParameters.completeArguments[0];
         assert.equal(completeAction[0], this.element);
         assert.deepEqual(completeAction[1], { _Progress: 1 });
     });
 
     QUnit.test('step callBack', function(assert) {
-        var steps = [],
-            animation = this.createAnimation(this.element, this.params, $.extend(this.options,
-                {
-                    step: function(p, p1) {
-                        steps.push([p, p1]);
-                    }
-                }));
+        const steps = [];
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options,
+            {
+                step: function(p, p1) {
+                    steps.push([p, p1]);
+                }
+            }));
         animation.tick();
         // Act
         animation.tick();
@@ -687,13 +687,13 @@ var $ = require('jquery'),
     });
 
     QUnit.test('complete callBack', function(assert) {
-        var completeCallCount = 0,
-            animation = this.createAnimation(this.element, this.params, $.extend(this.options,
-                {
-                    complete: function() {
-                        completeCallCount++;
-                    }
-                }));
+        let completeCallCount = 0;
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options,
+            {
+                complete: function() {
+                    completeCallCount++;
+                }
+            }));
         animation.tick();
         // Act
         animation.tick();
@@ -705,15 +705,15 @@ var $ = require('jquery'),
 
     QUnit.test('complete callBack. Check call position', function(assert) {
         assert.expect(2);
-        var that = this,
-            animation = this.createAnimation(this.element, this.params, $.extend(this.options, {
-                // Assert
-                complete: function() {
-                    var completeAction = that.animateAttributeParameters.completeArguments[0];
-                    assert.equal(completeAction[0], that.element);
-                    assert.deepEqual(completeAction[1], { _Progress: 1 });
-                }
-            }));
+        const that = this;
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options, {
+            // Assert
+            complete: function() {
+                const completeAction = that.animateAttributeParameters.completeArguments[0];
+                assert.equal(completeAction[0], that.element);
+                assert.deepEqual(completeAction[1], { _Progress: 1 });
+            }
+        }));
         animation.tick();
         // Act
         animation.tick();
@@ -722,7 +722,7 @@ var $ = require('jquery'),
     });
 
     QUnit.test('Partition duration', function(assert) {
-        var animation = this.createAnimation(this.element, this.params, $.extend(this.options,
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options,
             {
                 partitionDuration: 1 / 2
             }));
@@ -732,9 +732,8 @@ var $ = require('jquery'),
     // B239023
     QUnit.test('Stop animation on complete animation', function(assert) {
         assert.expect(1);
-        var completeCallCount = 0,
-            animation;
-        animation = this.createAnimation(this.element, this.params, $.extend(this.options,
+        let completeCallCount = 0;
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options,
             {
                 complete: function() {
                     completeCallCount++;
@@ -765,14 +764,14 @@ var $ = require('jquery'),
     });
 
     QUnit.test('animation starts after delay', function(assert) {
-        var step = sinon.stub(),
-            animation = new this.Animation(this.element, this.params, $.extend(this.options,
-                {
-                    step: step,
-                    easing: 'linear',
-                    duration: 100,
-                    delay: 0.2
-                }));
+        const step = sinon.stub();
+        const animation = new this.Animation(this.element, this.params, $.extend(this.options,
+            {
+                step: step,
+                easing: 'linear',
+                duration: 100,
+                delay: 0.2
+            }));
         animation.tick(new Date().getTime());
         this.clock.tick(10);
 
@@ -789,14 +788,14 @@ var $ = require('jquery'),
     });
 
     QUnit.test('animation duration with delay', function(assert) {
-        var step = sinon.stub(),
-            animation = new this.Animation(this.element, this.params, $.extend(this.options,
-                {
-                    step: step,
-                    easing: 'linear',
-                    duration: 100,
-                    delay: 0.2
-                }));
+        const step = sinon.stub();
+        const animation = new this.Animation(this.element, this.params, $.extend(this.options,
+            {
+                step: step,
+                easing: 'linear',
+                duration: 100,
+                delay: 0.2
+            }));
         animation.tick(new Date().getTime());
         this.clock.tick(20);
         animation.tick(new Date().getTime());
@@ -833,7 +832,7 @@ QUnit.module('SvgAnimationStep', {
 });
 
 QUnit.test('animateSvgStep object', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     assert.ok(step);
     assert.ok($.isFunction(step.segments), 'can animate segments');
     assert.ok($.isFunction(step.transform), 'can animate transform');
@@ -843,7 +842,7 @@ QUnit.test('animateSvgStep object', function(assert) {
 });
 
 QUnit.test('Base step', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.base(this.element, { from: 10, to: 20 }, 0.5, this.easing(assert), this.currentParams, 'x');
 
@@ -853,7 +852,7 @@ QUnit.test('Base step', function(assert) {
 });
 
 QUnit.test('Transformations step. translateX, translateY', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
@@ -872,7 +871,7 @@ QUnit.test('Transformations step. translateX, translateY', function(assert) {
 });
 
 QUnit.test('Transformations step. Rotate with xy', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
 
     // Act
     // elem, params, progress, easing, currentParams, attributeName
@@ -895,7 +894,7 @@ QUnit.test('Transformations step. Rotate with xy', function(assert) {
 });
 
 QUnit.test('Transformations step. Rotate without xy', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
 
     // Act
     // elem, params, progress, easing, currentParams, attributeName
@@ -910,7 +909,7 @@ QUnit.test('Transformations step. Rotate without xy', function(assert) {
 });
 
 QUnit.test('Transformations step. Scale', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
@@ -929,7 +928,7 @@ QUnit.test('Transformations step. Scale', function(assert) {
 });
 
 QUnit.test('Transformations step. All transformations', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.transform(this.element, {
         from: {
@@ -958,7 +957,7 @@ QUnit.test('Transformations step. All transformations', function(assert) {
 });
 
 QUnit.test('Arc step', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.arc(this.element, {
         from: {
@@ -993,7 +992,7 @@ QUnit.test('Arc step', function(assert) {
 });
 
 QUnit.test('Segments step', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
@@ -1006,7 +1005,7 @@ QUnit.test('Segments step', function(assert) {
 });
 
 QUnit.test('Segments step with end param', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
@@ -1020,7 +1019,7 @@ QUnit.test('Segments step with end param', function(assert) {
 });
 
 QUnit.test('Segments last step with end param', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     // elem, params, progress, easing, currentParams, attributeName
     step.segments(this.element, {
         from: [['M', 10, 20], ['L', 10, 40], ['L', 50, 1], ['Z']],
@@ -1034,7 +1033,7 @@ QUnit.test('Segments last step with end param', function(assert) {
 });
 
 QUnit.test('Complete action', function(assert) {
-    var step = this.animationStep;
+    const step = this.animationStep;
     step.complete(this.element, { someProp: 'someValue' });
 
     assert.strictEqual(this.element.stub('attr').callCount, 1);

@@ -18,25 +18,25 @@ import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 
-const TEXTEDITOR_CLASS = 'dx-texteditor',
-    TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container',
-    TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input',
-    TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS,
-    TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container',
-    TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container',
-    TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder',
-    TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty',
-    TEXTEDITOR_STYLING_MODE_PREFIX = 'dx-editor-',
-    ALLOWED_STYLE_CLASSES = [
-        TEXTEDITOR_STYLING_MODE_PREFIX + 'outlined',
-        TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
-        TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
-    ],
+const TEXTEDITOR_CLASS = 'dx-texteditor';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
+const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS;
+const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
+const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
+const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
+const TEXTEDITOR_STYLING_MODE_PREFIX = 'dx-editor-';
+const ALLOWED_STYLE_CLASSES = [
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'outlined',
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'filled',
+    TEXTEDITOR_STYLING_MODE_PREFIX + 'underlined'
+];
 
-    STATE_INVISIBLE_CLASS = 'dx-state-invisible',
-    TEXTEDITOR_PENDING_INDICATOR_CLASS = 'dx-pending-indicator',
-    TEXTEDITOR_VALIDATION_PENDING_CLASS = 'dx-validation-pending',
-    TEXTEDITOR_VALID_CLASS = 'dx-valid';
+const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
+const TEXTEDITOR_PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
+const TEXTEDITOR_VALIDATION_PENDING_CLASS = 'dx-validation-pending';
+const TEXTEDITOR_VALID_CLASS = 'dx-valid';
 
 const EVENTS_LIST = [
     'KeyDown', 'KeyPress', 'KeyUp',
@@ -440,10 +440,10 @@ const TextEditorBase = Editor.inherit({
 
     _renderPendingIndicator: function() {
         this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
-        const $inputContainer = this._getInputContainer(),
-            $indicatorElement = $('<div>')
-                .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
-                .appendTo($inputContainer);
+        const $inputContainer = this._getInputContainer();
+        const $indicatorElement = $('<div>')
+            .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
+            .appendTo($inputContainer);
         this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
     },
 
@@ -459,8 +459,8 @@ const TextEditorBase = Editor.inherit({
 
     _renderValidationState: function() {
         this.callBase();
-        const isPending = this.option('validationStatus') === 'pending',
-            $element = this.$element();
+        const isPending = this.option('validationStatus') === 'pending';
+        const $element = this.$element();
 
         if(isPending) {
             !this._pendingIndicator && this._renderPendingIndicator();

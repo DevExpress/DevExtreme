@@ -2,19 +2,19 @@ import CollectionWidgetEdit from './ui.collection_widget.edit';
 import { Deferred, when } from '../../core/utils/deferred';
 import { noop } from '../../core/utils/common';
 
-let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
+const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     _initMarkup() {
         this._deferredItems = [];
         this.callBase();
     },
 
     _renderItemContent(args) {
-        let renderContentDeferred = new Deferred(),
-            itemDeferred = new Deferred(),
-            that = this;
+        const renderContentDeferred = new Deferred();
+        const itemDeferred = new Deferred();
+        const that = this;
 
         this._deferredItems[args.index] = itemDeferred;
-        let $itemContent = this.callBase.call(that, args);
+        const $itemContent = this.callBase.call(that, args);
 
         itemDeferred.done(() => {
             renderContentDeferred.resolve($itemContent);
@@ -37,7 +37,7 @@ let AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     _postProcessRenderItems: noop,
 
     _renderItemsAsync() {
-        let d = new Deferred();
+        const d = new Deferred();
         when.apply(this, this._deferredItems).done(() => {
             this._postProcessRenderItems();
             d.resolve();

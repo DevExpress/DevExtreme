@@ -1,12 +1,12 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    noop = require('../../core/utils/common').noop,
-    Class = require('../../core/class'),
-    dateLocalization = require('../../localization/date');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const dateLocalization = require('../../localization/date');
 
-var abstract = Class.abstract;
+const abstract = Class.abstract;
 
-var DateBoxStrategy = Class.inherit({
+const DateBoxStrategy = Class.inherit({
     ctor: function(dateBox) {
         this.dateBox = dateBox;
     },
@@ -22,8 +22,8 @@ var DateBoxStrategy = Class.inherit({
     },
 
     _createWidget: function(element) {
-        var widgetName = this._getWidgetName();
-        var widgetOptions = this._getWidgetOptions();
+        const widgetName = this._getWidgetName();
+        const widgetOptions = this._getWidgetOptions();
 
         return this.dateBox._createComponent(element, widgetName, widgetOptions);
     },
@@ -45,7 +45,7 @@ var DateBoxStrategy = Class.inherit({
     customizeButtons: noop,
 
     getParsedText: function(text, format) {
-        var value = dateLocalization.parse(text, format);
+        const value = dateLocalization.parse(text, format);
         return value ? value : dateLocalization.parse(text);
     },
 
@@ -58,10 +58,10 @@ var DateBoxStrategy = Class.inherit({
     popupConfig: abstract,
 
     renderPopupContent: function() {
-        var popup = this._getPopup();
+        const popup = this._getPopup();
         this._renderWidget();
 
-        var $popupContent = popup.$content().parent();
+        const $popupContent = popup.$content().parent();
         eventsEngine.off($popupContent, 'mousedown');
         eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
     },
@@ -119,7 +119,7 @@ var DateBoxStrategy = Class.inherit({
     },
 
     dispose: function() {
-        var popup = this._getPopup();
+        const popup = this._getPopup();
 
         if(popup) {
             popup.$content().empty();

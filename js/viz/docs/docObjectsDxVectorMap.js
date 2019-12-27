@@ -2,7 +2,7 @@
  * @name MapLayer
  * @publicName Layer
  */
-var Layer = {
+const Layer = {
     /**
      * @name MapLayerFields.name
      * @type string
@@ -45,7 +45,7 @@ var Layer = {
  * @name MapLayerElement
  * @publicName Layer Element
  */
-var LayerElement = {
+const LayerElement = {
     /**
      * @name MapLayerElementFields.layer
      * @type object
@@ -96,7 +96,7 @@ var LayerElement = {
 * @type object
 * @inherits BaseLegendItem
 */
-var legendItem = {
+const legendItem = {
     /**
     * @name VectorMapLegendItem.start
     * @type number

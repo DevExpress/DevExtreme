@@ -1,34 +1,34 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    Promise = require('../core/polyfills/promise'),
-    fromPromise = require('../core/utils/deferred').fromPromise,
-    registerComponent = require('../core/component_registrator'),
-    errors = require('./widget/ui.errors'),
-    devices = require('../core/devices'),
-    Widget = require('./widget/ui.widget'),
-    inflector = require('../core/utils/inflector'),
-    each = require('../core/utils/iterator').each,
-    extend = require('../core/utils/extend').extend,
-    inArray = require('../core/utils/array').inArray,
-    isNumeric = require('../core/utils/type').isNumeric,
-    eventUtils = require('../events/utils'),
-    pointerEvents = require('../events/pointer'),
-    wrapToArray = require('../core/utils/array').wrapToArray;
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const Promise = require('../core/polyfills/promise');
+const fromPromise = require('../core/utils/deferred').fromPromise;
+const registerComponent = require('../core/component_registrator');
+const errors = require('./widget/ui.errors');
+const devices = require('../core/devices');
+const Widget = require('./widget/ui.widget');
+const inflector = require('../core/utils/inflector');
+const each = require('../core/utils/iterator').each;
+const extend = require('../core/utils/extend').extend;
+const inArray = require('../core/utils/array').inArray;
+const isNumeric = require('../core/utils/type').isNumeric;
+const eventUtils = require('../events/utils');
+const pointerEvents = require('../events/pointer');
+const wrapToArray = require('../core/utils/array').wrapToArray;
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
 
-var PROVIDERS = {
+const PROVIDERS = {
     googleStatic: require('./map/provider.google_static'),
     google: require('./map/provider.dynamic.google'),
     bing: require('./map/provider.dynamic.bing')
 };
 
 
-var MAP_CLASS = 'dx-map',
-    MAP_CONTAINER_CLASS = 'dx-map-container',
-    MAP_SHIELD_CLASS = 'dx-map-shield',
-    NATIVE_CLICK_CLASS = 'dx-native-click';
+const MAP_CLASS = 'dx-map';
+const MAP_CONTAINER_CLASS = 'dx-map-container';
+const MAP_SHIELD_CLASS = 'dx-map-shield';
+const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 /**
 * @name dxMap
@@ -36,7 +36,7 @@ var MAP_CLASS = 'dx-map',
 * @module ui/map
 * @export default
 */
-var Map = Widget.inherit({
+const Map = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -380,7 +380,7 @@ var Map = Widget.inherit({
     },
 
     _checkOption: function(option) {
-        var value = this.option(option);
+        const value = this.option(option);
 
         if(option === 'markers' && !Array.isArray(value)) {
             throw errors.Error('E1022');
@@ -398,20 +398,20 @@ var Map = Widget.inherit({
     },
 
     _grabEvents: function() {
-        var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
         eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));
     },
 
     _cancelEvent: function(e) {
-        var cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option('disabled');
+        const cancelByProvider = this._provider && this._provider.isEventsCanceled(e) && !this.option('disabled');
         if(cancelByProvider) {
             e.stopPropagation();
         }
     },
 
     _saveRendered: function(option) {
-        var value = this.option(option);
+        const value = this.option(option);
 
         this._rendered[option] = value.slice();
     },
@@ -423,12 +423,12 @@ var Map = Widget.inherit({
 
         this._saveRendered('markers');
         this._saveRendered('routes');
-        this._provider = new PROVIDERS[this.option('provider')](this, this._$container);
+        this._provider = new (PROVIDERS[this.option('provider')])(this, this._$container);
         this._queueAsyncAction('render', this._rendered.markers, this._rendered.routes);
     },
 
     _renderShield: function() {
-        var $shield;
+        let $shield;
 
         if(this.option('disabled')) {
             $shield = $('<div>').addClass(MAP_SHIELD_CLASS);
@@ -452,9 +452,9 @@ var Map = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
+        const name = args.name;
 
-        var changeBag = this._optionChangeBag;
+        const changeBag = this._optionChangeBag;
         this._optionChangeBag = null;
 
         switch(name) {
@@ -493,10 +493,10 @@ var Map = Widget.inherit({
                 this._queueAsyncAction('adjustViewport');
                 break;
             case 'markers':
-            case 'routes':
+            case 'routes': {
                 this._checkOption(name);
 
-                var prevValue = this._rendered[name];
+                const prevValue = this._rendered[name];
                 this._saveRendered(name);
                 this._queueAsyncAction(
                     'update' + inflector.titleize(name),
@@ -508,6 +508,7 @@ var Map = Widget.inherit({
                     }
                 });
                 break;
+            }
             case 'markerIconSrc':
                 this._queueAsyncAction('updateMarkers', this._rendered.markers, this._rendered.markers);
                 break;
@@ -535,8 +536,8 @@ var Map = Widget.inherit({
     },
 
     _queueAsyncAction: function(name) {
-        var options = [].slice.call(arguments).slice(1),
-            isActionSuppressed = this._suppressAsyncAction;
+        const options = [].slice.call(arguments).slice(1);
+        const isActionSuppressed = this._suppressAsyncAction;
 
         this._lastAsyncAction = this._lastAsyncAction.then(function() {
             if(!this._provider || isActionSuppressed) {
@@ -549,7 +550,7 @@ var Map = Widget.inherit({
             return this._provider[name].apply(this._provider, options).then(function(result) {
                 result = wrapToArray(result);
 
-                var mapRefreshed = result[0];
+                const mapRefreshed = result[0];
                 if(mapRefreshed) {
                     this._triggerReadyAction();
                 }
@@ -619,8 +620,8 @@ var Map = Widget.inherit({
     },
 
     _addFunction: function(optionName, addingValue) {
-        var optionValue = this.option(optionName),
-            addingValues = wrapToArray(addingValue);
+        const optionValue = this.option(optionName);
+        const addingValues = wrapToArray(addingValue);
 
         optionValue.push.apply(optionValue, addingValues);
 
@@ -628,16 +629,16 @@ var Map = Widget.inherit({
     },
 
     _removeFunction: function(optionName, removingValue) {
-        var optionValue = this.option(optionName),
-            removingValues = wrapToArray(removingValue);
+        const optionValue = this.option(optionName);
+        const removingValues = wrapToArray(removingValue);
 
         each(removingValues, function(removingIndex, removingValue) {
-            var index = isNumeric(removingValue)
+            const index = isNumeric(removingValue)
                 ? removingValue
                 : inArray(removingValue, optionValue);
 
             if(index !== -1) {
-                var removing = optionValue.splice(index, 1)[0];
+                const removing = optionValue.splice(index, 1)[0];
                 removingValues.splice(removingIndex, 1, removing);
             } else {
                 throw errors.log('E1021', inflector.titleize(optionName.substring(0, optionName.length - 1)), removingValue);

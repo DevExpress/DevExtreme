@@ -2,7 +2,7 @@
 /* global jQuery */
 
 !function() {
-    var module = QUnit.module;
+    const module = QUnit.module;
 
     QUnit.module = function(_, testEnvironment) {
         if(testEnvironment && (testEnvironment.setup || testEnvironment.teardown)) {
@@ -13,7 +13,7 @@
 
     // compares two float/double numbers with some acceptable epsilon
     QUnit.assert.roughEqual = function(actual, expected, epsilon, message) {
-        var delta = Math.abs(expected - actual);
+        const delta = Math.abs(expected - actual);
         this.pushResult({
             result: delta < epsilon,
             actual: actual,
@@ -23,9 +23,9 @@
     };
 
     QUnit.assert.assertPerformance = function(action, limit) {
-        var start = new Date();
+        const start = new Date();
         action();
-        var ms = new Date() - start;
+        const ms = new Date() - start;
         this.pushResult({
             result: ms < limit,
             actual: ms + ' ms',
@@ -34,8 +34,8 @@
         });
     };
 
-    var confirmWindowActive = function() {
-        var $input;
+    const confirmWindowActive = function() {
+        let $input;
         try {
             $input = jQuery('<input>')
                 .appendTo('body')
@@ -54,7 +54,7 @@
         if(confirmWindowActive()) {
             QUnit.test.apply(this, arguments);
         } else {
-            var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             if(iOS) {
                 // do not test
                 // do not skip
@@ -72,14 +72,14 @@
 
     };
 
-    var waitFor = window.waitFor = function(predicate, timeout, interval) {
+    const waitFor = window.waitFor = function(predicate, timeout, interval) {
         timeout = timeout || 30000;
         interval = interval || 15;
 
-        var d = jQuery.Deferred(),
-            startTime = jQuery.now();
+        const d = jQuery.Deferred();
+        const startTime = jQuery.now();
 
-        var checkInterval = setInterval(function() {
+        const checkInterval = setInterval(function() {
             if(predicate()) {
                 d.resolve();
             }
@@ -104,7 +104,7 @@
     };
 
     window.waitTimeout = function(timeout, callback) {
-        var startTime = jQuery.now();
+        const startTime = jQuery.now();
         return waitFor(function() {
             return (jQuery.now() - startTime) >= timeout;
         }).done(callback);
@@ -118,7 +118,7 @@
                 console._timers[st] = new Date();
             };
             console.timeEnd = function(st) {
-                var time = new Date() - console._timers[st];
+                const time = new Date() - console._timers[st];
                 console.info('end ' + st + ': ' + time + ' ms');
             };
         }
@@ -131,8 +131,8 @@
             });
         }
 
-        var uniqueName = dashCase(QUnit.config.current.testName),
-            $container = jQuery('<div />').attr('id', uniqueName);
+        const uniqueName = dashCase(QUnit.config.current.testName);
+        const $container = jQuery('<div />').attr('id', uniqueName);
         css && $container.css(css);
         parent && $container.appendTo(parent);
         return $container;
@@ -159,7 +159,7 @@
 
 
 (function clearQUnitFixtureByJQuery() {
-    var isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
+    const isMsEdge = 'CollectGarbage' in window && !('ActiveXObject' in window);
 
     QUnit.testDone(function(options) {
         if(!jQuery) {
@@ -183,7 +183,7 @@
     });
 
     QUnit.timerIgnoringCheckers = (function() {
-        var noop = function() { };
+        const noop = function() { };
 
         return {
             register: noop,
@@ -198,17 +198,17 @@
         return;
     }
 
-    var runAllMode = window.parent !== window.self;
+    const runAllMode = window.parent !== window.self;
 
-    var createMethodWrapper = function(method, callbacks) {
-        var originalMethod = method,
-            beforeCall = callbacks['beforeCall'],
-            afterCall = callbacks['afterCall'],
-            info = {
-                originalMethod: originalMethod
-            };
+    const createMethodWrapper = function(method, callbacks) {
+        const originalMethod = method;
+        const beforeCall = callbacks['beforeCall'];
+        const afterCall = callbacks['afterCall'];
+        const info = {
+            originalMethod: originalMethod
+        };
 
-        var wrapper = function() {
+        const wrapper = function() {
             info['context'] = this;
             info['args'] = Array.prototype.slice.call(arguments);
 
@@ -231,13 +231,13 @@
         return wrapper;
     };
 
-    var getStack = function() {
-        var stack = '';
+    const getStack = function() {
+        let stack = '';
         try { throw Error(''); } catch(ex) { stack = ex.stack; }
         return stack;
     };
 
-    var saveTimerInfo = function(logObject, id, info) {
+    const saveTimerInfo = function(logObject, id, info) {
         if(!runAllMode) {
             info.stack = getStack();
             info.callback = info.callback.toString();
@@ -245,8 +245,8 @@
         logObject[id] = info;
     };
 
-    var requestAnimationFrameMethodName = (function() {
-        var candidates = [
+    const requestAnimationFrameMethodName = (function() {
+        const candidates = [
             'requestAnimationFrame',
             'msRequestAnimationFrame',
             'mozRequestAnimationFrame',
@@ -254,15 +254,15 @@
         ];
 
         while(candidates.length) {
-            var candidate = candidates.shift();
+            const candidate = candidates.shift();
             if(candidate in window) {
                 return candidate;
             }
         }
     })();
 
-    var cancelAnimationFrameMethodName = (function() {
-        var candidates = [
+    const cancelAnimationFrameMethodName = (function() {
+        const candidates = [
             'cancelAnimationFrame',
             'msCancelAnimationFrame',
             'mozCancelAnimationFrame',
@@ -270,7 +270,7 @@
         ];
 
         while(candidates.length) {
-            var candidate = candidates.shift();
+            const candidate = candidates.shift();
             if(candidate in window) {
                 return candidate;
             }
@@ -278,14 +278,14 @@
     })();
 
 
-    var spyWindowMethods = function() {
-        var log,
-            logEnabled,
-            timeouts,
-            intervals,
-            animationFrames;
+    const spyWindowMethods = function() {
+        let log;
+        let logEnabled;
+        let timeouts;
+        let intervals;
+        let animationFrames;
 
-        var methodHooks = {
+        const methodHooks = {
             'setTimeout': {
                 'beforeCall': function(info) {
                     if(!logEnabled) {
@@ -293,7 +293,7 @@
                     }
 
                     info.originalCallback = info.args[0];
-                    var callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                    const callbackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
                         afterCall: function() {
                             if(!logEnabled) {
                                 return;
@@ -354,7 +354,7 @@
                 }
 
                 info.originalCallback = info.args[0];
-                var callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
+                const callBackWrapper = info.args[0] = createMethodWrapper(info.originalCallback, {
                     afterCall: function() {
                         if(!logEnabled) {
                             return;
@@ -385,11 +385,12 @@
             }
         };
 
-        for(var name in methodHooks) {
+        let name;
+        for(name in methodHooks) {
             window[name] = createMethodWrapper(window[name], methodHooks[name]);
         }
 
-        var initLog = function() {
+        const initLog = function() {
             log = {};
             timeouts = log['timeouts'] = {},
             intervals = log['intervals'] = {},
@@ -418,42 +419,42 @@
         };
     };
 
-    var suppressLogOnTest = function() {
+    const suppressLogOnTest = function() {
         return /Not cleared timers detected/.test(QUnit.config.current.testName);
     };
 
-    var log = spyWindowMethods();
+    const log = spyWindowMethods();
 
     QUnit.timerIgnoringCheckers = (function() {
-        var checkers = [],
-            checkersToUnregister = [];
+        let checkers = [];
+        let checkersToUnregister = [];
 
-        var register = function() {
+        const register = function() {
             Array.prototype.push.apply(checkers, arguments);
         };
 
-        var unregister = function() {
+        const unregister = function() {
             Array.prototype.push.apply(checkersToUnregister, arguments);
         };
 
-        var unregisterSingle = function(checker) {
-            var index = checkers.indexOf(checker);
+        const unregisterSingle = function(checker) {
+            const index = checkers.indexOf(checker);
 
             checkers.splice(index, 1);
         };
 
-        var applyUnregister = function() {
+        const applyUnregister = function() {
             jQuery.map(checkersToUnregister, unregisterSingle);
             checkersToUnregister = [];
         };
 
-        var clear = function() {
+        const clear = function() {
             checkers = [];
             checkersToUnregister = [];
         };
 
-        var needSkip = function(timerInfo) {
-            var skip = false;
+        const needSkip = function(timerInfo) {
+            let skip = false;
 
             jQuery.each(checkers, function(i, checker) {
                 if(checker(timerInfo)) {
@@ -490,12 +491,12 @@
             return;
         }
 
-        var logGlobalFailure = function(details) {
-            var timerInfo = details.timerInfo,
-                timeoutString = timerInfo.timeout ? ', timeout: ' + timerInfo.timeout : '',
-                message = ['Timer type: ', timerInfo.timerType, ', Id: ', timerInfo.timerId, timeoutString, '\nCallback:\n', timerInfo.callback].join('');
+        const logGlobalFailure = function(details) {
+            const timerInfo = details.timerInfo;
+            const timeoutString = timerInfo.timeout ? ', timeout: ' + timerInfo.timeout : '';
+            const message = ['Timer type: ', timerInfo.timerType, ', Id: ', timerInfo.timerId, timeoutString, '\nCallback:\n', timerInfo.callback].join('');
 
-            var testCallback = function() {
+            const testCallback = function() {
                 QUnit.pushFailure(message, timerInfo.stack || '1 timer');
             };
 
@@ -505,11 +506,11 @@
             QUnit.test(details.testName, testCallback);
         };
 
-        var isThirdPartyLibraryTimer = function(timerInfo) {
+        const isThirdPartyLibraryTimer = function(timerInfo) {
             if(!timerInfo || !timerInfo.callback) {
                 return false;
             }
-            var callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
+            const callback = String(timerInfo.callback).replace(/\s|"use strict";/g, '');
 
             if(timerInfo.timerType === 'animationFrames' &&
                 [
@@ -539,15 +540,15 @@
         log.stop();
 
         jQuery.each(['timeouts', 'intervals', 'animationFrames'], function() {
-            var type = String(this),
-                currentInfo = log.get()[type];
+            const type = String(this);
+            const currentInfo = log.get()[type];
 
             if(!jQuery.isEmptyObject(currentInfo)) {
-                var timerId = Object.keys(currentInfo)[0],
-                    normalizedTimerInfo = jQuery.extend({
-                        timerType: type,
-                        timerId: timerId
-                    }, currentInfo, currentInfo[timerId]);
+                const timerId = Object.keys(currentInfo)[0];
+                const normalizedTimerInfo = jQuery.extend({
+                    timerType: type,
+                    timerId: timerId
+                }, currentInfo, currentInfo[timerId]);
 
                 delete normalizedTimerInfo[timerId];
 
@@ -575,8 +576,7 @@
 (function checkSinonFakeTimers() {
 
     QUnit.testStart(function() {
-        var dateOnTestStart = Date,
-            after = QUnit.config.current.after;
+        const dateOnTestStart = Date; const after = QUnit.config.current.after;
 
         QUnit.config.current.after = function() {
             if(dateOnTestStart !== Date) {

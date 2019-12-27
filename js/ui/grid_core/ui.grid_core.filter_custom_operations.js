@@ -1,19 +1,19 @@
 import { renderValueText } from '../filter_builder/filter_builder';
 
-var $ = require('../../core/renderer'),
-    messageLocalization = require('../../localization/message'),
-    extend = require('../../core/utils/extend').extend,
-    DataSourceModule = require('../../data/data_source/data_source'),
-    deferredUtils = require('../../core/utils/deferred'),
-    utils = require('../filter_builder/utils');
+const $ = require('../../core/renderer');
+const messageLocalization = require('../../localization/message');
+const extend = require('../../core/utils/extend').extend;
+const DataSourceModule = require('../../data/data_source/data_source');
+const deferredUtils = require('../../core/utils/deferred');
+const utils = require('../filter_builder/utils');
 
 function baseOperation(grid) {
-    var calculateFilterExpression = function(filterValue, field) {
-        var result = [],
-            lastIndex = filterValue.length - 1;
+    const calculateFilterExpression = function(filterValue, field) {
+        let result = [];
+        const lastIndex = filterValue.length - 1;
         filterValue && filterValue.forEach(function(value, index) {
             if(utils.isCondition(value) || utils.isGroup(value)) {
-                var filterExpression = utils.getFilterExpression(value, [field], [], 'headerFilter');
+                const filterExpression = utils.getFilterExpression(value, [field], [], 'headerFilter');
                 result.push(filterExpression);
             } else {
                 result.push(utils.getFilterExpression([field.dataField, '=', value], [field], [], 'headerFilter'));
@@ -26,15 +26,15 @@ function baseOperation(grid) {
         return result;
     };
 
-    var getFullText = function(itemText, parentText) {
+    const getFullText = function(itemText, parentText) {
         return parentText ? parentText + '/' + itemText : itemText;
     };
 
-    var getSelectedItemsTexts = function(items, parentText) {
-        var result = [];
+    const getSelectedItemsTexts = function(items, parentText) {
+        let result = [];
         items.forEach(function(item) {
             if(item.items) {
-                var selectedItemsTexts = getSelectedItemsTexts(item.items, getFullText(item.text, parentText));
+                const selectedItemsTexts = getSelectedItemsTexts(item.items, getFullText(item.text, parentText));
                 result = result.concat(selectedItemsTexts);
             }
             item.selected && result.push(getFullText(item.text, parentText));
@@ -42,45 +42,45 @@ function baseOperation(grid) {
         return result;
     };
 
-    var headerFilterController = grid && grid.getController('headerFilter'),
-        customizeText = function(fieldInfo) {
-            var value = fieldInfo.value,
-                column = grid.columnOption(fieldInfo.field.dataField),
-                headerFilter = column && column.headerFilter,
-                lookup = column && column.lookup;
+    const headerFilterController = grid && grid.getController('headerFilter');
+    const customizeText = function(fieldInfo) {
+        const value = fieldInfo.value;
+        let column = grid.columnOption(fieldInfo.field.dataField);
+        const headerFilter = column && column.headerFilter;
+        const lookup = column && column.lookup;
 
-            if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-                column = extend({}, column, { filterType: 'include', filterValues: [value] });
-                var dataSourceOptions = headerFilterController.getDataSource(column);
-                dataSourceOptions.paginate = false;
-                let headerFilterDataSource = headerFilter && headerFilter.dataSource;
-                if(!headerFilterDataSource && lookup.items) {
-                    dataSourceOptions.store = lookup.items;
-                }
-                var dataSource = new DataSourceModule.DataSource(dataSourceOptions),
-                    result = new deferredUtils.Deferred();
-
-                dataSource.load().done(items => {
-                    result.resolve(getSelectedItemsTexts(items)[0]);
-                });
-                return result;
-            } else {
-                var text = headerFilterController.getHeaderItemText(value, column, 0, grid.option('headerFilter'));
-                return text;
+        if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
+            column = extend({}, column, { filterType: 'include', filterValues: [value] });
+            const dataSourceOptions = headerFilterController.getDataSource(column);
+            dataSourceOptions.paginate = false;
+            const headerFilterDataSource = headerFilter && headerFilter.dataSource;
+            if(!headerFilterDataSource && lookup.items) {
+                dataSourceOptions.store = lookup.items;
             }
-        };
+            const dataSource = new DataSourceModule.DataSource(dataSourceOptions);
+            const result = new deferredUtils.Deferred();
+
+            dataSource.load().done(items => {
+                result.resolve(getSelectedItemsTexts(items)[0]);
+            });
+            return result;
+        } else {
+            const text = headerFilterController.getHeaderItemText(value, column, 0, grid.option('headerFilter'));
+            return text;
+        }
+    };
     return {
         dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
         calculateFilterExpression: calculateFilterExpression,
         editorTemplate: function(conditionInfo, container) {
-            var div = $('<div>')
-                    .addClass('dx-filterbuilder-item-value-text')
-                    .appendTo(container),
-                column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
+            const div = $('<div>')
+                .addClass('dx-filterbuilder-item-value-text')
+                .appendTo(container);
+            const column = extend(true, {}, grid.columnOption(conditionInfo.field.dataField));
 
             renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));
 
-            var setValue = function(value) {
+            const setValue = function(value) {
                 conditionInfo.setValue(value);
             };
 
@@ -115,10 +115,10 @@ function anyOf(grid) {
 }
 
 function noneOf(grid) {
-    var baseOp = baseOperation(grid);
+    const baseOp = baseOperation(grid);
     return extend({}, baseOp, {
         calculateFilterExpression: function(filterValue, field) {
-            var baseFilter = baseOp.calculateFilterExpression(filterValue, field);
+            const baseFilter = baseOp.calculateFilterExpression(filterValue, field);
             if(!baseFilter || baseFilter.length === 0) return null;
 
             return baseFilter[0] === '!' ? baseFilter : ['!', baseFilter];

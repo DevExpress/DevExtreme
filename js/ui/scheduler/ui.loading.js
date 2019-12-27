@@ -1,17 +1,17 @@
-var $ = require('../../core/renderer'),
-    viewPortUtils = require('../../core/utils/view_port'),
-    LoadPanel = require('../load_panel'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const viewPortUtils = require('../../core/utils/view_port');
+const LoadPanel = require('../load_panel');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var loading = null;
+let loading = null;
 
-var createLoadPanel = function(options) {
+const createLoadPanel = function(options) {
     return new LoadPanel($('<div>')
         .appendTo(options && options.container || viewPortUtils.value()),
     options);
 };
 
-var removeLoadPanel = function() {
+const removeLoadPanel = function() {
     if(!loading) {
         return;
     }

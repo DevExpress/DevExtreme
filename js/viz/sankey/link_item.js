@@ -1,17 +1,17 @@
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
-var states = ['normal', 'adjacentNodeHover', 'hover'],
-    isDefined = require('../../core/utils/type').isDefined;
+const states = ['normal', 'adjacentNodeHover', 'hover'];
+const isDefined = require('../../core/utils/type').isDefined;
 
 function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
 
-    let border = itemOptions.border,
-        baseBorder = itemBaseOptions.border,
-        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
-        borderWidth = isDefined(border.width) ? border.width : baseBorder.width,
-        borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1),
-        opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1),
-        fill = itemOptions.color || color;
+    const border = itemOptions.border;
+    const baseBorder = itemBaseOptions.border;
+    const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
+    const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
+    const borderOpacity = isDefined(border.opacity) ? border.opacity : (isDefined(baseBorder.opacity) ? baseBorder.opacity : 1);
+    const opacity = isDefined(itemOptions.opacity) ? itemOptions.opacity : (isDefined(itemBaseOptions.opacity) ? itemBaseOptions.opacity : 1);
+    let fill = itemOptions.color || color;
 
     if(itemBaseOptions.colorMode === COLOR_MODE_TARGET || itemBaseOptions.colorMode === COLOR_MODE_SOURCE) {
         fill = color;
@@ -30,8 +30,8 @@ function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
 }
 
 function Link(widget, params) {
-    var that = this,
-        widgetOffset = widget._renderer.getRootOffset();
+    const that = this;
+    const widgetOffset = widget._renderer.getRootOffset();
 
     that.code = 0;
     that.widget = widget;

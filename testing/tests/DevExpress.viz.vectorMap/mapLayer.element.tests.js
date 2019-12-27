@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    mapLayerModule = require('viz/vector_map/map_layer');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const mapLayerModule = require('viz/vector_map/map_layer');
 
 QUnit.module('Basic', {
     beforeEach: function() {
@@ -23,7 +23,7 @@ QUnit.module('Basic', {
     },
 
     project: function(hasSeparateLabel) {
-        var element = this.element;
+        const element = this.element;
         element.proj = { tag: 'proj' };
         this.str.project = function() { return element.proj; };
         if(hasSeparateLabel) {
@@ -35,7 +35,7 @@ QUnit.module('Basic', {
     },
 
     draw: function(labelEnabled, hasSeparateLabel) {
-        var element = this.element;
+        const element = this.element;
         this.project(hasSeparateLabel);
         this.str.draw = function() {
             element.figure = arguments[1];
@@ -60,7 +60,7 @@ QUnit.test('Project with labels', function(assert) {
     this.draw(true, true);
     this.str.getStyles = this.str.refresh = this.str.setState = this.str.transformLabel = noop;
     this.element.refresh();
-    var proj = { tag: 'proj' };
+    const proj = { tag: 'proj' };
     this.str.project = sinon.stub().returns(proj);
     this.str.projectLabel = sinon.spy();
     this.context.hasSeparateLabel = true;
@@ -83,7 +83,7 @@ QUnit.test('Project with separate labels without label', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure;
+    let figure;
     this.str.draw = sinon.spy(function() {
         figure = arguments[1];
         figure.root = new vizMocks.Element();
@@ -138,7 +138,7 @@ QUnit.test('Transform with separate labels without label', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    var styles = { tag: 'styles' };
+    const styles = { tag: 'styles' };
     this.draw();
     this.str.getStyles = sinon.stub().returns(styles);
     this.str.refresh = sinon.spy();
@@ -147,13 +147,13 @@ QUnit.test('Refresh', function(assert) {
     this.element.refresh();
 
     assert.strictEqual(this.str.getStyles.lastCall.args.length, 1, 'getStyles');
-    var settings = this.str.getStyles.lastCall.args[0];
+    const settings = this.str.getStyles.lastCall.args[0];
     assert.deepEqual(this.str.refresh.lastCall.args, [this.context, this.element.figure, { index: this.index, name: 'test-name' }, this.element.proxy, settings], 'refresh');
     assert.deepEqual(this.str.setState.lastCall.args, [this.element.figure, styles, 0], 'setState');
 });
 
 QUnit.test('Refresh with label', function(assert) {
-    var styles = { tag: 'styles' };
+    const styles = { tag: 'styles' };
     this.draw(true);
     this.str.getStyles = sinon.stub().returns(styles);
     this.str.refresh = sinon.spy();
@@ -171,8 +171,8 @@ QUnit.test('Refresh with label', function(assert) {
     this.element.refresh();
 
     assert.strictEqual(this.str.getStyles.lastCall.args.length, 1, 'getStyles');
-    var settings = this.str.getStyles.lastCall.args[0],
-        text = this.context.renderer.text.lastCall.returnValue;
+    const settings = this.str.getStyles.lastCall.args[0];
+    const text = this.context.renderer.text.lastCall.returnValue;
     assert.deepEqual(this.str.refresh.lastCall.args, [this.context, this.element.figure, { index: this.index, name: 'test-name' }, this.element.proxy, settings], 'refresh');
     assert.deepEqual(this.str.setState.lastCall.args, [this.element.figure, styles, 0], 'setState');
     assert.deepEqual(text.attr.getCall(1).args, [{ text: 'Hello', x: 0, y: 0 }], 'text settings 1');
@@ -185,7 +185,7 @@ QUnit.test('Refresh with label', function(assert) {
 });
 
 QUnit.test('Refresh with label when labels are disabled', function(assert) {
-    var styles = { tag: 'styles' };
+    const styles = { tag: 'styles' };
     this.draw(true);
     this.str.getStyles = sinon.stub().returns(styles);
     this.str.refresh = sinon.spy();
@@ -200,7 +200,7 @@ QUnit.test('Refresh with label when labels are disabled', function(assert) {
     this.str.projectLabel = sinon.spy();
     this.str.transformLabel = sinon.spy();
     this.element.refresh();
-    var text = this.context.renderer.text.lastCall.returnValue;
+    const text = this.context.renderer.text.lastCall.returnValue;
 
     this.context.settings.label.enabled = false;
     this.element.refresh();
@@ -209,7 +209,7 @@ QUnit.test('Refresh with label when labels are disabled', function(assert) {
 });
 
 QUnit.test('Refresh with label when labels are disabled and particular label is enabled', function(assert) {
-    var styles = { tag: 'styles' };
+    const styles = { tag: 'styles' };
     this.draw(true);
     this.str.getStyles = sinon.stub().returns(styles);
     this.str.refresh = sinon.spy();
@@ -265,7 +265,7 @@ QUnit.test('Refresh with label when text is not defined', function(assert) {
 });
 
 QUnit.test('Options merging', function(assert) {
-    var settings;
+    let settings;
     this.str.getStyles = function() { settings = arguments[0]; };
     this.context.settings = {
         p1: 'p1', p2: 'p2',
@@ -302,7 +302,7 @@ QUnit.test('Options merging', function(assert) {
 });
 
 QUnit.test('Options and palette', function(assert) {
-    var settings;
+    let settings;
     this.str.getStyles = function() { settings = arguments[0]; };
     this.context.settings = {
         _colors: ['a', 'b', 'c'],
@@ -321,7 +321,7 @@ QUnit.test('Options and palette', function(assert) {
 });
 
 QUnit.test('Options and palette and option', function(assert) {
-    var settings;
+    let settings;
     this.str.getStyles = function() { settings = arguments[0]; };
     this.context.settings = {
         _colors: ['a', 'b', 'c'],
@@ -341,9 +341,9 @@ QUnit.test('Options and palette and option', function(assert) {
 });
 
 QUnit.test('Options and grouping', function(assert) {
-    var settings,
-        callback1 = sinon.stub().withArgs('test-field-1').returns(3),
-        callback2 = sinon.stub().withArgs('test-field-2').returns(5);
+    let settings;
+    const callback1 = sinon.stub().withArgs('test-field-1').returns(3);
+    const callback2 = sinon.stub().withArgs('test-field-2').returns(5);
     this.str.getStyles = function() { settings = arguments[0]; };
     this.context.grouping = {
         prop1: {
@@ -375,7 +375,7 @@ QUnit.test('measureLabel and adjustLabel', function(assert) {
     this.element.proxy.attribute('text', 'Hello');
     this.context.settings.label.dataField = 'text';
     this.element.refresh();
-    var text = this.context.renderer.text.lastCall.returnValue;
+    const text = this.context.renderer.text.lastCall.returnValue;
     text.getBBox = sinon.stub().returns({ width: 20, height: 16, y: 3 });
     this.str.getLabelOffset = sinon.stub().returns([30, 40]);
 
@@ -395,7 +395,7 @@ QUnit.test('Update when not drawn', function(assert) {
 QUnit.test('Update when drawn', function(assert) {
     this.draw();
     this.str.getStyles = this.str.refresh = this.str.setState = noop;
-    var refresh = sinon.spy(this.element, 'refresh');
+    const refresh = sinon.spy(this.element, 'refresh');
 
     this.element.update();
 
@@ -403,8 +403,8 @@ QUnit.test('Update when drawn', function(assert) {
 });
 
 QUnit.test('Set hovered', function(assert) {
-    var styles = { tag: 'styles' },
-        trigger = sinon.spy();
+    const styles = { tag: 'styles' };
+    const trigger = sinon.spy();
     this.context.params = { eventTrigger: trigger };
     this.context.hover = true;
     this.str.getStyles = function() { return styles; };
@@ -427,8 +427,8 @@ QUnit.test('Set hovered', function(assert) {
 });
 
 QUnit.test('Set selected', function(assert) {
-    var styles = { tag: 'styles' },
-        trigger = sinon.spy();
+    const styles = { tag: 'styles' };
+    const trigger = sinon.spy();
     this.context.params = { eventTrigger: trigger };
     this.context.selection = { state: {} };
     this.str.getStyles = function() { return styles; };
@@ -451,7 +451,7 @@ QUnit.test('Set selected', function(assert) {
 });
 
 QUnit.test('Set selected when not drawn', function(assert) {
-    var trigger = sinon.spy();
+    const trigger = sinon.spy();
     this.context.params = { eventTrigger: trigger };
     this.context.selection = { state: {} };
 
@@ -479,19 +479,19 @@ QUnit.test('Proxy.attribute', function(assert) {
 });
 
 QUnit.test('Proxy.selected getter', function(assert) {
-    var stub = sinon.stub(this.element, 'isSelected').returns('val');
+    const stub = sinon.stub(this.element, 'isSelected').returns('val');
     assert.strictEqual(this.element.proxy.selected(), 'val');
     assert.deepEqual(stub.lastCall.args, []);
 });
 
 QUnit.test('Proxy.selected setter', function(assert) {
-    var spy = sinon.spy(this.element, 'setSelected');
+    const spy = sinon.spy(this.element, 'setSelected');
     assert.strictEqual(this.element.proxy.selected('a', 'b'), this.element.proxy);
     assert.deepEqual(spy.lastCall.args, ['a', 'b']);
 });
 
 QUnit.test('Proxy.applySettings', function(assert) {
-    var spy = sinon.spy(this.element, 'update');
+    const spy = sinon.spy(this.element, 'update');
     assert.strictEqual(this.element.proxy.applySettings({ tag: 'settings' }), this.element.proxy);
     assert.deepEqual(spy.lastCall.args, [{ tag: 'settings' }]);
 });

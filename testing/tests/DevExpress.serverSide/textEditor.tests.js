@@ -1,7 +1,7 @@
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup = '<div id="texteditor"></div>';
+    const markup = '<div id="texteditor"></div>';
 
     document.getElementById('qunit-fixture').innerHTML = markup;
 });

@@ -3,7 +3,7 @@
 * @name dxSankeyNode
 * @publicName Node
 */
-var Node = {
+const Node = {
     /**
     * @name dxSankeyNodefields.title
     * @type string
@@ -53,7 +53,7 @@ var Node = {
 * @name dxSankeyLink
 * @publicName Link
 */
-var Link = {
+const Link = {
     /**
     * @name dxSankeyLinkfields.connection
     * @type dxSankeyConnectionInfoObject
@@ -88,7 +88,7 @@ var Link = {
 * @publicName connection
 * @type object
 */
-var dxSankeyConnectionInfoObject = {
+const dxSankeyConnectionInfoObject = {
     /**
     * @name dxSankeyConnectionInfoObject.source
     * @type string
@@ -104,4 +104,4 @@ var dxSankeyConnectionInfoObject = {
     * @type Number
     */
     weight: undefined
-}
+};

@@ -5,7 +5,7 @@ import { DataSource } from 'data/data_source/data_source';
 const { module, test } = QUnit;
 
 const generateData = (count) => {
-    let items = [];
+    const items = [];
     for(let i = 0; i < count; i++) {
         items.push({ id: i, text: 'text ' + i, index: i + 10 });
     }
@@ -104,7 +104,7 @@ module('live update', {
 
         helper.store.push([{ type: 'remove', key: 0 }]);
 
-        var loadingSpy = sinon.spy();
+        const loadingSpy = sinon.spy();
         helper.store.on('loading', loadingSpy);
         helper.instance.getDataSource().reload();
 

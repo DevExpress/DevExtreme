@@ -118,11 +118,11 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
     });
 
     QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', function(assert) {
-        var currentDate = this.instance.option('currentDate'),
-            header = this.instance.getHeader(),
-            workSpace = this.instance.getWorkSpace(),
-            headerCurrentDate = header.option('currentDate'),
-            workSpaceCurrentDate = workSpace.option('currentDate');
+        let currentDate = this.instance.option('currentDate');
+        const header = this.instance.getHeader();
+        const workSpace = this.instance.getWorkSpace();
+        let headerCurrentDate = header.option('currentDate');
+        let workSpaceCurrentDate = workSpace.option('currentDate');
 
         this.checkDateTime(assert, headerCurrentDate, dateUtils.trimTime(currentDate), 'header date');
         this.checkDateTime(assert, workSpaceCurrentDate, dateUtils.trimTime(currentDate), 'work space date');
@@ -178,7 +178,7 @@ QUnit.module('Scheduler with config', {
             }]
         });
 
-        var $workSpace = this.instance.getWorkSpace().$element();
+        const $workSpace = this.instance.getWorkSpace().$element();
         assert.notOk($workSpace.hasClass('dx-scheduler-work-space-overlapping'), 'workspace hasn\'t class');
     });
 

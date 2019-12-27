@@ -8,7 +8,7 @@ QUnit.module('Initialization', labelEnvironment);
 QUnit.test('Create label group on initialization', function(assert) {
     createFunnel({});
 
-    var labelsGroup = this.labelGroup();
+    const labelsGroup = this.labelGroup();
     assert.equal(labelsGroup.append.lastCall.args[0], this.renderer.root);
     assert.equal(labelsGroup.attr.lastCall.args[0].class, 'dxf-labels');
 });
@@ -25,8 +25,8 @@ QUnit.test('Create labels', function(assert) {
             visible: true
         }
     });
-    var labelsGroup = this.labelGroup(),
-        label = labelModule.Label.getCall(0).returnValue;
+    const labelsGroup = this.labelGroup();
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.ok(labelsGroup.clear.called);
 
@@ -66,7 +66,7 @@ QUnit.test('Create labels with styles', function(assert) {
         }
     });
 
-    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+    const options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
 
     assert.deepEqual(options.attributes.font, {
         color: 'red',
@@ -110,7 +110,7 @@ QUnit.test('Default label alignment for inside labels is center', function(asser
         }
     });
 
-    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+    const options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
 
     assert.deepEqual(options.textAlignment, 'center', 'text alignment');
 });
@@ -127,7 +127,7 @@ QUnit.test('Default label alignment for outside labels is left', function(assert
         }
     });
 
-    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+    const options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
 
     assert.deepEqual(options.textAlignment, 'left', 'text alignment');
 });
@@ -145,7 +145,7 @@ QUnit.test('Default label alignment for outside labels is right if rtl enabled',
         }
     });
 
-    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+    const options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
 
     assert.deepEqual(options.textAlignment, 'right', 'text alignment');
 });
@@ -160,7 +160,7 @@ QUnit.test('Do not create labels if label.visible set to false', function(assert
             visible: false
         }
     });
-    var labelsGroup = this.labelGroup();
+    const labelsGroup = this.labelGroup();
 
     assert.ok(labelsGroup.clear.called);
     assert.equal(labelModule.Label.callCount, 0, 'no one label is created');
@@ -197,7 +197,7 @@ QUnit.test('Reserve space for labels if position outside', function(assert) {
         }
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 680, 600]);
 });
@@ -216,7 +216,7 @@ QUnit.test('Reserve space for labels if position outside and horizontal alignmen
         }
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [120, 0, 800, 600]);
 });
@@ -234,7 +234,7 @@ QUnit.test('Reserve space for labels if position columns', function(assert) {
         }
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 665, 600]);
 });
@@ -252,7 +252,7 @@ QUnit.test('Use columns position if position value is not accepted', function(as
         }
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 665, 600]);
 });
@@ -270,13 +270,13 @@ QUnit.test('Do not reserve space for labels if position inside', function(assert
         }
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
 });
 
 QUnit.test('Relayout labels after dataSource changed', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }],
         valueField: 'value',
@@ -292,7 +292,7 @@ QUnit.test('Relayout labels after dataSource changed', function(assert) {
         dataSource: [{ value: 2 }]
     });
 
-    var items = this.items();
+    const items = this.items();
     assert.equal(items.length, 1);
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 735, 600]);
 });
@@ -317,7 +317,7 @@ QUnit.test('Place labels with outside position', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    let label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [360, 330]);
 
     label = labelModule.Label.getCall(1).returnValue;
@@ -342,7 +342,7 @@ QUnit.test('Place labels with outside position. inverted', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [700, 590]);
 });
 
@@ -364,7 +364,7 @@ QUnit.test('Place labels with outside position and left horizontal alignment', f
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.deepEqual(label.shift.args[0], [0, 30]);
 });
@@ -388,7 +388,7 @@ QUnit.test('Place labels with outside position. horizontalAlignment left. invert
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [0, 590]);
 });
 
@@ -409,7 +409,7 @@ QUnit.test('Place labels with inside position', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [365, 175]);
 });
 
@@ -430,7 +430,7 @@ QUnit.test('Place labels with inside position, figure is hexagon', function(asse
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [365, 325]);
 });
 
@@ -451,8 +451,8 @@ QUnit.test('Place labels with columns position', function(assert) {
             verticalOffset: 30
         }
     });
-    var label1 = labelModule.Label.getCall(0).returnValue,
-        label2 = labelModule.Label.getCall(1).returnValue;
+    const label1 = labelModule.Label.getCall(0).returnValue;
+    const label2 = labelModule.Label.getCall(1).returnValue;
 
     assert.deepEqual(label1.shift.args[0], [700, 30]);
     assert.deepEqual(label2.shift.args[0], [700, 30]);
@@ -476,7 +476,7 @@ QUnit.test('Place labels with columns position. inverted', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [700, 590]);
 });
 
@@ -498,8 +498,8 @@ QUnit.test('Place labels with columns position. rtl', function(assert) {
             verticalOffset: 30
         }
     });
-    var label1 = labelModule.Label.getCall(0).returnValue,
-        label2 = labelModule.Label.getCall(1).returnValue;
+    const label1 = labelModule.Label.getCall(0).returnValue;
+    const label2 = labelModule.Label.getCall(1).returnValue;
 
     assert.deepEqual(label1.shift.args[0], [700, 30]);
     assert.deepEqual(label2.shift.args[0], [755, 30]);
@@ -523,8 +523,8 @@ QUnit.test('Place labels with columns position and left horizontal alignment', f
             verticalOffset: 30
         }
     });
-    var label1 = labelModule.Label.getCall(0).returnValue,
-        label2 = labelModule.Label.getCall(1).returnValue;
+    const label1 = labelModule.Label.getCall(0).returnValue;
+    const label2 = labelModule.Label.getCall(1).returnValue;
 
     assert.deepEqual(label1.shift.args[0], [0, 30]);
     assert.deepEqual(label2.shift.args[0], [0, 30]);
@@ -549,7 +549,7 @@ QUnit.test('Place labels with columns position. horizontalAlignment left inverte
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
     assert.deepEqual(label.shift.args[0], [0, 590]);
 });
 
@@ -572,8 +572,8 @@ QUnit.test('Place labels with columns position and left horizontal alignment. rt
             verticalOffset: 30
         }
     });
-    var label1 = labelModule.Label.getCall(0).returnValue,
-        label2 = labelModule.Label.getCall(1).returnValue;
+    const label1 = labelModule.Label.getCall(0).returnValue;
+    const label2 = labelModule.Label.getCall(1).returnValue;
 
     assert.deepEqual(label1.shift.args[0], [0, 30]);
     assert.deepEqual(label2.shift.args[0], [55, 30]);
@@ -596,9 +596,9 @@ QUnit.test('Connector strategy', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(connectorStrategy.getFigureCenter(figure), [679, 0], 'center');
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [679, 0], 'figure point');
@@ -631,9 +631,9 @@ QUnit.test('Connector strategy. left horizontalAlignment', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(connectorStrategy.getFigureCenter(figure), [121, 0], 'center');
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [121, 0], 'figure point');
@@ -665,9 +665,9 @@ QUnit.test('Connector strategy. inverted', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(connectorStrategy.getFigureCenter(figure), [121, 599], 'center');
     assert.deepEqual(connectorStrategy.prepareLabelPoints({
@@ -699,9 +699,9 @@ QUnit.test('Place labels and connector, item border width > 0, horizontalAlignme
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(label.shift.args[0], [138, 31]);
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [259, 1], 'figure point');
@@ -728,9 +728,9 @@ QUnit.test('Place labels and connector, item border width > 0, horizontalAlignme
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(label.shift.args[0], [562, 31]);
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [541, 1], 'figure point');
@@ -758,9 +758,9 @@ QUnit.test('Place labels and connector, item border width > 0, horizontalAlignme
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(label.shift.args[0], [138, 590]);
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [259, 598], 'figure point');
@@ -788,9 +788,9 @@ QUnit.test('Place labels and connector, item border width > 0, horizontalAlignme
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue,
-        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
-        figure = label.setFigureToDrawConnector.lastCall.args[0];
+    const label = labelModule.Label.getCall(0).returnValue;
+    const connectorStrategy = labelModule.Label.getCall(0).args[0].strategy;
+    const figure = label.setFigureToDrawConnector.lastCall.args[0];
 
     assert.deepEqual(label.shift.args[0], [562, 590]);
     assert.deepEqual(connectorStrategy.findFigurePoint(figure), [541, 598], 'figure point');
@@ -801,7 +801,7 @@ QUnit.test('change label option', function(assert) {
         [0, 0, 1, 0, 1, 0.5, 0, 0.5]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }],
         valueField: 'value',
@@ -824,7 +824,7 @@ QUnit.test('change label option', function(assert) {
     assert.equal(this.labelGroup().clear.callCount, 1);
     assert.equal(labelModule.Label.callCount, 2);
 
-    var label = labelModule.Label.getCall(1).returnValue;
+    const label = labelModule.Label.getCall(1).returnValue;
     assert.deepEqual(label.shift.args[0], [392.5, 175]);
 });
 
@@ -863,19 +863,19 @@ QUnit.test('Hide labels', function(assert) {
 });
 
 QUnit.test('Show hidden labels', function(assert) {
-    var funnel = createFunnel({
-            algorithm: 'stub',
-            dataSource: [{ value: 1 }, { value: 2 }],
-            label: {
-                visible: true,
-                position: 'outside'
-            },
-            adaptiveLayout: {
-                width: 150,
-                keepLabels: false
-            }
-        }),
-        label = labelModule.Label.getCall(0).returnValue;
+    const funnel = createFunnel({
+        algorithm: 'stub',
+        dataSource: [{ value: 1 }, { value: 2 }],
+        label: {
+            visible: true,
+            position: 'outside'
+        },
+        adaptiveLayout: {
+            width: 150,
+            keepLabels: false
+        }
+    });
+    const label = labelModule.Label.getCall(0).returnValue;
 
     label.resetEllipsis.reset();
     label.draw.reset();
@@ -1003,7 +1003,7 @@ QUnit.test('Correct label pos if label out from left', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.equal(label.shift.lastCall.args[0], 0);
 });
@@ -1029,7 +1029,7 @@ QUnit.test('Correct label pos if label out from right', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.equal(label.shift.lastCall.args[0], 80);
 });
@@ -1055,7 +1055,7 @@ QUnit.test('Correct label pos if label out from top', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.equal(label.shift.lastCall.args[1], 0);
 });
@@ -1081,7 +1081,7 @@ QUnit.test('Correct label pos if label out from top', function(assert) {
         }
     });
 
-    var label = labelModule.Label.getCall(0).returnValue;
+    const label = labelModule.Label.getCall(0).returnValue;
 
     assert.equal(label.shift.lastCall.args[1], 40);
 });
@@ -1274,7 +1274,7 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
         [0, 0, 1, 0, 1, 0.5, 0, 0.5]
     ]);
 
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }],
         valueField: 'value',

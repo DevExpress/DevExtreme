@@ -15,15 +15,15 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const DX_MENU_CLASS = 'dx-menu',
-    DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item',
-    DX_MENU_ITEM_SELECTED_CLASS = 'dx-menu-item-selected',
-    DX_MENU_HORIZONTAL = 'dx-menu-horizontal',
-    DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + '-popout';
+const DX_MENU_CLASS = 'dx-menu';
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
+const DX_MENU_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
+const DX_MENU_HORIZONTAL = 'dx-menu-horizontal';
+const DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + '-popout';
 
 const createMenu = (options) => {
-    let $menu = $('#menu').dxMenu(options),
-        menuInstance = $menu.dxMenu('instance');
+    const $menu = $('#menu').dxMenu(options);
+    const menuInstance = $menu.dxMenu('instance');
 
     return { instance: menuInstance, element: $menu };
 };
@@ -39,35 +39,35 @@ QUnit.module('Menu rendering', {
     }
 }, () => {
     QUnit.test('Render items with custom model', function(assert) {
-        let menu = createMenu({
-                items: [{
-                    name: 'item 1',
-                    child: [{
-                        name: 'item 11',
-                        child: [
-                            { name: 'item 111' }
-                        ]
-                    }]
-                }],
-                displayExpr: 'name',
-                itemsExpr: 'child',
-                showFirstSubmenuMode: 'onClick'
-            }),
-            $item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const menu = createMenu({
+            items: [{
+                name: 'item 1',
+                child: [{
+                    name: 'item 11',
+                    child: [
+                        { name: 'item 111' }
+                    ]
+                }]
+            }],
+            displayExpr: 'name',
+            itemsExpr: 'child',
+            showFirstSubmenuMode: 'onClick'
+        });
+        const $item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
 
         assert.equal($item1.text(), 'item 1', 'root item rendered correct');
         assert.ok($item1.find(toSelector(DX_MENU_ITEM_POPOUT_CLASS)).length, 'popout was rendered');
     });
 
     QUnit.test('Check default css class', function(assert) {
-        let menu = createMenu({});
+        const menu = createMenu({});
 
         assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
     });
 
     QUnit.test('Do not render menu with empty items', function(assert) {
-        let menu = createMenu({ items: [] }),
-            root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
+        const menu = createMenu({ items: [] });
+        const root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
 
         assert.ok(menu);
         assert.equal(root.length, 0, 'no root');
@@ -85,11 +85,11 @@ QUnit.module('Menu - selection', {
     }
 }, () => {
     QUnit.test('Create root childfree item selected', function(assert) {
-        let menu = createMenu({
-                items: [{ text: 'root', selected: true }],
-                selectionMode: 'single'
-            }),
-            item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const menu = createMenu({
+            items: [{ text: 'root', selected: true }],
+            selectionMode: 'single'
+        });
+        const item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
         assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
     });
 });
@@ -103,23 +103,23 @@ QUnit.module('Menu with templates', {
     }
 }, () => {
     QUnit.test('Create items with template', function(assert) {
-        let $template = $('<div>').text('test'),
-            options = {
-                showFirstSubmenuMode: 'onClick',
-                items: [
-                    { text: 'item1' },
-                    {
-                        text: 'item2',
-                        items: [
-                            { text: 'item2-1' },
-                            { text: 'item2-2' }
-                        ]
-                    }
-                ],
-                itemTemplate: $template
-            },
-            menu = createMenu(options),
-            $item = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(1);
+        const $template = $('<div>').text('test');
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                { text: 'item1' },
+                {
+                    text: 'item2',
+                    items: [
+                        { text: 'item2-1' },
+                        { text: 'item2-2' }
+                    ]
+                }
+            ],
+            itemTemplate: $template
+        };
+        const menu = createMenu(options);
+        const $item = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(1);
 
         $($item).trigger('dxclick');
 
@@ -127,7 +127,7 @@ QUnit.module('Menu with templates', {
     });
 });
 
-var helper;
+let helper;
 
 QUnit.module('Aria accessibility', {
     beforeEach: function() {

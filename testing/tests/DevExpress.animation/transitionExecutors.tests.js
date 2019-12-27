@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    devices = require('core/devices'),
-    fx = require('animation/fx'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
-    animationPresets = require('animation/presets/presets').presets,
-    TransitionExecutorModule = require('animation/transition_executor/transition_executor');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const devices = require('core/devices');
+const fx = require('animation/fx');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const animationPresets = require('animation/presets/presets').presets;
+const TransitionExecutorModule = require('animation/transition_executor/transition_executor');
 
 QUnit.module('transition executor', {
     beforeEach: function() {
@@ -43,16 +43,16 @@ function MockAnimation(options) {
 }
 
 QUnit.test('enter/leave/start', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter = $('<div/>'),
-        $toLeave = $('<div/>'),
-        fxAnimateDeferred = $.Deferred(),
-        animationConfig = { duration: 555 };
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter = $('<div/>');
+    const $toLeave = $('<div/>');
+    const fxAnimateDeferred = $.Deferred();
+    const animationConfig = { duration: 555 };
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -64,7 +64,7 @@ QUnit.test('enter/leave/start', function(assert) {
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     transitionExecutor.enter($toEnter, animationConfig);
     transitionExecutor.leave($toLeave, animationConfig);
@@ -73,7 +73,7 @@ QUnit.test('enter/leave/start', function(assert) {
     assert.equal(animationSetupLog.length, 2, 'T266556');
     assert.equal(animationStartLog.length, 0);
 
-    var resultDeferred = transitionExecutor.start();
+    const resultDeferred = transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
     assert.equal(animationSetupLog.length, 2);
@@ -99,31 +99,31 @@ QUnit.test('enter/leave/start', function(assert) {
 });
 
 QUnit.test('stop', function(assert) {
-    var animationStopLog = [],
-        $toEnter = $('<div/>'),
-        $toLeave = $('<div/>'),
-        animationConfig = { duration: 555 };
+    const animationStopLog = [];
+    const $toEnter = $('<div/>');
+    const $toLeave = $('<div/>');
+    const animationConfig = { duration: 555 };
 
     fx.createAnimation = function(element, config) {
-        var fxAnimateDeferred = $.Deferred(),
-            result = new MockAnimation({
-                element: element,
-                config: config,
-                deferred: fxAnimateDeferred,
-                stop: function() {
-                    animationStopLog.push(arguments);
-                    fxAnimateDeferred.resolve();
-                }
-            });
+        const fxAnimateDeferred = $.Deferred();
+        const result = new MockAnimation({
+            element: element,
+            config: config,
+            deferred: fxAnimateDeferred,
+            stop: function() {
+                animationStopLog.push(arguments);
+                fxAnimateDeferred.resolve();
+            }
+        });
 
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     transitionExecutor.enter($toEnter, animationConfig);
     transitionExecutor.leave($toLeave, animationConfig);
-    var resultDeferred = transitionExecutor.start();
+    const resultDeferred = transitionExecutor.start();
     assert.equal(animationStopLog.length, 0);
     assert.equal(resultDeferred.state(), 'pending');
 
@@ -134,14 +134,14 @@ QUnit.test('stop', function(assert) {
 });
 
 QUnit.test('enter/leave/start direction parameter', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter = $('<div/>'),
-        $toLeave = $('<div/>');
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter = $('<div/>');
+    const $toLeave = $('<div/>');
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -153,7 +153,7 @@ QUnit.test('enter/leave/start direction parameter', function(assert) {
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     createAnimationLog.length = 0;
     transitionExecutor.enter($toEnter, { type: undefined, duration: 555, extraCssClasses: 'a b' }, { direction: 'forward' });
@@ -192,14 +192,14 @@ QUnit.test('enter/leave/start direction parameter', function(assert) {
 });
 
 QUnit.test('enter/leave/start non css', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter = $('<div/>'),
-        $toLeave = $('<div/>');
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter = $('<div/>');
+    const $toLeave = $('<div/>');
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -211,7 +211,7 @@ QUnit.test('enter/leave/start non css', function(assert) {
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     createAnimationLog.length = 0;
     transitionExecutor.enter($toEnter, { type: 'fade', from: 0.1, to: 0.9, duration: 555 });
@@ -233,19 +233,19 @@ QUnit.test('enter/leave/start non css', function(assert) {
 });
 
 QUnit.test('enter/leave/start custom animations', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter = $('<div/>'),
-        $toLeave = $('<div/>'),
-        customAnimation,
-        customAnimationNoResult = { enter: noop, leave: noop },
-        modifiers = { test: 'test' },
-        deferred = $.Deferred();
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter = $('<div/>');
+    const $toLeave = $('<div/>');
+    let customAnimation;
+    const customAnimationNoResult = { enter: noop, leave: noop };
+    const modifiers = { test: 'test' };
+    const deferred = $.Deferred();
 
     customAnimation = {
         enter: function(element, config) {
-            var result = new MockAnimation({
+            const result = new MockAnimation({
                 element: element,
                 config: config,
                 animationSetupLog: animationSetupLog,
@@ -257,7 +257,7 @@ QUnit.test('enter/leave/start custom animations', function(assert) {
             return result;
         },
         leave: function(element, config) {
-            var result = new MockAnimation({
+            const result = new MockAnimation({
                 element: element,
                 config: config,
                 animationSetupLog: animationSetupLog,
@@ -270,12 +270,12 @@ QUnit.test('enter/leave/start custom animations', function(assert) {
         }
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     createAnimationLog.length = 0;
     transitionExecutor.enter($toEnter, customAnimation, modifiers);
     transitionExecutor.leave($toLeave, customAnimation, modifiers);
-    var transitionsPromise = transitionExecutor.start();
+    let transitionsPromise = transitionExecutor.start();
 
     assert.equal(createAnimationLog.length, 2);
     assert.equal(createAnimationLog[0].element[0], $toEnter[0]);
@@ -295,16 +295,16 @@ QUnit.test('enter/leave/start custom animations', function(assert) {
 });
 
 QUnit.test('sync transitions', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter1 = $('<div/>'),
-        $toEnter2 = $('<div/>'),
-        $toLeave = $('<div/>'),
-        fxAnimateDeferreds = [$.Deferred(), $.Deferred(), $.Deferred()];
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter1 = $('<div/>');
+    const $toEnter2 = $('<div/>');
+    const $toLeave = $('<div/>');
+    const fxAnimateDeferreds = [$.Deferred(), $.Deferred(), $.Deferred()];
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -317,7 +317,7 @@ QUnit.test('sync transitions', function(assert) {
     };
 
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     transitionExecutor.enter($toEnter1, { duration: 555 });
     transitionExecutor.enter($toEnter2, { duration: 555 });
@@ -325,7 +325,7 @@ QUnit.test('sync transitions', function(assert) {
 
     assert.equal(createAnimationLog.length, 3);
 
-    var resultDeferred = transitionExecutor.start();
+    const resultDeferred = transitionExecutor.start();
     assert.equal(createAnimationLog.length, 3);
     assert.equal(resultDeferred.state(), 'pending');
 
@@ -338,24 +338,24 @@ QUnit.test('sync transitions', function(assert) {
 });
 
 QUnit.test('staggering transitions', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter1 = $('<div/>'),
-        $toEnter2 = $('<div/>'),
-        $toEnter3 = $('<div/>'),
-        $toLeave1 = $('<div/>'),
-        $toLeave2 = $('<div/>'),
-        $toLeave3 = $('<div/>'),
-        fxAnimateDeferred = $.Deferred().resolve(),
-        animation = {
-            duration: 555,
-            delay: 100,
-            staggerDelay: 111
-        };
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter1 = $('<div/>');
+    const $toEnter2 = $('<div/>');
+    const $toEnter3 = $('<div/>');
+    const $toLeave1 = $('<div/>');
+    const $toLeave2 = $('<div/>');
+    const $toLeave3 = $('<div/>');
+    const fxAnimateDeferred = $.Deferred().resolve();
+    const animation = {
+        duration: 555,
+        delay: 100,
+        staggerDelay: 111
+    };
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -367,7 +367,7 @@ QUnit.test('staggering transitions', function(assert) {
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     transitionExecutor.enter($toEnter1, animation);
     transitionExecutor.enter($toEnter2, animation);
@@ -409,13 +409,13 @@ QUnit.test('staggering transitions', function(assert) {
 });
 
 QUnit.test('animation device-dependent presets', function(assert) {
-    var createAnimationLog = [],
-        animationSetupLog = [],
-        animationStartLog = [],
-        $toEnter = $('<div/>');
+    const createAnimationLog = [];
+    const animationSetupLog = [];
+    const animationStartLog = [];
+    const $toEnter = $('<div/>');
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: animationSetupLog,
@@ -427,7 +427,7 @@ QUnit.test('animation device-dependent presets', function(assert) {
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     animationPresets.registerPreset('test-animation', {
         device: { platform: 'ios' },
@@ -461,8 +461,8 @@ QUnit.test('animation device-dependent presets', function(assert) {
 });
 
 QUnit.test('no animations with unknown preset', function(assert) {
-    var createAnimationLog = [],
-        $toEnter = $('<div/>');
+    const createAnimationLog = [];
+    const $toEnter = $('<div/>');
 
     fx.createAnimationLog = function(element, config) {
         createAnimationLog.push({
@@ -472,7 +472,7 @@ QUnit.test('no animations with unknown preset', function(assert) {
         return $.Deferred().resolve().promise();
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
 
     transitionExecutor.enter($toEnter, 'test-animation');
     transitionExecutor.start();
@@ -512,14 +512,14 @@ QUnit.test('preset aliases', function(assert) {
 });
 
 QUnit.test('Animation with direction=none on Android (T277115)', function(assert) {
-    var createAnimationLog = [],
-        $toEnter = $('<div/>');
+    const createAnimationLog = [];
+    const $toEnter = $('<div/>');
 
     devices.current({ platform: 'android' });
     animationPresets.resetToDefaults();
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: [],
@@ -531,7 +531,7 @@ QUnit.test('Animation with direction=none on Android (T277115)', function(assert
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
     transitionExecutor.enter($toEnter, 'slide', { direction: 'none' });
     transitionExecutor.start();
 
@@ -539,14 +539,14 @@ QUnit.test('Animation with direction=none on Android (T277115)', function(assert
 });
 
 QUnit.test('The \'configModifier.delay\' property is taken into account on Android (T339056)', function(assert) {
-    var createAnimationLog = [],
-        $toEnter = $('<div/>');
+    const createAnimationLog = [];
+    const $toEnter = $('<div/>');
 
     devices.current({ platform: 'android' });
     animationPresets.resetToDefaults();
 
     fx.createAnimation = function(element, config) {
-        var result = new MockAnimation({
+        const result = new MockAnimation({
             element: element,
             config: config,
             animationSetupLog: [],
@@ -558,7 +558,7 @@ QUnit.test('The \'configModifier.delay\' property is taken into account on Andro
         return result;
     };
 
-    var transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+    const transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
     transitionExecutor.enter($toEnter, 'slide', { duration: 123, delay: 234 });
     transitionExecutor.start();
 

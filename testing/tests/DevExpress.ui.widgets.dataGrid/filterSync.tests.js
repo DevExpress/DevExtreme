@@ -4,11 +4,11 @@ import customOperations from 'ui/grid_core/ui.grid_core.filter_custom_operations
 import fx from 'animation/fx';
 import 'ui/data_grid/ui.data_grid';
 
-var HEADER_FILTER_CLASS = 'dx-header-filter',
-    HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + '-empty';
+const HEADER_FILTER_CLASS = 'dx-header-filter';
+const HEADER_FILTER_EMPTY_CLASS = HEADER_FILTER_CLASS + '-empty';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
     '<div>\
         <div class="dx-datagrid">\
             <div id="container"></div>\
@@ -260,7 +260,7 @@ QUnit.module('Sync with FilterValue', {
 
     // T659816
     QUnit.test('clearFilter() clears filterValue', function(assert) {
-        var dataSourceFilter = ['field', '=', 0];
+        const dataSourceFilter = ['field', '=', 0];
         this.setupDataGrid({
             dataSource: {
                 store: [],
@@ -277,7 +277,7 @@ QUnit.module('Sync with FilterValue', {
 
     // T659816
     QUnit.test('clearFilter(\'filterValue\') clears only filterValue', function(assert) {
-        var dataSourceFilter = ['field', '=', 0];
+        const dataSourceFilter = ['field', '=', 0];
         this.setupDataGrid({
             dataSource: {
                 store: [],
@@ -358,7 +358,7 @@ QUnit.module('Sync with FilterValue', {
     });
 
     QUnit.test('skip sync when change filterType from undefined to \'include\' and vice versa', function(assert) {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         // arrange, act
         this.setupDataGrid({
             filterValue: ['field', '=', 2]
@@ -482,7 +482,7 @@ QUnit.module('getCombinedFilter', {
 
     QUnit.test('ignore Header Filter & Filter Row when filterSyncEnabled = true', function(assert) {
         // arrange
-        var filterValue = [['Test', '=', 2], 'and', ['Test', 'anyof', [5, 6]]];
+        const filterValue = [['Test', '=', 2], 'and', ['Test', 'anyof', [5, 6]]];
 
         // act
         this.setupDataGrid({
@@ -523,7 +523,7 @@ QUnit.module('getCombinedFilter', {
     });
 
     QUnit.test('calculateFilterExpression', function(assert) {
-        var handler = sinon.spy();
+        const handler = sinon.spy();
 
         // act
         this.setupDataGrid({
@@ -687,7 +687,7 @@ QUnit.module('getCombinedFilter', {
 
     QUnit.test('skip currentColumn header filter value when filterSyncEnabled = true', function(assert) {
         // arrange
-        var filterRowFilter = ['Test', '=', 2];
+        const filterRowFilter = ['Test', '=', 2];
 
         // act
         this.setupDataGrid({
@@ -707,7 +707,7 @@ QUnit.module('getCombinedFilter', {
 
     QUnit.test('add currentColumn header filter value when filterSyncEnabled = false', function(assert) {
         // arrange
-        var filterRowFilter = ['Test', '=', 2];
+        const filterRowFilter = ['Test', '=', 2];
 
         // act
         this.setupDataGrid({
@@ -934,7 +934,7 @@ QUnit.module('Real dataGrid', {
 }, function() {
     QUnit.test('clear all filters', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid();
+        const dataGrid = this.initDataGrid();
 
         // act
         dataGrid.option('filterValue', null);
@@ -947,10 +947,10 @@ QUnit.module('Real dataGrid', {
     });
 
     QUnit.test('update filterValue after change filter text with defaultFilterOperation', function(assert) {
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'number', defaultFilterOperation: '=', allowFiltering: true, index: 0 }]
         });
-        var filterRowInput = $('.dx-texteditor');
+        const filterRowInput = $('.dx-texteditor');
         assert.equal(filterRowInput.length, 1);
 
         filterRowInput.find('.dx-texteditor-input').val(90);
@@ -962,12 +962,12 @@ QUnit.module('Real dataGrid', {
     });
 
     QUnit.test('filterSync === \'auto\' with filterPanel', function(assert) {
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'number', defaultFilterOperation: '=', allowFiltering: true, index: 0 }],
             filterSyncEnabled: 'auto',
             filterPanel: { visible: true }
         });
-        var filterRowInput = $('.dx-texteditor');
+        const filterRowInput = $('.dx-texteditor');
         assert.equal(filterRowInput.length, 1);
 
         filterRowInput.find('.dx-texteditor-input').val(90);
@@ -980,11 +980,11 @@ QUnit.module('Real dataGrid', {
     });
 
     QUnit.test('filterSync === \'auto\' without filterPanel', function(assert) {
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'number', defaultFilterOperation: '=', allowFiltering: true, index: 0 }],
             filterSyncEnabled: 'auto'
         });
-        var filterRowInput = $('.dx-texteditor');
+        const filterRowInput = $('.dx-texteditor');
         assert.equal(filterRowInput.length, 1);
 
         filterRowInput.find('.dx-texteditor-input').val(90);
@@ -998,7 +998,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('update filterValue after change filter text with selectedFilterOperation', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'number', defaultFilterOperation: '=', selectedFilterOperation: '<>', allowFiltering: true, index: 0 }]
         });
 
@@ -1010,7 +1010,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('update filterValue after change filter operation', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{
                 dataField: 'field',
                 dataType: 'number',
@@ -1027,7 +1027,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('filterValue == null after change filter operation without value', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{
                 dataField: 'field',
                 dataType: 'number',
@@ -1045,7 +1045,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('onClick mode', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [
                 { dataField: 'field', dataType: 'number', selectedFilterOperation: '<>', allowFiltering: true },
                 { dataField: 'field2', dataType: 'number', selectedFilterOperation: '=', allowFiltering: true }
@@ -1057,7 +1057,7 @@ QUnit.module('Real dataGrid', {
         });
 
         // act
-        var filterRowInput = $('.dx-texteditor').eq(0);
+        let filterRowInput = $('.dx-texteditor').eq(0);
         filterRowInput.find('.dx-texteditor-input').val(90);
         filterRowInput.find('.dx-texteditor-input').trigger('keyup');
 
@@ -1069,7 +1069,7 @@ QUnit.module('Real dataGrid', {
         assert.deepEqual(dataGrid.option('filterValue'), null);
 
         // act
-        var $button = $('.dx-apply-button');
+        const $button = $('.dx-apply-button');
         $button.trigger('dxclick');
         // assert
         assert.deepEqual(dataGrid.option('filterValue'), [['field', '<>', 90], 'and', ['field2', '=', 150]]);
@@ -1077,7 +1077,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('change field filterValues', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid();
+        const dataGrid = this.initDataGrid();
 
         // act
         dataGrid.columnOption('field', { filterValues: [2, 3], filterType: 'exclude' });
@@ -1092,7 +1092,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('change field filterValue', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid();
+        const dataGrid = this.initDataGrid();
 
         // act
         dataGrid.columnOption('field', { filterValue: 100, selectedFilterOperation: '=' });
@@ -1108,16 +1108,16 @@ QUnit.module('Real dataGrid', {
     // T649282
     QUnit.test('\'Reset\' operation click when \'Between\' operation is active', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'dateField', dataType: 'date' }],
             filterValue: ['dateField', 'between', [new Date(), new Date()]]
         });
 
         // act
-        var filterMenu = $(dataGrid.element()).find('.dx-menu .dx-menu-item');
+        const filterMenu = $(dataGrid.element()).find('.dx-menu .dx-menu-item');
         filterMenu.trigger('dxclick');
-        var filterMenuItems = $('.dx-filter-menu.dx-overlay-content').first().find('li'),
-            resetItem = filterMenuItems.find('.dx-menu-item').last();
+        const filterMenuItems = $('.dx-filter-menu.dx-overlay-content').first().find('li');
+        const resetItem = filterMenuItems.find('.dx-menu-item').last();
         resetItem.trigger('dxclick');
 
         // assert
@@ -1126,7 +1126,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('do not sync if filterSyncEnabled = false', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: false,
             filterValue: null,
             columns: [{ dataField: 'field', filterValues: [1, 3], filterValue: 1, selectedFilterOperation: '=' }],
@@ -1142,7 +1142,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('header-filter-empty class isn\'t set in filtered column indicator when filterSyncEnabled = true', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: true,
             filterValue: null,
             columns: [{ dataField: 'field' }],
@@ -1159,7 +1159,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('header-filter-empty class is set in filtered column indicator when filterSyncEnabled = false', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: false,
             filterValue: null,
             columns: [{ dataField: 'field' }],
@@ -1175,7 +1175,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('check equals (one value)', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', allowHeaderFiltering: true }, { dataField: 'excludedField', allowHeaderFiltering: true, filterType: 'exclude' }]
         });
 
@@ -1188,7 +1188,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('check any of (two value)', function(assert) {
         // arrange
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             columns: [{ dataField: 'field', allowHeaderFiltering: true }, { dataField: 'excludedField', allowHeaderFiltering: true, filterType: 'exclude' }]
         });
 
@@ -1201,10 +1201,10 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('colum option changed called once after change filterValue', function(assert) {
         // arrange
-        var countCallFilterValueChanged = 0,
-            dataGrid = this.initDataGrid({
-                columns: [{ dataField: 'field', allowHeaderFiltering: true, filterType: 'exclude' }]
-            });
+        let countCallFilterValueChanged = 0;
+        const dataGrid = this.initDataGrid({
+            columns: [{ dataField: 'field', allowHeaderFiltering: true, filterType: 'exclude' }]
+        });
 
         // act
         dataGrid.option('onOptionChanged', function(e) {
@@ -1220,7 +1220,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('Load filterValue from state when filterSyncEnabled = false', function(assert) {
         // arrange, act
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: false,
             columns: ['field', 'field2'],
             stateStoring: {
@@ -1257,7 +1257,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('Load filterValue from state when filterSyncEnabled = true', function(assert) {
         // arrange, act
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: true,
             columns: ['field', 'field2'],
             stateStoring: {
@@ -1294,7 +1294,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('Load filterValues of columns from state when filterSyncEnabled = true & filterValue is undefined', function(assert) {
         // arrange, act
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: true,
             columns: ['field', 'field2'],
             filterValue: null,
@@ -1332,7 +1332,7 @@ QUnit.module('Real dataGrid', {
     // T814522
     QUnit.test('Load filterValues from columns when filterSyncEnabled is true and state is empty', function(assert) {
         // arrange, act
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: true,
             columns: [{
                 dataField: 'field',
@@ -1364,7 +1364,7 @@ QUnit.module('Real dataGrid', {
 
     QUnit.test('Load filterValues of columns from state when filterSyncEnabled = false & filterValue is undefined', function(assert) {
         // arrange, act
-        var dataGrid = this.initDataGrid({
+        const dataGrid = this.initDataGrid({
             filterSyncEnabled: false,
             columns: ['field', 'field2'],
             filterValue: null,
@@ -1400,18 +1400,18 @@ QUnit.module('Real dataGrid', {
     });
 
     QUnit.test('Update state when applying filterValue', function(assert) {
-        var customSaveSpy = sinon.spy(),
-            dataGrid = this.initDataGrid({
-                stateStoring: {
-                    enabled: true,
-                    type: 'custom',
-                    customLoad: function() {
-                        return {};
-                    },
-                    customSave: customSaveSpy,
-                    savingTimeout: 0
-                }
-            });
+        const customSaveSpy = sinon.spy();
+        const dataGrid = this.initDataGrid({
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                },
+                customSave: customSaveSpy,
+                savingTimeout: 0
+            }
+        });
         this.clock.tick();
         dataGrid.option('filterValue', ['field', '=', 1]);
         this.clock.tick();
@@ -1422,7 +1422,7 @@ QUnit.module('Real dataGrid', {
 QUnit.module('Custom operations', {
     beforeEach: function() {
         this.getAnyOfOperation = function(field, dataSource) {
-            var dataGrid = $('#container').dxDataGrid({
+            const dataGrid = $('#container').dxDataGrid({
                 dataSource: dataSource || [{}],
                 loadingTimeout: undefined,
                 columns: [field]
@@ -1433,11 +1433,11 @@ QUnit.module('Custom operations', {
 }, function() {
     QUnit.test('string value', function(assert) {
         // arrange
-        var result,
-            field = {
-                dataField: 'field',
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+        let result;
+        const field = {
+            dataField: 'field',
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         result = anyOfOperation.customizeText({
@@ -1451,12 +1451,12 @@ QUnit.module('Custom operations', {
 
     QUnit.test('date value', function(assert) {
         // arrange
-        var result,
-            field = {
-                dataField: 'field',
-                dataType: 'date'
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+        let result;
+        const field = {
+            dataField: 'field',
+            dataType: 'date'
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         result = anyOfOperation.customizeText({
@@ -1470,24 +1470,24 @@ QUnit.module('Custom operations', {
 
     QUnit.test('date value and custom item', function(assert) {
         // arrange
-        var result,
-            field = {
-                dataField: 'field',
-                dataType: 'date',
-                headerFilter: {
-                    dataSource: function(data) {
-                        data.dataSource.postProcess = function(results) {
-                            results.push({
-                                text: 'Weekends',
-                                value: 'weekends'
-                            });
-                            return results;
-                        };
-                    }
+        let result;
+        const field = {
+            dataField: 'field',
+            dataType: 'date',
+            headerFilter: {
+                dataSource: function(data) {
+                    data.dataSource.postProcess = function(results) {
+                        results.push({
+                            text: 'Weekends',
+                            value: 'weekends'
+                        });
+                        return results;
+                    };
                 }
-            },
-            dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }],
-            anyOfOperation = this.getAnyOfOperation(field, dataSource);
+            }
+        };
+        const dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }];
+        const anyOfOperation = this.getAnyOfOperation(field, dataSource);
 
         // act
         anyOfOperation.customizeText({
@@ -1503,28 +1503,28 @@ QUnit.module('Custom operations', {
 
     QUnit.test('lookup', function(assert) {
         // arrange
-        var result,
-            field = {
-                dataField: 'field',
-                lookup: {
-                    valueExpr: 'id',
-                    displayExpr: 'text',
-                    dataSource: [{
-                        id: 'California',
-                        text: 'California Text'
-                    },
-                    {
-                        id: 'Nevada',
-                        text: 'Nevada Text'
-                    },
-                    {
-                        id: 'Colorado',
-                        text: 'Colorado Text'
-                    }]
-                }
-            },
-            dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }],
-            anyOfOperation = this.getAnyOfOperation(field, dataSource);
+        let result;
+        const field = {
+            dataField: 'field',
+            lookup: {
+                valueExpr: 'id',
+                displayExpr: 'text',
+                dataSource: [{
+                    id: 'California',
+                    text: 'California Text'
+                },
+                {
+                    id: 'Nevada',
+                    text: 'Nevada Text'
+                },
+                {
+                    id: 'Colorado',
+                    text: 'Colorado Text'
+                }]
+            }
+        };
+        const dataSource = [{ field: '2014/1/1' }, { field: '2014/1/3' }, { field: '2014/2/4' }];
+        const anyOfOperation = this.getAnyOfOperation(field, dataSource);
 
         // act
         anyOfOperation.customizeText({
@@ -1540,23 +1540,23 @@ QUnit.module('Custom operations', {
 
     QUnit.test('data source as a function', function(assert) {
         // arrange
-        var operationText = 'Weekends',
-            result,
-            field = {
-                dataField: 'field',
-                headerFilter: {
-                    dataSource: function(data) {
-                        data.dataSource.postProcess = function(results) {
-                            results.push({
-                                text: operationText,
-                                value: 'weekends'
-                            });
-                            return results;
-                        };
-                    }
+        const operationText = 'Weekends';
+        let result;
+        const field = {
+            dataField: 'field',
+            headerFilter: {
+                dataSource: function(data) {
+                    data.dataSource.postProcess = function(results) {
+                        results.push({
+                            text: operationText,
+                            value: 'weekends'
+                        });
+                        return results;
+                    };
                 }
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+            }
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         anyOfOperation.customizeText({
@@ -1575,21 +1575,21 @@ QUnit.module('Custom operations', {
 
     QUnit.test('data source as a function', function(assert) {
         // arrange
-        var result,
-            dataSourceOptions = [{
-                text: 'Less than $3000',
-                value: ['SaleAmount', '<', 3000]
-            }, {
-                text: '$3000 - $5000',
-                value: [['SaleAmount', '>=', 3000], ['SaleAmount', '<', 5000]]
-            }],
-            field = {
-                dataField: 'field',
-                headerFilter: {
-                    dataSource: dataSourceOptions
-                }
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+        let result;
+        const dataSourceOptions = [{
+            text: 'Less than $3000',
+            value: ['SaleAmount', '<', 3000]
+        }, {
+            text: '$3000 - $5000',
+            value: [['SaleAmount', '>=', 3000], ['SaleAmount', '<', 5000]]
+        }];
+        const field = {
+            dataField: 'field',
+            headerFilter: {
+                dataSource: dataSourceOptions
+            }
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         anyOfOperation.customizeText({
@@ -1605,15 +1605,15 @@ QUnit.module('Custom operations', {
 
     QUnit.test('groupInterval', function(assert) {
         // arrange
-        var result,
-            field = {
-                dataField: 'field',
-                dataType: 'number',
-                headerFilter: {
-                    groupInterval: 100
-                }
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+        let result;
+        const field = {
+            dataField: 'field',
+            dataType: 'number',
+            headerFilter: {
+                groupInterval: 100
+            }
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         result = anyOfOperation.customizeText({
@@ -1627,11 +1627,11 @@ QUnit.module('Custom operations', {
 
     QUnit.test('anyof editor', function(assert) {
         // arrange
-        var $container = $('<div>'),
-            field = {
-                dataField: 'field',
-            },
-            anyOfOperation = this.getAnyOfOperation(field);
+        const $container = $('<div>');
+        const field = {
+            dataField: 'field',
+        };
+        const anyOfOperation = this.getAnyOfOperation(field);
 
         // act
         anyOfOperation.editorTemplate({
@@ -1646,13 +1646,13 @@ QUnit.module('Custom operations', {
 
     QUnit.test('anyof popup always has left alignment', function(assert) {
         // arrange
-        var $container = $('#container'),
-            popupPosition,
-            editorTemplate,
-            left = {
-                dataField: 'field',
-                alignment: 'left'
-            };
+        const $container = $('#container');
+        let popupPosition;
+        let editorTemplate;
+        const left = {
+            dataField: 'field',
+            alignment: 'left'
+        };
 
         // act
         editorTemplate = this.getAnyOfOperation(left).editorTemplate({

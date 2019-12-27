@@ -7,9 +7,9 @@ import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
-var MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
+const MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 
-var moduleConfig = {
+const moduleConfig = {
     afterEach: function() {
         ajaxMock.clear();
     }
@@ -24,7 +24,7 @@ QUnit.test('use second version by default', function(assert) {
 });
 
 QUnit.test('fieldTypes are updated correctly', function(assert) {
-    var params = [{
+    const params = [{
         storeOptions: {},
         expectedFieldTypes: {}
     }, {
@@ -91,7 +91,7 @@ QUnit.test('fieldTypes are updated correctly', function(assert) {
 });
 
 QUnit.test('options are not changed after the merger', function(assert) {
-    var storeOptions = {
+    const storeOptions = {
         key: [ 'id1', 'id2' ],
         keyType: { id1: 'Int32', id2: 'String' },
         fieldTypes: { id1: 'String' }
@@ -111,7 +111,7 @@ QUnit.test('options are not changed after the merger', function(assert) {
 
 QUnit.module('load', moduleConfig);
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -123,7 +123,7 @@ QUnit.test('works', function(assert) {
         callback: function(bag) { this.responseText = { value: [bag] }; }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .load()
             .done(function(r, extra) {
@@ -204,7 +204,7 @@ QUnit.test('works', function(assert) {
 QUnit.test('with params', function(assert) {
     assert.expect(6);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -220,7 +220,7 @@ QUnit.test('with params', function(assert) {
         }
     });
 
-    var options = {
+    const options = {
         sort: {
             field: 'a',
             desc: true
@@ -230,7 +230,7 @@ QUnit.test('with params', function(assert) {
         customQueryParams: { e: 4 }
     };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .load(options)
             .done(function(r, extra) {
@@ -275,7 +275,7 @@ QUnit.test('with params', function(assert) {
 });
 
 QUnit.test('with explicit expand', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -291,9 +291,9 @@ QUnit.test('with explicit expand', function(assert) {
         }
     });
 
-    var options = { expand: ['a', 'b.c'] };
+    const options = { expand: ['a', 'b.c'] };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata.org' })
             .load(options)
             .done(function(r, extra) {
@@ -317,7 +317,7 @@ QUnit.test('with explicit expand', function(assert) {
 });
 
 QUnit.test('with requireTotalCount', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -333,7 +333,7 @@ QUnit.test('with requireTotalCount', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata.org' })
             .load({ requireTotalCount: true })
             .done(function(r, extra) {
@@ -362,7 +362,7 @@ QUnit.test('with requireTotalCount', function(assert) {
 
 QUnit.module('totalCount', moduleConfig);
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -374,8 +374,8 @@ QUnit.test('works', function(assert) {
         responseText: { '@odata.count': 123 }
     });
 
-    var assertFunc = function(count) { assert.equal(count, 123); };
-    var promises = [
+    const assertFunc = function(count) { assert.equal(count, 123); };
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .totalCount()
             .done(assertFunc),
@@ -396,8 +396,8 @@ QUnit.test('works', function(assert) {
         .always(done);
 });
 QUnit.test('respects customQueryParams (T413790)', function(assert) {
-    var done = assert.async(),
-        capturedAjaxSettings;
+    const done = assert.async();
+    let capturedAjaxSettings;
 
     ajaxMock.setup({
         url: 'example.com',
@@ -426,7 +426,7 @@ QUnit.module('byKey', moduleConfig);
 QUnit.test('works', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org(42)',
@@ -438,8 +438,8 @@ QUnit.test('works', function(assert) {
         responseText: { value: { foo: 'bar' } }
     });
 
-    var assertFunc = function(r) { assert.deepEqual(r, { foo: 'bar' }); };
-    var promises = [
+    const assertFunc = function(r) { assert.deepEqual(r, { foo: 'bar' }); };
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey(42)
             .done(assertFunc),
@@ -463,7 +463,7 @@ QUnit.test('works', function(assert) {
 QUnit.test('with expand', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org(42)',
@@ -479,11 +479,11 @@ QUnit.test('with expand', function(assert) {
         }
     });
 
-    var assertFunc = function(r) {
+    const assertFunc = function(r) {
         assert.deepEqual(r, { expandClause: 'prop1/subprop,prop2' });
     };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey(42, { expand: ['prop1.subprop', 'prop2'] })
             .done(assertFunc),
@@ -509,7 +509,7 @@ QUnit.test('with expand', function(assert) {
 QUnit.test('expand should be undefined if it is not specified in the extraOptions', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org(42)',
@@ -531,7 +531,7 @@ QUnit.test('expand should be undefined if it is not specified in the extraOption
 QUnit.test('with select', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org(42)',
@@ -554,7 +554,7 @@ QUnit.test('with select', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey(42, { select: ['prop1', 'prop2'] })
             .done((value) => {
@@ -584,7 +584,7 @@ QUnit.test('with select', function(assert) {
 QUnit.test('compound key', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org*',
@@ -600,12 +600,12 @@ QUnit.test('compound key', function(assert) {
         }
     });
 
-    var assertFunc = function(r) {
-        var url = decodeURIComponent(r.url);
+    const assertFunc = function(r) {
+        const url = decodeURIComponent(r.url);
         assert.equal(url.indexOf('(key1=42,key2=\'abc\')'), 10);
     };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey({ key1: 42, key2: 'abc' })
             .done(assertFunc),
@@ -627,9 +627,9 @@ QUnit.test('compound key', function(assert) {
 });
 
 QUnit.test('original compound key value doesn\'t change', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var key = { key1: 37, key2: 73 };
+    const key = { key1: 37, key2: 73 };
 
     ajaxMock.setup({
         url: '*',
@@ -656,9 +656,9 @@ QUnit.test('unknown key type throws', function(assert) {
 });
 
 QUnit.test('Guid as key', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var guid = '3f17117f-63b1-ee7d-2b64-a7f717177773';
+    const guid = '3f17117f-63b1-ee7d-2b64-a7f717177773';
 
     ajaxMock.setup({
         url: 'odata2.org*',
@@ -674,7 +674,7 @@ QUnit.test('Guid as key', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey(new Guid(guid))
             .done(function(r) {
@@ -703,7 +703,7 @@ QUnit.test('Guid as key', function(assert) {
 });
 
 QUnit.test('string as key', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org*',
@@ -719,12 +719,12 @@ QUnit.test('string as key', function(assert) {
         }
     });
 
-    var assertFunc = function(r) {
-        var url = decodeURIComponent(r.url);
+    const assertFunc = function(r) {
+        const url = decodeURIComponent(r.url);
         assert.equal(url.indexOf('(\'abc\')'), 10);
     };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org' })
             .byKey('abc')
             .done(assertFunc),
@@ -746,7 +746,7 @@ QUnit.test('string as key', function(assert) {
 });
 
 QUnit.test('key type conversions by keyType option', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org*',
@@ -762,7 +762,7 @@ QUnit.test('key type conversions by keyType option', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         // v2 and v3
         new ODataStore({ url: 'odata.org', keyType: 'Int32' })
             .byKey(42)
@@ -824,7 +824,7 @@ QUnit.test('key type conversions by keyType option', function(assert) {
 QUnit.test('no double conversion for Int64', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org*',
@@ -837,8 +837,8 @@ QUnit.test('no double conversion for Int64', function(assert) {
     });
 
 
-    var assertFunc = function(r) { assert.ok(r.url.indexOf('(123L)') > -1); };
-    var promises = [
+    const assertFunc = function(r) { assert.ok(r.url.indexOf('(123L)') > -1); };
+    const promises = [
         new ODataStore({ url: 'odata2.org', keyType: 'Int64' })
             .byKey(new EdmLiteral('123L'))
             .done(assertFunc),
@@ -856,7 +856,7 @@ QUnit.test('no double conversion for Int64', function(assert) {
 });
 
 QUnit.test('key type conversions by fieldTypes option', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata4.org*',
@@ -865,7 +865,7 @@ QUnit.test('key type conversions by fieldTypes option', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata4.org', key: 'id', fieldTypes: { id: 'Int64' } })
             .byKey(42)
             .done(function(r) {
@@ -902,7 +902,7 @@ QUnit.test('key type conversions by fieldTypes option', function(assert) {
 
 QUnit.module('key type conversions', moduleConfig);
 QUnit.test('the request with filter is correct if key type is Int64, Decimal or Single (T346008)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -911,13 +911,13 @@ QUnit.test('the request with filter is correct if key type is Int64, Decimal or 
         }
     });
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         key: ['id1', 'id2', 'id3'],
         keyType: { id1: 'Int64', id2: 'Decimal', id3: 'Single' }
     });
 
-    var promises = [
+    const promises = [
         store
             .load({
                 filter: ['id1', '=', '123']
@@ -961,7 +961,7 @@ QUnit.test('the request with filter is correct if key type is Int64, Decimal or 
 });
 
 QUnit.test('Guid key processed as string if key type is String (T316902)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -973,7 +973,7 @@ QUnit.test('Guid key processed as string if key type is String (T316902)', funct
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({
             url: 'odata.org',
             key: 'id1',
@@ -1012,7 +1012,7 @@ QUnit.test('requires key', function(assert) {
 });
 
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1022,8 +1022,8 @@ QUnit.test('works', function(assert) {
         responseText: { id: 1, foo: 'bar' }
     });
 
-    var logger = [];
-    var store = new ODataStore({
+    const logger = [];
+    const store = new ODataStore({
         key: 'id',
         url: 'odata.org',
 
@@ -1057,7 +1057,7 @@ QUnit.test('works', function(assert) {
 });
 
 QUnit.test('works with useLegacyStoreResult', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1067,12 +1067,12 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
         responseText: { id: 1, foo: 'bar' }
     });
 
-    var oldUseLegacyStoreResult = config().useLegacyStoreResult;
+    const oldUseLegacyStoreResult = config().useLegacyStoreResult;
 
     config({ useLegacyStoreResult: true });
 
-    var logger = [];
-    var store = new ODataStore({
+    const logger = [];
+    const store = new ODataStore({
         key: 'id',
         url: 'odata.org',
 
@@ -1109,14 +1109,14 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
 });
 
 QUnit.test('insert with compound key', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
         responseText: { id: { foo: 'bar', bar: 'foo' } }
     });
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         key: 'id'
     });
@@ -1130,7 +1130,7 @@ QUnit.test('insert with compound key', function(assert) {
 });
 
 QUnit.test('with 201 status', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1140,7 +1140,7 @@ QUnit.test('with 201 status', function(assert) {
         responseText: { id: 1 }
     });
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         key: 'id'
     });
@@ -1160,10 +1160,10 @@ QUnit.module('update', moduleConfig);
 QUnit.test('works', function(assert) {
     assert.expect(17);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var log = [];
-    var compileLoggerFor = function(eventName) {
+    const log = [];
+    const compileLoggerFor = function(eventName) {
         return function(key, values) {
             log.push([eventName, key, values]);
         };
@@ -1181,7 +1181,7 @@ QUnit.test('works', function(assert) {
         responseText: 'OK'
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({
             url: 'odata.org/DataSet',
 
@@ -1302,10 +1302,10 @@ QUnit.test('works', function(assert) {
 QUnit.test('works with useLegacyStoreResult', function(assert) {
     assert.expect(13);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var log = [];
-    var compileLoggerFor = function(eventName) {
+    const log = [];
+    const compileLoggerFor = function(eventName) {
         return function(key, values) {
             log.push([eventName, key, values]);
         };
@@ -1317,11 +1317,11 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
         responseText: 'OK'
     });
 
-    var oldUseLegacyStoreResult = config().useLegacyStoreResult;
+    const oldUseLegacyStoreResult = config().useLegacyStoreResult;
 
     config({ useLegacyStoreResult: true });
 
-    var promises = [
+    const promises = [
         new ODataStore({
             url: 'odata.org/DataSet',
 
@@ -1416,10 +1416,10 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
 
 QUnit.module('remove', moduleConfig);
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var log = [];
-    var compileHandlerFor = function(eventName) {
+    const log = [];
+    const compileHandlerFor = function(eventName) {
         return function(key) {
             log.push([eventName, key]);
         };
@@ -1435,12 +1435,12 @@ QUnit.test('works', function(assert) {
         responseText: {}
     });
 
-    var handleBeforeSend = function(request) {
+    const handleBeforeSend = function(request) {
         assert.ok(request.url.indexOf('DataSet(1)') === 11);
         assert.equal(request.method.toLowerCase(), 'delete');
     };
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org/DataSet', beforeSend: handleBeforeSend, onRemoving: compileHandlerFor('onRemoving'), onRemoved: compileHandlerFor('onRemoved') })
             .on('removing', compileHandlerFor('removing'))
             .on('removed', compileHandlerFor('removed'))
@@ -1493,7 +1493,7 @@ QUnit.test('works', function(assert) {
 
 QUnit.module('Serialization', moduleConfig);
 QUnit.test('Dates, on loading', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -1549,7 +1549,7 @@ QUnit.test('Dates, on loading', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         // v2
         new ODataStore({ url: 'odata2.org', key: 'id' })
             .load({ filter: ['date', new Date(1945, 4, 9, 14, 25, 1, 1)] }),
@@ -1583,7 +1583,7 @@ QUnit.test('Dates, on loading', function(assert) {
 });
 
 QUnit.test('Dates, on inserting', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -1606,7 +1606,7 @@ QUnit.test('Dates, on inserting', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org', key: 'id' })
             .insert({ date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
@@ -1623,7 +1623,7 @@ QUnit.test('Dates, on inserting', function(assert) {
 });
 
 QUnit.test('Dates, on updating', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org(1)',
@@ -1646,7 +1646,7 @@ QUnit.test('Dates, on updating', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata2.org', key: 'id' })
             .update(1, { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
@@ -1668,7 +1668,7 @@ QUnit.module('Deserialization', moduleConfig);
 QUnit.test('Dates, disableable, ODataStore', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1680,8 +1680,8 @@ QUnit.test('Dates, disableable, ODataStore', function(assert) {
         responseText: { dateProperty: '1945-05-09T14:25:12.1234567Z' }
     });
 
-    var store = new ODataStore({ version: 4, url: 'odata.org', deserializeDates: false });
-    var promises = [
+    const store = new ODataStore({ version: 4, url: 'odata.org', deserializeDates: false });
+    const promises = [
         store.load()
             .done(function(r) {
                 assert.ok(typeof r[0].dateProperty === 'string');
@@ -1701,7 +1701,7 @@ QUnit.test('Dates, disableable, ODataStore', function(assert) {
 QUnit.test('Dates, disableable, ODataContext', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/name',
@@ -1718,7 +1718,7 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
         responseText: { dateProperty: '1945-05-09T14:25:12.1234567Z' }
     });
 
-    var ctx = new ODataContext({
+    const ctx = new ODataContext({
         version: 4,
         url: 'odata.org',
         deserializeDates: false,
@@ -1728,7 +1728,7 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         ctx.get('function')
             .done(function(r) {
                 assert.ok(typeof r.dateProperty === 'string');
@@ -1757,7 +1757,7 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
 
 QUnit.module('JSONP support', moduleConfig);
 QUnit.test('load()', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1780,7 +1780,7 @@ QUnit.test('load()', function(assert) {
 });
 
 QUnit.test('byKey()', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(1)',
@@ -1802,7 +1802,7 @@ QUnit.test('byKey()', function(assert) {
 
 QUnit.module('Error handling', moduleConfig);
 QUnit.test('generic HTTP error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'http-error\')',
@@ -1823,7 +1823,7 @@ QUnit.test('generic HTTP error', function(assert) {
 });
 
 QUnit.test('OData service error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'error\')',
@@ -1846,7 +1846,7 @@ QUnit.test('OData service error', function(assert) {
 
 
 QUnit.test('unexpected server response with 200 status', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'bad-response\')',
@@ -1866,11 +1866,11 @@ QUnit.test('unexpected server response with 200 status', function(assert) {
 });
 
 QUnit.test('error handlers (check params)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -1886,13 +1886,13 @@ QUnit.test('error handlers (check params)', function(assert) {
 });
 
 QUnit.test('non HTTP failure', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
     ajaxMock.setup({
         url: 'odata.org/get',
         status: 0
     });
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org/get'
     });
 
@@ -1907,11 +1907,11 @@ QUnit.test('non HTTP failure', function(assert) {
 });
 
 QUnit.test('error handlers (query evaluation)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -1925,7 +1925,7 @@ QUnit.test('error handlers (query evaluation)', function(assert) {
 });
 
 QUnit.test('error handlers (byKey)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'error\')',
@@ -1935,7 +1935,7 @@ QUnit.test('error handlers (byKey)', function(assert) {
         }
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'test entity error');
@@ -1954,16 +1954,16 @@ QUnit.test('error handlers (byKey)', function(assert) {
 });
 
 QUnit.test('error handlers (update)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'error\')',
         jQueryTextStatus: 'parsererror'
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -1974,16 +1974,16 @@ QUnit.test('error handlers (update)', function(assert) {
 });
 
 QUnit.test('error handlers (remove)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org(\'error\')',
         jQueryTextStatus: 'parsererror'
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -1994,16 +1994,16 @@ QUnit.test('error handlers (remove)', function(assert) {
 });
 
 QUnit.test('error handlers (insert)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
         jQueryTextStatus: 'parsererror'
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         key: 'id',
         errorHandler: helper.optionalHandler
@@ -2015,16 +2015,16 @@ QUnit.test('error handlers (insert)', function(assert) {
 });
 
 QUnit.test('error handlers (custom operation)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/TestOperationError',
         jQueryTextStatus: 'parsererror'
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
-    var context = new ODataContext({
+    const context = new ODataContext({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -2035,7 +2035,7 @@ QUnit.test('error handlers (custom operation)', function(assert) {
 });
 
 QUnit.test('Recursive inner exception (B232110)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2057,7 +2057,7 @@ QUnit.test('Recursive inner exception (B232110)', function(assert) {
         }
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.ok(error.errorDetails);
@@ -2079,7 +2079,7 @@ QUnit.test('Recursive inner exception (B232110)', function(assert) {
         assert.equal(error.message, 'The DELETE statement conflicted with the REFERENCE constraint');
     };
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -2088,7 +2088,7 @@ QUnit.test('Recursive inner exception (B232110)', function(assert) {
 });
 
 QUnit.test('No recursive inner exception (B232110) on validation error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
     ajaxMock.setup({
         url: 'odata.org',
         responseText: {
@@ -2098,13 +2098,13 @@ QUnit.test('No recursive inner exception (B232110) on validation error', functio
         }
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'The Product Name field is required.');
     };
 
-    var store = new ODataStore({
+    const store = new ODataStore({
         url: 'odata.org',
         errorHandler: helper.optionalHandler
     });
@@ -2114,7 +2114,7 @@ QUnit.test('No recursive inner exception (B232110) on validation error', functio
 
 QUnit.module('Addressing remote operations', moduleConfig);
 QUnit.test('get', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org*',
@@ -2129,7 +2129,7 @@ QUnit.test('get', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         // v2 and v3
         new ODataContext({ url: 'odata.org' })
             .get('operation', {
@@ -2188,7 +2188,7 @@ QUnit.test('get', function(assert) {
 });
 
 QUnit.test('T213119: The ODataContext.get method crashes when return value is a boolean true', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/true',
@@ -2200,7 +2200,7 @@ QUnit.test('T213119: The ODataContext.get method crashes when return value is a 
         responseText: { value: false }
     });
 
-    var promises = [
+    const promises = [
         new ODataContext({ url: 'odata.org' })
             .get('true')
             .done(function(r) {
@@ -2220,7 +2220,7 @@ QUnit.test('T213119: The ODataContext.get method crashes when return value is a 
 });
 
 QUnit.test('invoke for service operation', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/operation*',
@@ -2246,7 +2246,7 @@ QUnit.test('invoke for service operation', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         // v2 and 3
         new ODataContext({ url: 'odata.org' })
             .invoke('operation', { n: 13 })
@@ -2276,7 +2276,7 @@ QUnit.test('invoke for service operation', function(assert) {
 });
 
 QUnit.test('invoke and get methods should understand scalar types in result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/scalar',
@@ -2285,7 +2285,7 @@ QUnit.test('invoke and get methods should understand scalar types in result', fu
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataContext({ url: 'odata.org' })
             .get('scalar')
             .done(function(r) {
@@ -2308,7 +2308,7 @@ QUnit.test('invoke and get methods should understand scalar types in result', fu
 
 QUnit.module('Custom query params', moduleConfig);
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2326,7 +2326,7 @@ QUnit.test('works', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata.org' })
             .load({ customQueryParams: { customName: 'customValue' } }),
 
@@ -2345,7 +2345,7 @@ QUnit.test('works', function(assert) {
 });
 
 QUnit.test('url is correct when customQueryParams is undefined (T382714)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata4.org/messages',
@@ -2373,12 +2373,12 @@ QUnit.test('url is correct when customQueryParams is undefined (T382714)', funct
 });
 
 QUnit.test('array value for odata 4', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var guid = '3f17117f-63b1-ee7d-2b64-a7f717177773';
+    const guid = '3f17117f-63b1-ee7d-2b64-a7f717177773';
 
-    var value = [1, '\'1', new Date(1945, 4, 9, 14, 25, 1, 1), new Guid(guid), new EdmLiteral('123L')],
-        expectedUrl = 'odata4.org(customName=[1,\'\'\'1\',1945-05-09T14:25:01.001Z,' + guid + ',123L])';
+    const value = [1, '\'1', new Date(1945, 4, 9, 14, 25, 1, 1), new Guid(guid), new EdmLiteral('123L')];
+    const expectedUrl = 'odata4.org(customName=[1,\'\'\'1\',1945-05-09T14:25:01.001Z,' + guid + ',123L])';
 
     ajaxMock.setup({
         url: expectedUrl,
@@ -2398,7 +2398,7 @@ QUnit.test('array value for odata 4', function(assert) {
 
 QUnit.module('Misc', moduleConfig);
 QUnit.test('T226529', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2453,7 +2453,7 @@ QUnit.test('T226529', function(assert) {
 });
 
 QUnit.test('Sorting and grouping shouldn\'t add duplicate rules', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2472,7 +2472,7 @@ QUnit.test('Sorting and grouping shouldn\'t add duplicate rules', function(asser
 });
 
 QUnit.test('Sorting should be higher priority than grouping', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2493,7 +2493,7 @@ QUnit.test('Sorting should be higher priority than grouping', function(assert) {
 QUnit.test('Custom headers, query string params and timeout (beforeSend event)', function(assert) {
     assert.expect(6);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2507,8 +2507,8 @@ QUnit.test('Custom headers, query string params and timeout (beforeSend event)',
         callback: assertFunc
     });
 
-    var PARAM_NAME = 'customParam',
-        HEADER_NAME = 'x-custom-header';
+    const PARAM_NAME = 'customParam';
+    const HEADER_NAME = 'x-custom-header';
 
     function assertFunc(bag) {
         assert.equal(bag.timeout, 1122);
@@ -2522,7 +2522,7 @@ QUnit.test('Custom headers, query string params and timeout (beforeSend event)',
         requestOptions.headers[HEADER_NAME] = 'h';
     }
 
-    var promises = [
+    const promises = [
         new ODataStore({ url: 'odata.org', beforeSend: handleBeforeSend })
             .load(),
 
@@ -2538,7 +2538,7 @@ QUnit.test('Custom headers, query string params and timeout (beforeSend event)',
 });
 
 QUnit.test('link creation helper method', function(assert) {
-    var context = new ODataContext({
+    const context = new ODataContext({
         url: 'http://devexpress.com',
         entities: {
             alias: { name: 'RealName' },
@@ -2562,14 +2562,14 @@ QUnit.test('link creation helper method', function(assert) {
 });
 
 QUnit.test('custom entity name in ODataContext', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/TestEntity1',
         responseText: { d: {} }
     });
 
-    var context = new ODataContext({
+    const context = new ODataContext({
         url: 'odata.org',
         entities: {
             'abc': { name: 'TestEntity1' }
@@ -2611,7 +2611,7 @@ QUnit.test('filterToLower equal false', function(assert) {
 QUnit.test('filterToLower equal false for ODataContext', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/name',
@@ -2620,7 +2620,7 @@ QUnit.test('filterToLower equal false for ODataContext', function(assert) {
         }
     });
 
-    var ctx = new ODataContext({
+    const ctx = new ODataContext({
         version: 4,
         url: 'odata.org',
         filterToLower: false,
@@ -2630,7 +2630,7 @@ QUnit.test('filterToLower equal false for ODataContext', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         ctx.X.load({ filter: ['B', 'contains', 'O'] })
             .done(function(request) {
                 assert.equal(request[0].data.$filter, 'contains(tolower(B),\'o\')');
@@ -2650,7 +2650,7 @@ QUnit.test('filterToLower equal false for ODataContext', function(assert) {
 QUnit.test('oDataFilterToLower equal false for ODataContext', function(assert) {
     assert.expect(3);
 
-    var done = assert.async();
+    const done = assert.async();
 
     config({ oDataFilterToLower: false });
 
@@ -2661,7 +2661,7 @@ QUnit.test('oDataFilterToLower equal false for ODataContext', function(assert) {
         }
     });
 
-    var ctx = new ODataContext({
+    const ctx = new ODataContext({
         version: 4,
         url: 'odata.org',
         filterToLower: true,
@@ -2672,7 +2672,7 @@ QUnit.test('oDataFilterToLower equal false for ODataContext', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         ctx.X.load({ filter: ['B', 'contains', 'O'] })
             .done(function(request) {
                 assert.equal(request[0].data.$filter, 'contains(tolower(B),\'o\')');
@@ -2695,7 +2695,7 @@ QUnit.test('oDataFilterToLower equal false for ODataContext', function(assert) {
 });
 
 QUnit.test('verbose MIME specifier is used', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -2716,7 +2716,7 @@ QUnit.test('verbose MIME specifier is used', function(assert) {
 });
 
 QUnit.test('URL absolutation algorithm works incorrectly (see T305070 for details)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org/DataSet',

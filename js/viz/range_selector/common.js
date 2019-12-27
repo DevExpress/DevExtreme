@@ -1,10 +1,10 @@
-var _format = require('../axes/smart_formatter').smartFormatter,
-    isFunction = require('../../core/utils/type').isFunction,
-    HEIGHT_COMPACT_MODE = 24,
-    POINTER_SIZE = 4,
-    EMPTY_SLIDER_MARKER_TEXT = '. . .';
+const _format = require('../axes/smart_formatter').smartFormatter;
+const isFunction = require('../../core/utils/type').isFunction;
+const HEIGHT_COMPACT_MODE = 24;
+const POINTER_SIZE = 4;
+const EMPTY_SLIDER_MARKER_TEXT = '. . .';
 
-var utils = {
+const utils = {
     trackerSettings: {
         fill: 'grey',
         stroke: 'grey',
@@ -12,13 +12,13 @@ var utils = {
     },
     animationSettings: { duration: 250 }
 };
-var consts = {
+const consts = {
     emptySliderMarkerText: EMPTY_SLIDER_MARKER_TEXT,
     pointerSize: POINTER_SIZE
 };
 
-var formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type, logarithmBase) {
-    var formatObject = {
+const formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type, logarithmBase) {
+    const formatObject = {
         value: value,
         valueText: _format(value, {
             labelOptions: formatOptions,

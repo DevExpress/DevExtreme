@@ -302,13 +302,13 @@ class FileManager extends Widget {
             : this._controller.getFiles(selectedDir);
 
         if(this.option('itemView.showParentFolder') && !selectedDir.fileItem.isRoot) {
-            let parentDirItem = selectedDir.fileItem.createClone();
+            const parentDirItem = selectedDir.fileItem.createClone();
             parentDirItem.isParentFolder = true;
             parentDirItem.name = '..';
             parentDirItem.relativeName = '..';
             itemInfos = when(itemInfos)
                 .then(items => {
-                    let itemInfosCopy = [...items];
+                    const itemInfosCopy = [...items];
                     itemInfosCopy.unshift({
                         fileItem: parentDirItem,
                         icon: 'folder'

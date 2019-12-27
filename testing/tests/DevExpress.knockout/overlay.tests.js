@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    ko = require('knockout');
+const $ = require('jquery');
+const fx = require('animation/fx');
+const ko = require('knockout');
 
 require('ui/overlay');
 require('ui/slider');
@@ -9,7 +9,7 @@ require('integration/knockout');
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="Q509956">\
             <div data-bind="dxOverlay: { visible: visible, container: \'#Q509956\' }">\
                 <div data-bind="dxSlider: { value: value, min: 0, max: 10, step: 1, width: \'10px\' }"></div>\
@@ -19,7 +19,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
     },
@@ -31,8 +31,8 @@ var moduleConfig = {
 QUnit.module('integration tests', moduleConfig);
 
 QUnit.test('slider within overlay does not properly display its current position properly (Q509956)', function(assert) {
-    var $container = $('#Q509956');
-    var vm = {
+    const $container = $('#Q509956');
+    const vm = {
         visible: ko.observable(false),
         value: ko.observable(5)
     };
@@ -40,6 +40,6 @@ QUnit.test('slider within overlay does not properly display its current position
     ko.applyBindings(vm, $container.get(0));
     vm.visible(true);
 
-    var $handle = $container.find('.dx-slider .dx-slider-handle');
+    const $handle = $container.find('.dx-slider .dx-slider-handle');
     assert.equal($handle.position().left, 5);
 });

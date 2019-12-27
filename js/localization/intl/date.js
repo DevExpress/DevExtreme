@@ -29,9 +29,9 @@ const getFormatter = format => {
     return formattersCache[key];
 };
 
-var formatDateTime = (date, format) => {
+function formatDateTime(date, format) {
     return getFormatter(format)(date).replace(SYMBOLS_TO_REMOVE_REGEX, '');
-};
+}
 
 const formatNumber = number => {
     return (new Intl.NumberFormat(locale())).format(number);

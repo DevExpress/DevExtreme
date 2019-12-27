@@ -10,7 +10,7 @@
         root.DevExpress.testing.executeAsyncMock = factory(DevExpress.utils.common);
     }
 }(window, function(commonUtils) {
-    var originalExecuteAsync = commonUtils.executeAsync;
+    const originalExecuteAsync = commonUtils.executeAsync;
 
     return {
         setup: function() {

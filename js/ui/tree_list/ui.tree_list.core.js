@@ -5,7 +5,7 @@ extend(exports, modules, {
     modules: [],
 
     foreachNodes: function(nodes, callBack) {
-        for(var i = 0; i < nodes.length; i++) {
+        for(let i = 0; i < nodes.length; i++) {
             if(callBack(nodes[i]) !== false && nodes[i].hasChildren && nodes[i].children.length) {
                 this.foreachNodes(nodes[i].children, callBack);
             }

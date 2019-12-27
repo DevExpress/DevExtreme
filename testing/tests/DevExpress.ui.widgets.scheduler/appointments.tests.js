@@ -31,11 +31,11 @@ QUnit.testStart(function() {
     `);
 });
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
 
-        var that = this;
+        const that = this;
 
         this.clock = sinon.useFakeTimers();
         this.width = 20;
@@ -47,7 +47,7 @@ var moduleOptions = {
             return this.coordinates;
         };
 
-        var dataAccessors = {
+        const dataAccessors = {
             getter: {
                 startDate: compileGetter('startDate'),
                 endDate: compileGetter('endDate'),
@@ -69,7 +69,7 @@ var moduleOptions = {
             this.instance.option('items', items);
         };
 
-        var subscribes = {
+        const subscribes = {
             needCoordinates: function(options) {
                 options.callback(that.getCoordinates.apply(that));
             },
@@ -125,16 +125,16 @@ var moduleOptions = {
                 return 20;
             },
             appointmentTakesSeveralDays: function(appointment) {
-                var startDate = new Date(appointment.startDate),
-                    endDate = new Date(appointment.endDate);
+                const startDate = new Date(appointment.startDate);
+                const endDate = new Date(appointment.endDate);
 
-                var startDateCopy = dateUtils.trimTime(new Date(startDate)),
-                    endDateCopy = dateUtils.trimTime(new Date(endDate));
+                const startDateCopy = dateUtils.trimTime(new Date(startDate));
+                const endDateCopy = dateUtils.trimTime(new Date(endDate));
 
                 return startDateCopy.getTime() !== endDateCopy.getTime();
             },
             mapAppointmentFields: function(config) {
-                var result = {
+                const result = {
                     appointmentData: config.itemData,
                     appointmentElement: config.itemElement
                 };
@@ -146,10 +146,10 @@ var moduleOptions = {
             },
         };
 
-        var observer = {
+        const observer = {
             fire: function(subject) {
-                var callback = subscribes[subject],
-                    args = Array.prototype.slice.call(arguments);
+                const callback = subscribes[subject];
+                const args = Array.prototype.slice.call(arguments);
 
                 return callback && callback.apply(this, args.slice(1));
             }
@@ -160,7 +160,7 @@ var moduleOptions = {
         this.workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
 
-        var schedulerMock = {
+        const schedulerMock = {
             _appointments: this.instance,
             option: $.noop,
             element: $.noop,
@@ -181,13 +181,13 @@ QUnit.test('Scheduler appointments should be initialized', function(assert) {
 });
 
 QUnit.test('Scheduler appointments should have a right css class', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     assert.ok($element.hasClass('dx-scheduler-scrollable-appointments'), 'dxSchedulerAppointments has \'dx-scheduler-scrollable-appointments\' css class');
 });
 
 QUnit.test('startDate should be preprocessed before rendering', function(assert) {
-    var data = {
+    const data = {
         text: 'Appointment 1',
         startDate: 1429688467740,
     };
@@ -203,7 +203,7 @@ QUnit.test('startDate should be preprocessed before rendering', function(assert)
 });
 
 QUnit.test('Scheduler appointment should have appointment title', function(assert) {
-    var data = {
+    const data = {
         text: 'Appointment 1',
         startDate: new Date(2015, 8, 24, 13),
         endDate: new Date(2015, 8, 24, 15)
@@ -273,7 +273,7 @@ QUnit.test('Scheduler appointments should have a correct height', function(asser
         }
     ]);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
     assert.equal($appointment.outerHeight(), 40, 'Appointment has a right height');
 });
@@ -296,8 +296,8 @@ QUnit.test('Scheduler appointment should be resizable', function(assert) {
         }
     ]);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
-        resizableInstance = $appointment.dxResizable('instance');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const resizableInstance = $appointment.dxResizable('instance');
 
     assert.ok(resizableInstance instanceof Resizable, 'Appointment is instance of dxResizable');
     assert.equal(resizableInstance.option('handles'), 'top bottom', 'Appointment can resize only vertical');
@@ -322,7 +322,7 @@ QUnit.test('Scheduler appointment should not be resizable if allowResize is fals
         }
     ]);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
     assert.notOk($appointment.data('dxResizable'), 'Appointment is not dxResizable');
 });
@@ -343,13 +343,13 @@ QUnit.test('All-day appointment should not be resizable if current view is \'day
         }
     ]);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment').first();
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment').first();
 
     assert.notOk($appointment.hasClass('dx-resizable'), 'Appointment is not resizable');
 });
 
 QUnit.test('moveAppointmentBack should affect on appointment only first time', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -369,12 +369,12 @@ QUnit.test('moveAppointmentBack should affect on appointment only first time', f
         focusStateEnabled: true
     });
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
-    var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
     pointer.dragStart();
 
-    var coordinates = {
+    const coordinates = {
         top: 10,
         left: 10
     };
@@ -388,7 +388,7 @@ QUnit.test('moveAppointmentBack should affect on appointment only first time', f
 });
 
 QUnit.test('Appointment should not be changed while resize when \'esc\' key was pressed', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -406,12 +406,12 @@ QUnit.test('Appointment should not be changed while resize when \'esc\' key was 
     this.initItems([item]);
 
     this.instance.option({ focusStateEnabled: true });
-    var updateStub = sinon.stub(this.instance, 'notifyObserver').withArgs('updateAppointmentAfterResize');
+    const updateStub = sinon.stub(this.instance, 'notifyObserver').withArgs('updateAppointmentAfterResize');
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
-        keyboard = keyboardMock($appointment);
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const keyboard = keyboardMock($appointment);
 
-    var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
     pointer.down().move(0, 40);
     keyboard.keyDown('esc');
     pointer.up();
@@ -420,7 +420,7 @@ QUnit.test('Appointment should not be changed while resize when \'esc\' key was 
 });
 
 QUnit.test('Appointment should not be changed while resize when \'esc\' key was pressed', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -439,11 +439,11 @@ QUnit.test('Appointment should not be changed while resize when \'esc\' key was 
 
     this.instance.option({ focusStateEnabled: true });
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
-        initialWidth = $appointment.width(),
-        initialHeight = $appointment.height(),
-        keyboard = keyboardMock($appointment),
-        pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const initialWidth = $appointment.width();
+    const initialHeight = $appointment.height();
+    const keyboard = keyboardMock($appointment);
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom')).start();
 
     pointer.down().move(0, 40);
     keyboard.keyDown('esc');
@@ -454,7 +454,7 @@ QUnit.test('Appointment should not be changed while resize when \'esc\' key was 
 });
 
 QUnit.test('Allday appointment should stay in allDayContainer after small dragging', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -470,8 +470,8 @@ QUnit.test('Allday appointment should stay in allDayContainer after small draggi
         items: [item]
     });
 
-    var $appointment = $('#allDayContainer .dx-scheduler-appointment'),
-        pointer = pointerMock($appointment).start();
+    const $appointment = $('#allDayContainer .dx-scheduler-appointment');
+    const pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, -30);
     pointer.dragEnd();
@@ -480,7 +480,7 @@ QUnit.test('Allday appointment should stay in allDayContainer after small draggi
 });
 
 QUnit.test('Appointment tooltip should be hidden when drag is started', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -494,12 +494,12 @@ QUnit.test('Appointment tooltip should be hidden when drag is started', function
         items: [item]
     });
 
-    var updateSpy = sinon.spy(commonUtils.noop);
+    const updateSpy = sinon.spy(commonUtils.noop);
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment'),
-        pointer = pointerMock($appointment).start();
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const pointer = pointerMock($appointment).start();
 
     pointer.down().move(0, 60);
 
@@ -509,7 +509,7 @@ QUnit.test('Appointment tooltip should be hidden when drag is started', function
 });
 
 QUnit.test('Appointment should be rendered a many times if coordinates array contains a few items', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -527,7 +527,7 @@ QUnit.test('Appointment should be rendered a many times if coordinates array con
         items: [item]
     });
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
     assert.equal($appointment.length, 3, 'All appointments are rendered');
     assert.deepEqual(translator.locate($appointment.eq(0)), { top: 0, left: 0 }, 'appointment is rendered in right place');
@@ -537,18 +537,18 @@ QUnit.test('Appointment should be rendered a many times if coordinates array con
 });
 
 QUnit.test('Delta time for resizable appointment should be 0 if appointment isn\'t resized', function(assert) {
-    var strategy = new HorizontalMonthAppointmentsStrategy({
-            notifyObserver: commonUtils.noop,
-            option: commonUtils.noop,
-            fire: commonUtils.noop
-        }),
-        deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
+    const strategy = new HorizontalMonthAppointmentsStrategy({
+        notifyObserver: commonUtils.noop,
+        option: commonUtils.noop,
+        fire: commonUtils.noop
+    });
+    const deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
     assert.strictEqual(deltaTime, 0, 'Delta time is 0');
 });
 
 QUnit.test('Delta time for resizable appointment should decreased correctly in vertical strategy', function(assert) {
-    var strategy = new VerticalAppointmentsStrategy({
+    const strategy = new VerticalAppointmentsStrategy({
         notifyObserver: commonUtils.noop,
         invoke: commonUtils.noop,
         fire: commonUtils.noop,
@@ -558,13 +558,13 @@ QUnit.test('Delta time for resizable appointment should decreased correctly in v
         }
     });
     strategy._defaultHeight = 50;
-    var deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
+    const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
 
     assert.strictEqual(deltaTime, -1800000, 'Delta time is OK');
 });
 
 QUnit.test('Scheduler appointment should have aria-role \'button\'', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -575,19 +575,19 @@ QUnit.test('Scheduler appointment should have aria-role \'button\'', function(as
 
     this.instance.option('items', [item]);
 
-    var $appointment = this.instance.$element().find('.dx-scheduler-appointment');
+    const $appointment = this.instance.$element().find('.dx-scheduler-appointment');
 
     assert.equal($appointment.attr('role'), 'button', 'role is right');
 });
 
 QUnit.test('Split appointment by day', function(assert) {
-    var appt1 = { startDate: new Date(2016, 1, 25, 9).toString(), endDate: new Date(2016, 1, 25, 10).toString() },
-        appt2 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 2, 3, 16).toString() },
-        appt3 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 1, 29, 10).toString() };
+    const appt1 = { startDate: new Date(2016, 1, 25, 9).toString(), endDate: new Date(2016, 1, 25, 10).toString() };
+    const appt2 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 2, 3, 16).toString() };
+    const appt3 = { startDate: new Date(2016, 1, 28, 9).toString(), endDate: new Date(2016, 1, 29, 10).toString() };
 
-    var parts1 = this.instance.splitAppointmentByDay(appt1),
-        parts2 = this.instance.splitAppointmentByDay(appt2),
-        parts3 = this.instance.splitAppointmentByDay(appt3);
+    const parts1 = this.instance.splitAppointmentByDay(appt1);
+    const parts2 = this.instance.splitAppointmentByDay(appt2);
+    const parts3 = this.instance.splitAppointmentByDay(appt3);
 
     assert.deepEqual(parts1, [{
         appointmentData: appt1,
@@ -609,13 +609,13 @@ QUnit.test('Split appointment by day', function(assert) {
 });
 
 QUnit.test('Split appointment by day should consider startDayHour & endDayHour', function(assert) {
-    var appt1 = { startDate: new Date(2016, 1, 25, 1).toString(), endDate: new Date(2016, 1, 25, 2).toString() },
-        appt2 = { startDate: new Date(2016, 1, 28, 1).toString(), endDate: new Date(2016, 2, 3, 2).toString() },
-        appt3 = { startDate: new Date(2016, 1, 28, 16).toString(), endDate: new Date(2016, 1, 29, 20).toString() };
+    const appt1 = { startDate: new Date(2016, 1, 25, 1).toString(), endDate: new Date(2016, 1, 25, 2).toString() };
+    const appt2 = { startDate: new Date(2016, 1, 28, 1).toString(), endDate: new Date(2016, 2, 3, 2).toString() };
+    const appt3 = { startDate: new Date(2016, 1, 28, 16).toString(), endDate: new Date(2016, 1, 29, 20).toString() };
 
-    var parts1 = this.instance.splitAppointmentByDay(appt1),
-        parts2 = this.instance.splitAppointmentByDay(appt2),
-        parts3 = this.instance.splitAppointmentByDay(appt3);
+    const parts1 = this.instance.splitAppointmentByDay(appt1);
+    const parts2 = this.instance.splitAppointmentByDay(appt2);
+    const parts3 = this.instance.splitAppointmentByDay(appt3);
 
     assert.deepEqual(parts1, [], 'Parts are OK');
 
@@ -633,9 +633,9 @@ QUnit.test('Split appointment by day should consider startDayHour & endDayHour',
 });
 
 QUnit.test('Split appointment by day should trim minutes, seconds and milliseconds if needed', function(assert) {
-    var appt1 = { startDate: new Date(2017, 7, 21, 9, 0, 10).toString(), endDate: new Date(2017, 7, 22, 18, 0).toString() };
+    const appt1 = { startDate: new Date(2017, 7, 21, 9, 0, 10).toString(), endDate: new Date(2017, 7, 22, 18, 0).toString() };
 
-    var parts1 = this.instance.splitAppointmentByDay(appt1);
+    const parts1 = this.instance.splitAppointmentByDay(appt1);
 
     assert.deepEqual(parts1, [
         { settings: { startDate: new Date(2017, 7, 21, 9, 0, 10), endDate: new Date(2017, 7, 21, 20) }, startDate: appt1.startDate, endDate: appt1.endDate },
@@ -644,7 +644,7 @@ QUnit.test('Split appointment by day should trim minutes, seconds and millisecon
 });
 
 QUnit.test('Appointment should process resource names with spaces', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 10, 3, 9),
@@ -661,14 +661,14 @@ QUnit.test('Appointment should process resource names with spaces', function(ass
         items: [item]
     });
 
-    var $appointment = $('.dx-scheduler-appointment').eq(0);
+    const $appointment = $('.dx-scheduler-appointment').eq(0);
     assert.equal($appointment.filter('[data-someid-with__32__space]').length, 1, 'attr is right');
 });
 
 QUnit.module('Appointments Actions', moduleOptions);
 
 QUnit.test('Appointments should set alias key to cellCache', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 10, 3, 9),
@@ -680,7 +680,7 @@ QUnit.test('Appointments should set alias key to cellCache', function(assert) {
             { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
         ]
     };
-    var setCacheAliasSpy = sinon.spy(this.instance, 'invoke').withArgs('setCellDataCacheAlias');
+    const setCacheAliasSpy = sinon.spy(this.instance, 'invoke').withArgs('setCellDataCacheAlias');
 
     this.initItems([item]);
 
@@ -707,7 +707,7 @@ QUnit.test('Appointments should set alias key to cellCache', function(assert) {
 });
 
 QUnit.test('Default behavior of item click should prevented when set e.cancel', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -723,8 +723,8 @@ QUnit.test('Default behavior of item click should prevented when set e.cancel', 
         }
     });
 
-    var stub = sinon.stub(this.instance, 'notifyObserver').withArgs('showAppointmentTooltip');
-    var $item = $('.dx-scheduler-appointment').eq(0);
+    const stub = sinon.stub(this.instance, 'notifyObserver').withArgs('showAppointmentTooltip');
+    const $item = $('.dx-scheduler-appointment').eq(0);
 
     $($item).trigger('dxclick');
     this.clock.tick(300);
@@ -735,7 +735,7 @@ QUnit.test('Default behavior of item click should prevented when set e.cancel', 
 QUnit.test('onAppointmentDblClick should fires when item is dbl clicked', function(assert) {
     assert.expect(2);
 
-    var items = [{
+    const items = [{
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 2, 9, 10),
@@ -764,13 +764,13 @@ QUnit.test('onAppointmentDblClick should fires when item is dbl clicked', functi
         }
     });
 
-    var $item = $('.dx-scheduler-appointment').eq(0);
+    const $item = $('.dx-scheduler-appointment').eq(0);
     $($item).trigger(dblclickEvent.name);
 });
 
 QUnit.test('Popup should be shown when onAppointmentDblClick', function(assert) {
     assert.expect(1);
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -786,8 +786,8 @@ QUnit.test('Popup should be shown when onAppointmentDblClick', function(assert) 
         }
     });
 
-    var stub = sinon.stub(this.instance, 'notifyObserver').withArgs('showEditAppointmentPopup');
-    var $item = $('.dx-scheduler-appointment').eq(0);
+    const stub = sinon.stub(this.instance, 'notifyObserver').withArgs('showEditAppointmentPopup');
+    const $item = $('.dx-scheduler-appointment').eq(0);
 
     $($item).trigger(dblclickEvent.name);
 
@@ -799,9 +799,9 @@ QUnit.module('Appointments Keyboard Navigation', {
     beforeEach: function() {
         moduleOptions.beforeEach.apply(this);
 
-        var current = 0;
+        let current = 0;
         this.getCoordinates = function() {
-            var coords = [[{ top: 0, left: 100 }], [{ top: 0, left: 200 }], [{ top: 0, left: 300 }], [{ top: 0, left: 400 }]];
+            const coords = [[{ top: 0, left: 100 }], [{ top: 0, left: 200 }], [{ top: 0, left: 300 }], [{ top: 0, left: 400 }]];
             return coords[current++ % coords.length];
         };
 
@@ -814,7 +814,7 @@ QUnit.module('Appointments Keyboard Navigation', {
 });
 
 QUnit.test('Items has a tab index if focusStateEnabled', function(assert) {
-    var item = {
+    const item = {
         itemData: {
             text: 'Appointment 1',
             startDate: new Date(2015, 1, 9, 8),
@@ -829,7 +829,7 @@ QUnit.test('Items has a tab index if focusStateEnabled', function(assert) {
         focusStateEnabled: true,
         tabIndex: 1
     });
-    var $appointments = $('.dx-scheduler-appointment');
+    let $appointments = $('.dx-scheduler-appointment');
 
     assert.equal($appointments.eq(0).attr('tabindex'), 1, 'item tabindex is right');
 
@@ -842,7 +842,7 @@ QUnit.test('Items has a tab index if focusStateEnabled', function(assert) {
 });
 
 QUnit.testInActiveWindow('Focused element should be changed on focusin', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -866,7 +866,7 @@ QUnit.testInActiveWindow('Focused element should be changed on focusin', functio
         items: items,
         focusStateEnabled: true
     });
-    var $appointments = $('.dx-scheduler-appointment');
+    const $appointments = $('.dx-scheduler-appointment');
     $appointments.get(0).focus();
     assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
     assert.deepEqual($appointments.get(0), $(this.instance.option('focusedElement')).get(0), 'right element is focused');
@@ -876,7 +876,7 @@ QUnit.testInActiveWindow('Focused element should be changed on focusin', functio
 });
 
 QUnit.test('Appointment popup should be opened after enter key press', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -905,9 +905,9 @@ QUnit.test('Appointment popup should be opened after enter key press', function(
         focusStateEnabled: true
     });
 
-    var notifyStub = sinon.stub(this.instance, 'notifyObserver'),
-        $appointments = $('.dx-scheduler-appointment'),
-        keyboard = keyboardMock($appointments.eq(0));
+    const notifyStub = sinon.stub(this.instance, 'notifyObserver');
+    const $appointments = $('.dx-scheduler-appointment');
+    const keyboard = keyboardMock($appointments.eq(0));
 
 
     $($appointments.eq(0)).trigger('focusin');
@@ -922,7 +922,7 @@ QUnit.test('Appointment popup should be opened after enter key press', function(
 });
 
 QUnit.test('Appointment should be deleted after delete key press, if allowDelete = true', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -952,23 +952,23 @@ QUnit.test('Appointment should be deleted after delete key press, if allowDelete
         allowDelete: true
     });
 
-    var notifyStub = sinon.stub(this.instance, 'notifyObserver'),
-        $appointments = $('.dx-scheduler-appointment'),
-        $targetAppointment = $appointments.eq(1);
+    const notifyStub = sinon.stub(this.instance, 'notifyObserver');
+    const $appointments = $('.dx-scheduler-appointment');
+    const $targetAppointment = $appointments.eq(1);
 
     $($targetAppointment).trigger('focusin');
 
-    var keyboard = keyboardMock($targetAppointment);
+    const keyboard = keyboardMock($targetAppointment);
     keyboard.keyDown('del');
 
     assert.ok(notifyStub.called, 'notify is called');
 
-    var deleteEventName = notifyStub.getCall(0).args[0],
-        hideTooltipEventName = notifyStub.getCall(1).args[0];
+    const deleteEventName = notifyStub.getCall(0).args[0];
+    const hideTooltipEventName = notifyStub.getCall(1).args[0];
 
     assert.equal(deleteEventName, 'deleteAppointment', 'deleteAppointment is called');
 
-    var eventOptions = notifyStub.getCall(0).args[1];
+    const eventOptions = notifyStub.getCall(0).args[1];
     assert.deepEqual(eventOptions.data, items[1].itemData, 'data is ok');
     assert.deepEqual($(eventOptions.target).get(0), $targetAppointment.get(0), 'target is ok');
 
@@ -976,7 +976,7 @@ QUnit.test('Appointment should be deleted after delete key press, if allowDelete
 });
 
 QUnit.test('Appointment should not be deleted after delete key press, if allowDelete = false', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -1006,20 +1006,20 @@ QUnit.test('Appointment should not be deleted after delete key press, if allowDe
         allowDelete: false
     });
 
-    var notifyStub = sinon.stub(this.instance, 'notifyObserver'),
-        $appointments = $('.dx-scheduler-appointment'),
-        $targetAppointment = $appointments.eq(1);
+    const notifyStub = sinon.stub(this.instance, 'notifyObserver');
+    const $appointments = $('.dx-scheduler-appointment');
+    const $targetAppointment = $appointments.eq(1);
 
     $($targetAppointment).trigger('focusin');
 
-    var keyboard = keyboardMock($targetAppointment);
+    const keyboard = keyboardMock($targetAppointment);
     keyboard.keyDown('del');
 
     assert.notOk(notifyStub.called, 'notify was not called');
 });
 
 QUnit.test('Focus method should call focus on appointment', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -1038,15 +1038,15 @@ QUnit.test('Focus method should call focus on appointment', function(assert) {
         focusStateEnabled: true
     });
 
-    var $appointment = $('.dx-scheduler-appointment').eq(0);
+    const $appointment = $('.dx-scheduler-appointment').eq(0);
 
     $($appointment).trigger('focusin');
 
-    var focusedElement = $(this.instance.option('focusedElement')).get(0);
-    var focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
+    const focusedElement = $(this.instance.option('focusedElement')).get(0);
+    const focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
         return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
     }), 'focus');
-    var appointmentFocusedStub = sinon.stub(this.instance, 'notifyObserver').withArgs('appointmentFocused');
+    const appointmentFocusedStub = sinon.stub(this.instance, 'notifyObserver').withArgs('appointmentFocused');
 
     this.instance.focus();
 
@@ -1059,7 +1059,7 @@ QUnit.test('Focus method should call focus on appointment', function(assert) {
 QUnit.test('Default behavior of tab button should be prevented for apps', function(assert) {
     assert.expect(1);
 
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -1088,8 +1088,8 @@ QUnit.test('Default behavior of tab button should be prevented for apps', functi
         focusStateEnabled: true
     });
 
-    var $appointments = this.instance.$element().find('.dx-scheduler-appointment'),
-        keyboard = keyboardMock($appointments.eq(0));
+    const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
+    const keyboard = keyboardMock($appointments.eq(0));
 
     $(this.instance.$element()).on('keydown', function(e) {
         assert.ok(e.isDefaultPrevented(), 'default tab prevented');
@@ -1102,7 +1102,7 @@ QUnit.test('Default behavior of tab button should be prevented for apps', functi
 });
 
 QUnit.test('Focus shouldn\'t be prevent when first appointment is reached in back order', function(assert) {
-    var items = [
+    const items = [
         {
             itemData: {
                 text: 'Appointment 1',
@@ -1130,8 +1130,8 @@ QUnit.test('Focus shouldn\'t be prevent when first appointment is reached in bac
         focusStateEnabled: true
     });
 
-    var $appointments = this.instance.$element().find('.dx-scheduler-appointment'),
-        keyboard = keyboardMock($appointments.eq(0));
+    const $appointments = this.instance.$element().find('.dx-scheduler-appointment');
+    const keyboard = keyboardMock($appointments.eq(0));
 
     $(this.instance.$element()).on('keydown', function(e) {
         assert.notOk(e.isDefaultPrevented(), 'default tab isn\'t prevented');
