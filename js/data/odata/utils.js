@@ -1,35 +1,35 @@
-var Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    typeUtils = require('../../core/utils/type'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    each = require('../../core/utils/iterator').each,
-    ajax = require('../../core/utils/ajax'),
-    Guid = require('../../core/guid'),
-    isDefined = typeUtils.isDefined,
-    isPlainObject = typeUtils.isPlainObject,
-    grep = require('../../core/utils/common').grep,
-    Deferred = require('../../core/utils/deferred').Deferred,
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const typeUtils = require('../../core/utils/type');
+const iteratorUtils = require('../../core/utils/iterator');
+const each = require('../../core/utils/iterator').each;
+const ajax = require('../../core/utils/ajax');
+const Guid = require('../../core/guid');
+const isDefined = typeUtils.isDefined;
+const isPlainObject = typeUtils.isPlainObject;
+const grep = require('../../core/utils/common').grep;
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-    errors = require('../errors').errors,
-    dataUtils = require('../utils');
+const errors = require('../errors').errors;
+const dataUtils = require('../utils');
 
-var GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
+const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
 
-var VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
-var ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
+const VERBOSE_DATE_REGEX = /^\/Date\((-?\d+)((\+|-)?(\d+)?)\)\/$/;
+const ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[-+]{1}\d{2}(:?)(\d{2})?)?$/;
 
 // Request processing
-var JSON_VERBOSE_MIME_TYPE = 'application/json;odata=verbose';
+const JSON_VERBOSE_MIME_TYPE = 'application/json;odata=verbose';
 
-var makeArray = function(value) {
+const makeArray = function(value) {
     return typeUtils.type(value) === 'string' ? value.split() : value;
 };
 
-var hasDot = function(x) {
+const hasDot = function(x) {
     return /\./.test(x);
 };
 
-var pad = function(text, length, right) {
+const pad = function(text, length, right) {
     text = String(text);
     while(text.length < length) {
         text = right ? (text + '0') : ('0' + text);
@@ -38,13 +38,13 @@ var pad = function(text, length, right) {
 };
 
 function formatISO8601(date, skipZeroTime, skipTimezone) {
-    var bag = [];
+    const bag = [];
 
-    var isZeroTime = function() {
+    const isZeroTime = function() {
         return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
     };
 
-    var padLeft2 = function(text) { return pad(text, 2); };
+    const padLeft2 = function(text) { return pad(text, 2); };
 
     bag.push(date.getFullYear());
     bag.push('-');
@@ -74,10 +74,10 @@ function formatISO8601(date, skipZeroTime, skipTimezone) {
 }
 
 function parseISO8601(isoString) {
-    var result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000),
-        chunks = isoString.replace('Z', '').split('T'),
-        date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]),
-        time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
+    const result = new Date(new Date(0).getTimezoneOffset() * 60 * 1000);
+    const chunks = isoString.replace('Z', '').split('T');
+    const date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]);
+    const time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
 
     result.setFullYear(Number(date[1]));
     result.setMonth(Number(date[2]) - 1);
@@ -88,7 +88,7 @@ function parseISO8601(isoString) {
         result.setMinutes(Number(time[2]));
         result.setSeconds(Number(time[3]));
 
-        var fractional = (time[4] || '').slice(0, 3);
+        let fractional = (time[4] || '').slice(0, 3);
         fractional = pad(fractional, 3, true);
         result.setMilliseconds(Number(fractional));
     }
@@ -101,12 +101,12 @@ function isAbsoluteUrl(url) {
 }
 
 function toAbsoluteUrl(basePath, relativePath) {
-    var part;
-    var baseParts = stripParams(basePath).split('/');
-    var relativeParts = relativePath.split('/');
+    let part;
+    const baseParts = stripParams(basePath).split('/');
+    const relativeParts = relativePath.split('/');
 
     function stripParams(url) {
-        var index = url.indexOf('?');
+        const index = url.indexOf('?');
         if(index > -1) {
             return url.substr(0, index);
         }
@@ -127,17 +127,17 @@ function toAbsoluteUrl(basePath, relativePath) {
     return baseParts.join('/');
 }
 
-var param = function(params) {
-    var result = [];
+const param = function(params) {
+    const result = [];
 
-    for(var name in params) {
+    for(const name in params) {
         result.push(name + '=' + params[name]);
     }
 
     return result.join('&');
 };
 
-var ajaxOptionsForRequest = function(protocolVersion, request, options) {
+const ajaxOptionsForRequest = function(protocolVersion, request, options) {
     request = extend(
         {
             async: true,
@@ -154,19 +154,19 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
 
     options = options || {};
 
-    var beforeSend = options.beforeSend;
+    const beforeSend = options.beforeSend;
     if(beforeSend) {
         beforeSend(request);
     }
 
-    var method = (request.method || 'get').toLowerCase(),
-        isGet = method === 'get',
-        useJsonp = isGet && options.jsonp,
-        params = extend({}, request.params),
-        ajaxData = isGet ? params : formatPayload(request.payload),
-        qs = !isGet && param(params),
-        url = request.url,
-        contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
+    const method = (request.method || 'get').toLowerCase();
+    const isGet = method === 'get';
+    const useJsonp = isGet && options.jsonp;
+    const params = extend({}, request.params);
+    const ajaxData = isGet ? params : formatPayload(request.payload);
+    const qs = !isGet && param(params);
+    let url = request.url;
+    const contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
 
     if(qs) {
         url += (url.indexOf('?') > -1 ? '&' : '?') + qs;
@@ -217,19 +217,19 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
 };
 
 var sendRequest = function(protocolVersion, request, options) {
-    var d = new Deferred();
-    var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
+    const d = new Deferred();
+    const ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
     ajax.sendRequest(ajaxOptions).always(function(obj, textStatus) {
-        var transformOptions = {
-                deserializeDates: options.deserializeDates,
-                fieldTypes: options.fieldTypes
-            },
-            tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions),
-            error = tuple.error,
-            data = tuple.data,
-            nextUrl = tuple.nextUrl,
-            extra;
+        const transformOptions = {
+            deserializeDates: options.deserializeDates,
+            fieldTypes: options.fieldTypes
+        };
+        const tuple = interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions);
+        const error = tuple.error;
+        const data = tuple.data;
+        let nextUrl = tuple.nextUrl;
+        let extra;
 
         if(error) {
             if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
@@ -265,9 +265,9 @@ var sendRequest = function(protocolVersion, request, options) {
     return d.promise();
 };
 
-var formatDotNetError = function(errorObj) {
-    var message,
-        currentError = errorObj;
+const formatDotNetError = function(errorObj) {
+    let message;
+    let currentError = errorObj;
 
     if('message' in errorObj) {
         if(errorObj.message.value) {
@@ -286,17 +286,17 @@ var formatDotNetError = function(errorObj) {
 };
 
 // TODO split: decouple HTTP errors from OData errors
-var errorFromResponse = function(obj, textStatus, ajaxOptions) {
+const errorFromResponse = function(obj, textStatus, ajaxOptions) {
     if(textStatus === 'nocontent') {
         return null; // workaround for http://bugs.jquery.com/ticket/13292
     }
 
-    var message = 'Unknown error',
-        response = obj,
-        httpStatus = 200,
-        errorData = {
-            requestOptions: ajaxOptions
-        };
+    let message = 'Unknown error';
+    let response = obj;
+    let httpStatus = 200;
+    const errorData = {
+        requestOptions: ajaxOptions
+    };
 
     if(textStatus !== 'success') {
         httpStatus = obj.status;
@@ -306,7 +306,7 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
         } catch(x) {
         }
     }
-    var errorObj = response &&
+    const errorObj = response &&
         // NOTE: $.Deferred rejected and response contain error message
         (response.then && response
         // NOTE: $.Deferred resolved with odata error
@@ -320,7 +320,7 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
             httpStatus = 500;
         }
 
-        var customCode = Number(errorObj.code);
+        const customCode = Number(errorObj.code);
         if(isFinite(customCode) && customCode >= 400) {
             httpStatus = customCode;
         }
@@ -335,8 +335,8 @@ var errorFromResponse = function(obj, textStatus, ajaxOptions) {
 };
 
 var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOptions) {
-    var error = errorFromResponse(obj, textStatus, ajaxOptions),
-        value;
+    const error = errorFromResponse(obj, textStatus, ajaxOptions);
+    let value;
 
     if(error) {
         return { error: error };
@@ -358,7 +358,7 @@ var interpretJsonFormat = function(obj, textStatus, transformOptions, ajaxOption
 };
 
 var interpretVerboseJsonFormat = function(obj) {
-    var data = obj.d;
+    let data = obj.d;
     if(!isDefined(data)) {
         return { error: Error('Malformed or unsupported JSON response received') };
     }
@@ -375,7 +375,7 @@ var interpretVerboseJsonFormat = function(obj) {
 };
 
 var interpretLightJsonFormat = function(obj) {
-    var data = obj;
+    let data = obj;
 
     if(isDefined(data.value)) {
         data = data.value;
@@ -390,7 +390,7 @@ var interpretLightJsonFormat = function(obj) {
 
 // Serialization and parsing
 
-var EdmLiteral = Class.inherit({
+const EdmLiteral = Class.inherit({
     /**
     * @name EdmLiteralMethods.ctor
     * @publicName ctor(value)
@@ -417,8 +417,8 @@ var transformTypes = function(obj, options) {
 
             transformTypes(obj[key], options);
         } else if(typeof value === 'string') {
-            var fieldTypes = options.fieldTypes,
-                canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
+            const fieldTypes = options.fieldTypes;
+            const canBeGuid = !fieldTypes || fieldTypes[key] !== 'String';
 
             if(canBeGuid && GUID_REGEX.test(value)) {
                 obj[key] = new Guid(value);
@@ -426,7 +426,7 @@ var transformTypes = function(obj, options) {
 
             if(options.deserializeDates !== false) {
                 if(value.match(VERBOSE_DATE_REGEX)) {
-                    var date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
+                    const date = new Date(Number(RegExp.$1) + RegExp.$2 * 60 * 1000);
                     obj[key] = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
                 } else if(ISO8601_DATE_REGEX.test(value)) {
                     obj[key] = new Date(parseISO8601(obj[key]).valueOf());
@@ -436,15 +436,15 @@ var transformTypes = function(obj, options) {
     });
 };
 
-var serializeDate = function(date) {
+const serializeDate = function(date) {
     return 'datetime\'' + formatISO8601(date, true, true) + '\'';
 };
 
-var serializeString = function(value) {
+const serializeString = function(value) {
     return '\'' + value.replace(/'/g, '\'\'') + '\'';
 };
 
-var serializePropName = function(propName) {
+const serializePropName = function(propName) {
     if(propName instanceof EdmLiteral) {
         return propName.valueOf();
     }
@@ -483,7 +483,7 @@ var serializeValueV2 = function(value) {
     return String(value);
 };
 
-var serializeValue = function(value, protocolVersion) {
+const serializeValue = function(value, protocolVersion) {
     switch(protocolVersion) {
         case 2:
         case 3:
@@ -494,9 +494,9 @@ var serializeValue = function(value, protocolVersion) {
     }
 };
 
-var serializeKey = function(key, protocolVersion) {
+const serializeKey = function(key, protocolVersion) {
     if(isPlainObject(key)) {
-        var parts = [];
+        const parts = [];
         each(key, function(k, v) {
             parts.push(serializePropName(k) + '=' + serializeValue(v, protocolVersion));
         });
@@ -505,7 +505,7 @@ var serializeKey = function(key, protocolVersion) {
     return serializeValue(key, protocolVersion);
 };
 
-var keyConverters = {
+const keyConverters = {
 
     String: function(value) {
         return value + '';
@@ -548,16 +548,16 @@ var keyConverters = {
     }
 };
 
-var convertPrimitiveValue = function(type, value) {
+const convertPrimitiveValue = function(type, value) {
     if(value === null) return null;
-    var converter = keyConverters[type];
+    const converter = keyConverters[type];
     if(!converter) {
         throw errors.Error('E4014', type);
     }
     return converter(value);
 };
 
-var generateSelect = function(oDataVersion, select) {
+const generateSelect = function(oDataVersion, select) {
     if(!select) {
         return;
     }
@@ -569,9 +569,9 @@ var generateSelect = function(oDataVersion, select) {
     return grep(select, hasDot, true).join();
 };
 
-var generateExpand = function(oDataVersion, expand, select) {
-    var generatorV2 = function() {
-        var hash = {};
+const generateExpand = function(oDataVersion, expand, select) {
+    const generatorV2 = function() {
+        const hash = {};
 
         if(expand) {
             iteratorUtils.each(makeArray(expand), function() {
@@ -581,7 +581,7 @@ var generateExpand = function(oDataVersion, expand, select) {
 
         if(select) {
             iteratorUtils.each(makeArray(select), function() {
-                var path = this.split('.');
+                const path = this.split('.');
                 if(path.length < 2) {
                     return;
                 }
@@ -594,12 +594,12 @@ var generateExpand = function(oDataVersion, expand, select) {
         return iteratorUtils.map(hash, function(k, v) { return v; }).join();
     };
 
-    var generatorV4 = function() {
-        var format = function(hash) {
+    const generatorV4 = function() {
+        const format = function(hash) {
             var formatCore = function(hash) {
-                var result = '',
-                    selectValue = [],
-                    expandValue = [];
+                let result = '';
+                const selectValue = [];
+                const expandValue = [];
 
                 iteratorUtils.each(hash, function(key, value) {
                     if(Array.isArray(value)) {
@@ -631,7 +631,7 @@ var generateExpand = function(oDataVersion, expand, select) {
                 return result;
             };
 
-            var result = [];
+            const result = [];
 
             iteratorUtils.each(hash, function(key, value) {
                 result.push(key + formatCore(value));
@@ -640,9 +640,9 @@ var generateExpand = function(oDataVersion, expand, select) {
             return result.join();
         };
 
-        var parseTree = function(exprs, root, stepper) {
+        const parseTree = function(exprs, root, stepper) {
             var parseCore = function(exprParts, root, stepper) {
-                var result = stepper(root, exprParts.shift(), exprParts);
+                const result = stepper(root, exprParts.shift(), exprParts);
                 if(result === false) {
                     return;
                 }
@@ -655,7 +655,7 @@ var generateExpand = function(oDataVersion, expand, select) {
             });
         };
 
-        var hash = {};
+        const hash = {};
 
         if(expand || select) {
             if(expand) {

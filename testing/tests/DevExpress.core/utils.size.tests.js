@@ -23,7 +23,7 @@ QUnit.module('get width and height', {
 });
 
 QUnit.test('element in parent with fixed size', function(assert) {
-    var expected = [
+    const expected = [
         { width: 100, height: 0 },
         { width: 40, height: 50 },
         { width: 50, height: 55 },
@@ -31,7 +31,7 @@ QUnit.test('element in parent with fixed size', function(assert) {
         { width: 100, height: 0 }
     ];
 
-    for(var i = 0; i < testStyles.length; i++) {
+    for(let i = 0; i < testStyles.length; i++) {
         this.$element.attr('style', testStyles[i]);
         assert.equal(sizeUtils.getSize(this.$element[0], 'width', {}), expected[i].width);
         assert.equal(sizeUtils.getSize(this.$element[0], 'height', {}), expected[i].height);
@@ -39,9 +39,9 @@ QUnit.test('element in parent with fixed size', function(assert) {
 });
 
 QUnit.test('invisible element in parent with fixed size', function(assert) {
-    var that = this;
+    const that = this;
 
-    var testParams = [{
+    const testParams = [{
         style: 'display: none;',
         width: 0,
         height: 0
@@ -67,7 +67,7 @@ QUnit.test('invisible element in parent with fixed size', function(assert) {
 });
 
 QUnit.test('element with padding, marging, border without params', function(assert) {
-    var expected, i;
+    let expected; let i;
 
     expected = [
         { width: 80, height: 0 },
@@ -122,7 +122,7 @@ QUnit.test('element with padding, marging, border with params', function(assert)
 });
 
 QUnit.test('element with box-sizing = border-box', function(assert) {
-    var expected, i;
+    let expected; let i;
 
     expected = [
         { width: 100, height: 0 },
@@ -201,7 +201,7 @@ QUnit.test('element with box-sizing = border-box and parent is invisible', funct
 QUnit.test('element is not in a DOM', function(assert) {
     this.$freeElement = $('<div/>');
 
-    var expected = [
+    const expected = [
         { width: 0, height: 0 },
         { width: 40, height: 50 },
         { width: 50, height: 50 },
@@ -209,7 +209,7 @@ QUnit.test('element is not in a DOM', function(assert) {
         { width: 0, height: 0 }
     ];
 
-    for(var i = 0; i < testStyles.length; i++) {
+    for(let i = 0; i < testStyles.length; i++) {
         this.$freeElement.attr('style', testStyles[i]);
         assert.equal(sizeUtils.getSize(this.$freeElement[0], 'width', {}), expected[i].width);
         assert.equal(sizeUtils.getSize(this.$freeElement[0], 'height', {}), expected[i].height);
@@ -228,12 +228,12 @@ QUnit.test('element is not in a DOM', function(assert) {
 QUnit.module('getElementBoxParams');
 
 QUnit.test('element in parent with fixed size', function(assert) {
-    var $element = $('<div>').appendTo('#qunit-fixture');
-    var element = $element.get(0);
+    const $element = $('<div>').appendTo('#qunit-fixture');
+    const element = $element.get(0);
 
     $element.attr('style', 'width: 40px; height: 50px; border: 1px solid black; padding: 3px 4px; margin: 5px 6px');
 
-    var computedStyles = window.getComputedStyle(element);
+    const computedStyles = window.getComputedStyle(element);
 
     assert.deepEqual(sizeUtils.getElementBoxParams('width', computedStyles), {
         border: 2,

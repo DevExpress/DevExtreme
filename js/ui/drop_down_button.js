@@ -26,7 +26,7 @@ const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = 'dx-dropdownbutton-popup-wrapper';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
-let DropDownButton = Widget.inherit({
+const DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
@@ -393,7 +393,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderButtonGroup() {
-        let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
+        const $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
             this.$element().append($buttonGroup);
         }

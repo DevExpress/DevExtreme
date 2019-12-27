@@ -1,16 +1,16 @@
-var DataSource = require('./data/data_source/data_source').DataSource,
-    extend = require('./core/utils/extend').extend,
-    normalizeDataSourceOptions = require('./data/data_source/data_source').normalizeDataSourceOptions;
+const DataSource = require('./data/data_source/data_source').DataSource;
+const extend = require('./core/utils/extend').extend;
+const normalizeDataSourceOptions = require('./data/data_source/data_source').normalizeDataSourceOptions;
 
-var DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions',
-    DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler',
-    DATA_SOURCE_LOAD_ERROR_METHOD = '_dataSourceLoadErrorHandler',
-    DATA_SOURCE_LOADING_CHANGED_METHOD = '_dataSourceLoadingChangedHandler',
-    DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode',
-    SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
+const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
+const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
+const DATA_SOURCE_LOAD_ERROR_METHOD = '_dataSourceLoadErrorHandler';
+const DATA_SOURCE_LOADING_CHANGED_METHOD = '_dataSourceLoadingChangedHandler';
+const DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD = '_dataSourceFromUrlLoadMode';
+const SPECIFIC_DATA_SOURCE_OPTION = '_getSpecificDataSourceOption';
 
 
-var DataHelperMixin = {
+const DataHelperMixin = {
 
     postCtor: function() {
         this.on('disposing', function() {
@@ -24,9 +24,9 @@ var DataHelperMixin = {
     },
 
     _initDataSource: function() {
-        var dataSourceOptions = (SPECIFIC_DATA_SOURCE_OPTION in this) ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option('dataSource'),
-            widgetDataSourceOptions,
-            dataSourceType;
+        let dataSourceOptions = (SPECIFIC_DATA_SOURCE_OPTION in this) ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option('dataSource');
+        let widgetDataSourceOptions;
+        let dataSourceType;
 
         this._disposeDataSource();
 
@@ -72,7 +72,7 @@ var DataHelperMixin = {
     },
 
     _addDataSourceChangeHandler: function() {
-        var dataSource = this._dataSource;
+        const dataSource = this._dataSource;
         this._proxiedDataSourceChangedHandler = (function(e) {
             this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
         }).bind(this);
@@ -91,7 +91,7 @@ var DataHelperMixin = {
 
     _loadDataSource: function() {
         if(this._dataSource) {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
 
             if(dataSource.isLoaded()) {
                 this._proxiedDataSourceChangedHandler && this._proxiedDataSourceChangedHandler();

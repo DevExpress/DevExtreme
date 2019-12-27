@@ -1,23 +1,23 @@
-var dataUtils = require('../../core/element_data'),
-    eventsEngine = require('../../events/core/events_engine'),
-    WeakMap = require('../polyfills/weak_map'),
-    isDefined = require('./type').isDefined,
-    removeEvent = require('../remove_event');
+const dataUtils = require('../../core/element_data');
+const eventsEngine = require('../../events/core/events_engine');
+const WeakMap = require('../polyfills/weak_map');
+const isDefined = require('./type').isDefined;
+const removeEvent = require('../remove_event');
 
-var COMPONENT_NAMES_DATA_KEY = 'dxComponents',
-    ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
+const COMPONENT_NAMES_DATA_KEY = 'dxComponents';
+const ANONYMOUS_COMPONENT_DATA_KEY = 'dxPrivateComponent';
 
-var componentNames = new WeakMap(),
-    nextAnonymousComponent = 0;
+const componentNames = new WeakMap();
+let nextAnonymousComponent = 0;
 
-var getName = exports.name = function(componentClass, newName) {
+const getName = exports.name = function(componentClass, newName) {
     if(isDefined(newName)) {
         componentNames.set(componentClass, newName);
         return;
     }
 
     if(!componentNames.has(componentClass)) {
-        var generatedName = ANONYMOUS_COMPONENT_DATA_KEY + nextAnonymousComponent++;
+        const generatedName = ANONYMOUS_COMPONENT_DATA_KEY + nextAnonymousComponent++;
         componentNames.set(componentClass, generatedName);
         return generatedName;
     }
@@ -26,8 +26,8 @@ var getName = exports.name = function(componentClass, newName) {
 };
 
 exports.attachInstanceToElement = function($element, componentInstance, disposeFn) {
-    var data = dataUtils.data($element.get(0)),
-        name = getName(componentInstance.constructor);
+    const data = dataUtils.data($element.get(0));
+    const name = getName(componentInstance.constructor);
 
     data[name] = componentInstance;
 
@@ -45,7 +45,7 @@ exports.attachInstanceToElement = function($element, componentInstance, disposeF
 };
 
 exports.getInstanceByElement = function($element, componentClass) {
-    var name = getName(componentClass);
+    const name = getName(componentClass);
 
     return dataUtils.data($element.get(0), name);
 };

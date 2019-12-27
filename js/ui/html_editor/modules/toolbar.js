@@ -351,7 +351,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareToolbarItems() {
-        let resultItems = [];
+        const resultItems = [];
 
         each(this.options.items, (index, item) => {
             let newItem;

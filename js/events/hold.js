@@ -1,14 +1,14 @@
-var eventUtils = require('./utils'),
-    Emitter = require('./core/emitter'),
-    registerEmitter = require('./core/emitter_registrator'),
-    abs = Math.abs;
+const eventUtils = require('./utils');
+const Emitter = require('./core/emitter');
+const registerEmitter = require('./core/emitter_registrator');
+const abs = Math.abs;
 
-var HOLD_EVENT_NAME = 'dxhold',
-    HOLD_TIMEOUT = 750,
-    TOUCH_BOUNDARY = 5;
+const HOLD_EVENT_NAME = 'dxhold';
+const HOLD_TIMEOUT = 750;
+const TOUCH_BOUNDARY = 5;
 
 
-var HoldEmitter = Emitter.inherit({
+const HoldEmitter = Emitter.inherit({
 
     start: function(e) {
         this._startEventData = eventUtils.eventData(e);
@@ -17,7 +17,7 @@ var HoldEmitter = Emitter.inherit({
     },
 
     _startTimer: function(e) {
-        var holdTimeout = ('timeout' in this) ? this.timeout : HOLD_TIMEOUT;
+        const holdTimeout = ('timeout' in this) ? this.timeout : HOLD_TIMEOUT;
         this._holdTimer = setTimeout((function() {
             this._requestAccept(e);
             this._fireEvent(HOLD_EVENT_NAME, e, {
@@ -34,7 +34,7 @@ var HoldEmitter = Emitter.inherit({
     },
 
     _touchWasMoved: function(e) {
-        var delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
+        const delta = eventUtils.eventDelta(this._startEventData, eventUtils.eventData(e));
 
         return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
     },

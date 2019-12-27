@@ -4,33 +4,33 @@ import clickEvent from '../../events/click';
 import { each } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
 
-var ERROR_ROW_CLASS = 'dx-error-row',
-    ERROR_MESSAGE_CLASS = 'dx-error-message',
-    ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton',
-    ACTION_CLASS = 'action';
+const ERROR_ROW_CLASS = 'dx-error-row';
+const ERROR_MESSAGE_CLASS = 'dx-error-message';
+const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
+const ACTION_CLASS = 'action';
 
-var ErrorHandlingController = modules.ViewController.inherit({
+const ErrorHandlingController = modules.ViewController.inherit({
     init: function() {
-        var that = this;
+        const that = this;
 
         that._columnHeadersView = that.getView('columnHeadersView');
         that._rowsView = that.getView('rowsView');
     },
 
     _createErrorRow: function(error, $tableElements) {
-        var that = this,
-            $errorRow,
-            $closeButton,
-            $errorMessage = this._renderErrorMessage(error);
+        const that = this;
+        let $errorRow;
+        let $closeButton;
+        const $errorMessage = this._renderErrorMessage(error);
 
         if($tableElements) {
             $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
             $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
             eventsEngine.on($closeButton, clickEvent.name, that.createAction(function(args) {
-                var e = args.event,
-                    $errorRow,
-                    errorRowIndex = $(e.currentTarget).closest('.' + ERROR_ROW_CLASS).index();
+                const e = args.event;
+                let $errorRow;
+                const errorRowIndex = $(e.currentTarget).closest('.' + ERROR_ROW_CLASS).index();
 
                 e.stopPropagation();
                 each($tableElements, function(_, tableElement) {
@@ -57,8 +57,8 @@ var ErrorHandlingController = modules.ViewController.inherit({
     },
 
     _renderErrorMessage: function(error) {
-        var message = error.url ? error.message.replace(error.url, '') : error.message || error,
-            $message = $('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
+        const message = error.url ? error.message.replace(error.url, '') : error.message || error;
+        const $message = $('<div>').addClass(ERROR_MESSAGE_CLASS).text(message);
 
         if(error.url) {
             $('<a>').attr('href', error.url).text(error.url).appendTo($message);
@@ -68,13 +68,13 @@ var ErrorHandlingController = modules.ViewController.inherit({
     },
 
     renderErrorRow: function(error, rowIndex, $popupContent) {
-        var that = this,
-            $row,
-            $errorMessageElement,
-            $firstErrorRow,
-            rowElements,
-            viewElement,
-            $tableElements;
+        const that = this;
+        let $row;
+        let $errorMessageElement;
+        let $firstErrorRow;
+        let rowElements;
+        let viewElement;
+        let $tableElements;
 
         if($popupContent) {
             $popupContent.find('.' + ERROR_MESSAGE_CLASS).remove();
@@ -95,7 +95,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
                 that.removeErrorRow($row.next());
                 $errorMessageElement.insertAfter($row);
             } else {
-                var $tbody = $(tableElement).children('tbody');
+                const $tbody = $(tableElement).children('tbody');
                 rowElements = $tbody.children('tr');
                 if(that._columnHeadersView.isVisible()) {
                     that.removeErrorRow(rowElements.last());
@@ -107,7 +107,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
             }
         });
         if(!$popupContent) {
-            let resizingController = that.getController('resizing');
+            const resizingController = that.getController('resizing');
             resizingController && resizingController.fireContentReadyAction();
         }
         return $firstErrorRow;
@@ -115,10 +115,10 @@ var ErrorHandlingController = modules.ViewController.inherit({
 
     removeErrorRow: function($row) {
         if(!$row) {
-            let $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
+            const $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
             $row = $columnHeaders && $columnHeaders.find('.' + ERROR_ROW_CLASS);
             if(!$row || !$row.length) {
-                var $rowsViewElement = this._rowsView.element();
+                const $rowsViewElement = this._rowsView.element();
                 $row = $rowsViewElement && $rowsViewElement.find('.' + ERROR_ROW_CLASS);
             }
         }
@@ -126,7 +126,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
     },
 
     optionChanged: function(args) {
-        var that = this;
+        const that = this;
 
         switch(args.name) {
             case 'errorRowEnabled':
@@ -151,8 +151,8 @@ module.exports = {
         controllers: {
             data: {
                 init: function() {
-                    var that = this,
-                        errorHandlingController = that.getController('errorHandling');
+                    const that = this;
+                    const errorHandlingController = that.getController('errorHandling');
 
                     that.callBase();
 
@@ -165,8 +165,8 @@ module.exports = {
                         if(e && e.changeType === 'loadError') {
                             return;
                         }
-                        var errorHandlingController = that.getController('errorHandling'),
-                            editingController = that.getController('editing');
+                        const errorHandlingController = that.getController('errorHandling');
+                        const editingController = that.getController('editing');
 
                         if(editingController && !editingController.hasChanges()) {
                             errorHandlingController && errorHandlingController.removeErrorRow();

@@ -8,7 +8,7 @@ class ShrinkStrategy extends DrawerStrategy {
 
     slidePositionRendering(config, offset, animate) {
         if(animate) {
-            let animationConfig = extend(config.defaultAnimationConfig, {
+            const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 margin: config.panelOffset,
                 duration: this.getDrawerInstance().option('animationDuration'),
@@ -24,7 +24,7 @@ class ShrinkStrategy extends DrawerStrategy {
         const drawer = this.getDrawerInstance();
 
         if(animate) {
-            let animationConfig = extend(config.defaultAnimationConfig, {
+            const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 size: config.size,
                 duration: drawer.option('animationDuration'),

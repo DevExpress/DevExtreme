@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup = '<div id="container"></div><div id="pgfc"></div>';
+    const markup = '<div id="container"></div><div id="pgfc"></div>';
     $('#qunit-fixture').html(markup);
 });
 
@@ -16,12 +16,12 @@ import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import renderer from 'core/renderer';
 
-var createMockDataSource = function(options) {
+const createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
         field.index = index;
     });
 
-    var stubDataSource = {
+    const stubDataSource = {
         getAreaFields: function(area) {
             return options[area + 'Fields'] || [];
         },
@@ -82,7 +82,7 @@ QUnit.test('Empty options', function(assert) {
     assert.equal(this.$container.find('.dx-area').length, 5, 'area count');
     assert.equal(this.$container.find('.dx-area-field').length, 0, 'field count');
 
-    var $areaFieldsContainers = this.$container.find('.dx-area-fields');
+    const $areaFieldsContainers = this.$container.find('.dx-area-fields');
 
     assert.equal($areaFieldsContainers.length, 5, 'area fields container count');
     assert.equal($areaFieldsContainers.eq(0).attr('group'), undefined, 'group 1');
@@ -96,13 +96,13 @@ QUnit.test('Empty options', function(assert) {
     assert.equal($areaFieldsContainers.eq(4).attr('group'), 'data', 'group 5');
     assert.equal($areaFieldsContainers.eq(4).attr('allow-scrolling'), 'true', 'group 5 - allow-scrolling');
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
 
     assert.strictEqual(sortable.option('allowDragging'), true, 'dragging should be enabled by default');
 });
 
 QUnit.test('Empty DataSource', function(assert) {
-    var dataSourceOptions = {};
+    const dataSourceOptions = {};
 
     // act
     this.setup(dataSourceOptions);
@@ -116,7 +116,7 @@ QUnit.test('Empty DataSource', function(assert) {
 });
 
 QUnit.test('Render Area Fields', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         rowFields: [
             { caption: 'Field 1', area: 'row', allowFiltering: true, allowSorting: true }
         ],
@@ -143,7 +143,7 @@ QUnit.test('Render Area Fields', function(assert) {
     assert.equal(this.$container.find('.dx-area-fields').length, 5, 'area fields container count');
     assert.equal(this.$container.find('.dx-area-field').length, 6, 'field count');
 
-    var $groupFieldElements = this.$container.find('.dx-area-fields[group=row] .dx-area-field');
+    let $groupFieldElements = this.$container.find('.dx-area-fields[group=row] .dx-area-field');
     assert.equal($groupFieldElements.length, 1, 'row field elements count');
     assert.equal($groupFieldElements.eq(0).text(), 'Field 1', 'Field 1 text');
     assert.equal($groupFieldElements.find('.dx-sort').length, 1, 'sort indicator count');
@@ -176,7 +176,7 @@ QUnit.test('Render Area Fields', function(assert) {
 });
 
 QUnit.test('Hidden field in the data area', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         dataFields: [
             { caption: 'Field 1', area: 'data', visible: false },
             { caption: 'Field 2', area: 'data' }
@@ -187,7 +187,7 @@ QUnit.test('Hidden field in the data area', function(assert) {
     this.setup(dataSourceOptions);
 
     // assert
-    var $groupFieldElements = this.$container.find('.dx-area-fields[group=data] .dx-area-field');
+    const $groupFieldElements = this.$container.find('.dx-area-fields[group=data] .dx-area-field');
     assert.equal($groupFieldElements.length, 1, 'field elements count');
     assert.equal($groupFieldElements.eq(0).text(), 'Field 2', 'Field 1 text');
 });
@@ -203,14 +203,14 @@ QUnit.test('Render to hidden container', function(assert) {
     domUtils.triggerShownEvent($('#container'));
 
     // assert
-    var columns = $('#container').find('.dx-col');
+    const columns = $('#container').find('.dx-col');
     assert.strictEqual(columns.length, 4);
     assert.ok(columns.eq(0).height() > 0);
     assert.roughEqual(columns.eq(0).height(), columns.eq(1).height(), 1);
 });
 
 QUnit.test('Render Fields Tree', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', caption: 'Field 1', area: 'row' },
         { dataField: 'field2', caption: 'Field 2', area: 'column' },
         { dataField: 'field3', caption: 'Field 3' },
@@ -220,7 +220,7 @@ QUnit.test('Render Fields Tree', function(assert) {
         { dataField: 'field7', caption: 'Field 7', visible: false },
         { dataField: 'field8', caption: 'Field 8', groupIndex: 0, groupName: 'test' } // T232385
     ];
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         fields: fields
     };
 
@@ -232,7 +232,7 @@ QUnit.test('Render Fields Tree', function(assert) {
     assert.ok(this.dataSource);
     assert.equal(this.$container.find('.dx-treeview').length, 1, 'tree view count');
 
-    var fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
+    const fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
 
     assert.ok(fieldsDataSource, 'fields dataSource exists');
     assert.equal(fieldsDataSource.length, 6, 'fields dataSource length');
@@ -248,14 +248,14 @@ QUnit.test('Render Fields Tree', function(assert) {
 
 // T752911
 QUnit.test('Render Fields Tree with groups and without isMeasure', function(assert) {
-    var fields = [
-            { dataField: 'a' },
-            { dataField: 'b', groupName: 'b', levels: [{ groupName: 'b', groupIndex: 0 }] },
-            { dataField: 'c' }
-        ],
-        dataSourceOptions = {
-            fields: fields
-        };
+    const fields = [
+        { dataField: 'a' },
+        { dataField: 'b', groupName: 'b', levels: [{ groupName: 'b', groupIndex: 0 }] },
+        { dataField: 'c' }
+    ];
+    const dataSourceOptions = {
+        fields: fields
+    };
 
     // act
     this.setup(dataSourceOptions);
@@ -265,7 +265,7 @@ QUnit.test('Render Fields Tree with groups and without isMeasure', function(asse
     assert.ok(this.dataSource);
     assert.equal(this.$container.find('.dx-treeview').length, 1, 'tree view count');
 
-    var fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
+    const fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
 
     assert.ok(fieldsDataSource, 'fields dataSource exists');
     assert.equal(fieldsDataSource.length, 3, 'fields dataSource length');
@@ -277,36 +277,36 @@ QUnit.test('Render Fields Tree with groups and without isMeasure', function(asse
 });
 
 QUnit.test('Create areas with draggable items', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', caption: 'Field 1', area: 'row' }
     ];
 
     // act
     this.setup({ fields: fields });
-    var areas = this.$container.find('.dx-area-fields');
+    const areas = this.$container.find('.dx-area-fields');
 
     // assert
     assert.ok(areas.eq(0).hasClass('dx-pivotgrid-drag-action'), 'items in area are draggable');
 });
 
 QUnit.test('Render Fields Tree with dimension and displayFolder', function(assert) {
-    var fields = [
-            { dataField: 'field1', caption: 'Field 1', dimension: 'Dimension 1', area: 'row', isMeasure: false },
-            { dataField: 'field2', caption: 'Field 2', dimension: 'Dimension 1', area: 'column' },
-            { dataField: 'field3', caption: 'Field 3', dimension: 'Dimension 2' },
-            { dataField: 'field4', caption: 'Field 4', dimension: 'Dimension 2', displayFolder: 'Folder 1', area: 'filter' },
-            { dataField: 'field5', caption: 'Field 5' },
-            { dataField: 'field6', caption: 'Field 6', dimension: '[Measures]', area: 'data', isMeasure: true },
-            {
-                dataField: 'HierarchyField', caption: 'a hierarchy field', dimension: 'Dimension 2', groupName: 'hierarchy', isMeasure: false, levels: [
-                    { dataField: 'levelField' }
-                ]
-            }
-        ],
+    const fields = [
+        { dataField: 'field1', caption: 'Field 1', dimension: 'Dimension 1', area: 'row', isMeasure: false },
+        { dataField: 'field2', caption: 'Field 2', dimension: 'Dimension 1', area: 'column' },
+        { dataField: 'field3', caption: 'Field 3', dimension: 'Dimension 2' },
+        { dataField: 'field4', caption: 'Field 4', dimension: 'Dimension 2', displayFolder: 'Folder 1', area: 'filter' },
+        { dataField: 'field5', caption: 'Field 5' },
+        { dataField: 'field6', caption: 'Field 6', dimension: '[Measures]', area: 'data', isMeasure: true },
+        {
+            dataField: 'HierarchyField', caption: 'a hierarchy field', dimension: 'Dimension 2', groupName: 'hierarchy', isMeasure: false, levels: [
+                { dataField: 'levelField' }
+            ]
+        }
+    ];
 
-        dataSourceOptions = {
-            fields: fields
-        };
+    const dataSourceOptions = {
+        fields: fields
+    };
 
     // act
     this.setup(dataSourceOptions);
@@ -316,7 +316,7 @@ QUnit.test('Render Fields Tree with dimension and displayFolder', function(asser
     assert.ok(this.dataSource);
     assert.equal(this.$container.find('.dx-treeview').length, 1, 'tree view count');
 
-    var fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
+    const fieldsDataSource = this.$container.find('.dx-treeview').dxTreeView('option', 'dataSource');
 
     assert.ok(fieldsDataSource, 'fields dataSource exists');
     assert.equal(fieldsDataSource.length, 4, 'fields dataSource length');
@@ -357,7 +357,7 @@ QUnit.test('Render Fields Tree with dimension and displayFolder', function(asser
 });
 
 QUnit.test('Select Items in all fields area', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', dimension: 'Dimension 1' },
         { dataField: 'field2', dimension: 'Dimension 1' },
         { dataField: 'field3', dimension: 'Dimension 2' },
@@ -374,8 +374,8 @@ QUnit.test('Select Items in all fields area', function(assert) {
         fields: fields
     });
 
-    var treeView = this.$container.find('.dx-treeview').dxTreeView('instance'),
-        treeViewItems = treeView.option('dataSource');
+    const treeView = this.$container.find('.dx-treeview').dxTreeView('instance');
+    const treeViewItems = treeView.option('dataSource');
     // acts
     treeView.selectItem(treeViewItems[4]); // act1 - select field5
     treeView.selectItem(treeViewItems[2]); // act2 - select Dimension2
@@ -412,7 +412,7 @@ QUnit.test('Select Items in all fields area', function(assert) {
 });
 
 QUnit.test('T676235. Select Items in all fields area if applyChangesMode is onDemand', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', dimension: 'Dimension 1' },
         { dataField: 'field2', dimension: 'Dimension 1' },
         { dataField: 'field3', dimension: 'Dimension 2' },
@@ -433,7 +433,7 @@ QUnit.test('T676235. Select Items in all fields area if applyChangesMode is onDe
 
     sinon.spy(this.fieldChooser, '_changedHandler');
 
-    var treeView = this.$container.find('.dx-treeview').dxTreeView('instance');
+    const treeView = this.$container.find('.dx-treeview').dxTreeView('instance');
     // acts
     treeView.selectItem(treeView.option('dataSource')[4]); // act1 - select field5
     treeView.selectItem(treeView.option('dataSource')[2]); // act2 - select Dimension2
@@ -471,7 +471,7 @@ QUnit.test('T676235. Select Items in all fields area if applyChangesMode is onDe
 });
 
 QUnit.test('Unselect Items in all fields area', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', dimension: 'Dimension 1', area: 'row' },
         { dataField: 'field2', dimension: 'Dimension 1', area: 'column' },
         { dataField: 'field3', dimension: 'Dimension 2' },
@@ -487,8 +487,8 @@ QUnit.test('Unselect Items in all fields area', function(assert) {
         fields: fields
     });
 
-    var treeView = this.$container.find('.dx-treeview').dxTreeView('instance'),
-        treeViewItems = treeView.option('dataSource');
+    const treeView = this.$container.find('.dx-treeview').dxTreeView('instance');
+    const treeViewItems = treeView.option('dataSource');
     // acts
     treeView.unselectItem(treeViewItems[4]); // act1 - unselect field5
     treeView.selectItem(treeViewItems[2]); // act2 - unselect Dimension2
@@ -521,7 +521,7 @@ QUnit.test('Unselect Items in all fields area', function(assert) {
 });
 
 QUnit.test('Change sort order', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         rowFields: [
             { index: 0, caption: 'Field 1', area: 'row', sortOrder: 'desc', allowFiltering: true, allowSorting: true }
         ],
@@ -541,11 +541,11 @@ QUnit.test('Change sort order', function(assert) {
     this.setup(dataSourceOptions);
 
     // act
-    var $sortIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-sort');
+    const $sortIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-sort');
     $sortIndicatorsInColumnArea.parent().trigger('dxclick');
 
     // act
-    var $sortIndicatorsInRowArea = this.$container.find('.dx-area-fields[group=row] .dx-sort');
+    const $sortIndicatorsInRowArea = this.$container.find('.dx-area-fields[group=row] .dx-sort');
     $sortIndicatorsInRowArea.parent().trigger('dxclick');
 
     // assert
@@ -564,7 +564,7 @@ QUnit.test('Change sort order', function(assert) {
 });
 
 QUnit.test('Header filter menu for not group field', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -580,7 +580,7 @@ QUnit.test('Header filter menu for not group field', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -588,7 +588,7 @@ QUnit.test('Header filter menu for not group field', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    let $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-item').length, 4, 'list item count');
@@ -615,8 +615,8 @@ QUnit.test('Header filter menu for not group field', function(assert) {
 });
 
 QUnit.test('Date in the filterValue', function(assert) {
-    var filterValue = new Date();
-    var dataSourceOptions = {
+    const filterValue = new Date();
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [filterValue], allowFiltering: true }
@@ -632,20 +632,20 @@ QUnit.test('Date in the filterValue', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
 
     // act
     $filterIndicatorsInColumnArea.eq(1).trigger('dxclick');
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.find('.dx-list-item').length, 5, 'list item count');
     assert.equal($filterMenuList.find('.dx-list-item-selected').length, 1, 'list selected item count');
 });
 
 QUnit.test('Header filter menu when data with key', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: ['&[2003]', 'CY 2001'], allowFiltering: true }
@@ -667,7 +667,7 @@ QUnit.test('Header filter menu when data with key', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -675,7 +675,7 @@ QUnit.test('Header filter menu when data with key', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    let $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-item').length, 4, 'list item count');
@@ -694,7 +694,7 @@ QUnit.test('Header filter menu when data with key', function(assert) {
 });
 
 QUnit.test('Header filter menu for not group field when filterType exclude', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], filterType: 'exclude', allowFiltering: true }
@@ -710,7 +710,7 @@ QUnit.test('Header filter menu for not group field when filterType exclude', fun
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -718,7 +718,7 @@ QUnit.test('Header filter menu for not group field when filterType exclude', fun
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-item').length, 5, 'list item count');
@@ -726,7 +726,7 @@ QUnit.test('Header filter menu for not group field when filterType exclude', fun
 });
 
 QUnit.test('Change filter values for not group field', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -739,7 +739,7 @@ QUnit.test('Change filter values for not group field', function(assert) {
 
     this.setup(dataSourceOptions);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -747,7 +747,7 @@ QUnit.test('Change filter values for not group field', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-item').length, 5, 'list item count');
@@ -757,7 +757,7 @@ QUnit.test('Change filter values for not group field', function(assert) {
     $filterMenuList.find('.dx-list-item').eq(0).trigger('dxclick');
     $filterMenuList.find('.dx-list-item').eq(4).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.eq(0).trigger('dxclick');
@@ -770,8 +770,8 @@ QUnit.test('Change filter values for not group field', function(assert) {
     }]);
 
     // T241360
-    var scrollableUpdateCallCount = 0;
-    var $scrollableElements = this.$container.find('.dx-area .dx-scrollable');
+    let scrollableUpdateCallCount = 0;
+    const $scrollableElements = this.$container.find('.dx-area .dx-scrollable');
     $.each($scrollableElements, function() {
         $(this).dxScrollable('instance').on('updated', function() {
             scrollableUpdateCallCount++;
@@ -790,7 +790,7 @@ QUnit.test('Change filter values for not group field', function(assert) {
 });
 
 QUnit.test('T247590. Save tree view scroll position on dataSource changed', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -815,21 +815,21 @@ QUnit.test('T247590. Save tree view scroll position on dataSource changed', func
     this.setup(dataSourceOptions, { height: 90 });
     this.clock.tick(500);
 
-    var dataSource = this.dataSource,
-        scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
+    const dataSource = this.dataSource;
+    const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
     // act
     scrollable.scrollTo({ y: 30 });
 
     dataSource.on.withArgs('changed').lastCall.args[1]();
     // assert
-    var newTreeScrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
+    const newTreeScrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
     assert.strictEqual(newTreeScrollable.scrollTop(), 30);
 });
 
 QUnit.test('T676231. Save tree view scroll position on checkbox click if applyChangesMode is onDemand', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -854,7 +854,7 @@ QUnit.test('T676231. Save tree view scroll position on checkbox click if applyCh
     this.setup(dataSourceOptions, { height: 90, applyChangesMode: 'onDemand' });
     this.clock.tick(500);
 
-    var scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
+    const scrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
     // act
     scrollable.scrollTo({ y: 30 });
@@ -862,7 +862,7 @@ QUnit.test('T676231. Save tree view scroll position on checkbox click if applyCh
     $('.dx-treeview-border-visible .dx-checkbox').eq(0).trigger('dxclick');
 
     // assert
-    var newTreeScrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
+    const newTreeScrollable = $('.dx-treeview-border-visible').find('.dx-scrollable').dxScrollable('instance');
 
     assert.strictEqual(newTreeScrollable.scrollTop(), 30);
 });
@@ -870,7 +870,7 @@ QUnit.test('T676231. Save tree view scroll position on checkbox click if applyCh
 if(devices.current().deviceType === 'desktop') {
     // T244547
     QUnit.test('Dragging after change filter values', function(assert) {
-        var dataSourceOptions = {
+        const dataSourceOptions = {
             columnFields: [
                 { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
                 { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -886,7 +886,7 @@ if(devices.current().deviceType === 'desktop') {
         assert.ok(this.fieldChooser);
         assert.ok(this.dataSource);
 
-        var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+        const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
         assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
         // act
@@ -894,7 +894,7 @@ if(devices.current().deviceType === 'desktop') {
         this.clock.tick(500);
 
         // assert
-        var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+        const $filterMenuList = $('.dx-header-filter-menu .dx-list');
         assert.equal($filterMenuList.length, 1);
 
         assert.equal($filterMenuList.find('.dx-list-item').length, 5, 'list item count');
@@ -904,15 +904,15 @@ if(devices.current().deviceType === 'desktop') {
         // act
         $filterMenuList.find('.dx-list-item').eq(0).trigger('dxclick');
 
-        var $buttons = $('.dx-header-filter-menu .dx-button');
+        const $buttons = $('.dx-header-filter-menu .dx-button');
         assert.equal($buttons.length, 2);
 
         $buttons.eq(0).trigger('dxclick');
         this.clock.tick(500);
 
         // act
-        var $item = this.$container.find('.dx-area-box').eq(0);
-        var offset = $item.offset();
+        const $item = this.$container.find('.dx-area-box').eq(0);
+        const offset = $item.offset();
 
         pointerMock($item)
             .start()
@@ -947,7 +947,7 @@ QUnit.test('Change filter values second time', function(assert) {
 
     this.clock.tick(500);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    let $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -955,11 +955,11 @@ QUnit.test('Change filter values second time', function(assert) {
     this.clock.tick(500);
 
     // act
-    var $listItems = $('.dx-header-filter-menu .dx-list .dx-list-item');
+    const $listItems = $('.dx-header-filter-menu .dx-list .dx-list-item');
     assert.equal($listItems.length, 3);
     $listItems.eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.eq(0).trigger('dxclick');
@@ -970,7 +970,7 @@ QUnit.test('Change filter values second time', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-item').length, 3, 'list item count');
@@ -978,7 +978,7 @@ QUnit.test('Change filter values second time', function(assert) {
 });
 
 QUnit.test('Change filter type for not group field', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -994,7 +994,7 @@ QUnit.test('Change filter type for not group field', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
     // act
@@ -1002,7 +1002,7 @@ QUnit.test('Change filter type for not group field', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    let $filterMenuList = $('.dx-header-filter-menu .dx-list');
     assert.equal($filterMenuList.length, 1);
 
     assert.equal($filterMenuList.find('.dx-list-select-all').length, 1, 'list all item count');
@@ -1013,7 +1013,7 @@ QUnit.test('Change filter type for not group field', function(assert) {
     $filterMenuList = $('.dx-header-filter-menu .dx-list');
     $filterMenuList.find('.dx-list-item').eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.trigger('dxclick');
@@ -1026,7 +1026,7 @@ QUnit.test('Change filter type for not group field', function(assert) {
 });
 
 QUnit.test('Change filter values for group field', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Date', area: 'column', groupName: 'Date', filterValues: [[2001], [2002, 2]], levels: [{}, {}], allowFiltering: true }
         ],
@@ -1040,7 +1040,7 @@ QUnit.test('Change filter values for group field', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
     // act
@@ -1048,11 +1048,11 @@ QUnit.test('Change filter values for group field', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
     assert.equal($filterMenuList.length, 1, 'treeView');
 
     assert.equal($filterMenuList.find('.dx-treeview-node').length, 2, 'list item count');
-    var treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
+    const treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
 
     assert.strictEqual(treeNodes[0].itemData.children, null);
     assert.ok(treeNodes[0].selected);
@@ -1065,7 +1065,7 @@ QUnit.test('Change filter values for group field', function(assert) {
     // act
     $filterMenuList.find('.dx-treeview-node .dx-checkbox').eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.trigger('dxclick');
@@ -1079,7 +1079,7 @@ QUnit.test('Change filter values for group field', function(assert) {
 });
 
 QUnit.test('Change filter values for group field. filterType is \'exclude\'.', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Date', area: 'column', groupName: 'Date', filterValues: [[2001], [2002, 2]], levels: [{}, {}], allowFiltering: true, filterType: 'exclude' }
         ],
@@ -1092,7 +1092,7 @@ QUnit.test('Change filter values for group field. filterType is \'exclude\'.', f
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
     // act
@@ -1100,11 +1100,11 @@ QUnit.test('Change filter values for group field. filterType is \'exclude\'.', f
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
     assert.equal($filterMenuList.length, 1, 'treeView');
 
     assert.equal($filterMenuList.find('.dx-treeview-node').length, 2, 'list item count');
-    var treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
+    const treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
 
     assert.strictEqual(treeNodes[0].itemData.children, null);
     assert.strictEqual(treeNodes[0].selected, false);
@@ -1117,7 +1117,7 @@ QUnit.test('Change filter values for group field. filterType is \'exclude\'.', f
     // act
     $filterMenuList.find('.dx-treeview-node .dx-checkbox').eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.trigger('dxclick');
@@ -1133,7 +1133,7 @@ QUnit.test('Change filter values for group field. filterType is \'exclude\'.', f
 });
 
 QUnit.test('Change filter values for group field when key in data', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Date', area: 'column', groupName: 'Date', filterValues: [['CY 2001'], ['&[2002]', '&[2002]&[2]'], undefined, [2002, 1]], levels: [{}, {}], allowFiltering: true }
         ],
@@ -1150,7 +1150,7 @@ QUnit.test('Change filter values for group field when key in data', function(ass
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
     // act
@@ -1158,11 +1158,11 @@ QUnit.test('Change filter values for group field when key in data', function(ass
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
     assert.equal($filterMenuList.length, 1, 'treeView');
 
     assert.equal($filterMenuList.find('.dx-treeview-node').length, 2, 'list item count');
-    var treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
+    const treeNodes = $filterMenuList.dxTreeView('instance').getNodes();
 
     assert.strictEqual(treeNodes[0].itemData.children, null);
     assert.ok(treeNodes[0].selected);
@@ -1175,7 +1175,7 @@ QUnit.test('Change filter values for group field when key in data', function(ass
     // act
     $filterMenuList.find('.dx-treeview-node .dx-checkbox').eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.trigger('dxclick');
@@ -1189,7 +1189,7 @@ QUnit.test('Change filter values for group field when key in data', function(ass
 });
 
 QUnit.test('Change filter type for group field', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Date', area: 'column', groupName: 'Date', filterValues: [[2001], [2002, 2]], levels: [{}, {}], allowFiltering: true }
         ],
@@ -1203,7 +1203,7 @@ QUnit.test('Change filter type for group field', function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     assert.equal($filterIndicatorsInColumnArea.length, 1, 'filter indicators count');
 
     // act
@@ -1211,7 +1211,7 @@ QUnit.test('Change filter type for group field', function(assert) {
     this.clock.tick(500);
 
     // assert
-    var $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
+    let $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
     assert.equal($filterMenuList.length, 1, 'treeView');
 
     assert.equal($filterMenuList.find('.dx-treeview-node').length, 2, 'list item count');
@@ -1223,7 +1223,7 @@ QUnit.test('Change filter type for group field', function(assert) {
     $filterMenuList = $('.dx-header-filter-menu .dx-treeview');
     $filterMenuList.find('.dx-treeview-node .dx-checkbox').eq(0).trigger('dxclick');
 
-    var $buttons = $('.dx-header-filter-menu .dx-button');
+    const $buttons = $('.dx-header-filter-menu .dx-button');
     assert.equal($buttons.length, 2);
 
     $buttons.trigger('dxclick');
@@ -1237,14 +1237,14 @@ QUnit.test('Change filter type for group field', function(assert) {
 });
 
 QUnit.test('Dragging Fields', function(assert) {
-    var dataSourceOptions = {
-            fields: [
-                { dataField: 'Field1', isMeasure: true },
-                { dataField: 'Field2', isMeasure: false },
-                { dataField: 'Field3' }
-            ]
-        },
-        fields;
+    const dataSourceOptions = {
+        fields: [
+            { dataField: 'Field1', isMeasure: true },
+            { dataField: 'Field2', isMeasure: false },
+            { dataField: 'Field3' }
+        ]
+    };
+    let fields;
 
     this.setup(dataSourceOptions);
 
@@ -1259,13 +1259,13 @@ QUnit.test('Dragging Fields', function(assert) {
 
     function assertDragging(field, area, cancelExpected) {
         // act
-        var $targetGroup = $('.dx-area-fields[group=\'' + area + '\']'),
-            areaBorderColor = getBorderColor($targetGroup);
+        const $targetGroup = $('.dx-area-fields[group=\'' + area + '\']');
+        const areaBorderColor = getBorderColor($targetGroup);
 
-        var offset = field.offset(),
-            targetOffset = $targetGroup.offset();
+        const offset = field.offset();
+        const targetOffset = $targetGroup.offset();
 
-        var pointer = pointerMock(field)
+        const pointer = pointerMock(field)
             .start({
                 x: offset.left,
                 y: offset.top
@@ -1309,7 +1309,7 @@ QUnit.test('Dragging Fields', function(assert) {
 });
 
 QUnit.test('rtlEnabled assign for all children widgets', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         fields: [
             { dataField: 'field1', caption: 'Field 1', area: 'row' },
             { dataField: 'field2', caption: 'Field 2', area: 'column' },
@@ -1338,11 +1338,11 @@ QUnit.test('rtlEnabled assign for all children widgets', function(assert) {
     this.setup(dataSourceOptions, { rtlEnabled: true });
 
     // assert
-    var $widgets = $('.dx-widget');
+    const $widgets = $('.dx-widget');
 
     $.each($widgets, function() {
-        var $widget = $(this),
-            componentNames = dataUtils.data($widget[0], 'dxComponents');
+        const $widget = $(this);
+        const componentNames = dataUtils.data($widget[0], 'dxComponents');
 
         $.each(componentNames, function(index, componentName) {
             if(componentName.indexOf('dxPrivateComponent') === -1 && componentName !== 'dxToolbar') {
@@ -1355,12 +1355,12 @@ QUnit.test('rtlEnabled assign for all children widgets', function(assert) {
 });
 
 QUnit.test('Restore selecting state for second page when all items on first page selected', function(assert) {
-    var fieldValues = [];
-    for(var i = 0; i < 60; i++) {
+    const fieldValues = [];
+    for(let i = 0; i < 60; i++) {
         fieldValues.push({ value: i });
     }
 
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { index: 0, caption: 'Field 2', area: 'column', allowFiltering: true },
             { index: 1, caption: 'Field 3', area: 'column', filterValues: [8], allowFiltering: true }
@@ -1370,11 +1370,11 @@ QUnit.test('Restore selecting state for second page when all items on first page
 
     this.setup(dataSourceOptions);
 
-    var $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicatorsInColumnArea = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
     $filterIndicatorsInColumnArea.eq(0).trigger('dxclick');
     this.clock.tick(500);
 
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     $filterMenuList.find('.dx-list-select-all-checkbox').dxCheckBox('instance').option('value', true);
 
     // act
@@ -1390,7 +1390,7 @@ QUnit.test('Pass allowDragging to sortable', function(assert) {
         allowFieldDragging: false
     });
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
 
     assert.strictEqual(sortable.option('allowDragging'), false, 'allowDragging is passed to sortable');
 });
@@ -1402,7 +1402,7 @@ QUnit.test('Change allowDragging at runtime', function(assert) {
     });
     this.fieldChooser.option('allowFieldDragging', true);
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
 
     assert.strictEqual(sortable.option('allowDragging'), true, 'allowDragging is passed to sortable');
 });
@@ -1412,8 +1412,8 @@ QUnit.test('Layout 0', function(assert) {
     this.setup({}, { layout: 0 });
 
     // assert
-    var $cols = this.$container.find('.dx-col');
-    var $areas = this.$container.find('.dx-area');
+    const $cols = this.$container.find('.dx-col');
+    const $areas = this.$container.find('.dx-area');
 
     assert.equal($cols.length, 4, 'col count');
     assert.ok($cols.eq(0).height() > 0, 'col 0 height');
@@ -1434,8 +1434,8 @@ QUnit.test('Layout 1', function(assert) {
     this.setup({}, { layout: 1 });
 
     // assert
-    var $cols = this.$container.find('.dx-col');
-    var $areas = this.$container.find('.dx-area');
+    const $cols = this.$container.find('.dx-col');
+    const $areas = this.$container.find('.dx-area');
 
     assert.equal($cols.length, 2, 'col count');
     assert.ok($cols.eq(0).height() > 0, 'col 0 height');
@@ -1458,8 +1458,8 @@ QUnit.test('Layout 2', function(assert) {
     this.setup({}, { layout: 2 });
 
     // assert
-    var $cols = this.$container.find('.dx-col');
-    var $areas = this.$container.find('.dx-area');
+    const $cols = this.$container.find('.dx-col');
+    const $areas = this.$container.find('.dx-area');
 
     assert.equal($cols.length, 2, 'col count');
     assert.ok($cols.eq(0).height() > 0, 'col 0 height');
@@ -1480,25 +1480,25 @@ QUnit.test('Layout 2', function(assert) {
 });
 
 QUnit.test('change group position', function(assert) {
-    var dataSourceOptions = {
-            columnFields: [
-                { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0 },
-                { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 1, groupIndex: 0, areaIndex: 1 },
-                { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1 },
-                { caption: 'Field 4', area: 'column', index: 3, areaIndex: 2 }
-            ]
-        },
-        changedArgs = {
-            targetIndex: 0,
-            sourceIndex: 1
-        };
+    const dataSourceOptions = {
+        columnFields: [
+            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0 },
+            { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 1, groupIndex: 0, areaIndex: 1 },
+            { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1 },
+            { caption: 'Field 4', area: 'column', index: 3, areaIndex: 2 }
+        ]
+    };
+    const changedArgs = {
+        targetIndex: 0,
+        sourceIndex: 1
+    };
 
     this.setup(dataSourceOptions);
 
     changedArgs.sourceElement = renderer(this.$container.find('.dx-area-field').eq(2));
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
     // act
     onChangedHandler(changedArgs);
 
@@ -1509,7 +1509,7 @@ QUnit.test('change group position', function(assert) {
 });
 
 QUnit.test('getDataSource method', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', caption: 'Field 1', area: 'row' },
         { dataField: 'field2', caption: 'Field 2', area: 'column' },
         { dataField: 'field3', caption: 'Field 3' },
@@ -1518,7 +1518,7 @@ QUnit.test('getDataSource method', function(assert) {
         { dataField: 'field6', caption: 'Field 6', isDefault: false, area: 'data' },
         { dataField: 'field7', caption: 'Field 7', visible: false }
     ];
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         fields: fields
     };
 
@@ -1531,7 +1531,7 @@ QUnit.test('getDataSource method', function(assert) {
 
 QUnit.test('FieldChooser fire the \'contentReady\' event after render without dataSource', function(assert) {
     // arrange
-    var contentReadyHandler = sinon.stub();
+    const contentReadyHandler = sinon.stub();
 
     // act
     this.setup(null, { onContentReady: contentReadyHandler });
@@ -1542,8 +1542,8 @@ QUnit.test('FieldChooser fire the \'contentReady\' event after render without da
 
 QUnit.test('FieldChooser does not fire the contentReady event while dataSource is loading', function(assert) {
     // arrange
-    var dataSource = createMockDataSource({}),
-        contentReadyHandler = sinon.stub();
+    const dataSource = createMockDataSource({});
+    const contentReadyHandler = sinon.stub();
 
     dataSource.isLoading.returns(true);
 
@@ -1559,8 +1559,8 @@ QUnit.test('FieldChooser does not fire the contentReady event while dataSource i
 
 QUnit.test('The \'contentReady\' event fires after all data is loaded', function(assert) {
     // arrange
-    var dataSource = createMockDataSource({}),
-        contentReadyHandler = sinon.stub();
+    const dataSource = createMockDataSource({});
+    const contentReadyHandler = sinon.stub();
 
     dataSource.isLoading.returns(true);
 
@@ -1569,7 +1569,7 @@ QUnit.test('The \'contentReady\' event fires after all data is loaded', function
         onContentReady: contentReadyHandler
     });
 
-    var dataSourceChangedHandler = dataSource.on.withArgs('changed').lastCall.args[1];
+    const dataSourceChangedHandler = dataSource.on.withArgs('changed').lastCall.args[1];
 
     dataSource.isLoading.returns(false);
 
@@ -1583,7 +1583,7 @@ QUnit.test('The \'contentReady\' event fires after all data is loaded', function
 QUnit.test('Enable search', function(assert) {
     this.setup({}, { allowSearch: true, searchTimeout: 300 });
 
-    var treeview = this.$container.find('.dx-treeview').dxTreeView('instance');
+    let treeview = this.$container.find('.dx-treeview').dxTreeView('instance');
     assert.ok(treeview.option('searchEnabled'), 'treeview with search');
 
     this.fieldChooser.option('allowSearch', false);
@@ -1593,14 +1593,14 @@ QUnit.test('Enable search', function(assert) {
 });
 
 QUnit.test('resetTreeView works correct', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'field1', caption: 'Field 1', displayFolder: 'Folder' },
         { dataField: 'field2', caption: 'Field 2' },
     ];
 
     this.setup({ fields: fields }, { allowSearch: true });
 
-    var treeview = this.$container.find('.dx-treeview').dxTreeView('instance');
+    const treeview = this.$container.find('.dx-treeview').dxTreeView('instance');
     sinon.spy(treeview, 'collapseAll');
 
     treeview.option('searchValue', '1');
@@ -1638,7 +1638,7 @@ QUnit.module('dxPivotGridFieldChooser context menu', {
 });
 
 QUnit.test('render dxContextMenu', function(assert) {
-    var dataSourceOptions = {};
+    const dataSourceOptions = {};
 
     // act
     this.setup(dataSourceOptions);
@@ -1649,9 +1649,9 @@ QUnit.test('render dxContextMenu', function(assert) {
 });
 
 QUnit.test('create event args from field', function(assert) {
-    var eventArgs,
-        onContextMenuPreparingHandler = sinon.stub(),
-        e = $.Event('dxcontextmenu');
+    let eventArgs;
+    const onContextMenuPreparingHandler = sinon.stub();
+    const e = $.Event('dxcontextmenu');
 
     // act
     this.setup({
@@ -1675,9 +1675,9 @@ QUnit.test('create event args from field', function(assert) {
 });
 
 QUnit.test('create event args from area', function(assert) {
-    var eventArgs,
-        onContextMenuPreparingHandler = sinon.stub(),
-        e = $.Event('dxcontextmenu');
+    let eventArgs;
+    const onContextMenuPreparingHandler = sinon.stub();
+    const e = $.Event('dxcontextmenu');
 
     // act
     this.setup({
@@ -1701,9 +1701,9 @@ QUnit.test('create event args from area', function(assert) {
 });
 
 QUnit.test('create event args from empty area', function(assert) {
-    var eventArgs,
-        onContextMenuPreparingHandler = sinon.stub(),
-        e = $.Event('dxcontextmenu');
+    let eventArgs;
+    const onContextMenuPreparingHandler = sinon.stub();
+    const e = $.Event('dxcontextmenu');
 
     // act
     this.setup({
@@ -1726,9 +1726,9 @@ QUnit.test('create event args from empty area', function(assert) {
 });
 
 QUnit.test('create event args from empty space', function(assert) {
-    var eventArgs,
-        onContextMenuPreparingHandler = sinon.stub(),
-        e = $.Event('dxcontextmenu');
+    let eventArgs;
+    const onContextMenuPreparingHandler = sinon.stub();
+    const e = $.Event('dxcontextmenu');
 
     // act
     this.setup({
@@ -1751,11 +1751,11 @@ QUnit.test('create event args from empty space', function(assert) {
 });
 
 QUnit.test('create custom context menu items', function(assert) {
-    var itemClick = sinon.stub(),
-        itemData = {
-            text: '1',
-            onItemClick: itemClick
-        };
+    const itemClick = sinon.stub();
+    const itemData = {
+        text: '1',
+        onItemClick: itemClick
+    };
     // act
     this.setup({
         fields: this.fields,
@@ -1769,8 +1769,8 @@ QUnit.test('create custom context menu items', function(assert) {
     this.$container.find('[group=\'column\']').eq(0).trigger('dxcontextmenu');
     // assert
 
-    var contextMenu = this.$container.find('.dx-pivotgridfieldchooser-context-menu').dxContextMenu('instance'),
-        items = contextMenu.option('items');
+    const contextMenu = this.$container.find('.dx-pivotgridfieldchooser-context-menu').dxContextMenu('instance');
+    const items = contextMenu.option('items');
 
     assert.ok(contextMenu.option('visible'));
     assert.deepEqual(items, [itemData]);
@@ -1780,8 +1780,8 @@ QUnit.test('create custom context menu items', function(assert) {
 });
 
 QUnit.test('onContextMenuPreparing handler can be changed at runtime', function(assert) {
-    var onContextMenuPreparingHandler = sinon.stub(),
-        fieldChooser;
+    const onContextMenuPreparingHandler = sinon.stub();
+    let fieldChooser;
     // act
     this.setup({
         fields: this.fields,
@@ -1821,25 +1821,25 @@ QUnit.module('Base Field chooser', {
 });
 
 QUnit.test('Render group fields', function(assert) {
-    var that = this,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
-            { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: true },
-            { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true, allowFiltering: true, filterValues: ['10'] },
-            { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true, allowFiltering: true },
-            { caption: 'Field 4', area: 'column', index: 3, areaIndex: 4, allowSorting: true, allowFiltering: true }
-        ],
+    const that = this;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
+        { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: true },
+        { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true, allowFiltering: true, filterValues: ['10'] },
+        { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true, allowFiltering: true },
+        { caption: 'Field 4', area: 'column', index: 3, areaIndex: 4, allowSorting: true, allowFiltering: true }
+    ];
 
-        dataSourceOptions = {
-            columnFields: fields
-        };
+    const dataSourceOptions = {
+        columnFields: fields
+    };
     this.setup(dataSourceOptions);
 
     $.each(fields, function(_, field) {
         field.caption !== 'GroupField' && that.$container.append(that.fieldChooser.renderField(field));
     });
 
-    var fieldElements = that.$container.find('.dx-area-field');
+    const fieldElements = that.$container.find('.dx-area-field');
 
     assert.strictEqual(fieldElements.length, 4);
 
@@ -1849,25 +1849,25 @@ QUnit.test('Render group fields', function(assert) {
 });
 
 QUnit.test('Render group fields with filter values is defined', function(assert) {
-    var that = this,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
-            { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: true, filterValues: [['10']] },
-            { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true, allowFiltering: true },
-            { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true, allowFiltering: true },
-            { caption: 'Field 4', area: 'column', index: 3, areaIndex: 4, allowSorting: true, allowFiltering: true }
-        ],
+    const that = this;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
+        { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: true, filterValues: [['10']] },
+        { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true, allowFiltering: true },
+        { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true, allowFiltering: true },
+        { caption: 'Field 4', area: 'column', index: 3, areaIndex: 4, allowSorting: true, allowFiltering: true }
+    ];
 
-        dataSourceOptions = {
-            columnFields: fields
-        };
+    const dataSourceOptions = {
+        columnFields: fields
+    };
     this.setup(dataSourceOptions);
 
     $.each(fields, function(_, field) {
         field.caption !== 'GroupField' && that.$container.append(that.fieldChooser.renderField(field));
     });
 
-    var fieldElements = that.$container.find('.dx-area-field');
+    const fieldElements = that.$container.find('.dx-area-field');
 
     assert.strictEqual(fieldElements.length, 4);
 
@@ -1877,25 +1877,25 @@ QUnit.test('Render group fields with filter values is defined', function(assert)
 });
 
 QUnit.test('Render sort indicator for group field', function(assert) {
-    var that = this,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
-            { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: false },
-            { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true },
-            { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true },
-            { caption: 'Field 4', area: 'column', groupName: 'Group1', index: 4, groupIndex: 2, areaIndex: 1, allowSorting: false }
-        ],
+    const that = this;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
+        { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: false },
+        { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true },
+        { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true },
+        { caption: 'Field 4', area: 'column', groupName: 'Group1', index: 4, groupIndex: 2, areaIndex: 1, allowSorting: false }
+    ];
 
-        dataSourceOptions = {
-            columnFields: fields
-        };
+    const dataSourceOptions = {
+        columnFields: fields
+    };
     this.setup(dataSourceOptions);
 
     $.each(fields, function(_, field) {
         field.caption !== 'GroupField' && that.$container.append(that.fieldChooser.renderField(field));
     });
 
-    var fieldElements = that.$container.find('.dx-area-field[item-group]');
+    const fieldElements = that.$container.find('.dx-area-field[item-group]');
 
     assert.strictEqual(fieldElements.length, 3);
     assert.strictEqual(fieldElements.eq(0).find('.dx-sort').length, 1);
@@ -1905,25 +1905,25 @@ QUnit.test('Render sort indicator for group field', function(assert) {
 });
 
 QUnit.test('Change sortOrder for group field', function(assert) {
-    var that = this,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
-            { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: false },
-            { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true },
-            { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true },
-            { caption: 'Field 4', area: 'column', groupName: 'Group1', index: 4, groupIndex: 2, areaIndex: 1, allowSorting: false }
-        ],
+    const that = this;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true },
+        { caption: 'GroupField', area: 'column', index: 1, areaIndex: 1, allowFiltering: true, allowSorting: false },
+        { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 2, groupIndex: 0, areaIndex: 1, allowSorting: true },
+        { caption: 'Field 3', area: 'column', groupName: 'Group1', index: 3, groupIndex: 1, areaIndex: 1, allowSorting: true },
+        { caption: 'Field 4', area: 'column', groupName: 'Group1', index: 4, groupIndex: 2, areaIndex: 1, allowSorting: false }
+    ];
 
-        dataSourceOptions = {
-            columnFields: fields
-        };
+    const dataSourceOptions = {
+        columnFields: fields
+    };
     this.setup(dataSourceOptions);
 
     $.each(fields, function(_, field) {
         field.caption !== 'GroupField' && that.$container.append(that.fieldChooser.renderField(field));
     });
 
-    var fieldElements = that.$container.find('.dx-area-field[item-group]');
+    const fieldElements = that.$container.find('.dx-area-field[item-group]');
 
     // act
     fieldElements.eq(1).trigger('dxclick');
@@ -1935,7 +1935,7 @@ QUnit.test('Change sortOrder for group field', function(assert) {
 });
 
 QUnit.test('change group position', function(assert) {
-    var dataSourceOptions = {
+    const dataSourceOptions = {
         columnFields: [
             { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0 },
             { caption: 'Field 2', area: 'column', groupName: 'Group1', index: 1, groupIndex: 0, areaIndex: 1 },
@@ -1945,13 +1945,13 @@ QUnit.test('change group position', function(assert) {
     };
     this.setup(dataSourceOptions);
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged'),
-        changedArgs = {
-            sourceElement: this.$container.find('.dx-area-field').eq(2),
-            targetIndex: 0,
-            sourceIndex: 1
-        };
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
+    const changedArgs = {
+        sourceElement: this.$container.find('.dx-area-field').eq(2),
+        targetIndex: 0,
+        sourceIndex: 1
+    };
     // act
 
     onChangedHandler(changedArgs);
@@ -1962,18 +1962,18 @@ QUnit.test('change group position', function(assert) {
 });
 
 QUnit.test('Show search box in headerFilter', function(assert) {
-    var that = this,
-        list,
-        fieldElements,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
-        ],
-        dataSourceOptions = {
-            columnFields: fields,
-            fieldValues: [
-                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
-            ]
-        };
+    const that = this;
+    let list;
+    let fieldElements;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+    ];
+    const dataSourceOptions = {
+        columnFields: fields,
+        fieldValues: [
+            [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+        ]
+    };
 
     this.setup(dataSourceOptions, {
         headerFilter: {
@@ -2000,22 +2000,22 @@ QUnit.test('Show search box in headerFilter', function(assert) {
 });
 
 QUnit.test('HeaderFilter should be without search bar when column allowSearch is disabled', function(assert) {
-    var that = this,
-        list,
-        fieldElements,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
-                headerFilter: {
-                    allowSearch: false
-                }
+    const that = this;
+    let list;
+    let fieldElements;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
+            headerFilter: {
+                allowSearch: false
             }
-        ],
-        dataSourceOptions = {
-            columnFields: fields,
-            fieldValues: [
-                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
-            ]
-        };
+        }
+    ];
+    const dataSourceOptions = {
+        columnFields: fields,
+        fieldValues: [
+            [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+        ]
+    };
 
     this.setup(dataSourceOptions, {
         headerFilter: {
@@ -2039,19 +2039,19 @@ QUnit.test('HeaderFilter should be without search bar when column allowSearch is
 });
 
 QUnit.test('Search in headerFilter', function(assert) {
-    var that = this,
-        list,
-        $listItems,
-        fieldElements,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
-        ],
-        dataSourceOptions = {
-            columnFields: fields,
-            fieldValues: [
-                [{ value: 1, text: 'test1' }, { value: 2, text: 'test2' }, { value: 3, text: 'test3' }, { value: 4, text: 'test4' }]
-            ]
-        };
+    const that = this;
+    let list;
+    let $listItems;
+    let fieldElements;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+    ];
+    const dataSourceOptions = {
+        columnFields: fields,
+        fieldValues: [
+            [{ value: 1, text: 'test1' }, { value: 2, text: 'test2' }, { value: 3, text: 'test3' }, { value: 4, text: 'test4' }]
+        ]
+    };
 
     this.setup(dataSourceOptions, {
         headerFilter: {
@@ -2078,16 +2078,16 @@ QUnit.test('Search in headerFilter', function(assert) {
 });
 
 QUnit.test('headerFilter items if showRelevantValues is true', function(assert) {
-    var that = this,
-        fields = [
-            { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
-        ],
-        dataSourceOptions = {
-            columnFields: fields,
-            fieldValues: [
-                [{ value: 1, text: 'test1' }, { value: 2, text: 'test2' }]
-            ]
-        };
+    const that = this;
+    const fields = [
+        { caption: 'Field 1', area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+    ];
+    const dataSourceOptions = {
+        columnFields: fields,
+        fieldValues: [
+            [{ value: 1, text: 'test1' }, { value: 2, text: 'test2' }]
+        ]
+    };
 
     this.setup(dataSourceOptions, {
         headerFilter: {
@@ -2099,7 +2099,7 @@ QUnit.test('headerFilter items if showRelevantValues is true', function(assert) 
         that.$container.append(that.fieldChooser.renderField(field));
     });
 
-    var fieldElements = that.$container.find('.dx-area-field');
+    const fieldElements = that.$container.find('.dx-area-field');
     fieldElements.first().find('.dx-header-filter').trigger('dxclick');
 
     // act
@@ -2134,7 +2134,7 @@ QUnit.module('applyChangesMode: onDemand', {
 });
 
 QUnit.test('Default current state', function(assert) {
-    var dataSource = {};
+    const dataSource = {};
     dataSource.fields = [
         { dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 },
         { dataField: 'Field2', area: 'column', areaIndex: 1, index: 1 },
@@ -2144,13 +2144,13 @@ QUnit.test('Default current state', function(assert) {
     this.fieldChooser.getDataSource().load();
     this.clock.tick(500);
 
-    var state = this.fieldChooser.option('state');
+    const state = this.fieldChooser.option('state');
 
     assert.deepEqual(state.fields.length, 3, 'start state');
 });
 
 QUnit.test('change position between areas', function(assert) {
-    var dataSource = {};
+    const dataSource = {};
     dataSource.fields = [
         { dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 },
         { dataField: 'Field2', area: 'column', areaIndex: 1, index: 1 },
@@ -2158,8 +2158,8 @@ QUnit.test('change position between areas', function(assert) {
     ];
     this.setup(dataSource);
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
     // act
     onChangedHandler(this.createChangedArgs({
         sourceGroup: 'column',
@@ -2167,7 +2167,7 @@ QUnit.test('change position between areas', function(assert) {
         targetGroup: 'row'
     }));
 
-    var state = this.fieldChooser.option('state').fields;
+    const state = this.fieldChooser.option('state').fields;
     assert.equal(state[0].dataField, 'Field1');
     assert.equal(state[0].areaIndex, 0);
     assert.equal(state[0].area, 'row');
@@ -2180,7 +2180,7 @@ QUnit.test('change position between areas', function(assert) {
 });
 
 QUnit.test('move from area to treeview', function(assert) {
-    var dataSource = {};
+    const dataSource = {};
     dataSource.fields = [
         { dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 },
         { dataField: 'Field2', area: 'column', areaIndex: 1, index: 1 },
@@ -2189,8 +2189,8 @@ QUnit.test('move from area to treeview', function(assert) {
 
     this.setup(dataSource);
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
     // act
 
     onChangedHandler(this.createChangedArgs({
@@ -2198,10 +2198,10 @@ QUnit.test('move from area to treeview', function(assert) {
         targetGroup: undefined
     }));
 
-    var checkboxes = this.$container.find('.dx-checkbox');
+    const checkboxes = this.$container.find('.dx-checkbox');
     assert.equal(checkboxes.length, 3, 'checkboxes');
 
-    var checked = this.$container.find('.dx-checkbox-checked');
+    const checked = this.$container.find('.dx-checkbox-checked');
     assert.equal(checked.length, 2, 'checked checkboxes');
 });
 
@@ -2211,7 +2211,7 @@ QUnit.test('select in treeview', function(assert) {
     // act
     this.$container.find('.dx-checkbox').eq(0).trigger('dxclick');
 
-    var fields = this.fieldChooser.option('state').fields;
+    const fields = this.fieldChooser.option('state').fields;
     assert.equal(fields[0].area, 'column');
     assert.equal(fields[0].areaIndex, 0);
 });
@@ -2223,7 +2223,7 @@ QUnit.test('select and unselect in treeview', function(assert) {
     this.$container.find('.dx-checkbox').eq(0).trigger('dxclick');
     this.$container.find('.dx-checkbox').eq(0).trigger('dxclick');
 
-    var fields = this.fieldChooser.option('state').fields;
+    const fields = this.fieldChooser.option('state').fields;
     assert.equal(fields[0].area, undefined);
     assert.equal(fields[0].areaIndex, undefined);
 });
@@ -2234,7 +2234,7 @@ QUnit.test('unselect in treeview', function(assert) {
     // act
     this.$container.find('.dx-checkbox').eq(0).trigger('dxclick');
 
-    var fields = this.fieldChooser.option('state').fields;
+    const fields = this.fieldChooser.option('state').fields;
     assert.deepEqual(fields[0].area, undefined);
     assert.deepEqual(fields[0].areaIndex, undefined);
 });
@@ -2243,10 +2243,10 @@ QUnit.test('Change sort order', function(assert) {
     this.setup({ fields: [{ index: 0, dataField: 'Field1', area: 'row', allowSorting: true }] });
 
     // act
-    var $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
+    const $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
     $sortIndicator.parent().trigger('dxclick');
 
-    var state = this.fieldChooser.option('state').fields;
+    const state = this.fieldChooser.option('state').fields;
     assert.equal(state[0].sortOrder, 'desc');
 });
 
@@ -2254,12 +2254,12 @@ QUnit.test('Change sort order second time', function(assert) {
     this.setup({ fields: [{ index: 0, dataField: 'Field1', area: 'row', allowSorting: true }] });
 
     // act
-    var $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
+    let $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
     $sortIndicator.parent().trigger('dxclick');
     $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
     $sortIndicator.parent().trigger('dxclick');
 
-    var state = this.fieldChooser.option('state').fields;
+    const state = this.fieldChooser.option('state').fields;
     assert.equal(state[0].sortOrder, 'asc');
 });
 
@@ -2269,24 +2269,24 @@ QUnit.test('Apply filters', function(assert) {
         store: [{ Field1: '1' }, { Field1: '2' }]
     });
 
-    var $filterIndicator = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
+    const $filterIndicator = this.$container.find('.dx-area-fields[group=column] .dx-header-filter');
 
     // act
     $filterIndicator.eq(0).trigger('dxclick');
-    var $filterMenuList = $('.dx-header-filter-menu .dx-list');
+    const $filterMenuList = $('.dx-header-filter-menu .dx-list');
     $filterMenuList.find('.dx-checkbox').eq(1).trigger('dxclick');
     $('.dx-header-filter-menu .dx-button').eq(0).trigger('dxclick');
 
     // assert
-    var fields = this.fieldChooser.option('state').fields;
+    const fields = this.fieldChooser.option('state').fields;
     assert.deepEqual(fields[0].filterValues, ['1']);
 });
 
 QUnit.test('applyChanges', function(assert) {
     this.setup({ fields: [{ dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
 
     // act
     onChangedHandler(this.createChangedArgs({
@@ -2298,7 +2298,7 @@ QUnit.test('applyChanges', function(assert) {
     this.fieldChooser.applyChanges();
     this.clock.tick(1000);
 
-    var state = this.fieldChooser.getDataSource().state();
+    const state = this.fieldChooser.getDataSource().state();
     assert.equal(state.fields.length, 1, 'one field');
     assert.deepEqual(state.fields[0].dataField, 'Field1');
     assert.deepEqual(state.fields[0].area, 'row');
@@ -2307,8 +2307,8 @@ QUnit.test('applyChanges', function(assert) {
 QUnit.test('cancelChanges', function(assert) {
     this.setup({ fields: [{ dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
 
     // act
     onChangedHandler(this.createChangedArgs({
@@ -2326,8 +2326,8 @@ QUnit.test('cancelChanges', function(assert) {
 QUnit.test('cancel changes on field chooser repaint', function(assert) {
     this.setup({ fields: [{ dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
 
     // act
     onChangedHandler(this.createChangedArgs({
@@ -2345,7 +2345,7 @@ QUnit.test('cancel changes on field chooser repaint', function(assert) {
 QUnit.test('syncronize state option and dataSource state', function(assert) {
     this.setup({ fields: [{ dataField: 'Field1', area: 'column', areaIndex: 0 }] });
 
-    var state = this.fieldChooser.getDataSource().state();
+    const state = this.fieldChooser.getDataSource().state();
     state.fields[0].area = 'row';
 
     this.fieldChooser.getDataSource().state(state);
@@ -2357,8 +2357,8 @@ QUnit.test('syncronize state option and dataSource state', function(assert) {
 QUnit.test('cancel changes on dataSource change', function(assert) {
     this.setup({ fields: [{ dataField: 'Field1', area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortableOld('instance'),
-        onChangedHandler = sortable.option('onChanged');
+    const sortable = this.fieldChooser.$element().dxSortableOld('instance');
+    const onChangedHandler = sortable.option('onChanged');
 
     // act
     onChangedHandler(this.createChangedArgs({
@@ -2377,11 +2377,11 @@ QUnit.test('cancel changes on dataSource change', function(assert) {
 QUnit.test('state option change', function(assert) {
     // arrange
     this.setup({ fields: [{ index: 0, dataField: 'Field1', area: 'row', allowSorting: true, sortOrder: 'asc' }] });
-    var dataSource = this.fieldChooser.getDataSource();
-    var startState = dataSource.state();
+    const dataSource = this.fieldChooser.getDataSource();
+    const startState = dataSource.state();
 
     // act
-    var $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
+    let $sortIndicator = this.$container.find('.dx-area-fields[group=row] .dx-sort');
     $sortIndicator.parent().trigger('dxclick');
     this.fieldChooser.applyChanges();
 

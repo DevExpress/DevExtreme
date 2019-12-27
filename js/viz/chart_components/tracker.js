@@ -1,43 +1,43 @@
-var domAdapter = require('../../core/dom_adapter'),
-    eventsEngine = require('../../events/core/events_engine'),
-    clickEvent = require('../../events/click'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    consts = require('../components/consts'),
-    eventsConsts = consts.events,
+const domAdapter = require('../../core/dom_adapter');
+const eventsEngine = require('../../events/core/events_engine');
+const clickEvent = require('../../events/click');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const consts = require('../components/consts');
+const eventsConsts = consts.events;
 
-    vizUtils = require('../core/utils'),
-    pointerEvents = require('../../events/pointer'),
-    holdEvent = require('../../events/hold'),
-    addNamespace = require('../../events/utils').addNamespace,
-    isDefined = require('../../core/utils/type').isDefined,
-    _normalizeEnum = require('../core/utils').normalizeEnum,
-    _floor = Math.floor,
-    _each = each,
-    _noop = require('../../core/utils/common').noop,
+const vizUtils = require('../core/utils');
+const pointerEvents = require('../../events/pointer');
+const holdEvent = require('../../events/hold');
+const addNamespace = require('../../events/utils').addNamespace;
+const isDefined = require('../../core/utils/type').isDefined;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
+const _floor = Math.floor;
+const _each = each;
+const _noop = require('../../core/utils/common').noop;
 
-    HOVER_STATE = consts.states.hoverMark,
-    NORMAL_STATE = consts.states.normalMark,
+const HOVER_STATE = consts.states.hoverMark;
+const NORMAL_STATE = consts.states.normalMark;
 
-    EVENT_NS = 'dxChartTracker',
-    DOT_EVENT_NS = '.' + EVENT_NS,
-    POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS),
-    LEGEND_CLICK = 'legendClick',
-    SERIES_CLICK = 'seriesClick',
-    POINT_CLICK = 'pointClick',
-    POINT_DATA = 'chart-data-point',
-    SERIES_DATA = 'chart-data-series',
-    ARG_DATA = 'chart-data-argument',
-    DELAY = 100,
+const EVENT_NS = 'dxChartTracker';
+const DOT_EVENT_NS = '.' + EVENT_NS;
+const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
+const LEGEND_CLICK = 'legendClick';
+const SERIES_CLICK = 'seriesClick';
+const POINT_CLICK = 'pointClick';
+const POINT_DATA = 'chart-data-point';
+const SERIES_DATA = 'chart-data-series';
+const ARG_DATA = 'chart-data-argument';
+const DELAY = 100;
 
-    NONE_MODE = 'none',
-    ALL_ARGUMENT_POINTS_MODE = 'allargumentpoints',
-    INCLUDE_POINTS_MODE = 'includepoints',
-    EXLUDE_POINTS_MODE = 'excludepoints',
-    LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
+const NONE_MODE = 'none';
+const ALL_ARGUMENT_POINTS_MODE = 'allargumentpoints';
+const INCLUDE_POINTS_MODE = 'includepoints';
+const EXLUDE_POINTS_MODE = 'excludepoints';
+const LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
 function getData(event, dataKey) {
-    var target = event.target;
+    const target = event.target;
     return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
 }
 
@@ -58,15 +58,15 @@ function correctLegendHoverMode(mode) {
 }
 
 function correctHoverMode(target) {
-    var mode = target.getOptions().hoverMode;
+    const mode = target.getOptions().hoverMode;
 
     return mode === NONE_MODE ? mode : ALL_ARGUMENT_POINTS_MODE;
 }
 
-var baseTrackerPrototype = {
+const baseTrackerPrototype = {
     ctor: function(options) {
-        var that = this,
-            data = { tracker: that };
+        const that = this;
+        const data = { tracker: that };
 
         that._renderer = options.renderer;
         that._legend = options.legend;
@@ -116,7 +116,7 @@ var baseTrackerPrototype = {
     },
 
     repairTooltip: function() {
-        var point = this.pointAtShownTooltip;
+        const point = this.pointAtShownTooltip;
         if(!point || !point.series || !point.isVisible()) {
             this._hideTooltip(point, true);
         } else {
@@ -169,7 +169,7 @@ var baseTrackerPrototype = {
     },
 
     _clean: function() {
-        var that = this;
+        const that = this;
         that.hoveredPoint = that.hoveredSeries = that._hoveredArgumentPoints = null;
         that._hideTooltip(that.pointAtShownTooltip);
     },
@@ -181,7 +181,7 @@ var baseTrackerPrototype = {
     },
 
     _hideTooltip: function(point, silent) {
-        var that = this;
+        const that = this;
         if(!that._tooltip || (point && that.pointAtShownTooltip !== point)) {
             return;
         }
@@ -192,9 +192,9 @@ var baseTrackerPrototype = {
     },
 
     _showTooltip: function(point) {
-        var that = this,
-            tooltipFormatObject,
-            eventData;
+        const that = this;
+        let tooltipFormatObject;
+        let eventData;
 
         if(point && point.getOptions()) {
             tooltipFormatObject = point.getTooltipFormatObject(that._tooltip, that._tooltip.isShared() && that._chart.getStackedPoints(point));
@@ -205,8 +205,8 @@ var baseTrackerPrototype = {
                 eventData = { target: point };
             }
 
-            var coords = point.getTooltipParams(that._tooltip.getLocation()),
-                rootOffset = that._renderer.getRootOffset();
+            const coords = point.getTooltipParams(that._tooltip.getLocation());
+            const rootOffset = that._renderer.getRootOffset();
             coords.x += rootOffset.left;
             coords.y += rootOffset.top;
             if(!that._tooltip.show(tooltipFormatObject, coords, eventData)) {
@@ -217,8 +217,8 @@ var baseTrackerPrototype = {
     },
 
     _showPointTooltip: function(event, point) {
-        var that = event.data.tracker,
-            pointWithTooltip = that.pointAtShownTooltip;
+        const that = event.data.tracker;
+        const pointWithTooltip = that.pointAtShownTooltip;
 
         if(pointWithTooltip && pointWithTooltip !== point) {
             that._hideTooltip(pointWithTooltip);
@@ -234,16 +234,16 @@ var baseTrackerPrototype = {
         if(this._outHandler) {
             return;
         }
-        var that = this,
-            handler = function(e) {
-                var rootOffset = that._renderer.getRootOffset(),
-                    x = _floor(e.pageX - rootOffset.left),
-                    y = _floor(e.pageY - rootOffset.top);
-                if(!inCanvas(that._mainCanvas, x, y)) {
-                    that._pointerOut();
-                    that._disableOutHandler();
-                }
-            };
+        const that = this;
+        const handler = function(e) {
+            const rootOffset = that._renderer.getRootOffset();
+            const x = _floor(e.pageX - rootOffset.left);
+            const y = _floor(e.pageY - rootOffset.top);
+            if(!inCanvas(that._mainCanvas, x, y)) {
+                that._pointerOut();
+                that._disableOutHandler();
+            }
+        };
 
         eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, handler);
         this._outHandler = handler;
@@ -264,7 +264,7 @@ var baseTrackerPrototype = {
     },
 
     _triggerLegendClick: function(eventArgs, elementClick) {
-        var eventTrigger = this._eventTrigger;
+        const eventTrigger = this._eventTrigger;
 
         eventTrigger(LEGEND_CLICK, eventArgs, function() {
             !eventCanceled(eventArgs.event, eventArgs.target) && eventTrigger(elementClick, eventArgs);
@@ -272,10 +272,10 @@ var baseTrackerPrototype = {
     },
 
     _hoverLegendItem: function(x, y) {
-        var that = this,
-            item = that._legend.getItemByCoord(x, y),
-            series,
-            legendHoverMode = correctLegendHoverMode(that._legend.getOptions().hoverMode);
+        const that = this;
+        const item = that._legend.getItemByCoord(x, y);
+        let series;
+        const legendHoverMode = correctLegendHoverMode(that._legend.getOptions().hoverMode);
 
         if(item) {
             series = that._storedSeries[item.id];
@@ -289,8 +289,8 @@ var baseTrackerPrototype = {
     },
 
     _hoverArgument: function(argument, argumentIndex) {
-        var that = this,
-            hoverMode = that._getArgumentHoverMode();
+        const that = this;
+        const hoverMode = that._getArgumentHoverMode();
 
         if(isDefined(argument)) {
             that._releaseHoveredPoint();
@@ -312,8 +312,8 @@ var baseTrackerPrototype = {
     },
 
     _resetHoveredArgument: function() {
-        var that = this,
-            hoverMode;
+        const that = this;
+        let hoverMode;
 
         if(isDefined(that._hoveredArgument)) {
             hoverMode = that._getArgumentHoverMode();
@@ -340,13 +340,13 @@ var baseTrackerPrototype = {
     },
 
     _pointerHandler: function(e) {
-        var that = e.data.tracker,
-            rootOffset = that._renderer.getRootOffset(),
-            x = _floor(e.pageX - rootOffset.left),
-            y = _floor(e.pageY - rootOffset.top),
-            canvas = that._getCanvas(x, y),
-            series = getData(e, SERIES_DATA),
-            point = getData(e, POINT_DATA) || series && series.getPointByCoord(x, y);
+        const that = e.data.tracker;
+        const rootOffset = that._renderer.getRootOffset();
+        const x = _floor(e.pageX - rootOffset.left);
+        const y = _floor(e.pageY - rootOffset.top);
+        const canvas = that._getCanvas(x, y);
+        let series = getData(e, SERIES_DATA);
+        let point = getData(e, POINT_DATA) || series && series.getPointByCoord(x, y);
 
         if(point && !point.getMarkerVisibility()) {
             point = undefined;
@@ -422,21 +422,21 @@ var baseTrackerPrototype = {
     },
 
     _clickHandler: function(e) {
-        var that = e.data.tracker,
-            rootOffset = that._renderer.getRootOffset(),
-            x = _floor(e.pageX - rootOffset.left),
-            y = _floor(e.pageY - rootOffset.top),
-            point = getData(e, POINT_DATA),
-            series = that._stuckSeries || getData(e, SERIES_DATA) || point && point.series,
-            axis = that._argumentAxis;
+        const that = e.data.tracker;
+        const rootOffset = that._renderer.getRootOffset();
+        const x = _floor(e.pageX - rootOffset.left);
+        const y = _floor(e.pageY - rootOffset.top);
+        let point = getData(e, POINT_DATA);
+        const series = that._stuckSeries || getData(e, SERIES_DATA) || point && point.series;
+        const axis = that._argumentAxis;
 
         if(that._legend.coordsIn(x, y)) {
-            var item = that._legend.getItemByCoord(x, y);
+            const item = that._legend.getItemByCoord(x, y);
             if(item) {
                 that._legendClick(item, e);
             }
         } else if(axis && axis.coordsIn(x, y)) {
-            var argument = getData(e, ARG_DATA);
+            const argument = getData(e, ARG_DATA);
             if(isDefined(argument)) {
                 that._eventTrigger('argumentAxisClick', { argument: argument, event: e });
             }
@@ -451,22 +451,22 @@ var baseTrackerPrototype = {
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._disableOutHandler();
         that._renderer.root.off(DOT_EVENT_NS);
         that._seriesGroup.off(DOT_EVENT_NS);
     }
 };
 
-var ChartTracker = function(options) {
+const ChartTracker = function(options) {
     this.ctor(options);
 };
 
 extend(ChartTracker.prototype, baseTrackerPrototype, {
     _pointClick: function(point, event) {
-        var that = this,
-            eventTrigger = that._eventTrigger,
-            series = point.series;
+        const that = this;
+        const eventTrigger = that._eventTrigger;
+        const series = point.series;
 
         eventTrigger(POINT_CLICK, { target: point, event: event }, function() {
             !eventCanceled(event, series) && eventTrigger(SERIES_CLICK, { target: series, event: event });
@@ -477,7 +477,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     ///#ENDDEBUG
 
     update: function(options) {
-        var that = this;
+        const that = this;
         baseTrackerPrototype.update.call(this, options);
         that._argumentAxis = options.argumentAxis || {};
         that._axisHoverEnabled = that._argumentAxis && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
@@ -487,10 +487,10 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _getCanvas: function(x, y) {
-        var that = this,
-            canvases = that._canvases || [];
-        for(var i = 0; i < canvases.length; i++) {
-            var c = canvases[i];
+        const that = this;
+        const canvases = that._canvases || [];
+        for(let i = 0; i < canvases.length; i++) {
+            const c = canvases[i];
             if(inCanvas(c, x, y)) {
                 return c;
             }
@@ -513,26 +513,26 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _clean: function() {
-        var that = this;
+        const that = this;
         baseTrackerPrototype._clean.call(that);
         that._resetTimer();
         that._stuckSeries = null;
     },
 
     _getSeriesForShared: function(x, y) {
-        var that = this,
-            points = [],
-            point = null,
-            distance = Infinity;
+        const that = this;
+        const points = [];
+        let point = null;
+        let distance = Infinity;
 
         if(that._tooltip.isShared() && !that.hoveredSeries) {
             _each(that._storedSeries, function(_, series) {
-                var point = series.getNeighborPoint(x, y);
+                const point = series.getNeighborPoint(x, y);
                 point && points.push(point);
             });
             _each(points, function(_, p) {
-                var coords = p.getCrosshairData(x, y),
-                    d = vizUtils.getDistance(x, y, coords.x, coords.y);
+                const coords = p.getCrosshairData(x, y);
+                const d = vizUtils.getDistance(x, y, coords.x, coords.y);
                 if(d < distance) {
                     point = p;
                     distance = d;
@@ -543,7 +543,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _setTimeout: function(callback, keeper) {
-        var that = this;
+        const that = this;
         if(that._timeoutKeeper !== keeper) {
             that._resetTimer();
             that._hoverTimeout = setTimeout(function() {
@@ -576,7 +576,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _pointerOut: function() {
-        var that = this;
+        const that = this;
         that._stuckSeries = null;
         that._hideCrosshair();
         that._resetTimer();
@@ -584,7 +584,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _hoverArgumentAxis: function(x, y, e) {
-        var that = this;
+        const that = this;
         that._resetHoveredArgument();
         if(that._axisHoverEnabled && that._argumentAxis.coordsIn(x, y)) {
             that._hoverArgument(getData(e, ARG_DATA));
@@ -593,7 +593,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _pointerComplete: function(point, x, y) {
-        var that = this;
+        const that = this;
         that.hoveredSeries && that.hoveredSeries.updateHover(x, y);
         that._resetTimer();
         that._moveCrosshair(point, x, y);
@@ -601,7 +601,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     _legendClick: function(item, e) {
-        var series = this._storedSeries[item.id];
+        const series = this._storedSeries[item.id];
         this._triggerLegendClick({ target: series, event: e }, SERIES_CLICK);
     },
 
@@ -629,7 +629,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     }
 });
 
-var PieTracker = function(options) {
+const PieTracker = function(options) {
     this.ctor(options);
 };
 
@@ -639,8 +639,8 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     },
 
     _legendClick: function(item, e) {
-        var that = this,
-            points = [];
+        const that = this;
+        const points = [];
 
         that._storedSeries.forEach(s => points.push.apply(points, s.getPointsByKeys(item.argument, item.argumentIndex)));
         that._eventTrigger(LEGEND_CLICK, { target: item.argument, points, event: e });
@@ -651,8 +651,8 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     },
 
     _hoverLegendItem: function(x, y) {
-        var that = this,
-            item = that._legend.getItemByCoord(x, y);
+        const that = this;
+        const item = that._legend.getItemByCoord(x, y);
 
         that._resetHoveredArgument();
         if(item) {

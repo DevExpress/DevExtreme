@@ -1,17 +1,17 @@
 // there are rangebar, rangearea
-var extend = require('../../core/utils/extend').extend,
-    _extend = extend,
-    _isDefined = require('../../core/utils/type').isDefined,
-    _map = require('../core/utils').map,
-    _noop = require('../../core/utils/common').noop,
+const extend = require('../../core/utils/extend').extend;
+const _extend = extend;
+const _isDefined = require('../../core/utils/type').isDefined;
+const _map = require('../core/utils').map;
+const _noop = require('../../core/utils/common').noop;
 
-    scatterSeries = require('./scatter_series').chart,
-    barSeries = require('./bar_series').chart.bar,
-    areaSeries = require('./area_series').chart.area;
+const scatterSeries = require('./scatter_series').chart;
+const barSeries = require('./bar_series').chart.bar;
+const areaSeries = require('./area_series').chart.area;
 
 exports.chart = {};
 
-var baseRangeSeries = {
+const baseRangeSeries = {
 
     areErrorBarsVisible: _noop,
     _createErrorBarGroup: _noop,
@@ -125,7 +125,7 @@ exports.chart['rangebar'] = _extend({}, barSeries, baseRangeSeries);
 
 exports.chart['rangearea'] = _extend({}, areaSeries, {
     _drawPoint: function(options) {
-        var point = options.point;
+        const point = options.point;
 
         if(point.isInVisibleArea()) {
             point.clearVisibility();
@@ -143,8 +143,8 @@ exports.chart['rangearea'] = _extend({}, areaSeries, {
     },
 
     _prepareSegment: function(points, rotated) {
-        var processedPoints = this._processSinglePointsAreaSegment(points, rotated),
-            processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); });
+        const processedPoints = this._processSinglePointsAreaSegment(points, rotated);
+        const processedMinPointsCoords = _map(processedPoints, function(pt) { return pt.getCoords(true); });
 
         return {
             line: processedPoints,
@@ -155,7 +155,7 @@ exports.chart['rangearea'] = _extend({}, areaSeries, {
     },
 
     _getDefaultSegment: function(segment) {
-        var defaultSegment = areaSeries._getDefaultSegment.call(this, segment);
+        const defaultSegment = areaSeries._getDefaultSegment.call(this, segment);
         defaultSegment.bottomLine = defaultSegment.line;
         return defaultSegment;
     },
@@ -166,17 +166,17 @@ exports.chart['rangearea'] = _extend({}, areaSeries, {
     },
 
     _drawElement: function(segment, group) {
-        var that = this,
-            drawnElement = areaSeries._drawElement.call(that, segment, group);
+        const that = this;
+        const drawnElement = areaSeries._drawElement.call(that, segment, group);
         drawnElement.bottomLine = that._bordersGroup && that._createBorderElement(segment.bottomLine, { 'stroke-width': that._styles.normal.border['stroke-width'] }).append(that._bordersGroup);
 
         return drawnElement;
     },
 
     _applyStyle: function(style) {
-        var that = this,
-            elementsGroup = that._elementsGroup,
-            bordersGroup = that._bordersGroup;
+        const that = this;
+        const elementsGroup = that._elementsGroup;
+        const bordersGroup = that._bordersGroup;
 
         elementsGroup && elementsGroup.smartAttr(style.elements);
         bordersGroup && bordersGroup.attr(style.border);
@@ -187,8 +187,8 @@ exports.chart['rangearea'] = _extend({}, areaSeries, {
     },
 
     _updateElement: function(element, segment, animate, complete) {
-        var bottomLineParams = { points: segment.bottomLine },
-            bottomBorderElement = element.bottomLine;
+        const bottomLineParams = { points: segment.bottomLine };
+        const bottomBorderElement = element.bottomLine;
 
         areaSeries._updateElement.apply(this, arguments);
 

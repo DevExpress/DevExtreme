@@ -249,7 +249,7 @@ QUnit.module('nested rendering', {}, () => {
     });
 });
 
-var helper;
+let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {

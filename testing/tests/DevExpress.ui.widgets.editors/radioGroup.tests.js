@@ -66,8 +66,8 @@ module('nested radio group', moduleConfig, () => {
     });
 
     test('T680199 - click on one nested radio group doesn\'t change another nested group', assert => {
-        let $nestedRadioGroup1,
-            $nestedRadioGroup2;
+        let $nestedRadioGroup1;
+        let $nestedRadioGroup2;
 
         createRadioGroup({
             items: [{
@@ -123,13 +123,13 @@ module('buttons group rendering', () => {
     });
 
     test('onContentReady should rise after changing dataSource (T697809)', assert => {
-        const onContentReadyHandler = sinon.stub(),
-            instance = getInstance(
-                createRadioGroup({
-                    dataSource: ['str1', 'str2', 'str3'],
-                    onContentReady: onContentReadyHandler
-                })
-            );
+        const onContentReadyHandler = sinon.stub();
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: ['str1', 'str2', 'str3'],
+                onContentReady: onContentReadyHandler
+            })
+        );
 
         assert.ok(onContentReadyHandler.calledOnce);
         instance.option('dataSource', [1, 2, 3]);
@@ -167,8 +167,8 @@ module('layout', moduleConfig, () => {
     test('On the tablet radio group must use a horizontal layout', assert => {
         devices.current('iPad');
 
-        const $radioGroup = createRadioGroup(),
-            isHorizontalLayout = getInstance($radioGroup).option('layout') === 'horizontal';
+        const $radioGroup = createRadioGroup();
+        const isHorizontalLayout = getInstance($radioGroup).option('layout') === 'horizontal';
 
         assert.ok(isHorizontalLayout, 'radio group on tablet have horizontal layout');
     });
@@ -192,11 +192,11 @@ module('layout', moduleConfig, () => {
 module('hidden input', () => {
     test('the hidden input should get correct value on widget value change', assert => {
         const $element = createRadioGroup({
-                items: [1, 2, 3],
-                value: 2
-            }),
-            instance = getInstance($element),
-            $input = $element.find('input');
+            items: [1, 2, 3],
+            value: 2
+        });
+        const instance = getInstance($element);
+        const $input = $element.find('input');
 
         instance.option('value', 1);
         assert.equal($input.val(), '1', 'input value is correct');
@@ -315,10 +315,10 @@ module('value', moduleConfig, () => {
     test('repaint of widget shouldn\'t reset value option', assert => {
         const items = [{ text: '0' }, { text: '1' }];
         const $radioGroup = createRadioGroup({
-                items: items,
-                value: items[1]
-            }),
-            radioGroup = getInstance($radioGroup);
+            items: items,
+            value: items[1]
+        });
+        const radioGroup = getInstance($radioGroup);
 
         radioGroup.repaint();
         assert.strictEqual(radioGroup.option('value'), items[1]);
@@ -342,14 +342,14 @@ module('value', moduleConfig, () => {
     });
 
     test('onValueChanged option should get jQuery event as a parameter', assert => {
-        let jQueryEvent,
-            $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                onValueChanged: function(e) {
-                    jQueryEvent = e.event;
-                }
-            }),
-            radioGroup = getInstance($radioGroup);
+        let jQueryEvent;
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            onValueChanged: function(e) {
+                jQueryEvent = e.event;
+            }
+        });
+        const radioGroup = getInstance($radioGroup);
 
         $(radioGroup.itemElements()).first().trigger('dxclick');
         assert.ok(jQueryEvent, 'jQuery event is defined when click used');
@@ -434,15 +434,15 @@ module('valueExpr', moduleConfig, () => {
 module('widget sizing render', moduleConfig, () => {
     test('change width', assert => {
         const $element = createRadioGroup({
-                items: [
-                    { text: '0' },
-                    { text: '1' },
-                    { text: '2' },
-                    { text: '3' }
-                ]
-            }),
-            instance = getInstance($element),
-            customWidth = 400;
+            items: [
+                { text: '0' },
+                { text: '1' },
+                { text: '2' },
+                { text: '3' }
+            ]
+        });
+        const instance = getInstance($element);
+        const customWidth = 400;
 
         instance.option('width', customWidth);
 
@@ -454,13 +454,13 @@ module('keyboard navigation', moduleConfig, () => {
     test('keys tests', assert => {
         assert.expect(3);
 
-        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items
-            }),
-            instance = getInstance($element),
-            keyboard = keyboardMock($element);
+        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items
+        });
+        const instance = getInstance($element);
+        const keyboard = keyboardMock($element);
 
         $element.focusin();
 
@@ -502,22 +502,22 @@ module('keyboard navigation', moduleConfig, () => {
     });
 
     test('keyboard navigation does not work in disabled widget', assert => {
-        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items,
-                disabled: true
-            });
+        const items = [{ text: '0' }, { text: '1' }, { text: '2' }, { text: '3' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items,
+            disabled: true
+        });
 
         assert.ok($element.attr('tabindex') === undefined, 'collection of radio group has not tabindex');
     });
 
     test('radio group items should not have tabIndex(T674238)', assert => {
-        const items = [{ text: '0' }, { text: '1' }],
-            $element = createRadioGroup({
-                focusStateEnabled: true,
-                items: items
-            });
+        const items = [{ text: '0' }, { text: '1' }];
+        const $element = createRadioGroup({
+            focusStateEnabled: true,
+            items: items
+        });
 
         const $items = $element.find('.' + RADIO_BUTTON_CLASS);
         assert.ok($items.eq(0).attr('tabindex') === undefined, 'items of radio group hasn\'t tabindex');
@@ -539,11 +539,11 @@ module('focus policy', moduleConfig, () => {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$radioGroup.hasClass(FOCUSED_CLASS), 'radio group is not focused');
 
@@ -557,11 +557,11 @@ module('focus policy', moduleConfig, () => {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         $radioGroup.focusin();
         $($firstRButton).trigger('dxpointerdown');
@@ -577,11 +577,11 @@ module('focus policy', moduleConfig, () => {
         assert.expect(2);
 
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true
-            }),
-            radioGroup = getInstance($radioGroup),
-            $firstRButton = $(radioGroup.itemElements()).first();
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+        const radioGroup = getInstance($radioGroup);
+        const $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS));
 
@@ -603,11 +603,11 @@ module('focus policy', moduleConfig, () => {
 
     test('option \'accessKey\' has effect', assert => {
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true,
-                accessKey: 'k'
-            }),
-            instance = getInstance($radioGroup);
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            accessKey: 'k'
+        });
+        const instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr('accessKey'), 'k', 'access key is correct');
 
@@ -617,11 +617,11 @@ module('focus policy', moduleConfig, () => {
 
     test('option \'tabIndex\' has effect', assert => {
         const $radioGroup = createRadioGroup({
-                items: [1, 2, 3],
-                focusStateEnabled: true,
-                tabIndex: 4
-            }),
-            instance = getInstance($radioGroup);
+            items: [1, 2, 3],
+            focusStateEnabled: true,
+            tabIndex: 4
+        });
+        const instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr('tabIndex'), 4, 'tab index is correct');
         instance.option('tabIndex', 7);

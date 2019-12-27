@@ -1,17 +1,17 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    browser = require('core/utils/browser'),
-    devices = require('core/devices'),
-    themes = require('ui/themes');
+const $ = require('jquery');
+const ko = require('knockout');
+const browser = require('core/utils/browser');
+const devices = require('core/devices');
+const themes = require('ui/themes');
 
 require('../../../helpers/executeAsyncMock.js');
 require('integration/knockout');
 require('bundles/modules/parts/widgets-all');
 
-var LABEL = '.dx-field-label',
-    VALUE = '.dx-field-value';
+const LABEL = '.dx-field-label';
+const VALUE = '.dx-field-value';
 
-var fieldsetFixtureTemplate = '    <div id="markup" style="width: 980px">								\
+const fieldsetFixtureTemplate = '    <div id="markup" style="width: 980px">								\
     <div class="dx-fieldset" id="widgetsOnFields">														\
         <div class="dx-field" id="switchOnField">														\
             <div class="dx-field-label" data-bind="text: \'Switch:\'"></div>							\
@@ -119,7 +119,7 @@ var fieldsetFixtureTemplate = '    <div id="markup" style="width: 980px">							
 </div>';
 
 
-var checkThatTestingIsPossible = function() {
+const checkThatTestingIsPossible = function() {
     if(browser.mozilla) {
         QUnit.test('Temporarily we do not test for firefox', function(assert) {
             assert.ok(true);
@@ -134,7 +134,7 @@ var checkThatTestingIsPossible = function() {
         return false;
     }
 
-    var realDevice = devices.real();
+    const realDevice = devices.real();
     if(realDevice.platform === 'android' || realDevice.platform === 'ios') {
         QUnit.test('Temporarily we do not test on mobile devices', function(assert) {
             assert.ok(true);
@@ -145,47 +145,47 @@ var checkThatTestingIsPossible = function() {
     return true;
 };
 
-var defaultOptions = {
+const defaultOptions = {
     numberBoxAlign: 'right',
     testVerticalOffset: true,
     testSwitchBaseline: true,
     testDateBox: true
 };
 
-var getFullOffsetLeft = function($element) {
+const getFullOffsetLeft = function($element) {
     return Math.round($element.offset().left +
         parseFloat($element.css('padding-left')) +
         parseFloat($element.css('border-left-width')));
 };
 
-var getFullOffsetRight = function($element) {
+const getFullOffsetRight = function($element) {
     return Math.round($element.offset().left +
         $element.innerWidth());
 };
 
-var testVerticalAlign = function($parent, inputSelector, isContainer, testVerticalOffsetFlag) {
-    var $label = $parent.find(LABEL),
-        $value = $parent.find(inputSelector);
+const testVerticalAlign = function($parent, inputSelector, isContainer, testVerticalOffsetFlag) {
+    const $label = $parent.find(LABEL);
+    const $value = $parent.find(inputSelector);
 
     if(testVerticalOffsetFlag) {
         testVerticalOffset($label, $value);
     }
 
-    var $valueContainer = isContainer ? $value : $value.parent();
+    const $valueContainer = isContainer ? $value : $value.parent();
     testBaselineOffset($label, $valueContainer);
 };
 
 var testVerticalOffset = function($label, $value) {
-    var isIE9 = document.all && !document.atob;
-    var labelOffset = Math.round($label.offset().top - parseInt($label.css('margin-top')) - isIE9 ? parseInt($label.css('borderTopWidth')) : 0),
-        valueOffset = Math.round($value.offset().top - parseInt($value.css('margin-top')) - isIE9 ? parseInt($value.css('borderTopWidth')) : 0);
+    const isIE9 = document.all && !document.atob;
+    const labelOffset = Math.round($label.offset().top - parseInt($label.css('margin-top')) - isIE9 ? parseInt($label.css('borderTopWidth')) : 0);
+    const valueOffset = Math.round($value.offset().top - parseInt($value.css('margin-top')) - isIE9 ? parseInt($value.css('borderTopWidth')) : 0);
 
     QUnit.assert.equal(labelOffset, valueOffset, 'Top offset equal');
 };
 
 var testBaselineOffset = function($labelContainer, $valueContainer) {
-    var $imgForLabel,
-        $imgForInput;
+    let $imgForLabel;
+    let $imgForInput;
 
     try {
         $imgForLabel = $('<img/>').height(1).width(1).appendTo($labelContainer);
@@ -208,12 +208,12 @@ module.exports = function(themeName, options) {
     options = options || {};
     options = $.extend({}, defaultOptions, options);
 
-    var runTestModule = function(themeName) {
+    const runTestModule = function(themeName) {
         QUnit.module(themeName, {
             beforeEach: function() {
                 DevExpress.testing.executeAsyncMock.setup();
                 $('#qunit-fixture').html(fieldsetFixtureTemplate);
-                var $markup = $('#markup');
+                const $markup = $('#markup');
                 ko.applyBindings({}, $markup.get(0));
             },
             afterEach: function() {
@@ -223,38 +223,38 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('Horizontal align for same widgets on and in field-value', function(assert) {
-            var offsetRightForSwitchOnField = getFullOffsetRight($('#switchOnField ' + VALUE + ' .dx-switch-wrapper')),
-                offsetRightForSwitchInField = getFullOffsetRight($('#switchInField ' + VALUE + ' .dx-switch-wrapper')),
+            const offsetRightForSwitchOnField = getFullOffsetRight($('#switchOnField ' + VALUE + ' .dx-switch-wrapper'));
+            const offsetRightForSwitchInField = getFullOffsetRight($('#switchInField ' + VALUE + ' .dx-switch-wrapper'));
 
-                offsetRightForCheckboxOnField = getFullOffsetRight($('#checkboxOnField ' + VALUE + ' .dx-checkbox-icon')),
-                offsetRightForCheckboxInField = getFullOffsetRight($('#checkboxInField ' + VALUE + ' .dx-checkbox-icon')),
+            const offsetRightForCheckboxOnField = getFullOffsetRight($('#checkboxOnField ' + VALUE + ' .dx-checkbox-icon'));
+            const offsetRightForCheckboxInField = getFullOffsetRight($('#checkboxInField ' + VALUE + ' .dx-checkbox-icon'));
 
-                offsetLeftForSliderOnField = getFullOffsetLeft($('#sliderOnField ' + VALUE + ' .dx-slider-wrapper')),
-                offsetLeftForSliderInField = getFullOffsetLeft($('#sliderInField ' + VALUE + ' .dx-slider-wrapper')),
+            const offsetLeftForSliderOnField = getFullOffsetLeft($('#sliderOnField ' + VALUE + ' .dx-slider-wrapper'));
+            const offsetLeftForSliderInField = getFullOffsetLeft($('#sliderInField ' + VALUE + ' .dx-slider-wrapper'));
 
-                offsetLeftForTextBoxOnField = getFullOffsetLeft($('#textboxOnField ' + VALUE + ' input')),
-                offsetLeftForTextBoxInField = getFullOffsetLeft($('#textboxInField ' + VALUE + ' input')),
+            const offsetLeftForTextBoxOnField = getFullOffsetLeft($('#textboxOnField ' + VALUE + ' input'));
+            const offsetLeftForTextBoxInField = getFullOffsetLeft($('#textboxInField ' + VALUE + ' input'));
 
-                offsetLeftForAutocompleteOnField = getFullOffsetLeft($('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input')),
-                offsetLeftForAutocompleteInField = getFullOffsetLeft($('#autocompleteInField ' + VALUE + ' input.dx-texteditor-input')),
+            const offsetLeftForAutocompleteOnField = getFullOffsetLeft($('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input'));
+            const offsetLeftForAutocompleteInField = getFullOffsetLeft($('#autocompleteInField ' + VALUE + ' input.dx-texteditor-input'));
 
-                offsetLeftForDateBoxOnField = getFullOffsetLeft($('#dateboxOnField ' + VALUE + ' input')),
-                offsetLeftForDateBoxInField = getFullOffsetLeft($('#dateboxInField ' + VALUE + ' input')),
+            const offsetLeftForDateBoxOnField = getFullOffsetLeft($('#dateboxOnField ' + VALUE + ' input'));
+            const offsetLeftForDateBoxInField = getFullOffsetLeft($('#dateboxInField ' + VALUE + ' input'));
 
-                offsetLeftForTextAreaOnField = getFullOffsetLeft($('#textareaOnField ' + VALUE + ' textarea')),
-                offsetLeftForTextAreaInField = getFullOffsetLeft($('#textareaInField ' + VALUE + ' textarea')),
+            const offsetLeftForTextAreaOnField = getFullOffsetLeft($('#textareaOnField ' + VALUE + ' textarea'));
+            const offsetLeftForTextAreaInField = getFullOffsetLeft($('#textareaInField ' + VALUE + ' textarea'));
 
-                offsetLeftForLookupOnField = getFullOffsetLeft($('#lookupOnField ' + VALUE + ' .dx-lookup-field')),
-                offsetLeftForLookupInField = getFullOffsetLeft($('#lookupInField ' + VALUE + ' .dx-lookup-field')),
+            const offsetLeftForLookupOnField = getFullOffsetLeft($('#lookupOnField ' + VALUE + ' .dx-lookup-field'));
+            const offsetLeftForLookupInField = getFullOffsetLeft($('#lookupInField ' + VALUE + ' .dx-lookup-field'));
 
-                offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE)),
-                offsetLeftForSimpleInField = getFullOffsetLeft($('#simpleTextInField ' + VALUE)),
+            const offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE));
+            const offsetLeftForSimpleInField = getFullOffsetLeft($('#simpleTextInField ' + VALUE));
 
-                offsetRightForNumberBoxOnField = getFullOffsetRight($('#numberboxOnField ' + VALUE + ' input')),
-                offsetRightForNumberBoxInField = getFullOffsetRight($('#numberboxInField ' + VALUE + ' input')),
+            const offsetRightForNumberBoxOnField = getFullOffsetRight($('#numberboxOnField ' + VALUE + ' input'));
+            const offsetRightForNumberBoxInField = getFullOffsetRight($('#numberboxInField ' + VALUE + ' input'));
 
-                offsetLeftForNumberBoxOnField = getFullOffsetLeft($('#numberboxOnField ' + VALUE + ' input')),
-                offsetLeftForNumberBoxInField = getFullOffsetLeft($('#numberboxInField ' + VALUE + ' input'));
+            const offsetLeftForNumberBoxOnField = getFullOffsetLeft($('#numberboxOnField ' + VALUE + ' input'));
+            const offsetLeftForNumberBoxInField = getFullOffsetLeft($('#numberboxInField ' + VALUE + ' input'));
 
             assert.equal(offsetRightForSwitchOnField, offsetRightForSwitchInField, 'Horizontal align for switches');
             assert.equal(offsetRightForCheckboxOnField, offsetRightForCheckboxInField, 'Horizontal align for checkboxes');
@@ -277,21 +277,21 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('Horizontal align for different widgets on field-value', function(assert) {
-            var offsetLeftForTextBoxOnField = getFullOffsetLeft($('#textboxOnField ' + VALUE + ' input')),
+            const offsetLeftForTextBoxOnField = getFullOffsetLeft($('#textboxOnField ' + VALUE + ' input'));
 
-                offsetLeftForAutocompleteOnField = getFullOffsetLeft($('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input')),
+            const offsetLeftForAutocompleteOnField = getFullOffsetLeft($('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input'));
 
-                offsetLeftForDateBoxOnField = getFullOffsetLeft($('#dateboxOnField ' + VALUE + ' input.dx-texteditor-input')),
+            let offsetLeftForDateBoxOnField = getFullOffsetLeft($('#dateboxOnField ' + VALUE + ' input.dx-texteditor-input'));
 
-                offsetLeftForTextAreaOnField = getFullOffsetLeft($('#textareaOnField ' + VALUE + ' textarea')),
+            const offsetLeftForTextAreaOnField = getFullOffsetLeft($('#textareaOnField ' + VALUE + ' textarea'));
 
-                offsetLeftForLookupOnField = getFullOffsetLeft($('#lookupOnField ' + VALUE + ' .dx-lookup-field')),
+            const offsetLeftForLookupOnField = getFullOffsetLeft($('#lookupOnField ' + VALUE + ' .dx-lookup-field'));
 
-                offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE)),
+            const offsetLeftForSimpleOnField = getFullOffsetLeft($('#simpleTextOnField ' + VALUE));
 
-                currentTheme = themes.current(),
+            const currentTheme = themes.current();
 
-                paddingTextAreaDifference = currentTheme === 'ios.default' || currentTheme === 'ios7.default' ? 3 : 0;
+            const paddingTextAreaDifference = currentTheme === 'ios.default' || currentTheme === 'ios7.default' ? 3 : 0;
 
             assert.equal(offsetLeftForTextBoxOnField, offsetLeftForAutocompleteOnField, 'Horizontal align for textbox and autocomplete');
 
@@ -307,35 +307,35 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('Equal width for same widgets on and in field-value', function(assert) {
-            var widthForSwitchOnField = $('#switchOnField ' + VALUE + ' .dx-switch-wrapper').width(),
-                widthForSwitchInField = $('#switchInField ' + VALUE + ' .dx-switch-wrapper').width(),
+            const widthForSwitchOnField = $('#switchOnField ' + VALUE + ' .dx-switch-wrapper').width();
+            const widthForSwitchInField = $('#switchInField ' + VALUE + ' .dx-switch-wrapper').width();
 
-                widthForCheckboxOnField = $('#checkboxOnField ' + VALUE + ' .dx-checkbox-icon').width(),
-                widthForCheckboxInField = $('#checkboxInField ' + VALUE + ' .dx-checkbox-icon').width(),
+            const widthForCheckboxOnField = $('#checkboxOnField ' + VALUE + ' .dx-checkbox-icon').width();
+            const widthForCheckboxInField = $('#checkboxInField ' + VALUE + ' .dx-checkbox-icon').width();
 
-                widthForSliderOnField = $('#sliderOnField ' + VALUE + ' .dx-slider-wrapper').width(),
-                widthForSliderInField = $('#sliderInField ' + VALUE + ' .dx-slider-wrapper').width(),
+            const widthForSliderOnField = $('#sliderOnField ' + VALUE + ' .dx-slider-wrapper').width();
+            const widthForSliderInField = $('#sliderInField ' + VALUE + ' .dx-slider-wrapper').width();
 
-                widthForTextBoxOnField = $('#textboxOnField ' + VALUE + ' input').width(),
-                widthForTextBoxInField = $('#textboxInField ' + VALUE + ' input').width(),
+            const widthForTextBoxOnField = $('#textboxOnField ' + VALUE + ' input').width();
+            const widthForTextBoxInField = $('#textboxInField ' + VALUE + ' input').width();
 
-                widthForAutocompleteOnField = $('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input').width(),
-                widthForAutocompleteInField = $('#autocompleteInField ' + VALUE + ' input.dx-texteditor-input').width(),
+            const widthForAutocompleteOnField = $('#autocompleteOnField ' + VALUE + ' input.dx-texteditor-input').width();
+            const widthForAutocompleteInField = $('#autocompleteInField ' + VALUE + ' input.dx-texteditor-input').width();
 
-                widthForDateBoxOnField = $('#dateboxOnField ' + VALUE + ' input.dx-texteditor-input').width(),
-                widthForDateBoxInField = $('#dateboxInField ' + VALUE + ' input.dx-texteditor-input').width(),
+            const widthForDateBoxOnField = $('#dateboxOnField ' + VALUE + ' input.dx-texteditor-input').width();
+            const widthForDateBoxInField = $('#dateboxInField ' + VALUE + ' input.dx-texteditor-input').width();
 
-                widthForTextAreaOnField = $('#textareaOnField ' + VALUE + ' textarea').width(),
-                widthForTextAreaInField = $('#textareaInField ' + VALUE + ' textarea').width(),
+            const widthForTextAreaOnField = $('#textareaOnField ' + VALUE + ' textarea').width();
+            const widthForTextAreaInField = $('#textareaInField ' + VALUE + ' textarea').width();
 
-                widthForLookupOnField = $('#lookupOnField ' + VALUE + ' .dx-lookup-field').width(),
-                widthForLookupInField = $('#lookupInField ' + VALUE + ' .dx-lookup-field').width(),
+            const widthForLookupOnField = $('#lookupOnField ' + VALUE + ' .dx-lookup-field').width();
+            const widthForLookupInField = $('#lookupInField ' + VALUE + ' .dx-lookup-field').width();
 
-                widthForSimpleOnField = $('#simpleTextOnField ' + VALUE).width(),
-                widthForSimpleInField = $('#simpleTextInField ' + VALUE).width(),
+            const widthForSimpleOnField = $('#simpleTextOnField ' + VALUE).width();
+            const widthForSimpleInField = $('#simpleTextInField ' + VALUE).width();
 
-                widthForNumberBoxOnField = $('#numberboxOnField ' + VALUE + ' input').width(),
-                widthForNumberBoxInField = $('#numberboxInField ' + VALUE + ' input').width();
+            const widthForNumberBoxOnField = $('#numberboxOnField ' + VALUE + ' input').width();
+            const widthForNumberBoxInField = $('#numberboxInField ' + VALUE + ' input').width();
 
             assert.equal(widthForSwitchOnField, widthForSwitchInField, 'Width for switches');
             assert.equal(widthForCheckboxOnField, widthForCheckboxInField, 'Width for checkboxes');
@@ -406,15 +406,15 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('dxTextarea on Field', function(assert) {
-            var $parent = $('#textareaOnField'),
-                $label = $parent.find(LABEL),
-                $valueInput = $parent.find(VALUE + ' textarea');
+            const $parent = $('#textareaOnField');
+            const $label = $parent.find(LABEL);
+            const $valueInput = $parent.find(VALUE + ' textarea');
 
             if(options.verticalOffsetTest) {
                 testVerticalOffset($label, $valueInput);
             }
 
-            var cloneTextArea = $('<div>').css('display', 'inline-block')
+            const cloneTextArea = $('<div>').css('display', 'inline-block')
                 .css('vertical-align', 'top')
                 .css('padding-top', $valueInput.css('padding-top'))
                 .css('paddingBottom', $valueInput.css('paddingBottom'))
@@ -429,15 +429,15 @@ module.exports = function(themeName, options) {
         });
 
         QUnit.test('dxTextarea in Field', function(assert) {
-            var $parent = $('#textareaInField'),
-                $label = $parent.find(LABEL),
-                $valueInput = $parent.find(VALUE + ' textarea');
+            const $parent = $('#textareaInField');
+            const $label = $parent.find(LABEL);
+            const $valueInput = $parent.find(VALUE + ' textarea');
 
             if(options.verticalOffsetTest) {
                 testVerticalOffset($label, $valueInput);
             }
 
-            var cloneTextArea = $('<div>').css('display', 'inline-block')
+            const cloneTextArea = $('<div>').css('display', 'inline-block')
                 .css('vertical-align', 'top')
                 .css('padding-top', $valueInput.css('padding-top'))
                 .css('paddingBottom', $valueInput.css('paddingBottom'))

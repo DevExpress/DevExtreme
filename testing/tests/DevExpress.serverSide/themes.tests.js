@@ -1,9 +1,9 @@
-var themes = require('ui/themes'),
-    viewportUtils = require('core/utils/view_port');
+const themes = require('ui/themes');
+const viewportUtils = require('core/utils/view_port');
 
 window.includeThemesLinks();
 
-var viewport = document.createElement('div');
+const viewport = document.createElement('div');
 viewport.className = 'dx-viewport';
 document.body.appendChild(viewport);
 
@@ -34,8 +34,8 @@ QUnit.test('theme changing', function(assert) {
 QUnit.test('viewport changing', function(assert) {
     themes.current('generic.light');
 
-    var fixture = document.getElementById('qunit-fixture');
-    var newViewport = document.createElement('div');
+    const fixture = document.getElementById('qunit-fixture');
+    const newViewport = document.createElement('div');
     fixture.appendChild(newViewport);
     viewportUtils.value(newViewport);
 

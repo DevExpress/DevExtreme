@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    ko = require('knockout'),
-    KoTemplate = require('integration/knockout/template').KoTemplate;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const ko = require('knockout');
+const KoTemplate = require('integration/knockout/template').KoTemplate;
 
 QUnit.module('rendering', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         this.testBindingInit = noop;
         ko.bindingHandlers.testBinding = {
@@ -20,8 +20,8 @@ QUnit.module('rendering', {
 });
 
 QUnit.test('template should be rendered to container directly', function(assert) {
-    var $container = $('<div class=\'container\'>'),
-        template = new KoTemplate($('<div class=\'content\' data-bind=\'testBinding: {}\'>'));
+    const $container = $('<div class=\'container\'>');
+    const template = new KoTemplate($('<div class=\'content\' data-bind=\'testBinding: {}\'>'));
 
     this.testBindingInit = function(element) {
         assert.equal($(element).parent().get(0), $container.get(0), 'template rendered in attached container');
@@ -30,10 +30,10 @@ QUnit.test('template should be rendered to container directly', function(assert)
 });
 
 QUnit.test('template result should be correct', function(assert) {
-    var $container = $('<div class=\'container\'>'),
-        template = new KoTemplate($('<div class=\'content\' data-bind=\'testBinding: {}\'>'));
+    const $container = $('<div class=\'container\'>');
+    const template = new KoTemplate($('<div class=\'content\' data-bind=\'testBinding: {}\'>'));
 
-    var result;
+    let result;
     this.testBindingInit = function(element) {
         result = element;
     };
@@ -41,8 +41,8 @@ QUnit.test('template result should be correct', function(assert) {
 });
 
 QUnit.test('user\'s options object should not be changed after template rendering', function(assert) {
-    var template = new KoTemplate($('<div data-bind=\'text: $data.testField + $index\'>'));
-    var options = { container: $('<div>'), model: { testField: 'test' }, index: 1 };
+    const template = new KoTemplate($('<div data-bind=\'text: $data.testField + $index\'>'));
+    const options = { container: $('<div>'), model: { testField: 'test' }, index: 1 };
 
     template.render(options);
 
@@ -50,8 +50,8 @@ QUnit.test('user\'s options object should not be changed after template renderin
 });
 
 QUnit.test('template binding works when model is object', function(assert) {
-    var $container = $('<div>');
-    var template = new KoTemplate($('<div data-bind=\'text: $data.testField + $index\'>'));
+    const $container = $('<div>');
+    const template = new KoTemplate($('<div data-bind=\'text: $data.testField + $index\'>'));
 
     template.render({ container: $container, model: { testField: 'test' }, index: 1 });
 
@@ -59,8 +59,8 @@ QUnit.test('template binding works when model is object', function(assert) {
 });
 
 QUnit.test('template binding works when model is string', function(assert) {
-    var $container = $('<div>');
-    var template = new KoTemplate($('<div data-bind=\'text: $data + $index\'>'));
+    const $container = $('<div>');
+    const template = new KoTemplate($('<div data-bind=\'text: $data + $index\'>'));
 
     template.render({ container: $container, model: 'test', index: 1 });
 
@@ -68,9 +68,9 @@ QUnit.test('template binding works when model is string', function(assert) {
 });
 
 QUnit.test('template binding works when model is observable', function(assert) {
-    var $container = $('<div>');
-    var template = new KoTemplate($('<div data-bind=\'text: $data + $index\'>'));
-    var test = ko.observable('test');
+    const $container = $('<div>');
+    const template = new KoTemplate($('<div data-bind=\'text: $data + $index\'>'));
+    const test = ko.observable('test');
 
     template.render({ container: $container, model: test, index: 1 });
 
@@ -78,8 +78,8 @@ QUnit.test('template binding works when model is observable', function(assert) {
 });
 
 QUnit.test('template binding works when model is not defined', function(assert) {
-    var $container = $('<div>');
-    var template = new KoTemplate($('<div data-bind=\'text: $index\'>'));
+    const $container = $('<div>');
+    const template = new KoTemplate($('<div data-bind=\'text: $index\'>'));
 
     template.render({ container: $container, index: 1 });
 
@@ -87,12 +87,12 @@ QUnit.test('template binding works when model is not defined', function(assert) 
 });
 
 QUnit.test('bindingContext for container must have $root field (T561880)', function(assert) {
-    var vm = {
+    const vm = {
         text: 'test'
     };
     ko.applyBindings(vm, $('#qunit-fixture')[0]);
-    var $container = $('<div>');
-    var template = new KoTemplate($('<div data-bind=\'text: text + $root.text\'>'));
+    const $container = $('<div>');
+    const template = new KoTemplate($('<div data-bind=\'text: text + $root.text\'>'));
 
     template.render({ container: $container, model: vm });
 

@@ -1,23 +1,23 @@
-var $ = require('jquery');
-var noop = require('core/utils/common').noop;
-var BaseStrategy = require('events/pointer/base');
-var registerEvent = require('events/core/event_registrator');
-var special = require('../../../helpers/eventHelper.js').special;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const BaseStrategy = require('events/pointer/base');
+const registerEvent = require('events/core/event_registrator');
+const special = require('../../../helpers/eventHelper.js').special;
 
 
-var BubbledTestEventMap = {
+const BubbledTestEventMap = {
     'dxpointerdown': 'testdown',
     'dxpointermove': 'testmove',
     'dxpointerup': 'testup',
     'dxpointercancel': 'testcancel'
 };
 
-var NoBubbledTestEventMap = {
+const NoBubbledTestEventMap = {
     'dxpointerenter': 'testenter',
     'dxpointerleave': 'testleave'
 };
 
-var TestEventMap = $.extend({},
+const TestEventMap = $.extend({},
     BubbledTestEventMap,
     NoBubbledTestEventMap
 );
@@ -46,9 +46,9 @@ $.each({
     'dxpointerup': [0, 0, 0, 1]
 }, function(eventName, assertions) {
     QUnit.test('\'' + eventName + '\' event triggers', function(assert) {
-        var triggered = 0;
+        let triggered = 0;
 
-        var $element = $('#element');
+        const $element = $('#element');
         $element.on(eventName, function(e) {
             triggered++;
             assert.strictEqual(e.target, $element[0]);
@@ -69,7 +69,7 @@ $.each({
 
 $.each(TestEventMap, function(pointerEvent, originalEvent) {
     QUnit.test('\'' + pointerEvent + '\' event should be prevented if original event was prevented', function(assert) {
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(originalEvent, function(e) {
             e.preventDefault();
@@ -85,8 +85,8 @@ $.each(TestEventMap, function(pointerEvent, originalEvent) {
 
 $.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
     QUnit.test('\'' + pointerEvent + '\' event should not bubble', function(assert) {
-        var $element = $('#element');
-        var counter = 0;
+        const $element = $('#element');
+        let counter = 0;
         $(document).on(originalEvent, function(e) {
             counter++;
         });
@@ -101,7 +101,7 @@ $.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
     });
 
     QUnit.test('\'' + pointerEvent + '\' event should have delegated subscriptions', function(assert) {
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(pointerEvent, '#delegated', function(e) {
             assert.strictEqual(e.originalEvent.delegateTarget.id, 'element', '\'' + pointerEvent + '\'  have subscription');
@@ -114,8 +114,8 @@ $.each(NoBubbledTestEventMap, function(pointerEvent, originalEvent) {
 
 $.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
     QUnit.test('\'' + pointerEvent + '\' event should bubble', function(assert) {
-        var $element = $('#element');
-        var counter = 0;
+        const $element = $('#element');
+        let counter = 0;
         $(document).on(originalEvent, function(e) {
             counter++;
         });
@@ -130,7 +130,7 @@ $.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
     });
 
     QUnit.test('\'' + pointerEvent + '\' event should not have delegated subscriptions', function(assert) {
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(pointerEvent, '#delegated', function(e) {
             assert.strictEqual(e.originalEvent.delegateTarget.id, undefined, '\'' + pointerEvent + '\' not have subscription');
@@ -141,12 +141,12 @@ $.each(BubbledTestEventMap, function(pointerEvent, originalEvent) {
 });
 
 QUnit.test('event trigger order', function(assert) {
-    var LOG = [],
-        log = function(e) {
-            LOG.push(e.type);
-        };
+    const LOG = [];
+    const log = function(e) {
+        LOG.push(e.type);
+    };
 
-    var $element = $('#element');
+    const $element = $('#element');
     $element
         .on('testdown testup', log)
         .on('dxpointerdown dxpointerup', log)
@@ -167,10 +167,10 @@ QUnit.test('event trigger order', function(assert) {
 });
 
 QUnit.test('pointer events should unsubscribe on .off method', function(assert) {
-    var $element = $('#element'),
-        getEvents = function() {
-            return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
-        };
+    const $element = $('#element');
+    const getEvents = function() {
+        return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
+    };
 
     assert.equal(getEvents().length, 0);
 
@@ -184,7 +184,7 @@ QUnit.test('pointer events should unsubscribe on .off method', function(assert) 
 QUnit.test('one pointer event should not unsubscribe another events', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element
         .on('dxpointerdown dxpointerup', function(e) {
@@ -199,13 +199,13 @@ QUnit.test('one pointer event should not unsubscribe another events', function(a
 QUnit.test('empty original event should not unsubscribe the whole namespace', function(assert) {
     assert.expect(1);
 
-    var element = document.getElementById('element'),
-        $element = $(element);
+    const element = document.getElementById('element');
+    const $element = $(element);
 
-    var handlerSpy = sinon.spy();
+    const handlerSpy = sinon.spy();
     $element.on('any.dxPointerEvents', handlerSpy);
 
-    var strategy = new BaseStrategy('other', '');
+    const strategy = new BaseStrategy('other', '');
     strategy.noBubble = true;
     strategy.teardown($element);
 
@@ -217,7 +217,7 @@ QUnit.test('empty original event should not unsubscribe the whole namespace', fu
 QUnit.test('event is triggered one time after refresh', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element
         .on('dxpointerdown', function(e) {
@@ -236,10 +236,10 @@ QUnit.test('pointer event base strategy should have \'setup\' implementation, be
 });
 
 QUnit.test('pointer events should correctly unsubscribe events with target', function(assert) {
-    var $element = $('#element'),
-        getEvents = function() {
-            return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
-        };
+    const $element = $('#element');
+    const getEvents = function() {
+        return $.map($._data($element.get(0), 'events') || [], function(i) { return i; });
+    };
 
     assert.equal(getEvents().length, 0);
 

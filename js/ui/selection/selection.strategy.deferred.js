@@ -1,8 +1,8 @@
-var typeUtils = require('../../core/utils/type'),
-    SelectionStrategy = require('./selection.strategy'),
-    errors = require('../widget/ui.errors'),
-    dataQuery = require('../../data/query'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const typeUtils = require('../../core/utils/type');
+const SelectionStrategy = require('./selection.strategy');
+const errors = require('../widget/ui.errors');
+const dataQuery = require('../../data/query');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = SelectionStrategy.inherit({
 
@@ -11,13 +11,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     getSelectedItemKeys: function() {
-        var d = new Deferred(),
-            that = this,
-            key = this.options.key(),
-            select = typeUtils.isString(key) ? [key] : key;
+        const d = new Deferred();
+        const that = this;
+        const key = this.options.key();
+        const select = typeUtils.isString(key) ? [key] : key;
 
         this._loadFilteredData(this.options.selectionFilter, null, select).done(function(items) {
-            var keys = items.map(function(item) {
+            const keys = items.map(function(item) {
                 return that.options.keyOf(item);
             });
 
@@ -29,7 +29,7 @@ module.exports = SelectionStrategy.inherit({
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         if(isSelectAll) {
-            var filter = this.options.filter();
+            const filter = this.options.filter();
 
             if(!filter) {
                 this._setOption('selectionFilter', isDeselect ? [] : null);
@@ -42,7 +42,7 @@ module.exports = SelectionStrategy.inherit({
                 this._setOption('selectionFilter', []);
             }
 
-            for(var i = 0; i < keys.length; i++) {
+            for(let i = 0; i < keys.length; i++) {
                 if(isDeselect) {
                     this.removeSelectedItem(keys[i]);
                 } else {
@@ -58,7 +58,7 @@ module.exports = SelectionStrategy.inherit({
 
     setSelectedItems: function(keys) {
         this._setOption('selectionFilter', null);
-        for(var i = 0; i < keys.length; i++) {
+        for(let i = 0; i < keys.length; i++) {
             this.addSelectedItem(keys[i]);
         }
     },
@@ -68,7 +68,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     isItemKeySelected: function(itemData) {
-        var selectionFilter = this.options.selectionFilter;
+        const selectionFilter = this.options.selectionFilter;
 
         if(!selectionFilter) {
             return true;
@@ -78,13 +78,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _processSelectedItem: function(key) {
-        var keyField = this.options.key(),
-            filter = [keyField, '=', key];
+        const keyField = this.options.key();
+        let filter = [keyField, '=', key];
 
 
         if(Array.isArray(keyField)) {
             filter = [];
-            for(var i = 0; i < keyField.length; i++) {
+            for(let i = 0; i < keyField.length; i++) {
                 filter.push([keyField[i], '=', key[keyField[i]]]);
                 if(i !== keyField.length - 1) {
                     filter.push('and');
@@ -96,19 +96,19 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key) {
-        var filter = this._processSelectedItem(key);
+        const filter = this._processSelectedItem(key);
 
         this._addSelectionFilter(false, filter);
     },
 
     removeSelectedItem: function(key) {
-        var filter = this._processSelectedItem(key);
+        const filter = this._processSelectedItem(key);
 
         this._addSelectionFilter(true, filter);
     },
 
     validate: function() {
-        var key = this.options.key;
+        const key = this.options.key;
 
         if(key && key() === undefined) {
             throw errors.Error('E1042', 'Deferred selection');
@@ -117,10 +117,10 @@ module.exports = SelectionStrategy.inherit({
 
     _findSubFilter: function(selectionFilter, filter) {
         if(!selectionFilter) return -1;
-        var filterString = JSON.stringify(filter);
+        const filterString = JSON.stringify(filter);
 
-        for(var index = 0; index < selectionFilter.length; index++) {
-            var subFilter = selectionFilter[index];
+        for(let index = 0; index < selectionFilter.length; index++) {
+            const subFilter = selectionFilter[index];
             if(subFilter && JSON.stringify(subFilter) === filterString) {
                 return index;
             }
@@ -154,17 +154,17 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
-        var that = this,
-            needAddFilter = true,
-            currentFilter = isDeselect ? ['!', filter] : filter,
-            currentOperation = isDeselect ? 'and' : 'or',
-            selectionFilter = that.options.selectionFilter || [];
+        const that = this;
+        let needAddFilter = true;
+        const currentFilter = isDeselect ? ['!', filter] : filter;
+        const currentOperation = isDeselect ? 'and' : 'or';
+        let selectionFilter = that.options.selectionFilter || [];
 
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
             that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
-            var lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
+            const lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
             if(lastOperation && (lastOperation !== 'or' && isDeselect || lastOperation !== 'and' && !isDeselect)) {
                 needAddFilter = false;
@@ -193,7 +193,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _removeFilterByIndex: function(filter, filterIndex, isSelectAll) {
-        var lastRemoveOperation;
+        let lastRemoveOperation;
 
         if(filterIndex > 0) {
             lastRemoveOperation = filter.splice(filterIndex - 1, 2)[0];
@@ -211,7 +211,7 @@ module.exports = SelectionStrategy.inherit({
     _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
         filter = inverted ? ['!', filter] : filter;
 
-        var filterIndex = this._findSubFilter(selectionFilter, filter);
+        const filterIndex = this._findSubFilter(selectionFilter, filter);
 
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
             selectionFilter.splice(0, selectionFilter.length);
@@ -221,8 +221,8 @@ module.exports = SelectionStrategy.inherit({
         if(filterIndex >= 0) {
             return this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
         } else {
-            for(var i = 0; i < selectionFilter.length; i++) {
-                var lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
+            for(let i = 0; i < selectionFilter.length; i++) {
+                const lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
 
                 if(lastRemoveOperation) {
                     if(!selectionFilter[i].length) {
@@ -237,8 +237,8 @@ module.exports = SelectionStrategy.inherit({
     },
 
     getSelectAllState: function() {
-        var filter = this.options.filter(),
-            selectionFilter = this.options.selectionFilter;
+        const filter = this.options.filter();
+        let selectionFilter = this.options.selectionFilter;
 
         if(!selectionFilter) return true;
         if(!selectionFilter.length) return false;

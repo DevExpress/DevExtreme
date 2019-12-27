@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div class="dx-datagrid">\
         <div id="container"></div>\
@@ -61,9 +61,9 @@ QUnit.module('Pager', {
 
 QUnit.test('Not initialize pager when pager is not visible', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView,
-        pager;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
+    let pager;
 
     this.options.pager.visible = false;
 
@@ -80,9 +80,9 @@ QUnit.test('Not initialize pager when pager is not visible', function(assert) {
 
 QUnit.test('initialize pager when pager is visible', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView,
-        pager;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
+    let pager;
 
     this.dataControllerOptions.hasKnownLastPage = false;
 
@@ -103,9 +103,9 @@ QUnit.test('initialize pager when pager is visible', function(assert) {
 });
 
 QUnit.test('PagerView create dxPager via createComponent', function(assert) {
-    var testElement = $('#container'),
-        pagerView = this.pagerView,
-        isRenderViaCreateComponent = false;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
+    let isRenderViaCreateComponent = false;
 
     this._createComponent = function(element, name, config) {
         if(name === Pager) {
@@ -122,9 +122,9 @@ QUnit.test('PagerView create dxPager via createComponent', function(assert) {
 
 QUnit.test('Page index of dataController is changed from dxPager', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        pagerView = this.pagerView;
+    const that = this;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement);
@@ -137,8 +137,8 @@ QUnit.test('Page index of dataController is changed from dxPager', function(asse
 
 QUnit.test('Page index is changed from dataController', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement);
@@ -151,8 +151,8 @@ QUnit.test('Page index is changed from dataController', function(assert) {
 // T211403
 QUnit.test('Page index is changed from dataController several times', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement);
@@ -167,8 +167,8 @@ QUnit.test('Page index is changed from dataController several times', function(a
 // T220755
 QUnit.test('Page index correctly changed using string value', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement);
@@ -181,8 +181,8 @@ QUnit.test('Page index correctly changed using string value', function(assert) {
 
 QUnit.test('Pages count is changed from dataController', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement, {});
@@ -194,8 +194,8 @@ QUnit.test('Pages count is changed from dataController', function(assert) {
 
 QUnit.test('Page size is changed from dataController', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement, {});
@@ -207,8 +207,8 @@ QUnit.test('Page size is changed from dataController', function(assert) {
 
 QUnit.test('HasKnownLastPage is changed from dataController', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     // act
     pagerView.render(testElement, {});
@@ -221,8 +221,8 @@ QUnit.test('HasKnownLastPage is changed from dataController', function(assert) {
 
 QUnit.test('Visible is changed from dataController', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     this.dataControllerOptions.pageCount = 1;
     this.options.pager.visible = 'auto';
@@ -240,8 +240,8 @@ QUnit.test('Visible is changed from dataController', function(assert) {
 
 QUnit.test('Pager is not rendered on partial update', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     sinon.spy(pagerView, '_createComponent');
 
@@ -258,8 +258,8 @@ QUnit.test('Pager is not rendered on partial update', function(assert) {
 
 QUnit.test('pageCount is updated on partial update with repaintChangesOnly', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     sinon.spy(pagerView, '_createComponent');
 
@@ -283,7 +283,7 @@ QUnit.test('pageCount is updated on partial update with repaintChangesOnly', fun
 });
 
 QUnit.test('get page sizes when pageSizes option is auto and pageSize = 5', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = {
         allowedPageSizes: 'auto'
@@ -292,14 +292,14 @@ QUnit.test('get page sizes when pageSizes option is auto and pageSize = 5', func
     this.dataControllerOptions.pageSize = 5;
 
     // act
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, [2, 5, 10]);
 });
 
 QUnit.test('get page sizes when pageSizes option is auto and pageSize changed from 5 to 20', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = {
         allowedPageSizes: 'auto'
@@ -311,14 +311,14 @@ QUnit.test('get page sizes when pageSizes option is auto and pageSize changed fr
 
     // act
     this.dataControllerOptions.pageSize = 20;
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, [10, 20, 40]);
 });
 
 QUnit.test('get page sizes when pageSizes option is auto and pageSize changed from 5 to 10', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = {
         allowedPageSizes: 'auto'
@@ -330,28 +330,28 @@ QUnit.test('get page sizes when pageSizes option is auto and pageSize changed fr
 
     // act
     this.dataControllerOptions.pageSize = 10;
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, [2, 5, 10]);
 });
 
 QUnit.test('get page sizes when pageSizes option is auto and pageSize = 20', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         allowedPageSizes: 'auto'
     };
     this.dataControllerOptions.pageSize = 20;
 
     // act
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, [10, 20, 40]);
 });
 
 QUnit.test('get page sizes when pageSizes option is array', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         allowedPageSizes: [10, 20, 50, 100]
     };
@@ -359,14 +359,14 @@ QUnit.test('get page sizes when pageSizes option is array', function(assert) {
     this.dataControllerOptions.pageSize = 20;
 
     // act
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, [10, 20, 50, 100]);
 });
 
 QUnit.test('get page sizes when pageSize is 0 (pageable is false)', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         pageSizes: true
     };
@@ -374,14 +374,14 @@ QUnit.test('get page sizes when pageSize is 0 (pageable is false)', function(ass
     this.dataControllerOptions.pageSize = 0;
 
     // act
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, []);
 });
 
 QUnit.test('get page sizes when pageSizes option is false', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         pageSizes: false
     };
@@ -389,21 +389,21 @@ QUnit.test('get page sizes when pageSizes option is false', function(assert) {
     this.dataControllerOptions.pageSize = 20;
 
     // act
-    var pageSizes = pagerView.getPageSizes();
+    const pageSizes = pagerView.getPageSizes();
 
     // assert
     assert.deepEqual(pageSizes, []);
 });
 
 QUnit.test('isVisible when pageCount > 1 and visible is auto', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = { visible: 'auto' };
     this.dataControllerOptions.pageCount = 2;
 
     // act
     pagerView.render($('#container'));
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 2);
@@ -412,13 +412,13 @@ QUnit.test('isVisible when pageCount > 1 and visible is auto', function(assert) 
 });
 
 QUnit.test('isVisible when pageCount == 1 and visible is auto', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = { visible: 'auto' };
     this.dataControllerOptions.pageCount = 1;
 
     // act
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 1);
@@ -426,7 +426,7 @@ QUnit.test('isVisible when pageCount == 1 and visible is auto', function(assert)
 });
 
 QUnit.test('isVisible when pageCount == 1, hasKnownLastPage is false and visible is auto', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = { visible: 'auto' };
     this.dataControllerOptions.pageCount = 1;
@@ -435,7 +435,7 @@ QUnit.test('isVisible when pageCount == 1, hasKnownLastPage is false and visible
 
 
     // act
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.ok(!this.dataController.hasKnownLastPage());
@@ -444,14 +444,14 @@ QUnit.test('isVisible when pageCount == 1, hasKnownLastPage is false and visible
 });
 
 QUnit.test('isVisible when pageCount == 1 and visible is true', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = { visible: true };
     this.dataControllerOptions.pageCount = 1;
 
     // act
     pagerView.render($('#container'));
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 1);
@@ -460,7 +460,7 @@ QUnit.test('isVisible when pageCount == 1 and visible is true', function(assert)
 });
 
 QUnit.test('isVisible when pageCount > 1 and visible is false', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
 
     this.options.pager = { visible: false };
     this.dataControllerOptions.pageCount = 2;
@@ -468,7 +468,7 @@ QUnit.test('isVisible when pageCount > 1 and visible is false', function(assert)
 
     // act
     pagerView.render($('#container'));
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 2);
@@ -477,7 +477,7 @@ QUnit.test('isVisible when pageCount > 1 and visible is false', function(assert)
 });
 
 QUnit.test('isVisible when pageCount == 1 and pageSizes has more 1 items and visible is auto', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         visible: 'auto',
         pageSizes: [2, 5, 10]
@@ -486,7 +486,7 @@ QUnit.test('isVisible when pageCount == 1 and pageSizes has more 1 items and vis
     this.dataControllerOptions.pageCount = 1;
 
     // act
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 1);
@@ -494,7 +494,7 @@ QUnit.test('isVisible when pageCount == 1 and pageSizes has more 1 items and vis
 });
 
 QUnit.test('isVisible when pageCount == 1 and pageSizes disabled and visible is auto', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.pager = {
         visible: 'auto',
         pageSizes: false
@@ -503,7 +503,7 @@ QUnit.test('isVisible when pageCount == 1 and pageSizes disabled and visible is 
     this.dataControllerOptions.pageCount = 1;
 
     // act
-    var isVisible = pagerView.isVisible();
+    const isVisible = pagerView.isVisible();
 
     // assert
     assert.equal(this.dataController.pageCount(), 1);
@@ -512,7 +512,7 @@ QUnit.test('isVisible when pageCount == 1 and pageSizes disabled and visible is 
 });
 
 QUnit.test('isVisible for virtual scrolling', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.scrolling = {
         mode: 'virtual'
     };
@@ -523,7 +523,7 @@ QUnit.test('isVisible for virtual scrolling', function(assert) {
 });
 
 QUnit.test('isVisible for appendMode', function(assert) {
-    var pagerView = this.pagerView;
+    const pagerView = this.pagerView;
     this.options.scrolling = {
         mode: 'infinite'
     };
@@ -534,9 +534,9 @@ QUnit.test('isVisible for appendMode', function(assert) {
 });
 
 QUnit.test('isVisible is not reset when data source option is changed in data grid', function(assert) {
-    var pagerView = this.pagerView,
-        isResizeCalled,
-        isInvalidateCalled;
+    const pagerView = this.pagerView;
+    let isResizeCalled;
+    let isInvalidateCalled;
 
     this.options.pager = { visible: 'auto' };
     this.dataControllerOptions.pageCount = 2;
@@ -563,8 +563,8 @@ QUnit.test('isVisible is not reset when data source option is changed in data gr
 
 QUnit.test('Not visible pager when changing option scrolling to virtual', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     this.dataControllerOptions.hasKnownLastPage = false;
     this.options.pager.visible = 'auto';
@@ -596,8 +596,8 @@ QUnit.test('Not visible pager when changing option scrolling to virtual', functi
 
 QUnit.test('Show navigation buttons', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     this.options.pager.showNavigationButtons = true;
 
@@ -608,8 +608,8 @@ QUnit.test('Show navigation buttons', function(assert) {
 
 QUnit.test('Default show info', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     this.options.pager.showInfo = true;
 
@@ -620,8 +620,8 @@ QUnit.test('Default show info', function(assert) {
 
 QUnit.test('Custom show info', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        pagerView = this.pagerView;
+    const testElement = $('#container');
+    const pagerView = this.pagerView;
 
     this.options.pager.showInfo = true;
     this.options.pager.infoText = '{0} Страница из {1}';
@@ -633,7 +633,7 @@ QUnit.test('Custom show info', function(assert) {
 
 QUnit.test('Invalidate instead of render for options', function(assert) {
     // arrange
-    var renderCounter = 0;
+    let renderCounter = 0;
     this.pagerView.render($('#container'));
     this.pagerView.renderCompleted.add(function() {
         renderCounter++;
@@ -655,7 +655,7 @@ QUnit.test('Invalidate instead of render for options', function(assert) {
 
 QUnit.test('Pager should be visible when set the pageSize equal to totalCount', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.pager.allowedPageSizes = [2, 4, 6];
     this.dataControllerOptions = {
@@ -679,8 +679,8 @@ QUnit.test('Pager should be visible when set the pageSize equal to totalCount', 
 
 QUnit.test('Key down Enter, Space key by page index element', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        $pageElement;
+    const $testElement = $('#container');
+    let $pageElement;
 
     this.options.pager.allowedPageSizes = [2, 4, 6];
     this.dataControllerOptions = {
@@ -708,9 +708,9 @@ QUnit.test('Key down Enter, Space key by page index element', function(assert) {
 
 QUnit.test('Key down Enter, Space key by page size element', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        $pageElement,
-        pager;
+    const $testElement = $('#container');
+    let $pageElement;
+    let pager;
 
     this.options.pager.allowedPageSizes = [2, 4, 6];
     this.dataControllerOptions = {
@@ -734,7 +734,7 @@ QUnit.test('Key down Enter, Space key by page size element', function(assert) {
 
 QUnit.test('dxPager - infoText has rtl direction with rtlEnabled true (T753000)', function(assert) {
     // arrange
-    var container = $('#container').addClass('dx-rtl');
+    const container = $('#container').addClass('dx-rtl');
 
     // act
     this.options.pager.showInfo = true;

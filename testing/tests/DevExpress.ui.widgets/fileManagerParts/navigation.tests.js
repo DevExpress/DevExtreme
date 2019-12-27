@@ -118,7 +118,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root');
 
-        let $folderNode = this.wrapper.getFolderNode(2);
+        const $folderNode = this.wrapper.getFolderNode(2);
         $folderNode.trigger('dxclick');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'descendant folder selected');
@@ -364,7 +364,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('slashes in directory name must be processed correctly', function(assert) {
         const incorrectName = 'Docu\\/me\\/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider,
             rootText: 'Files',
             currentPath: '',
@@ -402,7 +402,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
     test('whitespace as directory name must be processed correctly', function(assert) {
         const incorrectName = 'Docu\\/me\\/nts';
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider,
             rootText: 'Files',
             currentPath: '',

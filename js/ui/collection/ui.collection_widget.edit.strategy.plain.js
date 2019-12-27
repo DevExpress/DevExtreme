@@ -1,15 +1,15 @@
-var inArray = require('../../core/utils/array').inArray,
-    EditStrategy = require('./ui.collection_widget.edit.strategy');
+const inArray = require('../../core/utils/array').inArray;
+const EditStrategy = require('./ui.collection_widget.edit.strategy');
 
 
-var PlainEditStrategy = EditStrategy.inherit({
+const PlainEditStrategy = EditStrategy.inherit({
 
     _getPlainItems: function() {
         return this._collectionWidget.option('items') || [];
     },
 
     getIndexByItemData: function(itemData) {
-        var keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
+        const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
         if(keyOf) {
             return this.getIndexByKey(keyOf(itemData));
         } else {
@@ -30,11 +30,11 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     getKeysByItems: function(items) {
-        var keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
-        var result = items;
+        const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
+        let result = items;
         if(keyOf) {
             result = [];
-            for(var i = 0; i < items.length; i++) {
+            for(let i = 0; i < items.length; i++) {
                 result.push(keyOf(items[i]));
             }
         }
@@ -42,15 +42,15 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     getIndexByKey: function(key) {
-        var cache = this._cache,
-            keys = cache && cache.keys || this.getKeysByItems(this._getPlainItems());
+        const cache = this._cache;
+        const keys = cache && cache.keys || this.getKeysByItems(this._getPlainItems());
 
         if(cache && !cache.keys) {
             cache.keys = keys;
         }
 
         if(typeof key === 'object') {
-            for(var i = 0, length = keys.length; i < length; i++) {
+            for(let i = 0, length = keys.length; i < length; i++) {
                 if(this._equalKeys(key, keys[i])) return i;
             }
         } else {
@@ -65,8 +65,8 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     moveItemAtIndexToIndex: function(movingIndex, destinationIndex) {
-        var items = this._getPlainItems(),
-            movedItemData = items[movingIndex];
+        const items = this._getPlainItems();
+        const movedItemData = items[movingIndex];
 
         items.splice(movingIndex, 1);
         items.splice(destinationIndex, 0, movedItemData);

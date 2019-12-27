@@ -72,10 +72,10 @@ module('DropDownEditor markup', {
 
     test('correct buttons order after rendering', (assert) => {
         const $dropDownEditor = this.rootElement.dxDropDownEditor({
-                showClearButton: true
-            }),
-            $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container'),
-            $buttons = $buttonsContainer.children();
+            showClearButton: true
+        });
+        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttons = $buttonsContainer.children();
 
         assert.equal($buttons.length, 2, 'clear button and drop button were rendered');
         assert.ok($buttons.eq(0).hasClass('dx-clear-button-area'), 'clear button is the first one');
@@ -114,8 +114,8 @@ module('DropDownEditor markup', {
 
 module('aria accessibility', () => {
     test('aria role', (assert) => {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(),
-            $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
+        const $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
         assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');

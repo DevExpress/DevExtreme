@@ -449,7 +449,7 @@ export const stringify = obj => {
         return JSON.stringify(obj);
     }
 
-    let props = Object
+    const props = Object
         .keys(obj)
         .map(key => `${key}: ${stringify(obj[key])}`)
         .join(', ');
@@ -594,7 +594,7 @@ export const createSampleFileItems = () => {
 };
 
 const createFileManagerItem = (parentPath, dataObj) => {
-    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+    const item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;

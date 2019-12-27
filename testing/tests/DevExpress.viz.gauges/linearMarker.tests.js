@@ -1,13 +1,13 @@
-var vizMocks = require('../../helpers/vizMocks.js'),
-    linearIndicatorsModule = require('viz/gauges/linear_indicators'),
-    getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo,
-    Translator1D = require('viz/translators/translator1d').Translator1D;
+const vizMocks = require('../../helpers/vizMocks.js');
+const linearIndicatorsModule = require('viz/gauges/linear_indicators');
+const getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var marker,
-    renderer,
-    owner,
-    tracker,
-    options;
+let marker;
+let renderer;
+let owner;
+let tracker;
+let options;
 
 QUnit.module('TriangleMarker', {
     beforeEach: function() {
@@ -17,7 +17,7 @@ QUnit.module('TriangleMarker', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 300, 400);
+        const translator = new Translator1D(0, 100, 300, 400);
         marker = new linearIndicatorsModule['trianglemarker']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
@@ -197,7 +197,7 @@ QUnit.module('TextCloudMarker', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 300, 400);
+        const translator = new Translator1D(0, 100, 300, 400);
         marker = new linearIndicatorsModule['textcloud']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
@@ -217,9 +217,9 @@ QUnit.module('TextCloudMarker', {
             },
             currentValue: 25
         };
-        var baseCreateText = renderer.stub('text');
+        const baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
-            var text = baseCreateText.apply(this, arguments);
+            const text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
             return text;
         });
@@ -259,7 +259,7 @@ QUnit.test('measure (string-like numbers)', function(assert) {
 });
 
 QUnit.test('render - horizontal, top', function(assert) {
-    var tc = new getTextCloudInfo({
+    const tc = new getTextCloudInfo({
         x: 325,
         y: 100,
         textWidth: 40,
@@ -289,7 +289,7 @@ QUnit.test('render - horizontal, top', function(assert) {
 });
 
 QUnit.test('render - horizontal, bottom', function(assert) {
-    var tc = new getTextCloudInfo({
+    const tc = new getTextCloudInfo({
         x: 325,
         y: 100,
         textWidth: 40,
@@ -320,7 +320,7 @@ QUnit.test('render - horizontal, bottom', function(assert) {
 });
 
 QUnit.test('render - vertical, left', function(assert) {
-    var tc = new getTextCloudInfo({
+    const tc = new getTextCloudInfo({
         x: 200,
         y: 325,
         textWidth: 40,
@@ -351,7 +351,7 @@ QUnit.test('render - vertical, left', function(assert) {
 });
 
 QUnit.test('render - vertical, right', function(assert) {
-    var tc = new getTextCloudInfo({
+    const tc = new getTextCloudInfo({
         x: 200,
         y: 325,
         textWidth: 40,

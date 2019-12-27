@@ -20,7 +20,7 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 const VISIBILITY_CHANGE_CLASS = 'dx-visibility-change-handler';
 const VISIBILITY_CHANGE_EVENTNAMESPACE = 'VisibilityChange';
 
-var DOMComponent = Component.inherit({
+const DOMComponent = Component.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
 
@@ -69,7 +69,7 @@ var DOMComponent = Component.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var isCustomOption = this.constructor._classCustomRules
+        const isCustomOption = this.constructor._classCustomRules
             && Object.prototype.hasOwnProperty.call(this._convertRulesToOptions(this.constructor._classCustomRules), name);
 
         return !isCustomOption && this.callBase(name);
@@ -77,7 +77,7 @@ var DOMComponent = Component.inherit({
 
     _attachWindowResizeCallback: function() {
         if(this._isDimensionChangeSupported()) {
-            var windowResizeCallBack = this._windowResizeCallBack = this._dimensionChanged.bind(this);
+            const windowResizeCallBack = this._windowResizeCallBack = this._dimensionChanged.bind(this);
             windowResizeCallbacks.add(windowResizeCallBack);
         }
     },
@@ -105,8 +105,8 @@ var DOMComponent = Component.inherit({
     },
 
     _renderElementAttributes: function() {
-        var attributes = extend({}, this.option('elementAttr')),
-            classNames = attributes.class;
+        const attributes = extend({}, this.option('elementAttr'));
+        const classNames = attributes.class;
 
         delete attributes.class;
 
@@ -128,10 +128,10 @@ var DOMComponent = Component.inherit({
     },
 
     _renderDimensions: function() {
-        var $element = this.$element();
-        var element = $element.get(0);
-        var width = this._getOptionValue('width', element);
-        var height = this._getOptionValue('height', element);
+        const $element = this.$element();
+        const element = $element.get(0);
+        const width = this._getOptionValue('width', element);
+        const height = this._getOptionValue('height', element);
 
         if(this._isCssUpdateRequired(element, height, width)) {
             $element.css({
@@ -146,8 +146,8 @@ var DOMComponent = Component.inherit({
     },
 
     _attachDimensionChangeHandlers: function() {
-        var that = this;
-        var resizeEventName = 'dxresize.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        const that = this;
+        const resizeEventName = 'dxresize.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
 
         eventsEngine.off(that.$element(), resizeEventName);
@@ -160,9 +160,9 @@ var DOMComponent = Component.inherit({
         if(!this._isVisibilityChangeSupported()) {
             return;
         }
-        var that = this;
-        var hidingEventName = 'dxhiding.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
-        var shownEventName = 'dxshown.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        const that = this;
+        const hidingEventName = 'dxhiding.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
+        const shownEventName = 'dxshown.' + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
         that._isHidden = !that._isVisible();
         eventsEngine.off(that.$element(), hidingEventName);
@@ -196,7 +196,7 @@ var DOMComponent = Component.inherit({
     _clean: commonUtils.noop,
 
     _modelByElement: function() {
-        var modelByElement = this.option('modelByElement') || commonUtils.noop;
+        const modelByElement = this.option('modelByElement') || commonUtils.noop;
         return modelByElement(this.$element());
     },
 
@@ -230,16 +230,16 @@ var DOMComponent = Component.inherit({
     },
 
     _createComponent: function(element, component, config) {
-        var that = this;
+        const that = this;
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(this._getSynchronizableOptionsForCreateComponent(), function(value) {
+        const synchronizableOptions = commonUtils.grep(this._getSynchronizableOptionsForCreateComponent(), function(value) {
             return !(value in config);
         });
 
-        var nestedComponentOptions = that.option('nestedComponentOptions') || commonUtils.noop;
-        var nestedComponentConfig = extend({
+        const nestedComponentOptions = that.option('nestedComponentOptions') || commonUtils.noop;
+        const nestedComponentConfig = extend({
             integrationOptions: this.option('integrationOptions'),
         }, nestedComponentOptions(this));
 
@@ -249,9 +249,9 @@ var DOMComponent = Component.inherit({
 
         that._extendConfig(config, nestedComponentConfig);
 
-        var instance;
+        let instance;
         if(isString(component)) {
-            var $element = $(element)[component](config);
+            const $element = $(element)[component](config);
             instance = $element[component]('instance');
         } else if(element) {
             instance = component.getInstance(element);
@@ -262,7 +262,7 @@ var DOMComponent = Component.inherit({
             }
         }
         if(instance) {
-            var optionChangedHandler = function(args) {
+            const optionChangedHandler = function(args) {
                 if(inArray(args.name, synchronizableOptions) >= 0) {
                     instance.option(args.name, args.value);
                 }
@@ -301,7 +301,7 @@ var DOMComponent = Component.inherit({
     * @type_function_param1_field3 model:object
     **/
     _defaultActionArgs: function() {
-        var model = this._modelByElement(this.$element());
+        const model = this._modelByElement(this.$element());
         return extend(this.callBase(), {
             element: this.element(),
             model: model
@@ -330,16 +330,16 @@ var DOMComponent = Component.inherit({
     },
 
     _removeAttributes: function(element) {
-        var i = element.attributes.length - 1;
+        let i = element.attributes.length - 1;
 
         for(; i >= 0; i--) {
-            var attribute = element.attributes[i];
+            const attribute = element.attributes[i];
 
             if(!attribute) {
                 return;
             }
 
-            var attributeName = attribute.name;
+            const attributeName = attribute.name;
 
             if(attributeName.indexOf('aria-') === 0 ||
                 attributeName.indexOf('dx-') !== -1 ||
@@ -352,14 +352,14 @@ var DOMComponent = Component.inherit({
     },
 
     _removeClasses: function(element) {
-        var classes = element.className.split(' ').filter(function(cssClass) {
+        const classes = element.className.split(' ').filter(function(cssClass) {
             return cssClass.lastIndexOf('dx-', 0) !== 0;
         });
         element.className = classes.join(' ');
     },
 
     endUpdate: function() {
-        var requireRender = !this._initializing && !this._initialized;
+        const requireRender = !this._initializing && !this._initialized;
 
         this.callBase.apply(this, arguments);
 
@@ -382,7 +382,7 @@ var DOMComponent = Component.inherit({
     },
 
     dispose: function() {
-        var element = this.$element().get(0);
+        const element = this.$element().get(0);
         dataUtils.cleanDataRecursive(element, true);
         element.textContent = '';
         this._removeAttributes(element);

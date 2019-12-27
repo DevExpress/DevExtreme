@@ -1,35 +1,35 @@
-var noop = require('../../core/utils/common').noop,
-    window = require('../../core/utils/window').getWindow(),
-    Promise = require('../../core/polyfills/promise'),
-    extend = require('../../core/utils/extend').extend,
-    errors = require('../widget/ui.errors'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    DynamicProvider = require('./provider.dynamic'),
-    Color = require('../../color'),
-    ajax = require('../../core/utils/ajax'),
-    isDefined = require('../../core/utils/type').isDefined;
+const noop = require('../../core/utils/common').noop;
+const window = require('../../core/utils/window').getWindow();
+const Promise = require('../../core/polyfills/promise');
+const extend = require('../../core/utils/extend').extend;
+const errors = require('../widget/ui.errors');
+const iteratorUtils = require('../../core/utils/iterator');
+const DynamicProvider = require('./provider.dynamic');
+const Color = require('../../color');
+const ajax = require('../../core/utils/ajax');
+const isDefined = require('../../core/utils/type').isDefined;
 
 /* global Microsoft */
-var BING_MAP_READY = '_bingScriptReady',
-    BING_URL_V8 = 'https://www.bing.com/api/maps/mapcontrol?callback=' + BING_MAP_READY,
+const BING_MAP_READY = '_bingScriptReady';
+let BING_URL_V8 = 'https://www.bing.com/api/maps/mapcontrol?callback=' + BING_MAP_READY;
 
-    INFOBOX_V_OFFSET_V8 = 13,
+const INFOBOX_V_OFFSET_V8 = 13;
 
-    BING_CREDENTIALS = 'AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH',
+const BING_CREDENTIALS = 'AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH';
 
-    MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
+const MIN_LOCATION_RECT_LENGTH = 0.0000000000000001;
 
 
-var msMapsLoaded = function() {
+const msMapsLoaded = function() {
     return window.Microsoft && window.Microsoft.Maps;
 };
 
-var msMapsLoader;
+let msMapsLoader;
 
 
-var BingProvider = DynamicProvider.inherit({
+const BingProvider = DynamicProvider.inherit({
     _mapType: function(type) {
-        var mapTypes = {
+        const mapTypes = {
             roadmap: Microsoft.Maps.MapTypeId.road,
             hybrid: Microsoft.Maps.MapTypeId.aerial,
             satellite: Microsoft.Maps.MapTypeId.aerial
@@ -38,7 +38,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _movementMode: function(type) {
-        var movementTypes = {
+        const movementTypes = {
             driving: Microsoft.Maps.Directions.RouteMode.driving,
             walking: Microsoft.Maps.Directions.RouteMode.walking
         };
@@ -47,7 +47,7 @@ var BingProvider = DynamicProvider.inherit({
 
     _resolveLocation: function(location) {
         return new Promise(function(resolve) {
-            var latLng = this._getLatLng(location);
+            const latLng = this._getLatLng(location);
             if(latLng) {
                 resolve(new Microsoft.Maps.Location(latLng.lat, latLng.lng));
             } else {
@@ -66,14 +66,14 @@ var BingProvider = DynamicProvider.inherit({
                 return;
             }
 
-            var searchManager = new Microsoft.Maps.Search.SearchManager(this._map);
-            var searchRequest = {
+            const searchManager = new Microsoft.Maps.Search.SearchManager(this._map);
+            const searchRequest = {
                 where: location,
                 count: 1,
                 callback: function(searchResponse) {
-                    var result = searchResponse.results[0];
+                    const result = searchResponse.results[0];
                     if(result) {
-                        var boundsBox = searchResponse.results[0].location;
+                        const boundsBox = searchResponse.results[0].location;
 
                         resolve(new Microsoft.Maps.Location(boundsBox.latitude, boundsBox.longitude));
                     } else {
@@ -94,8 +94,8 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _normalizeLocationRect: function(locationRect) {
-        var northWest = this._normalizeLocation(locationRect.getNorthwest()),
-            southEast = this._normalizeLocation(locationRect.getSoutheast());
+        const northWest = this._normalizeLocation(locationRect.getNorthwest());
+        const southEast = this._normalizeLocation(locationRect.getSoutheast());
 
         return {
             northEast: {
@@ -162,7 +162,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _createMap: function() {
-        var controls = this._option('controls');
+        const controls = this._option('controls');
 
         this._map = new Microsoft.Maps.Map(this._$container[0], {
             credentials: this._keyOption('bing') || BING_CREDENTIALS,
@@ -179,10 +179,10 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _viewChangeHandler: function() {
-        var bounds = this._map.getBounds();
+        const bounds = this._map.getBounds();
         this._option('bounds', this._normalizeLocationRect(bounds));
 
-        var center = this._map.getCenter();
+        const center = this._map.getCenter();
         this._option('center', this._normalizeLocation(center));
 
         if(!this._preventZoomChangeEvent) {
@@ -197,7 +197,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     updateDimensions: function() {
-        var $container = this._$container;
+        const $container = this._$container;
 
         this._map.setOptions({
             width: $container.width(),
@@ -208,8 +208,8 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     updateMapType: function() {
-        var type = this._option('type'),
-            labelOverlay = Microsoft.Maps.LabelOverlay;
+        const type = this._option('type');
+        const labelOverlay = Microsoft.Maps.LabelOverlay;
 
         this._map.setView({
             animate: false,
@@ -225,7 +225,7 @@ var BingProvider = DynamicProvider.inherit({
             this._resolveLocation(this._option('bounds.northEast')),
             this._resolveLocation(this._option('bounds.southWest'))
         ]).then(function(result) {
-            var bounds = new Microsoft.Maps.LocationRect.fromLocations(result[0], result[1]);
+            const bounds = new Microsoft.Maps.LocationRect.fromLocations(result[0], result[1]);
 
             this._map.setView({
                 animate: false,
@@ -259,7 +259,7 @@ var BingProvider = DynamicProvider.inherit({
 
     _renderMarker: function(options) {
         return this._resolveLocation(options.location).then(function(location) {
-            var pushpinOptions = {
+            const pushpinOptions = {
                 icon: options.iconSrc || this._option('markerIconSrc')
             };
             if(options.html) {
@@ -269,20 +269,20 @@ var BingProvider = DynamicProvider.inherit({
                     height: null
                 });
 
-                var htmlOffset = options.htmlOffset;
+                const htmlOffset = options.htmlOffset;
                 if(htmlOffset) {
                     pushpinOptions.anchor = new Microsoft.Maps.Point(-htmlOffset.left, -htmlOffset.top);
                 }
             }
 
-            var pushpin = new Microsoft.Maps.Pushpin(location, pushpinOptions);
+            const pushpin = new Microsoft.Maps.Pushpin(location, pushpinOptions);
             this._map.entities.push(pushpin);
 
-            var infobox = this._renderTooltip(location, options.tooltip);
-            var handler;
+            const infobox = this._renderTooltip(location, options.tooltip);
+            let handler;
             if(options.onClick || options.tooltip) {
-                var markerClickAction = this._mapWidget._createAction(options.onClick || noop),
-                    markerNormalizedLocation = this._normalizeLocation(location);
+                const markerClickAction = this._mapWidget._createAction(options.onClick || noop);
+                const markerNormalizedLocation = this._normalizeLocation(location);
 
                 handler = Microsoft.Maps.Events.addHandler(pushpin, 'click', function() {
                     markerClickAction({
@@ -311,7 +311,7 @@ var BingProvider = DynamicProvider.inherit({
 
         options = this._parseTooltipOptions(options);
 
-        var infobox = new Microsoft.Maps.Infobox(location, {
+        const infobox = new Microsoft.Maps.Infobox(location, {
             description: options.text,
             offset: new Microsoft.Maps.Point(0, INFOBOX_V_OFFSET_V8),
             visible: options.visible
@@ -337,9 +337,9 @@ var BingProvider = DynamicProvider.inherit({
             return this._resolveLocation(point);
         }.bind(this))).then(function(locations) {
             return new Promise(function(resolve) {
-                var direction = new Microsoft.Maps.Directions.DirectionsManager(this._map),
-                    color = new Color(options.color || this._defaultRouteColor()).toHex(),
-                    routeColor = new Microsoft.Maps.Color.fromHex(color);
+                const direction = new Microsoft.Maps.Directions.DirectionsManager(this._map);
+                const color = new Color(options.color || this._defaultRouteColor()).toHex();
+                const routeColor = new Microsoft.Maps.Color.fromHex(color);
                 routeColor.a = (options.opacity || this._defaultRouteOpacity()) * 255;
 
                 direction.setRenderOptions({
@@ -361,18 +361,18 @@ var BingProvider = DynamicProvider.inherit({
                 });
 
                 iteratorUtils.each(locations, function(_, location) {
-                    var waypoint = new Microsoft.Maps.Directions.Waypoint({ location: location });
+                    const waypoint = new Microsoft.Maps.Directions.Waypoint({ location: location });
                     direction.addWaypoint(waypoint);
                 });
 
-                var directionHandlers = [];
+                const directionHandlers = [];
 
                 directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', function(args) {
                     while(directionHandlers.length) {
                         Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
                     }
 
-                    var routeSummary = args.routeSummary[0];
+                    const routeSummary = args.routeSummary[0];
 
                     resolve({
                         instance: direction,
@@ -386,7 +386,7 @@ var BingProvider = DynamicProvider.inherit({
                         Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
                     }
 
-                    var status = 'RouteResponseCode: ' + args.responseCode + ' - ' + args.message;
+                    const status = 'RouteResponseCode: ' + args.responseCode + ' - ' + args.message;
                     errors.log('W1006', status);
 
                     resolve({
@@ -407,10 +407,10 @@ var BingProvider = DynamicProvider.inherit({
         this._updateBounds();
 
         if(this._bounds && this._option('autoAdjust')) {
-            var zoomBeforeFitting = this._map.getZoom();
+            const zoomBeforeFitting = this._map.getZoom();
             this._preventZoomChangeEvent = true;
 
-            var bounds = this._bounds.clone();
+            const bounds = this._bounds.clone();
             bounds.height = bounds.height * 1.1;
             bounds.width = bounds.width * 1.1;
             this._map.setView({
@@ -419,7 +419,7 @@ var BingProvider = DynamicProvider.inherit({
                 zoom: zoomBeforeFitting
             });
 
-            var zoomAfterFitting = this._map.getZoom();
+            const zoomAfterFitting = this._map.getZoom();
             if(zoomBeforeFitting < zoomAfterFitting) {
                 this._map.setView({
                     animate: false,

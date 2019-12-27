@@ -1,30 +1,30 @@
-var typeUtils = require('../../core/utils/type'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    config = require('../../core/config'),
-    extend = require('../../core/utils/extend').extend,
-    queryAdapters = require('../query_adapters'),
-    odataUtils = require('./utils'),
-    serializePropName = odataUtils.serializePropName,
-    errors = require('../errors').errors,
-    dataUtils = require('../utils'),
-    isFunction = typeUtils.isFunction;
+const typeUtils = require('../../core/utils/type');
+const iteratorUtils = require('../../core/utils/iterator');
+const config = require('../../core/config');
+const extend = require('../../core/utils/extend').extend;
+const queryAdapters = require('../query_adapters');
+const odataUtils = require('./utils');
+const serializePropName = odataUtils.serializePropName;
+const errors = require('../errors').errors;
+const dataUtils = require('../utils');
+const isFunction = typeUtils.isFunction;
 
-var DEFAULT_PROTOCOL_VERSION = 2;
+const DEFAULT_PROTOCOL_VERSION = 2;
 
-var compileCriteria = (function() {
-    var protocolVersion,
-        forceLowerCase,
-        fieldTypes;
+const compileCriteria = (function() {
+    let protocolVersion;
+    let forceLowerCase;
+    let fieldTypes;
 
-    var createBinaryOperationFormatter = function(op) {
+    const createBinaryOperationFormatter = function(op) {
         return function(prop, val) {
             return prop + ' ' + op + ' ' + val;
         };
     };
 
-    var createStringFuncFormatter = function(op, reverse) {
+    const createStringFuncFormatter = function(op, reverse) {
         return function(prop, val) {
-            var bag = [op, '('];
+            const bag = [op, '('];
 
             if(forceLowerCase) {
                 prop = prop.indexOf('tolower(') === -1 ? 'tolower(' + prop + ')' : prop;
@@ -42,7 +42,7 @@ var compileCriteria = (function() {
         };
     };
 
-    var formatters = {
+    const formatters = {
         '=': createBinaryOperationFormatter('eq'),
         '<>': createBinaryOperationFormatter('ne'),
         '>': createBinaryOperationFormatter('gt'),
@@ -53,31 +53,31 @@ var compileCriteria = (function() {
         'endswith': createStringFuncFormatter('endswith')
     };
 
-    var formattersV2 = extend({}, formatters, {
+    const formattersV2 = extend({}, formatters, {
         'contains': createStringFuncFormatter('substringof', true),
         'notcontains': createStringFuncFormatter('not substringof', true)
     });
 
-    var formattersV4 = extend({}, formatters, {
+    const formattersV4 = extend({}, formatters, {
         'contains': createStringFuncFormatter('contains'),
         'notcontains': createStringFuncFormatter('not contains')
     });
 
-    var compileBinary = function(criteria) {
+    const compileBinary = function(criteria) {
         criteria = dataUtils.normalizeBinaryCriterion(criteria);
 
-        var op = criteria[1],
-            formatters = protocolVersion === 4
-                ? formattersV4
-                : formattersV2,
-            formatter = formatters[op.toLowerCase()];
+        const op = criteria[1];
+        const formatters = protocolVersion === 4
+            ? formattersV4
+            : formattersV2;
+        const formatter = formatters[op.toLowerCase()];
 
         if(!formatter) {
             throw errors.Error('E4003', op);
         }
 
-        var fieldName = criteria[0],
-            value = criteria[2];
+        const fieldName = criteria[0];
+        let value = criteria[2];
 
         if(fieldTypes && fieldTypes[fieldName]) {
             value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
@@ -90,9 +90,9 @@ var compileCriteria = (function() {
     };
 
 
-    var compileUnary = function(criteria) {
-        var op = criteria[0],
-            crit = compileCore(criteria[1]);
+    const compileUnary = function(criteria) {
+        const op = criteria[0];
+        const crit = compileCore(criteria[1]);
 
         if(op === '!') {
             return 'not (' + crit + ')';
@@ -101,10 +101,10 @@ var compileCriteria = (function() {
         throw errors.Error('E4003', op);
     };
 
-    var compileGroup = function(criteria) {
-        var bag = [],
-            groupOperator,
-            nextGroupOperator;
+    const compileGroup = function(criteria) {
+        const bag = [];
+        let groupOperator;
+        let nextGroupOperator;
 
         iteratorUtils.each(criteria, function(index, criterion) {
             if(Array.isArray(criterion)) {
@@ -146,23 +146,23 @@ var compileCriteria = (function() {
     };
 })();
 
-var createODataQueryAdapter = function(queryOptions) {
-    var _sorting = [],
-        _criteria = [],
-        _expand = queryOptions.expand,
-        _select,
-        _skip,
-        _take,
-        _countQuery,
+const createODataQueryAdapter = function(queryOptions) {
+    let _sorting = [];
+    const _criteria = [];
+    const _expand = queryOptions.expand;
+    let _select;
+    let _skip;
+    let _take;
+    let _countQuery;
 
-        _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
+    const _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
 
-    var hasSlice = function() {
+    const hasSlice = function() {
         return _skip || _take !== undefined;
     };
 
     var hasFunction = function(criterion) {
-        for(var i = 0; i < criterion.length; i++) {
+        for(let i = 0; i < criterion.length; i++) {
             if(isFunction(criterion[i])) {
                 return true;
             }
@@ -174,8 +174,8 @@ var createODataQueryAdapter = function(queryOptions) {
         return false;
     };
 
-    var requestData = function() {
-        var result = {};
+    const requestData = function() {
+        const result = {};
 
         if(!_countQuery) {
             if(_sorting.length) {
@@ -193,9 +193,9 @@ var createODataQueryAdapter = function(queryOptions) {
         }
 
         if(_criteria.length) {
-            var criteria = _criteria.length < 2 ? _criteria[0] : _criteria,
-                fieldTypes = queryOptions && queryOptions.fieldTypes,
-                filterToLower = queryOptions && queryOptions.filterToLower;
+            const criteria = _criteria.length < 2 ? _criteria[0] : _criteria;
+            const fieldTypes = queryOptions && queryOptions.fieldTypes;
+            const filterToLower = queryOptions && queryOptions.filterToLower;
 
             result['$filter'] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
@@ -217,8 +217,8 @@ var createODataQueryAdapter = function(queryOptions) {
     };
 
     function tryLiftSelect(tasks) {
-        var selectIndex = -1;
-        for(var i = 0; i < tasks.length; i++) {
+        let selectIndex = -1;
+        for(let i = 0; i < tasks.length; i++) {
             if(tasks[i].name === 'select') {
                 selectIndex = i;
                 break;
@@ -227,7 +227,7 @@ var createODataQueryAdapter = function(queryOptions) {
 
         if(selectIndex < 0 || !isFunction(tasks[selectIndex].args[0])) return;
 
-        var nextTask = tasks[1 + selectIndex];
+        const nextTask = tasks[1 + selectIndex];
         if(!nextTask || nextTask.name !== 'slice') return;
 
         tasks[1 + selectIndex] = tasks[selectIndex];
@@ -259,16 +259,16 @@ var createODataQueryAdapter = function(queryOptions) {
         },
 
         multiSort: function(args) {
-            var rules;
+            let rules;
 
             if(hasSlice()) {
                 return false;
             }
 
-            for(var i = 0; i < args.length; i++) {
-                var getter = args[i][0],
-                    desc = !!args[i][1],
-                    rule;
+            for(let i = 0; i < args.length; i++) {
+                const getter = args[i][0];
+                const desc = !!args[i][1];
+                var rule;
 
                 if(typeof getter !== 'string') {
                     return false;

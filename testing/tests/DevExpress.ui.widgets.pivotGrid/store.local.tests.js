@@ -10,7 +10,7 @@ import config from 'core/config';
 import formatHelper from 'format_helper';
 import ajaxMock from '../../helpers/ajaxMock.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.store = new LocalStore(window.orders);
         this.load = function(options) {
@@ -39,15 +39,15 @@ QUnit.test('Array', function(assert) {
 });
 
 QUnit.test('Custom Store', function(assert) {
-    var done = assert.async(),
-        d = $.Deferred(),
+    const done = assert.async();
+    const d = $.Deferred();
 
-        store = new LocalStore({
-            load: function() {
-                return d;
-            },
-            key: 10
-        });
+    const store = new LocalStore({
+        load: function() {
+            return d;
+        },
+        key: 10
+    });
 
     store.load({
         columns: [{ dataField: 'ShipCountry' }],
@@ -62,8 +62,8 @@ QUnit.test('Custom Store', function(assert) {
 });
 
 QUnit.test('OData Store', function(assert) {
-    var done = assert.async(),
-        d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
     ajaxMock.setup({
         url: '/mock-odata',
@@ -161,7 +161,7 @@ QUnit.test('Filter by date set as string', function(assert) {
 QUnit.test('Fail on load', function(assert) {
     assert.expect(1);
 
-    var store = new LocalStore({
+    const store = new LocalStore({
         load: function() {
             return $.Deferred().reject();
         }
@@ -180,10 +180,10 @@ QUnit.test('Fail on load', function(assert) {
 QUnit.module('Array Local Store', moduleConfig);
 
 QUnit.test('Async loading when more 10000 items', function(assert) {
-    var items = [];
+    const items = [];
 
 
-    for(var i = 0; i < 20000; i++) {
+    for(let i = 0; i < 20000; i++) {
         items.push({ name: 'test' + i });
     }
 
@@ -194,9 +194,9 @@ QUnit.test('Async loading when more 10000 items', function(assert) {
         }
     });
 
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
-    var doneCalled;
+    let doneCalled;
     var progresses = [];
     this.store.load({
         rows: [{
@@ -470,8 +470,8 @@ QUnit.test('Numeric intervals. Numeric interval', function(assert) {
 });
 
 QUnit.test('Numeric intervals. Custom customizeText callback', function(assert) {
-    var customizeFunc = function() { },
-        field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, customizeText: customizeFunc };
+    const customizeFunc = function() { };
+    const field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, customizeText: customizeFunc };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
@@ -481,7 +481,7 @@ QUnit.test('Numeric intervals. Custom customizeText callback', function(assert) 
 });
 
 QUnit.test('Numeric intervals. Without custom customizeText callback', function(assert) {
-    var field = { dataField: 'Freight', dataType: 'number', groupInterval: 100 };
+    const field = { dataField: 'Freight', dataType: 'number', groupInterval: 100 };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
@@ -494,7 +494,7 @@ QUnit.test('Numeric intervals. Without custom customizeText callback', function(
 });
 
 QUnit.test('Numeric intervals. With format and without custom customizeText callback', function(assert) {
-    var field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, format: { type: 'currency', precision: 2 } };
+    const field = { dataField: 'Freight', dataType: 'number', groupInterval: 100, format: { type: 'currency', precision: 2 } };
     this.load({
         columns: [field],
         values: [{ summaryType: 'count' }]
@@ -528,7 +528,7 @@ QUnit.test('Numeric intervals. With format and without custom customizeText call
 });
 
 QUnit.test('Date intervals formatting', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' },
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' },
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' },
@@ -565,8 +565,8 @@ QUnit.test('Summary types', function(assert) {
         assert.strictEqual(data.values[0].length, 4, 'cell count in row');
         assert.strictEqual(data.values[0][0].length, 6, 'measures count');
 
-        var arrayToFixed = function(array, precision) {
-            var i;
+        const arrayToFixed = function(array, precision) {
+            let i;
             for(i = 0; i < array.length; i++) {
                 array[i] = Number(array[i].toFixed(precision));
             }
@@ -602,8 +602,8 @@ QUnit.test('groupField in the values', function(assert) {
         assert.strictEqual(data.values[0].length, 4, 'cell count in row');
         assert.strictEqual(data.values[0][0].length, 1, 'measures count');
 
-        var arrayToFixed = function(array, precision) {
-            var i;
+        const arrayToFixed = function(array, precision) {
+            let i;
             for(i = 0; i < array.length; i++) {
                 array[i] = Number(array[i].toFixed(precision));
             }
@@ -616,21 +616,21 @@ QUnit.test('groupField in the values', function(assert) {
 });
 
 QUnit.test('Custom summary aggregation', function(assert) {
-    var calculateCustomSummaryProcess = {
-            start: [],
-            calculate: [],
-            finalize: []
-        },
-        calculateCustomSummary = function(options) {
-            calculateCustomSummaryProcess[options.summaryProcess].push(options);
-            options.totalValue = options.totalValue || 0;
-            options.totalValue++;
-        },
-        field = {
-            dataField: 'Freight',
-            summaryType: 'custom',
-            calculateCustomSummary: calculateCustomSummary
-        };
+    const calculateCustomSummaryProcess = {
+        start: [],
+        calculate: [],
+        finalize: []
+    };
+    const calculateCustomSummary = function(options) {
+        calculateCustomSummaryProcess[options.summaryProcess].push(options);
+        options.totalValue = options.totalValue || 0;
+        options.totalValue++;
+    };
+    const field = {
+        dataField: 'Freight',
+        summaryType: 'custom',
+        calculateCustomSummary: calculateCustomSummary
+    };
 
     this.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
@@ -750,7 +750,7 @@ QUnit.test('Custom summary aggregation calculation', function(assert) {
 });
 
 QUnit.test('Local store with empty array', function(assert) {
-    var store = new LocalStore([]);
+    const store = new LocalStore([]);
 
     store.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year' }],
@@ -789,7 +789,7 @@ QUnit.test('Local store with empty array', function(assert) {
 });
 
 QUnit.test('Calculate count with expanded header when header values are undefined', function(assert) {
-    var store = new LocalStore([{}]);
+    const store = new LocalStore([{}]);
 
     store.load({
         columns: [],
@@ -847,7 +847,7 @@ QUnit.test('Expand  date field', function(assert) {
             {
                 dataType: 'date',
                 selector: function(data) {
-                    var d = new Date(data.OrderDate);
+                    const d = new Date(data.OrderDate);
                     return d;
                 }
             },
@@ -1166,7 +1166,7 @@ QUnit.test('Load with undefined value in the expanded path', function(assert) {
 });
 
 QUnit.test('getFields', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
@@ -1263,7 +1263,7 @@ QUnit.test('getFields', function(assert) {
 
 // T666145
 QUnit.test('getFields should skip fields with \'__\' prefix', function(assert) {
-    var dataSource = [{
+    const dataSource = [{
         '__metadata': {
             'id': 1,
             'uri': 'uri',
@@ -1286,11 +1286,11 @@ QUnit.test('getFields should skip fields with \'__\' prefix', function(assert) {
 });
 
 QUnit.test('getFields doesn\'t modify fields', function(assert) {
-    var dataSource = [{ OrderDate: '1996/12/12' }],
-        field = {
-            dataField: 'OrderDate',
-            dataType: 'date'
-        };
+    const dataSource = [{ OrderDate: '1996/12/12' }];
+    const field = {
+        dataField: 'OrderDate',
+        dataType: 'date'
+    };
 
     new LocalStore(dataSource).getFields(field).done(function() {
         assert.deepEqual(field, {
@@ -1301,7 +1301,7 @@ QUnit.test('getFields doesn\'t modify fields', function(assert) {
 });
 
 QUnit.test('getFields. Generate levels for user dataType', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { OrderDate: '1996/07/05' },
         { OrderDate: '1999/07/05' }
     ];
@@ -1516,7 +1516,7 @@ QUnit.test('Filter group field. Exclude Type', function(assert) {
 });
 
 QUnit.test('Filter dates without group interval', function(assert) {
-    var dataSource = window.orders.slice();
+    const dataSource = window.orders.slice();
     dataSource[10] = { OrderDate: null };
 
     new LocalStore(dataSource).load({
@@ -1537,7 +1537,7 @@ QUnit.test('Filter dates without group interval', function(assert) {
 });
 
 QUnit.test('complex dataField', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { Customer: { name: null }, 'Freight': '32.3800' },
         { Customer: {}, 'Freight': '11.6100' },
         { Customer: { name: 'Name1', Surname: 'Surname2' }, 'Freight': '11.6100' },
@@ -1574,11 +1574,11 @@ QUnit.test('complex dataField', function(assert) {
 });
 
 QUnit.test('Date dataField with ISO8601 format without forceIsoDateParsing', function(assert) {
-    var defaultForceIsoDateParsing = config().forceIsoDateParsing;
+    const defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = false;
 
     try {
-        var dataSource = [
+        const dataSource = [
             { 'Date': '2015-08-05T13:30:15' }
         ];
 
@@ -1602,11 +1602,11 @@ QUnit.test('Date dataField with ISO8601 format without forceIsoDateParsing', fun
 });
 
 QUnit.test('Date dataField with ISO8601 format with forceIsoDateParsing', function(assert) {
-    var defaultForceIsoDateParsing = config().forceIsoDateParsing;
+    const defaultForceIsoDateParsing = config().forceIsoDateParsing;
     config().forceIsoDateParsing = true;
 
     try {
-        var dataSource = [
+        const dataSource = [
             { 'Date': '2015-08-05T13:30:15' }
         ];
 
@@ -1630,14 +1630,14 @@ QUnit.test('Date dataField with ISO8601 format with forceIsoDateParsing', functi
 });
 
 QUnit.test('reload data', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10250, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
-    var localStore = new LocalStore(dataSource);
+    let localStore = new LocalStore(dataSource);
 
     localStore.load({
         values: [{ dataField: 'OrderID' }]
@@ -1658,14 +1658,14 @@ QUnit.test('reload data', function(assert) {
 });
 
 QUnit.test('filter data', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10250, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10251, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
-    var localStore = new LocalStore(dataSource);
+    const localStore = new LocalStore(dataSource);
 
     localStore.load({
         values: [{ dataField: 'OrderID' }]
@@ -1673,7 +1673,7 @@ QUnit.test('filter data', function(assert) {
 
     // act
     localStore.filter('OrderID', '>', 10249);
-    var filterExpr = localStore.filter();
+    const filterExpr = localStore.filter();
 
     localStore.load({
         values: [{ dataField: 'OrderID' }],
@@ -1725,7 +1725,7 @@ QUnit.test('T717466. Header item contains . symbol in value', function(assert) {
 QUnit.module('DrillDown', {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
-        var store = this.store;
+        const store = this.store;
 
         store.load({
             columns: [{ dataField: 'ShipCountry' }],
@@ -1734,7 +1734,7 @@ QUnit.module('DrillDown', {
         });
 
         this.getDrillDownData = function(loadOptions) {
-            var dataSource = store.createDrillDownDataSource.apply(store, arguments);
+            const dataSource = store.createDrillDownDataSource.apply(store, arguments);
             dataSource.paginate(false);
 
             return dataSource.load();
@@ -1800,12 +1800,12 @@ QUnit.test('set custom columns', function(assert) {
 });
 
 QUnit.test('DrillDown by path with maxRowCount', function(assert) {
-    var store = this.store,
-        loadOptions = {
-            columns: [{ dataField: 'ShipCountry' }],
-            rows: [{ dataField: 'ShipVia' }],
-            values: [{ summaryType: 'count' }]
-        };
+    const store = this.store;
+    const loadOptions = {
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
+        values: [{ summaryType: 'count' }]
+    };
     this.load(loadOptions);
 
     assert.strictEqual(store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], maxRowCount: 0 }).length, 830, 'GrandTotal with maxRowCount is 0');
@@ -1814,16 +1814,16 @@ QUnit.test('DrillDown by path with maxRowCount', function(assert) {
 });
 
 QUnit.test('DrillDown by path with customColumns', function(assert) {
-    var store = this.store,
-        loadOptions = {
-            columns: [{ dataField: 'ShipCountry' }],
-            rows: [{ dataField: 'ShipVia' }],
-            values: [{ summaryType: 'count' }]
-        };
+    const store = this.store;
+    const loadOptions = {
+        columns: [{ dataField: 'ShipCountry' }],
+        rows: [{ dataField: 'ShipVia' }],
+        values: [{ summaryType: 'count' }]
+    };
 
     this.load(loadOptions);
 
-    var drillDownItems = store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], customColumns: ['CustomerID', 'ShipAddress'] });
+    const drillDownItems = store.getDrillDownItems(loadOptions, { columnPath: [], rowPath: [], customColumns: ['CustomerID', 'ShipAddress'] });
 
     assert.strictEqual(drillDownItems.length, 830, 'GrandTotal with maxRowCount is 0');
     assert.deepEqual(drillDownItems[0], {
@@ -1833,13 +1833,13 @@ QUnit.test('DrillDown by path with customColumns', function(assert) {
 });
 
 QUnit.test('DrillDown with filters', function(assert) {
-    var store = this.store,
-        loadOptions = {
-            columns: [{ dataField: 'ShipCountry', filterValues: ['Argentina', 'Brazil', 'Canada', 'USA'] }],
-            rows: [{ dataField: 'ShipVia', filterValues: [1, 3] }],
-            filters: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', filterValues: [1996, 1997] }],
-            values: [{ summaryType: 'count' }]
-        };
+    const store = this.store;
+    const loadOptions = {
+        columns: [{ dataField: 'ShipCountry', filterValues: ['Argentina', 'Brazil', 'Canada', 'USA'] }],
+        rows: [{ dataField: 'ShipVia', filterValues: [1, 3] }],
+        filters: [{ dataField: 'OrderDate', dataType: 'date', groupInterval: 'year', filterValues: [1996, 1997] }],
+        values: [{ summaryType: 'count' }]
+    };
 
     this.load(loadOptions).done(function(data) {
         assert.strictEqual(data.values[0][0][0], 91, 'GT');
@@ -1850,21 +1850,21 @@ QUnit.test('DrillDown with filters', function(assert) {
 });
 
 QUnit.test('DrillDown by path when groups', function(assert) {
-    var store = this.store,
-        loadOptions = {
-            columns: [
-                { groupName: 'Date', groupIndex: 0, dataField: 'OrderDate', expanded: true, groupInterval: 'year', dataType: 'date', area: 'column' },
-                { groupName: 'Date', groupIndex: 1, dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', area: 'column' },
-                { groupName: 'Date', groupIndex: 2, dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', area: 'column' }
-            ],
-            rows: [{ dataField: 'ShipCountry' }],
-            values: [{ summaryType: 'count' }]
-        };
+    const store = this.store;
+    const loadOptions = {
+        columns: [
+            { groupName: 'Date', groupIndex: 0, dataField: 'OrderDate', expanded: true, groupInterval: 'year', dataType: 'date', area: 'column' },
+            { groupName: 'Date', groupIndex: 1, dataField: 'OrderDate', groupInterval: 'quarter', dataType: 'date', area: 'column' },
+            { groupName: 'Date', groupIndex: 2, dataField: 'OrderDate', groupInterval: 'month', dataType: 'date', area: 'column' }
+        ],
+        rows: [{ dataField: 'ShipCountry' }],
+        values: [{ summaryType: 'count' }]
+    };
 
     this.load(loadOptions);
 
 
-    var drillItems = store.getDrillDownItems(loadOptions, { columnPath: [1997, 2, 6], rowPath: ['Brazil'], customColumns: ['OrderID'] });
+    const drillItems = store.getDrillDownItems(loadOptions, { columnPath: [1997, 2, 6], rowPath: ['Brazil'], customColumns: ['OrderID'] });
 
     assert.strictEqual(drillItems.length, 2);
     assert.deepEqual(drillItems, [{ OrderID: 10563 }, { OrderID: 10581 }]);
@@ -1874,15 +1874,15 @@ QUnit.test('DrillDown by path when groups', function(assert) {
 QUnit.module('Custom Store local filtering');
 
 QUnit.test('Data should be filtered locally if custom store is used', function(assert) {
-    var filterOptions = ['OrderID', '>', 11000],
-        store = new LocalStore({
-            load: function(loadOptions) {
-                assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
-                return $.Deferred().resolve(window.orders);
-            },
+    const filterOptions = ['OrderID', '>', 11000];
+    const store = new LocalStore({
+        load: function(loadOptions) {
+            assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
+            return $.Deferred().resolve(window.orders);
+        },
 
-            filter: filterOptions
-        });
+        filter: filterOptions
+    });
 
     store.load({ rows: [], columns: [], values: [{ summaryType: 'column' }] }).done(function(data) {
         assert.strictEqual(data.values[0][0][0], 77, 'Store loaded data without filtering');
@@ -1890,15 +1890,15 @@ QUnit.test('Data should be filtered locally if custom store is used', function(a
 });
 
 QUnit.test('Data should be filtered by date locally if custom store is used', function(assert) {
-    var filterOptions = ['OrderDate', '=', new Date('1996/07/09')],
-        store = new LocalStore({
-            load: function(loadOptions) {
-                assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
-                return $.Deferred().resolve(window.orders);
-            },
+    const filterOptions = ['OrderDate', '=', new Date('1996/07/09')];
+    const store = new LocalStore({
+        load: function(loadOptions) {
+            assert.deepEqual(loadOptions.filter, filterOptions, 'filter options should are passed if custom store is used');
+            return $.Deferred().resolve(window.orders);
+        },
 
-            filter: filterOptions
-        });
+        filter: filterOptions
+    });
 
     store.load({
         columns: [{ dataField: 'OrderDate', dataType: 'date' }],
@@ -1909,14 +1909,14 @@ QUnit.test('Data should be filtered by date locally if custom store is used', fu
 });
 
 QUnit.test('Data should be filtered locally if store was loaded twice', function(assert) {
-    var loadOptions = { rows: [], columns: [], values: [{ summaryType: 'column' }] },
-        store = new LocalStore({
-            load: function() {
-                return $.Deferred().resolve(window.orders);
-            },
+    const loadOptions = { rows: [], columns: [], values: [{ summaryType: 'column' }] };
+    const store = new LocalStore({
+        load: function() {
+            return $.Deferred().resolve(window.orders);
+        },
 
-            filter: ['OrderID', '>', 11000]
-        });
+        filter: ['OrderID', '>', 11000]
+    });
 
     store.load(loadOptions);
 
@@ -1926,7 +1926,7 @@ QUnit.test('Data should be filtered locally if store was loaded twice', function
 });
 
 QUnit.test('Data should return all items if filter is not defined', function(assert) {
-    var store = new LocalStore({
+    const store = new LocalStore({
         load: function() {
             return $.Deferred().resolve(window.orders);
         }

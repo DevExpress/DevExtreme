@@ -1,10 +1,10 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('common.css!');
 require('ui/overlay');
 
 QUnit.testStart(function() {
-    var markup = '<div id="overlay"></div>';
+    const markup = '<div id="overlay"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -12,8 +12,8 @@ QUnit.testStart(function() {
 QUnit.module('default options');
 
 QUnit.test('height and width are \'auto\' on SSR', function(assert) {
-    var overlay = $('#overlay').dxOverlay().dxOverlay('instance'),
-        overlayElementStyles = overlay.element().style;
+    const overlay = $('#overlay').dxOverlay().dxOverlay('instance');
+    const overlayElementStyles = overlay.element().style;
 
     assert.equal(overlay.option('height'), null, 'height is \'null\'');
     assert.equal(overlay.option('width'), null, 'width is \'null\'');

@@ -18,18 +18,18 @@ QUnit.module('selectNodesRecursive = true', {
 });
 
 QUnit.test('ignore invisible items on select (T317454)', function(assert) {
-    var items = [{
-            text: 'item 1', expanded: true, items: [
-                { text: 'item 11', selected: false },
-                { text: 'item 12', visible: false, selected: false }
-            ]
-        }],
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'selectAll'
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        selectAll = $treeView.find('.dx-treeview-select-all-item').dxCheckBox('instance');
+    const items = [{
+        text: 'item 1', expanded: true, items: [
+            { text: 'item 11', selected: false },
+            { text: 'item 12', visible: false, selected: false }
+        ]
+    }];
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'selectAll'
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const selectAll = $treeView.find('.dx-treeview-select-all-item').dxCheckBox('instance');
 
     treeView.selectItem(items[0].items[0]);
     assert.strictEqual(items[0].selected, true, 'parent item ignore invisible selection');
@@ -37,19 +37,19 @@ QUnit.test('ignore invisible items on select (T317454)', function(assert) {
 });
 
 QUnit.test('ignore invisible items on unselect (T317454)', function(assert) {
-    var items = [{
-            text: 'item 1', expanded: true, items: [
-                { text: 'item 11' },
-                { text: 'item 12', visible: false, selected: true },
-                { text: 'item 13', visible: false }
-            ]
-        }],
-        $treeView = initTree({
-            items: items,
-            showCheckBoxesMode: 'selectAll'
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        selectAll = $treeView.find('.dx-treeview-select-all-item').dxCheckBox('instance');
+    const items = [{
+        text: 'item 1', expanded: true, items: [
+            { text: 'item 11' },
+            { text: 'item 12', visible: false, selected: true },
+            { text: 'item 13', visible: false }
+        ]
+    }];
+    const $treeView = initTree({
+        items: items,
+        showCheckBoxesMode: 'selectAll'
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const selectAll = $treeView.find('.dx-treeview-select-all-item').dxCheckBox('instance');
 
     treeView.selectItem(items[0]);
     assert.notOk(items[0].items[2].selected, 'invisible item ignores parent selection');
@@ -60,16 +60,16 @@ QUnit.test('ignore invisible items on unselect (T317454)', function(assert) {
 });
 
 QUnit.test('Unselect disabled item via API', function(assert) {
-    var data = $.extend(true, [], DATA[2]);
+    const data = $.extend(true, [], DATA[2]);
     data[0].disabled = true;
     data[0].selected = true;
 
-    var $treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        }),
-        instance = $treeView.dxTreeView('instance'),
-        $item = $treeView.find('.' + internals.ITEM_CLASS).first().get(0);
+    const $treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
+    });
+    const instance = $treeView.dxTreeView('instance');
+    const $item = $treeView.find('.' + internals.ITEM_CLASS).first().get(0);
 
     assert.ok(instance.option('items')[0].selected, 'item is selected');
     instance.unselectItem($item);
@@ -78,10 +78,10 @@ QUnit.test('Unselect disabled item via API', function(assert) {
 });
 
 QUnit.test('selection by key', function(assert) {
-    var data = [
-            { id: 1, text: 'Item 1', expanded: true, items: [{ id: 11, text: 'Item 11' }] }, { id: 12, text: 'Item 12' }
-        ],
-        treeView = initTree({ items: data }).dxTreeView('instance');
+    const data = [
+        { id: 1, text: 'Item 1', expanded: true, items: [{ id: 11, text: 'Item 11' }] }, { id: 12, text: 'Item 12' }
+    ];
+    const treeView = initTree({ items: data }).dxTreeView('instance');
 
     treeView.selectItem(1);
     assert.ok(data[0].selected);
@@ -91,17 +91,17 @@ QUnit.test('selection by key', function(assert) {
 });
 
 QUnit.test('Toggle node selected class', function(assert) {
-    var data = $.extend(true, [], DATA[2]);
+    const data = $.extend(true, [], DATA[2]);
     data[0].selected = true;
     data[0].expanded = true;
 
-    var treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        }).dxTreeView('instance'),
-        $treeView = treeView.$element(),
-        $selectedItems = $treeView.find('.dx-state-selected'),
-        checkboxes = $treeView.find('.dx-checkbox');
+    const treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
+    }).dxTreeView('instance');
+    const $treeView = treeView.$element();
+    let $selectedItems = $treeView.find('.dx-state-selected');
+    const checkboxes = $treeView.find('.dx-checkbox');
 
     assert.equal($selectedItems.length, 3, '3 selected items');
 

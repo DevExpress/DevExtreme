@@ -1,24 +1,24 @@
 import { isDefined } from '../../core/utils/type';
 import $ from '../../core/renderer';
 
-var SORT_CLASS = 'dx-sort',
-    SORT_NONE_CLASS = 'dx-sort-none',
-    SORTUP_CLASS = 'dx-sort-up',
-    SORTDOWN_CLASS = 'dx-sort-down',
-    SORT_INDEX_CLASS = 'dx-sort-index',
-    SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon',
-    HEADERS_ACTION_CLASS = 'action';
+const SORT_CLASS = 'dx-sort';
+const SORT_NONE_CLASS = 'dx-sort-none';
+const SORTUP_CLASS = 'dx-sort-up';
+const SORTDOWN_CLASS = 'dx-sort-down';
+const SORT_INDEX_CLASS = 'dx-sort-index';
+const SORT_INDEX_ICON_CLASS = 'dx-sort-index-icon';
+const HEADERS_ACTION_CLASS = 'action';
 
 
 module.exports = {
     _applyColumnState: function(options) {
-        var that = this,
-            ariaSortState,
-            $sortIndicator,
-            sortingMode = that.option('sorting.mode'),
-            rootElement = options.rootElement,
-            column = options.column,
-            $indicatorsContainer = that._getIndicatorContainer(rootElement);
+        const that = this;
+        let ariaSortState;
+        let $sortIndicator;
+        const sortingMode = that.option('sorting.mode');
+        const rootElement = options.rootElement;
+        const column = options.column;
+        const $indicatorsContainer = that._getIndicatorContainer(rootElement);
 
         if(options.name === 'sort') {
             rootElement.find('.' + SORT_CLASS).remove();
@@ -30,7 +30,7 @@ module.exports = {
                     .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
                     .toggleClass(SORTDOWN_CLASS, column.sortOrder === 'desc');
 
-                let hasSeveralSortIndexes = that.getController && !!that.getController('columns').columnOption('sortIndex:1');
+                const hasSeveralSortIndexes = that.getController && !!that.getController('columns').columnOption('sortIndex:1');
                 if(hasSeveralSortIndexes && that.option('sorting.showSortIndexes') && column.sortIndex >= 0) {
                     $('<span>')
                         .addClass(SORT_INDEX_ICON_CLASS)
@@ -64,10 +64,10 @@ module.exports = {
     },
 
     _renderIndicator: function(options) {
-        var rtlEnabled,
-            column = options.column,
-            $container = options.container,
-            $indicator = options.indicator;
+        let rtlEnabled;
+        const column = options.column;
+        const $container = options.container;
+        const $indicator = options.indicator;
 
         if(options.name === 'sort') {
             rtlEnabled = this.option('rtlEnabled');
@@ -94,7 +94,7 @@ module.exports = {
     },
 
     _getIndicatorElements: function($cell, returnAll) {
-        var $indicatorElements = this.callBase($cell);
+        const $indicatorElements = this.callBase($cell);
 
         return returnAll ? $indicatorElements : $indicatorElements && $indicatorElements.not('.' + SORT_NONE_CLASS);
     }

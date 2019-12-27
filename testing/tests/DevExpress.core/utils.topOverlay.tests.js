@@ -1,11 +1,11 @@
-var hideTopOverlay = require('mobile/hide_top_overlay'),
-    hideTopOverlayCallback = hideTopOverlay.hideCallback;
+const hideTopOverlay = require('mobile/hide_top_overlay');
+const hideTopOverlayCallback = hideTopOverlay.hideCallback;
 
 QUnit.module('top overlay util');
 
 QUnit.test('hideTopOverlayCallback', function(assert) {
-    var navCallback = hideTopOverlayCallback;
-    var res = '';
+    const navCallback = hideTopOverlayCallback;
+    let res = '';
     navCallback.add(function() {
         res += '0';
     });
@@ -23,7 +23,7 @@ QUnit.test('hideTopOverlayCallback', function(assert) {
     navCallback.fire();
     navCallback.fire();
     assert.equal('021', res);
-    var callback = function() {
+    const callback = function() {
         res += '3';
     };
     navCallback.add(callback);
@@ -37,8 +37,8 @@ QUnit.test('hideTopOverlayCallback', function(assert) {
 });
 
 QUnit.test('hideTopOverlay', function(assert) {
-    var callback = hideTopOverlayCallback,
-        eventFiredCount = 0;
+    const callback = hideTopOverlayCallback;
+    let eventFiredCount = 0;
 
     callback.add(function() {
         eventFiredCount++;

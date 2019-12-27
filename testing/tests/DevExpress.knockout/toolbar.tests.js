@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('ui/toolbar');
 require('integration/knockout');
@@ -14,7 +14,7 @@ QUnit.module('regression', {
 });
 
 QUnit.test('polymorph widget correctly renders nested widgets', function(assert) {
-    var vm = {
+    const vm = {
         items: [{
             widget: 'dxButton',
             options: {

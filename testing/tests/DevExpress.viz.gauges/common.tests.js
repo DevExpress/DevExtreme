@@ -1,22 +1,22 @@
 /* global createTestContainer, currentTest */
 
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    Class = require('core/class'),
-    registerComponent = require('core/component_registrator'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    objectUtils = require('core/utils/object'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    dxGauge = require('viz/gauges/common').dxGauge,
-    createPalette = require('viz/palette').createPalette,
-    axisModule = require('viz/axes/base_axis'),
-    loadingIndicatorModule = require('viz/core/loading_indicator'),
-    tooltipModule = require('viz/core/tooltip'),
-    rangeModule = require('viz/translators/range'),
-    translator1DModule = require('viz/translators/translator1d'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    stubRange = vizMocks.stubClass(rangeModule.Range),
-    themeManagerModule = require('viz/gauges/theme_manager');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const Class = require('core/class');
+const registerComponent = require('core/component_registrator');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const objectUtils = require('core/utils/object');
+const vizMocks = require('../../helpers/vizMocks.js');
+const dxGauge = require('viz/gauges/common').dxGauge;
+const createPalette = require('viz/palette').createPalette;
+const axisModule = require('viz/axes/base_axis');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
+const tooltipModule = require('viz/core/tooltip');
+const rangeModule = require('viz/translators/range');
+const translator1DModule = require('viz/translators/translator1d');
+const rendererModule = require('viz/core/renderers/renderer');
+const stubRange = vizMocks.stubClass(rangeModule.Range);
+const themeManagerModule = require('viz/gauges/theme_manager');
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
@@ -24,7 +24,7 @@ sinon.stub(rangeModule, 'Range', function(parameters) {
     return new stubRange(parameters);
 });
 
-var dxTestGauge = dxGauge.inherit({
+const dxTestGauge = dxGauge.inherit({
     NAME: 'dxTestGauge',
     _scaleTypes: {
         type: 'testAxes',
@@ -66,11 +66,11 @@ var dxTestGauge = dxGauge.inherit({
     }
 });
 
-var factory = dxTestGauge.prototype._factory = objectUtils.clone(dxGauge.prototype._factory);
+const factory = dxTestGauge.prototype._factory = objectUtils.clone(dxGauge.prototype._factory);
 
 registerComponent('dxTestGauge', dxTestGauge);
 
-var StubTooltip = vizMocks.Tooltip;
+const StubTooltip = vizMocks.Tooltip;
 tooltipModule.Tooltip = function(parameters) {
     return new StubTooltip(parameters);
 };
@@ -88,7 +88,7 @@ themeManagerModule.ThemeManager = vizMocks.stubClass(themeManagerModule.ThemeMan
     }
 });
 
-var TestElement = Class.inherit({
+const TestElement = Class.inherit({
     ctor: function(parameters) {
         this.parameters = parameters;
         this.renderer = parameters.renderer;
@@ -130,7 +130,7 @@ var TestElement = Class.inherit({
     }
 });
 
-var TestPointerElement = TestElement.inherit({
+const TestPointerElement = TestElement.inherit({
     render: function() {
         this.callBase.apply(this, arguments);
         this._currentValue = Number(this.options.currentValue);
@@ -158,13 +158,13 @@ function combineOptions(gauge, name, options) {
 
 factory.RangeContainer = function(parameters) {
     parameters.className = 'test-range-container';
-    var rangeContainer = new TestElement(parameters);
+    const rangeContainer = new TestElement(parameters);
     rangeContainer.getColorForValue = sinon.stub();
     return rangeContainer;
 };
 
 factory.createIndicator = function(parameters, type) {
-    var pointer = new TestPointerElement(parameters);
+    const pointer = new TestPointerElement(parameters);
     pointer.type = type;
     return pointer;
 };
@@ -177,7 +177,7 @@ sinon.stub(rendererModule, 'Renderer', function() {
     return currentTest().renderer;
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         vizMocks.stubIncidentOccurredCreation();
         rangeModule.Range.reset();
@@ -234,9 +234,9 @@ QUnit.test('Scale is rendered', function(assert) {
         }
     });
 
-    var scale = axisModule.Axis.getCall(0).returnValue,
-        scaleGroup = this.renderer.g.getCall(6).returnValue,
-        axisArguments = axisModule.Axis.getCall(0).args[0];
+    const scale = axisModule.Axis.getCall(0).returnValue;
+    const scaleGroup = this.renderer.g.getCall(6).returnValue;
+    const axisArguments = axisModule.Axis.getCall(0).args[0];
 
     assert.deepEqual(axisArguments.renderer, this.renderer, 'scale params: renderer');
     assert.deepEqual(axisArguments.axesContainerGroup, scaleGroup, 'scale params: group');
@@ -322,7 +322,7 @@ QUnit.test('hideFirstOrLast option in label option', function(assert) {
 });
 
 QUnit.test('Use range colors for scale', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: {
             label: {
                 useRangeColors: true
@@ -345,14 +345,14 @@ QUnit.test('Use range colors for scale', function(assert) {
 });
 
 QUnit.test('Range container is rendered', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             offset: -5,
             backgroundColor: 'grey',
             palette: 'test'
         }
     });
-    var target = gauge._rangeContainer;
+    const target = gauge._rangeContainer;
 
     assert.ok(target, 'instance');
     assert.ok(target instanceof TestElement, 'instance type');
@@ -369,7 +369,7 @@ QUnit.test('Range container is rendered', function(assert) {
 
 //  B250275
 QUnit.test('Palette for range container - name', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             palette: 'test-palette'
         }
@@ -379,7 +379,7 @@ QUnit.test('Palette for range container - name', function(assert) {
 
 //  B250275
 QUnit.test('Palette for range container - long array', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             palette: ['p1', 'p2', 'p3', 'p4', 'p5']
         }
@@ -389,7 +389,7 @@ QUnit.test('Palette for range container - long array', function(assert) {
 
 //  B250275
 QUnit.test('Palette for range container - short array', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             palette: ['p1', 'p2']
         }
@@ -398,7 +398,7 @@ QUnit.test('Palette for range container - short array', function(assert) {
 });
 
 QUnit.test('Value indicator is rendered', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         animation: {
             enabled: true,
             duration: 100
@@ -412,7 +412,7 @@ QUnit.test('Value indicator is rendered', function(assert) {
         },
         value: 45
     });
-    var target = gauge._valueIndicator;
+    const target = gauge._valueIndicator;
 
     assert.ok(target, 'instance');
     assert.ok(target instanceof TestElement, 'instance type');
@@ -425,7 +425,7 @@ QUnit.test('Value indicator is rendered', function(assert) {
     assert.ok(target.root, 'root');
     assert.strictEqual(target.root.attr.getCall(0).args[0]['class'], 'dxg-value-indicator', 'style class for root');
 
-    var defaultOptions = combineOptions(gauge, 'valueIndicator');
+    const defaultOptions = combineOptions(gauge, 'valueIndicator');
     delete target.options.vertical;
     assert.deepEqual(target.options, $.extend(true, {}, defaultOptions._default, defaultOptions['rectangle'], {
         offset: 20, position: 420,
@@ -443,7 +443,7 @@ QUnit.test('Value indicator is rendered', function(assert) {
 });
 
 QUnit.test('Subvalue indicators are rendered', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         animation: {
             enabled: true,
             duration: 50
@@ -458,7 +458,7 @@ QUnit.test('Subvalue indicators are rendered', function(assert) {
         subvalues: [-400, -300, -200]
     });
 
-    var defaultOptions = combineOptions(gauge, 'subvalueIndicator');
+    const defaultOptions = combineOptions(gauge, 'subvalueIndicator');
 
     assert.strictEqual(gauge._subvalueIndicatorsSet._indicators.length, 3, 'count');
     $.each(gauge._subvalueIndicatorsSet._indicators, function(i, target) {
@@ -495,7 +495,7 @@ QUnit.test('Subvalue indicators are rendered', function(assert) {
 QUnit.test('Use sample indicator instance for getting offset', function(assert) {
     sinon.stub(TestElement.prototype, 'getOffset').returns(0);
 
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         animation: {
             enabled: true,
             duration: 50
@@ -516,7 +516,7 @@ QUnit.test('Use sample indicator instance for getting offset', function(assert) 
 });
 
 QUnit.test('Subvalue indicators can be not rendered', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: { startValue: -100, endValue: -500 },
         subvalueIndicator: {
             type: 'triangle',
@@ -529,7 +529,7 @@ QUnit.test('Subvalue indicators can be not rendered', function(assert) {
 });
 
 QUnit.test('Value indicators are rendered in hard mode', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         animation: {
             enabled: true,
             duration: 50
@@ -543,7 +543,7 @@ QUnit.test('Value indicators are rendered in hard mode', function(assert) {
         ]
     });
 
-    var defaultOptions = combineOptions(gauge, 'valueIndicators');
+    const defaultOptions = combineOptions(gauge, 'valueIndicators');
 
     assert.strictEqual(gauge._valueIndicators.length, 3, 'count');
     $.each(gauge._valueIndicators, function(i, target) {
@@ -596,7 +596,7 @@ QUnit.test('Value indicators are rendered in hard mode', function(assert) {
 });
 
 QUnit.test('Value indicators are rendered - not valid types', function(assert) {
-    var __createIndicator = factory.createIndicator;
+    const __createIndicator = factory.createIndicator;
     try {
         factory.createIndicator = function(parameters, type) {
             if(type === 'test') {
@@ -604,7 +604,7 @@ QUnit.test('Value indicators are rendered - not valid types', function(assert) {
             }
             return null;
         };
-        var gauge = this.createTestGauge({
+        const gauge = this.createTestGauge({
             valueIndicators: [
                 { value: 10, type: 1 },
                 { value: 20 },
@@ -623,7 +623,7 @@ QUnit.test('Value indicators are rendered - not valid types', function(assert) {
 QUnit.module('Gauge - general parts creation', environment);
 
 QUnit.test('Translator is set', function(assert) {
-    var gauge = this.createTestGauge();
+    const gauge = this.createTestGauge();
     assert.ok(gauge._translator, 'translator');
     assert.ok(gauge._translator instanceof translator1DModule.Translator1D, 'instance of Translator1D');
     assert.strictEqual(gauge._translator.getDomainStart(), 0, 'domain start');
@@ -633,7 +633,7 @@ QUnit.test('Translator is set', function(assert) {
 });
 
 QUnit.test('Translator with settings', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: { startValue: 100, endValue: '200' }
     });
     assert.strictEqual(gauge._translator.getDomainStart(), 100, 'domain start');
@@ -643,7 +643,7 @@ QUnit.test('Translator with settings', function(assert) {
 });
 
 QUnit.test('Translator with not valid settings', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: { startValue: 500, endValue: 'test' }
     });
     assert.strictEqual(gauge._translator.getDomainStart(), 500, 'domain start');
@@ -662,9 +662,9 @@ QUnit.test('startValue < endValue', function(assert) {
         }
     });
 
-    var scale = axisModule.Axis.getCall(0).returnValue,
-        updateOptions = scale.updateOptions.getCall(0).args[0],
-        setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
+    const scale = axisModule.Axis.getCall(0).returnValue;
+    const updateOptions = scale.updateOptions.getCall(0).args[0];
+    const setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
 
     assert.strictEqual(updateOptions.min, 10);
     assert.strictEqual(updateOptions.max, 20);
@@ -685,9 +685,9 @@ QUnit.test('startValue > endValue', function(assert) {
         }
     });
 
-    var scale = axisModule.Axis.getCall(0).returnValue,
-        updateOptions = scale.updateOptions.getCall(0).args[0],
-        setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
+    const scale = axisModule.Axis.getCall(0).returnValue;
+    const updateOptions = scale.updateOptions.getCall(0).args[0];
+    const setBusinessRange = scale.setBusinessRange.getCall(0).args[0];
 
     assert.strictEqual(updateOptions.min, 10);
     assert.strictEqual(updateOptions.max, 20);
@@ -717,8 +717,8 @@ QUnit.module('Gauge - resizing', {
 
 QUnit.test('Resizable by default', function(assert) {
     assert.expect(2);
-    var done = assert.async(),
-        gauge = this.createTestGauge();
+    const done = assert.async();
+    const gauge = this.createTestGauge();
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.deepEqual(gauge._DEBUG_rootRect, [0, 0, 400, 200], 'resized');
@@ -730,10 +730,10 @@ QUnit.test('Resizable by default', function(assert) {
 });
 
 QUnit.test('Not resizable', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         redrawOnResize: false
     });
-    var rect = gauge._DEBUG_rootRect;
+    const rect = gauge._DEBUG_rootRect;
     gauge.rendered = function() {
         assert.ok(false);
     };
@@ -746,10 +746,10 @@ QUnit.test('Not resizable', function(assert) {
 });
 
 QUnit.test('Not resizable if sizes defined', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         size: { width: 100, height: 200 }
     });
-    var rect = gauge._DEBUG_rootRect;
+    const rect = gauge._DEBUG_rootRect;
     gauge.rendered = function() {
         assert.ok(false);
     };
@@ -763,11 +763,11 @@ QUnit.test('Not resizable if sizes defined', function(assert) {
 
 QUnit.test('Value indicators are not moved on resize', function(assert) {
     assert.expect(4);
-    var done = assert.async(),
-        gauge = this.createTestGauge({
-            value: 10,
-            subvalues: [20, 30]
-        });
+    const done = assert.async();
+    const gauge = this.createTestGauge({
+        value: 10,
+        subvalues: [20, 30]
+    });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.ok(!gauge._valueIndicator.previousValue, 'main pointer is not moved');
@@ -786,11 +786,11 @@ QUnit.test('Value indicators are not moved on resize', function(assert) {
 //  B252892
 QUnit.test('Value indicators preserve their value on resize', function(assert) {
     assert.expect(4);
-    var done = assert.async(),
-        gauge = this.createTestGauge({
-            value: 10,
-            subvalues: [20, 30]
-        });
+    const done = assert.async();
+    const gauge = this.createTestGauge({
+        value: 10,
+        subvalues: [20, 30]
+    });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.strictEqual(gauge._valueIndicator.value(), 10, 'main pointer');
@@ -807,7 +807,7 @@ QUnit.test('Value indicators preserve their value on resize', function(assert) {
 });
 
 QUnit.test('Can set value to null', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: null
     });
 
@@ -817,14 +817,14 @@ QUnit.test('Can set value to null', function(assert) {
 //  B252892
 QUnit.test('Value indicators preserve their value on resize (hard mode)', function(assert) {
     assert.expect(4);
-    var done = assert.async(),
-        gauge = this.createTestGauge({
-            valueIndicators: [
-                { value: 10 },
-                { value: 20 },
-                { value: 30 }
-            ]
-        });
+    const done = assert.async();
+    const gauge = this.createTestGauge({
+        valueIndicators: [
+            { value: 10 },
+            { value: 20 },
+            { value: 30 }
+        ]
+    });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.strictEqual(gauge._valueIndicators[0].value(), 10, 'value indicator 1');
@@ -840,11 +840,11 @@ QUnit.test('Value indicators preserve their value on resize (hard mode)', functi
 //  B253559
 QUnit.test('Animation settings are preserved on resize', function(assert) {
     assert.expect(4);
-    var done = assert.async(),
-        gauge = this.createTestGauge({
-            value: 10,
-            subvalues: [20, 30]
-        });
+    const done = assert.async();
+    const gauge = this.createTestGauge({
+        value: 10,
+        subvalues: [20, 30]
+    });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.ok(gauge._valueIndicator.options.animation, 'main pointer');
@@ -863,14 +863,14 @@ QUnit.test('Animation settings are preserved on resize', function(assert) {
 //  B253559
 QUnit.test('Animation settings are preserved on resize (hard mode)', function(assert) {
     assert.expect(4);
-    var done = assert.async(),
-        gauge = this.createTestGauge({
-            valueIndicators: [
-                { value: 10 },
-                { value: 20 },
-                { value: 30 }
-            ]
-        });
+    const done = assert.async();
+    const gauge = this.createTestGauge({
+        valueIndicators: [
+            { value: 10 },
+            { value: 20 },
+            { value: 30 }
+        ]
+    });
     gauge.rendered = function() {
         assert.strictEqual(gauge.renderCount, 2, 'render count');
         assert.ok(gauge._valueIndicators[0].options.animation, 'value indicator 1');
@@ -884,7 +884,7 @@ QUnit.test('Animation settings are preserved on resize (hard mode)', function(as
 });
 
 QUnit.test('Not redrawn if size is not changed', function(assert) {
-    var gauge = this.createTestGauge();
+    const gauge = this.createTestGauge();
     gauge.rendered = function() {
         assert.ok(false);
     };
@@ -897,9 +897,9 @@ QUnit.test('Not redrawn if size is not changed', function(assert) {
 //  B238220
 QUnit.test('Translator is not recreated on resize', function(assert) {
     assert.expect(1);
-    var done = assert.async(),
-        gauge = this.createTestGauge(),
-        translator = gauge._translator;
+    const done = assert.async();
+    const gauge = this.createTestGauge();
+    const translator = gauge._translator;
     gauge.rendered = function() {
         assert.strictEqual(gauge._translator, translator, 'not recreated');
         done();
@@ -913,7 +913,7 @@ QUnit.module('Gauge - options processing', environment);
 
 //  B232788
 QUnit.test('Less ranges in range container', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             ranges: [
                 { startValue: 0, endValue: 10, color: 'red' },
@@ -943,7 +943,7 @@ QUnit.test('Less ranges in range container', function(assert) {
 
 //  B232788
 QUnit.test('More ranges in range container', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             ranges: [
                 { startValue: 0, endValue: 10, color: 'red' },
@@ -977,7 +977,7 @@ QUnit.test('More ranges in range container', function(assert) {
 
 //  B232788
 QUnit.test('Ranges in range container are not changed', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             ranges: [
                 { startValue: 0, endValue: 10, color: 'red' },
@@ -1000,7 +1000,7 @@ QUnit.test('Ranges in range container are not changed', function(assert) {
 
 //  B232788
 QUnit.test('Less ranges in range container (direct assignment)', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             ranges: [
                 { startValue: 0, endValue: 10, color: 'red' },
@@ -1024,7 +1024,7 @@ QUnit.test('Less ranges in range container (direct assignment)', function(assert
 
 //  B232788
 QUnit.test('More ranges in range container (direct assignment)', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         rangeContainer: {
             ranges: [
                 { startValue: 0, endValue: 10, color: 'red' },
@@ -1051,9 +1051,9 @@ QUnit.test('More ranges in range container (direct assignment)', function(assert
 });
 
 QUnit.test('Force the tickInterval option', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
     });
-    var scale = axisModule.Axis.getCall(0).returnValue;
+    const scale = axisModule.Axis.getCall(0).returnValue;
 
     gauge.option({
         scale: {
@@ -1067,9 +1067,9 @@ QUnit.test('Force the tickInterval option', function(assert) {
 });
 
 QUnit.test('The axisDivisionFactor option has higher priority than the tickInterval option', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
     });
-    var scale = axisModule.Axis.getCall(0).returnValue;
+    const scale = axisModule.Axis.getCall(0).returnValue;
 
     gauge.option({
         scale: {
@@ -1085,7 +1085,7 @@ QUnit.test('The axisDivisionFactor option has higher priority than the tickInter
 
 //  B232788
 QUnit.test('Less custom tick values for scale', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: {
             customTicks: [10, 20, 30]
         }
@@ -1107,7 +1107,7 @@ QUnit.test('Less custom tick values for scale', function(assert) {
 
 //  B232788
 QUnit.test('More custom tick values for scale', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         scale: {
         }
     });
@@ -1130,7 +1130,7 @@ QUnit.test('More custom tick values for scale', function(assert) {
 
 //  B232788
 QUnit.test('Custom tick values in scale are not changed', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
     });
     gauge.option({
         scale: {
@@ -1149,7 +1149,7 @@ QUnit.test('Custom tick values in scale are not changed', function(assert) {
 });
 
 QUnit.test('Animation', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         animation: {
             duration: 500
         }
@@ -1164,14 +1164,14 @@ QUnit.test('Animation', function(assert) {
 QUnit.module('Gauge - value changing', environment);
 
 QUnit.test('value - get', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 30
     });
     assert.strictEqual(gauge.value(), 30);
 });
 
 QUnit.test('value - set', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 30
     });
     delete gauge._valueIndicator.previousValue;
@@ -1184,7 +1184,7 @@ QUnit.test('value - set', function(assert) {
 });
 
 QUnit.test('value - set, out of range', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 30
     });
     delete gauge._valueIndicator.previousValue;
@@ -1197,7 +1197,7 @@ QUnit.test('value - set, out of range', function(assert) {
 });
 
 QUnit.test('value - set, not valid', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 30
     });
     delete gauge._valueIndicator.previousValue;
@@ -1210,34 +1210,34 @@ QUnit.test('value - set, not valid', function(assert) {
 });
 
 QUnit.test('subvalues - get', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
     assert.deepEqual(gauge.subvalues(), [1, 2, 3]);
 });
 
 QUnit.test('subvalues - get / initialized with number', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: 10
     });
     assert.deepEqual(gauge.subvalues(), [10]);
 });
 
 QUnit.test('subvalues - get / not initialized', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
     });
     assert.strictEqual(gauge.subvalues(), undefined);
 });
 
 QUnit.test('subvalues - get / initialized with null', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: null
     });
     assert.strictEqual(gauge.subvalues(), undefined);
 });
 
 QUnit.test('subvalues - set', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1251,7 +1251,7 @@ QUnit.test('subvalues - set', function(assert) {
 });
 
 QUnit.test('subvalues - set, number', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1263,7 +1263,7 @@ QUnit.test('subvalues - set, number', function(assert) {
 });
 
 QUnit.test('subvalues - set, out of range', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1277,7 +1277,7 @@ QUnit.test('subvalues - set, out of range', function(assert) {
 });
 
 QUnit.test('subvalues - set, not valid', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1291,7 +1291,7 @@ QUnit.test('subvalues - set, not valid', function(assert) {
 });
 
 QUnit.test('subvalues - set, when they is not defined on initialization', function(assert) {
-    var gauge = this.createTestGauge();
+    const gauge = this.createTestGauge();
 
     gauge.subvalues([1, 2, 3]);
 
@@ -1300,7 +1300,7 @@ QUnit.test('subvalues - set, when they is not defined on initialization', functi
 });
 
 QUnit.test('set subvalues - null', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1]
     });
 
@@ -1311,7 +1311,7 @@ QUnit.test('set subvalues - null', function(assert) {
 });
 
 QUnit.test('subvalues - set, less values', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1323,7 +1323,7 @@ QUnit.test('subvalues - set, less values', function(assert) {
 });
 
 QUnit.test('subvalues - set, more values', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3]
     });
 
@@ -1338,7 +1338,7 @@ QUnit.test('subvalues - set, more values', function(assert) {
 
 //  B252197
 QUnit.test('subvalues - set, when initialized with empty array', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: []
     });
 
@@ -1349,7 +1349,7 @@ QUnit.test('subvalues - set, when initialized with empty array', function(assert
 });
 
 QUnit.test('indicatorValue - get', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         valueIndicators: [
             { value: 10 },
             { value: 20 }
@@ -1363,7 +1363,7 @@ QUnit.test('indicatorValue - get', function(assert) {
 });
 
 QUnit.test('indicatorValue - set', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         valueIndicators: [
             { value: 10 },
             { value: 20 }
@@ -1382,7 +1382,7 @@ QUnit.test('indicatorValue - set', function(assert) {
 });
 
 QUnit.test('indicatorValue - set, not valid', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         valueIndicators: [
             { value: 10 },
             { value: 20 }
@@ -1399,7 +1399,7 @@ QUnit.test('indicatorValue - set, not valid', function(assert) {
 });
 
 QUnit.test('indicatorValue - not in hard mode', function(assert) {
-    var gauge = this.createTestGauge();
+    const gauge = this.createTestGauge();
 
     assert.ok(gauge.valueIndicator === undefined, 'method is not available');
 });
@@ -1407,7 +1407,7 @@ QUnit.test('indicatorValue - not in hard mode', function(assert) {
 QUnit.module('Gauge - options changing support', environment);
 
 QUnit.test('value option', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 50
     });
 
@@ -1419,7 +1419,7 @@ QUnit.test('value option', function(assert) {
 });
 
 QUnit.test('value option, out of range', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 50
     });
 
@@ -1431,7 +1431,7 @@ QUnit.test('value option, out of range', function(assert) {
 });
 
 QUnit.test('value option, not valid', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         value: 50
     });
 
@@ -1442,7 +1442,7 @@ QUnit.test('value option, not valid', function(assert) {
 });
 
 QUnit.test('subvalues option', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [10, 20]
     });
 
@@ -1454,7 +1454,7 @@ QUnit.test('subvalues option', function(assert) {
 });
 
 QUnit.test('subvalues option, less values', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [10, 20, 30]
     });
 
@@ -1466,7 +1466,7 @@ QUnit.test('subvalues option, less values', function(assert) {
 });
 
 QUnit.test('subvalues option, more values', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [10, 20, 30]
     });
 
@@ -1478,7 +1478,7 @@ QUnit.test('subvalues option, more values', function(assert) {
 });
 
 QUnit.test('subvalues option, out of range', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [10, 20]
     });
 
@@ -1490,7 +1490,7 @@ QUnit.test('subvalues option, out of range', function(assert) {
 });
 
 QUnit.test('subvalues option, not valid', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [10, 20]
     });
 
@@ -1503,7 +1503,7 @@ QUnit.test('subvalues option, not valid', function(assert) {
 
 //  B251763
 QUnit.test('subvalues option, when subvalues are not defined on initialization', function(assert) {
-    var gauge = this.createTestGauge();
+    const gauge = this.createTestGauge();
 
     gauge.option('subvalues', [10, 20]);
 
@@ -1513,7 +1513,7 @@ QUnit.test('subvalues option, when subvalues are not defined on initialization',
 
 //  B252197
 QUnit.test('subvalues option, when initialized with empty array', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: []
     });
 
@@ -1526,7 +1526,7 @@ QUnit.test('subvalues option, when initialized with empty array', function(asser
 QUnit.module('Palette for subvalueIndicators', environment);
 
 QUnit.test('subvalueIndicator with empty palette', function(assert) {
-    var gauge = this.createTestGauge({
+    const gauge = this.createTestGauge({
         subvalues: [1, 2, 3], subvalueIndicator: {
             palette: [],
             color: 'someColor'
@@ -1540,13 +1540,13 @@ QUnit.test('subvalueIndicator with empty palette', function(assert) {
 });
 
 QUnit.test('palette longer count of indicators', function(assert) {
-    var customPalette = ['color1', 'color2', 'color3', 'color4'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3],
-            subvalueIndicator: {
-                palette: customPalette
-            }
-        });
+    const customPalette = ['color1', 'color2', 'color3', 'color4'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3],
+        subvalueIndicator: {
+            palette: customPalette
+        }
+    });
 
     $.each(gauge._subvalueIndicatorsSet._indicators, function(index, item) {
         assert.strictEqual(item.options.color, customPalette[index]);
@@ -1556,13 +1556,13 @@ QUnit.test('palette longer count of indicators', function(assert) {
 });
 
 QUnit.test('count of indicators longer palette', function(assert) {
-    var customPalette = ['color1', 'color2', 'color3', 'color4'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3, 4, 5, 6, 7],
-            subvalueIndicator: {
-                palette: customPalette
-            }
-        });
+    const customPalette = ['color1', 'color2', 'color3', 'color4'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3, 4, 5, 6, 7],
+        subvalueIndicator: {
+            palette: customPalette
+        }
+    });
 
     $.each(gauge._subvalueIndicatorsSet._indicators, function(index, item) {
         assert.strictEqual(item.options.color, customPalette[index % customPalette.length]);
@@ -1572,13 +1572,13 @@ QUnit.test('count of indicators longer palette', function(assert) {
 });
 
 QUnit.test('palette after remove some subvalues', function(assert) {
-    var customPalette = ['color1', 'color2'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3, 4, 5],
-            subvalueIndicator: {
-                palette: customPalette
-            }
-        });
+    const customPalette = ['color1', 'color2'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3, 4, 5],
+        subvalueIndicator: {
+            palette: customPalette
+        }
+    });
 
     gauge.subvalues([1, 2, 3]);
 
@@ -1591,13 +1591,13 @@ QUnit.test('palette after remove some subvalues', function(assert) {
 });
 
 QUnit.test('palette after add some subvalues', function(assert) {
-    var customPalette = ['color1', 'color2'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3, 4],
-            subvalueIndicator: {
-                palette: customPalette
-            }
-        });
+    const customPalette = ['color1', 'color2'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3, 4],
+        subvalueIndicator: {
+            palette: customPalette
+        }
+    });
 
     gauge.subvalues([1, 2, 3, 4, 5, 6]);
 
@@ -1610,13 +1610,13 @@ QUnit.test('palette after add some subvalues', function(assert) {
 });
 
 QUnit.test('palette after double add subvalues', function(assert) {
-    var customPalette = ['color1', 'color2'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3, 4],
-            subvalueIndicator: {
-                palette: customPalette
-            }
-        });
+    const customPalette = ['color1', 'color2'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3, 4],
+        subvalueIndicator: {
+            palette: customPalette
+        }
+    });
 
     gauge.subvalues([1, 2, 3, 4, 5]);
     gauge.subvalues([1, 2, 3, 4, 5, 6]);
@@ -1628,15 +1628,15 @@ QUnit.test('palette after double add subvalues', function(assert) {
 });
 
 QUnit.test('remove palette', function(assert) {
-    var customPalette = ['color1', 'color2'],
-        gauge = this.createTestGauge({
-            subvalues: [1, 2, 3],
-            subvalueIndicator: {
-                palette: customPalette,
-                color: 'someColor',
-                defaultPalette: null // For test only, there is no such option
-            }
-        });
+    const customPalette = ['color1', 'color2'];
+    const gauge = this.createTestGauge({
+        subvalues: [1, 2, 3],
+        subvalueIndicator: {
+            palette: customPalette,
+            color: 'someColor',
+            defaultPalette: null // For test only, there is no such option
+        }
+    });
 
     gauge.option('subvalueIndicator', { palette: null });
 

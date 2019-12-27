@@ -1,28 +1,28 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    devices = require('../../core/devices'),
-    extend = require('../../core/utils/extend').extend,
-    inkRipple = require('../widget/utils.ink_ripple'),
-    registerComponent = require('../../core/component_registrator'),
-    Editor = require('../editor/editor'),
-    eventUtils = require('../../events/utils'),
-    clickEvent = require('../../events/click');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const devices = require('../../core/devices');
+const extend = require('../../core/utils/extend').extend;
+const inkRipple = require('../widget/utils.ink_ripple');
+const registerComponent = require('../../core/component_registrator');
+const Editor = require('../editor/editor');
+const eventUtils = require('../../events/utils');
+const clickEvent = require('../../events/click');
 
-var RADIO_BUTTON_CLASS = 'dx-radiobutton',
-    RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon',
-    RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot',
-    RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked',
-    RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
+const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
+const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
+const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
+const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 
 /**
 * @name dxRadioButton
 * @inherits CollectionWidget
 * @hidden
 */
-var RadioButton = Editor.inherit({
+const RadioButton = Editor.inherit({
 
     _supportedKeys: function() {
-        var click = function(e) {
+        const click = function(e) {
             e.preventDefault();
             this._clickAction({ event: e });
         };
@@ -87,7 +87,7 @@ var RadioButton = Editor.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: element,
             event: dxEvent,
             wave: waveIndex
@@ -126,7 +126,7 @@ var RadioButton = Editor.inherit({
     },
 
     _renderClick: function() {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
         this._clickAction = this._createAction((function(args) {
             this._clickHandler(args.event);

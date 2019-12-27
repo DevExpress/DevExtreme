@@ -1,24 +1,24 @@
-var $ = require('jquery'),
-    dateUtils = require('core/utils/date'),
-    BaseView = require('ui/calendar/ui.calendar.base_view'),
-    Views = require('ui/calendar/ui.calendar.views'),
-    fx = require('animation/fx'),
-    dateSerialization = require('core/utils/date_serialization');
+const $ = require('jquery');
+const dateUtils = require('core/utils/date');
+const BaseView = require('ui/calendar/ui.calendar.base_view');
+const Views = require('ui/calendar/ui.calendar.views');
+const fx = require('animation/fx');
+const dateSerialization = require('core/utils/date_serialization');
 
 require('common.css!');
 require('ui/calendar');
 
-var CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell',
-    CALENDAR_TODAY_CLASS = 'dx-calendar-today',
-    CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view',
-    CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
+const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
+const CALENDAR_TODAY_CLASS = 'dx-calendar-today';
+const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
+const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 
-var getShortDate = function(date) {
+const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
 };
 
-var getTextsArray = function(elements) {
-    var result = [];
+const getTextsArray = function(elements) {
+    const result = [];
 
     $.each(elements, function(_, element) {
         result.push($(element).text());
@@ -54,20 +54,20 @@ QUnit.module('MonthView markup', {
     }
 }, () => {
     QUnit.test('main table should be 6 by 7', function(assert) {
-        var table = this.$element.find('tbody');
+        const table = this.$element.find('tbody');
         assert.strictEqual(table.length, 1, 'table has been rendered');
 
-        var rows = table.find('tr');
+        const rows = table.find('tr');
         assert.strictEqual(rows.length, 6, 'with 6 rows');
 
-        for(var i = 0; i < 6; ++i) {
-            var columns = $(rows[i]).find('td');
+        for(let i = 0; i < 6; ++i) {
+            const columns = $(rows[i]).find('td');
             assert.strictEqual(columns.length, 7, 'of 7 columns');
         }
     });
 
     QUnit.test('day captions must be rendered in proper order', function(assert) {
-        var captions = this.$element.find('table').find('th');
+        const captions = this.$element.find('table').find('th');
         assert.deepEqual(getTextsArray(captions), ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], 'day captions order is correct');
     });
 
@@ -78,12 +78,12 @@ QUnit.module('MonthView markup', {
             rtl: true
         });
 
-        var captions = this.$element.find('table').find('th');
+        const captions = this.$element.find('table').find('th');
         assert.deepEqual(getTextsArray(captions), ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon'], 'day captions order is correct');
     });
 
     QUnit.test('dates must be rendered in proper positions', function(assert) {
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['30', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13',
                 '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27',
@@ -97,7 +97,7 @@ QUnit.module('MonthView markup', {
             rtl: true
         });
 
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['6', '5', '4', '3', '2', '1', '30', '13', '12', '11', '10', '9', '8', '7',
                 '20', '19', '18', '17', '16', '15', '14', '27', '26', '25', '24', '23', '22', '21',
@@ -110,7 +110,7 @@ QUnit.module('MonthView markup', {
             firstDayOfWeek: 1
         });
 
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['26', '27', '28', '29', '30', '31', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
@@ -118,14 +118,14 @@ QUnit.module('MonthView markup', {
     });
 
     QUnit.test('non-current month dates must be decorated with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
+        const dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
         assert.deepEqual(getTextsArray(dateCells), ['30', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
     });
 
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        var todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
         assert.equal(todayCell.length, 1);
     });
 
@@ -163,21 +163,21 @@ QUnit.module('YearView markup', {
     }
 }, () => {
     QUnit.test('main table for year view should be 4 by 3', function(assert) {
-        var table = this.$element.find('tbody');
+        const table = this.$element.find('tbody');
 
         assert.strictEqual(table.length, 1, 'table has been rendered');
 
-        var rows = table.find('tr');
+        const rows = table.find('tr');
         assert.strictEqual(rows.length, 3, 'with 3 rows');
 
-        for(var i = 0; i < 3; ++i) {
-            var columns = $(rows[i]).find('td');
+        for(let i = 0; i < 3; ++i) {
+            const columns = $(rows[i]).find('td');
             assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 
     QUnit.test('month must be rendered in proper positions', function(assert) {
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['Jan', 'Feb', 'Mar', 'Apr', 'May',
                 'Jun', 'Jul', 'Aug', 'Sep',
@@ -190,7 +190,7 @@ QUnit.module('YearView markup', {
             rtl: true
         });
 
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['Apr', 'Mar', 'Feb', 'Jan',
                 'Aug', 'Jul', 'Jun', 'May',
@@ -199,11 +199,11 @@ QUnit.module('YearView markup', {
 
 
     QUnit.test('data-value after render for cells in year view', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            startMonth = 0;
+        const dateCells = this.$element.find('table').find('td');
+        let startMonth = 0;
 
         $.each(dateCells, function(_, dateCell) {
-            var shortDate = getShortDate(new Date(2013, startMonth, 1));
+            const shortDate = getShortDate(new Date(2013, startMonth, 1));
             assert.equal(shortDate, $(dateCell).data().value, 'data-value has a current value');
             startMonth++;
         });
@@ -212,7 +212,7 @@ QUnit.module('YearView markup', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        var todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
         assert.equal(todayCell.length, 1);
     });
 });
@@ -240,21 +240,21 @@ QUnit.module('DecadeView', {
     }
 }, () => {
     QUnit.test('main table for decade view should be 4 by 3', function(assert) {
-        var table = this.$element.find('tbody');
+        const table = this.$element.find('tbody');
 
         assert.strictEqual(table.length, 1, 'table has been rendered');
 
-        var rows = table.find('tr');
+        const rows = table.find('tr');
         assert.strictEqual(rows.length, 3, 'with 3 rows');
 
-        for(var i = 0; i < 3; ++i) {
-            var columns = $(rows[i]).find('td');
+        for(let i = 0; i < 3; ++i) {
+            const columns = $(rows[i]).find('td');
             assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 
     QUnit.test('years must be rendered in proper positions', function(assert) {
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['2009', '2010', '2011', '2012', '2013',
                 '2014', '2015', '2016', '2017',
@@ -267,7 +267,7 @@ QUnit.module('DecadeView', {
             rtl: true
         });
 
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['2012', '2011', '2010', '2009', '2016',
                 '2015', '2014', '2013', '2020',
@@ -275,14 +275,14 @@ QUnit.module('DecadeView', {
     });
 
     QUnit.test('non-current decade dates must be decorated with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
+        const dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
         assert.deepEqual(getTextsArray(dateCells), ['2009', '2020']);
     });
 
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        var todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
         assert.equal(todayCell.length, 1);
     });
 });
@@ -310,21 +310,21 @@ QUnit.module('CenturyView', {
     }
 }, () => {
     QUnit.test('main table for century view should be 4 by 3', function(assert) {
-        var table = this.$element.find('tbody');
+        const table = this.$element.find('tbody');
 
         assert.strictEqual(table.length, 1, 'table has been rendered');
 
-        var rows = table.find('tr');
+        const rows = table.find('tr');
         assert.strictEqual(rows.length, 3, 'with 3 rows');
 
-        for(var i = 0; i < 3; ++i) {
-            var columns = $(rows[i]).find('td');
+        for(let i = 0; i < 3; ++i) {
+            const columns = $(rows[i]).find('td');
             assert.strictEqual(columns.length, 4, 'of 4 columns');
         }
     });
 
     QUnit.test('decades must be rendered in proper positions', function(assert) {
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['1990 - 1999', '2000 - 2009', '2010 - 2019', '2020 - 2029', '2030 - 2039',
                 '2040 - 2049', '2050 - 2059', '2060 - 2069', '2070 - 2079',
@@ -337,7 +337,7 @@ QUnit.module('CenturyView', {
             rtl: true
         });
 
-        var dateCells = this.$element.find('table').find('td');
+        const dateCells = this.$element.find('table').find('td');
         assert.deepEqual(getTextsArray(dateCells),
             ['2020 - 2029', '2010 - 2019', '2000 - 2009', '1990 - 1999', '2060 - 2069',
                 '2050 - 2059', '2040 - 2049', '2030 - 2039', '2100 - 2109',
@@ -345,13 +345,13 @@ QUnit.module('CenturyView', {
     });
 
     QUnit.test('non-current century dates must be decorated with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
+        const dateCells = this.$element.find('table').find('td').filter('.' + CALENDAR_OTHER_VIEW_CLASS);
         assert.deepEqual(getTextsArray(dateCells), ['1990 - 1999', '2100 - 2109']);
     });
 
     QUnit.test('change value option must add a CSS class to a cell', function(assert) {
-        var secondDate = new Date(2010, 1, 1),
-            secondDateCell = this.$element.find('table').find('td').eq(2);
+        const secondDate = new Date(2010, 1, 1);
+        const secondDateCell = this.$element.find('table').find('td').eq(2);
 
         this.view.option('value', secondDate);
         assert.ok(secondDateCell.hasClass(CALENDAR_SELECTED_DATE_CLASS));
@@ -360,7 +360,7 @@ QUnit.module('CenturyView', {
     QUnit.test('today must be decorated with a css class', function(assert) {
         this.reinit({});
 
-        var todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
+        const todayCell = this.$element.find('.' + CALENDAR_TODAY_CLASS);
         assert.equal(todayCell.length, 1);
     });
 });
@@ -386,8 +386,8 @@ QUnit.module('MonthView min/max', {
     }
 }, () => {
     QUnit.test('monthView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '31123426272829301234567891011');
     });
@@ -416,8 +416,8 @@ QUnit.module('MonthView disabledDates', {
     }
 }, () => {
     QUnit.test('monthView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '12341234');
     });
@@ -447,8 +447,8 @@ QUnit.module('MonthView disabledDates as array', {
     }
 }, () => {
     QUnit.test('monthView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1234');
     });
@@ -478,8 +478,8 @@ QUnit.module('YearView min/max', {
     });
 
     QUnit.test('yearView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, 'AugSepOctNovDec');
     });
@@ -511,8 +511,8 @@ QUnit.module('YearView disabledDates', {
     });
 
     QUnit.test('yearView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, 'JanFebMar');
     });
@@ -542,8 +542,8 @@ QUnit.module('DecadeView min/max', {
     });
 
     QUnit.test('decadeView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '200920102011201220192020');
     });
@@ -575,8 +575,8 @@ QUnit.module('DecadeView disabledDates', {
     });
 
     QUnit.test('decadeView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '2009201020112012');
     });
@@ -606,8 +606,8 @@ QUnit.module('CenturyView min/max', {
     });
 
     QUnit.test('centuryView should not display dates earlier than min and later than max by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1990 - 19992080 - 20892090 - 20992100 - 2109');
     });
@@ -639,8 +639,8 @@ QUnit.module('CenturyView disabledDates', {
     });
 
     QUnit.test('centuryView should not display disabled dates by decorating them with a CSS class', function(assert) {
-        var dateCells = this.$element.find('table').find('td'),
-            dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
+        const dateCells = this.$element.find('table').find('td');
+        const dateCellsText = dateCells.filter('.' + CALENDAR_EMPTY_CELL_CLASS).text();
 
         assert.equal(dateCellsText, '1990 - 19992000 - 2009');
     });

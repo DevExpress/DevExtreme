@@ -1,14 +1,14 @@
-var Promise = require('../../core/polyfills/promise'),
-    Class = require('../../core/class'),
-    map = require('../../core/utils/iterator').map,
-    typeUtils = require('../../core/utils/type'),
-    eventUtils = require('../../events/utils'),
-    isPlainObject = typeUtils.isPlainObject,
-    isNumeric = typeUtils.isNumeric;
+const Promise = require('../../core/polyfills/promise');
+const Class = require('../../core/class');
+const map = require('../../core/utils/iterator').map;
+const typeUtils = require('../../core/utils/type');
+const eventUtils = require('../../events/utils');
+const isPlainObject = typeUtils.isPlainObject;
+const isNumeric = typeUtils.isNumeric;
 
-var abstract = Class.abstract;
+const abstract = Class.abstract;
 
-var Provider = Class.inherit({
+const Provider = Class.inherit({
 
     _defaultRouteWeight: function() {
         return 5;
@@ -101,7 +101,7 @@ var Provider = Class.inherit({
     },
 
     _keyOption: function(providerName) {
-        var key = this._option('key');
+        const key = this._option('key');
 
         return key[providerName] === undefined ? key : key[providerName];
     },
@@ -115,10 +115,10 @@ var Provider = Class.inherit({
 
     _getLatLng: function(location) {
         if(typeof location === 'string') {
-            var coords = map(location.split(','), function(item) {
-                    return item.trim();
-                }),
-                numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
+            const coords = map(location.split(','), function(item) {
+                return item.trim();
+            });
+            const numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;
 
             if(coords.length === 2 && coords[0].match(numericRegex) && coords[1].match(numericRegex)) {
                 return { lat: parseFloat(coords[0]), lng: parseFloat(coords[1]) };

@@ -1,10 +1,10 @@
-var touchPropsToHook = ['pageX', 'pageY', 'screenX', 'screenY', 'clientX', 'clientY'];
-var touchPropHook = function(name, event) {
+const touchPropsToHook = ['pageX', 'pageY', 'screenX', 'screenY', 'clientX', 'clientY'];
+const touchPropHook = function(name, event) {
     if(event[name] && !event.touches || !event.touches) {
         return event[name];
     }
 
-    var touches = event.touches.length ? event.touches : event.changedTouches;
+    const touches = event.touches.length ? event.touches : event.changedTouches;
     if(!touches.length) {
         return;
     }

@@ -110,7 +110,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Line series', function(assert) {
-        let chart = this.getChartForSeriesTests();
+        const chart = this.getChartForSeriesTests();
         this.checkCoords(assert, chart, { argument: 20, series: 's1' }, { x: 20, y: 60 }, this.p1Canvas);
         this.checkCoords(assert, chart, { value: 140, series: 's1' }, { x: 20, y: 60 }, this.p1Canvas);
 
@@ -138,7 +138,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Area series', function(assert) {
-        let chart = this.getChartForSeriesTests();
+        const chart = this.getChartForSeriesTests();
 
         this.checkCoords(assert, chart, { argument: 20, series: 's1' }, { x: 20, y: 60 });
         this.checkCoords(assert, chart, { value: 140, series: 's1' }, { x: 20, y: 60 });
@@ -163,7 +163,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Stepline series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val: 150 },
                 { arg: 50, val: 200 },
@@ -198,7 +198,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Steparea series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val: 150 },
                 { arg: 50, val: 200 },
@@ -233,7 +233,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Spline series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             series: [{ name: 's1', type: 'spline' }]
         });
 
@@ -260,7 +260,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Splinearea series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             series: [{ name: 's1', type: 'splinearea' }]
         });
 
@@ -287,7 +287,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Bar series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val: 150 },
                 { arg: 50, val: 200 },
@@ -327,7 +327,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Side-by-side bar series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val1: 110, val2: 130, val3: 120 },
                 { arg: 50, val1: 140, val2: 170, val3: 150 },
@@ -348,7 +348,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Scatter series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val: 150 },
                 { arg: 50, val: 200 },
@@ -384,7 +384,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Bubble series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val: 150, size: 20 },
                 { arg: 50, val: 200, size: 60 },
@@ -400,7 +400,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Financial series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { date: 10, low: 120, high: 180, open: 140, close: 160 },
                 { date: 50, low: 140, high: 200, open: 160, close: 180 },
@@ -417,7 +417,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Range series', function(assert) {
-        let chart = this.getChartForSeriesTests({
+        const chart = this.getChartForSeriesTests({
             dataSource: [
                 { arg: 0, val1: 110, val2: 130 },
                 { arg: 50, val1: 140, val2: 170 },
@@ -464,7 +464,7 @@ QUnit.module('Coordinates calculation. Chart plugin', {
     });
 
     QUnit.test('Pass offset to annotation coord object', function(assert) {
-        let chart = this.getChartForSeriesTests();
+        const chart = this.getChartForSeriesTests();
         const coords = chart._getAnnotationCoords({
             offsetX: 10,
             offsetY: 20
@@ -903,7 +903,7 @@ QUnit.module('Tooltip', environment, function() {
     });
 
     QUnit.test('Hide tooltip on container scroll', function(assert) {
-        var originalPlatform = devices.real().platform;
+        const originalPlatform = devices.real().platform;
 
         try {
             devices.real({ platform: 'generic' });

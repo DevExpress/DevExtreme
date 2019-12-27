@@ -257,7 +257,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
 
     test('refresh data and restore state', function(assert) {
         const done = assert.async();
-        let myData = [
+        const myData = [
             {
                 name: 'D1',
                 isDirectory: true,
@@ -270,7 +270,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 ]
             }
         ];
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider: myData
         });
 
@@ -311,7 +311,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
 
     test('restore selection after refresh when selected item was removed', function(assert) {
         const done = assert.async();
-        let myData = [
+        const myData = [
             {
                 name: 'D1',
                 isDirectory: true,
@@ -324,7 +324,7 @@ QUnit.module('FileItemsController tests', moduleConfig, () => {
                 ]
             }
         ];
-        let controller = new FileItemsController({
+        const controller = new FileItemsController({
             fileProvider: myData
         });
 

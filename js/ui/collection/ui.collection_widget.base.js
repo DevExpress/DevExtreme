@@ -47,32 +47,32 @@ const FOCUS_PAGE_DOWN = 'pagedown';
 const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
-var CollectionWidget = Widget.inherit({
+const CollectionWidget = Widget.inherit({
 
     _activeStateUnit: '.' + ITEM_CLASS,
 
     _supportedKeys: function() {
-        var enter = function(e) {
-                var $itemElement = $(this.option('focusedElement'));
+        const enter = function(e) {
+            const $itemElement = $(this.option('focusedElement'));
 
-                if(!$itemElement.length) {
-                    return;
-                }
+            if(!$itemElement.length) {
+                return;
+            }
 
-                this._itemClickHandler(extend({}, e, {
-                    target: $itemElement,
-                    currentTarget: $itemElement
-                }));
-            },
-            space = function(e) {
-                e.preventDefault();
-                enter.call(this, e);
-            },
-            move = function(location, e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._moveFocus(location, e);
-            };
+            this._itemClickHandler(extend({}, e, {
+                target: $itemElement,
+                currentTarget: $itemElement
+            }));
+        };
+        const space = function(e) {
+            e.preventDefault();
+            enter.call(this, e);
+        };
+        const move = function(location, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this._moveFocus(location, e);
+        };
         return extend(this.callBase(), {
             space: space,
             enter: enter,
@@ -158,7 +158,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _compileDisplayGetter: function() {
-        var displayExpr = this.option('displayExpr');
+        const displayExpr = this.option('displayExpr');
         this._displayGetter = displayExpr ? compileGetter(this.option('displayExpr')) : undefined;
     },
 
@@ -170,7 +170,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initDefaultItemTemplate: function() {
-        var fieldsMap = this._getFieldsMap();
+        const fieldsMap = this._getFieldsMap();
         this._defaultTemplates['item'] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
@@ -204,15 +204,15 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initItemsFromMarkup: function() {
-        var $items = this.$element().contents().filter(ITEMS_SELECTOR);
+        const $items = this.$element().contents().filter(ITEMS_SELECTOR);
         if(!$items.length || this.option('items').length) {
             return;
         }
 
-        var items = [].slice.call($items).map((item) => {
-            var $item = $(item);
-            var result = getElementOptions(item).dxItem;
-            var isTemplateRequired = $item.html().trim() && !result.template;
+        const items = [].slice.call($items).map((item) => {
+            const $item = $(item);
+            const result = getElementOptions(item).dxItem;
+            const isTemplateRequired = $item.html().trim() && !result.template;
 
             if(isTemplateRequired) {
                 result.template = this._prepareItemTemplate($item);
@@ -227,8 +227,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _prepareItemTemplate: function($item) {
-        var templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        var $template = $item
+        const templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
+        const $template = $item
             .detach()
             .clone()
             .removeAttr('data-options')
@@ -258,11 +258,11 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var $focusedElement = $(this.option('focusedElement'));
+        const $focusedElement = $(this.option('focusedElement'));
         if($focusedElement.length) {
             this._setFocusedItem($focusedElement);
         } else {
-            var $activeItem = this._getActiveItem();
+            const $activeItem = this._getActiveItem();
             if($activeItem.length) {
                 this.option('focusedElement', getPublicElement($activeItem));
             }
@@ -297,8 +297,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _moveFocus: function(location) {
-        var $items = this._getAvailableItems(),
-            $newTarget;
+        const $items = this._getAvailableItems();
+        let $newTarget;
 
         switch(location) {
             case FOCUS_PAGE_UP:
@@ -340,11 +340,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _prevItem: function($items) {
-        var $target = this._getActiveItem(),
-            targetIndex = $items.index($target),
-            $last = $items.last(),
-            $item = $($items[targetIndex - 1]),
-            loop = this.option('loopItemFocus');
+        const $target = this._getActiveItem();
+        const targetIndex = $items.index($target);
+        const $last = $items.last();
+        let $item = $($items[targetIndex - 1]);
+        const loop = this.option('loopItemFocus');
 
         if($item.length === 0 && loop) {
             $item = $last;
@@ -354,11 +354,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _nextItem: function($items) {
-        var $target = this._getActiveItem(true),
-            targetIndex = $items.index($target),
-            $first = $items.first(),
-            $item = $($items[targetIndex + 1]),
-            loop = this.option('loopItemFocus');
+        const $target = this._getActiveItem(true);
+        const targetIndex = $items.index($target);
+        const $first = $items.first();
+        let $item = $($items[targetIndex + 1]);
+        const loop = this.option('loopItemFocus');
 
         if($item.length === 0 && loop) {
             $item = $first;
@@ -407,11 +407,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _findItemElementByItem: function(item) {
-        var result = $(),
-            that = this;
+        let result = $();
+        const that = this;
 
         this.itemElements().each(function() {
-            var $item = $(this);
+            const $item = $(this);
             if($item.data(that._itemDataKey()) === item) {
                 result = $item;
                 return false;
@@ -426,7 +426,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemOptionChanged: function(item, property, value, oldValue) {
-        var $item = this._findItemElementByItem(item);
+        const $item = this._findItemElementByItem(item);
         if(!$item.length) {
             return;
         }
@@ -448,19 +448,19 @@ var CollectionWidget = Widget.inherit({
     },
 
     _refreshItem: function($item) {
-        var itemData = this._getItemData($item),
-            index = $item.data(this._itemIndexKey());
+        const itemData = this._getItemData($item);
+        const index = $item.data(this._itemIndexKey());
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
-            var matches = args.fullName.match(ITEM_PATH_REGEX);
+            const matches = args.fullName.match(ITEM_PATH_REGEX);
 
             if(matches && matches.length) {
-                var property = matches[matches.length - 1],
-                    itemPath = args.fullName.replace('.' + property, ''),
-                    item = this.option(itemPath);
+                const property = matches[matches.length - 1];
+                const itemPath = args.fullName.replace('.' + property, '');
+                const item = this.option(itemPath);
 
                 this._itemOptionChanged(item, property, args.value, args.previousValue);
                 return;
@@ -529,7 +529,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _loadNextPage: function() {
-        var dataSource = this._dataSource;
+        const dataSource = this._dataSource;
 
         this._expectNextPageLoading();
         dataSource.pageIndex(1 + dataSource.pageIndex());
@@ -550,7 +550,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        var items = this.option('items');
+        const items = this.option('items');
         if(this._initialized && items && this._shouldAppendItems()) {
             this._renderedItemsCount = items.length;
             if(!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
@@ -664,13 +664,13 @@ var CollectionWidget = Widget.inherit({
     },
 
     _attachClickEvent: function() {
-        var itemSelector = this._itemSelector(),
-            clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME),
-            that = this;
+        const itemSelector = this._itemSelector();
+        const clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const that = this;
 
-        var pointerDownAction = new Action(function(args) {
-            var event = args.event;
+        const pointerDownAction = new Action(function(args) {
+            const event = args.event;
             that._itemPointerDownHandler(event);
         });
 
@@ -702,9 +702,9 @@ var CollectionWidget = Widget.inherit({
                 return;
             }
 
-            var $target = $(e.target),
-                $closestItem = $target.closest(this._itemElements()),
-                $closestFocusable = this._closestFocusable($target);
+            const $target = $(e.target);
+            const $closestItem = $target.closest(this._itemElements());
+            const $closestFocusable = this._closestFocusable($target);
 
             if($closestItem.length && $closestFocusable && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
                 this.option('focusedElement', getPublicElement($closestItem));
@@ -740,9 +740,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _attachHoldEvent: function() {
-        var $itemContainer = this._itemContainer(),
-            itemSelector = this._itemSelector(),
-            eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
+        const $itemContainer = this._itemContainer();
+        const itemSelector = this._itemSelector();
+        const eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
@@ -765,9 +765,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _attachContextMenuEvent: function() {
-        var $itemContainer = this._itemContainer(),
-            itemSelector = this._itemSelector(),
-            eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
+        const $itemContainer = this._itemContainer();
+        const itemSelector = this._itemSelector();
+        const eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
@@ -786,7 +786,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var items = this.option('items') || [];
+        const items = this.option('items') || [];
         if(this._renderedItemsCount) {
             this._renderItems(items.slice(this._renderedItemsCount));
         } else {
@@ -806,13 +806,13 @@ var CollectionWidget = Widget.inherit({
 
     _renderItem: function(index, itemData, $container, $itemToReplace) {
         $container = $container || this._itemContainer();
-        var $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
+        const $itemFrame = this._renderItemFrame(index, itemData, $container, $itemToReplace);
         this._setElementData($itemFrame, itemData, index);
         $itemFrame.attr(this.option('_itemAttributes'));
         this._attachItemClickEvent(itemData, $itemFrame);
-        var $itemContent = this._getItemContent($itemFrame);
+        const $itemContent = this._getItemContent($itemFrame);
 
-        var renderContentPromise = this._renderItemContent({
+        const renderContentPromise = this._renderItemContent({
             index: index,
             itemData: itemData,
             container: getPublicElement($itemContent),
@@ -820,7 +820,7 @@ var CollectionWidget = Widget.inherit({
             defaultTemplateName: this.option('itemTemplate')
         });
 
-        var that = this;
+        const that = this;
         when(renderContentPromise).done(function($itemContent) {
             that._postprocessRenderItem({
                 itemElement: $itemFrame,
@@ -836,7 +836,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getItemContent: function($itemFrame) {
-        var $itemContent = $itemFrame.find('.' + ITEM_CONTENT_PLACEHOLDER_CLASS);
+        const $itemContent = $itemFrame.find('.' + ITEM_CONTENT_PLACEHOLDER_CLASS);
         $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
         return $itemContent;
     },
@@ -854,11 +854,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var itemTemplateName = this._getItemTemplateName(args);
-        var itemTemplate = this._getTemplate(itemTemplateName);
+        const itemTemplateName = this._getItemTemplateName(args);
+        const itemTemplate = this._getTemplate(itemTemplateName);
 
         this._addItemContentClasses(args);
-        var $templateResult = $(this._createItemByTemplate(itemTemplate, args));
+        const $templateResult = $(this._createItemByTemplate(itemTemplate, args));
         if(!$templateResult.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             return args.container;
         }
@@ -875,7 +875,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _addItemContentClasses: function(args) {
-        var classes = [
+        const classes = [
             ITEM_CLASS + CONTENT_CLASS_POSTFIX,
             args.contentClass
         ];
@@ -888,7 +888,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
-        var $itemFrame = $('<div>');
+        const $itemFrame = $('<div>');
         new (this.constructor.ItemClass)($itemFrame, this._itemOptions(), itemData || {});
 
         if($itemToReplace && $itemToReplace.length) {
@@ -898,7 +898,7 @@ var CollectionWidget = Widget.inherit({
         }
 
         if(this.option('showItemDataTitle')) {
-            var displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
+            const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
             $itemFrame.attr('title', displayValue);
         }
 
@@ -906,15 +906,15 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemOptions: function() {
-        var that = this;
+        const that = this;
         return {
             watchMethod: function() {
                 return that.option('integrationOptions.watchMethod');
             },
             owner: that,
             fieldGetter: function(field) {
-                var expr = that.option(field + 'Expr'),
-                    getter = compileGetter(expr);
+                const expr = that.option(field + 'Expr');
+                const getter = compileGetter(expr);
 
                 return getter;
             }
@@ -951,9 +951,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getItemTemplateName: function(args) {
-        var data = args.itemData,
-            templateProperty = args.templateProperty || this.option('itemTemplateProperty'),
-            template = data && data[templateProperty];
+        const data = args.itemData;
+        const templateProperty = args.templateProperty || this.option('itemTemplateProperty');
+        const template = data && data[templateProperty];
 
         return template || args.defaultTemplateName;
     },
@@ -972,8 +972,8 @@ var CollectionWidget = Widget.inherit({
 
     _renderEmptyMessage: function(items) {
         items = items || this.option('items');
-        var noDataText = this.option('noDataText'),
-            hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
+        const noDataText = this.option('noDataText');
+        const hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();
@@ -998,22 +998,22 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemEventHandler: function(initiator, handlerOptionName, actionArgs, actionConfig) {
-        var action = this._createActionByOption(handlerOptionName, extend({
+        const action = this._createActionByOption(handlerOptionName, extend({
             validatingTargetName: 'itemElement'
         }, actionConfig));
         return this._itemEventHandlerImpl(initiator, action, actionArgs);
     },
 
     _itemEventHandlerByHandler: function(initiator, handler, actionArgs, actionConfig) {
-        var action = this._createAction(handler, extend({
+        const action = this._createAction(handler, extend({
             validatingTargetName: 'itemElement'
         }, actionConfig));
         return this._itemEventHandlerImpl(initiator, action, actionArgs);
     },
 
     _itemEventHandlerImpl: function(initiator, action, actionArgs) {
-        var $itemElement = this._closestItemElement($(initiator)),
-            args = extend({}, actionArgs);
+        const $itemElement = this._closestItemElement($(initiator));
+        const args = extend({}, actionArgs);
 
         return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
     },
@@ -1035,7 +1035,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getSummaryItemsWidth: function(items, includeMargin) {
-        var result = 0;
+        let result = 0;
 
         if(items) {
             iteratorUtils.each(items, function(_, item) {

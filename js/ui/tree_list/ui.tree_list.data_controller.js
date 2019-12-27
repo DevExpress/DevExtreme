@@ -12,7 +12,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         _getNodeLevel: function(node) {
-            var level = -1;
+            let level = -1;
             while(node.parent) {
                 if(node.visible) {
                     level++;
@@ -47,7 +47,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         keyOf: function(data) {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
 
             if(dataSource) {
                 return dataSource.keyOf(data);
@@ -55,7 +55,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         key: function() {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
 
             if(dataSource) {
                 return dataSource.getKeyExpr();
@@ -68,11 +68,11 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 
         changeRowExpand: function(key) {
             if(this._dataSource) {
-                var that = this,
-                    args = {
-                        key: key
-                    },
-                    isExpanded = this.isRowExpanded(key);
+                const that = this;
+                const args = {
+                    key: key
+                };
+                const isExpanded = this.isRowExpanded(key);
 
                 that.executeAction(isExpanded ? 'onRowCollapsing' : 'onRowExpanding', args);
 

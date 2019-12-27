@@ -1,14 +1,14 @@
-var typeUtils = require('./type'),
-    adjust = require('./math').adjust,
-    each = require('./iterator').each,
-    camelize = require('./inflector').camelize,
+const typeUtils = require('./type');
+const adjust = require('./math').adjust;
+const each = require('./iterator').each;
+const camelize = require('./inflector').camelize;
 
-    isObject = typeUtils.isObject,
-    isString = typeUtils.isString,
-    isDate = typeUtils.isDate,
-    isDefined = typeUtils.isDefined;
+const isObject = typeUtils.isObject;
+const isString = typeUtils.isString;
+const isDate = typeUtils.isDate;
+const isDefined = typeUtils.isDefined;
 
-var dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
+const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
 var toMilliseconds = function(value) {
     switch(value) {
@@ -35,15 +35,15 @@ var toMilliseconds = function(value) {
     }
 };
 
-var getDatesInterval = function(startDate, endDate, intervalUnit) {
-    var delta = endDate.getTime() - startDate.getTime(),
-        millisecondCount = toMilliseconds(intervalUnit) || 1;
+const getDatesInterval = function(startDate, endDate, intervalUnit) {
+    const delta = endDate.getTime() - startDate.getTime();
+    const millisecondCount = toMilliseconds(intervalUnit) || 1;
 
     return Math.floor(delta / millisecondCount);
 };
 
-var getNextDateUnit = function(unit, withWeeks) {
-    var interval = getDateUnitInterval(unit);
+const getNextDateUnit = function(unit, withWeeks) {
+    const interval = getDateUnitInterval(unit);
 
     switch(interval) {
         case 'millisecond':
@@ -69,12 +69,12 @@ var getNextDateUnit = function(unit, withWeeks) {
     }
 };
 
-var convertMillisecondsToDateUnits = function(value) {
-    var i,
-        dateUnitCount,
-        dateUnitInterval,
-        dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'],
-        result = {};
+const convertMillisecondsToDateUnits = function(value) {
+    let i;
+    let dateUnitCount;
+    let dateUnitInterval;
+    const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
+    const result = {};
 
     for(i = dateUnitIntervals.length - 1; i >= 0; i--) {
         dateUnitInterval = dateUnitIntervals[i];
@@ -87,8 +87,8 @@ var convertMillisecondsToDateUnits = function(value) {
     return result;
 };
 
-var dateToMilliseconds = function(tickInterval) {
-    var milliseconds = 0;
+const dateToMilliseconds = function(tickInterval) {
+    let milliseconds = 0;
     if(isObject(tickInterval)) {
         each(tickInterval, function(key, value) {
             milliseconds += convertDateUnitToMilliseconds(key.substr(0, key.length - 1), value);
@@ -106,8 +106,8 @@ var convertDateUnitToMilliseconds = function(dateUnit, count) {
 
 // refactor for performance
 var getDateUnitInterval = function(tickInterval) {
-    var maxInterval = -1,
-        i;
+    let maxInterval = -1;
+    let i;
 
     if(isString(tickInterval)) {
         return tickInterval;
@@ -128,7 +128,7 @@ var getDateUnitInterval = function(tickInterval) {
 };
 
 // T375972
-var tickIntervalToFormatMap = {
+const tickIntervalToFormatMap = {
     millisecond: 'millisecond',
     second: 'longtime',
     minute: 'shorttime',
@@ -146,20 +146,20 @@ function getDateFormatByTickInterval(tickInterval) {
     return tickIntervalToFormatMap[getDateUnitInterval(tickInterval)] || '';
 }
 
-var getQuarter = function(month) {
+const getQuarter = function(month) {
     return Math.floor(month / 3);
 };
 
-var getFirstQuarterMonth = function(month) {
+const getFirstQuarterMonth = function(month) {
     return getQuarter(month) * 3;
 };
 
-var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, firstDayOfWeek) {
+const correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, firstDayOfWeek) {
     date = new Date(date.getTime());
-    var oldDate = new Date(date.getTime()),
-        firstQuarterMonth,
-        month,
-        dateUnitInterval = getDateUnitInterval(dateInterval);
+    const oldDate = new Date(date.getTime());
+    let firstQuarterMonth;
+    let month;
+    const dateUnitInterval = getDateUnitInterval(dateInterval);
 
     switch(dateUnitInterval) {
         case 'second':
@@ -202,21 +202,21 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, 
     return date;
 };
 
-var trimTime = function(date) {
+const trimTime = function(date) {
     return dateUtils.correctDateWithUnitBeginning(date, 'day');
 };
 
-var setToDayEnd = function(date) {
-    let result = dateUtils.trimTime(date);
+const setToDayEnd = function(date) {
+    const result = dateUtils.trimTime(date);
 
     result.setDate(result.getDate() + 1);
     return new Date(result.getTime() - 1);
 };
 
 
-var getDatesDifferences = function(date1, date2) {
-    var differences,
-        counter = 0;
+const getDatesDifferences = function(date1, date2) {
+    let differences;
+    let counter = 0;
 
     differences = {
         year: date1.getFullYear() !== date2.getFullYear(),
@@ -243,10 +243,10 @@ var getDatesDifferences = function(date1, date2) {
 };
 
 function addDateInterval(value, interval, dir) {
-    var result = new Date(value.getTime()),
-        intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
-            : typeUtils.isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
-                : interval;
+    const result = new Date(value.getTime());
+    const intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
+        : typeUtils.isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
+            : interval;
     if(intervalObject.years) {
         result.setFullYear(result.getFullYear() + intervalObject.years * dir);
     }
@@ -277,14 +277,14 @@ function addDateInterval(value, interval, dir) {
     return result;
 }
 
-var addInterval = function(value, interval, isNegative) {
-    var dir = isNegative ? -1 : +1;
+const addInterval = function(value, interval, isNegative) {
+    const dir = isNegative ? -1 : +1;
     return isDate(value) ? addDateInterval(value, interval, dir) : adjust(value + interval * dir, interval);
 };
 
-var getSequenceByInterval = function(min, max, interval) {
-    var intervals = [],
-        cur;
+const getSequenceByInterval = function(min, max, interval) {
+    const intervals = [];
+    let cur;
 
     intervals.push(isDate(min) ? new Date(min.getTime()) : min);
     cur = min;
@@ -295,22 +295,22 @@ var getSequenceByInterval = function(min, max, interval) {
     return intervals;
 };
 
-var getViewFirstCellDate = function(viewType, date) {
+const getViewFirstCellDate = function(viewType, date) {
     if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), 1); }
     if(viewType === 'year') { return new Date(date.getFullYear(), 0, date.getDate()); }
     if(viewType === 'decade') { return new Date(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
     if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
 };
 
-var getViewLastCellDate = function(viewType, date) {
+const getViewLastCellDate = function(viewType, date) {
     if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
     if(viewType === 'year') { return new Date(date.getFullYear(), 11, date.getDate()); }
     if(viewType === 'decade') { return new Date(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
     if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
 };
 
-var getViewMinBoundaryDate = function(viewType, date) {
-    var resultDate = new Date(date.getFullYear(), date.getMonth(), 1);
+const getViewMinBoundaryDate = function(viewType, date) {
+    const resultDate = new Date(date.getFullYear(), date.getMonth(), 1);
 
     if(viewType === 'month') {
         return resultDate;
@@ -333,8 +333,8 @@ var getViewMinBoundaryDate = function(viewType, date) {
     return resultDate;
 };
 
-var getViewMaxBoundaryDate = function(viewType, date) {
-    var resultDate = new Date(date);
+const getViewMaxBoundaryDate = function(viewType, date) {
+    const resultDate = new Date(date);
     resultDate.setDate(getLastMonthDay(date));
 
     if(viewType === 'month') {
@@ -360,15 +360,15 @@ var getViewMaxBoundaryDate = function(viewType, date) {
 };
 
 var getLastMonthDay = function(date) {
-    var resultDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const resultDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return resultDate.getDate();
 };
 
-var sameView = function(view, date1, date2) {
+const sameView = function(view, date1, date2) {
     return dateUtils[camelize('same ' + view)](date1, date2);
 };
 
-var getViewUp = function(typeView) {
+const getViewUp = function(typeView) {
     switch(typeView) {
         case 'month':
             return 'year';
@@ -381,7 +381,7 @@ var getViewUp = function(typeView) {
     }
 };
 
-var getViewDown = function(typeView) {
+const getViewDown = function(typeView) {
     switch(typeView) {
         case 'century':
             return 'decade';
@@ -394,8 +394,8 @@ var getViewDown = function(typeView) {
     }
 };
 
-var getDifferenceInMonth = function(typeView) {
-    var difference = 1;
+const getDifferenceInMonth = function(typeView) {
+    let difference = 1;
 
     if(typeView === 'year') { difference = 12; }
     if(typeView === 'decade') { difference = 12 * 10; }
@@ -404,8 +404,8 @@ var getDifferenceInMonth = function(typeView) {
     return difference;
 };
 
-var getDifferenceInMonthForCells = function(typeView) {
-    var difference = 1;
+const getDifferenceInMonthForCells = function(typeView) {
+    let difference = 1;
 
     if(typeView === 'decade') { difference = 12; }
     if(typeView === 'century') { difference = 12 * 10; }
@@ -414,7 +414,7 @@ var getDifferenceInMonthForCells = function(typeView) {
 };
 
 var getDateIntervalByString = function(intervalString) {
-    var result = {};
+    const result = {};
     switch(intervalString) {
         case 'year':
             result.years = 1;
@@ -447,7 +447,7 @@ var getDateIntervalByString = function(intervalString) {
     return result;
 };
 
-var sameDate = function(date1, date2) {
+const sameDate = function(date1, date2) {
     return sameMonthAndYear(date1, date2) && date1.getDate() === date2.getDate();
 };
 
@@ -459,20 +459,20 @@ var sameYear = function(date1, date2) {
     return date1 && date2 && date1.getFullYear() === date2.getFullYear();
 };
 
-var sameDecade = function(date1, date2) {
+const sameDecade = function(date1, date2) {
     if(!isDefined(date1) || !isDefined(date2)) return;
 
-    var startDecadeDate1 = date1.getFullYear() - date1.getFullYear() % 10,
-        startDecadeDate2 = date2.getFullYear() - date2.getFullYear() % 10;
+    const startDecadeDate1 = date1.getFullYear() - date1.getFullYear() % 10;
+    const startDecadeDate2 = date2.getFullYear() - date2.getFullYear() % 10;
 
     return date1 && date2 && startDecadeDate1 === startDecadeDate2;
 };
 
-var sameCentury = function(date1, date2) {
+const sameCentury = function(date1, date2) {
     if(!isDefined(date1) || !isDefined(date2)) return;
 
-    var startCenturyDate1 = date1.getFullYear() - date1.getFullYear() % 100,
-        startCenturyDate2 = date2.getFullYear() - date2.getFullYear() % 100;
+    const startCenturyDate1 = date1.getFullYear() - date1.getFullYear() % 100;
+    const startCenturyDate2 = date2.getFullYear() - date2.getFullYear() % 100;
 
     return date1 && date2 && startCenturyDate1 === startCenturyDate2;
 };
@@ -485,34 +485,34 @@ var getFirstYearInDecade = function(date) {
     return date && date.getFullYear() - date.getFullYear() % 10;
 };
 
-var getShortDateFormat = function() {
+const getShortDateFormat = function() {
     return 'yyyy/MM/dd';
 };
 
-var getFirstMonthDate = function(date) {
+const getFirstMonthDate = function(date) {
     if(!isDefined(date)) return;
-    var newDate = new Date(date.getFullYear(), date.getMonth(), 1);
+    const newDate = new Date(date.getFullYear(), date.getMonth(), 1);
     return newDate;
 };
 
-var getLastMonthDate = function(date) {
+const getLastMonthDate = function(date) {
     if(!isDefined(date)) return;
-    var newDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const newDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     return newDate;
 };
 
 var getFirstWeekDate = function(date, firstDayOfWeek) {
-    var delta = (date.getDay() - firstDayOfWeek + 7) % 7;
+    const delta = (date.getDay() - firstDayOfWeek + 7) % 7;
 
-    var result = new Date(date);
+    const result = new Date(date);
     result.setDate(date.getDate() - delta);
 
     return result;
 };
 
-var normalizeDateByWeek = function(date, currentDate) {
-    var differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day'),
-        resultDate = new Date(date);
+const normalizeDateByWeek = function(date, currentDate) {
+    const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
+    let resultDate = new Date(date);
 
     if(differenceInDays >= 6) {
         resultDate = new Date(resultDate.setDate(resultDate.getDate() + 7));
@@ -521,7 +521,7 @@ var normalizeDateByWeek = function(date, currentDate) {
     return resultDate;
 };
 
-var dateInRange = function(date, min, max, format) {
+const dateInRange = function(date, min, max, format) {
     if(format === 'date') {
         min = min && dateUtils.correctDateWithUnitBeginning(min, 'day');
         max = max && dateUtils.correctDateWithUnitBeginning(max, 'day');
@@ -531,9 +531,9 @@ var dateInRange = function(date, min, max, format) {
     return normalizeDate(date, min, max) === date;
 };
 
-var dateTimeFromDecimal = function(number) {
-    var hours = Math.floor(number),
-        minutes = (number % 1) * 60;
+const dateTimeFromDecimal = function(number) {
+    const hours = Math.floor(number);
+    const minutes = (number % 1) * 60;
 
     return {
         hours: hours,
@@ -541,9 +541,9 @@ var dateTimeFromDecimal = function(number) {
     };
 };
 
-var roundDateByStartDayHour = function(date, startDayHour) {
-    var startTime = this.dateTimeFromDecimal(startDayHour),
-        result = new Date(date);
+const roundDateByStartDayHour = function(date, startDayHour) {
+    const startTime = this.dateTimeFromDecimal(startDayHour);
+    const result = new Date(date);
 
     if(date.getHours() === startTime.hours && date.getMinutes() < startTime.minutes || date.getHours() < startTime.hours) {
         result.setHours(startTime.hours, startTime.minutes, 0, 0);
@@ -553,7 +553,7 @@ var roundDateByStartDayHour = function(date, startDayHour) {
 };
 
 var normalizeDate = function(date, min, max) {
-    var normalizedDate = date;
+    let normalizedDate = date;
 
     if(!isDefined(date)) {
         return date;
@@ -576,9 +576,9 @@ var fixTimezoneGap = function(oldDate, newDate) {
         return;
     }
 
-    var diff = newDate.getHours() - oldDate.getHours(),
-        sign,
-        trial;
+    const diff = newDate.getHours() - oldDate.getHours();
+    let sign;
+    let trial;
 
     if(diff === 0) {
         return;
@@ -592,7 +592,7 @@ var fixTimezoneGap = function(oldDate, newDate) {
     }
 };
 
-var roundToHour = function(date) {
+const roundToHour = function(date) {
     date.setHours(date.getHours() + 1);
     date.setMinutes(0);
 
@@ -603,12 +603,12 @@ var getTimezonesDifference = function(min, max) {
     return (max.getTimezoneOffset() - min.getTimezoneOffset()) * 60 * 1000;
 };
 
-var makeDate = function(date) {
+const makeDate = function(date) {
     // TODO: will be useful later for work with different timezones
     return new Date(date);
 };
 
-var getDatesOfInterval = function(startDate, endDate, step) {
+const getDatesOfInterval = function(startDate, endDate, step) {
     const result = [];
 
     let currentDate = new Date(startDate.getTime());

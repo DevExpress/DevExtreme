@@ -1,5 +1,5 @@
 function discreteColorizer(options, themeManager, root) {
-    var palette = themeManager.createPalette(options.palette, {
+    const palette = themeManager.createPalette(options.palette, {
         useHighlight: true,
         extensionMode: options.paletteExtensionMode,
         count: options.colorizeGroups ? getNodesCount(root) : getLeafsCount(root)
@@ -9,11 +9,11 @@ function discreteColorizer(options, themeManager, root) {
 }
 
 function getLeafsCount(root) {
-    var allNodes = root.nodes.slice(),
-        i,
-        ii = allNodes.length,
-        count = 0,
-        node;
+    const allNodes = root.nodes.slice();
+    let i;
+    const ii = allNodes.length;
+    let count = 0;
+    let node;
 
     for(i = 0; i < ii; ++i) {
         node = allNodes[i];
@@ -28,7 +28,7 @@ function getLeafsCount(root) {
 }
 
 function discreteLeafColorizer(palette) {
-    var colors = palette.generateColors();
+    const colors = palette.generateColors();
 
     return function(node) {
         return colors[node.index];
@@ -36,11 +36,11 @@ function discreteLeafColorizer(palette) {
 }
 
 function getNodesCount(root) {
-    var allNodes = root.nodes.slice(),
-        i,
-        ii = allNodes.length,
-        count = 0,
-        node;
+    const allNodes = root.nodes.slice();
+    let i;
+    const ii = allNodes.length;
+    let count = 0;
+    let node;
 
     for(i = 0; i < ii; ++i) {
         node = allNodes[i];
@@ -53,11 +53,11 @@ function getNodesCount(root) {
 }
 
 function prepareDiscreteGroupColors(palette, root) {
-    var colors = {},
-        allNodes = root.nodes.slice(),
-        i,
-        ii = allNodes.length,
-        node;
+    const colors = {};
+    let allNodes = root.nodes.slice();
+    let i;
+    let ii = allNodes.length;
+    let node;
 
     for(i = 0; i < ii; ++i) {
         node = allNodes[i];
@@ -72,7 +72,7 @@ function prepareDiscreteGroupColors(palette, root) {
 }
 
 function discreteGroupColorizer(palette, root) {
-    var colors = prepareDiscreteGroupColors(palette, root);
+    const colors = prepareDiscreteGroupColors(palette, root);
 
     return function(node) {
         return colors[node._id];

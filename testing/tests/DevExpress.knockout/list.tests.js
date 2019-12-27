@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const $ = require('jquery');
+const ko = require('knockout');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('ui/list');
 require('integration/knockout');
@@ -8,7 +8,7 @@ require('integration/knockout');
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="list"></div>\
         <div id="templated-list">\
             <div data-options="dxTemplate: { name: \'item\' }">Item Template</div>\
@@ -28,15 +28,15 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var LIST_CLASS = 'dx-list',
-    LIST_ITEM_CLASS = 'dx-list-item',
-    LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const LIST_CLASS = 'dx-list';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
-var toSelector = function(cssClass) {
+const toSelector = function(cssClass) {
     return '.' + cssClass;
 };
 
-var moduleSetup = {
+const moduleSetup = {
     beforeEach: function() {
         executeAsyncMock.setup();
 
@@ -54,11 +54,11 @@ var moduleSetup = {
 QUnit.module('rendering', moduleSetup);
 
 QUnit.test('default with ko approach', function(assert) {
-    var vm = {
+    const vm = {
         items: [0, 1]
     };
 
-    var $element = this.element;
+    const $element = this.element;
 
     $element.attr('data-bind', 'dxList: {items: items}');
 
@@ -66,7 +66,7 @@ QUnit.test('default with ko approach', function(assert) {
 
     assert.ok($element.hasClass(LIST_CLASS));
 
-    var items = $element.find(toSelector(LIST_ITEM_CLASS));
+    const items = $element.find(toSelector(LIST_ITEM_CLASS));
     assert.equal(items.length, 2);
     assert.ok(items.eq(0).hasClass(LIST_ITEM_CLASS));
     assert.ok(items.eq(1).hasClass(LIST_ITEM_CLASS));
@@ -77,10 +77,10 @@ QUnit.test('default with ko approach', function(assert) {
 QUnit.module('regressions', moduleSetup);
 
 QUnit.test('scrollView size updated on onContentReady (B253584)', function(assert) {
-    var scrollView,
-        itemHeight = 20;
+    let scrollView;
+    const itemHeight = 20;
 
-    var vm = {
+    const vm = {
         dataSource: {
             store: [1, 2, 3, 4, 5],
             paginate: false
@@ -99,7 +99,7 @@ QUnit.test('scrollView size updated on onContentReady (B253584)', function(asser
 });
 
 QUnit.test('observableArray.push must refresh', function(assert) {
-    var vm = {
+    const vm = {
         data: ko.observableArray([1])
     };
 
@@ -115,7 +115,7 @@ QUnit.test('observableArray.push must refresh', function(assert) {
 });
 
 QUnit.test('B233222. List - group header uses item template', function(assert) {
-    var vm = {
+    const vm = {
         groups: [
             { key: 'simple', items: ['1', '2', '3'] },
             { template: 'custom', key: 'custom', items: ['1', '2', '3'] },
@@ -125,8 +125,8 @@ QUnit.test('B233222. List - group header uses item template', function(assert) {
 
     ko.applyBindings(vm, $('#groupedListContainer').get(0));
 
-    var $list = $('#groupedListContainer').find('.dx-list'),
-        $headers = $list.find('.dx-list-group-header');
+    const $list = $('#groupedListContainer').find('.dx-list');
+    const $headers = $list.find('.dx-list-group-header');
 
     assert.equal($headers.eq(0).text(), 'Group Template', 'group template');
     assert.equal($headers.eq(1).text(), 'Custom Group Template', 'custom group.template');
@@ -139,7 +139,7 @@ QUnit.module('deleting in grouped list MVVM support');
 QUnit.test('deleteItem should correctly be handled by ko subscriptions with isolated items', function(assert) {
     assert.expect(2);
 
-    var items = [{
+    const items = [{
         key: 1,
         items: ko.observableArray([1, 2, 3])
     }, {
@@ -154,11 +154,11 @@ QUnit.test('deleteItem should correctly be handled by ko subscriptions with isol
         assert.ok('second group subscription triggered');
     });
 
-    var $list = $('#templated-list').dxList({
-            items: items,
-            grouped: true
-        }),
-        list = $list.dxList('instance');
+    const $list = $('#templated-list').dxList({
+        items: items,
+        grouped: true
+    });
+    const list = $list.dxList('instance');
 
     list.deleteItem({ group: 0, item: 0 });
     list.deleteItem({ group: 1, item: 0 });
@@ -168,18 +168,18 @@ QUnit.test('deleteItem should correctly be handled by ko subscriptions with isol
 QUnit.module('selecting MVVM support');
 
 QUnit.test('grouped list should respond on outside selectedItems changes', function(assert) {
-    var items = [
-            {
-                key: 'first',
-                items: [{ a: 0 }, { a: 1 }]
-            },
-            {
-                key: 'second',
-                items: [{ a: 3 }, { a: 4 }]
-            }
-        ],
-        $list = $('#koSelectingList');
-    var vm = {
+    const items = [
+        {
+            key: 'first',
+            items: [{ a: 0 }, { a: 1 }]
+        },
+        {
+            key: 'second',
+            items: [{ a: 3 }, { a: 4 }]
+        }
+    ];
+    const $list = $('#koSelectingList');
+    const vm = {
         items: items,
         grouped: true,
         editEnabled: true,
@@ -188,15 +188,15 @@ QUnit.test('grouped list should respond on outside selectedItems changes', funct
     };
     ko.applyBindings(vm, $list[0]);
 
-    var selectActionFired = 0,
-        unselectActionFired = 0;
-    var list = $list.dxList('instance');
+    let selectActionFired = 0;
+    let unselectActionFired = 0;
+    const list = $list.dxList('instance');
     list.option('onSelectionChanged', function(args) {
         selectActionFired += args.addedItems.length;
         unselectActionFired += args.removedItems.length;
     });
 
-    var $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
 
     vm.selectedItems([
         {

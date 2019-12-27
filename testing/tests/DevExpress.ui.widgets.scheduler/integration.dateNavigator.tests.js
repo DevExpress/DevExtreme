@@ -28,8 +28,8 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
     const INIT_CURRENT_DATE = new Date(2017, 4, 25);
 
     const testNavigatorButtonsState = (assert, instance, cases) => {
-        const $previousButton = $(instance.$element().find('.dx-scheduler-navigator-previous')),
-            $nextButton = $(instance.$element().find('.dx-scheduler-navigator-next'));
+        const $previousButton = $(instance.$element().find('.dx-scheduler-navigator-previous'));
+        const $nextButton = $(instance.$element().find('.dx-scheduler-navigator-next'));
 
         assert.equal(instance.option('currentDate').valueOf(), INIT_CURRENT_DATE.valueOf(), 'currentDate value equal with init currentDate');
         cases.forEach(testCase => {
@@ -137,7 +137,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
     QUnit.test('Min & Max options should be passed to header', function(assert) {
         this.createInstance({ currentDate: new Date(2015, 1, 9), min: new Date(2015, 1, 2), max: new Date(2015, 1, 4) });
 
-        var header = $(this.instance.$element()).find('.dx-scheduler-header').dxSchedulerHeader('instance');
+        const header = $(this.instance.$element()).find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
         assert.deepEqual(header.option('min'), new Date(2015, 1, 2), 'min is passed');
         assert.deepEqual(header.option('max'), new Date(2015, 1, 4), 'max is passed');
@@ -193,7 +193,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-next')).trigger('dxclick');
 
-        var workspace = this.instance.getWorkSpace();
+        const workspace = this.instance.getWorkSpace();
         assert.deepEqual(workspace._firstViewDate, new Date(2017, 4, 3, 8, 0), 'New date is correct');
     });
 
@@ -212,7 +212,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         $(this.instance.$element().find('.dx-scheduler-navigator-previous')).trigger('dxclick');
 
-        var workspace = this.instance.getWorkSpace();
+        const workspace = this.instance.getWorkSpace();
         assert.deepEqual(workspace._firstViewDate, new Date(2017, 3, 27, 8, 0), 'New date is correct');
     });
 
@@ -226,7 +226,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 startDate: new Date(2018, 4, 21)
             }] });
 
-        var $caption = this.instance.$element().find('.dx-scheduler-navigator-caption');
+        const $caption = this.instance.$element().find('.dx-scheduler-navigator-caption');
 
         assert.equal($caption.text(), 'May-Jun 2018', 'Caption is correct');
     });
@@ -254,8 +254,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 type: 'month',
                 intervalCount: 2
             }] });
-        var $element = this.instance.$element(),
-            $caption = $element.find('.dx-scheduler-navigator-caption');
+        const $element = this.instance.$element();
+        const $caption = $element.find('.dx-scheduler-navigator-caption');
 
         $($element.find('.dx-scheduler-navigator-next')).trigger('dxclick').trigger('dxclick');
 
@@ -272,8 +272,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 intervalCount: 2,
                 startDate: new Date(2018, 4, 21)
             }] });
-        var $element = this.instance.$element(),
-            $caption = $element.find('.dx-scheduler-navigator-caption');
+        const $element = this.instance.$element();
+        const $caption = $element.find('.dx-scheduler-navigator-caption');
 
         $($element.find('.dx-scheduler-navigator-next')).trigger('dxclick').trigger('dxclick');
 
@@ -290,8 +290,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 intervalCount: 2,
                 startDate: new Date(2018, 4, 21)
             }] });
-        var $element = this.instance.$element(),
-            $caption = $element.find('.dx-scheduler-navigator-caption');
+        const $element = this.instance.$element();
+        const $caption = $element.find('.dx-scheduler-navigator-caption');
 
         $($element.find('.dx-scheduler-navigator-previous')).trigger('dxclick').trigger('dxclick');
 
@@ -306,8 +306,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
             views: ['month']
         });
 
-        var $nextButton = $(this.instance.$element().find('.dx-scheduler-navigator-next')),
-            $previousButton = $(this.instance.$element().find('.dx-scheduler-navigator-previous'));
+        const $nextButton = $(this.instance.$element().find('.dx-scheduler-navigator-next'));
+        const $previousButton = $(this.instance.$element().find('.dx-scheduler-navigator-previous'));
 
         $nextButton.trigger('dxclick');
         $nextButton.trigger('dxclick');
@@ -330,8 +330,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 startDate: new Date(2017, 11, 11)
             }] });
 
-        var $nextButton = $(this.instance.$element().find('.dx-scheduler-navigator-next')),
-            $previousButton = $(this.instance.$element().find('.dx-scheduler-navigator-previous'));
+        const $nextButton = $(this.instance.$element().find('.dx-scheduler-navigator-next'));
+        const $previousButton = $(this.instance.$element().find('.dx-scheduler-navigator-previous'));
 
         $nextButton.trigger('dxclick');
         $nextButton.trigger('dxclick');
@@ -383,7 +383,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         this.createInstance({ currentDate: new Date(2015, 1, 9) });
         this.instance.option('currentDate', new Date(2015, 1, 10));
 
-        var navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
+        const navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
 
         assert.deepEqual(navigator.option('date'), new Date(2015, 1, 10), 'New date is correct');
     });
@@ -393,7 +393,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         this.createInstance({ currentDate: new Date(2015, 1, 9) });
         this.instance.option('currentView', 'week');
 
-        var navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
+        const navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
 
         assert.deepEqual(navigator.option('step'), 'week', 'Navigator caption is OK');
     });
@@ -402,7 +402,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         this.createInstance({ currentDate: new Date(2015, 1, 9), firstDayOfWeek: 3 });
 
-        var navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
+        const navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
 
         assert.deepEqual(navigator.option('firstDayOfWeek'), 3, 'firstDayOfWeek is OK');
 
@@ -414,7 +414,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     QUnit.test('Tasks should be rerendered after click on next/prev button', function(assert) {
         this.createInstance({ currentDate: new Date(2015, 1, 24) });
 
-        var spy = sinon.spy(this.instance._appointmentModel, 'filterByDate');
+        const spy = sinon.spy(this.instance._appointmentModel, 'filterByDate');
 
         try {
             $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
@@ -432,15 +432,15 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
             firstDayOfWeek: 1,
             dataSource: [{ startDate: new Date(2016, 0, 24, 3), endDate: new Date(2016, 0, 24, 4) }]
         });
-        var $scheduler = $(this.instance.$element());
+        const $scheduler = $(this.instance.$element());
 
-        var appointmentPosition = $scheduler.find('.dx-scheduler-appointment').position();
+        const appointmentPosition = $scheduler.find('.dx-scheduler-appointment').position();
 
         $scheduler.find('.dx-scheduler-navigator-caption').trigger('dxclick');
         $('.dx-calendar td[data-value=\'2016/01/23\']').trigger('dxclick');
         $scheduler.find('.dx-scheduler-navigator-next').trigger('dxclick');
 
-        var currentPosition = $scheduler.find('.dx-scheduler-appointment').position();
+        const currentPosition = $scheduler.find('.dx-scheduler-appointment').position();
         assert.roughEqual(currentPosition.top, appointmentPosition.top, 1.001, 'position is not modified');
     });
 
@@ -450,7 +450,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
             currentView: 'agenda'
         });
 
-        var navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
+        const navigator = $(this.instance.$element()).find('.dx-scheduler-navigator').dxSchedulerNavigator('instance');
 
         assert.equal(navigator.option('step'), 'agenda', 'Step is OK');
     });
@@ -458,7 +458,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     QUnit.test('Calendar popover has dx-scheduler-navigator-calendar-popover class', function(assert) {
         this.createInstance({});
 
-        var popover = $(this.instance.$element()).find('.dx-scheduler-navigator .dx-overlay');
+        const popover = $(this.instance.$element()).find('.dx-scheduler-navigator .dx-overlay');
 
         assert.ok(popover.hasClass('dx-scheduler-navigator-calendar-popover'), 'Calendar popover has dx-scheduler-navigator-calendar-popover class');
     });
@@ -472,8 +472,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
                 intervalCount: 2
             }] });
 
-        var $element = this.instance.$element(),
-            $caption = $element.find('.dx-scheduler-navigator-caption');
+        const $element = this.instance.$element();
+        const $caption = $element.find('.dx-scheduler-navigator-caption');
 
         $($element.find('.dx-scheduler-navigator-next')).trigger('dxclick');
 

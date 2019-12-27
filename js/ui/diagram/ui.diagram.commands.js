@@ -308,7 +308,7 @@ const DiagramCommands = {
             });
     },
     getToolbarCommands: function(commandNames) {
-        var commands = this.getAllToolbarCommands();
+        const commands = this.getAllToolbarCommands();
         if(commandNames) {
             return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
         }
@@ -414,8 +414,8 @@ const DiagramCommands = {
         ];
     },
     getPropertyPanelCommandsByGroups: function(groups) {
-        var commands = DiagramCommands.getAllPropertyPanelCommands();
-        var result = [];
+        const commands = DiagramCommands.getAllPropertyPanelCommands();
+        const result = [];
         groups.forEach(function(g, gi) {
             g.commands.forEach(function(cn, ci) {
                 result.push(extend(commands[cn], {
@@ -502,7 +502,7 @@ const DiagramCommands = {
             });
     },
     getContextMenuCommands: function(commandNames) {
-        var commands = this.getAllContextMenuCommands();
+        const commands = this.getAllContextMenuCommands();
         if(commandNames) {
             return commandNames.map(function(cn) { return commands[cn]; }).filter(function(c) { return c; });
         }
@@ -535,9 +535,9 @@ const DiagramCommands = {
         }
     },
     _getBlobByDataURI(window, dataURI, mimeString) {
-        var byteString = window.atob(dataURI.split(',')[1]);
-        var ia = new Uint8Array(byteString.length);
-        for(var i = 0; i < byteString.length; i++) {
+        const byteString = window.atob(dataURI.split(',')[1]);
+        const ia = new Uint8Array(byteString.length);
+        for(let i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
         return new window.Blob([ia.buffer], { type: mimeString });

@@ -1,31 +1,31 @@
-var $ = require('../core/renderer'),
-    window = require('../core/utils/window').getWindow(),
-    eventsEngine = require('../events/core/events_engine'),
-    errors = require('../core/errors'),
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    extend = require('../core/utils/extend').extend,
-    typeUtils = require('../core/utils/type'),
-    iteratorUtils = require('../core/utils/iterator'),
-    translator = require('./translator'),
-    easing = require('./easing'),
-    animationFrame = require('./frame'),
-    support = require('../core/utils/support'),
-    positionUtils = require('./position'),
-    removeEvent = require('../core/remove_event'),
-    eventUtils = require('../events/utils'),
-    deferredUtils = require('../core/utils/deferred'),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    removeEventName = eventUtils.addNamespace(removeEvent, 'dxFX'),
-    isFunction = typeUtils.isFunction,
-    isPlainObject = typeUtils.isPlainObject,
-    noop = require('../core/utils/common').noop;
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const eventsEngine = require('../events/core/events_engine');
+const errors = require('../core/errors');
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const extend = require('../core/utils/extend').extend;
+const typeUtils = require('../core/utils/type');
+const iteratorUtils = require('../core/utils/iterator');
+const translator = require('./translator');
+const easing = require('./easing');
+const animationFrame = require('./frame');
+const support = require('../core/utils/support');
+const positionUtils = require('./position');
+const removeEvent = require('../core/remove_event');
+const eventUtils = require('../events/utils');
+const deferredUtils = require('../core/utils/deferred');
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
+const removeEventName = eventUtils.addNamespace(removeEvent, 'dxFX');
+const isFunction = typeUtils.isFunction;
+const isPlainObject = typeUtils.isPlainObject;
+const noop = require('../core/utils/common').noop;
 
 
-var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
-    ANIM_DATA_KEY = 'dxAnimData',
-    ANIM_QUEUE_KEY = 'dxAnimQueue',
-    TRANSFORM_PROP = 'transform';
+const RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i;
+const ANIM_DATA_KEY = 'dxAnimData';
+const ANIM_QUEUE_KEY = 'dxAnimQueue';
+const TRANSFORM_PROP = 'transform';
 
 
 /**
@@ -34,7 +34,7 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @type object
 */
 
-var TransitionAnimationStrategy = {
+const TransitionAnimationStrategy = {
     initAnimation: function($element, config) {
         $element.css({
             'transitionProperty': 'none'
@@ -46,9 +46,9 @@ var TransitionAnimationStrategy = {
             setProps($element, config.from);
         }
 
-        var that = this,
-            deferred = new Deferred(),
-            cleanupWhen = config.cleanupWhen;
+        const that = this;
+        const deferred = new Deferred();
+        const cleanupWhen = config.cleanupWhen;
 
         config.transitionAnimation = {
             deferred: deferred,
@@ -89,14 +89,14 @@ var TransitionAnimationStrategy = {
     },
 
     _completeAnimationCallback: function($element, config) {
-        var that = this,
-            startTime = Date.now() + config.delay,
-            deferred = new Deferred(),
-            transitionEndFired = new Deferred(),
-            simulatedTransitionEndFired = new Deferred(),
-            simulatedEndEventTimer,
-            waitForJSCompleteTimer,
-            transitionEndEventName = support.transitionEndEventName() + '.dxFX';
+        const that = this;
+        const startTime = Date.now() + config.delay;
+        const deferred = new Deferred();
+        const transitionEndFired = new Deferred();
+        const simulatedTransitionEndFired = new Deferred();
+        let simulatedEndEventTimer;
+        let waitForJSCompleteTimer;
+        const transitionEndEventName = support.transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
@@ -179,13 +179,13 @@ var TransitionAnimationStrategy = {
     }
 };
 
-var FrameAnimationStrategy = {
+const FrameAnimationStrategy = {
     initAnimation: function($element, config) {
         setProps($element, config.from);
     },
     animate: function($element, config) {
-        var deferred = new Deferred(),
-            that = this;
+        const deferred = new Deferred();
+        const that = this;
 
         if(!config) {
             return deferred.reject().promise();
@@ -221,7 +221,7 @@ var FrameAnimationStrategy = {
                     return;
                 }
 
-                var currentValue = extend({}, this.currentValue);
+                const currentValue = extend({}, this.currentValue);
 
                 if(currentValue[TRANSFORM_PROP]) {
                     currentValue[TRANSFORM_PROP] = iteratorUtils.map(currentValue[TRANSFORM_PROP], function(value, prop) {
@@ -262,12 +262,12 @@ var FrameAnimationStrategy = {
     },
 
     _parseTransform: function(transformString) {
-        var result = {};
+        const result = {};
 
         iteratorUtils.each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
-            var translateData = translator.parseTranslate(part),
-                scaleData = part.match(/scale\((.+?)\)/),
-                rotateData = part.match(/(rotate.)\((.+)deg\)/);
+            const translateData = translator.parseTranslate(part);
+            const scaleData = part.match(/scale\((.+?)\)/);
+            const rotateData = part.match(/(rotate.)\((.+)deg\)/);
 
             if(translateData) {
                 result.translate = translateData;
@@ -286,7 +286,7 @@ var FrameAnimationStrategy = {
     },
 
     stop: function($element, config, jumpToEnd) {
-        var frameAnimation = config && config.frameAnimation;
+        const frameAnimation = config && config.frameAnimation;
 
         if(!frameAnimation) {
             return;
@@ -303,13 +303,13 @@ var FrameAnimationStrategy = {
     },
 
     _animationStep: function($element, config) {
-        var frameAnimation = config && config.frameAnimation;
+        const frameAnimation = config && config.frameAnimation;
 
         if(!frameAnimation) {
             return;
         }
 
-        var now = new Date().valueOf();
+        const now = new Date().valueOf();
 
         if(now >= frameAnimation.startTime + frameAnimation.duration) {
             frameAnimation.finish();
@@ -319,7 +319,7 @@ var FrameAnimationStrategy = {
         frameAnimation.currentValue = this._calcStepValue(frameAnimation, now - frameAnimation.startTime);
         frameAnimation.draw();
 
-        var that = this;
+        const that = this;
         frameAnimation.animationFrameId = animationFrame.requestAnimationFrame(function() {
             that._animationStep($element, config);
         });
@@ -327,14 +327,14 @@ var FrameAnimationStrategy = {
 
     _calcStepValue: function(frameAnimation, currentDuration) {
         var calcValueRecursively = function(from, to) {
-            var result = Array.isArray(to) ? [] : {};
+            const result = Array.isArray(to) ? [] : {};
 
-            var calcEasedValue = function(propName) {
-                var x = currentDuration / frameAnimation.duration,
-                    t = currentDuration,
-                    b = 1 * from[propName],
-                    c = to[propName] - from[propName],
-                    d = frameAnimation.duration;
+            const calcEasedValue = function(propName) {
+                const x = currentDuration / frameAnimation.duration;
+                const t = currentDuration;
+                const b = 1 * from[propName];
+                const c = to[propName] - from[propName];
+                const d = frameAnimation.duration;
 
                 return easing.getEasing(frameAnimation.easing)(x, t, b, c, d);
             };
@@ -356,7 +356,7 @@ var FrameAnimationStrategy = {
     },
 
     _normalizeValue: function(value) {
-        var numericValue = parseFloat(value, 10);
+        const numericValue = parseFloat(value, 10);
 
         if(numericValue === false) {
             return value;
@@ -366,7 +366,7 @@ var FrameAnimationStrategy = {
     }
 };
 
-var FallbackToNoAnimationStrategy = {
+const FallbackToNoAnimationStrategy = {
     initAnimation: function() {
     },
     animate: function() {
@@ -376,14 +376,14 @@ var FallbackToNoAnimationStrategy = {
     isSynchronous: true
 };
 
-var getAnimationStrategy = function(config) {
+const getAnimationStrategy = function(config) {
     config = config || {};
-    var animationStrategies = {
+    const animationStrategies = {
         'transition': support.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
         'frame': FrameAnimationStrategy,
         'noAnimation': FallbackToNoAnimationStrategy
     };
-    var strategy = config.strategy || 'transition';
+    let strategy = config.strategy || 'transition';
 
     if(config.type === 'css' && !support.transition()) {
         strategy = 'noAnimation';
@@ -392,7 +392,7 @@ var getAnimationStrategy = function(config) {
     return animationStrategies[strategy];
 };
 
-var baseConfigValidator = function(config, animationType, validate, typeMessage) {
+const baseConfigValidator = function(config, animationType, validate, typeMessage) {
     iteratorUtils.each(['from', 'to'], function() {
         if(!validate(config[this])) {
             throw errors.Error('E0010', animationType, this, typeMessage);
@@ -400,20 +400,20 @@ var baseConfigValidator = function(config, animationType, validate, typeMessage)
     });
 };
 
-var isObjectConfigValidator = function(config, animationType) {
+const isObjectConfigValidator = function(config, animationType) {
     return baseConfigValidator(config, animationType, function(target) { return isPlainObject(target); }, 'a plain object');
 };
 
-var isStringConfigValidator = function(config, animationType) {
+const isStringConfigValidator = function(config, animationType) {
     return baseConfigValidator(config, animationType, function(target) { return typeof target === 'string'; }, 'a string');
 };
 
-var CustomAnimationConfigurator = {
+const CustomAnimationConfigurator = {
     setup: function() {
     }
 };
 
-var CssAnimationConfigurator = {
+const CssAnimationConfigurator = {
     validateConfig: function(config) {
         isStringConfigValidator(config, 'css');
     },
@@ -422,23 +422,23 @@ var CssAnimationConfigurator = {
     }
 };
 
-var positionAliases = {
+const positionAliases = {
     'top': { my: 'bottom center', at: 'top center' },
     'bottom': { my: 'top center', at: 'bottom center' },
     'right': { my: 'left center', at: 'right center' },
     'left': { my: 'right center', at: 'left center' }
 };
 
-var SlideAnimationConfigurator = {
+const SlideAnimationConfigurator = {
     validateConfig: function(config) {
         isObjectConfigValidator(config, 'slide');
     },
 
     setup: function($element, config) {
-        var location = translator.locate($element);
+        const location = translator.locate($element);
 
         if(config.type !== 'slide') {
-            var positioningConfig = (config.type === 'slideIn') ? config.from : config.to;
+            const positioningConfig = (config.type === 'slideIn') ? config.from : config.to;
 
             positioningConfig.position = extend({ of: window }, positionAliases[config.direction]);
             setupPosition($element, positioningConfig);
@@ -458,7 +458,7 @@ var SlideAnimationConfigurator = {
     },
 
     _initNewPosition: function(location, config) {
-        var position = {
+        const position = {
             left: config.left,
             top: config.top
         };
@@ -466,7 +466,7 @@ var SlideAnimationConfigurator = {
         delete config.left;
         delete config.top;
 
-        var relativeValue = this._getRelativeValue(position.left);
+        let relativeValue = this._getRelativeValue(position.left);
         if(relativeValue !== undefined) {
             position.left = relativeValue + location.left;
         } else {
@@ -484,18 +484,18 @@ var SlideAnimationConfigurator = {
     },
 
     _getRelativeValue: function(value) {
-        var relativeValue;
+        let relativeValue;
         if(typeof value === 'string' && (relativeValue = RELATIVE_VALUE_REGEX.exec(value))) {
             return parseInt(relativeValue[1] + '1') * relativeValue[2];
         }
     }
 };
 
-var FadeAnimationConfigurator = {
+const FadeAnimationConfigurator = {
     setup: function($element, config) {
-        var from = config.from,
-            fromOpacity = isPlainObject(from) ? (config.skipElementInitialStyles ? 0 : $element.css('opacity')) : String(from),
-            toOpacity;
+        const from = config.from;
+        const fromOpacity = isPlainObject(from) ? (config.skipElementInitialStyles ? 0 : $element.css('opacity')) : String(from);
+        let toOpacity;
 
         switch(config.type) {
             case 'fadeIn':
@@ -519,24 +519,24 @@ var FadeAnimationConfigurator = {
     }
 };
 
-var PopAnimationConfigurator = {
+const PopAnimationConfigurator = {
     validateConfig: function(config) {
         isObjectConfigValidator(config, 'pop');
     },
 
     setup: function($element, config) {
-        var from = config.from,
-            to = config.to,
-            fromOpacity = 'opacity' in from ? from.opacity : $element.css('opacity'),
-            toOpacity = 'opacity' in to ? to.opacity : 1,
-            fromScale = 'scale' in from ? from.scale : 0,
-            toScale = 'scale' in to ? to.scale : 1;
+        const from = config.from;
+        const to = config.to;
+        const fromOpacity = 'opacity' in from ? from.opacity : $element.css('opacity');
+        const toOpacity = 'opacity' in to ? to.opacity : 1;
+        const fromScale = 'scale' in from ? from.scale : 0;
+        const toScale = 'scale' in to ? to.scale : 1;
 
         config.from = {
             opacity: fromOpacity
         };
 
-        var translate = translator.getTranslate($element);
+        const translate = translator.getTranslate($element);
 
         config.from[TRANSFORM_PROP] = this._getCssTransform(translate, fromScale);
 
@@ -552,7 +552,7 @@ var PopAnimationConfigurator = {
 };
 
 
-var animationConfigurators = {
+const animationConfigurators = {
     'custom': CustomAnimationConfigurator,
     'slide': SlideAnimationConfigurator,
     'slideIn': SlideAnimationConfigurator,
@@ -564,8 +564,8 @@ var animationConfigurators = {
     'css': CssAnimationConfigurator
 };
 
-var getAnimationConfigurator = function(config) {
-    var result = animationConfigurators[config.type];
+const getAnimationConfigurator = function(config) {
+    const result = animationConfigurators[config.type];
     if(!result) {
         throw errors.Error('E0011', config.type);
     }
@@ -574,26 +574,26 @@ var getAnimationConfigurator = function(config) {
 };
 
 
-var defaultJSConfig = {
-        type: 'custom',
-        from: {},
-        to: {},
-        duration: 400,
-        start: noop,
-        complete: noop,
-        easing: 'ease',
-        delay: 0
-    },
-    defaultCssConfig = {
-        duration: 400,
-        easing: 'ease',
-        delay: 0
-    };
+const defaultJSConfig = {
+    type: 'custom',
+    from: {},
+    to: {},
+    duration: 400,
+    start: noop,
+    complete: noop,
+    easing: 'ease',
+    delay: 0
+};
+const defaultCssConfig = {
+    duration: 400,
+    easing: 'ease',
+    delay: 0
+};
 
-var setupAnimationOnElement = function() {
-    var animation = this,
-        $element = animation.element,
-        config = animation.config;
+const setupAnimationOnElement = function() {
+    const animation = this;
+    const $element = animation.element;
+    const config = animation.config;
 
     setupPosition($element, config.from);
     setupPosition($element, config.to);
@@ -610,27 +610,27 @@ var setupAnimationOnElement = function() {
     animation.strategy.initAnimation($element, config);
 
     if(config.start) {
-        var element = getPublicElement($element);
+        const element = getPublicElement($element);
         config.start.apply(this, [element, config]);
     }
 };
 
-var onElementAnimationComplete = function(animation) {
-    var $element = animation.element,
-        config = animation.config;
+const onElementAnimationComplete = function(animation) {
+    const $element = animation.element;
+    const config = animation.config;
 
     $element.removeData(ANIM_DATA_KEY);
     if(config.complete) {
-        var element = getPublicElement($element);
+        const element = getPublicElement($element);
         config.complete.apply(this, [element, config]);
     }
     animation.deferred.resolveWith(this, [$element, config]);
 };
 
-var startAnimationOnElement = function() {
-    var animation = this,
-        $element = animation.element,
-        config = animation.config;
+const startAnimationOnElement = function() {
+    const animation = this;
+    const $element = animation.element;
+    const config = animation.config;
 
     animation.isStarted = true;
     return animation.strategy.animate($element, config)
@@ -642,10 +642,10 @@ var startAnimationOnElement = function() {
         });
 };
 
-var stopAnimationOnElement = function(jumpToEnd) {
-    var animation = this,
-        $element = animation.element,
-        config = animation.config;
+const stopAnimationOnElement = function(jumpToEnd) {
+    const animation = this;
+    const $element = animation.element;
+    const config = animation.config;
 
     clearTimeout(animation.startTimeout);
 
@@ -656,9 +656,9 @@ var stopAnimationOnElement = function(jumpToEnd) {
     animation.strategy.stop($element, config, jumpToEnd);
 };
 
-var scopedRemoveEvent = eventUtils.addNamespace(removeEvent, 'dxFXStartAnimation');
+const scopedRemoveEvent = eventUtils.addNamespace(removeEvent, 'dxFXStartAnimation');
 
-var subscribeToRemoveEvent = function(animation) {
+const subscribeToRemoveEvent = function(animation) {
     eventsEngine.off(animation.element, scopedRemoveEvent);
     eventsEngine.on(animation.element, scopedRemoveEvent, function() {
         fx.stop(animation.element);
@@ -669,22 +669,22 @@ var subscribeToRemoveEvent = function(animation) {
     });
 };
 
-var createAnimation = function(element, initialConfig) {
-    var defaultConfig = initialConfig.type === 'css' ? defaultCssConfig : defaultJSConfig,
-        config = extend(true, {}, defaultConfig, initialConfig),
-        configurator = getAnimationConfigurator(config),
-        strategy = getAnimationStrategy(config),
-        animation = {
-            element: $(element),
-            config: config,
-            configurator: configurator,
-            strategy: strategy,
-            isSynchronous: strategy.isSynchronous,
-            setup: setupAnimationOnElement,
-            start: startAnimationOnElement,
-            stop: stopAnimationOnElement,
-            deferred: new Deferred()
-        };
+const createAnimation = function(element, initialConfig) {
+    const defaultConfig = initialConfig.type === 'css' ? defaultCssConfig : defaultJSConfig;
+    const config = extend(true, {}, defaultConfig, initialConfig);
+    const configurator = getAnimationConfigurator(config);
+    const strategy = getAnimationStrategy(config);
+    const animation = {
+        element: $(element),
+        config: config,
+        configurator: configurator,
+        strategy: strategy,
+        isSynchronous: strategy.isSynchronous,
+        setup: setupAnimationOnElement,
+        start: startAnimationOnElement,
+        stop: stopAnimationOnElement,
+        deferred: new Deferred()
+    };
 
     if(isFunction(configurator.validateConfig)) {
         configurator.validateConfig(config);
@@ -695,21 +695,21 @@ var createAnimation = function(element, initialConfig) {
     return animation;
 };
 
-var animate = function(element, config) {
-    var $element = $(element);
+const animate = function(element, config) {
+    const $element = $(element);
 
     if(!$element.length) {
         return new Deferred().resolve().promise();
     }
 
-    var animation = createAnimation($element, config);
+    const animation = createAnimation($element, config);
 
     pushInAnimationQueue($element, animation);
     return animation.deferred.promise();
 };
 
 var pushInAnimationQueue = function($element, animation) {
-    var queueData = getAnimQueueData($element);
+    const queueData = getAnimQueueData($element);
     writeAnimQueueData($element, queueData);
     queueData.push(animation);
 
@@ -726,7 +726,7 @@ var writeAnimQueueData = function($element, queueData) {
     $element.data(ANIM_QUEUE_KEY, queueData);
 };
 
-var destroyAnimQueueData = function($element) {
+const destroyAnimQueueData = function($element) {
     $element.removeData(ANIM_QUEUE_KEY);
 };
 
@@ -740,7 +740,7 @@ var shiftFromAnimationQueue = function($element, queueData) {
         return;
     }
 
-    var animation = queueData.shift();
+    const animation = queueData.shift();
     if(queueData.length === 0) {
         destroyAnimQueueData($element);
     }
@@ -770,12 +770,12 @@ var setupPosition = function($element, config) {
         return;
     }
 
-    var win = $(window),
-        left = 0,
-        top = 0,
-        position = positionUtils.calculate($element, config.position),
-        offset = $element.offset(),
-        currentPosition = $element.position();
+    const win = $(window);
+    let left = 0;
+    let top = 0;
+    const position = positionUtils.calculate($element, config.position);
+    const offset = $element.offset();
+    const currentPosition = $element.position();
 
     if(currentPosition.top > offset.top) {
         top = win.scrollTop();
@@ -801,9 +801,9 @@ var setProps = function($element, props) {
     });
 };
 
-var stop = function(element, jumpToEnd) {
-    var $element = $(element),
-        queueData = getAnimQueueData($element);
+const stop = function(element, jumpToEnd) {
+    const $element = $(element);
+    const queueData = getAnimQueueData($element);
 
     // TODO: think about complete all animation in queue
     iteratorUtils.each(queueData, function(_, animation) {
@@ -815,7 +815,7 @@ var stop = function(element, jumpToEnd) {
     if(!isAnimating($element)) {
         shiftFromAnimationQueue($element, queueData);
     }
-    var animation = $element.data(ANIM_DATA_KEY);
+    const animation = $element.data(ANIM_DATA_KEY);
 
     if(animation) {
         animation.stop(jumpToEnd);

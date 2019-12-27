@@ -12,8 +12,8 @@ const StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
 });
 
 function getArray(len) {
-    var i,
-        array = new Array(len);
+    let i;
+    const array = new Array(len);
 
     for(i = 0; i < len; i++) {
         array[i] = 0;
@@ -21,7 +21,7 @@ function getArray(len) {
     return array;
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.canvas = {
             width: 200,
@@ -36,7 +36,7 @@ var environment = {
             originalRight: 0
         };
 
-        var that = this;
+        const that = this;
         sinon.stub(translator2DModule, 'Translator2D', function() {
             return that.translator;
         });
@@ -95,7 +95,7 @@ var environment = {
         this.generatedTicks = ticks;
         this.generatedTickInterval = tickInterval;
 
-        var translator = this.translator;
+        const translator = this.translator;
         ticks.forEach(function(tick) {
             translator.stub('translate').withArgs(tick).returns(100);
         });
@@ -110,10 +110,10 @@ var environment = {
         }
 
         // assert
-        var renderer = this.renderer,
-            actualTexts = getArray(texts.length).map(function(_, i) {
-                return renderer.text.getCall(i).args[0];
-            });
+        const renderer = this.renderer;
+        const actualTexts = getArray(texts.length).map(function(_, i) {
+            return renderer.text.getCall(i).args[0];
+        });
 
         assert.deepEqual(actualTexts, texts);
     },
@@ -238,7 +238,7 @@ QUnit.test('No formats for logarithmic ticks with logarithmBase !== 10', functio
 
 QUnit.test('Label\'s hint - use auto formatter', function(assert) {
     // arrange
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createAxis({
         isHorizontal: true,
         label: {
@@ -1174,7 +1174,7 @@ QUnit.test('No value - return null', function(assert) {
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(undefined);
+    const result = this.axis.getFormattedValue(undefined);
 
     assert.strictEqual(result, null);
 });
@@ -1188,7 +1188,7 @@ QUnit.test('No format specified - use auto format', function(assert) {
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(1002);
+    const result = this.axis.getFormattedValue(1002);
 
     assert.strictEqual(result, '1.0K');
 });
@@ -1203,7 +1203,7 @@ QUnit.test('Value is string - retrun as is', function(assert) {
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue('1002');
+    const result = this.axis.getFormattedValue('1002');
 
     assert.strictEqual(result, '1002');
 });
@@ -1221,7 +1221,7 @@ QUnit.test('Axis label has format - use axis label format', function(assert) {
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(1002);
+    const result = this.axis.getFormattedValue(1002);
 
     assert.strictEqual(result, '$1,002.000');
 });
@@ -1239,7 +1239,7 @@ QUnit.test('Pass options with format, axis label has format - use passed format'
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(1002, { format: { type: 'fixedPoint', precision: 2 } });
+    const result = this.axis.getFormattedValue(1002, { format: { type: 'fixedPoint', precision: 2 } });
 
     assert.strictEqual(result, '1,002.00');
 });
@@ -1254,13 +1254,13 @@ QUnit.test('T297683. Axis label has format with precision = 0', function(assert)
     this.generatedTickInterval = 100;
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(2.53);
+    const result = this.axis.getFormattedValue(2.53);
 
     assert.strictEqual(result, '3');
 });
 
 QUnit.test('T297683. Pass options and point - check customizeText arguments', function(assert) {
-    var customizeText = sinon.spy(function(value) {
+    const customizeText = sinon.spy(function(value) {
         return 'customized';
     });
 
@@ -1277,7 +1277,7 @@ QUnit.test('T297683. Pass options and point - check customizeText arguments', fu
     this.axis.setBusinessRange({ min: 10, max: 20 });
     this.axis.draw(this.canvas);
 
-    var result = this.axis.getFormattedValue(2.53, { customizeText: customizeText }, 'passedPoint');
+    const result = this.axis.getFormattedValue(2.53, { customizeText: customizeText }, 'passedPoint');
 
     assert.equal(customizeText.callCount, 1);
     assert.strictEqual(customizeText.firstCall.args[0], customizeText.firstCall.thisValue);
@@ -1289,11 +1289,11 @@ QUnit.module('Date markers', environment);
 
 QUnit.test('No custom format - use auto formatting', function(assert) {
     // arrange
-    var date0 = new Date(2011, 5, 29, 0, 0, 0),
-        date1 = new Date(2011, 5, 30, 0, 0, 0),
-        date2 = new Date(2011, 6, 1, 0, 0, 0),
-        date3 = new Date(2011, 6, 2, 0, 0, 0),
-        date4 = new Date(2011, 6, 2, 23, 59, 59);
+    const date0 = new Date(2011, 5, 29, 0, 0, 0);
+    const date1 = new Date(2011, 5, 30, 0, 0, 0);
+    const date2 = new Date(2011, 6, 1, 0, 0, 0);
+    const date3 = new Date(2011, 6, 2, 0, 0, 0);
+    const date4 = new Date(2011, 6, 2, 23, 59, 59);
 
     this.createAxis({
         isHorizontal: true,
@@ -1312,7 +1312,7 @@ QUnit.test('No custom format - use auto formatting', function(assert) {
     // act
     this.axis.draw(this.canvas);
 
-    var text = this.renderer.text;
+    const text = this.renderer.text;
     assert.strictEqual(text.getCall(0).args[0], '29');
     assert.strictEqual(text.getCall(1).args[0], 'Thursday, 30');
     assert.strictEqual(text.getCall(2).args[0], 'July 1');
@@ -1321,11 +1321,11 @@ QUnit.test('No custom format - use auto formatting', function(assert) {
 
 QUnit.test('Custom format - use custom format', function(assert) {
     // arrange
-    var date0 = new Date(2011, 5, 29, 0, 0, 0),
-        date1 = new Date(2011, 5, 30, 0, 0, 0),
-        date2 = new Date(2011, 6, 1, 0, 0, 0),
-        date3 = new Date(2011, 6, 2, 0, 0, 0),
-        date4 = new Date(2011, 6, 2, 23, 59, 59);
+    const date0 = new Date(2011, 5, 29, 0, 0, 0);
+    const date1 = new Date(2011, 5, 30, 0, 0, 0);
+    const date2 = new Date(2011, 6, 1, 0, 0, 0);
+    const date3 = new Date(2011, 6, 2, 0, 0, 0);
+    const date4 = new Date(2011, 6, 2, 23, 59, 59);
 
     this.createAxis({
         isHorizontal: true,
@@ -1346,7 +1346,7 @@ QUnit.test('Custom format - use custom format', function(assert) {
     // act
     this.axis.draw(this.canvas);
 
-    var text = this.renderer.text;
+    const text = this.renderer.text;
 
     assert.strictEqual(text.getCall(0).args[0], 'June');
     assert.strictEqual(text.getCall(1).args[0], 'June');
@@ -1356,10 +1356,10 @@ QUnit.test('Custom format - use custom format', function(assert) {
 
 QUnit.test('Tick labels do not show date transition', function(assert) {
     // arrange
-    var date0 = new Date(2011, 5, 30, 0, 0, 0),
-        date1 = new Date(2011, 5, 30, 12, 0, 0),
-        date2 = new Date(2011, 6, 1, 0, 0, 0),
-        date3 = new Date(2011, 6, 1, 12, 0, 0);
+    const date0 = new Date(2011, 5, 30, 0, 0, 0);
+    const date1 = new Date(2011, 5, 30, 12, 0, 0);
+    const date2 = new Date(2011, 6, 1, 0, 0, 0);
+    const date3 = new Date(2011, 6, 1, 12, 0, 0);
 
     this.createAxis({
         isHorizontal: true,
@@ -1381,7 +1381,7 @@ QUnit.test('Tick labels do not show date transition', function(assert) {
     // act
     this.axis.draw(this.canvas);
 
-    var text = this.renderer.text;
+    const text = this.renderer.text;
     assert.strictEqual(text.getCall(0).args[0], '12:00 AM');
     assert.strictEqual(text.getCall(1).args[0], '12:00 PM');
     assert.strictEqual(text.getCall(2).args[0], '12:00 AM');
@@ -1390,10 +1390,10 @@ QUnit.test('Tick labels do not show date transition', function(assert) {
 
 QUnit.test('Custom format for tick labels - use custom format', function(assert) {
     // arrange
-    var date0 = new Date(2011, 5, 30, 0, 0, 0),
-        date1 = new Date(2011, 5, 30, 12, 0, 0),
-        date2 = new Date(2011, 6, 1, 0, 0, 0),
-        date3 = new Date(2011, 6, 1, 12, 0, 0);
+    const date0 = new Date(2011, 5, 30, 0, 0, 0);
+    const date1 = new Date(2011, 5, 30, 12, 0, 0);
+    const date2 = new Date(2011, 6, 1, 0, 0, 0);
+    const date3 = new Date(2011, 6, 1, 12, 0, 0);
 
     this.createAxis({
         isHorizontal: true,
@@ -1416,7 +1416,7 @@ QUnit.test('Custom format for tick labels - use custom format', function(assert)
     // act
     this.axis.draw(this.canvas);
 
-    var text = this.renderer.text;
+    const text = this.renderer.text;
     assert.strictEqual(text.getCall(0).args[0], 'June');
     assert.strictEqual(text.getCall(1).args[0], 'June');
     assert.strictEqual(text.getCall(2).args[0], 'July');

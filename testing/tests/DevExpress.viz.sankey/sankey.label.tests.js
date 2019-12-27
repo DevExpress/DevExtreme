@@ -1,14 +1,14 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createSankey = common.createSankey,
-    environment = common.environment;
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createSankey = common.createSankey;
+const environment = common.environment;
 
 QUnit.module('Node labels', environment);
 
 QUnit.test('Create label group on initialization', function(assert) {
     createSankey({});
 
-    var labelsGroup = this.labelsGroup();
+    const labelsGroup = this.labelsGroup();
     assert.equal(labelsGroup.append.lastCall.args[0], this.renderer.root);
     assert.equal(labelsGroup.attr.lastCall.args[0].class, 'dxs-labels');
 });
@@ -20,9 +20,9 @@ QUnit.test('Create labels', function(assert) {
             visible: true
         }
     });
-    var labelsGroup = this.labelsGroup(),
-        labels = this.labels(),
-        that = this;
+    const labelsGroup = this.labelsGroup();
+    const labels = this.labels();
+    const that = this;
 
     assert.ok(labelsGroup.clear.called);
     assert.equal(labels.length, 3);
@@ -46,8 +46,8 @@ QUnit.test('If no labels present', function(assert) {
             visible: false
         }
     });
-    var labelsGroup = this.labelsGroup(),
-        labels = this.labels();
+    const labelsGroup = this.labelsGroup();
+    const labels = this.labels();
 
     assert.ok(labelsGroup.clear.called);
     assert.equal(labels.length, 0);
@@ -71,9 +71,9 @@ QUnit.test('Create labels with styles', function(assert) {
             },
         }
     });
-    var label = this.label(0),
-        css = label.css.firstCall.args[0],
-        attrs = label.attr.firstCall.args[0];
+    const label = this.label(0);
+    const css = label.css.firstCall.args[0];
+    const attrs = label.attr.firstCall.args[0];
 
     assert.deepEqual(css, {
         fill: 'red',
@@ -100,8 +100,8 @@ QUnit.test('Create labels with styles and invisible borders', function(assert) {
             }
         }
     });
-    var attrs = this.label(0).attr.firstCall.args[0];
-    var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
+    const attrs = this.label(0).attr.firstCall.args[0];
+    const haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
     assert.equal(haveAttrsOwnProperty('stroke-width'), false);
     assert.equal(haveAttrsOwnProperty('stroke-opacity'), false);
@@ -121,8 +121,8 @@ QUnit.test('Create labels with styles and invisible borders if border width is 0
             }
         }
     });
-    var attrs = this.label(0).attr.firstCall.args[0];
-    var haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
+    const attrs = this.label(0).attr.firstCall.args[0];
+    const haveAttrsOwnProperty = Object.prototype.hasOwnProperty.bind(attrs);
 
     assert.equal(haveAttrsOwnProperty('stroke-width'), false);
     assert.equal(haveAttrsOwnProperty('stroke-opacity'), false);
@@ -136,7 +136,7 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
             useNodeColors: true
         }
     });
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.equal(nodes[0].attr.lastCall.args[0].fill, this.label(0).css.firstCall.args[0].fill);
     assert.equal(nodes[1].attr.lastCall.args[0].fill, this.label(1).css.firstCall.args[0].fill);
@@ -145,7 +145,7 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
 
 QUnit.test('Labels customize text', function(assert) {
 
-    var customizeText = function(node) {
+    const customizeText = function(node) {
         return 'test text ' + node.title;
     };
 
@@ -166,7 +166,7 @@ QUnit.test('Labels alignment through cascades', function(assert) {
         dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
     });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.equal(this.label(0).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
     assert.equal(this.label(1).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
@@ -183,7 +183,7 @@ QUnit.test('Labels alignment through cascades with rtlEnabled', function(assert)
         dataSource: [{ source: 'Node 1', target: 'Node 3', weight: 1 }, { source: 'Node 2', target: 'Node 3', weight: 1 }],
     });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.equal(this.label(0).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
     assert.equal(this.label(1).attr.lastCall.args[0].translateX, 22, 'Alignment in first cascade');
@@ -204,8 +204,8 @@ QUnit.test('Labels offsets', function(assert) {
         }
     });
 
-    var x = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; }),
-        y = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
+    const x = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
+    const y = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -215,10 +215,10 @@ QUnit.test('Labels offsets', function(assert) {
         }
     });
 
-    var xOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; }),
-        yOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; }),
-        xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]],
-        yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
+    const xOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
+    const yOffset = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateY; });
+    const xDifference = [xOffset[0] - x[0], xOffset[1] - x[1], xOffset[2] - x[2]];
+    const yDifference = [yOffset[0] - y[0], yOffset[1] - y[1], yOffset[2] - y[2]];
 
     assert.deepEqual(xDifference, [20, 20, -20], 'horizontal offset applied'); // labels in last cascade are moved to other side (-10)
     assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
@@ -333,7 +333,7 @@ QUnit.test('Show labels if keepLabels is true and widget size is smaller than ad
 });
 
 QUnit.test('Show hidden labels', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
             visible: true

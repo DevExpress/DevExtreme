@@ -1154,7 +1154,7 @@ QUnit.module('value', moduleConfig, () => {
     });
 
     QUnit.test('value option change and input value change by typing should trigger onValueChange (T833415)', function(assert) {
-        let valueChangeSpy = sinon.spy();
+        const valueChangeSpy = sinon.spy();
 
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '(000) 000-0000',

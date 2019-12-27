@@ -22,7 +22,7 @@ const Fixture = Class.inherit({
 
     createGroup: function(container) {
         this.createValidationGroupContainer(container);
-        var group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
+        const group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
 
         return group;
     }
@@ -40,12 +40,12 @@ QUnit.module('General', {
     }
 }, () => {
     QUnit.test('validator should find group after dxshown event is triggered', function(assert) {
-        var $container = $('#dxValidationGroup');
-        var group = this.fixture.createGroup($container);
-        var $validator = $('<div>').dxValidator({
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const $validator = $('<div>').dxValidator({
             adapter: sinon.createStubInstance(DefaultAdapter)
         });
-        var validator = $validator.dxValidator('instance');
+        const validator = $validator.dxValidator('instance');
         validator.validate = sinon.spy(validator.validate);
 
         // act
@@ -58,24 +58,24 @@ QUnit.module('General', {
     });
 
     QUnit.test('group should be validated positively (async)', function(assert) {
-        const $container = $('#dxValidationGroup'),
-            group = this.fixture.createGroup($container),
-            adapter = sinon.createStubInstance(DefaultAdapter),
-            $validator = $('<div>').dxValidator({
-                adapter: adapter,
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function(params) {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.resolve(true);
-                        }, 100);
-                        return d.promise();
-                    }
-                }]
-            }),
-            validator = $validator.dxValidator('instance'),
-            done = assert.async();
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const $validator = $('<div>').dxValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve(true);
+                    }, 100);
+                    return d.promise();
+                }
+            }]
+        });
+        const validator = $validator.dxValidator('instance');
+        const done = assert.async();
 
         adapter.getValue.returns('123');
 
@@ -104,28 +104,28 @@ QUnit.module('General', {
 
 
     QUnit.test('group should be validated negatively (async)', function(assert) {
-        const $container = $('#dxValidationGroup'),
-            group = this.fixture.createGroup($container),
-            adapter = sinon.createStubInstance(DefaultAdapter),
-            message = 'test message',
-            $validator = $('<div>').dxValidator({
-                adapter: adapter,
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function(params) {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.reject({
-                                isValid: false,
-                                message: message
-                            });
-                        }, 100);
-                        return d.promise();
-                    }
-                }]
-            }),
-            validator = $validator.dxValidator('instance'),
-            done = assert.async();
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const message = 'test message';
+        const $validator = $('<div>').dxValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.reject({
+                            isValid: false,
+                            message: message
+                        });
+                    }, 100);
+                    return d.promise();
+                }
+            }]
+        });
+        const validator = $validator.dxValidator('instance');
+        const done = assert.async();
 
         adapter.getValue.returns('123');
 
@@ -154,17 +154,17 @@ QUnit.module('General', {
     });
 
     QUnit.test('group should be validated positively after removing the only pending validator (async)', function(assert) {
-        const $container = $('#dxValidationGroup'),
-            group = this.fixture.createGroup($container),
-            $validator1 = $('<div>').dxValidator({
-                adapter: sinon.createStubInstance(DefaultAdapter)
-            }),
-            validator1 = $validator1.dxValidator('instance'),
-            $validator2 = $('<div>').dxValidator({
-                adapter: sinon.createStubInstance(DefaultAdapter)
-            }),
-            validator2 = $validator2.dxValidator('instance'),
-            done = assert.async();
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const $validator1 = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        });
+        const validator1 = $validator1.dxValidator('instance');
+        const $validator2 = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        });
+        const validator2 = $validator2.dxValidator('instance');
+        const done = assert.async();
 
         validator1.validate = sinon.stub();
         validator1.validate.returns({
@@ -213,27 +213,27 @@ QUnit.module('General', {
     });
 
     QUnit.test('group should be validated positively with a new validator (async)', function(assert) {
-        const $container = $('#dxValidationGroup'),
-            group = this.fixture.createGroup($container),
-            adapter = sinon.createStubInstance(DefaultAdapter),
-            $validator1 = $('<div>').dxValidator({
-                adapter: adapter,
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function(params) {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.resolve(true);
-                        }, 100);
-                        return d.promise();
-                    }
-                }]
-            }),
-            validator1 = $validator1.dxValidator('instance'),
-            validator2 = $('<div>').dxValidator({
-                adapter: sinon.createStubInstance(DefaultAdapter)
-            }).dxValidator('instance'),
-            done = assert.async();
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const $validator1 = $('<div>').dxValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve(true);
+                    }, 100);
+                    return d.promise();
+                }
+            }]
+        });
+        const validator1 = $validator1.dxValidator('instance');
+        const validator2 = $('<div>').dxValidator({
+            adapter: sinon.createStubInstance(DefaultAdapter)
+        }).dxValidator('instance');
+        const done = assert.async();
 
         // act
         $validator1.appendTo($container);

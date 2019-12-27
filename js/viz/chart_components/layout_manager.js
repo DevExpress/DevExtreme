@@ -1,15 +1,15 @@
-var extend = require('../../core/utils/extend').extend,
-    layoutElementModule = require('../core/layout_element'),
-    _isNumber = require('../../core/utils/type').isNumeric,
-    _min = Math.min,
-    _max = Math.max,
-    _floor = Math.floor,
-    _sqrt = Math.sqrt,
-    consts = require('../components/consts'),
-    RADIAL_LABEL_INDENT = consts.radialLabelIndent;
+const extend = require('../../core/utils/extend').extend;
+const layoutElementModule = require('../core/layout_element');
+const _isNumber = require('../../core/utils/type').isNumeric;
+const _min = Math.min;
+const _max = Math.max;
+const _floor = Math.floor;
+const _sqrt = Math.sqrt;
+const consts = require('../components/consts');
+const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
-    var nearestCoord;
+    let nearestCoord;
     if(pointCenterCoord < firstCoord) {
         nearestCoord = firstCoord;
     } else if(secondCoord < pointCenterCoord) {
@@ -29,10 +29,10 @@ function getLabelLayout(point) {
 function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) {
     series.some(function(singleSeries) {
         return singleSeries.getVisiblePoints().reduce(function(radiusIsFound, point) {
-            var labelBBox = getLabelLayout(point);
+            const labelBBox = getLabelLayout(point);
             if(labelBBox) {
-                var xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX),
-                    yCoords = getNearestCoord(labelBBox.y, labelBBox.y + labelBBox.height, paneCenterY);
+                const xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX);
+                const yCoords = getNearestCoord(labelBBox.y, labelBBox.y + labelBBox.height, paneCenterY);
 
                 accessibleRadius = _min(_max(getLengthFromCenter(xCoords, yCoords, paneCenterX, paneCenterY) - RADIAL_LABEL_INDENT, minR), accessibleRadius);
                 radiusIsFound = true;
@@ -46,15 +46,15 @@ function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) 
 
 function getSizeLabels(series) {
     return series.reduce(function(res, singleSeries) {
-        var maxWidth = singleSeries.getVisiblePoints().reduce(function(width, point) {
-            var labelBBox = getLabelLayout(point);
+        let maxWidth = singleSeries.getVisiblePoints().reduce(function(width, point) {
+            const labelBBox = getLabelLayout(point);
             if(labelBBox && labelBBox.width > width) {
                 width = labelBBox.width;
             }
             return width;
         }, 0);
 
-        var rWidth = maxWidth;
+        let rWidth = maxWidth;
         if(maxWidth) {
             res.outerLabelsCount++;
             if(res.outerLabelsCount > 1) {
@@ -70,11 +70,11 @@ function getSizeLabels(series) {
 }
 
 function correctLabelRadius(labelSizes, radius, series, canvas, averageWidthLabels, centerX) {
-    var curRadius,
-        i,
-        runningWidth = 0,
-        sizes = labelSizes.sizes,
-        rSizes = labelSizes.rSizes;
+    let curRadius;
+    let i;
+    let runningWidth = 0;
+    const sizes = labelSizes.sizes;
+    const rSizes = labelSizes.rSizes;
 
     for(i = 0; i < series.length; i++) {
         if(sizes[i] === 0) {
@@ -101,7 +101,7 @@ function getLengthFromCenter(x, y, paneCenterX, paneCenterY) {
 }
 
 function getInnerRadius(series) {
-    var innerRadius;
+    let innerRadius;
     if(series.type === 'pie') {
         innerRadius = 0;
     } else {
@@ -112,7 +112,7 @@ function getInnerRadius(series) {
     return innerRadius;
 }
 
-var inverseAlign = {
+const inverseAlign = {
     left: 'right',
     right: 'left',
     top: 'bottom',
@@ -125,11 +125,11 @@ function downSize(canvas, layoutOptions) {
 }
 
 function getOffset(layoutOptions, offsets) {
-    var side = layoutOptions.cutLayoutSide,
-        offset = {
-            horizontal: 0,
-            vertical: 0
-        };
+    const side = layoutOptions.cutLayoutSide;
+    const offset = {
+        horizontal: 0,
+        vertical: 0
+    };
 
     switch(side) {
         case 'top':
@@ -166,9 +166,9 @@ function getFullRadiusWithLabels(centerX, canvas, sizeLabels) {
 }
 
 function correctAvailableRadius(availableRadius, canvas, series, minR, paneCenterX, paneCenterY) {
-    var sizeLabels = getSizeLabels(series),
-        averageWidthLabels,
-        fullRadiusWithLabels = getFullRadiusWithLabels(paneCenterX, canvas, sizeLabels);
+    const sizeLabels = getSizeLabels(series);
+    let averageWidthLabels;
+    const fullRadiusWithLabels = getFullRadiusWithLabels(paneCenterX, canvas, sizeLabels);
 
     if(fullRadiusWithLabels < minR) {
         availableRadius = minR;
@@ -189,13 +189,13 @@ LayoutManager.prototype = {
     },
 
     applyPieChartSeriesLayout: function(canvas, series, hideLayoutLabels) {
-        var paneSpaceHeight = canvas.height - canvas.top - canvas.bottom,
-            paneSpaceWidth = canvas.width - canvas.left - canvas.right,
-            paneCenterX = paneSpaceWidth / 2 + canvas.left,
-            paneCenterY = paneSpaceHeight / 2 + canvas.top,
-            piePercentage = this._options.piePercentage,
-            availableRadius,
-            minR;
+        const paneSpaceHeight = canvas.height - canvas.top - canvas.bottom;
+        const paneSpaceWidth = canvas.width - canvas.left - canvas.right;
+        const paneCenterX = paneSpaceWidth / 2 + canvas.left;
+        const paneCenterY = paneSpaceHeight / 2 + canvas.top;
+        const piePercentage = this._options.piePercentage;
+        let availableRadius;
+        let minR;
 
         if(_isNumber(piePercentage)) {
             availableRadius = minR = piePercentage * _min(canvas.height, canvas.width) / 2;
@@ -216,7 +216,7 @@ LayoutManager.prototype = {
     },
 
     applyEqualPieChartLayout: function(series, layout) {
-        var radius = layout.radius;
+        const radius = layout.radius;
 
         return {
             centerX: _floor(layout.x),
@@ -227,10 +227,10 @@ LayoutManager.prototype = {
     },
 
     correctPieLabelRadius: function(series, layout, canvas) {
-        var sizeLabels = getSizeLabels(series);
-        var averageWidthLabels;
-        var radius = layout.radiusOuter + RADIAL_LABEL_INDENT;
-        var availableLabelWidth = layout.centerX - canvas.left - radius;
+        const sizeLabels = getSizeLabels(series);
+        let averageWidthLabels;
+        const radius = layout.radiusOuter + RADIAL_LABEL_INDENT;
+        const availableLabelWidth = layout.centerX - canvas.left - radius;
 
         if(sizeLabels.common + RADIAL_LABEL_INDENT > availableLabelWidth) {
             averageWidthLabels = getAverageLabelWidth(layout.centerX, layout.radiusOuter, canvas, sizeLabels);
@@ -278,9 +278,9 @@ LayoutManager.prototype = {
     },
 
     _processAdaptiveLayout: function(panes, rotated, canvas, funcAxisDrawer) {
-        var that = this,
-            size = that.needMoreSpaceForPanesCanvas(panes, rotated),
-            items = this._elements;
+        const that = this;
+        const size = that.needMoreSpaceForPanesCanvas(panes, rotated);
+        const items = this._elements;
 
         if(!size) return;
 
@@ -292,10 +292,10 @@ LayoutManager.prototype = {
         }
 
         items.slice().reverse().forEach(function(item) {
-            var layoutOptions = item.getLayoutOptions(),
-                needRedraw = false,
-                sizeObject,
-                cutSide;
+            const layoutOptions = item.getLayoutOptions();
+            let needRedraw = false;
+            let sizeObject;
+            let cutSide;
 
             if(!layoutOptions) {
                 return;
@@ -312,8 +312,8 @@ LayoutManager.prototype = {
             cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
 
             if(needRedraw) {
-                var width = sizeObject.width - size.width;
-                var height = sizeObject.height - size.height;
+                let width = sizeObject.width - size.width;
+                let height = sizeObject.height - size.height;
 
                 if(cutSide === 'height' && size.width < 0) {
                     width = canvas.width - canvas.left - canvas.right;
@@ -332,10 +332,10 @@ LayoutManager.prototype = {
     },
 
     _probeDrawing: function(canvas) {
-        var that = this;
+        const that = this;
         this._elements.forEach(function(item) {
-            var layoutOptions = item.getLayoutOptions(),
-                sizeObject;
+            const layoutOptions = item.getLayoutOptions();
+            let sizeObject;
 
             if(!layoutOptions) {
                 return;
@@ -355,10 +355,10 @@ LayoutManager.prototype = {
 
     _drawElements: function(canvas) {
         this._elements.slice().reverse().forEach(function(item) {
-            var layoutOptions = item.getLayoutOptions(),
-                sizeObject,
-                cutSide,
-                length;
+            const layoutOptions = item.getLayoutOptions();
+            let sizeObject;
+            let cutSide;
+            let length;
 
             if(!layoutOptions) {
                 return;
@@ -377,7 +377,7 @@ LayoutManager.prototype = {
     },
 
     _positionElements: function(canvas) {
-        var offsets = {
+        const offsets = {
             left: 0,
             right: 0,
             top: 0,
@@ -385,10 +385,10 @@ LayoutManager.prototype = {
         };
 
         this._elements.slice().reverse().forEach(function(item) {
-            var layoutOptions = item.getLayoutOptions(),
-                position,
-                cutSide,
-                my;
+            const layoutOptions = item.getLayoutOptions();
+            let position;
+            let cutSide;
+            let my;
 
             if(!layoutOptions) {
                 return;

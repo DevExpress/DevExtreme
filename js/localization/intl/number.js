@@ -148,7 +148,7 @@ module.exports = {
             currency = dxConfig().defaultCurrency;
         }
 
-        let symbolInfo = this._getCurrencySymbolInfo(currency);
+        const symbolInfo = this._getCurrencySymbolInfo(currency);
         return {
             'symbol': symbolInfo.symbol
         };

@@ -1,26 +1,26 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    devices = require('../core/devices'),
-    domAdapter = require('../core/dom_adapter'),
-    domUtils = require('../core/utils/dom'),
-    animationFrame = require('../animation/frame'),
-    eventUtils = require('./utils'),
-    pointerEvents = require('./pointer'),
-    Emitter = require('./core/emitter'),
-    registerEmitter = require('./core/emitter_registrator'),
-    compareVersions = require('../core/utils/version').compare;
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const devices = require('../core/devices');
+const domAdapter = require('../core/dom_adapter');
+const domUtils = require('../core/utils/dom');
+const animationFrame = require('../animation/frame');
+const eventUtils = require('./utils');
+const pointerEvents = require('./pointer');
+const Emitter = require('./core/emitter');
+const registerEmitter = require('./core/emitter_registrator');
+const compareVersions = require('../core/utils/version').compare;
 
-var CLICK_EVENT_NAME = 'dxclick',
-    TOUCH_BOUNDARY = 10,
-    abs = Math.abs;
+const CLICK_EVENT_NAME = 'dxclick';
+const TOUCH_BOUNDARY = 10;
+const abs = Math.abs;
 
-var isInput = function(element) {
+const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
-var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
+const misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
 
-var ClickEmitter = Emitter.inherit({
+let ClickEmitter = Emitter.inherit({
 
     ctor: function(element) {
         this.callBase(element);
@@ -57,11 +57,11 @@ var ClickEmitter = Emitter.inherit({
     },
 
     _eventOutOfElement: function(e, element) {
-        var target = e.target,
-            targetChanged = !domUtils.contains(element, target) && element !== target,
+        const target = e.target;
+        const targetChanged = !domUtils.contains(element, target) && element !== target;
 
-            gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData),
-            boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
+        const gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData);
+        const boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
 
         return targetChanged || boundsExceeded;
     },
@@ -81,25 +81,25 @@ var ClickEmitter = Emitter.inherit({
 
 // NOTE: native strategy for desktop, iOS 9.3+, Android 5+
 (function() {
-    var NATIVE_CLICK_CLASS = 'dx-native-click';
-    var realDevice = devices.real(),
-        useNativeClick =
+    const NATIVE_CLICK_CLASS = 'dx-native-click';
+    const realDevice = devices.real();
+    const useNativeClick =
             realDevice.generic ||
             realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
             realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
 
-    var isNativeClickEvent = function(target) {
+    const isNativeClickEvent = function(target) {
         return useNativeClick || $(target).closest('.' + NATIVE_CLICK_CLASS).length;
     };
 
 
-    var prevented = null,
-        lastFiredEvent = null;
+    let prevented = null;
+    let lastFiredEvent = null;
 
-    var clickHandler = function(e) {
-        var originalEvent = e.originalEvent,
-            eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED,
-            leftButton = !e.which || e.which === 1;
+    const clickHandler = function(e) {
+        const originalEvent = e.originalEvent;
+        const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
+        const leftButton = !e.which || e.which === 1;
 
         if(leftButton && !prevented && isNativeClickEvent(e.target) && !eventAlreadyFired) {
             if(originalEvent) {
@@ -163,19 +163,19 @@ var ClickEmitter = Emitter.inherit({
 
 // NOTE: fixes native click blur on slow devices
 (function() {
-    var desktopDevice = devices.real().generic;
+    const desktopDevice = devices.real().generic;
 
     if(!desktopDevice) {
-        var startTarget = null,
-            blurPrevented = false;
+        let startTarget = null;
+        let blurPrevented = false;
 
-        var pointerDownHandler = function(e) {
+        const pointerDownHandler = function(e) {
             startTarget = e.target;
             blurPrevented = e.isDefaultPrevented();
         };
 
-        var clickHandler = function(e) {
-            var $target = $(e.target);
+        const clickHandler = function(e) {
+            const $target = $(e.target);
             if(!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is('label') && isInput($target)) {
                 domUtils.resetActiveElement();
             }
@@ -184,8 +184,8 @@ var ClickEmitter = Emitter.inherit({
             blurPrevented = false;
         };
 
-        var NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER',
-            document = domAdapter.getDocument();
+        const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
+        const document = domAdapter.getDocument();
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }

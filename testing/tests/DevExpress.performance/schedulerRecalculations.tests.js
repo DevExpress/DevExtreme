@@ -5,15 +5,15 @@ require('../../helpers/qunitPerformanceExtension.js');
 require('common.css!');
 require('generic_light.css!');
 
-var $ = require('jquery'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    data = [
-        { startDate: new Date(2016, 2, 9, 1), endDate: new Date(2016, 2, 9, 2), text: 'Meeting' },
-        { startDate: new Date(2016, 2, 9, 3), endDate: new Date(2016, 2, 9, 4), text: 'Go to a shop' },
-        { startDate: new Date(2016, 2, 9, 4, 30), endDate: new Date(2016, 2, 9, 5), text: 'The TV show' },
-        { startDate: new Date(2016, 2, 9, 5), endDate: new Date(2016, 2, 9, 5, 30), text: 'Read a book' },
-        { startDate: new Date(2016, 2, 9, 9), endDate: new Date(2016, 2, 9, 10), text: 'Play a guitar' }
-    ];
+const $ = require('jquery');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const data = [
+    { startDate: new Date(2016, 2, 9, 1), endDate: new Date(2016, 2, 9, 2), text: 'Meeting' },
+    { startDate: new Date(2016, 2, 9, 3), endDate: new Date(2016, 2, 9, 4), text: 'Go to a shop' },
+    { startDate: new Date(2016, 2, 9, 4, 30), endDate: new Date(2016, 2, 9, 5), text: 'The TV show' },
+    { startDate: new Date(2016, 2, 9, 5), endDate: new Date(2016, 2, 9, 5, 30), text: 'Read a book' },
+    { startDate: new Date(2016, 2, 9, 9), endDate: new Date(2016, 2, 9, 10), text: 'Play a guitar' }
+];
 
 require('ui/scheduler');
 
@@ -22,7 +22,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.performanceTest('dxScheduler should force minimum relayout count on creation', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxScheduler({
             showCurrentTimeIndicator: false,
             showAllDayPanel: false
@@ -33,7 +33,7 @@ QUnit.performanceTest('dxScheduler should force minimum relayout count on creati
 });
 
 QUnit.performanceTest('dxScheduler should force minimum relayout count on creation if showAllDayPanel = true', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxScheduler({
             showCurrentTimeIndicator: false,
             showAllDayPanel: true
@@ -44,7 +44,7 @@ QUnit.performanceTest('dxScheduler should force minimum relayout count on creati
 });
 
 QUnit.performanceTest('dxScheduler day view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['day'],
@@ -60,7 +60,7 @@ QUnit.performanceTest('dxScheduler day view should force minimum relayout count 
 });
 
 QUnit.performanceTest('dxScheduler day view should force minimum relayout count on creation with appointments if showAllDayPanel = true', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['day'],
@@ -76,7 +76,7 @@ QUnit.performanceTest('dxScheduler day view should force minimum relayout count 
 });
 
 QUnit.performanceTest('dxScheduler week view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['week'],
@@ -92,7 +92,7 @@ QUnit.performanceTest('dxScheduler week view should force minimum relayout count
 });
 
 QUnit.performanceTest('dxScheduler week view should force minimum relayout count on creation with appointments if showAllDayPanel = true', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['week'],
@@ -108,7 +108,7 @@ QUnit.performanceTest('dxScheduler week view should force minimum relayout count
 });
 
 QUnit.performanceTest('dxScheduler workWeek view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['workWeek'],
@@ -124,7 +124,7 @@ QUnit.performanceTest('dxScheduler workWeek view should force minimum relayout c
 });
 
 QUnit.performanceTest('dxScheduler workWeek view should force minimum relayout count on creation with appointments if showAllDayPanel = true', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['workWeek'],
@@ -140,7 +140,7 @@ QUnit.performanceTest('dxScheduler workWeek view should force minimum relayout c
 });
 
 QUnit.performanceTest('dxScheduler month view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['month'],
@@ -156,7 +156,7 @@ QUnit.performanceTest('dxScheduler month view should force minimum relayout coun
 });
 
 QUnit.performanceTest('dxScheduler timelineDay view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['timelineDay'],
@@ -172,7 +172,7 @@ QUnit.performanceTest('dxScheduler timelineDay view should force minimum relayou
 });
 
 QUnit.performanceTest('dxScheduler timelineWeek view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['timelineWeek'],
@@ -188,7 +188,7 @@ QUnit.performanceTest('dxScheduler timelineWeek view should force minimum relayo
 });
 
 QUnit.performanceTest('dxScheduler timelineWorkWeek view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['timelineWorkWeek'],
@@ -204,7 +204,7 @@ QUnit.performanceTest('dxScheduler timelineWorkWeek view should force minimum re
 });
 
 QUnit.performanceTest('dxScheduler timelineMonth view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['timelineMonth'],
@@ -220,7 +220,7 @@ QUnit.performanceTest('dxScheduler timelineMonth view should force minimum relay
 });
 
 QUnit.performanceTest('dxScheduler agenda view should force minimum relayout count on creation with appointments', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         console.timeStamp('Scheduler');
         $('#element').dxScheduler({
             views: ['agenda'],
@@ -239,7 +239,7 @@ QUnit.performanceTest('dxScheduler should not force relayout on dxshown event', 
         showCurrentTimeIndicator: false
     });
 
-    var measureFunction = function() {
+    const measureFunction = function() {
         resizeCallbacks.fire();
     };
 

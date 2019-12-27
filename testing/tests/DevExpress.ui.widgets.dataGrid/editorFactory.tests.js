@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '\
 <style>\
     .qunit-fixture-static {\
@@ -42,7 +42,7 @@ import { MockColumnsController, MockDataController, setupDataGridModules } from 
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
 
-var TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 QUnit.module('Editor Factory', {
     beforeEach: function() {
@@ -59,8 +59,8 @@ QUnit.module('Editor Factory', {
 });
 
 QUnit.test('Text editor', function(assert) {
-    var $container = $('#container'),
-        value = 'A';
+    const $container = $('#container');
+    let value = 'A';
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -69,8 +69,8 @@ QUnit.test('Text editor', function(assert) {
             value = newValue;
         }
     });
-    var textBox = $container.dxTextBox('instance'),
-        valueChangeEvent = textBox.option('valueChangeEvent');
+    const textBox = $container.dxTextBox('instance');
+    const valueChangeEvent = textBox.option('valueChangeEvent');
 
     // assert
     assert.ok(textBox, 'dxTextBox created');
@@ -88,8 +88,8 @@ QUnit.test('Text editor', function(assert) {
 // T749989
 QUnit.test('Editor should not convert value to string if editorType is defined and not equal to dxTextBox', function(assert) {
     // arrange
-    var $container = $('#container'),
-        value = [];
+    const $container = $('#container');
+    const value = [];
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -97,7 +97,7 @@ QUnit.test('Editor should not convert value to string if editorType is defined a
         parentType: 'dataRow',
         value: value
     });
-    var editor = $container.dxSelectBox('instance');
+    const editor = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(editor, 'editor created');
@@ -110,10 +110,10 @@ QUnit.test('Text editor enter in ios (T344096)', function(assert) {
         return;
     }
 
-    var $container = $('#container'),
-        value = 'A';
+    const $container = $('#container');
+    let value = 'A';
 
-    var originalDevice = devices.real();
+    const originalDevice = devices.real();
 
     devices.real({ ios: true });
 
@@ -124,8 +124,8 @@ QUnit.test('Text editor enter in ios (T344096)', function(assert) {
             value = newValue;
         }
     });
-    var textBox = $container.dxTextBox('instance'),
-        valueChangeEvent = textBox.option('valueChangeEvent');
+    const textBox = $container.dxTextBox('instance');
+    const valueChangeEvent = textBox.option('valueChangeEvent');
 
     // assert
     assert.ok(textBox, 'dxTextBox created');
@@ -150,9 +150,9 @@ QUnit.test('Text editor enter in ios (T344096)', function(assert) {
 
 if(browser.msie) {
     QUnit.test('Enter does not change the text editor value in IE, EDGE (T305674, T336478, T635192)', function(assert) {
-        var $container = $('#container'),
-            value = 'A',
-            setValueCallCount = 0;
+        const $container = $('#container');
+        let value = 'A';
+        let setValueCallCount = 0;
 
         // act
         this.editorFactoryController.createEditor($container, {
@@ -162,7 +162,7 @@ if(browser.msie) {
                 value = newValue;
             }
         });
-        var textBox = $container.dxTextBox('instance');
+        const textBox = $container.dxTextBox('instance');
 
         // assert
         assert.ok(textBox, 'dxTextBox created');
@@ -187,8 +187,8 @@ if(browser.msie) {
 
     // T426951
     QUnit.test('DateBox editor enter work in IE', function(assert) {
-        var $container = $('#container'),
-            value = new Date(2015, 10, 5);
+        const $container = $('#container');
+        let value = new Date(2015, 10, 5);
         // act
         this.editorFactoryController.createEditor($container, {
             dataType: 'date',
@@ -197,9 +197,9 @@ if(browser.msie) {
                 value = newValue;
             }
         });
-        var dateBox = $container.dxDateBox('instance');
+        const dateBox = $container.dxDateBox('instance');
 
-        var methods = [];
+        const methods = [];
 
         if(dateBox.focus) {
             dateBox.focus = function() {
@@ -224,9 +224,9 @@ if(browser.msie) {
 
     // T305674
     QUnit.test('Text editor value on lost focus', function(assert) {
-        var $container = $('#container'),
-            value = 'A',
-            setValueCallCount = 0;
+        const $container = $('#container');
+        let value = 'A';
+        let setValueCallCount = 0;
 
         // act
         this.editorFactoryController.createEditor($container, {
@@ -236,7 +236,7 @@ if(browser.msie) {
                 value = newValue;
             }
         });
-        var textBox = $container.dxTextBox('instance');
+        const textBox = $container.dxTextBox('instance');
 
         // assert
         assert.ok(textBox, 'dxTextBox created');
@@ -260,8 +260,8 @@ if(browser.msie) {
 
 QUnit.test('Text editor with set onEditorPreparing', function(assert) {
     // arrange
-    var $container = $('#container'),
-        textBox;
+    const $container = $('#container');
+    let textBox;
 
     this.options.onEditorPreparing = function(options) {
         // assert
@@ -311,8 +311,8 @@ QUnit.test('Text editor with set onEditorPreparing', function(assert) {
 
 QUnit.test('Text editor with set onEditorPrepared', function(assert) {
     // arrange
-    var $container = $('#container'),
-        textBox;
+    const $container = $('#container');
+    let textBox;
 
     this.options.onEditorPrepared = function(options) {
         // assert
@@ -339,8 +339,8 @@ QUnit.test('Text editor with set onEditorPrepared', function(assert) {
 });
 
 QUnit.test('NumberBox', function(assert) {
-    var $container = $('#container'),
-        value = 124;
+    const $container = $('#container');
+    let value = 124;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'number',
@@ -351,7 +351,7 @@ QUnit.test('NumberBox', function(assert) {
     });
 
     // act
-    var numberBox = $container.dxNumberBox('instance');
+    const numberBox = $container.dxNumberBox('instance');
 
     // assert
     assert.ok(numberBox, 'dxNumberBox created');
@@ -367,7 +367,7 @@ QUnit.test('NumberBox', function(assert) {
 
 // T159874
 QUnit.test('NumberBox with undefined value', function(assert) {
-    var $container = $('#container');
+    const $container = $('#container');
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'number',
@@ -375,7 +375,7 @@ QUnit.test('NumberBox with undefined value', function(assert) {
     });
 
     // act
-    var numberBox = $container.dxNumberBox('instance');
+    const numberBox = $container.dxNumberBox('instance');
 
     // assert
     assert.ok(numberBox, 'dxNumberBox created');
@@ -383,9 +383,9 @@ QUnit.test('NumberBox with undefined value', function(assert) {
 });
 
 QUnit.test('Change editorOptions on editorPreparing', function(assert) {
-    var $container = $('#container'),
-        editorPreparingCallCount = 0,
-        value = 124;
+    const $container = $('#container');
+    let editorPreparingCallCount = 0;
+    let value = 124;
 
     this.options.onEditorPreparing = function(options) {
         editorPreparingCallCount++;
@@ -407,7 +407,7 @@ QUnit.test('Change editorOptions on editorPreparing', function(assert) {
     });
 
     // act
-    var numberBox = $container.dxNumberBox('instance');
+    const numberBox = $container.dxNumberBox('instance');
 
     // assert
     assert.ok(numberBox, 'dxNumberBox created');
@@ -417,11 +417,11 @@ QUnit.test('Change editorOptions on editorPreparing', function(assert) {
     assert.ok($container.hasClass('dx-numberbox-spin'), 'numberbox render with spin buttons');
 });
 
-var DATAGRID_CHECKBOX_SIZE_CLASS = 'dx-datagrid-checkbox-size';
+const DATAGRID_CHECKBOX_SIZE_CLASS = 'dx-datagrid-checkbox-size';
 
 QUnit.test('Boolean editor', function(assert) {
-    var $container = $('#container'),
-        value = true;
+    const $container = $('#container');
+    let value = true;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -431,7 +431,7 @@ QUnit.test('Boolean editor', function(assert) {
         }
     });
     // act
-    var checkBox = $container.dxCheckBox('instance');
+    const checkBox = $container.dxCheckBox('instance');
 
 
     // assert
@@ -450,8 +450,8 @@ QUnit.test('Boolean editor', function(assert) {
 });
 
 QUnit.test('Boolean editor when inOnForm is true', function(assert) {
-    var $container = $('#container'),
-        value = true;
+    const $container = $('#container');
+    const value = true;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -459,7 +459,7 @@ QUnit.test('Boolean editor when inOnForm is true', function(assert) {
         value: value
     });
     // act
-    var checkBox = $container.dxCheckBox('instance');
+    const checkBox = $container.dxCheckBox('instance');
 
 
     // assert
@@ -468,7 +468,7 @@ QUnit.test('Boolean editor when inOnForm is true', function(assert) {
 });
 
 QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
-    var $container = $('#container');
+    const $container = $('#container');
 
     this.editorFactoryController.option('tabIndex', 7);
 
@@ -477,15 +477,15 @@ QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
     });
 
     // act
-    var checkBox = $container.dxCheckBox('instance');
+    const checkBox = $container.dxCheckBox('instance');
 
     // assert
     assert.equal(checkBox.$element().attr('tabIndex'), '7', 'tabIndex attr of checkBox');
 });
 
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
-    var $container = $('#container'),
-        value = null;
+    const $container = $('#container');
+    let value = null;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -496,7 +496,7 @@ QUnit.test('Boolean editor with null value should be intermediate', function(ass
     });
 
     // act
-    var checkBox = $container.dxCheckBox('instance');
+    const checkBox = $container.dxCheckBox('instance');
 
     // assert
     assert.ok(checkBox, 'dxCheckBox created');
@@ -504,8 +504,8 @@ QUnit.test('Boolean editor with null value should be intermediate', function(ass
 });
 
 QUnit.test('Date editor', function(assert) {
-    var $container = $('#container'),
-        value = new Date(2012, 1, 3);
+    const $container = $('#container');
+    let value = new Date(2012, 1, 3);
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'date',
@@ -516,7 +516,7 @@ QUnit.test('Date editor', function(assert) {
         }
     });
     // act
-    var editor = $container.dxDateBox('instance');
+    const editor = $container.dxDateBox('instance');
 
     // assert
     assert.ok(editor, 'dxDateBox created');
@@ -534,8 +534,8 @@ QUnit.test('Date editor', function(assert) {
 
 QUnit.test('DateTime editor', function(assert) {
     // arrange
-    var editor,
-        $container = $('#container');
+    let editor;
+    const $container = $('#container');
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -552,8 +552,8 @@ QUnit.test('DateTime editor', function(assert) {
 
 // T219884
 QUnit.test('Date editor with datetime format changing value', function(assert) {
-    var $container = $('#container'),
-        value = new Date(2012, 1, 3);
+    const $container = $('#container');
+    let value = new Date(2012, 1, 3);
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'date',
@@ -563,7 +563,7 @@ QUnit.test('Date editor with datetime format changing value', function(assert) {
             value = newValue;
         }
     });
-    var editor = $container.dxDateBox('instance');
+    const editor = $container.dxDateBox('instance');
     editor.option('format', 'datetime');
 
     // act
@@ -574,11 +574,11 @@ QUnit.test('Date editor with datetime format changing value', function(assert) {
 });
 
 QUnit.test('Date editor with custom format (T146458)', function(assert) {
-    var $container = $('#container'),
-        value = new Date(2012, 1, 3),
-        customFormat = 'dd.MM.yyyy';
+    const $container = $('#container');
+    let value = new Date(2012, 1, 3);
+    const customFormat = 'dd.MM.yyyy';
 
-    var mockGlobalizeLocalization = {
+    const mockGlobalizeLocalization = {
         format: function(date, format) {
             if(format === customFormat && date === value) {
                 return '03.02.2012';
@@ -600,7 +600,7 @@ QUnit.test('Date editor with custom format (T146458)', function(assert) {
         }
     });
     // act
-    var editor = $container.dxDateBox('instance');
+    const editor = $container.dxDateBox('instance');
 
     // assert
     assert.equal(editor.option('displayFormat'), 'dd.MM.yyyy', 'Widget format is correct');
@@ -608,8 +608,8 @@ QUnit.test('Date editor with custom format (T146458)', function(assert) {
 });
 
 QUnit.test('Date editor with custom editorOptions', function(assert) {
-    var $container = $('#container'),
-        value = new Date(2012, 1, 3);
+    const $container = $('#container');
+    let value = new Date(2012, 1, 3);
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -623,7 +623,7 @@ QUnit.test('Date editor with custom editorOptions', function(assert) {
             value = newValue;
         }
     });
-    var editor = $container.dxDateBox('instance');
+    const editor = $container.dxDateBox('instance');
 
     // assert
     assert.equal(editor.option('pickerType'), 'rollers', 'pickerType from editorOptions');
@@ -631,8 +631,8 @@ QUnit.test('Date editor with custom editorOptions', function(assert) {
 
 
 QUnit.test('Boolean editor when filtering', function(assert) {
-    var $container = $('#container'),
-        value = true;
+    const $container = $('#container');
+    let value = true;
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -646,14 +646,14 @@ QUnit.test('Boolean editor when filtering', function(assert) {
             value = newValue;
         }
     });
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
     assert.equal(selectBox.option('value'), true, 'selectbox value');
     assert.deepEqual(selectBox.option('items'), [null, true, false], 'selectbox items');
 
-    var listItems = $('.dx-list-item');
+    const listItems = $('.dx-list-item');
     assert.equal(listItems.length, 3, 'list items count');
     assert.equal(listItems.eq(0).text(), '[All]');
     assert.equal(listItems.eq(1).text(), 'True');
@@ -668,8 +668,8 @@ QUnit.test('Boolean editor when filtering', function(assert) {
 
 // T191746
 QUnit.test('Boolean editor when filtering change value', function(assert) {
-    var $container = $('#container'),
-        value;
+    const $container = $('#container');
+    let value;
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -710,8 +710,8 @@ QUnit.test('Boolean editor when filtering change value', function(assert) {
 });
 
 QUnit.test('Boolean editor when filtering and no localized texts', function(assert) {
-    var $container = $('#container'),
-        value = true;
+    const $container = $('#container');
+    let value = true;
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -722,14 +722,14 @@ QUnit.test('Boolean editor when filtering and no localized texts', function(asse
             value = newValue;
         }
     });
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
     assert.equal(selectBox.option('value'), true, 'selectbox value');
     assert.deepEqual(selectBox.option('items'), [null, true, false], 'selectbox items');
 
-    var listItems = $('.dx-list-item');
+    const listItems = $('.dx-list-item');
     assert.equal(listItems.length, 3, 'list items count');
     assert.equal(listItems.eq(0).text(), '');
     assert.equal(listItems.eq(1).text(), 'true');
@@ -743,11 +743,11 @@ QUnit.test('Boolean editor when filtering and no localized texts', function(asse
 });
 
 QUnit.test('Lookup editor', function(assert) {
-    var $container = $('#container'),
-        value = 2,
-        text;
+    const $container = $('#container');
+    let value = 2;
+    let text;
 
-    var editorOptions = {
+    const editorOptions = {
         lookup: {
             dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
             valueExpr: 'id',
@@ -765,7 +765,7 @@ QUnit.test('Lookup editor', function(assert) {
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
@@ -774,7 +774,7 @@ QUnit.test('Lookup editor', function(assert) {
     // T293216
     assert.equal(selectBox.option('searchExpr'), 'value', 'selectbox searchExpr');
 
-    var listItems = $('.dx-list-item');
+    const listItems = $('.dx-list-item');
     assert.equal(listItems.length, 3, 'list items count');
     assert.equal(listItems.eq(0).text(), 'text1');
     assert.equal(listItems.eq(1).text(), 'text2');
@@ -790,9 +790,9 @@ QUnit.test('Lookup editor', function(assert) {
 
 // T189828
 QUnit.test('Lookup editor with 0 value', function(assert) {
-    var $container = $('#container');
+    const $container = $('#container');
 
-    var editorOptions = {
+    const editorOptions = {
         lookup: {
             dataSource: [{ id: 0, value: 'text1' }, { id: 1, value: 'text2' }, { id: 2, value: 'text3' }],
             valueExpr: 'id',
@@ -805,7 +805,7 @@ QUnit.test('Lookup editor with 0 value', function(assert) {
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
@@ -815,17 +815,17 @@ QUnit.test('Lookup editor with 0 value', function(assert) {
 
 QUnit.test('Lookup editor with showClearButton', function(assert) {
     // arrange
-    var $container = $('#container'),
-        selectBox,
-        editorOptions = {
-            lookup: {
-                dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
-                valueExpr: 'id',
-                displayExpr: 'value',
-                allowClearing: true
-            },
-            setValue: function() { }
-        };
+    const $container = $('#container');
+    let selectBox;
+    const editorOptions = {
+        lookup: {
+            dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
+            valueExpr: 'id',
+            displayExpr: 'value',
+            allowClearing: true
+        },
+        setValue: function() { }
+    };
 
     // act
     this.editorFactoryController.createEditor($container, editorOptions);
@@ -837,17 +837,17 @@ QUnit.test('Lookup editor with showClearButton', function(assert) {
 
 QUnit.test('Lookup editor with allowClearing', function(assert) {
     // arrange
-    var $container = $('#container'),
-        selectBox,
-        editorOptions = {
-            lookup: {
-                dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
-                valueExpr: 'id',
-                displayExpr: 'value',
-                allowClearing: false
-            },
-            setValue: function() { }
-        };
+    const $container = $('#container');
+    let selectBox;
+    const editorOptions = {
+        lookup: {
+            dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
+            valueExpr: 'id',
+            displayExpr: 'value',
+            allowClearing: false
+        },
+        setValue: function() { }
+    };
 
     // act
     this.editorFactoryController.createEditor($container, editorOptions);
@@ -859,18 +859,18 @@ QUnit.test('Lookup editor with allowClearing', function(assert) {
 
 QUnit.test('Lookup editor with showClearButton and filtering', function(assert) {
     // arrange
-    var $container = $('#container'),
-        selectBox,
-        editorOptions = {
-            lookup: {
-                dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
-                valueExpr: 'id',
-                displayExpr: 'value',
-                allowClearing: true
-            },
-            parentType: 'filterRow',
-            setValue: function() { }
-        };
+    const $container = $('#container');
+    let selectBox;
+    const editorOptions = {
+        lookup: {
+            dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
+            valueExpr: 'id',
+            displayExpr: 'value',
+            allowClearing: true
+        },
+        parentType: 'filterRow',
+        setValue: function() { }
+    };
 
     // act
     this.editorFactoryController.createEditor($container, editorOptions);
@@ -881,10 +881,10 @@ QUnit.test('Lookup editor with showClearButton and filtering', function(assert) 
 });
 
 QUnit.test('Lookup editor when filtering', function(assert) {
-    var $container = $('#container'),
-        value = 2;
+    const $container = $('#container');
+    let value = 2;
 
-    var editorOptions = {
+    const editorOptions = {
         lookup: {
             dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
             valueExpr: 'id',
@@ -902,7 +902,7 @@ QUnit.test('Lookup editor when filtering', function(assert) {
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
@@ -911,7 +911,7 @@ QUnit.test('Lookup editor when filtering', function(assert) {
     // T293216
     assert.equal(selectBox.option('searchExpr'), 'value', 'selectbox searchExpr');
 
-    var listItems = $('.dx-list-item');
+    const listItems = $('.dx-list-item');
     assert.equal(listItems.length, 4, 'list items count');
     assert.equal(listItems.eq(0).text(), '(All)');
     assert.equal(listItems.eq(1).text(), 'text1');
@@ -927,10 +927,10 @@ QUnit.test('Lookup editor when filtering', function(assert) {
 
 // T220163
 QUnit.test('Lookup editor with paging', function(assert) {
-    var $container = $('#container'),
-        value = 2;
+    const $container = $('#container');
+    let value = 2;
 
-    var editorOptions = {
+    const editorOptions = {
         lookup: {
             dataSource: {
                 store: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
@@ -950,14 +950,14 @@ QUnit.test('Lookup editor with paging', function(assert) {
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
     assert.equal(selectBox.option('value'), 2, 'selectbox value');
     assert.deepEqual(selectBox.option('items'), [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }], 'selectbox items');
 
-    var listItems = $('.dx-list-item');
+    const listItems = $('.dx-list-item');
     assert.equal(listItems.length, 2, 'list items count');
     assert.equal(listItems.eq(0).text(), 'text1');
     assert.equal(listItems.eq(1).text(), 'text2');
@@ -971,10 +971,10 @@ QUnit.test('Lookup editor with paging', function(assert) {
 
 // T293216
 QUnit.test('Lookup editor with searchExpr', function(assert) {
-    var $container = $('#container'),
-        value = 2;
+    const $container = $('#container');
+    let value = 2;
 
-    var editorOptions = {
+    const editorOptions = {
         lookup: {
             dataSource: [{ id: 1, value: 'text1' }, { id: 2, value: 'text2' }, { id: 3, value: 'text3' }],
             valueExpr: 'id',
@@ -992,7 +992,7 @@ QUnit.test('Lookup editor with searchExpr', function(assert) {
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox, 'dxSelectBox created');
@@ -1001,9 +1001,9 @@ QUnit.test('Lookup editor with searchExpr', function(assert) {
 });
 
 QUnit.test('ReadOnly for textBox', function(assert) {
-    var $container = $('#container'),
-        textBox,
-        value = 'A';
+    const $container = $('#container');
+    let textBox;
+    let value = 'A';
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -1019,9 +1019,9 @@ QUnit.test('ReadOnly for textBox', function(assert) {
 });
 
 QUnit.test('ReadOnly for numberBox', function(assert) {
-    var $container = $('#container'),
-        numberBox,
-        value = 'A';
+    const $container = $('#container');
+    let numberBox;
+    let value = 'A';
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -1038,9 +1038,9 @@ QUnit.test('ReadOnly for numberBox', function(assert) {
 });
 
 QUnit.test('ReadOnly for date editor', function(assert) {
-    var $container = $('#container'),
-        editor,
-        value = new Date(2012, 1, 3);
+    const $container = $('#container');
+    let editor;
+    let value = new Date(2012, 1, 3);
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -1060,39 +1060,39 @@ QUnit.test('ReadOnly for date editor', function(assert) {
 });
 
 QUnit.test('ReadOnly for lookup', function(assert) {
-    var $container = $('#container'),
-        value = 2,
-        editorOptions = {
-            lookup: {
-                items: [
-                    { id: 1, value: 'text1' },
-                    { id: 2, value: 'text2' },
-                    { id: 3, value: 'text3' }
-                ],
-                valueExpr: 'id',
-                displayExpr: 'value'
-            },
-            showAllText: '(All)',
-            value: value,
-            setValue: function(newValue) {
-                value = newValue;
-            },
-            readOnly: true
-        };
+    const $container = $('#container');
+    let value = 2;
+    const editorOptions = {
+        lookup: {
+            items: [
+                { id: 1, value: 'text1' },
+                { id: 2, value: 'text2' },
+                { id: 3, value: 'text3' }
+            ],
+            valueExpr: 'id',
+            displayExpr: 'value'
+        },
+        showAllText: '(All)',
+        value: value,
+        setValue: function(newValue) {
+            value = newValue;
+        },
+        readOnly: true
+    };
 
     // act
     this.editorFactoryController.createEditor($container, editorOptions);
 
     // act
-    var selectBox = $container.dxSelectBox('instance');
+    const selectBox = $container.dxSelectBox('instance');
 
     // assert
     assert.ok(selectBox.option('readOnly'));
 });
 
 QUnit.test('ReadOnly for boolean editor', function(assert) {
-    var $container = $('#container'),
-        value = true;
+    const $container = $('#container');
+    let value = true;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -1104,7 +1104,7 @@ QUnit.test('ReadOnly for boolean editor', function(assert) {
     });
 
     // act
-    var checkBox = $container.dxCheckBox('instance');
+    const checkBox = $container.dxCheckBox('instance');
 
 
     // assert
@@ -1128,9 +1128,9 @@ QUnit.module('Editor Factory - RTL', {
 });
 
 QUnit.test('Create TextBox with RTL', function(assert) {
-    var $container = $('#container'),
-        value = 'a',
-        editor;
+    const $container = $('#container');
+    let value = 'a';
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         setValue: function(newValue) {
@@ -1147,9 +1147,9 @@ QUnit.test('Create TextBox with RTL', function(assert) {
 });
 
 QUnit.test('Create Boolean editor with RTL', function(assert) {
-    var $container = $('#container'),
-        value = true,
-        editor;
+    const $container = $('#container');
+    let value = true;
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -1167,9 +1167,9 @@ QUnit.test('Create Boolean editor with RTL', function(assert) {
 });
 
 QUnit.test('Create date editor with RTL', function(assert) {
-    var $container = $('#container'),
-        value = new Date(2012, 1, 3),
-        editor;
+    const $container = $('#container');
+    let value = new Date(2012, 1, 3);
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'date',
@@ -1188,9 +1188,9 @@ QUnit.test('Create date editor with RTL', function(assert) {
 });
 
 QUnit.test('Create Boolean editor with RTL when filtering', function(assert) {
-    var $container = $('#container'),
-        value = true,
-        editor;
+    const $container = $('#container');
+    let value = true;
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         dataType: 'boolean',
@@ -1212,9 +1212,9 @@ QUnit.test('Create Boolean editor with RTL when filtering', function(assert) {
 });
 
 QUnit.test('Create lookup editor with RTL', function(assert) {
-    var $container = $('#container'),
-        value = 2,
-        editor;
+    const $container = $('#container');
+    let value = 2;
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         lookup: {
@@ -1237,9 +1237,9 @@ QUnit.test('Create lookup editor with RTL', function(assert) {
 });
 
 QUnit.test('Create lookup editor with RTL when filtering', function(assert) {
-    var $container = $('#container'),
-        value = 2,
-        editor;
+    const $container = $('#container');
+    let value = 2;
+    let editor;
 
     this.editorFactoryController.createEditor($container, {
         lookup: {
@@ -1264,9 +1264,9 @@ QUnit.test('Create lookup editor with RTL when filtering', function(assert) {
 
 QUnit.test('dxTextArea editor inserts new line by Enter and ends edit by Ctrl + Enter ', function(assert) {
     // arrange
-    var $container = $('#container'),
-        value = 'Some text',
-        event;
+    const $container = $('#container');
+    let value = 'Some text';
+    let event;
 
     // act
     this.editorFactoryController.createEditor($container, {
@@ -1302,7 +1302,7 @@ QUnit.test('dxTextArea editor inserts new line by Enter and ends edit by Ctrl + 
 
 QUnit.module('Focus', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.clock = sinon.useFakeTimers();
         that.$element = function() {
@@ -1342,8 +1342,8 @@ QUnit.module('Focus', {
 
 QUnit.test('Update focus for cell of row', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        isFocused;
+    const testElement = $('#container');
+    let isFocused;
 
     this.setupDataGrid();
     this._views.rowsView.render(testElement);
@@ -1379,8 +1379,8 @@ QUnit.test('Call focus without parameter', function(assert) {
 // T179518
 QUnit.test('Update focus on tab keydown', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        isFocused;
+    const testElement = $('#container');
+    let isFocused;
 
     this.setupDataGrid();
     this._views.rowsView.render(testElement);
@@ -1403,7 +1403,7 @@ QUnit.test('Update focus on tab keydown', function(assert) {
 
 QUnit.test('Focus element', function(assert) {
     // arrange
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setupDataGrid();
 
@@ -1418,9 +1418,9 @@ QUnit.test('Focus element', function(assert) {
 // T218997
 QUnit.test('Focus disabled on focused cell', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        isFocused;
+    const that = this;
+    const testElement = $('#container');
+    let isFocused;
 
     that.setupDataGrid();
     that.rowsView.render(testElement);
@@ -1457,10 +1457,10 @@ QUnit.test('Focus disabled on focused cell', function(assert) {
 // T218997, T292164
 QUnit.test('Focus on cell with focused checkbox editor', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        focusWithHiddenBorders,
-        isFocused;
+    const that = this;
+    const testElement = $('#container');
+    let focusWithHiddenBorders;
+    let isFocused;
 
     that.options = {
         editing: {
@@ -1504,9 +1504,9 @@ QUnit.test('Focus on cell with focused checkbox editor', function(assert) {
 
 // T327148
 QUnit.testInActiveWindow('Focus on a filtering cell after editing cell in \'batch\' mode', function(assert) {
-    var that = this,
-        $cell,
-        $testElement = $('#container');
+    const that = this;
+    let $cell;
+    const $testElement = $('#container');
 
     that.options = {
         showColumnHeaders: true,
@@ -1567,9 +1567,9 @@ QUnit.testInActiveWindow('Focus on dxLookup editor', function(assert) {
         return;
     }
 
-    var that = this,
-        $cell,
-        $testElement = $('#container');
+    const that = this;
+    let $cell;
+    const $testElement = $('#container');
 
     that.options = {
         keyboardNavigation: {
@@ -1615,9 +1615,9 @@ QUnit.testInActiveWindow('Focus on dxTextArea editor', function(assert) {
         return;
     }
 
-    var that = this,
-        $cell,
-        $testElement = $('#container');
+    const that = this;
+    let $cell;
+    const $testElement = $('#container');
 
     that.options = {
         keyboardNavigation: {

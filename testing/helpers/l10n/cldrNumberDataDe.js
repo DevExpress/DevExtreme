@@ -1,4 +1,4 @@
-var Globalize = require('globalize');
+const Globalize = require('globalize');
 
 Globalize.load({
     'main': {

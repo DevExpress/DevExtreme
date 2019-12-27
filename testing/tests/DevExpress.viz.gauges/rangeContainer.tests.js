@@ -1,18 +1,18 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    BaseRangeContainer = require('viz/gauges/base_range_container'),
-    CircularRangeContainer = require('viz/gauges/circular_range_container'),
-    LinearRangeContainer = require('viz/gauges/linear_range_container'),
-    Translator1D = require('viz/translators/translator1d').Translator1D,
-    themeManagerModule = require('viz/gauges/theme_manager');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const BaseRangeContainer = require('viz/gauges/base_range_container');
+const CircularRangeContainer = require('viz/gauges/circular_range_container');
+const LinearRangeContainer = require('viz/gauges/linear_range_container');
+const Translator1D = require('viz/translators/translator1d').Translator1D;
+const themeManagerModule = require('viz/gauges/theme_manager');
 
-var TestRangeContainer = BaseRangeContainer.inherit({
+const TestRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
     },
     _createRange: function(range, settings) {
         this.elements = this.elements || [];
-        var element = this._renderer.g();
+        const element = this._renderer.g();
         element.range = range;
         element.data = settings;
         this.elements.push(element);
@@ -23,7 +23,7 @@ var TestRangeContainer = BaseRangeContainer.inherit({
     }
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.container = new vizMocks.Element();
@@ -71,7 +71,7 @@ QUnit.test('Clean', function(assert) {
 
 //  B232788
 QUnit.test('Init with less ranges', function(assert) {
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render({
         width: 10,
         ranges: [
@@ -95,7 +95,7 @@ QUnit.test('Init with less ranges', function(assert) {
 
 //  B232788
 QUnit.test('Init with more ranges', function(assert) {
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render({
         width: 10,
         ranges: [
@@ -123,7 +123,7 @@ QUnit.test('Init with more ranges', function(assert) {
 
 //  B232788
 QUnit.test('Init with no ranges', function(assert) {
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render({
         width: 10,
         ranges: [
@@ -164,13 +164,13 @@ QUnit.test('Color for value', function(assert) {
 
 QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
     checkRanges: function(assert, ranges, expected) {
-        var translatorAsc = new Translator1D(-50, 150, 300, 500),
-            translatorDesc = new Translator1D(50, -150, 300, 500),
-            rangesAsc,
-            rangesDesc,
-            expectedAsc = [],
-            expectedDesc = [],
-            list;
+        const translatorAsc = new Translator1D(-50, 150, 300, 500);
+        const translatorDesc = new Translator1D(50, -150, 300, 500);
+        let rangesAsc;
+        let rangesDesc;
+        const expectedAsc = [];
+        const expectedDesc = [];
+        let list;
 
         rangesAsc = ranges.slice(0);
         rangesDesc = $.map(rangesAsc, function(item) {
@@ -178,7 +178,7 @@ QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
         });
 
         $.each(expected, function(i, item) {
-            var objAsc = {
+            const objAsc = {
                 start: item.start,
                 end: item.end,
                 color: item.color,
@@ -186,7 +186,7 @@ QUnit.module('BaseRangeContainer - ranges ', $.extend({}, environment, {
                 endWidth: 10,
                 className: 'dxg-range dxg-' + (item.className >= 0 ? 'range-' + item.className : 'background-range')
             };
-            var objDesc = {
+            const objDesc = {
                 start: -item.start,
                 end: -item.end,
                 color: item.color,
@@ -338,7 +338,7 @@ QUnit.test('ranges are not valid - not numbers', function(assert) {
 QUnit.module('BaseRangeContainer - width', environment);
 
 QUnit.test('ascending width', function(assert) {
-    var elements;
+    let elements;
 
     this.rangeContainer = new TestRangeContainer({
         renderer: this.renderer,
@@ -388,7 +388,7 @@ QUnit.test('ascending width', function(assert) {
 });
 
 QUnit.test('descending width', function(assert) {
-    var elements;
+    let elements;
 
     this.rangeContainer = new TestRangeContainer({
         renderer: this.renderer,
@@ -439,11 +439,11 @@ QUnit.test('descending width', function(assert) {
 
 QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
     checkColors: function(assert, rangeColors, palette, expectedColors, paletteExtensionMode) {
-        var ranges, list,
-            step = 100 / (rangeColors.length + 1),
-            pos = 0;
+        let ranges; let list;
+        const step = 100 / (rangeColors.length + 1);
+        let pos = 0;
         ranges = $.map(rangeColors, function(color) {
-            var range = { startValue: pos, endValue: pos + step, color: color };
+            const range = { startValue: pos, endValue: pos + step, color: color };
             pos += step;
             return range;
         });
@@ -528,7 +528,7 @@ QUnit.module('CircularRangeContainer', {
 
 QUnit.test('inside', function(assert) {
     this.options.orientation = 'inside';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -558,7 +558,7 @@ QUnit.test('inside', function(assert) {
 
 QUnit.test('outside', function(assert) {
     this.options.orientation = 'outside';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -588,7 +588,7 @@ QUnit.test('outside', function(assert) {
 
 QUnit.test('center', function(assert) {
     this.options.orientation = 'center';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -675,7 +675,7 @@ QUnit.module('LinearRangeContainer', {
 
 QUnit.test('horizontal - top', function(assert) {
     this.options.verticalOrientation = 'top';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -710,7 +710,7 @@ QUnit.test('horizontal - top', function(assert) {
 
 QUnit.test('horizontal - bottom', function(assert) {
     this.options.verticalOrientation = 'bottom';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -746,7 +746,7 @@ QUnit.test('horizontal - bottom', function(assert) {
 QUnit.test('vertical - left', function(assert) {
     this.options.vertical = true;
     this.options.horizontalOrientation = 'left';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -782,7 +782,7 @@ QUnit.test('vertical - left', function(assert) {
 QUnit.test('vertical - right', function(assert) {
     this.options.vertical = true;
     this.options.horizontalOrientation = 'right';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -818,7 +818,7 @@ QUnit.test('vertical - right', function(assert) {
 QUnit.test('vertical - center', function(assert) {
     this.options.vertical = true;
     this.options.horizontalOrientation = 'center';
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
     rangeContainer.render(this.options).resize(this.layout);
 
     assert.ok(rangeContainer._renderer, '_renderer');
@@ -852,7 +852,7 @@ QUnit.test('vertical - center', function(assert) {
 });
 
 QUnit.test('measure', function(assert) {
-    var rangeContainer = this.rangeContainer;
+    const rangeContainer = this.rangeContainer;
 
     this.options.verticalOrientation = 'top';
     assert.deepEqual(rangeContainer.render(this.options).measure(this.layout), { min: 0, max: 20 }, 'horizontal, top');

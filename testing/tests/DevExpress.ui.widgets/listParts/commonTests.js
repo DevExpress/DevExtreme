@@ -567,19 +567,19 @@ QUnit.module('collapsible groups', moduleSetup, () => {
                 useNativeScrolling: false,
                 dataSource: {
                     load(options) {
-                        const d = $.Deferred(),
-                            items = [{
-                                key: 'first',
-                                items: [{ a: 0 }, { a: 1 }, { a: 2 }]
-                            },
-                            {
-                                key: 'second',
-                                items: [{ a: 3 }, { a: 4 }, { a: 5 }]
-                            },
-                            {
-                                key: 'third',
-                                items: [{ a: 6 }, { a: 7 }, { a: 8 }]
-                            }];
+                        const d = $.Deferred();
+                        const items = [{
+                            key: 'first',
+                            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+                        },
+                        {
+                            key: 'second',
+                            items: [{ a: 3 }, { a: 4 }, { a: 5 }]
+                        },
+                        {
+                            key: 'third',
+                            items: [{ a: 6 }, { a: 7 }, { a: 8 }]
+                        }];
                         setTimeout(() => {
                             d.resolve(items.slice(options.skip, options.skip + options.take));
                         }, 50);
@@ -2922,7 +2922,7 @@ QUnit.module('Search', () => {
     });
 });
 
-var helper;
+let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {

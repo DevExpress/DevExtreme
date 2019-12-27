@@ -1,12 +1,12 @@
-var registerComponent = require('../../../core/component_registrator'),
-    SchedulerTimelineWeek = require('./ui.scheduler.timeline_week'),
-    dateUtils = require('../../../core/utils/date'),
-    toMs = dateUtils.dateToMilliseconds;
+const registerComponent = require('../../../core/component_registrator');
+const SchedulerTimelineWeek = require('./ui.scheduler.timeline_week');
+const dateUtils = require('../../../core/utils/date');
+const toMs = dateUtils.dateToMilliseconds;
 
-var TIMELINE_CLASS = 'dx-scheduler-timeline-work-week',
-    MONDAY_INDEX = 1;
+const TIMELINE_CLASS = 'dx-scheduler-timeline-work-week';
+const MONDAY_INDEX = 1;
 
-var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
+const SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
@@ -20,7 +20,7 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     },
 
     _incrementDate: function(date) {
-        var day = date.getDay();
+        const day = date.getDay();
         if(day === 5) {
             date.setDate(date.getDate() + 2);
         }
@@ -28,7 +28,7 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     },
 
     _getOffsetByCount: function(cellIndex, rowIndex) {
-        var weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
+        const weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
         if(weekendCount > 0) {
             return toMs('day') * weekendCount * 2;
         } else {

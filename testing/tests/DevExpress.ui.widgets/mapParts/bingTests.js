@@ -1,19 +1,19 @@
 /* global Microsoft */
 
-var $ = require('jquery'),
-    testing = require('./utils.js'),
-    BingProvider = require('ui/map/provider.dynamic.bing'),
-    ajaxMock = require('../../../helpers/ajaxMock.js'),
-    errors = require('ui/widget/ui.errors');
+const $ = require('jquery');
+const testing = require('./utils.js');
+const BingProvider = require('ui/map/provider.dynamic.bing');
+const ajaxMock = require('../../../helpers/ajaxMock.js');
+const errors = require('ui/widget/ui.errors');
 
 
 require('ui/map');
 
-var LOCATIONS = testing.LOCATIONS,
-    MARKERS = testing.MARKERS,
-    ROUTES = testing.ROUTES;
+const LOCATIONS = testing.LOCATIONS;
+const MARKERS = testing.MARKERS;
+const ROUTES = testing.ROUTES;
 
-var prepareTestingBingProvider = function(abortDirectionsUpdate) {
+const prepareTestingBingProvider = function(abortDirectionsUpdate) {
     window.geocodedLocation = new Microsoft.Maps.Location(-1.12345, -1.12345);
     window.geocodedWithErrorLocation = new Microsoft.Maps.Location();
 
@@ -34,7 +34,7 @@ var prepareTestingBingProvider = function(abortDirectionsUpdate) {
 
 QUnit.module('bing provider', {
     beforeEach: function() {
-        var fakeURL = 'fakeBingUrl';
+        const fakeURL = 'fakeBingUrl';
         this.abortDirectionsUpdate = false;
 
         BingProvider.remapConstant(fakeURL);
@@ -65,14 +65,14 @@ QUnit.module('bing provider', {
 });
 
 QUnit.test('map initialize without loaded map', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     if(window.Microsoft) {
         delete window.Microsoft.Maps;
     }
 
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
     $('<div>').appendTo($('#map')).dxMap({
         provider: 'bing',
@@ -98,7 +98,7 @@ QUnit.test('map initialize without loaded map', function(assert) {
 });
 
 QUnit.test('map ready action', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
@@ -114,17 +114,17 @@ QUnit.test('map ready action', function(assert) {
 });
 
 QUnit.test('dimensions: width', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            width: 300,
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        width: 300,
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -138,17 +138,17 @@ QUnit.test('dimensions: width', function(assert) {
 });
 
 QUnit.test('dimensions: height', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            height: 300,
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        height: 300,
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -162,20 +162,20 @@ QUnit.test('dimensions: height', function(assert) {
 });
 
 QUnit.test('type', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            type: 'hybrid',
-            onReady: function() {
-                assert.equal(window.Microsoft.assignedOptions.mapTypeId, Microsoft.Maps.MapTypeId.aerial, 'type specified correctly');
-                assert.equal(window.Microsoft.assignedOptions.labelOverlay, Microsoft.Maps.LabelOverlay.visible, 'overlay set correctly');
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        type: 'hybrid',
+        onReady: function() {
+            assert.equal(window.Microsoft.assignedOptions.mapTypeId, Microsoft.Maps.MapTypeId.aerial, 'type specified correctly');
+            assert.equal(window.Microsoft.assignedOptions.labelOverlay, Microsoft.Maps.LabelOverlay.visible, 'overlay set correctly');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -201,21 +201,21 @@ QUnit.test('type', function(assert) {
 });
 
 QUnit.test('center', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred(),
-        d3 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
+    const d3 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            center: LOCATIONS[0],
-            onReady: function() {
-                assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
-                assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedLocation, 'center specified correctly');
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        center: LOCATIONS[0],
+        onReady: function() {
+            assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
+            assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedLocation, 'center specified correctly');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -241,7 +241,7 @@ QUnit.test('center', function(assert) {
 
     d3.done(function() {
         map.option('onUpdated', function() {
-            var coords = LOCATIONS[3].split(',');
+            const coords = LOCATIONS[3].split(',');
             assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode not used');
             assert.deepEqual(window.Microsoft.assignedOptions.center, new Microsoft.Maps.Location(parseFloat(coords[0]), parseFloat(coords[1])), 'center changed');
 
@@ -253,20 +253,20 @@ QUnit.test('center', function(assert) {
 });
 
 QUnit.test('center with geocode error', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            center: '',
-            onReady: function() {
-                assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode not used');
-                assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedWithErrorLocation, 'center changed');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        center: '',
+        onReady: function() {
+            assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode not used');
+            assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedWithErrorLocation, 'center changed');
 
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -281,19 +281,19 @@ QUnit.test('center with geocode error', function(assert) {
 });
 
 QUnit.test('\'center\' option is null', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            center: null,
-            onReady: function() {
-                assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedWithErrorLocation, 'center changed');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        center: null,
+        onReady: function() {
+            assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedWithErrorLocation, 'center changed');
 
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -306,20 +306,20 @@ QUnit.test('\'center\' option is null', function(assert) {
 });
 
 QUnit.test('geocode should be called once for equal locations', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            center: LOCATIONS[0],
-            onReady: function() {
-                assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        center: LOCATIONS[0],
+        onReady: function() {
+            assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
 
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.option('onUpdated', function() {
@@ -341,21 +341,21 @@ QUnit.test('geocode should be called once for equal locations', function(assert)
 });
 
 QUnit.test('center changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            center: LOCATIONS[0],
-            onReady: function() {
-                window.Microsoft.centerValue = [5, 10];
-                window.Microsoft.viewChangeCallback();
-                assert.deepEqual(map.option('center'), { lat: 5, lng: 10 }, 'center changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        center: LOCATIONS[0],
+        onReady: function() {
+            window.Microsoft.centerValue = [5, 10];
+            window.Microsoft.viewChangeCallback();
+            assert.deepEqual(map.option('center'), { lat: 5, lng: 10 }, 'center changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    var map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -369,18 +369,18 @@ QUnit.test('center changing from map', function(assert) {
 });
 
 QUnit.test('zoom', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            zoom: 4,
-            onReady: function() {
-                assert.equal(window.Microsoft.options.zoom, 4, 'zoom specified correctly');
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        zoom: 4,
+        onReady: function() {
+            assert.equal(window.Microsoft.options.zoom, 4, 'zoom specified correctly');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -394,21 +394,21 @@ QUnit.test('zoom', function(assert) {
 });
 
 QUnit.test('zoom changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            zoom: 4,
-            onReady: function() {
-                window.Microsoft.zoomValue = 5;
-                window.Microsoft.viewChangeCallback();
-                assert.equal(map.option('zoom'), 5, 'zoom changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        zoom: 4,
+        onReady: function() {
+            window.Microsoft.zoomValue = 5;
+            window.Microsoft.viewChangeCallback();
+            assert.equal(map.option('zoom'), 5, 'zoom changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    var map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -422,31 +422,31 @@ QUnit.test('zoom changing from map', function(assert) {
 });
 
 QUnit.test('bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var firstPoint,
-        secondPoint,
-        thirdPoint;
+    let firstPoint;
+    let secondPoint;
+    let thirdPoint;
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            bounds: {
-                northEast: LOCATIONS[0],
-                southWest: LOCATIONS[1]
-            },
-            onReady: function() {
-                firstPoint = window.geocodedLocation;
-                secondPoint = new Microsoft.Maps.Location(LOCATIONS[1].lat, LOCATIONS[1].lng);
-                thirdPoint = new Microsoft.Maps.Location(LOCATIONS[2][0], LOCATIONS[2][1]);
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        bounds: {
+            northEast: LOCATIONS[0],
+            southWest: LOCATIONS[1]
+        },
+        onReady: function() {
+            firstPoint = window.geocodedLocation;
+            secondPoint = new Microsoft.Maps.Location(LOCATIONS[1].lat, LOCATIONS[1].lng);
+            thirdPoint = new Microsoft.Maps.Location(LOCATIONS[2][0], LOCATIONS[2][1]);
 
-                assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
-                assert.deepEqual(window.Microsoft.assignedOptions.bounds.points, [firstPoint, secondPoint], 'center changed');
+            assert.equal(window.Microsoft.geocodeCalled, 1, 'geocode used');
+            assert.deepEqual(window.Microsoft.assignedOptions.bounds.points, [firstPoint, secondPoint], 'center changed');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -464,7 +464,7 @@ QUnit.test('bounds', function(assert) {
 });
 
 QUnit.test('bounds option should take precedence over center if bounds set', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
@@ -482,7 +482,7 @@ QUnit.test('bounds option should take precedence over center if bounds set', fun
 });
 
 QUnit.test('bounds option should not take precedence over center if bounds not set', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
@@ -496,30 +496,30 @@ QUnit.test('bounds option should not take precedence over center if bounds not s
 });
 
 QUnit.test('bounds changing from map', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            onReady: function() {
-                window.Microsoft.boundsValue = {
-                    getNorthwest: function() {
-                        return new Microsoft.Maps.Location(10, 50);
-                    },
-                    getSoutheast: function() {
-                        return new Microsoft.Maps.Location(40, 20);
-                    }
-                };
-                window.Microsoft.viewChangeCallback();
-                assert.deepEqual(map.option('bounds'), {
-                    northEast: { lat: 10, lng: 20 },
-                    southWest: { lat: 40, lng: 50 }
-                }, 'bounds changed correctly');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        onReady: function() {
+            window.Microsoft.boundsValue = {
+                getNorthwest: function() {
+                    return new Microsoft.Maps.Location(10, 50);
+                },
+                getSoutheast: function() {
+                    return new Microsoft.Maps.Location(40, 20);
+                }
+            };
+            window.Microsoft.viewChangeCallback();
+            assert.deepEqual(map.option('bounds'), {
+                northEast: { lat: 10, lng: 20 },
+                southWest: { lat: 40, lng: 50 }
+            }, 'bounds changed correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    var map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -533,20 +533,20 @@ QUnit.test('bounds changing from map', function(assert) {
 });
 
 QUnit.test('controls', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            controls: true,
-            onReady: function() {
-                assert.equal(window.Microsoft.options.showDashboard, true, 'controls specified correctly');
-                assert.equal(window.Microsoft.options.showMapTypeSelector, true, 'controls specified correctly');
-                assert.equal(window.Microsoft.options.showScalebar, true, 'controls specified correctly');
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        controls: true,
+        onReady: function() {
+            assert.equal(window.Microsoft.options.showDashboard, true, 'controls specified correctly');
+            assert.equal(window.Microsoft.options.showMapTypeSelector, true, 'controls specified correctly');
+            assert.equal(window.Microsoft.options.showScalebar, true, 'controls specified correctly');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onReady', function() {
@@ -562,7 +562,7 @@ QUnit.test('controls', function(assert) {
 });
 
 QUnit.test('key', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
@@ -578,23 +578,23 @@ QUnit.test('key', function(assert) {
 });
 
 QUnit.test('markers', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                assert.deepEqual(window.Microsoft.pushpinLocation, new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
-                assert.equal(window.Microsoft.pushpinAddedToMap, true, 'pushpin added to map');
-                assert.equal(window.Microsoft.infoboxAddedToMap, true, 'infobox added to map');
-                assert.strictEqual(window.Microsoft.pushpinOptions.width, undefined, 'pushpin width not specified');
-                assert.strictEqual(window.Microsoft.pushpinOptions.height, undefined, 'pushpin height not specified');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.deepEqual(window.Microsoft.pushpinLocation, new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng), 'location specified correctly');
+            assert.equal(window.Microsoft.pushpinAddedToMap, true, 'pushpin added to map');
+            assert.equal(window.Microsoft.infoboxAddedToMap, true, 'infobox added to map');
+            assert.strictEqual(window.Microsoft.pushpinOptions.width, undefined, 'pushpin width not specified');
+            assert.strictEqual(window.Microsoft.pushpinOptions.height, undefined, 'pushpin height not specified');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -611,21 +611,21 @@ QUnit.test('markers', function(assert) {
 });
 
 QUnit.test('marker`s tooltip options', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                assert.deepEqual(window.Microsoft.infoboxLocation, new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng), 'infobox location specified');
-                assert.equal(window.Microsoft.infoboxOptions.description, 'A', 'infobox description specified');
-                assert.equal(window.Microsoft.infoboxOptions.visible, true, 'infobox visible on render');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            assert.deepEqual(window.Microsoft.infoboxLocation, new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng), 'infobox location specified');
+            assert.equal(window.Microsoft.infoboxOptions.description, 'A', 'infobox description specified');
+            assert.equal(window.Microsoft.infoboxOptions.visible, true, 'infobox visible on render');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -641,16 +641,16 @@ QUnit.test('marker`s tooltip options', function(assert) {
 });
 
 QUnit.test('marker integration', function(assert) {
-    var done = assert.async();
-    var clickFired = 0,
-        marker = {
-            tooltip: 'A',
-            location: [40.537102, -73.990318],
-            onClick: function(e) {
-                assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
-                clickFired++;
-            }
-        };
+    const done = assert.async();
+    let clickFired = 0;
+    const marker = {
+        tooltip: 'A',
+        location: [40.537102, -73.990318],
+        onClick: function(e) {
+            assert.deepEqual(e.location, { lat: 40.537102, lng: -73.990318 }, 'markers location set');
+            clickFired++;
+        }
+    };
 
     $('#map').dxMap({
         provider: 'bing',
@@ -666,23 +666,23 @@ QUnit.test('marker integration', function(assert) {
 });
 
 QUnit.test('marker icon', function(assert) {
-    var done = assert.async();
-    var d1 = $.Deferred(),
-        d2 = $.Deferred();
+    const done = assert.async();
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
 
-    var markerUrl1 = 'http://example.com/1.png',
-        markerUrl2 = 'http://example.com/2.png';
+    const markerUrl1 = 'http://example.com/1.png';
+    const markerUrl2 = 'http://example.com/2.png';
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            markerIconSrc: markerUrl1,
-            onReady: function() {
-                assert.equal(window.Microsoft.pushpinOptions.icon, markerUrl1, 'pushpin contains custom icon url');
-                d1.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        markerIconSrc: markerUrl1,
+        onReady: function() {
+            assert.equal(window.Microsoft.pushpinOptions.icon, markerUrl1, 'pushpin contains custom icon url');
+            d1.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d1.done(function() {
         map.addMarker([$.extend({ iconSrc: markerUrl2 }, MARKERS[1]), MARKERS[2]]).done(function(instances) {
@@ -705,7 +705,7 @@ QUnit.test('marker icon', function(assert) {
 });
 
 QUnit.test('marker html', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     $('#map').dxMap({
         provider: 'bing',
@@ -721,7 +721,7 @@ QUnit.test('marker html', function(assert) {
 });
 
 QUnit.test('marker html offset', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
     $('#map').dxMap({
         provider: 'bing',
         markers: [MARKERS[6]],
@@ -734,17 +734,17 @@ QUnit.test('marker html offset', function(assert) {
 });
 
 QUnit.test('add marker', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addMarker(MARKERS[1]).done(function(instance) {
@@ -759,25 +759,25 @@ QUnit.test('add marker', function(assert) {
 });
 
 QUnit.test('add marker should extend bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var firstPoint,
-        secondPoint;
+    let firstPoint;
+    let secondPoint;
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            onReady: function() {
-                firstPoint = new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng);
-                secondPoint = new Microsoft.Maps.Location(MARKERS[1].location[0], MARKERS[1].location[1]);
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        onReady: function() {
+            firstPoint = new Microsoft.Maps.Location(MARKERS[0].location.lat, MARKERS[0].location.lng);
+            secondPoint = new Microsoft.Maps.Location(MARKERS[1].location[0], MARKERS[1].location[1]);
 
-                assert.deepEqual(Microsoft.locationRectInstances.pop().points, [firstPoint], 'bound extended and fitted correctly');
+            assert.deepEqual(Microsoft.locationRectInstances.pop().points, [firstPoint], 'bound extended and fitted correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -791,20 +791,20 @@ QUnit.test('add marker should extend bounds', function(assert) {
 });
 
 QUnit.test('add marker should extend visible bounds if autoAdjust = true', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: true,
-            onReady: function() {
-                assert.equal(window.Microsoft.boundFittedCount, 1, 'bounds fitted');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: true,
+        onReady: function() {
+            assert.equal(window.Microsoft.boundFittedCount, 1, 'bounds fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -818,20 +818,20 @@ QUnit.test('add marker should extend visible bounds if autoAdjust = true', funct
 });
 
 QUnit.test('add marker should not extend visible bounds if autoAdjust = false', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            onReady: function() {
-                assert.equal(window.Microsoft.boundFittedCount, 0, 'bounds fitted');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        onReady: function() {
+            assert.equal(window.Microsoft.boundFittedCount, 0, 'bounds fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -845,16 +845,16 @@ QUnit.test('add marker should not extend visible bounds if autoAdjust = false', 
 });
 
 QUnit.test('add markers', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addMarker([MARKERS[0], MARKERS[1]]).done(function(instances) {
@@ -867,17 +867,17 @@ QUnit.test('add markers', function(assert) {
 });
 
 QUnit.test('remove marker', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0], MARKERS[1]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0], MARKERS[1]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.removeMarker(1).done(function() {
@@ -891,8 +891,8 @@ QUnit.test('remove marker', function(assert) {
 });
 
 QUnit.test('markerAdded', function(assert) {
-    var done = assert.async();
-    var markerAddedFired = 0;
+    const done = assert.async();
+    let markerAddedFired = 0;
 
     $('#map').dxMap({
         provider: 'bing',
@@ -911,23 +911,23 @@ QUnit.test('markerAdded', function(assert) {
 });
 
 QUnit.test('markerRemoved', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var markerRemovedFired = 0;
+    let markerRemovedFired = 0;
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            onMarkerRemoved: function(args) {
-                assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
-                markerRemovedFired++;
-            },
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        onMarkerRemoved: function(args) {
+            assert.equal(args.options, MARKERS[0], 'correct options passed as parameter');
+            markerRemovedFired++;
+        },
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -941,20 +941,20 @@ QUnit.test('markerRemoved', function(assert) {
 });
 
 QUnit.test('autoAdjust', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            onReady: function() {
-                assert.equal(window.Microsoft.boundFittedCount, 0, 'bounds not fitted');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        onReady: function() {
+            assert.equal(window.Microsoft.boundFittedCount, 0, 'bounds not fitted');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -968,25 +968,25 @@ QUnit.test('autoAdjust', function(assert) {
 });
 
 QUnit.test('autoAdjust should not change zoom if marker is fitted', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 5,
-            onReady: function() {
-                window.Microsoft.zoomValue = 5;
-                window.Microsoft.fitBoundsCallback = function() {
-                    window.Microsoft.zoomValue = 10;
-                    window.Microsoft.Maps.Events.invoke(null, 'viewchange');
-                };
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 5,
+        onReady: function() {
+            window.Microsoft.zoomValue = 5;
+            window.Microsoft.fitBoundsCallback = function() {
+                window.Microsoft.zoomValue = 10;
+                window.Microsoft.Maps.Events.invoke(null, 'viewchange');
+            };
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1003,25 +1003,25 @@ QUnit.test('autoAdjust should not change zoom if marker is fitted', function(ass
 });
 
 QUnit.test('autoAdjust should change zoom if marker is not fitted', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 10,
-            onReady: function() {
-                window.Microsoft.zoomValue = 10;
-                window.Microsoft.fitBoundsCallback = function() {
-                    window.Microsoft.zoomValue = 5;
-                    window.Microsoft.Maps.Events.invoke(null, 'viewchange');
-                };
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 10,
+        onReady: function() {
+            window.Microsoft.zoomValue = 10;
+            window.Microsoft.fitBoundsCallback = function() {
+                window.Microsoft.zoomValue = 5;
+                window.Microsoft.Maps.Events.invoke(null, 'viewchange');
+            };
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1037,19 +1037,19 @@ QUnit.test('autoAdjust should change zoom if marker is not fitted', function(ass
 });
 
 QUnit.test('autoAdjust should not prevent zoom changing after change', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            markers: [MARKERS[0]],
-            autoAdjust: false,
-            zoom: 5,
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        markers: [MARKERS[0]],
+        autoAdjust: false,
+        zoom: 5,
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1065,31 +1065,31 @@ QUnit.test('autoAdjust should not prevent zoom changing after change', function(
 });
 
 QUnit.test('routes', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                var strokeColor = new Microsoft.Maps.Color.fromHex('#0000ff');
-                strokeColor.a = ROUTES[0].opacity * 255;
-                var polOpts = {
-                    strokeColor: strokeColor,
-                    strokeThickness: ROUTES[0].weight
-                };
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            const strokeColor = new Microsoft.Maps.Color.fromHex('#0000ff');
+            strokeColor.a = ROUTES[0].opacity * 255;
+            const polOpts = {
+                strokeColor: strokeColor,
+                strokeThickness: ROUTES[0].weight
+            };
 
-                assert.equal(window.Microsoft.directionsMapSpecified, true, 'direction drawn');
-                assert.equal(window.Microsoft.directionsOptions.routeMode, Microsoft.Maps.Directions.RouteMode.walking, 'map specified correctly');
-                assert.deepEqual(window.Microsoft.directionsOptions.drivingPolylineOptions, polOpts, 'line options specified correctly');
-                assert.deepEqual(window.Microsoft.directionsOptions.walkingPolylineOptions, polOpts, 'line options specified correctly');
-                assert.equal(window.Microsoft.directionsUpdatedHandlerRemoved, true, 'directions update handler drawn');
-                assert.equal(window.Microsoft.directionsErrorHandlerRemoved, true, 'directions error handler drawn');
+            assert.equal(window.Microsoft.directionsMapSpecified, true, 'direction drawn');
+            assert.equal(window.Microsoft.directionsOptions.routeMode, Microsoft.Maps.Directions.RouteMode.walking, 'map specified correctly');
+            assert.deepEqual(window.Microsoft.directionsOptions.drivingPolylineOptions, polOpts, 'line options specified correctly');
+            assert.deepEqual(window.Microsoft.directionsOptions.walkingPolylineOptions, polOpts, 'line options specified correctly');
+            assert.equal(window.Microsoft.directionsUpdatedHandlerRemoved, true, 'directions update handler drawn');
+            assert.equal(window.Microsoft.directionsErrorHandlerRemoved, true, 'directions error handler drawn');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1103,17 +1103,17 @@ QUnit.test('routes', function(assert) {
 });
 
 QUnit.test('add route', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addRoute(ROUTES[1]).done(function(instance) {
@@ -1131,26 +1131,26 @@ QUnit.test('add route', function(assert) {
 });
 
 QUnit.test('add route should extend bounds', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var points = [];
+    const points = [];
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            routes: [ROUTES[0]],
-            onReady: function() {
-                points.push(new Microsoft.Maps.Location(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]),
-                    new Microsoft.Maps.Location(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]),
-                    new Microsoft.Maps.Location(ROUTES[1].locations[0].lat, ROUTES[1].locations[0].lng),
-                    new Microsoft.Maps.Location(ROUTES[1].locations[2][0], ROUTES[1].locations[2][1]));
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        routes: [ROUTES[0]],
+        onReady: function() {
+            points.push(new Microsoft.Maps.Location(ROUTES[0].locations[0][0], ROUTES[0].locations[0][1]),
+                new Microsoft.Maps.Location(ROUTES[0].locations[2][0], ROUTES[0].locations[2][1]),
+                new Microsoft.Maps.Location(ROUTES[1].locations[0].lat, ROUTES[1].locations[0].lng),
+                new Microsoft.Maps.Location(ROUTES[1].locations[2][0], ROUTES[1].locations[2][1]));
 
-                assert.deepEqual(Microsoft.locationRectInstances.pop().points, [points[0], points[0], points[1]], 'bound extended and fitted correctly');
+            assert.deepEqual(Microsoft.locationRectInstances.pop().points, [points[0], points[0], points[1]], 'bound extended and fitted correctly');
 
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1164,16 +1164,16 @@ QUnit.test('add route should extend bounds', function(assert) {
 });
 
 QUnit.test('add routes', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addRoute([ROUTES[0], ROUTES[1]]).done(function(instances) {
@@ -1186,9 +1186,9 @@ QUnit.test('add routes', function(assert) {
 });
 
 QUnit.test('Error on render route', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
-    var logStub = sinon.stub(errors, 'log');
+    const done = assert.async();
+    const d = $.Deferred();
+    const logStub = sinon.stub(errors, 'log');
 
     if(window.Microsoft) {
         window.Microsoft.abortDirectionsUpdate = true;
@@ -1196,13 +1196,13 @@ QUnit.test('Error on render route', function(assert) {
         this.abortDirectionsUpdate = true;
     }
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.addRoute([ROUTES[0], ROUTES[1]]).done(function(instances) {
@@ -1217,8 +1217,8 @@ QUnit.test('Error on render route', function(assert) {
 });
 
 QUnit.test('routeAdded', function(assert) {
-    var done = assert.async();
-    var routeAddedFired = 0;
+    const done = assert.async();
+    let routeAddedFired = 0;
 
     $('#map').dxMap({
         provider: 'bing',
@@ -1237,23 +1237,23 @@ QUnit.test('routeAdded', function(assert) {
 });
 
 QUnit.test('routeRemoved', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred();
+    const done = assert.async();
+    const d = $.Deferred();
 
-    var routeRemovedFired = 0;
+    let routeRemovedFired = 0;
 
-    var $map = $('#map').dxMap({
-            provider: 'bing',
-            routes: [ROUTES[0]],
-            onRouteRemoved: function(args) {
-                assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
-                routeRemovedFired++;
-            },
-            onReady: function() {
-                d.resolve();
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'bing',
+        routes: [ROUTES[0]],
+        onRouteRemoved: function(args) {
+            assert.equal(args.options, ROUTES[0], 'correct options passed as parameter');
+            routeRemovedFired++;
+        },
+        onReady: function() {
+            d.resolve();
+        }
+    });
+    const map = $map.dxMap('instance');
 
     d.done(function() {
         map.option('onUpdated', function() {
@@ -1267,12 +1267,12 @@ QUnit.test('routeRemoved', function(assert) {
 });
 
 QUnit.test('click', function(assert) {
-    var done = assert.async();
-    var d = $.Deferred(),
-        clicked = 0,
-        eventFired = 0;
+    const done = assert.async();
+    const d = $.Deferred();
+    let clicked = 0;
+    let eventFired = 0;
 
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'bing',
         width: 400,
         height: 500,
