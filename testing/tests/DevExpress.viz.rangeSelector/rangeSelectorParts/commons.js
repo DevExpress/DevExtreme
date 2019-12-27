@@ -1,42 +1,42 @@
 /* global createTestContainer */
 
-var themeManagerModule = require('viz/core/base_theme_manager'),
-    rangeViewModule = require('viz/range_selector/range_view'),
-    slidersControllerModule = require('viz/range_selector/sliders_controller'),
-    trackerModule = require('viz/range_selector/tracker'),
-    axisModule = require('viz/axes/base_axis'),
-    seriesDataSourceModule = require('viz/range_selector/series_data_source'),
-    rangeModule = require('viz/translators/range'),
-    translator2DModule = require('viz/translators/translator2d'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    vizMocks = require('../../../helpers/vizMocks.js'),
+const themeManagerModule = require('viz/core/base_theme_manager');
+const rangeViewModule = require('viz/range_selector/range_view');
+const slidersControllerModule = require('viz/range_selector/sliders_controller');
+const trackerModule = require('viz/range_selector/tracker');
+const axisModule = require('viz/axes/base_axis');
+const seriesDataSourceModule = require('viz/range_selector/series_data_source');
+const rangeModule = require('viz/translators/range');
+const translator2DModule = require('viz/translators/translator2d');
+const rendererModule = require('viz/core/renderers/renderer');
+const vizMocks = require('../../../helpers/vizMocks.js');
 
-    StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager),
-    StubRangeView = vizMocks.stubClass(rangeViewModule.RangeView),
-    StubSlidersController = vizMocks.stubClass(slidersControllerModule.SlidersController, {
-        getSelectedRange: function() {
-            return { startValue: 'startValue', endValue: 'endValue' };
-        }
-    }),
-    StubTracker = vizMocks.stubClass(trackerModule.Tracker),
-    StubAxis = vizMocks.stubClass(axisModule.Axis),
-    StubSeriesDataSource = vizMocks.stubClass(seriesDataSourceModule.SeriesDataSource, {
-        getThemeManager: function() {
-            return {
-                getOptions: function() { return { valueAxis: {} }; },
-                dispose: sinon.spy()
-            };
-        }
-    }),
-    StubRange = vizMocks.stubClass(rangeModule.Range),
-    StubTranslator2D = vizMocks.stubClass(translator2DModule.Translator2D, {
-        isValid: function() {
-            return true;
-        },
-        getBusinessRange: function() {
-            return new StubRange();
-        }
-    });
+const StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager);
+const StubRangeView = vizMocks.stubClass(rangeViewModule.RangeView);
+const StubSlidersController = vizMocks.stubClass(slidersControllerModule.SlidersController, {
+    getSelectedRange: function() {
+        return { startValue: 'startValue', endValue: 'endValue' };
+    }
+});
+const StubTracker = vizMocks.stubClass(trackerModule.Tracker);
+const StubAxis = vizMocks.stubClass(axisModule.Axis);
+const StubSeriesDataSource = vizMocks.stubClass(seriesDataSourceModule.SeriesDataSource, {
+    getThemeManager: function() {
+        return {
+            getOptions: function() { return { valueAxis: {} }; },
+            dispose: sinon.spy()
+        };
+    }
+});
+const StubRange = vizMocks.stubClass(rangeModule.Range);
+const StubTranslator2D = vizMocks.stubClass(translator2DModule.Translator2D, {
+    isValid: function() {
+        return true;
+    },
+    getBusinessRange: function() {
+        return new StubRange();
+    }
+});
 
 require('viz/range_selector/range_selector');
 
@@ -91,7 +91,7 @@ exports.environment = {
     },
 
     createWidget: function(options) {
-        var that = this;
+        const that = this;
         that.themeManager.stub('theme').withArgs('scale').returns({
             tick: {},
             minorTick: {},

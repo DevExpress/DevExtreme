@@ -26,11 +26,11 @@ QUnit.testStart(function() {
             </div>');
 });
 
-var DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell',
-    APPOINTMENT_CLASS = 'dx-scheduler-appointment';
+const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
+const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
 function getDeltaTz(schedulerTz, date) {
-    var defaultTz = date.getTimezoneOffset() * 60000;
+    const defaultTz = date.getTimezoneOffset() * 60000;
     return schedulerTz * 3600000 + defaultTz;
 }
 
@@ -108,13 +108,13 @@ QUnit.test('Appts should be filtered correctly if there is a custom tz and start
         firstDayOfWeek: 1
     });
 
-    var $element = this.instance.$element(),
-        $appt = $element.find('.' + APPOINTMENT_CLASS),
-        cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
-        apptPosition = translator.locate($appt.eq(0)),
-        clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
+    const $element = this.instance.$element();
+    let $appt = $element.find('.' + APPOINTMENT_CLASS);
+    const cellHeight = $element.find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+    const apptPosition = translator.locate($appt.eq(0));
+    const clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
 
-    var cellsCount = (new Date(
+    const cellsCount = (new Date(
         new Date('2015-05-27T23:00:00+01:00').setHours(
             new Date('2015-05-27T23:00:00+01:00').getHours() + clientTzOffset - 8)).getHours() - 7) * 2;
 
@@ -131,7 +131,7 @@ QUnit.test('Appts should be filtered correctly if there is a custom tz and start
 });
 
 QUnit.test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -150,7 +150,7 @@ QUnit.test('Appts should be filtered correctly if there is a custom tz and start
             firstDayOfWeek: 1
         });
 
-        var apptCount = this.instance.$element().find('.' + APPOINTMENT_CLASS).length;
+        const apptCount = this.instance.$element().find('.' + APPOINTMENT_CLASS).length;
 
         assert.equal(apptCount, 0, 'There are not appts');
     } finally {
@@ -177,23 +177,23 @@ QUnit.test('Recurring appointment icon should be visible on the month view', fun
 
     this.clock.tick();
 
-    var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
-        $recurringIcon = $appointment.find('.dx-scheduler-appointment-recurrence-icon');
+    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+    const $recurringIcon = $appointment.find('.dx-scheduler-appointment-recurrence-icon');
 
     assert.ok($recurringIcon.parent().hasClass('dx-scheduler-appointment-content'), 'Recurring icon is visible');
 });
 
 QUnit.test('Appointment startDate and endDate should be correct in the details view, if custom timeZone is setting', function(assert) {
-    var startDate = new Date(2015, 3, 11, 11),
-        endDate = new Date(2015, 3, 11, 11, 30);
+    const startDate = new Date(2015, 3, 11, 11);
+    const endDate = new Date(2015, 3, 11, 11, 30);
 
-    var task = {
+    const task = {
         text: 'Task 1',
         Start: startDate,
         End: endDate
     };
 
-    var timezone = 5;
+    const timezone = 5;
 
     this.createInstance({
         dataSource: new DataSource({
@@ -208,19 +208,19 @@ QUnit.test('Appointment startDate and endDate should be correct in the details v
 
     this.instance.showAppointmentPopup(task);
 
-    var detailsForm = this.instance.getAppointmentDetailsForm(),
-        formData = detailsForm.option('formData'),
-        deltaTz = getDeltaTz(timezone, startDate);
+    const detailsForm = this.instance.getAppointmentDetailsForm();
+    const formData = detailsForm.option('formData');
+    const deltaTz = getDeltaTz(timezone, startDate);
 
     assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), 'start date is correct');
     assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), 'end date is correct');
 });
 
 QUnit.test('Appointment startDate and endDate should be correct in the details view, if custom timeZone is setting as string', function(assert) {
-    var startDate = new Date(2015, 3, 11, 11),
-        endDate = new Date(2015, 3, 11, 11, 30);
+    const startDate = new Date(2015, 3, 11, 11);
+    const endDate = new Date(2015, 3, 11, 11, 30);
 
-    var task = {
+    const task = {
         text: 'Task 1',
         Start: startDate,
         End: endDate
@@ -240,9 +240,9 @@ QUnit.test('Appointment startDate and endDate should be correct in the details v
 
     this.instance.showAppointmentPopup(task);
 
-    var detailsForm = this.instance.getAppointmentDetailsForm(),
-        formData = detailsForm.option('formData'),
-        deltaTz = getDeltaTz(5, startDate);
+    const detailsForm = this.instance.getAppointmentDetailsForm();
+    const formData = detailsForm.option('formData');
+    const deltaTz = getDeltaTz(5, startDate);
 
     assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), 'start date is correct');
     assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), 'end date is correct');
@@ -261,8 +261,8 @@ QUnit.test('Appointment startDate and endDate should be correct in the details v
 
     pointerMock(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(22)).start().click().click();
 
-    var detailsForm = this.instance.getAppointmentDetailsForm(),
-        formData = detailsForm.option('formData');
+    const detailsForm = this.instance.getAppointmentDetailsForm();
+    const formData = detailsForm.option('formData');
 
     assert.deepEqual(formData.Start, new Date(2015, 3, 23, 11), 'start date is correct');
     assert.deepEqual(formData.End, new Date(2015, 3, 23, 11, 30), 'end date is correct');
@@ -272,7 +272,7 @@ QUnit.test('Appointments should have correct size with custom time zone & hourly
 
     this.clock.restore();
 
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -298,10 +298,10 @@ QUnit.test('Appointments should have correct size with custom time zone & hourly
             timeZone: 'Africa/Brazzaville' // +1
         });
 
-        var $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            $first = $appointments.eq(0),
-            $second = $appointments.eq(1),
-            cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        const $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const $first = $appointments.eq(0);
+        const $second = $appointments.eq(1);
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
 
         assert.roughEqual($first.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
         assert.roughEqual($second.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
@@ -318,7 +318,7 @@ QUnit.test('Appointments should have correct size with custom time zone & hourly
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', function(assert) {
-    var workSpace;
+    let workSpace;
 
     try {
         this.clock.restore();
@@ -337,8 +337,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 
         workSpace = this.instance.getWorkSpace();
 
-        var appointment = { startDate: new Date(Date.UTC(2015, 1, 9, 3)).toJSON(), endDate: new Date(Date.UTC(2015, 1, 9, 3, 30)).toJSON(), text: 'caption' },
-            scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+        const appointment = { startDate: new Date(Date.UTC(2015, 1, 9, 3)).toJSON(), endDate: new Date(Date.UTC(2015, 1, 9, 3, 30)).toJSON(), text: 'caption' };
+        const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
         this.instance.showAppointmentPopup(appointment);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
@@ -360,9 +360,9 @@ QUnit.test('Scheduler should update scroll position if appointment was added to 
         timezone: 'Asia/Ashkhabad'
     });
 
-    var appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' },
-        workSpace = this.instance.getWorkSpace(),
-        scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
+    const workSpace = this.instance.getWorkSpace();
+    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
 
     try {
         this.instance.showAppointmentPopup(appointment);
@@ -375,14 +375,14 @@ QUnit.test('Scheduler should update scroll position if appointment was added to 
 });
 
 QUnit.test('Appointment date correction should be rollback after closing popup, if custom timeZone was set', function(assert) {
-    var updatedItem = {
-            text: 'Task 1',
-            startDate: new Date(2015, 1, 7, 1),
-            endDate: new Date(2015, 1, 7, 2)
-        },
-        data = new DataSource({
-            store: [updatedItem]
-        });
+    const updatedItem = {
+        text: 'Task 1',
+        startDate: new Date(2015, 1, 7, 1),
+        endDate: new Date(2015, 1, 7, 2)
+    };
+    const data = new DataSource({
+        store: [updatedItem]
+    });
 
     this.createInstance({
         currentView: 'week',
@@ -391,7 +391,7 @@ QUnit.test('Appointment date correction should be rollback after closing popup, 
         timeZone: 5
     });
 
-    var updateAppointment = sinon.spy(this.instance, 'updateAppointment');
+    const updateAppointment = sinon.spy(this.instance, 'updateAppointment');
     try {
         this.instance.showAppointmentPopup(updatedItem);
 
@@ -408,14 +408,14 @@ QUnit.test('Appointment date correction should be rollback after closing popup, 
 });
 
 QUnit.test('Appointment date correction should be rollback after closing popup, if custom timeZone was set as string', function(assert) {
-    var updatedItem = {
-            text: 'Task 1',
-            startDate: new Date(2015, 1, 7, 1),
-            endDate: new Date(2015, 1, 7, 2)
-        },
-        data = new DataSource({
-            store: [updatedItem]
-        });
+    const updatedItem = {
+        text: 'Task 1',
+        startDate: new Date(2015, 1, 7, 1),
+        endDate: new Date(2015, 1, 7, 2)
+    };
+    const data = new DataSource({
+        store: [updatedItem]
+    });
 
     this.createInstance({
         currentView: 'week',
@@ -424,7 +424,7 @@ QUnit.test('Appointment date correction should be rollback after closing popup, 
         timeZone: 'Asia/Calcutta'
     });
 
-    var updateAppointment = sinon.spy(this.instance, 'updateAppointment');
+    const updateAppointment = sinon.spy(this.instance, 'updateAppointment');
 
     try {
         this.instance.showAppointmentPopup(updatedItem);
@@ -441,7 +441,7 @@ QUnit.test('Appointment date correction should be rollback after closing popup, 
 
 QUnit.test('Appointment should have a correct template with custom timezone', function(assert) {
     this.clock.restore();
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
     try {
         this.createInstance({
@@ -461,8 +461,8 @@ QUnit.test('Appointment should have a correct template with custom timezone', fu
             timeZone: 'Asia/Ashkhabad'// +5:00
         });
 
-        var $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+        const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
 
         assert.equal($contentDates.first().text(), '10:00 AM', 'Start date is correct');
         assert.equal($contentDates.last().text(), '10:30 AM', 'End date is correct');
@@ -473,7 +473,7 @@ QUnit.test('Appointment should have a correct template with custom timezone', fu
 });
 
 QUnit.test('onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -504,7 +504,7 @@ QUnit.test('onAppointmentAdding event args should be consistent with adding appo
 
 QUnit.test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {
     this.clock.restore();
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
     try {
         this.createInstance({
@@ -523,8 +523,8 @@ QUnit.test('Appointment should have a correct template with custom timezone(T387
             text: 'new Date sample'
         }]);
 
-        var $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+        const $appt = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
 
         assert.equal($contentDates.first().text(), '11:00 AM', 'Start date is correct');
         assert.equal($contentDates.last().text(), '11:30 AM', 'End date is correct');
@@ -535,7 +535,7 @@ QUnit.test('Appointment should have a correct template with custom timezone(T387
 });
 
 QUnit.test('Appointment with custom timezone should be resized correctly(T390801)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -551,11 +551,11 @@ QUnit.test('Appointment with custom timezone should be resized correctly(T390801
             }]
         });
 
-        var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
-            $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            initialAppointmentTop = $appointment.position().top;
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+        let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const initialAppointmentTop = $appointment.position().top;
 
-        var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
 
         pointer.dragStart().drag(0, cellHeight);
         pointer.dragEnd();
@@ -570,7 +570,7 @@ QUnit.test('Appointment with custom timezone should be resized correctly(T390801
 });
 
 QUnit.test('Recurrence appointment with custom timezone should be resized correctly(T390801)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -588,11 +588,11 @@ QUnit.test('Recurrence appointment with custom timezone should be resized correc
             }]
         });
 
-        var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
-            $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            initialAppointmentTop = $appointments.eq(0).position().top;
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+        let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const initialAppointmentTop = $appointments.eq(0).position().top;
 
-        var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
 
         pointer.dragStart().drag(0, cellHeight);
         pointer.dragEnd();
@@ -608,7 +608,7 @@ QUnit.test('Recurrence appointment with custom timezone should be resized correc
 });
 
 QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
         this.createInstance({
             currentDate: new Date(2015, 5, 12),
@@ -627,11 +627,11 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
             }]
         });
 
-        var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height,
-            $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            initialAppointmentTop = $appointments.eq(0).position().top;
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+        let $appointments = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const initialAppointmentTop = $appointments.eq(0).position().top;
 
-        var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
 
         pointer.dragStart().drag(0, cellHeight);
         pointer.dragEnd();
@@ -648,9 +648,9 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
 });
 
 QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be opened correctly(T390801)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
-        var appointment = {
+        const appointment = {
             text: 'Stand-up meeting',
             startDate: new Date(2016, 5, 7, 9),
             endDate: new Date(2016, 5, 7, 10),
@@ -659,7 +659,7 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        var initialPosition;
+        let initialPosition;
 
         this.createInstance({
             currentDate: new Date(2016, 5, 7),
@@ -671,13 +671,13 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
             dataSource: [appointment]
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
 
         $appointment.trigger('dxdblclick');
         initialPosition = $appointment.position();
 
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
-        var updatedPosition = this.instance.$element().find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
+        const updatedPosition = this.instance.$element().find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
 
         assert.equal(updatedPosition.top, initialPosition.top, 'Top is updated correctly');
         assert.equal(updatedPosition.left, initialPosition.left, 'Left is updated correctly');
@@ -688,9 +688,9 @@ QUnit.test('Recurrence appointment with custom tz that isn\'t equal to scheduler
 });
 
 QUnit.test('Arguments in event args should be correct when timezone is set(T579457)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
-        var appointment = {
+        const appointment = {
             startDate: new Date('2017-11-22T14:30:00.000Z'),
             endDate: new Date('2017-11-22T15:00:00.000Z'),
             allDay: false,
@@ -711,7 +711,7 @@ QUnit.test('Arguments in event args should be correct when timezone is set(T5794
             dataSource: [appointment]
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
         $appointment.trigger('dxclick');
 
     } finally {
@@ -720,9 +720,9 @@ QUnit.test('Arguments in event args should be correct when timezone is set(T5794
 });
 
 QUnit.test('Recurrence appointment with the same custom timezones should be opened correctly(T390801)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
-        var appointment = {
+        const appointment = {
             text: 'Stand-up meeting',
             startDate: '2015-05-25T15:30:00.000Z',
             endDate: '2015-05-25T15:45:00.000Z',
@@ -731,7 +731,7 @@ QUnit.test('Recurrence appointment with the same custom timezones should be open
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        var initialPosition;
+        let initialPosition;
 
         this.createInstance({
             currentDate: new Date(2015, 4, 25),
@@ -743,13 +743,13 @@ QUnit.test('Recurrence appointment with the same custom timezones should be open
             dataSource: [appointment]
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
 
         $appointment.trigger('dxdblclick');
         initialPosition = $appointment.position();
 
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
-        var updatedPosition = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
+        const updatedPosition = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).not('.dx-scheduler-appointment-recurrence').position();
 
         assert.equal(updatedPosition.top, initialPosition.top, 'Top is updated correctly');
         assert.equal(updatedPosition.left, initialPosition.left, 'Left is updated correctly');
@@ -760,7 +760,7 @@ QUnit.test('Recurrence appointment with the same custom timezones should be open
 });
 
 QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T392414)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -779,11 +779,11 @@ QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should 
             }]
         });
 
-        var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
-            $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first(),
-            initialAppointmentTop = $appointment.position().top;
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first();
+        const initialAppointmentTop = $appointment.position().top;
 
-        var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
 
         pointer.dragStart().drag(0, cellHeight);
         pointer.dragEnd();
@@ -798,7 +798,7 @@ QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should 
 });
 
 QUnit.test('Appointment with custom tz that is equal to scheduler tz should be resized correctly(T392414)', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -817,11 +817,11 @@ QUnit.test('Appointment with custom tz that is equal to scheduler tz should be r
             }]
         });
 
-        var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
-            $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first(),
-            initialAppointmentTop = $appointment.position().top;
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first();
+        const initialAppointmentTop = $appointment.position().top;
 
-        var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+        const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
         pointer.dragStart().drag(0, cellHeight);
         pointer.dragEnd();
 
@@ -850,11 +850,11 @@ QUnit.test('Appointment with custom tz should be resized correctly if the schedu
         }]
     });
 
-    var cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight(),
-        $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first(),
-        initialAppointmentTop = $appointment.position().top;
+    const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+    let $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).first();
+    const initialAppointmentTop = $appointment.position().top;
 
-    var pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+    const pointer = pointerMock(this.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
     pointer.dragStart().drag(0, cellHeight);
     pointer.dragEnd();
 
@@ -882,11 +882,11 @@ QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should 
         }]
     });
 
-    var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first(),
-        $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6),
-        initialAppointmentHeight = $appointment.outerHeight();
+    let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
+    const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6);
+    const initialAppointmentHeight = $appointment.outerHeight();
 
-    let pointer = pointerMock($appointment).start().down().move(10, 10);
+    const pointer = pointerMock($appointment).start().down().move(10, 10);
     $cell.trigger(dragEvents.enter);
     pointer.up();
 
@@ -896,18 +896,18 @@ QUnit.test('Appointment with custom tz that isn\'t equal to scheduler tz should 
     assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
     assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-    var startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(),
-        endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(),
-        cellData = dataUtils.data($cell.get(0), 'dxCellData'),
-        startDate = cellData.startDate,
-        endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
+    const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+    const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+    const cellData = dataUtils.data($cell.get(0), 'dxCellData');
+    const startDate = cellData.startDate;
+    const endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
 
     assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
     assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
 });
 
 QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
-    var tzOffsetStub;
+    let tzOffsetStub;
     try {
         this.clock.restore();
         tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
@@ -926,14 +926,14 @@ QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991
             }]
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first(),
-            $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6),
-            initialAppointmentHeight = $appointment.outerHeight();
+        let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
+        const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(6);
+        const initialAppointmentHeight = $appointment.outerHeight();
 
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, 'Appointment top is OK');
         assert.roughEqual($appointment.outerHeight(), $cell.outerHeight(), 2.001, 'Appointment height is OK');
 
-        let pointer = pointerMock($appointment).start().down().move(10, 10);
+        const pointer = pointerMock($appointment).start().down().move(10, 10);
         $cell.trigger(dragEvents.enter);
         pointer.up();
 
@@ -942,11 +942,11 @@ QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
         assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
-        var startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(),
-            endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(),
-            cellData = dataUtils.data($cell.get(0), 'dxCellData'),
-            startDate = cellData.startDate,
-            endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
+        const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+        const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const cellData = dataUtils.data($cell.get(0), 'dxCellData');
+        const startDate = cellData.startDate;
+        const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
 
         assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
         assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
@@ -956,17 +956,17 @@ QUnit.test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991
 });
 
 QUnit.test('Appointment should be rendered correctly when custom timezone was set', function(assert) {
-    var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 7);
+    const startDate = new Date(2015, 1, 4, 5);
+    const endDate = new Date(2015, 1, 4, 7);
 
-    var appointments = [{
+    const appointments = [{
         startDate: startDate.toString(),
         endDate: endDate.toString(),
         text: 'abc',
         recurrenceRule: 'FREQ=DAILY'
     }];
 
-    var timezone = 5;
+    const timezone = 5;
 
     this.createInstance({
         currentDate: new Date(2015, 1, 4),
@@ -977,28 +977,28 @@ QUnit.test('Appointment should be rendered correctly when custom timezone was se
         timeZone: timezone
     });
 
-    var $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
-    var deltaTz = getDeltaTz(timezone, startDate);
+    const deltaTz = getDeltaTz(timezone, startDate);
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
 QUnit.test('Appointment should be rendered correctly when custom timezone was set', function(assert) {
-    var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 7);
+    const startDate = new Date(2015, 1, 4, 5);
+    const endDate = new Date(2015, 1, 4, 7);
 
-    var appointments = [{
+    const appointments = [{
         startDate: startDate.toString(),
         endDate: endDate.toString(),
         text: 'abc',
         recurrenceRule: 'FREQ=DAILY'
     }];
 
-    var timezone = 5;
+    const timezone = 5;
 
     this.createInstance({
         currentDate: new Date(2015, 1, 4),
@@ -1009,21 +1009,21 @@ QUnit.test('Appointment should be rendered correctly when custom timezone was se
         timeZone: timezone
     });
 
-    var $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
-    var deltaTz = getDeltaTz(timezone, startDate);
+    const deltaTz = getDeltaTz(timezone, startDate);
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
 QUnit.test('Appointment should be rendered correctly when custom timezone was set as string', function(assert) {
-    var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 7);
+    const startDate = new Date(2015, 1, 4, 5);
+    const endDate = new Date(2015, 1, 4, 7);
 
-    var appointments = [{
+    const appointments = [{
         startDate: startDate.toString(),
         endDate: endDate.toString(),
         text: 'abc',
@@ -1043,18 +1043,18 @@ QUnit.test('Appointment should be rendered correctly when custom timezone was se
     });
 
 
-    var $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
-    var deltaTz = getDeltaTz(5, startDate);
+    const deltaTz = getDeltaTz(5, startDate);
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime'), 'Start Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime'), 'End Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
 QUnit.test('Appointment should be rendered correctly when appointment timeZone was set', function(assert) {
-    var appointments = [{
+    const appointments = [{
         startDate: new Date(2015, 1, 4, 5).toString(),
         startDateTimeZone: 'Asia/Calcutta', // +05:30
         endDateTimeZone: 'Asia/Calcutta',
@@ -1062,7 +1062,7 @@ QUnit.test('Appointment should be rendered correctly when appointment timeZone w
         text: 'abc'
     }];
 
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -1073,7 +1073,7 @@ QUnit.test('Appointment should be rendered correctly when appointment timeZone w
             dataSource: appointments
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
         assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(new Date(2015, 1, 4, 7, 30), 'shorttime'), 'Start Date is correct on init');
         assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(new Date(2015, 1, 4, 8, 30), 'shorttime'), 'End Date is correct on init');
@@ -1086,7 +1086,7 @@ QUnit.test('Appointment should have correct height, when appointment timeZones w
 
     this.clock.restore();
 
-    var appointments = [{
+    const appointments = [{
         startDate: new Date(2015, 1, 4, 5).toString(),
         startDateTimeZone: 'Europe/Moscow',
         endDateTimeZone: 'Asia/Ashkhabad',
@@ -1094,7 +1094,7 @@ QUnit.test('Appointment should have correct height, when appointment timeZones w
         text: 'abc'
     }];
 
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -1106,8 +1106,8 @@ QUnit.test('Appointment should have correct height, when appointment timeZones w
             startDayHour: 5
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
-            cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
 
         assert.roughEqual($appointment.position().top, 0, 2.001, 'Appointment top is correct');
         assert.roughEqual($appointment.outerHeight(), 6 * cellHeight, 2.001, 'Appointment height is correct');
@@ -1117,10 +1117,10 @@ QUnit.test('Appointment should have correct height, when appointment timeZones w
 });
 
 QUnit.test('Appointment should be rendered correctly when appointment timezone and scheduler timezone was set', function(assert) {
-    var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 6);
+    const startDate = new Date(2015, 1, 4, 5);
+    const endDate = new Date(2015, 1, 4, 6);
 
-    var appointments = [{
+    const appointments = [{
         startDate: startDate.toString(),
         endDate: endDate.toString(),
         startDateTimezone: 'Asia/Ashkhabad',
@@ -1138,9 +1138,9 @@ QUnit.test('Appointment should be rendered correctly when appointment timezone a
         timeZone: 'Asia/Qyzylorda'
     });
 
-    var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+    const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
-    var deltaTz = getDeltaTz(6, startDate);
+    const deltaTz = getDeltaTz(6, startDate);
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
 
@@ -1149,10 +1149,10 @@ QUnit.test('Appointment should be rendered correctly when appointment timezone a
 });
 
 QUnit.test('All-day Appointment should be rendered correctly when custom timezone was set', function(assert) {
-    var timezone = 5,
-        timezoneDifference = getDeltaTz(timezone, new Date(2016, 4, 4)),
-        startDate = new Date(new Date(2016, 4, 4).getTime() - timezoneDifference),
-        endDate = new Date(new Date(2016, 4, 5).getTime() - timezoneDifference);
+    const timezone = 5;
+    const timezoneDifference = getDeltaTz(timezone, new Date(2016, 4, 4));
+    const startDate = new Date(new Date(2016, 4, 4).getTime() - timezoneDifference);
+    const endDate = new Date(new Date(2016, 4, 5).getTime() - timezoneDifference);
 
     this.createInstance({
         views: ['week'],
@@ -1165,9 +1165,9 @@ QUnit.test('All-day Appointment should be rendered correctly when custom timezon
         }]
     });
 
-    var $element = this.instance.$element(),
-        apptWidth = $element.find('.' + APPOINTMENT_CLASS).first().outerWidth(),
-        cellWidth = $element.find('.dx-scheduler-all-day-table-cell').first().outerWidth();
+    const $element = this.instance.$element();
+    const apptWidth = $element.find('.' + APPOINTMENT_CLASS).first().outerWidth();
+    const cellWidth = $element.find('.dx-scheduler-all-day-table-cell').first().outerWidth();
 
     assert.roughEqual(apptWidth, cellWidth, 2.001, 'Appt width is OK');
 });
@@ -1176,13 +1176,13 @@ QUnit.test('Appointment should be rendered correctly if timeZones is changed', f
 
     this.clock.restore();
 
-    var appointments = [{
+    const appointments = [{
         startDate: new Date(2015, 1, 4, 5).toString(),
         endDate: new Date(2015, 1, 4, 6).toString(),
         text: 'abc'
     }];
 
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
 
     try {
         this.createInstance({
@@ -1197,8 +1197,8 @@ QUnit.test('Appointment should be rendered correctly if timeZones is changed', f
 
         this.instance.option('timeZone', 4);
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
-            cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        const cellHeight = this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
 
         assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, 'Appointment top is correct');
     } finally {
@@ -1207,7 +1207,7 @@ QUnit.test('Appointment should be rendered correctly if timeZones is changed', f
 });
 
 QUnit.test('Appointment should have right width in workspace with timezone', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
         this.clock.restore();
         this.createInstance({
@@ -1226,8 +1226,8 @@ QUnit.test('Appointment should have right width in workspace with timezone', fun
             endDate: new Date(2017, 4, 5)
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0),
-            $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(9);
+        const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+        const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(9);
 
         assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, 'Task has a right width');
     } finally {
@@ -1236,7 +1236,7 @@ QUnit.test('Appointment should have right width in workspace with timezone', fun
 });
 
 QUnit.test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
-    var tzOffsetStub;
+    let tzOffsetStub;
     try {
         this.clock.restore();
         tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
@@ -1258,11 +1258,11 @@ QUnit.test('Recurrence appointment with \'Etc/UTC\' tz should be updated correct
             }]
         });
 
-        var $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first(),
-            $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(21),
-            initialAppointmentHeight = $appointment.outerHeight();
+        let $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).first();
+        const $cell = $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(21);
+        const initialAppointmentHeight = $appointment.outerHeight();
 
-        let pointer = pointerMock($appointment).start().down().move(10, 10);
+        const pointer = pointerMock($appointment).start().down().move(10, 10);
         $cell.trigger(dragEvents.enter);
         pointer.up();
 
@@ -1272,11 +1272,11 @@ QUnit.test('Recurrence appointment with \'Etc/UTC\' tz should be updated correct
         assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
 
 
-        var startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(),
-            endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(),
-            cellData = dataUtils.data($cell.get(0), 'dxCellData'),
-            startDate = cellData.startDate,
-            endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
+        const startDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+        const endDateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const cellData = dataUtils.data($cell.get(0), 'dxCellData');
+        const startDate = cellData.startDate;
+        const endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
 
         assert.equal(startDateText, dateLocalization.format(startDate, 'shorttime'), 'Appointment start date is OK');
         assert.equal(endDateText, dateLocalization.format(endDate, 'shorttime'), 'Appointment end date is OK');
@@ -1287,12 +1287,12 @@ QUnit.test('Recurrence appointment with \'Etc/UTC\' tz should be updated correct
 
 QUnit.test('Task dragging when custom timeZone is set', function(assert) {
     this.clock.restore();
-    var timezone = -5,
-        timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9)),
-        startDate = new Date(new Date(2015, 1, 9).getTime() - timezoneDifference),
-        endDate = new Date(new Date(2015, 1, 9, 1).getTime() - timezoneDifference);
+    const timezone = -5;
+    const timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9));
+    const startDate = new Date(new Date(2015, 1, 9).getTime() - timezoneDifference);
+    const endDate = new Date(new Date(2015, 1, 9, 1).getTime() - timezoneDifference);
 
-    var data = new DataSource({
+    const data = new DataSource({
         store: [
             {
                 text: 'Task 1',
@@ -1306,19 +1306,19 @@ QUnit.test('Task dragging when custom timeZone is set', function(assert) {
 
     this.clock.tick();
 
-    var hour = 3600000;
-    var updatedItem = {
+    const hour = 3600000;
+    const updatedItem = {
         text: 'Task 1',
         startDate: new Date(startDate.getTime() + hour),
         endDate: new Date(endDate.getTime() + hour),
         allDay: false
     };
 
-    let pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
+    const pointer = pointerMock($(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find('.' + DATE_TABLE_CELL_CLASS).eq(2).trigger(dragEvents.enter);
     pointer.up();
 
-    var dataSourceItem = this.instance.option('dataSource').items()[0];
+    const dataSourceItem = this.instance.option('dataSource').items()[0];
 
     this.clock.tick();
     assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
@@ -1326,9 +1326,9 @@ QUnit.test('Task dragging when custom timeZone is set', function(assert) {
 });
 
 QUnit.test('DropDown appointment should be rendered correctly when timezone is set', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
-        var data = [
+        const data = [
             {
                 schedule: 'Appointment 1',
                 startDate: new Date(2018, 8, 17, 1),
@@ -1381,7 +1381,7 @@ QUnit.test('DropDown appointment should be rendered correctly when timezone is s
 });
 
 QUnit.test('New added appointment should be rendered correctly in specified timeZone', function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     try {
         this.createInstance({
             dataSource: [],
@@ -1391,13 +1391,13 @@ QUnit.test('New added appointment should be rendered correctly in specified time
             timeZone: 'Etc/UTC'
         });
 
-        var task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
+        const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
 
         this.instance.showAppointmentPopup(task, true);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-        var $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS),
-            startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
+        const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
+        const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
 
         assert.deepEqual(startDate, task.startDate, 'appointment starts in 8AM');
     } finally {

@@ -6,14 +6,14 @@ import Guid from 'core/guid';
 import query from 'data/query';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
-var createDataSource = function(data, storeOptions, dataSourceOptions) {
-    var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data),
-        dataSource = new DataSource($.extend(true, { store: arrayStore, _preferSync: true }, dataSourceOptions));
+const createDataSource = function(data, storeOptions, dataSourceOptions) {
+    const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
+    const dataSource = new DataSource($.extend(true, { store: arrayStore, _preferSync: true }, dataSourceOptions));
 
     return dataSource;
 };
 
-var setupModule = function() {
+const setupModule = function() {
     this.options = {
         keyExpr: 'id',
         parentIdExpr: 'parentId',
@@ -33,13 +33,13 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.clock && this.clock.restore();
     this.dispose();
 };
 
 function foreachNodes(nodes, func) {
-    for(var i = 0; i < nodes.length; i++) {
+    for(let i = 0; i < nodes.length; i++) {
         func(nodes[i]);
         foreachNodes(nodes[i].children, func);
     }
@@ -78,13 +78,13 @@ QUnit.test('Paginate should be enabled when virtual scrolling is enabled', funct
 
 QUnit.test('Initialize from dataSource with plain structure', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
 
@@ -129,12 +129,12 @@ QUnit.test('Initialize from dataSource with plain structure', function(assert) {
 
 QUnit.test('root node should have correct key and level', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
-        ],
-        dataSource = createDataSource(array);
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
 
@@ -142,7 +142,7 @@ QUnit.test('root node should have correct key and level', function(assert) {
     dataSource.load();
 
     // assert
-    var rootNode = this.getRootNode();
+    const rootNode = this.getRootNode();
     assert.strictEqual(rootNode.children.length, 2, 'root node children count');
     assert.strictEqual(rootNode.key, 0, 'root node key');
     assert.strictEqual(rootNode.level, -1, 'root node level');
@@ -151,14 +151,14 @@ QUnit.test('root node should have correct key and level', function(assert) {
 // T514552
 QUnit.test('nodes should not be recreated after expand', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
-        ],
-        dataSource = createDataSource(array);
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array);
 
-    var nodesInitialized = sinon.stub();
+    const nodesInitialized = sinon.stub();
 
     this.applyOptions({
         onNodesInitialized: nodesInitialized
@@ -167,7 +167,7 @@ QUnit.test('nodes should not be recreated after expand', function(assert) {
     this.dataController.setDataSource(dataSource);
 
     dataSource.load();
-    var rootNode = this.getRootNode();
+    const rootNode = this.getRootNode();
 
     // act
     this.expandRow(2);
@@ -180,18 +180,18 @@ QUnit.test('nodes should not be recreated after expand', function(assert) {
 // T635433
 QUnit.test('sorting should not be reapplied after expand', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category2', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category1', phone: '98-75-21', id: 2, parentId: 0 }
-        ],
-        dataSource = createDataSource(array);
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category2', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category1', phone: '98-75-21', id: 2, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
 
     dataSource.load();
 
-    var calculateSortValueCalled = false;
+    let calculateSortValueCalled = false;
 
     this.columnOption('name', 'calculateSortValue', function(data) {
         calculateSortValueCalled = true;
@@ -216,14 +216,14 @@ QUnit.test('sorting should not be reapplied after expand', function(assert) {
 
 QUnit.test('nodes should be recreated after change sorting', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
-        ],
-        dataSource = createDataSource(array);
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array);
 
-    var nodesInitialized = sinon.stub();
+    const nodesInitialized = sinon.stub();
 
     this.applyOptions({
         onNodesInitialized: nodesInitialized
@@ -232,7 +232,7 @@ QUnit.test('nodes should be recreated after change sorting', function(assert) {
     this.dataController.setDataSource(dataSource);
 
     dataSource.load();
-    var rootNode = this.getRootNode();
+    const rootNode = this.getRootNode();
 
     // act
     dataSource.sort({ selector: 'name', desc: false });
@@ -245,15 +245,15 @@ QUnit.test('nodes should be recreated after change sorting', function(assert) {
 
 QUnit.test('Initialize from dataSource with hierarchical structure', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55' },
-            { name: 'Category2', phone: '98-75-21', items: [
-                { name: 'SubCategory1', phone: '55-66-77' },
-                { name: 'SubCategory2', phone: '56-76-79' }]
-            }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55' },
+        { name: 'Category2', phone: '98-75-21', items: [
+            { name: 'SubCategory1', phone: '55-66-77' },
+            { name: 'SubCategory2', phone: '56-76-79' }]
+        }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({
         itemsExpr: 'items',
@@ -292,15 +292,15 @@ QUnit.test('Initialize from dataSource with hierarchical structure', function(as
 
 QUnit.test('Initialize from dataSource with hierarchical structure when \'keyExpr\' option is specified', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', key: 'key1' },
-            { name: 'Category2', phone: '98-75-21', key: 'key2', items: [
-                { name: 'SubCategory1', phone: '55-66-77', key: 'key3' },
-                { name: 'SubCategory2', phone: '56-76-79', key: 'key4' }]
-            }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', key: 'key1' },
+        { name: 'Category2', phone: '98-75-21', key: 'key2', items: [
+            { name: 'SubCategory1', phone: '55-66-77', key: 'key3' },
+            { name: 'SubCategory2', phone: '56-76-79', key: 'key4' }]
+        }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({
         itemsExpr: 'items',
@@ -340,13 +340,13 @@ QUnit.test('Initialize from dataSource with hierarchical structure when \'keyExp
 
 QUnit.test('Initialize from dataSource when there is key of store (without the specified \'keyEpxr\' option)', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'Category2', phone: '98-75-21', id: 2 }
-        ],
-        dataSource = createDataSource(array, { key: 'id' });
+    let items;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'Category2', phone: '98-75-21', id: 2 }
+    ];
+    const dataSource = createDataSource(array, { key: 'id' });
 
     this.applyOptions({ keyExpr: null });
     this.dataController.setDataSource(dataSource);
@@ -377,12 +377,12 @@ QUnit.test('Initialize from dataSource when there is key of store (without the s
 
 QUnit.test('Checking key of store when dataSource as array', function(assert) {
     // arrange
-    var dataSource,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'Category2', phone: '98-75-21', id: 2 }
-        ];
+    let dataSource;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'Category2', phone: '98-75-21', id: 2 }
+    ];
 
     // act
     this.applyOptions({ dataSource: array });
@@ -394,12 +394,12 @@ QUnit.test('Checking key of store when dataSource as array', function(assert) {
 
 QUnit.test('Exception when key of store not equal \'keyExpr\' option value', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'Category2', phone: '98-75-21', id: 2 }
-        ],
-        dataSource = createDataSource(array, { key: 'name' });
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'Category2', phone: '98-75-21', id: 2 }
+    ];
+    const dataSource = createDataSource(array, { key: 'name' });
 
     // act, assert
     try {
@@ -412,13 +412,13 @@ QUnit.test('Exception when key of store not equal \'keyExpr\' option value', fun
 
 QUnit.test('Error on loading when key is not specified in data', function(assert) {
     // arrange
-    var dataErrors = [],
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'Category2', phone: '98-75-21', id: 2 }
-        ],
-        dataSource = createDataSource(array);
+    const dataErrors = [];
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'Category2', phone: '98-75-21', id: 2 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({
         keyExpr: 'key'
@@ -438,13 +438,13 @@ QUnit.test('Error on loading when key is not specified in data', function(assert
 
 QUnit.test('Update items', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'Category2', phone: '98-75-21', id: 2 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'Category2', phone: '98-75-21', id: 2 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -461,15 +461,15 @@ QUnit.test('Update items', function(assert) {
 QUnit.test('Initialize from dataSource with plain structure when virtual scrolling enabled', function(assert) {
 
     // arrange
-    var items,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
-            { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
-        ],
-        dataSource = createDataSource(array, {}, { pageSize: 3 });
+    let items;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
+        { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array, {}, { pageSize: 3 });
 
     // act
     this.applyOptions({
@@ -492,14 +492,14 @@ QUnit.test('Initialize from dataSource with plain structure when virtual scrolli
 
 QUnit.test('Initialize when remoteOperations and virtual scrolling are enabled and two pages are loaded', function(assert) {
     // arrange
-    var array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
-            { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
-        ],
-        dataSource = createDataSource(array, {}, { pageSize: 2 });
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
+        { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array, {}, { pageSize: 2 });
 
     // act
     this.applyOptions({
@@ -519,15 +519,15 @@ QUnit.test('Initialize when remoteOperations and virtual scrolling are enabled a
 
 QUnit.test('Expand node when virtual scrolling enabled', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
-            { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
-        ],
-        dataSource = createDataSource(array, {}, { pageSize: 3 });
+    let items;
+    const array = [
+        { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
+        { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
+    ];
+    const dataSource = createDataSource(array, {}, { pageSize: 3 });
 
     this.applyOptions({
         scrolling: {
@@ -570,7 +570,7 @@ QUnit.test('Get total items count', function(assert) {
 
 QUnit.test('Getting key when there are keyExpr and store hasn\'t key', function(assert) {
     // arrange
-    var array = [
+    const array = [
         { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
         { name: 'Category1', phone: '55-55-55', id: 1 },
         { name: 'Category2', phone: '98-75-21', id: 2 }
@@ -593,8 +593,8 @@ QUnit.test('Getting key when there are keyExpr and store hasn\'t key', function(
 // T511779
 QUnit.test('The expandRowKeys should be not changed when loading data when there is a filter', function(assert) {
     // arrange
-    var that = this,
-        expandedRowKeys = [];
+    const that = this;
+    let expandedRowKeys = [];
 
     // act
     that.applyOptions({
@@ -624,7 +624,7 @@ QUnit.test('The expandRowKeys should be not changed when loading data when there
 
 QUnit.test('TreeList should not throw exception on filtering if focused row is not in filter condition (T724482)', function(assert) {
     // arrange
-    let clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     this.applyOptions({
         remoteOperations: true,
         dataSource: [
@@ -659,8 +659,8 @@ QUnit.test('TreeList should not throw exception on filtering if focused row is n
 
 QUnit.test('Get node by key', function(assert) {
     // arrange
-    var rows,
-        node;
+    let rows;
+    let node;
 
     this.applyOptions({
         dataSource: [
@@ -683,8 +683,8 @@ QUnit.test('Get node by key', function(assert) {
 
 QUnit.test('Get node by key when node is hidden', function(assert) {
     // arrange
-    var rows,
-        node;
+    let rows;
+    let node;
 
     this.applyOptions({
         dataSource: [
@@ -715,14 +715,14 @@ QUnit.test('There are no exceptions on getting node when hasn\'t datasource', fu
 
 QUnit.test('Call forEachNode method when the first parameter as the array of nodes', function(assert) {
     // arrange
-    var rootNode,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
-        ],
-        dataSource = createDataSource(array),
-        spy = sinon.spy();
+    let rootNode;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
+    ];
+    const dataSource = createDataSource(array);
+    const spy = sinon.spy();
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -740,14 +740,14 @@ QUnit.test('Call forEachNode method when the first parameter as the array of nod
 
 QUnit.test('Call forEachNode method when the first parameter as node', function(assert) {
     // arrange
-    var rootNode,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
-        ],
-        dataSource = createDataSource(array),
-        spy = sinon.spy();
+    let rootNode;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
+    ];
+    const dataSource = createDataSource(array);
+    const spy = sinon.spy();
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -766,13 +766,13 @@ QUnit.test('Call forEachNode method when the first parameter as node', function(
 
 QUnit.test('Call forEachNode method with one parameter', function(assert) {
     // arrange
-    var array = [
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
-        ],
-        dataSource = createDataSource(array),
-        spy = sinon.spy();
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
+    ];
+    const dataSource = createDataSource(array);
+    const spy = sinon.spy();
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -790,15 +790,15 @@ QUnit.test('Call forEachNode method with one parameter', function(assert) {
 // T621620
 QUnit.test('Initialize from dataSource with hierarchical structure when \'parentIdExpr\' option is specified', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', key: 'key1' },
-            { name: 'Category2', phone: '98-75-21', key: 'key2', parentId: 'key1', items: [
-                { name: 'SubCategory1', phone: '55-66-77', key: 'key3', parentId: 'key2' },
-                { name: 'SubCategory2', phone: '56-76-79', key: 'key4', parentId: 'key2' }]
-            }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', key: 'key1' },
+        { name: 'Category2', phone: '98-75-21', key: 'key2', parentId: 'key1', items: [
+            { name: 'SubCategory1', phone: '55-66-77', key: 'key3', parentId: 'key2' },
+            { name: 'SubCategory2', phone: '56-76-79', key: 'key4', parentId: 'key2' }]
+        }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({
         itemsExpr: 'items',
@@ -838,13 +838,13 @@ QUnit.test('Initialize from dataSource with hierarchical structure when \'parent
 // T622381
 QUnit.test('Nodes should be expanded after refresh method is called at boot time (when autoExpandAll is true)', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
-            { name: 'SubCategory1', phone: '98-75-21', id: 2, parentId: 1 },
-            { name: 'SubCategory2', phone: '55-66-77', id: 3, parentId: 2 },
-        ],
-        clock = sinon.useFakeTimers();
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+        { name: 'SubCategory1', phone: '98-75-21', id: 2, parentId: 1 },
+        { name: 'SubCategory2', phone: '55-66-77', id: 3, parentId: 2 },
+    ];
+    const clock = sinon.useFakeTimers();
 
     try {
         this.applyOptions({ autoExpandAll: true, dataSource: array, loadingTimeout: 30 });
@@ -881,7 +881,7 @@ QUnit.test('Initialize when data as classes with a hierarchical structure', func
         set: function(value) { this._items = value; }
     });
 
-    var dataSource = [
+    const dataSource = [
         new Person(1, [
             new Person(2, [
                 new Person(3),
@@ -901,7 +901,7 @@ QUnit.test('Initialize when data as classes with a hierarchical structure', func
     });
 
     // assert
-    var rows = this.getVisibleRows();
+    const rows = this.getVisibleRows();
     assert.strictEqual(rows.length, 5, 'row count');
 
     assert.strictEqual(rows[0].node.key, 1, 'key of the first node');
@@ -925,12 +925,12 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
 
 QUnit.test('Expand node (plain structure)', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -951,12 +951,12 @@ QUnit.test('Expand node (plain structure)', function(assert) {
 
 QUnit.test('Expand expanded node (plain structure)', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -975,12 +975,12 @@ QUnit.test('Expand expanded node (plain structure)', function(assert) {
 
 QUnit.test('Collapse node (plain structure)', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -1009,12 +1009,12 @@ QUnit.test('Collapse node (plain structure)', function(assert) {
 
 QUnit.test('Set expanded nodes by expandedRowKeys - first level', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({ expandedRowKeys: [1] });
     this.dataController.setDataSource(dataSource);
@@ -1028,13 +1028,13 @@ QUnit.test('Set expanded nodes by expandedRowKeys - first level', function(asser
 
 QUnit.test('Set expanded nodes by expandedRowKeys - internal level', function(assert) {
     // arrange
-    var items,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 },
-            { name: 'SubCategory1-1', phone: '55-66-77', id: 3, parentId: 2 }
-        ],
-        dataSource = createDataSource(array);
+    let items;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 },
+        { name: 'SubCategory1-1', phone: '55-66-77', id: 3, parentId: 2 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.applyOptions({ expandedRowKeys: [2] });
     this.dataController.setDataSource(dataSource);
@@ -1056,11 +1056,11 @@ QUnit.test('Set expanded nodes by expandedRowKeys - internal level', function(as
 
 QUnit.test('Update expandedRowKeys', function(assert) {
     // arrange
-    var array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     this.dataController.setDataSource(dataSource);
     dataSource.load();
@@ -1081,14 +1081,14 @@ QUnit.test('Update expandedRowKeys', function(assert) {
 
 QUnit.test('Expand/collapse events', function(assert) {
     // arrange
-    var that = this,
-        events = [],
-        options = [],
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    const that = this;
+    let events = [];
+    const options = [];
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     $.each(['onRowExpanding', 'onRowExpanded', 'onRowCollapsing', 'onRowCollapsed'], function(index, name) {
         options[name] = function(e) {
@@ -1103,7 +1103,7 @@ QUnit.test('Expand/collapse events', function(assert) {
     that.expandRow(1);
 
     // assert
-    var items = that.dataController.items();
+    let items = that.dataController.items();
     assert.strictEqual(items.length, 2, 'count item');
     assert.deepEqual(events, [
         { name: 'onRowExpanding', key: 1 },
@@ -1127,12 +1127,12 @@ QUnit.test('Expand/collapse events', function(assert) {
 
 QUnit.test('Cancel expand row on an expanding event', function(assert) {
     // arrange
-    var that = this,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    const that = this;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     that.applyOptions({
         onRowExpanding: function(e) {
@@ -1146,18 +1146,18 @@ QUnit.test('Cancel expand row on an expanding event', function(assert) {
     that.expandRow(1);
 
     // assert
-    var items = that.dataController.items();
+    const items = that.dataController.items();
     assert.equal(items.length, 1, 'count item');
 });
 
 QUnit.test('Cancel collapse row on a collapsing event', function(assert) {
     // arrange
-    var that = this,
-        array = [
-            { name: 'Category1', phone: '55-55-55', id: 1 },
-            { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
-        ],
-        dataSource = createDataSource(array);
+    const that = this;
+    const array = [
+        { name: 'Category1', phone: '55-55-55', id: 1 },
+        { name: 'SubCategory1', phone: '55-66-77', id: 2, parentId: 1 }
+    ];
+    const dataSource = createDataSource(array);
 
     that.applyOptions({
         onRowCollapsing: function(e) {
@@ -1169,7 +1169,7 @@ QUnit.test('Cancel collapse row on a collapsing event', function(assert) {
     that.expandRow(1);
 
     // assert
-    var items = that.dataController.items();
+    let items = that.dataController.items();
     assert.equal(items.length, 2, 'count item');
 
     // act
@@ -1263,7 +1263,7 @@ QUnit.test('Initial sorting should be applied', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 1', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 2', 'item 1 name value');
@@ -1278,7 +1278,7 @@ QUnit.test('Initial sorting by several columns should be applied', function(asse
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.age, 18, 'item 0 age value');
     assert.equal(items[0].data.name, 'Name 2', 'item 0 name value');
@@ -1298,7 +1298,7 @@ QUnit.test('Initial sorting for second level should be applied', function(assert
     this.expandRow(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 6, 'count items');
     assert.equal(items[3].data.name, 'Name 4', 'item 3 name value');
     assert.equal(items[4].data.name, 'Name 5', 'item 4 name value');
@@ -1314,7 +1314,7 @@ QUnit.test('sortOrder changing by columnOption should be applied', function(asse
     this.columnOption('name', 'sortOrder', 'desc');
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 2', 'item 1 name value');
@@ -1329,7 +1329,7 @@ QUnit.test('Sorting when there is filter', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.equal(items.length, 2, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 1', 'item 1 name value');
@@ -1372,7 +1372,7 @@ QUnit.module('Remote Operations', { beforeEach: function() {
 
 QUnit.test('Initial load with sorting', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -1403,7 +1403,7 @@ QUnit.test('Initial load with sorting', function(assert) {
         }
     ], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 1', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 2', 'item 1 name value');
@@ -1412,9 +1412,9 @@ QUnit.test('Initial load with sorting', function(assert) {
 
 QUnit.test('Initial load with second level expanded key when loading data on demand', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
-    var itemsByParentId = {
+    const itemsByParentId = {
         '0': [{ id: 1, parentId: 0, name: 'Name 1' }],
         '1': [{ id: 2, parentId: 1, name: 'Name 2' }],
         '2': [{ id: 3, parentId: 2, name: 'Name 3' }]
@@ -1426,9 +1426,9 @@ QUnit.test('Initial load with second level expanded key when loading data on dem
         dataSource: {
             load: function(loadOptions) {
                 loadingArgs.push(loadOptions);
-                var result = [];
+                let result = [];
                 loadOptions.parentIds.forEach(function(parentId) {
-                    var items = itemsByParentId[parentId];
+                    const items = itemsByParentId[parentId];
                     if(items) {
                         result = result.concat(items);
                     }
@@ -1447,14 +1447,14 @@ QUnit.test('Initial load with second level expanded key when loading data on dem
         userData: {}
     }], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 1, 'count items');
     assert.equal(items[0].data.name, 'Name 1', 'item 0 name value');
 });
 
 QUnit.test('Change sort order if sorting is local', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    let loadingArgs = [];
 
     this.setupTreeList({
         remoteOperations: {
@@ -1480,7 +1480,7 @@ QUnit.test('Change sort order if sorting is local', function(assert) {
     // assert
     assert.deepEqual(loadingArgs, [], 'no loadings during local sorting');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 2', 'item 1 name value');
@@ -1489,7 +1489,7 @@ QUnit.test('Change sort order if sorting is local', function(assert) {
 
 QUnit.test('Expand first row when there is sorting', function(assert) {
     // arrange
-    var loadingArgs = [];
+    let loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -1524,7 +1524,7 @@ QUnit.test('Expand first row when there is sorting', function(assert) {
         }
     ], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 5, 'count items');
     assert.equal(items[0].data.name, 'Name 1', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 2', 'item 1 name value');
@@ -1549,7 +1549,7 @@ QUnit.test('Change sort order after collapse expanded row', function(assert) {
 
     // assert
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 5, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 0 name value');
     assert.equal(items[1].data.name, 'Name 6', 'item 1 name value');
@@ -1560,7 +1560,7 @@ QUnit.test('Change sort order after collapse expanded row', function(assert) {
 
 QUnit.test('Initial load when autoExpandAll', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         autoExpandAll: true,
@@ -1584,7 +1584,7 @@ QUnit.test('Initial load when autoExpandAll', function(assert) {
         }
     ], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 7, 'all items are visible');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[1].data.name, 'Name 6', 'item 2 name value');
@@ -1602,7 +1602,7 @@ QUnit.test('collapseRow when autoExpandAll', function(assert) {
     this.collapseRow(1);
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 4, 'all items are visible');
     assert.strictEqual(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.strictEqual(items[0].isExpanded, false, 'item 1 is not expanded');
@@ -1622,7 +1622,7 @@ QUnit.test('refresh after collapseRow when autoExpandAll', function(assert) {
     this.refresh();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.strictEqual(items.length, 4, 'all items are visible');
     assert.strictEqual(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.strictEqual(items[0].isExpanded, false, 'item 1 is not expanded');
@@ -1667,9 +1667,9 @@ QUnit.test("Initial load when dataSource has filter and filterMode is standard",
 
 QUnit.test('Initial load when dataSource has filter and filterMode is withAncestors (default)', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
-    var arrayStore = new ArrayStore({
+    const arrayStore = new ArrayStore({
         data: this.items
     });
 
@@ -1677,7 +1677,7 @@ QUnit.test('Initial load when dataSource has filter and filterMode is withAncest
         expandNodesOnFiltering: true,
         dataSource: {
             load: function(loadOptions) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 loadingArgs.push(loadOptions);
                 setTimeout(function() {
                     arrayStore.load(loadOptions).done(function(data) {
@@ -1709,7 +1709,7 @@ QUnit.test('Initial load when dataSource has filter and filterMode is withAncest
         userData: {}
     }], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -1726,9 +1726,9 @@ QUnit.test('Initial load when dataSource has filter and filterMode is withAncest
 // T698573
 QUnit.test('Collapse node when dataSource has filter and filterMode is withAncestors (default)', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    let loadingArgs = [];
 
-    var arrayStore = new ArrayStore({
+    const arrayStore = new ArrayStore({
         data: this.items
     });
 
@@ -1739,7 +1739,7 @@ QUnit.test('Collapse node when dataSource has filter and filterMode is withAnces
         },
         dataSource: {
             load: function(loadOptions) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 loadingArgs.push(loadOptions);
                 setTimeout(function() {
                     arrayStore.load(loadOptions).done(function(data) {
@@ -1763,7 +1763,7 @@ QUnit.test('Collapse node when dataSource has filter and filterMode is withAnces
     this.clock.tick();
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(loadingArgs.length, 0, 'no loadings on collapse row');
     assert.strictEqual(items.length, 2, 'item count');
     assert.strictEqual(this.isRowExpanded(items[0].key), false, 'item 0 is collapsed');
@@ -1781,7 +1781,7 @@ QUnit.test('Filter changing should expand nodes', function(assert) {
     });
 
     // act
-    var dataSource = this.getDataSource();
+    const dataSource = this.getDataSource();
 
     dataSource.filter(['age', '=', 19]);
     dataSource.load();
@@ -1793,7 +1793,7 @@ QUnit.test('Filter changing should expand nodes', function(assert) {
 
 QUnit.test('Initial load when dataSource has filter and filterMode is withAncestors (default) when remoteOperations false', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         expandNodesOnFiltering: true,
@@ -1815,7 +1815,7 @@ QUnit.test('Initial load when dataSource has filter and filterMode is withAncest
         userData: {}
     }], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -1854,7 +1854,7 @@ QUnit.test('Initial load when dataSource has filter and allow expand filtered it
 
     // assert
     assert.deepEqual(this.option('expandedRowKeys'), [5, 1], 'expandedRowKeys');
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.strictEqual(items[3].node.hasChildren, true, 'item 4 name hasChildren');
     assert.equal(items[3].node.children.length, 1, 'item 4 name children length');
@@ -1872,8 +1872,8 @@ QUnit.test('Initial load when dataSource has filter and allow expand filtered it
 
 QUnit.test('Initial load when dataSource has filter and allow expand filtered items and expand they in onNodesInitialized', function(assert) {
     // arrange, act
-    var isExpanding = false,
-        that = this;
+    let isExpanding = false;
+    const that = this;
 
     this.setupTreeList({
         expandNodesOnFiltering: true,
@@ -1912,7 +1912,7 @@ QUnit.test('Initial load when dataSource has filter and allow expand filtered it
 
     // assert
     assert.deepEqual(this.option('expandedRowKeys'), [5, 1, 2], 'expandedRowKeys');
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.equal(items.length, 5, 'count items');
     assert.strictEqual(items[4].node.parent, items[3].node, 'item 5 is child of item 4');
 
@@ -1936,7 +1936,7 @@ QUnit.test('Initial load when expandNodesOnFiltering and no filter', function(as
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'only first level items are visible');
 });
 
@@ -1952,7 +1952,7 @@ QUnit.test('Initial load when expandNodesOnFiltering and dataSource has filter a
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -1965,10 +1965,10 @@ QUnit.test('Initial load when expandNodesOnFiltering and dataSource has filter a
 
 QUnit.test('Initial load dataSource has filter and filterMode matchOnly is emulated using onNodesInitialized', function(assert) {
     // arrange, act
-    var that = this;
+    const that = this;
     this.setupTreeList({
         onNodesInitialized: function(e) {
-            var filter = that.getCombinedFilter();
+            const filter = that.getCombinedFilter();
 
             if(!filter) return;
 
@@ -1986,7 +1986,7 @@ QUnit.test('Initial load dataSource has filter and filterMode matchOnly is emula
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2009,7 +2009,7 @@ QUnit.test('Initial load when expandNodesOnFiltering disabled and dataSource has
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 2, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2032,7 +2032,7 @@ QUnit.test('Initial load when dataSource has filter and filterMode is matchOnly 
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.equal(items[0].data.name, 'Name 2', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2057,7 +2057,7 @@ QUnit.test('Initial load when filterMode is matchOnly and remoteOperations is fa
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 3, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2070,9 +2070,9 @@ QUnit.test('Initial load when filterMode is matchOnly and remoteOperations is fa
 // T515374
 QUnit.test('Initial load when dataSource has filter whose length is more than available (filterMode is withAncestors)', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
-    var arrayStore = new ArrayStore({
+    const arrayStore = new ArrayStore({
         data: this.items
     });
 
@@ -2081,7 +2081,7 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
         expandNodesOnFiltering: true,
         dataSource: {
             load: function(loadOptions) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 loadingArgs.push(loadOptions);
                 setTimeout(function() {
                     arrayStore.load(loadOptions).done(function(data) {
@@ -2113,7 +2113,7 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
         userData: {}
     }], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2130,9 +2130,9 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
 // T515374
 QUnit.test('Initial load when dataSource has filter whose length is more than available when remoteOperations false (filterMode is withAncestors)', function(assert) {
     // arrange, act
-    var loadingArgs = [];
+    const loadingArgs = [];
 
-    var arrayStore = new ArrayStore({
+    const arrayStore = new ArrayStore({
         data: this.items
     });
 
@@ -2142,7 +2142,7 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
         expandNodesOnFiltering: true,
         dataSource: {
             load: function(loadOptions) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 loadingArgs.push(loadOptions);
                 setTimeout(function() {
                     arrayStore.load(loadOptions).done(function(data) {
@@ -2166,7 +2166,7 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
         userData: {}
     }], 'loading arguments');
 
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.equal(items.length, 4, 'count items');
     assert.equal(items[0].data.name, 'Name 3', 'item 1 name value');
     assert.equal(items[0].level, 0, 'item 1 level');
@@ -2183,8 +2183,8 @@ QUnit.test('Initial load when dataSource has filter whose length is more than av
 
 QUnit.test('expand -> collapse -> expand row', function(assert) {
     // arrange
-    var items,
-        loadingArgs = [];
+    let items;
+    let loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -2275,8 +2275,8 @@ QUnit.test('Checking the \'hasChildren\' property of the node when it specified'
 // T585731
 QUnit.test('Checking the \'hasChildren\' property of the node after expand when key as Guid', function(assert) {
     // arrange
-    var items,
-        keys = [new Guid('26992b5c-7d63-89ec-2138-33dd5d244798'), new Guid('1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb')];
+    let items;
+    const keys = [new Guid('26992b5c-7d63-89ec-2138-33dd5d244798'), new Guid('1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb')];
 
     this.setupTreeList({
         dataSource: [
@@ -2297,7 +2297,7 @@ QUnit.test('Checking the \'hasChildren\' property of the node after expand when 
 
 QUnit.test('loadDescendants', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -2324,7 +2324,7 @@ QUnit.test('loadDescendants', function(assert) {
 
 QUnit.test('loadDescendants with key', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -2350,7 +2350,7 @@ QUnit.test('loadDescendants with key', function(assert) {
 
 QUnit.test('loadDescendants with several keys', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -2377,7 +2377,7 @@ QUnit.test('loadDescendants with several keys', function(assert) {
 
 QUnit.test('loadDescendants without deep pass', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         dataSource: {
@@ -2402,7 +2402,7 @@ QUnit.test('loadDescendants without deep pass', function(assert) {
 
 QUnit.test('loadDescendants - the load should not called when expanding row', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         expandedRowKeys: [0],
@@ -2431,7 +2431,7 @@ QUnit.test('loadDescendants - the load should not called when expanding row', fu
 
 QUnit.test('loadDescendants without args - the load should not called when expanding row', function(assert) {
     // arrange
-    var loadingArgs = [];
+    const loadingArgs = [];
 
     this.setupTreeList({
         expandedRowKeys: [0],
@@ -2477,17 +2477,17 @@ QUnit.module('Load data on demand', { beforeEach: function() {
 
 QUnit.test('Initialize load', function(assert) {
     // arrange, act
-    var loadOptions = [];
+    const loadOptions = [];
 
     this.setupTreeList({
         dataSource: {
             load: function(e) {
-                var d = $.Deferred(),
-                    nodes = [],
-                    parentIds = e.parentIds;
+                const d = $.Deferred();
+                const nodes = [];
+                const parentIds = e.parentIds;
 
                 if(parentIds) {
-                    for(var i = 0; i < parentIds.length; i++) {
+                    for(let i = 0; i < parentIds.length; i++) {
                         nodes.push({ id: i + 1, parentId: parentIds[i], field1: 'test1', field2: 'test2', field3: 'test3' });
                         nodes.push({ id: i + 2, parentId: parentIds[i], field1: 'test4', field2: 'test5', field3: 'test6' });
                     }
@@ -2501,32 +2501,32 @@ QUnit.test('Initialize load', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
     assert.deepEqual(loadOptions[0].parentIds, [0], 'parentIds');
     assert.equal(items.length, 2, 'count item');
 });
 
 QUnit.test('Expand row', function(assert) {
     // arrange
-    var items,
-        loadOptions = [],
-        data = {
-            0: [
-                { id: 1, parentId: 0, field1: 'test1', field2: 'test2', field3: 'test3' },
-                { id: 2, parentId: 0, field1: 'test4', field2: 'test5', field3: 'test6' }
-            ],
-            2: [{ id: 3, parentId: 2, field1: 'test7', field2: 'test8', field3: 'test9' }]
-        };
+    let items;
+    const loadOptions = [];
+    const data = {
+        0: [
+            { id: 1, parentId: 0, field1: 'test1', field2: 'test2', field3: 'test3' },
+            { id: 2, parentId: 0, field1: 'test4', field2: 'test5', field3: 'test6' }
+        ],
+        2: [{ id: 3, parentId: 2, field1: 'test7', field2: 'test8', field3: 'test9' }]
+    };
 
     this.setupTreeList({
         dataSource: {
             load: function(e) {
-                var d = $.Deferred(),
-                    result = [],
-                    parentIds = e.parentIds;
+                const d = $.Deferred();
+                const result = [];
+                const parentIds = e.parentIds;
 
                 if(parentIds) {
-                    for(var i = 0; i < parentIds.length; i++) {
+                    for(let i = 0; i < parentIds.length; i++) {
                         result.push.apply(result, data[parentIds[i]]);
                     }
                 }
@@ -2555,26 +2555,26 @@ QUnit.test('Expand row', function(assert) {
 // T604935
 QUnit.test('loadOptions.parendIds should be correct when expanding several nodes', function(assert) {
     // arrange
-    var items,
-        loadOptions = [],
-        data = {
-            0: [
-                { id: 1, parentId: 0, field1: 'test1', field2: 'test2', field3: 'test3' },
-                { id: 2, parentId: 0, field1: 'test4', field2: 'test5', field3: 'test6' }
-            ],
-            1: [],
-            2: [{ id: 3, parentId: 2, field1: 'test7', field2: 'test8', field3: 'test9' }]
-        };
+    let items;
+    const loadOptions = [];
+    const data = {
+        0: [
+            { id: 1, parentId: 0, field1: 'test1', field2: 'test2', field3: 'test3' },
+            { id: 2, parentId: 0, field1: 'test4', field2: 'test5', field3: 'test6' }
+        ],
+        1: [],
+        2: [{ id: 3, parentId: 2, field1: 'test7', field2: 'test8', field3: 'test9' }]
+    };
 
     this.setupTreeList({
         dataSource: {
             load: function(e) {
-                var d = $.Deferred(),
-                    result = [],
-                    parentIds = e.parentIds;
+                const d = $.Deferred();
+                const result = [];
+                const parentIds = e.parentIds;
 
                 if(parentIds) {
-                    for(var i = 0; i < parentIds.length; i++) {
+                    for(let i = 0; i < parentIds.length; i++) {
                         result.push.apply(result, data[parentIds[i]]);
                     }
                 }
@@ -2617,7 +2617,7 @@ QUnit.module('Filtering', { beforeEach: function() {
 
 QUnit.test('Search should work correctly with hierarchical structure', function(assert) {
     // arrange
-    var items;
+    let items;
 
     // act
     this.setupTreeList({
@@ -2660,7 +2660,7 @@ QUnit.test('Search when filterMode is \'fullBranch\'', function(assert) {
     });
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 2, 'item count');
     assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: 'Test 2' }, 'first item');
     assert.deepEqual(items[0].level, 0, 'level of the first item');
@@ -2690,7 +2690,7 @@ QUnit.test('Search when filterMode is \'fullBranch\'', function(assert) {
 
 QUnit.test('Search with filterMode is \'fullBranch\' when remote data source', function(assert) {
     // arrange
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { id: 1, parentId: 0, test: 'Test 1' },
         { id: 2, parentId: 0, test: 'Test 2' },
         { id: 3, parentId: 2, test: 'Test 3' },
@@ -2715,7 +2715,7 @@ QUnit.test('Search with filterMode is \'fullBranch\' when remote data source', f
     });
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 2, 'item count');
     assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: 'Test 2' }, 'first item');
     assert.deepEqual(items[0].level, 0, 'level of the first item');
@@ -2769,7 +2769,7 @@ QUnit.test('FullBranch mode. Expansion of the filtered node should work when exp
     this.expandRow(1);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 2, 'item count');
     assert.deepEqual(items[0].data, { id: 1, parentId: 0, test: 'Test 1' }, 'first item');
     assert.deepEqual(items[1].data, { id: 2, parentId: 1, test: 'Test 2' }, 'second item');
@@ -2816,7 +2816,7 @@ QUnit.test('FullBranch mode. The order of nodes should not be changed after expa
     this.expandRow(1);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 3, 'item count');
     assert.deepEqual(items[0].data, { id: 1, parentId: 0, test: 'Test 1' }, 'first item');
     assert.deepEqual(items[1].data, { id: 4, parentId: 1, test: 'Test 3' }, 'second item');
@@ -2863,7 +2863,7 @@ QUnit.test('FullBranch mode. Children of filtered nodes should not be collapsed 
     this.expandRow(2);
 
     // assert
-    var items = this.dataController.items();
+    let items = this.dataController.items();
     assert.strictEqual(items.length, 4, 'item count');
 
     // act
@@ -2881,10 +2881,10 @@ QUnit.test('FullBranch mode. Children of filtered nodes should not be collapsed 
 // T724827
 QUnit.test('The filter query should be correct after resetting the filter value', function(assert) {
     // arrange
-    var items,
-        filter,
-        /* eslint-disable */
-        store = new ArrayStore([
+    let items;
+    let filter;
+    /* eslint-disable */
+        var store = new ArrayStore([
             { id: 1, parentId: 0, name: "Name 3", age: 19 },
                 { id: 4, parentId: 1, name: "Name 6", age: 16 },
                 { id: 5, parentId: 1, name: "Name 5", age: 15 },

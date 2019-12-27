@@ -1,18 +1,18 @@
-var extend = require('../../../core/utils/extend').extend,
-    isNumeric = require('../../../core/utils/type').isNumeric,
-    candlestickPoint = require('./candlestick_point'),
-    _extend = extend,
-    _isNumeric = isNumeric;
+const extend = require('../../../core/utils/extend').extend;
+const isNumeric = require('../../../core/utils/type').isNumeric;
+const candlestickPoint = require('./candlestick_point');
+const _extend = extend;
+const _isNumeric = isNumeric;
 
 module.exports = _extend({}, candlestickPoint, {
     _getPoints: function() {
-        var that = this,
-            createPoint = that._options.rotated ? function(x, y) { return [y, x]; } : function(x, y) { return [x, y]; },
-            openYExist = _isNumeric(that.openY),
-            closeYExist = _isNumeric(that.closeY),
-            x = that.x,
-            width = that.width,
-            points;
+        const that = this;
+        const createPoint = that._options.rotated ? function(x, y) { return [y, x]; } : function(x, y) { return [x, y]; };
+        const openYExist = _isNumeric(that.openY);
+        const closeYExist = _isNumeric(that.closeY);
+        const x = that.x;
+        const width = that.width;
+        let points;
 
         points = [].concat(createPoint(x, that.highY));
         openYExist && (points = points.concat(createPoint(x, that.openY)));
@@ -30,7 +30,7 @@ module.exports = _extend({}, candlestickPoint, {
     },
 
     _getMinTrackerWidth: function() {
-        var width = 2 + this._styles.normal['stroke-width'];
+        const width = 2 + this._styles.normal['stroke-width'];
         return width + width % 2;
     }
 });

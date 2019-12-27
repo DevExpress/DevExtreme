@@ -2,8 +2,8 @@ import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import messageLocalization from '../../localization/message';
 
-var Popup = require('../popup'),
-    extend = require('../../core/utils/extend').extend;
+const Popup = require('../popup');
+const extend = require('../../core/utils/extend').extend;
 
 class DiagramDialog extends Widget {
     _init() {

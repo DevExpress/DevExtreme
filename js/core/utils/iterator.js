@@ -3,9 +3,9 @@ const map = (values, callback) => {
         return values.map(callback);
     }
 
-    let result = [];
+    const result = [];
 
-    for(let key in values) {
+    for(const key in values) {
         result.push(callback(values[key], key));
     }
 

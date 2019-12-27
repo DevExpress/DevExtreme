@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('ui/box');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="nestedBox" data-bind="dxBox: {}">\
             <div data-options="dxItem: {baseSize: 272, ratio: 0, box: {direction: \'col\'}}">\
                 <div data-options="dxItem: {baseSize: \'auto\', ratio: 0}">\
@@ -18,7 +18,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.test('innerBox with nested box item', function(assert) {
-    var $box = $('#nestedBox');
+    const $box = $('#nestedBox');
     ko.applyBindings({}, $box[0]);
 
     assert.equal($.trim($box.text()), 'Box1', 'inner box rendered');
@@ -31,11 +31,11 @@ QUnit.test('box item visibility change should fire onItemStateChanged action', f
         onItemStateChanged: itemStateChangedHandler\
     }"></div>');
 
-    var $box = $('#box'),
-        vm = {
-            isItemVisible: ko.observable(true),
-            itemStateChangedHandler: sinon.spy()
-        };
+    const $box = $('#box');
+    const vm = {
+        isItemVisible: ko.observable(true),
+        itemStateChangedHandler: sinon.spy()
+    };
 
     ko.applyBindings(vm, $box[0]);
     assert.equal(vm.itemStateChangedHandler.callCount, 0, 'handler should not be called on render');

@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    DataSource = require('data/data_source/data_source').DataSource,
-    logger = require('core/utils/console').logger,
-    fx = require('animation/fx'),
-    dataGridMocks = require('../../helpers/dataGridMocks.js');
+const $ = require('jquery');
+const ko = require('knockout');
+const DataSource = require('data/data_source/data_source').DataSource;
+const logger = require('core/utils/console').logger;
+const fx = require('animation/fx');
+const dataGridMocks = require('../../helpers/dataGridMocks.js');
 
 require('ui/data_grid/ui.data_grid');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<style>\
             .fixed-height {\
                 height: 400px;\
@@ -38,10 +38,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var processColumnsForCompare = function(columns, parameterNames) {
-    var processedColumns = $.extend(true, [], columns);
+const processColumnsForCompare = function(columns, parameterNames) {
+    const processedColumns = $.extend(true, [], columns);
     $.each(processedColumns, function() {
-        var propertyName;
+        let propertyName;
         for(propertyName in this) {
             if(parameterNames) {
                 if($.inArray(propertyName, parameterNames) === -1) {
@@ -80,7 +80,7 @@ QUnit.module('Assign options', {
 
 QUnit.test('Lookup dataSource is observable value', function(assert) {
     // arrange, act
-    var errorMessage;
+    let errorMessage;
 
     logger.error = function(message) {
         errorMessage = message;
@@ -97,7 +97,7 @@ QUnit.test('Lookup dataSource is observable value', function(assert) {
     assert.ok(errorMessage.indexOf('Unexpected type of data source is provided for a lookup column') > -1, 'Error message');
 });
 
-var setupModule = function() {
+const setupModule = function() {
     dataGridMocks.setupDataGridModules(this, ['columns', 'data', 'selection', 'editing', 'filterRow', 'masterDetail']);
 
     this.applyOptions = function(options) {
@@ -115,7 +115,7 @@ var setupModule = function() {
     };
 };
 
-var teardownModule = function() {
+const teardownModule = function() {
     this.dispose();
 };
 
@@ -123,7 +123,7 @@ QUnit.module('initialization from dataSource', { beforeEach: setupModule, afterE
 
 // T111157
 QUnit.test('Initialize from array store with observable fields', function(assert) {
-    var dataSource = new DataSource([
+    const dataSource = new DataSource([
         { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
         { name: ko.observable('Dan'), age: ko.observable(19), birthDate: ko.observable(new Date(1991, 6, 15)) }
     ]);
@@ -131,7 +131,7 @@ QUnit.test('Initialize from array store with observable fields', function(assert
 
     this.columnsController.applyDataSource(dataSource);
 
-    var visibleColumns = this.columnsController.getVisibleColumns();
+    const visibleColumns = this.columnsController.getVisibleColumns();
 
     assert.deepEqual(processColumnsForCompare(visibleColumns), [
         { index: 0, visible: true, showEditorAlways: false, allowFiltering: true, dataField: 'name', caption: 'Name', alignment: 'left', dataType: 'string' },
@@ -147,14 +147,14 @@ QUnit.test('Initialize from array store with observable fields', function(assert
 // T387248
 QUnit.test('Set selectedRows where there is a nested knockout observable value inside dataSource', function(assert) {
     // arrange
-    var items;
+    let items;
 
     this.array = [
         { name: ko.observable('Alex'), age: ko.observable(15), birthDate: ko.observable(new Date(1995, 5, 23)) },
         { name: ko.observable('Dan'), age: ko.observable(16), birthDate: ko.observable(new Date(1991, 6, 15)) },
         { name: ko.observable('Tom'), age: ko.observable(18), birthDate: ko.observable(new Date(1992, 8, 14)) }
     ];
-    var dataSource = new DataSource(this.array);
+    const dataSource = new DataSource(this.array);
     this.dataController.setDataSource(dataSource);
     dataSource.load();
 
@@ -202,7 +202,7 @@ QUnit.module('Work with knockout', {
         this.createDataGrid = function() {
             ko.applyBindings(this.viewModel, $('#landOfKO').get(0));
 
-            var dataGrid = $('#dataGridKO').dxDataGrid('instance');
+            const dataGrid = $('#dataGridKO').dxDataGrid('instance');
             this.clock.tick(500);
             return dataGrid;
         };
@@ -228,7 +228,7 @@ QUnit.test('Check that header filter shows without errors when using KO', functi
 
 // T266949
 QUnit.test('Root view model in cellTemplate', function(assert) {
-    var getCellTextCallCount = 0;
+    let getCellTextCallCount = 0;
 
     this.viewModel.getCellText = function(options) {
         getCellTextCallCount++;
@@ -252,17 +252,17 @@ QUnit.test('Root view model in cellTemplate', function(assert) {
 QUnit.test('Two-way binding', function(assert) {
     // arrange, act
 
-    var data = [{ field1: ko.observable(1), field2: ko.observable(2) }, { field1: ko.observable(3), field2: ko.observable(4) }];
+    const data = [{ field1: ko.observable(1), field2: ko.observable(2) }, { field1: ko.observable(3), field2: ko.observable(4) }];
 
     this.viewModel.gridOptions = {
         dataSource: data
     };
 
     // act
-    var dataGrid = this.createDataGrid();
+    const dataGrid = this.createDataGrid();
 
     // assert
-    var $rows = $(dataGrid.$element().find('.dx-data-row'));
+    let $rows = $(dataGrid.$element().find('.dx-data-row'));
     assert.equal($rows.length, 2, 'row count');
     assert.equal($rows.eq(0).children().eq(0).text(), '1');
     assert.equal($rows.eq(1).children().eq(0).text(), '3');
@@ -280,7 +280,7 @@ QUnit.test('Two-way binding', function(assert) {
 QUnit.test('Two-way binding disabled', function(assert) {
     // arrange, act
 
-    var data = [{ field1: ko.observable(1), field2: ko.observable(2) }, { field1: ko.observable(3), field2: ko.observable(4) }];
+    const data = [{ field1: ko.observable(1), field2: ko.observable(2) }, { field1: ko.observable(3), field2: ko.observable(4) }];
 
     this.viewModel.gridOptions = {
         dataSource: data,
@@ -288,10 +288,10 @@ QUnit.test('Two-way binding disabled', function(assert) {
     };
 
     // act
-    var dataGrid = this.createDataGrid();
+    const dataGrid = this.createDataGrid();
 
     // assert
-    var $rows = $(dataGrid.$element().find('.dx-data-row'));
+    let $rows = $(dataGrid.$element().find('.dx-data-row'));
     assert.equal($rows.length, 2, 'row count');
     assert.equal($rows.eq(0).children().eq(0).text(), '1');
     assert.equal($rows.eq(1).children().eq(0).text(), '3');
@@ -315,8 +315,8 @@ QUnit.test('$root model in rowTemplate', function(assert) {
         dataSource: [{ id: 1 }, { id: 2 }]
     };
 
-    var dataGrid = this.createDataGrid();
-    var $rows = $(dataGrid.$element().find('.test-row'));
+    const dataGrid = this.createDataGrid();
+    const $rows = $(dataGrid.$element().find('.test-row'));
 
     // act
     $rows.eq(1).click();
@@ -352,7 +352,7 @@ QUnit.module('Editing', {
         this.createDataGrid = function() {
             ko.applyBindings(this.viewModel, $('#landOfKO').get(0));
 
-            var dataGrid = $('#dataGridKO').dxDataGrid('instance');
+            const dataGrid = $('#dataGridKO').dxDataGrid('instance');
             this.clock.tick(500);
             return dataGrid;
         };
@@ -364,8 +364,8 @@ QUnit.module('Editing', {
     // T566012
     QUnit.test('Row mode: DataSource fields should not be changed when editing row', function(assert) {
         // arrange
-        var $input,
-            dataGrid = this.createDataGrid();
+        let $input;
+        const dataGrid = this.createDataGrid();
 
         dataGrid.editRow(0);
         $input = $(dataGrid.element()).find('.dx-datagrid-rowsview .dx-editor-cell input').first();
@@ -385,7 +385,7 @@ QUnit.module('Editing', {
     QUnit.test('Batch mode: DataSource fields should not be changed when editing cell', function(assert) {
         // arrange
         this.editing.mode = 'batch';
-        var dataGrid = this.createDataGrid();
+        const dataGrid = this.createDataGrid();
 
         // act
         dataGrid.cellValue(0, 0, 'Test');

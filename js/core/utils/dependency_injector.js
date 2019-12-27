@@ -1,15 +1,15 @@
 module.exports = function(object) {
-    var extend = require('./extend').extend,
-        isFunction = require('./type').isFunction,
-        each = require('./iterator').each,
-        Class = require('../class');
+    const extend = require('./extend').extend;
+    const isFunction = require('./type').isFunction;
+    const each = require('./iterator').each;
+    const Class = require('../class');
 
-    var BaseClass = Class.inherit(object),
-        InjectedClass = BaseClass,
-        instance = new InjectedClass(object),
-        initialFields = {};
+    const BaseClass = Class.inherit(object);
+    let InjectedClass = BaseClass;
+    let instance = new InjectedClass(object);
+    const initialFields = {};
 
-    var injectFields = function(injectionObject, initial) {
+    const injectFields = function(injectionObject, initial) {
         each(injectionObject, function(key) {
             if(isFunction(instance[key])) {
                 if(initial || !object[key]) {

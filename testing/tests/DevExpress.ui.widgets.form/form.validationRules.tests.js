@@ -160,21 +160,21 @@ QUnit.test('Validate with template wrapper', assert => {
 
 QUnit.test('CustomRule.validationCallback accepts formItem', assert => {
     // arrange
-    const validationSpy = sinon.spy(),
-        form = $('#form').dxForm({
-            formData: {
-                name: ''
-            },
-            items: [{
-                dataField: 'name',
-                itemType: 'simple',
-                validationRules: [{
-                    type: 'custom',
-                    message: 'Name is required',
-                    validationCallback: validationSpy
-                }]
+    const validationSpy = sinon.spy();
+    const form = $('#form').dxForm({
+        formData: {
+            name: ''
+        },
+        items: [{
+            dataField: 'name',
+            itemType: 'simple',
+            validationRules: [{
+                type: 'custom',
+                message: 'Name is required',
+                validationCallback: validationSpy
             }]
-        }).dxForm('instance');
+        }]
+    }).dxForm('instance');
 
     // act
     form.validate();
@@ -192,21 +192,21 @@ QUnit.test('CustomRule.validationCallback accepts formItem', assert => {
 
 QUnit.test('AsyncRule.validationCallback accepts formItem', assert => {
     // arrange
-    const validationSpy = sinon.spy(function() { return new Deferred().resolve().promise(); }),
-        form = $('#form').dxForm({
-            formData: {
-                name: ''
-            },
-            items: [{
-                dataField: 'name',
-                itemType: 'simple',
-                validationRules: [{
-                    type: 'async',
-                    message: 'Name is required',
-                    validationCallback: validationSpy
-                }]
+    const validationSpy = sinon.spy(function() { return new Deferred().resolve().promise(); });
+    const form = $('#form').dxForm({
+        formData: {
+            name: ''
+        },
+        items: [{
+            dataField: 'name',
+            itemType: 'simple',
+            validationRules: [{
+                type: 'async',
+                message: 'Name is required',
+                validationCallback: validationSpy
             }]
-        }).dxForm('instance');
+        }]
+    }).dxForm('instance');
 
     // act
     form.validate();

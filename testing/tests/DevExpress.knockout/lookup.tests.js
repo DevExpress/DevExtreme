@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
-    ko = require('knockout');
+const $ = require('jquery');
+const fx = require('animation/fx');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const ko = require('knockout');
 
 require('ui/lookup');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="T131530" data-bind="dxLookup: { items: [{ }, { }], itemTemplate: \'item\' }">\
             <div data-options="dxTemplate: { name: \'item\' }">Template</div>\
         </div>\
@@ -19,13 +19,13 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var LIST_CLASS = 'dx-list';
+const LIST_CLASS = 'dx-list';
 
-var toSelector = function(val) {
+const toSelector = function(val) {
     return '.' + val;
 };
 
-var openPopupWithList = function(lookup) {
+const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
 
@@ -43,27 +43,27 @@ QUnit.module('list options', {
 });
 
 QUnit.test('lookup should delegate templates to child widgets (T131530)', function(assert) {
-    var $lookup = $('#T131530');
+    const $lookup = $('#T131530');
     ko.applyBindings({}, $lookup.get(0));
 
-    var lookup = $lookup.dxLookup('instance');
+    const lookup = $lookup.dxLookup('instance');
 
     openPopupWithList(lookup);
 
-    var $list = $(toSelector(LIST_CLASS));
+    const $list = $(toSelector(LIST_CLASS));
 
     assert.equal($.trim($list.find('.dx-list-item').text()), 'TemplateTemplate');
 });
 
 QUnit.test('lookup with item template', function(assert) {
-    var $lookup = $('#lookupWithItemTemplate');
+    const $lookup = $('#lookupWithItemTemplate');
     ko.applyBindings({}, $lookup.get(0));
 
-    var lookup = $lookup.dxLookup('instance');
+    const lookup = $lookup.dxLookup('instance');
 
     openPopupWithList(lookup);
 
-    var $list = $(toSelector(LIST_CLASS));
+    const $list = $(toSelector(LIST_CLASS));
 
     assert.equal($.trim($list.find('.dx-list-item').text()), 'Template');
 });

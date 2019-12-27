@@ -1,4 +1,4 @@
-var dxFunnel = require('./funnel/funnel');
+const dxFunnel = require('./funnel/funnel');
 
 dxFunnel.addPlugin(require('./funnel/label').plugin);
 dxFunnel.addPlugin(require('./core/export').plugin);

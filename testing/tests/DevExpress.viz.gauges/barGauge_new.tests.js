@@ -13,7 +13,7 @@ const stubLegend = stubClass(Legend);
 
 $('<div id="test-container" style="width: 400px; height: 400px;"></div>').appendTo('#qunit-fixture');
 
-var _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
+const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
 titleModule.Title = vizMocks.Title;
 tooltipModule.Tooltip = vizMocks.Tooltip;
@@ -21,7 +21,7 @@ loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
 
 QUnit.module('Misc', {
     beforeEach: function() {
-        var renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
@@ -144,7 +144,7 @@ QUnit.module('Legend', {
         });
 
         sinon.stub(legendModule, 'Legend', () => {
-            var stub = new stubLegend();
+            const stub = new stubLegend();
             stub.stub('measure').returns([120, 120]);
             stub.stub('layoutOptions').returns({
                 horizontalAlignment: 'right',

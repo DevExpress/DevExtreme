@@ -3,24 +3,24 @@ import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
 
-var COLUMN_INDICATORS_CLASS = 'dx-column-indicators',
-    GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
+const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
+const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 
 module.exports = {
     _applyColumnState: function(options) {
-        var that = this,
-            rtlEnabled = this.option('rtlEnabled'),
-            columnAlignment = that._getColumnAlignment(options.column.alignment, rtlEnabled),
-            parameters = extend(true, { columnAlignment: columnAlignment }, options),
-            isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS),
-            $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem),
-            $span = $('<span>').addClass(that._getIndicatorClassName(options.name)),
-            getIndicatorAlignment = function() {
-                if(rtlEnabled) {
-                    return columnAlignment === 'left' ? 'right' : 'left';
-                }
-                return columnAlignment;
-            };
+        const that = this;
+        const rtlEnabled = this.option('rtlEnabled');
+        const columnAlignment = that._getColumnAlignment(options.column.alignment, rtlEnabled);
+        const parameters = extend(true, { columnAlignment: columnAlignment }, options);
+        const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
+        const $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem);
+        const $span = $('<span>').addClass(that._getIndicatorClassName(options.name));
+        const getIndicatorAlignment = function() {
+            if(rtlEnabled) {
+                return columnAlignment === 'left' ? 'right' : 'left';
+            }
+            return columnAlignment;
+        };
 
         parameters.container = $indicatorsContainer;
         parameters.indicator = $span;
@@ -40,8 +40,8 @@ module.exports = {
     },
 
     _createIndicatorContainer: function(options, ignoreIndicatorAlignment) {
-        var $indicatorsContainer = this._getIndicatorContainer(options.rootElement),
-            indicatorAlignment = options.columnAlignment === 'left' ? 'right' : 'left';
+        let $indicatorsContainer = this._getIndicatorContainer(options.rootElement);
+        const indicatorAlignment = options.columnAlignment === 'left' ? 'right' : 'left';
 
         if(!$indicatorsContainer.length) {
             $indicatorsContainer = $('<div>').addClass(COLUMN_INDICATORS_CLASS);
@@ -57,25 +57,25 @@ module.exports = {
     },
 
     _getIndicatorElements: function($cell) {
-        var $indicatorContainer = this._getIndicatorContainer($cell);
+        const $indicatorContainer = this._getIndicatorContainer($cell);
 
         return $indicatorContainer && $indicatorContainer.children();
     },
 
     _renderIndicator: function(options) {
-        var $container = options.container,
-            $indicator = options.indicator;
+        const $container = options.container;
+        const $indicator = options.indicator;
 
         $container && $indicator && $container.append($indicator);
     },
 
     _updateIndicators: function(indicatorName) {
-        var that = this,
-            columns = that.getColumns(),
-            $cells = that.getColumnElements(),
-            rowOptions,
-            $cell,
-            i;
+        const that = this;
+        const columns = that.getColumns();
+        const $cells = that.getColumnElements();
+        let rowOptions;
+        let $cell;
+        let i;
 
         if(!$cells || columns.length !== $cells.length) return;
 

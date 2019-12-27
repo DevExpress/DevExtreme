@@ -1,4 +1,4 @@
-var inflector = require('core/utils/inflector');
+const inflector = require('core/utils/inflector');
 
 QUnit.module('inflector');
 

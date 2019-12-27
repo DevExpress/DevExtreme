@@ -8,25 +8,25 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    var markup = '<div id="form"></div>';
+    const markup = '<div id="form"></div>';
     $('#qunit-fixture').html(markup);
 });
 
 QUnit.module('Public API: GetEditor');
 
 function CheckGetEditorResult(assert, prepareItemsCallback) {
-    var formItems1 = [
+    const formItems1 = [
         'test1',
         { dataField: 'test2' },
         { name: 'custom1', editorType: 'dxTextArea' }
     ];
-    var formItems2 = [
+    const formItems2 = [
         'test1_',
         { dataField: 'test2_' },
         { name: 'custom1_', editorType: 'dxTextArea' }
     ];
 
-    var form = $('#form').dxForm({
+    const form = $('#form').dxForm({
         items: prepareItemsCallback(formItems1)
     }).dxForm('instance');
 
@@ -72,7 +72,7 @@ QUnit.test('getEditor returns [tabbed.tab1.item] editor', function(assert) {
 });
 
 QUnit.test('getEditor returns [tabbed.tab2.item] editor', function(assert) {
-    var formItems1 = [{
+    const formItems1 = [{
         itemType: 'tabbed',
         tabs: [
             { title: 'tab1', items: [ 'tab1_item1' ] },
@@ -86,7 +86,7 @@ QUnit.test('getEditor returns [tabbed.tab2.item] editor', function(assert) {
             },
         ]
     }];
-    var formItems2 = [{
+    const formItems2 = [{
         itemType: 'tabbed',
         tabs: [
             { title: 'tab1', items: [ 'tab1_item1_' ] },
@@ -101,8 +101,8 @@ QUnit.test('getEditor returns [tabbed.tab2.item] editor', function(assert) {
         ]
     }];
 
-    var $form = $('#form');
-    var form = $form.dxForm({ items: formItems1 }).dxForm('instance');
+    const $form = $('#form');
+    const form = $form.dxForm({ items: formItems1 }).dxForm('instance');
 
     assert.ok(!isDefined(form.getEditor('tab2_item1')));
     assert.ok(!isDefined(form.getEditor('tab2_datafield1')));
@@ -177,7 +177,7 @@ QUnit.test('getEditor returns [tabbed1.tab1_1.tabbed2.tab2_1.item] editor', func
 
 QUnit.test('Get editor instance', function(assert) {
     // arrange
-    var $testContainer = $('#form');
+    const $testContainer = $('#form');
 
     $testContainer.dxForm({
         formData: { test1: 'abc', test2: 'xyz' },
@@ -185,7 +185,7 @@ QUnit.test('Get editor instance', function(assert) {
     });
 
     // act
-    var form = $testContainer.dxForm('instance');
+    const form = $testContainer.dxForm('instance');
 
     // assert
     assert.ok(!isDefined(form.getEditor('test2')), 'We hasn\'t instance for \'test2\' field');
@@ -198,7 +198,7 @@ QUnit.test('Get editor instance', function(assert) {
 
 QUnit.test('Get editor instance with group config', function(assert) {
     // arrange
-    var $testContainer = $('#form');
+    const $testContainer = $('#form');
 
     $testContainer.dxForm({
         formData: { test1: 'abc', test2: 'xyz' },
@@ -212,7 +212,7 @@ QUnit.test('Get editor instance with group config', function(assert) {
     });
 
     // act
-    var form = $testContainer.dxForm('instance');
+    const form = $testContainer.dxForm('instance');
 
     // assert
     assert.ok(isDefined(form.getEditor('test1')), 'We have instance for \'test1\' field');

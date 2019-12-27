@@ -2,7 +2,7 @@ import Class from 'core/class';
 
 QUnit.module('inheritance');
 
-var A = Class.inherit({
+const A = Class.inherit({
     ctor: function() {
         this.p1 = 'p1';
     },
@@ -20,13 +20,13 @@ var A = Class.inherit({
     }
 });
 
-var B = A.inherit({
+const B = A.inherit({
     m2: function() {
         return this.callBase() + 'b';
     }
 });
 
-var C = B.inherit({
+const C = B.inherit({
     ctor: function() {
         this.callBase();
         this.p2 = 'p2';
@@ -41,9 +41,9 @@ var C = B.inherit({
     }
 });
 
-var a = new A();
-var b = new B();
-var c = new C();
+const a = new A();
+const b = new B();
+const c = new C();
 
 B.redefine({
     m3: function() {
@@ -53,8 +53,8 @@ B.redefine({
 
 
 QUnit.test('instanceof on ctor-less class', function(assert) {
-    var class1 = Class.inherit({});
-    var obj1 = new class1();
+    const class1 = Class.inherit({});
+    const obj1 = new class1();
     assert.ok(obj1 instanceof class1);
 });
 
@@ -120,8 +120,8 @@ QUnit.test('no redefine in root Class', function(assert) {
 });
 
 QUnit.test('check for \'new\'', function(assert) {
-    var check = function(action) {
-        var error;
+    const check = function(action) {
+        let error;
         try {
             action();
         } catch(caught) {
@@ -151,14 +151,14 @@ QUnit.test('check for \'new\'', function(assert) {
 QUnit.module('mixins');
 
 QUnit.test('no include in root Class', function(assert) {
-    var child = Class.inherit({});
+    const child = Class.inherit({});
     assert.ok(!Class.include);
     assert.ok(!!child.include);
 });
 
 QUnit.test('two includes with ctor', function(assert) {
 
-    var Sortable = {
+    const Sortable = {
 
         ctor: function() {
             this.sortable = true;
@@ -170,7 +170,7 @@ QUnit.test('two includes with ctor', function(assert) {
 
     };
 
-    var Draggable = {
+    const Draggable = {
 
         ctor: function() {
             this.draggable = true;
@@ -183,7 +183,7 @@ QUnit.test('two includes with ctor', function(assert) {
     };
 
 
-    var myClass = Class.inherit({
+    const myClass = Class.inherit({
 
         ctor: function() {
             this.isMyClass = true;
@@ -197,7 +197,7 @@ QUnit.test('two includes with ctor', function(assert) {
 
     myClass.include(Sortable, Draggable);
 
-    var obj = new myClass();
+    const obj = new myClass();
 
     assert.ok(obj instanceof myClass);
     assert.ok(obj.isMyClass);
@@ -209,7 +209,7 @@ QUnit.test('two includes with ctor', function(assert) {
 
 QUnit.test('two dependent includes with ctor', function(assert) {
 
-    var Sortable = {
+    const Sortable = {
 
         ctor: function() {
             this.sortable = true;
@@ -225,7 +225,7 @@ QUnit.test('two dependent includes with ctor', function(assert) {
 
     };
 
-    var Draggable = {
+    const Draggable = {
 
         ctor: function() {
             this.draggable = true;
@@ -242,7 +242,7 @@ QUnit.test('two dependent includes with ctor', function(assert) {
     };
 
 
-    var myClass = Class.inherit({
+    const myClass = Class.inherit({
 
         ctor: function() {
             this.isMyClass = true;
@@ -260,7 +260,7 @@ QUnit.test('two dependent includes with ctor', function(assert) {
 
     myClass.include(Sortable, Draggable);
 
-    var obj = new myClass();
+    const obj = new myClass();
 
     assert.ok(obj instanceof myClass);
     assert.ok(obj.isMyClass);
@@ -275,7 +275,7 @@ QUnit.test('two dependent includes with ctor', function(assert) {
 });
 
 QUnit.test('method name collision', function(assert) {
-    var myClass = Class.inherit({
+    const myClass = Class.inherit({
         m: function() { }
     });
 
@@ -296,33 +296,33 @@ QUnit.test('method name collision', function(assert) {
 });
 
 QUnit.test('mixins are reusable (regression)', function(assert) {
-    var mixin = {
+    const mixin = {
         ctor: function() {
             this.mixed = true;
         }
     };
 
-    var class1 = Class.inherit({}).include(mixin),
-        class2 = Class.inherit({}).include(mixin);
+    const class1 = Class.inherit({}).include(mixin);
+    const class2 = Class.inherit({}).include(mixin);
 
-    var obj1 = new class1(),
-        obj2 = new class2();
+    const obj1 = new class1();
+    const obj2 = new class2();
 
     assert.ok(obj1.mixed);
     assert.ok(obj2.mixed);
 });
 
 QUnit.test('ctor of mixin included to parent class is invoked for descendants', function(assert) {
-    var Mixin = {
+    const Mixin = {
         ctor: function() {
             this.mixed = true;
         }
     };
 
-    var Parent = Class.inherit({}).include(Mixin),
-        Child = Parent.inherit({});
+    const Parent = Class.inherit({}).include(Mixin);
+    const Child = Parent.inherit({});
 
-    var o = new Child();
+    const o = new Child();
     assert.ok(o.mixed);
 });
 
@@ -330,14 +330,14 @@ QUnit.test('ctor of mixin included to parent class is invoked for descendants', 
 QUnit.module('Static');
 
 QUnit.test('static methods should be inherited', function(assert) {
-    var A = Class.inherit({
+    const A = Class.inherit({
         callFoo: function() {
             return this.constructor.foo();
         }
     });
     A.foo = function() { return 'foo'; };
-    var B = A.inherit({});
-    var C = B.inherit({});
+    const B = A.inherit({});
+    const C = B.inherit({});
     C.foo = function() { return A.foo() + 'bar'; };
 
     assert.equal(A.foo(), 'foo');
@@ -369,9 +369,9 @@ QUnit.test('subclassOf method for es6 inheritors', assert => {
 });
 
 QUnit.test('subclassOf method', function(assert) {
-    var A = Class.inherit({ }),
-        B = A.inherit({ }),
-        C = Class.inherit({ });
+    const A = Class.inherit({ });
+    const B = A.inherit({ });
+    const C = Class.inherit({ });
 
     assert.ok(!Class.subclassOf);
     assert.ok(A.subclassOf);
@@ -401,9 +401,9 @@ QUnit.test('subclassOf method', function(assert) {
 QUnit.module('regressions');
 
 QUnit.test('callBase regression', function(assert) {
-    var log = [];
+    const log = [];
 
-    var Parent = Class.inherit({
+    const Parent = Class.inherit({
         ctor: function() {
             log.push('Parent.ctor');
             this.method();
@@ -419,7 +419,7 @@ QUnit.test('callBase regression', function(assert) {
         }
     });
 
-    var Child = Parent.inherit({
+    const Child = Parent.inherit({
         method: function() {
             log.push('Child.method');
             this.subMethod();
@@ -446,16 +446,16 @@ QUnit.test('callBase regression', function(assert) {
 });
 
 QUnit.test('TypeScript inheritance', function(assert) {
-    var __extends = function(d, b) {
-        for(var p in b) if(Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+    const __extends = function(d, b) {
+        for(const p in b) if(Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
         function __() { this.constructor = d; }
         __.prototype = b.prototype;
         d.prototype = new __();
     };
 
-    var Base = Class.inherit({});
+    const Base = Class.inherit({});
 
-    var Child = (function(_super) {
+    const Child = (function(_super) {
         __extends(Child, _super);
         function Child() {
             _super.apply(this, arguments);

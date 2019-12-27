@@ -368,7 +368,7 @@ export default class FileItemsController {
     }
 
     _getDirectoryPathKeyParts(directoryInfo) {
-        let pathParts = [ directoryInfo.fileItem.key ];
+        const pathParts = [ directoryInfo.fileItem.key ];
         while(directoryInfo && directoryInfo.parentDirectory) {
             pathParts.unshift(directoryInfo.parentDirectory.fileItem.key);
             directoryInfo = directoryInfo.parentDirectory;
@@ -447,7 +447,7 @@ export default class FileItemsController {
     }
 
     _createRootDirectory(text) {
-        let root = new FileManagerRootItem();
+        const root = new FileManagerRootItem();
         root.name = text || '';
         return root;
     }

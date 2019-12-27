@@ -10,7 +10,7 @@
             require('ui/validator');
             require('ui/validation_summary');
 
-            var aspnet = require('aspnet');
+            const aspnet = require('aspnet');
             window.DevExpress = { aspnet: aspnet }; // for DevExpress.aspnet.createComponent in templates
 
             module.exports = factory(
@@ -54,7 +54,7 @@
             });
 
             QUnit.test('Create validationSummary items', function(assert) {
-                var validationGroup = 'test-group';
+                const validationGroup = 'test-group';
 
                 $('#editor')
                     .dxTextBox({
@@ -73,9 +73,9 @@
 
                 aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
 
-                var summary = $('#summary').dxValidationSummary('instance'),
-                    item = summary.option('items')[0],
-                    editor = item.validator.$element().dxTextBox('instance');
+                const summary = $('#summary').dxValidationSummary('instance');
+                const item = summary.option('items')[0];
+                const editor = item.validator.$element().dxTextBox('instance');
 
                 assert.equal(summary.option('items').length, 1, 'item count is OK');
                 assert.equal(item.text, 'Server exception', 'text of first item is OK');
@@ -83,7 +83,7 @@
             });
 
             QUnit.test('Create validationSummary items for different validationGroup', function(assert) {
-                var validationGroup = 'custom-group';
+                const validationGroup = 'custom-group';
 
                 $('#editor')
                     .dxTextBox({
@@ -102,13 +102,13 @@
 
                 aspnet.createValidationSummaryItems('custom-group-2', ['FullName']);
 
-                var summary = $('#summary').dxValidationSummary('instance');
+                const summary = $('#summary').dxValidationSummary('instance');
 
                 assert.notOk(summary.option('items').length, 'items not found');
             });
 
             QUnit.test('Create validationSummary items only for editor with related option name', function(assert) {
-                var validationGroup = 'test-group';
+                const validationGroup = 'test-group';
 
                 $('#editor')
                     .dxTextBox({
@@ -135,8 +135,8 @@
 
                 aspnet.createValidationSummaryItems(validationGroup, ['FullName']);
 
-                var summary = $('#summary').dxValidationSummary('instance'),
-                    item = summary.option('items')[0];
+                const summary = $('#summary').dxValidationSummary('instance');
+                const item = summary.option('items')[0];
 
                 assert.equal(summary.option('items').length, 1, 'item length is OK');
                 assert.equal(item.text, 'Server exception', 'text of first item is OK');
@@ -207,42 +207,42 @@
             }
 
             QUnit.test('Create component', function(assert) {
-                var $result = renderTemplate('#templateWithCreateComponent');
+                const $result = renderTemplate('#templateWithCreateComponent');
                 assert.ok($result.is('.dx-button'));
             });
 
             QUnit.test('Component element rendering', function(assert) {
-                var $result = renderTemplate('#simpleTemplate');
+                const $result = renderTemplate('#simpleTemplate');
                 assert.ok($result.is('div[id|=dx]'));
             });
 
             QUnit.test('Component rendering', function(assert) {
-                var $result = renderTemplate('#simpleTemplate');
+                const $result = renderTemplate('#simpleTemplate');
                 assert.ok($result.is('.dx-button'));
             });
 
             QUnit.test('Component rendering with options', function(assert) {
-                var $result = renderTemplate('#templateWithOptions');
+                const $result = renderTemplate('#templateWithOptions');
                 assert.equal($result.dxButton('option', 'text'), 'text');
             });
 
             QUnit.test('Component element rendering with custom ID', function(assert) {
-                var $result = renderTemplate('#templateWithID');
+                const $result = renderTemplate('#templateWithID');
                 assert.ok($result.is('#test-id'));
             });
 
             QUnit.test('Component element rendering with validator', function(assert) {
-                var $result = renderTemplate('#templateWithValidator');
+                const $result = renderTemplate('#templateWithValidator');
                 assert.equal($result.dxValidator('option', 'validationGroup'), 'my-group');
             });
 
             QUnit.test('Exotic characters in component ID should be escaped (T531137)', function(assert) {
-                var $result = renderTemplate('#templateWithExoticId');
+                const $result = renderTemplate('#templateWithExoticId');
                 assert.ok($result.dxButton('instance'));
             });
 
             QUnit.test('Inner template is rendered correctly when another script tags exist', function(assert) {
-                var $buttonElement = $('#buttonWithInnerTemplate').dxButton();
+                const $buttonElement = $('#buttonWithInnerTemplate').dxButton();
                 $buttonElement.find('script').remove();
                 assert.equal($buttonElement.text(), 'BUTTON_CONTENT');
             });
@@ -261,9 +261,9 @@
             setTemplateEngine('default');
         }
     }, function() {
-        var testTemplate = function(name, templateSource, expected, enableAlternateTemplateTags) {
+        const testTemplate = function(name, templateSource, expected, enableAlternateTemplateTags) {
             QUnit.test(name, function(assert) {
-                var $template = $('#simpleTemplate');
+                const $template = $('#simpleTemplate');
 
                 $template.text(templateSource);
 
@@ -379,7 +379,7 @@
                 '</script>'
             );
 
-            var widgetElement = $('#test-widget');
+            const widgetElement = $('#test-widget');
             widgetElement.dxButton({
                 template: $('#test-template')
             });
@@ -398,15 +398,15 @@
     QUnit.test('T758209', function(assert) {
         aspnet.setTemplateEngine();
 
-        var errors = errorsAccessor();
+        const errors = errorsAccessor();
         sinon.spy(errors, 'log');
 
         try {
-            var formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
-            var textBoxID = '682b4545-09d9-4f63-82ed-91570d869eb6';
+            const formID = 'bd859c15-674f-49bf-a6d0-9368508e8d11';
+            const textBoxID = '682b4545-09d9-4f63-82ed-91570d869eb6';
 
             window.__createForm = function() {
-                var config = {
+                const config = {
                     formData: { testField: 'testValue' },
                     items: [
                         {
@@ -508,7 +508,7 @@
 
             // Per https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute
             // "IDs can consist of just digits"
-            var NUMERIC_ID = 20191205;
+            const NUMERIC_ID = 20191205;
 
             $('#list1').dxList({
                 items: [ { key: NUMERIC_ID } ],
@@ -553,7 +553,7 @@
 
         [true, false].forEach(function(responseValue) {
             QUnit.test('sendValidationRequest - \'' + responseValue + '\' response', function(assert) {
-                var done = assert.async();
+                const done = assert.async();
 
                 this.ajaxMock.setup({
                     url: 'url',
@@ -572,7 +572,7 @@
         });
 
         QUnit.test('sendValidationRequest - string response', function(assert) {
-            var done = assert.async();
+            const done = assert.async();
 
             this.ajaxMock.setup({
                 url: 'url',
@@ -594,7 +594,7 @@
         });
 
         QUnit.test('sendValidationRequest - server error response', function(assert) {
-            var done = assert.async();
+            const done = assert.async();
 
             this.ajaxMock.setup({
                 url: 'url',

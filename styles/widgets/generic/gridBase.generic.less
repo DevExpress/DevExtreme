@@ -155,6 +155,9 @@
             & > td,
             & > tr > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
+                // T838734
+                border-top: ~"1px solid @{@{widgetName}-row-alternation-bg}";
+                border-bottom: ~"1px solid @{@{widgetName}-row-alternation-bg}";
             }
 
             &.dx-row:not(.dx-row-removed) {

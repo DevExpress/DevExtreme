@@ -1,8 +1,8 @@
-var graphModule = require('./graph');
+const graphModule = require('./graph');
 
-var validator = {
+const validator = {
     validate: function(data, incidentOccurred) {
-        var result = null;
+        let result = null;
         if(this._hasCycle(data)) {
             result = 'E2006';
             incidentOccurred('E2006');

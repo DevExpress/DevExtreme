@@ -1,23 +1,23 @@
-var $ = require('../../core/renderer'),
-    Callbacks = require('../../core/utils/callbacks'),
-    translator = require('../../animation/translator'),
-    eventUtils = require('../../events/utils'),
-    NativeStrategy = require('./ui.scrollable.native'),
-    LoadIndicator = require('../load_indicator'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const Callbacks = require('../../core/utils/callbacks');
+const translator = require('../../animation/translator');
+const eventUtils = require('../../events/utils');
+const NativeStrategy = require('./ui.scrollable.native');
+const LoadIndicator = require('../load_indicator');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading',
-    SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator',
-    SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-refreshing',
-    PULLDOWN_ICON_CLASS = 'dx-icon-pulldown',
+const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
+const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
+const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-refreshing';
+const PULLDOWN_ICON_CLASS = 'dx-icon-pulldown';
 
-    STATE_RELEASED = 0,
-    STATE_READY = 1,
-    STATE_REFRESHING = 2,
-    STATE_TOUCHED = 4,
-    STATE_PULLED = 5;
+const STATE_RELEASED = 0;
+const STATE_READY = 1;
+const STATE_REFRESHING = 2;
+const STATE_TOUCHED = 4;
+const STATE_PULLED = 5;
 
-var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
+const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _init: function(scrollView) {
         this.callBase(scrollView);
@@ -43,8 +43,8 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _renderPullDown: function() {
-        var $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($('<div>')).$element();
+        const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
+        const $loadIndicator = new LoadIndicator($('<div>')).$element();
 
         this._$icon = $('<div>')
             .addClass(PULLDOWN_ICON_CLASS);
@@ -75,7 +75,7 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _allowedDirections: function() {
-        var allowedDirections = this.callBase();
+        const allowedDirections = this.callBase();
         allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
         return allowedDirections;
     },
@@ -108,9 +108,9 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _movePullDown: function() {
-        var pullDownHeight = this._getPullDownHeight(),
-            top = Math.min(pullDownHeight * 3, this._deltaY + this._getPullDownStartPosition()),
-            angle = 180 * top / pullDownHeight / 3;
+        const pullDownHeight = this._getPullDownHeight();
+        const top = Math.min(pullDownHeight * 3, this._deltaY + this._getPullDownStartPosition());
+        const angle = 180 * top / pullDownHeight / 3;
 
         this._$pullDown
             .css({
@@ -163,8 +163,8 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
             return;
         }
 
-        var currentLocation = this.location().top,
-            scrollDelta = this._location - currentLocation;
+        const currentLocation = this.location().top;
+        const scrollDelta = this._location - currentLocation;
 
         this._location = currentLocation;
 
@@ -221,7 +221,7 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         this._updateDimensions();
         clearTimeout(this._releaseTimeout);

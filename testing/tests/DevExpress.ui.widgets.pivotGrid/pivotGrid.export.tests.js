@@ -4,7 +4,7 @@ import JSZipMock from '../../helpers/jszipMock.js';
 import excel_creator from 'exporter/excel_creator';
 
 QUnit.testStart(function() {
-    var markup = '<div id="pivotGrid" style="width: 700px"></div>';
+    const markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $('#qunit-fixture').html(markup);
 });
 

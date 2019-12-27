@@ -1,29 +1,29 @@
-var dxBaseGauge = require('./base_gauge').dxBaseGauge,
-    typeUtils = require('../../core/utils/type'),
-    each = require('../../core/utils/iterator').each,
-    extend = require('../../core/utils/extend').extend,
-    _isDefined = typeUtils.isDefined,
-    _isArray = Array.isArray,
-    _isNumber = typeUtils.isNumeric,
-    axisModule = require('../axes/base_axis'),
-    _map = require('../core/utils').map,
-    _normalizeEnum = require('../core/utils').normalizeEnum,
-    _compareArrays = require('./base_gauge').compareArrays,
+const dxBaseGauge = require('./base_gauge').dxBaseGauge;
+const typeUtils = require('../../core/utils/type');
+const each = require('../../core/utils/iterator').each;
+const extend = require('../../core/utils/extend').extend;
+const _isDefined = typeUtils.isDefined;
+const _isArray = Array.isArray;
+const _isNumber = typeUtils.isNumeric;
+const axisModule = require('../axes/base_axis');
+const _map = require('../core/utils').map;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
+const _compareArrays = require('./base_gauge').compareArrays;
 
-    _isFinite = isFinite,
-    _Number = Number,
-    _min = Math.min,
-    _max = Math.max,
+const _isFinite = isFinite;
+const _Number = Number;
+const _min = Math.min;
+const _max = Math.max;
 
-    _extend = extend,
-    _each = each,
-    _noop = require('../../core/utils/common').noop,
-    SHIFT_ANGLE = 90,
+const _extend = extend;
+const _each = each;
+const _noop = require('../../core/utils/common').noop;
+const SHIFT_ANGLE = 90;
 
-    OPTION_VALUE = 'value',
-    OPTION_SUBVALUES = 'subvalues',
-    DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 5,
-    DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 5];
+const OPTION_VALUE = 'value';
+const OPTION_SUBVALUES = 'subvalues';
+const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 5;
+const DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 5];
 
 function processValue(value, fallbackValue) {
     if(value === null) {
@@ -38,8 +38,8 @@ function parseArrayOfNumbers(arg) {
 
 exports.dxGauge = dxBaseGauge.inherit({
     _initCore: function() {
-        var that = this,
-            renderer = that._renderer;
+        const that = this;
+        const renderer = that._renderer;
 
         that._setupValue(that.option(OPTION_VALUE));
         that.__subvalues = parseArrayOfNumbers(that.option(OPTION_SUBVALUES));
@@ -62,7 +62,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     ],
 
     _initScale: function() {
-        var that = this;
+        const that = this;
 
         that._scaleGroup = that._renderer.g().attr({ 'class': 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
         that._scale = new axisModule.Axis({
@@ -76,7 +76,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _disposeCore: function() {
-        var that = this;
+        const that = this;
         that.callBase.apply(that, arguments);
 
         that._scale.dispose();
@@ -89,17 +89,17 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _disposeValueIndicators: function() {
-        var that = this;
+        const that = this;
         that._valueIndicator && that._valueIndicator.dispose();
         that._subvalueIndicatorsSet && that._subvalueIndicatorsSet.dispose();
         that._valueIndicator = that._subvalueIndicatorsSet = null;
     },
 
     _setupDomainCore: function() {
-        var that = this,
-            scaleOption = that.option('scale') || {},
-            startValue = that.option('startValue'),
-            endValue = that.option('endValue');
+        const that = this;
+        const scaleOption = that.option('scale') || {};
+        let startValue = that.option('startValue');
+        let endValue = that.option('endValue');
 
         startValue = _isNumber(startValue) ? _Number(startValue) : (_isNumber(scaleOption.startValue) ? _Number(scaleOption.startValue) : 0);
         endValue = _isNumber(endValue) ? _Number(endValue) : (_isNumber(scaleOption.endValue) ? _Number(scaleOption.endValue) : 100);
@@ -108,25 +108,25 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _cleanContent: function() {
-        var that = this;
+        const that = this;
         that._rangeContainer.clean();
         that._cleanValueIndicators();
     },
 
     _measureScale: function(scaleOptions) {
-        var that = this,
-            majorTick = scaleOptions.tick,
-            majorTickEnabled = majorTick.visible && majorTick.length > 0 && majorTick.width > 0,
-            minorTick = scaleOptions.minorTick,
-            minorTickEnabled = minorTick.visible && minorTick.length > 0 && minorTick.width > 0,
-            label = scaleOptions.label,
-            indentFromTick = Number(label.indentFromTick),
-            textParams,
-            layoutValue,
-            result,
-            coefs,
-            innerCoef,
-            outerCoef;
+        const that = this;
+        const majorTick = scaleOptions.tick;
+        const majorTickEnabled = majorTick.visible && majorTick.length > 0 && majorTick.width > 0;
+        const minorTick = scaleOptions.minorTick;
+        const minorTickEnabled = minorTick.visible && minorTick.length > 0 && minorTick.width > 0;
+        const label = scaleOptions.label;
+        const indentFromTick = Number(label.indentFromTick);
+        let textParams;
+        let layoutValue;
+        let result;
+        let coefs;
+        let innerCoef;
+        let outerCoef;
 
         if(!majorTickEnabled && !minorTickEnabled && !label.visible) { return {}; }
 
@@ -151,9 +151,9 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _renderContent: function() {
-        var that = this,
-            scaleOptions = that._prepareScaleSettings(),
-            elements;
+        const that = this;
+        const scaleOptions = that._prepareScaleSettings();
+        let elements;
 
         that._rangeContainer.render(_extend(that._getOption('rangeContainer'), { vertical: that._area.vertical }));
         that._renderScale(scaleOptions);
@@ -174,9 +174,9 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _prepareScaleSettings: function() {
-        var that = this,
-            userOptions = that.option('scale'),
-            scaleOptions = extend(true, {}, that._themeManager.theme('scale'), userOptions);
+        const that = this;
+        const userOptions = that.option('scale');
+        const scaleOptions = extend(true, {}, that._themeManager.theme('scale'), userOptions);
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
@@ -195,14 +195,14 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _renderScale: function(scaleOptions) {
-        var that = this,
-            bounds = that._translator.getDomain(),
-            startValue = bounds[0],
-            endValue = bounds[1],
-            angles = that._translator.getCodomain(),
-            invert = startValue > endValue,
-            min = _min(startValue, endValue),
-            max = _max(startValue, endValue);
+        const that = this;
+        const bounds = that._translator.getDomain();
+        const startValue = bounds[0];
+        const endValue = bounds[1];
+        const angles = that._translator.getCodomain();
+        const invert = startValue > endValue;
+        const min = _min(startValue, endValue);
+        const max = _max(startValue, endValue);
 
         scaleOptions.min = min;
         scaleOptions.max = max;
@@ -224,7 +224,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _updateIndicatorSettings: function(settings) {
-        var that = this;
+        const that = this;
         settings.currentValue = settings.baseValue = _isFinite(that._translator.translate(settings.baseValue)) ? _Number(settings.baseValue) : that._baseValue;
         settings.vertical = that._area.vertical;
         if(settings.text && !settings.text.format) {
@@ -233,10 +233,10 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _prepareIndicatorSettings: function(options, defaultTypeField) {
-        var that = this,
-            theme = that._themeManager.theme('valueIndicators'),
-            type = _normalizeEnum(options.type || that._themeManager.theme(defaultTypeField)),
-            settings = _extend(true, {}, theme._default, theme[type], options);
+        const that = this;
+        const theme = that._themeManager.theme('valueIndicators');
+        const type = _normalizeEnum(options.type || that._themeManager.theme(defaultTypeField));
+        const settings = _extend(true, {}, theme._default, theme[type], options);
         settings.type = type;
         settings.animation = that._animationSettings;
         settings.containerBackgroundColor = that._containerBackgroundColor;
@@ -250,7 +250,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _prepareValueIndicators: function() {
-        var that = this;
+        const that = this;
         that._prepareValueIndicator();
         that.__subvalues !== null && that._prepareSubvalueIndicators();
         return [that._valueIndicator, that._subvalueIndicatorsSet];
@@ -262,9 +262,9 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _prepareValueIndicator: function() {
-        var that = this,
-            target = that._valueIndicator,
-            settings = that._prepareIndicatorSettings(that.option('valueIndicator') || {}, 'valueIndicatorType');
+        const that = this;
+        let target = that._valueIndicator;
+        const settings = that._prepareIndicatorSettings(that.option('valueIndicator') || {}, 'valueIndicatorType');
         if(target && target.type !== settings.type) {
             target.dispose();
             target = null;
@@ -276,8 +276,8 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _createSubvalueIndicatorsSet: function() {
-        var that = this,
-            root = that._renderer.root;
+        const that = this;
+        const root = that._renderer.root;
         return new ValueIndicatorsSet({
             createIndicator: function(type, i) {
                 return that._createIndicator(type, root, 'dxg-subvalue-indicator', 'subvalue-indicator', i);
@@ -289,11 +289,11 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _prepareSubvalueIndicators: function() {
-        var that = this,
-            target = that._subvalueIndicatorsSet,
-            settings = that._prepareIndicatorSettings(that.option('subvalueIndicator') || {}, 'subvalueIndicatorType'),
-            isRecreate,
-            dummy;
+        const that = this;
+        let target = that._subvalueIndicatorsSet;
+        const settings = that._prepareIndicatorSettings(that.option('subvalueIndicator') || {}, 'subvalueIndicatorType');
+        let isRecreate;
+        let dummy;
         if(!target) {
             target = that._subvalueIndicatorsSet = that._createSubvalueIndicatorsSet();
         }
@@ -311,10 +311,10 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _setupSubvalues: function(subvalues) {
-        var vals = subvalues === undefined ? this.__subvalues : parseArrayOfNumbers(subvalues),
-            i,
-            ii,
-            list;
+        const vals = subvalues === undefined ? this.__subvalues : parseArrayOfNumbers(subvalues);
+        let i;
+        let ii;
+        let list;
         if(vals === null) return;
         for(i = 0, ii = vals.length, list = []; i < ii; ++i) {
             list.push(processValue(vals[i], this.__subvalues[i]));
@@ -323,12 +323,12 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _updateValueIndicator: function() {
-        var that = this;
+        const that = this;
         that._valueIndicator && that._valueIndicator.value(that.__value, that._noAnimation);
     },
 
     _updateSubvalueIndicators: function() {
-        var that = this;
+        const that = this;
         that._subvalueIndicatorsSet && that._subvalueIndicatorsSet.values(that.__subvalues, that._noAnimation);
     },
 
@@ -349,7 +349,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _changeValue: function(value) {
-        var that = this;
+        const that = this;
         that._setupValue(value);
         that._beginValueChanging();
         that._updateValueIndicator();
@@ -360,7 +360,7 @@ exports.dxGauge = dxBaseGauge.inherit({
     },
 
     _changeSubvalues: function(subvalues) {
-        var that = this;
+        const that = this;
         if(that.__subvalues !== null) {
             that._setupSubvalues(subvalues);
             that._beginValueChanging();
@@ -403,8 +403,8 @@ exports.dxGauge = dxBaseGauge.inherit({
     _getElementLayout: null,
 
     _createIndicator: function(type, owner, className, trackerType, trackerIndex, _strict) {
-        var that = this,
-            indicator = that._factory.createIndicator({ renderer: that._renderer, translator: that._translator, owner: owner, tracker: that._tracker, className: className }, type, _strict);
+        const that = this;
+        const indicator = that._factory.createIndicator({ renderer: that._renderer, translator: that._translator, owner: owner, tracker: that._tracker, className: className }, type, _strict);
         if(indicator) {
             indicator.type = type;
             indicator._trackerInfo = { type: trackerType, index: trackerIndex };
@@ -420,11 +420,11 @@ function valueGetter(arg) {
 }
 
 function setupValues(that, fieldName, optionItems) {
-    var currentValues = that[fieldName],
-        newValues = _isArray(optionItems) ? _map(optionItems, valueGetter) : [],
-        i = 0,
-        ii = newValues.length,
-        list = [];
+    const currentValues = that[fieldName];
+    const newValues = _isArray(optionItems) ? _map(optionItems, valueGetter) : [];
+    let i = 0;
+    const ii = newValues.length;
+    const list = [];
     for(; i < ii; ++i) {
         list.push(processValue(newValues[i], currentValues[i]));
     }
@@ -449,7 +449,7 @@ function selectHardMode(that) {
     that._indicatorValues = [];
     setupValues(that, '_indicatorValues', that.option('valueIndicators'));
     that._valueIndicators = [];
-    var _applyMostlyTotalChange = that._applyMostlyTotalChange;
+    const _applyMostlyTotalChange = that._applyMostlyTotalChange;
     that._applyMostlyTotalChange = function() {
         setupValues(this, '_indicatorValues', this.option('valueIndicators'));
         _applyMostlyTotalChange.call(this);
@@ -462,31 +462,31 @@ function selectHardMode(that) {
 }
 
 function updateActiveElements_hardMode() {
-    var that = this;
+    const that = this;
     _each(that._valueIndicators, function(_, valueIndicator) {
         valueIndicator.value(that._indicatorValues[valueIndicator.index], that._noAnimation);
     });
 }
 
 function prepareValueIndicators_hardMode() {
-    var that = this,
-        valueIndicators = that._valueIndicators || [],
-        userOptions = that.option('valueIndicators'),
-        optionList = [], i = 0, ii;
+    const that = this;
+    const valueIndicators = that._valueIndicators || [];
+    const userOptions = that.option('valueIndicators');
+    const optionList = []; let i = 0; let ii;
     for(ii = _isArray(userOptions) ? userOptions.length : 0; i < ii; ++i) {
         optionList.push(userOptions[i]);
     }
     for(ii = valueIndicators.length; i < ii; ++i) {
         optionList.push(null);
     }
-    var newValueIndicators = [];
+    const newValueIndicators = [];
     _each(optionList, function(i, userSettings) {
-        var valueIndicator = valueIndicators[i];
+        let valueIndicator = valueIndicators[i];
         if(!userSettings) {
             valueIndicator && valueIndicator.dispose();
             return;
         }
-        var settings = that._prepareIndicatorSettings(userSettings, 'valueIndicatorType');
+        const settings = that._prepareIndicatorSettings(userSettings, 'valueIndicatorType');
         if(valueIndicator && valueIndicator.type !== settings.type) {
             valueIndicator.dispose();
             valueIndicator = null;
@@ -538,7 +538,7 @@ ValueIndicatorsSet.prototype = {
     constructor: ValueIndicatorsSet,
 
     dispose: function() {
-        var that = this;
+        const that = this;
         _each(that._indicators, function(_, indicator) {
             indicator.dispose();
         });
@@ -547,7 +547,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     clean: function() {
-        var that = this;
+        const that = this;
         that._sample && that._sample.clean().dispose();
         _each(that._indicators, function(_, indicator) {
             indicator.clean();
@@ -557,7 +557,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     render: function(options, isRecreate) {
-        var that = this;
+        const that = this;
         that._options = options;
         that._sample = that._parameters.createIndicator(that.type);
         that._sample.render(options);
@@ -582,7 +582,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     resize: function(layout) {
-        var that = this;
+        const that = this;
         that._layout = layout;
         _each(that._indicators, function(_, indicator) {
             indicator.resize(layout);
@@ -595,7 +595,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     _getIndicatorOptions: function(index) {
-        var result = this._options;
+        let result = this._options;
         if(this._colorPalette) {
             result = _extend({}, result, { color: this._colorPalette[index] });
         }
@@ -603,8 +603,8 @@ ValueIndicatorsSet.prototype = {
     },
 
     _generatePalette: function(count) {
-        var that = this,
-            colors = null;
+        const that = this;
+        let colors = null;
         if(that._palette) {
             that._palette.reset();
             colors = that._palette.generateColors(count, { repeat: true });
@@ -613,12 +613,12 @@ ValueIndicatorsSet.prototype = {
     },
 
     _adjustIndicatorsCount: function(count) {
-        var that = this,
-            indicators = that._indicators,
-            i,
-            ii,
-            indicator,
-            indicatorsLen = indicators.length;
+        const that = this;
+        const indicators = that._indicators;
+        let i;
+        let ii;
+        let indicator;
+        const indicatorsLen = indicators.length;
 
         if(indicatorsLen > count) {
             for(i = count, ii = indicatorsLen; i < ii; ++i) {
@@ -637,7 +637,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     values: function(arg, _noAnimation) {
-        var that = this;
+        const that = this;
         if(!that.enabled) return;
         if(arg !== undefined) {
             if(!_isArray(arg)) {
@@ -659,7 +659,7 @@ ValueIndicatorsSet.prototype = {
 
 exports.createIndicatorCreator = function(indicators) {
     return function(parameters, type, _strict) {
-        var indicatorType = indicators[_normalizeEnum(type)] || (!_strict && indicators._default);
+        const indicatorType = indicators[_normalizeEnum(type)] || (!_strict && indicators._default);
         return indicatorType ? new indicatorType(parameters) : null;
     };
 };

@@ -23,9 +23,9 @@ const moduleConfig = {
 
 QUnit.module('loadSingle');
 QUnit.test('loadSingle call doesn\'t affect to state', function(assert) {
-    var source = new DataSource(TEN_NUMBERS),
-        changedFired = false,
-        loadingChangedFired = false;
+    const source = new DataSource(TEN_NUMBERS);
+    let changedFired = false;
+    let loadingChangedFired = false;
 
     source.on('changed', function() { changedFired = true; });
     source.on('loadingChanged', function() { loadingChangedFired = true; });
@@ -56,7 +56,7 @@ QUnit.test('lookup with key specified', function(assert) {
 QUnit.test('with no key specified', function(assert) {
     assert.expect(3);
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: [
             { a: '1', i: 1 },
             { a: '2', i: 2 },
@@ -126,10 +126,10 @@ QUnit.test('doesn\'t apply postProcess', function(assert) {
 QUnit.test('error handling', function(assert) {
     assert.expect(0);
 
-    var source = new DataSource(TEN_NUMBERS);
+    const source = new DataSource(TEN_NUMBERS);
 
-    var failFired = $.Deferred(),
-        loadErrorFired = $.Deferred();
+    const failFired = $.Deferred();
+    const loadErrorFired = $.Deferred();
 
     source.on('loadError', function() {
         loadErrorFired.resolve();
@@ -144,14 +144,14 @@ QUnit.test('error handling', function(assert) {
 QUnit.test('error handling (with key)', function(assert) {
     assert.expect(0);
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: new (ArrayStore.inherit({
             _byKeyImpl: function() { return $.Deferred().reject(Error('forced')).promise(); }
         }))({ key: 'a', data: [] })
     });
 
-    var failFired = $.Deferred(),
-        loadErrorFired = $.Deferred();
+    const failFired = $.Deferred();
+    const loadErrorFired = $.Deferred();
 
     source.on('loadError', function() { loadErrorFired.resolve(); });
     source.loadSingle('a', 1).fail(function() { failFired.resolve(); });
@@ -162,7 +162,7 @@ QUnit.test('error handling (with key)', function(assert) {
 QUnit.test('error handling (data item cannot be found, T283407)', function(assert) {
     assert.expect(3);
 
-    var handleError = function(error) {
+    const handleError = function(error) {
         assert.ok(error instanceof Error);
     };
 
@@ -182,9 +182,9 @@ QUnit.test('error handling (data item cannot be found, T283407)', function(asser
 });
 
 QUnit.test('don\'t force byKey for CustomStore(loadMode=raw, byKey=undefined)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var source = new DataSource({
+    const source = new DataSource({
         load: function() {
             return [ { a: 1 }, { a: 2 } ];
         },
@@ -199,7 +199,7 @@ QUnit.test('don\'t force byKey for CustomStore(loadMode=raw, byKey=undefined)', 
 
 QUnit.module('simple tests');
 QUnit.test('initial state and load', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         store: TEN_NUMBERS,
         pageSize: 3
     });
@@ -217,11 +217,11 @@ QUnit.test('initial state and load', function(assert) {
 });
 
 QUnit.test('requireTotalCount', function(assert) {
-    var loadingChangedCount,
-        countCallCount,
-        enumerateCallCount;
+    let loadingChangedCount;
+    let countCallCount;
+    let enumerateCallCount;
 
-    var createWrappedQuery = function(origQuery) {
+    const createWrappedQuery = function(origQuery) {
 
         function dummy() {
             return this;
@@ -240,13 +240,13 @@ QUnit.test('requireTotalCount', function(assert) {
         };
     };
 
-    var MyStore = ArrayStore.inherit({
+    const MyStore = ArrayStore.inherit({
         createQuery: function() {
             return createWrappedQuery(this.callBase.apply(this, arguments));
         }
     });
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: new MyStore(TEN_NUMBERS),
         requireTotalCount: true
     });
@@ -294,12 +294,12 @@ QUnit.test('map function', function(assert) {
 });
 
 QUnit.test('map function with push to store', function(assert) {
-    var done = assert.async(),
-        dataSource = new DataSource({
-            store: [1],
-            paginate: false,
-            map: function(item) { return item + 'p'; }
-        });
+    const done = assert.async();
+    const dataSource = new DataSource({
+        store: [1],
+        paginate: false,
+        map: function(item) { return item + 'p'; }
+    });
 
     dataSource.load()
         .done((data) => {
@@ -357,7 +357,7 @@ QUnit.test('map function + grouping + aggregating', function(assert) {
         group: ['a', 'b'],
         map: function(item) { return item.a * item.b; },
         onCustomizeLoadResult: function(loadResult) {
-            var calculator = new AggregateCalculator({
+            const calculator = new AggregateCalculator({
                 data: loadResult.data,
                 groupAggregates: [
                     { aggregator: 'count' }
@@ -396,7 +396,7 @@ QUnit.test('postProcess function', function(assert) {
 });
 
 QUnit.test('page index change', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         store: TEN_NUMBERS,
         pageIndex: 1,
         pageSize: 3
@@ -418,17 +418,17 @@ QUnit.test('page index change', function(assert) {
 });
 
 QUnit.test('paginate option', function(assert) {
-    var data = [];
+    const data = [];
 
-    for(var i = 0; i < 100; i++) {
+    for(let i = 0; i < 100; i++) {
         data.push(i);
     }
 
-    var store = new ArrayStore(data),
-        source = new DataSource({
-            store: store,
-            paginate: false
-        });
+    const store = new ArrayStore(data);
+    const source = new DataSource({
+        store: store,
+        paginate: false
+    });
 
     assert.ok(source.isLastPage());
     source.load().done(function() {
@@ -437,7 +437,7 @@ QUnit.test('paginate option', function(assert) {
 });
 
 QUnit.test('paginate method', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         store: TEN_NUMBERS,
         pageSize: 3
     });
@@ -462,9 +462,9 @@ QUnit.test('paginate method', function(assert) {
 });
 
 QUnit.test('reload', function(assert) {
-    var fn;
+    let fn;
 
-    var source = new DataSource({
+    const source = new DataSource({
         load: function(options) {
             fn(options);
             return TEN_NUMBERS;
@@ -492,10 +492,10 @@ QUnit.test('reload', function(assert) {
 });
 
 QUnit.test('reload invalidates CustomStore\'s raw data cache', function(assert) {
-    var done = assert.async(),
-        loadImpl;
+    const done = assert.async();
+    let loadImpl;
 
-    var source = new DataSource({
+    const source = new DataSource({
         load: function() {
             return loadImpl();
         },
@@ -516,17 +516,17 @@ QUnit.test('reload invalidates CustomStore\'s raw data cache', function(assert) 
 });
 
 QUnit.test('when grouped then not paginating by default', function(assert) {
-    var data = [];
+    const data = [];
 
-    for(var i = 0; i < 100; i++) {
+    for(let i = 0; i < 100; i++) {
         data.push({ i: i });
     }
 
-    var store = new ArrayStore(data),
-        source = new DataSource({
-            store: store,
-            group: 'i'
-        });
+    const store = new ArrayStore(data);
+    const source = new DataSource({
+        store: store,
+        group: 'i'
+    });
 
     source.load().done(function() {
         assert.equal(source.items().length, 100);
@@ -534,15 +534,15 @@ QUnit.test('when grouped then not paginating by default', function(assert) {
 });
 
 QUnit.test('load failure', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         store: [1, 2, 3],
         select: function() {
             throw Error('forced');
         }
     });
 
-    var failFired = $.Deferred(),
-        callbackFired = $.Deferred();
+    const failFired = $.Deferred();
+    const callbackFired = $.Deferred();
 
     source.on('loadError', function(error) {
         assert.equal(error.message, 'forced');
@@ -562,7 +562,7 @@ QUnit.test('load failure', function(assert) {
 QUnit.test('load in disposed state (B230839, B230785)', function(assert) {
     assert.expect(0);
 
-    var source = new DataSource();
+    const source = new DataSource();
     source.dispose();
 
     source.load();
@@ -571,17 +571,17 @@ QUnit.test('load in disposed state (B230839, B230785)', function(assert) {
 QUnit.test('store load callback fired in disposed state', function(assert) {
     assert.expect(0);
 
-    var loaded = $.Deferred();
+    const loaded = $.Deferred();
 
-    var storeClass = Store.inherit({
+    const storeClass = Store.inherit({
         _loadImpl: function() {
             return loaded.promise();
         }
     });
 
-    var store = new storeClass();
+    const store = new storeClass();
 
-    var source = new DataSource(store);
+    const source = new DataSource(store);
 
     source.load();
     source.dispose();
@@ -589,13 +589,13 @@ QUnit.test('store load callback fired in disposed state', function(assert) {
 });
 
 QUnit.test('store returned not an array', function(assert) {
-    var storeClass = Store.inherit({
+    const storeClass = Store.inherit({
         _loadImpl: function() {
             return $.Deferred().resolve(1);
         }
     });
 
-    var store = new storeClass();
+    const store = new storeClass();
 
     new DataSource(store).load().done(function(r) {
         assert.deepEqual(r, [1]);
@@ -603,26 +603,26 @@ QUnit.test('store returned not an array', function(assert) {
 });
 
 QUnit.test('dataSource knows key of its store, and knows store as well', function(assert) {
-    var store = new ArrayStore({
+    const store = new ArrayStore({
         key: 'id'
     });
-    var source = new DataSource(store);
+    const source = new DataSource(store);
     assert.equal(source.key(), 'id');
     assert.equal(source.store(), store);
 });
 
 QUnit.test('isLoading and loadingChanged', function(assert) {
-    var MyStore = Store.inherit({
+    const MyStore = Store.inherit({
         load: function() {
             return this.testDeferred.promise();
         }
     });
 
-    var store = new MyStore(),
-        ds = new DataSource(store),
-        d1 = $.Deferred(),
-        d2 = $.Deferred(),
-        changeCount = 0;
+    const store = new MyStore();
+    const ds = new DataSource(store);
+    const d1 = $.Deferred();
+    const d2 = $.Deferred();
+    let changeCount = 0;
 
     ds.on('loadingChanged', function() {
         changeCount++;
@@ -651,8 +651,8 @@ QUnit.test('isLoading and loadingChanged', function(assert) {
 });
 
 QUnit.test('beginLoading and endLoading', function(assert) {
-    var ds = new DataSource([]),
-        changeCount = 0;
+    const ds = new DataSource([]);
+    let changeCount = 0;
 
     ds.on('loadingChanged', function() {
         changeCount++;
@@ -676,16 +676,16 @@ QUnit.test('beginLoading and endLoading', function(assert) {
 });
 
 QUnit.test('beginLoading and endLoading with load', function(assert) {
-    var MyStore = Store.inherit({
+    const MyStore = Store.inherit({
         load: function() {
             return this.testDeferred.promise();
         }
     });
 
-    var store = new MyStore(),
-        ds = new DataSource(store),
-        testDeferred = $.Deferred(),
-        changeCount = 0;
+    const store = new MyStore();
+    const ds = new DataSource(store);
+    const testDeferred = $.Deferred();
+    let changeCount = 0;
 
     ds.on('loadingChanged', function() {
         changeCount++;
@@ -711,7 +711,7 @@ QUnit.test('beginLoading and endLoading with load', function(assert) {
 });
 
 QUnit.test('isLoading is false inside when changed fires', function(assert) {
-    var source = new DataSource(TEN_NUMBERS);
+    const source = new DataSource(TEN_NUMBERS);
 
     source.on('changed', function() {
         assert.ok(!source.isLoading());
@@ -721,7 +721,7 @@ QUnit.test('isLoading is false inside when changed fires', function(assert) {
 });
 
 QUnit.test('customizeStoreLoadOptions', function(assert) {
-    var source = new DataSource(TEN_NUMBERS);
+    const source = new DataSource(TEN_NUMBERS);
 
     source.on('customizeStoreLoadOptions', function(options) {
         options.storeLoadOptions.filter = ['this', '=', 1];
@@ -734,9 +734,9 @@ QUnit.test('customizeStoreLoadOptions', function(assert) {
 });
 
 QUnit.test('customizeStoreLoadOptions cache', function(assert) {
-    var source = new DataSource(TEN_NUMBERS),
-        loadingCount = 0,
-        changedCount = 0;
+    const source = new DataSource(TEN_NUMBERS);
+    let loadingCount = 0;
+    let changedCount = 0;
 
     source.store().on('loading', function() {
         loadingCount++;
@@ -765,14 +765,14 @@ QUnit.test('customizeStoreLoadOptions cache', function(assert) {
 });
 
 QUnit.test('load promise should be rejected if DataSource is disposed while loading data (T541870)', function(assert) {
-    var d = $.Deferred();
-    var source = new DataSource({
+    const d = $.Deferred();
+    const source = new DataSource({
         load: function() {
             return d.promise();
         }
     });
 
-    var loadPromise = source.load().done(function(data) {
+    const loadPromise = source.load().done(function(data) {
         assert.deepEqual(data, TEN_NUMBERS);
     });
 
@@ -787,7 +787,7 @@ QUnit.test('load promise should be rejected if DataSource is disposed while load
 });
 
 QUnit.test('customizeLoadResult', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         map: function(i) {
             return String(i);
         },
@@ -813,13 +813,13 @@ QUnit.test('customizeLoadResult', function(assert) {
 QUnit.test('cancel works', function(assert) {
     assert.expect(4);
 
-    var source = new DataSource({
+    const source = new DataSource({
         load: function() {
             return $.Deferred().promise();
         }
     });
 
-    var promise = source.load()
+    const promise = source.load()
         .fail(handleFail)
         .done(handleDone);
 
@@ -840,14 +840,14 @@ QUnit.test('cancel works', function(assert) {
 });
 
 QUnit.test('cancelAll works', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         load: function() {
             return $.Deferred().promise();
         }
     });
 
-    var promise1 = source.load();
-    var promise2 = source.load();
+    const promise1 = source.load();
+    const promise2 = source.load();
 
     source.cancelAll();
 
@@ -857,7 +857,7 @@ QUnit.test('cancelAll works', function(assert) {
 });
 
 QUnit.test('canceling on customizeStoreLoadOptions', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         load: mustNotReach
     });
 
@@ -883,8 +883,8 @@ QUnit.test('canceling on customizeStoreLoadOptions', function(assert) {
 });
 
 QUnit.test('cancel event flow', function(assert) {
-    var loadingChangedLog = [];
-    var ds = new DataSource({
+    const loadingChangedLog = [];
+    const ds = new DataSource({
         load: function() {
             return $.Deferred().promise();
         }
@@ -906,7 +906,7 @@ QUnit.test('cancel event flow', function(assert) {
         loadingChangedLog.push(state);
     });
 
-    var promise = ds.load()
+    const promise = ds.load()
         .always(function(state) {
             assert.equal(state, 'canceled');
         });
@@ -917,9 +917,9 @@ QUnit.test('cancel event flow', function(assert) {
 });
 
 QUnit.test('search API, default impl, no selector', function(assert) {
-    var store = new ArrayStore(['a', 'b']);
+    const store = new ArrayStore(['a', 'b']);
 
-    var source = new DataSource(store);
+    const source = new DataSource(store);
     source.searchValue('a');
 
     source.load().done(function(r) {
@@ -928,12 +928,12 @@ QUnit.test('search API, default impl, no selector', function(assert) {
 });
 
 QUnit.test('search API, default impl, single selector', function(assert) {
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { text: 'abc' },
         { text: 'xyz' }
     ]);
 
-    var source = new DataSource(store);
+    const source = new DataSource(store);
     source.searchExpr('text');
     source.searchValue('a');
 
@@ -944,13 +944,13 @@ QUnit.test('search API, default impl, single selector', function(assert) {
 });
 
 QUnit.test('search API, default impl, multi selectors, custom op', function(assert) {
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { text: 'abc', description: 'xyz' },
         { text: 'xyz', description: 'abc' },
         { text: 'xyz', description: 'xyz' }
     ]);
 
-    var source = new DataSource(store);
+    const source = new DataSource(store);
     source.searchExpr('text', 'description');
     source.searchOperation('=');
     source.searchValue('abc');
@@ -961,11 +961,11 @@ QUnit.test('search API, default impl, multi selectors, custom op', function(asse
 });
 
 QUnit.test('search API, default impl, complex selector', function(assert) {
-    var store = new ArrayStore([
+    const store = new ArrayStore([
         { date: new Date(1984, 5, 14) }
     ]);
 
-    var source = new DataSource(store);
+    const source = new DataSource(store);
     source.searchExpr(function(item) { return item.date.getFullYear(); });
     source.searchOperation('=');
     source.searchValue(1984);
@@ -976,7 +976,7 @@ QUnit.test('search API, default impl, complex selector', function(assert) {
 });
 
 QUnit.test('search API, custom impl', function(assert) {
-    var MyStore = Store.inherit({
+    const MyStore = Store.inherit({
 
         ctor: function(o) {
             this.callBase(o);
@@ -995,7 +995,7 @@ QUnit.test('search API, custom impl', function(assert) {
 
     });
 
-    var source = new DataSource(new MyStore());
+    const source = new DataSource(new MyStore());
     source.searchOperation('operation');
     source.searchValue('test text');
     source.searchExpr('expr');
@@ -1004,7 +1004,7 @@ QUnit.test('search API, custom impl', function(assert) {
 });
 
 QUnit.test('search API, configuration from ctor', function(assert) {
-    var source = new DataSource({
+    const source = new DataSource({
         searchExpr: 'abc',
         searchOperation: 'xyz',
         searchValue: 0,
@@ -1019,7 +1019,7 @@ QUnit.test('search API, configuration from ctor', function(assert) {
 QUnit.test('search API, useDefaultSearch', function(assert) {
     assert.expect(8);
 
-    var sourceWithCustomSearch = new DataSource({
+    const sourceWithCustomSearch = new DataSource({
         useDefaultSearch: false,
 
         load: function(options) {
@@ -1033,7 +1033,7 @@ QUnit.test('search API, useDefaultSearch', function(assert) {
         }
     });
 
-    var sourceWithDefaultSearch = new DataSource({
+    const sourceWithDefaultSearch = new DataSource({
         useDefaultSearch: true,
 
         load: function(options) {
@@ -1064,9 +1064,9 @@ QUnit.test('search API, useDefaultSearch', function(assert) {
 });
 
 QUnit.test('events API, changed', function(assert) {
-    var cl = {};
+    const cl = {};
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: [1, 2, 3],
         onChanged: function() {
             cl.onChanged_option = true;
@@ -1088,11 +1088,11 @@ QUnit.test('events API, changed', function(assert) {
 });
 
 QUnit.test('events API, loadingChanged', function(assert) {
-    var cl = {
+    const cl = {
         onLoadingChanged_option: [],
         on_loadingChanged_callback: []
     };
-    var source = new DataSource({
+    const source = new DataSource({
         store: [1, 2, 3],
         onLoadingChanged: function(isLoading) {
             cl.onLoadingChanged_option.push(isLoading);
@@ -1114,9 +1114,9 @@ QUnit.test('events API, loadingChanged', function(assert) {
 });
 
 QUnit.test('events API, loadError', function(assert) {
-    var cl = {};
+    const cl = {};
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: [1, 2, 3],
         select: function() {
             throw new Error('Forced');
@@ -1141,9 +1141,9 @@ QUnit.test('events API, loadError', function(assert) {
 });
 
 QUnit.test('events API, customizeLoadResult', function(assert) {
-    var cl = {};
+    const cl = {};
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: [1, 2, 3],
         onCustomizeLoadResult: function(loadResult) {
             cl.onCustomizeLoadResult_option = loadResult;
@@ -1162,7 +1162,7 @@ QUnit.test('events API, customizeLoadResult', function(assert) {
 
 
     source.load().done(function(r) {
-        var expected = {
+        const expected = {
             data: [1, 2, 3],
             extra: undefined,
             foo: 1,
@@ -1184,14 +1184,14 @@ QUnit.test('events API, customizeLoadResult', function(assert) {
 });
 
 QUnit.test('events API, customizeStoreLoadOptions', function(assert) {
-    var cl = {},
-        source = new DataSource({
-            store: [1, 2, 3],
-            onCustomizeStoreLoadOptions: function(loadOptions) {
-                cl.onCustomizeStoreLoadOptions_option = loadOptions;
-                delete cl.onCustomizeStoreLoadOptions_option.operationId;
-            }
-        });
+    const cl = {};
+    const source = new DataSource({
+        store: [1, 2, 3],
+        onCustomizeStoreLoadOptions: function(loadOptions) {
+            cl.onCustomizeStoreLoadOptions_option = loadOptions;
+            delete cl.onCustomizeStoreLoadOptions_option.operationId;
+        }
+    });
 
     source.on('customizeStoreLoadOptions', function(loadOptions) {
         cl.on_customizeStoreLoadOptions_callback = loadOptions;
@@ -1200,7 +1200,7 @@ QUnit.test('events API, customizeStoreLoadOptions', function(assert) {
 
 
     source.load().done(function(r) {
-        var expected = {
+        const expected = {
             storeLoadOptions: {
                 skip: 0,
                 take: 20,
@@ -1217,8 +1217,8 @@ QUnit.test('events API, customizeStoreLoadOptions', function(assert) {
 });
 
 QUnit.test('dispose unsubscribes events', function(assert) {
-    var func = function() { };
-    var source = new DataSource({
+    const func = function() { };
+    const source = new DataSource({
         store: [1, 2, 3],
 
         onChanged: func,
@@ -1234,7 +1234,7 @@ QUnit.test('dispose unsubscribes events', function(assert) {
     source.on('customizeLoadResult', func);
     source.on('customizeStoreLoadOptions', func);
 
-    var events = source._eventsStrategy._events;
+    let events = source._eventsStrategy._events;
     assert.ok(events['changed'].has(func));
     assert.ok(events['loadError'].has(func));
     assert.ok(events['loadingChanged'].has(func));
@@ -1254,13 +1254,13 @@ QUnit.test('dispose unsubscribes events', function(assert) {
 QUnit.module('Changing store load options', moduleConfig);
 
 QUnit.test('sort', function(assert) {
-    var data = [
+    const data = [
         { id: 1 },
         { id: 2 },
         { id: 3 }
     ];
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: data,
         map: function(i) { return i.id; }
     });
@@ -1280,12 +1280,12 @@ QUnit.test('sort', function(assert) {
 });
 
 QUnit.test('filter', function(assert) {
-    var data = [
+    const data = [
         { id: 1 },
         { id: 2 }
     ];
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: data,
         map: function(i) { return i.id; }
     });
@@ -1307,13 +1307,13 @@ QUnit.test('filter', function(assert) {
 });
 
 QUnit.test('group', function(assert) {
-    var data = [
+    const data = [
         { g: 1 },
         { g: 2 },
         { g: 1 }
     ];
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: data
     });
 
@@ -1331,11 +1331,11 @@ QUnit.test('group', function(assert) {
 });
 
 QUnit.test('select', function(assert) {
-    var data = [
+    const data = [
         { a: 1, b: 2 }
     ];
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: data
     });
 
@@ -1360,7 +1360,7 @@ QUnit.test('select', function(assert) {
 
 QUnit.module('requireTotalCount');
 QUnit.test('requireTotalCount: fail', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1372,7 +1372,7 @@ QUnit.test('requireTotalCount: fail', function(assert) {
         }
     });
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: new ODataStore({
             url: 'odata.org'
         }),
@@ -1394,12 +1394,12 @@ QUnit.test('requireTotalCount: fail', function(assert) {
 });
 
 QUnit.test('requireTotalCount: success', function(assert) {
-    var data = [
+    const data = [
         { a: 1, b: 2 },
         { a: 3, b: 4 }
     ];
 
-    var source = new DataSource({
+    const source = new DataSource({
         store: data
     });
 
@@ -1418,17 +1418,17 @@ QUnit.test('requireTotalCount: success', function(assert) {
 
 // T401687
 QUnit.test('totalCount when CustomStore with Promise/A', function(assert) {
-    var loadCallback,
-        source = new DataSource({
-            requireTotalCount: true,
-            load: function(e) {
-                return {
-                    then: function(callback) {
-                        loadCallback = callback;
-                    }
-                };
-            }
-        });
+    let loadCallback;
+    const source = new DataSource({
+        requireTotalCount: true,
+        load: function(e) {
+            return {
+                then: function(callback) {
+                    loadCallback = callback;
+                }
+            };
+        }
+    });
 
 
     source.load().done(function(data, extra) {
@@ -1447,7 +1447,7 @@ QUnit.test('totalCount when CustomStore with Promise/A', function(assert) {
 
 QUnit.module('Custom cases and regressions', moduleConfig);
 QUnit.test('expand option for OData store', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1473,7 +1473,7 @@ QUnit.test('expand option for OData store', function(assert) {
 });
 
 QUnit.test('filterToLower option equal false for OData store', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1499,8 +1499,8 @@ QUnit.test('filterToLower option equal false for OData store', function(assert) 
 });
 
 QUnit.test('Q456193', function(assert) {
-    var store = new ArrayStore(['a', 'b', 'c']),
-        source = new DataSource(store);
+    const store = new ArrayStore(['a', 'b', 'c']);
+    const source = new DataSource(store);
 
     source.load().done(function(r) {
         assert.deepEqual(r, ['a', 'b', 'c']);
@@ -1538,9 +1538,9 @@ QUnit.test('paging with continuation token', function(assert) {
         pageSize: null, // means page size varies
 
         load: function(options) {
-            var userData = options.userData,
-                token,
-                serverResponse;
+            const userData = options.userData;
+            let token;
+            let serverResponse;
 
             if(userData.lastPageIndex && source.pageIndex() > userData.lastPageIndex) {
                 return $.Deferred().resolve([]);
@@ -1592,15 +1592,15 @@ QUnit.test('paging with continuation token', function(assert) {
 });
 
 QUnit.test('B239452', function(assert) {
-    var BENCH = {
+    const BENCH = {
         title: 'Bench'
     };
 
-    var exercises = [{
+    const exercises = [{
         equipment: BENCH
     }];
 
-    var ds = new DataSource({
+    const ds = new DataSource({
         store: new ArrayStore(exercises),
         filter: ['equipment', BENCH]
     });
@@ -1611,7 +1611,7 @@ QUnit.test('B239452', function(assert) {
 });
 
 QUnit.test('B251658', function(assert) {
-    var ds = new DataSource({
+    const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         pageSize: 5
     });
@@ -1625,7 +1625,7 @@ QUnit.test('B251658', function(assert) {
 });
 
 QUnit.test('B253895 - Data - DataSource.pageIndex is not set to 0 when search API is applied', function(assert) {
-    var ds = new DataSource({
+    const ds = new DataSource({
         store: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         pageSize: 5
     });
@@ -1653,7 +1653,7 @@ QUnit.test('paging should be disabled if ctor options is url (see T314464)', fun
 });
 
 QUnit.test('StoreLoadOptionAccessors: null and undefined (based on T304670)', function(assert) {
-    var ds = new DataSource('');
+    const ds = new DataSource('');
 
     // setter
     assert.equal(ds.pageSize(0), undefined);
@@ -1728,10 +1728,10 @@ QUnit.test('StoreLoadOptionAccessors: null and undefined (based on T304670)', fu
 
 QUnit.module('live update', {
     beforeEach: function() {
-        var loadSpy = sinon.spy();
+        const loadSpy = sinon.spy();
         this.loadSpy = loadSpy;
-        var itemRemove = { field: 1 },
-            itemUpdate = { field: 2 };
+        const itemRemove = { field: 1 };
+        const itemUpdate = { field: 2 };
         this.changes = [
             { type: 'insert', data: { field: 3 } },
             { type: 'remove', key: itemRemove },
@@ -1787,7 +1787,7 @@ QUnit.module('live update', {
     }
 }, function() {
     QUnit.test('load is called when reshapeOnPush is enabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             reshapeOnPush: true,
             pushAggregationTimeout: 0
         });
@@ -1798,7 +1798,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('load is called with throttle when reshapeOnPush and pushAggregationTimeout are enabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             reshapeOnPush: true,
             pushAggregationTimeout: 100
         });
@@ -1813,7 +1813,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('load is called with throttle when reshapeOnPush and pushAggregationTimeout is defined', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             reshapeOnPush: true,
             pushAggregationTimeout: 100
         });
@@ -1828,7 +1828,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('load is called with automatic throttle depends on changed time', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             reshapeOnPush: true
         });
 
@@ -1852,13 +1852,13 @@ QUnit.module('live update', {
     });
 
     QUnit.test('automatic throttle depends on changed time when reshapeOnPush is disabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             reshapeOnPush: false
         });
 
         dataSource.load();
 
-        var changedSpy = sinon.spy();
+        const changedSpy = sinon.spy();
         dataSource.on('changed', (function() {
             this.clock.tick(10);
             changedSpy();
@@ -1879,39 +1879,39 @@ QUnit.module('live update', {
     });
 
     QUnit.test('load isn\'t called when reshapeOnPush is disabled', function(assert) {
-        var dataSource = this.createDataSource();
+        const dataSource = this.createDataSource();
         dataSource.store().push(this.changes);
         assert.equal(this.loadSpy.callCount, 0);
     });
 
     QUnit.test('pass changes in changed event when reshapeOnPush and paginate are disabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             paginate: false,
             pushAggregationTimeout: 0
         });
-        var changedSpy = sinon.spy();
+        const changedSpy = sinon.spy();
         dataSource.on('changed', changedSpy);
         dataSource.store().push(this.changes);
         assert.equal(changedSpy.firstCall.args[0].changes.length, 3);
     });
 
     QUnit.test('don\'t skip changes with types \'insert\' and \'remove\' when reshapeOnPush is disabled and paginate is enabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             paginate: true,
             pushAggregationTimeout: 0
         });
-        var changedSpy = sinon.spy();
+        const changedSpy = sinon.spy();
         dataSource.on('changed', changedSpy);
         dataSource.store().push(this.changes);
         assert.equal(changedSpy.firstCall.args[0].changes.length, 3);
     });
 
     QUnit.test('changed is fired with throttle when pushAggregationTimeout is enabled', function(assert) {
-        var dataSource = this.createDataSource({
+        const dataSource = this.createDataSource({
             paginate: false,
             pushAggregationTimeout: 100
         });
-        var changedSpy = sinon.spy();
+        const changedSpy = sinon.spy();
         dataSource.on('changed', changedSpy);
 
         assert.equal(changedSpy.callCount, 0);
@@ -1927,7 +1927,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push for grouping', function(assert) {
-        var dataSource = this.initGroupingDataSource();
+        const dataSource = this.initGroupingDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -1938,7 +1938,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'insert\' is ignored for grouping', function(assert) {
-        var dataSource = this.initGroupingDataSource();
+        const dataSource = this.initGroupingDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -1953,7 +1953,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'delete\' is ignored for grouping', function(assert) {
-        var dataSource = this.initGroupingDataSource();
+        const dataSource = this.initGroupingDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -1964,7 +1964,7 @@ QUnit.module('live update', {
 
     // T837104
     QUnit.test('push after adding items via array directly', function(assert) {
-        var store = this.initPlainDataSource().store();
+        const store = this.initPlainDataSource().store();
 
         store.push([
             { type: 'update', key: 1, data: { text: 'updated' } }
@@ -1980,7 +1980,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'insert\' if item is exists', function(assert) {
-        var dataSource = this.initPlainDataSource();
+        const dataSource = this.initPlainDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -1991,7 +1991,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'insert\' if item is exists if reshapeOnPush', function(assert) {
-        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        const dataSource = this.initPlainDataSource({ reshapeOnPush: true });
         dataSource.load();
 
         dataSource.store().push([
@@ -2003,7 +2003,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'remove\' and type=\'insert\'', function(assert) {
-        var dataSource = this.initPlainDataSource();
+        const dataSource = this.initPlainDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -2019,7 +2019,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'remove\' and type=\'insert\' if reshapeOnPush', function(assert) {
-        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        const dataSource = this.initPlainDataSource({ reshapeOnPush: true });
         dataSource.load();
 
         dataSource.store().push([
@@ -2035,7 +2035,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'insert\' with same key', function(assert) {
-        var dataSource = this.initPlainDataSource();
+        const dataSource = this.initPlainDataSource();
         dataSource.load();
 
         dataSource.store().push([
@@ -2052,7 +2052,7 @@ QUnit.module('live update', {
     });
 
     QUnit.test('push type=\'remove\' after insert if reshapeOnPush', function(assert) {
-        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        const dataSource = this.initPlainDataSource({ reshapeOnPush: true });
         dataSource.load();
 
         dataSource.store().push([

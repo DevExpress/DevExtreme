@@ -1,7 +1,7 @@
 define(function(require) {
-    var isFunction = require('core/utils/type').isFunction,
-        deferredUtils = require('core/utils/deferred'),
-        Deferred = deferredUtils.Deferred;
+    const isFunction = require('core/utils/type').isFunction;
+    const deferredUtils = require('core/utils/deferred');
+    const Deferred = deferredUtils.Deferred;
 
     if(!QUnit.urlParams['nojquery']) {
         return;
@@ -10,10 +10,10 @@ define(function(require) {
     QUnit.module('when');
 
     QUnit.test('when should be resolved synchronously', function(assert) {
-        var log = [];
+        const log = [];
 
-        var d1 = new Deferred();
-        var d2 = new Deferred();
+        const d1 = new Deferred();
+        const d2 = new Deferred();
 
         deferredUtils.when().done(function() {
             assert.deepEqual(arguments.length, 0, 'correct args');
@@ -37,8 +37,8 @@ define(function(require) {
     });
 
     QUnit.test('when should have correct context in done handler', function(assert) {
-        var d1 = new Deferred();
-        var d2 = new Deferred();
+        const d1 = new Deferred();
+        const d2 = new Deferred();
 
         deferredUtils.when(d1, d2).done(function(result) {
             assert.equal(this.length, 2, 'correct contexts length');
@@ -51,10 +51,10 @@ define(function(require) {
     });
 
     QUnit.test('when should be rejected if one of deferred was rejected', function(assert) {
-        var failHandlerCount = 0;
+        let failHandlerCount = 0;
 
-        var d1 = new Deferred();
-        var d2 = new Deferred();
+        const d1 = new Deferred();
+        const d2 = new Deferred();
 
         deferredUtils.when(d1, d2).fail(function(result) {
             assert.deepEqual(result, 1, 'correct args');
@@ -72,8 +72,8 @@ define(function(require) {
 
     QUnit.test('converted deferred should be resolved when source resolved', function(assert) {
         return new Promise(function(resolve) {
-            var promiseResult = {};
-            var context = {};
+            const promiseResult = {};
+            const context = {};
 
             deferredUtils.fromPromise(Promise.resolve(promiseResult), context).done(function(result) {
                 assert.equal(result, promiseResult);
@@ -86,8 +86,8 @@ define(function(require) {
 
     QUnit.test('converted deferred should be rejected when source rejected', function(assert) {
         return new Promise(function(resolve) {
-            var promiseResult = {};
-            var context = {};
+            const promiseResult = {};
+            const context = {};
 
             deferredUtils.fromPromise(Promise.reject(promiseResult), context).fail(function(result) {
                 assert.equal(result, promiseResult);
@@ -113,11 +113,11 @@ define(function(require) {
         methodName: 'notify',
         state: 'pending'
     }].forEach(function(config) {
-        var handlerName = config.handlerName;
-        var methodName = config.methodName;
+        const handlerName = config.handlerName;
+        const methodName = config.methodName;
 
         QUnit.test('Deferred should have correct state after ' + methodName, function(assert) {
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             deferred[methodName]();
             assert.equal(deferred.state(), config.state, 'deferred has correct state');
@@ -125,7 +125,7 @@ define(function(require) {
         });
 
         QUnit.test(handlerName + ' handler should be called after ' + methodName, function(assert) {
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             deferred[methodName]();
             deferred[handlerName](function() {
@@ -135,7 +135,7 @@ define(function(require) {
         });
 
         QUnit.test('methods should return Deferred', function(assert) {
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             assert.equal(deferred[methodName](), deferred, methodName + ' return correct object');
             assert.equal(deferred.promise()[handlerName](), deferred.promise(), 'promise().' + handlerName + ' return correct object');
@@ -145,7 +145,7 @@ define(function(require) {
 
         QUnit.test(handlerName + ' should support undefined handlers', function(assert) {
             assert.expect(0);
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             deferred[methodName]();
             deferred[handlerName](null);
@@ -154,7 +154,7 @@ define(function(require) {
         QUnit.test(handlerName + ' should be called only once', function(assert) {
             assert.expect(handlerName === 'progress' ? 2 : 1);
 
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             deferred[handlerName](function() {
                 assert.ok(true, 'deferred callback was called');
@@ -165,7 +165,7 @@ define(function(require) {
         });
 
         QUnit.test(handlerName + ' should have correct arguments', function(assert) {
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             deferred[handlerName](function(value1, value2) {
                 assert.equal(arguments.length, 2, 'handler has correct number of arguments');
@@ -177,8 +177,8 @@ define(function(require) {
         });
 
         QUnit.test(handlerName + ' should have correct context and arguments after resolve with ' + methodName + 'With method', function(assert) {
-            var deferred = new Deferred(),
-                context = {};
+            const deferred = new Deferred();
+            const context = {};
 
             deferred[handlerName](function(value1, value2) {
                 assert.equal(this, context, 'deferred handler has correct context');
@@ -191,8 +191,8 @@ define(function(require) {
         });
 
         QUnit.test(handlerName + ' handler should be called if Deferred was already resolved/rejected', function(assert) {
-            var deferred = new Deferred(),
-                context = {};
+            const deferred = new Deferred();
+            const context = {};
 
             deferred[methodName + 'With'](context, [3, 5]);
             deferred[handlerName](function(value1, value2) {
@@ -204,7 +204,7 @@ define(function(require) {
         });
 
         QUnit.test('promise should have ' + handlerName + ' handler and shouldn\'t have ' + methodName + ' method', function(assert) {
-            var promise = new Deferred().promise();
+            const promise = new Deferred().promise();
 
             assert.ok(isFunction(promise[handlerName]), 'promise has ' + handlerName + ' handler');
             assert.notOk(isFunction(promise[methodName]), 'promise doesn\'t have ' + methodName + ' method');
@@ -213,7 +213,7 @@ define(function(require) {
 
     QUnit.test('resolve handler shouldn\'t be called after reject', function(assert) {
         assert.expect(0);
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.done(function(value1, value2) {
             assert.ok(false, 'handler was called');
@@ -225,7 +225,7 @@ define(function(require) {
 
     QUnit.test('notify handler shouldn\'t be called after reject/resolve', function(assert) {
         assert.expect(0);
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.progress(function(value1, value2) {
             assert.ok(true, 'handler was called');
@@ -236,9 +236,9 @@ define(function(require) {
     });
 
     QUnit.test('always handler should be called after resolve', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
-        var result = deferred.always(function(value1, value2) {
+        const result = deferred.always(function(value1, value2) {
             assert.equal(this, deferred.promise(), 'deferred handler has correct context');
             assert.equal(arguments.length, 2, 'handler has correct number of arguments');
             assert.equal(value1, 3, 'argument is correct');
@@ -251,14 +251,14 @@ define(function(require) {
     });
 
     QUnit.test('always handler return correct object', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         assert.equal(deferred.always(), deferred, 'deferred handler return correct object');
         assert.equal(deferred.promise().always(), deferred.promise(), 'deferred.promise() handler return correct object');
     });
 
     QUnit.test('always handler should be called after reject', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.always(function(value1, value2) {
             assert.equal(this, deferred.promise(), 'deferred handler has correct context');
@@ -271,7 +271,7 @@ define(function(require) {
     });
 
     QUnit.test('catch handler should be called after reject', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.catch(function(value) {
             assert.equal(this, deferred.promise(), 'deferred handler has correct context');
@@ -283,7 +283,7 @@ define(function(require) {
 
     QUnit.test('catch handler shouldn\'t be called after resolve', function(assert) {
         assert.expect(0);
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.catch(function(value) {
             assert.ok(false);
@@ -293,7 +293,7 @@ define(function(require) {
     });
 
     QUnit.test('catch handler should be called after reject in chain', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.then(function() {
             assert.ok(false, 'resolve callback was called');
@@ -306,7 +306,7 @@ define(function(require) {
 
     QUnit.test('complex chain should call resolve handlers after reject handlers', function(assert) {
         assert.expect(2);
-        var deferred = new Deferred();
+        const deferred = new Deferred();
         deferred.then(function() {
             assert.ok(false, 'resolve handler should\'t be called');
         }).then(undefined, function() {
@@ -321,7 +321,7 @@ define(function(require) {
     });
 
     QUnit.test('then.resolve handler should be called after resolve', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.then(function(value1, value2) {
             assert.equal(this, deferred.promise(), 'deferred handler has correct context');
@@ -334,7 +334,7 @@ define(function(require) {
     });
 
     QUnit.test('then.reject handler should be called after reject', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.then(null, function(value1, value2) {
             assert.equal(this, deferred.promise(), 'deferred handler has correct context');
@@ -349,8 +349,8 @@ define(function(require) {
     QUnit.test('then should support chaining', function(assert) {
         assert.expect(2);
 
-        var deferred = new Deferred(),
-            chainingDeferred = new Deferred();
+        const deferred = new Deferred();
+        const chainingDeferred = new Deferred();
 
         deferred.then(function() {
             return 5;
@@ -368,11 +368,11 @@ define(function(require) {
     QUnit.test('then should support chaining with native Promise', function(assert) {
         assert.expect(1);
 
-        var deferred = new Deferred(),
-            promiseResolve,
-            promise = new Promise(function(resolve, reject) {
-                promiseResolve = resolve;
-            });
+        const deferred = new Deferred();
+        let promiseResolve;
+        const promise = new Promise(function(resolve, reject) {
+            promiseResolve = resolve;
+        });
 
         deferred.then(function() {
             return promise;
@@ -389,8 +389,8 @@ define(function(require) {
     QUnit.test('then should call only first handler after reject', function(assert) {
         assert.expect(1);
 
-        var deferred = new Deferred(),
-            chainingDeferred = new Deferred();
+        const deferred = new Deferred();
+        const chainingDeferred = new Deferred();
 
         deferred.then(function() {
             return chainingDeferred;
@@ -405,19 +405,19 @@ define(function(require) {
     });
 
     QUnit.test('promise method should extend promise object', function(assert) {
-        var props = {
+        const props = {
             test: 'testProperty'
         };
-        var deferred = new Deferred();
-        var promise = deferred.promise(props);
+        const deferred = new Deferred();
+        const promise = deferred.promise(props);
 
         assert.equal(promise.test, props.test, 'promise has additional properties');
         assert.notEqual(deferred.test, props.test, 'deferred doesn\'t have additional properties');
     });
 
     QUnit.test('Deferred should resolve native Promise', function(assert) {
-        var deferred = new Deferred();
-        var promise = Promise.resolve(deferred);
+        const deferred = new Deferred();
+        const promise = Promise.resolve(deferred);
 
         promise.then(function(value1) {
             assert.ok(true, 'native promise was resolved');
@@ -431,7 +431,7 @@ define(function(require) {
 
     QUnit.test('then.reject handler shouldn\'t be called after resolve', function(assert) {
         assert.expect(0);
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.then(undefined, function(value1) {
             assert.ok(false, 'callback wasn\'t called');
@@ -443,8 +443,8 @@ define(function(require) {
     QUnit.test('converted deferred should be resolved sync when source resolved', function(assert) {
         assert.expect(2);
 
-        var promiseResult = {};
-        var context = {};
+        const promiseResult = {};
+        const context = {};
 
         deferredUtils.fromPromise((new Deferred()).resolveWith(context, [promiseResult]).promise()).done(function(result) {
             assert.equal(result, promiseResult);
@@ -455,8 +455,8 @@ define(function(require) {
     QUnit.test('converted deferred should be rejected sync when source rejected', function(assert) {
         assert.expect(2);
 
-        var promiseResult = {};
-        var context = {};
+        const promiseResult = {};
+        const context = {};
 
         deferredUtils.fromPromise((new Deferred()).rejectWith(context, [promiseResult]).promise()).fail(function(result) {
             assert.equal(result, promiseResult);
@@ -467,8 +467,8 @@ define(function(require) {
     QUnit.test('converted primitive should be resolved sync', function(assert) {
         assert.expect(2);
 
-        var promiseResult = {};
-        var context = {};
+        const promiseResult = {};
+        const context = {};
 
         deferredUtils.fromPromise(promiseResult, context).done(function(result) {
             assert.equal(result, promiseResult);
@@ -477,7 +477,7 @@ define(function(require) {
     });
 
     QUnit.test('Can resolve chain with an empty string and zero', function(assert) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         deferred.then(function(v) {
             assert.equal(v, 1);

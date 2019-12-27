@@ -19,14 +19,14 @@ const TEMPLATE_SELECTOR = '[data-options*=\'dxTemplate\']';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 
-var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
-    var widgetName = options.model.widget;
+const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
+    let widgetName = options.model.widget;
     if(widgetName) {
-        var widgetElement = $('<div>'),
-            widgetOptions = options.model.options || {};
+        const widgetElement = $('<div>');
+        const widgetOptions = options.model.options || {};
 
         if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
-            var deprecatedName = widgetName;
+            const deprecatedName = widgetName;
             widgetName = camelize('dx-' + widgetName);
             log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
         }
@@ -88,11 +88,11 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _extractTemplates: function() {
-        var templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
-        var templatesMap = {};
+        const templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
+        const templatesMap = {};
 
         templateElements.each(function(_, template) {
-            var templateOptions = getElementOptions(template).dxTemplate;
+            const templateOptions = getElementOptions(template).dxTemplate;
 
             if(!templateOptions) {
                 return;
@@ -107,8 +107,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
             templatesMap[templateOptions.name].push(template);
         });
 
-        for(let templateName in templatesMap) {
-            var deviceTemplate = this._findTemplateByDevice(templatesMap[templateName]);
+        for(const templateName in templatesMap) {
+            const deviceTemplate = this._findTemplateByDevice(templatesMap[templateName]);
             if(deviceTemplate) {
                 this._saveTemplate(templateName, deviceTemplate);
             }
@@ -116,12 +116,12 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _saveTemplate: function(name, template) {
-        var templates = this.option('integrationOptions.templates');
+        const templates = this.option('integrationOptions.templates');
         templates[name] = this._createTemplate(template);
     },
 
     _findTemplateByDevice: function(templates) {
-        var suitableTemplate = findBestMatches(devices.current(), templates, function(template) {
+        const suitableTemplate = findBestMatches(devices.current(), templates, function(template) {
             return getElementOptions(template).dxTemplate;
         })[0];
 
@@ -135,17 +135,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _extractAnonymousTemplate: function() {
-        var templates = this.option('integrationOptions.templates'),
-            anonymousTemplateName = this._getAnonymousTemplateName(),
-            $anonymousTemplate = this.$element().contents().detach();
+        const templates = this.option('integrationOptions.templates');
+        const anonymousTemplateName = this._getAnonymousTemplateName();
+        const $anonymousTemplate = this.$element().contents().detach();
 
-        var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
-                var isTextNode = element.nodeType === TEXT_NODE,
-                    isEmptyText = $(element).text().trim().length < 1;
+        const $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
+            const isTextNode = element.nodeType === TEXT_NODE;
+            const isEmptyText = $(element).text().trim().length < 1;
 
-                return !(isTextNode && isEmptyText);
-            }),
-            onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
+            return !(isTextNode && isEmptyText);
+        });
+        const onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
         if(!templates[anonymousTemplateName] && !onlyJunkTemplateContent) {
             templates[anonymousTemplateName] = this._createTemplate($anonymousTemplate);
@@ -157,17 +157,17 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _createTemplateIfNeeded: function(templateSource) {
-        var templateKey = function(templateSource) {
+        const templateKey = function(templateSource) {
             return (isRenderer(templateSource) && templateSource[0]) || templateSource;
         };
 
-        var cachedTemplate = this._tempTemplates.filter(function(t) {
+        const cachedTemplate = this._tempTemplates.filter(function(t) {
             templateSource = templateKey(templateSource);
             return t.source === templateSource;
         })[0];
         if(cachedTemplate) return cachedTemplate.template;
 
-        var template = this._createTemplate(templateSource);
+        const template = this._createTemplate(templateSource);
         this._tempTemplates.push({ template: template, source: templateKey(templateSource) });
         return template;
     },
@@ -184,14 +184,14 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     _getTemplate: function(templateSource) {
         if(isFunction(templateSource)) {
             return new FunctionTemplate(function(options) {
-                var templateSourceResult = templateSource.apply(this, this._getNormalizedTemplateArgs(options));
+                const templateSourceResult = templateSource.apply(this, this._getNormalizedTemplateArgs(options));
 
                 if(!isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
                 }
 
-                var dispose = false;
-                var template = this._acquireTemplate(templateSourceResult, function(templateSource) {
+                let dispose = false;
+                const template = this._acquireTemplate(templateSourceResult, function(templateSource) {
                     if(templateSource.nodeType || isRenderer(templateSource) && !$(templateSource).is('script')) {
                         return new FunctionTemplate(function() {
                             return templateSource;
@@ -201,7 +201,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
                     return this._createTemplate(templateSource);
                 }.bind(this));
 
-                var result = template.render(options);
+                const result = template.render(options);
                 dispose && template.dispose && template.dispose();
                 return result;
             }.bind(this));
@@ -233,8 +233,8 @@ const DOMComponentWithTemplate = DomComponent.inherit({
         }
 
         if(typeof templateSource === 'string') {
-            var nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
-            var integrationTemplate = null;
+            const nonIntegrationTemplates = this.option('integrationOptions.skipTemplates') || [];
+            let integrationTemplate = null;
 
             if(nonIntegrationTemplates.indexOf(templateSource) === -1) {
                 integrationTemplate = this._renderIntegrationTemplate(templateSource);
@@ -249,7 +249,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _getNormalizedTemplateArgs: function(options) {
-        var args = [];
+        const args = [];
 
         if('model' in options) {
             args.push(options.model);
@@ -274,7 +274,7 @@ const DOMComponentWithTemplate = DomComponent.inherit({
     },
 
     _renderIntegrationTemplate: function(templateSource) {
-        let integrationTemplate = this.option('integrationOptions.templates')[templateSource];
+        const integrationTemplate = this.option('integrationOptions.templates')[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
             const isAsyncTemplate = this.option('templatesRenderAsynchronously');

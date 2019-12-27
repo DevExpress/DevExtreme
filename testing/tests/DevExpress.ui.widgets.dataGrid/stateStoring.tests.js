@@ -9,7 +9,7 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    var markup = '<div id="container" class="dx-datagrid"></div>';
+    const markup = '<div id="container" class="dx-datagrid"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -201,8 +201,8 @@ QUnit.test('customLoad with native Promise', function(assert) {
     // arrange
     this.clock.restore();
 
-    var that = this,
-        done = assert.async();
+    const that = this;
+    const done = assert.async();
 
     that.applyOptions({
         type: 'custom',
@@ -245,7 +245,7 @@ QUnit.test('Custom function load when state contains date', function(assert) {
 QUnit.test('Custom function save', function(assert) {
     // arrange
 
-    var userState;
+    let userState;
 
     this.applyOptions({
         storageKey: 'TestNameSpace',
@@ -267,7 +267,7 @@ QUnit.test('Custom function save', function(assert) {
 // T139963
 QUnit.test('Custom function save. Several save called', function(assert) {
     // arrange
-    var customSaveHandler = sinon.spy();
+    const customSaveHandler = sinon.spy();
 
     this.applyOptions({
         storageKey: 'TestNameSpace',
@@ -304,8 +304,8 @@ QUnit.test('Custom function save not defined', function(assert) {
 
 QUnit.test('Restore isSelected item keys', function(assert) {
     // arrange
-    var that = this,
-        testKeys = ['Test1', 'Test2'];
+    const that = this;
+    const testKeys = ['Test1', 'Test2'];
 
     that.applyOptions({ type: 'localStorage', storageKey: 'TestNameSpace' });
 
@@ -319,8 +319,8 @@ QUnit.test('Restore isSelected item keys', function(assert) {
 
 QUnit.test('Restore selectionFilter', function(assert) {
     // arrange
-    var that = this,
-        filter = ['id', '=', 1];
+    const that = this;
+    const filter = ['id', '=', 1];
 
     that.applyOptions({ type: 'localStorage', storageKey: 'TestNameSpace' });
 
@@ -419,14 +419,14 @@ QUnit.test('Transformation state in string JSON and parsing string JSON back ', 
 
 QUnit.test('Custom function load with object deferred', function(assert) {
     // arrange
-    var stateStoringController = this.stateStoringController,
-        changeCallCount = 0;
+    const stateStoringController = this.stateStoringController;
+    let changeCallCount = 0;
 
     this.applyOptions({
         storageKey: 'TestNameSpace',
         type: 'custom',
         customLoad: function() {
-            var d = $.Deferred();
+            const d = $.Deferred();
             setTimeout(function() {
                 d.resolve({ searchText: '123' });
             });
@@ -474,7 +474,7 @@ QUnit.module('State Storing with real controllers', {
 
 QUnit.test('State loading by user load function', function(assert) {
     // arrange, act
-    var d = $.Deferred();
+    const d = $.Deferred();
 
     this.setupDataGridModules({
         stateStoring: {
@@ -507,7 +507,7 @@ QUnit.test('State loading by user load function', function(assert) {
 // T303950
 QUnit.test('State loading by user load function without dataSource', function(assert) {
     // arrange
-    var countCallCustomLoad = 0;
+    let countCallCustomLoad = 0;
 
     this.setupDataGridModules({
         loadingTimeout: null
@@ -561,7 +561,7 @@ QUnit.test('stateStoringController correctly loads after switch stateStoring.ena
 
 
     // assert
-    var items = this.dataController.items();
+    const items = this.dataController.items();
 
     assert.equal(this.stateStoringController.isLoaded(), true, 'stateStoring controller is loaded');
     assert.equal(this.dataController.isLoaded(), true, 'dataController is loaded');
@@ -572,8 +572,8 @@ QUnit.test('stateStoringController correctly loads after switch stateStoring.ena
 // T605891
 QUnit.test('apply filterValues', function(assert) {
     // arrange
-    var items,
-        data = [{ id: 1 }, { id: 2 }];
+    let items;
+    const data = [{ id: 1 }, { id: 2 }];
 
     this.setupDataGridModules({
         loadingTimeout: null,
@@ -597,8 +597,8 @@ QUnit.test('apply filterValues', function(assert) {
 
 QUnit.test('not apply filter for hidden column', function(assert) {
     // arrange
-    var items,
-        data = [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }];
+    let items;
+    const data = [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }];
 
     this.setupDataGridModules({
         loadingTimeout: null,
@@ -936,8 +936,8 @@ QUnit.test('Set state by API', function(assert) {
 
 QUnit.test('Save user state when data changed', function(assert) {
     // arrange, act
-    var userState,
-        customSaveCallCount = 0;
+    let userState;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         stateStoring: {
@@ -976,7 +976,7 @@ QUnit.test('Save user state when data changed', function(assert) {
 
 QUnit.test('Save user state after selection is changed', function(assert) {
     // arrange, act
-    var customSave = sinon.stub();
+    const customSave = sinon.stub();
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1005,7 +1005,7 @@ QUnit.test('Save user state after selection is changed', function(assert) {
 
 QUnit.test('Save user state after selection is changed. Deferred selection', function(assert) {
     // arrange, act
-    var customSave = sinon.stub();
+    const customSave = sinon.stub();
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1037,8 +1037,8 @@ QUnit.test('Save user state after selection is changed. Deferred selection', fun
 
 QUnit.test('Save user state when columns changed', function(assert) {
     // arrange, act
-    var userState,
-        customSaveCallCount = 0;
+    let userState;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         sorting: { mode: 'single' },
@@ -1080,8 +1080,8 @@ QUnit.test('Save user state when columns changed', function(assert) {
 
 QUnit.test('Save user state when grouping a column', function(assert) {
     // arrange, act
-    var userState,
-        customSaveCallCount = 0;
+    let userState;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1123,8 +1123,8 @@ QUnit.test('Save user state when grouping a column', function(assert) {
 // T308264
 QUnit.test('Not save user state when the visibleWidth option in column changed', function(assert) {
     // arrange, act
-    var userState,
-        customSaveCallCount = 0;
+    let userState;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         sorting: { mode: 'single' },
@@ -1185,7 +1185,7 @@ QUnit.test('Not save user state when the visibleWidth option in column changed',
 // T140338
 QUnit.test('visible columns during state loading', function(assert) {
     // arrange, act
-    var d = $.Deferred();
+    const d = $.Deferred();
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1221,7 +1221,7 @@ QUnit.test('visible columns during state loading', function(assert) {
 // T354512
 QUnit.test('Update state when applying header filter', function(assert) {
     // arrange
-    var userState;
+    let userState;
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1283,7 +1283,7 @@ QUnit.test('Hide loading when dataSource is empty', function(assert) {
 
 // T668808
 QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
-    var generateDataSource = function(n) {
+    const generateDataSource = function(n) {
         return Array.apply(null, Array(n)).map(function(_, index) {
             return { id: index };
         });
@@ -1323,7 +1323,7 @@ QUnit.test('Render data when rowRenderingMode is virtual', function(assert) {
     this.gridView.update();
     this.clock.tick(200);
 
-    var $dataRows = this.gridView.element().find('tr.dx-data-row');
+    const $dataRows = this.gridView.element().find('tr.dx-data-row');
     assert.strictEqual(this.dataController.pageIndex(), 3);
     assert.strictEqual($dataRows.eq(0).text(), '6');
     assert.strictEqual($dataRows.length, 4);
@@ -1417,15 +1417,15 @@ QUnit.test('The filter should be cleared after resetting the grid\'s state', fun
 
 // T630977
 QUnit.test('Render columns when the stateStoring.enabled=true and dataSource is not defined', function(assert) {
-    var $testElement = $('#container'),
-        deferred = $.Deferred(),
-        columns = [{
-            dataField: 'field1',
-            dataType: 'string'
-        }, {
-            dataField: 'field2',
-            dataType: 'string'
-        }];
+    const $testElement = $('#container');
+    const deferred = $.Deferred();
+    const columns = [{
+        dataField: 'field1',
+        dataType: 'string'
+    }, {
+        dataField: 'field2',
+        dataType: 'string'
+    }];
     // arrange
     this.setupDataGridModules({
         columns: columns,
@@ -1449,8 +1449,8 @@ QUnit.test('Selected filter operation should be reset to the default state after
     fx.off = true;
 
     try {
-        var filterMenu,
-            filterMenuItem;
+        let filterMenu;
+        let filterMenuItem;
 
         this.$element = function() {
             return $('#container');
@@ -1503,10 +1503,10 @@ QUnit.test('ScrollTop should be correct after loading pageIndex from state', fun
     // arrange
     this.clock.restore();
 
-    var that = this,
-        scrollTop,
-        done = assert.async(),
-        $testElement = $('#container').height(60);
+    const that = this;
+    let scrollTop;
+    const done = assert.async();
+    const $testElement = $('#container').height(60);
 
     that.$element = function() {
         return $testElement;
@@ -1574,7 +1574,7 @@ QUnit.test('Load focusedRowKey state', function(assert) {
 
 QUnit.test('Save focused row state when data changed', function(assert) {
     // arrange, act
-    var userState;
+    let userState;
 
     this.setupDataGridModules({
         stateStoring: {
@@ -1618,9 +1618,9 @@ QUnit.test('Save focused row state when data changed', function(assert) {
 
 QUnit.test('customSave should not fired on render if state is not changed (T807890)', function(assert) {
     // arrange, act
-    var customSaveCallCount = 0;
+    let customSaveCallCount = 0;
 
-    var state = {
+    const state = {
         'columns': [{
             'visibleIndex': 0,
             'dataField': 'field1',
@@ -1657,7 +1657,7 @@ QUnit.test('customSave should not fired on render if state is not changed (T8078
 
 QUnit.test('customSave should fired on render if state is changed (T807890)', function(assert) {
     // arrange, act
-    var customSaveCallCount = 0;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: [{ field1: 1 }],
@@ -1680,7 +1680,7 @@ QUnit.test('customSave should fired on render if state is changed (T807890)', fu
 
 QUnit.test('customSave should not fired after refresh (T807890)', function(assert) {
     // arrange
-    var customSaveCallCount = 0;
+    let customSaveCallCount = 0;
 
     this.setupDataGridModules({
         dataSource: [{ field1: 1 }],

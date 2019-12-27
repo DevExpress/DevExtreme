@@ -12,9 +12,9 @@ import {
     SCROLLABLE_CONTENT_CLASS
 } from './scrollable.constants.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
                 <div class="content2"></div>\
@@ -34,10 +34,10 @@ var moduleConfig = {
     }
 };
 
-var getScrollOffset = function($scrollable) {
-    var $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        location = translator.locate($content);
+const getScrollOffset = function($scrollable) {
+    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const location = translator.locate($content);
 
     return {
         top: location.top - $container.scrollTop(),
@@ -48,7 +48,7 @@ var getScrollOffset = function($scrollable) {
 QUnit.module('actions', moduleConfig);
 
 QUnit.test('start action not fired after creation', function(assert) {
-    var started = 0;
+    let started = 0;
 
     $('#scrollable').dxScrollable({
         useNative: false,
@@ -61,9 +61,9 @@ QUnit.test('start action not fired after creation', function(assert) {
 });
 
 QUnit.test('start action fired once after several moves', function(assert) {
-    var started = 0;
+    let started = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStart: function() {
             started++;
@@ -81,9 +81,9 @@ QUnit.test('start action fired once after several moves', function(assert) {
 });
 
 QUnit.test('scroll action fired on every move', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onScroll: function() {
             scrolled++;
@@ -103,9 +103,9 @@ QUnit.test('scroll action fired on every move', function(assert) {
 });
 
 QUnit.test('scroll action fired on every content move during inertia', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onScroll: function() {
             scrolled++;
@@ -123,9 +123,9 @@ QUnit.test('scroll action fired on every content move during inertia', function(
 });
 
 QUnit.test('scroll action does not fire when location was not changed', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         bounceEnabled: false,
         onScroll: function() {
@@ -145,9 +145,9 @@ QUnit.test('scroll action does not fire when location was not changed', function
 });
 
 QUnit.test('end action fired on scroll end', function(assert) {
-    var end = 0;
+    let end = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         onEnd: function() {
@@ -165,9 +165,9 @@ QUnit.test('end action fired on scroll end', function(assert) {
 });
 
 QUnit.test('end action isn\'t fired without move', function(assert) {
-    var end = 0;
+    let end = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             end++;
@@ -183,15 +183,15 @@ QUnit.test('end action isn\'t fired without move', function(assert) {
 });
 
 QUnit.test('set actions by option', function(assert) {
-    var start = 0,
-        scroll = 0,
-        end = 0;
+    let start = 0;
+    let scroll = 0;
+    let end = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
-            useNative: false,
-            inertiaEnabled: false
-        }),
-        instance = $scrollable.dxScrollable('instance');
+    const $scrollable = $('#scrollable').dxScrollable({
+        useNative: false,
+        inertiaEnabled: false
+    });
+    const instance = $scrollable.dxScrollable('instance');
 
     instance.option('onStart', function(assert) { start++; });
     instance.option('onScroll', function(assert) { scroll++; });
@@ -209,9 +209,9 @@ QUnit.test('set actions by option', function(assert) {
 });
 
 QUnit.test('start not fired if event outside the scrollable', function(assert) {
-    var started = 0,
-        scrolled = 0,
-        ended = 0;
+    let started = 0;
+    let scrolled = 0;
+    let ended = 0;
 
     $('#scrollable').dxScrollable({
         useNative: false,
@@ -238,9 +238,9 @@ QUnit.test('start not fired if event outside the scrollable', function(assert) {
 });
 
 QUnit.test('scroll not fired without start', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onScroll: function() {
             scrolled++;
@@ -255,9 +255,9 @@ QUnit.test('scroll not fired without start', function(assert) {
 });
 
 QUnit.test('scroll not fired when start on another element', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onScroll: function() {
             scrolled++;
@@ -276,9 +276,9 @@ QUnit.test('scroll not fired when start on another element', function(assert) {
 });
 
 QUnit.test('scroll isn\'t fired when moving after finish of previous scrolling', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         inertiaEnabled: false,
         onScroll: function() {
@@ -298,9 +298,9 @@ QUnit.test('scroll isn\'t fired when moving after finish of previous scrolling',
 });
 
 QUnit.test('scroll action fired during native scroll', function(assert) {
-    var scrolled = 0;
+    let scrolled = 0;
 
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         inertiaEnabled: false,
         useNative: true,
         onScroll: function() {
@@ -314,20 +314,20 @@ QUnit.test('scroll action fired during native scroll', function(assert) {
 });
 
 QUnit.test('changing action option does not cause render', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false
     });
 
-    var $content = $scrollable.find('.' + SCROLLABLE_WRAPPER_CLASS),
-        mouse = pointerMock($content).start();
+    const $content = $scrollable.find('.' + SCROLLABLE_WRAPPER_CLASS);
+    const mouse = pointerMock($content).start();
 
     mouse
         .down()
         .move(0, -10);
 
-    var testAction = function(actionName) {
+    const testAction = function(actionName) {
         $scrollable.dxScrollable('option', actionName, noop);
-        var location = getScrollOffset($scrollable);
+        const location = getScrollOffset($scrollable);
         assert.equal(location.top, -10, actionName + ' case scrollable rerendered');
     };
 
@@ -347,8 +347,8 @@ QUnit.test('onStop action is called on `scrollable` stop (T818446)', function(as
         setTimeout(callback, 0);
     };
 
-    var stopCalled = false;
-    var $scrollable = $('#scrollable').dxScrollable({
+    let stopCalled = false;
+    const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onStop: function(e) {
             stopCalled = true;
@@ -356,7 +356,7 @@ QUnit.test('onStop action is called on `scrollable` stop (T818446)', function(as
         }
     });
 
-    let mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
+    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
 
     mouse
         .down()

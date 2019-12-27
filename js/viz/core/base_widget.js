@@ -1,34 +1,34 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    windowUtils = require('../../core/utils/window'),
-    domAdapter = require('../../core/dom_adapter'),
-    typeUtils = require('../../core/utils/type'),
-    each = require('../../core/utils/iterator').each,
-    version = require('../../core/version'),
-    _windowResizeCallbacks = require('../../core/utils/resize_callbacks'),
-    _stringFormat = require('../../core/utils/string').format,
-    _isObject = require('../../core/utils/type').isObject,
-    extend = require('../../core/utils/extend').extend,
-    themeManagerModule = require('../core/base_theme_manager'),
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const windowUtils = require('../../core/utils/window');
+const domAdapter = require('../../core/dom_adapter');
+const typeUtils = require('../../core/utils/type');
+const each = require('../../core/utils/iterator').each;
+const version = require('../../core/version');
+const _windowResizeCallbacks = require('../../core/utils/resize_callbacks');
+const _stringFormat = require('../../core/utils/string').format;
+const _isObject = require('../../core/utils/type').isObject;
+const extend = require('../../core/utils/extend').extend;
+const themeManagerModule = require('../core/base_theme_manager');
 
-    _floor = Math.floor,
-    DOMComponentWithTemplate = require('../../core/dom_component_with_template'),
-    helpers = require('./helpers'),
-    _parseScalar = require('./utils').parseScalar,
-    errors = require('./errors_warnings'),
-    _log = errors.log,
-    rendererModule = require('./renderers/renderer'),
+const _floor = Math.floor;
+const DOMComponentWithTemplate = require('../../core/dom_component_with_template');
+const helpers = require('./helpers');
+const _parseScalar = require('./utils').parseScalar;
+const errors = require('./errors_warnings');
+const _log = errors.log;
+const rendererModule = require('./renderers/renderer');
 
-    _Layout = require('./layout'),
+const _Layout = require('./layout');
 
-    devices = require('../../core/devices'),
-    eventsEngine = require('../../events/core/events_engine'),
+const devices = require('../../core/devices');
+const eventsEngine = require('../../events/core/events_engine');
 
-    OPTION_RTL_ENABLED = 'rtlEnabled',
+const OPTION_RTL_ENABLED = 'rtlEnabled';
 
-    SIZED_ELEMENT_CLASS = 'dx-sized-element',
+const SIZED_ELEMENT_CLASS = 'dx-sized-element';
 
-    _option = DOMComponentWithTemplate.prototype.option;
+const _option = DOMComponentWithTemplate.prototype.option;
 
 function getTrue() {
     return true;
@@ -44,11 +44,11 @@ function areCanvasesDifferent(canvas1, canvas2) {
 }
 
 function createResizeHandler(callback) {
-    var timeout,
-        handler = function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(callback, 100);
-        };
+    let timeout;
+    const handler = function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(callback, 100);
+    };
 
     handler.dispose = function() {
         clearTimeout(timeout);
@@ -64,7 +64,7 @@ function defaultOnIncidentOccurred(e) {
     }
 }
 
-var createIncidentOccurred = function(widgetName, eventTrigger) {
+let createIncidentOccurred = function(widgetName, eventTrigger) {
     return function incidentOccurred(id, args) {
         eventTrigger('incidentOccurred', {
             target: {
@@ -104,15 +104,15 @@ function pickPositiveValue(values) {
 //     }]
 
 
-var getEmptyComponent = function() {
-    var emptyComponentConfig = {
+const getEmptyComponent = function() {
+    const emptyComponentConfig = {
         _initTemplates() {},
         ctor(element, options) {
             this.callBase(element, options);
-            var sizedElement = domAdapter.createElement('div');
+            const sizedElement = domAdapter.createElement('div');
 
-            var width = options && typeUtils.isNumeric(options.width) ? options.width + 'px' : '100%';
-            var height = options && typeUtils.isNumeric(options.height) ? options.height + 'px' : this._getDefaultSize().height + 'px';
+            const width = options && typeUtils.isNumeric(options.width) ? options.width + 'px' : '100%';
+            const height = options && typeUtils.isNumeric(options.height) ? options.height + 'px' : this._getDefaultSize().height + 'px';
 
             domAdapter.setStyle(sizedElement, 'width', width);
             domAdapter.setStyle(sizedElement, 'height', height);
@@ -122,11 +122,11 @@ var getEmptyComponent = function() {
         }
     };
 
-    var EmptyComponent = DOMComponentWithTemplate.inherit(emptyComponentConfig);
-    var originalInherit = EmptyComponent.inherit;
+    const EmptyComponent = DOMComponentWithTemplate.inherit(emptyComponentConfig);
+    const originalInherit = EmptyComponent.inherit;
 
     EmptyComponent.inherit = function(config) {
-        for(var field in config) {
+        for(const field in config) {
             if(typeUtils.isFunction(config[field]) && field.substr(0, 1) !== '_' || field === '_dispose' || field === '_optionChanged') {
                 config[field] = noop;
             }
@@ -138,7 +138,7 @@ var getEmptyComponent = function() {
     return EmptyComponent;
 };
 
-var isServerSide = !windowUtils.hasWindow();
+const isServerSide = !windowUtils.hasWindow();
 
 function sizeIsValid(value) {
     return typeUtils.isDefined(value) && value > 0;
@@ -161,8 +161,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _useLinks: true,
 
     _init: function() {
-        var that = this,
-            linkTarget;
+        const that = this;
+        let linkTarget;
 
         that._$element.children('.' + SIZED_ELEMENT_CLASS).remove();
 
@@ -211,14 +211,14 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _initialChanges: ['LAYOUT', 'RESIZE_HANDLER', 'THEME', 'DISABLED'],
 
     _initPlugins: function() {
-        var that = this;
+        const that = this;
         each(that._plugins, function(_, plugin) {
             plugin.init.call(that);
         });
     },
 
     _disposePlugins: function() {
-        var that = this;
+        const that = this;
         each(that._plugins.slice().reverse(), function(_, plugin) {
             plugin.dispose.call(that);
         });
@@ -233,7 +233,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _resumeChanges: function() {
-        var that = this;
+        const that = this;
 
         if(--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
             that._renderer.lock();
@@ -252,8 +252,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _applyQueuedOptions: function() {
-        var that = this,
-            queue = that._optionsQueue;
+        const that = this;
+        const queue = that._optionsQueue;
 
         that._optionsQueue = null;
         that.beginUpdate();
@@ -270,11 +270,11 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _applyChanges: function() {
-        var that = this,
-            changes = that._changes,
-            order = that._totalChangesOrder,
-            i,
-            ii = order.length;
+        const that = this;
+        const changes = that._changes;
+        const order = that._totalChangesOrder;
+        let i;
+        const ii = order.length;
 
         for(i = 0; i < ii; ++i) {
             if(changes.has(order[i])) {
@@ -319,8 +319,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _change_DISABLED: function() {
-        var renderer = this._renderer,
-            root = renderer.root;
+        const renderer = this._renderer;
+        const root = renderer.root;
 
         if(this.option('disabled')) {
             this._initDisabledState = root.attr('pointer-events');
@@ -341,7 +341,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _themeDependentChanges: ['RENDERER'],
 
     _initRenderer: function() {
-        var that = this;
+        const that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
         that._canvas = that._calculateCanvas();
         that._renderer = new rendererModule.Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
@@ -367,8 +367,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _toggleParentsScrollSubscription: function(subscribe) {
-        var $parents = $(this._renderer.root.element).parents(),
-            scrollEvents = 'scroll.viz_widgets';
+        let $parents = $(this._renderer.root.element).parents();
+        const scrollEvents = 'scroll.viz_widgets';
 
         if(devices.real().platform === 'generic') {
             $parents = $parents.add(windowUtils.getWindow());
@@ -388,7 +388,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _stopCurrentHandling: noop,
 
     _dispose: function() {
-        var that = this;
+        const that = this;
         that.callBase.apply(that, arguments);
         that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
@@ -402,25 +402,25 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _initEventTrigger: function() {
-        var that = this;
+        const that = this;
         that._eventTrigger = createEventTrigger(that._eventsMap, function(name) { return that._createActionByOption(name); });
     },
 
     _calculateCanvas: function() {
-        var that = this,
-            size = that.option('size') || {},
-            margin = that.option('margin') || {},
-            defaultCanvas = that._getDefaultSize() || {},
-            elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0,
-            elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0,
-            canvas = {
-                width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
-                height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
-                left: pickPositiveValue([margin.left, defaultCanvas.left]),
-                top: pickPositiveValue([margin.top, defaultCanvas.top]),
-                right: pickPositiveValue([margin.right, defaultCanvas.right]),
-                bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom])
-            };
+        const that = this;
+        const size = that.option('size') || {};
+        const margin = that.option('margin') || {};
+        const defaultCanvas = that._getDefaultSize() || {};
+        const elementWidth = !sizeIsValid(size.width) && windowUtils.hasWindow() ? that._$element.width() : 0;
+        const elementHeight = !sizeIsValid(size.height) && windowUtils.hasWindow() ? that._$element.height() : 0;
+        let canvas = {
+            width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
+            height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
+            left: pickPositiveValue([margin.left, defaultCanvas.left]),
+            top: pickPositiveValue([margin.top, defaultCanvas.top]),
+            right: pickPositiveValue([margin.right, defaultCanvas.right]),
+            bottom: pickPositiveValue([margin.bottom, defaultCanvas.bottom])
+        };
         // This for backward compatibility - widget was not rendered when canvas is empty.
         // Now it will be rendered but because of "width" and "height" of the root both set to 0 it will not be visible.
         if(canvas.width - canvas.left - canvas.right <= 0 || canvas.height - canvas.top - canvas.bottom <= 0) {
@@ -430,8 +430,8 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _updateSize: function() {
-        var that = this,
-            canvas = that._calculateCanvas();
+        const that = this;
+        const canvas = that._calculateCanvas();
 
         that._renderer.fixPlacement();
         if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /* for charts */) {
@@ -451,10 +451,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _getAlignmentRect: noop,
 
     _setContentSize: function() {
-        var canvas = this._canvas,
-            layout = this._layout,
-            rect = canvas.width > 0 && canvas.height > 0 ? [canvas.left, canvas.top, canvas.width - canvas.right, canvas.height - canvas.bottom] : [0, 0, 0, 0],
-            nextRect;
+        const canvas = this._canvas;
+        const layout = this._layout;
+        let rect = canvas.width > 0 && canvas.height > 0 ? [canvas.left, canvas.top, canvas.width - canvas.right, canvas.height - canvas.bottom] : [0, 0, 0, 0];
+        let nextRect;
 
         rect = layout.forward(rect, this._getMinSize());
         nextRect = this._applySize(rect) || rect;
@@ -472,14 +472,14 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     ///#ENDDEBUG
 
     _getOption: function(name, isScalar) {
-        var theme = this._themeManager.theme(name),
-            option = this.option(name);
+        const theme = this._themeManager.theme(name);
+        const option = this.option(name);
         return isScalar ? (option !== undefined ? option : theme) : extend(true, {}, theme, option);
     },
 
     _setupResizeHandler: function() {
-        var that = this,
-            redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
+        const that = this;
+        const redrawOnResize = _parseScalar(this._getOption('redrawOnResize', true), true);
 
         if(that._resizeHandler) {
             that._removeResizeHandler();
@@ -507,7 +507,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _onBeginUpdate: noop,
 
     beginUpdate: function() {
-        var that = this;
+        const that = this;
         // The "_initialized" flag is checked because first time "beginUpdate" is called in the constructor.
         if(that._initialized && that._updateLockCount === 0) {
             that._onBeginUpdate();
@@ -518,7 +518,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     endUpdate: function() {
-        var that = this;
+        const that = this;
         that.callBase.apply(that, arguments);
         if(that._updateLockCount === 0) {
             that._resumeChanges();
@@ -527,7 +527,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     option: function(name) {
-        var that = this;
+        const that = this;
         // NOTE: `undefined` has to be returned because base option setter returns `undefined`.
         // `argument.length` and `isObject` checks are copypaste from Component.
         if(that._initialized && that._applyingChanges && (arguments.length > 1 || _isObject(name))) {
@@ -539,7 +539,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _getActionForUpdating: function(args) {
-        var that = this;
+        const that = this;
 
         return function() {
             _option.apply(that, args);
@@ -601,7 +601,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         const name = changedOption.name;
         const value = changedOption.value;
         const options = this._partialOptionChangesPath[name];
-        let partialChangeOptionsName = [];
+        const partialChangeOptionsName = [];
 
         if(options) {
             if(options === true) {
@@ -662,7 +662,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     getSize: function() {
-        var canvas = this._canvas || {};
+        const canvas = this._canvas || {};
         return { width: canvas.width, height: canvas.height };
     },
 
@@ -675,7 +675,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     },
 
     _drawn: function() {
-        var that = this;
+        const that = this;
         that.isReady = getFalse;
         if(that._dataIsReady()) {
             that._renderer.onEndAnimation(function() {
@@ -689,16 +689,16 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
 helpers.replaceInherit(module.exports);
 
 function createEventTrigger(eventsMap, callbackGetter) {
-    var triggers = {};
+    let triggers = {};
 
     each(eventsMap, function(name, info) {
         if(info.name) {
             createEvent(name);
         }
     });
-    var changes;
+    let changes;
     triggerEvent.change = function(name) {
-        var eventInfo = eventsMap[name];
+        const eventInfo = eventsMap[name];
         if(eventInfo) {
             (changes = changes || {})[name] = eventInfo;
         }
@@ -719,7 +719,7 @@ function createEventTrigger(eventsMap, callbackGetter) {
     return triggerEvent;
 
     function createEvent(name) {
-        var eventInfo = eventsMap[name];
+        const eventInfo = eventsMap[name];
 
         triggers[eventInfo.name] = callbackGetter(name);
     }

@@ -51,7 +51,7 @@ export function getMaxBound(arr) {
 }
 
 function getSelection(selectionMode) {
-    var selection = _normalizeEnum(selectionMode);
+    let selection = _normalizeEnum(selectionMode);
     selection = selection in SELECTIONS ? SELECTIONS[selection] : SELECTIONS.single;
     if(selection !== null) {
         selection = { state: {}, single: selection };
@@ -129,7 +129,7 @@ function isGeoJsonObject(obj) {
 // The problem is that when remote source returns an object (not an array) the data.DataSource internally wraps it into array (of one element)
 // So specific `if` clause is required to recognize GeoJson object in the returned `items`
 function unwrapFromDataSource(source) {
-    var sourceType;
+    let sourceType;
     if(source) {
         if(isGeoJsonObject(source)) {
             sourceType = GeoJsonSource;
@@ -170,7 +170,7 @@ function getDataValue(proxy, dataField) {
     return proxy.attribute(dataField);
 }
 
-var TYPE_TO_TYPE_MAP = {
+const TYPE_TO_TYPE_MAP = {
     Point: TYPE_MARKER,
     MultiPoint: TYPE_LINE,
     LineString: TYPE_LINE,
@@ -184,8 +184,8 @@ function pick(a, b) {
 }
 
 function guessTypeByData(sample) {
-    var type = TYPE_TO_TYPE_MAP[sample.type],
-        coordinates = sample.coordinates;
+    let type = TYPE_TO_TYPE_MAP[sample.type];
+    const coordinates = sample.coordinates;
     if(!type) {
         if(typeof coordinates[0] === 'number') {
             type = TYPE_MARKER;
@@ -198,11 +198,11 @@ function guessTypeByData(sample) {
     return type;
 }
 
-var selectStrategy = function(options, data) {
-    var type = _normalizeEnum(options.type),
-        elementType = _normalizeEnum(options.elementType),
-        sample,
-        strategy = _extend({}, emptyStrategy);
+let selectStrategy = function(options, data) {
+    let type = _normalizeEnum(options.type);
+    let elementType = _normalizeEnum(options.elementType);
+    let sample;
+    const strategy = _extend({}, emptyStrategy);
     if(data.count() > 0) {
         sample = data.geometry(data.item(0));
         type = strategiesByType[type] ? type : guessTypeByData(sample);
@@ -257,10 +257,10 @@ strategiesByType[TYPE_AREA] = {
     },
 
     getStyles: function(settings) {
-        var color = settings.color || null,
-            borderColor = settings.borderColor || null,
-            borderWidth = pick(settings.borderWidth, null),
-            opacity = pick(settings.opacity, null);
+        const color = settings.color || null;
+        const borderColor = settings.borderColor || null;
+        const borderWidth = pick(settings.borderWidth, null);
+        const opacity = pick(settings.opacity, null);
         return {
             root: [
                 { 'class': 'dxm-area', stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
@@ -302,9 +302,9 @@ strategiesByType[TYPE_LINE] = {
     },
 
     getStyles: function(settings) {
-        var color = settings.color || settings.borderColor || null,
-            width = pick(settings.borderWidth, null),
-            opacity = pick(settings.opacity, null);
+        const color = settings.color || settings.borderColor || null;
+        const width = pick(settings.borderWidth, null);
+        const opacity = pick(settings.opacity, null);
         return {
             root: [
                 { 'class': 'dxm-line', stroke: color, 'stroke-width': width, opacity: opacity },
@@ -346,7 +346,7 @@ strategiesByType[TYPE_MARKER] = {
     },
 
     getStyles: function(settings) {
-        var styles = {
+        const styles = {
             root: [
                 { 'class': 'dxm-marker' },
                 { 'class': 'dxm-marker dxm-marker-hovered' },
@@ -374,11 +374,11 @@ strategiesByType[TYPE_MARKER] = {
 
 var strategiesByGeometry = {};
 strategiesByGeometry[TYPE_AREA] = function(sample) {
-    var coordinates = sample.coordinates;
+    const coordinates = sample.coordinates;
     return { project: coordinates[0] && coordinates[0][0] && coordinates[0][0][0] && typeof coordinates[0][0][0][0] === 'number' ? projectMultiPolygon : projectPolygon };
 };
 strategiesByGeometry[TYPE_LINE] = function(sample) {
-    var coordinates = sample.coordinates;
+    const coordinates = sample.coordinates;
     return { project: coordinates[0] && coordinates[0][0] && typeof coordinates[0][0][0] === 'number' ? projectPolygon : projectLineString };
 };
 
@@ -406,17 +406,17 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         _getStyles: function(styles, style) {
-            var size = style.size > 0 ? _Number(style.size) : 0,
-                hoveredSize = size,
-                selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0),
-                hoveredBackSize = hoveredSize + (style.backStep > 0 ? _Number(style.backStep) : 0),
-                selectedBackSize = selectedSize + (style.backStep > 0 ? _Number(style.backStep) : 0),
-                color = style.color || null,
-                borderColor = style.borderColor || null,
-                borderWidth = pick(style.borderWidth, null),
-                opacity = pick(style.opacity, null),
-                backColor = style.backColor || null,
-                backOpacity = pick(style.backOpacity, null);
+            const size = style.size > 0 ? _Number(style.size) : 0;
+            const hoveredSize = size;
+            const selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0);
+            const hoveredBackSize = hoveredSize + (style.backStep > 0 ? _Number(style.backStep) : 0);
+            const selectedBackSize = selectedSize + (style.backStep > 0 ? _Number(style.backStep) : 0);
+            const color = style.color || null;
+            const borderColor = style.borderColor || null;
+            const borderWidth = pick(style.borderWidth, null);
+            const opacity = pick(style.opacity, null);
+            const backColor = style.backColor || null;
+            const backOpacity = pick(style.backOpacity, null);
             styles.dot = [
                 { r: size / 2, stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
                 { r: hoveredSize / 2, stroke: style.hoveredBorderColor || borderColor, 'stroke-width': pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || color, opacity: pick(style.hoveredOpacity, opacity) },
@@ -445,10 +445,10 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         _getStyles: function(styles, style) {
-            var color = style.color || null,
-                borderColor = style.borderColor || null,
-                borderWidth = pick(style.borderWidth, null),
-                opacity = pick(style.opacity, null);
+            const color = style.color || null;
+            const borderColor = style.borderColor || null;
+            const borderWidth = pick(style.borderWidth, null);
+            const opacity = pick(style.opacity, null);
             styles.bubble = [
                 { stroke: borderColor, 'stroke-width': borderWidth, fill: color, opacity: opacity },
                 { stroke: style.hoveredBorderColor || borderColor, 'stroke-width': pick(style.hoveredBorderWidth, borderWidth), fill: style.hoveredColor || style.color, opacity: pick(style.hoveredOpacity, opacity) },
@@ -461,17 +461,17 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         arrange: function(context, handles) {
-            var values = [],
-                i,
-                ii = values.length = handles.length,
-                settings = context.settings,
-                dataField = settings.dataField,
-                minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0,
-                maxSize = settings.maxSize > minSize ? _Number(settings.maxSize) : minSize,
-                minValue,
-                maxValue,
-                deltaValue,
-                deltaSize;
+            const values = [];
+            let i;
+            const ii = values.length = handles.length;
+            const settings = context.settings;
+            const dataField = settings.dataField;
+            const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
+            const maxSize = settings.maxSize > minSize ? _Number(settings.maxSize) : minSize;
+            let minValue;
+            let maxValue;
+            let deltaValue;
+            let deltaSize;
 
             if(settings.sizeGroups) {
                 return;
@@ -490,7 +490,7 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         updateGrouping: function(context) {
-            var dataField = context.settings.dataField;
+            const dataField = context.settings.dataField;
             strategiesByType[TYPE_MARKER].updateGrouping(context);
             groupBySize(context, function(proxy) {
                 return getDataValue(proxy, dataField);
@@ -505,16 +505,16 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         refresh: function(ctx, figure, data, proxy, settings) {
-            var values = getDataValue(proxy, ctx.settings.dataField) || [],
-                colors = settings._colors,
-                sum = 0,
-                pie = figure.pie,
-                renderer = ctx.renderer,
-                dataKey = ctx.dataKey,
-                r = (settings.size > 0 ? _Number(settings.size) : 0) / 2,
-                start = 90,
-                end = start,
-                zeroSum = false;
+            const values = getDataValue(proxy, ctx.settings.dataField) || [];
+            const colors = settings._colors;
+            let sum = 0;
+            const pie = figure.pie;
+            const renderer = ctx.renderer;
+            const dataKey = ctx.dataKey;
+            const r = (settings.size > 0 ? _Number(settings.size) : 0) / 2;
+            let start = 90;
+            let end = start;
+            let zeroSum = false;
 
             sum = values.reduce(function(total, item) {
                 return total + (item || 0);
@@ -534,9 +534,9 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         _getStyles: function(styles, style) {
-            var opacity = pick(style.opacity, null),
-                borderColor = style.borderColor || null,
-                borderWidth = pick(style.borderWidth, null);
+            const opacity = pick(style.opacity, null);
+            const borderColor = style.borderColor || null;
+            const borderWidth = pick(style.borderWidth, null);
             styles.pie = [
                 { opacity: opacity },
                 { opacity: pick(style.hoveredOpacity, opacity) },
@@ -555,12 +555,12 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         arrange: function(context, handles) {
-            var i,
-                ii = handles.length,
-                dataField = context.settings.dataField,
-                values,
-                count = 0,
-                palette;
+            let i;
+            const ii = handles.length;
+            const dataField = context.settings.dataField;
+            let values;
+            let count = 0;
+            let palette;
             for(i = 0; i < ii; ++i) {
                 values = getDataValue(handles[i].proxy, dataField);
                 if(values && values.length > count) {
@@ -591,10 +591,10 @@ strategiesByElementType[TYPE_MARKER] = {
         },
 
         _getStyles: function(styles, style) {
-            var size = style.size > 0 ? _Number(style.size) : 0,
-                hoveredSize = size + (style.hoveredStep > 0 ? _Number(style.hoveredStep) : 0),
-                selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0),
-                opacity = pick(style.opacity, null);
+            const size = style.size > 0 ? _Number(style.size) : 0;
+            const hoveredSize = size + (style.hoveredStep > 0 ? _Number(style.hoveredStep) : 0);
+            const selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0);
+            const opacity = pick(style.opacity, null);
             styles.image = [
                 { x: -size / 2, y: -size / 2, width: size, height: size, opacity: opacity },
                 { x: -hoveredSize / 2, y: -hoveredSize / 2, width: hoveredSize, height: hoveredSize, opacity: pick(style.hoveredOpacity, opacity) },
@@ -613,9 +613,9 @@ function projectPoint(projection, coordinates) {
 }
 
 function projectPointList(projection, coordinates) {
-    var output = [],
-        i,
-        ii = output.length = coordinates.length;
+    const output = [];
+    let i;
+    const ii = output.length = coordinates.length;
     for(i = 0; i < ii; ++i) {
         output[i] = projection.project(coordinates[i]);
     }
@@ -627,9 +627,9 @@ function projectLineString(projection, coordinates) {
 }
 
 function projectPolygon(projection, coordinates) {
-    var output = [],
-        i,
-        ii = output.length = coordinates.length;
+    const output = [];
+    let i;
+    const ii = output.length = coordinates.length;
     for(i = 0; i < ii; ++i) {
         output[i] = projectPointList(projection, coordinates[i]);
     }
@@ -637,9 +637,9 @@ function projectPolygon(projection, coordinates) {
 }
 
 function projectMultiPolygon(projection, coordinates) {
-    var output = [],
-        i,
-        ii = output.length = coordinates.length;
+    const output = [];
+    let i;
+    const ii = output.length = coordinates.length;
     for(i = 0; i < ii; ++i) {
         output[i] = projectPolygon(projection, coordinates[i]);
     }
@@ -647,16 +647,16 @@ function projectMultiPolygon(projection, coordinates) {
 }
 
 function transformPoint(content, projection, coordinates) {
-    var data = projection.transform(coordinates);
+    const data = projection.transform(coordinates);
     content.root.attr({ translateX: data[0], translateY: data[1] });
 }
 
 function transformList(projection, coordinates) {
-    var output = [],
-        i,
-        ii = coordinates.length,
-        item,
-        k = 0;
+    const output = [];
+    let i;
+    const ii = coordinates.length;
+    let item;
+    let k = 0;
     output.length = 2 * ii;
     for(i = 0; i < ii; ++i) {
         item = projection.transform(coordinates[i]);
@@ -667,9 +667,9 @@ function transformList(projection, coordinates) {
 }
 
 function transformPointList(content, projection, coordinates) {
-    var output = [],
-        i,
-        ii = output.length = coordinates.length;
+    const output = [];
+    let i;
+    const ii = output.length = coordinates.length;
     for(i = 0; i < ii; ++i) {
         output[i] = transformList(projection, coordinates[i]);
     }
@@ -677,21 +677,21 @@ function transformPointList(content, projection, coordinates) {
 }
 
 function transformAreaLabel(label, projection, coordinates) {
-    var data = projection.transform(coordinates[0]);
+    const data = projection.transform(coordinates[0]);
     label.spaceSize = projection.getSquareSize(coordinates[1]);
     label.text.attr({ translateX: data[0], translateY: data[1] });
     setAreaLabelVisibility(label);
 }
 
 function transformLineLabel(label, projection, coordinates) {
-    var data = projection.transform(coordinates[0]);
+    const data = projection.transform(coordinates[0]);
     label.spaceSize = projection.getSquareSize(coordinates[1]);
     label.text.attr({ translateX: data[0], translateY: data[1] });
     setLineLabelVisibility(label);
 }
 
 function getItemSettings(context, proxy, settings) {
-    var result = combineSettings(context.settings, settings);
+    const result = combineSettings(context.settings, settings);
     applyGrouping(context.grouping, proxy, result);
     if(settings.color === undefined && settings.paletteIndex >= 0) {
         result.color = result._colors[settings.paletteIndex];
@@ -701,7 +701,7 @@ function getItemSettings(context, proxy, settings) {
 
 function applyGrouping(grouping, proxy, settings) {
     _each(grouping, function(name, data) {
-        var index = findGroupingIndex(data.callback(proxy, data.field), data.partition);
+        const index = findGroupingIndex(data.callback(proxy, data.field), data.partition);
         if(index >= 0) {
             settings[name] = data.values[index];
         }
@@ -709,10 +709,10 @@ function applyGrouping(grouping, proxy, settings) {
 }
 
 function findGroupingIndex(value, partition) {
-    var start = 0,
-        end = partition.length - 1,
-        index = -1,
-        middle;
+    let start = 0;
+    let end = partition.length - 1;
+    let index = -1;
+    let middle;
     if(partition[start] <= value && value <= partition[end]) {
         if(value === partition[end]) {
             index = end - 1;
@@ -738,19 +738,19 @@ function raiseChanged(context, handle, state, name) {
 // This is required because `$.extend` cannot be used - because of the `options.data` which is commonly a very large array
 // TODO: Try to use our simple `extend` instead of `$.extend`
 function combineSettings(common, partial) {
-    var obj = _extend({}, common, partial);
+    const obj = _extend({}, common, partial);
     obj.label = _extend({}, common.label, obj.label);
     obj.label.font = _extend({}, common.label.font, obj.label.font);
     return obj;
 }
 
 function processCommonSettings(context, options) {
-    var themeManager = context.params.themeManager,
-        strategy = context.str,
-        settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme('layer:' + strategy.fullType)), options),
-        colors,
-        i,
-        palette;
+    const themeManager = context.params.themeManager;
+    const strategy = context.str;
+    const settings = combineSettings(_extend({ label: {}, color: strategy.getDefaultColor(context, options.palette) }, themeManager.theme('layer:' + strategy.fullType)), options);
+    let colors;
+    let i;
+    let palette;
     if(settings.paletteSize > 0) {
         palette = themeManager.createDiscretePalette(settings.palette, settings.paletteSize);
         for(i = 0, colors = []; i < settings.paletteSize; ++i) {
@@ -765,8 +765,8 @@ function valueCallback(proxy, dataField) {
     return proxy.attribute(dataField);
 }
 
-var performGrouping = function(context, partition, settingField, dataField, valuesCallback) {
-    var values;
+let performGrouping = function(context, partition, settingField, dataField, valuesCallback) {
+    let values;
     if(dataField && partition && partition.length > 1) {
         values = valuesCallback(partition.length - 1);
         context.grouping[settingField] = {
@@ -780,8 +780,8 @@ var performGrouping = function(context, partition, settingField, dataField, valu
 };
 
 function dropGrouping(context) {
-    var name = context.name,
-        dataExchanger = context.params.dataExchanger;
+    const name = context.name;
+    const dataExchanger = context.params.dataExchanger;
     _each(context.grouping, function(field) {
         dataExchanger.set(name, field, null);
     });
@@ -790,9 +790,9 @@ function dropGrouping(context) {
 
 var groupByColor = function(context) {
     performGrouping(context, context.settings.colorGroups, 'color', context.settings.colorGroupingField, function(count) {
-        var _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count),
-            i,
-            list = [];
+        const _palette = context.params.themeManager.createDiscretePalette(context.settings.palette, count);
+        let i;
+        const list = [];
         for(i = 0; i < count; ++i) {
             list.push(_palette.getColor(i));
         }
@@ -801,12 +801,12 @@ var groupByColor = function(context) {
 };
 
 var groupBySize = function(context, valueCallback) {
-    var settings = context.settings;
+    const settings = context.settings;
     performGrouping(context, settings.sizeGroups, 'size', valueCallback || settings.sizeGroupingField, function(count) {
-        var minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0,
-            maxSize = settings.maxSize >= minSize ? _Number(settings.maxSize) : 0,
-            i = 0,
-            sizes = [];
+        const minSize = settings.minSize > 0 ? _Number(settings.minSize) : 0;
+        const maxSize = settings.maxSize >= minSize ? _Number(settings.maxSize) : 0;
+        let i = 0;
+        const sizes = [];
         if(count > 1) {
             for(i = 0; i < count; ++i) {
                 sizes.push((minSize * (count - i - 1) + maxSize * i) / (count - 1));
@@ -857,8 +857,8 @@ function createLayerProxy(layer, name, index) {
     return proxy;
 }
 
-var MapLayer = function(params, container, name, index) {
-    var that = this;
+let MapLayer = function(params, container, name, index) {
+    const that = this;
     that._params = params;
     that._onProjection();
     that.proxy = createLayerProxy(that, name, index);
@@ -893,7 +893,7 @@ MapLayer.prototype = _extend({
     },
 
     _onProjection: function() {
-        var that = this;
+        const that = this;
         that._removeHandlers = that._params.projection.on({
             'engine': function() {
                 that._project();
@@ -919,7 +919,7 @@ MapLayer.prototype = _extend({
     },
 
     _dataSourceChangedHandler: function() {
-        var that = this;
+        const that = this;
         that._data = unwrapFromDataSource(that._dataSource && that._dataSource.items());
         that._update(true);
     },
@@ -938,7 +938,7 @@ MapLayer.prototype = _extend({
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._disposeDataSource();
         that._destroyHandles();
         dropGrouping(that._context);
@@ -957,7 +957,7 @@ MapLayer.prototype = _extend({
     ///#ENDDEBUG
 
     setOptions: function(options) {
-        var that = this;
+        const that = this;
         options = that._options = options || {};
         that._dataSourceLoaded = new DeferredModule.Deferred();
         if('dataSource' in options && options.dataSource !== that._options_dataSource) {
@@ -974,8 +974,8 @@ MapLayer.prototype = _extend({
     },
 
     _update: function(isContextChanged) {
-        var that = this,
-            context = that._context;
+        const that = this;
+        const context = that._context;
         if(isContextChanged) {
             context.str.reset(context);
             context.root.clear();
@@ -1048,16 +1048,16 @@ MapLayer.prototype = _extend({
     },
 
     _createHandles: function() {
-        var that = this,
-            handles = that._handles = [],
-            data = that._data,
-            i,
-            ii = handles.length = data.count(),
-            context = that._context,
-            geometry = data.geometry,
-            attributes = data.attributes,
-            handle,
-            dataItem;
+        const that = this;
+        const handles = that._handles = [];
+        const data = that._data;
+        let i;
+        const ii = handles.length = data.count();
+        const context = that._context;
+        const geometry = data.geometry;
+        const attributes = data.attributes;
+        let handle;
+        let dataItem;
         for(i = 0; i < ii; ++i) {
             dataItem = data.item(i);
             handles[i] = new MapLayerElement(context, i, geometry(dataItem), attributes(dataItem));
@@ -1079,9 +1079,9 @@ MapLayer.prototype = _extend({
     },
 
     _updateHandles: function() {
-        var handles = this._handles,
-            i,
-            ii = handles.length;
+        const handles = this._handles;
+        let i;
+        const ii = handles.length;
         for(i = 0; i < ii; ++i) {
             handles[i].refresh();
         }
@@ -1096,24 +1096,24 @@ MapLayer.prototype = _extend({
     },
 
     _transformCore: function() {
-        var transform = this._params.projection.getTransform();
+        const transform = this._params.projection.getTransform();
         this._context.root.attr(transform);
         this._context.labelRoot && this._context.labelRoot.attr(transform);
     },
 
     _project: function() {
-        var handles = this._handles,
-            i,
-            ii = handles.length;
+        const handles = this._handles;
+        let i;
+        const ii = handles.length;
         for(i = 0; i < ii; ++i) {
             handles[i].project();
         }
     },
 
     _transform: function() {
-        var handles = this._handles,
-            i,
-            ii = handles.length;
+        const handles = this._handles;
+        let i;
+        const ii = handles.length;
         this._transformCore();
         for(i = 0; i < ii; ++i) {
             handles[i].transform();
@@ -1144,7 +1144,7 @@ MapLayer.prototype = _extend({
     },
 
     clearSelection: function() {
-        var selection = this._context.selection;
+        const selection = this._context.selection;
         if(selection) {
             _each(selection.state, function(_, handle) {
                 handle && handle.setSelected(false);
@@ -1187,8 +1187,8 @@ function createProxy(handle, coords, attrs) {
 }
 
 var MapLayerElement = function(context, index, geometry, attributes) {
-    var that = this,
-        proxy = that.proxy = createProxy(that, geometry.coordinates, _extend({}, attributes));
+    const that = this;
+    const proxy = that.proxy = createProxy(that, geometry.coordinates, _extend({}, attributes));
     that._ctx = context;
     that._index = index;
     that._fig = that._label = null;
@@ -1206,13 +1206,13 @@ MapLayerElement.prototype = {
     constructor: MapLayerElement,
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._ctx = that.proxy = that._settings = that._fig = that._label = that.data = null;
         return that;
     },
 
     project: function() {
-        var context = this._ctx;
+        const context = this._ctx;
         this._projection = context.str.project(context.projection, this._coordinates);
         if(context.hasSeparateLabel && this._label) {
             this._projectLabel();
@@ -1224,15 +1224,15 @@ MapLayerElement.prototype = {
     },
 
     draw: function() {
-        var that = this,
-            context = this._ctx;
+        const that = this;
+        const context = this._ctx;
         context.str.draw(context, that._fig = {}, that._data);
         that._fig.root.append(context.root);
     },
 
     transform: function() {
-        var that = this,
-            context = that._ctx;
+        const that = this;
+        const context = that._ctx;
         context.str.transform(that._fig, context.projection, that._projection);
         if(context.hasSeparateLabel && that._label) {
             that._transformLabel();
@@ -1244,9 +1244,9 @@ MapLayerElement.prototype = {
     },
 
     refresh: function() {
-        var that = this,
-            strategy = that._ctx.str,
-            settings = getItemSettings(that._ctx, that.proxy, that._settings);
+        const that = this;
+        const strategy = that._ctx.str;
+        const settings = getItemSettings(that._ctx, that.proxy, that._settings);
         that._styles = strategy.getStyles(settings);
         strategy.refresh(that._ctx, that._fig, that._data, that.proxy, settings);
         that._refreshLabel(settings);
@@ -1254,10 +1254,10 @@ MapLayerElement.prototype = {
     },
 
     _refreshLabel: function(settings) {
-        var that = this,
-            context = that._ctx,
-            labelSettings = settings.label,
-            label = that._label;
+        const that = this;
+        const context = that._ctx;
+        const labelSettings = settings.label;
+        let label = that._label;
         if(context.settings.label.enabled) {
             if(!label) {
                 label = that._label = {
@@ -1290,8 +1290,8 @@ MapLayerElement.prototype = {
     },
 
     measureLabel: function() {
-        var label = this._label,
-            bBox;
+        const label = this._label;
+        let bBox;
         if(label.value) {
             bBox = label.text.getBBox();
             label.size = [bBox.width, bBox.height, -bBox.y - bBox.height / 2];
@@ -1299,8 +1299,8 @@ MapLayerElement.prototype = {
     },
 
     adjustLabel: function() {
-        var label = this._label,
-            offset;
+        const label = this._label;
+        let offset;
         if(label.value) {
             offset = this._ctx.str.getLabelOffset(label, label.settings);
             label.settings = null;
@@ -1309,7 +1309,7 @@ MapLayerElement.prototype = {
     },
 
     update: function(settings) {
-        var that = this;
+        const that = this;
         that._settings = combineSettings(that._settings, settings);
         // This check is required because the method can be called during the customization stage when DOM content neither is created nor should be changed
         if(that._fig) {
@@ -1326,15 +1326,15 @@ MapLayerElement.prototype = {
     },
 
     _setForeground: function() {
-        var root = this._fig.root;
+        const root = this._fig.root;
 
         this._state ? root.toForeground() : root.toBackground();
     },
 
     setHovered: function(state) {
-        var that = this,
-            currentState = hasFlag(that._state, STATE_HOVERED),
-            newState = !!state;
+        const that = this;
+        const currentState = hasFlag(that._state, STATE_HOVERED);
+        const newState = !!state;
         if(that._ctx.hover && currentState !== newState) {
             that._state = setFlag(that._state, STATE_HOVERED, newState);
             that._setState();
@@ -1345,11 +1345,11 @@ MapLayerElement.prototype = {
     },
 
     setSelected: function(state, _noEvent) {
-        var that = this,
-            currentState = hasFlag(that._state, STATE_SELECTED),
-            newState = !!state,
-            selection = that._ctx.selection,
-            tmp;
+        const that = this;
+        const currentState = hasFlag(that._state, STATE_SELECTED);
+        const newState = !!state;
+        const selection = that._ctx.selection;
+        let tmp;
         if(selection && currentState !== newState) {
             that._state = setFlag(that._state, STATE_SELECTED, newState);
             tmp = selection.state[selection.single];
@@ -1384,18 +1384,18 @@ MapLayerElement.prototype = {
 
 // http://en.wikipedia.org/wiki/Centroid
 function calculatePolygonCentroid(coordinates) {
-    var i,
-        length = coordinates.length,
-        v1,
-        v2 = coordinates[length - 1],
-        cross,
-        cx = 0,
-        cy = 0,
-        area = 0,
-        minX = Infinity,
-        maxX = -Infinity,
-        minY = Infinity,
-        maxY = -Infinity;
+    let i;
+    const length = coordinates.length;
+    let v1;
+    let v2 = coordinates[length - 1];
+    let cross;
+    let cx = 0;
+    let cy = 0;
+    let area = 0;
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
 
     for(i = 0; i < length; ++i) {
         v1 = v2;
@@ -1421,17 +1421,17 @@ function calculatePolygonCentroid(coordinates) {
 }
 
 function calculateLineStringData(coordinates) {
-    var i,
-        ii = coordinates.length,
-        v1,
-        v2 = coordinates[0] || [],
-        totalLength = 0,
-        items = [0],
-        min0 = v2[0],
-        max0 = v2[0],
-        min1 = v2[1],
-        max1 = v2[1],
-        t;
+    let i;
+    const ii = coordinates.length;
+    let v1;
+    let v2 = coordinates[0] || [];
+    let totalLength = 0;
+    const items = [0];
+    let min0 = v2[0];
+    let max0 = v2[0];
+    let min1 = v2[1];
+    let max1 = v2[1];
+    let t;
 
     for(i = 1; i < ii; ++i) {
         v1 = v2;
@@ -1463,11 +1463,11 @@ function calculateLineStringData(coordinates) {
 // There are redundant iterations in the following cycle - interior holes of a polygon should not be taken into account
 // So there is only centroid to be calculated for each "Polygon"
 function projectAreaLabel(coordinates) {
-    var i,
-        ii = coordinates.length,
-        centroid,
-        resultCentroid,
-        maxArea = 0;
+    let i;
+    const ii = coordinates.length;
+    let centroid;
+    let resultCentroid;
+    let maxArea = 0;
 
     for(i = 0; i < ii; ++i) {
         centroid = calculatePolygonCentroid(coordinates[i]);
@@ -1481,11 +1481,11 @@ function projectAreaLabel(coordinates) {
 }
 
 function projectLineLabel(coordinates) {
-    var i,
-        ii = coordinates.length,
-        maxLength = 0,
-        data,
-        resultData;
+    let i;
+    const ii = coordinates.length;
+    let maxLength = 0;
+    let data;
+    let resultData;
 
     for(i = 0; i < ii; ++i) {
         data = calculateLineStringData(coordinates[i]);
@@ -1498,8 +1498,8 @@ function projectLineLabel(coordinates) {
 }
 
 export function MapLayerCollection(params) {
-    var that = this,
-        renderer = params.renderer;
+    const that = this;
+    const renderer = params.renderer;
     that._params = params;
     that._layers = [];
     // TODO: Use Set instance instead of plain object
@@ -1516,7 +1516,7 @@ MapLayerCollection.prototype = {
     constructor: MapLayerCollection,
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._clip.dispose();
         that._layers.forEach(l => l.dispose());
         that._offTracker();
@@ -1524,12 +1524,12 @@ MapLayerCollection.prototype = {
     },
 
     _subscribeToTracker: function(tracker, renderer, eventTrigger) {
-        var that = this;
+        const that = this;
         that._offTracker = tracker.on({
             'click': function(arg) {
                 // TODO: Adjust `x` and `y` inside the Tracker
-                var offset = renderer.getRootOffset(),
-                    layer = that.byName(arg.data.name);
+                const offset = renderer.getRootOffset();
+                const layer = that.byName(arg.data.name);
                 arg.$event.x = arg.x - offset.left;
                 arg.$event.y = arg.y - offset.top;
                 // TODO: Remove the "raiseClick" method
@@ -1540,13 +1540,13 @@ MapLayerCollection.prototype = {
                 }
             },
             'hover-on': function(arg) {
-                var layer = that.byName(arg.data.name);
+                const layer = that.byName(arg.data.name);
                 if(layer) {
                     layer.hoverItem(arg.data.index, true);
                 }
             },
             'hover-off': function(arg) {
-                var layer = that.byName(arg.data.name);
+                const layer = that.byName(arg.data.name);
                 if(layer) {
                     layer.hoverItem(arg.data.index, false);
                 }
@@ -1587,8 +1587,8 @@ MapLayerCollection.prototype = {
     },
 
     _updateClip: function() {
-        var rect = this._rect,
-            bw = this._borderWidth;
+        const rect = this._rect;
+        const bw = this._borderWidth;
         this._clip.attr({ x: rect[0] + bw, y: rect[1] + bw, width: _max(rect[2] - bw * 2, 0), height: _max(rect[3] - bw * 2, 0) });
     },
 

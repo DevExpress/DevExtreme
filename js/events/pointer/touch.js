@@ -1,9 +1,9 @@
-var devices = require('../../core/devices'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    BaseStrategy = require('./base');
+const devices = require('../../core/devices');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const BaseStrategy = require('./base');
 
-var eventMap = {
+const eventMap = {
     'dxpointerdown': 'touchstart',
     'dxpointermove': 'touchmove',
     'dxpointerup': 'touchend',
@@ -15,8 +15,8 @@ var eventMap = {
 };
 
 
-var normalizeTouchEvent = function(e) {
-    var pointers = [];
+const normalizeTouchEvent = function(e) {
+    const pointers = [];
 
     each(e.touches, function(_, touch) {
         pointers.push(extend({
@@ -30,11 +30,11 @@ var normalizeTouchEvent = function(e) {
     };
 };
 
-var skipTouchWithSameIdentifier = function(pointerEvent) {
+const skipTouchWithSameIdentifier = function(pointerEvent) {
     return devices.real().platform === 'ios' && (pointerEvent === 'dxpointerdown' || pointerEvent === 'dxpointerup');
 };
 
-var TouchStrategy = BaseStrategy.inherit({
+const TouchStrategy = BaseStrategy.inherit({
 
     ctor: function() {
         this.callBase.apply(this, arguments);
@@ -43,7 +43,7 @@ var TouchStrategy = BaseStrategy.inherit({
 
     _handler: function(e) {
         if(skipTouchWithSameIdentifier(this._eventName)) {
-            var touch = e.changedTouches[0];
+            const touch = e.changedTouches[0];
 
             if(this._pointerId === touch.identifier && this._pointerId !== 0) {
                 return;

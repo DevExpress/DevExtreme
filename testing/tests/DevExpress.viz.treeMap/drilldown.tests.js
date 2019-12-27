@@ -1,5 +1,5 @@
-var common = require('./commonParts/common.js'),
-    $ = require('jquery');
+const common = require('./commonParts/common.js');
+const $ = require('jquery');
 
 require('viz/tree_map/drilldown');
 
@@ -13,19 +13,19 @@ QUnit.module('Drilldown', $.extend({
 }, common.environment));
 
 QUnit.test('Drilldown to node', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.create({
-            dataSource: [{
-                items: [{
-                    value: 2
-                }, {
-                    value: 1
-                }]
+    const spy = sinon.spy();
+    const widget = this.create({
+        dataSource: [{
+            items: [{
+                value: 2
             }, {
                 value: 1
-            }],
-            onDrill: spy
-        });
+            }]
+        }, {
+            value: 1
+        }],
+        onDrill: spy
+    });
     this.renderer.simpleRect.reset();
 
     widget.getRootNode().getChild(0).drillDown();
@@ -38,21 +38,21 @@ QUnit.test('Drilldown to node', function(assert) {
 });
 
 QUnit.test('Drilldown to sibling', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.create({
-            dataSource: [{
-                items: [{
-                    value: 2
-                }, {
-                    value: 1
-                }]
+    const spy = sinon.spy();
+    const widget = this.create({
+        dataSource: [{
+            items: [{
+                value: 2
             }, {
-                items: [{
-                    value: 1
-                }]
-            }],
-            onDrill: spy
-        });
+                value: 1
+            }]
+        }, {
+            items: [{
+                value: 1
+            }]
+        }],
+        onDrill: spy
+    });
     widget.getRootNode().getChild(0).drillDown();
     this.renderer.simpleRect.reset();
     spy.reset();
@@ -66,19 +66,19 @@ QUnit.test('Drilldown to sibling', function(assert) {
 });
 
 QUnit.test('Drilldown to leaf', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.create({
-            dataSource: [{
-                items: [{
-                    value: 2
-                }, {
-                    value: 1
-                }]
+    const spy = sinon.spy();
+    const widget = this.create({
+        dataSource: [{
+            items: [{
+                value: 2
             }, {
                 value: 1
-            }],
-            onDrill: spy
-        });
+            }]
+        }, {
+            value: 1
+        }],
+        onDrill: spy
+    });
     this.renderer.simpleRect.reset();
 
     widget.getRootNode().getChild(1).drillDown();
@@ -89,21 +89,21 @@ QUnit.test('Drilldown to leaf', function(assert) {
 });
 
 QUnit.test('Reset drilldown', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.create({
-            dataSource: [{
+    const spy = sinon.spy();
+    const widget = this.create({
+        dataSource: [{
+            items: [{
                 items: [{
-                    items: [{
-                        value: 2
-                    }]
-                }, {
-                    value: 1
+                    value: 2
                 }]
             }, {
                 value: 1
-            }],
-            onDrill: spy
-        });
+            }]
+        }, {
+            value: 1
+        }],
+        onDrill: spy
+    });
     widget.getRootNode().getChild(0).getChild(0).drillDown();
     this.renderer.simpleRect.reset();
     spy.reset();
@@ -118,21 +118,21 @@ QUnit.test('Reset drilldown', function(assert) {
 });
 
 QUnit.test('Drill up', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.create({
-            dataSource: [{
+    const spy = sinon.spy();
+    const widget = this.create({
+        dataSource: [{
+            items: [{
                 items: [{
-                    items: [{
-                        value: 2
-                    }]
-                }, {
-                    value: 1
+                    value: 2
                 }]
             }, {
                 value: 1
-            }],
-            onDrill: spy
-        });
+            }]
+        }, {
+            value: 1
+        }],
+        onDrill: spy
+    });
     widget.getRootNode().getChild(0).getChild(0).drillDown();
     this.renderer.simpleRect.reset();
     spy.reset();

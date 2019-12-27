@@ -65,8 +65,8 @@ class DiagramContextMenu extends Widget {
         });
     }
     _getItems(commands, onlyVisible) {
-        var items = [];
-        var beginGroup = false;
+        const items = [];
+        let beginGroup = false;
         commands.forEach(function(command) {
             if(command.widget === 'separator') {
                 beginGroup = true;
@@ -92,7 +92,7 @@ class DiagramContextMenu extends Widget {
             if(!selection) {
                 selection = { x, y, width: 0, height: 0 };
             }
-            var widthCorrection = selection.width > DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH ? 0 : (DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH - selection.width) / 2;
+            const widthCorrection = selection.width > DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH ? 0 : (DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH - selection.width) / 2;
             this._$contextMenuTargetElement.css({
                 left: selection.x - widthCorrection,
                 top: selection.y - DIAGRAM_TOUCHBAR_Y_OFFSET,
@@ -111,7 +111,7 @@ class DiagramContextMenu extends Widget {
         this._contextMenuInstance.hide();
     }
     _onItemClick(itemData) {
-        var processed = false;
+        let processed = false;
         if(this._onItemClickAction) {
             processed = this._onItemClickAction(itemData);
         }
@@ -132,7 +132,7 @@ class DiagramContextMenu extends Widget {
     }
     _setItemVisible(key, visible) {
         if(key in this._commandToIndexMap) {
-            var command = this._commands[this._commandToIndexMap[key]];
+            const command = this._commands[this._commandToIndexMap[key]];
             if(command) command.visible = visible;
         }
     }

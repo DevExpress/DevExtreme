@@ -270,17 +270,17 @@ class FallbackLayoutStrategy {
                 break;
             case 'end':
                 each($items, function() {
-                    const $item = $(this),
-                        itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
-                        shift = size - itemSize;
+                    const $item = $(this);
+                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
+                    const shift = size - itemSize;
                     $item.css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift);
                 });
                 break;
             case 'center':
                 each($items, function() {
-                    const $item = $(this),
-                        itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
-                        shift = 0.5 * (size - itemSize);
+                    const $item = $(this);
+                    const itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]]();
+                    const shift = 0.5 * (size - itemSize);
                     $item
                         .css(that._chooseMarginSide(FALLBACK_CROSS_PRE_MARGIN_MAP[direction]), shift)
                         .css(that._chooseMarginSide(FALLBACK_CROSS_POST_MARGIN_MAP[direction]), shift);
@@ -336,11 +336,11 @@ class FallbackLayoutStrategy {
 
         const freeSpaceSize = this._boxSize() - totalBaseSize;
         const itemSize = $item => {
-            const itemData = $item.data(BOX_ITEM_DATA_KEY),
-                size = this._baseSize($item),
-                factor = (freeSpaceSize >= 0) ? itemData.ratio || 0 : (isDefined(itemData.shrink) ? itemData.shrink : SHRINK) * size,
-                totalFactor = (freeSpaceSize >= 0) ? totalRatio : totalWeightedShrink,
-                shift = totalFactor ? Math.round(freeSpaceSize * factor / totalFactor) : 0;
+            const itemData = $item.data(BOX_ITEM_DATA_KEY);
+            const size = this._baseSize($item);
+            const factor = (freeSpaceSize >= 0) ? itemData.ratio || 0 : (isDefined(itemData.shrink) ? itemData.shrink : SHRINK) * size;
+            const totalFactor = (freeSpaceSize >= 0) ? totalRatio : totalWeightedShrink;
+            const shift = totalFactor ? Math.round(freeSpaceSize * factor / totalFactor) : 0;
 
             return size + shift;
         };

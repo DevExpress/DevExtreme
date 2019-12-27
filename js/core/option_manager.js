@@ -4,9 +4,9 @@ import typeUtils from './utils/type';
 import { noop } from './utils/common';
 import { extend } from './utils/extend';
 
-let cachedDeprecateNames = [];
-let cachedGetters = {};
-let cachedSetters = {};
+const cachedDeprecateNames = [];
+const cachedGetters = {};
+const cachedSetters = {};
 
 export class OptionManager {
     constructor(options, optionsByReference, deprecatedOptions) {

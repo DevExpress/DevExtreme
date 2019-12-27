@@ -7,61 +7,61 @@ import dragEvents from 'events/drag';
 
 const Translator = vizMocks.stubClass(translator2DModule.Translator2D);
 
-var canvas = {
-        top: 10,
-        bottom: 15,
-        left: 20,
-        right: 25,
-        width: 600,
-        height: 400
+const canvas = {
+    top: 10,
+    bottom: 15,
+    left: 20,
+    right: 25,
+    width: 600,
+    height: 400
+};
+const range = {
+    min: 10,
+    max: 100,
+    minVisible: 30,
+    maxVisible: 90,
+    categories: [],
+    visibleCategories: [],
+    inverted: true
+};
+const environment = {
+    beforeEach: function() {
+        this.renderer = new vizMocks.Renderer();
+
+        this.group = this.renderer.g();
+
+        sinon.stub(translator2DModule, 'Translator2D', function() {
+            const stub = new Translator();
+            stub.getScale = sinon.stub().returns(1);
+            stub.stub('getCanvasVisibleArea');
+            return stub;
+        });
+
+        this.options = {
+            rotated: false,
+            color: 'fill',
+            width: 10,
+            offset: 5,
+            opacity: 0.5,
+            visible: true
+        };
     },
-    range = {
-        min: 10,
-        max: 100,
-        minVisible: 30,
-        maxVisible: 90,
-        categories: [],
-        visibleCategories: [],
-        inverted: true
-    },
-    environment = {
-        beforeEach: function() {
-            this.renderer = new vizMocks.Renderer();
 
-            this.group = this.renderer.g();
+    afterEach: function() {
+        this.renderer.dispose();
+        this.renderer = null;
+        this.options = null;
+        translator2DModule.Translator2D.restore();
+    }
 
-            sinon.stub(translator2DModule, 'Translator2D', function() {
-                var stub = new Translator();
-                stub.getScale = sinon.stub().returns(1);
-                stub.stub('getCanvasVisibleArea');
-                return stub;
-            });
-
-            this.options = {
-                rotated: false,
-                color: 'fill',
-                width: 10,
-                offset: 5,
-                opacity: 0.5,
-                visible: true
-            };
-        },
-
-        afterEach: function() {
-            this.renderer.dispose();
-            this.renderer = null;
-            this.options = null;
-            translator2DModule.Translator2D.restore();
-        }
-
-    };
+};
 
 QUnit.module('dxChart scrollBar', environment);
 
 QUnit.test('create scrollBar', function(assert) {
-    var group = new vizMocks.Element(),
-        // act
-        scrollBar = new ScrollBar(this.renderer, group);
+    const group = new vizMocks.Element();
+    // act
+    const scrollBar = new ScrollBar(this.renderer, group);
     // assert
     assert.ok(scrollBar);
     assert.ok(translator2DModule.Translator2D.calledOnce);
@@ -75,14 +75,14 @@ QUnit.test('create scrollBar', function(assert) {
 });
 
 QUnit.test('init scrollBar', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group);
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
     scrollBar.update(this.options).updateSize(canvas);
     // act
     scrollBar.init(range, false);
     // Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
-    var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     assert.ok(scrollTranslator.update.calledOnce);
 
@@ -102,15 +102,15 @@ QUnit.test('init scrollBar', function(assert) {
 });
 
 QUnit.test('init scrollBar. Rotated', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group);
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
     scrollBar.update(this.options).updateSize(canvas);
     // act
     scrollBar.init(range, false);
     // Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
-    var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     assert.ok(scrollTranslator.update.calledOnce);
 
@@ -130,16 +130,16 @@ QUnit.test('init scrollBar. Rotated', function(assert) {
 });
 
 QUnit.test('init scrollBar. Remove min and max ', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        discreteRange = $.extend({}, range, { axisType: 'discrete' });
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const discreteRange = $.extend({}, range, { axisType: 'discrete' });
     scrollBar.update(this.options).updateSize(canvas);
 
     // act
     scrollBar.init(discreteRange, false);
     // Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
-    var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     assert.ok(scrollTranslator.update.calledOnce);
 
@@ -159,8 +159,8 @@ QUnit.test('init scrollBar. Remove min and max ', function(assert) {
 });
 
 QUnit.test('update scrollBar', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group);
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
     // act
     scrollBar.update(this.options);
     // Assert
@@ -182,8 +182,8 @@ QUnit.test('update scrollBar', function(assert) {
 });
 
 QUnit.test('update scrollBar. Rotated', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group);
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
     // act
     scrollBar.update(this.options);
@@ -206,9 +206,9 @@ QUnit.test('update scrollBar. Rotated', function(assert) {
 });
 
 QUnit.test('setPosition by arguments. Both arguments in range', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
     scrollTranslator.translate.withArgs('40').returns(45);
@@ -227,11 +227,11 @@ QUnit.test('setPosition by arguments. Both arguments in range', function(assert)
 });
 
 QUnit.test('setPosition by arguments. Discrete axis. stick false', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            axisType: 'discrete'
-        }), false),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
+        axisType: 'discrete'
+    }), false);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
 
@@ -258,11 +258,11 @@ QUnit.test('setPosition by arguments. Discrete axis. stick false', function(asse
 });
 
 QUnit.test('setPosition by arguments. Discrete axis. stick true', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            axisType: 'discrete'
-        }), true),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
+        axisType: 'discrete'
+    }), true);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
 
@@ -289,9 +289,9 @@ QUnit.test('setPosition by arguments. Discrete axis. stick true', function(asser
 });
 
 QUnit.test('setPosition by arguments. Stick false', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), false),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), false);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
 
@@ -318,9 +318,9 @@ QUnit.test('setPosition by arguments. Stick false', function(assert) {
 });
 
 QUnit.test('setPosition by arguments.Stick true', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), true),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), true);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
 
@@ -348,9 +348,9 @@ QUnit.test('setPosition by arguments.Stick true', function(assert) {
 
 QUnit.test('setPosition by arguments. Both arguments are undefined', function(assert) {
 
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
 
@@ -373,9 +373,9 @@ QUnit.test('setPosition by arguments. Both arguments are undefined', function(as
 });
 
 QUnit.test('setPosition by arguments. Both arguments out of canvas', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
     scrollTranslator.translate.returns(null);
@@ -398,9 +398,9 @@ QUnit.test('setPosition by arguments. Both arguments out of canvas', function(as
 });
 
 QUnit.test('setPosition by arguments. min = max', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
     scrollTranslator.translate.withArgs('40').returns(45);
@@ -418,9 +418,9 @@ QUnit.test('setPosition by arguments. min = max', function(assert) {
 });
 
 QUnit.test('setPosition by arguments. minSize', function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group),
-        scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+    const group = new vizMocks.Element();
+    const scrollBar = new ScrollBar(this.renderer, group);
+    const scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
     scrollTranslator.translate.withArgs('40').returns(45);
@@ -615,14 +615,14 @@ QUnit.module('scrollBar layouting', {
 });
 
 QUnit.test('Set position for horizontal scrollBar', function(assert) {
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
     // act
-    var pos1 = scrollBar.update(this.getOptions({})).getOptions().position,
-        pos2 = scrollBar.update(this.getOptions({ position: 'top' })).getOptions().position,
-        pos3 = scrollBar.update(this.getOptions({ position: 'bottom' })).getOptions().position,
-        pos4 = scrollBar.update(this.getOptions({ position: 'left' })).getOptions().position,
-        pos5 = scrollBar.update(this.getOptions({ position: 'right' })).getOptions().position,
-        pos6 = scrollBar.update(this.getOptions({ position: 'invalid' })).getOptions().position;
+    const pos1 = scrollBar.update(this.getOptions({})).getOptions().position;
+    const pos2 = scrollBar.update(this.getOptions({ position: 'top' })).getOptions().position;
+    const pos3 = scrollBar.update(this.getOptions({ position: 'bottom' })).getOptions().position;
+    const pos4 = scrollBar.update(this.getOptions({ position: 'left' })).getOptions().position;
+    const pos5 = scrollBar.update(this.getOptions({ position: 'right' })).getOptions().position;
+    const pos6 = scrollBar.update(this.getOptions({ position: 'invalid' })).getOptions().position;
 
     // Assert
     assert.strictEqual(pos1, 'top');
@@ -635,14 +635,14 @@ QUnit.test('Set position for horizontal scrollBar', function(assert) {
 
 QUnit.test('Set position for vertical scrollBar', function(assert) {
     this.options.rotated = true;
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
     // act
-    var pos1 = scrollBar.update(this.getOptions({})).getOptions().position,
-        pos2 = scrollBar.update(this.getOptions({ position: 'top' })).getOptions().position,
-        pos3 = scrollBar.update(this.getOptions({ position: 'bottom' })).getOptions().position,
-        pos4 = scrollBar.update(this.getOptions({ position: 'left' })).getOptions().position,
-        pos5 = scrollBar.update(this.getOptions({ position: 'right' })).getOptions().position,
-        pos6 = scrollBar.update(this.getOptions({ position: 'invalid' })).getOptions().position;
+    const pos1 = scrollBar.update(this.getOptions({})).getOptions().position;
+    const pos2 = scrollBar.update(this.getOptions({ position: 'top' })).getOptions().position;
+    const pos3 = scrollBar.update(this.getOptions({ position: 'bottom' })).getOptions().position;
+    const pos4 = scrollBar.update(this.getOptions({ position: 'left' })).getOptions().position;
+    const pos5 = scrollBar.update(this.getOptions({ position: 'right' })).getOptions().position;
+    const pos6 = scrollBar.update(this.getOptions({ position: 'invalid' })).getOptions().position;
 
     // Assert
     assert.strictEqual(pos1, 'right');
@@ -654,10 +654,10 @@ QUnit.test('Set position for vertical scrollBar', function(assert) {
 });
 
 QUnit.test('setPane', function(assert) {
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
 
-    var p1 = scrollBar.update(this.getOptions({ position: 'top' })).setPane(this.panes).pane,
-        p2 = scrollBar.update(this.getOptions({ position: 'bottom' })).setPane(this.panes).pane;
+    const p1 = scrollBar.update(this.getOptions({ position: 'top' })).setPane(this.panes).pane;
+    const p2 = scrollBar.update(this.getOptions({ position: 'bottom' })).setPane(this.panes).pane;
 
     assert.strictEqual(p1, 'pane1');
     assert.strictEqual(p2, 'pane2');
@@ -665,22 +665,22 @@ QUnit.test('setPane', function(assert) {
 
 QUnit.test('setPane. Rotated', function(assert) {
     this.options.rotated = true;
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
 
-    var p1 = scrollBar.update(this.getOptions({ position: 'left' })).setPane(this.panes).pane,
-        p2 = scrollBar.update(this.getOptions({ position: 'right' })).setPane(this.panes).pane;
+    const p1 = scrollBar.update(this.getOptions({ position: 'left' })).setPane(this.panes).pane;
+    const p2 = scrollBar.update(this.getOptions({ position: 'right' })).setPane(this.panes).pane;
 
     assert.strictEqual(p1, 'pane1');
     assert.strictEqual(p2, 'pane2');
 });
 
 QUnit.test('getMargins', function(assert) {
-    var scrollBar = new ScrollBar(this.renderer, this.group),
-        pane = {
-            name: 'testPane'
-        };
-    var b1 = scrollBar.update(this.getOptions({ position: 'top' })).setPane([pane]).getMargins(),
-        b2 = scrollBar.update(this.getOptions({ position: 'bottom' })).setPane([pane]).getMargins();
+    const scrollBar = new ScrollBar(this.renderer, this.group);
+    const pane = {
+        name: 'testPane'
+    };
+    const b1 = scrollBar.update(this.getOptions({ position: 'top' })).setPane([pane]).getMargins();
+    const b2 = scrollBar.update(this.getOptions({ position: 'bottom' })).setPane([pane]).getMargins();
 
     assert.deepEqual(b1, {
         top: 15,
@@ -698,12 +698,12 @@ QUnit.test('getMargins', function(assert) {
 
 QUnit.test('getMargins. Rotated', function(assert) {
     this.options.rotated = true;
-    var scrollBar = new ScrollBar(this.renderer, this.group),
-        pane = {
-            name: 'testPane'
-        };
-    var b1 = scrollBar.update(this.getOptions({ position: 'right' })).setPane([pane]).getMargins(),
-        b2 = scrollBar.update(this.getOptions({ position: 'left' })).setPane([pane]).getMargins();
+    const scrollBar = new ScrollBar(this.renderer, this.group);
+    const pane = {
+        name: 'testPane'
+    };
+    const b1 = scrollBar.update(this.getOptions({ position: 'right' })).setPane([pane]).getMargins();
+    const b2 = scrollBar.update(this.getOptions({ position: 'left' })).setPane([pane]).getMargins();
 
     assert.deepEqual(b1, {
         top: 0,
@@ -720,7 +720,7 @@ QUnit.test('getMargins. Rotated', function(assert) {
 });
 
 QUnit.test('UpdateSize', function(assert) {
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
 
     scrollBar.update(this.getOptions({ position: 'top' })).setPane(this.panes).updateSize(this.panes[0].canvas);
     scrollBar.update(this.getOptions({ position: 'bottom' })).setPane(this.panes).updateSize(this.panes[1].canvas);
@@ -738,7 +738,7 @@ QUnit.test('UpdateSize', function(assert) {
 
 QUnit.test('Apply layout. Rotated', function(assert) {
     this.options.rotated = true;
-    var scrollBar = new ScrollBar(this.renderer, this.group);
+    const scrollBar = new ScrollBar(this.renderer, this.group);
 
     scrollBar.update(this.getOptions({ position: 'right' })).setPane(this.panes).updateSize(this.panes[1].canvas);
     scrollBar.update(this.getOptions({ position: 'left' })).setPane(this.panes).updateSize(this.panes[0].canvas);
@@ -756,9 +756,9 @@ QUnit.test('Apply layout. Rotated', function(assert) {
 
 QUnit.test('getMultipleAxesSpacing', function(assert) {
     this.options.rotated = true;
-    var scrollBar = new ScrollBar(this.renderer, this.group),
-        // act
-        res = scrollBar.getMultipleAxesSpacing();
+    const scrollBar = new ScrollBar(this.renderer, this.group);
+    // act
+    const res = scrollBar.getMultipleAxesSpacing();
 
     assert.strictEqual(res, 0);
 });

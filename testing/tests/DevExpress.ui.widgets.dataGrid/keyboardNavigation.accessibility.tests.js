@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    let markup = `
+    const markup = `
         <div>
             <div id="container" class="dx-datagrid"></div>
         </div>`;
@@ -132,15 +132,15 @@ QUnit.module('Keyboard navigation accessibility', {
 
     testInDesktop('Focus command elements if row editing', function(assert) {
         // arrange
-        var counter = 0;
+        let counter = 0;
         this.setupModule();
         this.gridView.render($('#container'));
         this.clock.tick();
 
-        var _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
+        const _editingCellTabHandler = this.keyboardNavigationController._editingCellTabHandler;
         this.keyboardNavigationController._editingCellTabHandler = (eventArgs, direction) => {
-            var $target = $(eventArgs.originalEvent.target),
-                result = _editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
+            const $target = $(eventArgs.originalEvent.target);
+            const result = _editingCellTabHandler.bind(this.keyboardNavigationController)(eventArgs, direction);
 
             if($target.hasClass('dx-link')) {
                 assert.equal(result, eventArgs.shift ? $target.index() === 0 : $target.index() === 1, 'need default behavior');
@@ -320,8 +320,8 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down by group panel', function(assert) {
-        var headerPanelWrapper = dataGridWrapper.headerPanel,
-            keyDownFiresCount = 0;
+        const headerPanelWrapper = dataGridWrapper.headerPanel;
+        let keyDownFiresCount = 0;
 
         // arrange
         this.options = {
@@ -360,8 +360,8 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down by header cell', function(assert) {
-        var headersWrapper = dataGridWrapper.headers,
-            keyDownFiresCount = 0;
+        const headersWrapper = dataGridWrapper.headers;
+        let keyDownFiresCount = 0;
 
         // arrange
         this.options = {
@@ -393,9 +393,9 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down by header filter indicator', function(assert) {
-        var headersWrapper = dataGridWrapper.headers,
-            keyDownFiresCount = 0,
-            headerFilterShownCount = 0;
+        const headersWrapper = dataGridWrapper.headers;
+        let keyDownFiresCount = 0;
+        let headerFilterShownCount = 0;
 
         // arrange
         this.options = {
@@ -431,8 +431,8 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down by pager', function(assert) {
-        var pagerWrapper = dataGridWrapper.pager,
-            keyDownFiresCount = 0;
+        const pagerWrapper = dataGridWrapper.pager;
+        let keyDownFiresCount = 0;
 
         // arrange
         this.options = {
@@ -471,7 +471,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down by header filter indicator', function(assert) {
-        var headersWrapper = dataGridWrapper.headers;
+        const headersWrapper = dataGridWrapper.headers;
 
         // arrange
         this.options = {
@@ -497,8 +497,8 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down on filter panel elements', function(assert) {
-        var filterPanelWrapper = dataGridWrapper.filterPanel,
-            filterBuilderShownCount = 0;
+        const filterPanelWrapper = dataGridWrapper.filterPanel;
+        let filterBuilderShownCount = 0;
 
         // arrange
         this.options = {
@@ -541,7 +541,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Enter, Space key down on pager elements', function(assert) {
-        var pagerWrapper = dataGridWrapper.pager;
+        const pagerWrapper = dataGridWrapper.pager;
 
         this.options = {
             pager: {
@@ -597,7 +597,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Group panel focus state', function(assert) {
-        var headerPanelWrapper = dataGridWrapper.headerPanel;
+        const headerPanelWrapper = dataGridWrapper.headerPanel;
 
         // arrange
         this.columns = [
@@ -640,7 +640,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Header row focus state', function(assert) {
-        var headersWrapper = dataGridWrapper.headers;
+        const headersWrapper = dataGridWrapper.headers;
 
         // arrange
         this.setupModule();
@@ -667,7 +667,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Rows view focus state', function(assert) {
-        var $rowsView;
+        let $rowsView;
 
         // arrange
         this.setupModule();
@@ -692,7 +692,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Filter panel focus state', function(assert) {
-        var filterPanelWrapper = dataGridWrapper.filterPanel;
+        const filterPanelWrapper = dataGridWrapper.filterPanel;
 
         this.options = {
             filterPanel: {
@@ -724,7 +724,7 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Pager focus state', function(assert) {
-        var pagerWrapper = dataGridWrapper.pager;
+        const pagerWrapper = dataGridWrapper.pager;
 
         this.options = {
             pager: {

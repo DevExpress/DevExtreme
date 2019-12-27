@@ -1587,7 +1587,7 @@ QUnit.module('Selection', moduleConfig, () => {
     });
 });
 
-var helper;
+let helper;
 QUnit.module('Aria accessibility', {
     beforeEach: () => {
         helper = new ariaAccessibilityTestHelper({

@@ -4,7 +4,7 @@ import 'common.css!';
 
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="treeList"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -20,10 +20,10 @@ QUnit.module('TreeList markup', {
 });
 
 QUnit.test('markup init', function(assert) {
-    var $element = $('#treeList').dxTreeList(),
-        $container = $element.children(),
-        $headersView = $container.children('.dx-treelist-headers'),
-        $rowsView = $container.children('.dx-treelist-rowsview');
+    const $element = $('#treeList').dxTreeList();
+    const $container = $element.children();
+    const $headersView = $container.children('.dx-treelist-headers');
+    const $rowsView = $container.children('.dx-treelist-rowsview');
 
     assert.ok($element.hasClass('dx-treelist'), 'dx-treelist');
     assert.ok($container.hasClass('dx-treelist-container'), 'dx-treelist');
@@ -35,7 +35,7 @@ QUnit.test('markup init', function(assert) {
 });
 
 QUnit.test('markup with dataSource', function(assert) {
-    var $element = $('#treeList').dxTreeList({
+    const $element = $('#treeList').dxTreeList({
         dataSource: [
             { id: 1, parentId: 0, name: 'Alex' },
             { id: 2, parentId: 1, name: 'Bob' },
@@ -48,9 +48,9 @@ QUnit.test('markup with dataSource', function(assert) {
 
     this.clock.tick(30);
 
-    var $container = $element.children(),
-        $headersView = $container.children('.dx-treelist-headers'),
-        $rowsView = $container.children('.dx-treelist-rowsview');
+    const $container = $element.children();
+    const $headersView = $container.children('.dx-treelist-headers');
+    const $rowsView = $container.children('.dx-treelist-rowsview');
 
     assert.ok($element.hasClass('dx-treelist'), 'dx-widget');
     assert.ok($container.hasClass('dx-treelist-container'), 'dx-treelist');
@@ -68,7 +68,7 @@ QUnit.test('markup with dataSource', function(assert) {
     assert.equal($rowsView.find('.dx-data-row td').length, 6, 'rows view has 6 data cells');
     assert.equal($rowsView.find('td').length, 9, 'rows view has 15 cells (6 data cells + 3 free space cells)');
 
-    var $dataCells = $rowsView.find('.dx-data-row td');
+    const $dataCells = $rowsView.find('.dx-data-row td');
     assert.equal($dataCells.find('.dx-treelist-expanded').length, 1, 'first row is expanded');
     assert.equal($dataCells.eq(0).text(), '1', 'value of the first cell of the first row');
     assert.equal($dataCells.eq(1).text(), '0', 'value of the second cell of the first row');

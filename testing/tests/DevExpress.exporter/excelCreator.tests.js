@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    excelCreator = require('exporter').excel,
-    coreLocalization = require('localization/core'),
-    ExcelCreator = excelCreator.creator,
-    internals = excelCreator.__internals,
-    exportMocks = require('../../helpers/exportMocks.js');
+const $ = require('jquery');
+const excelCreator = require('exporter').excel;
+const coreLocalization = require('localization/core');
+const ExcelCreator = excelCreator.creator;
+const internals = excelCreator.__internals;
+const exportMocks = require('../../helpers/exportMocks.js');
 
 QUnit.module('Excel creator', {
     beforeEach: function() {
@@ -14,7 +14,7 @@ QUnit.module('Excel creator', {
 
 QUnit.test('Date time format converting', function(assert) {
     // arrange
-    var expected = {
+    const expected = {
         longTime: '[$-9]H:mm:ss AM/PM',
         longDate: '[$-9]dddd, MMMM d, yyyy',
         year: '[$-9]yyyy',
@@ -43,7 +43,7 @@ QUnit.test('Date time format converting', function(assert) {
     };
 
     // assert, act
-    for(var formatIndex in expected) {
+    for(const formatIndex in expected) {
         assert.strictEqual(excelCreator.formatConverter.convertFormat(UNSUPPORTED_FORMAT_MAPPING[formatIndex] || formatIndex, null, 'date'), expected[formatIndex], 'excel format: ' + expected[formatIndex]);
     }
 });
@@ -51,7 +51,7 @@ QUnit.test('Date time format converting', function(assert) {
 // T495544
 QUnit.test('Date format converting when format is custom', function(assert) {
     // act
-    var excelFormat = excelCreator.formatConverter.convertFormat('dd/MMM/yyyy', null, 'date');
+    const excelFormat = excelCreator.formatConverter.convertFormat('dd/MMM/yyyy', null, 'date');
 
     // assert
     assert.strictEqual(excelFormat, '[$-9]dd\\/MMM\\/yyyy', 'excel format for custom date format');
@@ -59,7 +59,7 @@ QUnit.test('Date format converting when format is custom', function(assert) {
 
 QUnit.test('Date format converting when format with square brackets', function(assert) {
     // act
-    var excelFormat = excelCreator.formatConverter.convertFormat('[h:mm aaa]', null, 'date');
+    const excelFormat = excelCreator.formatConverter.convertFormat('[h:mm aaa]', null, 'date');
 
     // assert
     assert.strictEqual(excelFormat, '[$-9]\\[H:mm AM/PM\\]', 'excel format with square brackets');
@@ -67,10 +67,10 @@ QUnit.test('Date format converting when format with square brackets', function(a
 
 // T476869
 QUnit.test('Number format converting when format is not string', function(assert) {
-    var format = function(x) { return x + ' $'; };
+    const format = function(x) { return x + ' $'; };
 
     // act
-    var excelFormat = excelCreator.formatConverter.convertFormat(format, null, 'number');
+    const excelFormat = excelCreator.formatConverter.convertFormat(format, null, 'number');
 
     // assert
     assert.strictEqual(excelFormat, undefined, 'no excel format for format as function');
@@ -79,22 +79,22 @@ QUnit.test('Number format converting when format is not string', function(assert
 // T454328
 QUnit.test('Date time format as function converting', function(assert) {
     // arrange
-    var month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var day_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var day_names_short = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    var day_names_short2 = ['Вс', 'Пн', 'Вт', 'Cр', 'Чт', 'Пт', 'Сб'];
-    var day_names_es = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
-    var arabicZeroCode = 1632;
+    const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const day_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const day_names_short = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const day_names_short2 = ['Вс', 'Пн', 'Вт', 'Cр', 'Чт', 'Пт', 'Сб'];
+    const day_names_es = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    const arabicZeroCode = 1632;
 
-    var formatArabicNumber = function(text) {
+    const formatArabicNumber = function(text) {
         return text.split('').map(function(char) {
-            var digit = parseInt(char);
+            const digit = parseInt(char);
             return String.fromCharCode(digit + arabicZeroCode);
         }).join('');
     };
 
-    var convertDate = function(formatter) {
+    const convertDate = function(formatter) {
         return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
     };
 
@@ -132,10 +132,10 @@ QUnit.test('Date time format as function converting', function(assert) {
     };
 
     // assert, act
-    for(var pattern in expected) {
-        var formatters = Array.isArray(expected[pattern]) ? expected[pattern] : [expected[pattern]];
+    for(const pattern in expected) {
+        const formatters = Array.isArray(expected[pattern]) ? expected[pattern] : [expected[pattern]];
 
-        for(var i = 0; i < formatters.length; i++) {
+        for(let i = 0; i < formatters.length; i++) {
             assert.strictEqual(convertDate(formatters[i]), pattern, 'Pattern: "' + pattern + '", Example:"' + formatters[i](new Date()) + '"');
         }
     }
@@ -144,13 +144,13 @@ QUnit.test('Date time format as function converting', function(assert) {
 // T573609
 QUnit.test('Date time format if formatter is defined with moment Do pattern', function(assert) {
     // arrange
-    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    var format = {
+    const format = {
         formatter: function(date) {
-            var monthName = month_names_short[date.getMonth()],
-                day = date.getDate(),
-                dayPostfix = 'th';
+            const monthName = month_names_short[date.getMonth()];
+            const day = date.getDate();
+            let dayPostfix = 'th';
             if(day === 1) {
                 dayPostfix = 'st';
             } else if(day === 2) {
@@ -162,7 +162,7 @@ QUnit.test('Date time format if formatter is defined with moment Do pattern', fu
         }
     };
 
-    var convertDate = function(formatter) {
+    const convertDate = function(formatter) {
         return excelCreator.formatConverter.convertFormat(formatter, null, 'date');
     };
 
@@ -171,12 +171,12 @@ QUnit.test('Date time format if formatter is defined with moment Do pattern', fu
 
 // T457272
 QUnit.test('shortDate format for user language', function(assert) {
-    var oldLocale = coreLocalization.locale();
+    const oldLocale = coreLocalization.locale();
 
     coreLocalization.locale('cs');
 
     // act
-    var excelFormat = excelCreator.formatConverter.convertFormat(function(value) {
+    const excelFormat = excelCreator.formatConverter.convertFormat(function(value) {
         return value.getDate().toString() + '. ' + value.getMonth().toString() + '. ' + value.getFullYear().toString();
     }, null, 'date');
 
@@ -188,10 +188,10 @@ QUnit.test('shortDate format for user language', function(assert) {
 
 QUnit.test('Get excel date value', function(assert) {
     // act, assert
-    var that = this,
-        getExcelDateValue = function(strDate) {
-            return String(that.excelCreator._tryGetExcelDateValue(new Date(strDate), 'dd/MM/yyyy H:MM:s'));
-        };
+    const that = this;
+    const getExcelDateValue = function(strDate) {
+        return String(that.excelCreator._tryGetExcelDateValue(new Date(strDate), 'dd/MM/yyyy H:MM:s'));
+    };
 
     assert.strictEqual(getExcelDateValue('08/15/1900 12:52:03'), '228.53614583333334');
     assert.strictEqual(getExcelDateValue('02/2/1900 12:52:03'), '33.536145833333336');
@@ -275,7 +275,7 @@ QUnit.test('Cell formats generating by the \'getStyles\' function result', funct
 
 QUnit.test('stringArray generating', function(assert) {
     // arrange
-    var strings;
+    let strings;
 
     // act
     this.excelCreator._prepareStyleData();
@@ -289,7 +289,7 @@ QUnit.test('stringArray generating', function(assert) {
 
 QUnit.test('cellsArray generating', function(assert) {
     // arrange
-    var cells;
+    let cells;
 
     this.dataProvider.getStyles.returns([
         { alignment: 'center', bold: true, dataType: 'string' },
@@ -353,8 +353,8 @@ QUnit.test('Cell type generate', function(assert) {
 
 QUnit.test('Excel file structure', function(assert) {
     // arrange
-    var zip = this.excelCreator._zip,
-        paths = [];
+    const zip = this.excelCreator._zip;
+    const paths = [];
 
     // act
     this.excelCreator._generateContent();
@@ -368,15 +368,15 @@ QUnit.test('Excel file structure', function(assert) {
 
 QUnit.test('Check XML tag generating with content', function(assert) {
     // arrange
-    var expected = '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"><test>content</test></Relationship>',
-        attributes = [
-            { name: 'Id', value: 'rId1' },
-            {
-                name: 'Type',
-                value: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument'
-            },
-            { name: 'Target', value: 'xl/workbook.xml' }
-        ];
+    const expected = '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"><test>content</test></Relationship>';
+    const attributes = [
+        { name: 'Id', value: 'rId1' },
+        {
+            name: 'Type',
+            value: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument'
+        },
+        { name: 'Target', value: 'xl/workbook.xml' }
+    ];
 
     // act, assert
     assert.strictEqual(this.excelCreator._getXMLTag('Relationship', attributes, '<test>content</test>'), expected);
@@ -384,15 +384,15 @@ QUnit.test('Check XML tag generating with content', function(assert) {
 
 QUnit.test('Check XML tag generating without content', function(assert) {
     // arrange
-    var expected = '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml" />',
-        attributes = [
-            { name: 'Id', value: 'rId1' },
-            {
-                name: 'Type',
-                value: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument'
-            },
-            { name: 'Target', value: 'xl/workbook.xml' }
-        ];
+    const expected = '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml" />';
+    const attributes = [
+        { name: 'Id', value: 'rId1' },
+        {
+            name: 'Type',
+            value: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument'
+        },
+        { name: 'Target', value: 'xl/workbook.xml' }
+    ];
 
     // act, assert
     assert.strictEqual(this.excelCreator._getXMLTag('Relationship', attributes), expected);
@@ -407,8 +407,8 @@ QUnit.test('Generate merging XML', function(assert) {
     this.excelCreator._dataProvider.getHeaderRowCount = undefined;
 
     // act
-    var mergingXML = this.excelCreator._generateMergingXML(),
-        expected = '<mergeCells count="6"><mergeCell ref="A1:B2" /><mergeCell ref="C1:D2" /><mergeCell ref="A3:B4" /><mergeCell ref="C3:D4" /><mergeCell ref="A5:B6" /><mergeCell ref="C5:D6" /></mergeCells>';
+    const mergingXML = this.excelCreator._generateMergingXML();
+    const expected = '<mergeCells count="6"><mergeCell ref="A1:B2" /><mergeCell ref="C1:D2" /><mergeCell ref="A3:B4" /><mergeCell ref="C3:D4" /><mergeCell ref="A5:B6" /><mergeCell ref="C5:D6" /></mergeCells>';
 
     // assert
     assert.equal(mergingXML, expected);
@@ -416,10 +416,10 @@ QUnit.test('Generate merging XML', function(assert) {
 
 QUnit.test('Content_Types file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="utf-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />' +
+    const expected = '<?xml version="1.0" encoding="utf-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />' +
             '<Default Extension="xml" ContentType="application/xml" /><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" /><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" /><Override PartName="/xl/sharedStrings.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml" />' +
-            '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" /></Types>',
-        done = assert.async();
+            '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" /></Types>';
+    const done = assert.async();
 
     // act
     this.excelCreator._generateContent();
@@ -437,8 +437,8 @@ QUnit.test('Content_Types file content', function(assert) {
 
 QUnit.test('_rels\\.rels file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="utf-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml" /></Relationships>',
-        done = assert.async();
+    const expected = '<?xml version="1.0" encoding="utf-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml" /></Relationships>';
+    const done = assert.async();
 
     // act
     this.excelCreator._generateContent();
@@ -456,11 +456,11 @@ QUnit.test('_rels\\.rels file content', function(assert) {
 
 QUnit.test('xl\\_rels\\workbook.xml.rels file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="utf-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    const expected = '<?xml version="1.0" encoding="utf-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
             '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml" />' +
             '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml" />' +
-            '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml" /></Relationships>',
-        done = assert.async();
+            '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml" /></Relationships>';
+    const done = assert.async();
 
     // act
     this.excelCreator._generateContent();
@@ -478,10 +478,10 @@ QUnit.test('xl\\_rels\\workbook.xml.rels file content', function(assert) {
 
 QUnit.test('xl\\workbook.xml file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="utf-8"?><workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><bookViews><workbookView xWindow="0" yWindow="0" windowWidth="0" windowHeight="0"/></bookViews><sheets><sheet name="Sheet" sheetId="1" r:id="rId1" /></sheets>' +
+    const expected = '<?xml version="1.0" encoding="utf-8"?><workbook xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><bookViews><workbookView xWindow="0" yWindow="0" windowWidth="0" windowHeight="0"/></bookViews><sheets><sheet name="Sheet" sheetId="1" r:id="rId1" /></sheets>' +
             '<definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">Sheet!$1:$1</definedName>' +
-            '<definedName name="_xlnm._FilterDatabase" hidden="0" localSheetId="0">Sheet!$A$1:$F$6332</definedName></definedNames></workbook>',
-        done = assert.async();
+            '<definedName name="_xlnm._FilterDatabase" hidden="0" localSheetId="0">Sheet!$A$1:$F$6332</definedName></definedNames></workbook>';
+    const done = assert.async();
 
     // act
     this.excelCreator._generateContent();
@@ -499,8 +499,8 @@ QUnit.test('xl\\workbook.xml file content', function(assert) {
 
 QUnit.test('xl\\styles.xml file content', function(assert) {
     // arrange
-    var done = assert.async(),
-        expected = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    const done = assert.async();
+    const expected = '<?xml version="1.0" encoding="utf-8"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
             '<numFmts count="3">' +
             '<numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" />' +
             '<numFmt numFmtId="166" formatCode="[$-9]M\\/d\\/yyyy" />' +
@@ -551,8 +551,8 @@ QUnit.test('xl\\styles.xml file content', function(assert) {
 
 QUnit.test('xl\\sharedStrings.xml file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="5" uniqueCount="5"><si><t>test1</t></si><si><t>test2</t></si><si><t>test3</t></si><si><t>ColumnClone</t></si><si><t>test5</t></si></sst>',
-        done = assert.async();
+    const expected = '<?xml version="1.0" encoding="utf-8"?><sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="5" uniqueCount="5"><si><t>test1</t></si><si><t>test2</t></si><si><t>test3</t></si><si><t>ColumnClone</t></si><si><t>test5</t></si></sst>';
+    const done = assert.async();
 
     // act
     this.excelCreator._generateContent();
@@ -570,8 +570,8 @@ QUnit.test('xl\\sharedStrings.xml file content', function(assert) {
 
 QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
     // arrange
-    var expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/><cols><col width="13.57" min="1" max="1" /><col width="27.86" min="2" max="2" /><col width="20.71" min="3" max="3" /><col width="22.14" min="4" max="4" /></cols><sheetData><row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="b"><v>true</v></c><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="n"><v>12</v></c><c r="D1" s="0" t="n"><v>41709.5</v></c></row><row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="b"><v>true</v></c><c r="B2" s="0" t="s"><v>1</v></c><c r="C2" s="0" t="n"><v>122</v></c><c r="D2" s="0" t="n"><v>41740.5</v></c></row><row r="3" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="0" t="b"><v>false</v></c><c r="B3" s="0" t="s"><v>2</v></c><c r="C3" s="0" t="n"><v>1</v></c><c r="D3" s="0" t="n"><v>41770.5</v></c></row><row r="4" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="0" t="b"><v>false</v></c><c r="B4" s="0" t="s"><v>3</v></c><c r="C4" s="0" t="n"><v>4</v></c><c r="D4" s="0" t="n"><v>41801.5</v></c></row><row r="5" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A5" s="0" t="b"><v>true</v></c><c r="B5" s="0" t="s"><v>4</v></c><c r="C5" s="0" t="n"><v>5</v></c><c r="D5" s="0" t="n"><v>41831.5</v></c></row><row r="6" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A6" s="0" t="b"><v>true</v></c><c r="B6" s="0" t="s"><v>3</v></c><c r="C6" s="0" t="n"><v>5</v></c><c r="D6" s="0" t="n"><v>41831.5</v></c></row></sheetData><autoFilter ref="A1:D6" /><ignoredErrors><ignoredError sqref="A1:D6" numberStoredAsText="1" /></ignoredErrors></worksheet>',
-        done = assert.async();
+    const expected = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"><sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/><cols><col width="13.57" min="1" max="1" /><col width="27.86" min="2" max="2" /><col width="20.71" min="3" max="3" /><col width="22.14" min="4" max="4" /></cols><sheetData><row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="b"><v>true</v></c><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="n"><v>12</v></c><c r="D1" s="0" t="n"><v>41709.5</v></c></row><row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="b"><v>true</v></c><c r="B2" s="0" t="s"><v>1</v></c><c r="C2" s="0" t="n"><v>122</v></c><c r="D2" s="0" t="n"><v>41740.5</v></c></row><row r="3" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="0" t="b"><v>false</v></c><c r="B3" s="0" t="s"><v>2</v></c><c r="C3" s="0" t="n"><v>1</v></c><c r="D3" s="0" t="n"><v>41770.5</v></c></row><row r="4" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A4" s="0" t="b"><v>false</v></c><c r="B4" s="0" t="s"><v>3</v></c><c r="C4" s="0" t="n"><v>4</v></c><c r="D4" s="0" t="n"><v>41801.5</v></c></row><row r="5" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A5" s="0" t="b"><v>true</v></c><c r="B5" s="0" t="s"><v>4</v></c><c r="C5" s="0" t="n"><v>5</v></c><c r="D5" s="0" t="n"><v>41831.5</v></c></row><row r="6" spans="1:4" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A6" s="0" t="b"><v>true</v></c><c r="B6" s="0" t="s"><v>3</v></c><c r="C6" s="0" t="n"><v>5</v></c><c r="D6" s="0" t="n"><v>41831.5</v></c></row></sheetData><autoFilter ref="A1:D6" /><ignoredErrors><ignoredError sqref="A1:D6" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const done = assert.async();
 
     // act
     this.excelCreator._options.autoFilterEnabled = true;
@@ -591,7 +591,7 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
 
 QUnit.test('Disable ignore errors', function(assert) {
     // arrange
-    var done = assert.async();
+    const done = assert.async();
 
     this.excelCreator._options.ignoreErrors = false;
 
@@ -599,7 +599,7 @@ QUnit.test('Disable ignore errors', function(assert) {
     this.excelCreator._generateContent();
 
     assert.expect(1);
-    var worksheetFile = this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME);
+    const worksheetFile = this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME);
     worksheetFile.async('string').then(function(content) {
         try {
             // assert
@@ -612,8 +612,8 @@ QUnit.test('Disable ignore errors', function(assert) {
 
 QUnit.test('Generating worksheet without groups', function(assert) {
     // arrange
-    var dataProvider = new exportMocks.MockDataProvider(),
-        done = assert.async();
+    const dataProvider = new exportMocks.MockDataProvider();
+    const done = assert.async();
 
     dataProvider.getGroupLevel = function(index) {
         return 0;
@@ -642,7 +642,7 @@ QUnit.test('Generating worksheet without groups', function(assert) {
 
 QUnit.test('Generating worksheet with groups', function(assert) {
     // arrange
-    var done = assert.async();
+    const done = assert.async();
 
     this.dataProvider.getStyles.returns([
         { alignment: 'center', bold: true, wrapText: true },
@@ -676,10 +676,10 @@ QUnit.test('Generating worksheet with groups', function(assert) {
 
 QUnit.test('Add rtl property to sheet view', function(assert) {
     // arrange
-    var done = assert.async(),
-        excelCreatorRTL = new ExcelCreator(new exportMocks.MockDataProvider(), {
-            rtlEnabled: true
-        });
+    const done = assert.async();
+    const excelCreatorRTL = new ExcelCreator(new exportMocks.MockDataProvider(), {
+        rtlEnabled: true
+    });
 
     // act
     excelCreatorRTL._generateContent();
@@ -696,9 +696,9 @@ QUnit.test('Add rtl property to sheet view', function(assert) {
 
 QUnit.test('Workwheet XML content is valid', function(assert) {
     // arrange
-    var excelCreator,
-        done = assert.async(),
-        dataProvider = new exportMocks.MockDataProvider();
+    let excelCreator;
+    const done = assert.async();
+    const dataProvider = new exportMocks.MockDataProvider();
 
     dataProvider.isTotalRow = function(rowIndex) {
         return rowIndex === 5;
@@ -726,7 +726,7 @@ QUnit.test('Workwheet XML content is valid', function(assert) {
 
 QUnit.test('Generating worksheet with groups and three rows of the header', function(assert) {
     // arrange
-    var done = assert.async();
+    const done = assert.async();
 
     this.excelCreator._dataProvider.getHeaderRowCount = function() {
         return 3;
@@ -753,9 +753,9 @@ QUnit.test('Generating worksheet with groups and three rows of the header', func
 
 QUnit.test('Style XML content is valid', function(assert) {
     // arrange
-    var excelCreator,
-        done = assert.async(),
-        dataProvider = new exportMocks.MockDataProvider();
+    let excelCreator;
+    const done = assert.async();
+    const dataProvider = new exportMocks.MockDataProvider();
 
     // act
     excelCreator = new ExcelCreator(dataProvider, {
@@ -778,9 +778,9 @@ QUnit.test('Style XML content is valid', function(assert) {
 
 QUnit.test('SharedString XML content is valid', function(assert) {
     // arrange
-    var excelCreator,
-        done = assert.async(),
-        dataProvider = new exportMocks.MockDataProvider();
+    let excelCreator;
+    const done = assert.async();
+    const dataProvider = new exportMocks.MockDataProvider();
 
     dataProvider.isTotalRow = function(rowIndex) {
         return rowIndex === 5;
@@ -849,7 +849,7 @@ QUnit.module('Excel creator with cellMerged data provider ', {
 
 QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
     // arrange
-    var done = assert.async();
+    const done = assert.async();
     // act
     this.excelCreator._generateContent();
 
@@ -867,7 +867,7 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content', function(assert) {
 
 QUnit.test('xl\\worksheets\\sheet1.xml file content with AutoFilter', function(assert) {
     // arrange
-    var done = assert.async();
+    const done = assert.async();
 
     // act
     this.excelCreator._options.autoFilterEnabled = true;
@@ -877,7 +877,7 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content with AutoFilter', function(a
     this.excelCreator._zip.folder(internals.XL_FOLDER_NAME + '/' + internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).async('string').then(function(content) {
         try {
             // assert
-            var $autoFilter = $(content).find('autoFilter');
+            const $autoFilter = $(content).find('autoFilter');
             assert.strictEqual($autoFilter.parent()[0].tagName.toLowerCase(), 'worksheet');
             assert.strictEqual($autoFilter.attr('ref'), 'A2:A3');
         } finally {
@@ -888,7 +888,7 @@ QUnit.test('xl\\worksheets\\sheet1.xml file content with AutoFilter', function(a
 
 
 QUnit.test('Exception should be thrown if JSzip not included has no start date', function(assert) {
-    var zip_backup = this.excelCreator._zip;
+    const zip_backup = this.excelCreator._zip;
 
     this.excelCreator._zip = null;
 

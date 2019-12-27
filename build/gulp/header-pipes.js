@@ -1,13 +1,13 @@
-var fs = require('fs');
-var lazyPipe = require('lazypipe');
-var header = require('gulp-header');
-var path = require('path');
+const fs = require('fs');
+const lazyPipe = require('lazypipe');
+const header = require('gulp-header');
+const path = require('path');
 
-var context = require('./context.js');
+const context = require('./context.js');
 
-var licenseTemplate = fs.readFileSync(path.join(__dirname, './license-header.txt'), 'utf8');
+const licenseTemplate = fs.readFileSync(path.join(__dirname, './license-header.txt'), 'utf8');
 
-var useStrict = lazyPipe().pipe(function() {
+const useStrict = lazyPipe().pipe(function() {
     return header('"use strict";\n\n');
 });
 

@@ -107,8 +107,8 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
         const angle = PI / 4 + arrowAngle / 2;
         const endAngle = PI / 4 - arrowAngle / 2;
 
-        let arrowEndPointX = rightTopCorner[0] + cos(endAngle) * cornerRadius;
-        let arrowEndPointY = rightTopCorner[1] + (1 - sin(endAngle)) * cornerRadius;
+        const arrowEndPointX = rightTopCorner[0] + cos(endAngle) * cornerRadius;
+        const arrowEndPointY = rightTopCorner[1] + (1 - sin(endAngle)) * cornerRadius;
 
         let arrowArc = buildPath('L', rightTopCorner, getArc(cornerRadius, cos(angle), 1 - sin(angle)), 'L', [anchorX, anchorY, arrowEndPointX, arrowEndPointY],
             getAbsoluteArc(cornerRadius, rightTopCorner[0] + cornerRadius, rightTopCorner[1] + cornerRadius));
@@ -322,8 +322,8 @@ export class Plaque {
         const renderer = this.widget._renderer;
         const options = this.options;
 
-        let cloudSettings = { opacity: options.opacity, 'stroke-width': 0, fill: options.color };
-        let borderOptions = options.border || {};
+        const cloudSettings = { opacity: options.opacity, 'stroke-width': 0, fill: options.color };
+        const borderOptions = options.border || {};
 
         if(borderOptions.visible) {
             extend(cloudSettings, {

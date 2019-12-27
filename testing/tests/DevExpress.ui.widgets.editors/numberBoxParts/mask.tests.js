@@ -1872,7 +1872,7 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
 
         this.input.focus();
         if(browser.msie) {
-            let currentCaret = this.keyboard.caret();
+            const currentCaret = this.keyboard.caret();
             assert.ok(currentCaret.start !== 6 && currentCaret.end !== 6, 'caret position during timeout, it has different values for IE11 and Edge');
         }
 
