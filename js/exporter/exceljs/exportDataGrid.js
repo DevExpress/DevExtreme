@@ -13,7 +13,7 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let {
+    const {
         customizeCell,
         component,
         worksheet,
@@ -38,25 +38,25 @@ function exportDataGrid(options) {
         summaryRight: false
     };
 
-    let cellsRange = {
+    const cellsRange = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    let dataProvider = component.getDataProvider(selectedRowsOnly);
+    const dataProvider = component.getDataProvider(selectedRowsOnly);
 
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-            let columns = dataProvider.getColumns();
-            let headerRowCount = dataProvider.getHeaderRowCount();
-            let dataRowsCount = dataProvider.getRowsCount();
+            const columns = dataProvider.getColumns();
+            const headerRowCount = dataProvider.getHeaderRowCount();
+            const dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
                 _setColumnsWidth(worksheet, columns, cellsRange.from.column);
             }
 
-            let mergedCells = [];
-            let mergeRanges = [];
+            const mergedCells = [];
+            const mergeRanges = [];
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
@@ -75,7 +75,7 @@ function exportDataGrid(options) {
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
-            let worksheetViewSettings = worksheet.views[0] || {};
+            const worksheetViewSettings = worksheet.views[0] || {};
 
             if(component.option('rtlEnabled')) {
                 worksheetViewSettings.rightToLeft = true;
@@ -168,7 +168,7 @@ function _tryConvertToExcelNumberFormat(format, dataType) {
 }
 
 function _formatObjectConverter(format, dataType) {
-    var result = {
+    const result = {
         format: format,
         precision: format && format.precision,
         dataType: dataType
@@ -216,7 +216,7 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
 
 function _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider) {
     if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
-        let cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
+        const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
         if(cellMerge.colspan || cellMerge.rowspan) {
             for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
                 for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {

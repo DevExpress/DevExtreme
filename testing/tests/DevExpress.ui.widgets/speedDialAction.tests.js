@@ -196,7 +196,7 @@ QUnit.module('modify global action button config', {
     });
 
     QUnit.test('check main fab position after change', function(assert) {
-        var firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
+        const firstSDA = $('#fab-one').dxSpeedDialAction().dxSpeedDialAction('instance');
 
         let $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
         const fabDimensions = 64;
@@ -382,7 +382,7 @@ QUnit.module('check action buttons click args', {
         }).dxSpeedDialAction('instance');
 
         const $fabMainElement = $(FAB_MAIN_SELECTOR);
-        let $fabMainContent = $fabMainElement.find('.dx-overlay-content');
+        const $fabMainContent = $fabMainElement.find('.dx-overlay-content');
 
         $fabMainContent.trigger('dxclick');
 
@@ -806,7 +806,7 @@ QUnit.module('add index option', {
             icon: 'trash'
         }).dxSpeedDialAction('instance');
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
         let $fabContent = $(FAB_SELECTOR).find('.dx-overlay-content');
 
         const fabDimensions = 30;

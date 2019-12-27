@@ -8,14 +8,14 @@ import { each } from '../../core/utils/iterator';
 import Class from '../../core/class';
 import { Deferred, when } from '../../core/utils/deferred';
 
-var SCROLLING_MODE_INFINITE = 'infinite',
-    SCROLLING_MODE_VIRTUAL = 'virtual';
+const SCROLLING_MODE_INFINITE = 'infinite';
+const SCROLLING_MODE_VIRTUAL = 'virtual';
 
-var isVirtualMode = function(that) {
+const isVirtualMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 };
 
-var isAppendMode = function(that) {
+const isAppendMode = function(that) {
     return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
@@ -34,15 +34,15 @@ exports.getContentHeightLimit = function(browser) {
 };
 
 exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, $targetElement) {
-    var $scrollElement,
-        scrollableArray = [],
-        scrollToArray = [],
-        disposeArray = [];
+    let $scrollElement;
+    const scrollableArray = [];
+    const scrollToArray = [];
+    const disposeArray = [];
     $targetElement = $targetElement || $element;
 
     function getElementOffset(scrollable) {
-        var $scrollableElement = scrollable.element ? scrollable.$element() : scrollable,
-            scrollableOffset = positionUtils.offset($scrollableElement);
+        const $scrollableElement = scrollable.element ? scrollable.$element() : scrollable;
+        const scrollableOffset = positionUtils.offset($scrollableElement);
 
         if(!scrollableOffset) {
             return $element.offset().top;
@@ -53,14 +53,14 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
 
     function createWindowScrollHandler(scrollable) {
         return function() {
-            var scrollTop = scrollable.scrollTop() - getElementOffset(scrollable);
+            let scrollTop = scrollable.scrollTop() - getElementOffset(scrollable);
 
             scrollTop = scrollTop > 0 ? scrollTop : 0;
             scrollChangedHandler(scrollTop);
         };
     }
 
-    var widgetScrollStrategy = {
+    const widgetScrollStrategy = {
         on: function(scrollable, eventName, handler) {
             scrollable.on('scroll', handler);
         },
@@ -70,9 +70,9 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
     };
 
     function subscribeToScrollEvents($scrollElement) {
-        var isDocument = $scrollElement.get(0).nodeName === '#document';
-        var scrollable = $scrollElement.data('dxScrollable');
-        var eventsStrategy = widgetScrollStrategy;
+        const isDocument = $scrollElement.get(0).nodeName === '#document';
+        let scrollable = $scrollElement.data('dxScrollable');
+        let eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
             scrollable = isDocument && $(getWindow()) || $scrollElement.css('overflowY') === 'auto' && $scrollElement;
@@ -80,12 +80,12 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
             if(!scrollable) return;
         }
 
-        var handler = createWindowScrollHandler(scrollable);
+        const handler = createWindowScrollHandler(scrollable);
         eventsStrategy.on(scrollable, 'scroll', handler);
 
         scrollToArray.push(function(pos) {
-            var topOffset = getElementOffset(scrollable),
-                scrollMethod = scrollable.scrollTo ? 'scrollTo' : 'scrollTop';
+            const topOffset = getElementOffset(scrollable);
+            const scrollMethod = scrollable.scrollTo ? 'scrollTo' : 'scrollTop';
 
             if(pos - topOffset >= 0) {
                 scrollable[scrollMethod](pos + topOffset);
@@ -119,31 +119,31 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
 };
 
 exports.VirtualScrollController = Class.inherit((function() {
-    var getViewportPageCount = function(that) {
-        var pageSize = that._dataSource.pageSize(),
-            preventPreload = that.option('scrolling.preventPreload');
+    const getViewportPageCount = function(that) {
+        const pageSize = that._dataSource.pageSize();
+        const preventPreload = that.option('scrolling.preventPreload');
 
         if(preventPreload) {
             return 0;
         }
 
-        var realViewportSize = that._viewportSize;
+        let realViewportSize = that._viewportSize;
 
         if(isVirtualMode(that) && !that.option('legacyRendering') && that.option('scrolling.removeInvisiblePages')) {
             realViewportSize = 0;
 
-            var viewportSize = that._viewportSize * that._viewportItemSize;
+            const viewportSize = that._viewportSize * that._viewportItemSize;
 
-            var offset = that.getContentOffset();
-            var position = that._position || 0;
+            let offset = that.getContentOffset();
+            const position = that._position || 0;
 
-            var virtualItemsCount = that.virtualItemsCount();
-            var totalItemsCount = that._dataSource.totalItemsCount();
+            const virtualItemsCount = that.virtualItemsCount();
+            const totalItemsCount = that._dataSource.totalItemsCount();
 
-            for(var itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
+            for(let itemIndex = virtualItemsCount.begin; itemIndex < totalItemsCount; itemIndex++) {
                 if(offset >= position + viewportSize) break;
 
-                var itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
+                const itemSize = that._itemSizes[itemIndex] || that._viewportItemSize;
                 offset += itemSize;
                 if(offset >= position) {
                     realViewportSize++;
@@ -154,9 +154,9 @@ exports.VirtualScrollController = Class.inherit((function() {
         return (pageSize && realViewportSize > 0) ? Math.ceil(realViewportSize / pageSize) : 1;
     };
 
-    var getPreloadPageCount = function(that, previous) {
-        var preloadEnabled = that.option('scrolling.preloadEnabled'),
-            pageCount = getViewportPageCount(that);
+    const getPreloadPageCount = function(that, previous) {
+        const preloadEnabled = that.option('scrolling.preloadEnabled');
+        let pageCount = getViewportPageCount(that);
 
         if(pageCount) {
             if(previous) {
@@ -175,13 +175,13 @@ exports.VirtualScrollController = Class.inherit((function() {
         return pageCount;
     };
 
-    var getPageIndexForLoad = function(that) {
-        var result = -1,
-            needToLoadNextPage,
-            needToLoadPrevPage,
-            needToLoadPageBeforeLast,
-            beginPageIndex = getBeginPageIndex(that),
-            dataSource = that._dataSource;
+    const getPageIndexForLoad = function(that) {
+        let result = -1;
+        let needToLoadNextPage;
+        let needToLoadPrevPage;
+        let needToLoadPageBeforeLast;
+        const beginPageIndex = getBeginPageIndex(that);
+        const dataSource = that._dataSource;
 
         if(beginPageIndex < 0) {
             result = that._pageIndex;
@@ -213,21 +213,21 @@ exports.VirtualScrollController = Class.inherit((function() {
         return result;
     };
 
-    var getBeginPageIndex = function(that) {
+    function getBeginPageIndex(that) {
         return that._cache.length ? that._cache[0].pageIndex : -1;
-    };
+    }
 
-    var getEndPageIndex = function(that) {
+    function getEndPageIndex(that) {
         return that._cache.length ? that._cache[that._cache.length - 1].pageIndex : -1;
-    };
+    }
 
-    var fireChanged = function(that, changed, args) {
+    const fireChanged = function(that, changed, args) {
         that._isChangedFiring = true;
         changed(args);
         that._isChangedFiring = false;
     };
 
-    var processDelayChanged = function(that, changed, args) {
+    const processDelayChanged = function(that, changed, args) {
         if(that._isDelayChanged) {
             that._isDelayChanged = false;
             fireChanged(that, changed, args);
@@ -235,12 +235,12 @@ exports.VirtualScrollController = Class.inherit((function() {
         }
     };
 
-    var processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
-        var dataSource = that._dataSource,
-            items = dataSource.items().slice(),
-            change = isObject(changeType) ? changeType : undefined,
-            isPrepend = changeType === 'prepend',
-            viewportItems = dataSource.viewportItems();
+    const processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
+        const dataSource = that._dataSource;
+        const items = dataSource.items().slice();
+        let change = isObject(changeType) ? changeType : undefined;
+        const isPrepend = changeType === 'prepend';
+        const viewportItems = dataSource.viewportItems();
 
         if(changeType && isString(changeType) && !that._isDelayChanged) {
             change = {
@@ -254,7 +254,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                 }
             }
         }
-        var removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
+        let removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
 
         if(removeItemCount && dataSource.correctCount) {
             removeItemCount = dataSource.correctCount(viewportItems, removeItemCount, isPrepend);
@@ -282,8 +282,8 @@ exports.VirtualScrollController = Class.inherit((function() {
         }
     };
 
-    var loadCore = function(that, pageIndex) {
-        var dataSource = that._dataSource;
+    const loadCore = function(that, pageIndex) {
+        const dataSource = that._dataSource;
 
         if(pageIndex === that.pageIndex() || (!dataSource.isLoading() && pageIndex < dataSource.pageCount() || (!dataSource.hasKnownLastPage() && pageIndex === dataSource.pageCount()))) {
             dataSource.pageIndex(pageIndex);
@@ -297,7 +297,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
     return {
         ctor: function(component, dataSource, isVirtual) {
-            var that = this;
+            const that = this;
             that._dataSource = dataSource;
             that.component = component;
             that._pageIndex = that._lastPageIndex = dataSource.pageIndex();
@@ -322,11 +322,11 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         virtualItemsCount: function() {
-            var that = this,
-                pageIndex,
-                itemsCount = 0,
-                beginItemsCount,
-                endItemsCount;
+            const that = this;
+            let pageIndex;
+            let itemsCount = 0;
+            let beginItemsCount;
+            let endItemsCount;
 
             if(isVirtualMode(that)) {
                 pageIndex = getBeginPageIndex(that);
@@ -344,9 +344,9 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         setViewportPosition: function(position) {
-            var that = this,
-                result = new Deferred(),
-                scrollingTimeout = Math.min(that.option('scrolling.timeout') || 0, that._dataSource.changingDuration());
+            const that = this;
+            const result = new Deferred();
+            let scrollingTimeout = Math.min(that.option('scrolling.timeout') || 0, that._dataSource.changingDuration());
 
             if(scrollingTimeout < that.option('scrolling.renderingThreshold')) {
                 scrollingTimeout = that.option('scrolling.minTimeout') || 0;
@@ -370,17 +370,17 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         getItemIndexByPosition: function() {
-            var that = this,
-                position = that._position,
-                defaultItemSize = that.getItemSize(),
-                offset = 0,
-                itemOffset = 0,
-                itemSize;
+            const that = this;
+            const position = that._position;
+            const defaultItemSize = that.getItemSize();
+            let offset = 0;
+            let itemOffset = 0;
+            let itemSize;
 
-            var itemOffsetsWithSize = Object.keys(that._itemSizes).concat(-1);
-            for(var i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
-                var itemOffsetWithSize = parseInt(itemOffsetsWithSize[i]);
-                var itemOffsetDiff = (position - offset) / defaultItemSize;
+            const itemOffsetsWithSize = Object.keys(that._itemSizes).concat(-1);
+            for(let i = 0; i < itemOffsetsWithSize.length && offset < position; i++) {
+                const itemOffsetWithSize = parseInt(itemOffsetsWithSize[i]);
+                let itemOffsetDiff = (position - offset) / defaultItemSize;
                 if(itemOffsetWithSize < 0 || itemOffset + itemOffsetDiff < itemOffsetWithSize) {
                     itemOffset += itemOffsetDiff;
                     break;
@@ -399,14 +399,14 @@ exports.VirtualScrollController = Class.inherit((function() {
         _setViewportPositionCore: function(position) {
             this._position = position;
 
-            var itemIndex = this.getItemIndexByPosition();
+            const itemIndex = this.getItemIndexByPosition();
             return this.setViewportItemIndex(itemIndex);
         },
 
         setContentSize: function(size) {
-            var that = this,
-                sizes = Array.isArray(size) && size,
-                virtualItemsCount = that.virtualItemsCount();
+            const that = this;
+            const sizes = Array.isArray(size) && size;
+            const virtualItemsCount = that.virtualItemsCount();
 
             if(sizes) {
                 size = sizes.reduce((a, b) => a + b, 0);
@@ -420,8 +420,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                         that._itemSizes[virtualItemsCount.begin + index] = size;
                     });
                 }
-                var virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
-                var contentHeightLimit = exports.getContentHeightLimit(browser);
+                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
+                const contentHeightLimit = exports.getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     that._sizeRatio = contentHeightLimit / virtualContentSize;
                 } else {
@@ -433,14 +433,14 @@ exports.VirtualScrollController = Class.inherit((function() {
             return this._viewportItemSize * this._sizeRatio;
         },
         getItemOffset: function(itemIndex, isEnd) {
-            var that = this,
-                virtualItemsCount = that.virtualItemsCount(),
-                itemCount = itemIndex;
+            const that = this;
+            const virtualItemsCount = that.virtualItemsCount();
+            let itemCount = itemIndex;
 
             if(!virtualItemsCount) return 0;
 
-            var offset = 0,
-                totalItemsCount = that._dataSource.totalItemsCount();
+            let offset = 0;
+            const totalItemsCount = that._dataSource.totalItemsCount();
 
             Object.keys(that._itemSizes).forEach(currentItemIndex => {
                 if(!itemCount) return;
@@ -453,16 +453,16 @@ exports.VirtualScrollController = Class.inherit((function() {
             return Math.floor(offset + itemCount * that._viewportItemSize * that._sizeRatio);
         },
         getContentOffset: function(type) {
-            var isEnd = type === 'end',
-                virtualItemsCount = this.virtualItemsCount();
+            const isEnd = type === 'end';
+            const virtualItemsCount = this.virtualItemsCount();
 
             if(!virtualItemsCount) return 0;
 
             return this.getItemOffset(isEnd ? virtualItemsCount.end : virtualItemsCount.begin, isEnd);
         },
         getVirtualContentSize: function() {
-            var that = this,
-                virtualItemsCount = that.virtualItemsCount();
+            const that = this;
+            const virtualItemsCount = that.virtualItemsCount();
 
             return virtualItemsCount ? that.getContentOffset('begin') + that.getContentOffset('end') + that._contentSize : 0;
         },
@@ -470,15 +470,15 @@ exports.VirtualScrollController = Class.inherit((function() {
             return this._viewportItemIndex;
         },
         setViewportItemIndex: function(itemIndex) {
-            var that = this,
-                pageSize = that._dataSource.pageSize(),
-                pageCount = that._dataSource.pageCount(),
-                virtualMode = isVirtualMode(that),
-                appendMode = isAppendMode(that),
-                totalItemsCount = that._dataSource.totalItemsCount(),
-                lastPageSize,
-                maxPageIndex,
-                newPageIndex;
+            const that = this;
+            const pageSize = that._dataSource.pageSize();
+            const pageCount = that._dataSource.pageCount();
+            const virtualMode = isVirtualMode(that);
+            const appendMode = isAppendMode(that);
+            const totalItemsCount = that._dataSource.totalItemsCount();
+            let lastPageSize;
+            let maxPageIndex;
+            let newPageIndex;
 
             that._viewportItemIndex = itemIndex;
 
@@ -527,25 +527,25 @@ exports.VirtualScrollController = Class.inherit((function() {
             }
         },
         beginPageIndex: function(defaultPageIndex) {
-            var beginPageIndex = getBeginPageIndex(this);
+            let beginPageIndex = getBeginPageIndex(this);
             if(beginPageIndex < 0) {
                 beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
             }
             return beginPageIndex;
         },
         endPageIndex: function() {
-            var endPageIndex = getEndPageIndex(this);
+            const endPageIndex = getEndPageIndex(this);
             return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
         },
         pageSize: function() {
             return this._dataSource.pageSize();
         },
         load: function() {
-            var pageIndexForLoad,
-                that = this,
-                dataSource = that._dataSource,
-                loadResult,
-                result;
+            let pageIndexForLoad;
+            const that = this;
+            const dataSource = that._dataSource;
+            let loadResult;
+            let result;
 
             if(isVirtualMode(that) || isAppendMode(that)) {
                 pageIndexForLoad = getPageIndexForLoad(that);
@@ -555,7 +555,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     if(loadResult) {
                         result = new Deferred();
                         loadResult.done(function() {
-                            var delayDeferred = that._delayDeferred;
+                            const delayDeferred = that._delayDeferred;
                             if(delayDeferred) {
                                 delayDeferred.done(result.resolve).fail(result.reject);
                             } else {
@@ -578,10 +578,10 @@ exports.VirtualScrollController = Class.inherit((function() {
             return result || new Deferred().resolve();
         },
         loadIfNeed: function() {
-            var that = this;
+            const that = this;
 
             if((isVirtualMode(that) || isAppendMode(that)) && !that._dataSource.isLoading() && (!that._isChangedFiring || that._isVirtual)) {
-                var position = that.getViewportPosition();
+                const position = that.getViewportPosition();
                 if(position > 0) {
                     that._setViewportPositionCore(position);
                 } else {
@@ -590,13 +590,13 @@ exports.VirtualScrollController = Class.inherit((function() {
             }
         },
         handleDataChanged: function(callBase, e) {
-            var that = this,
-                beginPageIndex,
-                dataSource = that._dataSource,
-                lastCacheLength = that._cache.length,
-                changeType,
-                removeInvisiblePages,
-                cacheItem;
+            const that = this;
+            let beginPageIndex;
+            const dataSource = that._dataSource;
+            let lastCacheLength = that._cache.length;
+            let changeType;
+            let removeInvisiblePages;
+            let cacheItem;
 
             if(e && e.changes) {
                 fireChanged(that, callBase, e);
@@ -625,7 +625,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     processDelayChanged(that, callBase, { isDelayed: true });
                 }
 
-                var removeCacheItem;
+                let removeCacheItem;
                 if(beginPageIndex === dataSource.pageIndex() + 1) {
                     if(removeInvisiblePages) {
                         removeCacheItem = that._cache.pop();
@@ -640,7 +640,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     that._cache.push(cacheItem);
                 }
 
-                var isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
+                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
                 processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
@@ -652,7 +652,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             }
         },
         itemsCount: function(isBase) {
-            var itemsCount = 0;
+            let itemsCount = 0;
 
             if(!isBase && isVirtualMode(this)) {
                 each(this._cache, function() {
@@ -673,7 +673,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         subscribeToWindowScrollEvents: function($element) {
-            var that = this;
+            const that = this;
 
             that._windowScroll = that._windowScroll || exports.subscribeToExternalScrollers($element, function(scrollTop) {
                 if(that.viewportItemSize()) {

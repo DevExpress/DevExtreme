@@ -1,12 +1,12 @@
-var $ = require('../core/renderer'),
-    ajax = require('../core/utils/ajax'),
-    window = require('../core/utils/window').getWindow(),
-    isFunction = require('../core/utils/type').isFunction,
-    each = require('../core/utils/iterator').each,
-    svgUtils = require('../core/utils/svg'),
-    deferredUtils = require('../core/utils/deferred'),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+const $ = require('../core/renderer');
+const ajax = require('../core/utils/ajax');
+const window = require('../core/utils/window').getWindow();
+const isFunction = require('../core/utils/type').isFunction;
+const each = require('../core/utils/iterator').each;
+const svgUtils = require('../core/utils/svg');
+const deferredUtils = require('../core/utils/deferred');
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
 
 
 exports.svgCreator = {
@@ -25,10 +25,10 @@ exports.svgCreator = {
     },
 
     _loadImages: function() {
-        var that = this;
+        const that = this;
 
         each(that._imageArray, function(src) {
-            var deferred = new Deferred();
+            const deferred = new Deferred();
 
             that._imageDeferreds.push(deferred);
             that._getBinaryFile(src, function(response) {
@@ -38,10 +38,10 @@ exports.svgCreator = {
                     return;
                 }
 
-                var i,
-                    binary = '',
-                    bytes = new Uint8Array(response),
-                    length = bytes.byteLength;
+                let i;
+                let binary = '';
+                const bytes = new Uint8Array(response);
+                const length = bytes.byteLength;
 
                 for(i = 0; i < length; i++) {
                     binary += String.fromCharCode(bytes[i]);
@@ -53,8 +53,8 @@ exports.svgCreator = {
     },
 
     _parseImages: function(element) {
-        var href,
-            that = this;
+        let href;
+        const that = this;
 
         if(element.tagName === 'image') {
             href = $(element).attr('href') || $(element).attr('xlink:href');
@@ -76,11 +76,11 @@ exports.svgCreator = {
     },
 
     getData: function(data, options) {
-        var markup,
-            that = this,
-            xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
-            svgElem = svgUtils.getSvgElement(data),
-            $svgObject = $(svgElem);
+        let markup;
+        const that = this;
+        const xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
+        const svgElem = svgUtils.getSvgElement(data);
+        const $svgObject = $(svgElem);
 
         markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0), options.backgroundColor);
 

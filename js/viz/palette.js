@@ -136,8 +136,8 @@ export function getPalette(palette, parameters) {
     parameters = parameters || {};
     palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
 
-    var result,
-        type = parameters.type;
+    let result;
+    const type = parameters.type;
     if(_isArray(palette)) {
         return palette.slice(0);
     } else {
@@ -153,8 +153,8 @@ export function getPalette(palette, parameters) {
 }
 
 export function registerPalette(name, palette) {
-    var item = {},
-        paletteName;
+    const item = {};
+    let paletteName;
 
     if(_isArray(palette)) {
         item.simpleSet = palette.slice(0);
@@ -179,9 +179,9 @@ export function getAccentColor(palette, themeDefault) {
 }
 
 function RingBuf(buf) {
-    var ind = 0;
+    let ind = 0;
     this.next = function() {
-        var res = buf[ind++];
+        const res = buf[ind++];
         if(ind === buf.length) {
             this.reset();
         }
@@ -193,18 +193,18 @@ function RingBuf(buf) {
 }
 
 function getAlternateColorsStrategy(palette, parameters) {
-    var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
-        paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
-        currentPalette = [];
+    const stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0;
+    const paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]);
+    let currentPalette = [];
 
     function reset() {
-        var step = paletteSteps.next();
+        const step = paletteSteps.next();
         currentPalette = step ? getAlteredPalette(palette, step) : palette.slice(0);
     }
 
     return {
         getColor: function(index) {
-            var color = currentPalette[index % palette.length];
+            const color = currentPalette[index % palette.length];
 
             if(index % palette.length === palette.length - 1) {
                 reset();
@@ -215,7 +215,7 @@ function getAlternateColorsStrategy(palette, parameters) {
         generateColors: function(count) {
             const colors = [];
             count = count || parameters.count;
-            for(var i = 0; i < count; i++) {
+            for(let i = 0; i < count; i++) {
                 colors.push(this.getColor(i));
             }
 
@@ -231,13 +231,13 @@ function getAlternateColorsStrategy(palette, parameters) {
 
 function getExtrapolateColorsStrategy(palette, parameters) {
     function convertColor(color, cycleIndex, cycleCount) {
-        var hsl = new _Color(color).hsl,
-            l = hsl.l / 100,
-            diapason = cycleCount - 1 / cycleCount,
-            minL = l - diapason * 0.5,
-            maxL = l + diapason * 0.5,
-            cycleMiddle = (cycleCount - 1) / 2,
-            cycleDiff = cycleIndex - cycleMiddle;
+        const hsl = new _Color(color).hsl;
+        let l = hsl.l / 100;
+        const diapason = cycleCount - 1 / cycleCount;
+        let minL = l - diapason * 0.5;
+        let maxL = l + diapason * 0.5;
+        const cycleMiddle = (cycleCount - 1) / 2;
+        const cycleDiff = cycleIndex - cycleMiddle;
 
         if(minL < Math.min(0.5, l * 0.9)) {
             minL = Math.min(0.5, l * 0.9);
@@ -260,9 +260,9 @@ function getExtrapolateColorsStrategy(palette, parameters) {
 
     return {
         getColor: function(index, count) {
-            var paletteCount = palette.length,
-                cycles = _floor((count - 1) / (paletteCount) + 1),
-                color = palette[index % paletteCount];
+            const paletteCount = palette.length;
+            const cycles = _floor((count - 1) / (paletteCount) + 1);
+            const color = palette[index % paletteCount];
 
             if(cycles > 1) {
                 return convertColor(color, _floor(index / paletteCount), cycles);
@@ -285,15 +285,15 @@ function getExtrapolateColorsStrategy(palette, parameters) {
 }
 
 function getColorMixer(palette, parameters) {
-    var paletteCount = palette.length,
-        extendedPalette = [];
+    const paletteCount = palette.length;
+    let extendedPalette = [];
 
     function distributeColors(count, colorsCount, startIndex, distribution) {
-        var groupSize = Math.floor(count / colorsCount),
-            extraItems = count - colorsCount * groupSize,
-            i = startIndex,
-            middleIndex,
-            size;
+        const groupSize = Math.floor(count / colorsCount);
+        let extraItems = count - colorsCount * groupSize;
+        let i = startIndex;
+        let middleIndex;
+        let size;
 
         while(i < startIndex + count) {
             size = groupSize;
@@ -315,10 +315,10 @@ function getColorMixer(palette, parameters) {
     function getColorAndDistance(arr, startIndex, count) {
         startIndex = (count + startIndex) % count;
 
-        var distance = 0;
+        let distance = 0;
 
-        for(var i = startIndex; i < count * 2; i += 1) {
-            var index = (count + i) % count;
+        for(let i = startIndex; i < count * 2; i += 1) {
+            const index = (count + i) % count;
             if(arr[index]) {
                 return [arr[index], distance];
             }
@@ -327,19 +327,19 @@ function getColorMixer(palette, parameters) {
     }
 
     function blendColors(paletteWithEmptyColors, paletteLength) {
-        for(var i = 0; i < paletteLength; i++) {
-            var color = paletteWithEmptyColors[i];
+        for(let i = 0; i < paletteLength; i++) {
+            const color = paletteWithEmptyColors[i];
             if(!color) {
-                var color1 = paletteWithEmptyColors[i - 1];
+                let color1 = paletteWithEmptyColors[i - 1];
                 if(!color1) {
                     continue;
                 } else {
-                    var c2 = getColorAndDistance(paletteWithEmptyColors, i, paletteLength),
-                        color2 = new _Color(c2[0]);
+                    const c2 = getColorAndDistance(paletteWithEmptyColors, i, paletteLength);
+                    const color2 = new _Color(c2[0]);
 
                     color1 = new _Color(color1);
 
-                    for(var j = 0; j < c2[1]; j++, i++) {
+                    for(let j = 0; j < c2[1]; j++, i++) {
                         paletteWithEmptyColors[i] = color1.blend(color2, (j + 1) / (c2[1] + 1)).toHex();
                     }
                 }
@@ -354,10 +354,10 @@ function getColorMixer(palette, parameters) {
             return palette;
         }
 
-        var result = [],
-            colorInGroups = paletteCount - 2,
-            currentColorIndex = 0,
-            cleanColorIndices = [];
+        let result = [];
+        const colorInGroups = paletteCount - 2;
+        let currentColorIndex = 0;
+        let cleanColorIndices = [];
 
 
         if(parameters.keepLastColorInEnd) {
@@ -366,7 +366,7 @@ function getColorMixer(palette, parameters) {
             cleanColorIndices = distributeColors(count - 1, paletteCount - 1, 1, [0]);
         }
 
-        for(var i = 0; i < count; i++) {
+        for(let i = 0; i < count; i++) {
             if(cleanColorIndices.indexOf(i) > -1) {
                 result[i] = palette[currentColorIndex++];
             }
@@ -392,7 +392,7 @@ function getColorMixer(palette, parameters) {
         generateColors: function(count, repeat) {
             count = count || parameters.count || paletteCount;
             if(repeat && count > paletteCount) {
-                let colors = extendPalette(paletteCount);
+                const colors = extendPalette(paletteCount);
                 for(let i = 0; i < count - paletteCount; i++) {
                     colors.push(colors[i]);
                 }
@@ -430,8 +430,8 @@ export function createPalette(palette, parameters, themeDefaultPalette) {
     };
     parameters = parameters || {};
 
-    var extensionMode = (parameters.extensionMode || '').toLowerCase(),
-        colors = getPalette(palette, { type: parameters.type || 'simpleSet', themeDefault: themeDefaultPalette });
+    const extensionMode = (parameters.extensionMode || '').toLowerCase();
+    const colors = getPalette(palette, { type: parameters.type || 'simpleSet', themeDefault: themeDefaultPalette });
 
     if(extensionMode === 'alternate') {
         paletteObj._extensionStrategy = getAlternateColorsStrategy(colors, parameters);
@@ -447,9 +447,9 @@ export function createPalette(palette, parameters, themeDefaultPalette) {
 }
 
 function getAlteredPalette(originalPalette, step) {
-    var palette = [],
-        i,
-        ii = originalPalette.length;
+    const palette = [];
+    let i;
+    const ii = originalPalette.length;
     for(i = 0; i < ii; ++i) {
         palette.push(getNewColor(originalPalette[i], step));
     }
@@ -457,8 +457,8 @@ function getAlteredPalette(originalPalette, step) {
 }
 
 function getNewColor(currentColor, step) {
-    var newColor = new _Color(currentColor).alter(step),
-        lightness = getLightness(newColor);
+    let newColor = new _Color(currentColor).alter(step);
+    const lightness = getLightness(newColor);
     if(lightness > 200 || lightness < 55) {
         newColor = new _Color(currentColor).alter(-step / 2);
     }
@@ -470,7 +470,7 @@ function getLightness(color) {
 }
 
 export function getDiscretePalette(source, size, themeDefaultPalette) {
-    var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette }), size) : [];
+    const palette = size > 0 ? createDiscreteColors(getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette }), size) : [];
 
     return {
         getColor: function(index) {
@@ -480,16 +480,16 @@ export function getDiscretePalette(source, size, themeDefaultPalette) {
 }
 
 function createDiscreteColors(source, count) {
-    var colorCount = count - 1,
-        sourceCount = source.length - 1,
-        colors = [],
-        gradient = [],
-        i;
+    const colorCount = count - 1;
+    const sourceCount = source.length - 1;
+    const colors = [];
+    const gradient = [];
+    let i;
 
     function addColor(pos) {
-        var k = sourceCount * pos,
-            kl = _floor(k),
-            kr = _ceil(k);
+        const k = sourceCount * pos;
+        const kl = _floor(k);
+        const kr = _ceil(k);
         gradient.push(colors[kl].blend(colors[kr], k - kl).toHex());
     }
 
@@ -508,9 +508,9 @@ function createDiscreteColors(source, count) {
 
 export function getGradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
-    var palette = getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette }),
-        color1 = new _Color(palette[0]),
-        color2 = new _Color(palette[1]);
+    const palette = getPalette(source, { type: 'gradientSet', themeDefault: themeDefaultPalette });
+    const color1 = new _Color(palette[0]);
+    const color2 = new _Color(palette[1]);
 
     return {
         getColor: function(ratio) {

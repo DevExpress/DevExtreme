@@ -6,7 +6,7 @@ import 'viz/chart';
 import 'viz/polar_chart';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div class="tooltipInteraction">\
             <div class="parentContainer">\
                 <div id="chart" class="chart"></div>\
@@ -55,7 +55,7 @@ QUnit.test('tooltip should be hidden on any target\'s parent scroll', function(a
 });
 
 QUnit.test('tooltip should be hidden on window scroll event on desktop', function(assert) {
-    var originalPlatform = devices.real().platform;
+    const originalPlatform = devices.real().platform;
 
     try {
         devices.real({ platform: 'generic' });
@@ -72,7 +72,7 @@ QUnit.test('tooltip should be hidden on window scroll event on desktop', functio
 });
 
 QUnit.test('tooltip should not be hidden on window scroll event on mobile devices', function(assert) {
-    var originalPlatform = devices.real().platform;
+    const originalPlatform = devices.real().platform;
 
     try {
         devices.real({ platform: 'ios' });
@@ -92,7 +92,7 @@ QUnit.test('tooltip should not be hidden on window scroll event on mobile device
 QUnit.test('tooltip should not be hidden if target parent was changed (scroll on previous parent)', function(assert) {
     this.createChart();
 
-    var $chart = $('.parentContainer .chart').detach();
+    const $chart = $('.parentContainer .chart').detach();
     $chart.appendTo('.tooltipInteraction .newParentContainer');
     $chart.dxChart('instance').render({ force: true });
     this.showTooltip();
@@ -106,7 +106,7 @@ QUnit.test('tooltip should not be hidden if target parent was changed (scroll on
 QUnit.test('tooltip should be hidden if target parent was changed (scroll on new parent)', function(assert) {
     this.createChart();
 
-    var $chart = $('.parentContainer .chart').detach();
+    const $chart = $('.parentContainer .chart').detach();
     $chart.appendTo('.tooltipInteraction .newParentContainer');
     $chart.dxChart('instance').render({ force: true });
     this.showTooltip();
@@ -119,7 +119,7 @@ QUnit.test('tooltip should be hidden if target parent was changed (scroll on new
 
 QUnit.test('target scroll subscriptions should be unsubscribed for current chart', function(assert) {
     this.createChart();
-    var chart = $('<div></div>').appendTo('.parentContainer').dxChart({}).dxChart('instance');
+    const chart = $('<div></div>').appendTo('.parentContainer').dxChart({}).dxChart('instance');
     this.showTooltip();
 
     // act
@@ -139,7 +139,7 @@ QUnit.module('Misc');
 // In the customer's issue it is somehow accomplished by actions code. In the test (for simplicity) it is done manually.
 // On "beginUpdate" chart comes to invalid state and later crashes on "endUpdate".
 QUnit.test('There should be no crash when chart updating is began after option is changed and ended some time later', function(assert) {
-    var chart = $('#chart').dxChart({
+    const chart = $('#chart').dxChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: {},
         onIncidentOccurred: function(e) {
@@ -174,15 +174,15 @@ QUnit.test('Three stacked spline area series (one of which has null point) shoul
 
 // T402081
 QUnit.test('number of rendering on updating dataSource', function(assert) {
-    var drawn = sinon.spy(),
-        data = new DataSource({
-            store: []
-        }),
-        chart = $('#chart').dxChart({
-            dataSource: data,
-            series: {},
-            onDrawn: drawn
-        }).dxChart('instance');
+    const drawn = sinon.spy();
+    const data = new DataSource({
+        store: []
+    });
+    const chart = $('#chart').dxChart({
+        dataSource: data,
+        series: {},
+        onDrawn: drawn
+    }).dxChart('instance');
 
     drawn.reset();
 
@@ -194,10 +194,10 @@ QUnit.test('number of rendering on updating dataSource', function(assert) {
 
 // T600660
 QUnit.test('useSpiderWeb option changing', function(assert) {
-    var polar = $('#chart').dxPolarChart({
-            series: [{}]
-        }).dxPolarChart('instance'),
-        initialSeries = polar.getAllSeries()[0];
+    const polar = $('#chart').dxPolarChart({
+        series: [{}]
+    }).dxPolarChart('instance');
+    const initialSeries = polar.getAllSeries()[0];
 
     polar.option('useSpiderWeb', true);
 
@@ -252,7 +252,7 @@ QUnit.test('single series. select', function(assert) {
     // arrange
     this.options.onSeriesSelectionChanged = sinon.spy();
 
-    var chart = this.createChart(this.options);
+    const chart = this.createChart(this.options);
 
     // act
     chart.getAllSeries()[0].select();
@@ -265,7 +265,7 @@ QUnit.test('single series. double select', function(assert) {
     // arrange
     this.options.onSeriesSelectionChanged = sinon.spy();
 
-    var chart = this.createChart(this.options);
+    const chart = this.createChart(this.options);
 
     chart.getAllSeries()[0].select();
     // act
@@ -278,7 +278,7 @@ QUnit.test('single series. double select', function(assert) {
 QUnit.test('single series. clear selection selected series', function(assert) {
     // arrage
     this.options.onSeriesSelectionChanged = sinon.spy();
-    var chart = this.createChart(this.options);
+    const chart = this.createChart(this.options);
 
     chart.getAllSeries()[0].select();
 
@@ -308,7 +308,7 @@ QUnit.test('select second series with single selection mode', function(assert) {
     this.options.seriesSelectionMode = 'single';
     this.createChart(this.options);
 
-    var allSeries = this.chart.getAllSeries();
+    const allSeries = this.chart.getAllSeries();
 
     allSeries[0].select();
 
@@ -327,7 +327,7 @@ QUnit.test('select series with two series', function(assert) {
     this.options.seriesSelectionMode = 'single';
     this.createChart(this.options);
 
-    var allSeries = this.chart.getAllSeries();
+    const allSeries = this.chart.getAllSeries();
 
     // act
     allSeries[0].select();
@@ -342,7 +342,7 @@ QUnit.test('select second series with multiple selection mode', function(assert)
     this.options.seriesSelectionMode = 'multiple';
     this.createChart(this.options);
 
-    var allSeries = this.chart.getAllSeries();
+    const allSeries = this.chart.getAllSeries();
 
     allSeries[0].select();
 
@@ -356,7 +356,7 @@ QUnit.test('select second series with multiple selection mode', function(assert)
 
 QUnit.test('select point', function(assert) {
     // arrange
-    var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
+    const pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = 'single';
     this.createChart(this.options);
@@ -371,7 +371,7 @@ QUnit.test('select point', function(assert) {
 
 QUnit.test('select selected point', function(assert) {
     // arrange
-    var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
+    const pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = 'single';
     this.createChart(this.options);
@@ -386,7 +386,7 @@ QUnit.test('select selected point', function(assert) {
 
 QUnit.test('clear selection of selected point', function(assert) {
     // arrange
-    var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
+    const pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = 'single';
     this.createChart(this.options);
@@ -402,7 +402,7 @@ QUnit.test('clear selection of selected point', function(assert) {
 
 QUnit.test('clear selection of unselected point', function(assert) {
     // arrange
-    var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
+    const pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = 'single';
     this.createChart(this.options);
@@ -416,7 +416,7 @@ QUnit.test('clear selection of unselected point', function(assert) {
 
 QUnit.test('select two points. single mode', function(assert) {
     // arrange
-    var pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
+    const pointSelectionChanged = this.options.onPointSelectionChanged = sinon.spy();
 
     this.options.pointSelectionMode = 'single';
     this.createChart(this.options);
@@ -460,7 +460,7 @@ QUnit.test('select two points with multiple mode', function(assert) {
 
 QUnit.test('hover', function(assert) {
     // arrange
-    var hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
+    const hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
 
     // act
@@ -472,7 +472,7 @@ QUnit.test('hover', function(assert) {
 
 QUnit.test('clearHover', function(assert) {
     // arrange
-    var hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
+    const hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].hover();
     hoverChanged.reset();
@@ -485,7 +485,7 @@ QUnit.test('clearHover', function(assert) {
 
 QUnit.test('hoverPoint', function(assert) {
     // arrange
-    var pointHover = this.options.onPointHoverChanged = sinon.spy();
+    const pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
 
     // act
@@ -497,7 +497,7 @@ QUnit.test('hoverPoint', function(assert) {
 
 QUnit.test('clearPointHover', function(assert) {
     // arrange
-    var pointHover = this.options.onPointHoverChanged = sinon.spy();
+    const pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
     pointHover.reset();
@@ -512,8 +512,8 @@ QUnit.test('clearPointHover', function(assert) {
 
 QUnit.test('Clean point hover after hover another point', function(assert) {
     // arrange
-    var points,
-        series;
+    let points;
+    let series;
 
     this.createChart(this.options);
     series = this.chart.getAllSeries()[0];
@@ -529,7 +529,7 @@ QUnit.test('Clean point hover after hover another point', function(assert) {
 
 QUnit.test('onPointhoverChanged on hover second', function(assert) {
     // arrange
-    var pointHover = this.options.onPointHoverChanged = sinon.spy();
+    const pointHover = this.options.onPointHoverChanged = sinon.spy();
 
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
@@ -549,7 +549,7 @@ QUnit.module('axis grids hidding', {
 
 QUnit.test('hide grids for first stub axis', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: 'a1' }, { argumentField: 'argumentField' }],
         valueAxis: [{
@@ -571,8 +571,8 @@ QUnit.test('hide grids for first stub axis', function(assert) {
         }]
     });
 
-    var stubAxis = chart.getValueAxis('stubAxis');
-    var valueAxis = chart.getValueAxis('a1');
+    const stubAxis = chart.getValueAxis('stubAxis');
+    const valueAxis = chart.getValueAxis('a1');
 
     assert.equal(stubAxis.getOptions().grid.visible, false, 'first axis grid isn\'t visible');
     assert.equal(stubAxis.getOptions().minorGrid.visible, false, 'first axis grid isn\'t visible');
@@ -583,7 +583,7 @@ QUnit.test('hide grids for first stub axis', function(assert) {
 
 QUnit.test('hide grids for second axis', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: 'a1' }, { axis: 'a2' }],
         valueAxis: [{
@@ -604,8 +604,8 @@ QUnit.test('hide grids for second axis', function(assert) {
             }
         }]
     });
-    var firstAxis = chart.getValueAxis('a2');
-    var secondAxis = chart.getValueAxis('a1');
+    const firstAxis = chart.getValueAxis('a2');
+    const secondAxis = chart.getValueAxis('a1');
 
     assert.equal(firstAxis.getOptions().grid.visible, true, 'first axis grid visible');
     assert.equal(firstAxis.getOptions().minorGrid.visible, true, 'first axis grid visible');
@@ -616,7 +616,7 @@ QUnit.test('hide grids for second axis', function(assert) {
 
 QUnit.test('T570332. Do not show minor grid when it disabled and two stub axis', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         series: [{ axis: 'a1' }, { axis: 'a2' }],
         valueAxis: [{
             name: 'a2',
@@ -636,8 +636,8 @@ QUnit.test('T570332. Do not show minor grid when it disabled and two stub axis',
             }
         }]
     });
-    var firstAxis = chart.getValueAxis('a2');
-    var secondAxis = chart.getValueAxis('a1');
+    const firstAxis = chart.getValueAxis('a2');
+    const secondAxis = chart.getValueAxis('a1');
 
     assert.equal(firstAxis.getOptions().minorGrid.visible, false, 'first axis minor grid isn\'t visible');
     assert.equal(secondAxis.getOptions().minorGrid.visible, false, 'second axis minor grid isn\'t visible');
@@ -645,7 +645,7 @@ QUnit.test('T570332. Do not show minor grid when it disabled and two stub axis',
 
 QUnit.test('T570332. Make minor grid visible for first non stub axis', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ axis: 'a1' }, { axis: 'a2' }],
         valueAxis: [{
@@ -666,8 +666,8 @@ QUnit.test('T570332. Make minor grid visible for first non stub axis', function(
             }
         }]
     });
-    var firstAxis = chart.getValueAxis('a2');
-    var secondAxis = chart.getValueAxis('a1');
+    const firstAxis = chart.getValueAxis('a2');
+    const secondAxis = chart.getValueAxis('a1');
 
     assert.equal(firstAxis.getOptions().minorGrid.visible, true, 'first axis minor grid is visible');
     assert.equal(secondAxis.getOptions().minorGrid.visible, false, 'second axis minor grid isn\'t visible');
@@ -675,7 +675,7 @@ QUnit.test('T570332. Make minor grid visible for first non stub axis', function(
 
 QUnit.test('two stub axis', function(assert) {
     // act
-    var chart = this.createChart({
+    const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }],
         series: [{ argumentField: 'a1' }, { argumentField: 'a1' }],
         valueAxis: [{
@@ -695,7 +695,7 @@ QUnit.test('two stub axis', function(assert) {
         }]
     });
 
-    var verticalAxes = chart._valueAxes;
+    const verticalAxes = chart._valueAxes;
 
     assert.equal(verticalAxes.length, 2, 'chart must have two value axis');
     assert.equal(verticalAxes[0].getOptions().grid.visible, true, 'first axis grid visible');

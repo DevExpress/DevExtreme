@@ -46,12 +46,12 @@ const UNSUPPORTED_FORMAT_MAPPING = {
     millisecond: 'longTime'
 };
 
-var ExcelCreator = Class.inherit({
+const ExcelCreator = Class.inherit({
     _getXMLTag: function(tagName, attributes, content) {
-        var result = '<' + tagName,
-            i,
-            length = attributes.length,
-            attr;
+        let result = '<' + tagName;
+        let i;
+        const length = attributes.length;
+        let attr;
 
         for(i = 0; i < length; i++) {
             attr = attributes[i];
@@ -65,10 +65,10 @@ var ExcelCreator = Class.inherit({
 
     _convertToExcelCellRef: function(zeroBasedRowIndex, zeroBasedCellIndex) {
         // pass (0, 0) to get 'A1'
-        var columnName = '',
-            max = 26,
-            charCode,
-            isCellIndexFound;
+        let columnName = '';
+        const max = 26;
+        let charCode;
+        let isCellIndexFound;
 
         while(!isCellIndexFound) {
             charCode = 65 + ((zeroBasedCellIndex >= max) ? (zeroBasedCellIndex % max) : Math.ceil(zeroBasedCellIndex));
@@ -119,7 +119,7 @@ var ExcelCreator = Class.inherit({
     },
 
     _formatObjectConverter: function(format, dataType) {
-        var result = {
+        const result = {
             format: format,
             precision: format && format.precision,
             dataType: dataType
@@ -135,8 +135,8 @@ var ExcelCreator = Class.inherit({
         return result;
     },
     _tryConvertToExcelNumberFormat: function(format, dataType) {
-        var currency,
-            newFormat = this._formatObjectConverter(format, dataType);
+        let currency;
+        const newFormat = this._formatObjectConverter(format, dataType);
 
         format = newFormat.format;
         currency = newFormat.currency;
@@ -164,8 +164,8 @@ var ExcelCreator = Class.inherit({
     },
 
     _tryGetExcelDateValue: function(date) {
-        var days,
-            totalTime;
+        let days;
+        let totalTime;
 
         if(isDate(date)) {
             days = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - EXCEL_START_TIME) / (1000 * 60 * 60 * 24));
@@ -179,10 +179,10 @@ var ExcelCreator = Class.inherit({
     },
 
     _prepareValue: function(rowIndex, cellIndex) {
-        var dataProvider = this._dataProvider,
-            { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex) || {},
-            sourceValue,
-            type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
+        const dataProvider = this._dataProvider;
+        let { value, cellSourceData } = dataProvider.getCellData(rowIndex, cellIndex) || {};
+        let sourceValue;
+        let type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
         if(type === VALID_TYPES.date && !isDate(value)) {
             type = VALID_TYPES.string;
@@ -238,7 +238,7 @@ var ExcelCreator = Class.inherit({
 
         dataProvider.customizeExcelCell(args, sourceData);
 
-        let newStyle = styleCopy || {};
+        const newStyle = styleCopy || {};
 
         newStyle.font = args.font;
 
@@ -260,16 +260,16 @@ var ExcelCreator = Class.inherit({
     },
 
     _getDataArray: function() {
-        var that = this,
-            rowIndex,
-            cellIndex,
-            cellsArray,
-            cellData,
-            result = [],
-            dataProvider = that._dataProvider,
-            rowsLength = dataProvider.getRowsCount(),
-            columns = dataProvider.getColumns(),
-            cellsLength;
+        const that = this;
+        let rowIndex;
+        let cellIndex;
+        let cellsArray;
+        let cellData;
+        const result = [];
+        const dataProvider = that._dataProvider;
+        const rowsLength = dataProvider.getRowsCount();
+        const columns = dataProvider.getColumns();
+        let cellsLength;
 
         for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
             cellsArray = [];
@@ -342,8 +342,8 @@ var ExcelCreator = Class.inherit({
     },
 
     _prepareStyleData: function() {
-        var that = this,
-            styles = that._dataProvider.getStyles();
+        const that = this;
+        const styles = that._dataProvider.getStyles();
 
         that._dataProvider.getColumns().forEach(function(column) {
             that._colsArray.push(that._calculateWidth(column.width));
@@ -394,7 +394,7 @@ var ExcelCreator = Class.inherit({
     },
 
     _getWorkbookContent: function() {
-        var content = '<bookViews><workbookView xWindow="0" yWindow="0" windowWidth="0" windowHeight="0"/>' +
+        const content = '<bookViews><workbookView xWindow="0" yWindow="0" windowWidth="0" windowHeight="0"/>' +
                       '</bookViews><sheets><sheet name="Sheet" sheetId="1" r:id="rId1" /></sheets><definedNames>' +
                       '<definedName name="_xlnm.Print_Titles" localSheetId="0">Sheet!$1:$1</definedName>' +
                       '<definedName name="_xlnm._FilterDatabase" hidden="0" localSheetId="0">Sheet!$A$1:$F$6332</definedName></definedNames>';
@@ -418,9 +418,9 @@ var ExcelCreator = Class.inherit({
     },
 
     _generateStylesXML: function() {
-        var that = this,
-            folder = that._zip.folder(XL_FOLDER_NAME),
-            XML = '';
+        const that = this;
+        const folder = that._zip.folder(XL_FOLDER_NAME);
+        let XML = '';
 
         XML = XML + this._excelFile.generateNumberFormatsXml();
         XML = XML + this._excelFile.generateFontsXml();
@@ -442,10 +442,10 @@ var ExcelCreator = Class.inherit({
     },
 
     _generateStringsXML: function() {
-        var folder = this._zip.folder(XL_FOLDER_NAME),
-            stringIndex,
-            stringsLength = this._stringArray.length,
-            sharedStringXml = XML_TAG;
+        const folder = this._zip.folder(XL_FOLDER_NAME);
+        let stringIndex;
+        const stringsLength = this._stringArray.length;
+        let sharedStringXml = XML_TAG;
 
         for(stringIndex = 0; stringIndex < stringsLength; stringIndex++) {
             this._stringArray[stringIndex] = this._getXMLTag('si', [], this._getXMLTag('t', [], this._stringArray[stringIndex]));
@@ -462,8 +462,8 @@ var ExcelCreator = Class.inherit({
     },
 
     _getPaneXML: function() {
-        var attributes = [{ name: 'activePane', value: 'bottomLeft' }, { name: 'state', value: 'frozen' }],
-            frozenArea = this._dataProvider.getFrozenArea();
+        const attributes = [{ name: 'activePane', value: 'bottomLeft' }, { name: 'state', value: 'frozen' }];
+        const frozenArea = this._dataProvider.getFrozenArea();
 
         if(!(frozenArea.x || frozenArea.y)) return '';
 
@@ -497,18 +497,18 @@ var ExcelCreator = Class.inherit({
     },
 
     _generateWorksheetXML: function() {
-        var colIndex,
-            rowIndex,
-            cellData,
-            xmlCells,
-            rightBottomCellRef,
-            xmlRows = [],
-            rowsLength = this._cellsArray.length,
-            cellsLength,
-            colsLength = this._colsArray.length,
-            rSpans = '1:' + colsLength,
-            headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1,
-            xmlResult = [WORKSHEET_HEADER_XML];
+        let colIndex;
+        let rowIndex;
+        let cellData;
+        let xmlCells;
+        let rightBottomCellRef;
+        let xmlRows = [];
+        const rowsLength = this._cellsArray.length;
+        let cellsLength;
+        const colsLength = this._colsArray.length;
+        const rSpans = '1:' + colsLength;
+        const headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1;
+        let xmlResult = [WORKSHEET_HEADER_XML];
 
         xmlResult.push((this._needSheetPr) ? GROUP_SHEET_PR_XML : SINGLE_SHEET_PR_XML);
         xmlResult.push('<dimension ref="A1:C1"/>'); // 18.3.1.35 dimension (Worksheet Dimensions)
@@ -581,22 +581,22 @@ var ExcelCreator = Class.inherit({
     },
 
     _generateMergingXML: function() {
-        var k,
-            l,
-            cellIndex,
-            rowIndex,
-            rowsLength = isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount(),
-            columnsLength = this._dataProvider.getColumns().length,
-            usedArea = [],
-            mergeArray = [],
-            mergeArrayLength,
-            mergeIndex,
-            mergeXML = '';
+        let k;
+        let l;
+        let cellIndex;
+        let rowIndex;
+        const rowsLength = isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount();
+        const columnsLength = this._dataProvider.getColumns().length;
+        const usedArea = [];
+        const mergeArray = [];
+        let mergeArrayLength;
+        let mergeIndex;
+        let mergeXML = '';
 
         for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
             for(cellIndex = 0; cellIndex !== columnsLength; cellIndex++) {
                 if(!isDefined(usedArea[rowIndex]) || !isDefined(usedArea[rowIndex][cellIndex])) {
-                    var cellMerge = this._dataProvider.getCellMerging(rowIndex, cellIndex);
+                    const cellMerge = this._dataProvider.getCellMerging(rowIndex, cellIndex);
                     if(cellMerge.colspan || cellMerge.rowspan) {
                         mergeArray.push({
                             start: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, cellIndex),
@@ -624,10 +624,10 @@ var ExcelCreator = Class.inherit({
     },
 
     _generateCommonXML: function() {
-        var relsFileContent = XML_TAG + this._createXMLRelationships(this._createXMLRelationship(1, 'officeDocument', 'xl/' + WORKBOOK_FILE_NAME)),
-            xmlRelationships,
-            folder = this._zip.folder(XL_FOLDER_NAME),
-            relsXML = XML_TAG;
+        const relsFileContent = XML_TAG + this._createXMLRelationships(this._createXMLRelationship(1, 'officeDocument', 'xl/' + WORKBOOK_FILE_NAME));
+        let xmlRelationships;
+        const folder = this._zip.folder(XL_FOLDER_NAME);
+        let relsXML = XML_TAG;
 
         this._zip.folder('_' + RELATIONSHIP_PART_NAME).file('.' + RELATIONSHIP_PART_NAME, relsFileContent);
         xmlRelationships = this._createXMLRelationship(1, 'worksheet', 'worksheets/' + WORKSHEET_FILE_NAME) + this._createXMLRelationship(2, 'styles', STYLE_FILE_NAME) + this._createXMLRelationship(3, 'sharedStrings', SHAREDSTRING_FILE_NAME);
@@ -709,7 +709,7 @@ exports.ExcelCreator = ExcelCreator;
 
 exports.getData = function(data, options) {
     // TODO: Looks like there is no need to export ExcelCreator any more?
-    var excelCreator = new exports.ExcelCreator(data, options);
+    const excelCreator = new exports.ExcelCreator(data, options);
 
     excelCreator._checkZipState();
 

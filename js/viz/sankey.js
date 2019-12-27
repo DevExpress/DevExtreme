@@ -1,5 +1,5 @@
-var dxSankey = require('./sankey/sankey'),
-    setTooltipCustomOptions = require('./sankey/tooltip').setTooltipCustomOptions;
+const dxSankey = require('./sankey/sankey');
+const setTooltipCustomOptions = require('./sankey/tooltip').setTooltipCustomOptions;
 
 dxSankey.addPlugin(require('./core/export').plugin);
 dxSankey.addPlugin(require('./core/title').plugin);

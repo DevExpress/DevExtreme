@@ -1,17 +1,17 @@
-var $ = require('../core/renderer'),
-    TrackBar = require('./track_bar'),
-    extend = require('../core/utils/extend').extend,
-    isFunction = require('../core/utils/type').isFunction,
-    registerComponent = require('../core/component_registrator');
+const $ = require('../core/renderer');
+const TrackBar = require('./track_bar');
+const extend = require('../core/utils/extend').extend;
+const isFunction = require('../core/utils/type').isFunction;
+const registerComponent = require('../core/component_registrator');
 
-var PROGRESSBAR_CLASS = 'dx-progressbar',
-    PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container',
-    PROGRESSBAR_RANGE_CONTAINER_CLASS = 'dx-progressbar-range-container',
-    PROGRESSBAR_RANGE_CLASS = 'dx-progressbar-range',
-    PROGRESSBAR_WRAPPER_CLASS = 'dx-progressbar-wrapper',
-    PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status',
-    PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container',
-    PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
+const PROGRESSBAR_CLASS = 'dx-progressbar';
+const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
+const PROGRESSBAR_RANGE_CONTAINER_CLASS = 'dx-progressbar-range-container';
+const PROGRESSBAR_RANGE_CLASS = 'dx-progressbar-range';
+const PROGRESSBAR_WRAPPER_CLASS = 'dx-progressbar-wrapper';
+const PROGRESSBAR_STATUS_CLASS = 'dx-progressbar-status';
+const PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER = 'dx-progressbar-animating-container';
+const PROGRESSBAR_INDETERMINATE_SEGMENT = 'dx-progressbar-animating-segment';
 
 /**
 * @name dxProgressBar
@@ -19,7 +19,7 @@ var PROGRESSBAR_CLASS = 'dx-progressbar',
 * @module ui/progress_bar
 * @export default
 */
-var ProgressBar = TrackBar.inherit({
+const ProgressBar = TrackBar.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -130,9 +130,9 @@ var ProgressBar = TrackBar.inherit({
         this._$segmentContainer = $('<div>')
             .addClass(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER);
 
-        var segments = this.option('_animatingSegmentCount');
+        const segments = this.option('_animatingSegmentCount');
 
-        for(var i = 0; i < segments; i++) {
+        for(let i = 0; i < segments; i++) {
             $('<div>')
                 .addClass(PROGRESSBAR_INDETERMINATE_SEGMENT)
                 .addClass(PROGRESSBAR_INDETERMINATE_SEGMENT + '-' + (i + 1))
@@ -143,7 +143,7 @@ var ProgressBar = TrackBar.inherit({
     },
 
     _toggleStatus: function(value) {
-        var splitPosition = this.option('statusPosition').split(' ');
+        const splitPosition = this.option('statusPosition').split(' ');
 
         if(value) {
             if(splitPosition[0] === 'top' || splitPosition[0] === 'left') {
@@ -159,12 +159,12 @@ var ProgressBar = TrackBar.inherit({
     },
 
     _togglePositionClass: function() {
-        var position = this.option('statusPosition'),
-            splitPosition = position.split(' ');
+        const position = this.option('statusPosition');
+        const splitPosition = position.split(' ');
 
         this._$wrapper.removeClass('dx-position-top-left dx-position-top-right dx-position-bottom-left dx-position-bottom-right dx-position-left dx-position-right');
 
-        var positionClass = 'dx-position-' + splitPosition[0];
+        let positionClass = 'dx-position-' + splitPosition[0];
 
         if(splitPosition[1]) {
             positionClass += '-' + splitPosition[1];
@@ -185,8 +185,8 @@ var ProgressBar = TrackBar.inherit({
     },
 
     _renderValue: function() {
-        var val = this.option('value'),
-            max = this.option('max');
+        const val = this.option('value');
+        const max = this.option('max');
 
         if(!val && val !== 0) {
             this._toggleIndeterminateState(true);
@@ -208,7 +208,7 @@ var ProgressBar = TrackBar.inherit({
     },
 
     _setStatus: function() {
-        var format = this.option('statusFormat');
+        let format = this.option('statusFormat');
 
         if(isFunction(format)) {
             format = format.bind(this);
@@ -218,7 +218,7 @@ var ProgressBar = TrackBar.inherit({
             };
         }
 
-        var statusText = format(this._currentRatio, this.option('value'));
+        const statusText = format(this._currentRatio, this.option('value'));
         this._$status.text(statusText);
     },
 

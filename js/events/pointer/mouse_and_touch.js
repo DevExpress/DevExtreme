@@ -1,10 +1,10 @@
-var extend = require('../../core/utils/extend').extend,
-    BaseStrategy = require('./base'),
-    MouseStrategy = require('./mouse'),
-    TouchStrategy = require('./touch'),
-    eventUtils = require('../utils');
+const extend = require('../../core/utils/extend').extend;
+const BaseStrategy = require('./base');
+const MouseStrategy = require('./mouse');
+const TouchStrategy = require('./touch');
+const eventUtils = require('../utils');
 
-var eventMap = {
+const eventMap = {
     'dxpointerdown': 'touchstart mousedown',
     'dxpointermove': 'touchmove mousemove',
     'dxpointerup': 'touchend mouseup',
@@ -16,8 +16,8 @@ var eventMap = {
 };
 
 
-var activated = false;
-var activateStrategy = function() {
+let activated = false;
+const activateStrategy = function() {
     if(activated) {
         return;
     }
@@ -27,7 +27,7 @@ var activateStrategy = function() {
     activated = true;
 };
 
-var MouseAndTouchStrategy = BaseStrategy.inherit({
+const MouseAndTouchStrategy = BaseStrategy.inherit({
 
     EVENT_LOCK_TIMEOUT: 100,
 
@@ -38,7 +38,7 @@ var MouseAndTouchStrategy = BaseStrategy.inherit({
     },
 
     _handler: function(e) {
-        var isMouseEvent = eventUtils.isMouseEvent(e);
+        const isMouseEvent = eventUtils.isMouseEvent(e);
 
         if(!isMouseEvent) {
             this._skipNextEvents = true;
@@ -54,7 +54,7 @@ var MouseAndTouchStrategy = BaseStrategy.inherit({
 
             clearTimeout(this._unlockMouseTimer);
 
-            var that = this;
+            const that = this;
             this._unlockMouseTimer = setTimeout(function() {
                 that._mouseLocked = false;
             }, this.EVENT_LOCK_TIMEOUT);
@@ -66,8 +66,8 @@ var MouseAndTouchStrategy = BaseStrategy.inherit({
     },
 
     _fireEvent: function(args) {
-        var isMouseEvent = eventUtils.isMouseEvent(args.originalEvent),
-            normalizer = isMouseEvent ? MouseStrategy.normalize : TouchStrategy.normalize;
+        const isMouseEvent = eventUtils.isMouseEvent(args.originalEvent);
+        const normalizer = isMouseEvent ? MouseStrategy.normalize : TouchStrategy.normalize;
 
         return this.callBase(extend(normalizer(args.originalEvent), args));
     },

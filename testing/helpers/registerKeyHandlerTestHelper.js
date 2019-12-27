@@ -23,7 +23,7 @@ const registerKeyHandlerTestHelper = {
                 };
 
                 this.checkKeyHandlerCall = (key) => {
-                    let args = this.handler.firstCall.args[0];
+                    const args = this.handler.firstCall.args[0];
 
                     assert.strictEqual(this.handler.callCount, 1, `key press ${key} button was handled`);
                     assert.ok(this.keyPressTargetElement.is(args.target), 'event.target');

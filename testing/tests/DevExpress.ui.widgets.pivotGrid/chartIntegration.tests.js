@@ -74,24 +74,24 @@ QUnit.module('Chart Binding', {
 });
 
 QUnit.test('Pivot Grid has method to bind chart', function(assert) {
-    var pivotGrid = createPivotGrid();
+    const pivotGrid = createPivotGrid();
 
     assert.ok(pivotGrid);
     assert.ok($.isFunction(pivotGrid.bindChart));
 });
 
 QUnit.test('Call bind chart without arguments', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chartBinding = pivotGrid.bindChart();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chartBinding = pivotGrid.bindChart();
 
     assert.ok(!chartBinding);
 });
 
 QUnit.test('Bind chart instance to pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartBinding = pivotGrid.bindChart(chart),
-        chartOptions = this.getChartOptions();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartBinding = pivotGrid.bindChart(chart);
+    const chartOptions = this.getChartOptions();
 
     assert.ok(chartBinding);
     assert.ok(chartOptions);
@@ -101,10 +101,10 @@ QUnit.test('Bind chart instance to pivotGrid', function(assert) {
 });
 
 QUnit.test('Bind chart instance set as element to pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartBinding = pivotGrid.bindChart(chart.$element()),
-        chartOptions = this.getChartOptions();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartBinding = pivotGrid.bindChart(chart.$element());
+    const chartOptions = this.getChartOptions();
 
     assert.ok(chartBinding);
     assert.ok(chartOptions);
@@ -113,27 +113,27 @@ QUnit.test('Bind chart instance set as element to pivotGrid', function(assert) {
 });
 
 QUnit.test('Don\'t bind chart set as empty element to pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        $container = $('<div id="newChartContainer">').appendTo('#qunit-fixture'),
-        chartBinding = pivotGrid.bindChart($container);
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const $container = $('<div id="newChartContainer">').appendTo('#qunit-fixture');
+    const chartBinding = pivotGrid.bindChart($container);
 
     assert.ok(!chartBinding);
 });
 
 QUnit.test('Don\'t bind chart set as fake selector to pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chartBinding = pivotGrid.bindChart('#myChart');
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chartBinding = pivotGrid.bindChart('#myChart');
 
     assert.ok(!chartBinding);
 });
 
 QUnit.test('Bind chart instance set as selector to pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
 
     createChart();
 
-    var chartBinding = pivotGrid.bindChart('#chartContainer'),
-        chartOptions = this.getChartOptions();
+    const chartBinding = pivotGrid.bindChart('#chartContainer');
+    const chartOptions = this.getChartOptions();
 
     assert.ok(chartBinding);
     assert.ok(chartOptions);
@@ -142,12 +142,12 @@ QUnit.test('Bind chart instance set as selector to pivotGrid', function(assert) 
 });
 
 QUnit.test('Bind chart instance set as dom element', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
 
     createChart();
 
-    var chartBinding = pivotGrid.bindChart(document.getElementById('chartContainer')),
-        chartOptions = this.getChartOptions();
+    const chartBinding = pivotGrid.bindChart(document.getElementById('chartContainer'));
+    const chartOptions = this.getChartOptions();
 
     assert.ok(chartBinding);
     assert.ok(chartOptions);
@@ -156,27 +156,27 @@ QUnit.test('Bind chart instance set as dom element', function(assert) {
 });
 
 QUnit.test('Update bound chart when pivotGrid is changed', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
 
     pivotGrid.bindChart(createChart());
 
-    var chartDataSource = this.getChartOptions().dataSource;
+    const chartDataSource = this.getChartOptions().dataSource;
 
     // act
     pivotGrid.getDataSource().field(0, { area: null });
     pivotGrid.getDataSource().load();
 
     // assert
-    var updatedChartOptions = this.getChartOptions();
+    const updatedChartOptions = this.getChartOptions();
     assert.ok(chartDataSource !== updatedChartOptions.dataSource, 'chart dataSource is updated');
 });
 
 QUnit.test('Unbind chart from pivotGrid', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartBinding = pivotGrid.bindChart(chart),
-        chartDataSource = this.getChartOptions().dataSource,
-        newChartDS;
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartBinding = pivotGrid.bindChart(chart);
+    const chartDataSource = this.getChartOptions().dataSource;
+    let newChartDS;
 
     chartBinding();
 
@@ -189,9 +189,9 @@ QUnit.test('Unbind chart from pivotGrid', function(assert) {
 });
 
 QUnit.test('Binding same chart two times', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartReady = sinon.stub();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartReady = sinon.stub();
 
     pivotGrid.bindChart(chart);
     pivotGrid.bindChart(chart);
@@ -205,8 +205,8 @@ QUnit.test('Binding same chart two times', function(assert) {
 });
 
 QUnit.test('Change pivotGrid after disposing bound chart', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
 
     pivotGrid.bindChart(chart);
     pivotGrid.getDataSource().field(0, { area: null });
@@ -217,10 +217,10 @@ QUnit.test('Change pivotGrid after disposing bound chart', function(assert) {
 });
 
 QUnit.test('Unbind chart after pivotGrid disposing', function(assert) {
-    var pivotGridDataSource = new PivotGridDataSource(this.pivotGridOptions.dataSource),
-        pivotGrid = createPivotGrid({ dataSource: pivotGridDataSource }),
-        chart = createChart(),
-        chartReady = sinon.stub();
+    const pivotGridDataSource = new PivotGridDataSource(this.pivotGridOptions.dataSource);
+    const pivotGrid = createPivotGrid({ dataSource: pivotGridDataSource });
+    const chart = createChart();
+    const chartReady = sinon.stub();
 
     pivotGrid.bindChart(chart);
     pivotGridDataSource.field(0, { area: null });
@@ -234,15 +234,15 @@ QUnit.test('Unbind chart after pivotGrid disposing', function(assert) {
 });
 
 QUnit.test('Rebind chart after change pivotGrid dataSource', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartReady = sinon.stub();
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartReady = sinon.stub();
 
     pivotGrid.bindChart(chart);
 
     chart.on('done', chartReady);
 
-    var newDataSourceOptions = $.extend({}, this.pivotGridOptions, {
+    const newDataSourceOptions = $.extend({}, this.pivotGridOptions, {
         fields: [
             { dataField: 'ShipCountry', filterValues: ['Argentina', 'USA', 'Canada'], area: 'row' },
             { summaryType: 'count', area: 'data' }
@@ -261,10 +261,10 @@ QUnit.test('Rebind chart after change pivotGrid dataSource', function(assert) {
 });
 
 QUnit.test('no rebind chart after change pivotGrid dataSource if chart unbound', function(assert) {
-    var pivotGrid = createPivotGrid(this.pivotGridOptions),
-        chart = createChart(),
-        chartReady = sinon.stub(),
-        chartBinding = pivotGrid.bindChart(chart);
+    const pivotGrid = createPivotGrid(this.pivotGridOptions);
+    const chart = createChart();
+    const chartReady = sinon.stub();
+    const chartBinding = pivotGrid.bindChart(chart);
 
     chart.on('done', chartReady);
 
@@ -279,14 +279,14 @@ QUnit.test('no rebind chart after change pivotGrid dataSource if chart unbound',
 
 
 QUnit.test('Pass grandTotal text', function(assert) {
-    var pivotGrid = createPivotGrid({
-            dataSource: this.pivotGridOptions.dataSource,
-            texts: {
-                grandTotal: 'GT'
-            }
-        }),
+    const pivotGrid = createPivotGrid({
+        dataSource: this.pivotGridOptions.dataSource,
+        texts: {
+            grandTotal: 'GT'
+        }
+    });
 
-        chart = createChart();
+    const chart = createChart();
 
     pivotGrid.bindChart(chart, {
         processCell: function(arg) {
@@ -294,38 +294,38 @@ QUnit.test('Pass grandTotal text', function(assert) {
         }
     });
 
-    var series = chart.getAllSeries();
+    const series = chart.getAllSeries();
 
     assert.strictEqual(series[series.length - 1].name, 'GT');
     assert.ok(series[series.length - 1].getPoints()[0].argument);
 });
 
 QUnit.test('Not redraw chart during virtual scrolling', function(assert) {
-    var pivotGridOptions = $.extend(true, this.pivotGridOptions, {
-            scrolling: { mode: 'virtual', timeout: 0, renderingThreshold: 0 },
-            height: '200px',
-            dataSource: { fields: [{}, {
-                dataField: 'OrderDate',
-                dataType: 'date',
-                area: 'row',
-                filterValues: [[1996]],
-                expanded: true
-            }, {
-                groupName: 'OrderDate',
-                groupInterval: 'year',
-            }, {
-                groupName: 'OrderDate',
-                groupInterval: 'quarter',
-            }, {
-                groupName: 'OrderDate',
-                groupInterval: 'day',
-                groupIndex: 3
-            }]
-            }
-        }),
-        pivotGrid = createPivotGrid(pivotGridOptions),
-        chart = createChart({ legend: { visible: false } }),
-        chartReady = sinon.stub();
+    const pivotGridOptions = $.extend(true, this.pivotGridOptions, {
+        scrolling: { mode: 'virtual', timeout: 0, renderingThreshold: 0 },
+        height: '200px',
+        dataSource: { fields: [{}, {
+            dataField: 'OrderDate',
+            dataType: 'date',
+            area: 'row',
+            filterValues: [[1996]],
+            expanded: true
+        }, {
+            groupName: 'OrderDate',
+            groupInterval: 'year',
+        }, {
+            groupName: 'OrderDate',
+            groupInterval: 'quarter',
+        }, {
+            groupName: 'OrderDate',
+            groupInterval: 'day',
+            groupIndex: 3
+        }]
+        }
+    });
+    const pivotGrid = createPivotGrid(pivotGridOptions);
+    const chart = createChart({ legend: { visible: false } });
+    const chartReady = sinon.stub();
 
 
     pivotGrid.bindChart(chart);
@@ -348,22 +348,22 @@ QUnit.module('Chart dataSource item generation with single dataField', {
             { summaryType: 'count', caption: 'Count', area: 'data' }
         ];
 
-        var that = this,
-            pivotGridDataSource = new PivotGridDataSource({
-                store: orders,
-                fields: this.fields
-            });
+        const that = this;
+        const pivotGridDataSource = new PivotGridDataSource({
+            store: orders,
+            fields: this.fields
+        });
 
         pivotGridDataSource.load();
 
         this.pivotGridDataSource = pivotGridDataSource;
 
         this.createBinding = function(bindingOptions) {
-            var pivotGrid = createPivotGrid({
-                    dataSource: pivotGridDataSource
-                }),
-                chart = createChart({}),
-                binding = pivotGrid.bindChart(chart, bindingOptions);
+            const pivotGrid = createPivotGrid({
+                dataSource: pivotGridDataSource
+            });
+            const chart = createChart({});
+            const binding = pivotGrid.bindChart(chart, bindingOptions);
 
             that.dxChart = $('#chartContainer').dxChart('instance');
             that.chartDataSource = that.dxChart.option('dataSource');
@@ -380,7 +380,7 @@ QUnit.test('Generate data', function(assert) {
     this.createBinding();
     // assert
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].name, 'Argentina');
@@ -408,7 +408,7 @@ QUnit.test('InvertedBinding', function(assert) {
     });
     // assert
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].name, '1996', 'first series');
@@ -434,7 +434,7 @@ QUnit.test('Generate data when expanded column item', function(assert) {
 
     this.createBinding();
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].name, 'Argentina');
@@ -464,7 +464,7 @@ QUnit.test('Generate data when expanded row & column items', function(assert) {
 
     this.createBinding();
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 2);
 
     assert.strictEqual(series[0].name, 'Brazil - Campinas');
@@ -483,7 +483,7 @@ QUnit.test('Generate data for zero level', function(assert) {
     this.createBinding();
 
     // assert
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 1);
 
     assert.strictEqual(series[0].name, 'Grand Total');
@@ -506,7 +506,7 @@ QUnit.test('Can Include all items', function(assert) {
 
     // assert
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 3);
     assert.strictEqual(series[2].name, 'Grand Total');
     assert.strictEqual(series[2].getPoints().length, 5, 'point length');
@@ -521,7 +521,7 @@ QUnit.test('Generate data', function(assert) {
     this.createBinding();
     // assert
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].name, 'Argentina');
@@ -556,11 +556,11 @@ QUnit.module('Chart dataSource item generation with several dataFields', {
             { dataField: 'Freight', dataType: 'number', summaryType: 'avg', caption: 'Avg Freight', format: { type: 'fixedPoint', precision: 2 }, area: 'data' }
         ];
 
-        var that = this,
-            pivotGridDataSource = new PivotGridDataSource({
-                store: orders,
-                fields: this.fields
-            });
+        const that = this;
+        const pivotGridDataSource = new PivotGridDataSource({
+            store: orders,
+            fields: this.fields
+        });
 
         pivotGridDataSource.load();
 
@@ -569,11 +569,11 @@ QUnit.module('Chart dataSource item generation with several dataFields', {
         that.container = $('#chartContainer');
 
         this.createBinding = function(bindingOptions) {
-            var pivotGrid = createPivotGrid({
-                    dataSource: pivotGridDataSource
-                }),
-                chart = createChart({}),
-                binding = pivotGrid.bindChart(chart, bindingOptions);
+            const pivotGrid = createPivotGrid({
+                dataSource: pivotGridDataSource
+            });
+            const chart = createChart({});
+            const binding = pivotGrid.bindChart(chart, bindingOptions);
 
             that.dxChart = $('#chartContainer').dxChart('instance');
             that.chartDataSource = that.dxChart.option('dataSource');
@@ -592,7 +592,7 @@ QUnit.test('Generate data - dataFields on series', function(assert) {
 
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 4);
 
@@ -626,7 +626,7 @@ QUnit.test('Generate data - dataFields on series', function(assert) {
     assert.strictEqual(series[3].axis, 'Avg Freight');
     assert.strictEqual(series[3].pane, 'default0');
 
-    var panesOptions = this.dxChart.option('panes');
+    const panesOptions = this.dxChart.option('panes');
     assert.strictEqual(panesOptions.length, 1);
     assert.strictEqual(panesOptions[0].name, undefined);
 });
@@ -636,7 +636,7 @@ QUnit.test('Generate data - dataFields on series. dataFieldsDisplayMode is \'spl
         dataFieldsDisplayMode: 'splitPanes'
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 4);
 
@@ -670,7 +670,7 @@ QUnit.test('Generate data - dataFields on series. dataFieldsDisplayMode is \'spl
     assert.strictEqual(series[3].axis, 'Avg Freight');
     assert.strictEqual(series[3].pane, 'Avg Freight');
 
-    var panesOptions = this.dxChart.option('panes');
+    const panesOptions = this.dxChart.option('panes');
     assert.strictEqual(panesOptions.length, 2);
     assert.strictEqual(panesOptions[0].name, 'Count');
     assert.strictEqual(panesOptions[1].name, 'Avg Freight');
@@ -681,7 +681,7 @@ QUnit.test('Generate data - dataFields on series. dataFieldsDisplayMode is \'sin
         dataFieldsDisplayMode: 'singleAxis'
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 4);
 
@@ -715,7 +715,7 @@ QUnit.test('Generate data - dataFields on series. dataFieldsDisplayMode is \'sin
     assert.strictEqual(series[3].axis, 'defaultAxisName0');
     assert.strictEqual(series[3].pane, 'default0');
 
-    var panesOptions = this.dxChart.option('panes');
+    const panesOptions = this.dxChart.option('panes');
     assert.strictEqual(panesOptions.length, 1);
     assert.strictEqual(panesOptions[0].name, undefined);
 });
@@ -725,7 +725,7 @@ QUnit.test('Generate data - dataFields on arguments', function(assert) {
         putDataFieldsInto: 'args'
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
 
@@ -757,7 +757,7 @@ QUnit.test('Generate data - dataFields on arguments and dataFieldsDisplayMode is
         dataFieldsDisplayMode: 'splitPanes'
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
 
@@ -789,7 +789,7 @@ QUnit.test('Generate data - dataFields on arguments. Show DataFieldPrior', funct
         alternateDataFields: false
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
 
@@ -819,7 +819,7 @@ QUnit.test('Generate data - dataFields on arguments. Inverted Binding', function
         inverted: true
     });
     // assert
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
 
@@ -848,7 +848,7 @@ QUnit.test('Generate data - put data fields into arguments and series', function
         putDataFieldsInto: 'both'
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 4);
 
@@ -881,7 +881,7 @@ QUnit.test('Generate data - put data fields into arguments and series', function
     assert.strictEqual(series[3].axis, 'Avg Freight');
     assert.strictEqual(series[3].pane, 'default0');
 
-    var panesOptions = this.dxChart.option('panes');
+    const panesOptions = this.dxChart.option('panes');
     assert.strictEqual(panesOptions.length, 1);
     assert.strictEqual(panesOptions[0].name, undefined);
 });
@@ -898,22 +898,22 @@ QUnit.module('Value Axis Options', {
             { summaryType: 'count', caption: 'Count', area: 'data', dataType: 'number', format: { type: 'fixedPoint', precision: 2 } }
         ];
 
-        var that = this,
-            pivotGridDataSource = new PivotGridDataSource({
-                store: orders,
-                fields: this.fields
-            });
+        const that = this;
+        const pivotGridDataSource = new PivotGridDataSource({
+            store: orders,
+            fields: this.fields
+        });
 
         pivotGridDataSource.load();
 
         this.pivotGridDataSource = pivotGridDataSource;
 
         this.createBinding = function(bindingOptions) {
-            var pivotGrid = createPivotGrid({
-                    dataSource: pivotGridDataSource
-                }),
-                chart = createChart({}),
-                binding = pivotGrid.bindChart(chart, bindingOptions);
+            const pivotGrid = createPivotGrid({
+                dataSource: pivotGridDataSource
+            });
+            const chart = createChart({});
+            const binding = pivotGrid.bindChart(chart, bindingOptions);
 
             that.valueAxisOptions = $('#chartContainer').dxChart('option', 'valueAxis');
 
@@ -944,7 +944,7 @@ QUnit.test('Single dataField. Numeric', function(assert) {
 });
 
 QUnit.test('Single dataField. customizeText', function(assert) {
-    var customizeText = sinon.spy(function(formatObject) {
+    const customizeText = sinon.spy(function(formatObject) {
         return formatObject.value + '';
     });
 
@@ -1124,22 +1124,22 @@ QUnit.module('Customize Chart', {
             { summaryType: 'count', caption: 'Count', area: 'data' }
         ];
 
-        var that = this,
-            pivotGridDataSource = new PivotGridDataSource({
-                store: orders,
-                fields: this.fields
-            });
+        const that = this;
+        const pivotGridDataSource = new PivotGridDataSource({
+            store: orders,
+            fields: this.fields
+        });
 
         pivotGridDataSource.load();
 
         this.pivotGridDataSource = pivotGridDataSource;
 
         this.createBinding = function(bindingOptions) {
-            var pivotGrid = createPivotGrid({
-                    dataSource: pivotGridDataSource
-                }),
-                chart = createChart({}),
-                binding = pivotGrid.bindChart(chart, bindingOptions);
+            const pivotGrid = createPivotGrid({
+                dataSource: pivotGridDataSource
+            });
+            const chart = createChart({});
+            const binding = pivotGrid.bindChart(chart, bindingOptions);
 
             that.dxChart = $('#chartContainer').dxChart('instance');
 
@@ -1152,7 +1152,7 @@ QUnit.module('Customize Chart', {
 });
 
 QUnit.test('Customize series', function(assert) {
-    var customizeSeries = sinon.spy(function(seriesName, seriesOptions) {
+    const customizeSeries = sinon.spy(function(seriesName, seriesOptions) {
         if(seriesName === 'Brazil') {
             return {
                 type: 'area'
@@ -1164,7 +1164,7 @@ QUnit.test('Customize series', function(assert) {
         customizeSeries: customizeSeries
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].type, 'bar');
@@ -1178,7 +1178,7 @@ QUnit.test('Customize series', function(assert) {
 });
 
 QUnit.test('Customize Data', function(assert) {
-    var processCell = sinon.spy(function(processArgs) {
+    const processCell = sinon.spy(function(processArgs) {
         if(processArgs.chartDataItem.series === 'Brazil - Sao Paulo' && processArgs.chartDataItem.arg === '1997/Q3') {
             return {
                 visible: 'true',
@@ -1201,7 +1201,7 @@ QUnit.test('Customize Data', function(assert) {
     });
 
     assert.strictEqual(processCell.callCount, 49);
-    var grandTotalCell = processCell.lastCall.args[0];
+    const grandTotalCell = processCell.lastCall.args[0];
 
     assert.deepEqual(grandTotalCell.rowFields, this.pivotGridDataSource.getAreaFields('row'), 'rowFields');
     assert.deepEqual(grandTotalCell.rowPath, [], 'row Path');
@@ -1225,7 +1225,7 @@ QUnit.test('Customize Data', function(assert) {
         val: 61
     });
 
-    var cell = processCell.getCall(32).args[0];
+    const cell = processCell.getCall(32).args[0];
 
     assert.strictEqual(cell.visible, true);
     assert.deepEqual(cell.rowPath, ['Brazil', 'Sao Paulo'], 'cell rowPath');
@@ -1237,7 +1237,7 @@ QUnit.test('Customize Data', function(assert) {
     assert.strictEqual(cell.chartDataItem.series, 'Brazil - Sao Paulo');
     assert.strictEqual(cell.chartDataItem.arg, '1997/Q4');
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
 
     assert.strictEqual(series[4].name, 'custom');
     assert.strictEqual(series[4].getPoints().length, 1);
@@ -1246,7 +1246,7 @@ QUnit.test('Customize Data', function(assert) {
 });
 
 QUnit.test('Customize Chart options', function(assert) {
-    var customizeChart = sinon.spy(function(chartOptions) {
+    const customizeChart = sinon.spy(function(chartOptions) {
         return {
             commonSeriesSettings: {
                 type: 'area'
@@ -1294,12 +1294,12 @@ QUnit.test('Customize Chart options', function(assert) {
         panes: [{}]
     });
 
-    var series = this.dxChart.getAllSeries();
+    const series = this.dxChart.getAllSeries();
     assert.strictEqual(series.length, 2);
     assert.strictEqual(series[0].type, 'area');
     assert.strictEqual(series[1].type, 'area');
 
-    var valueAxisOptions = this.dxChart.option('valueAxis');
+    const valueAxisOptions = this.dxChart.option('valueAxis');
 
     assert.strictEqual(valueAxisOptions.title, 'Customized axis');
 

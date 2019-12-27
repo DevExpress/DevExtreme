@@ -248,21 +248,21 @@ QUnit.module('Intl localization', {
         });
 
         QUnit.test('getOpenXmlCurrencyFormat', function(assert) {
-            const nonBreakingSpace = '\xa0',
-                expectedResults = {
-                    RUB: {
-                        de: '#,##0{0} RUB',
-                        en: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ja: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
-                        ru: '#,##0{0} ₽'
-                    },
-                    USD: {
-                        de: '#,##0{0} $',
-                        en: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ja: '$#,##0{0}_);\\($#,##0{0}\\)',
-                        ru: '#,##0{0} $'
-                    }
-                };
+            const nonBreakingSpace = '\xa0';
+            const expectedResults = {
+                RUB: {
+                    de: '#,##0{0} RUB',
+                    en: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
+                    ja: 'RUB#,##0{0}_);\\(RUB#,##0{0}\\)',
+                    ru: '#,##0{0} ₽'
+                },
+                USD: {
+                    de: '#,##0{0} $',
+                    en: '$#,##0{0}_);\\($#,##0{0}\\)',
+                    ja: '$#,##0{0}_);\\($#,##0{0}\\)',
+                    ru: '#,##0{0} $'
+                }
+            };
 
             for(const currency in expectedResults) {
                 for(const localeId in expectedResults[currency]) {
@@ -303,7 +303,7 @@ QUnit.module('Intl localization', {
                 });
             };
 
-            const monthsWide = getIntlMonthNames('long'), monthsAbbr = getIntlMonthNames('short'), monthsNarrow = getIntlMonthNames('narrow');
+            const monthsWide = getIntlMonthNames('long'); const monthsAbbr = getIntlMonthNames('short'); const monthsNarrow = getIntlMonthNames('narrow');
 
             assert.deepEqual(dateLocalization.getMonthNames(), monthsWide, 'Array of month names without format');
             assert.deepEqual(dateLocalization.getMonthNames('wide'), monthsWide, 'Array of month names (wide format)');
@@ -627,7 +627,7 @@ QUnit.module('Intl localization', {
     QUnit.module('defaultCurrency');
 
     QUnit.test('config.defaultCurrency affects on localization', function(assert) {
-        var originalConfig = config();
+        const originalConfig = config();
 
         try {
             assert.equal(numberLocalization.getCurrencySymbol().symbol, '$');

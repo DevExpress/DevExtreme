@@ -13,7 +13,8 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html('<div id=\'dateBox\'></div>');
 });
 
-let setupModule = {
+
+const setupModule = {
     beforeEach: function() {
         this.parts = renderDateParts('Tuesday, July 2, 2024 16:19 PM', dateParser.getRegExpInfo('EEEE, MMMM d, yyyy HH:mm a', dateLocalization));
         this.$element = $('#dateBox').dxDateBox({
@@ -61,7 +62,7 @@ module('Rendering', setupModule, () => {
 });
 
 module('Date parts rendering', setupModule, () => {
-    let checkAndRemoveAccessors = (part, stub, assert) => {
+    const checkAndRemoveAccessors = (part, stub, assert) => {
         assert.strictEqual(part.getter(), stub, 'stub getter');
         assert.deepEqual(part.setter, noop, 'stub setter');
 
@@ -70,8 +71,8 @@ module('Date parts rendering', setupModule, () => {
         delete part.limits;
     };
 
-    let checkAndRemoveLimits = (part, expected, assert) => {
-        let limits = part.limits;
+    const checkAndRemoveLimits = (part, expected, assert) => {
+        const limits = part.limits;
         assert.deepEqual(limits(new Date(2012, 1, 4, 5, 6, 7)), expected, 'limits for ' + part.pattern);
 
         delete part.limits;
@@ -84,7 +85,7 @@ module('Date parts rendering', setupModule, () => {
     test('Day of week', function(assert) {
         checkAndRemoveLimits(this.parts[0], { min: 0, max: 6 }, assert);
 
-        let date = new Date(2012, 1, 4, 15, 6);
+        const date = new Date(2012, 1, 4, 15, 6);
         this.parts[0].setter(date, 2);
         assert.strictEqual(date.getDay(), 2, 'setter sets day of week');
         delete this.parts[0].setter;
@@ -102,7 +103,7 @@ module('Date parts rendering', setupModule, () => {
     test('Month', function(assert) {
         checkAndRemoveLimits(this.parts[2], { min: 1, max: 12 }, assert);
 
-        let date = new Date(2012, 2, 30);
+        const date = new Date(2012, 2, 30);
         this.parts[2].setter(date, 1);
         assert.strictEqual(date.getMonth(), 0, 'setter sets month');
         delete this.parts[2].setter;
@@ -122,7 +123,7 @@ module('Date parts rendering', setupModule, () => {
     test('Day', function(assert) {
         checkAndRemoveLimits(this.parts[4], { min: 1, max: 31 }, assert);
 
-        let date = new Date(2012, 1, 4, 15, 6);
+        const date = new Date(2012, 1, 4, 15, 6);
         this.parts[4].setter(date, 3);
         assert.strictEqual(date.getDate(), 3, 'setter sets day');
         delete this.parts[4].setter;
@@ -140,7 +141,7 @@ module('Date parts rendering', setupModule, () => {
     test('Year', function(assert) {
         checkAndRemoveLimits(this.parts[6], { min: 0, max: 9999 }, assert);
 
-        let date = new Date(2012, 1, 4, 15, 6);
+        const date = new Date(2012, 1, 4, 15, 6);
         this.parts[6].setter(date, 15);
         assert.strictEqual(date.getFullYear(), 2015, 'setter sets year');
         delete this.parts[6].setter;
@@ -222,9 +223,9 @@ module('Date parts rendering', setupModule, () => {
     test('Time indication', function(assert) {
         checkAndRemoveLimits(this.parts[12], { min: 0, max: 1 }, assert);
 
-        let date = new Date(2012, 1, 4, 15, 6);
+        const date = new Date(2012, 1, 4, 15, 6);
 
-        let isPm = this.parts[12].getter(date);
+        const isPm = this.parts[12].getter(date);
         assert.strictEqual(isPm, 1, 'getter returns PM');
         delete this.parts[12].getter;
 
@@ -971,7 +972,7 @@ module('Empty dateBox', {
     test('Short Year should use current date', function(assert) {
         this.instance.option('displayFormat', 'yy');
 
-        let dateStart = new Date().getFullYear().toString().substr(0, 2);
+        const dateStart = new Date().getFullYear().toString().substr(0, 2);
 
         this.keyboard
             .type('21')

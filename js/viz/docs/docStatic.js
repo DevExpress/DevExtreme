@@ -2,7 +2,7 @@
 * @name viz
 * @namespace DevExpress
 */
-var staticMethods = {
+const staticMethods = {
     /**
     * @name vizmethods.currentTheme
     * @publicName currentTheme(theme)

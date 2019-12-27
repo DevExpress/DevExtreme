@@ -1,10 +1,10 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    errors = require('../widget/ui.errors'),
-    decoratorRegistry = require('./ui.list.edit.decorator_registry');
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const errors = require('../widget/ui.errors');
+const decoratorRegistry = require('./ui.list.edit.decorator_registry');
 
 require('./ui.list.edit.decorator.static');
 require('./ui.list.edit.decorator.switchable.button');
@@ -15,9 +15,9 @@ require('./ui.list.edit.decorator.selection');
 require('./ui.list.edit.decorator.reorder');
 
 
-var editOptionsRegistry = [];
+const editOptionsRegistry = [];
 
-var registerOption = function(enabledFunc, decoratorTypeFunc, decoratorSubTypeFunc) {
+const registerOption = function(enabledFunc, decoratorTypeFunc, decoratorSubTypeFunc) {
     editOptionsRegistry.push({
         enabled: enabledFunc,
         decoratorType: decoratorTypeFunc,
@@ -42,12 +42,12 @@ registerOption(
         return !this.option('menuItems').length && this.option('allowItemDeleting');
     },
     function() {
-        var mode = this.option('itemDeleteMode');
+        const mode = this.option('itemDeleteMode');
 
         return mode === 'toggle' || mode === 'slideButton' || mode === 'swipe' || mode === 'static' ? 'delete' : 'menu';
     },
     function() {
-        var mode = this.option('itemDeleteMode');
+        let mode = this.option('itemDeleteMode');
 
         if(mode === 'slideItem') {
             mode = 'slide';
@@ -84,16 +84,16 @@ registerOption(
 );
 
 
-var LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag',
-    LIST_ITEM_AFTER_BAG_CLASS = 'dx-list-item-after-bag',
+const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
+const LIST_ITEM_AFTER_BAG_CLASS = 'dx-list-item-after-bag';
 
-    DECORATOR_BEFORE_BAG_CREATE_METHOD = 'beforeBag',
-    DECORATOR_AFTER_BAG_CREATE_METHOD = 'afterBag',
-    DECORATOR_MODIFY_ELEMENT_METHOD = 'modifyElement',
-    DECORATOR_AFTER_RENDER_METHOD = 'afterRender',
-    DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = 'getExcludedSelectors';
+const DECORATOR_BEFORE_BAG_CREATE_METHOD = 'beforeBag';
+const DECORATOR_AFTER_BAG_CREATE_METHOD = 'afterBag';
+const DECORATOR_MODIFY_ELEMENT_METHOD = 'modifyElement';
+const DECORATOR_AFTER_RENDER_METHOD = 'afterRender';
+const DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = 'getExcludedSelectors';
 
-var EditProvider = Class.inherit({
+const EditProvider = Class.inherit({
 
     ctor: function(list) {
         this._list = list;
@@ -112,12 +112,12 @@ var EditProvider = Class.inherit({
         this._decorators = [];
 
         each(editOptionsRegistry, (function(_, option) {
-            var optionEnabled = option.enabled.call(this._list);
+            const optionEnabled = option.enabled.call(this._list);
             if(optionEnabled) {
-                var decoratorType = option.decoratorType.call(this._list),
-                    decoratorSubType = option.decoratorSubType.call(this._list),
+                const decoratorType = option.decoratorType.call(this._list);
+                const decoratorSubType = option.decoratorSubType.call(this._list);
 
-                    decorator = this._createDecorator(decoratorType, decoratorSubType);
+                const decorator = this._createDecorator(decoratorType, decoratorSubType);
 
                 this._decorators.push(decorator);
             }
@@ -125,13 +125,13 @@ var EditProvider = Class.inherit({
     },
 
     _createDecorator: function(type, subType) {
-        var decoratorClass = this._findDecorator(type, subType);
+        const decoratorClass = this._findDecorator(type, subType);
 
         return new decoratorClass(this._list);
     },
 
     _findDecorator: function(type, subType) {
-        var foundDecorator = decoratorRegistry.registry[type][subType];
+        const foundDecorator = decoratorRegistry.registry[type][subType];
 
         if(!foundDecorator) {
             throw errors.Error('E1012', type, subType);
@@ -141,9 +141,9 @@ var EditProvider = Class.inherit({
     },
 
     modifyItemElement: function(args) {
-        var $itemElement = $(args.itemElement);
+        const $itemElement = $(args.itemElement);
 
-        var config = {
+        const config = {
             $itemElement: $itemElement
         };
 
@@ -157,20 +157,20 @@ var EditProvider = Class.inherit({
     },
 
     _prependBeforeBags: function($itemElement, config) {
-        var $beforeBags = this._collectDecoratorsMarkup(DECORATOR_BEFORE_BAG_CREATE_METHOD, config, LIST_ITEM_BEFORE_BAG_CLASS);
+        const $beforeBags = this._collectDecoratorsMarkup(DECORATOR_BEFORE_BAG_CREATE_METHOD, config, LIST_ITEM_BEFORE_BAG_CLASS);
         $itemElement.prepend($beforeBags);
     },
 
     _appendAfterBags: function($itemElement, config) {
-        var $afterBags = this._collectDecoratorsMarkup(DECORATOR_AFTER_BAG_CREATE_METHOD, config, LIST_ITEM_AFTER_BAG_CLASS);
+        const $afterBags = this._collectDecoratorsMarkup(DECORATOR_AFTER_BAG_CREATE_METHOD, config, LIST_ITEM_AFTER_BAG_CLASS);
         $itemElement.append($afterBags);
     },
 
     _collectDecoratorsMarkup: function(method, config, containerClass) {
-        var $collector = $('<div>');
+        const $collector = $('<div>');
 
         each(this._decorators, function() {
-            var $container = $('<div>').addClass(containerClass);
+            const $container = $('<div>').addClass(containerClass);
             this[method](extend({
                 $container: $container
             }, config));
@@ -193,9 +193,9 @@ var EditProvider = Class.inherit({
             return false;
         }
 
-        var decorators = this._decorators,
-            length = decorators.length;
-        for(var i = 0; i < length; i++) {
+        const decorators = this._decorators;
+        const length = decorators.length;
+        for(let i = 0; i < length; i++) {
             if(decorators[i][name] !== noop) {
                 return true;
             }
@@ -209,10 +209,10 @@ var EditProvider = Class.inherit({
             return false;
         }
 
-        var response = false,
-            decorators = this._decorators,
-            length = decorators.length;
-        for(var i = 0; i < length; i++) {
+        let response = false;
+        const decorators = this._decorators;
+        const length = decorators.length;
+        for(let i = 0; i < length; i++) {
             response = decorators[i][name]($itemElement, e);
             if(response) {
                 break;
@@ -243,7 +243,7 @@ var EditProvider = Class.inherit({
     },
 
     getExcludedItemSelectors: function() {
-        var excludedSelectors = [];
+        const excludedSelectors = [];
 
         this._applyDecorators(DECORATOR_GET_EXCLUDED_SELECTORS_METHOD, excludedSelectors);
 

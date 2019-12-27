@@ -3,14 +3,14 @@ import 'ui/button';
 import 'ui/button_group';
 import 'common.css!';
 
-const BUTTON_GROUP_CLASS = 'dx-buttongroup',
-    BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper',
-    BUTTON_CLASS = 'dx-button',
-    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item',
-    BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item',
-    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item',
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width',
-    SHAPE_STANDARD_CLASS = 'dx-shape-standard';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+const BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + '-wrapper';
+const BUTTON_CLASS = 'dx-button';
+const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
+const BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-first-item';
+const BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + '-last-item';
+const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + '-has-width';
+const SHAPE_STANDARD_CLASS = 'dx-shape-standard';
 
 QUnit.testStart(() => {
     const markup = `

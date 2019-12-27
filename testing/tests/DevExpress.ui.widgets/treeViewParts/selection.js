@@ -3,7 +3,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import eventsEngine from 'events/core/events_engine';
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 
-let { module, test } = QUnit;
+const { module, test } = QUnit;
 
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
@@ -58,7 +58,7 @@ module('selection common', () => {
     });
 
     test('selectionChanged should fire only when selection was changed', function(assert) {
-        let selectionChangedHandler = sinon.spy();
+        const selectionChangedHandler = sinon.spy();
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2', items: [{ text: 'item 21' }] }];
         const treeView = createInstance({
             items: items,
@@ -75,7 +75,7 @@ module('selection common', () => {
     });
 
     test('onItemSelectionChanged should have correct arguments', function(assert) {
-        let itemSelectionChangedHandler = sinon.spy();
+        const itemSelectionChangedHandler = sinon.spy();
         const treeView = createInstance({
             items: [{ text: 'Item 1', id: 2 }],
             onItemSelectionChanged: itemSelectionChangedHandler
@@ -92,7 +92,7 @@ module('selection common', () => {
     });
 
     test('itemSelected should fire when select', function(assert) {
-        let itemSelectionChangedHandler = sinon.spy();
+        const itemSelectionChangedHandler = sinon.spy();
 
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
         const treeView = createInstance({
@@ -107,7 +107,7 @@ module('selection common', () => {
     });
 
     test('itemSelected should not fire when selection was not changed', function(assert) {
-        let itemSelectionChangedHandler = sinon.spy();
+        const itemSelectionChangedHandler = sinon.spy();
 
         const items = [{ text: 'item 1', selected: true }, { text: 'item 2' }];
         const treeView = createInstance({
@@ -306,7 +306,7 @@ module('selection single', () => {
             selectionRequired: true
         });
 
-        let $checkBox = treeView.getCheckBoxes();
+        const $checkBox = treeView.getCheckBoxes();
 
         eventsEngine.trigger($checkBox, 'dxclick');
 
@@ -325,7 +325,7 @@ module('selection single', () => {
             selectionRequired: true
         });
 
-        let $item = treeView.getItems(treeView.getNodes());
+        const $item = treeView.getItems(treeView.getNodes());
 
         eventsEngine.trigger($item, 'dxclick');
 
@@ -467,7 +467,7 @@ module('selection single', () => {
     });
 
     test('onItemSelectionChanged event should be fired on unselect previosly selected item', function(assert) {
-        let itemSelectionChangedHandler = sinon.spy();
+        const itemSelectionChangedHandler = sinon.spy();
         const treeView = createInstance({
             items: [{ text: 'item 1' }, { text: 'item 2' }],
             selectByClick: true,
@@ -503,7 +503,7 @@ module('selection single', () => {
     });
 
     test('items should be selectable after the search', function(assert) {
-        let itemClickHandler = sinon.spy();
+        const itemClickHandler = sinon.spy();
         const treeView = createInstance({
             dataSource: [{ text: 'Stores' }],
             searchEnabled: true,
@@ -511,7 +511,7 @@ module('selection single', () => {
             selectionMode: 'single',
             onItemClick: itemClickHandler
         });
-        let $input = treeView.getElement().find('.dx-texteditor-input');
+        const $input = treeView.getElement().find('.dx-texteditor-input');
 
         keyboardMock($input).type('s');
         eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');

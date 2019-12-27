@@ -1,5 +1,5 @@
-var errorUtils = require('../../core/utils/error'),
-    errors = require('../../core/errors');
+const errorUtils = require('../../core/utils/error');
+const errors = require('../../core/errors');
 /**
 * @docid
 * @name ErrorsViz

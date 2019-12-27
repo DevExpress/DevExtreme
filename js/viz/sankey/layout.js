@@ -6,11 +6,11 @@ const _ALIGNMENT_DEFAULT = _ALIGNMENT_CENTER;
 const graphModule = require('./graph');
 const validatorModule = require('./data_validator');
 
-let layout = {
+const layout = {
     _weightPerPixel: null,
 
     _getCascadeIdx: function(nodeTitle, cascadesConfig) {
-        let nodeInfo = cascadesConfig.filter((c) => { return c.name === nodeTitle; })[0];
+        const nodeInfo = cascadesConfig.filter((c) => { return c.name === nodeTitle; })[0];
 
         if(nodeInfo.outgoing.length > 0) {
             // in common case number of cascade is the longest path to the node
@@ -42,10 +42,10 @@ let layout = {
     },
 
     _computeCascades: function(links) {
-        let cascadesConfig = graphModule.struct.computeLongestPaths(links),
-            maxCascade = graphModule.routines.maxOfArray(cascadesConfig.map(c => { return c.lp; }));
+        const cascadesConfig = graphModule.struct.computeLongestPaths(links);
+        const maxCascade = graphModule.routines.maxOfArray(cascadesConfig.map(c => { return c.lp; }));
 
-        let cascades = [];
+        const cascades = [];
 
         // init cascades
         for(let i = 0; i < maxCascade + 1; i++) {
@@ -67,7 +67,7 @@ let layout = {
         // compute in and out weightes of all nodes of cascades
         cascades.forEach(cascade => {
             Object.keys(cascade).forEach(nodeTitle => {
-                let node = cascade[nodeTitle];
+                const node = cascade[nodeTitle];
                 node.inWeight = this._getInWeightForNode(node.nodeTitle, links);
                 node.outWeight = this._getOutWeightForNode(node.nodeTitle, links);
                 node.maxWeight = Math.max(node.inWeight, node.outWeight);
@@ -78,7 +78,8 @@ let layout = {
     },
 
     _getWeightForCascade: function(cascades, cascadeIdx) {
-        let wMax = 0, cascade = cascades[cascadeIdx];
+        let wMax = 0;
+        const cascade = cascades[cascadeIdx];
         Object.keys(cascade).forEach(nodeTitle => {
             wMax += Math.max(cascade[nodeTitle].inWeight, cascade[nodeTitle].outWeight);
         });
@@ -86,11 +87,11 @@ let layout = {
     },
 
     _getMaxWeightThroughCascades: function(cascades) {
-        let max = [];
+        const max = [];
         cascades.forEach(cascade => {
             let mW = 0;
             Object.keys(cascade).forEach(nodeTitle => {
-                let node = cascade[nodeTitle];
+                const node = cascade[nodeTitle];
                 mW += Math.max(node.inWeight, node.outWeight);
             });
             max.push(mW);
@@ -100,11 +101,11 @@ let layout = {
     },
 
     _computeNodes: function(cascades, options) {
-        let rects = [],
-            maxWeight = this._getMaxWeightThroughCascades(cascades),
-            maxNodeNum = graphModule.routines.maxOfArray(cascades.map(nodesInCascade => Object.keys(nodesInCascade).length)),
-            nodePadding = options.nodePadding,
-            heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
+        const rects = [];
+        const maxWeight = this._getMaxWeightThroughCascades(cascades);
+        const maxNodeNum = graphModule.routines.maxOfArray(cascades.map(nodesInCascade => Object.keys(nodesInCascade).length));
+        let nodePadding = options.nodePadding;
+        let heightAvailable = options.height - nodePadding * (maxNodeNum - 1);
 
         if(heightAvailable < 0) { // when the available height is too small, e.g. sum of all paddings is more then available height
             nodePadding = 0;
@@ -116,10 +117,10 @@ let layout = {
         // compute in and out weightes of all nodes of cascades
         let cascadeIdx = 0;
         cascades.forEach(cascade => {
-            let cascadeRects = [],
-                y = 0,
-                nodesInCascade = Object.keys(cascade).length,
-                cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
+            const cascadeRects = [];
+            let y = 0;
+            const nodesInCascade = Object.keys(cascade).length;
+            const cascadeHeight = this._getWeightForCascade(cascades, cascadeIdx) / this._weightPerPixel + nodePadding * (nodesInCascade - 1);
 
             let cascadeAlign = _ALIGNMENT_DEFAULT;
 
@@ -141,10 +142,10 @@ let layout = {
             });
 
             Object.keys(cascade).sort((a, b) => { return cascade[a].sort - cascade[b].sort; }).forEach(nodeTitle => {
-                let node = cascade[nodeTitle],
-                    height = Math.floor(heightAvailable * node.maxWeight / maxWeight),
-                    x = Math.round(cascadeIdx * options.width / (cascades.length - 1)) - (cascadeIdx === 0 ? 0 : options.nodeWidth),
-                    rect = {};
+                const node = cascade[nodeTitle];
+                const height = Math.floor(heightAvailable * node.maxWeight / maxWeight);
+                const x = Math.round(cascadeIdx * options.width / (cascades.length - 1)) - (cascadeIdx === 0 ? 0 : options.nodeWidth);
+                const rect = {};
 
                 rect._name = nodeTitle;
                 rect.width = options.nodeWidth;
@@ -184,7 +185,7 @@ let layout = {
     },
 
     _computeLinks: function(links, rects, cascades) {
-        let yOffsets = {}, paths = [], result = [];
+        const yOffsets = {}; const paths = []; const result = [];
 
         cascades.forEach(cascade => {
             Object.keys(cascade).forEach(nodeTitle => {
@@ -194,22 +195,22 @@ let layout = {
 
         rects.forEach(rectsOfCascade => {
             rectsOfCascade.forEach(nodeRect => {
-                let nodeTitle = nodeRect._name,
-                    rectFrom = this._findRectByName(rects, nodeTitle),
-                    linksFromNode = links.filter(link => { return link[0] === nodeTitle; }); // all outgoing links from the node
+                const nodeTitle = nodeRect._name;
+                const rectFrom = this._findRectByName(rects, nodeTitle);
+                const linksFromNode = links.filter(link => { return link[0] === nodeTitle; }); // all outgoing links from the node
 
                 // all outgoing links should be sorted according to the order of their target nodes
                 linksFromNode.forEach(link => {
                     link.sort = this._findIndexByName(rects, link[1]);
                 });
                 linksFromNode.sort((a, b) => { return a.sort - b.sort; }).forEach(link => {
-                    let rectTo = this._findRectByName(rects, link[1]),
-                        height = Math.round(link[2] / this._weightPerPixel),
-                        yOffsetFrom = yOffsets[link[0]].out,
-                        yOffsetTo = yOffsets[link[1]].in,
-                        // heights of left and right parts of the link must fit the nodes on it's left and right
-                        heightFrom = (yOffsets[link[0]].out + height > rectFrom.height) ? rectFrom.height - yOffsets[link[0]].out : height,
-                        heightTo = (yOffsets[link[1]].in + height > rectTo.height) ? rectTo.height - yOffsets[link[1]].in : height;
+                    const rectTo = this._findRectByName(rects, link[1]);
+                    const height = Math.round(link[2] / this._weightPerPixel);
+                    const yOffsetFrom = yOffsets[link[0]].out;
+                    const yOffsetTo = yOffsets[link[1]].in;
+                    // heights of left and right parts of the link must fit the nodes on it's left and right
+                    const heightFrom = (yOffsets[link[0]].out + height > rectFrom.height) ? rectFrom.height - yOffsets[link[0]].out : height;
+                    const heightTo = (yOffsets[link[1]].in + height > rectTo.height) ? rectTo.height - yOffsets[link[1]].in : height;
                     paths.push({
                         from: { x: rectFrom.x, y: rectFrom.y + yOffsetFrom, width: rectFrom.width, height: heightFrom, node: rectFrom, weight: link[2] },
                         to: { x: rectTo.x, y: rectTo.y + yOffsetTo, width: rectTo.width, height: heightTo, node: rectTo }
@@ -221,7 +222,7 @@ let layout = {
         });
 
         paths.forEach(link => {
-            let path = {
+            const path = {
                 d: this._spline(link.from, link.to),
                 _boundingRect: {
                     x: link.from.x + link.from.width,
@@ -242,9 +243,9 @@ let layout = {
     },
 
     _fitNodeHeight: function(nodeName, nodeRects, paths) {
-        let targetRect = this._findRectByName(nodeRects, nodeName),
-            heightOfLinksSummaryIn = 0,
-            heightOfLinksSummaryOut = 0;
+        const targetRect = this._findRectByName(nodeRects, nodeName);
+        let heightOfLinksSummaryIn = 0;
+        let heightOfLinksSummaryOut = 0;
 
         paths.forEach(function(path) {
             if(path.from.node._name === nodeName) {
@@ -266,20 +267,20 @@ let layout = {
     },
 
     _spline: function(rectLeft, rectRight) {
-        let p_UpLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y },
-            p_DownLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y + rectLeft.height },
-            p_UpRight = { x: rectRight.x, y: rectRight.y },
-            p_DownRight = { x: rectRight.x, y: rectRight.y + rectRight.height },
-            curve_width = _SPLINE_TENSION * (p_UpRight.x - p_UpLeft.x),
-            result = `M ${p_UpLeft.x} ${p_UpLeft.y} C ${p_UpLeft.x + curve_width} ${p_UpLeft.y} ${p_UpRight.x - curve_width} ${p_UpRight.y} ${p_UpRight.x} ${p_UpRight.y} L ${p_DownRight.x} ${p_DownRight.y} C ${p_DownRight.x - curve_width} ${p_DownRight.y} ${p_DownLeft.x + curve_width} ${p_DownLeft.y} ${p_DownLeft.x} ${p_DownLeft.y} Z`;
+        const p_UpLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y };
+        const p_DownLeft = { x: rectLeft.x + rectLeft.width, y: rectLeft.y + rectLeft.height };
+        const p_UpRight = { x: rectRight.x, y: rectRight.y };
+        const p_DownRight = { x: rectRight.x, y: rectRight.y + rectRight.height };
+        const curve_width = _SPLINE_TENSION * (p_UpRight.x - p_UpLeft.x);
+        const result = `M ${p_UpLeft.x} ${p_UpLeft.y} C ${p_UpLeft.x + curve_width} ${p_UpLeft.y} ${p_UpRight.x - curve_width} ${p_UpRight.y} ${p_UpRight.x} ${p_UpRight.y} L ${p_DownRight.x} ${p_DownRight.y} C ${p_DownRight.x - curve_width} ${p_DownRight.y} ${p_DownLeft.x + curve_width} ${p_DownLeft.y} ${p_DownLeft.x} ${p_DownLeft.y} Z`;
 
         return result;
     },
 
     computeLayout: function(linksData, sortData, options, incidentOccurred) {
         this._sort = sortData;
-        let result = {},
-            validateResult = validatorModule.validate(linksData, incidentOccurred);
+        const result = {};
+        const validateResult = validatorModule.validate(linksData, incidentOccurred);
         if(!validateResult) {
             result.cascades = this._computeCascades(linksData);
             result.nodes = this._computeNodes(

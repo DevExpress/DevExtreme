@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars, no-var, one-var*/
 function parseDBF(stream, errors) {
-    var timeStart,
-        timeEnd,
-        header,
-        parseData,
-        records;
+    let timeStart;
+    let timeEnd;
+    let header;
+    let parseData;
+    let records;
     try {
         timeStart = new Date();
         header = parseDataBaseFileHeader(stream, errors);
@@ -18,16 +18,16 @@ function parseDBF(stream, errors) {
 }
 
 function parseDataBaseFileHeader(stream, errors) {
-    var i,
-        header = {
-            versionNumber: stream.ui8(),
-            lastUpdate: new Date(1900 + stream.ui8(), stream.ui8() - 1, stream.ui8()),
-            numberOfRecords: stream.ui32LE(),
-            headerLength: stream.ui16LE(),
-            recordLength: stream.ui16LE(),
-            fields: []
-        },
-        term;
+    let i;
+    const header = {
+        versionNumber: stream.ui8(),
+        lastUpdate: new Date(1900 + stream.ui8(), stream.ui8() - 1, stream.ui8()),
+        numberOfRecords: stream.ui32LE(),
+        headerLength: stream.ui16LE(),
+        recordLength: stream.ui16LE(),
+        fields: []
+    };
+    let term;
     stream.skip(20);
     for(i = (header.headerLength - stream.pos() - 1) / 32; i > 0; --i) {
         header.fields.push(parseFieldDescriptor(stream));
@@ -39,14 +39,14 @@ function parseDataBaseFileHeader(stream, errors) {
     return header;
 }
 
-var _fromCharCode = String.fromCharCode;
+const _fromCharCode = String.fromCharCode;
 
 function getAsciiString(stream, length) {
     return _fromCharCode.apply(null, stream.ui8arr(length));
 }
 
 function parseFieldDescriptor(stream) {
-    var desc = {
+    const desc = {
         name: getAsciiString(stream, 11).replace(/\0*$/gi, ''),
         type: _fromCharCode(stream.ui8()),
         length: stream.skip(4).ui8(),
@@ -56,9 +56,9 @@ function parseFieldDescriptor(stream) {
     return desc;
 }
 
-var DBF_FIELD_PARSERS = {
+const DBF_FIELD_PARSERS = {
     'C': function(stream, length) {
-        var str = getAsciiString(stream, length);
+        let str = getAsciiString(stream, length);
 
         try {
             str = decodeURIComponent(escape(str)); // T522922
@@ -67,11 +67,11 @@ var DBF_FIELD_PARSERS = {
         return str.trim();
     },
     'N': function(stream, length) {
-        var str = getAsciiString(stream, length);
+        const str = getAsciiString(stream, length);
         return parseFloat(str, 10);
     },
     'D': function(stream, length) {
-        var str = getAsciiString(stream, length);
+        const str = getAsciiString(stream, length);
         return new Date(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
     }
 };
@@ -82,11 +82,12 @@ function DBF_FIELD_PARSER_DEFAULT(stream, length) {
 }
 
 function prepareDataBaseFileRecordParseData(header, errors) {
-    var list = [],
-        i = 0,
-        ii = header.fields.length,
-        item, field,
-        totalLength = 0;
+    const list = [];
+    let i = 0;
+    const ii = header.fields.length;
+    let item;
+    let field;
+    let totalLength = 0;
     for(i = 0; i < ii; ++i) {
         field = header.fields[i];
         item = {
@@ -108,13 +109,13 @@ function prepareDataBaseFileRecordParseData(header, errors) {
 }
 
 function parseDataBaseFileRecords(stream, recordCount, recordLength, parseData, errors) {
-    var i,
-        j,
-        jj = parseData.length,
-        pos,
-        records = [],
-        record,
-        pd;
+    let i;
+    let j;
+    const jj = parseData.length;
+    let pos;
+    const records = [];
+    let record;
+    let pd;
     for(i = 0; i < recordCount; ++i) {
         record = {};
         pos = stream.pos();

@@ -1,20 +1,20 @@
-var $ = require('jquery'),
-    testing = require('./utils.js'),
-    Map = require('ui/map'),
-    GoogleStaticProvider = require('ui/map/provider.google_static'),
-    Color = require('color'),
-    ajaxMock = require('../../../helpers/ajaxMock.js');
+const $ = require('jquery');
+const testing = require('./utils.js');
+const Map = require('ui/map');
+const GoogleStaticProvider = require('ui/map/provider.google_static');
+const Color = require('color');
+const ajaxMock = require('../../../helpers/ajaxMock.js');
 
-var LOCATIONS = testing.LOCATIONS,
-    MARKERS = testing.MARKERS,
-    ROUTES = testing.ROUTES;
+const LOCATIONS = testing.LOCATIONS;
+const MARKERS = testing.MARKERS;
+const ROUTES = testing.ROUTES;
 
-var MAP_CONTAINER_CLASS = 'dx-map-container';
+const MAP_CONTAINER_CLASS = 'dx-map-container';
 
 
 QUnit.module('googleStatic provider', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -28,11 +28,11 @@ QUnit.module('googleStatic provider', {
     }
 });
 
-var mapUrl = function(map) {
+const mapUrl = function(map) {
     return backgroundUrl((map.element ? map.$element() : map).find('.' + MAP_CONTAINER_CLASS));
 };
 
-var backgroundUrl = function($element) {
+const backgroundUrl = function($element) {
     return $element.css('backgroundImage').replace(/^url|[("")]/g, '');
 };
 
@@ -51,7 +51,7 @@ QUnit.test('map ready action', function(assert) {
 
 QUnit.test('default options', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             onReady: function(e) {
                 assert.notEqual(mapUrl(map).indexOf('sensor=false'), -1, 'dimensions set correctly');
@@ -64,7 +64,7 @@ QUnit.test('default options', function(assert) {
 
 QUnit.test('dimensions', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             width: 400,
             height: 500,
@@ -94,7 +94,7 @@ QUnit.test('dimensions', function(assert) {
 
 QUnit.test('type', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             type: 'hybrid',
             onReady: function(e) {
@@ -128,7 +128,7 @@ QUnit.test('type', function(assert) {
 
 QUnit.test('center', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             center: LOCATIONS[0],
             onReady: function(e) {
@@ -172,7 +172,7 @@ QUnit.test('center', function(assert) {
 
 QUnit.test('location parsing should be correct in case of string with one comma', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             center: 'A, B',
             onReady: function(e) {
@@ -186,7 +186,7 @@ QUnit.test('location parsing should be correct in case of string with one comma'
 
 QUnit.test('zoom', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             zoom: 1,
             onReady: function(e) {
@@ -210,7 +210,7 @@ QUnit.test('zoom', function(assert) {
 
 QUnit.test('key', function(assert) {
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             key: 10153453,
             onReady: function(e) {
@@ -226,7 +226,7 @@ QUnit.test('markers', function(assert) {
     assert.expect(4);
 
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             markers: [MARKERS[0]],
             onReady: function(e) {
@@ -273,11 +273,11 @@ QUnit.test('markers', function(assert) {
 });
 
 QUnit.test('markerIcon', function(assert) {
-    var markerUrl1 = 'http://example.com/1.png',
-        markerUrl2 = 'http://example.com/2.png';
+    const markerUrl1 = 'http://example.com/1.png';
+    const markerUrl2 = 'http://example.com/2.png';
 
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             markers: [MARKERS[0]],
             markerIconSrc: markerUrl1,
@@ -301,7 +301,7 @@ QUnit.test('markerIcon', function(assert) {
 });
 
 QUnit.test('markerAdded', function(assert) {
-    var markerAddedFired = 0;
+    let markerAddedFired = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -321,7 +321,7 @@ QUnit.test('markerAdded', function(assert) {
 });
 
 QUnit.test('markerRemoved', function(assert) {
-    var markerRemovedFired = 0;
+    let markerRemovedFired = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -365,7 +365,7 @@ QUnit.test('autoAdjust', function(assert) {
 });
 
 QUnit.test('routes', function(assert) {
-    var route0 = 'path='
+    const route0 = 'path='
         + 'color:' + (new Color(ROUTES[0].color).toHex() + Math.round((ROUTES[0].opacity) * 255).toString(16)).replace('#', '0x') + '|'
         + 'weight:' + ROUTES[0].weight + '|'
         + ROUTES[0].locations[0][0] + ',' + ROUTES[0].locations[0][1] + '|'
@@ -373,7 +373,7 @@ QUnit.test('routes', function(assert) {
         + ROUTES[0].locations[2][0] + ',' + ROUTES[0].locations[2][1];
 
     return new Promise(function(resolve) {
-        var map = new Map($('#map'), {
+        const map = new Map($('#map'), {
             provider: 'googleStatic',
             routes: [ROUTES[0]],
             onReady: function(e) {
@@ -396,7 +396,7 @@ QUnit.test('routes', function(assert) {
 });
 
 QUnit.test('routeAdded', function(assert) {
-    var routeAddedFired = 0;
+    let routeAddedFired = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -439,8 +439,8 @@ QUnit.test('routeRemoved', function(assert) {
 });
 
 QUnit.test('click', function(assert) {
-    var clicked = 0,
-        eventFired = 0;
+    let clicked = 0;
+    let eventFired = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -451,7 +451,7 @@ QUnit.test('click', function(assert) {
                 clicked++;
             },
             onReady: function(e) {
-                var $element = $(e.element);
+                const $element = $(e.element);
                 $element.dxMap('instance').on('click', function() {
                     eventFired++;
                 });
@@ -467,7 +467,7 @@ QUnit.test('click', function(assert) {
 });
 
 QUnit.test('the pointer down event propagation should be canceled', function(assert) {
-    var isPropagationStopped;
+    let isPropagationStopped;
     return new Promise(function(resolve) {
         new Map($('#map'), {
             provider: 'googleStatic',

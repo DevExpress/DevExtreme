@@ -1,16 +1,16 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    BaseView = require('./ui.calendar.base_view'),
-    dateUtils = require('../../core/utils/date'),
-    extend = require('../../core/utils/extend').extend,
-    dateLocalization = require('../../localization/date'),
-    dateSerialization = require('../../core/utils/date_serialization'),
-    typeUtils = require('../../core/utils/type');
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const BaseView = require('./ui.calendar.base_view');
+const dateUtils = require('../../core/utils/date');
+const extend = require('../../core/utils/extend').extend;
+const dateLocalization = require('../../localization/date');
+const dateSerialization = require('../../core/utils/date_serialization');
+const typeUtils = require('../../core/utils/type');
 
-var CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month',
-    CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
+const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
+const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 
-var Views = {
+const Views = {
 
     'month': BaseView.inherit({
 
@@ -44,15 +44,15 @@ var Views = {
         },
 
         _renderHeader: function() {
-            var that = this;
+            const that = this;
 
-            var $header = $('<thead>');
+            const $header = $('<thead>');
             this._$table.prepend($header);
 
-            var $headerRow = $('<tr>');
+            const $headerRow = $('<tr>');
             $header.append($headerRow);
 
-            var appendCell = this.option('rtl')
+            const appendCell = this.option('rtl')
                 ? function(row, cell) {
                     row.prepend(cell);
                 }
@@ -61,7 +61,7 @@ var Views = {
                 };
 
             this._iterateCells(this.option('colCount'), function(i) {
-                var $cell = $('<th>')
+                const $cell = $('<th>')
                     .text(that._getDayCaption(that._getFirstDayOfWeek() + i));
 
                 appendCell($headerRow, $cell);
@@ -73,14 +73,14 @@ var Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            var today = new Date();
+            const today = new Date();
 
             return dateUtils.sameDate(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
-            var minDate = this.option('min'),
-                maxDate = this.option('max');
+            const minDate = this.option('min');
+            const maxDate = this.option('max');
 
             return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
         },
@@ -94,15 +94,15 @@ var Views = {
         },
 
         _getDayCaption: function(day) {
-            var daysInWeek = this.option('colCount');
+            const daysInWeek = this.option('colCount');
 
             return dateLocalization.getDayNames('abbreviated')[day % daysInWeek];
         },
 
         _getFirstCellData: function() {
-            var firstDay = dateUtils.getFirstMonthDate(this.option('date')),
-                firstMonthDayOffset = this._getFirstDayOfWeek() - firstDay.getDay(),
-                daysInWeek = this.option('colCount');
+            const firstDay = dateUtils.getFirstMonthDate(this.option('date'));
+            let firstMonthDayOffset = this._getFirstDayOfWeek() - firstDay.getDay();
+            const daysInWeek = this.option('colCount');
 
             if(firstMonthDayOffset >= 0) {
                 firstMonthDayOffset -= daysInWeek;
@@ -132,7 +132,7 @@ var Views = {
 
         _getDefaultDisabledDatesHandler: function(disabledDates) {
             return function(args) {
-                var isDisabledDate = disabledDates.some(function(item) {
+                const isDisabledDate = disabledDates.some(function(item) {
                     return dateUtils.sameDate(item, args.date);
                 });
 
@@ -166,7 +166,7 @@ var Views = {
         },
 
         _getFirstCellData: function() {
-            var data = new Date(this.option('date'));
+            const data = new Date(this.option('date'));
 
             data.setDate(1);
             data.setMonth(0);
@@ -181,7 +181,7 @@ var Views = {
         },
 
         _getCellByDate: function(date) {
-            var foundDate = new Date(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
 
             return this._$table.find('td[data-value=\'' + dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat()) + '\']');
@@ -211,14 +211,14 @@ var Views = {
         },
 
         _isDateOutOfRange: function(cellDate) {
-            var min = this.option('min'),
-                max = this.option('max');
+            const min = this.option('min');
+            const max = this.option('max');
 
             return !dateUtils.dateInRange(cellDate.getFullYear(), min && min.getFullYear(), max && max.getFullYear());
         },
 
         _isOtherView: function(cellDate) {
-            var date = new Date(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameDecade(date, this.option('date'));
@@ -229,7 +229,7 @@ var Views = {
         },
 
         _getFirstCellData: function() {
-            var year = dateUtils.getFirstYearInDecade(this.option('date')) - 1;
+            const year = dateUtils.getFirstYearInDecade(this.option('date')) - 1;
             return new Date(year, 0, 1);
         },
 
@@ -240,10 +240,10 @@ var Views = {
         },
 
         getNavigatorCaption: function() {
-            var currentDate = this.option('date'),
-                firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate),
-                startDate = new Date(currentDate),
-                endDate = new Date(currentDate);
+            const currentDate = this.option('date');
+            const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstYearInDecade);
             endDate.setFullYear(firstYearInDecade + 9);
@@ -256,7 +256,7 @@ var Views = {
         },
 
         _getCellByDate: function(date) {
-            var foundDate = new Date(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
@@ -279,23 +279,23 @@ var Views = {
         },
 
         _isDateOutOfRange: function(cellDate) {
-            var decade = dateUtils.getFirstYearInDecade(cellDate),
-                minDecade = dateUtils.getFirstYearInDecade(this.option('min')),
-                maxDecade = dateUtils.getFirstYearInDecade(this.option('max'));
+            const decade = dateUtils.getFirstYearInDecade(cellDate);
+            const minDecade = dateUtils.getFirstYearInDecade(this.option('min'));
+            const maxDecade = dateUtils.getFirstYearInDecade(this.option('max'));
 
             return !dateUtils.dateInRange(decade, minDecade, maxDecade);
         },
 
         _isOtherView: function(cellDate) {
-            var date = new Date(cellDate);
+            const date = new Date(cellDate);
             date.setMonth(1);
 
             return !dateUtils.sameCentury(date, this.option('date'));
         },
 
         _getCellText: function(cellDate) {
-            var startDate = dateLocalization.format(cellDate, 'yyyy'),
-                endDate = new Date(cellDate);
+            const startDate = dateLocalization.format(cellDate, 'yyyy');
+            const endDate = new Date(cellDate);
 
             endDate.setFullYear(endDate.getFullYear() + 9);
 
@@ -303,7 +303,7 @@ var Views = {
         },
 
         _getFirstCellData: function() {
-            var decade = dateUtils.getFirstDecadeInCentury(this.option('date')) - 10;
+            const decade = dateUtils.getFirstDecadeInCentury(this.option('date')) - 10;
             return new Date(decade, 0, 1);
         },
 
@@ -314,7 +314,7 @@ var Views = {
         },
 
         _getCellByDate: function(date) {
-            var foundDate = new Date(date);
+            const foundDate = new Date(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
             foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
@@ -323,10 +323,10 @@ var Views = {
         },
 
         getNavigatorCaption: function() {
-            var currentDate = this.option('date'),
-                firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate),
-                startDate = new Date(currentDate),
-                endDate = new Date(currentDate);
+            const currentDate = this.option('date');
+            const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
+            const startDate = new Date(currentDate);
+            const endDate = new Date(currentDate);
 
             startDate.setFullYear(firstDecadeInCentury);
             endDate.setFullYear(firstDecadeInCentury + 99);

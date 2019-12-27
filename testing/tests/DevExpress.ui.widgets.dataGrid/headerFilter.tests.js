@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div id="container"  class="dx-datagrid"></div>\
 </div>';
@@ -44,7 +44,7 @@ QUnit.module('Header Filter dataController', {
 });
 
 QUnit.test('filterValues with one value', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -58,7 +58,7 @@ QUnit.test('filterValues with one value', function(assert) {
 });
 
 QUnit.test('filterValues with several values', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -72,7 +72,7 @@ QUnit.test('filterValues with several values', function(assert) {
 });
 
 QUnit.test('filterValues with several values with filterType \'exclude\'', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -86,7 +86,7 @@ QUnit.test('filterValues with several values with filterType \'exclude\'', funct
 });
 
 QUnit.test('filterValues with one filter expression', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -100,7 +100,7 @@ QUnit.test('filterValues with one filter expression', function(assert) {
 });
 
 QUnit.test('filterValues with several filter expressions', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -115,7 +115,7 @@ QUnit.test('filterValues with several filter expressions', function(assert) {
 
 // T345461
 QUnit.test('filterValues with one filter expressions and with filterType \'exclude\'', function(assert) {
-    var that = this;
+    const that = this;
 
     // act
     that.setupDataGrid({
@@ -136,8 +136,8 @@ QUnit.test('invertFilterExpression', function(assert) {
 // T585671
 QUnit.test('Header filter with custom dataSource - postProcess should not be ignored', function(assert) {
     // arrange
-    var items,
-        dataSource;
+    let items;
+    let dataSource;
 
     this.setupDataGrid({
         dataSource: [],
@@ -172,8 +172,8 @@ QUnit.test('Header filter with custom dataSource - postProcess should not be ign
 // T585671
 QUnit.test('Header filter with dataSource as function - postProcess should not be ignored (for a lookup column)', function(assert) {
     // arrange
-    var items,
-        dataSource;
+    let items;
+    let dataSource;
 
     this.setupDataGrid({
         dataSource: [],
@@ -213,8 +213,8 @@ QUnit.test('Header filter with dataSource as function - postProcess should not b
 // T612786
 QUnit.test('Header filter with custom dataSource if column with lookup', function(assert) {
     // arrange
-    var items,
-        dataSource;
+    let items;
+    let dataSource;
 
     this.setupDataGrid({
         dataSource: [],
@@ -294,7 +294,8 @@ QUnit.module('Header Filter', {
         };
 
         this.generateItems = function(count, duplicateCount) {
-            var i, j;
+            let i;
+            let j;
 
             duplicateCount = duplicateCount || 1;
 
@@ -317,8 +318,8 @@ QUnit.module('Header Filter', {
 
 QUnit.test('Draw header filter indicator', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     that.setupDataGrid();
 
@@ -331,8 +332,8 @@ QUnit.test('Draw header filter indicator', function(assert) {
 
 QUnit.test('Draw header filter indicator with allowFiltering true', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     this.columns = [{
         dataField: 'Test1', allowFiltering: true, calculateCellValue: function(data) {
@@ -354,8 +355,8 @@ QUnit.test('Draw header filter indicator with allowFiltering true', function(ass
 
 QUnit.test('Draw header filter indicator with allowFiltering false and allowHeaderFiltering true', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     this.columns = [{
         dataField: 'Test1', allowFiltering: false, allowHeaderFiltering: true, calculateCellValue: function(data) {
@@ -377,8 +378,8 @@ QUnit.test('Draw header filter indicator with allowFiltering false and allowHead
 
 QUnit.test('Not draw header filter indicator with allowFiltering true and allowHeaderFiltering false', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     this.columns = [{
         dataField: 'Test1', allowFiltering: true, allowHeaderFiltering: false, calculateCellValue: function(data) {
@@ -400,9 +401,9 @@ QUnit.test('Not draw header filter indicator with allowFiltering true and allowH
 
 QUnit.test('Show header filter', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -431,9 +432,9 @@ QUnit.test('Show header filter', function(assert) {
 // T435785
 QUnit.test('Show header filter when no dataSource', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.setupDataGrid();
 
@@ -461,8 +462,8 @@ QUnit.test('Show header filter when no dataSource', function(assert) {
 // T321243
 QUnit.test('Show header filter animation in ios', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     devices._currentDevice = { platform: 'ios' };
 
@@ -479,7 +480,7 @@ QUnit.test('Show header filter animation in ios', function(assert) {
 
 
     // assert
-    var popup = that.headerFilterView.getPopupContainer().option('animation');
+    const popup = that.headerFilterView.getPopupContainer().option('animation');
 
     assert.equal(popup.show.type, 'pop', 'animation show type');
 
@@ -488,9 +489,9 @@ QUnit.test('Show header filter animation in ios', function(assert) {
 
 QUnit.test('Show header filter when column with dataType date', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.columns[0].dataType = 'date';
     that.setupDataGrid();
@@ -516,10 +517,10 @@ QUnit.test('Show header filter when column with dataType date', function(assert)
 // T413416
 QUnit.test('Show header filter when column with encodeHtml is false', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        $listItemElements,
-        $testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let $listItemElements;
+    const $testElement = $('#container');
 
     that.items = [{ Test1: '<b>test1</b>', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.columns[0].encodeHtml = false;
@@ -548,10 +549,10 @@ QUnit.test('Show header filter when column with encodeHtml is false', function(a
 // T413416
 QUnit.test('Show header filter when column with encodeHtml is true', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        $listItemElements,
-        $testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let $listItemElements;
+    const $testElement = $('#container');
 
     that.items = [{ Test1: '<b>test1</b>', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.columns[0].encodeHtml = true;
@@ -579,9 +580,9 @@ QUnit.test('Show header filter when column with encodeHtml is true', function(as
 
 QUnit.test('Hide header filter', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -613,9 +614,9 @@ QUnit.test('Hide header filter', function(assert) {
 
 QUnit.test('Header filter with items', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.setupDataGrid();
@@ -640,9 +641,9 @@ QUnit.test('Header filter with items', function(assert) {
 // T269664, T271835
 QUnit.test('Header filter with items where many duplicate values', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30, 5);
     that.setupDataGrid();
@@ -665,9 +666,9 @@ QUnit.test('Header filter with items where many duplicate values', function(asse
 
 QUnit.test('Header filter with items when column with dataType date', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].dataType = 'date';
     that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 0, 4), Test2: 'test4' }, { Test1: null, Test2: 'test6' }];
@@ -709,9 +710,9 @@ QUnit.test('Header filter with items when column with dataType date', function(a
 // T274290
 QUnit.test('Header filter with items when column lookup with simple types', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].lookup = { dataSource: ['test1', 'test2', 'test3'] };
     that.columns[0].filterValues = ['test3'];
@@ -741,9 +742,9 @@ QUnit.test('Header filter with items when column lookup with simple types', func
 // T274290
 QUnit.test('Header filter with items when column lookup with object types', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].lookup = { valueExpr: 'id', displayExpr: 'value', dataSource: [{ id: 1, value: 'test1' }, { id: 2, value: 'test2' }, { id: 3, value: 'test3' }] };
     that.columns[0].filterValues = [3];
@@ -774,9 +775,9 @@ QUnit.test('Header filter with items when column lookup with object types', func
 // T427652
 QUnit.test('Header filter with items when lookup dataSource as function', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].lookup = {
         dataSource: function() {
@@ -806,9 +807,9 @@ QUnit.test('Header filter with items when lookup dataSource as function', functi
 
 QUnit.test('Header filter with items when column with dataType date and filterValues', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].dataType = 'date';
     that.columns[0].filterValues = ['1986/1/4'];
@@ -845,9 +846,9 @@ QUnit.test('Header filter with items when column with dataType date and filterVa
 
 QUnit.test('Save state when selecting', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.setupDataGrid();
@@ -897,9 +898,9 @@ QUnit.test('Save state when selecting', function(assert) {
 
 QUnit.test('Update selecting for first page when filterValues for second page is defined', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
     that.columns[0].filterValues = ['test25'];
@@ -944,9 +945,9 @@ QUnit.test('Update selecting for first page when filterValues for second page is
 
 QUnit.test('Restore selecting state for second page when all items on first page selected', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
     that.columns[0].filterValues = ['test25'];
@@ -980,9 +981,9 @@ QUnit.test('Restore selecting state for second page when all items on first page
 
 QUnit.test('Restore selecting state for second page when not all items on first page selected', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
 
@@ -1017,9 +1018,9 @@ QUnit.test('Restore selecting state for second page when not all items on first 
 
 QUnit.test('Restore selecting state for second page when no selected items on first page', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
 
@@ -1054,9 +1055,9 @@ QUnit.test('Restore selecting state for second page when no selected items on fi
 
 QUnit.test('Second page selection after select all', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
 
@@ -1093,9 +1094,9 @@ QUnit.test('Second page selection after select all', function(assert) {
 
 QUnit.test('Second page selection after unselect all', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.generateItems(30);
 
@@ -1133,9 +1134,9 @@ QUnit.test('Second page selection after unselect all', function(assert) {
 
 QUnit.test('Save state when selecting for column with dataType date', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].dataType = 'date';
     that.items = [{ Test1: new Date(1986, 0, 1), Test2: 'test2' }, { Test1: new Date(1986, 3, 4), Test2: 'test4' }];
@@ -1199,9 +1200,9 @@ QUnit.test('Save state when selecting for column with dataType date', function(a
 
 QUnit.test('Save state when selecting for column with dataType date. filterType is \'exclude\'', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].dataType = 'date';
     that.columns[0].filterType = 'exclude';
@@ -1257,9 +1258,9 @@ QUnit.test('Save state when selecting for column with dataType date. filterType 
 
 QUnit.test('Update when select all items', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.columns[0].filterValues = ['test1'];
@@ -1295,9 +1296,9 @@ QUnit.test('Update when select all items', function(assert) {
 
 QUnit.test('Update when selected all items and column with filterValues', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].filterValues = ['test3'];
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
@@ -1352,9 +1353,9 @@ QUnit.test('Update when selected all items and column with filterValues', functi
 // T248184
 QUnit.test('Indicator state when there is filterValues in column', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.columns[0].filterValues = ['test3'];
     that.setupDataGrid();
@@ -1371,9 +1372,9 @@ QUnit.test('Indicator state when there is filterValues in column', function(asse
 // T248184
 QUnit.test('Indicator state when there is no filterValues in column', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.setupDataGrid();
 
@@ -1389,9 +1390,9 @@ QUnit.test('Indicator state when there is no filterValues in column', function(a
 // T248184
 QUnit.test('Indicator state when there is filterValues in the grouped column', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.columns[0].groupIndex = 0;
     that.columns[0].filterValues = ['test3'];
@@ -1412,9 +1413,9 @@ QUnit.test('Indicator state when there is filterValues in the grouped column', f
 
 QUnit.test('Header filter popup should be shown on header filter icon click in groupPanel', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.columns[0].groupIndex = 0;
@@ -1433,7 +1434,7 @@ QUnit.test('Header filter popup should be shown on header filter icon click in g
     $($headerFilter).trigger('dxclick');
 
     // assert
-    var $popupContent = that.headerFilterView.getPopupContainer().$content();
+    const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(':visible'), 'visible popup');
     assert.equal($popupContent.find('.dx-list-item').length, 2, 'list items count');
@@ -1443,9 +1444,9 @@ QUnit.test('Header filter popup should be shown on header filter icon click in g
 // T472271
 QUnit.test('Header filter indicator should be shown for grouped column with showWhenGrouped', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.columns[0].groupIndex = 0;
     that.columns[0].showWhenGrouped = true;
@@ -1464,9 +1465,9 @@ QUnit.test('Header filter indicator should be shown for grouped column with show
 // T472271
 QUnit.test('Header filter popup should be shown on header filter icon click for column with showWhenGrouped', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.items = [{ Test1: 'test1', Test2: 'test2' }, { Test1: 'test3', Test2: 'test4' }];
     that.columns[0].groupIndex = 0;
@@ -1482,7 +1483,7 @@ QUnit.test('Header filter popup should be shown on header filter icon click for 
     $($headerFilter).trigger('dxclick');
 
     // assert
-    var $popupContent = that.headerFilterView.getPopupContainer().$content();
+    const $popupContent = that.headerFilterView.getPopupContainer().$content();
     assert.ok($popupContent.is(':visible'), 'visible popup');
     assert.equal($popupContent.find('.dx-list-item').length, 2, 'list items count');
     assert.equal($popupContent.find('.dx-list-item-selected').length, 1, 'one selected list item');
@@ -1491,9 +1492,9 @@ QUnit.test('Header filter popup should be shown on header filter icon click for 
 // T248184
 QUnit.test('Indicator state when there is no filterValues in the grouped column', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $headerFilter;
+    const that = this;
+    const testElement = $('#container');
+    let $headerFilter;
 
     that.columns[0].groupIndex = 0;
     that.options.groupPanel = {
@@ -1514,9 +1515,9 @@ QUnit.test('Indicator state when there is no filterValues in the grouped column'
 // T260241
 QUnit.test('Show header filter with set a custom width and height by column', function(assert) {
     // arrange
-    var that = this,
-        $popupContainer,
-        testElement = $('#container');
+    const that = this;
+    let $popupContainer;
+    const testElement = $('#container');
 
     that.columns[0].headerFilter = {
         width: 400,
@@ -1545,9 +1546,9 @@ QUnit.test('Show header filter with set a custom width and height by column', fu
 // T260241
 QUnit.test('Save size of the header filter after resize', function(assert) {
     // arrange
-    var that = this,
-        $popupContainer,
-        testElement = $('#container');
+    const that = this;
+    let $popupContainer;
+    const testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -1594,8 +1595,8 @@ QUnit.test('Save size of the header filter after resize', function(assert) {
 
 QUnit.test('Invalidate instead of render for headerFilter options', function(assert) {
     // arrange
-    var renderCounter = 0,
-        testElement = $('#container');
+    let renderCounter = 0;
+    const testElement = $('#container');
 
     this.setupDataGrid();
     this.columnHeadersView.render(testElement);
@@ -1620,8 +1621,8 @@ QUnit.test('Invalidate instead of render for headerFilter options', function(ass
 // T490356
 QUnit.test('Checking filterValues of the column after deselect item of a loaded page when there is selected item of an unloaded page', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        $popupContent;
+    const $testElement = $('#container');
+    let $popupContent;
 
     this.generateItems(30);
     this.columns[0].filterValues = ['test01', 'test30'];
@@ -1647,10 +1648,10 @@ QUnit.test('Checking filterValues of the column after deselect item of a loaded 
 
 QUnit.test('Show header filter with search bar', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        list,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let list;
+    const testElement = $('#container');
 
     that.options.headerFilter.allowSearch = true;
     that.options.headerFilter.searchTimeout = 300;
@@ -1689,10 +1690,10 @@ QUnit.test('Test aria-label in search-box input (T829760)', function(assert) {
 
 QUnit.test('Show header filter with search bar with searchMode equals', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        list,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let list;
+    const testElement = $('#container');
 
     that.options.headerFilter.allowSearch = true;
     that.options.headerFilter.searchTimeout = 300;
@@ -1716,10 +1717,10 @@ QUnit.test('Show header filter with search bar with searchMode equals', function
 
 QUnit.test('Show header filter when column with dataType date with search bar', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        treeView,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let treeView;
+    const testElement = $('#container');
 
     that.options.headerFilter.allowSearch = true;
     that.options.headerFilter.searchTimeout = 300;
@@ -1742,10 +1743,10 @@ QUnit.test('Show header filter when column with dataType date with search bar', 
 
 QUnit.test('HeaderFilter should be without search bar when column allowSearch is disabled', function(assert) {
     // arrange
-    var that = this,
-        list,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let list;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.headerFilter.allowSearch = true;
     that.columns[0].headerFilter = {
@@ -1767,10 +1768,10 @@ QUnit.test('HeaderFilter should be without search bar when column allowSearch is
 
 QUnit.test('Check select all state after search', function(assert) {
     // arrange
-    var that = this,
-        list,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
 
@@ -1795,10 +1796,10 @@ QUnit.test('Check select all state after search', function(assert) {
 
 QUnit.test('Check select all state after search if column dataType is date', function(assert) {
     // arrange
-    var that = this,
-        treeView,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let treeView;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
     that.columns[0].dataType = 'date';
@@ -1824,12 +1825,12 @@ QUnit.test('Check select all state after search if column dataType is date', fun
 
 QUnit.test('Check select all state after search and select if column dataType is date and search is by month', function(assert) {
     // arrange
-    var that = this,
-        treeView,
-        $selectAll,
-        column,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let treeView;
+    let $selectAll;
+    let column;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
     that.columns[0].dataType = 'date';
@@ -1866,11 +1867,11 @@ QUnit.test('Check select all state after search and select if column dataType is
 
 QUnit.test('Check search in column lookup with simple types', function(assert) {
     // arrange
-    var that = this,
-        list,
-        listItems,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    let listItems;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].lookup = {
         dataSource: ['test1', 'test2', 'test3']
@@ -1901,11 +1902,11 @@ QUnit.test('Check search in column lookup with simple types', function(assert) {
 
 QUnit.test('Check filtering in column lookup with object types', function(assert) {
     // arrange
-    var that = this,
-        list,
-        listItems,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    let listItems;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.columns[0].lookup = {
         valueExpr: 'value',
@@ -1937,11 +1938,11 @@ QUnit.test('Check filtering in column lookup with object types', function(assert
 
 QUnit.test('Search when custom dataSource to headerFilter is specified', function(assert) {
     // arrange
-    var that = this,
-        list,
-        listItems,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    let listItems;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
     that.columns[0].headerFilter = {
@@ -1967,11 +1968,11 @@ QUnit.test('Search when custom dataSource to headerFilter is specified', functio
 
 QUnit.test('Search by custom column', function(assert) {
     // arrange
-    var that = this,
-        list,
-        listItems,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    let listItems;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
     that.columns[0] = {
@@ -2005,11 +2006,11 @@ QUnit.test('Search by custom column', function(assert) {
 // T643528
 QUnit.test('Search by value from calculateCellValue', function(assert) {
     // arrange
-    var that = this,
-        list,
-        listItems,
-        testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let list;
+    let listItems;
+    const testElement = $('#container');
+    let $popupContent;
 
     that.options.headerFilter.allowSearch = true;
     that.columns = [{
@@ -2045,13 +2046,13 @@ QUnit.test('Search by value from calculateCellValue', function(assert) {
 QUnit.test('No exceptions on an attempt to filter a lookup column when valueExpr is not specified', function(assert) {
     // arrange
     try {
-        var that = this,
-            $testElement = $('#container'),
-            $popupContent,
-            headerFilterDataSource = [
-                { value: 1, text: 'test1' },
-                { value: 2, text: 'test2' }
-            ];
+        const that = this;
+        const $testElement = $('#container');
+        let $popupContent;
+        const headerFilterDataSource = [
+            { value: 1, text: 'test1' },
+            { value: 2, text: 'test2' }
+        ];
 
         that.columns[0].lookup = {
             displayExpr: 'text',
@@ -2098,17 +2099,17 @@ QUnit.testInActiveWindow('No scroll on opening the header filter when the popup 
         return;
     }
     // arrange
-    var that = this,
-        $popupContent,
-        viewPort = viewPortUtils.value(),
-        $testElement = $('#container').wrap($('<div/>').css({
-            position: 'absolute',
-            width: '100%',
-            height: '300px',
-            overflowY: 'scroll',
-            top: 10000,
-            left: 10000
-        }));
+    const that = this;
+    let $popupContent;
+    const viewPort = viewPortUtils.value();
+    const $testElement = $('#container').wrap($('<div/>').css({
+        position: 'absolute',
+        width: '100%',
+        height: '300px',
+        overflowY: 'scroll',
+        top: 10000,
+        left: 10000
+    }));
 
     fx.off = true;
     viewPortUtils.value($testElement.parent());
@@ -2176,9 +2177,9 @@ QUnit.module('Header Filter with real columnsController', {
 // T237910
 QUnit.test('Load data', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.setupDataGrid({
         controllers: {
@@ -2206,7 +2207,7 @@ QUnit.test('Load data', function(assert) {
 
 QUnit.test('combined filter when filterValues defined', function(assert) {
     // arrange
-    var that = this;
+    const that = this;
 
     that.options.columns = [{ dataField: 'column1', filterValues: [1, 2, 3], allowHeaderFiltering: true }, { dataField: 'column2', filterValues: [1, 2, 3], filterType: 'exclude', allowHeaderFiltering: true }];
     that.options.dataSource = {
@@ -2242,8 +2243,8 @@ QUnit.test('combined filter when filterValues defined', function(assert) {
 // T318497
 QUnit.test('Apply header filter after refresh grid', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container');
+    const that = this;
+    const $testElement = $('#container');
 
     that.options.columns = [{ dataField: 'column1', filterValues: [2], allowFiltering: true }];
     that.options.dataSource = {
@@ -2274,10 +2275,10 @@ QUnit.test('Apply header filter after refresh grid', function(assert) {
 // T310415
 QUnit.test('Header filter with items when column with filterValues', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container'),
-        $listElements,
-        $popupContent;
+    const that = this;
+    const testElement = $('#container');
+    let $listElements;
+    let $popupContent;
 
     that.options.columns[0].filterValues = ['test3'];
     that.options.columns[1].filterValues = ['test2', 'test4'];
@@ -2306,10 +2307,10 @@ QUnit.test('Header filter with items when column with filterValues', function(as
 // T243382
 QUnit.test('Header filter with filter row and apply filter button', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.filterRow = {
@@ -2347,9 +2348,9 @@ QUnit.test('Header filter with filter row and apply filter button', function(ass
 // T242345
 QUnit.test('Header filter when set format by column', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: 12, Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
     that.options.columns[0] = { dataField: 'Test1', format: 'currency' };
@@ -2374,10 +2375,10 @@ QUnit.test('Header filter when set format by column', function(assert) {
 // T241043
 QUnit.test('Filtering by empty null value', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        items,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let items;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: null, Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
     that.options.columns[0] = { dataField: 'Test1', dataType: 'number', allowHeaderFiltering: true };
@@ -2419,10 +2420,10 @@ QUnit.test('Filtering by empty null value', function(assert) {
 // T313688
 QUnit.test('Filtering by empty undefined value', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        items,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let items;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test2: 'value1' }, { Test1: 6, Test2: 'value2' }];
     that.options.columns[0] = { dataField: 'Test1', dataType: 'number', allowHeaderFiltering: true };
@@ -2464,10 +2465,10 @@ QUnit.test('Filtering by empty undefined value', function(assert) {
 // T372825
 QUnit.test('Filtering by empty string', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        items,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let items;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: '', Test2: 'value1' }, { Test1: null, Test2: 'value2' }, { Test1: 'value3', Test2: 'value4' }];
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: true };
@@ -2511,10 +2512,10 @@ QUnit.test('Filtering by empty string', function(assert) {
 // T372825
 QUnit.test('Filtering by empty string with filterType is exclude', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        items,
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    let items;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: '', Test2: 'value1' }, { Test1: null, Test2: 'value2' }, { Test1: 'value3', Test2: 'value4' }];
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: true, filterType: 'exclude' };
@@ -2557,10 +2558,10 @@ QUnit.test('Filtering by empty string with filterType is exclude', function(asse
 // T251272
 QUnit.test('Header Filter when grid with CustomStore', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
     that.options.dataSource = {
         filter: ['Test1', '<>', 'value14'],
@@ -2590,10 +2591,10 @@ QUnit.test('Header Filter when grid with CustomStore', function(assert) {
 
 QUnit.test('Header Filter when grid with CustomStore when remoteOperations false', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
     that.options.remoteOperations = false;
     that.options.dataSource = {
@@ -2624,8 +2625,8 @@ QUnit.test('Header Filter when grid with CustomStore when remoteOperations false
 // T801018
 QUnit.test('Header filter with search bar if remote filtering and local grouping', function(assert) {
     // arrange
-    var that = this,
-        testElement = $('#container');
+    const that = this;
+    const testElement = $('#container');
 
     that.options.headerFilter.allowSearch = true;
     that.options.remoteOperations = { sorting: true, filtering: true, paging: true };
@@ -2638,8 +2639,8 @@ QUnit.test('Header filter with search bar if remote filtering and local grouping
     that.headerFilterController.showHeaderFilterMenu(0);
 
     // assert
-    var $popupContent = that.headerFilterView.getPopupContainer().$content(),
-        list = $popupContent.find('.dx-list').dxList('instance');
+    const $popupContent = that.headerFilterView.getPopupContainer().$content();
+    const list = $popupContent.find('.dx-list').dxList('instance');
 
     assert.ok(list.option('searchEnabled'), 'list with search bar');
     assert.equal(list.option('searchExpr'), 'Test1', 'searchExpr is correct');
@@ -2647,10 +2648,10 @@ QUnit.test('Header filter with search bar if remote filtering and local grouping
 
 QUnit.test('Header Filter when grid with CustomStore when remote grouping and remote summary', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
     that.options.remoteOperations = true;
     that.options.summary = {
@@ -2697,10 +2698,10 @@ QUnit.test('Header Filter when grid with CustomStore when remote grouping and re
 
 QUnit.test('Header Filter when grid with CustomStore when remote grouping and groupInterval defined', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
     that.options.remoteOperations = true;
     that.options.columns[0].headerFilter = { groupInterval: 10 };
@@ -2735,10 +2736,10 @@ QUnit.test('Header Filter when grid with CustomStore when remote grouping and gr
 
 QUnit.test('Header Filter when grid with CustomStore when remote grouping and groupInterval defined as array', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
     that.options.remoteOperations = true;
     that.options.columns[0].headerFilter = { groupInterval: [100, 10] };
@@ -2774,12 +2775,12 @@ QUnit.test('Header Filter when grid with CustomStore when remote grouping and gr
 // T276179
 QUnit.test('Header Filter when grid with ODataStore with expand', function(assert) {
     // arrange
-    var that = this,
-        $popupContent,
-        loadArgs = [],
-        testElement = $('#container');
+    const that = this;
+    let $popupContent;
+    const loadArgs = [];
+    const testElement = $('#container');
 
-    var store = new ODataStore({});
+    const store = new ODataStore({});
 
     store._loadImpl = function(options) {
         loadArgs.push(options);
@@ -2816,10 +2817,10 @@ QUnit.test('Header Filter when grid with ODataStore with expand', function(asser
 // T267981
 QUnit.test('Not update indicator state for column with allowHeaderFiltering is false', function(assert) {
     // arrange
-    var that = this,
-        columns,
-        $cells,
-        testElement = $('#container');
+    const that = this;
+    let columns;
+    let $cells;
+    const testElement = $('#container');
 
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: false };
     that.setupDataGrid({
@@ -2856,10 +2857,10 @@ QUnit.test('Not update indicator state for column with allowHeaderFiltering is f
 // T322354
 QUnit.test('Not show indicator when set filterValues for column and with headerFilter.visible is false', function(assert) {
     // arrange
-    var that = this,
-        columns,
-        $cells,
-        testElement = $('#container');
+    const that = this;
+    let columns;
+    let $cells;
+    const testElement = $('#container');
 
     that.options.headerFilter.visible = false;
     that.setupDataGrid({
@@ -2892,11 +2893,11 @@ QUnit.test('Not show indicator when set filterValues for column and with headerF
 
 QUnit.test('Header Filter with CustomStore', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: true, headerFilter: { dataSource: [{ value: 'value1', text: 'Value1' }, { value: 'value2', text: 'Value2' }] } };
@@ -2939,11 +2940,11 @@ QUnit.test('Header Filter with CustomStore', function(assert) {
 // T306872
 QUnit.test('Header Filter - customStore value with filter data options', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: true, headerFilter: { dataSource: [{ value: ['Test1', '=', 'value1'], text: 'Value1' }, { value: 'value2', text: 'Value2' }] } };
@@ -2987,10 +2988,10 @@ QUnit.test('Header Filter - customStore value with filter data options', functio
 // T306872
 QUnit.test('Header Filter - saving state when customStore value with filter data options', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = { dataField: 'Test1', allowHeaderFiltering: true, headerFilter: { dataSource: [{ value: ['Test1', '=', 'value1'], text: 'Value1' }, { value: 'value2', text: 'Value2' }] }, filterValues: [['Test1', '=', 'value1']] };
@@ -3017,11 +3018,11 @@ QUnit.test('Header Filter - saving state when customStore value with filter data
 
 QUnit.test('Header Filter - customization dataSource via event', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = {
@@ -3074,10 +3075,10 @@ QUnit.test('Header Filter - customization dataSource via event', function(assert
 // T311441
 QUnit.test('Header Filter (List) - saving state with changed dataSource via event', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = {
@@ -3133,10 +3134,10 @@ QUnit.test('Header Filter (List) - saving state with changed dataSource via even
 // T311441
 QUnit.test('Header Filter (TreeView) - saving state with changed dataSource via event', function(assert) {
     // arrange
-    var that = this,
-        $treeViewItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $treeViewItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: new Date(1993, 7, 6), Test2: 'value1' }, { Test1: new Date(1994, 2, 6), Test2: 'value2' }];
     that.options.columns[0] = {
@@ -3211,12 +3212,12 @@ QUnit.test('Header Filter (TreeView) - saving state with changed dataSource via 
 
 QUnit.test('Header Filter with customize text', function(assert) {
     // arrange
-    var that = this,
-        i = 1,
-        $listItems,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let i = 1;
+    let $listItems;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0].customizeText = function(options) {
@@ -3265,12 +3266,12 @@ QUnit.test('Header Filter with customize text', function(assert) {
 
 QUnit.test('Header Filter with customize text for column with dataType the date', function(assert) {
     // arrange
-    var that = this,
-        i = 1,
-        $listItems,
-        $popupContent,
-        applyFilterCallCount = 0,
-        testElement = $('#container');
+    const that = this;
+    let i = 1;
+    let $listItems;
+    let $popupContent;
+    let applyFilterCallCount = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: 'value1' }, { Test1: new Date(1992, 2, 6), Test2: 'value2' }];
     that.options.columns[0].customizeText = function(options) {
@@ -3326,12 +3327,12 @@ QUnit.test('Header Filter with customize text for column with dataType the date'
 
 QUnit.test('Header Filter with calculateFilterExpression', function(assert) {
     // arrange
-    var that = this,
-        i = 0,
-        filter,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let i = 0;
+    let filter;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0].calculateFilterExpression = function(filterValue, selectedFilterOperation, target) {
@@ -3374,11 +3375,11 @@ QUnit.test('Header Filter with calculateFilterExpression', function(assert) {
 
 QUnit.test('Apply header filter', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        countCallColumnsChanged = 0,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let countCallColumnsChanged = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: 'value1', Test2: 'value2' }, { Test1: 'value3', Test2: 'value4' }, { Test1: 'value5', Test2: 'value6' }];
     that.options.columns[0].filterValues = ['value1'];
@@ -3417,12 +3418,12 @@ QUnit.test('Apply header filter', function(assert) {
 
 QUnit.test('Header filter with group interval \'year\' for column with dataType \'date\'', function(assert) {
     // arrange
-    var that = this,
-        filter,
-        $listItems,
-        listInstance,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let filter;
+    let $listItems;
+    let listInstance;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: 'value1' }, { Test1: new Date(1997, 2, 6), Test2: 'value2' }];
     that.options.columns[0].headerFilter = { groupInterval: 'year' };
@@ -3466,11 +3467,11 @@ QUnit.test('Header filter with group interval \'year\' for column with dataType 
 
 QUnit.test('Header filter with group interval \'quarter\' for column with dataType \'date\'', function(assert) {
     // arrange
-    var that = this,
-        filter,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let filter;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [
         { Test1: new Date(1992, 9, 6), Test2: 'value1' },
@@ -3524,11 +3525,11 @@ QUnit.test('Header filter with group interval \'quarter\' for column with dataTy
 // T636103
 QUnit.test('Header filter with custom data source and group interval null for column with dataType \'date\'', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        listInstance,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let listInstance;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [{ Test1: new Date(1992, 7, 6), Test2: 'value1' }];
     that.options.columns[0].headerFilter = {
@@ -3562,11 +3563,11 @@ QUnit.test('Header filter with custom data source and group interval null for co
 
 QUnit.test('Header filter with group interval for column with dataType \'number\'', function(assert) {
     // arrange
-    var that = this,
-        filter,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let filter;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [
         { Test1: 19, Test2: 'value1' },
@@ -3619,10 +3620,10 @@ QUnit.test('Header filter with group interval for column with dataType \'number\
 // T311547
 QUnit.test('Header filter with group interval for column with dataType \'number\' and format is \'currency\'', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [
         { Test1: 19, Test2: 'value1' },
@@ -3652,11 +3653,11 @@ QUnit.test('Header filter with group interval for column with dataType \'number\
 // T311547
 QUnit.test('HeaderFilter - customizeText with group interval for column with dataType \'number\' and format is \'currency\'', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        countCallCustomizeText = 0,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let countCallCustomizeText = 0;
+    const testElement = $('#container');
 
     that.options.dataSource = [
         { Test1: 19, Test2: 'value1' },
@@ -3665,7 +3666,7 @@ QUnit.test('HeaderFilter - customizeText with group interval for column with dat
     that.options.columns[0].format = 'currency';
     that.options.columns[0].headerFilter = { groupInterval: 100 };
     that.options.columns[0].customizeText = function(options) {
-        var result;
+        let result;
 
         if(options.target === 'headerFilter') {
             if(countCallCustomizeText === 0) {
@@ -3707,10 +3708,10 @@ QUnit.test('HeaderFilter - customizeText with group interval for column with dat
 // T470801
 QUnit.test('Header filter should ignore calculateGroupValue column option', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    const testElement = $('#container');
 
     that.options.dataSource = [
         { Test1: 19, Test2: 'value1' },
@@ -3743,9 +3744,9 @@ QUnit.test('Header filter should ignore calculateGroupValue column option', func
 // T323372
 QUnit.test('Proxy customQueryParams load parameter during headerFilter operation', function(assert) {
     // arrange
-    var that = this,
-        column,
-        loadOptions;
+    const that = this;
+    let column;
+    let loadOptions;
 
     that.options.dataSource = { store: { type: 'odata' }, customQueryParams: { param: 'test' } };
     that.setupDataGrid();
@@ -3765,10 +3766,10 @@ QUnit.test('Proxy customQueryParams load parameter during headerFilter operation
 
 QUnit.test('dataSource group parameter should contains compare option if column has sortingMethod callback', function(assert) {
     // arrange
-    var that = this,
-        column;
+    const that = this;
+    let column;
 
-    var context;
+    let context;
     that.options.columns[0].sortingMethod = function(x, y) {
         context = this;
         return x - y;
@@ -3781,7 +3782,7 @@ QUnit.test('dataSource group parameter should contains compare option if column 
     column = that.columnsController.getVisibleColumns()[0];
 
     // act
-    var dataSource = that.headerFilterController.getDataSource(column);
+    const dataSource = that.headerFilterController.getDataSource(column);
     that.clock.tick();
 
     // assert
@@ -3794,11 +3795,11 @@ QUnit.test('dataSource group parameter should contains compare option if column 
 // T349706
 QUnit.test('Not apply filter when selected all items', function(assert) {
     // arrange
-    var that = this,
-        column,
-        callApplyFilter,
-        $testElement = $('#container'),
-        $popupContent;
+    const that = this;
+    let column;
+    let callApplyFilter;
+    const $testElement = $('#container');
+    let $popupContent;
 
     that.options.dataSource = [{ Test1: 'test1', Test2: 'test2' }];
     that.setupDataGrid();
@@ -3838,9 +3839,9 @@ QUnit.test('Not apply filter when selected all items', function(assert) {
 
 QUnit.test('Draw header filter indicator for band columns', function(assert) {
     // arrange
-    var that = this,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $cells;
+    const $testElement = $('#container');
 
     that.options.dataSource = [{ Column1: 12, Column2: 'value1', Column3: 'value2', Column4: 'value3', Column5: 'value4' }, { Column1: 6, Column2: 'value5', Column3: 'value6', Column4: 'value7', Column5: 'value8' }];
     that.options.columns = [{ caption: 'Band column 1', columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', columns: ['Column4', 'Column5'] }];
@@ -3864,20 +3865,20 @@ QUnit.test('Draw header filter indicator for band columns', function(assert) {
 
 QUnit.test('Load data for column with dataType is \'datetime\'', function(assert) {
     // arrange
-    var items,
-        column,
-        headerFilterDataSource,
-        getTreeText = function(items) {
-            var result = [],
-                item = items[0];
+    let items;
+    let column;
+    let headerFilterDataSource;
+    const getTreeText = function(items) {
+        const result = [];
+        let item = items[0];
 
-            while(item) {
-                result.push(item.text);
-                item = item.items && item.items[0];
-            }
+        while(item) {
+            result.push(item.text);
+            item = item.items && item.items[0];
+        }
 
-            return result;
-        };
+        return result;
+    };
 
     this.options.dataSource = [{ birthday: new Date(1992, 8, 6, 12, 13, 14) }];
     this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
@@ -3898,9 +3899,9 @@ QUnit.test('Load data for column with dataType is \'datetime\'', function(assert
 // T534059
 QUnit.test('Header filter should consider the \'trueText\' and \'falseText\' column options', function(assert) {
     // arrange
-    var that = this,
-        $itemElements,
-        $testElement = $('#container');
+    const that = this;
+    let $itemElements;
+    const $testElement = $('#container');
 
     that.options.columns = [{
         dataField: 'field',
@@ -3930,11 +3931,11 @@ QUnit.test('Header filter should consider the \'trueText\' and \'falseText\' col
 // T544400
 QUnit.test('Updating selection state should be correct when headerFilter.dataSource as ArrayStore', function(assert) {
     // arrange
-    var that = this,
-        $listItems,
-        $popupContent,
-        $cancelButton,
-        $testElement = $('#container');
+    const that = this;
+    let $listItems;
+    let $popupContent;
+    let $cancelButton;
+    const $testElement = $('#container');
 
     that.options.dataSource = that.items;
     that.options.columns[0] = {
@@ -3975,7 +3976,7 @@ QUnit.test('Updating selection state should be correct when headerFilter.dataSou
 // T596758
 QUnit.test('Checking filter in loadOptions when value in headerFilter.dataSource is specified as filter expression for a date column', function(assert) {
     // arrange
-    var spy = sinon.spy(function(loadOptions) {
+    const spy = sinon.spy(function(loadOptions) {
         return [{ date: '2018/01/01' }, { date: '2018/01/02' }, { date: '2018/01/03' }];
     });
 

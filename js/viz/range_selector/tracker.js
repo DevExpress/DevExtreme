@@ -9,21 +9,21 @@ const MIN_MANUAL_SELECTING_WIDTH = 10;
 const window = windowModule.getWindow();
 
 function isLeftButtonPressed(event) {
-    var e = event || window.event,
-        originalEvent = e.originalEvent,
-        touches = e.touches,
-        pointerType = (originalEvent ? originalEvent.pointerType : false),
-        eventTouches = (originalEvent ? originalEvent.touches : false),
-        isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1)),
-        isTouches = (touches && touches.length > 0) || (eventTouches && eventTouches.length > 0);
+    const e = event || window.event;
+    const originalEvent = e.originalEvent;
+    const touches = e.touches;
+    const pointerType = (originalEvent ? originalEvent.pointerType : false);
+    const eventTouches = (originalEvent ? originalEvent.touches : false);
+    const isMSPointerLeftClick = originalEvent && pointerType !== undefined && (pointerType === (originalEvent.MSPOINTER_TYPE_TOUCH || 'touch') || (pointerType === (originalEvent.MSPOINTER_TYPE_MOUSE || 'mouse') && originalEvent.buttons === 1));
+    const isTouches = (touches && touches.length > 0) || (eventTouches && eventTouches.length > 0);
 
     return (e.which === 1) || isMSPointerLeftClick || isTouches;
 }
 
 function isMultiTouches(event) {
-    var originalEvent = event.originalEvent,
-        touches = event.touches,
-        eventTouches = originalEvent && originalEvent.touches;
+    const originalEvent = event.originalEvent;
+    const touches = event.touches;
+    const eventTouches = originalEvent && originalEvent.touches;
 
     return (touches && touches.length > 1) || (eventTouches && eventTouches.length > 1) || null;
 }
@@ -47,8 +47,8 @@ function isTouchEventArgs(e) {
 }
 
 function getEventPageX(event) {
-    var originalEvent = event.originalEvent,
-        result = 0;
+    const originalEvent = event.originalEvent;
+    let result = 0;
     if(event.pageX) {
         result = event.pageX;
     } else if(originalEvent && originalEvent.pageX) {
@@ -65,42 +65,42 @@ function getEventPageX(event) {
 }
 
 function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
-    var isTouchEvent,
-        isActive = false,
-        initialPosition,
-        movingHandler = null,
-        docEvents = {
-            [pointerEvents.move](e) {
-                var position,
-                    offset;
-                if(isTouchEvent !== isTouchEventArgs(e)) return;
+    let isTouchEvent;
+    let isActive = false;
+    let initialPosition;
+    let movingHandler = null;
+    const docEvents = {
+        [pointerEvents.move](e) {
+            let position;
+            let offset;
+            if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-                if(!isLeftButtonPressed(e)) {
-                    cancel(e);
-                }
-                if(isActive) {
-                    position = getEventPageX(e);
-                    offset = getRootOffsetLeft();
-                    if(movingHandler) {
-                        movingHandler(position - offset, e);
-                    } else {
-                        if(state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
-                            movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
-                        }
+            if(!isLeftButtonPressed(e)) {
+                cancel(e);
+            }
+            if(isActive) {
+                position = getEventPageX(e);
+                offset = getRootOffsetLeft();
+                if(movingHandler) {
+                    movingHandler(position - offset, e);
+                } else {
+                    if(state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
+                        movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
                     }
-                }
-            },
-            [pointerEvents.up](e) {
-                var position;
-                if(isActive) {
-                    position = getEventPageX(e);
-                    if(!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
-                        controller.moveSelectedArea(position - getRootOffsetLeft(), e);
-                    }
-                    cancel(e);
                 }
             }
-        };
+        },
+        [pointerEvents.up](e) {
+            let position;
+            if(isActive) {
+                position = getEventPageX(e);
+                if(!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
+                    controller.moveSelectedArea(position - getRootOffsetLeft(), e);
+                }
+                cancel(e);
+            }
+        }
+    };
 
     function cancel(e) {
         if(isActive) {
@@ -123,23 +123,23 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
 }
 
 function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft) {
-    var isTouchEvent,
-        isActive = false,
-        movingHandler = null,
-        docEvents = {
-            [pointerEvents.move](e) {
-                if(isTouchEvent !== isTouchEventArgs(e)) return;
+    let isTouchEvent;
+    let isActive = false;
+    let movingHandler = null;
+    const docEvents = {
+        [pointerEvents.move](e) {
+            if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-                if(!isLeftButtonPressed(e)) {
-                    cancel(e);
-                }
-                if(isActive) {
-                    preventDefault(e);
-                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
-                }
-            },
-            [pointerEvents.up]: cancel
-        };
+            if(!isLeftButtonPressed(e)) {
+                cancel(e);
+            }
+            if(isActive) {
+                preventDefault(e);
+                movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
+            }
+        },
+        [pointerEvents.up]: cancel
+    };
 
     function cancel(e) {
         if(isActive) {
@@ -161,23 +161,23 @@ function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft
 }
 
 function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
-    var isTouchEvent,
-        isActive = false,
-        movingHandler = null,
-        docEvents = {
-            [pointerEvents.move](e) {
-                if(isTouchEvent !== isTouchEventArgs(e)) return;
+    let isTouchEvent;
+    let isActive = false;
+    let movingHandler = null;
+    const docEvents = {
+        [pointerEvents.move](e) {
+            if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-                if(!isLeftButtonPressed(e)) {
-                    cancel(e);
-                }
-                if(isActive) {
-                    preventDefault(e);
-                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
-                }
-            },
-            [pointerEvents.up]: cancel
-        };
+            if(!isLeftButtonPressed(e)) {
+                cancel(e);
+            }
+            if(isActive) {
+                preventDefault(e);
+                movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
+            }
+        },
+        [pointerEvents.up]: cancel
+    };
 
     each(sliders, function(i, slider) {
         slider.on({
@@ -209,8 +209,8 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
 }
 
 export function Tracker(params) {
-    var state = this._state = {},
-        targets = params.controller.getTrackerTargets();
+    const state = this._state = {};
+    const targets = params.controller.getTrackerTargets();
     if(msPointerEnabled) {
         params.renderer.root.css({ 'msTouchAction': 'pinch-zoom' });
     }
@@ -239,7 +239,7 @@ Tracker.prototype = {
     },
 
     update: function(enabled, behavior) {
-        var state = this._state;
+        const state = this._state;
         state.enabled = enabled;
         state.moveSelectedRangeByClick = behavior.moveSelectedRangeByClick;
         state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;

@@ -1,4 +1,4 @@
-var common = require('./commonParts/common.js');
+const common = require('./commonParts/common.js');
 
 require('viz/tree_map/colorizing.discrete');
 require('viz/tree_map/colorizing.gradient');

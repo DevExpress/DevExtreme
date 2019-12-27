@@ -1,26 +1,35 @@
-var isDefined = require('./type').isDefined,
-    each = require('./iterator').each,
-    objectUtils = require('./object'),
-    config = require('../config');
+const isDefined = require('./type').isDefined;
+const each = require('./iterator').each;
+const objectUtils = require('./object');
+const config = require('../config');
 
-var isEmpty = function(entity) {
+const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
 };
 
-var wrapToArray = function(entity) {
+const wrapToArray = function(entity) {
     return Array.isArray(entity) ? entity : [entity];
 };
 
-var intersection = function(a, b) {
+const inArray = function(value, object) {
+    if(!object) {
+        return -1;
+    }
+    const array = Array.isArray(object) ? object : object.toArray();
+
+    return array.indexOf(value);
+};
+
+const intersection = function(a, b) {
     if(!Array.isArray(a) || a.length === 0 ||
        !Array.isArray(b) || b.length === 0) {
         return [];
     }
 
-    var result = [];
+    const result = [];
 
     each(a, function(_, value) {
-        var index = inArray(value, b);
+        const index = inArray(value, b);
 
         if(index !== -1) {
             result.push(value);
@@ -30,7 +39,7 @@ var intersection = function(a, b) {
     return result;
 };
 
-var removeDuplicates = function(from, what) {
+const removeDuplicates = function(from, what) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];
     }
@@ -39,10 +48,10 @@ var removeDuplicates = function(from, what) {
         return from.slice();
     }
 
-    var result = [];
+    const result = [];
 
     each(from, function(_, value) {
-        var index = inArray(value, what);
+        const index = inArray(value, what);
 
         if(index === -1) {
             result.push(value);
@@ -52,10 +61,10 @@ var removeDuplicates = function(from, what) {
     return result;
 };
 
-var normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
-    var indexedItems = {},
-        parameterIndex = 0,
-        useLegacyVisibleIndex = config().useLegacyVisibleIndex;
+const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
+    const indexedItems = {};
+    let parameterIndex = 0;
+    const useLegacyVisibleIndex = config().useLegacyVisibleIndex;
 
     each(items, function(index, item) {
         index = item[indexParameterName];
@@ -105,25 +114,16 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
     return parameterIndex;
 };
 
-var inArray = function(value, object) {
-    if(!object) {
-        return -1;
-    }
-    var array = Array.isArray(object) ? object : object.toArray();
-
-    return array.indexOf(value);
-};
-
-var merge = function(array1, array2) {
-    for(var i = 0; i < array2.length; i++) {
+const merge = function(array1, array2) {
+    for(let i = 0; i < array2.length; i++) {
         array1[array1.length] = array2[i];
     }
 
     return array1;
 };
 
-var find = function(array, condition) {
-    for(var i = 0; i < array.length; i++) {
+const find = function(array, condition) {
+    for(let i = 0; i < array.length; i++) {
         if(condition(array[i])) {
             return array[i];
         }

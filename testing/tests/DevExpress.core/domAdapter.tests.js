@@ -1,15 +1,15 @@
-var domAdapter = require('core/dom_adapter');
+const domAdapter = require('core/dom_adapter');
 
 QUnit.module('DOM Adapter', {
     beforeEach: function() {
-        var fixture = document.getElementById('qunit-fixture');
+        const fixture = document.getElementById('qunit-fixture');
         this.container = document.createElement('div');
         fixture.appendChild(this.container);
     }
 });
 
 QUnit.test('insertElement', function(assert) {
-    var target = document.createElement('span');
+    const target = document.createElement('span');
 
     domAdapter.insertElement(this.container, target);
 
@@ -19,7 +19,7 @@ QUnit.test('insertElement', function(assert) {
 QUnit.test('listen with no window', function(assert) {
     assert.expect(0);
 
-    var windowObject = {};
+    const windowObject = {};
     windowObject.window = windowObject;
 
     domAdapter.listen(windowObject, 'test-event', function() {});
@@ -32,7 +32,7 @@ QUnit.module('DOM Adapter injection', {
 });
 
 QUnit.test('inject document', function(assert) {
-    var doc = {};
+    const doc = {};
     domAdapter.inject({
         _document: doc
     });

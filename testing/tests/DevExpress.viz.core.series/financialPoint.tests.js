@@ -6,7 +6,7 @@ import tooltipModule from 'viz/core/tooltip';
 
 const originalLabel = labelModule.Label;
 
-var createPoint = function(series, data, options) {
+const createPoint = function(series, data, options) {
     options = options || {};
     options.type = options.type || 'stock';
     return new pointModule.Point(series, data, options);
@@ -14,7 +14,7 @@ var createPoint = function(series, data, options) {
 
 QUnit.module('Point coordinates translation. Financial', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.series = new MockSeries({
             valueAxis: { getTranslator: function() { return that.translators.val; } },
             argumentAxis: { getTranslator: function() { return that.translators.arg; } }
@@ -56,14 +56,14 @@ QUnit.module('Point coordinates translation. Financial', {
     translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
     translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 },
     setTranslators: function() {
-        var xTranslator = new MockTranslator({
-                translate: this.translateXData,
-                failOnWrongData: true
-            }),
-            yTranslator = new MockTranslator({
-                translate: this.translateYData,
-                failOnWrongData: true
-            });
+        const xTranslator = new MockTranslator({
+            translate: this.translateXData,
+            failOnWrongData: true
+        });
+        const yTranslator = new MockTranslator({
+            translate: this.translateYData,
+            failOnWrongData: true
+        });
 
         this.translators = this.opt.rotated ? {
             arg: yTranslator,
@@ -77,7 +77,7 @@ QUnit.module('Point coordinates translation. Financial', {
 
 QUnit.test('Translation', function(assert) {
     this.setTranslators();
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
 
@@ -91,7 +91,7 @@ QUnit.test('Translation', function(assert) {
 QUnit.test('hasCoords returns true if point has x, lowY, highY', function(assert) {
     this.setTranslators();
 
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
 
@@ -103,7 +103,7 @@ QUnit.test('hasCoords returns false if point does not have x', function(assert) 
     this.translators.arg = new MockTranslator({
         translate: { 1: null }
     });
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
     assert.ok(!point.hasCoords());
@@ -114,7 +114,7 @@ QUnit.test('hasCoords returns false if point does not have lowY', function(asser
     this.translators.val = new MockTranslator({
         translate: { 1: null, 2: 2, 3: 3, 4: 4 }
     });
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
     assert.ok(!point.hasCoords());
@@ -125,7 +125,7 @@ QUnit.test('hasCoords returns false if point does not have highY', function(asse
     this.translators.val = new MockTranslator({
         translate: { 1: 1, 2: 2, 3: 3, 4: null }
     });
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
     assert.ok(!point.hasCoords());
@@ -136,7 +136,7 @@ QUnit.test('hasCoords returns true if point does not have closeY or openY', func
     this.translators.val = new MockTranslator({
         translate: { 1: 1, 2: null, 3: null, 4: 4 }
     });
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
     assert.ok(point.hasCoords());
@@ -145,7 +145,7 @@ QUnit.test('hasCoords returns true if point does not have closeY or openY', func
 QUnit.test('getCrosshairData', function(assert) {
     this.series.axis = 'valueAxisName';
     this.setTranslators();
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
 
@@ -168,7 +168,7 @@ QUnit.test('getCrosshairData. Rotate', function(assert) {
     this.opt.rotated = true;
     this.series.axis = 'valueAxisName';
     this.setTranslators();
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
     point.translate();
 
@@ -233,7 +233,7 @@ QUnit.module('Point coordinates correction. Candlestick', {
 });
 
 QUnit.test('Odd width', function(assert) {
-    var correction = {
+    const correction = {
         offset: -10,
         width: 19
     };
@@ -245,7 +245,7 @@ QUnit.test('Odd width', function(assert) {
 });
 
 QUnit.test('Negative offset', function(assert) {
-    var correction = {
+    const correction = {
         offset: -10,
         width: 20
     };
@@ -257,7 +257,7 @@ QUnit.test('Negative offset', function(assert) {
 });
 
 QUnit.test('Positive offset', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 8
     };
@@ -269,7 +269,7 @@ QUnit.test('Positive offset', function(assert) {
 });
 
 QUnit.test('Width more than max width', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 20
     };
@@ -281,7 +281,7 @@ QUnit.test('Width more than max width', function(assert) {
 });
 
 QUnit.test('Width less than min width', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 2
     };
@@ -336,7 +336,7 @@ QUnit.module('Point coordinates correction. Stock', {
 });
 
 QUnit.test('Odd width', function(assert) {
-    var correction = {
+    const correction = {
         offset: -10,
         width: 19
     };
@@ -348,7 +348,7 @@ QUnit.test('Odd width', function(assert) {
 });
 
 QUnit.test('Negative offset', function(assert) {
-    var correction = {
+    const correction = {
         offset: -10,
         width: 20
     };
@@ -360,7 +360,7 @@ QUnit.test('Negative offset', function(assert) {
 });
 
 QUnit.test('Positive offset', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 8
     };
@@ -372,7 +372,7 @@ QUnit.test('Positive offset', function(assert) {
 });
 
 QUnit.test('Width more than max width', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 20
     };
@@ -384,7 +384,7 @@ QUnit.test('Width more than max width', function(assert) {
 });
 
 QUnit.test('Width less than min width', function(assert) {
-    var correction = {
+    const correction = {
         offset: 10,
         width: 2
     };
@@ -428,55 +428,45 @@ QUnit.module('Has value method', {
 });
 
 QUnit.test('Positive', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt),
-        result;
-
-    result = point.hasValue();
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt);
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. OpenValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 5 }, this.opt),
-        result;
-
-    result = point.hasValue();
+    const point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 5 }, this.opt);
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. CloseValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: null, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt),
-        result;
-
-    result = point.hasValue();
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: null, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt);
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. HighValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: null, lowValue: 1, reductionValue: 3 }, this.opt),
-        result;
-
-    result = point.hasValue();
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: null, lowValue: 1, reductionValue: 3 }, this.opt);
+    const result = point.hasValue();
 
     assert.strictEqual(result, false);
 });
 
 QUnit.test('Negative. LowValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: null, reductionValue: 3 }, this.opt),
-        result;
-
-    result = point.hasValue();
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: null, reductionValue: 3 }, this.opt);
+    const result = point.hasValue();
 
     assert.strictEqual(result, false);
 });
 
 QUnit.module('Check object in visible area', {
     beforeEach: function() {
-        var that = this,
-            translateXData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 },
-            translateYData = { 1: 990, 2: 1000, 3: 1010, 4: 1040, 5: 1050, 6: 1090, 7: 1100, 8: 1110 };
+        const that = this;
+        const translateXData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 };
+        const translateYData = { 1: 990, 2: 1000, 3: 1010, 4: 1040, 5: 1050, 6: 1090, 7: 1100, 8: 1110 };
 
         this.options = {
             widgetType: 'chart',
@@ -518,7 +508,7 @@ QUnit.test('Point is visible inside area', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -531,7 +521,7 @@ QUnit.test('Point is invisible on the left', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -544,7 +534,7 @@ QUnit.test('Point is visible on the left border', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -557,7 +547,7 @@ QUnit.test('Point is invisible on the right', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -570,7 +560,7 @@ QUnit.test('Point is visible on the right border', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -583,7 +573,7 @@ QUnit.test('Point is invisible on the top', function(assert) {
     this.point.closeValue = 8;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -596,7 +586,7 @@ QUnit.test('Point is visible on the top border', function(assert) {
     this.point.closeValue = 8;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -609,7 +599,7 @@ QUnit.test('Point is invisible on the bottom', function(assert) {
     this.point.closeValue = 2;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -622,16 +612,16 @@ QUnit.test('Point is visible on the bottom border', function(assert) {
     this.point.closeValue = 3;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
 
 QUnit.module('Check object in visible area. Rotated.', {
     beforeEach: function() {
-        var that = this,
-            translateXData = { 1: -10, 2: 0, 3: 10, 4: 40, 5: 50, 6: 90, 7: 100, 8: 110 },
-            translateYData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 };
+        const that = this;
+        const translateXData = { 1: -10, 2: 0, 3: 10, 4: 40, 5: 50, 6: 90, 7: 100, 8: 110 };
+        const translateYData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 };
 
         this.options = {
             reduction: {
@@ -674,7 +664,7 @@ QUnit.test('Point is visible inside area', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -687,7 +677,7 @@ QUnit.test('Point is invisible on the left', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -700,7 +690,7 @@ QUnit.test('Point is visible on the left border', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -713,7 +703,7 @@ QUnit.test('Point is invisible on the right', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -726,7 +716,7 @@ QUnit.test('Point is visible on the right border', function(assert) {
     this.point.closeValue = 5;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -739,7 +729,7 @@ QUnit.test('Point is invisible on the top', function(assert) {
     this.point.closeValue = 8;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -752,7 +742,7 @@ QUnit.test('Point is visible on the top border', function(assert) {
     this.point.closeValue = 8;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
@@ -765,7 +755,7 @@ QUnit.test('Point is invisible on the bottom', function(assert) {
     this.point.closeValue = 2;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(!isInVisibleArea);
 });
@@ -778,14 +768,14 @@ QUnit.test('Point is visible on the bottom border', function(assert) {
     this.point.closeValue = 3;
     this.point.translate();
 
-    var isInVisibleArea = this.point.isInVisibleArea();
+    const isInVisibleArea = this.point.isInVisibleArea();
 
     assert.ok(isInVisibleArea);
 });
 
 QUnit.module('Draw point. Candlestick', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
@@ -846,7 +836,7 @@ QUnit.module('Draw point. Candlestick', {
 });
 
 QUnit.test('Marker (openValue < closeValue)', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -868,7 +858,7 @@ QUnit.test('Marker (openValue < closeValue)', function(assert) {
 });
 
 QUnit.test('Marker without close value', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -888,7 +878,7 @@ QUnit.test('Marker without close value', function(assert) {
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
 });
 QUnit.test('Marker without open value', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -909,7 +899,7 @@ QUnit.test('Marker without open value', function(assert) {
 });
 
 QUnit.test('Marker without open&close values', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: null, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -929,7 +919,7 @@ QUnit.test('Marker without open&close values', function(assert) {
 });
 
 QUnit.test('Marker (openValue < closeValue). Rotated', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point._options.rotated = true;
     point.width = 10;
@@ -951,7 +941,7 @@ QUnit.test('Marker (openValue < closeValue). Rotated', function(assert) {
 });
 
 QUnit.test('Marker (openValue > closeValue). Rotated', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 4, closeValue: 2, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 4, closeValue: 2, highValue: 4, lowValue: 1 }, this.options);
 
     point._options.rotated = true;
     point.width = 10;
@@ -973,7 +963,7 @@ QUnit.test('Marker (openValue > closeValue). Rotated', function(assert) {
 });
 
 QUnit.test('Marker (openValue > closeValue)', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 4, closeValue: 2, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 4, closeValue: 2, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -993,7 +983,7 @@ QUnit.test('Marker (openValue > closeValue)', function(assert) {
 });
 
 QUnit.test('Marker (openValue = closeValue)', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1013,7 +1003,7 @@ QUnit.test('Marker (openValue = closeValue)', function(assert) {
 });
 
 QUnit.test('Marker (openValue = closeValue). Rotated', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point._options.rotated = true;
     point.width = 10;
@@ -1035,7 +1025,7 @@ QUnit.test('Marker (openValue = closeValue). Rotated', function(assert) {
 });
 
 QUnit.test('Marker (openValue = closeValue).', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1055,7 +1045,7 @@ QUnit.test('Marker (openValue = closeValue).', function(assert) {
 });
 
 QUnit.test('Marker, reduction point', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1071,7 +1061,7 @@ QUnit.test('Marker, reduction point', function(assert) {
 });
 
 QUnit.test('Marker, positive point', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1087,7 +1077,7 @@ QUnit.test('Marker, positive point', function(assert) {
 });
 
 QUnit.test('Marker, reduction & positive', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1103,7 +1093,7 @@ QUnit.test('Marker, reduction & positive', function(assert) {
 });
 
 QUnit.test('Marker, default', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1119,7 +1109,7 @@ QUnit.test('Marker, default', function(assert) {
 });
 
 QUnit.test('Update marker', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1137,7 +1127,7 @@ QUnit.test('Update marker', function(assert) {
 });
 
 QUnit.test('Update marker group', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1154,7 +1144,7 @@ QUnit.test('Update marker group', function(assert) {
 });
 
 QUnit.test('Update marker location', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1177,7 +1167,7 @@ QUnit.test('Update marker location', function(assert) {
 });
 
 QUnit.test('Marker without state', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.draw(this.renderer, this.groups);
@@ -1190,7 +1180,7 @@ QUnit.test('Marker without state', function(assert) {
 
 QUnit.module('Draw point. Stock', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -1250,7 +1240,7 @@ QUnit.module('Draw point. Stock', {
 });
 
 QUnit.test('Marker', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1272,7 +1262,7 @@ QUnit.test('Marker', function(assert) {
 });
 
 QUnit.test('Marker without openValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1292,7 +1282,7 @@ QUnit.test('Marker without openValue', function(assert) {
 });
 
 QUnit.test('Marker without closeValue', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1312,7 +1302,7 @@ QUnit.test('Marker without closeValue', function(assert) {
 });
 
 QUnit.test('Marker. Rotated', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point._options.rotated = true;
     point.width = 10;
@@ -1334,7 +1324,7 @@ QUnit.test('Marker. Rotated', function(assert) {
 });
 
 QUnit.test('Marker, reduction point', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1350,7 +1340,7 @@ QUnit.test('Marker, reduction point', function(assert) {
 });
 
 QUnit.test('Marker, positive point', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1366,7 +1356,7 @@ QUnit.test('Marker, positive point', function(assert) {
 });
 
 QUnit.test('Marker, reduction & positive', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1382,7 +1372,7 @@ QUnit.test('Marker, reduction & positive', function(assert) {
 });
 
 QUnit.test('Marker, default', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1398,7 +1388,7 @@ QUnit.test('Marker, default', function(assert) {
 });
 
 QUnit.test('Update marker', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1417,7 +1407,7 @@ QUnit.test('Update marker', function(assert) {
 });
 
 QUnit.test('Update marker location', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1443,7 +1433,7 @@ QUnit.test('Update marker location', function(assert) {
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.translators = {
             arg: new MockTranslator({
                 translate: { 1: 11 },
@@ -1493,7 +1483,7 @@ QUnit.module('Tooltip', {
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
             getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; }
         };
-        var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -1506,7 +1496,7 @@ QUnit.module('Tooltip', {
 });
 
 QUnit.test('Get tooltip coordinates, highY < lowY. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1515,13 +1505,13 @@ QUnit.test('Get tooltip coordinates, highY < lowY. Location is center', function
     point.lowY = 69;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 44, y: 56, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, highY < lowY. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1530,13 +1520,13 @@ QUnit.test('Get tooltip coordinates, highY < lowY. Location is edge', function(a
     point.lowY = 69;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 44, y: 43, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, highY > lowY. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1545,13 +1535,13 @@ QUnit.test('Get tooltip coordinates, highY > lowY. Location is center', function
     point.lowY = 43;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 44, y: 56, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, highY > lowY. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1560,13 +1550,13 @@ QUnit.test('Get tooltip coordinates, highY > lowY. Location is edge', function(a
     point.lowY = 43;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 44, y: 43, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, point is abroad on the top. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1575,13 +1565,13 @@ QUnit.test('Get tooltip coordinates, point is abroad on the top. Location is cen
     point.lowY = 69;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 44, y: 37, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, point is abroad on the top. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1590,13 +1580,13 @@ QUnit.test('Get tooltip coordinates, point is abroad on the top. Location is edg
     point.lowY = 69;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 44, y: 5, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, point is abroad on the bottom. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 552;
@@ -1605,13 +1595,13 @@ QUnit.test('Get tooltip coordinates, point is abroad on the bottom. Location is 
     point.lowY = 820;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 44, y: 676, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, point is abroad on the bottom. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 552;
@@ -1620,18 +1610,18 @@ QUnit.test('Get tooltip coordinates, point is abroad on the bottom. Location is 
     point.lowY = 820;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 44, y: 542, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, rotated, point is abroad on the left. Location is center', function(assert) {
     this.options.rotated = true;
-    var at = this.translators.arg;
+    const at = this.translators.arg;
     this.translators.arg = this.translators.val;
     this.translators.val = at;
     this.series.getVisibleArea = function() { return { minX: 5, maxX: 810, minY: 10, maxY: 600 }; };
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1640,13 +1630,13 @@ QUnit.test('Get tooltip coordinates, rotated, point is abroad on the left. Locat
     point.lowY = -20;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 37.5, y: 44, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, rotated, point is abroad on the left. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
 
     point.x = 44;
@@ -1655,13 +1645,13 @@ QUnit.test('Get tooltip coordinates, rotated, point is abroad on the left. Locat
     point.highY = 70;
     point.lowY = -20;
     point.draw(this.renderer, this.groups);
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 70, y: 44, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, rotated, point is abroad on the right. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
 
     point.x = 44;
@@ -1672,13 +1662,13 @@ QUnit.test('Get tooltip coordinates, rotated, point is abroad on the right. Loca
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.deepEqual(cc, { x: 571, y: 44, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, rotated, point is abroad on the right. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
 
     point.x = 44;
@@ -1689,13 +1679,13 @@ QUnit.test('Get tooltip coordinates, rotated, point is abroad on the right. Loca
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.deepEqual(cc, { x: 600, y: 44, offset: 0 });
 });
 
 QUnit.test('Get tooltip coordinates, highY < lowY. Location is invalid', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 44;
     point.openY = 52;
@@ -1704,15 +1694,15 @@ QUnit.test('Get tooltip coordinates, highY < lowY. Location is invalid', functio
     point.lowY = 69;
     point.draw(this.renderer, this.groups);
 
-    var cc = point.getTooltipParams('abs');
+    const cc = point.getTooltipParams('abs');
 
     assert.deepEqual(cc, { x: 44, y: 56, offset: 0 });
 });
 
 QUnit.test('Get tooltip format object', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
-    var cc = point.getTooltipFormatObject(this.tooltip);
+    const cc = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(cc.argument, 25);
     assert.equal(cc.argumentText, '25:argument');
@@ -1739,9 +1729,9 @@ QUnit.test('Get tooltip format object with null values', function(assert) {
     this.data.closeValue = null;
     this.data.originalCloseValue = null;
     this.data.originalOpenValue = null;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
-    var cc = point.getTooltipFormatObject(this.tooltip);
+    const cc = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(cc.argument, 25);
     assert.equal(cc.valueText, 'h: 45:undefined l: 10:undefined');
@@ -1805,31 +1795,31 @@ QUnit.module('Styles', {
 });
 
 QUnit.test('Default Style', function(assert) {
-    var point = createPoint(this.series, { argument: 5, openValue: 33, closeValue: 22, highValue: 44, lowValue: 11 }, this.options);
+    const point = createPoint(this.series, { argument: 5, openValue: 33, closeValue: 22, highValue: 44, lowValue: 11 }, this.options);
 
     assert.deepEqual(point._styles, this.options.styles);
 });
 
 QUnit.test('positive Style', function(assert) {
-    var point = createPoint(this.series, { argument: 5, openValue: 11, closeValue: 22, highValue: 44, lowValue: 11 }, this.options);
+    const point = createPoint(this.series, { argument: 5, openValue: 11, closeValue: 22, highValue: 44, lowValue: 11 }, this.options);
 
     assert.deepEqual(point._styles, this.options.styles.positive);
 });
 
 QUnit.test('Default reduction Style', function(assert) {
-    var point = createPoint(this.series, { argument: 5, openValue: 33, closeValue: 22, highValue: 44, lowValue: 11, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 5, openValue: 33, closeValue: 22, highValue: 44, lowValue: 11, isReduction: true }, this.options);
 
     assert.deepEqual(point._styles, this.options.styles.reduction);
 });
 
 QUnit.test('Positive reduction Style', function(assert) {
-    var point = createPoint(this.series, { argument: 5, openValue: 11, closeValue: 22, highValue: 44, lowValue: 11, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 5, openValue: 11, closeValue: 22, highValue: 44, lowValue: 11, isReduction: true }, this.options);
 
     assert.deepEqual(point._styles, this.options.styles.reductionPositive);
 });
 
 QUnit.test('Update marker group', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     point.translate();
     point.width = 10;
@@ -1843,20 +1833,20 @@ QUnit.test('Update marker group', function(assert) {
 });
 
 QUnit.test('T111849. Get color', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
     assert.equal(point.getColor(), '#222222');
 });
 
 QUnit.test('T111849. Get color from reduction point', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4, isReduction: true }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4, isReduction: true }, this.options);
 
     assert.equal(point.getColor(), '#333333');
 });
 
 QUnit.module('Draw label', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.translators = {
             arg: new MockTranslator({
                 translate: { 1: 11 },
@@ -1913,8 +1903,8 @@ QUnit.module('Draw label', {
 });
 
 QUnit.test('Get label format object', function(assert) {
-    var point = createPoint(this.series, this.data, this.options),
-        result = point._getLabelFormatObject();
+    const point = createPoint(this.series, this.data, this.options);
+    const result = point._getLabelFormatObject();
 
     assert.equal(result.openValue, 11);
     assert.equal(result.closeValue, 12);
@@ -1938,7 +1928,7 @@ QUnit.test('Check customize text object', function(assert) {
     this.options.label.argumentFormat = 'fixedPoint';
     this.options.label.precision = 2;
     this.options.label.argumentPrecision = 2;
-    var pt = createPoint(this.series, this.data, this.options);
+    const pt = createPoint(this.series, this.data, this.options);
 
     pt.x = 30;
     pt.y = 30;
@@ -1964,7 +1954,7 @@ QUnit.test('Check customize text object', function(assert) {
 
 QUnit.test('high value = null', function(assert) {
     this.data.highValue = null;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 60;
@@ -1978,7 +1968,7 @@ QUnit.test('high value = null', function(assert) {
 
 QUnit.test('low value = null', function(assert) {
     this.data.lowValue = null;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 60;
@@ -1991,14 +1981,14 @@ QUnit.test('low value = null', function(assert) {
 });
 
 QUnit.test('Get graphic bbox. Not rotated', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 60;
     point.lowY = 90;
     point.width = 20;
 
-    var bBox = point._getGraphicBBox();
+    const bBox = point._getGraphicBBox();
 
     assert.equal(bBox.x, 40);
     assert.equal(bBox.y, 60);
@@ -2008,14 +1998,14 @@ QUnit.test('Get graphic bbox. Not rotated', function(assert) {
 
 QUnit.test('Get graphic bbox. Rotated', function(assert) {
     this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
     point.width = 20;
 
-    var bBox = point._getGraphicBBox();
+    const bBox = point._getGraphicBBox();
 
     assert.equal(bBox.x, 60);
     assert.equal(bBox.y, 40);
@@ -2028,7 +2018,7 @@ QUnit.test('Draw label if point isn\'t reduction', function(assert) {
     this.options.label.background.fill = 'red';
     this.options.label.connector = { visible: true, stroke: 'red', 'stroke-width': 2 };
     this.options.reduction = { color: 'blue' };
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 90;
@@ -2048,7 +2038,7 @@ QUnit.test('Draw label if point is reduction', function(assert) {
     this.options.label.connector = { visible: true, stroke: 'red', 'stroke-width': 2 };
     this.options.reduction = { color: 'blue' };
     this.data.isReduction = true;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
     this.data.isReduction = false;
 
     point.x = 50;
@@ -2067,7 +2057,7 @@ QUnit.test('Update label from reduction to non-reduction', function(assert) {
     this.options.label.background.fill = 'red';
     this.options.label.connector = { visible: true, stroke: 'red', 'stroke-width': 2 };
     this.options.reduction = { color: 'blue' };
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 90;
@@ -2087,7 +2077,7 @@ QUnit.test('Update label from reduction to non-reduction', function(assert) {
 
 QUnit.test('Draw label. Stock', function(assert) {
     this.options.type = 'stock';
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 90;
@@ -2101,7 +2091,7 @@ QUnit.test('Draw label. Stock', function(assert) {
 
 QUnit.test('Draw label. Candlestick', function(assert) {
     this.options.type = 'candlestick';
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 50;
     point.highY = 90;
@@ -2144,6 +2134,6 @@ QUnit.module('get point radius', {
 });
 
 QUnit.test('get radius', function(assert) {
-    var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
+    const point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
     assert.equal(point.getPointRadius(), 0);
 });

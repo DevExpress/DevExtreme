@@ -2688,7 +2688,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             keyboardMock($input).type(text);
             const inputWidth = $input.width();
 
-            var inputCopy = createTextElementHiddenCopy($input, text);
+            const inputCopy = createTextElementHiddenCopy($input, text);
             inputCopy.appendTo('#qunit-fixture');
 
             assert.ok(inputWidth >= inputCopy.width());

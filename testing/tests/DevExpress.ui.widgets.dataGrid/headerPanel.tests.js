@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div id="container"  class="dx-datagrid"></div>\
 </div>';
@@ -44,10 +44,10 @@ QUnit.module('Header panel', {
 
 QUnit.test('Draw searchPanel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        searchPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let searchPanel;
 
     this.options.searchPanel = {
         visible: true,
@@ -63,7 +63,7 @@ QUnit.test('Draw searchPanel', function(assert) {
     assert.ok(headerPanelElement.length);
     assert.ok(headerPanelElement.children().hasClass('dx-toolbar'), 'header panel contain dxToolbar');
 
-    var input = testElement.find('input');
+    const input = testElement.find('input');
 
     searchPanel = testElement.find('.dx-datagrid-search-panel');
     assert.strictEqual(input.length, 1);
@@ -73,9 +73,9 @@ QUnit.test('Draw searchPanel', function(assert) {
 
 QUnit.test('Change search text', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        input;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let input;
 
     this.options.searchPanel = {
         visible: true,
@@ -101,10 +101,10 @@ QUnit.test('Change search text', function(assert) {
 
 QUnit.test('Draw groupPanel without grouping', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        groupPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let groupPanel;
 
     this.options.groupPanel = {
         visible: true,
@@ -128,11 +128,11 @@ QUnit.test('Draw groupPanel without grouping', function(assert) {
 
 QUnit.test('Render groupPanel with visible="auto"', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        groupPanel,
-        countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let groupPanel;
+    const countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
 
     this.options.groupPanel = {
         visible: 'auto',
@@ -154,8 +154,8 @@ QUnit.test('Render groupPanel with visible="auto"', function(assert) {
 
 QUnit.test('Bounding rect of groupPanel when panel is not visible', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.groupPanel = {
         visible: false,
@@ -173,10 +173,10 @@ QUnit.test('Bounding rect of groupPanel when panel is not visible', function(ass
 
 QUnit.test('Bounding rect of groupPanel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        boundingRect,
-        isBoundingCorrect;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let boundingRect;
+    let isBoundingCorrect;
 
     this.options.groupPanel = {
         visible: true,
@@ -196,10 +196,10 @@ QUnit.test('Bounding rect of groupPanel', function(assert) {
 
 QUnit.test('Group items with cssClass', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        groupPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let groupPanel;
 
     this.options.groupPanel = {
         visible: true
@@ -224,12 +224,12 @@ QUnit.test('Group items with cssClass', function(assert) {
 QUnit.test('Draw groupPanel with grouping', function(assert) {
     // arrange
 
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        groupPanel,
-        groupPanelItem,
-        columns;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let groupPanel;
+    let groupPanelItem;
+    let columns;
 
     $.extend(this.columns[0], { groupIndex: 0, allowSorting: true });
 
@@ -258,8 +258,8 @@ QUnit.test('Draw groupPanel with grouping', function(assert) {
 
 QUnit.test('Group panel with sorting, check alignment', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     $.extend(this.columns[0], { groupIndex: 0, allowSorting: true, caption: 'test' });
 
@@ -271,7 +271,7 @@ QUnit.test('Group panel with sorting, check alignment', function(assert) {
     headerPanel.render(testElement);
 
     // assert
-    var $groupPanelItemChildren = testElement.find('.dx-group-panel-item').contents();
+    const $groupPanelItemChildren = testElement.find('.dx-group-panel-item').contents();
 
     assert.equal($groupPanelItemChildren.length, 2, 'group panel item have 2 items');
     assert.ok($groupPanelItemChildren.eq(1).hasClass('dx-column-indicators'), 'indicators are after text in group panel');
@@ -279,8 +279,8 @@ QUnit.test('Group panel with sorting, check alignment', function(assert) {
 
 QUnit.test('Group panel with sorting, height after change font size', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     $.extend(this.columns[0], { groupIndex: 0, allowSorting: true });
 
@@ -290,7 +290,7 @@ QUnit.test('Group panel with sorting, height after change font size', function(a
 
     headerPanel.render(testElement);
 
-    var oldHeight = testElement.find('.dx-datagrid-group-panel').height();
+    const oldHeight = testElement.find('.dx-datagrid-group-panel').height();
 
     // act
     testElement.css('font-size', '10px');
@@ -303,11 +303,11 @@ QUnit.test('Group panel with sorting, height after change font size', function(a
 
 QUnit.test('Draw header panel with group panel and search panel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        headerPanelElement,
-        groupPanel,
-        searchPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let headerPanelElement;
+    let groupPanel;
+    let searchPanel;
 
     this.options.groupPanel = {
         visible: true
@@ -331,8 +331,8 @@ QUnit.test('Draw header panel with group panel and search panel', function(asser
 
 QUnit.test('Not draw header panel without group panel and search panel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     // act
     headerPanel.render(testElement);
@@ -343,9 +343,9 @@ QUnit.test('Not draw header panel without group panel and search panel', functio
 
 QUnit.test('Enter text in searchPanel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        searchPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let searchPanel;
 
     this.options.searchPanel = {
         visible: true
@@ -363,9 +363,9 @@ QUnit.test('Enter text in searchPanel', function(assert) {
 
 QUnit.test('Draw searchPanel custom width', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container'),
-        searchPanel;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
+    let searchPanel;
 
     this.options.searchPanel = {
         visible: true,
@@ -376,7 +376,7 @@ QUnit.test('Draw searchPanel custom width', function(assert) {
     headerPanel.render(testElement);
 
     // assert
-    var input = testElement.find('input');
+    const input = testElement.find('input');
     searchPanel = testElement.find('.dx-datagrid-search-panel');
     assert.strictEqual(input.length, 1);
     assert.ok(searchPanel.length === 1);
@@ -385,9 +385,9 @@ QUnit.test('Draw searchPanel custom width', function(assert) {
 
 QUnit.test('Hide search panel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        container = $('#container'),
-        $headerPanel;
+    const headerPanel = this.headerPanel;
+    const container = $('#container');
+    let $headerPanel;
 
     this.options.searchPanel = {
         visible: true
@@ -411,8 +411,8 @@ QUnit.test('Hide search panel', function(assert) {
 
 function updateSearchTextTest(assert, that, eventToTrigger) {
     // arrange
-    var headerPanel = that.headerPanel,
-        container = $('#container');
+    const headerPanel = that.headerPanel;
+    const container = $('#container');
 
     that.options.searchPanel = {
         visible: true
@@ -420,7 +420,7 @@ function updateSearchTextTest(assert, that, eventToTrigger) {
 
     headerPanel.render(container);
 
-    var searchInput = container.find('.dx-texteditor');
+    const searchInput = container.find('.dx-texteditor');
     assert.equal(searchInput.length, 1);
 
     // act
@@ -451,8 +451,8 @@ QUnit.test('update search text with timeout and input event', function(assert) {
 // T117339
 QUnit.test('Not allow dragging when no visible group panel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.groupPanel = {
         visible: false,
@@ -468,8 +468,8 @@ QUnit.test('Not allow dragging when no visible group panel', function(assert) {
 // T117339
 QUnit.test('Not allow dragging when allowGrouping in column false', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.groupPanel = {
         visible: true,
@@ -485,8 +485,8 @@ QUnit.test('Not allow dragging when allowGrouping in column false', function(ass
 // T117339
 QUnit.test('Allow dragging when visible group panel', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.groupPanel = {
         visible: true,
@@ -501,8 +501,8 @@ QUnit.test('Allow dragging when visible group panel', function(assert) {
 
 QUnit.test('EmptyPanelText is displayed when allowColumnDragging is false', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container');
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.groupPanel = {
         visible: true,
@@ -536,9 +536,9 @@ QUnit.module('Draw buttons in header panel', {
 
 QUnit.test('Draw add row button', function(assert) {
     // arrange
-    var addRowButton,
-        headerPanel = this.headerPanel,
-        testElement = $('#container');
+    let addRowButton;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.editing = {
         allowAdding: true,
@@ -558,10 +558,10 @@ QUnit.test('Draw add row button', function(assert) {
 
 QUnit.test('Draw cancel and save buttons', function(assert) {
     // arrange
-    var cancelButton,
-        saveButton,
-        headerPanel = this.headerPanel,
-        testElement = $('#container');
+    let cancelButton;
+    let saveButton;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.editing = {
         allowUpdating: true,
@@ -589,9 +589,9 @@ QUnit.test('Draw cancel and save buttons', function(assert) {
 
 QUnit.test('Draw show column chooser button', function(assert) {
     // arrange
-    var showColumnChooserButton,
-        headerPanel = this.headerPanel,
-        testElement = $('#container');
+    let showColumnChooserButton;
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container');
 
     this.options.columnChooser = {
         enabled: true,
@@ -609,8 +609,8 @@ QUnit.test('Draw show column chooser button', function(assert) {
 
 QUnit.test('Draw hidden show column chooser button', function(assert) {
     // arrange
-    var headerPanel = this.headerPanel,
-        testElement = $('#container').width(10);
+    const headerPanel = this.headerPanel;
+    const testElement = $('#container').width(10);
 
     this.options.columnChooser = {
         enabled: true,
@@ -637,8 +637,8 @@ QUnit.test('Draw hidden show column chooser button', function(assert) {
     // act
     headerPanel.render(testElement);
 
-    var $columnChooserButton = testElement.find('.dx-toolbar .dx-toolbar-item:visible'),
-        $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu:visible');
+    const $columnChooserButton = testElement.find('.dx-toolbar .dx-toolbar-item:visible');
+    const $toolbarMenuButton = $('.dx-toolbar .dx-dropdownmenu:visible');
 
     // assert
     assert.equal($toolbarMenuButton.length, 1, 'has shown toolbar menu button');
@@ -647,10 +647,10 @@ QUnit.test('Draw hidden show column chooser button', function(assert) {
 
 QUnit.test('Add button via the onToolbarPreparing option', function(assert) {
     // arrange
-    var $customButtonElement,
-        callCountToolbarPreparing = 0,
-        headerPanel = this.headerPanel,
-        $testElement = $('#container');
+    let $customButtonElement;
+    let callCountToolbarPreparing = 0;
+    const headerPanel = this.headerPanel;
+    const $testElement = $('#container');
 
     this.options.onToolbarPreparing = function(e) {
         // assert
@@ -683,9 +683,9 @@ QUnit.test('Add button via the onToolbarPreparing option', function(assert) {
 
 QUnit.test('Add button via the onToolbarPreparing option when there is column chooser button', function(assert) {
     // arrange
-    var $customButtonElements,
-        headerPanel = this.headerPanel,
-        $testElement = $('#container');
+    let $customButtonElements;
+    const headerPanel = this.headerPanel;
+    const $testElement = $('#container');
 
     this.options.columnChooser = {
         enabled: true,
@@ -725,10 +725,10 @@ QUnit.test('Add button via the onToolbarPreparing option when there is column ch
 
 QUnit.test('onToolbarPreparing - setting handler to the click event for column chooser button', function(assert) {
     // arrange
-    var callCountClick = 0,
-        $columnChooserButton,
-        headerPanel = this.headerPanel,
-        $testElement = $('#container');
+    let callCountClick = 0;
+    let $columnChooserButton;
+    const headerPanel = this.headerPanel;
+    const $testElement = $('#container');
 
     this.options.columnChooser = {
         enabled: true,

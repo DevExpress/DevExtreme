@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    devices = require('core/devices'),
-    fx = require('animation/fx'),
-    dateLocalization = require('localization/date'),
-    keyboardMock = require('../../helpers/keyboardMock.js');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const devices = require('core/devices');
+const fx = require('animation/fx');
+const dateLocalization = require('localization/date');
+const keyboardMock = require('../../helpers/keyboardMock.js');
 
 require('ui/scheduler/ui.scheduler.navigator');
 require('common.css!');
@@ -27,7 +27,7 @@ QUnit.module('Navigator', {
 });
 
 QUnit.test('customizeDateNavigatorText should have right context', function(assert) {
-    var date = new Date(2018, 11, 14, 9, 20);
+    const date = new Date(2018, 11, 14, 9, 20);
 
     this.instance.option('date', date);
     this.instance.option('customizeDateNavigatorText', function() {
@@ -36,10 +36,10 @@ QUnit.test('customizeDateNavigatorText should have right context', function(asse
 });
 
 QUnit.test('Click on \'next\' button should notify observer', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-next');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-next');
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', new Date(2015, 1, 24));
@@ -52,10 +52,10 @@ QUnit.test('Click on \'next\' button should notify observer', function(assert) {
 });
 
 QUnit.test('Click on \'previous\' button should notify observer', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-previous');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-previous');
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', new Date(2015, 1, 24));
@@ -68,7 +68,7 @@ QUnit.test('Click on \'previous\' button should notify observer', function(asser
 });
 
 QUnit.test('Next button: Offset for \'week\' step should be 7 days', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 1, 24), step: 'week' });
@@ -79,7 +79,7 @@ QUnit.test('Next button: Offset for \'week\' step should be 7 days', function(as
 });
 
 QUnit.test('Previous button: Offset for \'week\' step should be 7 days', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 1, 24), step: 'week' });
@@ -90,7 +90,7 @@ QUnit.test('Previous button: Offset for \'week\' step should be 7 days', functio
 });
 
 QUnit.test('Next button: Offset for \'workWeek\' step should be 7 days', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 1, 24), step: 'workWeek' });
@@ -101,7 +101,7 @@ QUnit.test('Next button: Offset for \'workWeek\' step should be 7 days', functio
 });
 
 QUnit.test('Previous button: Offset for \'workWeek\' step should be 7 days', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 1, 24), step: 'workWeek' });
@@ -112,7 +112,7 @@ QUnit.test('Previous button: Offset for \'workWeek\' step should be 7 days', fun
 });
 
 QUnit.test('Next button: Offset for \'month\' step should be 1 month', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 0, 24), step: 'month' });
@@ -123,7 +123,7 @@ QUnit.test('Next button: Offset for \'month\' step should be 1 month', function(
 });
 
 QUnit.test('Next button: last month dates should be handled correctly', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 0, 31), step: 'month' });
@@ -134,7 +134,7 @@ QUnit.test('Next button: last month dates should be handled correctly', function
 });
 
 QUnit.test('Previous button: Offset for \'month\' step should be 1 month', function(assert) {
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option({ date: new Date(2015, 0, 24), step: 'month' });
@@ -145,7 +145,7 @@ QUnit.test('Previous button: Offset for \'month\' step should be 1 month', funct
 });
 
 QUnit.test('Navigator should throw an error if step is undefined', function(assert) {
-    var instance = this.instance;
+    const instance = this.instance;
 
     assert.throws(
         function() {
@@ -161,11 +161,11 @@ QUnit.test('Navigator should throw an error if step is undefined', function(asse
 });
 
 QUnit.test('Click on \'next\' button should notify observer, day with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-next'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-next');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', date);
@@ -179,11 +179,11 @@ QUnit.test('Click on \'next\' button should notify observer, day with intervalCo
 });
 
 QUnit.test('Click on \'next\' button should notify observer, week with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-next'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-next');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('firstDayOfWeek', 1);
@@ -198,11 +198,11 @@ QUnit.test('Click on \'next\' button should notify observer, week with intervalC
 });
 
 QUnit.test('Click on \'next\' button should notify observer, workWeek with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-next'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-next');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('firstDayOfWeek', 1);
@@ -217,11 +217,11 @@ QUnit.test('Click on \'next\' button should notify observer, workWeek with inter
 });
 
 QUnit.test('Click on \'previous\' button should notify observer, week with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-previous'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-previous');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('firstDayOfWeek', 1);
@@ -236,11 +236,11 @@ QUnit.test('Click on \'previous\' button should notify observer, week with inter
 });
 
 QUnit.test('Click on \'previous\' button should notify observer, workWeek with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-previous'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-previous');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('firstDayOfWeek', 1);
@@ -255,11 +255,11 @@ QUnit.test('Click on \'previous\' button should notify observer, workWeek with i
 });
 
 QUnit.test('Click on \'next\' button should notify observer, month with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-next'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-next');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', date);
@@ -273,11 +273,11 @@ QUnit.test('Click on \'next\' button should notify observer, month with interval
 });
 
 QUnit.test('Click on \'previous\' button should notify observer, month with intervalCount', function(assert) {
-    var $element = this.instance.$element(),
-        $nextButton = $element.find('.dx-scheduler-navigator-previous'),
-        date = new Date(2015, 4, 25);
+    const $element = this.instance.$element();
+    const $nextButton = $element.find('.dx-scheduler-navigator-previous');
+    const date = new Date(2015, 4, 25);
 
-    var updateSpy = sinon.spy(noop);
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', date);
@@ -291,79 +291,79 @@ QUnit.test('Click on \'previous\' button should notify observer, month with inte
 });
 
 QUnit.test('Calendar popover should be shown on caption click', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     $($button).trigger('dxclick');
 
-    var $popover = $('.dx-popover');
+    const $popover = $('.dx-popover');
 
     assert.equal($popover.length, 1, 'Popover exists');
     assert.equal($popover.dxPopover('instance').option('visible'), true, 'Popover is shown');
 });
 
 QUnit.test('Popover should contain calendar', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     $($button).trigger('dxclick');
-    var $calendar = $('.dx-popup-content>.dx-calendar');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
 
     assert.equal($calendar.length, 1, 'Popover contains calendar');
     assert.ok($calendar.hasClass('dx-scheduler-navigator-calendar'), 'Calendar has a specific class');
 });
 
 QUnit.test('Calendar should have a right date', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption'),
-        date = new Date(2015, 4, 15);
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
+    const date = new Date(2015, 4, 15);
 
     this.instance.option('date', date);
 
 
     $($button).trigger('dxclick');
-    var $calendar = $('.dx-popup-content>.dx-calendar');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
 
     assert.deepEqual($calendar.dxCalendar('instance').option('value'), date, 'Calendar have a right date');
 });
 
 QUnit.test('Calendar should have a right date after change navigator\'s date', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption'),
-        date = new Date(2015, 4, 15);
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
+    const date = new Date(2015, 4, 15);
 
     $($button).trigger('dxclick');
 
     this.instance.option('date', date);
-    var $calendar = $('.dx-popup-content>.dx-calendar');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
 
     assert.deepEqual($calendar.dxCalendar('instance').option('value'), date, 'Calendar have a right date');
 });
 
 QUnit.test('Calendar should have a right firstDayOfWeek', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     this.instance.option('firstDayOfWeek', 3);
 
 
     $($button).trigger('dxclick');
-    var $calendar = $('.dx-popup-content>.dx-calendar');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
 
     assert.deepEqual($calendar.dxCalendar('instance').option('firstDayOfWeek'), 3, 'Calendar have a right firstDayOfWeek');
 });
 
 QUnit.test('Calendar valueChange should notify observer', function(assert) {
-    var $button = this.instance.$element().find('.dx-scheduler-navigator-caption'),
-        updateSpy = sinon.spy(noop);
+    const $button = this.instance.$element().find('.dx-scheduler-navigator-caption');
+    const updateSpy = sinon.spy(noop);
     this.instance.notifyObserver = updateSpy;
 
     this.instance.option('date', new Date(2015, 3, 15));
 
     $($button).trigger('dxclick');
 
-    var $calendar = $('.dx-popup-content>.dx-calendar'),
-        $cell = $calendar.find('td[data-value=\'2015/04/10\']');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
+    const $cell = $calendar.find('td[data-value=\'2015/04/10\']');
 
     $($cell).trigger('dxclick');
 
@@ -400,9 +400,9 @@ QUnit.test('Caption should be OK for \'agenda\' view if agendaDuration = 1', fun
         date: new Date(2015, 0, 24)
     });
 
-    var $element = this.instance.$element(),
-        button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance'),
-        caption = devices.real().generic ? '24 January 2015' : '24 Jan 2015';
+    const $element = this.instance.$element();
+    const button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
+    const caption = devices.real().generic ? '24 January 2015' : '24 Jan 2015';
 
     assert.equal(button.option('text'), caption, 'Step is agenda: Caption is OK');
 });
@@ -419,9 +419,9 @@ QUnit.test('Caption should be OK for \'agenda\' view if agendaDuration = 0', fun
         date: new Date(2015, 0, 24)
     });
 
-    var $element = this.instance.$element(),
-        button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance'),
-        caption = devices.real().generic ? '24-30 January 2015' : '24-30 Jan 2015';
+    const $element = this.instance.$element();
+    const button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
+    const caption = devices.real().generic ? '24-30 January 2015' : '24-30 Jan 2015';
 
     assert.equal(button.option('text'), caption, 'Step is agenda: Caption is OK');
 });
@@ -438,8 +438,8 @@ QUnit.test('Caption should be OK for \'agenda\' view if years is different', fun
         date: new Date(2018, 5, 20)
     });
 
-    var $element = this.instance.$element(),
-        button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
+    const $element = this.instance.$element();
+    const button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
 
     assert.equal(button.option('text'), '20 Jun 2018-14 Jun 2019', 'Step is agenda: Caption is OK');
 });
@@ -456,8 +456,8 @@ QUnit.test('Caption should be OK for \'agenda\' view if year is same, but months
         date: new Date(2018, 5, 20)
     });
 
-    var $element = this.instance.$element(),
-        button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
+    const $element = this.instance.$element();
+    const button = $element.find('.dx-scheduler-navigator-caption').dxButton('instance');
 
     assert.equal(button.option('text'), '20 Jun-18 Aug 2018', 'Step is agenda: Caption is OK');
 });
@@ -482,7 +482,7 @@ QUnit.module('Navigator Min & Max Options', {
 });
 
 QUnit.test('prev button should be disabled if min option is handled', function(assert) {
-    var prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
+    const prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
 
     assert.ok(prev.option('disabled'), 'button is disabled');
 
@@ -494,7 +494,7 @@ QUnit.test('prev button should be disabled if min option is handled', function(a
 });
 
 QUnit.test('next button should be disabled if max option is handled', function(assert) {
-    var next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
+    const next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
 
     assert.ok(next.option('disabled'), 'button is disabled');
 
@@ -507,7 +507,7 @@ QUnit.test('next button should be disabled if max option is handled', function(a
 
 QUnit.test('prev button should be disabled if min option is handled for week step', function(assert) {
     this.instance.option('step', 'week');
-    var prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
+    const prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
 
     assert.ok(prev.option('disabled'), 'button is disabled');
 
@@ -520,7 +520,7 @@ QUnit.test('prev button should be disabled if min option is handled for week ste
 
 QUnit.test('next button should be disabled if max option is handled for week step', function(assert) {
     this.instance.option('step', 'week');
-    var next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
+    const next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
 
     assert.ok(next.option('disabled'), 'button is disabled');
 
@@ -533,7 +533,7 @@ QUnit.test('next button should be disabled if max option is handled for week ste
 
 QUnit.test('next button should be enabled if max option has same date and different month', function(assert) {
     this.instance.option('step', 'day');
-    var next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
+    const next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
 
     this.instance.option('max', new Date(2015, 2, 3));
     assert.notOk(next.option('disabled'), 'button is not disabled');
@@ -541,7 +541,7 @@ QUnit.test('next button should be enabled if max option has same date and differ
 
 QUnit.test('prev button should be disabled if min option is handled for month step', function(assert) {
     this.instance.option('step', 'month');
-    var prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
+    const prev = this.instance.$element().find('.dx-scheduler-navigator-previous').dxButton('instance');
 
     assert.ok(prev.option('disabled'), 'button is disabled');
 
@@ -554,7 +554,7 @@ QUnit.test('prev button should be disabled if min option is handled for month st
 
 QUnit.test('next button should be disabled if max option is handled for month step', function(assert) {
     this.instance.option('step', 'month');
-    var next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
+    const next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
 
     assert.ok(next.option('disabled'), 'button is disabled');
 
@@ -567,19 +567,19 @@ QUnit.test('next button should be disabled if max option is handled for month st
 
 QUnit.test('next button should be enabled if max option has same date and different year', function(assert) {
     this.instance.option('step', 'month');
-    var next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
+    const next = this.instance.$element().find('.dx-scheduler-navigator-next').dxButton('instance');
 
     this.instance.option('max', new Date(2016, 1, 10));
     assert.notOk(next.option('disabled'), 'button is not disabled');
 });
 
 QUnit.test('Min & Max options are passed to calendar', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     $($button).trigger('dxclick');
-    var $calendar = $('.dx-popup-content>.dx-calendar'),
-        calendar = $calendar.dxCalendar('instance');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
+    const calendar = $calendar.dxCalendar('instance');
 
     assert.deepEqual(calendar.option('min'), new Date(2015, 1, 3), 'Calendar have a right min');
     assert.deepEqual(calendar.option('max'), new Date(2015, 1, 3), 'Calendar have a right max');
@@ -609,7 +609,7 @@ QUnit.module('Navigator Keyboard Navigation', {
 });
 
 QUnit.test('focusStateEnabled should be passed to buttons', function(assert) {
-    var $buttons = this.instance.$element().find('.dx-button');
+    const $buttons = this.instance.$element().find('.dx-button');
 
     $.each($buttons, function(_, button) {
         assert.equal($(button).dxButton('instance').option('focusStateEnabled'), true, 'focusStateEnabled is correct');
@@ -623,8 +623,8 @@ QUnit.test('focusStateEnabled should be passed to buttons', function(assert) {
 });
 
 QUnit.test('tabIndex should be passed to buttons', function(assert) {
-    var $element = this.instance.$element(),
-        $buttons = $element.find('.dx-button');
+    const $element = this.instance.$element();
+    const $buttons = $element.find('.dx-button');
 
 
     assert.equal($element.attr('tabindex'), null, 'element has no tabIndex');
@@ -645,9 +645,9 @@ QUnit.test('tabIndex should be passed to buttons', function(assert) {
 QUnit.test('caption should be integrated with calendar', function(assert) {
     this.instance.option('date', new Date(2015, 3, 15));
 
-    var $caption = this.instance.$element().find('.dx-scheduler-navigator-caption'),
-        keyboard = keyboardMock($caption),
-        updateSpy = sinon.spy(noop);
+    const $caption = this.instance.$element().find('.dx-scheduler-navigator-caption');
+    const keyboard = keyboardMock($caption);
+    const updateSpy = sinon.spy(noop);
 
     this.instance.notifyObserver = updateSpy;
 
@@ -664,9 +664,9 @@ QUnit.test('caption should be integrated with calendar', function(assert) {
 QUnit.test('calendar\'s popover should be hidden after \'tab\' key press', function(assert) {
     this.instance.option('date', new Date(2015, 3, 15));
 
-    var $caption = this.instance.$element().find('.dx-scheduler-navigator-caption'),
-        keyboard = keyboardMock($caption),
-        popover = $('.dx-popover').dxPopover('instance');
+    const $caption = this.instance.$element().find('.dx-scheduler-navigator-caption');
+    const keyboard = keyboardMock($caption);
+    const popover = $('.dx-popover').dxPopover('instance');
 
     $($caption).trigger('focusin');
     keyboard.keyDown('enter');
@@ -676,11 +676,11 @@ QUnit.test('calendar\'s popover should be hidden after \'tab\' key press', funct
 });
 
 QUnit.test('calendar should have right keyboard options', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     $($button).trigger('dxclick');
-    var $calendar = $('.dx-popup-content>.dx-calendar');
+    const $calendar = $('.dx-popup-content>.dx-calendar');
 
     assert.strictEqual($calendar.dxCalendar('option', 'tabIndex'), null, 'Calendar have a right tabIndex');
     assert.strictEqual($calendar.dxCalendar('option', 'hasFocus')(), true, 'Calendar have a right hasFocus fn');
@@ -701,13 +701,13 @@ QUnit.module('Mobile behavior', {
 });
 
 QUnit.test('Popup should be used on mobile devices', function(assert) {
-    var $element = this.instance.$element(),
-        $button = $element.find('.dx-scheduler-navigator-caption');
+    const $element = this.instance.$element();
+    const $button = $element.find('.dx-scheduler-navigator-caption');
 
     $($button).trigger('dxclick');
 
-    var $popup = $('.dx-popup'),
-        popup = $popup.dxPopup('instance');
+    const $popup = $('.dx-popup');
+    const popup = $popup.dxPopup('instance');
 
     assert.ok(popup.option('fullScreen'), 'Popup takes full screen');
     assert.deepEqual(popup.option('toolbarItems'), [{ shortcut: 'cancel' }], 'Cancel button exists');
@@ -717,7 +717,7 @@ QUnit.test('Popup should be used on mobile devices', function(assert) {
 QUnit.module('FirstDayOfWeek option');
 
 QUnit.test('Navigator should set firstDayOfWeek by option if it is setted and this is different in localization', function(assert) {
-    var spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
+    const spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
     $('#scheduler-navigator').dxSchedulerNavigator({
         step: 'week',

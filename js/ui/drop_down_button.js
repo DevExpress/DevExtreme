@@ -32,7 +32,7 @@ const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
  * @module ui/drop_down_button
  * @export default
  */
-let DropDownButton = Widget.inherit({
+const DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), {
@@ -543,7 +543,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderButtonGroup() {
-        let $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
+        const $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
             this.$element().append($buttonGroup);
         }

@@ -1,17 +1,17 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    translator2DModule = require('viz/translators/translator2d'),
-    rangeModule = require('viz/translators/range'),
-    multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer'),
-    chartMocks = require('../../helpers/chartMocks.js'),
-    MockAxis = chartMocks.MockAxis,
-    insertMockFactory = chartMocks.insertMockFactory,
-    restoreMockFactory = chartMocks.restoreMockFactory;
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const translator2DModule = require('viz/translators/translator2d');
+const rangeModule = require('viz/translators/range');
+const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
+const chartMocks = require('../../helpers/chartMocks.js');
+const MockAxis = chartMocks.MockAxis;
+const insertMockFactory = chartMocks.insertMockFactory;
+const restoreMockFactory = chartMocks.restoreMockFactory;
 
 require('viz/chart');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="chartContainer" style="width: 300px; height: 150px;"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -22,17 +22,17 @@ function setupMocks() {
 }
 
 function checkAxesSynchronization(assert, options) {
-    var axes,
-        axesTickPositions = [],
-        firstIndex,
-        axesOptions = options.axesOptions,
-        axesOptionsAfterSync = options.axesOptionsAfterSync,
-        syncIndexes = options.syncIndexes,
-        checkSync = options.checkSync || function() { return true; };
+    let axes;
+    const axesTickPositions = [];
+    let firstIndex;
+    const axesOptions = options.axesOptions;
+    const axesOptionsAfterSync = options.axesOptionsAfterSync;
+    const syncIndexes = options.syncIndexes;
+    const checkSync = options.checkSync || function() { return true; };
 
-    var createAxes = function(axesOptions) {
-        var createAxis = function(options) {
-            var canvas = options.canvas || {
+    const createAxes = function(axesOptions) {
+        const createAxis = function(options) {
+            const canvas = options.canvas || {
                 top: 0,
                 bottom: 0,
                 left: 0,
@@ -40,11 +40,11 @@ function checkAxesSynchronization(assert, options) {
                 width: 600,
                 height: 400
             };
-            var range = new rangeModule.Range(options.range);
-            var axis = new MockAxis({ renderer: new vizMocks.Renderer() });
-            var translator = new translator2DModule.Translator2D({}, canvas, { shiftZeroValue: true });
+            const range = new rangeModule.Range(options.range);
+            const axis = new MockAxis({ renderer: new vizMocks.Renderer() });
+            const translator = new translator2DModule.Translator2D({}, canvas, { shiftZeroValue: true });
             translator.updateBusinessRange(range);
-            var visibleArea = translator.getCanvasVisibleArea();
+            const visibleArea = translator.getCanvasVisibleArea();
             axis.getVisibleArea.returns([visibleArea.min, visibleArea.max]);
 
             axis.updateOptions({
@@ -62,7 +62,7 @@ function checkAxesSynchronization(assert, options) {
             return axis;
         };
         return $.map(axesOptions, function(axisOptions) {
-            var axis = createAxis(axisOptions);
+            const axis = createAxis(axisOptions);
             $.each(axisOptions.mockFunctions, function(func, wrapper) {
                 wrapper(axis[func]);
             });
@@ -71,9 +71,9 @@ function checkAxesSynchronization(assert, options) {
         });
     };
 
-    var getObjectData = function(object) {
-        var propertyName,
-            result = {};
+    const getObjectData = function(object) {
+        let propertyName;
+        const result = {};
         for(propertyName in object) {
             if(typeof object[propertyName] !== 'function') {
                 if(typeof object[propertyName] === 'number') {
@@ -106,7 +106,7 @@ function checkAxesSynchronization(assert, options) {
 
     if(syncIndexes) {
         $.each(axes, function(i, axis) {
-            var tickValues = axis.getTicksValues().majorTicksValues;
+            const tickValues = axis.getTicksValues().majorTicksValues;
             if(tickValues) {
                 axesTickPositions.push($.map(tickValues, function(val) {
                     return axis.getTranslator().translate(val);
@@ -117,12 +117,12 @@ function checkAxesSynchronization(assert, options) {
         });
 
         $.each(syncIndexes, function(i) {
-            var groupIndex = i;
+            const groupIndex = i;
             firstIndex = this[0];
             $.each(this, function() {
-                var firstAxisTickPositions = axesTickPositions[firstIndex];
-                var currentIndex = this;
-                var axisTickPositions = axesTickPositions[currentIndex];
+                const firstAxisTickPositions = axesTickPositions[firstIndex];
+                const currentIndex = this;
+                const axisTickPositions = axesTickPositions[currentIndex];
                 $.each(firstAxisTickPositions, function(i) {
                     if(checkSync(i)) {
                         assert.ok($.inArray(Number(this), axisTickPositions) !== -1, firstIndex + ' and ' + currentIndex + ' axes ticks positions must be equals for ' + groupIndex + ' axis indexes group');
@@ -141,7 +141,7 @@ function checkAxesSynchronization(assert, options) {
     }
 }
 
-var environment = { beforeEach: setupMocks, afterEach: restoreMockFactory };
+const environment = { beforeEach: setupMocks, afterEach: restoreMockFactory };
 
 QUnit.module('MultiAxis Synchronization', environment);
 
@@ -287,7 +287,7 @@ QUnit.test('No synchronization for non-number tickValues', function(assert) {
 
 // T684665
 QUnit.test('No syncronize axis if viewport have field \'action\' with value \'zoom\'', function(assert) {
-    var mockFunctions = {
+    const mockFunctions = {
         getViewport: function(instance) { instance.returns({ action: 'zoom' }); }
     };
     checkAxesSynchronization(assert, {
@@ -1616,8 +1616,8 @@ QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 a
 QUnit.module('MultiAxis LogarithmicAxis Synchronization', environment);
 
 QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert) {
-    var tickValues1 = [0.000001, 0.00001, 0.0001],
-        tickValue2 = [10, 100, 1000];
+    const tickValues1 = [0.000001, 0.00001, 0.0001];
+    const tickValue2 = [10, 100, 1000];
     tickValues1.tickInterval = 1;
     tickValue2.tickInterval = 1;
 
@@ -1655,8 +1655,8 @@ QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert
 });
 
 QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(assert) {
-    var tickValues1 = [10e-2, 10e0, 10e2, 10e4],
-        tickValue2 = [10e1, 10e2, 10e3, 10e4];
+    const tickValues1 = [10e-2, 10e0, 10e2, 10e4];
+    const tickValue2 = [10e1, 10e2, 10e3, 10e4];
     tickValues1.tickInterval = 2;
     tickValue2.tickInterval = 1;
 
@@ -1694,8 +1694,8 @@ QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(as
 });
 
 QUnit.test('Synchronization logarithmic Axis with non logarithmic axis', function(assert) {
-    var tickValues1 = [10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3, 10e4],
-        tickValue2 = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+    const tickValues1 = [10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3, 10e4];
+    const tickValue2 = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
     tickValues1.tickInterval = 1;
     tickValue2.tickInterval = 10;
 
@@ -1732,8 +1732,8 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis', functio
 });
 
 QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542', function(assert) {
-    var tickValues1 = [10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3],
-        tickValue2 = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+    const tickValues1 = [10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3];
+    const tickValue2 = [10, 20, 30, 40, 50, 60, 70, 80, 90];
     tickValues1.tickInterval = 1;
     tickValue2.tickInterval = 10;
 
@@ -1770,8 +1770,8 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
 });
 
 QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. Ticks adjusting. T603397', function(assert) {
-    var tickValues1 = [1000, 10000, 100000],
-        tickValue2 = [0, 100, 200, 300, 400];
+    const tickValues1 = [1000, 10000, 100000];
+    const tickValue2 = [0, 100, 200, 300, 400];
     tickValues1.tickInterval = 1;
     tickValue2.tickInterval = 100;
 
@@ -1808,8 +1808,8 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. Ticks ad
 });
 
 QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
-    var tickValues1 = [-2, -1, 0, 1, 2, 3],
-        tickValue2 = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+    const tickValues1 = [-2, -1, 0, 1, 2, 3];
+    const tickValue2 = [10, 20, 30, 40, 50, 60, 70, 80, 90];
     tickValues1.tickInterval = 1;
     tickValue2.tickInterval = 10;
 
@@ -1845,8 +1845,8 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
 });
 
 QUnit.test('Add minor ticks', function(assert) {
-    var tickValues1 = [0, 1, 2],
-        tickValue2 = [0, 1, 2, 3];
+    const tickValues1 = [0, 1, 2];
+    const tickValue2 = [0, 1, 2, 3];
 
     checkAxesSynchronization(assert, {
         axesOptions: [

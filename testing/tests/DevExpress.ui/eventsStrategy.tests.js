@@ -1,16 +1,16 @@
-var $ = require('jquery'),
-    Widget = require('ui/widget/ui.widget'),
-    registerComponent = require('core/component_registrator'),
-    EventsStrategy = require('core/events_strategy').EventsStrategy;
+const $ = require('jquery');
+const Widget = require('ui/widget/ui.widget');
+const registerComponent = require('core/component_registrator');
+const EventsStrategy = require('core/events_strategy').EventsStrategy;
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="element"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var DxWidget = Widget.inherit({});
+const DxWidget = Widget.inherit({});
 registerComponent('dxWidget', DxWidget);
 
 
@@ -19,14 +19,14 @@ QUnit.module('events strategy');
 QUnit.test('setup event strategy', function(assert) {
     assert.expect(6);
 
-    var eventName = 'testEventName';
-    var checkEventMethod = function(name) {
+    const eventName = 'testEventName';
+    const checkEventMethod = function(name) {
         if(name === eventName) {
             assert.ok(true, 'event subscribed');
         }
     };
 
-    var eventsStrategy = {
+    const eventsStrategy = {
         on: checkEventMethod,
         off: checkEventMethod,
         fireEvent: checkEventMethod,
@@ -39,7 +39,7 @@ QUnit.test('setup event strategy', function(assert) {
         }
     };
 
-    var instance = $('#element').dxWidget({
+    const instance = $('#element').dxWidget({
         eventsStrategy: eventsStrategy
     }).dxWidget('instance');
 
@@ -54,14 +54,14 @@ QUnit.test('setup event strategy', function(assert) {
 QUnit.test('setup event strategy as function', function(assert) {
     assert.expect(6);
 
-    var eventName = 'testEventName';
-    var checkEventMethod = function(name) {
+    const eventName = 'testEventName';
+    const checkEventMethod = function(name) {
         if(name === eventName) {
             assert.ok(true, 'event subscribed');
         }
     };
 
-    var eventsStrategy = function() {
+    const eventsStrategy = function() {
         return {
             on: checkEventMethod,
             off: checkEventMethod,
@@ -76,7 +76,7 @@ QUnit.test('setup event strategy as function', function(assert) {
         };
     };
 
-    var instance = $('#element').dxWidget({
+    const instance = $('#element').dxWidget({
         eventsStrategy: eventsStrategy
     }).dxWidget('instance');
 
@@ -91,8 +91,8 @@ QUnit.test('setup event strategy as function', function(assert) {
 QUnit.test('callbacks should have correct context', function(assert) {
     assert.expect(1);
 
-    var context = {};
-    var $element = $('#element').dxWidget({
+    const context = {};
+    const $element = $('#element').dxWidget({
         eventsStrategy: new EventsStrategy(context)
     });
 

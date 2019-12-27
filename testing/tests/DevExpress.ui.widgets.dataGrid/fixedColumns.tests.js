@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<style>\
     .qunit-fixture-static {\
         position: absolute !important;\
@@ -37,13 +37,13 @@ import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import dataUtils from 'core/element_data';
 import translator from 'animation/translator';
 
-var device = devices.real(),
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
+const device = devices.real();
+const expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
-var generateData = function(countItems) {
-    var j = 1,
-        i = countItems,
-        result = [];
+const generateData = function(countItems) {
+    let j = 1;
+    let i = countItems;
+    const result = [];
 
     while(i--) {
         result.push({
@@ -60,7 +60,7 @@ setTemplateEngine('hogan');
 
 QUnit.module('Fixed columns', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.$element = () => $('#container');
         that.gridContainer = $('#container > .dx-datagrid');
@@ -112,10 +112,10 @@ QUnit.module('Fixed columns', {
 
 QUnit.test('Draw fixed table for columnHeadersView', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     // act
     that.setupDataGrid();
@@ -151,14 +151,14 @@ QUnit.test('Draw fixed table for columnHeadersView', function(assert) {
 
 QUnit.test('Draw fixed table for rowsView', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $cells,
-        $fixedFreeSpaceRow,
-        $fixedCells,
-        scrollableInstance,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $cells;
+    let $fixedFreeSpaceRow;
+    let $fixedCells;
+    let scrollableInstance;
+    const $testElement = $('#container');
 
     // act
     that.setupDataGrid();
@@ -216,9 +216,9 @@ QUnit.test('Draw fixed table for rowsView', function(assert) {
 // T418037
 QUnit.test('ColumnHeadersView - set column width for fixed table when no scroll', function(assert) {
     // arrange
-    var that = this,
-        $colElements,
-        $testElement = $('#container').width(300);
+    const that = this;
+    let $colElements;
+    const $testElement = $('#container').width(300);
 
     $.map(that.columns, function(column) {
         column.width = 50;
@@ -256,9 +256,9 @@ QUnit.test('ColumnHeadersView - set column width for fixed table when no scroll'
 // T418037
 QUnit.test('ColumnHeadersView - set column width for fixed table when has scroll', function(assert) {
     // arrange
-    var that = this,
-        $colElements,
-        $testElement = $('#container').width(300);
+    const that = this;
+    let $colElements;
+    const $testElement = $('#container').width(300);
 
     $.map(that.columns, function(column) {
         column.width = 100;
@@ -295,9 +295,9 @@ QUnit.test('ColumnHeadersView - set column width for fixed table when has scroll
 // T418037
 QUnit.test('ColumnHeadersView - set column width for fixed table when has scroll after no scroll', function(assert) {
     // arrange
-    var that = this,
-        $colElements,
-        $testElement = $('#container').width(300);
+    const that = this;
+    let $colElements;
+    const $testElement = $('#container').width(300);
 
     $.map(that.columns, function(column) {
         column.width = 50;
@@ -335,9 +335,9 @@ QUnit.test('ColumnHeadersView - set column width for fixed table when has scroll
 // T418037
 QUnit.test('RowsView - set column width for fixed table when no scroll', function(assert) {
     // arrange
-    var that = this,
-        $colElements,
-        $testElement = $('#container').width(300);
+    const that = this;
+    let $colElements;
+    const $testElement = $('#container').width(300);
 
     $.map(that.columns, function(column) {
         column.width = 50;
@@ -375,9 +375,9 @@ QUnit.test('RowsView - set column width for fixed table when no scroll', functio
 // T418037
 QUnit.test('RowsView - set column width for fixed table when has scroll', function(assert) {
     // arrange
-    var that = this,
-        $colElements,
-        $testElement = $('#container').width(300);
+    const that = this;
+    let $colElements;
+    const $testElement = $('#container').width(300);
 
     $.map(that.columns, function(column) {
         column.width = 100;
@@ -414,8 +414,8 @@ QUnit.test('RowsView - set column width for fixed table when has scroll', functi
 // T290161
 QUnit.testInActiveWindow('Not reset scrollTop by fixed table for rowsView', function(assert) {
     // arrange
-    var that = this,
-        done = assert.async();
+    const that = this;
+    const done = assert.async();
 
     that.setupDataGrid();
     that.rowsView.render(that.gridContainer);
@@ -435,10 +435,10 @@ QUnit.testInActiveWindow('Not reset scrollTop by fixed table for rowsView', func
 // T234394
 QUnit.test('Draw fixed table for rowsView with master detail', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [{ rowType: 'data', values: [true, 'test4', 'test1', 'test3', 'test5', 'test2'] }, { rowType: 'detail' }];
     that.columns.unshift({ command: 'expand' });
@@ -471,10 +471,10 @@ QUnit.test('Draw fixed table for rowsView with master detail', function(assert) 
 // T363211
 QUnit.test('Draw fixed table inside master detail', function(assert) {
     // arrange
-    var that = this,
-        $masterDetail,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $masterDetail;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [{ rowType: 'data', values: [true, 'test4', 'test1', 'test3', 'test5', 'test2'] }, { rowType: 'detail' }];
     that.columns.unshift({ command: 'expand' });
@@ -503,10 +503,10 @@ QUnit.test('Draw fixed table inside master detail', function(assert) {
 // T234546
 QUnit.test('Draw fixed table for rowsView with group row', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'] },
         { values: [null, 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
@@ -567,8 +567,8 @@ QUnit.test('Draw fixed table for rowsView with group row', function(assert) {
 // T824508, T821252
 QUnit.test('The pointer-events none style should not be assigned to group cell if groupCellTemplate is defined', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container');
+    const that = this;
+    const $testElement = $('#container');
 
     that.items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'] }];
 
@@ -586,7 +586,7 @@ QUnit.test('The pointer-events none style should not be assigned to group cell i
     // act
     that.rowsView.render($testElement);
 
-    var $groupCells = $testElement.find('.my-group-cell');
+    const $groupCells = $testElement.find('.my-group-cell');
     // assert
     assert.equal($groupCells.length, 2, 'group cell count');
     assert.notEqual($groupCells.eq(0).css('pointer-events'), 'none', 'pointer-events is auto for first cell');
@@ -596,8 +596,8 @@ QUnit.test('The pointer-events none style should not be assigned to group cell i
 // T270455
 QUnit.test('Draw fixed table when scrolling mode infinite', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container');
+    const that = this;
+    const $testElement = $('#container');
 
     // act
     that.setupDataGrid({
@@ -610,8 +610,8 @@ QUnit.test('Draw fixed table when scrolling mode infinite', function(assert) {
     that.rowsView.render($testElement);
 
     // assert
-    var $content = $testElement.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content');
-    var $fixedContent = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed');
+    const $content = $testElement.find('.dx-datagrid-rowsview').children('.dx-scrollable-wrapper').find('.dx-datagrid-content');
+    const $fixedContent = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed');
     assert.equal($content.length, 1, 'main content');
     assert.equal($content.find('.dx-datagrid-bottom-load-panel').length, 1, 'main content has bottom load panel');
     assert.equal($fixedContent.find('.dx-datagrid-bottom-load-panel').length, 1, 'fixed content has bottom load panel'); // T642937
@@ -620,11 +620,11 @@ QUnit.test('Draw fixed table when scrolling mode infinite', function(assert) {
 // T472955
 QUnit.test('Checking for presence of a free space row after scroll to second page (scrolling mode infinite)', function(assert) {
     // arrange
-    var that = this,
-        $content,
-        $fixedContent,
-        items = generateData(40),
-        $testElement = $('#container');
+    const that = this;
+    let $content;
+    let $fixedContent;
+    const items = generateData(40);
+    const $testElement = $('#container');
 
     that.setupDataGrid({
         isLoaded: true,
@@ -652,18 +652,18 @@ QUnit.test('Checking for presence of a free space row after scroll to second pag
 
 QUnit.test('\'getCell\' function return cell from correct table', function(assert) {
     // arrange
-    var isCellFromFixedTable = function($cell) {
+    const isCellFromFixedTable = function($cell) {
         return $cell && !!$cell.closest('.dx-datagrid-content-fixed').length;
     };
 
-    var $testElement = $('#container'),
-        cells = [];
+    const $testElement = $('#container');
+    const cells = [];
 
     // act
     this.setupDataGrid();
     this.rowsView.render($testElement);
 
-    var i;
+    let i;
 
     for(i = 0; i < this.columns.length; i++) {
         cells.push(this.rowsView.getCell({ columnIndex: i, rowIndex: 0 }));
@@ -677,10 +677,10 @@ QUnit.test('\'getCell\' function return cell from correct table', function(asser
 // T234546, T282585
 QUnit.test('Draw fixed table for rowsView with summary by fixed column in group row', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [{
         rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'], summaryCells: [[], [], [], [], [{
@@ -734,10 +734,10 @@ QUnit.test('Draw fixed table for rowsView with summary by fixed column in group 
 // T394151
 QUnit.test('Draw fixed table for rowsView with summary by unfixed column in group row', function(assert) {
     // arrange
-    var that = this,
-        $groupRow,
-        $cellElements,
-        $testElement = $('#container');
+    const that = this;
+    let $groupRow;
+    let $cellElements;
+    const $testElement = $('#container');
 
     that.items = [{
         rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'], summaryCells: [[], [], [], [{
@@ -793,10 +793,10 @@ QUnit.test('Draw fixed table for rowsView with summary by unfixed column in grou
 // T394151
 QUnit.test('Draw fixed table for rowsView with summary by fixed (on left side) and unfixed columns in group row', function(assert) {
     // arrange
-    var that = this,
-        $groupRow,
-        $cellElements,
-        $testElement = $('#container');
+    const that = this;
+    let $groupRow;
+    let $cellElements;
+    const $testElement = $('#container');
 
     that.items = [{
         rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'], summaryCells: [[], [], [{
@@ -866,10 +866,10 @@ QUnit.test('Draw fixed table for rowsView with summary by fixed (on left side) a
 // T282585
 QUnit.test('Draw fixed table for rowsView with summary by fixed (on right side) and unfixed columns in group row', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [{
         rowType: 'group', groupIndex: 0, isExpanded: true, values: ['test4'], summaryCells: [[], [], [], [{
@@ -932,9 +932,9 @@ QUnit.test('Draw fixed table for rowsView with summary by fixed (on right side) 
 
 QUnit.test('Update free space row for fixed table', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable;
+    const that = this;
+    let $table;
+    let $fixTable;
 
     that.setupDataGrid();
     that.rowsView.render(that.gridContainer);
@@ -957,11 +957,11 @@ QUnit.test('Update free space row for fixed table', function(assert) {
 
 QUnit.test('Draw fixed table for summary', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $footerContentElements,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $footerContentElements;
+    const $testElement = $('#container');
 
     that.totalItem = {
         rowType: 'totalFooter',
@@ -1008,11 +1008,11 @@ QUnit.test('Draw fixed table for summary', function(assert) {
 // T232872
 QUnit.test('Hover with group row and hoverStateEnabled true', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        rowIndex,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let rowIndex;
+    const $testElement = $('#container');
 
     that.items.unshift({ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true } });
     that.columns[0].groupIndex = 0;
@@ -1050,10 +1050,10 @@ QUnit.test('Hover with group row and hoverStateEnabled true', function(assert) {
 // T322134
 QUnit.test('Hover on detail grid when hoverStateEnabled true', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items.splice(1, 0, { rowType: 'detail' });
 
@@ -1077,7 +1077,7 @@ QUnit.test('Hover on detail grid when hoverStateEnabled true', function(assert) 
     $fixTable = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
 
     // act
-    var $rowInDetailCell = $fixTable.find('tbody > tr').eq(1).find('.dx-row');
+    const $rowInDetailCell = $fixTable.find('tbody > tr').eq(1).find('.dx-row');
     assert.equal($rowInDetailCell.length, 1, 'dx-row in detail cell exists');
     $rowInDetailCell.trigger('mouseover');
 
@@ -1089,10 +1089,10 @@ QUnit.test('Hover on detail grid when hoverStateEnabled true', function(assert) 
 // T232878
 QUnit.test('Hover with hoverStateEnabled false', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.rowsView.render($testElement);
@@ -1121,10 +1121,10 @@ QUnit.test('Hover with hoverStateEnabled false', function(assert) {
 
 QUnit.test('Synchronize rows for main table', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items[0].values[1] = 'test4 test4 test4';
     that.setupDataGrid();
@@ -1150,10 +1150,10 @@ QUnit.test('Synchronize rows for main table', function(assert) {
 
 QUnit.test('Synchronize rows for fixed table', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items[0].values[1] = 'test1 test1 test1';
     that.setupDataGrid();
@@ -1180,10 +1180,10 @@ QUnit.test('Synchronize rows for fixed table', function(assert) {
 // T234513
 QUnit.test('Synchronize rows for fixed table with master detail', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.items = [
         { rowType: 'data', values: [true, 'test4', 'test1 test1 test1 test1', 'test3', 'test5', 'test2'] },
@@ -1217,10 +1217,10 @@ QUnit.test('Synchronize rows for fixed table with master detail', function(asser
 
 QUnit.test('Synchronize rows with floating-point height', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.columns[1].headerCellTemplate = function(container, options) {
         $(container).text(options.column.caption);
@@ -1246,10 +1246,10 @@ QUnit.test('Synchronize rows with floating-point height', function(assert) {
 // T246724
 QUnit.test('Get indices of the fixed columns', function(assert) {
     // arrange
-    var that = this,
-        $fixTable,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $fixTable;
+    let $cells;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.rowsView.render($testElement);
@@ -1270,10 +1270,10 @@ QUnit.test('Get indices of the fixed columns', function(assert) {
 // T246638
 QUnit.test('Synchronize position fixed table with main table', function(assert) {
     // arrange
-    var that = this,
-        done = assert.async(),
-        $fixTable,
-        scrollableInstance;
+    const that = this;
+    const done = assert.async();
+    let $fixTable;
+    let scrollableInstance;
 
     that.items = [{ values: ['test4', 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
         { values: ['test9', 'test6', 'test8', 'test10', 'test7'], rowType: 'data' },
@@ -1297,7 +1297,7 @@ QUnit.test('Synchronize position fixed table with main table', function(assert) 
     assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
     assert.equal($fixTable.position().top, 0, 'fixed table - position top');
 
-    var scrollChanged = function() {
+    const scrollChanged = function() {
         // assert
         assert.equal($fixTable.position().top, -20, 'fixed table - position top');
         that.rowsView.scrollChanged.remove(scrollChanged);
@@ -1312,13 +1312,13 @@ QUnit.test('Synchronize position fixed table with main table', function(assert) 
 // T247366
 QUnit.test('Synchronize position fixed table with main table when scrolling mode virtual', function(assert) {
     // arrange
-    var that = this,
-        done = assert.async(),
-        $table,
-        $fixTable,
-        scrollableInstance;
+    const that = this;
+    const done = assert.async();
+    let $table;
+    let $fixTable;
+    let scrollableInstance;
 
-    var dataOptions = {
+    const dataOptions = {
         virtualItemsCount: {
             begin: 0,
             end: 800
@@ -1346,7 +1346,7 @@ QUnit.test('Synchronize position fixed table with main table when scrolling mode
     assert.ok(that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').length, 'has fix content');
     assert.equal($fixTable.position().top, 0, 'fixed table - position top');
 
-    var scrollChanged = function(e) {
+    const scrollChanged = function(e) {
         // assert
         assert.ok($fixTable.position().top < 0, 'position top is defined');
         assert.ok($table.find('.dx-virtual-row').eq(0).height() > 0, 'virtual row has height');
@@ -1366,13 +1366,13 @@ QUnit.test('Synchronize position fixed table with main table when scrolling mode
 
 QUnit.test('Check that fixed column has virtual rows (T642937)', function(assert) {
     // arrange
-    var that = this,
-        $fixTable,
-        $testElement = $('#container'),
-        fixedColumnsCount,
-        notFixedColumnsCount;
+    const that = this;
+    let $fixTable;
+    const $testElement = $('#container');
+    let fixedColumnsCount;
+    let notFixedColumnsCount;
 
-    var dataOptions = {
+    const dataOptions = {
         virtualItemsCount: {
             begin: 1,
             end: 2
@@ -1404,10 +1404,10 @@ if(device.deviceType === 'desktop') {
     // T241973
     QUnit.test('Synchronize position main table with fixed table', function(assert) {
         // arrange
-        var that = this,
-            $fixTable,
-            scrollableInstance,
-            countCallScrollOffsetChanged = 0;
+        const that = this;
+        let $fixTable;
+        let scrollableInstance;
+        let countCallScrollOffsetChanged = 0;
 
         that.items = [{ values: ['test4', 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
             { values: ['test9', 'test6', 'test8', 'test10', 'test7'], rowType: 'data' },
@@ -1459,14 +1459,14 @@ if(device.deviceType === 'desktop') {
     // T241973
     QUnit.test('Event not bubbling when data can scroll more', function(assert) {
         // arrange
-        var that = this,
-            $fixTable,
-            scrollableInstance,
-            countCallWheelEventOnDocument = 0,
-            countCallScrollOffsetChanged = 0,
-            wheelHandler = function() {
-                countCallWheelEventOnDocument++;
-            };
+        const that = this;
+        let $fixTable;
+        let scrollableInstance;
+        let countCallWheelEventOnDocument = 0;
+        let countCallScrollOffsetChanged = 0;
+        const wheelHandler = function() {
+            countCallWheelEventOnDocument++;
+        };
 
         that.items = [{ values: ['test4', 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
             { values: ['test9', 'test6', 'test8', 'test10', 'test7'], rowType: 'data' },
@@ -1514,15 +1514,15 @@ if(device.deviceType === 'desktop') {
     // T241973
     QUnit.test('Event bubbling when data cannot scroll more', function(assert) {
         // arrange
-        var that = this,
-            $fixTable,
-            scrollableInstance,
-            countCallWheelEventOnDocument = 0,
-            countCallScrollOffsetChanged = 0,
-            $testElement = $('#container'),
-            wheelHandler = function() {
-                countCallWheelEventOnDocument++;
-            };
+        const that = this;
+        let $fixTable;
+        let scrollableInstance;
+        let countCallWheelEventOnDocument = 0;
+        let countCallScrollOffsetChanged = 0;
+        const $testElement = $('#container');
+        const wheelHandler = function() {
+            countCallWheelEventOnDocument++;
+        };
 
         that.items = [{ values: ['test4', 'test1', 'test3', 'test5', 'test2'], rowType: 'data' },
             { values: ['test9', 'test6', 'test8', 'test10', 'test7'], rowType: 'data' },
@@ -1571,11 +1571,11 @@ if(device.deviceType === 'desktop') {
 // T246417
 QUnit.test('Get column elements when there is fixed columns', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        columnElements,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let columnElements;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);
@@ -1602,12 +1602,12 @@ QUnit.test('Get column elements when there is fixed columns', function(assert) {
 // T239622
 QUnit.test('Show error row in columnHeadersView', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $errorRow,
-        $headerRow,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $errorRow;
+    let $headerRow;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);
@@ -1643,11 +1643,11 @@ QUnit.test('Show error row in columnHeadersView', function(assert) {
 QUnit.test('Show error row in rowsView', function(assert) {
     // arrange
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $errorRow,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $errorRow;
+    const $testElement = $('#container');
 
     // act
     that.setupDataGrid();
@@ -1679,11 +1679,11 @@ QUnit.test('Show error row in rowsView', function(assert) {
 // T254937, T293038
 QUnit.test('Call the onRowPrepared for main and fixed table', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        countCallOnRowPrepared = 0,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let countCallOnRowPrepared = 0;
+    const $testElement = $('#container');
 
     that.options.onRowPrepared = function(rowInfo) {
         countCallOnRowPrepared++;
@@ -1708,10 +1708,10 @@ QUnit.test('Call the onRowPrepared for main and fixed table', function(assert) {
 // T241021
 QUnit.test('Draw filter row when set filterOperations option in unfixed first column', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.columns = [
         {
@@ -1761,10 +1761,10 @@ QUnit.test('Draw filter row when set filterOperations option in unfixed first co
 // T241021
 QUnit.test('Draw filter row when set filterOperations option in fixed first column', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.columns = [
         {
@@ -1815,8 +1815,8 @@ QUnit.test('Draw filter row when set filterOperations option in fixed first colu
 // T331287
 QUnit.test('Reset filter operation for fixed column', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container');
+    const that = this;
+    const $testElement = $('#container');
 
     that.columns = [
         {
@@ -1844,7 +1844,7 @@ QUnit.test('Reset filter operation for fixed column', function(assert) {
     that.columnHeadersView.render($testElement);
 
     // assert
-    var $firstInput = $testElement.find('.dx-datagrid-headers').children('.dx-datagrid-content-fixed').find('input').first();
+    const $firstInput = $testElement.find('.dx-datagrid-headers').children('.dx-datagrid-content-fixed').find('input').first();
     assert.equal($firstInput.val(), '123', 'filter text');
 
     // act
@@ -1859,10 +1859,10 @@ QUnit.test('Reset filter operation for fixed column', function(assert) {
 // T241021
 QUnit.test('Draw filter row when set filterOperations option in unfixed first column and fixed first column', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    const $testElement = $('#container');
 
     that.columns = [
         {
@@ -1912,9 +1912,9 @@ QUnit.test('Draw filter row when set filterOperations option in unfixed first co
 // T310680
 QUnit.test('Updating position of the fixed table on refresh grid', function(assert) {
     // arrange
-    var that = this,
-        $fixedTable,
-        done = assert.async();
+    const that = this;
+    let $fixedTable;
+    const done = assert.async();
 
     that.items = generateData(20);
     that.setupDataGrid();
@@ -1945,11 +1945,11 @@ QUnit.test('Updating position of the fixed table on refresh grid', function(asse
 // T310680
 QUnit.testInActiveWindow('Scrolling to focused cell when it is fixed', function(assert) {
     // arrange
-    var that = this,
-        $cell,
-        scrollTop,
-        $fixedTable,
-        done = assert.async();
+    const that = this;
+    let $cell;
+    let scrollTop;
+    let $fixedTable;
+    const done = assert.async();
 
     that.clock.restore();
     that.items = generateData(20);
@@ -1964,7 +1964,7 @@ QUnit.testInActiveWindow('Scrolling to focused cell when it is fixed', function(
     $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
     $cell = $fixedTable.find('tbody > tr:not(.dx-freespace-row)').last().children().first();
 
-    var scrollChanged = function(e) {
+    const scrollChanged = function(e) {
         that.rowsView.scrollChanged.remove(scrollChanged);
         scrollTop = $fixedTable.parent().scrollTop();
         assert.ok(scrollTop > 500, 'scroll top of the fixed table');
@@ -1980,10 +1980,10 @@ QUnit.testInActiveWindow('Scrolling to focused cell when it is fixed', function(
 if(browser.mozilla) {
     QUnit.testInActiveWindow('Scrolling should performs with delay if FF and columnFixing.enabled', function(assert) {
         // arrange
-        var that = this,
-            $cell,
-            $fixedTable,
-            done = assert.async();
+        const that = this;
+        let $cell;
+        let $fixedTable;
+        const done = assert.async();
 
         that.clock.restore();
         that.items = generateData(20);
@@ -1998,12 +1998,12 @@ if(browser.mozilla) {
         $fixedTable = that.gridContainer.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
         $cell = $fixedTable.find('tbody > tr:not(.dx-freespace-row)').last().children().first();
 
-        var dateStart = new Date(),
-            scrollChanged = function(e) {
-                that.rowsView.scrollChanged.remove(scrollChanged);
-                assert.ok(new Date() - dateStart >= 60, 'scrolling has delay');
-                done();
-            };
+        const dateStart = new Date();
+        const scrollChanged = function(e) {
+            that.rowsView.scrollChanged.remove(scrollChanged);
+            assert.ok(new Date() - dateStart >= 60, 'scrolling has delay');
+            done();
+        };
 
         that.rowsView.scrollChanged.add(scrollChanged);
 
@@ -2014,9 +2014,9 @@ if(browser.mozilla) {
 
 QUnit.test('getFixedColumnElements', function(assert) {
     // arrange
-    var that = this,
-        $fixedColumnElements,
-        $testElement = $('#container');
+    const that = this;
+    let $fixedColumnElements;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);
@@ -2034,10 +2034,10 @@ QUnit.test('getFixedColumnElements', function(assert) {
 // T384563, T384496
 QUnit.test('Updating position of the fixed table (when scrollbar at the bottom) after delete the row', function(assert) {
     // arrange
-    var that = this,
-        $fixedTable,
-        positionTop,
-        done = assert.async();
+    const that = this;
+    let $fixedTable;
+    let positionTop;
+    const done = assert.async();
 
     that.items = generateData(20);
     that.setupDataGrid();
@@ -2070,8 +2070,8 @@ QUnit.test('Updating position of the fixed table (when scrollbar at the bottom) 
 // T722330
 QUnit.test('Elastic scrolling should be applied for fixed table', function(assert) {
     // arrange
-    var that = this,
-        $fixedTable;
+    const that = this;
+    let $fixedTable;
 
     that.setupDataGrid();
     that.rowsView.render(that.gridContainer);
@@ -2105,7 +2105,7 @@ QUnit.test('Elastic scrolling should be applied for fixed table', function(asser
 
 QUnit.module('Headers reordering and resizing with fixed columns', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.$element = () => $('#container');
         that.gridContainer = $('#container > .dx-datagrid');
@@ -2154,8 +2154,8 @@ QUnit.module('Headers reordering and resizing with fixed columns', {
 // T249504, T256629
 QUnit.test('Reordering - get points by columns for columns fixed to the left', function(assert) {
     // arrange
-    var that = this,
-        pointsByColumns;
+    const that = this;
+    let pointsByColumns;
 
     that.$element().width(925);
 
@@ -2181,8 +2181,8 @@ QUnit.test('Reordering - get points by columns for columns fixed to the left', f
 // T249504, T256629
 QUnit.test('Reordering - get points by columns for not fixed columns', function(assert) {
     // arrange
-    var that = this,
-        pointsByColumns;
+    const that = this;
+    let pointsByColumns;
 
     that.$element().width(925);
 
@@ -2208,9 +2208,9 @@ QUnit.test('Reordering - get points by columns for not fixed columns', function(
 // T249504, T256629
 QUnit.test('Reordering -  get points by columns for columns fixed to the right', function(assert) {
     // arrange
-    var that = this,
-        pointsByColumns,
-        testElement = $('#container').width(925);
+    const that = this;
+    let pointsByColumns;
+    const testElement = $('#container').width(925);
 
     that.setupDataGrid();
 
@@ -2233,10 +2233,10 @@ QUnit.test('Reordering -  get points by columns for columns fixed to the right',
 
 QUnit.test('Reordering -  get points by columns for children of the band column fixed to the left', function(assert) {
     // arrange
-    var that = this,
-        visibleColumns,
-        pointsByColumns,
-        $testElement = $('#container').width(925);
+    const that = this;
+    let visibleColumns;
+    let pointsByColumns;
+    const $testElement = $('#container').width(925);
 
     that.columns = [{ caption: 'Band column 1', fixed: true, columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', columns: ['Column4', 'Column5'] }];
 
@@ -2275,10 +2275,10 @@ QUnit.test('Reordering -  get points by columns for children of the band column 
 
 QUnit.test('Reordering - get points by columns for children of the band column fixed to the right', function(assert) {
     // arrange
-    var that = this,
-        visibleColumns,
-        pointsByColumns,
-        $testElement = $('#container').width(925);
+    const that = this;
+    let visibleColumns;
+    let pointsByColumns;
+    const $testElement = $('#container').width(925);
 
     that.columns = [{ caption: 'Band column 1', columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', fixed: true, fixedPosition: 'right', columns: ['Column4', 'Column5'] }];
 
@@ -2318,10 +2318,10 @@ QUnit.test('Reordering - get points by columns for children of the band column f
 
 QUnit.test('Reordering -  get points by columns with startColumnIndex for children of the band column fixed to the right', function(assert) {
     // arrange
-    var that = this,
-        visibleColumns,
-        pointsByColumns,
-        $testElement = $('#container').width(925);
+    const that = this;
+    let visibleColumns;
+    let pointsByColumns;
+    const $testElement = $('#container').width(925);
 
     that.columns = [{ caption: 'Band column 1', fixed: true, columns: ['Column1', 'Column2'] }, 'Column3', { caption: 'Band column 2', fixed: true, fixedPosition: 'right', columns: ['Column4', 'Column5'] }];
 
@@ -2361,7 +2361,7 @@ QUnit.test('Reordering -  get points by columns with startColumnIndex for childr
 
 QUnit.test('Reordering - set rows opacity for fixed column', function(assert) {
     // arrange
-    var testElement = $('#container').width(925);
+    const testElement = $('#container').width(925);
 
     this.columns = [
         {
@@ -2385,7 +2385,7 @@ QUnit.test('Reordering - set rows opacity for fixed column', function(assert) {
     this.rowsView.setRowsOpacity(0, 0.5);
 
     // assert
-    var $cells = $('.dx-datagrid-table-fixed').eq(1).find('td:first-child');
+    const $cells = $('.dx-datagrid-table-fixed').eq(1).find('td:first-child');
     assert.equal($cells.eq(0).css('opacity'), '0.5', 'opacity for cell 1 of column 1');
     assert.equal($cells.eq(1).css('opacity'), '0.5', 'opacity for cell 2 of column 1');
 });
@@ -2393,8 +2393,8 @@ QUnit.test('Reordering - set rows opacity for fixed column', function(assert) {
 // T256629
 QUnit.test('Resizing -  get points by columns', function(assert) {
     // arrange
-    var that = this,
-        pointsByColumns;
+    const that = this;
+    let pointsByColumns;
 
     that.$element().width(800);
 
@@ -2418,9 +2418,9 @@ QUnit.test('Resizing -  get points by columns', function(assert) {
 // T256629
 QUnit.test('Resizing -  get points by fixed columns', function(assert) {
     // arrange
-    var that = this,
-        pointsByFixedColumns,
-        testElement = $('#container').width(800);
+    const that = this;
+    let pointsByFixedColumns;
+    const testElement = $('#container').width(800);
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -2441,9 +2441,9 @@ QUnit.test('Resizing -  get points by fixed columns', function(assert) {
 // T277354
 QUnit.test('Resizing -  get points for fixed columns with fixedPosition right', function(assert) {
     // arrange
-    var that = this,
-        pointsByFixedColumns,
-        testElement = $('#container').width(300);
+    const that = this;
+    let pointsByFixedColumns;
+    const testElement = $('#container').width(300);
 
     that.columns = [
         {
@@ -2472,9 +2472,9 @@ QUnit.test('Resizing -  get points for fixed columns with fixedPosition right', 
 // T256629
 QUnit.test('Resizing - not get target point for a scrolled column', function(assert) {
     // arrange
-    var that = this,
-        targetPoint,
-        testElement = $('#container').width(800);
+    const that = this;
+    let targetPoint;
+    const testElement = $('#container').width(800);
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -2491,9 +2491,9 @@ QUnit.test('Resizing - not get target point for a scrolled column', function(ass
 // T256629
 QUnit.test('Resizing - get target point for fixed column', function(assert) {
     // arrange
-    var that = this,
-        targetPoint,
-        testElement = $('#container').width(800);
+    const that = this;
+    let targetPoint;
+    const testElement = $('#container').width(800);
 
     that.setupDataGrid();
     that.columnHeadersView.render(testElement);
@@ -2515,7 +2515,7 @@ QUnit.test('Resizing - get target point for fixed column', function(assert) {
 // T249504
 QUnit.test('Normalization visible index after dragging a fixed column in last position', function(assert) {
     // arrange
-    var columns;
+    let columns;
 
     this.setupDataGrid();
 
@@ -2541,7 +2541,7 @@ QUnit.test('Normalization visible index after dragging a fixed column in last po
 // T249504
 QUnit.test('Normalization visible index after dragging not fixed column in last position', function(assert) {
     // arrange
-    var columns;
+    let columns;
 
     this.setupDataGrid();
 
@@ -2567,9 +2567,9 @@ QUnit.test('Normalization visible index after dragging not fixed column in last 
 // T616780
 QUnit.test('Resizing -  get points by fixed columns when columnResizingMode is \'widget\'', function(assert) {
     // arrange
-    var that = this,
-        pointsByFixedColumns,
-        $testElement = $('#container').width(800);
+    const that = this;
+    let pointsByFixedColumns;
+    const $testElement = $('#container').width(800);
 
     that.setupDataGrid({
         allowColumnResizing: false,
@@ -2604,7 +2604,7 @@ QUnit.test('Resizing -  get points by fixed columns when columnResizingMode is \
 
 QUnit.module('Fixed columns with band columns', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.$element = () => $('#container');
         that.gridContainer = $('#container > .dx-datagrid');
@@ -2654,9 +2654,9 @@ QUnit.module('Fixed columns with band columns', {
 
 QUnit.test('getFixedColumnElements when there is band columns', function(assert) {
     // arrange
-    var that = this,
-        $fixedColumnElements,
-        $testElement = $('#container');
+    const that = this;
+    let $fixedColumnElements;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);
@@ -2675,9 +2675,9 @@ QUnit.test('getFixedColumnElements when there is band columns', function(assert)
 
 QUnit.test('getFixedColumnElements with rowIndex when there is band columns', function(assert) {
     // arrange
-    var that = this,
-        $fixedColumnElements,
-        $testElement = $('#container');
+    const that = this;
+    let $fixedColumnElements;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);
@@ -2697,9 +2697,9 @@ QUnit.test('getFixedColumnElements with rowIndex when there is band columns', fu
 // T360139
 QUnit.test('getColumnWidths with band columns', function(assert) {
     // arrange
-    var that = this,
-        widths,
-        $testElement = $('#container').width(600);
+    const that = this;
+    let widths;
+    const $testElement = $('#container').width(600);
 
     that.options.columns = [{ caption: 'Column 1', width: 200 },
         {
@@ -2723,12 +2723,12 @@ QUnit.test('getColumnWidths with band columns', function(assert) {
 
 QUnit.test('Fixed columns with band columns', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $trElements,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $trElements;
+    let $cells;
+    const $testElement = $('#container');
 
     that.setupDataGrid();
 
@@ -2786,12 +2786,12 @@ QUnit.test('Fixed columns with band columns', function(assert) {
 
 QUnit.test('Draw fixed band columns with fixed position on the right side', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $trElements,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $trElements;
+    let $cells;
+    const $testElement = $('#container');
 
     that.options.columns = [
         {
@@ -2861,12 +2861,12 @@ QUnit.test('Draw fixed band columns with fixed position on the right side', func
 
 QUnit.test('Draw fixed band columns with fixed position on the left side', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $trElements,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $trElements;
+    let $cells;
+    const $testElement = $('#container');
 
     that.options.columns = [
         {
@@ -2937,12 +2937,12 @@ QUnit.test('Draw fixed band columns with fixed position on the left side', funct
 // T377704
 QUnit.test('Draw fixed band columns with master detail', function(assert) {
     // arrange
-    var that = this,
-        $table,
-        $fixTable,
-        $trElements,
-        $cells,
-        $testElement = $('#container');
+    const that = this;
+    let $table;
+    let $fixTable;
+    let $trElements;
+    let $cells;
+    const $testElement = $('#container');
 
     that.options.columns = [
         {
@@ -3021,7 +3021,7 @@ QUnit.test('Draw fixed band columns with master detail', function(assert) {
 
 QUnit.module('Fixed columns with real dataController and columnController', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.$element = () => $('#container');
         that.gridContainer = $('#container > .dx-datagrid');
@@ -3053,9 +3053,9 @@ QUnit.module('Fixed columns with real dataController and columnController', {
 // T624538
 QUnit.test('Scroll top should be correct after expanding master detail', function(assert) {
     // arrange
-    var that = this,
-        scrollable,
-        $testElement = $('#container');
+    const that = this;
+    let scrollable;
+    const $testElement = $('#container');
 
     that.options.scrolling = {
         useNative: false
@@ -3090,11 +3090,11 @@ QUnit.test('Scroll top should be correct after expanding master detail', functio
 
 QUnit.test('\'getCellElement\' function return group cell from correct table', function(assert) {
     // arrange
-    var isCellFromFixedTable = function($cell) {
+    const isCellFromFixedTable = function($cell) {
         return $cell && !!$cell.closest('.dx-datagrid-content-fixed').length;
     };
 
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.columns[0].fixedPosition = 'right';
     this.options.columns[1] = { dataField: 'field2', groupIndex: 0 };
@@ -3109,8 +3109,8 @@ QUnit.test('\'getCellElement\' function return group cell from correct table', f
 
 QUnit.test('Fixed column widths should be correct when the group cell position is specified', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        $colElements;
+    const $testElement = $('#container');
+    let $colElements;
 
     this.options.grouping = { allowCollapsing: true };
     this.options.columns[2] = { dataField: 'field3', groupIndex: 0 };
@@ -3136,11 +3136,11 @@ QUnit.test('Fixed column widths should be correct when the group cell position i
 
 QUnit.test('The cells option of row should be correct when there are fixed columns', function(assert) {
     // arrange
-    var cells,
-        rowElement,
-        cellElements,
-        fixedRowElement,
-        $testElement = $('#container');
+    let cells;
+    let rowElement;
+    let cellElements;
+    let fixedRowElement;
+    const $testElement = $('#container');
 
     this.setupDataGrid();
 
@@ -3189,10 +3189,10 @@ QUnit.test('The cells option of row should be correct when there are fixed colum
 // T737955
 QUnit.test('The vertical position of the fixed table should be correct after scrolling when scrolling.useNative is true', function(assert) {
     // arrange
-    var that = this,
-        scrollable,
-        $fixedTableElement,
-        $testElement = $('#container').width(400);
+    const that = this;
+    let scrollable;
+    let $fixedTableElement;
+    const $testElement = $('#container').width(400);
 
     that.options.scrolling = {
         useNative: true
@@ -3223,15 +3223,15 @@ QUnit.test('The vertical position of the fixed table should be correct after scr
 // T829901
 QUnit.test('The load panel should not be displayed when fixing and unfixing the column', function(assert) {
     // arrange
-    let that = this,
-        $testElement = $('#container').width(400),
-        generateData = () => {
-            let data = [];
-            for(let i = 0; i < 40; i++) {
-                data.push({ field1: 'test' + i, field2: 'test' + (i + 1), field3: 'test' + (i + 2) });
-            }
-            return data;
-        };
+    const that = this;
+    const $testElement = $('#container').width(400);
+    const generateData = () => {
+        const data = [];
+        for(let i = 0; i < 40; i++) {
+            data.push({ field1: 'test' + i, field2: 'test' + (i + 1), field3: 'test' + (i + 2) });
+        }
+        return data;
+    };
 
     that.options.loadPanel = { visible: true };
     that.options.scrolling = {

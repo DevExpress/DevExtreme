@@ -1,7 +1,7 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="element"><div id="delegated"></div></div>\
         </div>';

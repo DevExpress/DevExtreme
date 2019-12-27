@@ -1,7 +1,7 @@
-var _extend = require('../../core/utils/extend').extend;
-var windowUtils = require('../../core/utils/window');
-var noop = require('../../core/utils/common').noop;
-var isServerSide = !windowUtils.hasWindow();
+const _extend = require('../../core/utils/extend').extend;
+const windowUtils = require('../../core/utils/window');
+const noop = require('../../core/utils/common').noop;
+const isServerSide = !windowUtils.hasWindow();
 
 function Flags() {
     this.reset();
@@ -11,9 +11,9 @@ Flags.prototype = {
     constructor: Flags,
 
     add: function(codes) {
-        var i,
-            ii = codes.length,
-            flags = this._flags;
+        let i;
+        const ii = codes.length;
+        const flags = this._flags;
 
         for(i = 0; i < ii; ++i) {
             flags[codes[i]] = 1;
@@ -48,8 +48,8 @@ function buildTotalChanges(proto) {
 }
 
 function addChange(settings) {
-    var proto = this.prototype,
-        code = settings.code;
+    const proto = this.prototype;
+    const code = settings.code;
 
     proto['_change_' + code] = settings.handler;
     if(settings.isThemeDependent) {
@@ -63,10 +63,10 @@ function addChange(settings) {
 }
 
 function createChainExecutor() {
-    var executeChain = function() {
-        var i,
-            ii = executeChain._chain.length,
-            result;
+    const executeChain = function() {
+        let i;
+        const ii = executeChain._chain.length;
+        let result;
         for(i = 0; i < ii; ++i) {
             result = executeChain._chain[i].apply(this, arguments);
         }
@@ -81,7 +81,7 @@ function createChainExecutor() {
 }
 
 function expand(target, name, expander) {
-    var current = target[name];
+    let current = target[name];
     if(!current) {
         current = expander;
     } else {
@@ -101,7 +101,7 @@ function expand(target, name, expander) {
 }
 
 function addPlugin(plugin) {
-    var proto = this.prototype;
+    const proto = this.prototype;
     proto._plugins.push(plugin);
     plugin.fontFields && proto._fontFields.push.apply(proto._fontFields, plugin.fontFields);
     if(plugin.members) {
@@ -113,7 +113,7 @@ function addPlugin(plugin) {
 
     if(plugin.extenders) {
         Object.keys(plugin.extenders).forEach(function(key) {
-            var func = plugin.extenders[key];
+            const func = plugin.extenders[key];
             expand(proto, key, func);
         }, this);
     }
@@ -121,10 +121,10 @@ function addPlugin(plugin) {
 
 exports.replaceInherit = isServerSide
     ? function(widget) {
-        var _inherit = widget.inherit;
+        const _inherit = widget.inherit;
         widget.inherit = function() {
-            var result = _inherit.apply(this, arguments);
-            var proto = result.prototype;
+            const result = _inherit.apply(this, arguments);
+            const proto = result.prototype;
             [
                 '_plugins',
                 '_eventsMap',
@@ -147,21 +147,21 @@ exports.replaceInherit = isServerSide
         widget.addPlugin = noop;
     }
     : function(widget) {
-        var _inherit = widget.inherit;
+        const _inherit = widget.inherit;
         widget.inherit = function() {
-            var proto = this.prototype,
-                plugins = proto._plugins,
-                fontFields = proto._fontFields,
-                eventsMap = proto._eventsMap,
-                initialChanges = proto._initialChanges,
-                themeDependentChanges = proto._themeDependentChanges,
-                optionChangesMap = proto._optionChangesMap,
-                partialOptionChangesMap = proto._partialOptionChangesMap,
-                partialOptionChangesPath = proto._partialOptionChangesPath,
-                optionChangesOrder = proto._optionChangesOrder,
-                layoutChangesOrder = proto._layoutChangesOrder,
-                customChangesOrder = proto._customChangesOrder,
-                result = _inherit.apply(this, arguments);
+            let proto = this.prototype;
+            const plugins = proto._plugins;
+            const fontFields = proto._fontFields;
+            const eventsMap = proto._eventsMap;
+            const initialChanges = proto._initialChanges;
+            const themeDependentChanges = proto._themeDependentChanges;
+            const optionChangesMap = proto._optionChangesMap;
+            const partialOptionChangesMap = proto._partialOptionChangesMap;
+            const partialOptionChangesPath = proto._partialOptionChangesPath;
+            const optionChangesOrder = proto._optionChangesOrder;
+            const layoutChangesOrder = proto._layoutChangesOrder;
+            const customChangesOrder = proto._customChangesOrder;
+            const result = _inherit.apply(this, arguments);
 
             proto = result.prototype;
             proto._plugins = combineLists(plugins, proto._plugins);

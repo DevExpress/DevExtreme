@@ -1,25 +1,25 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
 
-    FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif',
+const FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif';
 
-    LIGHT_TITLE_COLOR = 'rgba(0,0,0,0.87)',
-    LIGHT_LABEL_COLOR = 'rgba(0,0,0,0.54)',
+const LIGHT_TITLE_COLOR = 'rgba(0,0,0,0.87)';
+const LIGHT_LABEL_COLOR = 'rgba(0,0,0,0.54)';
 
-    DARK_TITLE_COLOR = 'rgba(255,255,255,0.87)',
-    DARK_LABEL_COLOR = 'rgba(255,255,255,0.54)',
-    DARK_BACKGROUND_COLOR = '#363640',
+const DARK_TITLE_COLOR = 'rgba(255,255,255,0.87)';
+const DARK_LABEL_COLOR = 'rgba(255,255,255,0.54)';
+const DARK_BACKGROUND_COLOR = '#363640';
 
-    WHITE = '#ffffff',
-    BLACK = '#000000',
-    RANGE_COLOR = '#b5b5b5',
-    AREA_LAYER_COLOR = '#686868',
-    LINE_COLOR = '#c7c7c7',
-    TARGET_COLOR = '#8e8e8e',
-    POSITIVE_COLOR = '#b8b8b8',
-    LABEL_BORDER_COLOR = '#494949',
-    BREAK_STYLE_COLOR = '#818181';
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+const RANGE_COLOR = '#b5b5b5';
+const AREA_LAYER_COLOR = '#686868';
+const LINE_COLOR = '#c7c7c7';
+const TARGET_COLOR = '#8e8e8e';
+const POSITIVE_COLOR = '#b8b8b8';
+const LABEL_BORDER_COLOR = '#494949';
+const BREAK_STYLE_COLOR = '#818181';
 
 registerTheme({
     name: 'material',
@@ -460,7 +460,7 @@ function registerMaterialColorScheme(accentName, themeName, accentColor) {
     }, 'material.' + themeName);
 }
 
-var materialAccents = {
+const materialAccents = {
     'blue': '#03a9f4',
     'lime': '#cddc39',
     'orange': '#ff5722',
@@ -468,9 +468,9 @@ var materialAccents = {
     'teal': '#009688'
 };
 
-for(var accent in materialAccents) {
+for(const accent in materialAccents) {
     if(Object.prototype.hasOwnProperty.call(materialAccents, accent)) {
-        var color = materialAccents[accent];
+        const color = materialAccents[accent];
         registerMaterialColorScheme(accent, 'light', color);
         registerMaterialColorScheme(accent, 'dark', color);
         registerThemeAlias(`material.${accent}.light.compact`, `material.${accent}.light`);

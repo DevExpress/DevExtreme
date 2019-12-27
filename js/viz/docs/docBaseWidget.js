@@ -4,7 +4,7 @@
 * @hidden
 * @inherits DOMComponent
 */
-var BaseWidget = {
+const BaseWidget = {
     /**
     * @pseudo CommonVizFormat
     * @type format
@@ -603,7 +603,7 @@ var BaseWidget = {
 * @hidden
 * @type object
 */
-var ScaleBreak = {
+const ScaleBreak = {
     /**
     * @name ScaleBreak.startValue
     * @type number|date|string
@@ -624,7 +624,7 @@ var ScaleBreak = {
 * @default undefined
 * @hidden
 */
-var tickInterval = {
+const tickInterval = {
     /**
     * @name VizTimeInterval.years
     * @type number
@@ -677,7 +677,7 @@ var tickInterval = {
 * @hidden
 * @type object
 */
-var VizRange = {
+const VizRange = {
     /**
     * @name VizRange.startValue
     * @type number|date|string
@@ -735,7 +735,7 @@ var VizRange = {
 * @hidden
 * @type object
 */
-var BaseLegend = {
+const BaseLegend = {
     /**
     * @name BaseLegend.horizontalAlignment
     * @type Enums.HorizontalAlignment
@@ -1023,7 +1023,7 @@ var BaseLegend = {
 * @hidden
 * @type object
 */
-var legendItem = {
+const legendItem = {
     /**
     * @name BaseLegendItem.text
     * @type string

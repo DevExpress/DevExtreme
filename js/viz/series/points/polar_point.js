@@ -1,21 +1,21 @@
-var extend = require('../../../core/utils/extend').extend,
-    _extend = extend,
+const extend = require('../../../core/utils/extend').extend;
+const _extend = extend;
 
-    symbolPoint = require('./symbol_point'),
-    barPoint = require('./bar_point'),
-    piePoint = require('./pie_point'),
-    isDefined = require('../../../core/utils/type').isDefined,
-    vizUtils = require('../../core/utils'),
-    normalizeAngle = vizUtils.normalizeAngle,
+const symbolPoint = require('./symbol_point');
+const barPoint = require('./bar_point');
+const piePoint = require('./pie_point');
+const isDefined = require('../../../core/utils/type').isDefined;
+const vizUtils = require('../../core/utils');
+const normalizeAngle = vizUtils.normalizeAngle;
 
-    _math = Math,
-    _max = _math.max,
+const _math = Math;
+const _max = _math.max;
 
-    RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent,
+const RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent;
 
-    ERROR_BARS_ANGLE_OFFSET = 90,
-    CANVAS_POSITION_END = 'canvas_position_end',
-    CANVAS_POSITION_DEFAULT = 'canvas_position_default';
+const ERROR_BARS_ANGLE_OFFSET = 90;
+const CANVAS_POSITION_END = 'canvas_position_end';
+const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 
 exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
@@ -28,11 +28,11 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     _getCoords: function(argument, value) {
-        var axis = this.series.getValueAxis(),
-            startAngle = axis.getAngles()[0],
-            angle = this._getArgTranslator().translate(argument),
-            radius = this._getValTranslator().translate(value),
-            coords = vizUtils.convertPolarToXY(axis.getCenter(), axis.getAngles()[0], angle, radius);
+        const axis = this.series.getValueAxis();
+        const startAngle = axis.getAngles()[0];
+        const angle = this._getArgTranslator().translate(argument);
+        const radius = this._getValTranslator().translate(value);
+        const coords = vizUtils.convertPolarToXY(axis.getCenter(), axis.getAngles()[0], angle, radius);
 
         coords.angle = angle + startAngle - 90,
         coords.radius = radius;
@@ -70,9 +70,9 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     _translateErrorBars: function() {
-        var that = this,
-            errorBars = that._options.errorBars,
-            translator = that._getValTranslator();
+        const that = this;
+        const errorBars = that._options.errorBars;
+        const translator = that._getValTranslator();
 
         if(!errorBars) {
             return;
@@ -90,10 +90,10 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     getDefaultCoords: function() {
-        var cosSin = vizUtils.getCosAndSin(-this.angle),
-            radius = this._getValTranslator().translate(CANVAS_POSITION_DEFAULT),
-            x = this.defaultX + radius * cosSin.cos,
-            y = this.defaultY + radius * cosSin.sin;
+        const cosSin = vizUtils.getCosAndSin(-this.angle);
+        const radius = this._getValTranslator().translate(CANVAS_POSITION_DEFAULT);
+        const x = this.defaultX + radius * cosSin.cos;
+        const y = this.defaultY + radius * cosSin.sin;
 
         return { x: x, y: y };
     },
@@ -103,9 +103,9 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     _checkLabelPosition: function(label, coord) {
-        var that = this,
-            visibleArea = that._getVisibleArea(),
-            graphicBBox = that._getGraphicBBox();
+        const that = this;
+        const visibleArea = that._getVisibleArea();
+        const graphicBBox = that._getGraphicBBox();
 
         if(that._isPointInVisibleArea(visibleArea, graphicBBox)) {
             coord = that._moveLabelOnCanvas(coord, visibleArea, label.getBoundingRect());
@@ -115,7 +115,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     _getErrorBarSettings: function(errorBarOptions, animationEnabled) {
-        var settings = symbolPoint._getErrorBarSettings.call(this, errorBarOptions, animationEnabled);
+        const settings = symbolPoint._getErrorBarSettings.call(this, errorBarOptions, animationEnabled);
 
         settings.rotate = ERROR_BARS_ANGLE_OFFSET - this.angle;
         settings.rotateX = this.centerX;
@@ -193,15 +193,15 @@ exports.polarBarPoint = _extend({}, barPoint, {
     },
 
     _drawMarker: function(renderer, group, animationEnabled) {
-        var that = this,
-            styles = that._getStyle(),
-            coords = that.getMarkerCoords(),
-            innerRadius = coords.innerRadius,
-            outerRadius = coords.outerRadius,
+        const that = this;
+        const styles = that._getStyle();
+        const coords = that.getMarkerCoords();
+        let innerRadius = coords.innerRadius;
+        let outerRadius = coords.outerRadius;
 
-            start = that._getCoords(that.argument, CANVAS_POSITION_DEFAULT),
-            x = coords.x,
-            y = coords.y;
+        const start = that._getCoords(that.argument, CANVAS_POSITION_DEFAULT);
+        let x = coords.x;
+        let y = coords.y;
 
         if(animationEnabled) {
             innerRadius = 0;
@@ -214,11 +214,11 @@ exports.polarBarPoint = _extend({}, barPoint, {
     },
 
     _checkLabelPosition: function(label, coord) {
-        var that = this,
-            visibleArea = that._getVisibleArea(),
-            angleFunctions = vizUtils.getCosAndSin(that.middleAngle),
-            x = that.centerX + that.defaultRadius * angleFunctions.cos,
-            y = that.centerY - that.defaultRadius * angleFunctions.sin;
+        const that = this;
+        const visibleArea = that._getVisibleArea();
+        const angleFunctions = vizUtils.getCosAndSin(that.middleAngle);
+        const x = that.centerX + that.defaultRadius * angleFunctions.cos;
+        const y = that.centerY - that.defaultRadius * angleFunctions.sin;
 
         if(x > visibleArea.minX && x < visibleArea.maxX && y > visibleArea.minY && y < visibleArea.maxY) {
             coord = that._moveLabelOnCanvas(coord, visibleArea, label.getBoundingRect());
@@ -236,11 +236,11 @@ exports.polarBarPoint = _extend({}, barPoint, {
     },
 
     coordsIn: function(x, y) {
-        var val = vizUtils.convertXYToPolar(this.series.getValueAxis().getCenter(), x, y),
-            coords = this.getMarkerCoords(),
-            isBetweenAngles = coords.startAngle < coords.endAngle ?
-                -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :
-                -val.phi <= coords.startAngle && -val.phi >= coords.endAngle;
+        const val = vizUtils.convertXYToPolar(this.series.getValueAxis().getCenter(), x, y);
+        const coords = this.getMarkerCoords();
+        const isBetweenAngles = coords.startAngle < coords.endAngle ?
+            -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :
+            -val.phi <= coords.startAngle && -val.phi >= coords.endAngle;
 
         return (val.r >= coords.innerRadius && val.r <= coords.outerRadius && isBetweenAngles);
     }

@@ -1,5 +1,5 @@
-var $ = require('jquery');
-var special = require('../../../helpers/eventHelper.js').special;
+const $ = require('jquery');
+const special = require('../../../helpers/eventHelper.js').special;
 
 QUnit.test('events', function(assert) {
 

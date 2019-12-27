@@ -14,8 +14,8 @@ function isFirefoxOnLinux() {
 }
 
 function colorEqual(actual, expected, message) {
-    var hexActual = new Color(actual).toHex(),
-        hexExpected = new Color(expected).toHex();
+    const hexActual = new Color(actual).toHex();
+    const hexExpected = new Color(expected).toHex();
     this.pushResult({
         result: hexActual === hexExpected,
         actual: hexActual,
@@ -49,7 +49,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
 
         // act
-        var elem = new this.Element(this.rendererStub, 'svg');
+        const elem = new this.Element(this.rendererStub, 'svg');
 
         // assert
         assert.ok(elem);
@@ -64,9 +64,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Append to another SvgElement', function(assert) {
         // arrange
-        var elem = new this.Element(this.rendererStub, 'svg'),
-            anotherElement = { element: document.createElement('div') },
-            result;
+        const elem = new this.Element(this.rendererStub, 'svg');
+        const anotherElement = { element: document.createElement('div') };
+        let result;
 
         // act
         result = elem.append(anotherElement);
@@ -81,8 +81,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     // TODO backward compatibility
     QUnit.test('Append to undefined parent. backward compatibility!!!', function(assert) {
         // arrange
-        var elem = new this.Element(this.rendererStub, 'svg'),
-            result;
+        const elem = new this.Element(this.rendererStub, 'svg');
+        let result;
 
         // act
         result = elem.append();
@@ -96,10 +96,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Remove', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem2 = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            result;
+        const parent = { element: document.createElement('div') };
+        const elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem2 = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        let result;
 
         // act
         result = elem1.remove();
@@ -112,8 +112,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // Though it is private method it is tested in order to test links functionality (where it is only used) in a platform agnostic way
     QUnit.test('Insert', function(assert) {
-        var element = new this.Element(this.rendererStub, 'svg'),
-            parent = { element: document.createElement('div') };
+        const element = new this.Element(this.rendererStub, 'svg');
+        const parent = { element: document.createElement('div') };
         parent.element.appendChild(document.createElement('div'));
         parent.element.appendChild(document.createElement('div'));
         parent.element.appendChild(document.createElement('div'));
@@ -125,9 +125,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('toForeground', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            elem1,
-            result;
+        const parent = { element: document.createElement('div') };
+        let elem1;
+        let result;
 
         elem1 = (new this.Element(this.rendererStub, 'svg')).append(parent);
         (new this.Element(this.rendererStub, 'svg')).append(parent);
@@ -144,9 +144,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('toBackground', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            elem3,
-            result;
+        const parent = { element: document.createElement('div') };
+        let elem3;
+        let result;
 
         (new this.Element(this.rendererStub, 'svg')).append(parent);
         (new this.Element(this.rendererStub, 'svg')).append(parent);
@@ -163,20 +163,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Move', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1,
-            result2,
-            result3,
-            result4,
-            result5,
-            result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
         rect1.attr = sinon.spy(); rect1.animate = sinon.spy();
         rect2.attr = sinon.spy(); rect2.animate = sinon.spy();
         rect3.attr = sinon.spy(); rect3.animate = sinon.spy();
@@ -228,16 +228,22 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Rotate', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4, result5, result6, result7;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
         rect1.attr = sinon.spy(); rect1.animate = sinon.spy();
         rect2.attr = sinon.spy(); rect2.animate = sinon.spy();
         rect3.attr = sinon.spy(); rect3.animate = sinon.spy();
@@ -296,9 +302,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('getOffset', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            offset;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        let offset;
         $('#qunit-fixture').append(parent);
 
         // act
@@ -311,9 +317,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('setTitle', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
 
         rect.setTitle('test');
 
@@ -324,10 +330,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Sharp', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            root = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root),
-            result;
+        const parent = { element: document.createElement('div') };
+        const root = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root);
+        let result;
 
         elem.attr = sinon.spy(function() { return this; });
 
@@ -342,10 +348,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Sharp with parameter', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            root = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root),
-            result;
+        const parent = { element: document.createElement('div') };
+        const root = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem = (new this.Element(this.rendererStub, 'g')).attr({ x: 1, y: 2, width: 3, height: 4, 'stroke-width': 5 }).append(root);
+        let result;
 
         elem.attr = sinon.spy(function() { return this; });
 
@@ -360,8 +366,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Data, object', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.data({ key1: 'value1', key2: 'value2' });
@@ -374,8 +380,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Data, key_value', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.data('key1', 'value1');
@@ -386,8 +392,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr', function(assert) {
-        var lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern'),
-            element = (new this.Element(this.rendererStub, 'rect'));
+        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
 
@@ -396,8 +402,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr / no hatching', function(assert) {
-        var lock = this.rendererStub.lockHatching = sinon.spy(),
-            element = (new this.Element(this.rendererStub, 'rect'));
+        const lock = this.rendererStub.lockHatching = sinon.spy();
+        const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red' });
 
@@ -406,8 +412,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr with \'none\' hatching', function(assert) {
-        var lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern'),
-            element = (new this.Element(this.rendererStub, 'rect'));
+        const lock = this.rendererStub.lockHatching = sinon.stub().returns('test-pattern');
+        const element = (new this.Element(this.rendererStub, 'rect'));
 
         element.smartAttr({ fill: 'red', hatching: { direction: 'NoNe' } });
 
@@ -416,8 +422,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr / no hatching and previous hatching', function(assert) {
-        var release = this.rendererStub.releaseHatching = sinon.spy(),
-            element = (new this.Element(this.rendererStub, 'rect'));
+        const release = this.rendererStub.releaseHatching = sinon.spy();
+        const element = (new this.Element(this.rendererStub, 'rect'));
         this.rendererStub.lockHatching = function() { return 'test-pattern'; };
         element.smartAttr({ fill: 'red', hatching: { direction: 'left' } });
 
@@ -428,8 +434,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr / no change passed args', function(assert) {
-        var element = (new this.Element(this.rendererStub, 'rect')),
-            attrs = { fill: 'red', hatching: { direction: 'left' } };
+        const element = (new this.Element(this.rendererStub, 'rect'));
+        const attrs = { fill: 'red', hatching: { direction: 'left' } };
 
         this.rendererStub.lockHatching = function() { return 'test-pattern'; };
 
@@ -440,8 +446,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('smartAttr / apply attrs', function(assert) {
-        var element = (new this.Element(this.rendererStub, 'rect')),
-            attrs = { fill: 'red', stroke: 'green' };
+        const element = (new this.Element(this.rendererStub, 'rect'));
+        const attrs = { fill: 'red', stroke: 'green' };
 
         this.rendererStub.lockHatching = function() { return 'test-pattern'; };
         element.attr = sinon.spy();
@@ -455,7 +461,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Returns correct namespaces (IE specific problem)', function(assert) {
         function mapFromStr(str) {
-            var map = {};
+            const map = {};
             str.split('>').forEach(function(s) {
                 s.split('<').forEach(function(s) {
                     s.split(' ').forEach(function(s) {
@@ -468,9 +474,9 @@ function checkDashStyle(assert, elem, result, style, value) {
             return map;
         }
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new rendererModule.SvgElement({}, 'svg')).append(parent),
-            markupString;
+        const parent = { element: document.createElement('div') };
+        const svg = (new rendererModule.SvgElement({}, 'svg')).append(parent);
+        let markupString;
         $('#qunit-fixture').append(parent);
 
         svg.element.appendChild(document.createTextNode('Some content'));
@@ -490,8 +496,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Can return markup on detached element', function(assert) {
         // arrange
-        var svg = (new rendererModule.SvgElement({}, 'svg')),
-            markupString;
+        const svg = (new rendererModule.SvgElement({}, 'svg'));
+        let markupString;
 
         svg.element.appendChild(document.createTextNode('Some content'));
 
@@ -508,9 +514,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('HTML entities presented as numeric code', function(assert) {
         // arrange
-        var svg = (new rendererModule.SvgElement({}, 'svg')),
-            text = (new rendererModule.TextSvgElement({})).append(svg),
-            markupString;
+        const svg = (new rendererModule.SvgElement({}, 'svg'));
+        const text = (new rendererModule.TextSvgElement({})).append(svg);
+        let markupString;
         text.attr({ text: '&amp;&lt;&gt;&nbsp; &copy;&Oslash;' });
 
         // act
@@ -522,9 +528,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Change multiple entries of entity to numeric code', function(assert) {
         // arrange
-        var svg = (new rendererModule.SvgElement({}, 'svg')),
-            text = (new rendererModule.TextSvgElement({})).append(svg),
-            markupString;
+        const svg = (new rendererModule.SvgElement({}, 'svg'));
+        const text = (new rendererModule.TextSvgElement({})).append(svg);
+        let markupString;
         text.attr({ text: '1&nbsp;2&nbsp;3' });
 
         // act
@@ -536,7 +542,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement jQuery API', {
         beforeEach: function() {
-            var renderer = rendererModule;
+            const renderer = rendererModule;
 
             this.Element = renderer.SvgElement;
 
@@ -562,8 +568,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Clear', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.clear();
@@ -576,8 +582,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Disposing', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.dispose();
@@ -590,8 +596,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('On', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.on(1, 2, 3, 4);
@@ -606,8 +612,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Off', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.off(1, 2, 3, 4);
@@ -622,8 +628,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Trigger', function(assert) {
         // arrange
-        var elem = (new this.Element(this.rendererStub, 'svg')),
-            result;
+        const elem = (new this.Element(this.rendererStub, 'svg'));
+        let result;
 
         // act
         result = elem.trigger(1, 2, 3, 4);
@@ -639,7 +645,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement. attr API, set attrs', {
         beforeEach: function() {
-            var renderer = rendererModule;
+            const renderer = rendererModule;
 
             this.Element = renderer.SvgElement;
 
@@ -649,11 +655,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attributes param is undefined', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            g = (new this.Element(this.rendererStub, 'g')).append(svg),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(g),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const g = (new this.Element(this.rendererStub, 'g')).append(svg);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(g);
+        let result;
 
         // act
         result = rect.attr();
@@ -664,11 +670,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attributes without processing', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            g = (new this.Element(this.rendererStub, 'g')).append(svg),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(g),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const g = (new this.Element(this.rendererStub, 'g')).append(svg);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(g);
+        let result;
 
         // act
         result = rect.attr({ 'some-attr': 'some value 1', 'someAttr': 'some value 2' });
@@ -684,20 +690,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is processed', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            result1,
-            result2,
-            result3,
-            result4,
-            result5,
-            result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'dashStyle': 'longdash' });
@@ -718,15 +724,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is applied after stroke-width', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            result1, result2, result3, result4, result5, result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
@@ -747,20 +758,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is applied before stroke-width', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'path')).append(svg),
-            result1,
-            result2,
-            result3,
-            result4,
-            result5,
-            result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'path')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
         // act
         result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
         result2 = elem2.attr({ 'dashStyle': 'dash' }).attr({ 'stroke-width': 2 });
@@ -780,15 +791,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is applied after stroke-width (rect element)', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4, result5, result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'stroke-width': 2 }).attr({ 'dashStyle': 'longdash' });
@@ -809,15 +825,20 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is applied before stroke-width (rect element)', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4, result5, result6;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
 
         // act
         result1 = elem1.attr({ 'dashStyle': 'longdash' }).attr({ 'stroke-width': 2 });
@@ -838,10 +859,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is undefined after some value', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
+        let result;
 
         // act
         result = elem.attr({ 'dashStyle': undefined });
@@ -852,10 +873,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is null after some value', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
+        let result;
 
         // act
         result = elem.attr({ 'dashStyle': null });
@@ -868,10 +889,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('DashStyle is solid after some value', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem = (new this.Element(this.rendererStub, 'path')).attr({ 'dashStyle': 'longdash' }).append(svg);
+        let result;
 
         // act
         result = elem.attr({ 'dashStyle': 'solid' });
@@ -884,14 +905,14 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Align attribute is processed. LTR', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1,
-            result2,
-            result3;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
 
         // act
         result1 = rect1.attr({ 'align': 'left' });
@@ -919,14 +940,14 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         this.rendererStub.rtl = true;
 
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1,
-            result2,
-            result3;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
 
         // act
         result1 = rect1.attr({ 'align': 'left' });
@@ -954,10 +975,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         // arrange
         this.rendererStub.rtl = true;
 
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'align': 'left' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'align': 'left' }).append(svg);
+        let result;
 
         // act
         result = rect.attr({ 'align': null });
@@ -971,10 +992,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. value is undefined (does not take effect)', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg);
+        let result;
 
         // act
         result = rect.attr({ 'cy': undefined, dashStyle: undefined });
@@ -990,10 +1011,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. value is null (deletes attribute)', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'circle')).attr({ 'cy': 100, dashStyle: 'dot' }).append(svg);
+        let result;
 
         // act
         result = rect.attr({ 'cy': null, dashStyle: null });
@@ -1009,7 +1030,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement. attr API, set attrs. transform', {
         beforeEach: function() {
-            var renderer = rendererModule;
+            const renderer = rendererModule;
             this.Element = renderer.SvgElement;
 
             this.rendererStub = { fake: 'fake' };
@@ -1018,10 +1039,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Do not calculate transform attribute if no transformations applied', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result;
 
         rect._applyTransformation = sinon.spy();
 
@@ -1035,10 +1056,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Calculate transform attribute only once on attr call', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result;
 
         rect._applyTransformation = sinon.spy();
         rect.element.setAttribute = sinon.spy();
@@ -1064,10 +1085,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('All transform attributes are stored', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result;
 
         rect._applyTransformation = sinon.spy();
         rect.element.setAttribute = sinon.spy();
@@ -1105,13 +1126,16 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Translate transformation', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1145,16 +1169,22 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Rotate transformation', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4, result5, result6, result7;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect5 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect6 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect7 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1213,13 +1243,16 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Scale transformation', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result1, result2, result3, result4;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect1 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect2 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect3 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const rect4 = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
 
         rect1.element.setAttribute = sinon.spy();
         rect2.element.setAttribute = sinon.spy();
@@ -1253,10 +1286,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('All transformations at once', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result;
 
         rect.element.setAttribute = sinon.spy();
 
@@ -1279,10 +1312,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Change some transforms', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        let result;
 
         rect.element.setAttribute = sinon.spy();
 
@@ -1307,17 +1340,24 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Perform sharping', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            result1, result2, result3, result4, result5, result6, result7, result8;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1366,17 +1406,24 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Perform vertical sharping', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            result1, result2, result3, result4, result5, result6, result7, result8;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1434,17 +1481,24 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Perform horizontal sharping', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg),
-            result1, result2, result3, result4, result5, result6, result7, result8;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const elem1 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem2 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem3 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem4 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem5 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem6 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem7 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        const elem8 = (new this.Element(this.rendererStub, 'circle')).append(svg);
+        let result1;
+        let result2;
+        let result3;
+        let result4;
+        let result5;
+        let result6;
+        let result7;
+        let result8;
 
         elem1.element.setAttribute = sinon.spy();
         elem2.element.setAttribute = sinon.spy();
@@ -1493,7 +1547,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement. attr API, get attrs', {
         beforeEach: function() {
-            var renderer = rendererModule;
+            const renderer = rendererModule;
 
             this.Element = renderer.SvgElement;
 
@@ -1503,11 +1557,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Get stored attribute without processing', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
+        let result;
         rect.attr({ 'some-attr': 'some value 1', 'someAttr': 'some value 2' });
 
         // act
@@ -1520,11 +1574,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Get stored attribute with processing', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
+        let result;
         rect.attr({ 'align': 'left' });
 
         // act
@@ -1537,11 +1591,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Get default value of processed attribute', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs),
-            result;
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
+        let result;
         rect.attr({ 'some-attr': 'some value 1' });
 
         // act
@@ -1554,10 +1608,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Get default value of processed attribute', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const getAttrSpy = sinon.spy(rect.element.setAttribute.withArgs);
         rect.attr({ 'some-attr': 'some value 1' });
 
         // act/assert
@@ -1574,9 +1628,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement. css API', {
         beforeEach: function() {
-            var Element = rendererModule.SvgElement,
-                parent = { element: document.createElement('div') },
-                svg = (new Element({}, 'svg')).append(parent);
+            const Element = rendererModule.SvgElement;
+            const parent = { element: document.createElement('div') };
+            const svg = (new Element({}, 'svg')).append(parent);
 
             this.rect = (new Element({}, 'rect')).append(svg);
             this.rect.element.setAttribute = sinon.spy();
@@ -1585,7 +1639,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Compose styles, do not process style names', function(assert) {
         // act
-        var result = this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
+        const result = this.rect.css({ 'font-size': 13, 'cursor': 'pointer' });
 
         // assert
         assert.equal(result, this.rect);
@@ -1608,7 +1662,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ 'font-family': 'SegoeUI', cursor: 'default' });
+        const result = this.rect.css({ 'font-family': 'SegoeUI', cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
@@ -1623,7 +1677,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css();
+        const result = this.rect.css();
 
         // assert
         assert.equal(result, this.rect);
@@ -1638,7 +1692,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ 'font-size': undefined, cursor: 'default' });
+        const result = this.rect.css({ 'font-size': undefined, cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
@@ -1653,7 +1707,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ 'font-size': null, cursor: 'default' });
+        const result = this.rect.css({ 'font-size': null, cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
@@ -1668,7 +1722,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.rect.element.setAttribute.reset();
 
         // act
-        var result = this.rect.css({ 'font-size': '', cursor: 'default' });
+        const result = this.rect.css({ 'font-size': '', cursor: 'default' });
 
         // assert
         assert.equal(result, this.rect);
@@ -1678,40 +1732,40 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Special cases. apply unit name', function(assert) {
-        var cssStyles = {
-                'column-count': 2,
-                'fill-opacity': 0.2,
-                'flex-grow': 1,
-                'flex-shrink': 1,
-                'font-weight': 2,
-                'line-height': 3,
-                'opacity': 0.3,
-                'order': 2,
-                'orphans': 3,
-                'widows': 1,
-                'z-index': 4,
-                'zoom': 2,
-                'font-size': '12pt',
-                'left': 30,
-                'width': 400
-            },
-            expectedStyleStrings = [
-                'column-count:2;',
-                'fill-opacity:0.2;',
-                'flex-grow:1;',
-                'flex-shrink:1;',
-                'font-weight:2;',
-                'line-height:3;',
-                'opacity:0.3;',
-                'order:2;',
-                'orphans:3;',
-                'widows:1;',
-                'z-index:4;',
-                'zoom:2;',
-                'font-size:12pt;',
-                'left:30px;',
-                'width:400px;'
-            ];
+        const cssStyles = {
+            'column-count': 2,
+            'fill-opacity': 0.2,
+            'flex-grow': 1,
+            'flex-shrink': 1,
+            'font-weight': 2,
+            'line-height': 3,
+            'opacity': 0.3,
+            'order': 2,
+            'orphans': 3,
+            'widows': 1,
+            'z-index': 4,
+            'zoom': 2,
+            'font-size': '12pt',
+            'left': 30,
+            'width': 400
+        };
+        const expectedStyleStrings = [
+            'column-count:2;',
+            'fill-opacity:0.2;',
+            'flex-grow:1;',
+            'flex-shrink:1;',
+            'font-weight:2;',
+            'line-height:3;',
+            'opacity:0.3;',
+            'order:2;',
+            'orphans:3;',
+            'widows:1;',
+            'z-index:4;',
+            'zoom:2;',
+            'font-size:12pt;',
+            'left:30px;',
+            'width:400px;'
+        ];
 
         assert.deepEqual(this.rect.css(cssStyles).element.setAttribute.firstCall.args[1], expectedStyleStrings.join(''));
     });
@@ -1727,10 +1781,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of not-drawn element', function(assert) {
         // arrange
-        var circle = (new this.Element({}, 'circle')).attr({ cx: 33, cy: 55, r: 123 });
+        const circle = (new this.Element({}, 'circle')).attr({ cx: 33, cy: 55, r: 123 });
 
         // act
-        var bBox = circle.getBBox();
+        const bBox = circle.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1744,10 +1798,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of simple element', function(assert) {
         // arrange
-        var circle = (new this.Element({}, 'circle')).attr({ cx: 40, cy: 50, r: 30 }).append(this.svg);
+        const circle = (new this.Element({}, 'circle')).attr({ cx: 40, cy: 50, r: 30 }).append(this.svg);
 
         // act
-        var bBox = circle.getBBox();
+        const bBox = circle.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1761,10 +1815,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox with float values', function(assert) {
         // arrange
-        var circle = (new this.Element({}, 'circle')).attr({ cx: 40.4, cy: 49.6, r: 30.7 }).append(this.svg);
+        const circle = (new this.Element({}, 'circle')).attr({ cx: 40.4, cy: 49.6, r: 30.7 }).append(this.svg);
 
         // act
-        var bBox = circle.getBBox();
+        const bBox = circle.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1778,12 +1832,12 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of parent of element', function(assert) {
         // arrange
-        var g = (new this.Element({}, 'g')).append(this.svg);
+        const g = (new this.Element({}, 'g')).append(this.svg);
 
         (new this.Element({}, 'circle')).attr({ cx: 10, cy: 20, r: 10 }).append(g);
 
         // act
-        var bBox = g.getBBox();
+        const bBox = g.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1797,10 +1851,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rect element', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1814,10 +1868,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rotated rect element (90)', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 90, rotateX: 20, rotateY: 30 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 90, rotateX: 20, rotateY: 30 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1831,10 +1885,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rotated rect element (90 without rotateX/rotateY)', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 90 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 90 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1848,10 +1902,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rotated rect element (180)', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 180, rotateX: 20, rotateY: 30 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 180, rotateX: 20, rotateY: 30 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1865,10 +1919,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rotated rect element (45)', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 45, rotateX: 20, rotateY: 30 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 45, rotateX: 20, rotateY: 30 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1882,10 +1936,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('GetBBox of rotated rect element (30)', function(assert) {
         // arrange
-        var rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 30, rotateX: 20, rotateY: 30 }).append(this.svg);
+        const rect = (new this.Element({}, 'rect')).attr({ x: 20, y: 30, width: 50, height: 30, rotate: 30, rotateX: 20, rotateY: 30 }).append(this.svg);
 
         // act
-        var bBox = rect.getBBox();
+        const bBox = rect.getBBox();
 
         // assert
         assert.deepEqual(bBox, {
@@ -1899,10 +1953,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement. animate API', {
         beforeEach: function() {
-            var renderer = { animateElement: sinon.spy(), _animation: { enabled: true, somethingElse: 'yesSomethingElse' }, animationEnabled: function() { return this._animation.enabled; } },
-                Element = rendererModule.SvgElement,
-                parent = { element: document.createElement('div') },
-                svg = (new Element(renderer, 'svg')).append(parent);
+            const renderer = { animateElement: sinon.spy(), _animation: { enabled: true, somethingElse: 'yesSomethingElse' }, animationEnabled: function() { return this._animation.enabled; } };
+            const Element = rendererModule.SvgElement;
+            const parent = { element: document.createElement('div') };
+            const svg = (new Element(renderer, 'svg')).append(parent);
 
             this.rect = (new Element(renderer, 'rect')).append(svg);
             this.rect.attr = sinon.spy();
@@ -1911,9 +1965,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute stored in wrapper', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
         rect._settings.x = 10;
         rect._settings.width = 100;
 
@@ -1932,9 +1986,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute stored in element', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
         rect.element.setAttribute('x', 1);
         rect.element.setAttribute('width', 2);
 
@@ -1953,9 +2007,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute not stored', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
 
         // act
         result = rect.animate({ x: 20, width: 50 });
@@ -1972,9 +2026,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute. Merge options', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
 
         // act
         result = rect.animate({ x: 20 }, { someNewOption: 'newOption', somethingElse: 'changed' });
@@ -1991,10 +2045,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute. Complete', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            complete = sinon.spy(),
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        const complete = sinon.spy();
+        let result;
 
         // act
         result = rect.animate({ x: 20 }, {}, complete);
@@ -2011,11 +2065,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute. Animation disabled', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            complete = sinon.spy(),
-            step = sinon.spy(),
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        const complete = sinon.spy();
+        const step = sinon.spy();
+        let result;
 
         renderer._animation.enabled = false;
 
@@ -2040,9 +2094,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate common attribute. Animation disabled, no step, no complete', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
 
         renderer._animation.enabled = false;
 
@@ -2058,7 +2112,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('T338486', function(assert) {
-        var rect = this.rect;
+        const rect = this.rect;
 
         rect._settings.translateY = 99.99998,
         rect._settings.translateX = 199.99998;
@@ -2072,9 +2126,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate transform attributes stored in wrapper', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
         rect._settings.translateX = 10;
         rect._settings.translateY = 20;
         rect._settings.rotate = 30;
@@ -2127,9 +2181,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate transform attributes, from default values', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
 
         // act
         result = rect.animate({
@@ -2175,9 +2229,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate arc param', function(assert) {
         // arrange
-        var rect = this.rect,
-            renderer = rect.renderer,
-            result;
+        const rect = this.rect;
+        const renderer = rect.renderer;
+        let result;
 
         // act
         result = rect.animate({
@@ -2204,8 +2258,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Stop animation', function(assert) {
         // arrange
-        var rect = this.rect,
-            result;
+        const rect = this.rect;
+        let result;
 
         rect.animation = { stop: sinon.spy() };
 
@@ -2229,8 +2283,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Enabling links', function(assert) {
-        var parent = this.element(),
-            child = this.element();
+        const parent = this.element();
+        const child = this.element();
 
         assert.strictEqual(parent.enableLinks(), parent, 'return value');
         child.linkOn(parent, {});
@@ -2238,20 +2292,20 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Virtual link', function(assert) {
-        var parent = this.element().enableLinks();
+        const parent = this.element().enableLinks();
 
         assert.strictEqual(parent.virtualLink({}), parent, 'return value');
     });
 
     QUnit.test('Link after', function(assert) {
-        var parent = this.element().enableLinks();
+        const parent = this.element().enableLinks();
 
         assert.strictEqual(parent.linkAfter('test'), parent, 'return value');
     });
 
     QUnit.test('Turn link on and off', function(assert) {
-        var parent = this.element().enableLinks(),
-            child = this.element();
+        const parent = this.element().enableLinks();
+        const child = this.element();
 
         assert.strictEqual(child.linkOn(parent, {}), child, 'return value - on');
         assert.strictEqual(child.linkOff(), child, 'return value - off');
@@ -2267,15 +2321,15 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Appending and removing', function(assert) {
-        var parent = this.element().enableLinks(),
-            child = this.element().linkOn(parent, {});
+        const parent = this.element().enableLinks();
+        const child = this.element().linkOn(parent, {});
 
         assert.strictEqual(child.linkAppend(), child, 'return value - append');
         assert.strictEqual(child.linkRemove(), child, 'return value - remove');
     });
 
     QUnit.test('Appending and removing non linked', function(assert) {
-        var child = this.element();
+        const child = this.element();
 
         try {
             child.linkAppend();
@@ -2307,10 +2361,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         },
 
         check: function(assert, expected, message) {
-            var actualNodes = $.map(this.parent.element.childNodes, function(node) {
+            const actualNodes = $.map(this.parent.element.childNodes, function(node) {
                 return node;
             });
-            var expectedNodes = $.map(expected, function(element) {
+            const expectedNodes = $.map(expected, function(element) {
                 return element.element;
             });
             assert.deepEqual(actualNodes, expectedNodes, message);
@@ -2446,9 +2500,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Set clip-path attribute. pathModified = false', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
 
         // act
         rect.attr({ 'clip-path': 'DevExpress_34' });
@@ -2460,10 +2514,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Set clip-path attribute. pathModified = true', function(assert) {
         // arrange
         this.rendererStub.pathModified = true;
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            url = window.location.href.split('#')[0];
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const url = window.location.href.split('#')[0];
 
         // act
         rect.attr({ 'clip-path': 'DevExpress_34' });
@@ -2475,9 +2529,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Set clip-path = null', function(assert) {
         // arrange
         this.rendererStub.pathModified = true;
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_34' }).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_34' }).append(svg);
 
         // act
         rect.attr({ 'clip-path': null });
@@ -2488,9 +2542,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Set filter attribute. pathModified = false', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
 
         // act
         rect.attr({ 'filter': 'DevExpress_34' });
@@ -2502,10 +2556,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Set filter attribute. pathModified = true', function(assert) {
         // arrange
         this.rendererStub.pathModified = true;
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            url = window.location.href.split('#')[0];
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const url = window.location.href.split('#')[0];
 
         // act
         rect.attr({ 'filter': 'DevExpress_34' });
@@ -2517,9 +2571,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Set filter = null', function(assert) {
         // arrange
         this.rendererStub.pathModified = true;
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_34' }).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_34' }).append(svg);
 
         // act
         rect.attr({ 'filter': null });
@@ -2530,9 +2584,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Set pattern as fill attribute. pathModified = false', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
 
         // act
         rect.attr({ 'fill': 'DevExpress_34' });
@@ -2544,10 +2598,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Set pattern as fill attribute. pathModified = true', function(assert) {
         // arrange
         this.rendererStub.pathModified = true;
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg),
-            url = window.location.href.split('#')[0];
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const url = window.location.href.split('#')[0];
 
         // act
         rect.attr({ 'fill': 'DevExpress_34' });
@@ -2558,9 +2612,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Set pattern as fill attribute = null', function(assert) {
         // arrange
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_34' }).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_34' }).append(svg);
 
         // act
         rect.attr({ 'fill': null });
@@ -2571,14 +2625,14 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Remove hashes from url for FuncIRI. pathModified = true', function(assert) {
         // arrange
-        var url = window.location.href.split('#')[0];
+        const url = window.location.href.split('#')[0];
 
         window.location.hash = 'testhash';
         this.rendererStub.pathModified = true;
 
-        var parent = { element: document.createElement('div') },
-            svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-            rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
+        const parent = { element: document.createElement('div') };
+        const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+        const rect = (new this.Element(this.rendererStub, 'rect')).append(svg);
 
         // act
         rect.attr({ 'filter': 'DevExpress_34' });
@@ -2590,13 +2644,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     if('pushState' in history) {
         QUnit.test('FixPath API. pathModified = false', function(assert) {
             // arrange
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rectWithClip = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg),
-                rectWithPattern = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_13' }).append(svg),
-                rectWithFilter = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_14' }).append(svg);
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rectWithClip = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg);
+            const rectWithPattern = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_13' }).append(svg);
+            const rectWithFilter = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_14' }).append(svg);
 
-            var url = window.location.pathname + '?testparam=2';
+            const url = window.location.pathname + '?testparam=2';
             window.history.pushState('', document.title, url);
 
             // act
@@ -2612,13 +2666,13 @@ function checkDashStyle(assert, elem, result, style, value) {
             // arrange
             this.rendererStub.pathModified = true;
 
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rectWithClip = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg),
-                rectWithPattern = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_13' }).append(svg),
-                rectWithFilter = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_14' }).append(svg);
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rectWithClip = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg);
+            const rectWithPattern = (new this.Element(this.rendererStub, 'rect')).attr({ 'fill': 'DevExpress_13' }).append(svg);
+            const rectWithFilter = (new this.Element(this.rendererStub, 'rect')).attr({ 'filter': 'DevExpress_14' }).append(svg);
 
-            var newUrl = window.location.href.split('?')[0] + '?testparam=2';
+            const newUrl = window.location.href.split('?')[0] + '?testparam=2';
             window.history.pushState('', document.title, newUrl);
 
             // act
@@ -2632,12 +2686,12 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('FixPath API. do not change attribute if its value was funcIRI, but now it is not', function(assert) {
             // arrange
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rect = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(svg);
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rect = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(svg);
             rect.attr({ fill: 'red' });
 
-            var url = window.location.href.split('?')[0] + '?testparam=2';
+            const url = window.location.href.split('?')[0] + '?testparam=2';
             window.history.pushState('', document.title, url);
 
             // act
@@ -2651,14 +2705,14 @@ function checkDashStyle(assert, elem, result, style, value) {
             // arrange
             this.rendererStub.pathModified = true;
 
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rect = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(svg),
-                testElement = rect.element;
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rect = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(svg);
+            const testElement = rect.element;
 
-            var href = window.location.href,
-                oldUrl = href.split('#')[0],
-                newUrl = href.split('?')[0] + '?testparam=2';
+            const href = window.location.href;
+            const oldUrl = href.split('#')[0];
+            const newUrl = href.split('?')[0] + '?testparam=2';
 
             window.history.pushState('', document.title, newUrl);
 
@@ -2676,13 +2730,13 @@ function checkDashStyle(assert, elem, result, style, value) {
             // arrange
             this.rendererStub.pathModified = true;
 
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rootGroup = (new this.Element(this.rendererStub, 'group')).attr({ fill: 'DevExpress_12' }).append(svg),
-                rect1 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_13' }).append(rootGroup),
-                href = window.location.href,
-                oldUrl = href.split('#')[0],
-                newUrl = href.split('?')[0] + '?testparam=2';
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rootGroup = (new this.Element(this.rendererStub, 'group')).attr({ fill: 'DevExpress_12' }).append(svg);
+            const rect1 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_13' }).append(rootGroup);
+            const href = window.location.href;
+            const oldUrl = href.split('#')[0];
+            const newUrl = href.split('?')[0] + '?testparam=2';
 
             window.history.pushState('', document.title, newUrl);
 
@@ -2700,15 +2754,15 @@ function checkDashStyle(assert, elem, result, style, value) {
             // arrange
             this.rendererStub.pathModified = true;
 
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rootGroup = (new this.Element(this.rendererStub, 'group')).append(svg),
-                rect1 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(rootGroup),
-                childGroup = (new this.Element(this.rendererStub, 'group')).append(rootGroup),
-                rect2 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_13' }).append(childGroup),
-                href = window.location.href,
-                oldUrl = href.split('#')[0],
-                newUrl = href.split('?')[0] + '?testparam=2';
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rootGroup = (new this.Element(this.rendererStub, 'group')).append(svg);
+            const rect1 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_12' }).append(rootGroup);
+            const childGroup = (new this.Element(this.rendererStub, 'group')).append(rootGroup);
+            const rect2 = (new this.Element(this.rendererStub, 'rect')).attr({ fill: 'DevExpress_13' }).append(childGroup);
+            const href = window.location.href;
+            const oldUrl = href.split('#')[0];
+            const newUrl = href.split('?')[0] + '?testparam=2';
 
             window.history.pushState('', document.title, newUrl);
 
@@ -2724,11 +2778,11 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Attribute with FuncIRI is removed and re-set. IMPORTANT due to FF and Edge bugs', function(assert) {
             // arrange
-            var parent = { element: document.createElement('div') },
-                svg = (new this.Element(this.rendererStub, 'svg')).append(parent),
-                rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg);
+            const parent = { element: document.createElement('div') };
+            const svg = (new this.Element(this.rendererStub, 'svg')).append(parent);
+            const rect = (new this.Element(this.rendererStub, 'rect')).attr({ 'clip-path': 'DevExpress_12' }).append(svg);
 
-            var url = window.location.pathname + '?testparam=2';
+            const url = window.location.pathname + '?testparam=2';
             window.history.pushState('', document.title, url);
 
             rect.element.removeAttribute = sinon.spy();
@@ -2747,7 +2801,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 (function RectSvgElement_functionality() {
     QUnit.module('RectSvgElement', {
         beforeEach: function() {
-            var rendererNS = rendererModule;
+            const rendererNS = rendererModule;
 
             this.SvgElement = rendererNS.SvgElement;
             this.Element = rendererNS.RectSvgElement;
@@ -2758,7 +2812,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Create rect', function(assert) {
         // act
-        var rect = new this.Element(this.renderer);
+        const rect = new this.Element(this.renderer);
 
         // assert
         assert.ok(rect instanceof this.Element);
@@ -2766,8 +2820,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. without params', function(assert) {
-        var rect = new this.Element(this.renderer),
-            res;
+        const rect = new this.Element(this.renderer);
+        let res;
 
         // act
         res = rect.attr();
@@ -2781,9 +2835,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. x, y, w, h, even sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2807,9 +2861,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. x, y, w, h, odd sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 5 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 30, height: 40, 'stroke-width': 5 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2833,9 +2887,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. w, h, even sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { width: 30, height: 40, 'stroke-width': 6 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { width: 30, height: 40, 'stroke-width': 6 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2859,9 +2913,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. w, h, odd sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { width: 30, height: 40, 'stroke-width': 3 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { width: 30, height: 40, 'stroke-width': 3 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2885,9 +2939,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. width < height, sw > min, even sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2911,9 +2965,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. width < height, sw > min, odd sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 5 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 4, height: 40, 'stroke-width': 5 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2937,9 +2991,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. width > height, sw > min, even sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 6 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 6 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2963,9 +3017,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. width > height, sw > min, odd sw', function(assert) {
         // arrange
-        var rect = new this.Element(this.renderer),
-            attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 5 },
-            res;
+        const rect = new this.Element(this.renderer);
+        const attrs = { x: 1, y: 2, width: 30, height: 4, 'stroke-width': 5 };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -2989,9 +3043,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change rect attrs + extra attr', function(assert) {
         // arrange
-        var rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 }),
-            attrs = { x: 10, y: 20, width: 300, height: 400, 'stroke-width': 10, fill: 'red' },
-            res;
+        const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
+        const attrs = { x: 10, y: 20, width: 300, height: 400, 'stroke-width': 10, fill: 'red' };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -3017,9 +3071,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change some rect attrs + extra attr', function(assert) {
         // arrange
-        var rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 }),
-            attrs = { x: 10, y: 20, fill: 'red' },
-            res;
+        const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 });
+        const attrs = { x: 10, y: 20, fill: 'red' };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -3045,9 +3099,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change extra attr only', function(assert) {
         // arrange
-        var rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 }),
-            attrs = { fill: 'red' },
-            res;
+        const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 4, height: 40, 'stroke-width': 6 });
+        const attrs = { fill: 'red' };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -3073,9 +3127,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. value is undefined (does not take effect)', function(assert) {
         // arrange
-        var rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 }),
-            attrs = { x: 10, y: undefined },
-            res;
+        const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
+        const attrs = { x: 10, y: undefined };
+        let res;
 
         // act
         res = rect.attr(attrs);
@@ -3099,9 +3153,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. sharping', function(assert) {
         // arrange
-        var rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 }),
-            attrs = { sharp: true },
-            res;
+        const rect = (new this.Element(this.renderer)).attr({ x: 1, y: 2, width: 30, height: 40, 'stroke-width': 6 });
+        const attrs = { sharp: true };
+        let res;
 
         rect.element.setAttribute = sinon.spy();
 
@@ -3130,14 +3184,14 @@ function checkDashStyle(assert, elem, result, style, value) {
 (function PathSvgElement_functionality() {
     QUnit.module('PathSvgElement', {
         beforeEach: function() {
-            var rendererNS = rendererModule;
+            const rendererNS = rendererModule;
 
             this.SvgElement = rendererNS.SvgElement;
             this.Element = rendererNS.PathSvgElement;
             this.renderer = { animateElement: sinon.spy(), _animation: { enabled: true, somethingElse: 'yesSomethingElse' }, animationEnabled: function() { return this._animation.enabled; } };
         },
         createElement: function(type) {
-            var elem = new this.Element(this.renderer, type);
+            const elem = new this.Element(this.renderer, type);
             elem.element.setAttribute = sinon.spy();
             return elem;
         }
@@ -3145,8 +3199,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Create path (check type)', function(assert) {
         // act
-        var path1 = this.createElement(),
-            path2 = this.createElement('sometype');
+        const path1 = this.createElement();
+        const path2 = this.createElement('sometype');
 
         // assert
         assert.equal(path1.type, 'line');
@@ -3156,8 +3210,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. without params', function(assert) {
-        var path = this.createElement('line'),
-            res;
+        const path = this.createElement('line');
+        let res;
 
         // act
         res = path.attr();
@@ -3174,10 +3228,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. wrong type', function(assert) {
-        var attrs = { points: [1, 2, 3, 4] },
-            path = this.createElement('wrong-type'),
-            expected_d = 'M 0 0',
-            res;
+        const attrs = { points: [1, 2, 3, 4] };
+        const path = this.createElement('wrong-type');
+        const expected_d = 'M 0 0';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3195,10 +3249,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. line. empty array', function(assert) {
-        var attrs = { points: [] },
-            path = this.createElement('line'),
-            expected_d = 'M 0 0',
-            res;
+        const attrs = { points: [] };
+        const path = this.createElement('line');
+        const expected_d = 'M 0 0';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3216,10 +3270,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. line. simple array', function(assert) {
-        var attrs = { points: [1, 2, 3, 4, 5.123, 6.456] },
-            path = this.createElement('line'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456',
-            res;
+        const attrs = { points: [1, 2, 3, 4, 5.123, 6.456] };
+        const path = this.createElement('line');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3237,10 +3291,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. line. 2D array', function(assert) {
-        var attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] },
-            path = this.createElement('line'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456',
-            res;
+        const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] };
+        const path = this.createElement('line');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3259,10 +3313,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. line. simple array of objects', function(assert) {
-        var attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] },
-            path = this.createElement('line'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456',
-            res;
+        const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] };
+        const path = this.createElement('line');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3281,10 +3335,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. line. 2D array of objects', function(assert) {
-        var attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] },
-            path = this.createElement('line'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456',
-            res;
+        const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] };
+        const path = this.createElement('line');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 M 10 20 L 30 40 L 50.123 60.456';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3302,10 +3356,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. area. empty array', function(assert) {
-        var attrs = { points: [] },
-            path = this.createElement('area'),
-            expected_d = 'M 0 0 Z',
-            res;
+        const attrs = { points: [] };
+        const path = this.createElement('area');
+        const expected_d = 'M 0 0 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3323,10 +3377,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. area. simple array', function(assert) {
-        var attrs = { points: [1, 2, 3, 4, 5.123, 6.456] },
-            path = this.createElement('area'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z',
-            res;
+        const attrs = { points: [1, 2, 3, 4, 5.123, 6.456] };
+        const path = this.createElement('area');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3344,10 +3398,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. area. 2D array', function(assert) {
-        var attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] },
-            path = this.createElement('area'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z',
-            res;
+        const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456], [10, 20, 30, 40, 50.123, 60.456]] };
+        const path = this.createElement('area');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3366,10 +3420,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. area. simple array of objects', function(assert) {
-        var attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] },
-            path = this.createElement('area'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z',
-            res;
+        const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }] };
+        const path = this.createElement('area');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3388,10 +3442,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. area. 2D array of objects', function(assert) {
-        var attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] },
-            path = this.createElement('area'),
-            expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z',
-            res;
+        const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }], [{ x: 10, y: 20 }, { x: 30, y: 40 }, { x: 50.123, y: 60.456 }]] };
+        const path = this.createElement('area');
+        const expected_d = 'M 1 2 L 3 4 L 5.123 6.456 Z M 10 20 L 30 40 L 50.123 60.456 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3409,10 +3463,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezier. empty array', function(assert) {
-        var attrs = { points: [] },
-            path = this.createElement('bezier'),
-            expected_d = 'M 0 0',
-            res;
+        const attrs = { points: [] };
+        const path = this.createElement('bezier');
+        const expected_d = 'M 0 0';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3430,10 +3484,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezier. simple array', function(assert) {
-        var attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] },
-            path = this.createElement('bezier'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14',
-            res;
+        const attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] };
+        const path = this.createElement('bezier');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3451,10 +3505,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezier. 2D array', function(assert) {
-        var attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] },
-            path = this.createElement('bezier'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16',
-            res;
+        const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] };
+        const path = this.createElement('bezier');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3473,10 +3527,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. bezier. simple array of objects', function(assert) {
-        var attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] },
-            path = this.createElement('bezier'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14',
-            res;
+        const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] };
+        const path = this.createElement('bezier');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3495,10 +3549,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. bezier. 2D array of objects', function(assert) {
-        var attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] },
-            path = this.createElement('bezier'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16',
-            res;
+        const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] };
+        const path = this.createElement('bezier');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 M 9 10 C 11 12 13 14 15 16';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3516,10 +3570,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezierarea. empty array', function(assert) {
-        var attrs = { points: [] },
-            path = this.createElement('bezierarea'),
-            expected_d = 'M 0 0 Z',
-            res;
+        const attrs = { points: [] };
+        const path = this.createElement('bezierarea');
+        const expected_d = 'M 0 0 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3537,10 +3591,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezierarea. simple array', function(assert) {
-        var attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] },
-            path = this.createElement('bezierarea'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z',
-            res;
+        const attrs = { points: [1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345, 9, 10, 11, 12, 13, 14] };
+        const path = this.createElement('bezierarea');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3558,10 +3612,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. bezierarea. 2D array', function(assert) {
-        var attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] },
-            path = this.createElement('bezierarea'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z',
-            res;
+        const attrs = { points: [[1, 2, 3, 4, 5.123, 6.456, 7.891, 8.345], [9, 10, 11, 12, 13, 14, 15, 16]] };
+        const path = this.createElement('bezierarea');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3580,10 +3634,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. bezierarea. simple array of objects', function(assert) {
-        var attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] },
-            path = this.createElement('bezierarea'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z',
-            res;
+        const attrs = { points: [{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }, { x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }] };
+        const path = this.createElement('bezierarea');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 C 9 10 11 12 13 14 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3602,10 +3656,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // TODO backward compatibility
     QUnit.test('Attr. bezierarea. 2D array of objects', function(assert) {
-        var attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] },
-            path = this.createElement('bezierarea'),
-            expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z',
-            res;
+        const attrs = { points: [[{ x: 1, y: 2 }, { x: 3, y: 4 }, { x: 5.123, y: 6.456 }, { x: 7.891, y: 8.345 }], [{ x: 9, y: 10 }, { x: 11, y: 12 }, { x: 13, y: 14 }, { x: 15, y: 16 }]] };
+        const path = this.createElement('bezierarea');
+        const expected_d = 'M 1 2 C 3 4 5.123 6.456 7.891 8.345 Z M 9 10 C 11 12 13 14 15 16 Z';
+        let res;
 
         // act
         res = path.attr(attrs);
@@ -3624,9 +3678,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change points attr + extra attrs', function(assert) {
         // arrange
-        var attrs = { points: [1, 2, 3, 4], fill: 'red' },
-            path,
-            res;
+        const attrs = { points: [1, 2, 3, 4], fill: 'red' };
+        let path;
+        let res;
 
         path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
@@ -3649,9 +3703,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change segments attr + extra attrs', function(assert) {
         // arrange
-        var attrs = { segments: [['M', 1, 2], ['L', 3, 4]], fill: 'red' },
-            path,
-            res;
+        const attrs = { segments: [['M', 1, 2], ['L', 3, 4]], fill: 'red' };
+        let path;
+        let res;
 
         path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
@@ -3674,9 +3728,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change only extra attrs', function(assert) {
         // arrange
-        var path,
-            attrs = { fill: 'red' },
-            res;
+        let path;
+        const attrs = { fill: 'red' };
+        let res;
 
         path = this.createElement('line').attr({ points: [10, 20, 30, 40] });
 
@@ -3700,9 +3754,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. Get attribute', function(assert) {
         // arrange
-        var getAttrSpy,
-            path,
-            result;
+        let getAttrSpy;
+        let path;
+        let result;
 
         path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
         getAttrSpy = sinon.spy(path.element.setAttribute.withArgs),
@@ -3717,8 +3771,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. line. equal length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3742,8 +3796,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. line. old length > new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4, 5, 6] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3767,8 +3821,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. line. old length < new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3792,8 +3846,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. line. old length < new length, old is single point', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3817,8 +3871,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. line. old length < new length, old is empty', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')),
-            result;
+        const path = (new this.Element(this.renderer, 'line'));
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3842,8 +3896,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezier. equal length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3867,8 +3921,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezier. old length > new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3892,8 +3946,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezier. old length < new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2, 3, 4, 5, 6, 7, 8] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3917,8 +3971,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezier. old length < new length, old is single point', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezier')).attr({ points: [1, 2] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3942,8 +3996,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezier. old length < new length, old is empty', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezier')),
-            result;
+        const path = (new this.Element(this.renderer, 'bezier'));
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3967,8 +4021,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. area. equal length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -3992,8 +4046,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. area. old length > new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 500, 150, 500, 300, 300, 400, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4017,8 +4071,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. area. old length < new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 300, 400, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 300, 50, 300, 400, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4042,8 +4096,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. area. old length < new length, old is single point', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'area')).attr({ points: [100, 150, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4067,8 +4121,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. area. old length < new length, old is empty', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'area')),
-            result;
+        const path = (new this.Element(this.renderer, 'area'));
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4093,8 +4147,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     // TODO check 'tail' rule
     QUnit.test('Animate. bezierarea. equal length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4132,8 +4186,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezierarea. old length > new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 400, 50, 500, 100, 500, 150, 500, 150, 500, 300, 500, 300, 500, 350, 400, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4176,8 +4230,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezierarea. old length < new length', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 300, 50, 300, 400, 300, 400, 200, 400, 100, 350, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 100, 200, 50, 300, 50, 300, 50, 300, 400, 300, 400, 200, 400, 100, 350, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4215,8 +4269,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezierarea. old length < new length, old is single point', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 150, 100, 300, 100, 300] }),
-            result;
+        const path = (new this.Element(this.renderer, 'bezierarea')).attr({ points: [100, 150, 100, 150, 100, 300, 100, 300] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4254,8 +4308,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. bezierarea. old length < new length, old is empty', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'bezierarea')),
-            result;
+        const path = (new this.Element(this.renderer, 'bezierarea'));
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4293,8 +4347,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. path params + extra', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
+        let result;
         path.attr = sinon.spy();
 
         // act
@@ -4322,8 +4376,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. path params (stored in wrapper) + extra, animation disabled', function(assert) {
         // arrange
-        var path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] }),
-            result;
+        const path = (new this.Element(this.renderer, 'line')).attr({ points: [1, 2, 3, 4] });
+        let result;
         path.attr = sinon.spy();
         this.renderer._animation.enabled = false;
 
@@ -4344,7 +4398,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 (function ArcSvgElement_functionality() {
     QUnit.module('ArcSvgElement', {
         beforeEach: function() {
-            var rendererNS = rendererModule;
+            const rendererNS = rendererModule;
 
             this.SvgElement = rendererNS.SvgElement;
             this.Element = rendererNS.ArcSvgElement;
@@ -4352,7 +4406,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.renderer = { animateElement: sinon.spy(), _animation: { enabled: true, somethingElse: 'yesSomethingElse' }, animationEnabled: function() { return this._animation.enabled; } };
         },
         createElement: function(type) {
-            var elem = new this.Element(this.renderer);
+            const elem = new this.Element(this.renderer);
             elem.element.setAttribute = sinon.spy();
             return elem;
         }
@@ -4360,7 +4414,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Create arc', function(assert) {
         // act
-        var arc = this.createElement();
+        const arc = this.createElement();
 
         // assert
         assert.ok(arc instanceof this.Element);
@@ -4369,8 +4423,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. without params', function(assert) {
-        var arc = this.createElement(),
-            res;
+        const arc = this.createElement();
+        let res;
 
         // act
         res = arc.attr();
@@ -4384,10 +4438,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. not circle, short curve', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 },
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z',
-            res;
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 };
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
+        let res;
 
         // act
         res = arc.attr(attrs);
@@ -4409,10 +4463,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr, circle, long curve', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 450 },
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z',
-            res;
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 450 };
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
+        let res;
 
         // act
         res = arc.attr(attrs);
@@ -4434,9 +4488,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr, close to circle (diff > 0.001), should be circle', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90.0001, endAngle: 450 },
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90.0001, endAngle: 450 };
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
 
         // act
         arc.attr(attrs);
@@ -4447,10 +4501,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr, close angles', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 179.999, endAngle: 180 },
-            expected_d = 'M -300.00000 199.99302 A 400.00000 400.00000 0 0 0 -300.00000 200.00000 L -200.00000 200.00000 A 300.00000 300.00000 0 0 1 -200.00000 199.99476 Z',
-            res;
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 179.999, endAngle: 180 };
+        const expected_d = 'M -300.00000 199.99302 A 400.00000 400.00000 0 0 0 -300.00000 200.00000 L -200.00000 200.00000 A 300.00000 300.00000 0 0 1 -200.00000 199.99476 Z';
+        let res;
 
         // act
         res = arc.attr(attrs);
@@ -4472,10 +4526,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr, angles more than 360', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 360, endAngle: 450 },
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z',
-            res;
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 360, endAngle: 450 };
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
+        let res;
 
         // act
         res = arc.attr(attrs);
@@ -4497,10 +4551,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr, whole angle multiple of 360', function(assert) {
         // arrange
-        var arc = (this.createElement()),
-            attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 810 },
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z',
-            res;
+        const arc = (this.createElement());
+        const attrs = { x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 90, endAngle: 810 };
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 1 0 499.99999 200.06981 M 400.00000 200.05236 A 300.00000 300.00000 0 1 1 400.00000 200.00000 Z';
+        let res;
 
         // act
         res = arc.attr(attrs);
@@ -4522,10 +4576,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change base arc attrs + extra attrs', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 }),
-            attrs = { x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, fill: 'red' },
-            expected_d = 'M 9000.00000 20000.00000 A 1000.00000 1000.00000 0 1 0 11000.00000 20000.00000 L 10500.00000 20000.00000 A 500.00000 500.00000 0 1 1 9500.00000 20000.00000 Z',
-            res;
+        const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
+        const attrs = { x: 10000, y: 20000, innerRadius: 500, outerRadius: 1000, startAngle: 900, endAngle: 1800, fill: 'red' };
+        const expected_d = 'M 9000.00000 20000.00000 A 1000.00000 1000.00000 0 1 0 11000.00000 20000.00000 L 10500.00000 20000.00000 A 500.00000 500.00000 0 1 1 9500.00000 20000.00000 Z';
+        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
@@ -4553,10 +4607,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change some arc attrs + extra attrs', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 }),
-            attrs = { x: 10000, innerRadius: 500, startAngle: 900, fill: 'red' },
-            expected_d = 'M 10500.00000 2000.00000 A 500.00000 500.00000 0 1 0 10499.99999 2000.08727 M 10100.00000 2000.01745 A 100.00000 100.00000 0 1 1 10100.00000 2000.00000 Z',
-            res;
+        const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
+        const attrs = { x: 10000, innerRadius: 500, startAngle: 900, fill: 'red' };
+        const expected_d = 'M 10500.00000 2000.00000 A 500.00000 500.00000 0 1 0 10499.99999 2000.08727 M 10100.00000 2000.01745 A 100.00000 100.00000 0 1 1 10100.00000 2000.00000 Z';
+        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
@@ -4585,10 +4639,10 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. change only extra attrs', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 }),
-            attrs = { fill: 'red' },
-            expected_d = 'M 1000.00000 1900.00000 A 100.00000 100.00000 0 0 0 900.00000 2000.00000 L 950.00000 2000.00000 A 50.00000 50.00000 0 0 1 1000.00000 1950.00000 Z',
-            res;
+        const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
+        const attrs = { fill: 'red' };
+        const expected_d = 'M 1000.00000 1900.00000 A 100.00000 100.00000 0 0 0 900.00000 2000.00000 L 950.00000 2000.00000 A 50.00000 50.00000 0 0 1 1000.00000 1950.00000 Z';
+        let res;
         arc.element.setAttribute = sinon.spy();
 
         // act
@@ -4613,10 +4667,10 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. Get attribute', function(assert) {
-        var arc = (new this.Element(this.renderer)).attr({ x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 }),
-            expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z',
-            getAttrSpy = sinon.spy(arc.element.setAttribute.withArgs),
-            res;
+        const arc = (new this.Element(this.renderer)).attr({ x: 100, y: 200, innerRadius: 300, outerRadius: 400, startAngle: 0, endAngle: 90 });
+        const expected_d = 'M 500.00000 200.00000 A 400.00000 400.00000 0 0 0 100.00000 -200.00000 L 100.00000 -100.00000 A 300.00000 300.00000 0 0 1 400.00000 200.00000 Z';
+        const getAttrSpy = sinon.spy(arc.element.setAttribute.withArgs);
+        let res;
 
         // act
         res = arc.attr('d');
@@ -4628,8 +4682,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. arc params (stored in wrapper) + extra', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 }),
-            result;
+        const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
+        let result;
         arc.attr = sinon.spy();
 
         // act
@@ -4656,8 +4710,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. arc params (not stored) + extra', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)),
-            result;
+        const arc = (new this.Element(this.renderer));
+        let result;
         arc.attr = sinon.spy();
 
         // act
@@ -4684,8 +4738,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Animate. arc params (stored in wrapper) + extra, animation disabled', function(assert) {
         // arrange
-        var arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 }),
-            result;
+        const arc = (new this.Element(this.renderer)).attr({ x: 1000, y: 2000, innerRadius: 50, outerRadius: 100, startAngle: 90, endAngle: 180 });
+        let result;
         arc.attr = sinon.spy();
         this.renderer._animation.enabled = false;
 
@@ -4709,9 +4763,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 })();
 
 (function TextSvgElement_functionality() {
-    var textEnvironment = {
+    const textEnvironment = {
         beforeEach: function() {
-            var rendererNS = rendererModule;
+            const rendererNS = rendererModule;
 
             this.SvgElement = rendererNS.SvgElement;
             this.Element = rendererNS.TextSvgElement;
@@ -4723,7 +4777,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             $('#qunit-fixture').append(this.parent);
         },
         prepareRenderBeforeEllipsis: function() {
-            var element;
+            let element;
             this.renderer.root = new this.SvgElement({}, 'svg');
             element = new this.Element(this.renderer);
             element.getBBox = sinon.stub().returns({ width: 20 });
@@ -4762,10 +4816,10 @@ function checkDashStyle(assert, elem, result, style, value) {
                 checkTspans(false, false);
             }
             function checkTspans(checkStroke, withOffset) {
-                var offset = withOffset ? expectedData.length : 0;
+                const offset = withOffset ? expectedData.length : 0;
                 $.each(expectedData, function(i, expected) {
-                    var tspan = text.element.childNodes[i + offset],
-                        postfix = ' / ' + (checkStroke ? 'stroke' : '') + ' tspan ' + (i + 1);
+                    const tspan = text.element.childNodes[i + offset];
+                    const postfix = ' / ' + (checkStroke ? 'stroke' : '') + ' tspan ' + (i + 1);
                     assert.strictEqual(tspan.tagName, 'tspan', 'tag name' + postfix);
 
                     if(typeUtils.isDefined(expected.x)) {
@@ -4795,8 +4849,8 @@ function checkDashStyle(assert, elem, result, style, value) {
                     if(expected.style) {
                         if(tspan.getAttribute('style') !== null) {
                             $.each(expected.style, function(name, value) {
-                                var expected = value.replace(/\s/g, '').replace(/;$/, ''),
-                                    actual = tspan.style[name].replace(/\s/g, '');
+                                const expected = value.replace(/\s/g, '').replace(/;$/, '');
+                                const actual = tspan.style[name].replace(/\s/g, '');
                                 if(name === 'fill' || name === 'stroke') {
                                     colorEqual.call(assert, actual, expected);
                                 } else {
@@ -4824,7 +4878,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Create text', function(assert) {
         // act
-        var text = this.createText();
+        const text = this.createText();
 
         // assert
         assert.ok(text instanceof this.Element);
@@ -4832,8 +4886,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Attr. without params', function(assert) {
-        var text = this.createText(),
-            res;
+        const text = this.createText();
+        let res;
 
         // act
         res = text.attr();
@@ -4847,7 +4901,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Attr. Get attribute', function(assert) {
         // arrange
-        var text = this.createText();
+        const text = this.createText();
 
         // act, assert
         assert.strictEqual(text.attr('translateY'), 0, 'method result');
@@ -4856,9 +4910,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Do not create any textNodes if no text passed', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { x: 1, y: 2 },
-            result;
+        const text = this.createText();
+        const attrs = { x: 1, y: 2 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4871,8 +4925,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Do not create any textNodes if text is null', function(assert) {
         // arrange
-        var text = this.createText(),
-            result;
+        const text = this.createText();
+        let result;
 
         // act
         result = text.attr({ x: 1, y: 2, text: null });
@@ -4884,8 +4938,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Do not create any textNodes if text is undefined', function(assert) {
         // arrange
-        var text = this.createText(),
-            result;
+        const text = this.createText();
+        let result;
 
         // act
         result = text.attr({ x: 1, y: 2, text: undefined });
@@ -4897,9 +4951,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Simple text', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: 'simple text', x: 1, y: 2 },
-            result;
+        const text = this.createText();
+        const attrs = { text: 'simple text', x: 1, y: 2 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4912,9 +4966,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Text is 0', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: 0, x: 1, y: 2, align: 'right' },
-            result;
+        const text = this.createText();
+        const attrs = { text: 0, x: 1, y: 2, align: 'right' };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4927,9 +4981,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Simple text, empty string', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: '', x: 1, y: 2 },
-            result;
+        const text = this.createText();
+        const attrs = { text: '', x: 1, y: 2 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4942,9 +4996,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Text param as number', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: 123456, x: 1, y: 2 },
-            result;
+        const text = this.createText();
+        const attrs = { text: 123456, x: 1, y: 2 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4957,9 +5011,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text, default line height', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 },
-            result;
+        const text = this.createText();
+        const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4977,9 +5031,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Single line text with the spaces in the start of the line and with stroke, tspans should be w/o spaces there', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: '  simple text', x: 10, y: 20, stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 },
-            result;
+        const text = this.createText();
+        const attrs = { text: '  simple text', x: 10, y: 20, stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -4993,9 +5047,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text with the spaces in the start of each line, tspans should be w/o spaces there', function(assert) {
         // arrange
-        var text = this.createText(),
-            attrs = { text: '  simple text\r\n with multiple\n lines', x: 10, y: 20 },
-            result;
+        const text = this.createText();
+        const attrs = { text: '  simple text\r\n with multiple\n lines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5012,9 +5066,9 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test('Multiline text, default line height / HTML encoding', function(assert) {
         // arrange
         this.renderer.encodeHtml = true;
-        var text = this.createText(),
-            attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 },
-            result;
+        const text = this.createText();
+        const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5031,9 +5085,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text, line height from font size', function(assert) {
         // arrange
-        var text = this.createText().css({ 'font-size': 18 }),
-            attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 },
-            result;
+        const text = this.createText().css({ 'font-size': 18 });
+        const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5050,9 +5104,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text, line height from font size(em)', function(assert) {
         // arrange
-        var text = this.createText().css({ 'font-size': '0.9em' }),
-            attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 },
-            result;
+        const text = this.createText().css({ 'font-size': '0.9em' });
+        const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5069,9 +5123,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text, line height from font size(absolute size)', function(assert) {
         // arrange
-        var text = this.createText().css({ 'font-size': 'large' }),
-            attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 },
-            result;
+        const text = this.createText().css({ 'font-size': 'large' });
+        const attrs = { text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5088,9 +5142,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Multiline text after simple text', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'text is very simple', x: 50, y: 40 }),
-            attrs = { text: 'simple text\r\nwith multiple\nlines' },
-            result;
+        const text = this.createText().attr({ text: 'text is very simple', x: 50, y: 40 });
+        const attrs = { text: 'simple text\r\nwith multiple\nlines' };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5106,7 +5160,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Creation multiline text html', function(assert) {
-        var text = this.createText().attr({ text: 'Text<br/><b>Example<i>more</i></b><br/>someone text', x: 20, y: 30 });
+        const text = this.createText().attr({ text: 'Text<br/><b>Example<i>more</i></b><br/>someone text', x: 20, y: 30 });
 
         this.checkTspans(assert, text, [
             { x: 20, y: 30, text: 'Text' },
@@ -5118,13 +5172,13 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T227388
     QUnit.test('Html text is wrapped with brackets', function(assert) {
-        var text = this.createText().attr({ text: '<Example>' });
+        const text = this.createText().attr({ text: '<Example>' });
 
         this.checkEmpty(assert, text);
     });
 
     QUnit.test('Creation text with special characters', function(assert) {
-        var text = this.createText().attr({ text: '&#0176; C', x: 0, y: 0 });
+        const text = this.createText().attr({ text: '&#0176; C', x: 0, y: 0 });
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: '° C' }
@@ -5132,7 +5186,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Creation text html with style', function(assert) {
-        var text = this.createText().attr({ text: 'Text <b style=\'color:#010101\'>bold</b>', x: 10, y: 20 });
+        const text = this.createText().attr({ text: 'Text <b style=\'color:#010101\'>bold</b>', x: 10, y: 20 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, style: { fontWeight: '', fill: '' }, text: 'Text ' },
@@ -5142,13 +5196,13 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Creation text html with style / HTML encoding', function(assert) {
         this.renderer.encodeHtml = true;
-        var text = this.createText().attr({ text: 'Text <b style=\'color:rgb(1,1,1)\'>bold</b>', x: 10, y: 20 });
+        const text = this.createText().attr({ text: 'Text <b style=\'color:rgb(1,1,1)\'>bold</b>', x: 10, y: 20 });
 
         this.checkSimple(assert, text, { text: 'Text <b style=\'color:rgb(1,1,1)\'>bold</b>' }, { x: 10, y: 20 });
     });
 
     QUnit.test('Check inheritance setting', function(assert) {
-        var text = this.createText().attr({ text: 'Simple Text<b>Bold<i>Bold Italic<u>Underline Bold italic</u></i></b>', x: 30, y: 20 });
+        const text = this.createText().attr({ text: 'Simple Text<b>Bold<i>Bold Italic<u>Underline Bold italic</u></i></b>', x: 30, y: 20 });
 
         this.checkTspans(assert, text, [
             { x: 30, y: 20, text: 'Simple Text' },
@@ -5159,7 +5213,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Check inheritance setting font size', function(assert) {
-        var text = this.createText().attr({ text: 'Simple Text<b style=\'font-size:15px\'>Bold<i>Bold Italic<u>Underline Bold italic</u></i></b>', x: 0, y: 0 });
+        const text = this.createText().attr({ text: 'Simple Text<b style=\'font-size:15px\'>Bold<i>Bold Italic<u>Underline Bold italic</u></i></b>', x: 0, y: 0 });
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: 'Simple Text' },
@@ -5171,7 +5225,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Inheritance settings font size for multiline text', function(assert) {
-        var text = this.createText().attr({ text: '<span>line1</span>\n<span style=\'font-size:16px;\'>line2</span>\n<span>line3</span>', x: 1, y: 2 }).css({ 'font-size': 18 });
+        const text = this.createText().attr({ text: '<span>line1</span>\n<span style=\'font-size:16px;\'>line2</span>\n<span>line3</span>', x: 1, y: 2 }).css({ 'font-size': 18 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'line1' },
@@ -5181,13 +5235,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('T514698. Text contains html comments-like structures without any other html-like strings - do not parse as HTML', function(assert) {
-        var text = this.createText().attr({ text: 'Regular text <!--html comment like-->', x: 1, y: 2 });
+        const text = this.createText().attr({ text: 'Regular text <!--html comment like-->', x: 1, y: 2 });
 
         this.checkSimple(assert, text, { text: 'Regular text <!--html comment like-->' }, { x: 1, y: 2 });
     });
 
     QUnit.test('T514698. Text contains html comments-like and other html-like strings - parse HTML and skip comments', function(assert) {
-        var text = this.createText().attr({ text: 'Regular text<br/><b>Html text</b><!--html comment like-->', x: 20, y: 30 });
+        const text = this.createText().attr({ text: 'Regular text<br/><b>Html text</b><!--html comment like-->', x: 20, y: 30 });
 
         this.checkTspans(assert, text, [
             { x: 20, y: 30, text: 'Regular text' },
@@ -5197,9 +5251,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Simple text after multiline text', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 1, y: 2 }),
-            attrs = { text: 'text is very simple', x: 3, y: 4 },
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 1, y: 2 });
+        const attrs = { text: 'text is very simple', x: 3, y: 4 };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5212,9 +5266,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. text is undefined (does not take effect)', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 }),
-            attrs = { text: undefined },
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
+        const attrs = { text: undefined };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5232,9 +5286,9 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Special cases. text is null (deletes text)', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines' }),
-            attrs = { text: null },
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines' });
+        const attrs = { text: null };
+        let result;
 
         // act
         result = text.attr(attrs);
@@ -5247,8 +5301,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Css with empty param', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 }),
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
+        let result;
 
         // act
         result = text.css();
@@ -5259,8 +5313,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Update text line positions if font size changed', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 }),
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
+        let result;
 
         // act
         result = text.css({ 'font-size': 18 });
@@ -5276,8 +5330,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Update text line positions if text position changed', function(assert) {
         // arrange
-        var text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 }),
-            result;
+        const text = this.createText().attr({ text: 'simple text\r\nwith multiple\nlines', x: 10, y: 20 });
+        let result;
 
         // act
         result = text.attr({ x: 30, y: 40 });
@@ -5293,7 +5347,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Partial font size is less than common font size / not first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/>Line 2-1<span font-size=\'18px\'>Line 2-2</span>Line 2-3\nLine 3' }).css({ 'font-size': 20 });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/>Line 2-1<span font-size=\'18px\'>Line 2-2</span>Line 2-3\nLine 3' }).css({ 'font-size': 20 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5306,7 +5360,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Partial font size is less than common font size / first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/><span style=\'font-size: 18px;\'>Line 2-1</span>Line 2-2\nLine 3' }).css({ 'font-size': 20 });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/><span style=\'font-size: 18px;\'>Line 2-1</span>Line 2-2\nLine 3' }).css({ 'font-size': 20 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5318,7 +5372,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Partial font size is greater than common font size / not first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 18px;\'>Line 2-2</span>Line 2-3\nLine 3' }).css({ 'font-size': 10 });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 18px;\'>Line 2-2</span>Line 2-3\nLine 3' }).css({ 'font-size': 10 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5331,7 +5385,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Partial font size is greater than common font size / first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/><span style=\'font-size: 18px;\'>Line 2-1</span>Line 2-2\nLine 3' }).css({ 'font-size': 10 });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1<br/><span style=\'font-size: 18px;\'>Line 2-1</span>Line 2-2\nLine 3' }).css({ 'font-size': 10 });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5343,7 +5397,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Two partial font sizes / not first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1\nLine 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><span style=\'font-size: 18px;\'>Line 2-3</span>\nLine 3' });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1\nLine 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><span style=\'font-size: 18px;\'>Line 2-3</span>\nLine 3' });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5356,7 +5410,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     // T177039
     QUnit.test('Two partial font sizes / first element', function(assert) {
-        var text = this.createText().attr({ x: 1, y: 2, text: 'Line 1\n<span style=\'font-size: 16px;\'>Line 2-1</span><span style=\'font-size: 18px;\'>Line 2-2</span>\nLine 3' });
+        const text = this.createText().attr({ x: 1, y: 2, text: 'Line 1\n<span style=\'font-size: 16px;\'>Line 2-1</span><span style=\'font-size: 18px;\'>Line 2-2</span>\nLine 3' });
 
         this.checkTspans(assert, text, [
             { x: 1, y: 2, text: 'Line 1' },
@@ -5367,13 +5421,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Stroked text / empty', function(assert) {
-        var text = this.createText().attr({ x: 10, y: 20, stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkEmpty(assert, text);
     });
 
     QUnit.test('Stroked text / simple', function(assert) {
-        var text = this.createText().attr({ x: 10, y: 20, text: 'Simple Text', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, text: 'Simple Text', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: 'Simple Text' }
@@ -5381,7 +5435,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Stroked text / multiline', function(assert) {
-        var text = this.createText().attr({ x: 10, y: 20, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: 'Line 1' },
@@ -5392,7 +5446,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Stroked text / multiline / HTML encoding', function(assert) {
         this.renderer.encodeHtml = true;
-        var text = this.createText().attr({ x: 10, y: 20, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: 'Line 1' },
@@ -5402,7 +5456,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Stroked text / html tags', function(assert) {
-        var text = this.createText().attr({ x: 10, y: 20, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: 'Line 1' },
@@ -5414,7 +5468,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.test('Stroked text / html tags / HTML encoding', function(assert) {
         this.renderer.encodeHtml = true;
-        var text = this.createText().attr({ x: 10, y: 20, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
+        const text = this.createText().attr({ x: 10, y: 20, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3, 'stroke-opacity': 0.4 });
 
         this.checkTspans(assert, text, [
             { x: 10, y: 20, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3' }
@@ -5422,13 +5476,13 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Stroked then non stroked / simple', function(assert) {
-        var text = this.createText().attr({ x: 0, y: 0, text: 'Simple Text', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
+        const text = this.createText().attr({ x: 0, y: 0, text: 'Simple Text', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
 
         this.checkSimple(assert, text, { text: 'Simple Text' }, { x: 0, y: 0 });
     });
 
     QUnit.test('Stroked then non stroked / multiline', function(assert) {
-        var text = this.createText().attr({ x: 0, y: 0, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
+        const text = this.createText().attr({ x: 0, y: 0, text: 'Line 1\nLine 2\nLine 3', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: 'Line 1' },
@@ -5438,7 +5492,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test('Stroked then non stroked / html tags', function(assert) {
-        var text = this.createText().attr({ x: 0, y: 0, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
+        const text = this.createText().attr({ x: 0, y: 0, text: 'Line 1<br/>Line 2-1<span style=\'font-size: 16px;\'>Line 2-2</span><br/>Line 3', stroke: 'black', 'stroke-width': 3 }).attr({ stroke: null });
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: 'Line 1' },
@@ -5451,8 +5505,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     if(!isFirefoxOnLinux()) {
 
         QUnit.test('Apply ellipsis. Single line', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5463,8 +5517,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Single line. Complex line', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5479,8 +5533,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Single line, big max width', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5491,8 +5545,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Single line, zero width', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5503,8 +5557,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Single line, negative width', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5515,8 +5569,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Single line. Complex line. required length equal startindex of text', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 280 });
             this.prepareRenderBeforeEllipsis();
@@ -5531,8 +5585,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Text should not ellipsis if maxWidth = text width', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 40 });
             this.prepareRenderBeforeEllipsis();
@@ -5543,8 +5597,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('There is not text', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 0 });
             this.prepareRenderBeforeEllipsis();
@@ -5555,8 +5609,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Required length less than width of the ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There <b>is</b> test text for <i>checking</i> ellipsis with single line' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 280 });
             this.prepareRenderBeforeEllipsis();
@@ -5569,8 +5623,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Multiline', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with multi\nline and four lines' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with multi\nline and four lines' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300 });
             this.prepareRenderBeforeEllipsis();
@@ -5586,7 +5640,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Multiline. Complex lines', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines' });
 
             this.prepareRenderBeforeEllipsis();
 
@@ -5604,7 +5658,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis. Multiline. Complex lines. With stroked', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines', stroke: 'black', 'stroke-width': 3 });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines', stroke: 'black', 'stroke-width': 3 });
 
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(34);
@@ -5620,7 +5674,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         // T629325
         QUnit.test('Apply ellipsis. Multiline. There is single white space in second line', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'Line one<br/>Line two <b>with</b> <i>single</i> white space' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'Line one<br/>Line two <b>with</b> <i>single</i> white space' });
 
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(130);
@@ -5636,7 +5690,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         QUnit.test('Apply ellipsis. Multiline. With encode html', function(assert) {
             this.renderer.encodeHtml = true;
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with single\nline' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with single\nline' });
 
             text.element.getBBox = sinon.stub().returns({ width: 400 });
             this.prepareRenderBeforeEllipsis();
@@ -5650,8 +5704,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Not apply ellipsis. One symbol', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '7' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: '7' });
+            let hasEllipsis;
 
             text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
             this.prepareRenderBeforeEllipsis();
@@ -5662,9 +5716,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis second time with new width', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis' }),
-                textAfterFirstIteration,
-                textAfterSecondIteration;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis' });
+            let textAfterFirstIteration;
+            let textAfterSecondIteration;
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(40);
             textAfterFirstIteration = text.element.childNodes[0].wholeText;
@@ -5679,7 +5733,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('restore text after ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis' });
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(40);
 
@@ -5688,7 +5742,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply new text after ellipsis - draw new text, reset ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'It <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <b>and</b><i> four</i> lines' });
             text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(40);
@@ -5704,7 +5758,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply stroke after ellipsis - draw old text with stroke, reset ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with single\nline' });
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: 'There is test\ntext for checking<br/>ellipsis with single\nline' });
             text.element.getBBox = sinon.stub().returns({ width: 400, height: 20, x: 0, y: 0 });
             this.prepareRenderBeforeEllipsis();
             text.applyEllipsis(40);
@@ -5720,8 +5774,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Apply ellipsis of rotated element', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 0, y: 0, rotate: 270, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().append(this.svg).attr({ x: 0, y: 0, rotate: 270, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             this.prepareRenderBeforeEllipsis();
             hasEllipsis = text.applyEllipsis(100);
@@ -5731,8 +5785,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Do not apply ellipsis if element not added', function(assert) {
-            var text = this.createText().attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' }),
-                hasEllipsis;
+            const text = this.createText().attr({ x: 0, y: 0, text: 'There is test text for checking ellipsis with single line' });
+            let hasEllipsis;
 
             this.prepareRenderBeforeEllipsis();
             hasEllipsis = text.applyEllipsis(100);
@@ -5742,27 +5796,27 @@ function checkDashStyle(assert, elem, result, style, value) {
 
 
         QUnit.test('security of renderer', function(assert) {
-            var withoutClosingTags = this.createText().attr({ text: 'text >with <angle brackets > without closing', x: 20, y: 30 }),
-                withClosing = this.createText().attr({ text: 'text <with>angle brackets </with >closing', x: 20, y: 30 }),
-                withSimpleMarkup = this.createText().attr({ text: 'text with markup1<a class="className"></a>', x: 20, y: 30 }),
-                withSimpleStyleTag = this.createText().attr({ text: '<b href="mref" src="s" onerror="(function(){})()" style="font-size:11px;" >aa</b>', x: 20, y: 30 }),
-                attrWithSpace = this.createText().attr({ text: '<img onerror  =  \'function(){}\' />' }),
-                mixedQuotes = this.createText().attr({ text: '<b href="mref" src="s" onerror=\'(function(){})()\' >aa</b>', x: 20, y: 30 }),
-                mixedQuotesWithStyle1 = this.createText().attr({
-                    text: '<b style="font-size:11px;fill:#767676;font-family:\'Segoe UI\', \'Helvetica Neue\'font-weight:400;cursor:default;" >aa</b>', x: 20, y: 30
-                }),
-                mixedQuotesWithStyle2 = this.createText().attr({
-                    text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' src=\'ms\' >aa</b>', x: 20, y: 30
-                }),
-                mixedQuotesWithStyle3 = this.createText().attr({
-                    text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI"; cursor:default;\' href=\'mref\'> </b>', x: 20, y: 30
-                }),
-                mixedQuotesWithStyle4 = this.createText().attr({
-                    text: '<b src=\'e\' style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue";font-weight:400;cursor:default;\' >aa</b>', x: 20, y: 30
-                }),
-                withoutQuotes = this.createText().attr({
-                    text: '<video src=1 style=\'font-size:11px;\' onerror=alert(1)> </video>', x: 20, y: 30
-                });
+            const withoutClosingTags = this.createText().attr({ text: 'text >with <angle brackets > without closing', x: 20, y: 30 });
+            const withClosing = this.createText().attr({ text: 'text <with>angle brackets </with >closing', x: 20, y: 30 });
+            const withSimpleMarkup = this.createText().attr({ text: 'text with markup1<a class="className"></a>', x: 20, y: 30 });
+            const withSimpleStyleTag = this.createText().attr({ text: '<b href="mref" src="s" onerror="(function(){})()" style="font-size:11px;" >aa</b>', x: 20, y: 30 });
+            const attrWithSpace = this.createText().attr({ text: '<img onerror  =  \'function(){}\' />' });
+            const mixedQuotes = this.createText().attr({ text: '<b href="mref" src="s" onerror=\'(function(){})()\' >aa</b>', x: 20, y: 30 });
+            const mixedQuotesWithStyle1 = this.createText().attr({
+                text: '<b style="font-size:11px;fill:#767676;font-family:\'Segoe UI\', \'Helvetica Neue\'font-weight:400;cursor:default;" >aa</b>', x: 20, y: 30
+            });
+            const mixedQuotesWithStyle2 = this.createText().attr({
+                text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' src=\'ms\' >aa</b>', x: 20, y: 30
+            });
+            const mixedQuotesWithStyle3 = this.createText().attr({
+                text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI"; cursor:default;\' href=\'mref\'> </b>', x: 20, y: 30
+            });
+            const mixedQuotesWithStyle4 = this.createText().attr({
+                text: '<b src=\'e\' style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue";font-weight:400;cursor:default;\' >aa</b>', x: 20, y: 30
+            });
+            const withoutQuotes = this.createText().attr({
+                text: '<video src=1 style=\'font-size:11px;\' onerror=alert(1)> </video>', x: 20, y: 30
+            });
 
             assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, 'text >with <angle > without closing');
             assert.strictEqual(withClosing.DEBUG_parsedHtml, 'text <with>angle brackets </with >closing');
@@ -5780,8 +5834,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         QUnit.module('TextSvgElement. Apply text overflow rules', textEnvironment);
 
         QUnit.test('WordWrap normal', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>There is test text for checking ellipsis with single line<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>There is test text for checking ellipsis with single line<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5801,8 +5855,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('WordWrap normal. Single long word', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglong<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglong<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5820,8 +5874,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Single line. wordWrap word-break', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5837,8 +5891,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Single line. wordWrap normal. text overflow clip', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5860,8 +5914,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('wordWrap normal. text overflow ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5877,8 +5931,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('wordWrap normal. text overflow hide', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>long longlonglonglonglonglong long<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5891,8 +5945,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('wordWrap normal. Simple text', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There is test text for checking ellipsis with single line' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There is test text for checking ellipsis with single line' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5912,8 +5966,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Single line. wordWrap none', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '<b>longlonglonglonglonglonglong<b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5930,8 +5984,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Complex text. wordWrap normal', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There <b>is</b> test <b>text for</b> <br/>checking <b>ellipsis</b> with single <i>line</i>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'There <b>is</b> test <b>text for</b> <br/>checking <b>ellipsis</b> with single <i>line</i>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5959,8 +6013,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -5974,7 +6028,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Complex text. wordWrap: none, text overflow: ellipsis - remove test next to ellipsis. Stroked text', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', 'stroke-width': 2, text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', 'stroke-width': 2, text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
 
             this.prepareRenderBeforeEllipsis();
             text.setMaxSize(110, undefined, {
@@ -5986,8 +6040,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Complex text. wordWrap: normal, text overflow: ellipsis - wrap word', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'longlonglonglonglong <b>longlonglonglonglong</b>' });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -6001,11 +6055,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('WordWrap stroked text', function(assert) {
-            var text = this.createText().append(this.svg).attr({
-                    x: 35, y: 100, fill: 'black', stroke: 'black', 'stroke-width': 3,
-                    text: 'There is test text for checking ellipsis with single line'
-                }),
-                result;
+            const text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: 'black', stroke: 'black', 'stroke-width': 3,
+                text: 'There is test text for checking ellipsis with single line'
+            });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(110, undefined, {
@@ -6023,11 +6077,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('WordWrap long text. Keep visible ellipsis when width is too small', function(assert) {
-            var text = this.createText().append(this.svg).attr({
-                    x: 35, y: 100, fill: 'black', stroke: 'black',
-                    text: 'There is'
-                }),
-                result;
+            const text = this.createText().append(this.svg).attr({
+                x: 35, y: 100, fill: 'black', stroke: 'black',
+                text: 'There is'
+            });
+            let result;
 
             this.prepareRenderBeforeEllipsis();
             result = text.setMaxSize(1, undefined, {
@@ -6043,7 +6097,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. textOverflow hide', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There is test text for checking ellipsis with single line'
             });
@@ -6058,7 +6112,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. null as height', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There is test text for checking ellipsis with single line'
             });
@@ -6072,7 +6126,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. TextOverflow = \'none\'. Show all texts ', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There is test text for checking ellipsis with single line'
             });
@@ -6087,7 +6141,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. textOverflow ellipsis. multi line text, Last text width less than maxWidth - add ... at the end', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There\nis\ntest\ntext\nfor checking ellipsis with single line'
             });
@@ -6105,7 +6159,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. textOverflow ellipsis. multi line text, Do not add ... double times', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'Text\nText Text Text Text Text Text\nText'
             });
@@ -6122,7 +6176,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height. textOverflow ellipsis. Slice text', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'Text\nText Text Text 1\nText'
             });
@@ -6138,7 +6192,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Set max height without width', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'Text\nText Text Text 1\nText'
             });
@@ -6157,7 +6211,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         // T732389
         QUnit.test('textOverflow hide. Can apply x attr on hidden text', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There is test text for checking ellipsis with single line'
             });
@@ -6173,7 +6227,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('setMaxWidth with width that is less then zero', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text' });
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text' });
 
             this.prepareRenderBeforeEllipsis();
 
@@ -6186,7 +6240,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Can hide ellipsis if maxWidth too small', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text' });
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text' });
 
             this.prepareRenderBeforeEllipsis();
 
@@ -6200,7 +6254,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Do not hide ellipsis if maxWidth is enought to dispay it', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text Text Text Text' });
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text Text Text Text' });
 
             this.prepareRenderBeforeEllipsis();
 
@@ -6214,7 +6268,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('Hide ellipsis string in multiple line text with height limit', function(assert) {
-            var text = this.createText().append(this.svg).attr({
+            const text = this.createText().append(this.svg).attr({
                 x: 35, y: 100, fill: 'black',
                 text: 'There\nis\ntest\ntext\nfor checking ellipsis with single line'
             });
@@ -6230,8 +6284,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('WordWrap normal with title element', function(assert) {
-            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text Text Text Text Text Text' }),
-                result;
+            const text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: 'Text Text Text Text Text Text' });
+            let result;
 
             text.setTitle('hint');
             this.prepareRenderBeforeEllipsis();
@@ -6243,7 +6297,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         });
 
         QUnit.test('T820606. call setMaxHeight for detached text element', function(assert) {
-            var text = this.createText().attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '200K' });
+            const text = this.createText().attr({ x: 35, y: 100, fill: 'black', stroke: 'black', text: '200K' });
 
             this.prepareRenderBeforeEllipsis();
             text.setMaxSize(-103, undefined, {

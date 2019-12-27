@@ -1,4 +1,4 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 exports.MockDataProvider = function(data, columns) {
     data = data || [
@@ -58,7 +58,7 @@ exports.MockDataProvider = function(data, columns) {
         getStyleId: sinon.stub().returns(0),
 
         getFrozenArea: function() {
-            var that = this;
+            const that = this;
 
             return { x: 0, y: that.getHeaderRowCount() };
         },
@@ -68,8 +68,8 @@ exports.MockDataProvider = function(data, columns) {
 };
 
 exports.checkUniqueValue = function checkUniqueValue(arrayTarget) {
-    var tmpArray = [],
-        i;
+    const tmpArray = [];
+    let i;
 
     for(i = 0; i < arrayTarget.length; i++) {
         if($.inArray(arrayTarget[i], tmpArray) === -1) {

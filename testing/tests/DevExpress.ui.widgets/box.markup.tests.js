@@ -6,7 +6,7 @@ import 'common.css!';
 import 'ui/scroll_view/ui.scrollable';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="box"></div>\
         \
         <div id="boxWithInnerBox">\
@@ -34,8 +34,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const BOX_CLASS = 'dx-box',
-    BOX_ITEM_CLASS = 'dx-box-item';
+const BOX_CLASS = 'dx-box';
+const BOX_ITEM_CLASS = 'dx-box-item';
 
 QUnit.module('render', () => {
     QUnit.test('render', function(assert) {
@@ -181,10 +181,10 @@ QUnit.module('rendering box item', () => {
     });
 
     QUnit.test('onItemStateChanged action should fire after item visibility changed', function(assert) {
-        const items = [{ text: 'Item 1' }],
-            itemStateChangedHandler = sinon.spy(),
-            $box = $('#box').dxBox({ items: items, onItemStateChanged: itemStateChangedHandler }),
-            box = $box.dxBox('instance');
+        const items = [{ text: 'Item 1' }];
+        const itemStateChangedHandler = sinon.spy();
+        const $box = $('#box').dxBox({ items: items, onItemStateChanged: itemStateChangedHandler });
+        const box = $box.dxBox('instance');
 
         box.option('items[0].visible', false);
 
