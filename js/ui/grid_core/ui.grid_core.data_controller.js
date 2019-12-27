@@ -693,6 +693,24 @@ module.exports = {
                         return columnIndices;
                     }
                 },
+                _compareItems: function(item1, item2) {
+                    if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                        return false;
+                    }
+
+                    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
+                    if(compareFields.some(field => item1[field] !== item2[field])) {
+                        return false;
+                    }
+
+                    if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
+                        if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                },
                 _applyChangesOnly: function(change) {
                     const rowIndices = [];
                     const columnIndices = [];
@@ -706,20 +724,9 @@ module.exports = {
                         }
                     }
 
-                    function isItemEquals(item1, item2) {
-                        if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
+                    const isItemEquals = (item1, item2) => {
+                        if(!this._compareItems(item1, item2)) {
                             return false;
-                        }
-
-                        const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
-                        if(compareFields.some(field => item1[field] !== item2[field])) {
-                            return false;
-                        }
-
-                        if(item1.rowType === 'group' || item1.rowType === 'groupFooter') {
-                            if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
-                                return false;
-                            }
                         }
 
                         if(item1.cells) {
@@ -732,7 +739,7 @@ module.exports = {
                         }
 
                         return true;
-                    }
+                    };
 
                     const oldItems = this._items.slice();
                     change.items.forEach(function(item, index) {
