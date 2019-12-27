@@ -15,6 +15,7 @@ import {
     FILTER_BUILDER_ITEM_VALUE_CLASS,
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS,
     FILTER_BUILDER_OVERLAY_CLASS,
+    FILTER_BUILDER_GROUP_CLASS,
     FILTER_BUILDER_GROUP_OPERATION_CLASS,
     FILTER_BUILDER_IMAGE_ADD_CLASS,
     FILTER_BUILDER_IMAGE_REMOVE_CLASS,
@@ -1167,6 +1168,26 @@ QUnit.module('on value changed', function() {
         // remove condition
         clickByButtonAndSelectMenuItem($('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
         assert.equal(getFilterBuilderItems(container).length, 1);
+    });
+
+    QUnit.test('Should remove the group if the last condition in it is removed (T846991)', function(assert) {
+        // arrange
+        var container = $('#container'),
+            value = [['CompanyName', 'K&S Music']];
+
+        container.dxFilterBuilder({
+            value: value,
+            fields: fields
+        });
+
+        // assert
+        assert.equal(container.find('.' + FILTER_BUILDER_GROUP_CLASS).length, 2, 'root group and group with condition');
+
+        // act
+        clickByButtonAndSelectMenuItem($('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
+
+        // assert
+        assert.equal(container.find('.' + FILTER_BUILDER_GROUP_CLASS).length, 1, 'group with condition is removed');
     });
 
     // T824147
