@@ -137,6 +137,7 @@
         "dxDataGrid-columnFixingRightPosition": "Đến bên phải",
         "dxDataGrid-exportTo": "Xuất ra",
         "dxDataGrid-exportToExcel": "Xuất ra Tập tin Excel",
+        "dxDataGrid-exporting": "Xuất khẩu...",
         "dxDataGrid-excelFormat": "Tập tin Excel",
         "dxDataGrid-selectedRows": "Các hàng được chọn",
         "dxDataGrid-exportSelectedRows": "Xuất ra các hàng được chọn",

@@ -1,5 +1,6 @@
 import { isDefined, isString, isObject } from '../../core/utils/type';
 import excelFormatConverter from '../excel_format_converter';
+import messageLocalization from '../../localization/message';
 import { extend } from '../../core/utils/extend';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
@@ -17,10 +18,20 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        autoFilterEnabled = undefined,
+        autoFilterEnabled,
         keepColumnWidths = true,
-        selectedRowsOnly = false
+        selectedRowsOnly = false,
+        loadPanel = {
+            enabled: true,
+            text: messageLocalization.format('dxDataGrid-exporting')
+        }
     } = options;
+
+    const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
+    if('animation' in component.option('loadPanel')) {
+        loadPanel.animation = null;
+    }
+    component.option('loadPanel', loadPanel);
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -82,6 +93,8 @@ function exportDataGrid(options) {
             }
 
             resolve(cellsRange);
+        }).always(() => {
+            component.option('loadPanel', initialLoadPanelOptions);
         });
     });
 }
