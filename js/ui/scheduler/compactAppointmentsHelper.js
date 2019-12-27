@@ -5,10 +5,8 @@ import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import deferredUtils from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
+import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
 
-const LIST_ITEM_DATA_KEY = 'dxListItemData';
-const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
-const LIST_ITEM_CLASS = 'dx-list-item';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';

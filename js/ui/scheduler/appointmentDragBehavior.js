@@ -2,11 +2,11 @@ import $ from '../../core/renderer';
 import Draggable from '../draggable';
 import translator from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
+import { LIST_ITEM_DATA_KEY } from './constants';
 
 const FIXED_CONTAINER_PROP_NAME = 'fixedContainer';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
-const LIST_ITEM_DATA_KEY = 'dxListItemData';
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
