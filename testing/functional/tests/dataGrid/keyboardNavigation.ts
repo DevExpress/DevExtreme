@@ -584,3 +584,60 @@ test("Row should not be focused by 'focusedRowIndex' after change 'pageIndex' by
             pageSize: 2
         }
     }));
+
+
+    test("Focus cells by tab if columnRenderingMode is virtual", async t => {
+        const dataGrid = new DataGrid("#container");
+
+        await t
+            .click(dataGrid.getDataCell(1, 1).element)
+            .expect(dataGrid.getDataCell(1, 1).isEditCell).ok("Cell[1, 1] is editing cell")
+            .pressKey('tab')
+            .expect(dataGrid.getDataCell(1, 2).isEditCell).ok("Cell[1, 2] is editing cell")
+            .pressKey('tab')
+            .expect(dataGrid.getDataCell(1, 3).isEditCell).ok("Cell[1, 3] is editing cell")
+            .pressKey('tab')
+            .expect(dataGrid.getDataCell(1, 4).isEditCell).ok("Cell[1, 4] is editing cell")
+            .pressKey('tab')
+            .expect(dataGrid.getDataCell(1, 5).isEditCell).ok("Cell[1, 5] is editing cell")
+            .pressKey('tab')
+            .expect(dataGrid.getDataCell(1, 6).isEditCell).ok("Cell[1, 6] is editing cell");
+        }).before(() => {
+            const generateData = function (rowCount, columnCount) {
+                var items = [];
+
+                for(let i = 0; i < rowCount; i++) {
+                    let item = { };
+                    for(let j = 0; j < columnCount; j++) {
+                        item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
+                    }
+                    items.push(item);
+                }
+                return items;
+            };
+            const data = generateData(10, 10);
+
+            return createWidget("dxDataGrid", {
+                height: 150,
+                width: 200,
+                dataSource: data,
+                columnWidth: 70,
+                showBorders: true,
+                editing: {
+                    mode: "cell",
+                    allowUpdating: true,
+                },
+                scrolling: {
+                    rowRenderingMode: "virtual",
+                    columnRenderingMode: "virtual",
+                    columnPageSize: 3
+                },
+                paging: {
+                    enabled: false
+                },
+                onFocusedCellChanging: e => {
+                    console.log('onFocusedCellChanging');
+                    e.isHighlighted = true;
+                }
+            });
+        });
