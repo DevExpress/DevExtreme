@@ -509,6 +509,9 @@ module.exports = gridCore.Controller.inherit((function() {
         operationTypes: function() {
             return this._operationTypes;
         },
+        lastLoadOptions: function() {
+            return this._lastLoadOptions || {};
+        },
         isLastPage: function() {
             return this._isLastPage;
         },
