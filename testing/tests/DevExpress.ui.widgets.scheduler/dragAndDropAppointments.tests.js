@@ -279,9 +279,9 @@ module('Drag and drop appointments', moduleConfig, () => {
                 .up();
         };
 
-        test('in common views', assert => testViews(commonViews, assert));
-        test('in time line views', assert => testViews(timeLineViews, assert));
-        test('in group views', assert => testViews(groupViews, assert));
+        module('common view', () => test('test views', assert => testViews(commonViews, assert)));
+        module('time line', () => test('test views', assert => testViews(timeLineViews, assert)));
+        module('group line', () => test('test views', assert => testViews(groupViews, assert)));
     });
 
     module('Appointment should move a same distance as mouse', () => {
@@ -366,308 +366,310 @@ module('Drag and drop appointments', moduleConfig, () => {
             });
         };
 
-        test('in common views', assert => testViews(commonViews, assert));
-        test('in time line views', assert => testViews(timeLineViews, assert));
-        test('in group views', assert => testViews(groupViews, assert));
+        module('common view', () => test('test views', assert => testViews(commonViews, assert)));
+        module('time line', () => test('test views', assert => testViews(timeLineViews, assert)));
+        module('group line', () => test('test views', assert => testViews(groupViews, assert)));
     });
 
-    test('DropDownAppointment shouldn\'t be draggable if editing.allowDragging is false', function(assert) {
-        const tasks = [
-            {
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 12, 0)
-            },
-            {
-                text: 'Task 3',
-                startDate: new Date(2015, 1, 9, 13, 0),
-                endDate: new Date(2015, 1, 9, 14, 0)
-            }
-        ];
+    module('Common', () => {
+        test('DropDownAppointment shouldn\'t be draggable if editing.allowDragging is false', function(assert) {
+            const tasks = [
+                {
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
+                },
+                {
+                    text: 'Task 2',
+                    startDate: new Date(2015, 1, 9, 11, 0),
+                    endDate: new Date(2015, 1, 9, 12, 0)
+                },
+                {
+                    text: 'Task 3',
+                    startDate: new Date(2015, 1, 9, 13, 0),
+                    endDate: new Date(2015, 1, 9, 14, 0)
+                }
+            ];
 
-        const scheduler = createWrapper({
-            editing: {
-                allowDragging: false
-            },
-            height: 600,
-            views: ['month'],
-            currentView: 'month',
-            dataSource: tasks,
-            currentDate: new Date(2015, 1, 9)
+            const scheduler = createWrapper({
+                editing: {
+                    allowDragging: false
+                },
+                height: 600,
+                views: ['month'],
+                currentView: 'month',
+                dataSource: tasks,
+                currentDate: new Date(2015, 1, 9)
+            });
+
+            scheduler.appointments.compact.click();
+
+            const appointment = scheduler.tooltip.getItemElement();
+            const renderStub = sinon.stub(scheduler.instance.getAppointmentsInstance(), '_renderItem');
+
+            appointment.trigger('dxdragstart');
+
+            assert.notOk(renderStub.calledOnce, 'Phanton item was not rendered');
         });
 
-        scheduler.appointments.compact.click();
-
-        const appointment = scheduler.tooltip.getItemElement();
-        const renderStub = sinon.stub(scheduler.instance.getAppointmentsInstance(), '_renderItem');
-
-        appointment.trigger('dxdragstart');
-
-        assert.notOk(renderStub.calledOnce, 'Phanton item was not rendered');
-    });
-
-    test('Phantom appointment should have correct template', function(assert) {
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: [{ type: 'timelineDay', maxAppointmentsPerCell: 1 }],
-            currentView: 'timelineDay',
-            dataSource: [{
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            }],
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        const pointer = pointerMock(scheduler.tooltip.getItemElement())
-            .start()
-            .dragStart();
-
-        const phantomAppointment = scheduler.appointments.getAppointment();
-
-        assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM', 'Appointment start is correct');
-        assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '2:00 AM', 'Appointment edn is correct');
-
-        pointer.dragEnd();
-    });
-
-    QUnit.test('Appointment should move to the first cell from tooltip case', function(assert) {
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-            currentView: 'month',
-            dataSource: [{
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            }],
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        scheduler.appointments.compact.click(0);
-        const compactAppointment = scheduler.appointments.compact.getAppointment();
-        const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
-
-        pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
-
-        const data = scheduler.instance.option('dataSource')[1];
-        assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), 'start date is correct');
-        assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), 'end date is correct');
-    });
-
-    QUnit.test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', function(assert) {
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-            currentView: 'month',
-            dataSource: [{
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0),
-                disabled: true,
-            },
-            {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0),
-                disabled: true,
-            }],
-            currentDate: new Date(2015, 1, 9)
-        });
-
-        scheduler.appointments.compact.click(0);
-        const compactAppointment = scheduler.appointments.compact.getAppointment();
-        const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
-
-        pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
-
-        const data = scheduler.instance.option('dataSource')[1];
-        assert.deepEqual(data.startDate, new Date(2015, 1, 9, 1, 0), 'start date is correct');
-        assert.deepEqual(data.endDate, new Date(2015, 1, 9, 2, 0), 'end date is correct');
-    });
-
-    QUnit.test('The recurring appointment should have correct position when dragging', function(assert) {
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: ['month'],
-            currentView: 'month',
-            currentDate: new Date(2017, 4, 25),
-            dataSource: [{
-                text: 'Watercolor Landscape',
-                roomId: [1],
-                startDate: new Date(2017, 4, 1, 9, 30),
-                endDate: new Date(2017, 4, 1, 11),
-                recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10'
-            }],
-            resources: [{
-                fieldExpr: 'roomId',
+        test('Phantom appointment should have correct template', function(assert) {
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: [{ type: 'timelineDay', maxAppointmentsPerCell: 1 }],
+                currentView: 'timelineDay',
                 dataSource: [{
-                    text: 'Room 101',
-                    id: 1,
-                    color: '#bbd806'
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
+                },
+                {
+                    text: 'Task 2',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
                 }],
-                label: 'Room'
-            }]
+                currentDate: new Date(2015, 1, 9)
+            });
+
+            const pointer = pointerMock(scheduler.tooltip.getItemElement())
+                .start()
+                .dragStart();
+
+            const phantomAppointment = scheduler.appointments.getAppointment();
+
+            assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM', 'Appointment start is correct');
+            assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '2:00 AM', 'Appointment edn is correct');
+
+            pointer.dragEnd();
         });
 
-        const $appointment = scheduler.appointments.find('Watercolor Landscape').first();
-        const positionBeforeDrag = getAbsolutePosition($appointment);
-        const pointer = pointerMock($appointment).start();
+        test('Appointment should move to the first cell from tooltip case', function(assert) {
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+                currentView: 'month',
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
+                },
+                {
+                    text: 'Task 2',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0)
+                }],
+                currentDate: new Date(2015, 1, 9)
+            });
 
-        try {
+            scheduler.appointments.compact.click(0);
+            const compactAppointment = scheduler.appointments.compact.getAppointment();
+            const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
+
+            pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
+
+            const data = scheduler.instance.option('dataSource')[1];
+            assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), 'start date is correct');
+            assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), 'end date is correct');
+        });
+
+        test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', function(assert) {
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+                currentView: 'month',
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0),
+                    disabled: true,
+                },
+                {
+                    text: 'Task 2',
+                    startDate: new Date(2015, 1, 9, 1, 0),
+                    endDate: new Date(2015, 1, 9, 2, 0),
+                    disabled: true,
+                }],
+                currentDate: new Date(2015, 1, 9)
+            });
+
+            scheduler.appointments.compact.click(0);
+            const compactAppointment = scheduler.appointments.compact.getAppointment();
+            const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
+
+            pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
+
+            const data = scheduler.instance.option('dataSource')[1];
+            assert.deepEqual(data.startDate, new Date(2015, 1, 9, 1, 0), 'start date is correct');
+            assert.deepEqual(data.endDate, new Date(2015, 1, 9, 2, 0), 'end date is correct');
+        });
+
+        test('The recurring appointment should have correct position when dragging', function(assert) {
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: ['month'],
+                currentView: 'month',
+                currentDate: new Date(2017, 4, 25),
+                dataSource: [{
+                    text: 'Watercolor Landscape',
+                    roomId: [1],
+                    startDate: new Date(2017, 4, 1, 9, 30),
+                    endDate: new Date(2017, 4, 1, 11),
+                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10'
+                }],
+                resources: [{
+                    fieldExpr: 'roomId',
+                    dataSource: [{
+                        text: 'Room 101',
+                        id: 1,
+                        color: '#bbd806'
+                    }],
+                    label: 'Room'
+                }]
+            });
+
+            const $appointment = scheduler.appointments.find('Watercolor Landscape').first();
+            const positionBeforeDrag = getAbsolutePosition($appointment);
+            const pointer = pointerMock($appointment).start();
+
+            try {
+                pointer
+                    .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                    .move(150, 0)
+                    .up();
+
+                const positionAfterDrag = getAbsolutePosition($appointment);
+
+                assert.deepEqual(positionAfterDrag, {
+                    left: positionBeforeDrag.left + 150,
+                    top: positionBeforeDrag.top
+                });
+            } finally {
+                scheduler.appointmentPopup.dialog.hide();
+            }
+        });
+
+        // T835049
+        QUnit.test('The appointment should have correct position after a drop when the store is asynchronous', function(assert) {
+            let data = [{
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 1, 11, 0),
+                endDate: new Date(2015, 1, 1, 11, 30)
+            }];
+
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: [{ type: 'timelineMonth' }],
+                currentView: 'timelineMonth',
+                dataSource: {
+                    load: () => {
+                        const d = $.Deferred();
+
+                        setTimeout(() => d.resolve(data), 30);
+
+                        return d.promise();
+                    },
+                    update: (key, values) => {
+                        const d = $.Deferred();
+
+                        setTimeout(function() {
+                            $.extend(data[0], values);
+                            d.resolve(data[0]);
+                        }, 30);
+
+                        return d.promise();
+                    }
+                },
+                currentDate: new Date(2015, 1, 1),
+                startDayHour: 9
+            });
+
+            this.clock.tick(30);
+
+            let $appointment = scheduler.appointments.find('Task 1').first(),
+                positionBeforeDrag = getAbsolutePosition($appointment),
+                pointer = pointerMock($appointment).start(),
+                cellWidth = scheduler.workSpace.getCellWidth();
+
             pointer
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
-                .move(150, 0)
-                .up();
+                .move(cellWidth, 0);
 
-            const positionAfterDrag = getAbsolutePosition($appointment);
+            pointer.up();
+
+            $appointment = scheduler.appointments.find('Task 1').first();
+            let positionAfterDrag = getAbsolutePosition($appointment);
 
             assert.deepEqual(positionAfterDrag, {
-                left: positionBeforeDrag.left + 150,
+                left: positionBeforeDrag.left + cellWidth,
                 top: positionBeforeDrag.top
+            }, 'appointment position is correct');
+            assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
+
+            this.clock.tick(30); // waiting for data update
+
+            $appointment = scheduler.appointments.find('Task 1').first();
+            positionAfterDrag = getAbsolutePosition($appointment);
+
+            assert.deepEqual(positionAfterDrag, {
+                left: positionBeforeDrag.left + cellWidth,
+                top: positionBeforeDrag.top
+            }, 'appointment position is correct');
+            assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
+
+            this.clock.tick(30); // waiting for data loading
+
+            $appointment = scheduler.appointments.find('Task 1').first();
+            positionAfterDrag = getAbsolutePosition($appointment);
+
+            assert.deepEqual(positionAfterDrag, {
+                left: positionBeforeDrag.left + cellWidth,
+                top: positionBeforeDrag.top
+            }, 'appointment position is correct');
+            assert.notOk($appointment.hasClass('dx-draggable-dragging'), 'appointment isn\'t dragging');
+        });
+
+        // T832754
+        test('The appointment should be dropped correctly after pressing Esc key', function(assert) {
+            const scheduler = createWrapper({
+                editing: true,
+                height: 600,
+                views: [{ type: 'day' }],
+                currentView: 'day',
+                dataSource: [{
+                    text: 'Task 1',
+                    startDate: new Date(2015, 1, 9, 11, 0),
+                    endDate: new Date(2015, 1, 9, 11, 30)
+                }],
+                currentDate: new Date(2015, 1, 9),
+                startDayHour: 9
             });
-        } finally {
-            scheduler.appointmentPopup.dialog.hide();
-        }
-    });
 
-    // T835049
-    QUnit.test('The appointment should have correct position after a drop when the store is asynchronous', function(assert) {
-        let data = [{
-            text: 'Task 1',
-            startDate: new Date(2015, 1, 1, 11, 0),
-            endDate: new Date(2015, 1, 1, 11, 30)
-        }];
+            let $appointment = scheduler.appointments.find('Task 1').first(),
+                positionBeforeDrag = getAbsolutePosition($appointment),
+                pointer = pointerMock($appointment).start(),
+                cellHeight = scheduler.workSpace.getCellHeight();
 
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: [{ type: 'timelineMonth' }],
-            currentView: 'timelineMonth',
-            dataSource: {
-                load: () => {
-                    const d = $.Deferred();
+            pointer
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, -cellHeight);
 
-                    setTimeout(() => d.resolve(data), 30);
+            keyboardMock($appointment.get(0)).keyDown('esc');
 
-                    return d.promise();
-                },
-                update: (key, values) => {
-                    const d = $.Deferred();
+            pointer.up();
 
-                    setTimeout(function() {
-                        $.extend(data[0], values);
-                        d.resolve(data[0]);
-                    }, 30);
+            $appointment = scheduler.appointments.find('Task 1').first();
+            let positionAfterDrag = getAbsolutePosition($appointment);
 
-                    return d.promise();
-                }
-            },
-            currentDate: new Date(2015, 1, 1),
-            startDayHour: 9
+            assert.deepEqual(positionAfterDrag, {
+                left: positionBeforeDrag.left,
+                top: positionBeforeDrag.top - cellHeight
+            }, 'appointment position is correct');
+            assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
         });
-
-        this.clock.tick(30);
-
-        let $appointment = scheduler.appointments.find('Task 1').first(),
-            positionBeforeDrag = getAbsolutePosition($appointment),
-            pointer = pointerMock($appointment).start(),
-            cellWidth = scheduler.workSpace.getCellWidth();
-
-        pointer
-            .down(positionBeforeDrag.left, positionBeforeDrag.top)
-            .move(cellWidth, 0);
-
-        pointer.up();
-
-        $appointment = scheduler.appointments.find('Task 1').first();
-        let positionAfterDrag = getAbsolutePosition($appointment);
-
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left + cellWidth,
-            top: positionBeforeDrag.top
-        }, 'appointment position is correct');
-        assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
-
-        this.clock.tick(30); // waiting for data update
-
-        $appointment = scheduler.appointments.find('Task 1').first();
-        positionAfterDrag = getAbsolutePosition($appointment);
-
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left + cellWidth,
-            top: positionBeforeDrag.top
-        }, 'appointment position is correct');
-        assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
-
-        this.clock.tick(30); // waiting for data loading
-
-        $appointment = scheduler.appointments.find('Task 1').first();
-        positionAfterDrag = getAbsolutePosition($appointment);
-
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left + cellWidth,
-            top: positionBeforeDrag.top
-        }, 'appointment position is correct');
-        assert.notOk($appointment.hasClass('dx-draggable-dragging'), 'appointment isn\'t dragging');
-    });
-
-    // T832754
-    QUnit.test('The appointment should be dropped correctly after pressing Esc key', function(assert) {
-        const scheduler = createWrapper({
-            editing: true,
-            height: 600,
-            views: [{ type: 'day' }],
-            currentView: 'day',
-            dataSource: [{
-                text: 'Task 1',
-                startDate: new Date(2015, 1, 9, 11, 0),
-                endDate: new Date(2015, 1, 9, 11, 30)
-            }],
-            currentDate: new Date(2015, 1, 9),
-            startDayHour: 9
-        });
-
-        let $appointment = scheduler.appointments.find('Task 1').first(),
-            positionBeforeDrag = getAbsolutePosition($appointment),
-            pointer = pointerMock($appointment).start(),
-            cellHeight = scheduler.workSpace.getCellHeight();
-
-        pointer
-            .down(positionBeforeDrag.left, positionBeforeDrag.top)
-            .move(0, -cellHeight);
-
-        keyboardMock($appointment.get(0)).keyDown('esc');
-
-        pointer.up();
-
-        $appointment = scheduler.appointments.find('Task 1').first();
-        let positionAfterDrag = getAbsolutePosition($appointment);
-
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left,
-            top: positionBeforeDrag.top - cellHeight
-        }, 'appointment position is correct');
-        assert.deepEqual(scheduler.option('dataSource')[0].startDate, new Date(2015, 1, 9, 10, 30), 'Start date is OK');
     });
 
     module('appointmentDragging customization', () => {
