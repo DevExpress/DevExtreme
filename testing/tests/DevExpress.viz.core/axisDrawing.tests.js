@@ -2432,7 +2432,7 @@ QUnit.test('Vertical axis. WordWrap != none, textOverflow = none. Width to set m
     this.updateOptions({
         isHorizontal: false,
         position: 'top',
-        placeholderSize: 20,
+        placeholderSize: 30,
         label: {
             visible: true,
             indentFromAxis: 10,
@@ -2482,7 +2482,7 @@ QUnit.test('Horizontal axis. WordWrap != none, textOverflow = none. Height to se
     this.updateOptions({
         isHorizontal: true,
         position: 'top',
-        placeholderSize: 20,
+        placeholderSize: 30,
         label: {
             visible: true,
             indentFromAxis: 10,
@@ -2916,7 +2916,7 @@ QUnit.test('Vertical left. Labels are wider than placeholderSize less than - set
     this.updateOptions({
         isHorizontal: false,
         position: 'left',
-        placeholderSize: 10,
+        placeholderSize: 20,
         label: {
             visible: true,
             indentFromAxis: 10,
@@ -2973,7 +2973,7 @@ QUnit.test('Vertical left. Labels are shorter than placeholderSize - do not set 
     this.updateOptions({
         isHorizontal: false,
         position: 'left',
-        placeholderSize: 20,
+        placeholderSize: 30,
         label: {
             visible: true,
             indentFromAxis: 10,
