@@ -1142,6 +1142,83 @@ QUnit.test('\'supportCompactDropDownAppointments\' should return true for some v
     assert.notOk(this.instance.fire('supportCompactDropDownAppointments'));
 });
 
+QUnit.test('getText with format TIME should work correct', function(assert) {
+    const data = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11)
+    };
+    this.createInstance({
+        dataSource: [data],
+        views: ['week'],
+        currentView: 'week'
+    });
+    this.clock.tick(300);
+
+    assert.deepEqual(this.instance.fire('getText', data, data, 'TIME'), {
+        formatDate: '10:00 AM - 11:00 AM',
+        text: 'Appointment test text'
+    });
+});
+
+QUnit.test('getText, appointment with allDay option, without format', function(assert) {
+    const data = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11),
+        allDay: true
+    };
+    this.createInstance({
+        dataSource: [data],
+        views: ['week'],
+        currentView: 'week'
+    });
+    this.clock.tick(300);
+
+    assert.deepEqual(this.instance.fire('getText', data, data), {
+        formatDate: 'March 1',
+        text: 'Appointment test text'
+    });
+});
+
+QUnit.test('getText, simple appointment, without format', function(assert) {
+    const data = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11),
+    };
+    this.createInstance({
+        dataSource: [data],
+        views: ['week'],
+        currentView: 'week'
+    });
+    this.clock.tick(300);
+
+    assert.deepEqual(this.instance.fire('getText', data, data), {
+        formatDate: '10:00 AM - 11:00 AM',
+        text: 'Appointment test text'
+    });
+});
+
+QUnit.test('getText, simple appointment, month view, without format', function(assert) {
+    const data = {
+        text: 'Appointment test text',
+        startDate: new Date(2018, 2, 1, 10),
+        endDate: new Date(2018, 2, 1, 11),
+    };
+    this.createInstance({
+        dataSource: [data],
+        views: ['month'],
+        currentView: 'month'
+    });
+    this.clock.tick(300);
+
+    assert.deepEqual(this.instance.fire('getText', data, data), {
+        formatDate: 'March 1, 10:00 AM - 11:00 AM',
+        text: 'Appointment test text'
+    });
+});
+
 QUnit.module('Agenda', {
     beforeEach: function() {
         this.createInstance = function(options) {
