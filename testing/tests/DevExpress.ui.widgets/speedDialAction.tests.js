@@ -850,25 +850,32 @@ QUnit.module('check action buttons events', {
 
     afterEach: function() {
         fx.off = false;
-
-        $('#fab-one').dxSpeedDialAction('instance').dispose();
-        $('#fab-two').dxSpeedDialAction('instance').dispose();
-    }
+    },
 }, () => {
-    QUnit.test('trigger and args', function(assert) {
+    test('trigger and args', function(assert) {
         const contentReadyStub = sinon.stub();
         const contentReadyHandlerStub = sinon.stub();
+        const initializedStub = sinon.stub();
+        const disposingHandlerStub = sinon.stub();
+        const initializedHandlerStub = sinon.stub();
+        const disposingStub = sinon.stub();
         const clickStub = sinon.stub();
 
         $('#fab-one')
             .dxSpeedDialAction({
-                onContentReady: contentReadyHandlerStub
+                onContentReady: contentReadyHandlerStub,
+                onInitialized: initializedHandlerStub,
+                onDisposing: disposingHandlerStub
             })
             .dxSpeedDialAction('instance')
             .on('contentReady', contentReadyStub)
+            .on('initialized', initializedStub)
+            .on('disposing', disposingStub)
             .on('click', clickStub);
 
         assert.equal(contentReadyHandlerStub.callCount, 1, 'first action content ready handler calls once');
+        assert.equal(initializedHandlerStub.callCount, 1, 'first action initialized handler calls once');
+        assert.equal(disposingHandlerStub.callCount, 0, 'first action disposing handler calls once');
 
         const contentReadyHandlerArgs = contentReadyHandlerStub.getCall(0).args;
         assert.equal(contentReadyHandlerArgs[0].component.NAME, 'dxSpeedDialAction', 'right first SDA content ready component in args');
@@ -889,12 +896,25 @@ QUnit.module('check action buttons events', {
 
         const contentReadyTwoStub = sinon.stub();
         const contentReadyTwoHandlerStub = sinon.stub();
+        const initializedTwoStub = sinon.stub();
+        const disposingTwoHandlerStub = sinon.stub();
+        const initializedTwoHandlerStub = sinon.stub();
+        const disposingTwoStub = sinon.stub();
+
         $('#fab-two')
             .dxSpeedDialAction({
-                onContentReady: contentReadyTwoHandlerStub
+                onContentReady: contentReadyTwoHandlerStub,
+                onInitialized: initializedTwoHandlerStub,
+                onDisposing: disposingTwoHandlerStub
             })
             .dxSpeedDialAction('instance')
-            .on('contentReady', contentReadyTwoStub);
+            .on('contentReady', contentReadyTwoStub)
+            .on('initialized', initializedTwoStub)
+            .on('disposing', disposingTwoStub);
+
+
+        assert.equal(initializedHandlerStub.callCount, 1, 'first action initialized handler calls once');
+        assert.equal(disposingHandlerStub.callCount, 0, 'first action disposing handler calls once');
 
         $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
 
@@ -916,6 +936,15 @@ QUnit.module('check action buttons events', {
         assert.equal(contentReadyTwoArgs[0].component.NAME, 'dxSpeedDialAction', 'right second SDA content ready component in args');
         assert.ok(contentReadyTwoArgs[0].actionElement.hasClass('dx-overlay'), 'right second SDA content ready actionElement in args');
         assert.equal($(contentReadyTwoArgs[0].element).attr('id'), 'fab-two', 'right second SDA content ready element in args');
+
+        $('#fab-one').dxSpeedDialAction('instance').dispose();
+        assert.equal(disposingHandlerStub.callCount, 1, 'first action disposing handler calls once');
+        assert.equal(disposingStub.callCount, 1, 'first action disposing event calls once');
+
+
+        $('#fab-two').dxSpeedDialAction('instance').dispose();
+        assert.equal(disposingTwoHandlerStub.callCount, 1, 'second action disposing handler calls once');
+        assert.equal(disposingTwoStub.callCount, 1, 'second action disposing event calls once');
     });
 });
 
