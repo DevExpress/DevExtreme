@@ -568,7 +568,7 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     [false, true].forEach((searchEnabled) => {
-        QUnit.test('Widget selects current value in the dropDownList if dxSelectBox with async data is opened on initialization (T822930)', function(assert) {
+        QUnit.test(`Widget selects current value in the dropDownList if dxSelectBox with async data and searchEnabled: ${searchEnabled} is opened on initialization (T822930)`, function(assert) {
             const selectBox = $('#selectBox').dxSelectBox({
                 deferRendering: true,
                 searchEnabled,
@@ -1898,7 +1898,7 @@ QUnit.module('editing', moduleSetup, () => {
         $('#qunit-fixture').trigger('dxpointerdown');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal(loadMock.callCount, 2, 'load should not be called on init and on filter reset');
+        assert.equal(loadMock.callCount, 2, 'load should be called twice: on init and on filter reset');
         assert.equal(byKeyMock.callCount, 0, 'bykey should not be called');
     });
 
@@ -3399,9 +3399,6 @@ QUnit.module('Scrolling', {
 
         setTimeout(() => {
             assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
-            $('#qunit-fixture')
-                .css('left', 10000)
-                .css('top', 10000);
             done();
         });
     });
