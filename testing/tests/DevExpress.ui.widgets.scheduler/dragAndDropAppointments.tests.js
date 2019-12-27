@@ -372,21 +372,15 @@ module('Drag and drop appointments', moduleConfig, () => {
             });
         };
 
-        module('common view', function() {
-            test('test views', function(assert) {
-                testViews(commonViews, assert);
-            });
-        });
-        module('time line', function() {
-            test('test views', function(assert) {
-                testViews(timeLineViews, assert);
-            });
-        });
-        module('group line', function() {
-            test('test views', function(assert) {
-                testViews(groupViews, assert);
-            });
-        });
+        module('common view', () => test('test views', function(assert) {
+            testViews(commonViews, assert);
+        }));
+        module('time line', () => test('test views', function(assert) {
+            testViews(timeLineViews, assert);
+        }));
+        module('group line', () => test('test views', function(assert) {
+            testViews(groupViews, assert);
+        }));
     });
 
     module('Common', () => {
