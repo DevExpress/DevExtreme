@@ -6466,7 +6466,7 @@ QUnit.module('API', moduleConfig, () => {
     ]);
 
     [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
-        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
+        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, (assert) => {
             const done = assert.async();
             const ds = [{ f1: 'f1_1' }];
 
@@ -6498,7 +6498,7 @@ QUnit.module('API', moduleConfig, () => {
         });
     });
 
-    QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
+    QUnit.test('LoadPanel - loadPanel: { enabled: false }', (assert) => {
         assert.expect();
         const done = assert.async();
         const ds = [{ f1: 'f1_1' }];
@@ -6526,7 +6526,7 @@ QUnit.module('API', moduleConfig, () => {
     });
 
     [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
-        QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
+        QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, (assert) => {
             const done = assert.async();
             const ds = [{ f1: 'f1_1' }];
             const locale = localization.locale();
