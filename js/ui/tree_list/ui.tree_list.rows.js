@@ -35,6 +35,8 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         for(let i = 0; i <= level; i++) {
             $container.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
         }
+
+        return $container;
     };
 
     return {
@@ -43,18 +45,20 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
                 .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                 .appendTo($container);
 
-            renderIcons($iconContainer, options.row);
-
             options.watch && options.watch(function() {
                 return [options.row.level, options.row.isExpanded, options.row.node.hasChildren];
-            }, function() {
+            }, () => {
                 $iconContainer.empty();
-                renderIcons($iconContainer, options.row);
+                this._renderExpandIconCore($iconContainer, options);
             });
 
             $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 
-            return $iconContainer;
+            return this._renderExpandIconCore($iconContainer, options);
+        },
+
+        _renderExpandIconCore: function($iconContainer, options) {
+            return renderIcons($iconContainer, options.row);
         },
 
         _renderCellCommandContent: function(container, model) {

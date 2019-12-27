@@ -959,6 +959,77 @@ QUnit.test('Change searchPanel.text', function(assert) {
     assert.equal($searchInput.val(), 'new text', 'search text');
 });
 
+// T846709
+['standard', 'virual'].forEach((rowRenderingMode) => {
+    QUnit.test(`Modified nodes should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
+        // arrange
+        let data = generateData(2),
+            treeList = createTreeList({
+                dataSource: data,
+                autoExpandAll: true,
+                repaintChangesOnly: true,
+                scrolling: {
+                    rowRenderingMode: rowRenderingMode
+                },
+                columns: ['id']
+            });
+
+        this.clock.tick(30);
+
+        // act
+        data[1].parentId = data[3].id;
+        treeList.option('dataSource', [...data]);
+        this.clock.tick(30);
+
+        // assert
+        const $rowElements = $(treeList.element()).find('.dx-treelist-rowsview').find('.dx-data-row');
+        assert.strictEqual($rowElements.length, 3, 'node count');
+        assert.strictEqual($rowElements.eq(0).find('.dx-treelist-empty-space').length, 1, 'first node - first level');
+        assert.strictEqual($rowElements.eq(0).children().first().text(), '1', 'first node - first cell text');
+        assert.strictEqual($rowElements.eq(1).find('.dx-treelist-empty-space').length, 1, 'second node - first level');
+        assert.strictEqual($rowElements.eq(1).children().first().text(), '3', 'second node - first cell text');
+        assert.strictEqual($rowElements.eq(2).find('.dx-treelist-empty-space').length, 2, 'third node - second level');
+        assert.strictEqual($rowElements.eq(2).children().first().text(), '4', 'third node - first cell text');
+        assert.strictEqual($rowElements.eq(2).children().first().find('.dx-treelist-collapsed').length, 1, 'third node has an expand icon');
+    });
+});
+
+QUnit.test('Modified nodes should be displayed correctly when repaintChangesOnly is true and selection.mode is "multiple"', function(assert) {
+    // arrange
+    let data = generateData(2),
+        treeList = createTreeList({
+            dataSource: data,
+            autoExpandAll: true,
+            repaintChangesOnly: true,
+            selection: {
+                mode: 'multiple'
+            },
+            columns: ['id']
+        });
+
+    this.clock.tick(30);
+
+    // act
+    data[1].parentId = data[3].id;
+    treeList.option('dataSource', [...data]);
+    this.clock.tick(30);
+
+    // assert
+    const $rowElements = $(treeList.element()).find('.dx-treelist-rowsview').find('.dx-data-row');
+    assert.strictEqual($rowElements.length, 3, 'node count');
+    assert.strictEqual($rowElements.eq(0).find('.dx-treelist-empty-space').length, 1, 'first node - first level');
+    assert.strictEqual($rowElements.eq(0).children().first().text(), '1', 'first node - first cell text');
+    assert.strictEqual($rowElements.eq(1).find('.dx-treelist-empty-space').length, 1, 'second node - first level');
+    assert.strictEqual($rowElements.eq(1).children().first().text(), '3', 'second node - first cell text');
+    assert.strictEqual($rowElements.eq(2).find('.dx-treelist-empty-space').length, 2, 'third node - second level');
+    assert.strictEqual($rowElements.eq(2).children().first().text(), '4', 'third node - first cell text');
+
+    const $expandIcon = $rowElements.eq(2).children().first().find('.dx-treelist-collapsed');
+    assert.strictEqual($expandIcon.length, 1, 'third node has an expand icon');
+    assert.ok($expandIcon.next().hasClass('dx-select-checkbox'), 'third node has a select checkbox');
+});
+
+
 QUnit.module('Expand/Collapse rows');
 
 // T627926

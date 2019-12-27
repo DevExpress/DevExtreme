@@ -37,6 +37,18 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             this._dataSource.load();
         },
 
+        _compareItems: function(item1, item2) {
+            if(!this.callBase.apply(this, arguments)) {
+                return false;
+            }
+
+            if(item1.node && item2.node && item1.node.hasChildren !== item2.node.hasChildren) {
+                return false;
+            }
+
+            return true;
+        },
+
         init: function() {
             this.createAction('onRowExpanding');
             this.createAction('onRowExpanded');
