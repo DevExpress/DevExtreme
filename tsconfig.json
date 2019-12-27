@@ -33,7 +33,7 @@
         "node_modules"
       ]
     },
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": [
     "./js",

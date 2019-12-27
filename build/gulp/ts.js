@@ -47,6 +47,7 @@ gulp.task('ts-sources', function() {
 
 gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
     var content = `/// <reference path="${TS_PATH}" />\n`;
+    content += 'import * as $ from \'jquery\';';
 
     content += MODULES
         .map(function(moduleMeta) {
@@ -66,17 +67,15 @@ gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
             }).join('');
         }).join('\n');
 
+    const tsProject = ts.createProject('build/gulp/tsconfig.json');
     return file('artifacts/globals.ts', content, { src: true })
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(tsProject());
 }));
 
 gulp.task('ts-compilation-check', function() {
+    const tsProject = ts.createProject('build/gulp/tsconfig.json');
     return gulp.src(TS_PATH)
-        .pipe(ts({
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(tsProject());
 });
 
 gulp.task('ts', gulp.series('ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check'));

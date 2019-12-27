@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const { generateComponents } = require('devextreme-generator/component-compiler');
 const generator = require('devextreme-generator/preact-generator').default;
-const gulpTypeScript = require('gulp-typescript');
+const ts = require('gulp-typescript');
 const lint = require('gulp-eslint');
 const plumber = require('gulp-plumber');
 
@@ -14,7 +14,7 @@ const knownErrors = [
 ];
 
 gulp.task('generate-components', function() {
-    const tsProject = gulpTypeScript.createProject('build/gulp/preact.tsconfig.json');
+    const tsProject = ts.createProject('build/gulp/preact.tsconfig.json');
     return gulp.src(SRC)
         .pipe(generateComponents(generator))
         .pipe(plumber({
@@ -24,7 +24,7 @@ gulp.task('generate-components', function() {
         }))
         .pipe(tsProject({
             error(e) {
-                if(!knownErrors.some(i => e.message.endsWith(i)) && e.message.indexOf('node_modules/@types') === -1) {
+                if(!knownErrors.some(i => e.message.endsWith(i))) {
                     console.log(e.message);
                 }
             },

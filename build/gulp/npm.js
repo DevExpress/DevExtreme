@@ -202,11 +202,10 @@ gulp.task('npm-ts-modules-check', gulp.series('npm-ts-modules-generator', functi
         }).join('\n');
     }).join('\n');
 
+    const tsProject = ts.createProject('build/gulp/tsconfig.json', { allowSyntheticDefaultImports: true });
+
     return file('artifacts/modules.ts', content, { src: true })
-        .pipe(ts({
-            allowSyntheticDefaultImports: true,
-            noEmitOnError: true
-        }, ts.reporter.fullReporter()));
+        .pipe(tsProject(ts.reporter.fullReporter()));
 }));
 
 gulp.task('npm-check', gulp.series('npm-ts-modules-check'));

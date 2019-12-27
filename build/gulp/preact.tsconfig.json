@@ -4,6 +4,7 @@
         "module": "ESNext",
         "strict": false,
         "esModuleInterop": false,
+        "typeRoots": ["node_modules/@types"],
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
         "jsxFactory": "Preact.h"
