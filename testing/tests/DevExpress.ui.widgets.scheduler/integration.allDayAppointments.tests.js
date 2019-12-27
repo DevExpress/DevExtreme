@@ -1608,7 +1608,7 @@ QUnit.test('Recurrence allDay appointment should be rendered correctly (T831801)
 
     scheduler.instance.updateAppointment(appointment, newAppointment);
 
-    let appointmentCount = scheduler.appointments.getAppointmentCount();
+    const appointmentCount = scheduler.appointments.getAppointmentCount();
 
     assert.equal(appointmentCount, 7, 'Appointments are OK');
 });

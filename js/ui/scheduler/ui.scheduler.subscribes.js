@@ -418,10 +418,11 @@ const subscribes = {
     },
 
     updateAppointmentEndDate: function(options) {
-        let endDate = options.endDate,
-            endDayHour = this._getCurrentViewOption('endDayHour'),
-            startDayHour = this._getCurrentViewOption('startDayHour'),
-            updatedEndDate = endDate;
+        const endDate = options.endDate;
+        const endDayHour = this._getCurrentViewOption('endDayHour');
+        const startDayHour = this._getCurrentViewOption('startDayHour');
+
+        let updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
