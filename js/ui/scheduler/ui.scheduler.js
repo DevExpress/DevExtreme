@@ -2335,8 +2335,9 @@ const Scheduler = Widget.inherit({
     },
 
     _getEndDate: function(appointment, skipNormalize) {
-        var endDate = this.fire('getField', 'endDate', appointment),
-            allDay = this.appointmentTakesAllDay(appointment);
+        var endDate = new Date(this.fire('getField', 'endDate', appointment)),
+            startDate = new Date(this.fire('getField', 'startDate', appointment)),
+            sameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
 
@@ -2348,7 +2349,7 @@ const Scheduler = Widget.inherit({
 
             !skipNormalize && this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
-                allDay: allDay,
+                sameDate: sameDate,
                 callback: function(result) {
                     endDate = result;
                 }
