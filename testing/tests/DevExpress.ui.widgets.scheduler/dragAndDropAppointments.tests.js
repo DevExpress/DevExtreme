@@ -63,7 +63,7 @@ module('Browser zoom', zoomModuleConfig, () => {
             scheduler.option('currentView', view);
             scheduler.option('dataSource', createDataSource());
 
-            let appointment = scheduler.appointments.getAppointment();
+            const appointment = scheduler.appointments.getAppointment();
 
             assert.equal(scheduler.appointments.getDateText(), '9:30 AM - 11:30 AM', `appointment should have correct date on init in ${view}  view`);
 

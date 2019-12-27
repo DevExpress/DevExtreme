@@ -13370,7 +13370,7 @@ QUnit.test('Update should work after scrolling if scrolling mode is infinite and
                 const items = [];
 
                 for(let i = options.skip; i < options.skip + options.take; i++) {
-                    let id = i + 1;
+                    const id = i + 1;
                     items.push({ id: id, name: 'test ' + id });
                 }
 
@@ -19028,7 +19028,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -19083,7 +19083,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -19144,7 +19144,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
 
         $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -19208,7 +19208,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.ok($firstCell.hasClass('dx-cell-modified'), 'modified cell');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
 
         $saveButton = $('.dx-datagrid-save-button');
@@ -19281,7 +19281,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
         that.clock.tick();
 
@@ -19317,8 +19317,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
 
-        let onRowValidatingArguments = onRowValidatingSpy.args[0][0];
-        let brokenRules = onRowValidatingArguments.brokenRules;
+        const onRowValidatingArguments = onRowValidatingSpy.args[0][0];
+        const brokenRules = onRowValidatingArguments.brokenRules;
 
         assert.equal(brokenRules.length, 2, 'brokenRules length');
 
@@ -19386,7 +19386,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         assert.notOk($firstCell.hasClass('dx-datagrid-invalid'), 'cell has not invalid class');
 
         // act
-        let scrollable = dataGrid.getScrollable();
+        const scrollable = dataGrid.getScrollable();
         scrollable.scrollTo({ y: 1000 });
         that.clock.tick();
 
@@ -19423,8 +19423,8 @@ QUnit.module('Validation with virtual scrolling and rendering', {
 
         assert.equal(onRowValidatingSpy.callCount, 1, 'onRowValidating call count');
 
-        let onRowValidatingArguments = onRowValidatingSpy.args[0][0];
-        let brokenRules = onRowValidatingArguments.brokenRules;
+        const onRowValidatingArguments = onRowValidatingSpy.args[0][0];
+        const brokenRules = onRowValidatingArguments.brokenRules;
 
         assert.equal(brokenRules.length, 1, 'brokenRules length');
 

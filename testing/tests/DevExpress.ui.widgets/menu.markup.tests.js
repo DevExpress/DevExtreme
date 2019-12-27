@@ -39,7 +39,7 @@ QUnit.module('Menu rendering', {
     }
 }, () => {
     QUnit.test('Render items with custom model', function(assert) {
-        let menu = createMenu({
+        const menu = createMenu({
             items: [{
                 name: 'item 1',
                 child: [{
@@ -53,21 +53,21 @@ QUnit.module('Menu rendering', {
             itemsExpr: 'child',
             showFirstSubmenuMode: 'onClick'
         });
-        let $item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const $item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
 
         assert.equal($item1.text(), 'item 1', 'root item rendered correct');
         assert.ok($item1.find(toSelector(DX_MENU_ITEM_POPOUT_CLASS)).length, 'popout was rendered');
     });
 
     QUnit.test('Check default css class', function(assert) {
-        let menu = createMenu({});
+        const menu = createMenu({});
 
         assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
     });
 
     QUnit.test('Do not render menu with empty items', function(assert) {
-        let menu = createMenu({ items: [] });
-        let root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
+        const menu = createMenu({ items: [] });
+        const root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
 
         assert.ok(menu);
         assert.equal(root.length, 0, 'no root');
@@ -85,11 +85,11 @@ QUnit.module('Menu - selection', {
     }
 }, () => {
     QUnit.test('Create root childfree item selected', function(assert) {
-        let menu = createMenu({
+        const menu = createMenu({
             items: [{ text: 'root', selected: true }],
             selectionMode: 'single'
         });
-        let item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
         assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
     });
 });
@@ -103,8 +103,8 @@ QUnit.module('Menu with templates', {
     }
 }, () => {
     QUnit.test('Create items with template', function(assert) {
-        let $template = $('<div>').text('test');
-        let options = {
+        const $template = $('<div>').text('test');
+        const options = {
             showFirstSubmenuMode: 'onClick',
             items: [
                 { text: 'item1' },
@@ -118,8 +118,8 @@ QUnit.module('Menu with templates', {
             ],
             itemTemplate: $template
         };
-        let menu = createMenu(options);
-        let $item = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(1);
+        const menu = createMenu(options);
+        const $item = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(1);
 
         $($item).trigger('dxclick');
 

@@ -991,10 +991,10 @@ QUnit.module('positioning', () => {
                 position: { my: 'right center', at: 'left center' }
             });
 
-            let elements = getElementsPositionAndSize($popover, $target);
-            let target = elements.target;
-            let arrow = elements.arrow;
-            let content = elements.content;
+            const elements = getElementsPositionAndSize($popover, $target);
+            const target = elements.target;
+            const arrow = elements.arrow;
+            const content = elements.content;
 
             assert.equal(parseInt(arrow.offsetTop + arrow.height / 2, 10), parseInt(target.offsetTop + target.height / 2, 10), 'arrow top is OK');
             assert.equal(arrow.offsetLeft + arrow.width, target.offsetLeft, 'arrow left is OK');
@@ -1019,10 +1019,10 @@ QUnit.module('positioning', () => {
                 position: { my: 'left center', at: 'right center' }
             });
 
-            let elements = getElementsPositionAndSize($popover, $target);
-            let target = elements.target;
-            let arrow = elements.arrow;
-            let content = elements.content;
+            const elements = getElementsPositionAndSize($popover, $target);
+            const target = elements.target;
+            const arrow = elements.arrow;
+            const content = elements.content;
 
             assert.equal(parseInt(arrow.offsetTop + arrow.height / 2, 10), parseInt(target.offsetTop + target.height / 2, 10), 'arrow top is OK');
             assert.equal(arrow.offsetLeft, target.offsetLeft + target.width, 'arrow left is OK');

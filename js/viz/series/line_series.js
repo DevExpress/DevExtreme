@@ -658,7 +658,7 @@ exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
 
     getNeighborPoints(param, paramName) {
         let points = this.getPoints();
-        let neighborPoints = [];
+        const neighborPoints = [];
 
         if(this.getOptions().closed) {
             points = _extend(true, [], points);

@@ -572,7 +572,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Line series', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests({
+        const polarChart = this.getPolarChartForSeriesTests({
             argumentAxis: {
                 tickInterval: 30
             }
@@ -619,7 +619,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Area series', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests({
+        const polarChart = this.getPolarChartForSeriesTests({
             series: [
                 { type: 'area', name: 's1' }
             ],
@@ -666,7 +666,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Scatter series', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests({
+        const polarChart = this.getPolarChartForSeriesTests({
             series: [
                 { type: 'scatter', name: 's1' }
             ],
@@ -689,7 +689,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Bar series', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests({
+        const polarChart = this.getPolarChartForSeriesTests({
             series: [
                 { name: 's1', type: 'bar' },
                 { name: 's2', type: 'bar', valueField: 'val2' }
@@ -725,7 +725,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Get coordinates from series. Closed series', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests({
+        const polarChart = this.getPolarChartForSeriesTests({
             dataSource: [
                 { arg: 30, val: 100, val2: 150 },
                 { arg: 90, val: 200, val2: 50 },
@@ -779,7 +779,7 @@ QUnit.module('Coordinates calculation. PolarChart plugin', {
     });
 
     QUnit.test('Pass offset to annotation coord object', function(assert) {
-        let polarChart = this.getPolarChartForSeriesTests();
+        const polarChart = this.getPolarChartForSeriesTests();
         const coords = polarChart._getAnnotationCoords({
             offsetX: 10,
             offsetY: 20

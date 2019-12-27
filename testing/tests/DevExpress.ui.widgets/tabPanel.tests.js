@@ -540,7 +540,7 @@ QUnit.module('keyboard navigation', {
 
     if(devices.current().deviceType === 'desktop') {
         const createWidget = ($element) => {
-            let widget = $element.dxTabPanel({
+            const widget = $element.dxTabPanel({
                 focusStateEnabled: true,
                 items: [{ text: 'text' }]
             }).dxTabPanel('instance');

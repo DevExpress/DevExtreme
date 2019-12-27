@@ -6484,7 +6484,7 @@ QUnit.module('API', moduleConfig, () => {
 
             dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
             const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            let expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
 
             if(browser.webkit) {
                 extend(expectedLoadPanelSettingsOnExporting, { animation: null });

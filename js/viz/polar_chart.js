@@ -166,7 +166,7 @@ const dxPolarChart = AdvancedChart.inherit({
     },
 
     getXYFromPolar(angle, radius, argument, value) {
-        let layoutInfo = {
+        const layoutInfo = {
             angle: undefined,
             radius: undefined,
             x: undefined,

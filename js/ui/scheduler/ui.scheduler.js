@@ -2888,7 +2888,7 @@ const Scheduler = Widget.inherit({
 
     createTooltipDragBehavior(e) {
         let dragElement;
-        let $element = $(e.element);
+        const $element = $(e.element);
 
         if(this._allowDragging()) {
             const dragBehavior = this.getWorkSpace().dragBehavior;

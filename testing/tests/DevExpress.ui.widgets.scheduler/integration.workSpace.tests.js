@@ -1995,11 +1995,11 @@ QUnit.test('Workspace view group header cells have same height as table cells (T
         height: 700
     });
 
-    let headerCells = this.scheduler.workSpace.groups.getGroupHeaders();
+    const headerCells = this.scheduler.workSpace.groups.getGroupHeaders();
 
-    let firstHeaderCell = headerCells.eq(0);
-    let fifthHeaderCell = headerCells.eq(4);
-    let dateTableCell = this.scheduler.workSpace.getCells().eq(0);
+    const firstHeaderCell = headerCells.eq(0);
+    const fifthHeaderCell = headerCells.eq(4);
+    const dateTableCell = this.scheduler.workSpace.getCells().eq(0);
 
     assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
     assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');

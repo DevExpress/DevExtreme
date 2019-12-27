@@ -86,12 +86,12 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         getHiddenValidatorsErrorText: function(brokenRules) {
-            let brokenRulesMessages = [];
+            const brokenRulesMessages = [];
 
             each(brokenRules, function(_, brokenRule) {
-                let column = brokenRule.column;
-                let isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
-                let isVisibleColumn = column && column.visible;
+                const column = brokenRule.column;
+                const isGroupExpandColumn = column && column.groupIndex !== undefined && !column.showWhenGrouped;
+                const isVisibleColumn = column && column.visible;
 
                 if(!brokenRule.validator.$element().parent().length && (!isVisibleColumn || isGroupExpandColumn)) {
                     brokenRulesMessages.push(brokenRule.message);
@@ -456,7 +456,7 @@ module.exports = {
 
                     if(this.isCellOrBatchEditMode()) {
                         hasInvisibleRows = editData.some((rowEditData) => {
-                            let rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
+                            const rowIndex = this._dataController.getRowIndexByKey(rowEditData.key);
 
                             return rowIndex < 0;
                         });

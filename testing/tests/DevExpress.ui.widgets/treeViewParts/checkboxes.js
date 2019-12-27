@@ -279,7 +279,7 @@ configs.forEach(config => {
     QUnit.module(`SelectionMode: ${config.selectionMode}, dataSource: ${config.dataSourceOption}, virtualModeEnabled: ${config.virtualModeEnabled}, expanded: ${config.expanded}, selectNodesRecursive: ${config.selectNodesRecursive}`, () => {
         QUnit.test('all.selected: false', function(assert) {
             // check via dataSource
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
             wrapper.checkSelectedKeys([]);
@@ -293,7 +293,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
             wrapper.instance.selectAll();
@@ -333,7 +333,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('all.selected: false -> selectItem(0) -> expandAll', function(assert) {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
             wrapper.instance.selectItem(0);
@@ -378,7 +378,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('all.selected: false -> selectItem(1) -> expandAll', function(assert) {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
             wrapper.instance.selectItem(1);
@@ -432,7 +432,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
@@ -457,7 +457,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
@@ -474,7 +474,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
@@ -508,7 +508,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
@@ -553,7 +553,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
@@ -585,7 +585,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1.selected: true', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -612,7 +612,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1.selected: true -> expandAll', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -641,7 +641,7 @@ configs.forEach(config => {
                 return;
             }
 
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -682,7 +682,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1.selected: true -> unselectAll -> expandAll', function(assert) {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -702,7 +702,7 @@ configs.forEach(config => {
 
 
         QUnit.test('item1_1.selected: true', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -726,7 +726,7 @@ configs.forEach(config => {
 
 
         QUnit.test('item1_1.selected: true -> expandAll', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -757,7 +757,7 @@ configs.forEach(config => {
                 assert.ok('skip for single');
                 return;
             }
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -786,7 +786,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function(assert) {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
@@ -813,7 +813,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1_1_1.selected: true', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
@@ -835,7 +835,7 @@ configs.forEach(config => {
         });
 
         QUnit.test('item1_1_1.selected: true -> expandAll', function() {
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
@@ -862,7 +862,7 @@ configs.forEach(config => {
                 assert.ok('skip for single');
                 return;
             }
-            let wrapper = createWrapper(config, {}, [
+            const wrapper = createWrapper(config, {}, [
                 { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                 { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                 { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);

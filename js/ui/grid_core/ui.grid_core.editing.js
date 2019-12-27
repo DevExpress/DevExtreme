@@ -2959,7 +2959,7 @@ module.exports = {
                         editingController.showHighlighting($cell);
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
-                        let skipValidation = parameters.row.isNewRow;
+                        const skipValidation = parameters.row.isNewRow;
 
                         editingController.showHighlighting($cell, skipValidation);
                     }

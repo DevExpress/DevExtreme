@@ -201,7 +201,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('incomplete animation should be stopped after toggling visibility', function(assert) {
-        let origFxStop = fx.stop;
+        const origFxStop = fx.stop;
         let panelStopCalls = 0;
         let contentStopCalls = 0;
         let overlayContentStopCalls = 0;
@@ -260,7 +260,7 @@ QUnit.module('Drawer behavior', () => {
             shading: true
         });
 
-        let origFxStop = fx.stop;
+        const origFxStop = fx.stop;
         let panelStopCalls = 0;
         let contentStopCalls = 0;
         let overlayContentStopCalls = 0;
@@ -312,7 +312,7 @@ QUnit.module('Drawer behavior', () => {
             shading: true
         });
 
-        let origFxStop = fx.stop;
+        const origFxStop = fx.stop;
         let panelStopCalls = 0;
         let contentStopCalls = 0;
         let shaderStopCalls = 0;
@@ -419,7 +419,7 @@ QUnit.module('Drawer behavior', () => {
         const instance = $element.dxDrawer('instance');
 
         instance.option('position', 'right');
-        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
         let $content = $wrapper.children();
 
         assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
@@ -441,7 +441,7 @@ QUnit.module('Drawer behavior', () => {
         const instance = $element.dxDrawer('instance');
 
         instance.option('openedStateMode', 'shrink');
-        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
         let $content = $wrapper.children();
 
         assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));
@@ -1012,7 +1012,7 @@ QUnit.module('Rtl', () => {
     });
 
     QUnit.test('drawer panel overlay should have right position config', function(assert) {
-        let drawer = $('#drawer').dxDrawer({
+        const drawer = $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             rtlEnabled: true
         }).dxDrawer('instance');
@@ -1030,7 +1030,7 @@ QUnit.module('Rtl', () => {
 
     QUnit.test('minSize and maxSize should be rendered correctly in overlap mode rtl, slide', function(assert) {
         fx.off = true;
-        let drawer = $('#drawer').dxDrawer({
+        const drawer = $('#drawer').dxDrawer({
             openedStateMode: 'overlap',
             minSize: 50,
             maxSize: 300,
@@ -1068,7 +1068,7 @@ QUnit.module('Rtl', () => {
 
         instance.option('openedStateMode', 'shrink');
 
-        let $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
+        const $wrapper = $element.find('.dx-drawer-wrapper').eq(0);
         let $content = $wrapper.children();
 
         assert.ok($content.eq(1).hasClass('dx-drawer-panel-content'));

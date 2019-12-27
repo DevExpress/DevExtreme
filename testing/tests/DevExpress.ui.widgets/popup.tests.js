@@ -1025,8 +1025,8 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('showCloseButton option', function(assert) {
-        let $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] });
-        let instance = $popup.dxPopup('instance');
+        const $popup = $('#popup').dxPopup({ visible: true, toolbarItems: [] });
+        const instance = $popup.dxPopup('instance');
         let $closeButton = $popup.find('.' + POPUP_TITLE_CLOSEBUTTON_CLASS);
         assert.ok($closeButton.length, 'Need to show close button by default');
 
@@ -1221,7 +1221,7 @@ QUnit.module('resize', {
         let onResizeFired = 0;
         let onResizeEndFired = 0;
 
-        let instance = $('#popup').dxPopup({
+        const instance = $('#popup').dxPopup({
             resizeEnabled: true,
             visible: true,
             onResizeStart: function() { onResizeStartFired++; },
@@ -1229,9 +1229,9 @@ QUnit.module('resize', {
             onResizeEnd: function() { onResizeEndFired++; }
         }).dxPopup('instance');
 
-        let $content = instance.overlayContent();
-        let $handle = $content.find('.dx-resizable-handle-top');
-        let pointer = pointerMock($handle);
+        const $content = instance.overlayContent();
+        const $handle = $content.find('.dx-resizable-handle-top');
+        const pointer = pointerMock($handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 

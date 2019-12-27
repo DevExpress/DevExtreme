@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    let markup = `
+    const markup = `
         <div>
             <div id="container" class="dx-datagrid"></div>
         </div>`;

@@ -1738,13 +1738,13 @@ QUnit.test('Dragging an item to another the sortable widget without free space w
     $('#items2').children().eq(-2).css('margin', 1);
 
 
-    let sortable1 = this.createSortable({
+    const sortable1 = this.createSortable({
         dropFeedbackMode: 'push',
         filter: '.draggable',
         group: 'shared'
     }, $('#items'));
 
-    let sortable2 = this.createSortable({
+    const sortable2 = this.createSortable({
         dropFeedbackMode: 'push',
         filter: '.draggable',
         group: 'shared'
@@ -1752,7 +1752,7 @@ QUnit.test('Dragging an item to another the sortable widget without free space w
 
 
     // act
-    let pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+    const pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
     assert.strictEqual(sortable2.$element().children().eq(-2)[0].style.marginBottom, '29px', 'items2 last item has margin bottom');
@@ -2298,8 +2298,8 @@ QUnit.test('Dragging an item to another sortable and back when it is alone in th
 // T846161
 QUnit.test('The onRemove event should be fired when dragging the item from sortable to draggable', function(assert) {
     // arrange
-    let onRemoveSpy = sinon.spy();
-    let onDragEndSpy = sinon.spy();
+    const onRemoveSpy = sinon.spy();
+    const onDragEndSpy = sinon.spy();
 
     const draggable = this.createDraggable({
         filter: '.draggable',
