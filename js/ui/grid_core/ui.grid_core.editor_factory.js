@@ -113,13 +113,32 @@ var EditorFactory = modules.ViewController.inherit({
             }
             that._$focusedElement = $element;
 
+            if($element.is('td')) {
+                that._focusedCellPosition = {
+                    colIndex: $element.attr('aria-colindex') - 1,
+                    rowIndex: $element.parent().attr('aria-rowindex') - 1
+                };
+            }
+
             clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
+                let ownerDocument = $element.get(0).ownerDocument,
+                    isElementInDocument = !ownerDocument || !ownerDocument.body.contains($element.get(0));
+
                 delete that._focusTimeoutID;
+
+                if(!isElementInDocument && that._focusedCellPosition) {
+                    $element = $(that.getView('rowsView').getCellElement(that._focusedCellPosition.rowIndex, that._focusedCellPosition.colIndex));
+
+                    that._$focusedElement = $element;
+                }
 
                 that.renderFocusOverlay($element, hideBorder);
 
                 $element.addClass(FOCUSED_ELEMENT_CLASS);
+
+                delete that._focusedCellPosition;
+
                 that.focused.fire($element);
             });
         }

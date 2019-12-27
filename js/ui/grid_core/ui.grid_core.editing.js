@@ -2580,9 +2580,12 @@ module.exports = {
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 
-                    if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
-                        editingController.closeEditCell();
-                    }
+                    clearTimeout(this._closeEditCellTimeout);
+                    this._closeEditCellTimeout = setTimeout(() => {
+                        if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
+                            editingController.closeEditCell();
+                        }
+                    });
 
                     if(allowEditing && eventName === startEditAction) {
                         return editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
@@ -2688,6 +2691,7 @@ module.exports = {
                 dispose: function() {
                     this.callBase.apply(this, arguments);
                     clearTimeout(this._pointerDownTimeout);
+                    clearTimeout(this._closeEditCellTimeout);
                 }
             },
 

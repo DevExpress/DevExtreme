@@ -18391,7 +18391,9 @@ QUnit.test('Should open master detail by click if row is edited in row mode (T84
         this.dataGrid.option({
             loadingTimeout: undefined,
             dataSource: [{ id: 1 }],
-            startEditAction: startEditAction,
+            editing: {
+                startEditAction
+            },
             masterDetail: {
                 enabled: true,
                 template: function(container, options) {
