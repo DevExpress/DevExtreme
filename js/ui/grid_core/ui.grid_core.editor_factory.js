@@ -122,13 +122,15 @@ var EditorFactory = modules.ViewController.inherit({
 
             clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
-                let ownerDocument = $element.get(0).ownerDocument,
-                    isElementInDocument = !ownerDocument || !ownerDocument.body.contains($element.get(0));
+                let element = $element.get(0),
+                    ownerDocument = element && element.ownerDocument,
+                    isElementInDocument = ownerDocument && ownerDocument.body.contains(element),
+                    rowsView = that.getView('rowsView');
 
                 delete that._focusTimeoutID;
 
-                if(!isElementInDocument && that._focusedCellPosition) {
-                    $element = $(that.getView('rowsView').getCellElement(that._focusedCellPosition.rowIndex, that._focusedCellPosition.colIndex));
+                if(!isElementInDocument && that._focusedCellPosition && rowsView) {
+                    $element = $(rowsView.getCellElement(that._focusedCellPosition.rowIndex, that._focusedCellPosition.colIndex));
 
                     that._$focusedElement = $element;
                 }

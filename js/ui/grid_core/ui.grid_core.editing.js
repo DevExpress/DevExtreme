@@ -2581,11 +2581,11 @@ module.exports = {
                     }
 
                     clearTimeout(this._closeEditCellTimeout);
-                    this._closeEditCellTimeout = setTimeout(() => {
-                        if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
+                    if(eventName === 'click' && startEditAction === 'dblClick' && !editingController.isEditCell(e.rowIndex, columnIndex)) {
+                        this._closeEditCellTimeout = setTimeout(() => {
                             editingController.closeEditCell();
-                        }
-                    });
+                        });
+                    }
 
                     if(allowEditing && eventName === startEditAction) {
                         return editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
