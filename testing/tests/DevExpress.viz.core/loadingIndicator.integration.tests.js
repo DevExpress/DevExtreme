@@ -2,7 +2,7 @@ require('viz/tree_map/tree_map');
 
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
-const module = require('viz/core/loading_indicator');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
 const DataSource = require('data/data_source/data_source').DataSource;
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
@@ -10,7 +10,7 @@ $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height
 QUnit.module('Loading indicator', {
     beforeEach: function() {
         const loadingIndicator = this.loadingIndicator = new vizMocks.LoadingIndicator();
-        module.LoadingIndicator = sinon.spy(function() { return loadingIndicator; });
+        loadingIndicatorModule.LoadingIndicator = sinon.spy(function() { return loadingIndicator; });
         this.$container = $('#test-container');
     },
 
@@ -26,7 +26,7 @@ QUnit.test('Show', function(assert) {
 
     widget.showLoadingIndicator();
 
-    const params = module.LoadingIndicator.lastCall.args[0];
+    const params = loadingIndicatorModule.LoadingIndicator.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
     assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
     assert.ok(typeof params.notify === 'function', 'param - notify');
@@ -49,7 +49,7 @@ QUnit.test('Notification callback / true', function(assert) {
     const widget = this.createWidget();
     const spy = widget._stopCurrentHandling = sinon.spy();
 
-    module.LoadingIndicator.lastCall.args[0].notify(true);
+    loadingIndicatorModule.LoadingIndicator.lastCall.args[0].notify(true);
 
     assert.strictEqual(widget.option('loadingIndicator.show'), true, 'option state');
     assert.deepEqual(spy.lastCall.args, [], 'current handlings are stopped');
@@ -58,7 +58,7 @@ QUnit.test('Notification callback / true', function(assert) {
 QUnit.test('Notification callback / false', function(assert) {
     const widget = this.createWidget();
 
-    module.LoadingIndicator.lastCall.args[0].notify(false);
+    loadingIndicatorModule.LoadingIndicator.lastCall.args[0].notify(false);
 
     assert.strictEqual(widget.option('loadingIndicator.show'), false, 'option state');
 });
