@@ -269,22 +269,24 @@ var KeyboardNavigationController = core.ViewController.inherit({
         each(that._focusedViews, function(index, view) {
             if(view) {
                 view.renderCompleted.add(function(e) {
-                    var $element = view.element(),
+                    let $rowsView = view.element(),
                         isFullUpdate = !e || e.changeType === 'refresh',
                         isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
                         needUpdateFocus = false,
                         isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend'),
                         keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
                         $focusedElement = $(':focus'),
-                        isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is('body'));
+                        isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
 
-                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), keyboardActionSelector, {
+                    eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), clickAction);
+                    eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), keyboardActionSelector, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
 
-                    that._initKeyDownProcessor(that, $element, that._keyDownHandler);
+                    that._initKeyDownProcessor(that, $rowsView, that._keyDownHandler);
+
+                    that._setRowsViewAttributes($rowsView);
 
                     if(isFocusedViewCorrect && isFocusedElementCorrect) {
                         needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
@@ -293,6 +295,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 });
             }
         });
+    },
+
+    _setRowsViewAttributes: function($rowsView) {
+        let isGridEmpty = !this._dataController.getVisibleRows().length;
+        if(isGridEmpty) {
+            let tabIndex = this.option('tabindex') || 0;
+            $rowsView.attr('tabindex', tabIndex);
+        }
     },
 
     _initKeyDownProcessor: function(context, element, handler) {
