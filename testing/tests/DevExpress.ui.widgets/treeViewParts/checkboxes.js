@@ -324,9 +324,9 @@ configs.forEach(config => {
                     }
                 }
 
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after selectAll');
-                wrapper.checkEventLog(expectedEventLog, 'after selectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
+                wrapper.checkSelectedNodes(expectedNodes, 'after select');
+                wrapper.checkEventLog(expectedEventLog, 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -343,9 +343,9 @@ configs.forEach(config => {
                     }
                 }
 
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -372,9 +372,9 @@ configs.forEach(config => {
                     // unexpected result
                     expectedNodes = [0];
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectItem(0)');
-                wrapper.checkSelectedNodes(expectedNodes, 'after selectItem(0)');
-                wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after selectItem(0)');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
+                wrapper.checkSelectedNodes(expectedNodes, 'after select');
+                wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -390,9 +390,9 @@ configs.forEach(config => {
                         expectedNodes = [0, 1];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -425,9 +425,9 @@ configs.forEach(config => {
                     expectedEventLog = [];
                     expectedNodes = [];
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectItem(1)');
-                wrapper.checkSelectedNodes(expectedNodes, 'after selectItem(1)');
-                wrapper.checkEventLog(expectedEventLog, 'after selectItem(1)');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
+                wrapper.checkSelectedNodes(expectedNodes, 'after select');
+                wrapper.checkEventLog(expectedEventLog, 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -441,9 +441,9 @@ configs.forEach(config => {
                     // unexpected result
                     expectedNodes = [];
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -484,9 +484,9 @@ configs.forEach(config => {
 
             wrapper.instance.expandAll();
 
-            wrapper.checkSelectedKeys([0, 1], 'after expandAll');
-            wrapper.checkSelectedNodes([0, 1], 'after expandAll');
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkSelectedKeys([0, 1], 'after expand');
+            wrapper.checkSelectedNodes([0, 1], 'after expand');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         [treeView => treeView.unselectAll(), treeView => treeView.setSelectedNodesKeys([])].forEach(unselectFunc => {
@@ -529,9 +529,9 @@ configs.forEach(config => {
                         expectedNodes = [0, 1];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-                // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -575,9 +575,9 @@ configs.forEach(config => {
                     expectedNodes = [0, 1];
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+            // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         QUnit.test('all.selected: true -> unselectItem(1) -> expandAll', function(assert) {
@@ -612,9 +612,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [0, 1];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-            wrapper.checkSelectedNodes(expectedKeys, 'after expandAll');
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+            wrapper.checkSelectedNodes(expectedKeys, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         QUnit.test('item1.selected: true', function() {
@@ -663,9 +663,9 @@ configs.forEach(config => {
                 }
             }
 
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-            wrapper.checkSelectedNodes(expectedKeys, 'after expandAll');
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+            wrapper.checkSelectedNodes(expectedKeys, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
@@ -702,9 +702,9 @@ configs.forEach(config => {
                         expectedEventLog = [];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after selectAll');
-                wrapper.checkEventLog(expectedEventLog, 'after selectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
+                wrapper.checkSelectedNodes(expectedNodes, 'after select');
+                wrapper.checkEventLog(expectedEventLog, 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -721,9 +721,9 @@ configs.forEach(config => {
                         }
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-                wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+                wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -746,9 +746,9 @@ configs.forEach(config => {
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
-                wrapper.checkSelectedKeys([], 'after expandAll');
-                wrapper.checkSelectedNodes([], 'after expandAll');
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkSelectedKeys([], 'after expand');
+                wrapper.checkSelectedNodes([], 'after expand');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -798,9 +798,9 @@ configs.forEach(config => {
                     }
                 }
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
@@ -832,9 +832,9 @@ configs.forEach(config => {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog(expectedEventLog, 'after selectAll');
+                wrapper.checkEventLog(expectedEventLog, 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -843,9 +843,9 @@ configs.forEach(config => {
                     // unexpected result
                     expectedKeys = [0, 1];
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -881,9 +881,9 @@ configs.forEach(config => {
                         expectedKeys = [0, 1];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkEventLog([], 'after expand');
             });
         });
 
@@ -927,9 +927,9 @@ configs.forEach(config => {
                 // unexpected result
                 expectedKeys = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
             // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkEventLog([], 'after expand');
         });
 
         [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
@@ -961,9 +961,9 @@ configs.forEach(config => {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after selectAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog(expectedEventLog, 'after selectAll');
+                wrapper.checkEventLog(expectedEventLog, 'after select');
                 wrapper.clearEventLog();
 
                 wrapper.instance.expandAll();
@@ -975,9 +975,44 @@ configs.forEach(config => {
                         expectedKeys = [0];
                     }
                 }
-                wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
+                wrapper.checkSelectedKeys(expectedKeys, 'after expand');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
-                wrapper.checkEventLog([], 'after expandAll');
+                wrapper.checkEventLog([], 'after expand');
+            });
+        });
+
+        [true, false].forEach(selected => {
+            [[0], [0, 1], [0, 2], [0, 1, 2], [2]].forEach(selectedKeys => {
+                QUnit.test(`all.selected: ${selected}} -> setSelectedKey(${selectedKeys})`, function(assert) {
+                    if(config.selectionMode === 'single') {
+                        assert.ok('skip for single');
+                        return;
+                    }
+
+                    const items = [];
+                    const itemsCount = 3;
+                    for(let i = 0; i < itemsCount; i++) {
+                        items.push({ id: i, text: `item${i}`, parentId: ROOT_ID, selected, expanded: config.expanded });
+                    }
+                    let wrapper = createWrapper(config, {}, items);
+
+                    wrapper.instance.setSelectedNodesKeys(selectedKeys);
+                    let expectedEventLog = [];
+                    const itemSelectionChangedEventCallCount = selected
+                        ? itemsCount - selectedKeys.length
+                        : selectedKeys.length;
+
+                    for(let i = 0; i < itemSelectionChangedEventCallCount; i++) {
+                        expectedEventLog.push('itemSelectionChanged');
+                    }
+                    if(itemSelectionChangedEventCallCount > 0) {
+                        expectedEventLog.push('selectionChanged');
+                    }
+
+                    wrapper.checkSelectedKeys(selectedKeys);
+                    wrapper.checkSelectedNodes(selectedKeys);
+                    wrapper.checkEventLog(expectedEventLog);
+                });
             });
         });
 
@@ -1034,9 +1069,9 @@ configs.forEach(config => {
                 expectedKeys = [];
                 expectedNodes = [];
             }
-            wrapper.checkSelectedKeys(expectedKeys, 'after expandAll');
-            wrapper.checkSelectedNodes(expectedNodes, 'after expandAll');
-            wrapper.checkEventLog([], 'after expandAll');
+            wrapper.checkSelectedKeys(expectedKeys, 'after expand');
+            wrapper.checkSelectedNodes(expectedNodes, 'after expand');
+            wrapper.checkEventLog([], 'after expand');
         });
     });
 });
