@@ -429,45 +429,35 @@ QUnit.module('Has value method', {
 
 QUnit.test('Positive', function(assert) {
     const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. OpenValue', function(assert) {
     const point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 2, highValue: 4, lowValue: 1, reductionValue: 5 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. CloseValue', function(assert) {
     const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: null, highValue: 4, lowValue: 1, reductionValue: 3 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 });
 
 QUnit.test('Negative. HighValue', function(assert) {
     const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: null, lowValue: 1, reductionValue: 3 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, false);
 });
 
 QUnit.test('Negative. LowValue', function(assert) {
     const point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: null, reductionValue: 3 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, false);
 });

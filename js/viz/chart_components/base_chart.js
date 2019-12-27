@@ -900,8 +900,7 @@ const BaseChart = BaseWidget.inherit({
 
     _prepareDrawOptions: function(drawOptions) {
         const animationOptions = this._getAnimationOptions();
-        let options;
-        options = extend({},
+        const options = extend({},
             {
                 force: false,
                 adjustAxes: true,

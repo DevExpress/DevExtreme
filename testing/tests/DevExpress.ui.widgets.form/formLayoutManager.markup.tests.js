@@ -1325,9 +1325,7 @@ QUnit.module('Layout manager', () => {
     test('Render field items from fieldData and items', function(assert) {
         // arrange, act
         const $testContainer = $('#container');
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: {
                 name: 'Patti'
             },
@@ -1354,9 +1352,7 @@ QUnit.module('Layout manager', () => {
                 age: 34
             }
         };
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: complexObject,
             items: [{
                 dataField: 'CTO.name',
@@ -1396,9 +1392,7 @@ QUnit.module('Layout manager', () => {
                 age: 34
             }
         };
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: complexObject,
             items: [{
                 dataField: 'CTO.name',
@@ -1548,9 +1542,7 @@ QUnit.module('Layout manager', () => {
     test('Update editor with nested dataField when layoutData changed', function(assert) {
         // arrange
         const $testContainer = $('#container');
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: {
                 personalInfo: {
                     firstName: 'John'
@@ -3037,9 +3029,7 @@ QUnit.module('Supported editors', () => {
         // arrange
         const $testContainer = $('#container');
         let selectBox;
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: {
                 simpleProducts: 'SuperLCD 70'
             },
@@ -3074,9 +3064,7 @@ QUnit.module('Supported editors', () => {
         // arrange
         const $testContainer = $('#container');
         let tagBox;
-        let layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
+        const layoutManager = $testContainer.dxLayoutManager({
             layoutData: {
                 simpleProducts: ['HD Video Player', 'SuperLCD 70']
             },

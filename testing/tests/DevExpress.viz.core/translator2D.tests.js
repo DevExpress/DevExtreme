@@ -98,9 +98,7 @@ QUnit.module('Life cycle', environment);
 QUnit.test('Create vertical translator', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -127,9 +125,7 @@ QUnit.test('Create vertical translator', function(assert) {
 QUnit.test('Create vertical translator with paddings', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange);
     const canvas = $.extend({ startPadding: 50, endPadding: 50 }, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.equal(translator._canvasOptions.startPoint, 60);
     assert.equal(translator._canvasOptions.endPoint, 290);
@@ -141,9 +137,7 @@ QUnit.test('Create vertical translator with paddings', function(assert) {
 QUnit.test('Create horizontal translator', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, optionsHorizontal);
+    const translator = this.createTranslator(range, canvas, optionsHorizontal);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -170,9 +164,7 @@ QUnit.test('Create horizontal translator', function(assert) {
 QUnit.test('Create horizontal translator with paddings', function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange);
     const canvas = $.extend({ startPadding: 50, endPadding: 50 }, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: true });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: true });
 
     assert.equal(translator._canvasOptions.startPoint, 120);
     assert.equal(translator._canvasOptions.endPoint, 530);
@@ -184,9 +176,7 @@ QUnit.test('Create horizontal translator with paddings', function(assert) {
 QUnit.test('Create numeric translator', function(assert) {
     const range = $.extend({}, numericRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -206,9 +196,7 @@ QUnit.test('Create numeric translator when business range delta = 0, Min = max =
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 100, 'range min is correct');
@@ -231,9 +219,7 @@ QUnit.test('Create horizontal numeric translator when business range delta = 0, 
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { shiftZeroValue: true });
+    const translator = this.createTranslator(range, canvas, { shiftZeroValue: true });
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 0, 'range min is correct');
@@ -256,9 +242,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -278,9 +262,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, -10, 'range min is correct');
@@ -300,9 +282,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min = minVi
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -322,9 +302,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         dataType: 'numeric'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -336,9 +314,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
 QUnit.test('Create datetime translator', function(assert) {
     const range = $.extend({}, datetimeRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -360,9 +336,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
         dataType: 'datetime'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min is correct');
@@ -382,9 +356,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
         dataType: 'datetime'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
@@ -404,9 +376,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
         dataType: 'datetime'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min is correct');
@@ -426,9 +396,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
         dataType: 'datetime'
     };
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas);
+    const translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
@@ -440,9 +408,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
 QUnit.test('Create discrete translator (Stick = false, invert = false)', function(assert) {
     const range = $.extend({}, discreteRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, $.extend({ stick: false }, optionsHorizontal));
+    const translator = this.createTranslator(range, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -465,9 +431,7 @@ QUnit.test('Create discrete translator (Stick = false, invert = false)', functio
 QUnit.test('Create discrete translator (Stick = true, invert = true)', function(assert) {
     const range = $.extend({ invert: true }, discreteRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, $.extend({ stick: true }, optionsHorizontal));
+    const translator = this.createTranslator(range, canvas, $.extend({ stick: true }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 170);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -480,9 +444,7 @@ QUnit.test('Create discrete translator (Stick = true, invert = true)', function(
 
 QUnit.test('Create discrete translator (Stick = true, addSpiderCategory = true)', function(assert) {
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(discreteRange, canvas, $.extend({ stick: false }, optionsHorizontal));
+    const translator = this.createTranslator(discreteRange, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 127.5);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -496,9 +458,7 @@ QUnit.test('Create discrete translator (Stick = true, addSpiderCategory = true)'
 QUnit.test('Create logarithmic translator', function(assert) {
     const range = $.extend({ minVisible: 100, maxVisible: 1000 }, logarithmicRange);
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -521,9 +481,7 @@ QUnit.test('Create logarithmic translator', function(assert) {
 QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible = 1', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 10, max: 10, minVisible: 10, maxVisible: 10 });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -546,9 +504,7 @@ QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible =
 QUnit.test('Create logarithmic translator. Base = 2', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 2, max: 32, minVisible: 4, maxVisible: 16, base: 2 });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -3275,9 +3231,7 @@ QUnit.test('min bar size more visible area', function(assert) {
 QUnit.test('Simple use (logarithmic translator)', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.equal(adjust(translator.getMinBarSize(110)), 10);
     assert.equal(adjust(translator.getMinBarSize(330)), 1000);
@@ -3286,9 +3240,7 @@ QUnit.test('Simple use (logarithmic translator)', function(assert) {
 QUnit.test('Simple use (logarithmic translator, negative exponent)', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 0.01, max: 10, minVisible: 0.01, maxVisible: 10, invert: false });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.equal(adjust(translator.getMinBarSize(110)), 0.1);
     assert.equal(adjust(translator.getMinBarSize(330)), 10);
@@ -3299,9 +3251,7 @@ QUnit.module('checkMinBarSize', environment);
 QUnit.test('Simple use (logarithmic translator)', function(assert) {
     const range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false });
     const canvas = $.extend({}, canvasTemplate);
-    let translator;
-
-    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+    const translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.equal(adjust(translator.checkMinBarSize(5, 2, 5)), 5);
     assert.equal(adjust(translator.checkMinBarSize(5, 7, 5)), 7);

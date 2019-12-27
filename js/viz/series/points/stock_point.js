@@ -12,9 +12,7 @@ module.exports = _extend({}, candlestickPoint, {
         const closeYExist = _isNumeric(that.closeY);
         const x = that.x;
         const width = that.width;
-        let points;
-
-        points = [].concat(createPoint(x, that.highY));
+        let points = [].concat(createPoint(x, that.highY));
         openYExist && (points = points.concat(createPoint(x, that.openY)));
         openYExist && (points = points.concat(createPoint(x - width / 2, that.openY)));
         openYExist && (points = points.concat(createPoint(x, that.openY)));

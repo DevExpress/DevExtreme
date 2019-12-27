@@ -55,9 +55,7 @@ const ToolbarMenu = List.inherit({
     _renderItem: function(index, item, itemContainer, $after) {
         const location = item.location || 'menu';
         const $container = this['_$' + location + 'Section'];
-        let itemElement;
-
-        itemElement = this.callBase(index, item, $container, $after);
+        const itemElement = this.callBase(index, item, $container, $after);
 
         if(this._getItemTemplateName({ itemData: item })) {
             itemElement.addClass('dx-toolbar-menu-custom');

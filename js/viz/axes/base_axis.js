@@ -1388,9 +1388,7 @@ Axis.prototype = {
 
     _createTicksAndLabelFormat: function(range, incidentOccurred) {
         const options = this._options;
-        let ticks;
-
-        ticks = this._getTicks(range, incidentOccurred, false);
+        const ticks = this._getTicks(range, incidentOccurred, false);
 
         if(!range.isEmpty() && options.type === constants.discrete && options.dataType === 'datetime' && !this._hasLabelFormat && ticks.ticks.length) {
             options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
@@ -2430,9 +2428,7 @@ Axis.prototype = {
         };
         let notRecastStep;
         const boxes = that._majorTicks.map(function(tick) { return tick.labelBBox; });
-        let step;
-
-        step = that._getStep(boxes);
+        let step = that._getStep(boxes);
         switch(displayMode) {
             case ROTATE:
                 if(ignoreOverlapping) {

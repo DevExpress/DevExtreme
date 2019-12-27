@@ -912,9 +912,7 @@ QUnit.test('Refresh', function(assert) {
         target: 8
     };
     const sparkCont = $('<div style="width: 200px; height: 30px">').appendTo(this.$container);
-    let bullet;
-
-    bullet = this.createBullet(options, sparkCont);
+    const bullet = this.createBullet(options, sparkCont);
     sparkCont.width(300);
     sparkCont.height(40);
     this.resetTranslators();

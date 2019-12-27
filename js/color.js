@@ -290,9 +290,7 @@ function toHsvFromRgb(r, g, b) {
     const delta = max - min;
     let H;
     let S;
-    let V;
-
-    V = max;
+    let V = max;
     S = (max === 0 ? 0 : 1 - min / max);
 
     if(max === min) {

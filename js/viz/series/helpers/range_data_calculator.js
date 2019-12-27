@@ -241,9 +241,7 @@ module.exports = {
     getViewport: function(series) {
         const points = series.getPoints();
         let range = {};
-        let reducer;
-
-        reducer = getViewportReducer(series);
+        const reducer = getViewportReducer(series);
         range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
         points.some(function(point, index) {
             reducer(range, point, index, points);

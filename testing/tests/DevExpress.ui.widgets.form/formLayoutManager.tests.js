@@ -282,9 +282,7 @@ QUnit.test('onEditorEnterKey', function(assert) {
     // arrange
     let testArgs;
     let editor;
-    let layoutManager;
-
-    layoutManager = $('#container').dxLayoutManager({
+    const layoutManager = $('#container').dxLayoutManager({
         layoutData: {
             name: 'Test Name',
             profession: 'Test profession'

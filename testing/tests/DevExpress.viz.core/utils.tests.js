@@ -8,9 +8,7 @@ QUnit.module('decreaseGaps', {
 
 QUnit.test('decrease one value', function(assert) {
     const margin = { top: 10 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top'], 7);
+    const decrease = this.decreaseGaps(margin, ['top'], 7);
 
     assert.equal(margin.top, 3);
     assert.equal(decrease, 0);
@@ -18,9 +16,7 @@ QUnit.test('decrease one value', function(assert) {
 
 QUnit.test('decrease two value', function(assert) {
     const margin = { top: 10, bottom: 10 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom'], 8);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom'], 8);
 
     assert.equal(margin.top, 6);
     assert.equal(margin.bottom, 6);
@@ -29,9 +25,7 @@ QUnit.test('decrease two value', function(assert) {
 
 QUnit.test('One value zero', function(assert) {
     const margin = { top: 10, bottom: 0 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom'], 2);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom'], 2);
 
     assert.equal(margin.top, 8);
     assert.equal(margin.bottom, 0);
@@ -40,9 +34,7 @@ QUnit.test('One value zero', function(assert) {
 
 QUnit.test('One value less decrease value', function(assert) {
     const margin = { top: 10, bottom: 1 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom'], 3);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom'], 3);
 
     assert.equal(margin.top, 8);
     assert.equal(margin.bottom, 0);
@@ -51,9 +43,7 @@ QUnit.test('One value less decrease value', function(assert) {
 
 QUnit.test('Sum margin less decrease', function(assert) {
     const margin = { top: 5, bottom: 12 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom'], 30);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom'], 30);
 
     assert.equal(margin.top, 0);
     assert.equal(margin.bottom, 0);
@@ -62,9 +52,7 @@ QUnit.test('Sum margin less decrease', function(assert) {
 
 QUnit.test('three value', function(assert) {
     const margin = { top: 5, bottom: 12, left: 30 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom', 'left'], 30);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom', 'left'], 30);
 
     assert.equal(margin.top, 0);
     assert.equal(margin.bottom, 0);
@@ -74,9 +62,7 @@ QUnit.test('three value', function(assert) {
 
 QUnit.test('value round', function(assert) {
     const margin = { top: 10, bottom: 10 };
-    let decrease;
-
-    decrease = this.decreaseGaps(margin, ['top', 'bottom'], 5);
+    const decrease = this.decreaseGaps(margin, ['top', 'bottom'], 5);
 
     assert.equal(margin.top, 7);
     assert.equal(margin.bottom, 7);

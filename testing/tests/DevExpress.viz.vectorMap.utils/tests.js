@@ -53,8 +53,7 @@ if(typeof ArrayBuffer !== 'undefined') {
     testData.forEach(function(testDataItem) {
         QUnit.test(testDataItem.name, function(assert) {
             const done = assert.async();
-            let func;
-            func = parse(TEST_DATA_URL + testDataItem.name, function(data, errors) {
+            const func = parse(TEST_DATA_URL + testDataItem.name, function(data, errors) {
                 assert.strictEqual(func, undefined, 'function result');
                 assert.deepEqual(data, testDataItem.expected, 'parsing result');
                 checkErrors(assert, errors, testDataItem.name);

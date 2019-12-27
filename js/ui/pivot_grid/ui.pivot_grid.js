@@ -1615,9 +1615,7 @@ const PivotGrid = Widget.inherit({
 
     _update: function(isFirstDrawing) {
         const that = this;
-        let updateHandler;
-
-        updateHandler = function() {
+        const updateHandler = function() {
             that.updateDimensions().done(function() {
                 that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
             });

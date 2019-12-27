@@ -954,9 +954,7 @@ QUnit.test('getGrayScaleFilter. first time creation', function(assert) {
 QUnit.test('getGrayScaleFilter. call twice - only one filter created', function(assert) {
     const filter = this.renderer.getGrayScaleFilter();
     const id = filter.id;
-    let filter2;
-
-    filter2 = this.renderer.getGrayScaleFilter();
+    const filter2 = this.renderer.getGrayScaleFilter();
 
     assert.equal(filter2.id, id);
     assert.equal(filter.stub('append').callCount, 1);

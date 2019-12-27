@@ -225,9 +225,7 @@ const overlappingEnvironment = $.extend({}, environment, {
     QUnit.module('Pie dxChart', environment);
 
     QUnit.test('dxChart creation', function(assert) {
-        let chart;
-
-        chart = createPieChart.call(this, {});
+        const chart = createPieChart.call(this, {});
 
         assert.ok(chart);
         assert.strictEqual(commons.rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');

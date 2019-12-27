@@ -498,9 +498,7 @@ QUnit.module('HasValue method', {
 
 QUnit.test('Positive', function(assert) {
     const point = createPoint(this.series, { argument: 12, value: 5 }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, true);
 
@@ -508,9 +506,7 @@ QUnit.test('Positive', function(assert) {
 
 QUnit.test('Negative', function(assert) {
     const point = createPoint(this.series, { argument: 39, value: null }, this.opt);
-    let result;
-
-    result = point.hasValue();
+    const result = point.hasValue();
 
     assert.strictEqual(result, false);
 });

@@ -45,8 +45,7 @@ const actions = {
     },
 
     'read-and-parse': function(arg, callback) {
-        let func;
-        func = utils.parse(path.join(dataDirectory, arg), function(data, errors) {
+        const func = utils.parse(path.join(dataDirectory, arg), function(data, errors) {
             callback({
                 func: func === undefined,
                 data: data,

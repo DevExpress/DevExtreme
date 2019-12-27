@@ -733,8 +733,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
     QUnit.test('Stop animation on complete animation', function(assert) {
         assert.expect(1);
         let completeCallCount = 0;
-        let animation;
-        animation = this.createAnimation(this.element, this.params, $.extend(this.options,
+        const animation = this.createAnimation(this.element, this.params, $.extend(this.options,
             {
                 complete: function() {
                     completeCallCount++;

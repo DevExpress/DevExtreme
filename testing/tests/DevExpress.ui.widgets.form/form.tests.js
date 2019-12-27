@@ -143,9 +143,7 @@ QUnit.test('Change of the formData field change value of the editor', function(a
 QUnit.test('Change editor value after formOption is changed and items is defined', function(assert) {
     // arrange
     const $testContainer = $('#form');
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: true },
         items: ['pirateName', 'type', 'isSought']
     }).dxForm('instance');
@@ -169,9 +167,7 @@ QUnit.test('Change editor value after formOption is changed and items is defined
 QUnit.test('Reset editor value after formData changing only if dataField is defined', function(assert) {
     // arrange
     const $testContainer = $('#form');
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { pirateName: 'Blackbeard', type: 'captain', isSought: 'Test', gender: 'Male' },
         items: [{ dataField: 'gender' }, { dataField: 'pirateName' }, { dataField: 'type' }, { name: 'isSought', editorType: 'dxTextBox' }]
     }).dxForm('instance');
@@ -343,9 +339,7 @@ QUnit.test('Refresh form when visibility changed to \'true\' in msie browser', f
     // arrange, act
     const $testContainer = $('#form');
     const expectedRefreshCount = browser.msie ? 1 : 0;
-    let form;
-
-    form = $testContainer.dxForm({
+    const form = $testContainer.dxForm({
         formData: { name: 'TestName' },
         items: [{ dataField: 'name' }]
     }).dxForm('instance');
@@ -1639,9 +1633,7 @@ QUnit.test('Check component instance onEditorEnterKey', function(assert) {
     // arrange
     let testArgs;
     let editor;
-    let form;
-
-    form = $('#form').dxForm({
+    const form = $('#form').dxForm({
         formData: {
             name: 'Kyle',
             work: 'MexCo'
@@ -2764,9 +2756,7 @@ QUnit.test('Column count for tabs may depend on screen factor', function(assert)
 QUnit.test('Cached colCount options doesn\'t leak', function(assert) {
     // arrange
     const $form = $('#form');
-    let instance;
-
-    instance = $form.dxForm({
+    const instance = $form.dxForm({
         formData: {
             name: 'User',
             lastName: 'Test Last Name'

@@ -995,9 +995,7 @@ const LayoutManager = Widget.inherit({
     _createComponent: function($editor, type, editorOptions) {
         const that = this;
         const readOnlyState = this.option('readOnly');
-        let instance;
-
-        instance = that.callBase($editor, type, editorOptions);
+        const instance = that.callBase($editor, type, editorOptions);
 
         readOnlyState && instance.option('readOnly', readOnlyState);
 

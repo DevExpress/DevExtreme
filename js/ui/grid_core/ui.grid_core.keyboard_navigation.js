@@ -200,9 +200,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const isEditing = this._editingController.isEditing();
         let needStopPropagation = true;
         const originalEvent = e.originalEvent;
-        let isHandled;
-
-        isHandled = this._processOnKeyDown(e);
+        const isHandled = this._processOnKeyDown(e);
 
         if(originalEvent.isDefaultPrevented()) {
             return;

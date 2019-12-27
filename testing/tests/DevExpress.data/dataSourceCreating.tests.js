@@ -78,9 +78,7 @@ QUnit.test('options.load and raw load mode', function(assert) {
 
 QUnit.test('options.store is ODataStore config', function(assert) {
     const url = 'http://service.test';
-    let source;
-
-    source = new DataSource({
+    const source = new DataSource({
         store: {
             type: 'odata',
             url: url

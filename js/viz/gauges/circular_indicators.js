@@ -111,9 +111,7 @@ const NeedleIndicator = SimpleIndicator.inherit({
         const options = that._options;
         const radius = options.radius;
         const spindleSize = this._adjustOffset(_Number(options.spindleSize) / 2, radius) * 2;
-        let gapSize;
-
-        gapSize = this._adjustOffset(_Number(options.spindleGapSize) / 2, radius) * 2 || 0;
+        let gapSize = this._adjustOffset(_Number(options.spindleGapSize) / 2, radius) * 2 || 0;
         if(gapSize > 0) {
             gapSize = gapSize <= spindleSize ? gapSize : spindleSize;
         }

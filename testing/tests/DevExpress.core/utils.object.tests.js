@@ -127,9 +127,7 @@ QUnit.test('deepExtendArraySafe utility does not change complex \'object\' to pl
     const changes = {
         deepProp: { toChange: 'changed value' }
     };
-    let result;
-
-    result = objectUtils.deepExtendArraySafe(target, changes);
+    const result = objectUtils.deepExtendArraySafe(target, changes);
 
     assert.equal(result.deepProp.simpleProp, undefined);
     assert.equal(result.deepProp.toChange, 'changed value');
@@ -142,9 +140,7 @@ QUnit.test('deepExtendArraySafe utility can extend complex \'object\' by plain \
     const changes = {
         deepProp: { toChange: 'changed value' }
     };
-    let result;
-
-    result = objectUtils.deepExtendArraySafe(target, changes, true);
+    const result = objectUtils.deepExtendArraySafe(target, changes, true);
 
     assert.equal(result.deepProp.simpleProp, 'simple value');
     assert.equal(result.deepProp.toChange, 'changed value');
@@ -157,9 +153,7 @@ QUnit.test('deepExtendArraySafe utility could not extend complex \'object\' by a
     const newValue = {
         deepProp: new this.SomeClass('new value')
     };
-    let result;
-
-    result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 
     assert.equal(result.deepProp.simpleProp, 'new value');
     assert.notOk(!!result.deepProp.toChange);
@@ -172,9 +166,7 @@ QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' de
     const newValue = {
         deepProp: { toChange: 'changed value' }
     };
-    let result;
-
-    result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
+    const result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 
     assert.equal(result.deepProp.toChange, 'changed value');
 });

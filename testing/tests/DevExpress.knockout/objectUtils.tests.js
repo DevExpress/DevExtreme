@@ -6,9 +6,7 @@ require('integration/knockout');
 
 QUnit.test('deepExtendArraySafe works correctly with array contain observables', function(assert) {
     const testObj = { id: 4, name: ko.observable('John') };
-    let resultObj;
-
-    resultObj = objectUtils.deepExtendArraySafe(testObj, { name: 'Sue' });
+    const resultObj = objectUtils.deepExtendArraySafe(testObj, { name: 'Sue' });
 
     assert.equal(variableWrapper.isWrapped(resultObj.name), true, '\'name\' field is still observable');
     assert.equal(resultObj.name(), 'Sue', 'New value accepted');

@@ -672,9 +672,7 @@ class Menu extends MenuBase {
         const $prevSelectedItem = this.$element().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`).first().children().children().filter(`.${this._selectedItemClass()}`);
 
         if($prevSelectedItem.length) {
-            let prevSelectedItemData;
-
-            prevSelectedItemData = this._getItemData($prevSelectedItem);
+            const prevSelectedItemData = this._getItemData($prevSelectedItem);
             prevSelectedItemData.selected = false;
             $prevSelectedItem.removeClass(this._selectedItemClass());
         }
