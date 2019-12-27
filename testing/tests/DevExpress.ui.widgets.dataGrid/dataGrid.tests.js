@@ -11681,6 +11681,7 @@ QUnit.test('DataGrid should update editor values in Popup Edit Form if its data 
     assert.equal($popupEditorInput.val(), 'foo', 'value changed');
 });
 
+// T824018
 QUnit.test('The onOptionChanged event should be called once when changing column option', function(assert) {
     // arrange
     var onOptionChanged = sinon.spy(),
@@ -11696,6 +11697,46 @@ QUnit.test('The onOptionChanged event should be called once when changing column
 
     // assert
     assert.strictEqual(onOptionChanged.callCount, 1, 'onOptionChanged is called once');
+});
+
+// T657041
+QUnit.testInActiveWindow('Filter row editor should not lose focus after changing filterValue if filter panel is used', function(assert) {
+    // arrange
+    var onOptionChanged = sinon.spy(),
+        $filterRowEditor,
+        $input;
+
+    createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field1: 1 }],
+        columns: [{ dataField: 'field1' }],
+        filterRow: { visible: true },
+        filterPanel: { visible: true },
+        onOptionChanged: onOptionChanged
+    });
+
+    // act
+    $filterRowEditor = $('.dx-datagrid-filter-row').find('.dx-editor-cell');
+    $input = $filterRowEditor.find('.dx-texteditor-input-container').find('input');
+
+    $input.trigger('dxpointerdown');
+    $input.trigger('focus');
+    $input.val(1);
+    $input.trigger('change');
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(onOptionChanged.callCount, 4, 'onOptionChanged call count');
+
+    assert.equal(onOptionChanged.getCall(0).args[0].fullName, 'columns[0].filterValue', 'option fullName');
+    assert.equal(onOptionChanged.getCall(1).args[0].fullName, 'filterValue', 'option fullName');
+    assert.equal(onOptionChanged.getCall(2).args[0].fullName, 'columns[0].filterType', 'option fullName');
+    assert.equal(onOptionChanged.getCall(3).args[0].fullName, 'columns[0].filterValues', 'option fullName');
+
+    assert.ok($filterRowEditor.hasClass('dx-focused'), 'dx-focused');
+    assert.ok($filterRowEditor.find('.dx-editor-outlined').hasClass('dx-state-focused'), 'dx-state-focused');
+    assert.ok($filterRowEditor.find('.dx-texteditor-input').is(':focus'), 'focus');
 });
 
 QUnit.module('API methods', baseModuleConfig);
