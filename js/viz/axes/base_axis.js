@@ -1884,11 +1884,12 @@ Axis.prototype = {
         if(isDefined(tickInterval)) {
             convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
         }
+        const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
         if(that._isHorizontal) {
             textWidth = convertedTickInterval;
-            textHeight = options.placeholderSize;
+            textHeight = usefulSpace;
         } else {
-            textWidth = options.placeholderSize;
+            textWidth = usefulSpace;
             textHeight = convertedTickInterval;
         }
 

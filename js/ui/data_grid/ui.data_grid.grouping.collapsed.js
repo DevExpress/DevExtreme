@@ -464,7 +464,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 if(remoteGroupPaging && groupInfo.isExpanded && path.length < groups.length) {
                     return loadGroupTotalCount(dataSource, {
                         filter: createGroupFilter(path, {
-                            filter: dataSource.filter(),
+                            filter: dataSource.lastLoadOptions().filter,
                             group: dataSource.group()
                         }),
                         group: [groups[path.length]],

@@ -4267,6 +4267,34 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         }]);
     });
 
+    // T837927
+    QUnit.test('grouping with paginate. Expand group if filterValue is defined', function(assert) {
+        let source = this.createDataSource({
+            group: ['field1', 'field2'],
+            pageSize: 5
+        });
+
+        const filter = ['field3', '=', 3];
+
+        source.customizeStoreLoadOptions.add(options => {
+            if(options.isCustomLoading) return;
+
+            const storeLoadOptions = options.storeLoadOptions;
+            storeLoadOptions.filter = storeLoadOptions.filter ? [storeLoadOptions.filter, 'and', filter] : filter;
+        });
+
+        source.load();
+        source.changeRowExpand([1]);
+        source.load();
+
+        assert.equal(source.totalItemsCount(), 2);
+        assert.deepEqual(this.processItems(source.items()), [{
+            key: 1, items: [
+                { key: 2, items: null }
+            ]
+        }]);
+    });
+
     QUnit.test('grouping with pageSize less items count. Collapse group with undefined key', function(assert) {
         const source = this.createDataSource({
             group: [{ selector: 'field1', isExpanded: true, desc: true }],

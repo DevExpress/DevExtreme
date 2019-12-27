@@ -613,3 +613,13 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
     assert.deepEqual(dates[3], new Date(2018, 8, 3, 12, 13, 0), 'Date in interval is correct');
     assert.deepEqual(dates[4], new Date(2018, 8, 4, 12, 13, 0), 'Date in interval is correct');
 });
+
+QUnit.test('the getDatesBetween method should return firstDate if firstDate=lastDate(T845632)', function(assert) {
+    const startDate = new Date(2018, 7, 31, 12, 13, 0);
+    const endDate = new Date(2018, 7, 31, 12, 13, 0);
+
+    const dates = dateUtils.getDatesOfInterval(startDate, endDate, 'day');
+
+    assert.equal(dates.length, 1);
+    assert.deepEqual(dates[0], new Date(2018, 7, 31, 12, 13, 0), 'Date in interval is correct');
+});
