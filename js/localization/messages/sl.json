@@ -135,6 +135,7 @@
         "dxDataGrid-columnFixingRightPosition": "Desno",
         "dxDataGrid-exportTo": "Izvozi",
         "dxDataGrid-exportToExcel": "Izvozi v Excel datoteko",
+        "dxDataGrid-exporting": "Izvozi...",
         "dxDataGrid-excelFormat": "Excel datoteka",
         "dxDataGrid-selectedRows": "Izbrane vrstice",
         "dxDataGrid-exportSelectedRows": "Izvozi izbrane vrstice",
