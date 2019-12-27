@@ -69,13 +69,13 @@ gulp.task('ts-jquery-check', gulp.series('ts-sources', function() {
 
     const tsProject = ts.createProject('build/gulp/tsconfig.json');
     return file('artifacts/globals.ts', content, { src: true })
-        .pipe(tsProject());
+        .pipe(tsProject(ts.reporter.fullReporter()));
 }));
 
 gulp.task('ts-compilation-check', function() {
     const tsProject = ts.createProject('build/gulp/tsconfig.json');
     return gulp.src(TS_PATH)
-        .pipe(tsProject());
+        .pipe(tsProject(ts.reporter.fullReporter()));
 });
 
 gulp.task('ts', gulp.series('ts-vendor', 'ts-sources', 'ts-jquery-check', 'ts-compilation-check'));
