@@ -1563,3 +1563,54 @@ QUnit.test('allDayPanel cell with custom dataCellTemplate must open appointment 
 
     assert.ok(spy.calledOnce, 'Method was called');
 });
+
+QUnit.test('New allDay appointment should be rendered correctly when groupByDate = true (T845632)', function(assert) {
+    const appointment = {
+        text: 'a',
+        startDate: new Date(2020, 1, 9, 1),
+        endDate: new Date(2020, 1, 9, 2),
+        ownerId: [2]
+    };
+    const newAppointment = {
+        text: 'a',
+        startDate: new Date(2020, 1, 9),
+        endDate: new Date(2020, 1, 9),
+        allDay: true,
+        ownerId: [2]
+    };
+
+    const scheduler = createInstance({
+        currentDate: new Date(2020, 1, 9),
+        views: ['week'],
+        currentView: 'week',
+        groupByDate: true,
+        startDayHour: 1,
+        dataSource: [appointment],
+        groups: ['ownerId'],
+        resources: [
+            {
+                field: 'ownerId',
+                label: 'o',
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        text: 'a',
+                        id: 1
+                    },
+                    {
+                        text: 'b',
+                        id: 2
+                    }
+                ]
+            }
+        ]
+    });
+
+    scheduler.instance.updateAppointment(appointment, newAppointment);
+
+    const $appointment = scheduler.appointments.getAppointment();
+
+    assert.ok($appointment.hasClass('dx-scheduler-all-day-appointment'), 'Appointment has `addDayAppointment` class');
+    assert.ok($(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').length === 1, 'Appointment is in `allDayAppointments` container');
+    assert.ok(translator.locate($appointment).top === 0, 'Appointment is on top of it`s container');
+});
