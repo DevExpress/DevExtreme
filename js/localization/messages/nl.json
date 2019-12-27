@@ -135,6 +135,7 @@
         "dxDataGrid-columnFixingRightPosition": "Naar rechts",
         "dxDataGrid-exportTo": "Exporteren",
         "dxDataGrid-exportToExcel": "Exporteer naar Excel bestand",
+        "dxDataGrid-exporting": "Exporteren...",
         "dxDataGrid-excelFormat": "Excel bestand",
         "dxDataGrid-selectedRows": "Geselecteerde rijen",
         "dxDataGrid-exportSelectedRows": "Exporteer geselecteerde rijen",

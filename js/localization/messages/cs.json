@@ -135,6 +135,7 @@
         "dxDataGrid-columnFixingRightPosition": "Vpravo",
         "dxDataGrid-exportTo": "Export",
         "dxDataGrid-exportToExcel": "Export do sešitu Excel",
+        "dxDataGrid-exporting": "Export...",
         "dxDataGrid-excelFormat": "soubor Excel",
         "dxDataGrid-selectedRows": "Vybrané řádky",
         "dxDataGrid-exportSelectedRows": "Export vybraných řádků",

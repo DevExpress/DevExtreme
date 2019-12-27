@@ -135,6 +135,7 @@
         "dxDataGrid-columnFixingRightPosition": "A droite",
         "dxDataGrid-exportTo": "Exporter",
         "dxDataGrid-exportToExcel": "Exporter sous Excel",
+        "dxDataGrid-exporting": "Exporter...",
         "dxDataGrid-excelFormat": "Fichier Excel",
         "dxDataGrid-selectedRows": "Lignes sélectionnées",
         "dxDataGrid-exportSelectedRows": "Exporter les lignes sélectionnées",
