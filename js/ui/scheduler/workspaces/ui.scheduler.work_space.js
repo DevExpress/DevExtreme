@@ -28,6 +28,7 @@ const VerticalGroupedStrategy = require('./ui.scheduler.work_space.grouped.strat
 const tableCreator = require('../ui.scheduler.table_creator');
 const VerticalShader = require('../shaders/ui.scheduler.current_time_shader.vertical');
 const AppointmentDragBehavior = require('../appointmentDragBehavior');
+const FIXED_CONTAINER_CLASS = require('../constants').FIXED_CONTAINER_CLASS;
 
 const COMPONENT_CLASS = 'dx-scheduler-work-space';
 const GROUPED_WORKSPACE_CLASS = 'dx-scheduler-work-space-grouped';
@@ -46,7 +47,6 @@ const TIME_PANEL_ROW_CLASS = 'dx-scheduler-time-panel-row';
 
 const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
 const ALL_DAY_TABLE_CLASS = 'dx-scheduler-all-day-table';
-const FIXED_CONTAINER_CLASS = 'dx-scheduler-fixed-appointments';
 const ALL_DAY_CONTAINER_CLASS = 'dx-scheduler-all-day-appointments';
 const ALL_DAY_TITLE_CLASS = 'dx-scheduler-all-day-title';
 const ALL_DAY_TITLE_HIDDEN_CLASS = 'dx-scheduler-all-day-title-hidden';
