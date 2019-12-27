@@ -567,37 +567,40 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, 'selected item is visible after search');
     });
 
-    QUnit.test('Widget selects current value in the dropDownList if dxSelectBox with async data is opened on initialization (T822930)', function(assert) {
-        const selectBox = $('#selectBox').dxSelectBox({
-            deferRendering: true,
-            dataSource: {
-                load: () => {
-                    const d = $.Deferred();
+    [false, true].forEach((searchEnabled) => {
+        QUnit.test('Widget selects current value in the dropDownList if dxSelectBox with async data is opened on initialization (T822930)', function(assert) {
+            const selectBox = $('#selectBox').dxSelectBox({
+                deferRendering: true,
+                searchEnabled,
+                dataSource: {
+                    load: () => {
+                        const d = $.Deferred();
 
-                    setTimeout(() => {
-                        d.resolve([1, 2, 3]);
-                    }, TIME_TO_WAIT / 4);
+                        setTimeout(() => {
+                            d.resolve([1, 2, 3]);
+                        }, TIME_TO_WAIT / 4);
 
-                    return d.promise();
+                        return d.promise();
+                    },
+                    byKey: () => {
+                        const d = $.Deferred();
+
+                        setTimeout(() => {
+                            d.resolve(1);
+                        }, TIME_TO_WAIT / 4);
+
+                        return d.promise();
+                    }
                 },
-                byKey: () => {
-                    const d = $.Deferred();
+                value: 1
+            }).dxSelectBox('instance');
 
-                    setTimeout(() => {
-                        d.resolve(1);
-                    }, TIME_TO_WAIT / 4);
+            selectBox.open();
+            this.clock.tick(TIME_TO_WAIT);
+            const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList('instance');
 
-                    return d.promise();
-                }
-            },
-            value: 1
-        }).dxSelectBox('instance');
-
-        selectBox.open();
-        this.clock.tick(TIME_TO_WAIT);
-        const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList('instance');
-
-        assert.strictEqual(list.option('selectedItem'), 1, 'list item is selected');
+            assert.strictEqual(list.option('selectedItem'), 1, 'list item is selected');
+        });
     });
 
     QUnit.test('dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page', function(assert) {
@@ -1847,6 +1850,58 @@ QUnit.module('editing', moduleSetup, () => {
 
         assert.equal(byKeyMock.callCount, 1, 'byKey should not be called after input text restoring');
     });
+
+
+    QUnit.test('load function should have no unnecessary calls if search and custom items options are enabled (T847864)', function(assert) {
+        const data = [{
+            ID: 1,
+            Name: 'Item 11'
+        }, {
+            ID: 2,
+            Name: 'Item 12'
+        }, {
+            ID: 3,
+            Name: 'Item 22'
+        }];
+        const loadMock = sinon.stub().returns(data);
+        const byKeyMock = sinon.spy(function(id) {
+            if(id) {
+                return [data[id - 1]];
+            } else {
+                return [];
+            }
+        });
+        const $element = $('#selectBox').dxSelectBox({
+            deferRendering: true,
+            dataSource: {
+                load: loadMock,
+                byKey: byKeyMock
+            },
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+            searchExpr: 'Name',
+            searchEnabled: true,
+            searchTimeout: 0,
+            acceptCustomValue: true,
+            onCustomItemCreating: function(options) {
+                options.customItem = { 'ID': data.length + 1, 'Name': options.text };
+                data.push(options.customItem);
+            }
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        $input.trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT);
+        keyboard.type('1');
+        this.clock.tick(TIME_TO_WAIT);
+        $('#qunit-fixture').trigger('dxpointerdown');
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.equal(loadMock.callCount, 2, 'load should not be called on init and on filter reset');
+        assert.equal(byKeyMock.callCount, 0, 'bykey should not be called');
+    });
+
 
     QUnit.test('acceptCustomValue', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
@@ -3344,6 +3399,9 @@ QUnit.module('Scrolling', {
 
         setTimeout(() => {
             assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
+            $('#qunit-fixture')
+                .css('left', 10000)
+                .css('top', 10000);
             done();
         });
     });
