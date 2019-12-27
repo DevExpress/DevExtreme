@@ -58,35 +58,35 @@
 */
 
 
-var $ = require('../core/renderer'),
-    commonUtils = require('../core/utils/common'),
-    each = require('../core/utils/iterator').each,
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    domAdapter = require('../core/dom_adapter'),
-    isWindow = require('../core/utils/type').isWindow,
-    extend = require('../core/utils/extend').extend,
-    browser = require('../core/utils/browser'),
+const $ = require('../core/renderer');
+const commonUtils = require('../core/utils/common');
+const each = require('../core/utils/iterator').each;
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const domAdapter = require('../core/dom_adapter');
+const isWindow = require('../core/utils/type').isWindow;
+const extend = require('../core/utils/extend').extend;
+const browser = require('../core/utils/browser');
 
-    translator = require('./translator'),
-    support = require('../core/utils/support');
+const translator = require('./translator');
+const support = require('../core/utils/support');
 
-var horzRe = /left|right/,
-    vertRe = /top|bottom/,
-    collisionRe = /fit|flip|none/,
-    IS_SAFARI = browser.safari;
+const horzRe = /left|right/;
+const vertRe = /top|bottom/;
+const collisionRe = /fit|flip|none/;
+const IS_SAFARI = browser.safari;
 
-var normalizeAlign = function(raw) {
-    var result = {
+const normalizeAlign = function(raw) {
+    const result = {
         h: 'center',
         v: 'center'
     };
 
-    var pair = commonUtils.splitPair(raw);
+    const pair = commonUtils.splitPair(raw);
 
     if(pair) {
         each(pair, function() {
-            var w = String(this).toLowerCase();
+            const w = String(this).toLowerCase();
             if(horzRe.test(w)) {
                 result.h = w;
             } else if(vertRe.test(w)) {
@@ -98,14 +98,14 @@ var normalizeAlign = function(raw) {
     return result;
 };
 
-var normalizeOffset = function(raw) {
+const normalizeOffset = function(raw) {
     return commonUtils.pairToObject(raw);
 };
 
-var normalizeCollision = function(raw) {
-    var pair = commonUtils.splitPair(raw),
-        h = String(pair && pair[0]).toLowerCase(),
-        v = String(pair && pair[1]).toLowerCase();
+const normalizeCollision = function(raw) {
+    const pair = commonUtils.splitPair(raw);
+    let h = String(pair && pair[0]).toLowerCase();
+    let v = String(pair && pair[1]).toLowerCase();
 
     if(!collisionRe.test(h)) {
         h = 'none';
@@ -117,7 +117,7 @@ var normalizeCollision = function(raw) {
     return { h: h, v: v };
 };
 
-var getAlignFactor = function(align) {
+const getAlignFactor = function(align) {
     switch(align) {
         case 'center':
             return 0.5;
@@ -129,7 +129,7 @@ var getAlignFactor = function(align) {
     }
 };
 
-var inverseAlign = function(align) {
+const inverseAlign = function(align) {
     switch(align) {
         case 'left':
             return 'right';
@@ -144,8 +144,8 @@ var inverseAlign = function(align) {
     }
 };
 
-var calculateOversize = function(data, bounds) {
-    var oversize = 0;
+const calculateOversize = function(data, bounds) {
+    let oversize = 0;
 
     if(data.myLocation < bounds.min) {
         oversize += bounds.min - data.myLocation;
@@ -158,7 +158,7 @@ var calculateOversize = function(data, bounds) {
     return oversize;
 };
 
-var collisionSide = function(direction, data, bounds) {
+const collisionSide = function(direction, data, bounds) {
     if(data.myLocation < bounds.min) {
         return direction === 'h' ? 'left' : 'top';
     }
@@ -169,17 +169,17 @@ var collisionSide = function(direction, data, bounds) {
 };
 
 // TODO: rename?
-var initMyLocation = function(data) {
+const initMyLocation = function(data) {
     data.myLocation = data.atLocation
         + getAlignFactor(data.atAlign) * data.atSize
         - getAlignFactor(data.myAlign) * data.mySize
         + data.offset;
 };
 
-var collisionResolvers = {
+const collisionResolvers = {
 
     'fit': function(data, bounds) {
-        var result = false;
+        let result = false;
         if(data.myLocation > bounds.max) {
             data.myLocation = bounds.max;
             result = true;
@@ -200,7 +200,7 @@ var collisionResolvers = {
         }
 
         if(data.myLocation < bounds.min || data.myLocation > bounds.max) {
-            var inverseData = extend({}, data, {
+            const inverseData = extend({}, data, {
                 myAlign: inverseAlign(data.myAlign),
                 atAlign: inverseAlign(data.atAlign),
                 offset: -data.offset
@@ -227,24 +227,24 @@ var collisionResolvers = {
     }
 };
 
-var scrollbarWidth;
+let scrollbarWidth;
 
-var calculateScrollbarWidth = function() {
-    var $scrollDiv = $('<div>').css({
-            width: 100,
-            height: 100,
-            overflow: 'scroll',
-            position: 'absolute',
-            top: -9999
-        }).appendTo($('body')),
-        result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
+const calculateScrollbarWidth = function() {
+    const $scrollDiv = $('<div>').css({
+        width: 100,
+        height: 100,
+        overflow: 'scroll',
+        position: 'absolute',
+        top: -9999
+    }).appendTo($('body'));
+    const result = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
 
     $scrollDiv.remove();
 
     scrollbarWidth = result;
 };
 
-var defaultPositionResult = {
+const defaultPositionResult = {
     h: {
         location: 0,
         flip: false,
@@ -259,27 +259,27 @@ var defaultPositionResult = {
     }
 };
 
-var calculatePosition = function(what, options) {
-    var $what = $(what),
-        currentOffset = $what.offset(),
-        result = extend(true, {}, defaultPositionResult, {
-            h: { location: currentOffset.left },
-            v: { location: currentOffset.top }
-        });
+const calculatePosition = function(what, options) {
+    const $what = $(what);
+    const currentOffset = $what.offset();
+    const result = extend(true, {}, defaultPositionResult, {
+        h: { location: currentOffset.left },
+        v: { location: currentOffset.top }
+    });
 
     if(!options) {
         return result;
     }
 
-    var my = normalizeAlign(options.my),
-        at = normalizeAlign(options.at),
-        of = ($(options.of).length && options.of) || window,
-        offset = normalizeOffset(options.offset),
-        collision = normalizeCollision(options.collision),
-        boundary = options.boundary,
-        boundaryOffset = normalizeOffset(options.boundaryOffset);
+    const my = normalizeAlign(options.my);
+    const at = normalizeAlign(options.at);
+    let of = ($(options.of).length && options.of) || window;
+    const offset = normalizeOffset(options.offset);
+    const collision = normalizeCollision(options.collision);
+    const boundary = options.boundary;
+    const boundaryOffset = normalizeOffset(options.boundaryOffset);
 
-    var h = {
+    const h = {
         mySize: $what.outerWidth(),
         myAlign: my.h,
         atAlign: at.h,
@@ -288,7 +288,7 @@ var calculatePosition = function(what, options) {
         boundaryOffset: boundaryOffset.h
     };
 
-    var v = {
+    const v = {
         mySize: $what.outerHeight(),
         myAlign: my.v,
         atAlign: at.v,
@@ -315,7 +315,7 @@ var calculatePosition = function(what, options) {
             h.atSize = of.width();
             v.atSize = of.height();
         } else {
-            var o = of.offset();
+            const o = of.offset();
             h.atLocation = o.left;
             v.atLocation = o.top;
             h.atSize = of.outerWidth();
@@ -326,26 +326,26 @@ var calculatePosition = function(what, options) {
     initMyLocation(h);
     initMyLocation(v);
 
-    var bounds = (function() {
-        var win = $(window),
-            windowWidth = win.width(),
-            windowHeight = win.height(),
-            left = win.scrollLeft(),
-            top = win.scrollTop(),
-            documentElement = domAdapter.getDocumentElement(),
-            hZoomLevel = support.touch ? documentElement.clientWidth / windowWidth : 1,
-            vZoomLevel = support.touch ? documentElement.clientHeight / windowHeight : 1;
+    const bounds = (function() {
+        const win = $(window);
+        const windowWidth = win.width();
+        const windowHeight = win.height();
+        let left = win.scrollLeft();
+        let top = win.scrollTop();
+        const documentElement = domAdapter.getDocumentElement();
+        const hZoomLevel = support.touch ? documentElement.clientWidth / windowWidth : 1;
+        const vZoomLevel = support.touch ? documentElement.clientHeight / windowHeight : 1;
 
         if(scrollbarWidth === undefined) {
             calculateScrollbarWidth();
         }
 
-        var boundaryWidth = windowWidth,
-            boundaryHeight = windowHeight;
+        let boundaryWidth = windowWidth;
+        let boundaryHeight = windowHeight;
 
         if(boundary) {
-            var $boundary = $(boundary),
-                boundaryPosition = $boundary.offset();
+            const $boundary = $(boundary);
+            const boundaryPosition = $boundary.offset();
 
             left = boundaryPosition.left;
             top = boundaryPosition.top;
@@ -380,7 +380,7 @@ var calculatePosition = function(what, options) {
         collisionResolvers[v.collision](v, bounds.v);
     }
 
-    var preciser = function(number) {
+    const preciser = function(number) {
         return options.precise ? number : Math.round(number);
     };
 
@@ -393,8 +393,8 @@ var calculatePosition = function(what, options) {
     return result;
 };
 
-var position = function(what, options) {
-    var $what = $(what);
+const position = function(what, options) {
+    const $what = $(what);
 
     if(!options) {
         return $what.offset();
@@ -402,10 +402,10 @@ var position = function(what, options) {
 
     translator.resetPosition($what, true);
 
-    var offset = $what.offset(),
-        targetPosition = (options.h && options.v) ? options : calculatePosition($what, options);
+    const offset = $what.offset();
+    const targetPosition = (options.h && options.v) ? options : calculatePosition($what, options);
 
-    var preciser = function(number) {
+    const preciser = function(number) {
         return options.precise ? number : Math.round(number);
     };
 
@@ -417,7 +417,7 @@ var position = function(what, options) {
     return targetPosition;
 };
 
-var offset = function(element) {
+const offset = function(element) {
     element = $(element).get(0);
     if(isWindow(element)) {
         return null;

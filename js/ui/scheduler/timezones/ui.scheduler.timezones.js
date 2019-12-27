@@ -1,8 +1,8 @@
-var query = require('../../../data/query'),
-    errors = require('../../../core/errors'),
-    tzData = require('./ui.scheduler.timezones_data');
+const query = require('../../../data/query');
+const errors = require('../../../core/errors');
+const tzData = require('./ui.scheduler.timezones_data');
 
-var SchedulerTimezones = {
+const SchedulerTimezones = {
     _displayNames: tzData.displayNames,
     _list: tzData.timezones,
 
@@ -16,9 +16,9 @@ var SchedulerTimezones = {
         return query(this.getTimezones());
     },
     getTimezoneById: function(id) {
-        var result,
-            i = 0,
-            tzList = this.getTimezones();
+        let result;
+        let i = 0;
+        const tzList = this.getTimezones();
 
         if(id) {
             while(!result) {
@@ -26,7 +26,7 @@ var SchedulerTimezones = {
                     errors.log('W0009', id);
                     return;
                 }
-                var currentId = tzList[i]['id'];
+                const currentId = tzList[i]['id'];
                 if(currentId === id) {
                     result = tzList[i];
                 }
@@ -36,15 +36,15 @@ var SchedulerTimezones = {
         return result;
     },
     getTimezoneOffsetById: function(id, dateTimeStamp) {
-        var tz = this.getTimezoneById(id),
-            offsets,
-            offsetIndices,
-            untils,
-            result;
+        const tz = this.getTimezoneById(id);
+        let offsets;
+        let offsetIndices;
+        let untils;
+        let result;
 
         if(tz) {
             if(tz.link) {
-                var rootTz = this.getTimezones()[tz.link];
+                const rootTz = this.getTimezones()[tz.link];
                 offsets = rootTz.offsets;
                 untils = rootTz.untils;
                 offsetIndices = rootTz.offsetIndices;
@@ -60,19 +60,19 @@ var SchedulerTimezones = {
         return result;
     },
     getUtcOffset: function(offsets, offsetIndices, untils, dateTimeStamp) {
-        var index = 0;
-        var offsetIndicesList = offsetIndices.split('');
+        let index = 0;
+        const offsetIndicesList = offsetIndices.split('');
 
-        var untilsList = untils.split('|').map(function(until) {
+        const untilsList = untils.split('|').map(function(until) {
             if(until === 'Infinity') {
                 return null;
             }
             return parseInt(until, 36) * 1000;
         });
 
-        var currentUntil = 0;
+        let currentUntil = 0;
 
-        for(var i = 0, listLength = untilsList.length; i < listLength; i++) {
+        for(let i = 0, listLength = untilsList.length; i < listLength; i++) {
             currentUntil += untilsList[i];
             if(dateTimeStamp >= currentUntil) {
                 index = i;
@@ -89,8 +89,8 @@ var SchedulerTimezones = {
         return offsets[Number(offsetIndicesList[index])];
     },
     getTimezoneShortDisplayNameById: function(id) {
-        var tz = this.getTimezoneById(id),
-            result;
+        const tz = this.getTimezoneById(id);
+        let result;
 
         if(tz) {
             result = tz.DisplayName.substring(0, 11);
@@ -102,7 +102,7 @@ var SchedulerTimezones = {
         return query(this.getDisplayNames()).sortBy().toArray();
     },
     getTimezoneDisplayNameById: function(id) {
-        var tz = this.getTimezoneById(id);
+        const tz = this.getTimezoneById(id);
         return tz ? this.getDisplayNames()[tz.winIndex] : '';
     },
     getSimilarTimezones: function(id) {
@@ -110,7 +110,7 @@ var SchedulerTimezones = {
             return [];
         }
 
-        var tz = this.getTimezoneById(id);
+        const tz = this.getTimezoneById(id);
 
         return this.getTimezonesIdsByWinIndex(tz.winIndex);
 
@@ -128,7 +128,7 @@ var SchedulerTimezones = {
             });
     },
     getTimezonesIdsByDisplayName: function(displayName) {
-        var displayNameIndex = this.getDisplayNames().indexOf(displayName);
+        const displayNameIndex = this.getDisplayNames().indexOf(displayName);
 
         return this.getTimezonesIdsByWinIndex(displayNameIndex);
     },
@@ -138,10 +138,10 @@ var SchedulerTimezones = {
     },
 
     processDateDependOnTimezone: function(date, tzOffset) {
-        var result = new Date(date);
+        let result = new Date(date);
 
         if(tzOffset) {
-            var tzDiff = tzOffset + this.getClientTimezoneOffset(date) / 3600000;
+            const tzDiff = tzOffset + this.getClientTimezoneOffset(date) / 3600000;
             result = new Date(result.setHours(result.getHours() + tzDiff));
         }
 

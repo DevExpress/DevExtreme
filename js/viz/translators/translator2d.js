@@ -1,22 +1,22 @@
-var extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    Range = require('./range').Range,
-    categoryTranslator = require('./category_translator'),
-    intervalTranslator = require('./interval_translator'),
-    datetimeTranslator = require('./datetime_translator'),
-    logarithmicTranslator = require('./logarithmic_translator'),
-    vizUtils = require('../core/utils'),
-    typeUtils = require('../../core/utils/type'),
-    getLog = vizUtils.getLogExt,
-    getPower = vizUtils.getPower,
-    raiseToExt = vizUtils.raiseToExt,
-    isDefined = typeUtils.isDefined,
-    adjust = require('../../core/utils/math').adjust,
-    _abs = Math.abs,
-    CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'],
-    _Translator2d,
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const Range = require('./range').Range;
+const categoryTranslator = require('./category_translator');
+const intervalTranslator = require('./interval_translator');
+const datetimeTranslator = require('./datetime_translator');
+const logarithmicTranslator = require('./logarithmic_translator');
+const vizUtils = require('../core/utils');
+const typeUtils = require('../../core/utils/type');
+const getLog = vizUtils.getLogExt;
+const getPower = vizUtils.getPower;
+const raiseToExt = vizUtils.raiseToExt;
+const isDefined = typeUtils.isDefined;
+const adjust = require('../../core/utils/math').adjust;
+const _abs = Math.abs;
+const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
+let _Translator2d;
 
-    addInterval = require('../../core/utils/date').addInterval;
+const addInterval = require('../../core/utils/date').addInterval;
 
 const dummyTranslator = {
     to(value) {
@@ -28,21 +28,21 @@ const dummyTranslator = {
     }
 };
 
-var validateCanvas = function(canvas) {
+const validateCanvas = function(canvas) {
     each(CANVAS_PROP, function(_, prop) {
         canvas[prop] = parseInt(canvas[prop]) || 0;
     });
     return canvas;
 };
 
-var makeCategoriesToPoints = function(categories) {
-    var categoriesToPoints = {};
+const makeCategoriesToPoints = function(categories) {
+    const categoriesToPoints = {};
 
     categories.forEach(function(item, i) { categoriesToPoints[item.valueOf()] = i; });
     return categoriesToPoints;
 };
 
-var validateBusinessRange = function(businessRange) {
+const validateBusinessRange = function(businessRange) {
     if(!(businessRange instanceof Range)) {
         businessRange = new Range(businessRange);
     }
@@ -57,18 +57,18 @@ var validateBusinessRange = function(businessRange) {
 };
 
 function prepareBreaks(breaks, range) {
-    var transform = range.axisType === 'logarithmic' ? function(value) {
-            return getLog(value, range.base);
-        } : function(value) {
-            return value;
-        },
-        array = [],
-        br,
-        transformFrom,
-        transformTo,
-        i,
-        length = breaks.length,
-        sum = 0;
+    const transform = range.axisType === 'logarithmic' ? function(value) {
+        return getLog(value, range.base);
+    } : function(value) {
+        return value;
+    };
+    const array = [];
+    let br;
+    let transformFrom;
+    let transformTo;
+    let i;
+    const length = breaks.length;
+    let sum = 0;
 
     for(i = 0; i < length; i++) {
         br = breaks[i];
@@ -93,7 +93,7 @@ function getCanvasBounds(range) {
     let max = range.max;
     let minVisible = range.minVisible;
     let maxVisible = range.maxVisible;
-    let isLogarithmic = range.axisType === 'logarithmic';
+    const isLogarithmic = range.axisType === 'logarithmic';
 
     if(isLogarithmic) {
         maxVisible = getLog(maxVisible, range.base, range.allowNegatives, range.linearThreshold);
@@ -148,14 +148,14 @@ _Translator2d.prototype = {
     constructor: _Translator2d,
     reinit: function() {
         // TODO: parseInt canvas
-        var that = this,
-            options = that._options,
-            range = that._businessRange,
-            categories = range.categories || [],
-            script = {},
-            canvasOptions = that._prepareCanvasOptions(),
-            visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories,
-            categoriesLength = visibleCategories.length;
+        const that = this;
+        const options = that._options;
+        const range = that._businessRange;
+        const categories = range.categories || [];
+        let script = {};
+        const canvasOptions = that._prepareCanvasOptions();
+        const visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
+        const categoriesLength = visibleCategories.length;
 
         if(range.isEmpty()) {
             script = dummyTranslator;
@@ -201,12 +201,12 @@ _Translator2d.prototype = {
     },
 
     _translateBreaks: function() {
-        var breaks = this._breaks,
-            size = this._options.breaksSize,
-            i,
-            b,
-            end,
-            length;
+        const breaks = this._breaks;
+        const size = this._options.breaksSize;
+        let i;
+        let b;
+        let end;
+        let length;
         if(breaks === undefined) {
             return;
         }
@@ -219,12 +219,12 @@ _Translator2d.prototype = {
     },
 
     _checkValueAboutBreaks: function(breaks, pos, start, end, methods) {
-        var i,
-            length,
-            prop = { length: 0, breaksSize: undefined, inBreak: false },
-            br,
-            prevBreak,
-            lastBreak = breaks[breaks.length - 1];
+        let i;
+        let length;
+        let prop = { length: 0, breaksSize: undefined, inBreak: false };
+        let br;
+        let prevBreak;
+        const lastBreak = breaks[breaks.length - 1];
 
         if(methods.isStartSide(pos, breaks, start, end)) {
             return prop;
@@ -253,7 +253,7 @@ _Translator2d.prototype = {
     },
 
     _getDiscreteInterval: function(categoriesLength, canvasOptions) {
-        var correctedCategoriesCount = categoriesLength - (this._options.stick ? 1 : 0);
+        const correctedCategoriesCount = categoriesLength - (this._options.stick ? 1 : 0);
         return correctedCategoriesCount > 0 ? canvasOptions.canvasLength / correctedCategoriesCount : canvasOptions.canvasLength;
     },
 
@@ -297,8 +297,8 @@ _Translator2d.prototype = {
     },
 
     updateBusinessRange: function(businessRange) {
-        var that = this,
-            breaks = businessRange.breaks || [];
+        const that = this;
+        const breaks = businessRange.breaks || [];
 
         that._businessRange = validateBusinessRange(businessRange);
 
@@ -308,7 +308,7 @@ _Translator2d.prototype = {
     },
 
     update: function(businessRange, canvas, options) {
-        var that = this;
+        const that = this;
         that._options = extend(that._options || {}, options);
         that._canvas = validateCanvas(canvas);
 
@@ -371,18 +371,18 @@ _Translator2d.prototype = {
     },
 
     _calculateProjection: function(distance) {
-        var canvasOptions = this._canvasOptions;
+        const canvasOptions = this._canvasOptions;
         return canvasOptions.invert ? canvasOptions.endPoint - distance : canvasOptions.startPoint + distance;
     },
 
     _calculateUnProjection: function(distance) {
-        var canvasOptions = this._canvasOptions;
+        const canvasOptions = this._canvasOptions;
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
 
     getMinBarSize: function(minBarSize) {
-        var visibleArea = this.getCanvasVisibleArea(),
-            minValue = this.from(visibleArea.min + minBarSize);
+        const visibleArea = this.getCanvasVisibleArea();
+        const minValue = this.from(visibleArea.min + minBarSize);
 
         return _abs(this.from(visibleArea.min) - (!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
     },
@@ -497,7 +497,7 @@ _Translator2d.prototype = {
     },
 
     getScale: function(val1, val2) {
-        var canvasOptions = this._canvasOptions;
+        const canvasOptions = this._canvasOptions;
         if(canvasOptions.rangeMax === canvasOptions.rangeMin) {
             return 1;
         }
@@ -509,7 +509,7 @@ _Translator2d.prototype = {
 
     // dxRangeSelector
     isValid: function(value) {
-        var co = this._canvasOptions;
+        const co = this._canvasOptions;
 
         value = this._fromValue(value);
 
@@ -520,9 +520,9 @@ _Translator2d.prototype = {
     },
 
     getCorrectValue: function(value, direction) {
-        var that = this,
-            breaks = that._breaks,
-            prop;
+        const that = this;
+        const breaks = that._breaks;
+        let prop;
 
         value = that._fromValue(value);
 
@@ -548,11 +548,11 @@ _Translator2d.prototype = {
         }
 
         bp = this._fromValue(bp);
-        var that = this,
-            canvasOptions = that._canvasOptions,
-            breaks = that._breaks,
-            prop = { length: 0 },
-            commonBreakSize = 0;
+        const that = this;
+        const canvasOptions = that._canvasOptions;
+        const breaks = that._breaks;
+        let prop = { length: 0 };
+        let commonBreakSize = 0;
 
         if(breaks !== undefined) {
             prop = that._checkValueAboutBreaks(breaks, bp, 'trFrom', 'trTo', that._checkingMethodsAboutBreaks[0]);
@@ -572,12 +572,12 @@ _Translator2d.prototype = {
     },
 
     from: function(pos, direction) {
-        var that = this,
-            breaks = that._breaks,
-            prop = { length: 0 },
-            canvasOptions = that._canvasOptions,
-            startPoint = canvasOptions.startPoint,
-            commonBreakSize = 0;
+        const that = this;
+        const breaks = that._breaks;
+        let prop = { length: 0 };
+        const canvasOptions = that._canvasOptions;
+        const startPoint = canvasOptions.startPoint;
+        let commonBreakSize = 0;
 
         if(breaks !== undefined) {
             prop = that._checkValueAboutBreaks(breaks, pos, 'start', 'end', that._checkingMethodsAboutBreaks[1]);

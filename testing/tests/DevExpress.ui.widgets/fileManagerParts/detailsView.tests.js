@@ -172,7 +172,7 @@ QUnit.module('Details View', moduleConfig, () => {
         assert.equal(getCellValueInDetailsView(this.$element, 4, 2), '3.txt');
         assert.equal(getCellValueInDetailsView(this.$element, 5, 2), '4.txt', 'sorted descending');
 
-        var e = $.Event('dxclick');
+        const e = $.Event('dxclick');
         e.ctrlKey = true;
         columnHeader.trigger(e);
         this.clock.tick(400);

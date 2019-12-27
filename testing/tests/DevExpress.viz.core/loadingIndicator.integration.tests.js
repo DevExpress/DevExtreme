@@ -1,15 +1,15 @@
 require('viz/tree_map/tree_map');
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    module = require('viz/core/loading_indicator'),
-    DataSource = require('data/data_source/data_source').DataSource;
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const module = require('viz/core/loading_indicator');
+const DataSource = require('data/data_source/data_source').DataSource;
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
 QUnit.module('Loading indicator', {
     beforeEach: function() {
-        var loadingIndicator = this.loadingIndicator = new vizMocks.LoadingIndicator();
+        const loadingIndicator = this.loadingIndicator = new vizMocks.LoadingIndicator();
         module.LoadingIndicator = sinon.spy(function() { return loadingIndicator; });
         this.$container = $('#test-container');
     },
@@ -20,13 +20,13 @@ QUnit.module('Loading indicator', {
 });
 
 QUnit.test('Show', function(assert) {
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         loadingIndicator: { text: 'Some text' }
     });
 
     widget.showLoadingIndicator();
 
-    var params = module.LoadingIndicator.lastCall.args[0];
+    const params = module.LoadingIndicator.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
     assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
     assert.ok(typeof params.notify === 'function', 'param - notify');
@@ -37,7 +37,7 @@ QUnit.test('Show', function(assert) {
 
 QUnit.test('Show when container is not visible', function(assert) {
     this.$container.hide();
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget.showLoadingIndicator();
 
@@ -46,8 +46,8 @@ QUnit.test('Show when container is not visible', function(assert) {
 });
 
 QUnit.test('Notification callback / true', function(assert) {
-    var widget = this.createWidget(),
-        spy = widget._stopCurrentHandling = sinon.spy();
+    const widget = this.createWidget();
+    const spy = widget._stopCurrentHandling = sinon.spy();
 
     module.LoadingIndicator.lastCall.args[0].notify(true);
 
@@ -56,7 +56,7 @@ QUnit.test('Notification callback / true', function(assert) {
 });
 
 QUnit.test('Notification callback / false', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     module.LoadingIndicator.lastCall.args[0].notify(false);
 
@@ -64,7 +64,7 @@ QUnit.test('Notification callback / false', function(assert) {
 });
 
 QUnit.test('Hide', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget.hideLoadingIndicator();
 
@@ -72,7 +72,7 @@ QUnit.test('Hide', function(assert) {
 });
 
 QUnit.test('_scheduleLoadingIndicatorHiding', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget._scheduleLoadingIndicatorHiding();
 
@@ -80,7 +80,7 @@ QUnit.test('_scheduleLoadingIndicatorHiding', function(assert) {
 });
 
 QUnit.test('_fulfillLoadingIndicatorHiding', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget._fulfillLoadingIndicatorHiding();
 
@@ -88,7 +88,7 @@ QUnit.test('_fulfillLoadingIndicatorHiding', function(assert) {
 });
 
 QUnit.test('\'loadingIndicator\' option', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     widget.showLoadingIndicator();
 
     widget.option('loadingIndicator', { backgroundColor: 'red' });
@@ -98,7 +98,7 @@ QUnit.test('\'loadingIndicator\' option', function(assert) {
 });
 
 QUnit.test('Hidden when theme is changed', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     widget.showLoadingIndicator();
 
     widget.option('theme', 'test-theme');
@@ -108,7 +108,7 @@ QUnit.test('Hidden when theme is changed', function(assert) {
 });
 
 QUnit.test('Hidden when option is set to the same value', function(assert) {
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         theme: 'test-theme'
     });
     widget.showLoadingIndicator();
@@ -120,7 +120,7 @@ QUnit.test('Hidden when option is set to the same value', function(assert) {
 });
 
 QUnit.test('Hidden when data source is changed', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     widget.showLoadingIndicator();
 
     widget.option('dataSource', [{ value: 1 }]);
@@ -130,7 +130,7 @@ QUnit.test('Hidden when data source is changed', function(assert) {
 });
 
 QUnit.test('Hiding is scheduled on any option change', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget.option('test-option', 'test-value');
 
@@ -138,7 +138,7 @@ QUnit.test('Hiding is scheduled on any option change', function(assert) {
 });
 
 QUnit.test('Depends on theme', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     this.loadingIndicator.setOptions.reset();
 
     widget.option('theme', 'test-theme');
@@ -173,7 +173,7 @@ QUnit.test('Show loading indicator if data source loading', function(assert) {
 });
 
 QUnit.test('Show loading indicator on each loading of data', function(assert) {
-    var data = new DataSource({
+    const data = new DataSource({
         store: []
     });
 
@@ -186,8 +186,8 @@ QUnit.test('Show loading indicator on each loading of data', function(assert) {
 
     this.loadingIndicator.show.reset();
 
-    var N = 10;
-    for(var i = 0; i < N; i++) {
+    const N = 10;
+    for(let i = 0; i < N; i++) {
         data.load();
     }
 

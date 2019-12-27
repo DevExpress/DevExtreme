@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    dateUtils = require('core/utils/date'),
-    RecurrenceEditor = require('ui/scheduler/ui.scheduler.recurrence_editor'),
-    recurrenceUtils = require('ui/scheduler/utils.recurrence'),
-    dateLocalization = require('localization/date');
+const $ = require('jquery');
+const dateUtils = require('core/utils/date');
+const RecurrenceEditor = require('ui/scheduler/ui.scheduler.recurrence_editor');
+const recurrenceUtils = require('ui/scheduler/utils.recurrence');
+const dateLocalization = require('localization/date');
 
-var FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq',
-    REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container',
-    REPEAT_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type',
-    REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count',
-    REPEAT_DATE_EDITOR = 'dx-recurrence-datebox-until-date',
-    REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on',
-    REPEAT_ON_WEEK_EDITOR = 'dx-recurrence-repeat-on-week',
-    REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month',
-    DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month',
-    REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year',
-    MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year',
-    EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
+const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';
+const REPEAT_END_EDITOR_CONTAINER = 'dx-recurrence-repeat-end-container';
+const REPEAT_TYPE_EDITOR = 'dx-recurrence-radiogroup-repeat-type';
+const REPEAT_COUNT_EDITOR = 'dx-recurrence-numberbox-repeat-count';
+const REPEAT_DATE_EDITOR = 'dx-recurrence-datebox-until-date';
+const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
+const REPEAT_ON_WEEK_EDITOR = 'dx-recurrence-repeat-on-week';
+const REPEAT_ON_MONTH_EDITOR = 'dx-recurrence-repeat-on-month';
+const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
+const REPEAT_ON_YEAR_EDITOR = 'dx-recurrence-repeat-on-year';
+const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
+const EVERY_INTERVAL = 'dx-recurrence-numberbox-interval';
 
 require('common.css!');
 
@@ -51,7 +51,7 @@ QUnit.test('Recurrence editor should correctly process null value and reset inne
     this.instance.option('value', null);
     this.instance.option('visible', true);
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     assert.equal(freqEditor.option('value'), 'never', 'freq editor default value was set');
 });
@@ -73,12 +73,12 @@ QUnit.test('Recurrence editor should contain select box for select freq', functi
 QUnit.test('Recurrence editor should has right items', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
-    var items = freqEditor.option('items');
-    var itemValues = [{ text: 'Never', value: 'never' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
+    const items = freqEditor.option('items');
+    const itemValues = [{ text: 'Never', value: 'never' }, { text: 'Daily', value: 'daily' }, { text: 'Weekly', value: 'weekly' }, { text: 'Monthly', value: 'monthly' }, { text: 'Yearly', value: 'yearly' }];
 
-    for(var i = 0, len = items.length; i < len; i++) {
+    for(let i = 0, len = items.length; i < len; i++) {
         assert.equal(itemValues[i].text, items[i].text(), 'item text is right');
         assert.equal(itemValues[i].value, items[i].value, 'item value is right');
     }
@@ -88,7 +88,7 @@ QUnit.test('Recurrence editor should correctly process values of the freq select
     this.createInstance({ startDate: new Date(2015, 7, 27) });
     this.instance.option('visible', true);
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     assert.equal(this.instance.option('value'), null, 'Recurrence editor has right value');
 
@@ -99,7 +99,7 @@ QUnit.test('Recurrence editor should correctly process values of the freq select
 QUnit.test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday setting', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
     freqEditor.option('value', 'monthly');
 
     assert.equal(this.instance.option('value'), 'FREQ=MONTHLY;BYMONTHDAY=10', 'Recurrence editor has right value');
@@ -108,14 +108,14 @@ QUnit.test('Recurrence editor should correctly process values of the freq radioG
 QUnit.test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
     freqEditor.option('value', 'yearly');
 
     assert.equal(this.instance.option('value'), 'FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3', 'Recurrence editor has right value');
 });
 
 QUnit.test('Recurrence editor onValueChanged should be fired after change value', function(assert) {
-    var fired = 0;
+    let fired = 0;
     this.createInstance({
         value: 'FREQ=MONTHLY',
         onValueChanged: function() {
@@ -123,7 +123,7 @@ QUnit.test('Recurrence editor onValueChanged should be fired after change value'
         }
     });
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     freqEditor.option('value', 'weekly');
 
@@ -135,9 +135,9 @@ QUnit.test('\'resizePopup\' observer should be fired after changing freq', funct
         value: 'FREQ=MONTHLY'
     });
 
-    var stub = sinon.stub(this.instance, 'invoke').withArgs('resizePopup');
+    const stub = sinon.stub(this.instance, 'invoke').withArgs('resizePopup');
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     freqEditor.option('value', 'weekly');
 
@@ -147,7 +147,7 @@ QUnit.test('\'resizePopup\' observer should be fired after changing freq', funct
 QUnit.test('Recurrence editor should correctly process values to the freq radioGroup', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     assert.equal(freqEditor.option('value'), 'weekly', 'Freq editor has right value');
 
@@ -167,9 +167,9 @@ QUnit.module('Recurrence editor - interval editor', {
 QUnit.test('Recurrence interval numberbox should be rendered with right defaults', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $interval = this.instance.$element().find('.' + EVERY_INTERVAL),
-        $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label'),
-        interval = $interval.dxNumberBox('instance');
+    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
+    const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label');
+    const interval = $interval.dxNumberBox('instance');
 
     assert.equal($interval.length, 1, 'numberBox for setting recurrence interval was rendered');
     assert.equal($intervalLabel.length, 1, 'labels was rendered');
@@ -182,7 +182,7 @@ QUnit.test('Recurrence interval numberbox should be rendered with right defaults
 QUnit.test('Recurrence interval numberbox should process value correctly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
 
-    var $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
+    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
 
     assert.equal($interval.dxNumberBox('instance').option('value'), 2, 'numberBox have right value after init');
 
@@ -194,7 +194,7 @@ QUnit.test('Recurrence interval numberbox should process value correctly', funct
 QUnit.test('Recurrence editor should correctly process values from interval editor', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
 
-    var $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
+    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
 
     $interval.dxNumberBox('instance').option('value', 3);
 
@@ -204,8 +204,8 @@ QUnit.test('Recurrence editor should correctly process values from interval edit
 QUnit.test('Recurrence repeat-interval editor should have correct aria-describedby attribute', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;INTERVAL=1' });
 
-    var $intervalEditor = this.instance.$element().find('.dx-recurrence-numberbox-interval .dx-texteditor-input'),
-        $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label').first();
+    const $intervalEditor = this.instance.$element().find('.dx-recurrence-numberbox-interval .dx-texteditor-input');
+    const $intervalLabel = this.instance.$element().find('.dx-recurrence-numberbox-interval-label').first();
 
     assert.notEqual($intervalEditor.attr('aria-describedby'), undefined, 'aria-describedby exists');
     assert.equal($intervalEditor.attr('aria-describedby'), $intervalLabel.attr('id'), 'aria-describedby is correct');
@@ -223,7 +223,7 @@ QUnit.module('Recurrence editor - repeat-end editor', {
 QUnit.test('Recurrence editor should contain repeat-type radio group to turn on/of repeat-end', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatType = $('.' + REPEAT_TYPE_EDITOR);
+    const $repeatType = $('.' + REPEAT_TYPE_EDITOR);
 
     assert.equal($repeatType.length, 1, 'repeat-type was rendered');
 });
@@ -231,8 +231,8 @@ QUnit.test('Recurrence editor should contain repeat-type radio group to turn on/
 QUnit.test('Recurrence repeat-type editor should have right default', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatType = $('.' + REPEAT_TYPE_EDITOR),
-        repeatTypeEditor = $repeatType.dxRadioGroup('instance');
+    const $repeatType = $('.' + REPEAT_TYPE_EDITOR);
+    const repeatTypeEditor = $repeatType.dxRadioGroup('instance');
 
     assert.equal(repeatTypeEditor.option('value'), 'never', 'repeat-type has right value');
     assert.equal($repeatType.css('display'), 'block', 'repeat editor is not visible');
@@ -241,10 +241,10 @@ QUnit.test('Recurrence repeat-type editor should have right default', function(a
 QUnit.test('Recurrence repeat-type editor should be rendered with right inner editor', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-    var $repeat = this.instance.$element().find('.' + REPEAT_END_EDITOR_CONTAINER),
-        $repeatType = $repeat.find('.' + REPEAT_TYPE_EDITOR),
-        $repeatCount = $repeat.find('.' + REPEAT_COUNT_EDITOR),
-        $repeatUntilDate = $repeat.find('.' + REPEAT_DATE_EDITOR);
+    const $repeat = this.instance.$element().find('.' + REPEAT_END_EDITOR_CONTAINER);
+    const $repeatType = $repeat.find('.' + REPEAT_TYPE_EDITOR);
+    const $repeatCount = $repeat.find('.' + REPEAT_COUNT_EDITOR);
+    const $repeatUntilDate = $repeat.find('.' + REPEAT_DATE_EDITOR);
 
     assert.equal($repeatType.length, 1, 'repeatType editor was rendered');
 
@@ -258,13 +258,13 @@ QUnit.test('Recurrence repeat-type editor should be rendered with right inner ed
 QUnit.test('Recurrence editor parts should be disabled if needed', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatType = $('.' + REPEAT_TYPE_EDITOR),
-        repeatTypeEditor = $repeatType.dxRadioGroup('instance');
+    const $repeatType = $('.' + REPEAT_TYPE_EDITOR);
+    const repeatTypeEditor = $repeatType.dxRadioGroup('instance');
 
     repeatTypeEditor.option('value', 'count');
 
-    var $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR),
-        $repeatUntilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+    const $repeatUntilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
 
     assert.ok(!$repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is not disabled by default');
     assert.ok($repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is disabled');
@@ -278,8 +278,8 @@ QUnit.test('Recurrence editor parts should be disabled if needed', function(asse
 QUnit.test('Recurrence radioGroup for select type of repeat should process rules correctly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-    var $complete = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR),
-        complete = $complete.dxRadioGroup('instance');
+    const $complete = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR);
+    const complete = $complete.dxRadioGroup('instance');
 
     assert.equal(complete.option('value'), 'count', 'value is correct');
 
@@ -291,15 +291,15 @@ QUnit.test('Recurrence radioGroup for select type of repeat should process rules
 QUnit.test('Recurrence editor parts should be rendered after repeat-type editor optionChanged', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-    var $repeatType = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR),
-        repeatType = $repeatType.dxRadioGroup('instance');
+    const $repeatType = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR);
+    const repeatType = $repeatType.dxRadioGroup('instance');
 
     assert.equal(repeatType.option('value'), 'count', 'repeat-type is correct after init');
 
     repeatType.option('value', 'until');
 
-    var $repeatUntilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR),
-        $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+    const $repeatUntilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
 
     assert.ok($repeatCount.hasClass('dx-state-disabled'), 'repeat-count editor is disabled');
     assert.ok(!$repeatUntilDate.hasClass('dx-state-disabled'), 'repeat-until editor is not disabled after optionChanged');
@@ -313,8 +313,8 @@ QUnit.test('Recurrence editor parts should be rendered after repeat-type editor 
 QUnit.test('Recurrence editor should correctly process values from repeat-type editor', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-    var $complete = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR);
-    var date = dateUtils.trimTime(new Date());
+    const $complete = this.instance.$element().find('.' + REPEAT_TYPE_EDITOR);
+    let date = dateUtils.trimTime(new Date());
 
     date.setDate(date.getDate() + 1);
     date = new Date(date.getTime() - 1);
@@ -326,8 +326,8 @@ QUnit.test('Recurrence editor should correctly process values from repeat-type e
 QUnit.test('Recurrence repeat-count editor should be rendered with right defaults', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR),
-        repeatCount = $repeatCount.dxNumberBox('instance');
+    const $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+    const repeatCount = $repeatCount.dxNumberBox('instance');
 
     assert.equal(repeatCount.option('showSpinButtons'), true, 'numberBox has right min value');
     assert.equal(repeatCount.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
@@ -338,8 +338,8 @@ QUnit.test('Recurrence repeat-count editor should be rendered with right default
 QUnit.test('Recurrence repeat-count editor should process rules correctly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
-    var $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR),
-        repeatCount = $repeatCount.dxNumberBox('instance');
+    const $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+    const repeatCount = $repeatCount.dxNumberBox('instance');
 
     assert.equal(repeatCount.option('value'), 10, 'value of repeat-count editor is correct on init');
 
@@ -351,8 +351,8 @@ QUnit.test('Recurrence repeat-count editor should process rules correctly', func
 QUnit.test('Recurrence editor should correctly process values from repeat-count editor', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;COUNT=1' });
 
-    var $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR),
-        repeatCount = $repeatCount.dxNumberBox('instance');
+    const $repeatCount = this.instance.$element().find('.' + REPEAT_COUNT_EDITOR);
+    const repeatCount = $repeatCount.dxNumberBox('instance');
 
     repeatCount.option('value', 9);
 
@@ -362,8 +362,8 @@ QUnit.test('Recurrence editor should correctly process values from repeat-count 
 QUnit.test('Recurrence until-date editor should not process rules if it was set in recurrence string(T726894)', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
-    var $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR),
-        untilDate = $untilDate.dxDateBox('instance');
+    const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const untilDate = $untilDate.dxDateBox('instance');
 
     assert.deepEqual(untilDate.option('value'), recurrenceUtils.getDateByAsciiString('20151007'), 'value of until-date editor is correct on init');
 
@@ -375,17 +375,17 @@ QUnit.test('Recurrence until-date editor should not process rules if it was set 
 QUnit.test('Recurrence editor should correctly process values from until-date editor', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
-    var $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR),
-        untilDate = $untilDate.dxDateBox('instance');
+    const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const untilDate = $untilDate.dxDateBox('instance');
 
     untilDate.option('value', recurrenceUtils.getDateByAsciiString('20151107'));
 
-    var date = dateUtils.trimTime(new Date(2015, 10, 7));
+    let date = dateUtils.trimTime(new Date(2015, 10, 7));
 
     date.setDate(date.getDate() + 1);
     date = new Date(date.getTime() - 1);
 
-    var untilString = recurrenceUtils.getAsciiStringByDate(date);
+    const untilString = recurrenceUtils.getAsciiStringByDate(date);
 
     assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;UNTIL=' + untilString, 'Recurrence editor has right value');
 });
@@ -401,7 +401,7 @@ QUnit.module('Recurrence editor - repeat-on editor', {
 QUnit.test('Recurrence repeat-on editor should be rendered, when freq != daily', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
 
     assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
 });
@@ -409,12 +409,12 @@ QUnit.test('Recurrence repeat-on editor should be rendered, when freq != daily',
 QUnit.test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
     assert.equal($repeatOnWeek.length, 1, 'repeat-on-week editor was rendered');
 
-    var $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
+    const $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.length, 7, 'repeat-on-week editor contains 7 checkboxes');
 });
@@ -422,7 +422,7 @@ QUnit.test('Recurrence repeat-on editor should contain repeat-on-week editor, wh
 QUnit.test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
 
-    var $checkboxes = $('.' + 'dx-checkbox');
+    const $checkboxes = $('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(0).dxCheckBox('instance').option('value'), true, 'right checkBox is checked');
     assert.equal($checkboxes.eq(2).dxCheckBox('instance').option('value'), true, 'right checkBox is checked');
@@ -435,7 +435,7 @@ QUnit.test('Recurrence repeat-on editor should process values correctly, freq = 
 QUnit.test('Recurrence repeat-on editor should process values by startDate correctly, freq = weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
 
-    var $checkboxes = $('.' + 'dx-checkbox');
+    const $checkboxes = $('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(0).dxCheckBox('instance').option('value'), true, 'right checkBox is checked');
 });
@@ -443,10 +443,10 @@ QUnit.test('Recurrence repeat-on editor should process values by startDate corre
 QUnit.test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(3).dxCheckBox('instance');
+    const checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(3).dxCheckBox('instance');
 
     checkbox.option('value', true);
 
@@ -459,10 +459,10 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor after 
 
 QUnit.test('Recurrence editor should be able to uncheck default day from byday rule, freq=weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2018, 6, 24, 1) });
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var $checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(2);
+    const $checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(2);
 
     assert.ok($checkbox.dxCheckBox('instance').option('value'));
 
@@ -474,7 +474,7 @@ QUnit.test('Recurrence editor should be able to uncheck default day from byday r
 QUnit.test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
 
-    var $checkboxes = $('.' + 'dx-checkbox');
+    const $checkboxes = $('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(0).dxCheckBox('instance').option('value'), false, 'checkBox is not checked');
     assert.equal($checkboxes.eq(2).dxCheckBox('instance').option('value'), true, 'right checkBox is checked');
@@ -483,10 +483,10 @@ QUnit.test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=w
 QUnit.test('Recurrence editor should process values from repeat-on-editor correctly, freq=weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
+    const $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
 
     $checkboxes.eq(1).dxCheckBox('instance').option('value', true);
 
@@ -496,13 +496,13 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
 QUnit.test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnMonth = $repeatOn.find('.' + REPEAT_ON_MONTH_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnMonth = $repeatOn.find('.' + REPEAT_ON_MONTH_EDITOR);
 
     assert.equal($repeatOnMonth.length, 1, 'repeat-on-month editor was rendered');
 
-    var $day = $repeatOnMonth.find('.' + DAY_OF_MONTH),
-        dayEditor = $day.dxNumberBox('instance');
+    const $day = $repeatOnMonth.find('.' + DAY_OF_MONTH);
+    const dayEditor = $day.dxNumberBox('instance');
 
     assert.equal($day.length, 1, 'day-of-month editor was rendered');
     assert.equal(dayEditor.option('min'), 1, 'correct default value of day-of-month editor');
@@ -514,8 +514,8 @@ QUnit.test('Recurrence repeat-on editor should contain repeat-on-month editor, w
 QUnit.test('Recurrence repeat-on editor should should process values correctly, when freq = monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayOfMonth = $dayOfMonth.dxNumberBox('instance');
+    let $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    let dayOfMonth = $dayOfMonth.dxNumberBox('instance');
 
     assert.equal(dayOfMonth.option('value'), 5, 'repeat-on-month editor was rendered');
 
@@ -530,8 +530,8 @@ QUnit.test('Recurrence repeat-on editor should should process values correctly, 
 QUnit.test('Recurrence repeat-on editor should should process values by startDate correctly, when freq = monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2015, 1, 10, 1) });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayOfMonth = $dayOfMonth.dxNumberBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayOfMonth = $dayOfMonth.dxNumberBox('instance');
 
     assert.equal(dayOfMonth.option('value'), 10, 'repeat-on-month editor was rendered with right value');
 });
@@ -539,8 +539,8 @@ QUnit.test('Recurrence repeat-on editor should should process values by startDat
 QUnit.test('Recurrence editor should process values from repeat-on-editor correctly, freq=monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayOfMonth = $dayOfMonth.dxNumberBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayOfMonth = $dayOfMonth.dxNumberBox('instance');
 
     dayOfMonth.option('value', 12);
 
@@ -550,8 +550,8 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
 QUnit.test('\'BYMONTHDAY\' rule has a higher priority than \'startDate\' rule, when freq = monthly', function(assert) {
     this.createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5', startDate: new Date(2015, 1, 10, 1) });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayOfMonth = $dayOfMonth.dxNumberBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayOfMonth = $dayOfMonth.dxNumberBox('instance');
 
     assert.equal(dayOfMonth.option('value'), 5, 'repeat-on-month editor was rendered with right value');
 });
@@ -559,18 +559,18 @@ QUnit.test('\'BYMONTHDAY\' rule has a higher priority than \'startDate\' rule, w
 QUnit.test('Recurrence repeat-on editor should contain repeat-on-year editor, when freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnYear = $repeatOn.find('.' + REPEAT_ON_YEAR_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnYear = $repeatOn.find('.' + REPEAT_ON_YEAR_EDITOR);
 
     assert.equal($repeatOnYear.length, 1, 'repeat-on-year editor was rendered');
 
-    var $month = $repeatOnYear.find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $month = $repeatOnYear.find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     assert.equal($month.length, 1, 'month-of-year editor was rendered');
     assert.equal(monthEditor.option('items').length, 12, 'correct default value of month-of-year editor');
 
-    var $day = $repeatOnYear.find('.' + DAY_OF_MONTH);
+    const $day = $repeatOnYear.find('.' + DAY_OF_MONTH);
 
     assert.equal($day.length, 1, 'day-of-month editor was rendered');
 });
@@ -578,10 +578,10 @@ QUnit.test('Recurrence repeat-on editor should contain repeat-on-year editor, wh
 QUnit.test('Recurrence repeat-on editor should should process values correctly, when freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=5' });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayEditor = $dayOfMonth.dxNumberBox('instance'),
-        $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayEditor = $dayOfMonth.dxNumberBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     assert.equal(dayEditor.option('value'), 5, 'day was set correctly');
     assert.equal(monthEditor.option('value'), 10, 'month was set correctly');
@@ -595,10 +595,10 @@ QUnit.test('Recurrence repeat-on editor should should process values correctly, 
 QUnit.test('Recurrence repeat-on editor should process values by startDate correctly, when freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2015, 2, 10, 1) });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayEditor = $dayOfMonth.dxNumberBox('instance'),
-        $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayEditor = $dayOfMonth.dxNumberBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     assert.equal(dayEditor.option('value'), 10, 'day was set correctly');
     assert.equal(monthEditor.option('value'), 3, 'month was set correctly');
@@ -607,15 +607,15 @@ QUnit.test('Recurrence repeat-on editor should process values by startDate corre
 QUnit.test('Recurrence editor should process values from repeat-on-editor correctly, freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2015, 7, 4) });
 
-    var $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     monthEditor.option('value', '10');
 
     assert.equal(this.instance.option('value'), 'FREQ=YEARLY;BYMONTH=10', 'recurrence editor value is correct');
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayEditor = $dayOfMonth.dxNumberBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayEditor = $dayOfMonth.dxNumberBox('instance');
 
     dayEditor.option('value', 5);
     assert.equal(this.instance.option('value'), 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=5', 'recurrence editor value is correct');
@@ -624,8 +624,8 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
 QUnit.test('\'BYMONTH\' rule should has right default value, when freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2016, 4, 10) });
 
-    var $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     assert.equal(monthEditor.option('value'), 5, 'month was set correctly');
 });
@@ -633,10 +633,10 @@ QUnit.test('\'BYMONTH\' rule should has right default value, when freq = yearly'
 QUnit.test('\'BYMONTH\' rule has a higher priority than \'startDate\' rule, when freq = yearly', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=5', startDate: new Date(2015, 2, 10, 1) });
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayEditor = $dayOfMonth.dxNumberBox('instance'),
-        $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayEditor = $dayOfMonth.dxNumberBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
 
     assert.equal(dayEditor.option('value'), 5, 'day was set correctly');
     assert.equal(monthEditor.option('value'), 10, 'month was set correctly');
@@ -657,9 +657,9 @@ QUnit.test('Recurrence repeat-on editor should be rendered after changing freq i
 QUnit.test('Recurrence editor should process values from repeat-on-editor correctly after freq changing', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2015, 2, 10) });
 
-    var $month = this.instance.$element().find('.' + MONTH_OF_YEAR),
-        monthEditor = $month.dxSelectBox('instance'),
-        freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
+    const $month = this.instance.$element().find('.' + MONTH_OF_YEAR);
+    const monthEditor = $month.dxSelectBox('instance');
+    const freqEditor = $('.' + FREQUENCY_EDITOR).dxSelectBox('instance');
 
     monthEditor.option('value', '10');
     freqEditor.option('value', 'daily');
@@ -668,8 +668,8 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
 
     freqEditor.option('value', 'monthly');
 
-    var $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH),
-        dayEditor = $dayOfMonth.dxNumberBox('instance');
+    const $dayOfMonth = this.instance.$element().find('.' + DAY_OF_MONTH);
+    const dayEditor = $dayOfMonth.dxNumberBox('instance');
 
     dayEditor.option('value', 5);
     freqEditor.option('value', 'yearly');
@@ -679,8 +679,8 @@ QUnit.test('Recurrence editor should process values from repeat-on-editor correc
 
 QUnit.test('It should not be possible to set incorrect day of month', function(assert) {
     this.createInstance({ value: 'FREQ=YEARLY' });
-    var monthEditor = this.instance.$element().find('.' + MONTH_OF_YEAR).dxSelectBox('instance'),
-        dayInMonthEditor = this.instance.$element().find('.' + DAY_OF_MONTH).dxNumberBox('instance');
+    const monthEditor = this.instance.$element().find('.' + MONTH_OF_YEAR).dxSelectBox('instance');
+    const dayInMonthEditor = this.instance.$element().find('.' + DAY_OF_MONTH).dxNumberBox('instance');
 
     monthEditor.option('value', '4');
 
@@ -696,8 +696,8 @@ QUnit.test('Parts of recurrence editor should have right readonly option', funct
         readOnly: true
     });
 
-    var $interval = this.instance.$element().find('.' + EVERY_INTERVAL),
-        intervalInstance = $interval.dxNumberBox('instance');
+    const $interval = this.instance.$element().find('.' + EVERY_INTERVAL);
+    const intervalInstance = $interval.dxNumberBox('instance');
 
     assert.equal(intervalInstance.option('readOnly'), this.instance.option('readOnly'), 'right readonly option');
 });
@@ -717,7 +717,7 @@ QUnit.test('Recurrence editor should have correct firstDayOfWeek default value',
 });
 
 QUnit.test('Recurrence editor should have correct firstDayOfWeek value if this is different in localization', function(assert) {
-    var spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
+    const spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
     this.createInstance({ firstDayOfWeek: 0 });
 
@@ -727,8 +727,8 @@ QUnit.test('Recurrence editor should have correct firstDayOfWeek value if this i
 QUnit.test('Repeat-until dateBox should have right firstDayOfWeek', function(assert) {
     this.createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
 
-    var $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR),
-        untilDate = $untilDate.dxDateBox('instance');
+    const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const untilDate = $untilDate.dxDateBox('instance');
 
     assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 5, 'First day of the week is ok');
 });
@@ -737,8 +737,8 @@ QUnit.test('Repeat-until dateBox should have right firstDayOfWeek after firstDay
     this.createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
     this.instance.option('firstDayOfWeek', 1);
 
-    var $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR),
-        untilDate = $untilDate.dxDateBox('instance');
+    const $untilDate = this.instance.$element().find('.' + REPEAT_DATE_EDITOR);
+    const untilDate = $untilDate.dxDateBox('instance');
 
     assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 1, 'First day of the week is ok');
 });
@@ -746,10 +746,10 @@ QUnit.test('Repeat-until dateBox should have right firstDayOfWeek after firstDay
 QUnit.test('Repeat-on-week editor should be rendered correctly', function(assert) {
     this.createInstance({ firstDayOfWeek: 3, value: 'FREQ=WEEKLY;BYDAY=TU' });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
+    const $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(0).find('.dx-checkbox-text').text(), 'WE', 'Repeat-on-week editor was rendered correctly');
     assert.equal($checkboxes.eq(6).find('.dx-checkbox-text').text(), 'TU', 'Repeat-on-week editor was rendered correctly');
@@ -759,10 +759,10 @@ QUnit.test('Repeat-on-week editor should be rendered correctly after firstDayOfW
     this.createInstance({ firstDayOfWeek: 3, value: 'FREQ=WEEKLY;BYDAY=TU' });
     this.instance.option('firstDayOfWeek', 5);
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
+    const $checkboxes = $repeatOnWeek.find('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(0).find('.dx-checkbox-text').text(), 'FR', 'Repeat-on-week editor was rendered correctly');
     assert.equal($checkboxes.eq(6).find('.dx-checkbox-text').text(), 'TH', 'Repeat-on-week editor was rendered correctly');
@@ -771,7 +771,7 @@ QUnit.test('Repeat-on-week editor should be rendered correctly after firstDayOfW
 QUnit.test('Repeat-on-week editor should process values correctly if firstDayOfWeek was set, freq = weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', firstDayOfWeek: 6 });
 
-    var $checkboxes = $('.' + 'dx-checkbox');
+    const $checkboxes = $('.' + 'dx-checkbox');
 
     assert.equal($checkboxes.eq(3).dxCheckBox('instance').option('value'), true, 'Right checkBox was checked');
 });
@@ -779,10 +779,10 @@ QUnit.test('Repeat-on-week editor should process values correctly if firstDayOfW
 QUnit.test('Repeat-on-week editor should process values from checkboxes correctly if firstDayOfWeek was set, freq=weekly', function(assert) {
     this.createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', firstDayOfWeek: 3 });
 
-    var $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR),
-        $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
+    const $repeatOn = this.instance.$element().find('.' + REPEAT_ON_EDITOR);
+    const $repeatOnWeek = $repeatOn.find('.' + REPEAT_ON_WEEK_EDITOR);
 
-    var checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(3).dxCheckBox('instance');
+    const checkbox = $repeatOnWeek.find('.' + 'dx-checkbox').eq(3).dxCheckBox('instance');
 
     checkbox.option('value', true);
 

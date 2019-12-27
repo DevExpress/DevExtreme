@@ -1,18 +1,18 @@
-var _each = require('../../core/utils/iterator').each,
-    _max = Math.max,
-    _min = Math.min,
-    _round = Math.round,
-    registerComponent = require('../../core/component_registrator'),
-    extend = require('../../core/utils/extend').extend,
-    objectUtils = require('../../core/utils/object'),
-    dxBaseGauge = require('./base_gauge').dxBaseGauge,
-    dxGauge = require('./common').dxGauge,
-    _normalizeEnum = require('../core/utils').normalizeEnum,
-    linearIndicatorsModule = require('./linear_indicators'),
-    createIndicatorCreator = require('./common').createIndicatorCreator,
-    LinearRangeContainer = require('./linear_range_container');
+const _each = require('../../core/utils/iterator').each;
+const _max = Math.max;
+const _min = Math.min;
+const _round = Math.round;
+const registerComponent = require('../../core/component_registrator');
+const extend = require('../../core/utils/extend').extend;
+const objectUtils = require('../../core/utils/object');
+const dxBaseGauge = require('./base_gauge').dxBaseGauge;
+const dxGauge = require('./common').dxGauge;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
+const linearIndicatorsModule = require('./linear_indicators');
+const createIndicatorCreator = require('./common').createIndicatorCreator;
+const LinearRangeContainer = require('./linear_range_container');
 
-var dxLinearGauge = dxGauge.inherit({
+const dxLinearGauge = dxGauge.inherit({
     _rootClass: 'dxg-linear-gauge',
 
     _factoryMethods: {
@@ -30,21 +30,21 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _getThemeManagerOptions() {
-        let options = this.callBase.apply(this, arguments);
+        const options = this.callBase.apply(this, arguments);
 
         options.subTheme = '_linear';
         return options;
     },
 
     _updateScaleTickIndent: function(scaleOptions) {
-        var indentFromTick = scaleOptions.label.indentFromTick,
-            length = scaleOptions.tick.length,
-            textParams = this._scale.measureLabels(extend({}, this._canvas)),
-            verticalTextCorrection = scaleOptions.isHorizontal ? textParams.height + textParams.y : 0,
-            isIndentPositive = indentFromTick > 0,
-            orientation,
-            textCorrection,
-            tickCorrection;
+        const indentFromTick = scaleOptions.label.indentFromTick;
+        const length = scaleOptions.tick.length;
+        const textParams = this._scale.measureLabels(extend({}, this._canvas));
+        const verticalTextCorrection = scaleOptions.isHorizontal ? textParams.height + textParams.y : 0;
+        const isIndentPositive = indentFromTick > 0;
+        let orientation;
+        let textCorrection;
+        let tickCorrection;
 
         if(scaleOptions.isHorizontal) {
             orientation = isIndentPositive ? { center: 0.5, top: 0, bottom: 1 } : { center: 0.5, top: 1, bottom: 0 };
@@ -62,10 +62,10 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _shiftScale: function(layout, scaleOptions) {
-        var that = this,
-            canvas = extend({}, that._canvas),
-            isHorizontal = scaleOptions.isHorizontal,
-            scale = that._scale;
+        const that = this;
+        const canvas = extend({}, that._canvas);
+        const isHorizontal = scaleOptions.isHorizontal;
+        const scale = that._scale;
 
         canvas[isHorizontal ? 'left' : 'top'] = that._area[isHorizontal ? 'startCoord' : 'endCoord'];
         canvas[isHorizontal ? 'right' : 'bottom'] = canvas[isHorizontal ? 'width' : 'height'] - that._area[isHorizontal ? 'endCoord' : 'startCoord'];
@@ -75,11 +75,11 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _setupCodomain: function() {
-        var that = this,
-            geometry = that.option('geometry') || {},
-            vertical = _normalizeEnum(geometry.orientation) === 'vertical',
-            initialStartCoord = -100,
-            initialEndCoord = 100;
+        const that = this;
+        const geometry = that.option('geometry') || {};
+        const vertical = _normalizeEnum(geometry.orientation) === 'vertical';
+        const initialStartCoord = -100;
+        const initialEndCoord = 100;
 
         that._area = {
             vertical: vertical,
@@ -97,7 +97,7 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _getTicksCoefficients: function(options) {
-        var coefs = { inner: 0, outer: 1 };
+        const coefs = { inner: 0, outer: 1 };
 
         if(this._area.vertical) {
             if(options.horizontalOrientation === 'left') {
@@ -119,7 +119,7 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _correctScaleIndents: function(result, indentFromTick, textParams) {
-        var vertical = this._area.vertical;
+        const vertical = this._area.vertical;
         if(indentFromTick >= 0) {
             result.max += indentFromTick + textParams[vertical ? 'width' : 'height'];
         } else {
@@ -129,16 +129,16 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _measureMainElements: function(elements, scaleMeasurement) {
-        var that = this,
-            x = that._area.x,
-            y = that._area.y,
-            minBound = 1000,
-            maxBound = 0,
-            indent = 0,
-            scale = that._scale;
+        const that = this;
+        const x = that._area.x;
+        const y = that._area.y;
+        let minBound = 1000;
+        let maxBound = 0;
+        let indent = 0;
+        const scale = that._scale;
 
         _each(elements.concat(scale), function(_, element) {
-            var bounds = element.measure ? element.measure({ x: x + element.getOffset(), y: y + element.getOffset() }) : scaleMeasurement;
+            const bounds = element.measure ? element.measure({ x: x + element.getOffset(), y: y + element.getOffset() }) : scaleMeasurement;
             bounds.max !== undefined && (maxBound = _max(maxBound, bounds.max));
             bounds.min !== undefined && (minBound = _min(minBound, bounds.min));
             (bounds.indent > 0) && (indent = _max(indent, bounds.indent));
@@ -147,11 +147,11 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _applyMainLayout: function(elements, scaleMeasurement) {
-        var that = this,
-            measurements = that._measureMainElements(elements, scaleMeasurement),
-            area = that._area,
-            rect,
-            offset;
+        const that = this;
+        const measurements = that._measureMainElements(elements, scaleMeasurement);
+        const area = that._area;
+        let rect;
+        let offset;
 
         if(area.vertical) {
             rect = selectRectBySizes(that._innerRect, { width: measurements.maxBound - measurements.minBound });
@@ -175,9 +175,9 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _getApproximateScreenRange: function() {
-        var that = this,
-            area = that._area,
-            s = area.vertical ? that._canvas.height : that._canvas.width;
+        const that = this;
+        const area = that._area;
+        let s = area.vertical ? that._canvas.height : that._canvas.width;
 
         s > area.totalSize && (s = area.totalSize);
         s = s * 0.8;
@@ -185,7 +185,7 @@ var dxLinearGauge = dxGauge.inherit({
     },
 
     _getDefaultSize: function() {
-        var geometry = this.option('geometry') || {};
+        const geometry = this.option('geometry') || {};
         if(geometry.orientation === 'vertical') {
             return { width: 100, height: 300 };
         } else {
@@ -197,8 +197,8 @@ var dxLinearGauge = dxGauge.inherit({
 });
 
 function selectRectBySizes(srcRect, sizes, margins) {
-    var rect = extend({}, srcRect),
-        step;
+    const rect = extend({}, srcRect);
+    let step;
     margins = margins || {};
     if(sizes) {
         rect.left += margins.left || 0;
@@ -228,7 +228,7 @@ function selectRectBySizes(srcRect, sizes, margins) {
 dxLinearGauge._TESTS_selectRectBySizes = selectRectBySizes;
 ///#ENDDEBUG
 
-var indicators = dxLinearGauge.prototype._factory.indicators = {};
+const indicators = dxLinearGauge.prototype._factory.indicators = {};
 dxLinearGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
 indicators._default = linearIndicatorsModule._default;

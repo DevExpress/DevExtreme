@@ -1,30 +1,30 @@
-var $ = require('../core/renderer'),
-    window = require('../core/utils/window').getWindow(),
-    devices = require('../core/devices'),
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    Widget = require('./widget/ui.widget'),
-    Button = require('./button'),
-    Popover = require('./popover'),
-    DataHelperMixin = require('../data_helper'),
-    List = require('./list'),
-    themes = require('./themes'),
-    ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+const $ = require('../core/renderer');
+const window = require('../core/utils/window').getWindow();
+const devices = require('../core/devices');
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const Widget = require('./widget/ui.widget');
+const Button = require('./button');
+const Popover = require('./popover');
+const DataHelperMixin = require('../data_helper');
+const List = require('./list');
+const themes = require('./themes');
+const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 
-var DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu',
-    DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup',
-    DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper',
-    DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list',
-    DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
+const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
+const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
+const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+const DROP_DOWN_MENU_LIST_CLASS = 'dx-dropdownmenu-list';
+const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 
-var POPUP_OPTION_MAP = {
+const POPUP_OPTION_MAP = {
     'popupWidth': 'width',
     'popupHeight': 'height',
     'popupMaxHeight': 'maxHeight',
     'popupAutoResizeEnabled': 'autoResizeEnabled'
 };
 
-var BUTTON_OPTION_MAP = {
+const BUTTON_OPTION_MAP = {
     'buttonIcon': 'icon',
     'buttonText': 'text',
     'buttonWidth': 'width',
@@ -32,9 +32,9 @@ var BUTTON_OPTION_MAP = {
     'buttonTemplate': 'template'
 };
 
-var DropDownMenu = Widget.inherit({
+const DropDownMenu = Widget.inherit({
     _supportedKeys: function() {
-        var extension = {};
+        let extension = {};
 
         if(!this.option('opened') || !this._list.option('focusedElement')) {
             extension = this._button._supportedKeys();
@@ -222,8 +222,8 @@ var DropDownMenu = Widget.inherit({
     },
 
     _renderButton: function() {
-        var $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS),
-            config = this._buttonOptions();
+        const $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS);
+        const config = this._buttonOptions();
 
         this._button = this._createComponent($button, Button, config);
     },
@@ -249,7 +249,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     _toggleMenuVisibility: function(opened) {
-        var state = opened === undefined ? !this._popup.option('visible') : opened;
+        const state = opened === undefined ? !this._popup.option('visible') : opened;
 
         if(opened) {
             this._renderPopup();
@@ -264,14 +264,14 @@ var DropDownMenu = Widget.inherit({
             return;
         }
 
-        var $popup = this._$popup = $('<div>').appendTo(this.$element()),
-            config = this._popupOptions();
+        const $popup = this._$popup = $('<div>').appendTo(this.$element());
+        const config = this._popupOptions();
 
         this._popup = this._createComponent($popup, Popover, config); // TODO: Circular dep
     },
 
     _popupOptions: function() {
-        var usePopup = !this.option('usePopover');
+        const usePopup = !this.option('usePopover');
 
         return {
             onInitialized: function(args) {
@@ -301,8 +301,8 @@ var DropDownMenu = Widget.inherit({
     },
 
     _renderList: function(contentElement) {
-        var $content = $(contentElement),
-            listConfig = this._listOptions();
+        const $content = $(contentElement);
+        const listConfig = this._listOptions();
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
@@ -315,7 +315,7 @@ var DropDownMenu = Widget.inherit({
 
         this._setListDataSource();
 
-        var listMaxHeight = $(window).height() * 0.5;
+        const listMaxHeight = $(window).height() * 0.5;
         if($content.height() > listMaxHeight) {
             $content.height(listMaxHeight);
         }
@@ -370,8 +370,8 @@ var DropDownMenu = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
-        var value = args.value;
+        const name = args.name;
+        const value = args.value;
 
         switch(name) {
             case 'items':

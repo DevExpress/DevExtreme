@@ -125,7 +125,7 @@ class FileManagerContextMenu extends Widget {
             return res;
         }
 
-        let result = this._createMenuItemByCommandName(commandName);
+        const result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
         this._extendAttributes(result, item, ['visible', 'beginGroup', 'text', 'icon']);
@@ -154,7 +154,7 @@ class FileManagerContextMenu extends Widget {
     }
 
     _onContextMenuItemClick(commandName) {
-        let targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
+        const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
         this._commandManager.executeCommand(commandName, targetFileItems);
     }
 

@@ -3,107 +3,107 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { findField, foreachTree, setFieldProperty } from './ui.pivot_grid.utils';
 
-var COLUMN = 'column',
-    ROW = 'row',
-    NULL = null,
+const COLUMN = 'column';
+const ROW = 'row';
+const NULL = null;
 
-    calculatePercentValue = function(value, totalValue) {
-        var result = value / totalValue;
-        if(!isDefined(value) || isNaN(result)) {
-            result = NULL;
-        }
-        return result;
-    },
+const calculatePercentValue = function(value, totalValue) {
+    let result = value / totalValue;
+    if(!isDefined(value) || isNaN(result)) {
+        result = NULL;
+    }
+    return result;
+};
 
-    percentOfGrandTotal = function(e, dimension) {
-        return calculatePercentValue(e.value(), e.grandTotal(dimension).value());
-    },
+const percentOfGrandTotal = function(e, dimension) {
+    return calculatePercentValue(e.value(), e.grandTotal(dimension).value());
+};
 
-    percentOfParent = function(e, dimension) {
-        var parent = e.parent(dimension),
-            parentValue = parent ? parent.value() : e.value();
+const percentOfParent = function(e, dimension) {
+    const parent = e.parent(dimension);
+    const parentValue = parent ? parent.value() : e.value();
 
-        return calculatePercentValue(e.value(), parentValue);
-    },
+    return calculatePercentValue(e.value(), parentValue);
+};
 
-    createAbsoluteVariationExp = function(allowCrossGroup) {
-        return function(e) {
-            var prevCell = e.prev(COLUMN, allowCrossGroup),
-                prevValue = prevCell && prevCell.value();
+const createAbsoluteVariationExp = function(allowCrossGroup) {
+    return function(e) {
+        const prevCell = e.prev(COLUMN, allowCrossGroup);
+        const prevValue = prevCell && prevCell.value();
 
-            if(isDefined(prevValue) && isDefined(e.value())) {
-                return e.value() - prevValue;
-            }
-
-            return NULL;
-        };
-    },
-
-    createPercentVariationExp = function(allowCrossGroup) {
-        var absoluteExp = createAbsoluteVariationExp(allowCrossGroup);
-        return function(e) {
-            var absVar = absoluteExp(e),
-                prevCell = e.prev(COLUMN, allowCrossGroup),
-                prevValue = prevCell && prevCell.value();
-
-            return absVar !== NULL && prevValue ? absVar / prevValue : NULL;
-        };
-    },
-
-    summaryDictionary = {
-        percentOfColumnTotal: function(e) {
-            return percentOfParent(e, ROW);
-        },
-
-        percentOfRowTotal: function(e) {
-            return percentOfParent(e, COLUMN);
-        },
-
-        percentOfColumnGrandTotal: function(e) {
-            return percentOfGrandTotal(e, ROW);
-        },
-
-        percentOfRowGrandTotal: function(e) {
-            return percentOfGrandTotal(e, COLUMN);
-        },
-
-        percentOfGrandTotal: function(e) {
-            return percentOfGrandTotal(e);
-        }
-    },
-    getPrevCellCrossGroup = function(cell, direction) {
-        if(!cell || !cell.parent(direction)) {
-            return;
+        if(isDefined(prevValue) && isDefined(e.value())) {
+            return e.value() - prevValue;
         }
 
-        var prevCell = cell.prev(direction);
-
-        if(!prevCell) {
-            prevCell = getPrevCellCrossGroup(cell.parent(direction), direction);
-        }
-
-        return prevCell;
-    },
-
-    createRunningTotalExpr = function(field) {
-        if(!field.runningTotal) {
-            return;
-        }
-        var direction = field.runningTotal === COLUMN ? ROW : COLUMN;
-        return function(e) {
-            var prevCell = field.allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false),
-                value = e.value(true),
-                prevValue = prevCell && prevCell.value(true);
-
-            if(isDefined(prevValue) && isDefined(value)) {
-                value = prevValue + value;
-            } else if(isDefined(prevValue)) {
-                value = prevValue;
-            }
-
-            return value;
-        };
+        return NULL;
     };
+};
+
+const createPercentVariationExp = function(allowCrossGroup) {
+    const absoluteExp = createAbsoluteVariationExp(allowCrossGroup);
+    return function(e) {
+        const absVar = absoluteExp(e);
+        const prevCell = e.prev(COLUMN, allowCrossGroup);
+        const prevValue = prevCell && prevCell.value();
+
+        return absVar !== NULL && prevValue ? absVar / prevValue : NULL;
+    };
+};
+
+const summaryDictionary = {
+    percentOfColumnTotal: function(e) {
+        return percentOfParent(e, ROW);
+    },
+
+    percentOfRowTotal: function(e) {
+        return percentOfParent(e, COLUMN);
+    },
+
+    percentOfColumnGrandTotal: function(e) {
+        return percentOfGrandTotal(e, ROW);
+    },
+
+    percentOfRowGrandTotal: function(e) {
+        return percentOfGrandTotal(e, COLUMN);
+    },
+
+    percentOfGrandTotal: function(e) {
+        return percentOfGrandTotal(e);
+    }
+};
+var getPrevCellCrossGroup = function(cell, direction) {
+    if(!cell || !cell.parent(direction)) {
+        return;
+    }
+
+    let prevCell = cell.prev(direction);
+
+    if(!prevCell) {
+        prevCell = getPrevCellCrossGroup(cell.parent(direction), direction);
+    }
+
+    return prevCell;
+};
+
+const createRunningTotalExpr = function(field) {
+    if(!field.runningTotal) {
+        return;
+    }
+    const direction = field.runningTotal === COLUMN ? ROW : COLUMN;
+    return function(e) {
+        const prevCell = field.allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false);
+        let value = e.value(true);
+        const prevValue = prevCell && prevCell.value(true);
+
+        if(isDefined(prevValue) && isDefined(value)) {
+            value = prevValue + value;
+        } else if(isDefined(prevValue)) {
+            value = prevValue;
+        }
+
+        return value;
+    };
+};
 
 function createCache() {
     return {
@@ -113,11 +113,11 @@ function createCache() {
 }
 
 function getFieldPos(descriptions, field, cache) {
-    var fieldIndex,
-        allFields,
-        fieldParams = {
-            index: -1
-        };
+    let fieldIndex;
+    let allFields;
+    let fieldParams = {
+        index: -1
+    };
 
     if(!isObject(field)) {
         if(cache.fields[field]) {
@@ -130,7 +130,7 @@ function getFieldPos(descriptions, field, cache) {
     }
 
     if(field) {
-        var area = field.area || 'data';
+        const area = field.area || 'data';
         fieldParams = cache.positions[field.index] = cache.positions[field.index] || {
             area: area,
             index: inArray(field, descriptions[area === 'data' ? 'values' : area + 's'])
@@ -144,7 +144,7 @@ function getPathFieldName(dimension) {
     return dimension === ROW ? '_rowPath' : '_columnPath';
 }
 
-var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, fieldsCache) {
+const SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, fieldsCache) {
     this._columnPath = columnPath;
     this._rowPath = rowPath;
     this._fieldIndex = fieldIndex;
@@ -153,7 +153,7 @@ var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, 
     this._data = data;
     this._descriptions = descriptions;
 
-    var cell = data.values && data.values[rowPath[0].index] && data.values[rowPath[0].index][columnPath[0].index];
+    const cell = data.values && data.values[rowPath[0].index] && data.values[rowPath[0].index][columnPath[0].index];
 
     if(cell) {
         cell.originalCell = cell.originalCell || cell.slice();
@@ -178,13 +178,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     _createCell: function(config) {
-        var that = this;
+        const that = this;
         return new SummaryCell(config._columnPath || that._columnPath, config._rowPath || that._rowPath, that._data, that._descriptions, that._fieldIndex);
     },
 
     parent: function(direction) {
-        var path = this._getPath(direction).slice(),
-            config = {};
+        const path = this._getPath(direction).slice();
+        const config = {};
         path.shift();
 
         if(path.length) {
@@ -195,13 +195,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     children: function(direction) {
-        var path = this._getPath(direction).slice(),
-            item = path[0],
-            result = [],
-            cellConfig = {};
+        const path = this._getPath(direction).slice();
+        const item = path[0];
+        const result = [];
+        const cellConfig = {};
 
         if(item.children) {
-            for(var i = 0; i < item.children.length; i++) {
+            for(let i = 0; i < item.children.length; i++) {
                 cellConfig[getPathFieldName(direction)] = [item.children[i]].concat(path.slice());
                 result.push(this._createCell(cellConfig));
             }
@@ -211,11 +211,11 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     grandTotal: function(direction) {
-        var config = {},
-            rowPath = this._rowPath,
-            columnPath = this._columnPath,
-            dimensionPath = this._getPath(direction),
-            pathFieldName = getPathFieldName(direction);
+        const config = {};
+        const rowPath = this._rowPath;
+        const columnPath = this._columnPath;
+        const dimensionPath = this._getPath(direction);
+        const pathFieldName = getPathFieldName(direction);
 
         if(!direction) {
             config._rowPath = [rowPath[rowPath.length - 1]];
@@ -228,11 +228,11 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
 
     next: function(direction, allowCrossGroup) {
-        var currentPath = this._getPath(direction),
-            item = currentPath[0],
-            parent = this.parent(direction),
-            siblings,
-            index;
+        const currentPath = this._getPath(direction);
+        const item = currentPath[0];
+        let parent = this.parent(direction);
+        let siblings;
+        let index;
 
         if(parent) {
             index = inArray(item, currentPath[1].children);
@@ -258,11 +258,11 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
 
     prev: function(direction, allowCrossGroup) {
-        var currentPath = this._getPath(direction),
-            item = currentPath[0],
-            parent = this.parent(direction),
-            siblings,
-            index;
+        const currentPath = this._getPath(direction);
+        const item = currentPath[0];
+        let parent = this.parent(direction);
+        let siblings;
+        let index;
 
         if(parent) {
             index = inArray(item, currentPath[1].children);
@@ -295,17 +295,17 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         if(area === 'data') {
             return this._descriptions.values[this._fieldIndex];
         }
-        var path = this._getPath(area),
-            descriptions = this._getDimension(area),
-            field = descriptions[path.length - 2];
+        const path = this._getPath(area);
+        const descriptions = this._getDimension(area);
+        const field = descriptions[path.length - 2];
 
         return field || NULL;
     },
 
     child: function(direction, fieldValue) {
-        var children = this.children(direction),
-            childLevelField;
-        for(var i = 0; i < children.length; i++) {
+        const children = this.children(direction);
+        let childLevelField;
+        for(let i = 0; i < children.length; i++) {
             childLevelField = childLevelField || children[i].field(direction);
             if(children[i].value(childLevelField) === fieldValue) {
                 return children[i];
@@ -316,17 +316,17 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
 
     slice: function(field, value) {
-        var that = this,
-            config = {},
-            fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache),
-            area = fieldPos.area,
-            fieldIndex = fieldPos.index,
-            childItems,
-            path,
-            currentValue,
-            level,
-            sliceCell = NULL,
-            newPath = [];
+        const that = this;
+        const config = {};
+        const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
+        const area = fieldPos.area;
+        const fieldIndex = fieldPos.index;
+        let childItems;
+        let path;
+        let currentValue;
+        let level;
+        let sliceCell = NULL;
+        const newPath = [];
 
         if(area === ROW || area === COLUMN) {
             path = this._getPath(area).slice();
@@ -334,13 +334,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 
             if(path[level]) {
                 newPath[path.length - 1] = path[path.length - 1];
-                for(var i = level; i >= 0; i--) {
+                for(let i = level; i >= 0; i--) {
                     if(path[i + 1]) {
                         childItems = path[i + 1].children || [];
                         currentValue = i === level ? value : path[i].value;
                         path[i] = undefined;
 
-                        for(var childIndex = 0; childIndex < childItems.length; childIndex++) {
+                        for(let childIndex = 0; childIndex < childItems.length; childIndex++) {
                             if(childItems[childIndex].value === currentValue) {
                                 path[i] = childItems[childIndex];
                                 break;
@@ -361,16 +361,16 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     },
 
     value: function(arg1, arg2) {
-        var cell = this._cell,
-            fieldIndex = this._fieldIndex,
-            fistArgIsBoolean = arg1 === true || arg1 === false,
-            path,
-            field = !fistArgIsBoolean ? arg1 : NULL,
-            needCalculatedValue = fistArgIsBoolean && arg1 || arg2,
-            level;
+        const cell = this._cell;
+        let fieldIndex = this._fieldIndex;
+        const fistArgIsBoolean = arg1 === true || arg1 === false;
+        let path;
+        const field = !fistArgIsBoolean ? arg1 : NULL;
+        const needCalculatedValue = fistArgIsBoolean && arg1 || arg2;
+        let level;
 
         if(isDefined(field)) {
-            var fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
+            const fieldPos = getFieldPos(this._descriptions, field, this._fieldsCache);
             fieldIndex = fieldPos.index;
 
             if(fieldPos.area !== 'data') {
@@ -403,9 +403,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
 });
 
 function getExpression(field) {
-    var summaryDisplayMode = field.summaryDisplayMode,
-        crossGroupCalculation = field.allowCrossGroupCalculation,
-        expression = NULL;
+    const summaryDisplayMode = field.summaryDisplayMode;
+    const crossGroupCalculation = field.allowCrossGroupCalculation;
+    let expression = NULL;
 
     if(isFunction(field.calculateSummaryValue)) {
         expression = field.calculateSummaryValue;
@@ -426,8 +426,8 @@ function getExpression(field) {
 }
 
 function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation) {
-    var values = data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [],
-        originalCell = values.originalCell;
+    const values = data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [];
+    const originalCell = values.originalCell;
 
     if(!originalCell) {
         return;
@@ -441,35 +441,35 @@ function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation)
 }
 
 exports.applyDisplaySummaryMode = function(descriptions, data) {
-    var expressions = [],
-        columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
-        rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }],
-        valueFields = descriptions.values,
-        fieldsCache = createCache();
+    const expressions = [];
+    const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
+    const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
+    const valueFields = descriptions.values;
+    const fieldsCache = createCache();
 
     data.values = data.values || [];
 
     foreachTree(rowElements, function(rowPath) {
-        var rowItem = rowPath[0];
+        const rowItem = rowPath[0];
 
         rowItem.isEmpty = [];
 
         data.values[rowItem.index] = data.values[rowItem.index] || [];
 
         foreachTree(columnElements, function(columnPath) {
-            var columnItem = columnPath[0],
-                expression,
-                expressionArg,
-                cell,
-                field,
-                isEmptyCell,
-                value;
+            const columnItem = columnPath[0];
+            let expression;
+            let expressionArg;
+            let cell;
+            let field;
+            let isEmptyCell;
+            let value;
 
             columnItem.isEmpty = columnItem.isEmpty || [];
 
             processDataCell(data, rowItem.index, columnItem.index, false);
 
-            for(var i = 0; i < valueFields.length; i++) {
+            for(let i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
                 expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
                 isEmptyCell = false;
@@ -498,28 +498,28 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 };
 
 exports.applyRunningTotal = function(descriptions, data) {
-    var expressions = [],
-        columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
-        rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }],
-        valueFields = descriptions.values,
-        fieldsCache = createCache();
+    const expressions = [];
+    const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
+    const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
+    const valueFields = descriptions.values;
+    const fieldsCache = createCache();
 
     data.values = data.values || [];
 
     foreachTree(rowElements, function(rowPath) {
-        var rowItem = rowPath[0];
+        const rowItem = rowPath[0];
         data.values[rowItem.index] = data.values[rowItem.index] || [];
 
         foreachTree(columnElements, function(columnPath) {
-            var columnItem = columnPath[0],
-                expression,
-                expressionArg,
-                cell,
-                field;
+            const columnItem = columnPath[0];
+            let expression;
+            let expressionArg;
+            let cell;
+            let field;
 
             processDataCell(data, rowItem.index, columnItem.index, true);
 
-            for(var i = 0; i < valueFields.length; i++) {
+            for(let i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
                 expression = expressions[i] = (expressions[i] === undefined ? createRunningTotalExpr(field) : expressions[i]);
 
@@ -535,11 +535,11 @@ exports.applyRunningTotal = function(descriptions, data) {
 };
 
 exports.createMockSummaryCell = function(descriptions, fields, indices) {
-    var summaryCell = new SummaryCell([], [], {}, descriptions, 0);
+    const summaryCell = new SummaryCell([], [], {}, descriptions, 0);
     summaryCell.value = function(fieldId) {
         if(isDefined(fieldId)) {
-            var index = findField(fields, fieldId),
-                field = fields[index];
+            const index = findField(fields, fieldId);
+            const field = fields[index];
             if(!indices[index] && field && !isDefined(field.area)) {
                 descriptions.values.push(field);
                 indices[index] = true;

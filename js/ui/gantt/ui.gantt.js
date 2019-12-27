@@ -249,7 +249,7 @@ class Gantt extends Widget {
         }
     }
     _getSpecificDataSourceOption(name) {
-        var dataSource = this.option(`${name}.dataSource`);
+        const dataSource = this.option(`${name}.dataSource`);
         if(Array.isArray(dataSource)) {
             return {
                 store: {
@@ -264,7 +264,7 @@ class Gantt extends Widget {
     _compileGettersByOption(optionName) {
         const getters = {};
         const optionValue = this.option(optionName);
-        for(let field in optionValue) {
+        for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
                 getters[exprMatches[1]] = dataCoreUtils.compileGetter(optionValue[exprMatches[0]]);
@@ -275,7 +275,7 @@ class Gantt extends Widget {
     _compileSettersByOption(optionName) {
         const setters = {};
         const optionValue = this.option(optionName);
-        for(let field in optionValue) {
+        for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
                 setters[exprMatches[1]] = dataCoreUtils.compileSetter(optionValue[exprMatches[0]]);

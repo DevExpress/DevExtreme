@@ -3,7 +3,7 @@ import { extend } from 'core/utils/extend';
 
 QUnit.module('findChanges', {
     beforeEach: function() {
-        var isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
+        const isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
         this.oldItems = [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }];
         this.newItems = extend(true, [], this.oldItems);
         this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, isItemEquals);
@@ -12,7 +12,7 @@ QUnit.module('findChanges', {
     QUnit.test('add item in the beginning', function(assert) {
         this.newItems.unshift({ a: 'Item 2', id: 2 });
 
-        var changes = this.findChanges();
+        const changes = this.findChanges();
 
         assert.equal(changes.length, 1);
         assert.equal(changes[0].type, 'insert');
@@ -22,7 +22,7 @@ QUnit.module('findChanges', {
     QUnit.test('remove item from the beginning', function(assert) {
         this.newItems.shift();
 
-        var changes = this.findChanges();
+        const changes = this.findChanges();
 
         assert.equal(changes.length, 1);
         assert.equal(changes[0].type, 'remove');
@@ -34,7 +34,7 @@ QUnit.module('findChanges', {
         this.newItems.push({ a: 'Item 2', id: 2 });
         this.newItems[0].a = 'Item 1 updated';
 
-        var changes = this.findChanges();
+        const changes = this.findChanges();
 
         assert.equal(changes.length, 3);
         assert.equal(changes[0].type, 'remove');
@@ -50,7 +50,7 @@ QUnit.module('findChanges', {
         this.newItems.unshift({ a: 'Item 2', id: 2 });
         this.newItems[1].a = 'Item 0 updated';
 
-        var changes = this.findChanges();
+        const changes = this.findChanges();
 
         assert.equal(changes[0].type, 'insert');
         assert.equal(changes[0].data.id, 2);
@@ -64,7 +64,7 @@ QUnit.module('findChanges', {
         this.newItems.pop();
         this.newItems[0].a = 'Item 0 updated';
 
-        var changes = this.findChanges();
+        const changes = this.findChanges();
 
         assert.equal(changes[0].type, 'update');
         assert.equal(changes[0].data.id, 0);

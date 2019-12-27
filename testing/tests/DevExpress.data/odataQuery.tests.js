@@ -7,19 +7,19 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'data/odata/query_adapter';
 
-var MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
+const MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 
 function QUERY(url, options) {
     return query(url, $.extend({ adapter: 'odata' }, options));
 }
 
-var moduleConfig = {
+const moduleConfig = {
     afterEach: function() {
         ajaxMock.clear();
     }
 };
 
-var moduleWithMockConfig = {
+const moduleWithMockConfig = {
     beforeEach: function() {
         ajaxMock.setup({
             url: 'odata.org',
@@ -36,7 +36,7 @@ var moduleWithMockConfig = {
 
 QUnit.module('Common', moduleConfig);
 QUnit.test('existing query string is kept', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'url?customParam=1',
@@ -58,7 +58,7 @@ QUnit.test('existing query string is kept', function(assert) {
 });
 
 QUnit.test('Custom headers, query string params, async and request timeout (beforeSend event)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -67,7 +67,7 @@ QUnit.test('Custom headers, query string params, async and request timeout (befo
         }
     });
 
-    var beforeSend = function(options) {
+    const beforeSend = function(options) {
         assert.equal(options.async, true);
         assert.equal(options.method, 'get');
         assert.equal(options.timeout, 30000);
@@ -96,7 +96,7 @@ QUnit.test('Custom headers, query string params, async and request timeout (befo
 });
 
 QUnit.test('JSONP for cross-domain requests', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -127,9 +127,9 @@ QUnit.module('Query string generation', moduleWithMockConfig);
 QUnit.test('sort', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(desc, expectation) {
+    const check = function(desc, expectation) {
         return QUERY('odata.org')
             .sortBy('a', desc)
             .enumerate()
@@ -148,7 +148,7 @@ QUnit.test('sort', function(assert) {
 QUnit.test('second sortBy overrides the first', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .sortBy('name1')
@@ -166,7 +166,7 @@ QUnit.test('second sortBy overrides the first', function(assert) {
 QUnit.test('thenBy', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .sortBy('name1')
@@ -184,7 +184,7 @@ QUnit.test('thenBy', function(assert) {
 QUnit.test('sortBy nested fields', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .sortBy('a.b.c')
@@ -201,9 +201,9 @@ QUnit.test('sortBy nested fields', function(assert) {
 QUnit.test('slice', function(assert) {
     assert.expect(8);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(skip, take, expectSkip) {
+    const check = function(skip, take, expectSkip) {
         return QUERY('odata.org')
             .slice(skip, take)
             .enumerate()
@@ -221,7 +221,7 @@ QUnit.test('slice', function(assert) {
 });
 
 QUnit.test('select', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .select('a.x', 'a.y', 'b')
@@ -237,7 +237,7 @@ QUnit.test('select', function(assert) {
 });
 
 QUnit.test('expand to third level', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .select('a.b.c')
@@ -252,16 +252,16 @@ QUnit.test('expand to third level', function(assert) {
 });
 
 QUnit.test('select and expand in OData 4', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var checker = function(selectClause, expandClause) {
-        var options = { version: 4 };
+    const checker = function(selectClause, expandClause) {
+        const options = { version: 4 };
 
         if(expandClause) {
             options.expand = expandClause;
         }
 
-        var q = QUERY('odata.org', options);
+        let q = QUERY('odata.org', options);
         if(selectClause) {
             q = q.select(selectClause);
         }
@@ -269,7 +269,7 @@ QUnit.test('select and expand in OData 4', function(assert) {
         return q.enumerate();
     };
 
-    var promises = [
+    const promises = [
         checker(['a.x', 'a.y.z'], null)
             .done(function(results) {
                 assert.deepEqual(results[0].data, {
@@ -333,13 +333,13 @@ QUnit.test('select and expand in OData 4', function(assert) {
 
 QUnit.module('Dates transformation', moduleConfig);
 QUnit.test('works', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            var expected = [
+            const expected = [
                 '(date eq datetime\'1996-07-04T01:01:01.001\')',
                 '(date eq datetime\'1996-07-04T01:01:01.010\')',
                 '(date eq datetime\'1996-07-04T01:01:01.100\')',
@@ -354,7 +354,7 @@ QUnit.test('works', function(assert) {
         url: 'odata4.org',
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            var expected = [
+            const expected = [
                 '(date eq 1996-07-04T01:01:01.001Z)',
                 '(date eq 1996-07-04T01:01:01.010Z)',
                 '(date eq 1996-07-04T01:01:01.100Z)',
@@ -365,7 +365,7 @@ QUnit.test('works', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         QUERY('odata.org')
             .filter([
                 ['date', new Date(1996, 6, 4, 1, 1, 1, 1)],
@@ -396,9 +396,9 @@ QUnit.module('Criteria transformation', moduleWithMockConfig);
 QUnit.test('comparison operators', function(assert) {
     assert.expect(6);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(criteria, expectation) {
+    const check = function(criteria, expectation) {
         return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
@@ -407,7 +407,7 @@ QUnit.test('comparison operators', function(assert) {
             });
     };
 
-    var promises = [
+    const promises = [
         check(['f', '=', 2], 'f eq 2'),
         check(['f', '<>', 2], 'f ne 2'),
         check(['f', '>', 2], 'f gt 2'),
@@ -438,7 +438,7 @@ QUnit.test('unknown filter operation', function(assert) {
 QUnit.test('mixin and/or conditions inside a single group throws', function(assert) {
     assert.expect(4);
 
-    var mustNotReach = function() {
+    const mustNotReach = function() {
         assert.ok(false, 'Shouldn\'t reach this point');
     };
 
@@ -500,9 +500,9 @@ QUnit.test('mixin and/or conditions inside a single group throws', function(asse
 QUnit.test('OR', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(criteria) {
+    const check = function(criteria) {
         return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
@@ -521,9 +521,9 @@ QUnit.test('OR', function(assert) {
 QUnit.test('AND', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(criteria) {
+    const check = function(criteria) {
         return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
@@ -542,7 +542,7 @@ QUnit.test('AND', function(assert) {
 QUnit.test('chain produces AND', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(['f', '=', 2])
@@ -558,9 +558,9 @@ QUnit.test('chain produces AND', function(assert) {
 });
 
 QUnit.test('NOT with binary operation', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(criteria) {
+    const check = function(criteria) {
         return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
@@ -578,9 +578,9 @@ QUnit.test('NOT with binary operation', function(assert) {
 });
 
 QUnit.test('NOT with group operation', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(criteria) {
+    const check = function(criteria) {
         return QUERY('odata.org')
             .filter(criteria)
             .enumerate()
@@ -600,7 +600,7 @@ QUnit.test('NOT with group operation', function(assert) {
 QUnit.test('string values', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(['f', '=', 'a\'b<a'])
@@ -617,7 +617,7 @@ QUnit.test('string values', function(assert) {
 QUnit.test('child field', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter('a.b')
@@ -634,7 +634,7 @@ QUnit.test('child field', function(assert) {
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(['f', 2])
@@ -651,7 +651,7 @@ QUnit.test('missing operation means equal', function(assert) {
 QUnit.test('missing value means true', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(['f'])
@@ -668,7 +668,7 @@ QUnit.test('missing value means true', function(assert) {
 QUnit.test('missing logic operator means AND', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter([['f', '=', 1], ['k', '>', 2]])
@@ -685,7 +685,7 @@ QUnit.test('missing logic operator means AND', function(assert) {
 QUnit.test('when arguments are not array', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter('f', '=', 1)
@@ -702,9 +702,9 @@ QUnit.test('when arguments are not array', function(assert) {
 QUnit.test('string functions', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org')
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -713,7 +713,7 @@ QUnit.test('string functions', function(assert) {
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(tolower(f/p),\'ab\')'),
         check('endsWith', 'endswith(tolower(f/p),\'ab\')'),
         check('contains', 'substringof(\'ab\',tolower(f/p))'),
@@ -730,9 +730,9 @@ QUnit.test('string functions', function(assert) {
 QUnit.test('string functions with filterToLower equal false', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org', { filterToLower: false })
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -741,7 +741,7 @@ QUnit.test('string functions with filterToLower equal false', function(assert) {
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(f/p,\'Ab\')'),
         check('endsWith', 'endswith(f/p,\'Ab\')'),
         check('contains', 'substringof(\'Ab\',f/p)'),
@@ -758,11 +758,11 @@ QUnit.test('string functions with filterToLower equal false', function(assert) {
 QUnit.test('string functions with global filterToLower equal false', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
     config({ oDataFilterToLower: false });
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org')
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -771,7 +771,7 @@ QUnit.test('string functions with global filterToLower equal false', function(as
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(f/p,\'Ab\')'),
         check('endsWith', 'endswith(f/p,\'Ab\')'),
         check('contains', 'substringof(\'Ab\',f/p)'),
@@ -791,9 +791,9 @@ QUnit.test('string functions with global filterToLower equal false', function(as
 QUnit.test('string functions (v4)', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org', { version: 4 })
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -802,7 +802,7 @@ QUnit.test('string functions (v4)', function(assert) {
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(tolower(f/p),\'ab\')'),
         check('endsWith', 'endswith(tolower(f/p),\'ab\')'),
         check('contains', 'contains(tolower(f/p),\'ab\')'),
@@ -819,9 +819,9 @@ QUnit.test('string functions (v4)', function(assert) {
 QUnit.test('string functions (v4) with filterToLower equal false', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org', { version: 4, filterToLower: false })
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -830,7 +830,7 @@ QUnit.test('string functions (v4) with filterToLower equal false', function(asse
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(f/p,\'Ab\')'),
         check('endsWith', 'endswith(f/p,\'Ab\')'),
         check('contains', 'contains(f/p,\'Ab\')'),
@@ -847,11 +847,11 @@ QUnit.test('string functions (v4) with filterToLower equal false', function(asse
 QUnit.test('string functions (v4) with global filterToLower equal false', function(assert) {
     assert.expect(4);
 
-    var done = assert.async();
+    const done = assert.async();
 
     config({ oDataFilterToLower: false });
 
-    var check = function(operation, expectation) {
+    const check = function(operation, expectation) {
         return QUERY('odata.org', { version: 4 })
             .filter('f.p', operation, 'Ab')
             .enumerate()
@@ -860,7 +860,7 @@ QUnit.test('string functions (v4) with global filterToLower equal false', functi
             });
     };
 
-    var promises = [
+    const promises = [
         check('startsWith', 'startswith(f/p,\'Ab\')'),
         check('endsWith', 'endswith(f/p,\'Ab\')'),
         check('contains', 'contains(f/p,\'Ab\')'),
@@ -878,7 +878,7 @@ QUnit.test('string functions (v4) with global filterToLower equal false', functi
 });
 
 QUnit.test('Explicit Edm literals (Q441230 case)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter('x', new EdmLiteral('123M'))
@@ -893,7 +893,7 @@ QUnit.test('Explicit Edm literals (Q441230 case)', function(assert) {
 });
 
 QUnit.test('Edm literals for case conversion (Q522002)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(new EdmLiteral('tolower(Name)'), 'contains', new EdmLiteral('tolower(\'abc\')'))
@@ -910,7 +910,7 @@ QUnit.test('Edm literals for case conversion (Q522002)', function(assert) {
 QUnit.test('Values are converted according to \'fieldTypes\' property', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org', {
         fieldTypes: {
@@ -934,7 +934,7 @@ QUnit.module('Server side capabilities', moduleConfig);
 QUnit.test('can be done on server: any number of sort and filter before slice, first select, first slice', function(assert) {
     assert.expect(2 * 5);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -943,8 +943,8 @@ QUnit.test('can be done on server: any number of sort and filter before slice, f
         }
     });
 
-    var assertFunc = function(r) {
-        var d = r[0].data;
+    const assertFunc = function(r) {
+        const d = r[0].data;
 
         assert.equal(d['$orderby'], 'a');
         assert.equal(d['$filter'], '(a gt 1) and (a lt 2)');
@@ -953,7 +953,7 @@ QUnit.test('can be done on server: any number of sort and filter before slice, f
         assert.equal(d['$select'], 'a');
     };
 
-    var promises = [
+    const promises = [
         QUERY('odata.org')
             .sortBy('phantom')
             .filter(['a', '>', 1])
@@ -982,7 +982,7 @@ QUnit.test('can be done on server: any number of sort and filter before slice, f
 });
 
 QUnit.test('count on server', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -994,7 +994,7 @@ QUnit.test('count on server', function(assert) {
         responseText: { '@odata.count': 321 }
     });
 
-    var promises = [
+    const promises = [
         QUERY('odata2.org')
             .sortBy('x')
             .filter(['y', '=', 1])
@@ -1024,7 +1024,7 @@ QUnit.test('count on server', function(assert) {
 });
 
 QUnit.test('count rejects in case of non-number result', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -1036,12 +1036,12 @@ QUnit.test('count rejects in case of non-number result', function(assert) {
         responseText: { '@odata.count': undefined }
     });
 
-    var assertFunc = function(err) {
+    const assertFunc = function(err) {
         assert.ok(true);
         assert.equal(err.__id, 'E4018');
     };
 
-    var promises = $.map([
+    const promises = $.map([
         QUERY('odata2.org')
             .count()
             .fail(assertFunc),
@@ -1051,7 +1051,7 @@ QUnit.test('count rejects in case of non-number result', function(assert) {
             .fail(assertFunc)
 
     ], function(promise) {
-        var d = $.Deferred();
+        const d = $.Deferred();
 
         // NOTE: Reverse because of $.when
         promise.fail(d.resolve);
@@ -1068,7 +1068,7 @@ QUnit.test('count rejects in case of non-number result', function(assert) {
 });
 
 QUnit.test('enumerate with/without requireTotalCount', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1086,7 +1086,7 @@ QUnit.test('enumerate with/without requireTotalCount', function(assert) {
         }
     });
 
-    var promises = [
+    const promises = [
         QUERY('odata.org')
             .enumerate()
             .done(function(r, extra) {
@@ -1110,7 +1110,7 @@ QUnit.test('enumerate with/without requireTotalCount', function(assert) {
 QUnit.test('$skiptoken support', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
     // v2
     ajaxMock.setup({
@@ -1144,7 +1144,7 @@ QUnit.test('$skiptoken support', function(assert) {
         responseText: { value: ['c'] }
     });
 
-    var promises = [
+    const promises = [
         QUERY('http://odata.org/DataSet')
             .enumerate()
             .done(function(r) {
@@ -1166,8 +1166,8 @@ QUnit.test('$skiptoken support', function(assert) {
 });
 
 QUnit.test('T560045 - ignore next link when $top is specified', function(assert) {
-    var done = assert.async(),
-        urlPrefix = 'https://graph.microsoft.com/v1.0/me/messages';
+    const done = assert.async();
+    const urlPrefix = 'https://graph.microsoft.com/v1.0/me/messages';
 
     ajaxMock.setup({
         url: urlPrefix,
@@ -1189,7 +1189,7 @@ QUnit.test('T560045 - ignore next link when $top is specified', function(assert)
 });
 
 QUnit.test('Lift functional select after slice', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: '/',
@@ -1210,7 +1210,7 @@ QUnit.module('Switching to array mode', moduleWithMockConfig);
 QUnit.test('sort by function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .sortBy(function() { return 0; })
@@ -1227,7 +1227,7 @@ QUnit.test('sort by function', function(assert) {
 QUnit.test('filter by function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter(function() { return true; })
@@ -1244,7 +1244,7 @@ QUnit.test('filter by function', function(assert) {
 QUnit.test('filter where getter is function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .filter([['url', 'odata.org'], 'and', [function(obj) { return true; }, true]])
@@ -1261,7 +1261,7 @@ QUnit.test('filter where getter is function', function(assert) {
 QUnit.test('sort after slice', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .slice(0, 10)
@@ -1279,7 +1279,7 @@ QUnit.test('sort after slice', function(assert) {
 QUnit.test('filter after slice', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .slice(0, 10)
@@ -1297,7 +1297,7 @@ QUnit.test('filter after slice', function(assert) {
 QUnit.test('select after select', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .select('data', 'server')
@@ -1315,7 +1315,7 @@ QUnit.test('select after select', function(assert) {
 QUnit.test('select by function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .select(function(obj) { return obj; })
@@ -1332,7 +1332,7 @@ QUnit.test('select by function', function(assert) {
 QUnit.test('slice after slice', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .slice(0, 20)
@@ -1370,7 +1370,7 @@ QUnit.module('Client side fallbacks', {
 QUnit.test('groupBy', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .groupBy('group')
@@ -1387,7 +1387,7 @@ QUnit.test('groupBy', function(assert) {
 QUnit.test('sort by function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY('odata.org')
         .sortBy(function(i) { return -i.id; })
@@ -1403,9 +1403,9 @@ QUnit.test('sort by function', function(assert) {
 });
 
 QUnit.test('aggregates', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var promises = [
+    const promises = [
         QUERY('odata.org')
             .max('id')
             .done(function(max) {
@@ -1449,7 +1449,7 @@ QUnit.test('aggregates', function(assert) {
 
 QUnit.module('Error handling', moduleConfig);
 QUnit.test('generic HTTP error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1470,7 +1470,7 @@ QUnit.test('generic HTTP error', function(assert) {
 });
 
 QUnit.test('OData service error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata2.org',
@@ -1518,7 +1518,7 @@ QUnit.test('OData service error', function(assert) {
 });
 
 QUnit.test('OData service error with details (UseVerboseErrors = true)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1539,7 +1539,7 @@ QUnit.test('OData service error with details (UseVerboseErrors = true)', functio
 });
 
 QUnit.test('unexpected server response with 200 status', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1560,7 +1560,7 @@ QUnit.test('unexpected server response with 200 status', function(assert) {
 });
 
 QUnit.test('server error via JSONP with 200 status', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1590,7 +1590,7 @@ QUnit.test('server error via JSONP with 200 status', function(assert) {
 QUnit.test('client error: before ajax', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1611,7 +1611,7 @@ QUnit.test('client error: before ajax', function(assert) {
 QUnit.test('client error: after ajax', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1631,7 +1631,7 @@ QUnit.test('client error: after ajax', function(assert) {
 });
 
 QUnit.test('error handlers: server-side error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',
@@ -1640,7 +1640,7 @@ QUnit.test('error handlers: server-side error', function(assert) {
         responseText: 'Expected 404'
     });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
     helper.extraChecker = function(error) {
         assert.equal(error.message, 'Not Found');
     };
@@ -1655,11 +1655,11 @@ QUnit.test('error handlers: server-side error', function(assert) {
 });
 
 QUnit.test('error handlers: client-side error', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({ url: 'odata.org' });
 
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
     helper.run(
         function() {
             return QUERY('odata.org', { errorHandler: helper.optionalHandler })
@@ -1673,7 +1673,7 @@ QUnit.test('error handlers: client-side error', function(assert) {
 
 QUnit.module('T174721', moduleConfig);
 QUnit.test('sortBy(str), thenBy(func)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     ajaxMock.setup({
         url: 'odata.org',

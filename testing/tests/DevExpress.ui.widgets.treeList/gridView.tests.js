@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<!--qunit-fixture-->\
     <div id="container">\
         <div id="treeList">\
@@ -51,26 +51,26 @@ QUnit.module('Synchronize columns', {
 
 QUnit.test('Synchronization widths of columns when \'columnAutoWidth\' option is enabled', function(assert) {
     // arrange
-    var done = assert.async(),
-        $cellElement,
-        realWidth = 0,
-        columnsController = new MockColumnsController([
-            {
-                caption: 'Column 1',
-                cellTemplate: function($container, options) {
-                    return $('<div/>', { css: { display: 'inline-block' } }).text(options.value);
-                }
-            },
-            { caption: 'Column 2' }
-        ]),
-        dataController = new MockDataController({
-            items: [{ rowType: 'data', values: ['Test Test Test Test Test Test Test Test Test', 'Test'], node: { hasChildren: true }, level: 0 }]
-        }),
-        gridView = this.createGridView({
-            columnsController: columnsController,
-            dataController: dataController
-        }, { columnAutoWidth: true }),
-        $testElement = $('<div />').width(350).appendTo($('#treeList'));
+    const done = assert.async();
+    let $cellElement;
+    let realWidth = 0;
+    const columnsController = new MockColumnsController([
+        {
+            caption: 'Column 1',
+            cellTemplate: function($container, options) {
+                return $('<div/>', { css: { display: 'inline-block' } }).text(options.value);
+            }
+        },
+        { caption: 'Column 2' }
+    ]);
+    const dataController = new MockDataController({
+        items: [{ rowType: 'data', values: ['Test Test Test Test Test Test Test Test Test', 'Test'], node: { hasChildren: true }, level: 0 }]
+    });
+    const gridView = this.createGridView({
+        columnsController: columnsController,
+        dataController: dataController
+    }, { columnAutoWidth: true });
+    const $testElement = $('<div />').width(350).appendTo($('#treeList'));
 
     // act
     gridView.render($testElement);

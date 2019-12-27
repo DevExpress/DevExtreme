@@ -3,13 +3,13 @@ import dataSourceAdapter from './ui.tree_list.data_source_adapter';
 import virtualScrollingModule from '../grid_core/ui.grid_core.virtual_scrolling';
 import { extend } from '../../core/utils/extend';
 
-var oldDefaultOptions = virtualScrollingModule.defaultOptions,
-    originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data,
-    originalDataSourceAdapterExtender = virtualScrollingModule.extenders.dataSourceAdapter;
+const oldDefaultOptions = virtualScrollingModule.defaultOptions;
+const originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data;
+const originalDataSourceAdapterExtender = virtualScrollingModule.extenders.dataSourceAdapter;
 
 virtualScrollingModule.extenders.controllers.data = extend({}, originalDataControllerExtender, {
     _loadOnOptionChange: function() {
-        var virtualScrollController = this._dataSource && this._dataSource._virtualScrollController;
+        const virtualScrollController = this._dataSource && this._dataSource._virtualScrollController;
 
         virtualScrollController && virtualScrollController.reset();
         this.callBase();
@@ -19,7 +19,7 @@ virtualScrollingModule.extenders.controllers.data = extend({}, originalDataContr
 virtualScrollingModule.extenders.dataSourceAdapter = extend({}, originalDataSourceAdapterExtender, {
     changeRowExpand: function() {
         return this.callBase.apply(this, arguments).done(() => {
-            var viewportItemIndex = this.getViewportItemIndex();
+            const viewportItemIndex = this.getViewportItemIndex();
 
             viewportItemIndex >= 0 && this.setViewportItemIndex(viewportItemIndex);
         });

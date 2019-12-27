@@ -11,10 +11,10 @@ import publicComponentUtils from 'core/utils/public_component';
 import messageLocalization from 'localization/message';
 import { TreeViewSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 
-var device = devices.real();
+const device = devices.real();
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container" class="dx-datagrid"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -41,7 +41,7 @@ QUnit.module('Column chooser', {
         });
 
         this.setTestElement = function($rootElement) {
-            var $element = $('<div />').appendTo($rootElement);
+            const $element = $('<div />').appendTo($rootElement);
             this.columnChooserView._$element = $element;
             this.columnChooserView._$parent = $rootElement;
         };
@@ -62,7 +62,7 @@ QUnit.module('Column chooser', {
 
 QUnit.test('Bounding rect of groupPanel when panel is not visible', function(assert) {
     // arrange
-    var testElement = $('#container');
+    const testElement = $('#container');
     this.setTestElement(testElement);
 
     // act
@@ -74,9 +74,9 @@ QUnit.test('Bounding rect of groupPanel when panel is not visible', function(ass
 
 QUnit.test('Bounding rect of groupPanel', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        boundingRect,
-        isBoundingCorrect;
+    const testElement = $('#container');
+    let boundingRect;
+    let isBoundingCorrect;
 
     this.setTestElement(testElement);
 
@@ -94,8 +94,8 @@ QUnit.test('Bounding rect of groupPanel', function(assert) {
 
 QUnit.test('Draw column chooser (dragAndDrop mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        $overlayWrapper;
+    const testElement = $('#container');
+    let $overlayWrapper;
 
     this.options.columnChooser.emptyPanelText = 'Test';
     this.setTestElement(testElement);
@@ -116,8 +116,8 @@ QUnit.test('Draw column chooser (dragAndDrop mode)', function(assert) {
 
 QUnit.test('Draw column chooser (select mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        $overlayWrapper;
+    const testElement = $('#container');
+    let $overlayWrapper;
 
     this.options.columnChooser.mode = 'select';
     this.setTestElement(testElement);
@@ -138,9 +138,9 @@ QUnit.test('Draw column chooser (select mode)', function(assert) {
 
 QUnit.test('Draw column chooser with hidden columns (dragAndDrop mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        columnChooser;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let columnChooser;
 
     $.extend(this.columns, [{ caption: 'Column 1', visible: true }, { caption: 'Column 2', visible: false, showInColumnChooser: true }, { caption: 'Column 3', visible: false, showInColumnChooser: false }]);
     this.setTestElement(testElement);
@@ -166,11 +166,11 @@ QUnit.test('Draw column chooser with hidden columns (dragAndDrop mode)', functio
 
 QUnit.test('Draw column chooser with hidden columns (select mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        $columnChooser,
-        items,
-        treeView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let $columnChooser;
+    let items;
+    let treeView;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }, { caption: 'Column 2', index: 1, visible: false, showInColumnChooser: true }, { caption: 'Column 3', index: 2, visible: false, showInColumnChooser: false }, { caption: 'Column 4', index: 3, visible: true }]);
@@ -196,12 +196,12 @@ QUnit.test('Draw column chooser with hidden columns (select mode)', function(ass
 
 QUnit.test('Draw column chooser with columns.allowHiding == false (select mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        $columnChooser,
-        items,
-        treeView,
-        $checkBoxElements;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let $columnChooser;
+    let items;
+    let treeView;
+    let $checkBoxElements;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, allowHiding: false }, { caption: 'Column 2', index: 1, visible: false }]);
@@ -234,8 +234,8 @@ QUnit.test('Draw column chooser with columns.allowHiding == false (select mode)'
 
 QUnit.test('Hide column chooser when is visible true', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooser;
+    const testElement = $('#container');
+    let columnChooser;
     this.setTestElement(testElement);
 
     this.renderColumnChooser();
@@ -262,9 +262,9 @@ QUnit.test('Hide column chooser when is visible true', function(assert) {
 
 QUnit.test('Hide column via column chooser (select mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        $columnChooser,
-        $treeViewItem;
+    const testElement = $('#container');
+    let $columnChooser;
+    let $treeViewItem;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }, { caption: 'Column 2', index: 1, visible: false, showInColumnChooser: true }, { caption: 'Column 3', index: 2, visible: false, showInColumnChooser: false }, { caption: 'Column 4', index: 3, visible: true }]);
@@ -288,9 +288,9 @@ QUnit.test('Hide column via column chooser (select mode)', function(assert) {
 
 QUnit.test('Prevent hiding the last column via column chooser when select mode is using', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        $columnChooser,
-        $treeViewItem;
+    const testElement = $('#container');
+    let $columnChooser;
+    let $treeViewItem;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }]);
@@ -315,9 +315,9 @@ QUnit.test('Prevent hiding the last column via column chooser when select mode i
 
 QUnit.test('Show column via column chooser (select mode)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        $columnChooser,
-        $treeViewItem;
+    const testElement = $('#container');
+    let $columnChooser;
+    let $treeViewItem;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: false }, { caption: 'Column 2', index: 1, visible: false, showInColumnChooser: true }, { caption: 'Column 3', index: 2, visible: false, showInColumnChooser: false }, { caption: 'Column 4', index: 3, visible: true }]);
@@ -341,7 +341,7 @@ QUnit.test('Show column via column chooser (select mode)', function(assert) {
 
 QUnit.test('Rendering show column chooser button in headerPanel', function(assert) {
     // arrange
-    var testElement = $('#container');
+    const testElement = $('#container');
     this.setTestElement(testElement);
 
     this.options.editing = { allowAdding: true };
@@ -356,7 +356,7 @@ QUnit.test('Rendering show column chooser button in headerPanel', function(asser
     assert.ok(testElement.find('.dx-datagrid-column-chooser').length, 'has column chooser');
     assert.ok(!$('body').children('.dx-datagrid-column-chooser').length, 'doesn\'t have wrapper column chooser');
 
-    var $toolbarButtons = testElement.find('.dx-datagrid-toolbar-button');
+    const $toolbarButtons = testElement.find('.dx-datagrid-toolbar-button');
 
     assert.equal($toolbarButtons.length, 2, 'there are 2 buttons in toolbar');
     assert.ok($toolbarButtons.eq(1).hasClass('dx-datagrid-column-chooser-button'), 'second button is column chooser');
@@ -367,8 +367,8 @@ QUnit.test('Rendering show column chooser button in headerPanel', function(asser
 
 QUnit.test('Show column chooser by pressing the button', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooser;
+    const testElement = $('#container');
+    let columnChooser;
     this.setTestElement(testElement);
 
     this.renderColumnChooser();
@@ -392,10 +392,10 @@ QUnit.test('Show column chooser by pressing the button', function(assert) {
 
 QUnit.test('Get column elements', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        columnChooser,
-        columnHiddenElements;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let columnChooser;
+    let columnHiddenElements;
 
     $.extend(this.columns, [
         { caption: 'Column 1', visible: true, index: 0 },
@@ -429,9 +429,9 @@ QUnit.test('Get column elements', function(assert) {
 // B255428
 QUnit.test('Get bounding rect', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        boundingRect;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let boundingRect;
     this.setTestElement(testElement);
 
     this.columnChooserView.showColumnChooser();
@@ -447,9 +447,9 @@ QUnit.test('Get bounding rect', function(assert) {
 
 QUnit.test('Get bounding rect when column chooser not visible', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        boundingRect;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let boundingRect;
 
     this.setTestElement(testElement);
 
@@ -464,9 +464,9 @@ QUnit.test('Get bounding rect when column chooser not visible', function(assert)
 
 QUnit.test('Get bounding rect when column chooser not enabled', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView,
-        boundingRect;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
+    let boundingRect;
 
     this.setTestElement(testElement);
 
@@ -484,7 +484,7 @@ QUnit.test('Get bounding rect when column chooser not enabled', function(assert)
 });
 
 QUnit.test('rtlEnabled option set class to an overlay content', function(assert) {
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setTestElement(testElement);
 
@@ -494,7 +494,7 @@ QUnit.test('rtlEnabled option set class to an overlay content', function(assert)
         config.rtlEnabled = true;
 
         name = typeof name === 'string' ? name : publicComponentUtils.name(name);
-        var $element = $(element)[name](config || {});
+        const $element = $(element)[name](config || {});
         return $element[name]('instance');
     };
 
@@ -508,8 +508,8 @@ QUnit.test('rtlEnabled option set class to an overlay content', function(assert)
 
 QUnit.test('Redraw column chooser with rtlEnabled (changed options)', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -529,8 +529,8 @@ QUnit.test('Redraw column chooser with rtlEnabled (changed options)', function(a
 
 QUnit.test('Column chooser is draggable', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserContainer;
+    const testElement = $('#container');
+    let columnChooserContainer;
 
     // act
     this.setTestElement(testElement);
@@ -542,9 +542,9 @@ QUnit.test('Column chooser is draggable', function(assert) {
 });
 
 QUnit.test('Enable search', function(assert) {
-    var testElement = $('#container'),
-        $overlayWrapper,
-        treeView;
+    const testElement = $('#container');
+    let $overlayWrapper;
+    let treeView;
 
     this.setTestElement(testElement);
 
@@ -582,8 +582,8 @@ QUnit.test('Test aria-label in search-box input (T829760)', function(assert) {
 if(device.deviceType === 'desktop') {
     QUnit.test('Close and cancel buttons for generic theme', function(assert) {
         // arrange
-        var testElement = $('#container'),
-            columnChooserView = this.columnChooserView;
+        const testElement = $('#container');
+        const columnChooserView = this.columnChooserView;
 
         this.setTestElement(testElement);
 
@@ -599,9 +599,9 @@ if(device.deviceType === 'desktop') {
 
 QUnit.test('Close and cancel buttons for mobile theme', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        origIsGeneric = themes.isGeneric,
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const origIsGeneric = themes.isGeneric;
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -620,9 +620,9 @@ QUnit.test('Close and cancel buttons for mobile theme', function(assert) {
 
 QUnit.test('Close and cancel buttons for material theme', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        origIsMaterial = themes.isMaterial,
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const origIsMaterial = themes.isMaterial;
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -642,7 +642,7 @@ QUnit.test('Close and cancel buttons for material theme', function(assert) {
 
 QUnit.test('Add non touch class when column chooser is shown on win phone', function(assert) {
     // arrange
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setTestElement(testElement);
 
@@ -708,7 +708,7 @@ QUnit.test('Non touch class is not added when column chooser is shown on not win
     // arrange
     $(document.body).removeClass('dx-datagrid-notouch-action');
 
-    var testElement = $('#container');
+    const testElement = $('#container');
 
     this.setTestElement(testElement);
 
@@ -727,8 +727,8 @@ QUnit.test('Non touch class is not added when column chooser is shown on not win
 
 QUnit.test('Remove non touch class when column chooser is hidden on win phone', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooser;
+    const testElement = $('#container');
+    let columnChooser;
 
     this.setTestElement(testElement);
 
@@ -752,8 +752,8 @@ QUnit.test('Remove non touch class when column chooser is hidden on win phone', 
 
 QUnit.test('Show column chooser via api method when it is disabled_T102451', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -773,8 +773,8 @@ QUnit.test('Show column chooser via api method when it is disabled_T102451', fun
 
 QUnit.test('Popup window is not initialized when enabled is false_T102451', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -792,8 +792,8 @@ QUnit.test('Popup window is not initialized when enabled is false_T102451', func
 // T117339
 QUnit.test('Not allow dragging when no visible column chooser', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -806,8 +806,8 @@ QUnit.test('Not allow dragging when no visible column chooser', function(assert)
 // T117339
 QUnit.test('Not allow dragging when allowHiding in column false', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -822,8 +822,8 @@ QUnit.test('Not allow dragging when allowHiding in column false', function(asser
 // T117339
 QUnit.test('Allow dragging when visible column chooser', function(assert) {
     // arrange
-    var testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement(testElement);
 
@@ -837,8 +837,8 @@ QUnit.test('Allow dragging when visible column chooser', function(assert) {
 
 QUnit.test('Allow dragging with visible band column', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const $testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement($testElement);
 
@@ -852,8 +852,8 @@ QUnit.test('Allow dragging with visible band column', function(assert) {
 
 QUnit.test('Not allow dragging with hidden band column', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        columnChooserView = this.columnChooserView;
+    const $testElement = $('#container');
+    const columnChooserView = this.columnChooserView;
 
     this.setTestElement($testElement);
 
@@ -870,9 +870,9 @@ QUnit.test('Not allow dragging with hidden band column', function(assert) {
 
 QUnit.test('CheckBox mode - not update treeview when selected items', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        callRenderColumnChooser,
-        columnChooserView = this.columnChooserView;
+    const $testElement = $('#container');
+    let callRenderColumnChooser;
+    const columnChooserView = this.columnChooserView;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
@@ -905,9 +905,9 @@ QUnit.test('CheckBox mode - not update treeview when selected items', function(a
 
 QUnit.test('CheckBox mode - update treeview when changed the column option is showInColumnChooser', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        callRenderColumnChooser,
-        columnChooserView = this.columnChooserView;
+    const $testElement = $('#container');
+    let callRenderColumnChooser;
+    const columnChooserView = this.columnChooserView;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
@@ -928,9 +928,9 @@ QUnit.test('CheckBox mode - update treeview when changed the column option is sh
 
 QUnit.test('CheckBox mode - column chooser with hidden band column', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        $checkBoxElements,
-        columnChooserView = this.columnChooserView;
+    const $testElement = $('#container');
+    let $checkBoxElements;
+    const columnChooserView = this.columnChooserView;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true }, { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 }, { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }]);
@@ -954,10 +954,10 @@ QUnit.test('CheckBox mode - column chooser with hidden band column', function(as
 
 QUnit.test('CheckBox mode - check hidden band column', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container'),
-        $checkBoxElements,
-        columnChooserView = this.columnChooserView;
+    const that = this;
+    const $testElement = $('#container');
+    let $checkBoxElements;
+    const columnChooserView = this.columnChooserView;
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Band Column', index: 0, visible: false, showInColumnChooser: true }, { caption: 'Column 1', index: 1, visible: true, showInColumnChooser: true, ownerBand: 0 }, { caption: 'Column 2', index: 2, visible: false, showInColumnChooser: true, ownerBand: 0 }]);
@@ -984,7 +984,7 @@ QUnit.test('CheckBox mode - check hidden band column', function(assert) {
 
 QUnit.test('CheckBox mode - Update a selection state when column visibility is changed via API', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true, showInColumnChooser: true }, { caption: 'Column 2', index: 1, visible: true, showInColumnChooser: true }]);
@@ -1016,13 +1016,13 @@ QUnit.test('CheckBox mode - Update a selection state when column visibility is c
 });
 
 ['select', 'dragAndDrop'].forEach(mode => {
-    var modeName = (mode === 'select' ? 'CheckBox' : 'T739323: DragAndDrop');
+    const modeName = (mode === 'select' ? 'CheckBox' : 'T739323: DragAndDrop');
     QUnit.test(modeName + ' mode - scroll position after selecting an last item', function(assert) {
         // arrange
-        var $columnChooser,
-            $lastItemElement,
-            scrollableInstance,
-            $testElement = $('#container');
+        let $columnChooser;
+        let $lastItemElement;
+        let scrollableInstance;
+        const $testElement = $('#container');
 
         this.options.columnChooser.mode = mode;
         this.options.columnChooser.height = 200;
@@ -1060,7 +1060,7 @@ QUnit.test('CheckBox mode - Update a selection state when column visibility is c
 // T535738
 QUnit.test('CheckBox mode - update treeview when changing the column options', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     this.options.columnChooser.mode = 'select';
     $.extend(this.columns, [{ caption: 'Column 1', index: 0, visible: true }, { caption: 'Column 2', index: 1, visible: true }]);
@@ -1082,9 +1082,9 @@ QUnit.test('CheckBox mode - update treeview when changing the column options', f
 // T571469
 QUnit.test('Filter value should be reset after disabled search', function(assert) {
     // arrange
-    var $testElement = $('#container'),
-        popupInstance,
-        treeViewInstance;
+    const $testElement = $('#container');
+    let popupInstance;
+    let treeViewInstance;
 
     $.extend(this.columns, [
         { caption: 'Column 1', index: 0, visible: false },
@@ -1119,8 +1119,8 @@ QUnit.test('Filter value should be reset after disabled search', function(assert
 // T595315
 QUnit.test('Change width and height after first rendering', function(assert) {
     // arrange
-    var popupInstance,
-        $testElement = $('#container');
+    let popupInstance;
+    const $testElement = $('#container');
 
     this.setTestElement($testElement);
     this.renderColumnChooser();

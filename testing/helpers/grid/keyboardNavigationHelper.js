@@ -12,7 +12,7 @@ import DataGridWrapper from '../wrappers/dataGridWrappers.js';
 export const dataGridWrapper = new DataGridWrapper('#container');
 
 export function setupModules(that, modulesOptions, gridModules) {
-    var defaultSetCellValue = function(data, value) {
+    const defaultSetCellValue = function(data, value) {
         if(this.serializeValue) {
             value = this.serializeValue(value);
         }
@@ -83,26 +83,26 @@ export function setupModules(that, modulesOptions, gridModules) {
     });
 }
 
-export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'),
-    device = devices.real(),
-    KEYS = {
-        'tab': 'Tab',
-        'enter': 'Enter',
-        'escape': 'Escape',
-        'pageUp': 'PageUp',
-        'pageDown': 'PageDown',
-        'leftArrow': 'ArrowLeft',
-        'upArrow': 'ArrowUp',
-        'rightArrow': 'ArrowRight',
-        'downArrow': 'ArrowDown',
-        'space': ' ',
-        'F': 'F',
-        'A': 'A',
-        'D': 'D',
-        '1': '1',
-        '2': '2',
-        'F2': 'F2'
-    };
+export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation');
+const device = devices.real();
+const KEYS = {
+    'tab': 'Tab',
+    'enter': 'Enter',
+    'escape': 'Escape',
+    'pageUp': 'PageUp',
+    'pageDown': 'PageDown',
+    'leftArrow': 'ArrowLeft',
+    'upArrow': 'ArrowUp',
+    'rightArrow': 'ArrowRight',
+    'downArrow': 'ArrowDown',
+    'space': ' ',
+    'F': 'F',
+    'A': 'A',
+    'D': 'D',
+    '1': '1',
+    '2': '2',
+    'F2': 'F2'
+};
 
 export function testInDesktop(name, testFunc) {
     if(device.deviceType === 'desktop') {
@@ -115,7 +115,7 @@ export function triggerKeyDown(key, ctrl, shift, target, result) {
         preventDefault: false,
         stopPropagation: false
     };
-    var alt = false;
+    let alt = false;
     if(typeof ctrl === 'object') {
         alt = ctrl.alt;
         shift = ctrl.shift;
@@ -148,14 +148,14 @@ export function fireKeyDown($target, key, ctrlKey) {
 }
 
 export function focusCell(columnIndex, rowIndex) {
-    var $element0 = this.rowsView.element(),
-        $row = $($element0.find('.dx-row')[rowIndex]);
+    const $element0 = this.rowsView.element();
+    const $row = $($element0.find('.dx-row')[rowIndex]);
     $($row.find('td')[columnIndex]).trigger(CLICK_EVENT);
 }
 
 export function getTextSelection(element) {
-    let startPos = element.selectionStart,
-        endPos = element.selectionEnd;
+    const startPos = element.selectionStart;
+    const endPos = element.selectionEnd;
     return element.value.substring(startPos, endPos);
 }
 

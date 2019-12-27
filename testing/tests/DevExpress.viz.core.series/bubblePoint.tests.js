@@ -6,7 +6,7 @@ import tooltipModule from 'viz/core/tooltip';
 
 const originalLabel = labelModule.Label;
 
-var createPoint = function(series, data, options) {
+const createPoint = function(series, data, options) {
     options = options || {};
     options.type = options.type || 'bubble';
     return new pointModule.Point(series, data, options);
@@ -14,7 +14,7 @@ var createPoint = function(series, data, options) {
 
 QUnit.module('Draw point. Bubble', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
 
         this.translators = {
@@ -53,7 +53,7 @@ QUnit.module('Draw point. Bubble', {
 });
 
 QUnit.test('Marker', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
     point.translate();
@@ -76,7 +76,7 @@ QUnit.test('Marker', function(assert) {
 });
 
 QUnit.test('Update marker', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
     point.translate();
@@ -95,7 +95,7 @@ QUnit.test('Update marker', function(assert) {
 });
 
 QUnit.test('Update marker location', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
     point.translate();
@@ -116,7 +116,7 @@ QUnit.test('Update marker location', function(assert) {
 });
 
 QUnit.test('Marker with animationEnabled', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
     point.translate();
@@ -138,8 +138,8 @@ QUnit.test('Marker with animationEnabled', function(assert) {
 });
 
 QUnit.test('animate', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options),
-        complete = sinon.stub();
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const complete = sinon.stub();
 
     point.correctCoordinates(4);
     point.translate();
@@ -171,8 +171,8 @@ QUnit.test('animate', function(assert) {
 });
 
 QUnit.test('animate without graphic', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options),
-        complete = sinon.spy();
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const complete = sinon.spy();
 
     point.correctCoordinates(4);
     point.translate();
@@ -185,8 +185,8 @@ QUnit.test('animate without graphic', function(assert) {
 
 QUnit.test('pass diameter to correctCoordinates', function(assert) {
     // arrange
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options),
-        diameter = 10;
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const diameter = 10;
 
     // act
     point.correctCoordinates(diameter);
@@ -209,7 +209,7 @@ QUnit.module('Tooltip', {
             label: {},
             styles: { normal: {} }
         };
-        var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -230,14 +230,14 @@ QUnit.module('Tooltip', {
 });
 
 QUnit.test('Get tooltip coordinates, height less than min bubble height. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 430;
     point.y = 250;
     point.draw(this.renderer, this.groups);
     point.graphic.getBBox = function() { return { height: 10 }; };
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.equal(cc.x, 430);
     assert.equal(cc.y, 250);
@@ -245,14 +245,14 @@ QUnit.test('Get tooltip coordinates, height less than min bubble height. Locatio
 });
 
 QUnit.test('Get tooltip coordinates. Location is edge', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 430;
     point.y = 250;
     point.draw(this.renderer, this.groups);
     point.graphic.getBBox = function() { return { height: 24 }; };
 
-    var cc = point.getTooltipParams('edge');
+    const cc = point.getTooltipParams('edge');
 
     assert.equal(cc.x, 430);
     assert.equal(cc.y, 250);
@@ -260,14 +260,14 @@ QUnit.test('Get tooltip coordinates. Location is edge', function(assert) {
 });
 
 QUnit.test('Get tooltip coordinates, height more than min bubble height. Location is center', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 430;
     point.y = 250;
     point.draw(this.renderer, this.groups);
     point.graphic.getBBox = function() { return { height: 30 }; };
 
-    var cc = point.getTooltipParams('center');
+    const cc = point.getTooltipParams('center');
 
     assert.equal(cc.x, 430);
     assert.equal(cc.y, 250);
@@ -275,9 +275,9 @@ QUnit.test('Get tooltip coordinates, height more than min bubble height. Locatio
 });
 
 QUnit.test('Get tooltip format object', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
     point.percent = 100;
-    var cc = point.getTooltipFormatObject(this.tooltip);
+    const cc = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(cc.argument, 1);
     assert.equal(cc.argumentText, '1:argument');
@@ -293,7 +293,7 @@ QUnit.test('Get tooltip format object', function(assert) {
 
 QUnit.module('Draw Label', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
@@ -355,8 +355,8 @@ QUnit.module('Draw Label', {
 });
 
 QUnit.test('Get label format object', function(assert) {
-    var point = createPoint(this.series, this.data, this.options),
-        result = point._getLabelFormatObject();
+    const point = createPoint(this.series, this.data, this.options);
+    const result = point._getLabelFormatObject();
 
     assert.equal(result.value, 15);
     assert.equal(result.argument, 25);
@@ -369,7 +369,7 @@ QUnit.test('Get label format object', function(assert) {
 
 QUnit.test('Value = null', function(assert) {
     this.data.value = null;
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 33;
     point.y = 22;
@@ -381,13 +381,13 @@ QUnit.test('Value = null', function(assert) {
 });
 
 QUnit.test('Get graphic bbox', function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
+    const point = createPoint(this.series, this.data, this.options);
 
     point.x = 33;
     point.y = 22;
     point.bubbleSize = 20;
 
-    var bBox = point._getGraphicBBox();
+    const bBox = point._getGraphicBBox();
 
     assert.equal(bBox.x, 13);
     assert.equal(bBox.y, 2);
@@ -396,8 +396,8 @@ QUnit.test('Get graphic bbox', function(assert) {
 });
 
 QUnit.test('Draw label outside', function(assert) {
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
+    const point = createPoint(this.series, this.data, this.options);
+    const label = point._label;
 
     point.x = 33;
     point.y = 52;
@@ -413,8 +413,8 @@ QUnit.test('Draw label outside', function(assert) {
 
 QUnit.test('Draw label when position is invalid', function(assert) {
     this.options.label.position = 'abc';
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
+    const point = createPoint(this.series, this.data, this.options);
+    const label = point._label;
 
     point.x = 33;
     point.y = 52;
@@ -430,8 +430,8 @@ QUnit.test('Draw label when position is invalid', function(assert) {
 
 QUnit.test('Draw label inside', function(assert) {
     this.options.label.position = 'inside';
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
+    const point = createPoint(this.series, this.data, this.options);
+    const label = point._label;
 
     point.x = 33;
     point.y = 25;
@@ -474,6 +474,6 @@ QUnit.module('get point radius', {
 });
 
 QUnit.test('get radius', function(assert) {
-    var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
+    const point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
     assert.equal(point.getPointRadius(), 0);
 });

@@ -1,6 +1,6 @@
-var noop = require('core/utils/common').noop,
-    themeModule = require('viz/themes'),
-    ThemeManager = require('viz/gauges/theme_manager').ThemeManager;
+const noop = require('core/utils/common').noop;
+const themeModule = require('viz/themes');
+const ThemeManager = require('viz/gauges/theme_manager').ThemeManager;
 
 QUnit.module('ThemeManager', {
     createThemeManager: function() {
@@ -9,10 +9,10 @@ QUnit.module('ThemeManager', {
 });
 
 QUnit.test('Theme - generic', function(assert) {
-    var themeManager = this.createThemeManager();
+    const themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager.setTheme();
-    var theme = themeManager.theme();
+    const theme = themeManager.theme();
     assert.strictEqual(themeManager.themeName(), 'generic.light', 'theme name');
     assert.ok(theme.title, 'title');
     assert.ok(theme.export, 'export');
@@ -26,10 +26,10 @@ QUnit.test('Theme - generic', function(assert) {
 });
 
 QUnit.test('Theme - generic-dark', function(assert) {
-    var themeManager = this.createThemeManager();
+    const themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager.setTheme('generic.dark');
-    var theme = themeManager.theme();
+    const theme = themeManager.theme();
     assert.strictEqual(themeManager.themeName(), 'generic.dark', 'theme name');
     assert.ok(theme.title, 'title');
     assert.ok(theme.export, 'export');
@@ -53,10 +53,10 @@ QUnit.test('Subtheme', function(assert) {
             }
         }
     });
-    var themeManager = this.createThemeManager();
+    const themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager._subTheme = '#circular';
     themeManager.setTheme('my-theme');
-    var theme = themeManager.theme();
+    const theme = themeManager.theme();
     assert.strictEqual(theme.valueIndicator._default.offset, 100);
 });

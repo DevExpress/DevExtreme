@@ -32,12 +32,12 @@ function getRectangleBBox(bBox) {
 }
 
 function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
-    var params = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
+    const params = isHorizontal ? ['x', 'width', 'y', 'height', y, 0] : ['y', 'height', 'x', 'width', x, 1];
 
     return function(bBox, position, coord) {
-        var labelCoord = { x: coord.x, y: coord.y },
-            rectangleBBox = getRectangleBBox(bBox),
-            delta = isHorizontal ? coord.y - bBox.y - bBox.height / 2 : coord.y - bBox.y;
+        const labelCoord = { x: coord.x, y: coord.y };
+        const rectangleBBox = getRectangleBBox(bBox);
+        const delta = isHorizontal ? coord.y - bBox.y - bBox.height / 2 : coord.y - bBox.y;
 
         labelCoord.y = isHorizontal || (!isHorizontal && position === BOTTOM) ? coord.y + delta : coord.y;
 
@@ -57,7 +57,7 @@ function getLabelCheckerPosition(x, y, isHorizontal, canvas) {
 }
 
 function Crosshair(renderer, options, params, group) {
-    var that = this;
+    const that = this;
     that._renderer = renderer;
     that._crosshairGroup = group;
     that._options = {};
@@ -68,8 +68,8 @@ Crosshair.prototype = {
     constructor: Crosshair,
 
     update: function(options, params) {
-        var that = this,
-            canvas = params.canvas;
+        const that = this;
+        const canvas = params.canvas;
         that._canvas = {
             top: canvas.top,
             bottom: canvas.height - canvas.bottom,
@@ -85,7 +85,7 @@ Crosshair.prototype = {
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
 
         that._renderer = that._crosshairGroup = that._options = that._axes =
             that._canvas = that._horizontalGroup = that._verticalGroup =
@@ -93,7 +93,7 @@ Crosshair.prototype = {
     },
 
     _prepareOptions: function(options, direction) {
-        var lineOptions = options[direction + 'Line'];
+        const lineOptions = options[direction + 'Line'];
         this._options[direction] = {
             visible: lineOptions.visible,
             line: {
@@ -108,24 +108,24 @@ Crosshair.prototype = {
     },
 
     _createLines: function(options, sharpParam, group) {
-        var lines = [],
-            canvas = this._canvas,
-            points = [canvas.left, canvas.top, canvas.left, canvas.top];
-        for(var i = 0; i < 2; i++) {
+        const lines = [];
+        const canvas = this._canvas;
+        const points = [canvas.left, canvas.top, canvas.left, canvas.top];
+        for(let i = 0; i < 2; i++) {
             lines.push(this._renderer.path(points, 'line').attr(options).sharp(sharpParam).append(group));
         }
         return lines;
     },
 
     render: function() {
-        var that = this,
-            renderer = that._renderer,
-            options = that._options,
-            verticalOptions = options.vertical,
-            horizontalOptions = options.horizontal,
-            extraOptions = horizontalOptions.visible ? horizontalOptions.line : verticalOptions.line,
-            circleOptions = { stroke: extraOptions.stroke, 'stroke-width': extraOptions['stroke-width'], dashStyle: extraOptions.dashStyle, opacity: extraOptions.opacity },
-            canvas = that._canvas;
+        const that = this;
+        const renderer = that._renderer;
+        const options = that._options;
+        const verticalOptions = options.vertical;
+        const horizontalOptions = options.horizontal;
+        const extraOptions = horizontalOptions.visible ? horizontalOptions.line : verticalOptions.line;
+        const circleOptions = { stroke: extraOptions.stroke, 'stroke-width': extraOptions['stroke-width'], dashStyle: extraOptions.dashStyle, opacity: extraOptions.opacity };
+        const canvas = that._canvas;
 
         that._horizontal = {};
         that._vertical = {};
@@ -147,21 +147,21 @@ Crosshair.prototype = {
     },
 
     _createLabels: function(axes, options, isHorizontal, group) {
-        var that = this,
-            canvas = that._canvas,
-            renderer = that._renderer,
-            x,
-            y,
-            text,
-            labels = [],
-            background,
-            currentLabelPos,
-            labelOptions = options.label;
+        const that = this;
+        const canvas = that._canvas;
+        const renderer = that._renderer;
+        let x;
+        let y;
+        let text;
+        const labels = [];
+        let background;
+        let currentLabelPos;
+        const labelOptions = options.label;
 
         if(labelOptions.visible) {
             axes.forEach(function(axis) {
-                var position = axis.getOptions().position,
-                    align;
+                const position = axis.getOptions().position;
+                let align;
                 if(axis.getTranslator().getBusinessRange().isEmpty()) {
                     return;
                 }
@@ -189,14 +189,14 @@ Crosshair.prototype = {
     },
 
     _updateText: function(value, axisName, labels, point, func) {
-        var that = this;
+        const that = this;
 
         labels.forEach(function(label) {
-            var axis = label.axis,
-                coord = label.startXY,
-                textElement = label.text,
-                backgroundElement = label.background,
-                text = '';
+            const axis = label.axis;
+            const coord = label.startXY;
+            const textElement = label.text;
+            const backgroundElement = label.background;
+            let text = '';
 
             if(!axis.name || axis.name === axisName) {
                 text = axis.getFormattedValue(value, label.options, point);
@@ -225,33 +225,33 @@ Crosshair.prototype = {
     },
 
     _updateLinesCanvas: function(label) {
-        var position = label.pos.side,
-            labelCoord = label.pos.coord,
-            coords = this._linesCanvas,
-            canvas = this._canvas;
+        const position = label.pos.side;
+        const labelCoord = label.pos.coord;
+        const coords = this._linesCanvas;
+        const canvas = this._canvas;
 
         coords[position] = (coords[position] !== canvas[position] && mathAbs(coords[position] - canvas[position]) < mathAbs(labelCoord - canvas[position])) ? coords[position] : labelCoord;
     },
 
     _updateLines: function(lines, x, y, r, isHorizontal) {
-        var coords = this._linesCanvas,
-            canvas = this._canvas,
-            points = isHorizontal
-                ? [
-                    [mathMin(x - r, coords.left), canvas.top, x - r, canvas.top],
-                    [x + r, canvas.top, mathMax(coords.right, x + r), canvas.top]
-                ]
-                : [
-                    [canvas.left, mathMin(coords.top, y - r), canvas.left, y - r],
-                    [canvas.left, y + r, canvas.left, mathMax(coords.bottom, y + r)]
-                ];
-        for(var i = 0; i < 2; i++) {
+        const coords = this._linesCanvas;
+        const canvas = this._canvas;
+        const points = isHorizontal
+            ? [
+                [mathMin(x - r, coords.left), canvas.top, x - r, canvas.top],
+                [x + r, canvas.top, mathMax(coords.right, x + r), canvas.top]
+            ]
+            : [
+                [canvas.left, mathMin(coords.top, y - r), canvas.left, y - r],
+                [canvas.left, y + r, canvas.left, mathMax(coords.bottom, y + r)]
+            ];
+        for(let i = 0; i < 2; i++) {
             lines[i].attr({ points: points[i] }).sharp(isHorizontal ? 'v' : 'h', isHorizontal ? (y === canvas.bottom ? -1 : 1) : (x === canvas.right ? -1 : 1));
         }
     },
 
     _resetLinesCanvas: function() {
-        var canvas = this._canvas;
+        const canvas = this._canvas;
         this._linesCanvas = {
             left: canvas.left,
             right: canvas.right,
@@ -261,9 +261,9 @@ Crosshair.prototype = {
     },
 
     _getClipRectForPane: function(x, y) {
-        var panes = this._panes,
-            i,
-            coords;
+        const panes = this._panes;
+        let i;
+        let coords;
         for(i = 0; i < panes.length; i++) {
             coords = panes[i].coords;
             if(coords.left <= x && coords.right >= x && coords.top <= y && coords.bottom >= y) {
@@ -274,16 +274,16 @@ Crosshair.prototype = {
     },
 
     show: function(data) {
-        var that = this,
-            point = data.point,
-            pointData = point.getCrosshairData(data.x, data.y),
-            r = point.getPointRadius(),
-            horizontal = that._horizontal,
-            vertical = that._vertical,
-            rad = !r ? 0 : r + 3,
-            canvas = that._canvas,
-            x = mathFloor(pointData.x),
-            y = mathFloor(pointData.y);
+        const that = this;
+        const point = data.point;
+        const pointData = point.getCrosshairData(data.x, data.y);
+        const r = point.getPointRadius();
+        const horizontal = that._horizontal;
+        const vertical = that._vertical;
+        const rad = !r ? 0 : r + 3;
+        const canvas = that._canvas;
+        const x = mathFloor(pointData.x);
+        const y = mathFloor(pointData.y);
 
         if(x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom) {
             that._crosshairGroup.attr({ visibility: 'visible' });

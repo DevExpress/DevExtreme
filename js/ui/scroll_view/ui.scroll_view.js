@@ -1,40 +1,40 @@
-var $ = require('../../core/renderer'),
-    devices = require('../../core/devices'),
-    windowUtils = require('../../core/utils/window'),
-    messageLocalization = require('../../localization/message'),
-    registerComponent = require('../../core/component_registrator'),
-    getPublicElement = require('../../core/utils/dom').getPublicElement,
-    extend = require('../../core/utils/extend').extend,
-    noop = require('../../core/utils/common').noop,
-    PullDownStrategy = require('./ui.scroll_view.native.pull_down'),
-    SwipeDownStrategy = require('./ui.scroll_view.native.swipe_down'),
-    SimulatedStrategy = require('./ui.scroll_view.simulated'),
-    Scrollable = require('./ui.scrollable'),
-    LoadIndicator = require('../load_indicator'),
-    themes = require('./../themes'),
-    LoadPanel = require('../load_panel');
+const $ = require('../../core/renderer');
+const devices = require('../../core/devices');
+const windowUtils = require('../../core/utils/window');
+const messageLocalization = require('../../localization/message');
+const registerComponent = require('../../core/component_registrator');
+const getPublicElement = require('../../core/utils/dom').getPublicElement;
+const extend = require('../../core/utils/extend').extend;
+const noop = require('../../core/utils/common').noop;
+const PullDownStrategy = require('./ui.scroll_view.native.pull_down');
+const SwipeDownStrategy = require('./ui.scroll_view.native.swipe_down');
+const SimulatedStrategy = require('./ui.scroll_view.simulated');
+const Scrollable = require('./ui.scrollable');
+const LoadIndicator = require('../load_indicator');
+const themes = require('./../themes');
+const LoadPanel = require('../load_panel');
 
-var SCROLLVIEW_CLASS = 'dx-scrollview',
-    SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content',
-    SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket',
-    SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket',
-    SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down',
+const SCROLLVIEW_CLASS = 'dx-scrollview';
+const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
+const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';
+const SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket';
+const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down';
 
-    SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + '-scrollbottom',
-    SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator',
-    SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text',
+const SCROLLVIEW_REACHBOTTOM_CLASS = SCROLLVIEW_CLASS + '-scrollbottom';
+const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
+const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text';
 
-    SCROLLVIEW_LOADPANEL = SCROLLVIEW_CLASS + '-loadpanel';
+const SCROLLVIEW_LOADPANEL = SCROLLVIEW_CLASS + '-loadpanel';
 
-var refreshStrategies = {
+const refreshStrategies = {
     pullDown: PullDownStrategy,
     swipeDown: SwipeDownStrategy,
     simulated: SimulatedStrategy
 };
 
-var isServerSide = !windowUtils.hasWindow();
+const isServerSide = !windowUtils.hasWindow();
 
-var scrollViewServerConfig = {
+const scrollViewServerConfig = {
     finishLoading: noop,
     release: noop,
     refresh: noop,
@@ -45,7 +45,7 @@ var scrollViewServerConfig = {
     }
 };
 
-var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
+const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -69,7 +69,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
         return this.callBase().concat([
             {
                 device: function() {
-                    var realDevice = devices.real();
+                    const realDevice = devices.real();
                     return realDevice.platform === 'android';
                 },
                 options: {
@@ -109,23 +109,23 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initContent: function() {
-        var $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
+        const $content = $('<div>').addClass(SCROLLVIEW_CONTENT_CLASS);
         this._$content.wrapInner($content);
     },
 
     _initTopPocket: function() {
-        var $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS),
-            $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
+        const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
+        const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
         $topPocket.append($pullDown);
         this._$content.prepend($topPocket);
     },
 
     _initBottomPocket: function() {
-        var $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS),
-            $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS),
-            $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($('<div>')).$element(),
-            $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
+        const $bottomPocket = this._$bottomPocket = $('<div>').addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS);
+        const $reachBottom = this._$reachBottom = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
+        const $loadContainer = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
+        const $loadIndicator = new LoadIndicator($('<div>')).$element();
+        const $text = this._$reachBottomText = $('<div>').addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
         this._updateReachBottomText();
 
@@ -139,11 +139,11 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initLoadPanel: function() {
-        let $loadPanelElement = $('<div>')
+        const $loadPanelElement = $('<div>')
             .addClass(SCROLLVIEW_LOADPANEL)
             .appendTo(this.$element());
 
-        let loadPanelOptions = {
+        const loadPanelOptions = {
             shading: false,
             delay: 400,
             message: this.option('refreshingText'),
@@ -160,9 +160,9 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _createStrategy: function() {
-        var strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
+        const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
 
-        var strategyClass = refreshStrategies[strategyName];
+        const strategyClass = refreshStrategies[strategyName];
         if(!strategyClass) {
             throw Error('E1030', this.option('refreshStrategy'));
         }
@@ -187,7 +187,7 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     on: function(eventName) {
-        var result = this.callBase.apply(this, arguments);
+        const result = this.callBase.apply(this, arguments);
 
         if(eventName === 'pullDown' || eventName === 'reachBottom') {
             this._tryRefreshPocketState();

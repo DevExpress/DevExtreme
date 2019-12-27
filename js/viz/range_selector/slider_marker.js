@@ -1,10 +1,10 @@
-var patchFontOptions = require('../core/utils').patchFontOptions,
+const patchFontOptions = require('../core/utils').patchFontOptions;
 
-    SLIDER_MARKER_UPDATE_DELAY = 75,
-    POINTER_SIZE = require('./common').consts.pointerSize;
+const SLIDER_MARKER_UPDATE_DELAY = 75;
+const POINTER_SIZE = require('./common').consts.pointerSize;
 
 function SliderMarker(renderer, root, isLeftPointer) {
-    var that = this;
+    const that = this;
     that._isLeftPointer = isLeftPointer;
     that._isOverlapped = false;
 
@@ -26,7 +26,7 @@ SliderMarker.prototype = {
     },
 
     _getTextSize: function() {
-        var textSize = this._label.getBBox();
+        const textSize = this._label.getBBox();
         if(!this._textHeight && isFinite(textSize.height)) {
             this._textHeight = textSize.height;
         }
@@ -38,36 +38,36 @@ SliderMarker.prototype = {
     },
 
     _getAreaPointsInfo: function(textSize) {
-        var that = this,
-            rectSize = that._getRectSize(textSize),
-            rectWidth = rectSize.width,
-            rectHeight = rectSize.height,
-            rectLeftBorder = -rectWidth,
-            rectRightBorder = 0,
-            pointerRightPoint = POINTER_SIZE,
-            pointerCenterPoint = 0,
-            pointerLeftPoint = -POINTER_SIZE,
-            position = that._position,
-            isLeft = that._isLeftPointer,
-            correctCloudBorders = function() {
-                rectLeftBorder++;
-                rectRightBorder++;
-                pointerRightPoint++;
-                pointerCenterPoint++;
-                pointerLeftPoint++;
-            },
-            checkPointerBorders = function() {
-                if(pointerRightPoint > rectRightBorder) {
-                    pointerRightPoint = rectRightBorder;
-                } else {
-                    if(pointerLeftPoint < rectLeftBorder) {
-                        pointerLeftPoint = rectLeftBorder;
-                    }
+        const that = this;
+        const rectSize = that._getRectSize(textSize);
+        const rectWidth = rectSize.width;
+        const rectHeight = rectSize.height;
+        let rectLeftBorder = -rectWidth;
+        let rectRightBorder = 0;
+        let pointerRightPoint = POINTER_SIZE;
+        let pointerCenterPoint = 0;
+        let pointerLeftPoint = -POINTER_SIZE;
+        const position = that._position;
+        const isLeft = that._isLeftPointer;
+        const correctCloudBorders = function() {
+            rectLeftBorder++;
+            rectRightBorder++;
+            pointerRightPoint++;
+            pointerCenterPoint++;
+            pointerLeftPoint++;
+        };
+        const checkPointerBorders = function() {
+            if(pointerRightPoint > rectRightBorder) {
+                pointerRightPoint = rectRightBorder;
+            } else {
+                if(pointerLeftPoint < rectLeftBorder) {
+                    pointerLeftPoint = rectLeftBorder;
                 }
+            }
 
-                isLeft && correctCloudBorders();
-            },
-            borderPosition = position;
+            isLeft && correctCloudBorders();
+        };
+        let borderPosition = position;
 
         if(isLeft) {
             if(position > that._range[1] - rectWidth) {
@@ -109,10 +109,10 @@ SliderMarker.prototype = {
     },
 
     _update: function() {
-        var that = this,
-            textSize,
-            currentTextSize,
-            rectSize;
+        const that = this;
+        let textSize;
+        let currentTextSize;
+        let rectSize;
 
         clearTimeout(that._timeout);
 
@@ -129,9 +129,9 @@ SliderMarker.prototype = {
         }, SLIDER_MARKER_UPDATE_DELAY);
 
         function updateSliderMarker(size, rectSize) {
-            var points,
-                pointsData,
-                offset;
+            let points;
+            let pointsData;
+            let offset;
 
             rectSize = rectSize || that._getRectSize(size);
             that._group.attr({ translateY: -(rectSize.height + POINTER_SIZE) });
@@ -157,7 +157,7 @@ SliderMarker.prototype = {
     },
 
     applyOptions: function(options, screenRange) {
-        var that = this;
+        const that = this;
         that._range = screenRange;
         that._paddingLeftRight = options.paddingLeftRight;
         that._paddingTopBottom = options.paddingTopBottom;
@@ -186,7 +186,7 @@ SliderMarker.prototype = {
     },
 
     setOverlapped: function(isOverlapped) {
-        var that = this;
+        const that = this;
         if(that._isOverlapped !== isOverlapped) {
             if(isOverlapped) {
                 that._border.append(that._group);

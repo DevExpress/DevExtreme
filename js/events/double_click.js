@@ -1,19 +1,19 @@
-var eventsEngine = require('../events/core/events_engine'),
-    domUtils = require('../core/utils/dom'),
-    domAdapter = require('../core/dom_adapter'),
-    Class = require('../core/class'),
-    registerEvent = require('./core/event_registrator'),
-    clickEvent = require('./click'),
-    eventUtils = require('./utils');
+const eventsEngine = require('../events/core/events_engine');
+const domUtils = require('../core/utils/dom');
+const domAdapter = require('../core/dom_adapter');
+const Class = require('../core/class');
+const registerEvent = require('./core/event_registrator');
+const clickEvent = require('./click');
+const eventUtils = require('./utils');
 
-var DBLCLICK_EVENT_NAME = 'dxdblclick',
-    DBLCLICK_NAMESPACE = 'dxDblClick',
-    NAMESPACED_CLICK_EVENT = eventUtils.addNamespace(clickEvent.name, DBLCLICK_NAMESPACE),
+const DBLCLICK_EVENT_NAME = 'dxdblclick';
+const DBLCLICK_NAMESPACE = 'dxDblClick';
+const NAMESPACED_CLICK_EVENT = eventUtils.addNamespace(clickEvent.name, DBLCLICK_NAMESPACE);
 
-    DBLCLICK_TIMEOUT = 300;
+const DBLCLICK_TIMEOUT = 300;
 
 
-var DblClick = Class.inherit({
+const DblClick = Class.inherit({
 
     ctor: function() {
         this._handlerCount = 0;
@@ -33,7 +33,7 @@ var DblClick = Class.inherit({
     },
 
     _clickHandler: function(e) {
-        var timeStamp = e.timeStamp || Date.now();
+        const timeStamp = e.timeStamp || Date.now();
 
         if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
             eventUtils.fireEvent({

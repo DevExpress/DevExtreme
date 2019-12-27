@@ -1,7 +1,7 @@
 function find(callback) {
     let currentIndex = 0;
     while(currentIndex < this.length) {
-        let currentValue = this[currentIndex];
+        const currentValue = this[currentIndex];
         if(callback.call(undefined, currentValue, currentIndex, this)) {
             return currentValue;
         }

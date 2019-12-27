@@ -150,7 +150,7 @@ export const categoriesVerticalTranslatorDataY = {
     interval: verticalCategoryDelta
 };
 
-var defaultAxisXOptions = $.extend(true, {}, {
+const defaultAxisXOptions = $.extend(true, {}, {
     isHorizontal: true,
     valueMarginsEnabled: true,
     position: 'bottom',
@@ -186,7 +186,7 @@ var defaultAxisXOptions = $.extend(true, {}, {
     drawingType: 'normal'
 });
 
-var defaultAxisYOptions = $.extend(true, {}, {
+const defaultAxisYOptions = $.extend(true, {}, {
     isHorizontal: false,
     valueMarginsEnabled: true,
     position: 'left',
@@ -230,7 +230,7 @@ export const createVerticalAxis = function createVerticalAxis(translatorData, or
 
 function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHorizontal) {
     function createTranslator(data, options) {
-        var useOriginalTranslator = options.useOriginalTranslator;
+        const useOriginalTranslator = options.useOriginalTranslator;
         data.categories = data.categories || options.categories;
         data.maxVisible = data.maxVisible || options.max;
         data.minVisible = data.minVisible || options.min;
@@ -246,10 +246,10 @@ function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHori
     translatorData = $.extend({}, translatorData);
     orthogonalTranslatorData = $.extend({}, orthogonalTranslatorData);
 
-    var translator = createTranslator(translatorData, allOptions),
-        orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions),
-        mergedOptions = $.extend(true, {}, allOptions),
-        axis;
+    const translator = createTranslator(translatorData, allOptions);
+    const orthogonalTranslator = createTranslator(orthogonalTranslatorData, allOptions);
+    const mergedOptions = $.extend(true, {}, allOptions);
+    let axis;
 
     axis = new axisModule.Axis({
         renderer: new vizMocks.Renderer(),
@@ -293,7 +293,7 @@ export const insertMockFactory = function insertMockFactory() {
     };
 
     mockItem('Point', pointModule, function(series, data, options) {
-        var opt = $.extend(true, {}, data, options);
+        const opt = $.extend(true, {}, data, options);
         opt.series = series;
         return new MockPoint(opt);
     });
@@ -301,7 +301,7 @@ export const insertMockFactory = function insertMockFactory() {
     mockItem('Series', seriesModule, function(renderSettings, options) {
         seriesMockData.args.push(arguments);
         if(seriesMockData.series.length > seriesMockData.currentSeries) {
-            var series = seriesMockData.series[seriesMockData.currentSeries++];
+            const series = seriesMockData.series[seriesMockData.currentSeries++];
             series.name = series.name || options.name;
             series.type = options.type;
             series.axis = options.axis;
@@ -330,7 +330,7 @@ export const insertMockFactory = function insertMockFactory() {
     });
 
     axisModule && mockItem('Axis', axisModule, function(parameters) {
-        var axis = new MockAxis(parameters);
+        const axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
     });
@@ -355,13 +355,13 @@ export const setupSeriesFamily = function() {
 //  Translator
 
 export const MockTranslator = function(data) {
-    var innerData = data,
-        failOnWrongData = data && data.failOnWrongData;
+    const innerData = data;
+    const failOnWrongData = data && data.failOnWrongData;
     return {
         translate: function(index) {
             currentAssert().ok(index !== null, 'Verification of value that was passed to Translator (translate)');
             index = index === undefined ? 0 : index;
-            var result = innerData.translate[index.toString()];
+            const result = innerData.translate[index.toString()];
             if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'translate(' + index + ') = undefined');
             }
@@ -369,7 +369,7 @@ export const MockTranslator = function(data) {
         },
         from: function(index) {
             currentAssert().ok(index !== undefined && index !== null, 'Verification of value that was passed to Translator (from)');
-            var result = innerData.from[index.toString()];
+            const result = innerData.from[index.toString()];
             if(typeof index === 'number' && failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'from(' + index + ') = undefined');
             }
@@ -377,21 +377,21 @@ export const MockTranslator = function(data) {
         },
         translateSpecialCase: function(specialCase) {
             currentAssert().ok(specialCase !== undefined && specialCase !== null, 'Verification of value that was passed to Translator (translateSpecialCase)');
-            var result = innerData.specialCases[specialCase];
+            const result = innerData.specialCases[specialCase];
             if(failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'translateSpecialCase(' + specialCase + ') = undefined');
             }
             return result;
         },
         getInterval: function() {
-            var result = innerData.interval;
+            const result = innerData.interval;
             if(failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'interval = undefined');
             }
             return result;
         },
         getCanvasVisibleArea: function() {
-            var result = innerData.getCanvasVisibleArea;
+            const result = innerData.getCanvasVisibleArea;
             if(failOnWrongData && result === undefined) {
                 currentAssert().ok(false, 'getCanvasVisibleArea = undefined');
             }
@@ -417,7 +417,7 @@ export const MockTranslator = function(data) {
 };
 
 export const MockAngularTranslator = function(data) {
-    var innerData = data;
+    const innerData = data;
     return {
         translate: function(index) {
             currentAssert().ok(index !== undefined && index !== null, 'Verification of value that was passed to Translator (translate)');
@@ -460,7 +460,7 @@ export const MockSeries = function MockSeries(options) {
         _argumentAxis: options.argumentAxis,
         createPoints: sinon.spy(),
         pointsByArgument: (function() {
-            var pointsByArgument = {};
+            const pointsByArgument = {};
 
             $.each(options.points, function(_, p) {
                 if(p.argument) {
@@ -494,7 +494,7 @@ export const MockSeries = function MockSeries(options) {
             if(options.visible === false) {
                 return { arg: {}, val: {} };
             }
-            var range = $.extend(true, {}, options.range || {});
+            const range = $.extend(true, {}, options.range || {});
 
             range.arg = range.arg || {};
             range.val = range.val || {};
@@ -562,7 +562,7 @@ export const MockSeries = function MockSeries(options) {
             this.deselectedPoint = point;
         },
         getPointsByArg: function(arg) {
-            var f = [];
+            const f = [];
             $.each(options.points, function(_, point) {
                 // eslint-disable-next-line eqeqeq
                 if(point.argument.valueOf() == arg.valueOf()) {
@@ -573,7 +573,7 @@ export const MockSeries = function MockSeries(options) {
         },
         getPointsByKeys: sinon.stub(),
         getArgumentField: function() {
-            var options = this._options;
+            const options = this._options;
             return options.argumentField;
         },
         showPointTooltip: function(point) {
@@ -717,7 +717,7 @@ export const MockPoint = Class.inherit(
         },
         correctPosition: function(correction) {
             // correct angles?...
-            var that = this;
+            const that = this;
             that.radiusInner = correction.radiusInner;
             that.radiusOuter = correction.radiusOuter;
             that.centerX = correction.centerX;
@@ -727,7 +727,7 @@ export const MockPoint = Class.inherit(
             if(this.hasValue()) {
                 this.total = total;
                 this.percent = this.value / total;
-                var isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
+                const isFullStackedSeries = this.series.type === '' || this.series.type.indexOf('fullstacked') === 0;
                 if(fullStacked && isFullStackedSeries) {
                     this.value = this.value / total;
                     this.minValue = this.minValue / total;
@@ -861,8 +861,8 @@ export const MockPoint = Class.inherit(
     });
 
 export const MockAxis = function(renderOptions) {
-    var renderer = renderOptions.renderer,
-        axisElementsGroup = renderer.g();
+    const renderer = renderOptions.renderer;
+    const axisElementsGroup = renderer.g();
     return {
         updateOptions: function(options) {
             this.pane = options.pane;
@@ -981,7 +981,7 @@ export const MockAxis = function(renderOptions) {
             return this._options.mockAxesSpacing || 5;
         },
         getTranslator: function() {
-            var businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
+            const businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
             businessRange.minVisible = businessRange.minVisible || businessRange.min;
             businessRange.maxVisible = businessRange.maxVisible || businessRange.max;
             return this._options && this._options.mockTranslator || new MockTranslator(businessRange);
@@ -1088,7 +1088,7 @@ var MockSeriesFamily = Class.inherit({
 });
 
 export const checkTextSpecial = function(i, text, x, y, attr) {
-    var assert = currentAssert();
+    const assert = currentAssert();
     assert.strictEqual(renderer.text.getCall(i).args[0], text, 'Text for text ' + i);
     assert.equal(renderer.text.getCall(i).args[1], x, 'X for text ' + i);
     assert.equal(renderer.text.getCall(i).args[2], y, 'Y for text ' + i);
@@ -1102,7 +1102,7 @@ export const checkTextSpecial = function(i, text, x, y, attr) {
 
 export const commonMethodsForTests = {
     checkTranslatorsCount: function(assert, translators, panesCount, axesCount) {
-        var i = 0;
+        let i = 0;
         $.each(translators, function(pane, axes) {
             panesCount--;
             $.each(axes, function(axis, tr) {

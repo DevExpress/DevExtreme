@@ -48,7 +48,7 @@ function getEngine(engine) {
     return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
 }
 
-export let Projection = function(parameters) {
+export const Projection = function(parameters) {
     const that = this;
     that._initEvents();
     that._params = parameters;
@@ -108,7 +108,7 @@ Projection.prototype = {
         const max = [that.project([engine.max()[0], 0])[0], that.project([0, engine.max()[1]])[1]];
 
         const screenAR = width / height;
-        let boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);
+        const boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);
         let correction;
         if(isNaN(boundsAR) || boundsAR === 0
         || (_min(screenAR, aspectRatio) <= aspectRatio * boundsAR && aspectRatio * boundsAR <= _max(screenAR, aspectRatio))) {

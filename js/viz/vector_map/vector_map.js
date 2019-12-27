@@ -29,7 +29,7 @@ function mergeBounds(sumBounds, dataBounds) {
         Math.max(dataBounds[1], dataBounds[3], sumBounds[1])] : sumBounds;
 }
 
-var dxVectorMap = BaseWidget.inherit({
+const dxVectorMap = BaseWidget.inherit({
     _eventsMap: {
         'onClick': { name: 'click' },
         'onCenterChanged': { name: 'centerChanged' },
@@ -51,7 +51,7 @@ var dxVectorMap = BaseWidget.inherit({
     ],
 
     _initLayerCollection: function(dataKey) {
-        var that = this;
+        const that = this;
         that._layerCollection = new MapLayerCollection({
             renderer: that._renderer,
             projection: that._projection,
@@ -113,7 +113,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initLegendsControl: function() {
-        var that = this;
+        const that = this;
         that._legendsControl = new legendModule.LegendsControl({
             renderer: that._renderer,
             container: that._root,
@@ -127,7 +127,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initControlBar: function(dataKey) {
-        var that = this;
+        const that = this;
         that._controlBar = new controlBarModule.ControlBar({
             renderer: that._renderer,
             container: that._root,
@@ -139,10 +139,10 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _initElements: function() {
-        var that = this,
-            dataKey = generateDataKey(),
-            notifyCounter = 0;
-        var preventProjectionEvents;
+        const that = this;
+        const dataKey = generateDataKey();
+        let notifyCounter = 0;
+        let preventProjectionEvents;
 
         that._preventProjectionEvents = function() {
             preventProjectionEvents = true;
@@ -201,7 +201,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _disposeCore: function() {
-        var that = this;
+        const that = this;
         that._controlBar.dispose();
         that._gestureHandler.dispose();
         that._tracker.dispose();
@@ -217,7 +217,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _setupInteraction: function() {
-        var options = {
+        const options = {
             centeringEnabled: !!_parseScalar(this._getOption('panningEnabled', true), true),
             zoomingEnabled: !!_parseScalar(this._getOption('zoomingEnabled', true), true)
         };
@@ -230,7 +230,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     _applySize: function(rect) {
-        var layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
+        const layout = { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], right: 0, bottom: 0 };
         this._projection.setSize(layout);
         this._layoutControl.setSize(layout);
         this._layerCollection.setRect([layout.left, layout.top, layout.width, layout.height]);
@@ -396,19 +396,19 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     getLayerByIndex: function(index) {
-        var layer = this._layerCollection.byIndex(index);
+        const layer = this._layerCollection.byIndex(index);
         return layer ? layer.proxy : null;
     },
 
     getLayerByName: function(name) {
-        var layer = this._layerCollection.byName(name);
+        const layer = this._layerCollection.byName(name);
         return layer ? layer.proxy : null;
     },
 
     clearSelection: function(_noEvent) {
-        var layers = this._layerCollection.items(),
-            i,
-            ii = layers.length;
+        const layers = this._layerCollection.items();
+        let i;
+        const ii = layers.length;
         for(i = 0; i < ii; ++i) {
             layers[i].clearSelection(_noEvent);
         }
@@ -416,7 +416,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     center: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getCenter();
         } else {
@@ -426,7 +426,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     zoomFactor: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getZoom();
         } else {
@@ -436,7 +436,7 @@ var dxVectorMap = BaseWidget.inherit({
     },
 
     viewport: function(value) {
-        var that = this;
+        const that = this;
         if(value === undefined) {
             return that._projection.getViewport();
         } else {

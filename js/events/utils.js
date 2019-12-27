@@ -196,7 +196,7 @@ const copyEvent = function(originalEvent) {
 };
 
 const createEvent = function(originalEvent, args) {
-    let event = copyEvent(originalEvent);
+    const event = copyEvent(originalEvent);
 
     if(args) {
         extend(event, args);

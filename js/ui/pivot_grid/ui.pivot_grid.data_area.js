@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
 import { AreaItem } from './ui.pivot_grid.area_item';
 
-var PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area',
-    PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data',
-    PIVOTGRID_TOTAL_CLASS = 'dx-total',
-    PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal',
-    PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
+const PIVOTGRID_AREA_CLASS = 'dx-pivotgrid-area';
+const PIVOTGRID_AREA_DATA_CLASS = 'dx-pivotgrid-area-data';
+const PIVOTGRID_TOTAL_CLASS = 'dx-total';
+const PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal';
+const PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
 
 exports.DataArea = AreaItem.inherit({
     _getAreaName: function() {
@@ -18,8 +18,8 @@ exports.DataArea = AreaItem.inherit({
     },
 
     _applyCustomStyles: function(options) {
-        var cell = options.cell,
-            classArray = options.classArray;
+        const cell = options.cell;
+        const classArray = options.classArray;
 
         if(cell.rowType === 'T' || cell.columnType === 'T') {
             classArray.push(PIVOTGRID_TOTAL_CLASS);

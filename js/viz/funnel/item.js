@@ -1,11 +1,11 @@
-var states = ['normal', 'hover', 'selection', 'selection'],
-    isDefined = require('../../core/utils/type').isDefined;
+const states = ['normal', 'hover', 'selection', 'selection'];
+const isDefined = require('../../core/utils/type').isDefined;
 
 function parseStyles(color, style, baseStyle) {
-    var border = style.border,
-        baseBorder = baseStyle.border,
-        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
-        borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
+    const border = style.border;
+    const baseBorder = baseStyle.border;
+    const borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible;
+    const borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
 
     return {
         fill: color,
@@ -16,8 +16,8 @@ function parseStyles(color, style, baseStyle) {
 }
 
 function Item(widget, options) {
-    var that = this,
-        data = options.data;
+    const that = this;
+    const data = options.data;
 
     that.code = 0;
     that.widget = widget;
@@ -73,7 +73,7 @@ Item.prototype = {
     },
 
     select: function(state) {
-        var mode = this.widget._getOption('selectionMode', true);
+        const mode = this.widget._getOption('selectionMode', true);
         if(mode === 'none' || state === this.isSelected()) {
             return;
         }

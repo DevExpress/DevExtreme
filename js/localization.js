@@ -1,7 +1,7 @@
-let core = require('./localization/core');
-let message = require('./localization/message');
-let number = require('./localization/number');
-let date = require('./localization/date');
+const core = require('./localization/core');
+const message = require('./localization/message');
+const number = require('./localization/number');
+const date = require('./localization/date');
 require('./localization/currency');
 
 

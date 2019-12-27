@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    dblclickEvent = require('events/dblclick'),
-    pointerMock = require('../../helpers/pointerMock.js');
+const $ = require('jquery');
+const dblclickEvent = require('events/dblclick');
+const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="element"></div>\
             <div id="otherElement"></div>\
@@ -12,7 +12,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -40,10 +40,10 @@ QUnit.module('timeout', moduleConfig);
 QUnit.test('dxdblclick should be fired if element clicked twice with timeout < 300ms', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element').on(dblclickEvent.name, function(e) {
-            assert.ok(true, 'dxdblclick fired');
-        }),
-        pointer = pointerMock($element).start();
+    const $element = $('#element').on(dblclickEvent.name, function(e) {
+        assert.ok(true, 'dxdblclick fired');
+    });
+    const pointer = pointerMock($element).start();
 
     pointer.click().wait(299);
     this.clock.tick(299);
@@ -53,10 +53,10 @@ QUnit.test('dxdblclick should be fired if element clicked twice with timeout < 3
 QUnit.test('dxdblclick should not be fired if element clicked twice with timeout > 300ms', function(assert) {
     assert.expect(0);
 
-    var $element = $('#element').on(dblclickEvent.name, function(e) {
-            assert.ok(true, 'dxdblclick fired');
-        }),
-        pointer = pointerMock($element).start();
+    const $element = $('#element').on(dblclickEvent.name, function(e) {
+        assert.ok(true, 'dxdblclick fired');
+    });
+    const pointer = pointerMock($element).start();
 
     pointer.click().wait(301);
     this.clock.tick(301);
@@ -66,10 +66,10 @@ QUnit.test('dxdblclick should not be fired if element clicked twice with timeout
 QUnit.test('dxdblclick should be fired once after triple click', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element').on(dblclickEvent.name, function(e) {
-            assert.ok(true, 'dxdblclick fired');
-        }),
-        pointer = pointerMock($element).start();
+    const $element = $('#element').on(dblclickEvent.name, function(e) {
+        assert.ok(true, 'dxdblclick fired');
+    });
+    const pointer = pointerMock($element).start();
 
     pointer.click();
     pointer.click();

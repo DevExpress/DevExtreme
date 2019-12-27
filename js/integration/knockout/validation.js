@@ -7,8 +7,8 @@ import { Deferred } from '../../core/utils/deferred';
 import Guid from '../../core/guid';
 import ko from 'knockout';
 
-const VALIDATION_STATUS_VALID = 'valid',
-    VALIDATION_STATUS_PENDING = 'pending';
+const VALIDATION_STATUS_VALID = 'valid';
+const VALIDATION_STATUS_PENDING = 'pending';
 
 const koDxValidator = Class.inherit({
     ctor(target, { name, validationRules }) {
@@ -36,7 +36,7 @@ const koDxValidator = Class.inherit({
             const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
             this._validationInfo.result = extend({}, result, { complete });
         } else {
-            for(let prop in result) {
+            for(const prop in result) {
                 if(prop !== 'id' && prop !== 'complete') {
                     this._validationInfo.result[prop] = result[prop];
                 }
@@ -45,12 +45,12 @@ const koDxValidator = Class.inherit({
     },
 
     validate() {
-        const currentResult = this._validationInfo && this._validationInfo.result,
-            value = this.target();
+        const currentResult = this._validationInfo && this._validationInfo.result;
+        const value = this.target();
         if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return extend({}, currentResult);
         }
-        let result = ValidationEngine.validate(value, this.validationRules, this.name);
+        const result = ValidationEngine.validate(value, this.validationRules, this.name);
         result.id = new Guid().toString();
         this._applyValidationResult(result);
         result.complete && result.complete.then((res) => {

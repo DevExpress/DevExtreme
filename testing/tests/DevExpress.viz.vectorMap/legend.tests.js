@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    coreLegendModule = require('viz/components/legend'),
-    legendModule = require('viz/vector_map/legend'),
-    ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const coreLegendModule = require('viz/components/legend');
+const legendModule = require('viz/vector_map/legend');
+const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
 
 QUnit.module('Legend', {
     beforeEach: function() {
@@ -87,7 +87,7 @@ QUnit.test('instance type', function(assert) {
 });
 
 QUnit.test('creation', function(assert) {
-    var root = this.renderer.g.lastCall.returnValue;
+    const root = this.renderer.g.lastCall.returnValue;
     assert.deepEqual(root.attr.lastCall.args, [{ 'class': 'dxm-legend' }], 'settings');
     assert.deepEqual(root.linkOn.lastCall.args, [this.container, { name: 'legend', after: 'legend-base' }], 'root is linked to container');
     assert.deepEqual(root.linkAppend.lastCall.args, [], 'root is appended');
@@ -148,7 +148,7 @@ QUnit.test('Pass default layer color for markers', function(assert) {
 });
 
 QUnit.test('customizeText format object', function(assert) {
-    var spy = this.options.customizeText = sinon.spy();
+    const spy = this.options.customizeText = sinon.spy();
     this.legend.setOptions(this.options);
 
     this.updateData([10, 20, 30], [1, 2, 3, 4]);
@@ -236,9 +236,9 @@ QUnit.test('instance type', function(assert) {
 });
 
 QUnit.test('setOptions', function(assert) {
-    var options = [{ option: 1 }, { option: 2 }, { option: 3 }],
-        theme = { theme: 'theme' },
-        parameters = this.parameters;
+    const options = [{ option: 1 }, { option: 2 }, { option: 3 }];
+    const theme = { theme: 'theme' };
+    const parameters = this.parameters;
     this.theme.returns(theme);
 
     this.legendsControl.setOptions(options);
@@ -258,10 +258,10 @@ QUnit.test('setOptions', function(assert) {
 });
 
 QUnit.test('setOptions / more than before', function(assert) {
-    var options = [{ option: 1 }, { option: 2 }, { option: 3 }],
-        options2 = [{ option2: 1 }, { option2: 2 }, { option2: 3 }, { option2: 4 }],
-        theme = { theme: 'theme' },
-        parameters = this.parameters;
+    const options = [{ option: 1 }, { option: 2 }, { option: 3 }];
+    const options2 = [{ option2: 1 }, { option2: 2 }, { option2: 3 }, { option2: 4 }];
+    const theme = { theme: 'theme' };
+    const parameters = this.parameters;
     this.theme.returns(theme);
     this.legendsControl.setOptions(options);
 
@@ -281,10 +281,10 @@ QUnit.test('setOptions / more than before', function(assert) {
 });
 
 QUnit.test('setOptions / less then before', function(assert) {
-    var options = [{ option: 1 }, { option: 2 }, { option: 3 }],
-        options2 = [{ option2: 1 }, { option2: 2 }],
-        theme = { theme: 'theme' },
-        parameters = this.parameters;
+    const options = [{ option: 1 }, { option: 2 }, { option: 3 }];
+    const options2 = [{ option2: 1 }, { option2: 2 }];
+    const theme = { theme: 'theme' };
+    const parameters = this.parameters;
     this.theme.returns(theme);
     this.legendsControl.setOptions(options, theme);
 
@@ -308,7 +308,7 @@ QUnit.test('init', function(assert) {
 });
 
 QUnit.test('dispose', function(assert) {
-    var options = [{ option: 1 }, { option: 2 }, { option: 3 }];
+    const options = [{ option: 1 }, { option: 2 }, { option: 3 }];
     this.legendsControl.setOptions(options);
 
     this.legendsControl.dispose();

@@ -44,8 +44,8 @@ class DiagramToolbar extends DiagramPanel {
 
     _renderToolbar($toolbar) {
         const commands = DiagramCommands.getToolbarCommands(this.option('commands'));
-        var widgetCommandNames = this.option('widgetCommandNames') || [];
-        var widgetCommands = WIDGET_COMMANDS.filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
+        const widgetCommandNames = this.option('widgetCommandNames') || [];
+        const widgetCommands = WIDGET_COMMANDS.filter(function(c) { return widgetCommandNames.indexOf(c.command) > -1; });
         let dataSource = this._prepareToolbarItems(commands, 'before', this._execDiagramCommand);
         dataSource = dataSource.concat(this._prepareToolbarItems(widgetCommands, 'after', this._execWidgetCommand));
         this._toolbarInstance = this._createComponent($toolbar, Toolbar, {
@@ -233,7 +233,7 @@ class DiagramToolbar extends DiagramPanel {
     _addContextMenuHelper(items, widget, indexPath, rootButton) {
         if(items) {
             items.forEach((item, index) => {
-                let itemIndexPath = indexPath.concat(index);
+                const itemIndexPath = indexPath.concat(index);
                 this._itemHelpers[item.command] = new ContextMenuItemHelper(widget, itemIndexPath, rootButton);
                 this._addContextMenuHelper(item.items, widget, itemIndexPath, rootButton);
             });
@@ -353,7 +353,7 @@ class ToolbarItemHelper {
     setItems(items) {
         if('items' in this._widget.option()) {
             this._widget.option('items', items.map(item => {
-                var value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
+                const value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
                 return {
                     'value': value,
                     'title': item.text
@@ -370,11 +370,11 @@ class ContextMenuItemHelper extends ToolbarItemHelper {
         this._rootButton = rootButton;
     }
     setEnabled(enabled) {
-        let optionText = this._indexPath.reduce((r, i) => {
+        const optionText = this._indexPath.reduce((r, i) => {
             return r + `items[${i}].`;
         }, '') + 'disabled';
         this._widget.option(optionText, !enabled);
-        let rootEnabled = this._hasEnabledCommandItems(this._widget.option('items'));
+        const rootEnabled = this._hasEnabledCommandItems(this._widget.option('items'));
         this._rootButton.option('disabled', !rootEnabled);
     }
     _hasEnabledCommandItems(items) {

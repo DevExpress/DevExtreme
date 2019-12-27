@@ -66,7 +66,7 @@ export default class SplitterControl extends Widget {
 
     _dimensionChanged() {
         if(this._leftPanelPercentageWidth === undefined) {
-            let leftElementWidth = this._$leftElement.get(0).clientWidth;
+            const leftElementWidth = this._$leftElement.get(0).clientWidth;
             this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftElementWidth);
         }
 

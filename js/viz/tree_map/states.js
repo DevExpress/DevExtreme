@@ -1,13 +1,13 @@
-var proto = require('./tree_map.base').prototype,
-    nodeProto = require('./node').prototype,
+const proto = require('./tree_map.base').prototype;
+const nodeProto = require('./node').prototype;
 
-    handlers = proto._handlers,
-    _calculateState = handlers.calculateState,
-    _buildState = nodeProto._buildState,
-    _extend = require('../../core/utils/extend').extend;
+const handlers = proto._handlers;
+const _calculateState = handlers.calculateState;
+const _buildState = nodeProto._buildState;
+const _extend = require('../../core/utils/extend').extend;
 
 handlers.calculateState = function(options) {
-    var states = { 0: _calculateState(options) };
+    const states = { 0: _calculateState(options) };
 
     handlers.calculateAdditionalStates(states, options);
     return states;
@@ -22,7 +22,7 @@ nodeProto.statesMap = { 0: 0 };
 nodeProto.additionalStates = [];
 
 nodeProto._buildState = function(state, extra) {
-    var states = { 0: _buildState(state[0], extra) };
+    const states = { 0: _buildState(state[0], extra) };
 
     if(this.additionalStates.length) {
         buildAdditionalStates(states, states[0], state, this.additionalStates);
@@ -44,8 +44,8 @@ nodeProto.setState = function(code, state) {
 };
 
 function buildAdditionalStates(states, base, source, list) {
-    var i,
-        ii = list.length;
+    let i;
+    const ii = list.length;
 
     for(i = 0; i < ii; ++i) {
         states[list[i]] = _extend({}, base, source[list[i]]);

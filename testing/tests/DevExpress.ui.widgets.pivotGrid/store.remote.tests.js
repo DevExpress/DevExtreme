@@ -8,36 +8,36 @@ import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 
 function getCustomArrayStore(data) {
-    var arrayStore = new ArrayStore(data);
+    const arrayStore = new ArrayStore(data);
 
     function getSummary(summaryOptions) {
-        var summary = summaryOptions.selector ? summaryOptions.summaryType + '(' + summaryOptions.selector + ')' : summaryOptions.summaryType;
+        const summary = summaryOptions.selector ? summaryOptions.summaryType + '(' + summaryOptions.selector + ')' : summaryOptions.summaryType;
         return summary;
     }
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         key: 'OrderID',
         load: function(loadOptions) {
-            var d = $.Deferred();
+            const d = $.Deferred();
 
             if(loadOptions.group) {
                 $.each(loadOptions.group, function(_, group) {
-                    var selector = group.selector,
-                        interval = group.groupInterval,
-                        intervalField = selector + (typeof interval === 'string' ? interval.substr(0, 1).toUpperCase() + interval.substr(1) : '');
+                    const selector = group.selector;
+                    const interval = group.groupInterval;
+                    const intervalField = selector + (typeof interval === 'string' ? interval.substr(0, 1).toUpperCase() + interval.substr(1) : '');
 
                     group.selector = intervalField;
                 });
             }
-            var skip = loadOptions.skip;
-            var take = loadOptions.take;
+            const skip = loadOptions.skip;
+            const take = loadOptions.take;
             arrayStore.load($.extend({}, loadOptions, { skip: null, take: null })).done(function(data) {
-                var path = [],
-                    totalSummary = {
-                        summary: null
-                    };
+                const path = [];
+                const totalSummary = {
+                    summary: null
+                };
 
-                var filterExpr = '';
+                let filterExpr = '';
                 if(loadOptions.filter) {
                     filterExpr = '(' + loadOptions.filter + ')';
                 }
@@ -45,14 +45,14 @@ function getCustomArrayStore(data) {
                 if(loadOptions.totalSummary) {
                     totalSummary.summary = [];
 
-                    for(var i = 0; i < loadOptions.totalSummary.length; i++) {
+                    for(let i = 0; i < loadOptions.totalSummary.length; i++) {
                         totalSummary.summary.push('GT:' + getSummary(loadOptions.totalSummary[i]) + filterExpr);
                     }
                 }
 
                 RemoteStore.__forEachGroup(data, function(item, level) {
                     path[level] = item.key;
-                    for(var i = 0; i < (loadOptions.groupSummary && loadOptions.groupSummary.length || 0); i++) {
+                    for(let i = 0; i < (loadOptions.groupSummary && loadOptions.groupSummary.length || 0); i++) {
                         if(item.items) {
                             item.summary = item.summary || [];
 
@@ -93,19 +93,19 @@ function getColumnTotal(data, column) {
 }
 
 function getValue(data, rowItem, columnItem, measureIndex) {
-    var columnIndex = columnItem ? columnItem.index : data.grandTotalColumnIndex,
-        rowIndex = rowItem ? rowItem.index : data.grandTotalRowIndex;
+    const columnIndex = columnItem ? columnItem.index : data.grandTotalColumnIndex;
+    const rowIndex = rowItem ? rowItem.index : data.grandTotalRowIndex;
 
     return data.values[rowIndex][columnIndex][measureIndex || 0];
 }
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.externalStore = getCustomArrayStore(window.orders);
         this.store = new RemoteStore(this.externalStore);
 
         this.load = function(options) {
-            var d = this.store.load(options);
+            const d = this.store.load(options);
 
             d.done(function(data) {
                 if(!options.rowTake && !options.columnTake) {
@@ -121,7 +121,7 @@ var moduleConfig = {
 QUnit.module('Loading root data', moduleConfig);
 
 QUnit.test('Fail on loading', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function() {
             return $.Deferred().reject('Error Message');
         }
@@ -139,13 +139,13 @@ QUnit.test('Fail on loading', function(assert) {
 });
 
 QUnit.test('Loading data with empty dimensions', function(assert) {
-    var externalStore = this.externalStore,
-        loadSpy = sinon.spy(function() {
-            return externalStore.load.apply(externalStore, arguments);
-        }),
-        store = new RemoteStore({
-            load: loadSpy
-        });
+    const externalStore = this.externalStore;
+    const loadSpy = sinon.spy(function() {
+        return externalStore.load.apply(externalStore, arguments);
+    });
+    const store = new RemoteStore({
+        load: loadSpy
+    });
 
     store.load({
         columns: [],
@@ -471,7 +471,7 @@ QUnit.test('Summary for several data fields', function(assert) {
 
 
 QUnit.test('Empty string key', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { field1: '' },
         { field1: '2' }
     ];
@@ -492,7 +492,7 @@ QUnit.test('Empty string key', function(assert) {
 });
 
 QUnit.test('null key with two levels grouping', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { field1: null, field2: '11' },
         { field1: '2', field2: '22' }
     ];
@@ -550,7 +550,7 @@ QUnit.test('Children should be loaded if row is expanded', function(assert) {
 });
 
 QUnit.test('OnLoaded event should fire once if any column is expanded', function(assert) {
-    var onLoaded = sinon.stub();
+    const onLoaded = sinon.stub();
     this.externalStore.on('loaded', onLoaded);
 
     this.load({
@@ -563,7 +563,7 @@ QUnit.test('OnLoaded event should fire once if any column is expanded', function
 });
 
 QUnit.test('OnLoaded event should fire 1 time if any row is expanded', function(assert) {
-    var onLoaded = sinon.stub();
+    const onLoaded = sinon.stub();
     this.externalStore.on('loaded', onLoaded);
 
     this.load({
@@ -576,7 +576,7 @@ QUnit.test('OnLoaded event should fire 1 time if any row is expanded', function(
 });
 
 QUnit.test('OnLoaded event should fire 3 times when one row is expanded', function(assert) {
-    var onLoaded = sinon.stub();
+    const onLoaded = sinon.stub();
     this.externalStore.on('loaded', onLoaded);
 
     this.load({
@@ -589,7 +589,7 @@ QUnit.test('OnLoaded event should fire 3 times when one row is expanded', functi
 });
 
 QUnit.test('OnLoaded event should fire 5 times when one row and one column are expanded', function(assert) {
-    var onLoaded = sinon.stub();
+    const onLoaded = sinon.stub();
     this.externalStore.on('loaded', onLoaded);
 
     this.load({
@@ -630,9 +630,9 @@ QUnit.module('Discover');
 
 QUnit.test('Take only 20 first items for discover', function(assert) {
     sinon.spy(pivotGridUtils, 'discoverObjectFields');
-    var dataSource = [];
+    const dataSource = [];
 
-    for(var i = 0; i < 20; i++) {
+    for(let i = 0; i < 20; i++) {
         dataSource.push({ field1: i });
     }
 
@@ -655,7 +655,7 @@ QUnit.test('Take only 20 first items for discover', function(assert) {
 });
 
 QUnit.test('getFields', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
@@ -750,7 +750,7 @@ QUnit.test('getFields', function(assert) {
 });
 
 QUnit.test('getFields. Generate levels for user dataType', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { OrderDate: '1996/07/05' },
         { OrderDate: '1999/07/05' }
     ];
@@ -801,14 +801,14 @@ QUnit.test('getFields. Generate levels for user dataType', function(assert) {
 QUnit.module('Data grouping');
 
 QUnit.test('Store should group data in fields by group intervals', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { OrderDate: '1996/07/05', OrderDateYear: 1996 },
         { OrderDate: '1999/07/06', OrderDateYear: 1999 },
         { OrderDate: '1996/07/07', OrderDateYear: 1996 },
         { OrderDate: '1999/07/08', OrderDateYear: 1999 }
     ];
 
-    var store = new RemoteStore(getCustomArrayStore(dataSource));
+    const store = new RemoteStore(getCustomArrayStore(dataSource));
 
     store.load({
         columns: [{ dataField: 'OrderDate', groupInterval: 'Year', dataType: 'date' }],
@@ -823,9 +823,9 @@ QUnit.test('Store should group data in fields by group intervals', function(asse
 });
 
 QUnit.test('Date intervals formatting', function(assert) {
-    var store = new RemoteStore(getCustomArrayStore([]));
+    const store = new RemoteStore(getCustomArrayStore([]));
 
-    var fields = [
+    const fields = [
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' },
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' },
         { dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' },
@@ -848,13 +848,13 @@ QUnit.test('Date intervals formatting', function(assert) {
 });
 
 QUnit.test('Set default formatter for group fields with groupInterval', function(assert) {
-    var store = new RemoteStore(getCustomArrayStore([])),
-        fields = [
-            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' },
-            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' },
-            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' },
-            { dataField: 'OrderDate', dataType: 'date', groupInterval: 'day' }
-        ];
+    const store = new RemoteStore(getCustomArrayStore([]));
+    const fields = [
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'quarter' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'month' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'dayOfWeek' },
+        { dataField: 'OrderDate', dataType: 'date', groupInterval: 'day' }
+    ];
 
     store.load({
         columns: fields,
@@ -878,14 +878,14 @@ QUnit.test('Set default formatter for group fields with groupInterval', function
 QUnit.module('Mock tests');
 
 QUnit.test('Mock should group values correctly', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { OrderDate: '1996/07/05', OrderDateYear: 1996 },
         { OrderDate: '1999/07/06', OrderDateYear: 1999 },
         { OrderDate: '1996/07/07', OrderDateYear: 1996 },
         { OrderDate: '1999/07/08', OrderDateYear: 1999 }
     ];
 
-    var store = getCustomArrayStore(dataSource);
+    const store = getCustomArrayStore(dataSource);
 
     store.load({
         group: [{ selector: 'OrderDate', groupInterval: 'Year' }]
@@ -1084,7 +1084,7 @@ QUnit.test('Filter group field. Include Type', function(assert) {
 });
 
 QUnit.test('Filter by number - include', function(assert) {
-    var store = new RemoteStore(getCustomArrayStore([
+    const store = new RemoteStore(getCustomArrayStore([
         { Freight: 0, ShipCountry: 'Russia' },
         { Freight: 25, ShipCountry: 'Russia' },
         { Freight: 100, ShipCountry: 'Russia' },
@@ -1111,7 +1111,7 @@ QUnit.test('Filter by number - include', function(assert) {
 });
 
 QUnit.test('Filter by number - exclude', function(assert) {
-    var store = new RemoteStore(getCustomArrayStore([
+    const store = new RemoteStore(getCustomArrayStore([
         { Freight: 0, ShipCountry: 'Russia' },
         { Freight: 25, ShipCountry: 'Russia' },
         { Freight: 100, ShipCountry: 'Russia' },
@@ -1136,17 +1136,17 @@ QUnit.test('Filter by number - exclude', function(assert) {
 });
 
 QUnit.test('Prefilter', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10250, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10251, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
-    var store = new RemoteStore(getCustomArrayStore(dataSource));
+    const store = new RemoteStore(getCustomArrayStore(dataSource));
 
     store.filter('OrderID', '>', 10249);
-    var filterExpr = store.filter();
+    const filterExpr = store.filter();
 
     store.load({
         rows: [{ dataField: 'OrderID' }],
@@ -1163,19 +1163,19 @@ QUnit.test('Prefilter', function(assert) {
 });
 
 QUnit.test('Prefilter as option', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10250, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10251, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         store: getCustomArrayStore(dataSource),
         filter: ['OrderID', '>', 10249]
     });
 
-    var filterExpr = store.filter();
+    const filterExpr = store.filter();
 
     store.load({
         rows: [{ dataField: 'OrderID', filterValues: [10250, 10251, 10249] }],
@@ -1192,17 +1192,17 @@ QUnit.test('Prefilter as option', function(assert) {
 });
 
 QUnit.test('Prefilter with filter filed', function(assert) {
-    var dataSource = [
+    const dataSource = [
         { 'OrderID': 10248, Customer: { name: null }, 'EmployeeID': undefined, 'OrderDate': null, 'Freight': '32.3800', 'ShipName': 'Vins et alcools Chevalier', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10249, Customer: {}, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10250, 'EmployeeID': 6, 'OrderDate': new Date('1996/07/05'), 'Freight': '11.6100', 'ShipName': 'Toms Spezialitaten', 'ShipRegion': null, 'ShipPostalCode': null },
         { 'OrderID': 10251, Customer: { name: 'Name' }, 'EmployeeID': 4, 'OrderDate': new Date('1996/07/08'), 'Freight': '65.8300', 'ShipName': 'Hanari Carnes', 'ShipRegion': 'RJ', 'ShipPostalCode': null }
     ];
 
-    var store = new RemoteStore(getCustomArrayStore(dataSource));
+    const store = new RemoteStore(getCustomArrayStore(dataSource));
 
     store.filter([['OrderID', '>', 10249], 'and', ['OrderID', '<=', 10251]]);
-    var filterExpr = store.filter();
+    const filterExpr = store.filter();
 
     store.load({
         rows: [{ dataField: 'OrderID', filterValues: [10251] }],
@@ -1217,7 +1217,7 @@ QUnit.test('Prefilter with filter filed', function(assert) {
 });
 
 QUnit.test('Filter date with incorrect groupInterval', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter, [['OrderDate', '=', 1996]]);
             return $.Deferred();
@@ -1232,7 +1232,7 @@ QUnit.test('Filter date with incorrect groupInterval', function(assert) {
 });
 
 QUnit.test('Filter by Year', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter, [['OrderDate.Year', '=', 1996]]);
             return $.Deferred();
@@ -1247,7 +1247,7 @@ QUnit.test('Filter by Year', function(assert) {
 });
 
 QUnit.test('Filter by Month', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter, [['OrderDate.Month', '=', 0], 'or', ['OrderDate.Month', '=', 1]]);
             return $.Deferred();
@@ -1262,7 +1262,7 @@ QUnit.test('Filter by Month', function(assert) {
 });
 
 QUnit.test('Filter by dayOfWeek', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter, [['OrderDate.DayOfWeek', '=', 0], 'or', ['OrderDate.DayOfWeek', '=', 1]]);
             return $.Deferred();
@@ -1277,7 +1277,7 @@ QUnit.test('Filter by dayOfWeek', function(assert) {
 });
 
 QUnit.test('Search', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter, ['ShipCountry', 'contains', 'ru']);
             return $.Deferred();
@@ -1292,7 +1292,7 @@ QUnit.test('Search', function(assert) {
 });
 
 QUnit.test('Include filter by Quarter', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter,
                 [
@@ -1319,7 +1319,7 @@ QUnit.test('Include filter by Quarter', function(assert) {
 });
 
 QUnit.test('Exclude filter by Quarter', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter,
                 [
@@ -1346,7 +1346,7 @@ QUnit.test('Exclude filter by Quarter', function(assert) {
 });
 
 QUnit.test('Filter by number without groupInterval', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter,
                 [
@@ -1366,7 +1366,7 @@ QUnit.test('Filter by number without groupInterval', function(assert) {
 });
 
 QUnit.test('Filter by number with groupInterval', function(assert) {
-    var store = new RemoteStore({
+    const store = new RemoteStore({
         load: function(loadOptions) {
             assert.deepEqual(loadOptions.filter,
                 [
@@ -1387,19 +1387,19 @@ QUnit.test('Filter by number with groupInterval', function(assert) {
 
 // T836053
 QUnit.test('Error should not be thrown during filtering if there are more filter values ​​than fields', function(assert) {
-    var filter,
-        store = new RemoteStore({
-            load: function(loadOptions) {
-                filter = loadOptions.filter;
+    let filter;
+    const store = new RemoteStore({
+        load: function(loadOptions) {
+            filter = loadOptions.filter;
 
-                return $.Deferred();
-            }
-        }),
-        fields = [
-            { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
-            { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
-        ],
-        filterValues = [[1996, 1], [1996, 2], [1997, 4]];
+            return $.Deferred();
+        }
+    });
+    const fields = [
+        { dataField: 'OrderDate', groupInterval: 'year', dataType: 'date' },
+        { dataField: 'OrderDate', groupInterval: 'month', dataType: 'date' }
+    ];
+    const filterValues = [[1996, 1], [1996, 2], [1997, 4]];
 
     // assert
     assert.ok(filterValues.length > fields.length, 'more filter values ​​than fields');
@@ -1545,7 +1545,7 @@ QUnit.test('Expanded column after expanded item. when no row fields', function(a
 });
 
 QUnit.test('Expand row', function(assert) {
-    var loadSpy = sinon.spy(this.externalStore, 'load');
+    const loadSpy = sinon.spy(this.externalStore, 'load');
     this.load({
         rows: [{ dataField: 'ShipCountry' }, { dataField: 'ShipCity' }],
         columns: [{ dataField: 'ShipVia' }],
@@ -1784,10 +1784,10 @@ QUnit.module('DrillDown', {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
 
-        var store = this.store;
+        const store = this.store;
 
         this.getDrillDownData = function() {
-            var drillDownDataSource = store.createDrillDownDataSource.apply(store, arguments);
+            const drillDownDataSource = store.createDrillDownDataSource.apply(store, arguments);
 
             drillDownDataSource.paginate(false);
 
@@ -1905,7 +1905,7 @@ QUnit.test('DrillDown with filters and slice paths', function(assert) {
 });
 
 QUnit.test('DrillDown with user filter', function(assert) {
-    var drillDownDataSource = this.store.createDrillDownDataSource({
+    const drillDownDataSource = this.store.createDrillDownDataSource({
         columns: [{ dataField: 'ShipCountry' }],
         rows: [{ dataField: 'ShipVia', filterValues: [1, 3] }],
         filters: [{ dataField: 'ShipCity' }],

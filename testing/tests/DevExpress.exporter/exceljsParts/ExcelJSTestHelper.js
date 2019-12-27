@@ -120,7 +120,7 @@ class ExcelJSTestHelper {
     _iterateCells(cellsArray, callback) {
         for(let rowIndex = 0; rowIndex < cellsArray.length; rowIndex++) {
             for(let columnIndex = 0; columnIndex < cellsArray[rowIndex].length; columnIndex++) {
-                let currentCell = cellsArray[rowIndex][columnIndex];
+                const currentCell = cellsArray[rowIndex][columnIndex];
 
                 callback(currentCell, rowIndex, columnIndex);
             }

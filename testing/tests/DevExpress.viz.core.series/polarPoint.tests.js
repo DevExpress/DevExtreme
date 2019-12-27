@@ -5,73 +5,73 @@ import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
 const Series = SeriesModule.Series;
 
-var defaultStyle = {
-        normal: {
-            r: 6
-        }
+const defaultStyle = {
+    normal: {
+        r: 6
+    }
+};
+const series = sinon.createStubInstance(Series);
+const label = sinon.createStubInstance(labelModule.Label);
+const environment = {
+    beforeEach: function() {
+        const that = this;
+
+        this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub() };
+        this.argTranslator = { translate: sinon.stub() };
+
+        this.valTranslator.translate.returns(10)
+            .withArgs(0).returns(6)
+            .withArgs(1).returns(8)
+            .withArgs(2).returns(10)
+            .withArgs(3).returns(12)
+            .withArgs(4).returns(14)
+            .withArgs('canvas_position_default').returns(2)
+            .withArgs('canvas_position_top').returns(0)
+            .withArgs('canvas_position_end').returns(150);
+
+        this.argTranslator.translate.returns(90)
+            .withArgs(1).returns(5)
+            .withArgs(10).returns(-60)
+            .withArgs('canvas_position_start').returns(0);
+
+        this.valTranslator.getBusinessRange.returns({ minVisible: 0 });
+
+        series.getLabelVisibility.returns(true);
+        series.getOptions = function() { return { containerBackgroundColor: 'ffffff' }; };
+        series._visibleArea = { minX: 50, minY: 102, maxX: 150, maxY: 235 };
+        series.getVisibleArea = function() { return series._visibleArea; };
+
+        this.angles = [30, 30 + 360];
+        series.getValueAxis.returns({
+            getTranslator: function() {
+                return that.valTranslator;
+            },
+            getCenter: function() { return { x: 100, y: 200 }; },
+            getCanvas: function() { return { top: 2, bottom: 15, left: 0, right: 10, width: 160, height: 150 }; },
+            getAngles: function() { return that.angles; }
+        });
+        series.getArgumentAxis.returns({
+            getTranslator: function() {
+                return that.argTranslator;
+            }
+        });
+        series._argumentChecker.returns(true);
+        series._valueChecker.returns(true);
+
+        this.createLabel = sinon.stub(labelModule, 'Label', function() {
+            label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
+            label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0 });
+            resetStub(label);
+            return label;
+        });
+
+        this.data = { argument: 1, value: 2 };
+        this.renderer = new vizMocks.Renderer();
     },
-    series = sinon.createStubInstance(Series),
-    label = sinon.createStubInstance(labelModule.Label),
-    environment = {
-        beforeEach: function() {
-            var that = this;
-
-            this.valTranslator = { translate: sinon.stub(), getBusinessRange: sinon.stub() };
-            this.argTranslator = { translate: sinon.stub() };
-
-            this.valTranslator.translate.returns(10)
-                .withArgs(0).returns(6)
-                .withArgs(1).returns(8)
-                .withArgs(2).returns(10)
-                .withArgs(3).returns(12)
-                .withArgs(4).returns(14)
-                .withArgs('canvas_position_default').returns(2)
-                .withArgs('canvas_position_top').returns(0)
-                .withArgs('canvas_position_end').returns(150);
-
-            this.argTranslator.translate.returns(90)
-                .withArgs(1).returns(5)
-                .withArgs(10).returns(-60)
-                .withArgs('canvas_position_start').returns(0);
-
-            this.valTranslator.getBusinessRange.returns({ minVisible: 0 });
-
-            series.getLabelVisibility.returns(true);
-            series.getOptions = function() { return { containerBackgroundColor: 'ffffff' }; };
-            series._visibleArea = { minX: 50, minY: 102, maxX: 150, maxY: 235 };
-            series.getVisibleArea = function() { return series._visibleArea; };
-
-            this.angles = [30, 30 + 360];
-            series.getValueAxis.returns({
-                getTranslator: function() {
-                    return that.valTranslator;
-                },
-                getCenter: function() { return { x: 100, y: 200 }; },
-                getCanvas: function() { return { top: 2, bottom: 15, left: 0, right: 10, width: 160, height: 150 }; },
-                getAngles: function() { return that.angles; }
-            });
-            series.getArgumentAxis.returns({
-                getTranslator: function() {
-                    return that.argTranslator;
-                }
-            });
-            series._argumentChecker.returns(true);
-            series._valueChecker.returns(true);
-
-            this.createLabel = sinon.stub(labelModule, 'Label', function() {
-                label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
-                label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0 });
-                resetStub(label);
-                return label;
-            });
-
-            this.data = { argument: 1, value: 2 };
-            this.renderer = new vizMocks.Renderer();
-        },
-        afterEach: function() {
-            this.createLabel.restore();
-        }
-    };
+    afterEach: function() {
+        this.createLabel.restore();
+    }
+};
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
@@ -95,14 +95,14 @@ function createSimplePoint(data, options) {
 }
 
 function createTranslatedPoint(options, offset) {
-    var point = createSimplePoint(this.data, options);
+    const point = createSimplePoint(this.data, options);
     point.correctCoordinates({ offset: offset || 0, width: 10 });
     point.translate();
     return point;
 }
 
 function createAndDrawPoint(options, animation) {
-    var point = createTranslatedPoint.call(this, options);
+    const point = createTranslatedPoint.call(this, options);
     point.draw(this.renderer, {
         markers: this.renderer.g(),
         labels: this.renderer.g(),
@@ -112,7 +112,7 @@ function createAndDrawPoint(options, animation) {
 }
 
 function createLabel(options, layoutOptions) {
-    var point = createTranslatedPoint.call(this, options);
+    const point = createTranslatedPoint.call(this, options);
     layoutOptions && (point._label.getLayoutOptions.returns(layoutOptions));
     point.correctLabelPosition(point._label);
     return point._label;
@@ -121,12 +121,12 @@ function createLabel(options, layoutOptions) {
 QUnit.module('translate', environment);
 
 QUnit.test('create polar point', function(assert) {
-    var point = createSimplePoint(this.data);
+    const point = createSimplePoint(this.data);
     assert.ok(point, 'point created');
 });
 
 QUnit.test('translate point coords', function(assert) {
-    var point = createTranslatedPoint.call(this);
+    const point = createTranslatedPoint.call(this);
 
     assert.equal(point.radius, 10);
     assert.equal(point.middleAngle, -(5 + 30 - 90));
@@ -141,7 +141,7 @@ QUnit.test('translate point coords', function(assert) {
 });
 
 QUnit.test('render point with correct position', function(assert) {
-    var point = createAndDrawPoint.call(this);
+    const point = createAndDrawPoint.call(this);
 
     assert.equal(this.renderer.circle.callCount, 1);
     assert.deepEqual(point.getBoundingRect().x, 100);
@@ -219,14 +219,14 @@ QUnit.test('Draw error bar - show highError with type is \'stdDeviation\'', func
 
 QUnit.test('animation from start point', function(assert) {
     this.valTranslator.translate.withArgs('canvas_position_default').returns(0);
-    var point = createAndDrawPoint.call(this, {}, true);
+    const point = createAndDrawPoint.call(this, {}, true);
 
     assert.equal(point.graphic._stored_settings.translateX, 100);
     assert.equal(point.graphic._stored_settings.translateY, 200);
 });
 
 QUnit.test('without animation from center', function(assert) {
-    var point = createAndDrawPoint.call(this, {}, false);
+    const point = createAndDrawPoint.call(this, {}, false);
 
     assert.equal(point.graphic._stored_settings.translateX, 106);
     assert.equal(point.graphic._stored_settings.translateY, 192);
@@ -234,13 +234,13 @@ QUnit.test('without animation from center', function(assert) {
 
 QUnit.test('getDefaultCoords', function(assert) {
     this.valTranslator.translate.withArgs('canvas_position_default').returns(0);
-    var point = createTranslatedPoint.call(this);
+    const point = createTranslatedPoint.call(this);
 
     assert.deepEqual(point.getDefaultCoords(), { x: 100, y: 200 });
 });
 
 QUnit.test('draw label', function(assert) {
-    var label = createLabel.call(this);
+    const label = createLabel.call(this);
 
     assert.ok(label.shift.called);
     assert.equal(label.shift.args[0][0], 123);
@@ -248,7 +248,7 @@ QUnit.test('draw label', function(assert) {
 });
 
 QUnit.test('Set vx and vy for tracker values like angle and radius', function(assert) {
-    var point = createTranslatedPoint.call(this);
+    const point = createTranslatedPoint.call(this);
 
     assert.equal(point.angle, 55, 'set angle');
     assert.equal(point.radius, 10, 'set radius');
@@ -259,7 +259,7 @@ QUnit.test('Set vx and vy for tracker values like angle and radius', function(as
 
 QUnit.test('normalize angle for vx', function(assert) {
     this.data = { argument: 10, value: 1 };
-    var point = createTranslatedPoint.call(this);
+    const point = createTranslatedPoint.call(this);
 
     assert.equal(point.vx, 240, 'set angle');
     assert.equal(point.vy, 8, 'set radius');
@@ -268,14 +268,14 @@ QUnit.test('normalize angle for vx', function(assert) {
 
 QUnit.test('getCoords', function(assert) {
     this.valTranslator.translate.withArgs('canvas_position_default').returns(0);
-    var point = createTranslatedPoint.call(this);
+    const point = createTranslatedPoint.call(this);
 
     assert.deepEqual(point.getCoords(), { x: 106, y: 192 });
     assert.deepEqual(point.getCoords(true), { x: 100, y: 200 });
 });
 
 QUnit.test('draw label, position inside', function(assert) {
-    var l = createLabel.call(this, null, { alignment: 'center', radialOffset: 0, position: 'inside' });
+    const l = createLabel.call(this, null, { alignment: 'center', radialOffset: 0, position: 'inside' });
 
     assert.ok(l.shift.called);
     assert.equal(l.shift.args[0][0], 123);
@@ -284,7 +284,7 @@ QUnit.test('draw label, position inside', function(assert) {
 
 QUnit.test('translate, value out of visible area (less then minVisible)', function(assert) {
     this.valTranslator.translate.withArgs(2).returns(-50);
-    var point = createAndDrawPoint.call(this);
+    const point = createAndDrawPoint.call(this);
 
     assert.strictEqual(point.radius, null);
     assert.notOk(point.inVisibleArea);
@@ -292,7 +292,7 @@ QUnit.test('translate, value out of visible area (less then minVisible)', functi
 
 QUnit.test('translate, value out of visible area (over then maxVisible)', function(assert) {
     this.valTranslator.translate.withArgs(2).returns(200);
-    var point = createAndDrawPoint.call(this);
+    const point = createAndDrawPoint.call(this);
 
     assert.notOk(point.inVisibleArea);
 });
@@ -300,7 +300,7 @@ QUnit.test('translate, value out of visible area (over then maxVisible)', functi
 QUnit.module('Bar point', environment);
 
 QUnit.test('translate point coords', function(assert) {
-    var point = createTranslatedPoint.call(this, { type: 'bar' });
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
 
     assert.equal(point.radius, 10);
     assert.equal(point.x, 106);
@@ -316,21 +316,21 @@ QUnit.test('translate point coords', function(assert) {
 });
 
 QUnit.test('normalize zero angle with positive offset', function(assert) {
-    var point = createTranslatedPoint.call(this, { type: 'bar' }, 10);
+    const point = createTranslatedPoint.call(this, { type: 'bar' }, 10);
 
     assert.equal(point.middleAngle, -315, 'set middle angle');
     assert.equal(point.angle, -315, 'set angle');
 });
 
 QUnit.test('normalize zero angle with negative offset', function(assert) {
-    var point = createTranslatedPoint.call(this, { type: 'bar' }, -10);
+    const point = createTranslatedPoint.call(this, { type: 'bar' }, -10);
 
     assert.equal(point.middleAngle, -295, 'set middle angle');
     assert.equal(point.angle, -295, 'set angle');
 });
 
 QUnit.test('correct render point', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.equal(this.renderer.arc.callCount, 1);
     assert.equal(this.renderer.arc.getCall(0).args[0], 100, 'x position');
@@ -344,7 +344,7 @@ QUnit.test('correct render point', function(assert) {
 });
 
 QUnit.test('update marker after redraw', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     point.translate();
     point.draw(this.renderer, {
@@ -361,7 +361,7 @@ QUnit.test('update marker after redraw', function(assert) {
 });
 
 QUnit.test('draw bar point with animation', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar' }, true);
+    const point = createAndDrawPoint.call(this, { type: 'bar' }, true);
 
     assert.equal(point.graphic._stored_settings.x, 101, 'x position');
     assert.equal(point.graphic._stored_settings.y, 198, 'y position');
@@ -372,7 +372,7 @@ QUnit.test('draw bar point with animation', function(assert) {
 });
 
 QUnit.test('get marker coords', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -388,7 +388,7 @@ QUnit.test('T173587. translate, negative value', function(assert) {
     this.data = { argument: 1, value: -2 };
     this.valTranslator.translate.withArgs('canvas_position_default').returns(100);
     this.valTranslator.translate.withArgs(-2).returns(50);
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -404,7 +404,7 @@ QUnit.test('T173587. translate, negative value', function(assert) {
 QUnit.test('translate, value out of visible area', function(assert) {
     this.valTranslator.translate.withArgs(2).returns(-50);
     this.valTranslator.translate.withArgs('canvas_position_default').returns(0);
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -422,7 +422,7 @@ QUnit.test('translate negative value, value out of visible area', function(asser
     this.valTranslator.translate.withArgs('canvas_position_default').returns(100);
     this.valTranslator.translate.withArgs(-2).returns(-50);
     this.valTranslator.getBusinessRange.returns({ minVisible: -1 });
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -438,7 +438,7 @@ QUnit.test('translate negative value, value out of visible area', function(asser
 QUnit.test('translate, both values out of visible area', function(assert) {
     this.valTranslator.translate.withArgs('canvas_position_default').returns(null);
     this.valTranslator.translate.withArgs(2).returns(null);
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -455,7 +455,7 @@ QUnit.test('translate negative value, value on edge of visible area', function(a
     this.data = { argument: 1, value: -2 };
     this.valTranslator.translate.withArgs('canvas_position_default').returns(100);
     this.valTranslator.translate.withArgs(-2).returns(0);
-    var point = createAndDrawPoint.call(this, { type: 'bar' });
+    const point = createAndDrawPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getMarkerCoords(), {
         x: 100,
@@ -469,7 +469,7 @@ QUnit.test('translate negative value, value on edge of visible area', function(a
 });
 
 QUnit.test('draw label', function(assert) {
-    var label = createLabel.call(this, { type: 'bar' });
+    const label = createLabel.call(this, { type: 'bar' });
 
     assert.ok(label.shift.called);
     assert.equal(label.shift.args[0][0], 123);
@@ -522,7 +522,7 @@ QUnit.test('Draw point with errorBar when animation enabled', function(assert) {
 
 QUnit.test('draw label, position inside', function(assert) {
     label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0, position: 'inside' });
-    var l = createLabel.call(this, { type: 'bar' }, { alignment: 'center', radialOffset: 0, position: 'inside' });
+    const l = createLabel.call(this, { type: 'bar' }, { alignment: 'center', radialOffset: 0, position: 'inside' });
 
     assert.ok(l.shift.called);
     assert.equal(l.shift.args[0][0], 93);
@@ -530,7 +530,7 @@ QUnit.test('draw label, position inside', function(assert) {
 });
 
 QUnit.test('draw connector', function(assert) {
-    var label = createLabel.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
+    const label = createLabel.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
 
     assert.ok(label.setFigureToDrawConnector.called);
 
@@ -539,48 +539,48 @@ QUnit.test('draw connector', function(assert) {
 });
 
 QUnit.test('coordsIn', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
+    const point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
     assert.ok(point.coordsIn(104, 194));
 });
 
 QUnit.test('not in coordsIn', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
+    const point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
     assert.ok(!point.coordsIn(105, 105));
 });
 
 QUnit.test('not in coordsIn, radius more than point', function(assert) {
-    var point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
+    const point = createAndDrawPoint.call(this, { type: 'bar', styles: { normal: { 'stroke-width': 4, stroke: 'ffffff' } } });
     assert.ok(!point.coordsIn(109, 189));
 });
 
 QUnit.module('check label position', environment);
 
 QUnit.test('line, point in visible area', function(assert) {
-    var point = createTranslatedPoint.call(this);
-    var coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
+    const point = createTranslatedPoint.call(this);
+    const coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
 
     assert.deepEqual(coord, { x: 50, y: 102 });
 });
 
 QUnit.test('line, point is not in visible area', function(assert) {
     series._visibleArea = { minY: 20, maxY: 135, minX: 30, maxX: 150 };
-    var point = createTranslatedPoint.call(this);
-    var coord = point._checkLabelPosition({}, { x: -1, y: 2 });
+    const point = createTranslatedPoint.call(this);
+    const coord = point._checkLabelPosition({}, { x: -1, y: 2 });
 
     assert.deepEqual(coord, { x: -1, y: 2 });
 });
 
 QUnit.test('bar', function(assert) {
-    var point = createTranslatedPoint.call(this, { type: 'bar' });
-    var coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
+    const coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
 
     assert.deepEqual(coord, { x: 50, y: 102 });
 });
 
 QUnit.test('bar, point is not in visible area', function(assert) {
     series._visibleArea = { minY: 20, maxY: 35, minX: 30, maxX: 30 };
-    var point = createTranslatedPoint.call(this, { type: 'bar' });
-    var coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
+    const coord = point._checkLabelPosition({ getBoundingRect: function() { return { width: 20, height: 10 }; } }, { x: -1, y: 2 });
 
     assert.deepEqual(coord, { x: -1, y: 2 });
 });
@@ -588,7 +588,7 @@ QUnit.test('bar, point is not in visible area', function(assert) {
 QUnit.test('getTooltipParam', function(assert) {
     this.angles = [90, 90 + 360];
     this.argTranslator.translate.withArgs(1).returns(90);
-    var point = createTranslatedPoint.call(this, { type: 'bar' });
+    const point = createTranslatedPoint.call(this, { type: 'bar' });
 
     assert.deepEqual(point.getTooltipParams(), {
         offset: 0,

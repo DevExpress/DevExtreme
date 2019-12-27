@@ -189,8 +189,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _initSelectionModule: function() {
-        const that = this,
-            itemsGetter = that._editStrategy.itemsGetter;
+        const that = this;
+        const itemsGetter = that._editStrategy.itemsGetter;
 
         this._selection = new Selection({
             allowNullValue: this._nullValueSelectionSupported(),
@@ -246,8 +246,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _getSelectedItemIndices: function(keys) {
-        const that = this,
-            indices = [];
+        const that = this;
+        const indices = [];
 
         keys = keys || this._selection.getSelectedItemKeys();
 
@@ -362,8 +362,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         let optionName = 'selectedIndex';
 
         const isOptionDefined = function(optionName) {
-            const optionValue = this.option(optionName),
-                length = isDefined(optionValue) && optionValue.length;
+            const optionValue = this.option(optionName);
+            const length = isDefined(optionValue) && optionValue.length;
             return length || optionName in this._userOptions;
         }.bind(this);
 
@@ -463,9 +463,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _postprocessRenderItem: function(args) {
         if(this.option('selectionMode') !== 'none') {
-            const $itemElement = $(args.itemElement),
-                normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement),
-                isItemSelected = this._isItemSelected(normalizedItemIndex);
+            const $itemElement = $(args.itemElement);
+            const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement);
+            const isItemSelected = this._isItemSelected(normalizedItemIndex);
 
             this._processSelectableItem($itemElement, isItemSelected);
         }
@@ -477,9 +477,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _updateSelectedItems: function(args) {
-        const that = this,
-            addedItemKeys = args.addedItemKeys,
-            removedItemKeys = args.removedItemKeys;
+        const that = this;
+        const addedItemKeys = args.addedItemKeys;
+        const removedItemKeys = args.removedItemKeys;
 
         if(that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
             const selectionChangePromise = that._selectionChangePromise;
@@ -605,16 +605,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
-        const deferred = new Deferred(),
-            deletingActionArgs = { cancel: false },
-            deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
+        const deferred = new Deferred();
+        const deletingActionArgs = { cancel: false };
+        const deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
 
         when(deletePromise).always((function(value) {
-            const deletePromiseExists = !deletePromise,
-                deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved',
-                argumentsSpecified = !!arguments.length,
+            const deletePromiseExists = !deletePromise;
+            const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
+            const argumentsSpecified = !!arguments.length;
 
-                shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
+            const shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
             when(fromPromise(deletingActionArgs.cancel))
                 .always(function() {
@@ -634,9 +634,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             return new Deferred().resolve().promise();
         }
 
-        const deferred = new Deferred(),
-            disabledState = this.option('disabled'),
-            dataStore = this._dataSource.store();
+        const deferred = new Deferred();
+        const disabledState = this.option('disabled');
+        const dataStore = this._dataSource.store();
 
         this.option('disabled', true);
 
@@ -796,12 +796,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     deleteItem: function(itemElement) {
-        const that = this,
+        const that = this;
 
-            deferred = new Deferred(),
-            $item = this._editStrategy.getItemElement(itemElement),
-            index = this._editStrategy.getNormalizedIndex(itemElement),
-            itemResponseWaitClass = this._itemResponseWaitClass();
+        const deferred = new Deferred();
+        const $item = this._editStrategy.getItemElement(itemElement);
+        const index = this._editStrategy.getNormalizedIndex(itemElement);
+        const itemResponseWaitClass = this._itemResponseWaitClass();
 
         if(indexExists(index)) {
             this._waitDeletingPrepare($item).done(function() {
@@ -836,17 +836,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {
-        const deferred = new Deferred(),
+        const deferred = new Deferred();
 
-            that = this,
-            strategy = this._editStrategy,
+        const that = this;
+        const strategy = this._editStrategy;
 
-            $movingItem = strategy.getItemElement(itemElement),
-            $destinationItem = strategy.getItemElement(toItemElement),
-            movingIndex = strategy.getNormalizedIndex(itemElement),
-            destinationIndex = strategy.getNormalizedIndex(toItemElement),
+        const $movingItem = strategy.getItemElement(itemElement);
+        const $destinationItem = strategy.getItemElement(toItemElement);
+        const movingIndex = strategy.getNormalizedIndex(itemElement);
+        const destinationIndex = strategy.getNormalizedIndex(toItemElement);
 
-            changingOption = this._dataSource ? 'dataSource' : 'items';
+        const changingOption = this._dataSource ? 'dataSource' : 'items';
 
         const canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {

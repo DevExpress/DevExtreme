@@ -1,7 +1,7 @@
-var jQuery = require('jquery');
-var compareVersions = require('../core/utils/version').compare;
-var errors = require('../core/utils/error');
-var useJQuery = require('./jquery/use_jquery')();
+const jQuery = require('jquery');
+const compareVersions = require('../core/utils/version').compare;
+const errors = require('../core/utils/error');
+const useJQuery = require('./jquery/use_jquery')();
 
 if(useJQuery && compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
     throw errors.Error('E0012');

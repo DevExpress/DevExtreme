@@ -1,54 +1,54 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    domUtils = require('../../core/utils/dom'),
-    numberLocalization = require('../../localization/number'),
-    devices = require('../../core/devices'),
-    extend = require('../../core/utils/extend').extend,
-    applyServerDecimalSeparator = require('../../core/utils/common').applyServerDecimalSeparator,
-    registerComponent = require('../../core/component_registrator'),
-    TrackBar = require('../track_bar'),
-    eventUtils = require('../../events/utils'),
-    pointerEvents = require('../../events/pointer'),
-    feedbackEvents = require('../../events/core/emitter.feedback'),
-    SliderHandle = require('./ui.slider_handle'),
-    inkRipple = require('../widget/utils.ink_ripple'),
-    clickEvent = require('../../events/click'),
-    Swipeable = require('../../events/gesture/swipeable'),
-    themes = require('../themes'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const domUtils = require('../../core/utils/dom');
+const numberLocalization = require('../../localization/number');
+const devices = require('../../core/devices');
+const extend = require('../../core/utils/extend').extend;
+const applyServerDecimalSeparator = require('../../core/utils/common').applyServerDecimalSeparator;
+const registerComponent = require('../../core/component_registrator');
+const TrackBar = require('../track_bar');
+const eventUtils = require('../../events/utils');
+const pointerEvents = require('../../events/pointer');
+const feedbackEvents = require('../../events/core/emitter.feedback');
+const SliderHandle = require('./ui.slider_handle');
+const inkRipple = require('../widget/utils.ink_ripple');
+const clickEvent = require('../../events/click');
+const Swipeable = require('../../events/gesture/swipeable');
+const themes = require('../themes');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var SLIDER_CLASS = 'dx-slider';
-var SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';
-var SLIDER_HANDLE_SELECTOR = '.dx-slider-handle';
-var SLIDER_BAR_CLASS = 'dx-slider-bar';
-var SLIDER_RANGE_CLASS = 'dx-slider-range';
-var SLIDER_RANGE_VISIBLE_CLASS = 'dx-slider-range-visible';
-var SLIDER_LABEL_CLASS = 'dx-slider-label';
-var SLIDER_LABEL_POSITION_CLASS_PREFIX = 'dx-slider-label-position-';
-var SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = 'dx-slider-tooltip-position-';
-var INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
-var SLIDER_VALIDATION_NAMESPACE = 'Validation';
+const SLIDER_CLASS = 'dx-slider';
+const SLIDER_WRAPPER_CLASS = 'dx-slider-wrapper';
+const SLIDER_HANDLE_SELECTOR = '.dx-slider-handle';
+const SLIDER_BAR_CLASS = 'dx-slider-bar';
+const SLIDER_RANGE_CLASS = 'dx-slider-range';
+const SLIDER_RANGE_VISIBLE_CLASS = 'dx-slider-range-visible';
+const SLIDER_LABEL_CLASS = 'dx-slider-label';
+const SLIDER_LABEL_POSITION_CLASS_PREFIX = 'dx-slider-label-position-';
+const SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = 'dx-slider-tooltip-position-';
+const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
+const SLIDER_VALIDATION_NAMESPACE = 'Validation';
 
-var Slider = TrackBar.inherit({
+const Slider = TrackBar.inherit({
 
     _activeStateUnit: SLIDER_HANDLE_SELECTOR,
 
     _supportedKeys: function() {
-        var isRTL = this.option('rtlEnabled');
+        const isRTL = this.option('rtlEnabled');
 
-        var that = this;
-        var roundedValue = function(offset, isLeftDirection) {
+        const that = this;
+        const roundedValue = function(offset, isLeftDirection) {
             offset = that._valueStep(offset);
-            var step = that.option('step');
-            var value = that.option('value');
+            const step = that.option('step');
+            const value = that.option('value');
 
-            var division = (value - that.option('min')) % step;
-            var result = isLeftDirection
+            const division = (value - that.option('min')) % step;
+            let result = isLeftDirection
                 ? value - offset + (division ? step - division : 0)
                 : value + offset - division;
 
-            var min = that.option('min'),
-                max = that.option('max');
+            const min = that.option('min');
+            const max = that.option('max');
 
             if(result < min) {
                 result = min;
@@ -59,10 +59,10 @@ var Slider = TrackBar.inherit({
             return result;
         };
 
-        var moveHandleRight = function(offset) {
+        const moveHandleRight = function(offset) {
             that.option('value', roundedValue(offset, isRTL));
         };
-        var moveHandleLeft = function(offset) {
+        const moveHandleLeft = function(offset) {
             that.option('value', roundedValue(offset, !isRTL));
         };
 
@@ -94,13 +94,13 @@ var Slider = TrackBar.inherit({
             home: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var min = this.option('min');
+                const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var max = this.option('max');
+                const max = this.option('max');
                 this.option('value', max);
             }
         });
@@ -206,7 +206,7 @@ var Slider = TrackBar.inherit({
             },
             {
                 device: function() {
-                    var themeName = themes.current();
+                    const themeName = themes.current();
                     return themes.isMaterial(themeName);
                 },
                 options: {
@@ -231,11 +231,11 @@ var Slider = TrackBar.inherit({
     _attachFocusEvents: function() {
         this.callBase();
 
-        var namespace = this.NAME + SLIDER_VALIDATION_NAMESPACE;
-        var focusInEvent = eventUtils.addNamespace('focusin', namespace);
-        var focusOutEvent = eventUtils.addNamespace('focusout', namespace);
+        const namespace = this.NAME + SLIDER_VALIDATION_NAMESPACE;
+        const focusInEvent = eventUtils.addNamespace('focusin', namespace);
+        const focusOutEvent = eventUtils.addNamespace('focusout', namespace);
 
-        var $focusTarget = this._focusTarget();
+        const $focusTarget = this._focusTarget();
         eventsEngine.on($focusTarget, focusInEvent, this._toggleValidationMessage.bind(this, true));
         eventsEngine.on($focusTarget, focusOutEvent, this._toggleValidationMessage.bind(this, false));
     },
@@ -243,7 +243,7 @@ var Slider = TrackBar.inherit({
     _detachFocusEvents: function() {
         this.callBase();
 
-        var $focusTarget = this._focusTarget();
+        const $focusTarget = this._focusTarget();
 
         this._toggleValidationMessage(false);
         eventsEngine.off($focusTarget, this.NAME + SLIDER_VALIDATION_NAMESPACE);
@@ -278,7 +278,7 @@ var Slider = TrackBar.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: element,
             event: dxEvent,
             wave: waveIndex
@@ -332,10 +332,10 @@ var Slider = TrackBar.inherit({
     },
 
     _renderHandleImpl: function(value, $element) {
-        var $handle = $element || $('<div>').appendTo(this._$range),
-            format = this.option('tooltip.format'),
-            tooltipEnabled = this.option('tooltip.enabled'),
-            tooltipPosition = this.option('tooltip.position');
+        const $handle = $element || $('<div>').appendTo(this._$range);
+        const format = this.option('tooltip.format');
+        const tooltipEnabled = this.option('tooltip.enabled');
+        const tooltipPosition = this.option('tooltip.position');
 
         this.$element()
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'bottom', tooltipEnabled && tooltipPosition === 'bottom')
@@ -381,7 +381,7 @@ var Slider = TrackBar.inherit({
             return;
         }
 
-        var $focusTarget = $($element || this._focusTarget());
+        const $focusTarget = $($element || this._focusTarget());
         this._renderInkWave($focusTarget, null, isFocused, 0);
     },
 
@@ -391,10 +391,10 @@ var Slider = TrackBar.inherit({
             .removeClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + 'top');
 
         if(this.option('label.visible')) {
-            var min = this.option('min'),
-                max = this.option('max'),
-                position = this.option('label.position'),
-                labelFormat = this.option('label.format');
+            const min = this.option('min');
+            const max = this.option('max');
+            const position = this.option('label.position');
+            const labelFormat = this.option('label.format');
 
             if(!this._$minLabel) {
                 this._$minLabel = $('<div>')
@@ -428,10 +428,10 @@ var Slider = TrackBar.inherit({
     },
 
     _renderStartHandler: function() {
-        var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
-        var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        var startAction = this._createAction(this._startHandler.bind(this));
-        var $element = this.$element();
+        const pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const startAction = this._createAction(this._startHandler.bind(this));
+        const $element = this.$element();
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, function(e) {
@@ -441,7 +441,7 @@ var Slider = TrackBar.inherit({
         });
         eventsEngine.off($element, clickEventName);
         eventsEngine.on($element, clickEventName, (function(e) {
-            var $handle = this._activeHandle();
+            const $handle = this._activeHandle();
 
             if($handle) {
                 eventsEngine.trigger($handle, 'focusin');
@@ -456,9 +456,9 @@ var Slider = TrackBar.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        var rtlEnabled = this.option('rtlEnabled'),
-            startOffset,
-            endOffset;
+        const rtlEnabled = this.option('rtlEnabled');
+        let startOffset;
+        let endOffset;
 
         if(eventUtils.isTouchEvent(e.event)) {
             this._createAction(this._startHandler.bind(this))({ event: e.event });
@@ -483,7 +483,7 @@ var Slider = TrackBar.inherit({
         this._feedbackDeferred.resolve();
         this._toggleActiveState(this._activeHandle(), false);
 
-        var offsetDirection = this.option('rtlEnabled') ? -1 : 1;
+        const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
@@ -500,8 +500,8 @@ var Slider = TrackBar.inherit({
     },
 
     _updateHandlePosition: function(e) {
-        var offsetDirection = this.option('rtlEnabled') ? -1 : 1;
-        var newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
+        const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
+        const newRatio = Math.min(this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio(), 1);
 
         this._$range.width(newRatio * 100 + '%');
 
@@ -511,9 +511,9 @@ var Slider = TrackBar.inherit({
     },
 
     _swipePixelRatio: function() {
-        var min = this.option('min'),
-            max = this.option('max'),
-            step = this._valueStep(this.option('step'));
+        const min = this.option('min');
+        const max = this.option('max');
+        const step = this._valueStep(this.option('step'));
 
         return (max - min) / step;
     },
@@ -533,11 +533,11 @@ var Slider = TrackBar.inherit({
     },
 
     _changeValueOnSwipe: function(ratio) {
-        var min = this.option('min'),
-            max = this.option('max'),
-            step = this._valueStep(this.option('step')),
-            newChange = ratio * (max - min),
-            newValue = min + newChange;
+        const min = this.option('min');
+        const max = this.option('max');
+        const step = this._valueStep(this.option('step'));
+        const newChange = ratio * (max - min);
+        let newValue = min + newChange;
 
         if(step < 0) {
             return;
@@ -546,13 +546,13 @@ var Slider = TrackBar.inherit({
         if(newValue === max || newValue === min) {
             this._setValueOnSwipe(newValue);
         } else {
-            var stepExponent = (step + '').split('.')[1];
-            var minExponent = (min + '').split('.')[1];
-            var exponentLength = Math.max(
+            const stepExponent = (step + '').split('.')[1];
+            const minExponent = (min + '').split('.')[1];
+            const exponentLength = Math.max(
                 stepExponent && stepExponent.length || 0,
                 minExponent && minExponent.length || 0
             );
-            var stepCount = Math.round((newValue - min) / step);
+            const stepCount = Math.round((newValue - min) / step);
 
             newValue = Number((stepCount * step + min).toFixed(exponentLength));
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
@@ -564,7 +564,7 @@ var Slider = TrackBar.inherit({
     },
 
     _startHandler: function(args) {
-        var e = args.event;
+        const e = args.event;
 
         this._currentRatio = (eventUtils.eventData(e).x - this._$bar.offset().left) / this._$bar.width();
 
@@ -579,7 +579,7 @@ var Slider = TrackBar.inherit({
     _renderValue: function() {
         this.callBase();
 
-        var value = this.option('value');
+        const value = this.option('value');
 
         this._getSubmitElement().val(applyServerDecimalSeparator(value));
         SliderHandle.getInstance(this._activeHandle()).option('value', value);

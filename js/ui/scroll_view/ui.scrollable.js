@@ -30,7 +30,7 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
 
-var deviceDependentOptions = function() {
+const deviceDependentOptions = function() {
     return [{
         device: function() {
             return !support.nativeScrolling;
@@ -54,7 +54,7 @@ var deviceDependentOptions = function() {
     }];
 };
 
-var Scrollable = DOMComponent.inherit({
+const Scrollable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -144,10 +144,10 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _initScrollableMarkup: function() {
-        var $element = this.$element().addClass(SCROLLABLE_CLASS),
-            $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS),
-            $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS),
-            $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
+        const $element = this.$element().addClass(SCROLLABLE_CLASS);
+        const $container = this._$container = $('<div>').addClass(SCROLLABLE_CONTAINER_CLASS);
+        const $wrapper = this._$wrapper = $('<div>').addClass(SCROLLABLE_WRAPPER_CLASS);
+        const $content = this._$content = $('<div>').addClass(SCROLLABLE_CONTENT_CLASS);
 
         if(domAdapter.hasDocumentProperty('onbeforeactivate') && browser.msie && browser.version < 12) {
             eventsEngine.on($element, eventUtils.addNamespace('beforeactivate', SCROLLABLE), function(e) {
@@ -210,9 +210,9 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _attachEventHandlers: function() {
-        var strategy = this._strategy;
+        const strategy = this._strategy;
 
-        var initEventData = {
+        const initEventData = {
             getDirection: strategy.getDirection.bind(strategy),
             validate: this._validate.bind(this),
             isNative: this.option('useNative'),
@@ -242,7 +242,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _initHandler: function() {
-        var strategy = this._strategy;
+        const strategy = this._strategy;
         strategy.handleInit.apply(strategy, arguments);
     },
 
@@ -328,18 +328,18 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _resetInactiveDirection: function() {
-        var inactiveProp = this._getInactiveProp();
+        const inactiveProp = this._getInactiveProp();
         if(!inactiveProp || !windowUtils.hasWindow()) {
             return;
         }
 
-        var scrollOffset = this.scrollOffset();
+        const scrollOffset = this.scrollOffset();
         scrollOffset[inactiveProp] = 0;
         this.scrollTo(scrollOffset);
     },
 
     _getInactiveProp: function() {
-        var direction = this.option('direction');
+        const direction = this.option('direction');
         if(direction === VERTICAL) {
             return 'left';
         }
@@ -354,14 +354,14 @@ var Scrollable = DOMComponent.inherit({
 
     _normalizeLocation: function(location) {
         if(typeUtils.isPlainObject(location)) {
-            var left = commonUtils.ensureDefined(location.left, location.x);
-            var top = commonUtils.ensureDefined(location.top, location.y);
+            const left = commonUtils.ensureDefined(location.left, location.x);
+            const top = commonUtils.ensureDefined(location.top, location.y);
             return {
                 left: typeUtils.isDefined(left) ? -left : undefined,
                 top: typeUtils.isDefined(top) ? -top : undefined
             };
         } else {
-            var direction = this.option('direction');
+            const direction = this.option('direction');
             return {
                 left: direction !== VERTICAL ? -location : undefined,
                 top: direction !== HORIZONTAL ? -location : undefined
@@ -384,7 +384,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _isDirection: function(direction) {
-        var current = this.option('direction');
+        const current = this.option('direction');
         if(direction === VERTICAL) {
             return current !== HORIZONTAL;
         }
@@ -395,7 +395,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _updateAllowedDirection: function() {
-        var allowedDirections = this._strategy._allowedDirections();
+        const allowedDirections = this._strategy._allowedDirections();
 
         if(this._isDirection(BOTH) && allowedDirections.vertical && allowedDirections.horizontal) {
             this._allowedDirectionValue = BOTH;
@@ -425,7 +425,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        var location = this._location();
+        const location = this._location();
         return {
             top: -location.top,
             left: -location.left
@@ -481,14 +481,14 @@ var Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
 
-        var location = this._location();
+        let location = this._location();
 
         if(!this.option('useNative')) {
             targetLocation = this._strategy._applyScaleRatio(targetLocation);
             location = this._strategy._applyScaleRatio(location);
         }
 
-        var distance = this._normalizeLocation({
+        const distance = this._normalizeLocation({
             left: location.left - commonUtils.ensureDefined(targetLocation.left, location.left),
             top: location.top - commonUtils.ensureDefined(targetLocation.top, location.top)
         });
@@ -501,15 +501,15 @@ var Scrollable = DOMComponent.inherit({
     },
 
     scrollToElement: function(element, offset) {
-        var $element = $(element);
-        var elementInsideContent = this.$content().find(element).length;
-        var elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
+        const $element = $(element);
+        const elementInsideContent = this.$content().find(element).length;
+        const elementIsInsideContent = ($element.parents('.' + SCROLLABLE_CLASS).length - $element.parents('.' + SCROLLABLE_CONTENT_CLASS).length) === 0;
         if(!elementInsideContent || !elementIsInsideContent) {
             return;
         }
 
-        var scrollPosition = { top: 0, left: 0 };
-        var direction = this.option('direction');
+        const scrollPosition = { top: 0, left: 0 };
+        const direction = this.option('direction');
 
         if(direction !== VERTICAL) {
             scrollPosition.left = this.getScrollElementPosition($element, HORIZONTAL, offset);
@@ -523,18 +523,18 @@ var Scrollable = DOMComponent.inherit({
 
     getScrollElementPosition: function($element, direction, offset) {
         offset = offset || {};
-        var isVertical = direction === VERTICAL;
-        var startOffset = (isVertical ? offset.top : offset.left) || 0;
-        var endOffset = (isVertical ? offset.bottom : offset.right) || 0;
-        var pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
-        var elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-        var elementPosition = elementPositionRelativeToContent - pushBackOffset;
-        var elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
-        var scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-        var clientSize = (isVertical ? this.clientHeight() : this.clientWidth());
+        const isVertical = direction === VERTICAL;
+        const startOffset = (isVertical ? offset.top : offset.left) || 0;
+        const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
+        const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
+        const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
+        const elementPosition = elementPositionRelativeToContent - pushBackOffset;
+        const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
+        const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
+        const clientSize = (isVertical ? this.clientHeight() : this.clientWidth());
 
-        var startDistance = scrollLocation - elementPosition + startOffset;
-        var endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
+        const startDistance = scrollLocation - elementPosition + startOffset;
+        const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
 
         if(startDistance <= 0 && endDistance >= 0) {
             return scrollLocation;
@@ -544,7 +544,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _elementPositionRelativeToContent: function($element, prop) {
-        var result = 0;
+        let result = 0;
         while(this._hasScrollContent($element)) {
             result += $element.position()[prop];
             $element = $element.offsetParent();
@@ -553,7 +553,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _hasScrollContent: function($element) {
-        var $content = this.$content();
+        const $content = this.$content();
         return $element.closest($content).length && !$element.is($content);
     },
 
