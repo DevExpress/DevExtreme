@@ -40,7 +40,7 @@ const alignCenterWrap = { horizontal: 'center', wrapText: true };
 
 
 QUnit.testStart(() => {
-    let markup = '<div id=\'dataGrid\'></div>';
+    const markup = '<div id=\'dataGrid\'></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -76,9 +76,9 @@ const moduleConfig = {
         const topLeft = { row: 2, column: 3 };
         const topLeftCell1 = topLeft;
 
-        let testCaption = '';
+        const testCaption = '';
         const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-            let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
             const result = {
                 component: dataGrid,
@@ -101,7 +101,7 @@ const moduleConfig = {
 
             const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
 
-            let expectedCells = [];
+            const expectedCells = [];
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
                 helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
@@ -6529,7 +6529,7 @@ QUnit.module('LoadPanel', moduleConfig, () => {
 
             dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
             const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
-            let expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
 
             if(browser.webkit) {
                 extend(expectedLoadPanelSettingsOnExporting, { animation: null });
