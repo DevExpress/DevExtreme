@@ -17,15 +17,12 @@ function exportDataGrid(options) {
         customizeCell,
         component,
         worksheet,
-        topLeftCell = { row: 1, column: 1 },
+        topLeftCell,
         autoFilterEnabled,
-        keepColumnWidths = true,
-        selectedRowsOnly = false,
-        loadPanel = {
-            enabled: true,
-            text: messageLocalization.format('dxDataGrid-exporting')
-        }
-    } = options;
+        keepColumnWidths,
+        selectedRowsOnly,
+        loadPanel
+    } = _getFullOptions(options);
 
     const initialLoadPanelOptions = extend({}, component.option('loadPanel'));
     if('animation' in component.option('loadPanel')) {
@@ -99,6 +96,27 @@ function exportDataGrid(options) {
     });
 }
 
+function _getFullOptions(options) {
+    const fullOptions = extend({}, options);
+    if(!isDefined(fullOptions.topLeftCell)) {
+        fullOptions.topLeftCell = { row: 1, column: 1 };
+    }
+    if(!isDefined(fullOptions.keepColumnWidths)) {
+        fullOptions.keepColumnWidths = true;
+    }
+    if(!isDefined(fullOptions.selectedRowsOnly)) {
+        fullOptions.selectedRowsOnly = false;
+    }
+    if(!isDefined(fullOptions.loadPanel)) {
+        fullOptions.loadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
+    }
+    if(!isDefined(fullOptions.autoFilterEnabled) && isDefined(fullOptions.component)) {
+        fullOptions.autoFilterEnabled = !!fullOptions.component.option('export.excelFilterEnabled');
+    }
+
+    return fullOptions;
+}
+
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
     const styles = dataProvider.getStyles();
 
@@ -142,10 +160,6 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setAutoFilter(dataProvider, worksheet, component, cellsRange, autoFilterEnabled) {
-    if(!isDefined(autoFilterEnabled)) {
-        autoFilterEnabled = !!component.option('export.excelFilterEnabled');
-    }
-
     if(autoFilterEnabled) {
         if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
             worksheet.autoFilter = cellsRange;
@@ -240,4 +254,4 @@ function _mergeCells(worksheet, topLeftCell, mergeRanges) {
     });
 }
 
-export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH };
+export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH, _getFullOptions };
