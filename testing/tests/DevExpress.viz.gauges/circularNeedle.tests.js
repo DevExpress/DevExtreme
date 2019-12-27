@@ -1,13 +1,13 @@
-var vizMocks = require('../../helpers/vizMocks.js'),
-    circularIndicatorsModule = require('viz/gauges/circular_indicators'),
-    Translator1D = require('viz/translators/translator1d').Translator1D;
+const vizMocks = require('../../helpers/vizMocks.js');
+const circularIndicatorsModule = require('viz/gauges/circular_indicators');
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var needle,
-    renderer,
-    owner,
-    tracker,
-    translator,
-    options;
+let needle;
+let renderer;
+let owner;
+let tracker;
+let translator;
+let options;
 
 QUnit.module('RectangleNeedle', {
     beforeEach: function() {
@@ -17,7 +17,7 @@ QUnit.module('RectangleNeedle', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 180, 0);
+        const translator = new Translator1D(0, 100, 180, 0);
         needle = new circularIndicatorsModule['rectangleneedle']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
@@ -89,8 +89,8 @@ QUnit.test('not valid radius (not rendered)', function(assert) {
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
-    var x = 200 + Math.cos(Math.PI * 0.75) * 44.5,
-        y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
+    const x = 200 + Math.cos(Math.PI * 0.75) * 44.5;
+    const y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
 });
 
@@ -126,8 +126,8 @@ QUnit.test('Do not dicrease offsets and spindle size if radius is greater than b
 });
 
 QUnit.test('getTooltipParameters when dicresed offsets', function(assert) {
-    var x = 200 + Math.cos(Math.PI * 0.75) * 42,
-        y = 100 - Math.sin(Math.PI * 0.75) * 42;
+    const x = 200 + Math.cos(Math.PI * 0.75) * 42;
+    const y = 100 - Math.sin(Math.PI * 0.75) * 42;
     options.beginAdaptingAtRadius = 160;
 
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
@@ -225,8 +225,8 @@ QUnit.test('not valid radius (not rendered)', function(assert) {
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
-    var x = 200 + Math.cos(Math.PI * 0.75) * 44.5,
-        y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
+    const x = 200 + Math.cos(Math.PI * 0.75) * 44.5;
+    const y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
 });
 
@@ -346,8 +346,8 @@ QUnit.test('not valid secondFraction', function(assert) {
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
-    var x = 200 + Math.cos(Math.PI * 0.75) * 44.5,
-        y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
+    const x = 200 + Math.cos(Math.PI * 0.75) * 44.5;
+    const y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
 });
 

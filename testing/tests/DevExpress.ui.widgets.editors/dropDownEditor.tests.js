@@ -574,7 +574,7 @@ QUnit.module('focus policy', () => {
     });
 
     QUnit.test('focusout to another editor should close current ddb (T832410)', function(assert) {
-        var $dropDownEditor1 = $('#dropDownEditorLazy').dxDropDownEditor({
+        const $dropDownEditor1 = $('#dropDownEditorLazy').dxDropDownEditor({
             items: [0, 1, 2],
             contentTemplate() {
                 return $('<div>').attr('id', 'test-content');
@@ -584,16 +584,16 @@ QUnit.module('focus policy', () => {
             opened: true
         });
 
-        var $dropDownEditor2 = $('#dropDownEditorSecond').dxDropDownEditor({
+        const $dropDownEditor2 = $('#dropDownEditorSecond').dxDropDownEditor({
             items: [0, 1, 2],
             acceptCustomValue: true,
             focusStateEnabled: true
         });
 
-        var dropDownEditor1 = $dropDownEditor1.dxDropDownEditor('instance');
+        const dropDownEditor1 = $dropDownEditor1.dxDropDownEditor('instance');
 
-        var $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        var $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const $input1 = $dropDownEditor1.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const $input2 = $dropDownEditor2.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         dropDownEditor1.focus();
 
@@ -988,7 +988,7 @@ QUnit.module('Templates', () => {
             value: [1],
             searchEnabled: true,
             fieldTemplate(itemData, container) {
-                const $textBox = $('<div>').dxTextBox(), $field = $('<div>Test<div/>');
+                const $textBox = $('<div>').dxTextBox(); const $field = $('<div>Test<div/>');
 
                 assert.equal(isRenderer(container), !!config().useJQuery, 'container is correct');
                 $(container).append($field).append($textBox);

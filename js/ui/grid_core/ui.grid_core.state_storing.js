@@ -5,24 +5,24 @@ import stateStoringCore from './ui.grid_core.state_storing_core';
 import { Deferred } from '../../core/utils/deferred';
 
 const getDataState = that => {
-    let pagerView = that.getView('pagerView'),
-        dataController = that.getController('data'),
-        state = {
-            allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
-            filterPanel: { filterEnabled: that.option('filterPanel.filterEnabled') },
-            filterValue: that.option('filterValue'),
-            focusedRowKey: that.option('focusedRowEnabled') ? that.option('focusedRowKey') : undefined
-        };
+    const pagerView = that.getView('pagerView');
+    const dataController = that.getController('data');
+    const state = {
+        allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
+        filterPanel: { filterEnabled: that.option('filterPanel.filterEnabled') },
+        filterValue: that.option('filterValue'),
+        focusedRowKey: that.option('focusedRowEnabled') ? that.option('focusedRowKey') : undefined
+    };
 
     return extend(state, dataController.getUserState());
 };
 
 // TODO move processLoadState to target modules (data, columns, pagerView)
 const processLoadState = that => {
-    let columnsController = that.getController('columns'),
-        selectionController = that.getController('selection'),
-        exportController = that.getController('export'),
-        dataController = that.getController('data');
+    const columnsController = that.getController('columns');
+    const selectionController = that.getController('selection');
+    const exportController = that.getController('export');
+    const dataController = that.getController('data');
 
     if(columnsController) {
         columnsController.columnsChanged.add(function() {
@@ -46,7 +46,7 @@ const processLoadState = that => {
         that._initialFilterValue = that.option('filterValue');
 
         dataController.changed.add(function() {
-            var state = getDataState(that);
+            const state = getDataState(that);
 
             that.updateState(state);
         });
@@ -64,9 +64,9 @@ const processLoadState = that => {
 const DEFAULT_FILTER_VALUE = null;
 
 const getFilterValue = (that, state) => {
-    let filterSyncController = that.getController('filterSync'),
-        columnsController = that.getController('columns'),
-        hasFilterState = state.columns || state.filterValue !== undefined;
+    const filterSyncController = that.getController('filterSync');
+    const columnsController = that.getController('columns');
+    const hasFilterState = state.columns || state.filterValue !== undefined;
 
     if(filterSyncController) {
         if(hasFilterState) {
@@ -132,8 +132,8 @@ module.exports = {
         views: {
             rowsView: {
                 init: function() {
-                    var that = this;
-                    var dataController = that.getController('data');
+                    const that = this;
+                    const dataController = that.getController('data');
 
                     that.callBase();
 
@@ -141,7 +141,7 @@ module.exports = {
                         if(dataController.isLoaded() && !dataController.getDataSource()) {
                             that.setLoading(false);
                             that.renderNoDataText();
-                            var columnHeadersView = that.component.getView('columnHeadersView');
+                            const columnHeadersView = that.component.getView('columnHeadersView');
                             columnHeadersView && columnHeadersView.render();
                             that.component._fireContentReadyAction();
                         }
@@ -159,7 +159,7 @@ module.exports = {
                     return this.callBase() || this.getController('data').isStateLoading();
                 },
                 state: function(state) {
-                    var result = this.callBase.apply(this, arguments);
+                    const result = this.callBase.apply(this, arguments);
 
                     if(state !== undefined) {
                         this.applyState(extend({}, state));
@@ -169,10 +169,10 @@ module.exports = {
                 },
                 updateState: function(state) {
                     if(this.isEnabled()) {
-                        let oldState = this.state(),
-                            newState = extend({}, oldState, state),
-                            oldStateHash = getKeyHash(oldState),
-                            newStateHash = getKeyHash(newState);
+                        const oldState = this.state();
+                        const newState = extend({}, oldState, state);
+                        const oldStateHash = getKeyHash(oldState);
+                        const newStateHash = getKeyHash(newState);
 
                         if(!equalByValue(oldStateHash, newStateHash)) {
                             extend(this._state, state);
@@ -183,17 +183,17 @@ module.exports = {
                     }
                 },
                 applyState: function(state) {
-                    var that = this,
-                        allowedPageSizes = state.allowedPageSizes,
-                        searchText = state.searchText,
-                        selectedRowKeys = state.selectedRowKeys,
-                        selectionFilter = state.selectionFilter,
-                        exportController = that.getController('export'),
-                        columnsController = that.getController('columns'),
-                        dataController = that.getController('data'),
-                        scrollingMode = that.option('scrolling.mode'),
-                        isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite',
-                        showPageSizeSelector = that.option('pager.visible') === true && that.option('pager.showPageSizeSelector');
+                    const that = this;
+                    const allowedPageSizes = state.allowedPageSizes;
+                    const searchText = state.searchText;
+                    const selectedRowKeys = state.selectedRowKeys;
+                    const selectionFilter = state.selectionFilter;
+                    const exportController = that.getController('export');
+                    const columnsController = that.getController('columns');
+                    const dataController = that.getController('data');
+                    const scrollingMode = that.option('scrolling.mode');
+                    const isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite';
+                    const showPageSizeSelector = that.option('pager.visible') === true && that.option('pager.showPageSizeSelector');
 
                     that.component.beginUpdate();
 
@@ -235,8 +235,8 @@ module.exports = {
             },
             columns: {
                 getVisibleColumns: function() {
-                    var visibleColumns = this.callBase.apply(this, arguments),
-                        stateStoringController = this.getController('stateStoring');
+                    const visibleColumns = this.callBase.apply(this, arguments);
+                    const stateStoringController = this.getController('stateStoring');
 
                     return stateStoringController.isEnabled() && !stateStoringController.isLoaded() ? [] : visibleColumns;
                 }
@@ -246,14 +246,14 @@ module.exports = {
                     return this.callBase().concat(['stateLoaded']);
                 },
                 _refreshDataSource: function() {
-                    var that = this,
-                        callBase = that.callBase,
-                        stateStoringController = that.getController('stateStoring');
+                    const that = this;
+                    const callBase = that.callBase;
+                    const stateStoringController = that.getController('stateStoring');
 
                     if(stateStoringController.isEnabled() && !stateStoringController.isLoaded()) {
                         clearTimeout(that._restoreStateTimeoutID);
 
-                        var deferred = new Deferred();
+                        const deferred = new Deferred();
                         that._restoreStateTimeoutID = setTimeout(function() {
                             stateStoringController.load().always(function() {
                                 that._restoreStateTimeoutID = null;
@@ -269,8 +269,8 @@ module.exports = {
                 },
 
                 isLoading: function() {
-                    var that = this,
-                        stateStoringController = that.getController('stateStoring');
+                    const that = this;
+                    const stateStoringController = that.getController('stateStoring');
 
                     return this.callBase() || stateStoringController.isLoading();
                 },

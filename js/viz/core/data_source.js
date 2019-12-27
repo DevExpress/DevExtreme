@@ -1,31 +1,31 @@
-var noop = require('../../core/utils/common').noop,
-    DataHelperMixin = require('../../data_helper'),
-    postCtor = DataHelperMixin.postCtor,
-    name,
-    members = {
-        _dataSourceLoadErrorHandler: function() {
+const noop = require('../../core/utils/common').noop;
+const DataHelperMixin = require('../../data_helper');
+const postCtor = DataHelperMixin.postCtor;
+let name;
+const members = {
+    _dataSourceLoadErrorHandler: function() {
+        this._dataSourceChangedHandler();
+    },
+
+    _dataSourceOptions: function() {
+        return { paginate: false };
+    },
+
+    _updateDataSource: function() {
+        this._refreshDataSource();
+        if(!this.option('dataSource')) {
             this._dataSourceChangedHandler();
-        },
-
-        _dataSourceOptions: function() {
-            return { paginate: false };
-        },
-
-        _updateDataSource: function() {
-            this._refreshDataSource();
-            if(!this.option('dataSource')) {
-                this._dataSourceChangedHandler();
-            }
-        },
-
-        _dataIsLoaded: function() {
-            return !this._dataSource || this._dataSource.isLoaded();
-        },
-
-        _dataSourceItems: function() {
-            return this._dataSource && this._dataSource.items();
         }
-    };
+    },
+
+    _dataIsLoaded: function() {
+        return !this._dataSource || this._dataSource.isLoaded();
+    },
+
+    _dataSourceItems: function() {
+        return this._dataSource && this._dataSource.items();
+    }
+};
 
 for(name in DataHelperMixin) {
     if(name === 'postCtor') {

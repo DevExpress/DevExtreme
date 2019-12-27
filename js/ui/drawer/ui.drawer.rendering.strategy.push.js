@@ -15,7 +15,7 @@ class PushStrategy extends DrawerStrategy {
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
 
         if(animate) {
-            let animationConfig = {
+            const animationConfig = {
                 $element: config.$content,
                 position: config.contentPosition,
                 direction: drawer.getDrawerPosition(),

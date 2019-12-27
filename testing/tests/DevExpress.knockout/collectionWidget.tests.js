@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    registerComponent = require('core/component_registrator'),
-    CollectionWidget = require('ui/collection/ui.collection_widget.edit'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const $ = require('jquery');
+const ko = require('knockout');
+const registerComponent = require('core/component_registrator');
+const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="cmp"></div>\
         <div id="cmp-with-template">\
             <div data-options="dxTemplate : { name: \'testTemplate\' } ">\
@@ -90,11 +90,11 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var ITEM_CLASS = 'dx-item',
-    EMPTY_MESSAGE_CLASS = 'dx-empty-message',
-    ITEM_SELECTED_CLASS = 'dx-item-selected';
+const ITEM_CLASS = 'dx-item';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
+const ITEM_SELECTED_CLASS = 'dx-item-selected';
 
-var TestComponent = CollectionWidget.inherit({
+const TestComponent = CollectionWidget.inherit({
 
     NAME: 'TestComponent',
 
@@ -130,12 +130,12 @@ QUnit.test('item specifies its template', function(assert) {
     registerComponent('dxTestComponent', TestComponent);
 
     try {
-        var items = [
+        const items = [
             { template: 'custom', text: 'customText' },
             { template: 'nonExistent', text: 'nonExistentText' }
         ];
 
-        var $markup = $(
+        const $markup = $(
             '<div id=\'container\'>' +
             '   <div data-bind=\'dxTestComponent: { items: items }\'>' +
             '       <div data-options="dxTemplate: { name: \'custom\' }">CustomTemplate</div>' +
@@ -146,7 +146,7 @@ QUnit.test('item specifies its template', function(assert) {
 
         ko.applyBindings({ items: items }, $markup.get(0));
 
-        var itemElements = $markup.find('.item');
+        const itemElements = $markup.find('.item');
         assert.equal(itemElements.length, 2);
         assert.equal(itemElements.eq(0).text(), 'CustomTemplate', 'custom item.template');
         assert.equal(itemElements.eq(1).text(), 'nonExistent', 'render template name if template does not exists');
@@ -161,11 +161,11 @@ QUnit.test('item specifies non existent template', function(assert) {
     registerComponent('dxTestComponent', TestComponent);
 
     try {
-        var items = [
+        const items = [
             { text: 'test', template: 'custom' }
         ];
 
-        var $markup = $(
+        const $markup = $(
             '<div id=\'container\'>' +
             '   <div data-bind=\'dxTestComponent: { items: items }\'>' +
             '   </div>' +
@@ -174,7 +174,7 @@ QUnit.test('item specifies non existent template', function(assert) {
 
         ko.applyBindings({ items: items }, $markup.get(0));
 
-        var itemElements = $markup.find('.item');
+        const itemElements = $markup.find('.item');
         assert.equal(itemElements.length, 1);
         assert.equal(itemElements.eq(0).text(), 'custom');
 
@@ -185,14 +185,14 @@ QUnit.test('item specifies non existent template', function(assert) {
 });
 
 QUnit.test('Q556417 - NoDataItem shouldn\'t be removed for nested CollectionWidget', function(assert) {
-    var $element = $('#container-with-nested-container');
+    const $element = $('#container-with-nested-container');
 
     try {
         registerComponent('dxTestComponent', TestComponent);
 
         ko.applyBindings({}, $element.get(0));
 
-        var $noData = $element.find('.' + EMPTY_MESSAGE_CLASS);
+        const $noData = $element.find('.' + EMPTY_MESSAGE_CLASS);
         assert.equal($noData.length, 1, 'nodata element rendered for nested component without items');
 
     } finally {
@@ -203,9 +203,9 @@ QUnit.test('Q556417 - NoDataItem shouldn\'t be removed for nested CollectionWidg
 
 QUnit.test('render items with multiple templates, ko scenario', function(assert) {
     try {
-        var $element = $('#container-with-ko-template'),
-            testSet = ['First: book', 'Second: pen', 'eraser', 'abc', 'pencil', 'First: liner'],
-            $items;
+        const $element = $('#container-with-ko-template');
+        const testSet = ['First: book', 'Second: pen', 'eraser', 'abc', 'pencil', 'First: liner'];
+        let $items;
 
         registerComponent('dxTestComponent', TestComponent);
 
@@ -251,7 +251,7 @@ QUnit.test('render items with multiple templates, ko scenario', function(assert)
 
 QUnit.test('$index is available in markup (T542335)', function(assert) {
     try {
-        var $element = $('#container-with-ko-template-and-item-index');
+        const $element = $('#container-with-ko-template-and-item-index');
 
         registerComponent('dxTestComponent', TestComponent);
 
@@ -262,7 +262,7 @@ QUnit.test('$index is available in markup (T542335)', function(assert) {
             ]
         }, $element.get(0));
 
-        var $items = $element.find('.item');
+        const $items = $element.find('.item');
 
         assert.equal($.trim($items.eq(0).text()), '$index: 0');
         assert.equal($.trim($items.eq(1).text()), '$index: 1');
@@ -285,11 +285,11 @@ QUnit.module('items via markup', {
 });
 
 QUnit.test('define items in markup', function(assert) {
-    var $component = $('#container-with-items-in-markup');
+    const $component = $('#container-with-items-in-markup');
     ko.applyBindings({}, $component.get(0));
 
-    var component = $component.dxTestComponent('instance');
-    var expectedItems = [
+    const component = $component.dxTestComponent('instance');
+    const expectedItems = [
         { text: '1' },
         { text: '2' },
         { text: '3' }
@@ -297,56 +297,56 @@ QUnit.test('define items in markup', function(assert) {
 
     assert.deepEqual(component.option('items'), expectedItems, 'items fetched');
 
-    var $items = $component.find('.item');
+    const $items = $component.find('.item');
     assert.equal($items.length, 3, 'rendered 3 items');
     assert.equal($component.text(), '123', 'items rendered');
 });
 
 QUnit.test('items in markup with templates', function(assert) {
-    var $component = $('#container-with-items-with-template');
+    const $component = $('#container-with-items-with-template');
     ko.applyBindings({}, $component.get(0));
 
-    var component = $component.dxTestComponent('instance');
-    var items = component.option('items');
+    const component = $component.dxTestComponent('instance');
+    const items = component.option('items');
     assert.equal(items.length, 2, '2 items fetched');
     assert.ok(items[0].template, 'template defined');
     assert.ok(items[1].template, 'template defined');
     assert.notEqual(items[0].template, items[1].template, 'templates are different');
 
-    var $items = $component.find('.item');
+    const $items = $component.find('.item');
     assert.equal($items.length, 2, 'rendered 2 items');
     assert.equal($items.eq(0).text(), '1', 'items rendered');
     assert.equal($items.eq(1).text(), '2', 'items rendered');
 });
 
 QUnit.test('item uses custom template', function(assert) {
-    var $component = $('#container-with-items-and-custom-template');
+    const $component = $('#container-with-items-and-custom-template');
     ko.applyBindings({}, $component.get(0));
 
     assert.equal($.trim($component.text()), 'custom');
 });
 
 QUnit.test('option items has higher priority than items in markup', function(assert) {
-    var $component = $('#container-with-items-in-markup-and-items-in-options');
-    var items = [1, 2, 3];
+    const $component = $('#container-with-items-in-markup-and-items-in-options');
+    const items = [1, 2, 3];
 
     ko.applyBindings({ items: items }, $component.get(0));
 
-    var component = $component.dxTestComponent('instance');
+    const component = $component.dxTestComponent('instance');
 
     assert.equal(component.option('items'), items, 'items replaced');
 });
 
 QUnit.test('$parent should be correct for collection item', function(assert) {
-    var vm = {
+    const vm = {
         text: 'parent',
         items: [{ 'nonsense': true }]
     };
 
-    var $markup = $('#cmp-ko');
+    const $markup = $('#cmp-ko');
     ko.applyBindings(vm, $markup.get(0));
 
-    var $item = $markup.find('.dx-item');
+    const $item = $markup.find('.dx-item');
     assert.equal($.trim($item.text()), 'parent');
 });
 
@@ -371,10 +371,10 @@ QUnit.module('selecting MVVM support', {
 });
 
 QUnit.test('selectedItems option should contain correct items', function(assert) {
-    var items = [{ a: 0 }, { a: 1 }, { a: 2 }],
-        $element = $('#ko-selecting-case');
+    const items = [{ a: 0 }, { a: 1 }, { a: 2 }];
+    const $element = $('#ko-selecting-case');
 
-    var vm = {
+    const vm = {
         items: items,
         selectedItems: ko.observableArray([]),
         selectionMode: 'multiple'
@@ -382,9 +382,9 @@ QUnit.test('selectedItems option should contain correct items', function(assert)
 
     ko.applyBindings(vm, $element[0]);
 
-    var instance = $element.dxTestComponent('instance');
+    const instance = $element.dxTestComponent('instance');
 
-    var item = function(index) {
+    const item = function(index) {
         return $element.find('.' + ITEM_CLASS).eq(index);
     };
 
@@ -398,10 +398,10 @@ QUnit.test('selectedItems option should contain correct items', function(assert)
 });
 
 QUnit.test('items should be selected when widget rendered', function(assert) {
-    var items = [{ a: 0 }, { a: 1 }, { a: 2 }],
-        $element = $('#ko-selecting-case');
+    const items = [{ a: 0 }, { a: 1 }, { a: 2 }];
+    const $element = $('#ko-selecting-case');
 
-    var vm = {
+    const vm = {
         items: items,
         selectedItems: ko.observableArray([items[0], items[2]]),
         selectionMode: 'multiple'
@@ -409,7 +409,7 @@ QUnit.test('items should be selected when widget rendered', function(assert) {
 
     ko.applyBindings(vm, $element[0]);
 
-    var item = function(index) {
+    const item = function(index) {
         return $element.find('.' + ITEM_CLASS).eq(index);
     };
 
@@ -419,23 +419,23 @@ QUnit.test('items should be selected when widget rendered', function(assert) {
 });
 
 QUnit.test('component should respond on outside selectedItems changes', function(assert) {
-    var items = [{ a: 0 }, { a: 1 }],
-        $element = $('#ko-selecting-case');
+    const items = [{ a: 0 }, { a: 1 }];
+    const $element = $('#ko-selecting-case');
 
-    var vm = {
+    const vm = {
         items: items,
         selectedItems: ko.observableArray([]),
         selectionMode: 'multiple'
     };
     ko.applyBindings(vm, $element[0]);
 
-    var selectionChangeFired = 0;
-    var instance = $element.dxTestComponent('instance');
+    let selectionChangeFired = 0;
+    const instance = $element.dxTestComponent('instance');
     instance.option('onSelectionChanged', function() {
         selectionChangeFired++;
     });
 
-    var $items = $element.find('.' + ITEM_CLASS);
+    const $items = $element.find('.' + ITEM_CLASS);
 
     vm.selectedItems([items[0], items[1]]);
     vm.selectedItems([items[1]]);

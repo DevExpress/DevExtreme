@@ -1,10 +1,10 @@
-var createBlobFile = function(name, size, type) {
+const createBlobFile = function(name, size, type) {
     return {
         name: name,
         size: size,
         type: type || 'image/png',
         blob: (function(size) {
-            var str = '';
+            let str = '';
             while(str.length < size) {
                 str += 'a';
             }

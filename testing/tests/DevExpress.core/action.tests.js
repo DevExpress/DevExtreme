@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    errors = require('core/errors'),
-    Action = require('core/action');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const errors = require('core/errors');
+const Action = require('core/action');
 
-var noJquery = QUnit.urlParams['nojquery'];
+const noJquery = QUnit.urlParams['nojquery'];
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div class="dx-state-disabled">\
             <div class="dx-click-target"></div>\
         </div>\
@@ -18,11 +18,11 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var actionExecutors = Action.executors,
-    register = Action.registerExecutor,
-    unregister = Action.unregisterExecutor;
+const actionExecutors = Action.executors;
+const register = Action.registerExecutor;
+const unregister = Action.unregisterExecutor;
 
-var mockStringActionExecutor = {
+const mockStringActionExecutor = {
     execute: function(e) {
         if(typeof e.action === 'string') {
             e.result = e.action;
@@ -34,7 +34,7 @@ var mockStringActionExecutor = {
 QUnit.module('Action Executors');
 
 QUnit.test('registerActionExecutor/unregisterActionExecutor simple', function(assert) {
-    var testExecutor = { execute: noop };
+    const testExecutor = { execute: noop };
 
     register('test', testExecutor);
     assert.strictEqual(actionExecutors.test, testExecutor);
@@ -44,8 +44,8 @@ QUnit.test('registerActionExecutor/unregisterActionExecutor simple', function(as
 });
 
 QUnit.test('registerActionExecutor/unregisterActionExecutor by object', function(assert) {
-    var testExecutor1 = { execute: noop },
-        testExecutor2 = { execute: noop };
+    const testExecutor1 = { execute: noop };
+    const testExecutor2 = { execute: noop };
 
     register({
         'test1': testExecutor1,
@@ -71,22 +71,22 @@ QUnit.module('Action', {
 });
 
 QUnit.test('no action', function(assert) {
-    var action = new Action();
+    const action = new Action();
     action.execute();
     assert.equal(action._action, null);
 });
 
 QUnit.test('action as a string', function(assert) {
-    var action = new Action('new location');
-    var result = action.execute();
+    const action = new Action('new location');
+    const result = action.execute();
     assert.equal(result, 'new location');
 });
 
 QUnit.test('action as a function', function(assert) {
-    var executed = false,
-        execArgs = [];
+    let executed = false;
+    let execArgs = [];
 
-    var action = new Action(function() {
+    const action = new Action(function() {
         executed = true;
         execArgs = arguments;
     });
@@ -101,10 +101,10 @@ QUnit.test('action as a function', function(assert) {
 });
 
 QUnit.test('action as a function with context', function(assert) {
-    var context = {},
-        execContext = null;
+    const context = {};
+    let execContext = null;
 
-    var action = new Action(
+    const action = new Action(
         function() {
             execContext = this;
         },
@@ -119,7 +119,7 @@ QUnit.test('action as a function with context', function(assert) {
 });
 
 QUnit.test('canceled action is not executed', function(assert) {
-    var action = new Action('new location');
+    const action = new Action('new location');
 
     register('canceller', {
         validate: function(e) {
@@ -127,16 +127,16 @@ QUnit.test('canceled action is not executed', function(assert) {
         }
     });
 
-    var result = action.execute();
+    const result = action.execute();
     assert.strictEqual(result, undefined);
 
     unregister('canceller');
 });
 
 QUnit.test('action is handled once', function(assert) {
-    var CustomActionClass = function() { },
-        action = new Action(new CustomActionClass()),
-        handledTwice = false;
+    const CustomActionClass = function() { };
+    const action = new Action(new CustomActionClass());
+    let handledTwice = false;
 
     register('test1', {
         execute: function(e) {
@@ -162,16 +162,16 @@ QUnit.test('action is handled once', function(assert) {
 });
 
 QUnit.test('action execute callbacks', function(assert) {
-    var executed = false,
-        args = [],
-        result = 1;
+    let executed = false;
+    const args = [];
+    const result = 1;
 
-    var actionFunc = function() {
+    const actionFunc = function() {
         executed = true;
         return result;
     };
 
-    var action = new Action(actionFunc,
+    const action = new Action(actionFunc,
         {
             beforeExecute: function(e) {
                 assert.ok(!executed);
@@ -205,9 +205,9 @@ QUnit.test('action execute callbacks', function(assert) {
 });
 
 QUnit.test('beforeExecute callback can cancel action execution', function(assert) {
-    var handlerSpy = sinon.spy(noop);
+    const handlerSpy = sinon.spy(noop);
 
-    var action = new Action(handlerSpy, {
+    const action = new Action(handlerSpy, {
         beforeExecute: function(e) {
             e.cancel = true;
         }
@@ -218,9 +218,9 @@ QUnit.test('beforeExecute callback can cancel action execution', function(assert
 });
 
 QUnit.test('afterExecute callback can be canceled at action execution', function(assert) {
-    var handlerSpy = sinon.spy(noop);
+    const handlerSpy = sinon.spy(noop);
 
-    var action = new Action(function(e) {
+    const action = new Action(function(e) {
         e.cancel = true;
     }, {
         afterExecute: handlerSpy
@@ -231,9 +231,9 @@ QUnit.test('afterExecute callback can be canceled at action execution', function
 });
 
 QUnit.test('ui interaction validator should prevent all action handlers by validatingTargetName', function(assert) {
-    var handlerSpy = sinon.spy(noop);
+    const handlerSpy = sinon.spy(noop);
 
-    var action = new Action(handlerSpy, {
+    const action = new Action(handlerSpy, {
         validatingTargetName: 'customElement'
     });
 
@@ -247,10 +247,10 @@ QUnit.test('ui interaction validator should prevent all action handlers by valid
 
 
 QUnit.test('ui interaction validator should prevent all ui action handlers by \'dx-state-readonly\' class', function(assert) {
-    var handlerSpy = sinon.spy(noop),
-        $targetElement = $('.dx-state-readonly .dx-click-target');
+    const handlerSpy = sinon.spy(noop);
+    const $targetElement = $('.dx-state-readonly .dx-click-target');
 
-    var action = new Action(handlerSpy);
+    const action = new Action(handlerSpy);
 
     action.execute({
         event: $.Event('click', { target: $targetElement.get(0) }),
@@ -261,7 +261,7 @@ QUnit.test('ui interaction validator should prevent all ui action handlers by \'
 });
 
 QUnit.test('Action argument should contain both Event and jQueryEvent field or none of them', function(assert) {
-    var eventMock = {};
+    const eventMock = {};
 
     new Action(function(e) {
         assert.notOk(e.event);
@@ -279,10 +279,10 @@ QUnit.test('Action argument should contain both Event and jQueryEvent field or n
 });
 
 QUnit.test('Working with jQueryEvent field should throw warning', function(assert) {
-    var eventMock = {};
-    var expectedWarning = ['W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead'];
-    var originalLog = errors.log;
-    var log = [];
+    const eventMock = {};
+    const expectedWarning = ['W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead'];
+    const originalLog = errors.log;
+    const log = [];
 
     errors.log = function() {
         log.push($.makeArray(arguments));
@@ -324,7 +324,7 @@ QUnit.module('excludeValidators', {
     },
 
     afterEach: function() {
-        var executors = this.originalActionExecutors;
+        const executors = this.originalActionExecutors;
         $.each(actionExecutors, function(name, impl) {
             actionExecutors[name] = executors[name];
         });
@@ -332,10 +332,10 @@ QUnit.module('excludeValidators', {
 });
 
 QUnit.test('not passed, all validators should be performed', function(assert) {
-    var testExecutorWithValidateValidateCalled = 0,
-        testExecutorWithExecuteCalled = 0,
-        testExecutorWithValidateAndExecuteValidateCalled = 0,
-        testExecutorWithValidateAndExecuteExecuteCalled = 0;
+    let testExecutorWithValidateValidateCalled = 0;
+    let testExecutorWithExecuteCalled = 0;
+    let testExecutorWithValidateAndExecuteValidateCalled = 0;
+    let testExecutorWithValidateAndExecuteExecuteCalled = 0;
 
     register({
         'testExecutorWithValidate': {
@@ -370,10 +370,10 @@ QUnit.test('not passed, all validators should be performed', function(assert) {
 });
 
 QUnit.test('passed, listed validators are skipped', function(assert) {
-    var testExecutorWithValidateValidateCalled = 0,
-        testExecutorWithExecuteCalled = 0,
-        testExecutorWithValidateAndExecuteValidateCalled = 0,
-        testExecutorWithValidateAndExecuteExecuteCalled = 0;
+    let testExecutorWithValidateValidateCalled = 0;
+    let testExecutorWithExecuteCalled = 0;
+    let testExecutorWithValidateAndExecuteValidateCalled = 0;
+    let testExecutorWithValidateAndExecuteExecuteCalled = 0;
 
     register({
         'testExecutorWithValidate': {

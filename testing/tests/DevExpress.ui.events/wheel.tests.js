@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    wheelEvent = require('events/core/wheel'),
-    nativePointerMock = require('../../helpers/nativePointerMock.js');
+const $ = require('jquery');
+const wheelEvent = require('events/core/wheel');
+const nativePointerMock = require('../../helpers/nativePointerMock.js');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="test"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -12,10 +12,10 @@ QUnit.testStart(function() {
 QUnit.module('wheel');
 
 QUnit.test('basic', function(assert) {
-    var fired = 0,
-        args,
-        $element = $('#test'),
-        mouse = nativePointerMock($element).start();
+    let fired = 0;
+    let args;
+    const $element = $('#test');
+    const mouse = nativePointerMock($element).start();
 
     $element.on(wheelEvent.name, function(e) {
         fired++;
@@ -29,10 +29,10 @@ QUnit.test('basic', function(assert) {
 });
 
 QUnit.test('handler fired once', function(assert) {
-    var firstHandler = 0,
-        secondHandler = 0,
-        $element = $('#test'),
-        $wrapper = $element.wrap('<div>').parent();
+    let firstHandler = 0;
+    let secondHandler = 0;
+    const $element = $('#test');
+    const $wrapper = $element.wrap('<div>').parent();
 
     $element.on(wheelEvent.name, function(e) {
         firstHandler++;
@@ -48,9 +48,9 @@ QUnit.test('handler fired once', function(assert) {
 });
 
 QUnit.test('provide delta and pointerType in event args', function(assert) {
-    var args,
-        $element = $('#test'),
-        mouse = nativePointerMock($element).start();
+    let args;
+    const $element = $('#test');
+    const mouse = nativePointerMock($element).start();
 
     $element.on(wheelEvent.name, function(e) {
         args = e;

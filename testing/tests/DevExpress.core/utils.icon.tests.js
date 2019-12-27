@@ -105,7 +105,7 @@ testModule('icon utils', {
 
     test('getImageContainer', (assert) => {
         this.sourceArray.forEach(({ source, result }) => {
-            var $iconElement = getImageContainer(source);
+            const $iconElement = getImageContainer(source);
             switch(result) {
                 case 'dxIcon':
                     assert.ok($iconElement.hasClass(ICON_CLASS), `correct for ${result}`);

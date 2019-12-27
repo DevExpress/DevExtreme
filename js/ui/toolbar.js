@@ -1,26 +1,26 @@
-var $ = require('../core/renderer'),
-    themes = require('./themes'),
-    registerComponent = require('../core/component_registrator'),
-    grep = require('../core/utils/common').grep,
-    extend = require('../core/utils/extend').extend,
-    arrayUtils = require('../core/utils/array'),
-    iteratorUtils = require('../core/utils/iterator'),
-    ActionSheetStrategy = require('./toolbar/ui.toolbar.strategy.action_sheet'),
-    DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_menu'),
-    ToolbarBase = require('./toolbar/ui.toolbar.base'),
-    ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+const $ = require('../core/renderer');
+const themes = require('./themes');
+const registerComponent = require('../core/component_registrator');
+const grep = require('../core/utils/common').grep;
+const extend = require('../core/utils/extend').extend;
+const arrayUtils = require('../core/utils/array');
+const iteratorUtils = require('../core/utils/iterator');
+const ActionSheetStrategy = require('./toolbar/ui.toolbar.strategy.action_sheet');
+const DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_menu');
+const ToolbarBase = require('./toolbar/ui.toolbar.base');
+const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 
-var STRATEGIES = {
+const STRATEGIES = {
     actionSheet: ActionSheetStrategy,
     dropDownMenu: DropDownMenuStrategy
 };
 
-var TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide',
-    TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide',
-    TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
+const TOOLBAR_AUTO_HIDE_ITEM_CLASS = 'dx-toolbar-item-auto-hide';
+const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
+const TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
 
 
-var Toolbar = ToolbarBase.inherit({
+const Toolbar = ToolbarBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -96,7 +96,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -139,7 +139,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
-        var itemElement = this.callBase(index, item, itemContainer, $after);
+        const itemElement = this.callBase(index, item, itemContainer, $after);
 
         if(item.locateInMenu === 'auto') {
             itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
@@ -157,7 +157,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _hideOverflowItems: function(elementWidth) {
-        var overflowItems = this.$element().find('.' + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+        const overflowItems = this.$element().find('.' + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
 
         if(!overflowItems.length) {
             return;
@@ -166,10 +166,10 @@ var Toolbar = ToolbarBase.inherit({
         elementWidth = elementWidth || this.$element().width();
         $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
-        var itemsWidth = this._getItemsWidth();
+        let itemsWidth = this._getItemsWidth();
 
         while(overflowItems.length && elementWidth < itemsWidth) {
-            var $item = overflowItems.eq(-1);
+            const $item = overflowItems.eq(-1);
             itemsWidth -= $item.outerWidth();
             $item.addClass(TOOLBAR_HIDDEN_ITEM);
             overflowItems.splice(-1, 1);
@@ -177,20 +177,20 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _getMenuItems: function() {
-        var that = this;
-        var menuItems = grep(this.option('items') || [], function(item) {
+        const that = this;
+        const menuItems = grep(this.option('items') || [], function(item) {
             return that._isMenuItem(item);
         });
 
-        var $hiddenItems = this._itemContainer()
+        const $hiddenItems = this._itemContainer()
             .children('.' + TOOLBAR_AUTO_HIDE_ITEM_CLASS + '.' + TOOLBAR_HIDDEN_ITEM)
             .not('.dx-state-invisible');
         this._restoreItems = this._restoreItems || [];
 
-        var overflowItems = [].slice.call($hiddenItems).map((item) => {
-            var itemData = that._getItemData(item),
-                $itemContainer = $(item).children(),
-                $itemMarkup = $itemContainer.children();
+        const overflowItems = [].slice.call($hiddenItems).map((item) => {
+            const itemData = that._getItemData(item);
+            const $itemContainer = $(item).children();
+            const $itemMarkup = $itemContainer.children();
 
             return extend({
                 menuItemTemplate: function() {
@@ -199,7 +199,7 @@ var Toolbar = ToolbarBase.inherit({
                         item: $itemMarkup
                     });
 
-                    var $container = $('<div>').addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+                    const $container = $('<div>').addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
                     return $container.append($itemMarkup);
                 }
             }, itemData);
@@ -209,7 +209,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _getToolbarItems: function() {
-        var that = this;
+        const that = this;
         return grep(this.option('items') || [], function(item) {
             return !that._isMenuItem(item);
         });
@@ -221,13 +221,13 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _renderMenuStrategy: function() {
-        var strategyName = this.option('submenuType');
+        let strategyName = this.option('submenuType');
 
         if(this._requireDropDownStrategy()) {
             strategyName = 'dropDownMenu';
         }
 
-        var strategy = STRATEGIES[strategyName];
+        const strategy = STRATEGIES[strategyName];
 
         if(!(this._menuStrategy && this._menuStrategy.NAME === strategyName)) {
             this._menuStrategy = new strategy(this);
@@ -235,8 +235,8 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _requireDropDownStrategy: function() {
-        var items = this.option('items') || [],
-            result = false;
+        const items = this.option('items') || [];
+        let result = false;
 
         iteratorUtils.each(items, function(index, item) {
             if(item.locateInMenu === 'auto') {
@@ -264,7 +264,7 @@ var Toolbar = ToolbarBase.inherit({
         });
         this._restoreItems = [];
 
-        var elementWidth = this.$element().width();
+        const elementWidth = this.$element().width();
 
         this._hideOverflowItems(elementWidth);
         this.callBase(elementWidth);
@@ -294,8 +294,8 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
-        var value = args.value;
+        const name = args.name;
+        const value = args.value;
 
         switch(name) {
             case 'submenuType':

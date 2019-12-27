@@ -1,24 +1,24 @@
-var eventsEngine = require('../events/core/events_engine'),
-    domAdapter = require('../core/dom_adapter'),
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    Class = require('../core/class'),
-    abstract = Class.abstract,
-    errors = require('./errors').errors,
-    ArrayStore = require('./array_store');
+const eventsEngine = require('../events/core/events_engine');
+const domAdapter = require('../core/dom_adapter');
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const Class = require('../core/class');
+const abstract = Class.abstract;
+const errors = require('./errors').errors;
+const ArrayStore = require('./array_store');
 
-var LocalStoreBackend = Class.inherit({
+const LocalStoreBackend = Class.inherit({
 
     ctor: function(store, storeOptions) {
         this._store = store;
         this._dirty = !!storeOptions.data;
         this.save();
 
-        var immediate = this._immediate = storeOptions.immediate;
-        var flushInterval = Math.max(100, storeOptions.flushInterval || 10 * 1000);
+        const immediate = this._immediate = storeOptions.immediate;
+        const flushInterval = Math.max(100, storeOptions.flushInterval || 10 * 1000);
 
         if(!immediate) {
-            var saveProxy = this.save.bind(this);
+            const saveProxy = this.save.bind(this);
             setInterval(saveProxy, flushInterval);
             eventsEngine.on(window, 'beforeunload', saveProxy);
             if(window.cordova) {
@@ -52,10 +52,10 @@ var LocalStoreBackend = Class.inherit({
     _saveImpl: abstract
 });
 
-var DomLocalStoreBackend = LocalStoreBackend.inherit({
+const DomLocalStoreBackend = LocalStoreBackend.inherit({
 
     ctor: function(store, storeOptions) {
-        var name = storeOptions.name;
+        const name = storeOptions.name;
         if(!name) {
             throw errors.Error('E4013');
         }
@@ -65,7 +65,7 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
     },
 
     _loadImpl: function() {
-        var raw = window.localStorage.getItem(this._key);
+        const raw = window.localStorage.getItem(this._key);
         if(raw) {
             return JSON.parse(raw);
         }
@@ -82,12 +82,12 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
 
 });
 
-var localStoreBackends = {
+const localStoreBackends = {
     'dom': DomLocalStoreBackend
 };
 
 
-var LocalStore = ArrayStore.inherit({
+const LocalStore = ArrayStore.inherit({
 
     ctor: function(options) {
         if(typeof options === 'string') {
@@ -108,17 +108,17 @@ var LocalStore = ArrayStore.inherit({
     },
 
     _insertImpl: function(values) {
-        var b = this._backend;
+        const b = this._backend;
         return this.callBase(values).done(b.notifyChanged.bind(b));
     },
 
     _updateImpl: function(key, values) {
-        var b = this._backend;
+        const b = this._backend;
         return this.callBase(key, values).done(b.notifyChanged.bind(b));
     },
 
     _removeImpl: function(key) {
-        var b = this._backend;
+        const b = this._backend;
         return this.callBase(key).done(b.notifyChanged.bind(b));
     }
 }, 'local');

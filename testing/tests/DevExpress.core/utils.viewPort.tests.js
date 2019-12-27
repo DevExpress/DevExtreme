@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    viewPortUtils = require('core/utils/view_port'),
-    viewPort = viewPortUtils.value,
-    viewPortChanged = viewPortUtils.changeCallback;
+const $ = require('jquery');
+const viewPortUtils = require('core/utils/view_port');
+const viewPort = viewPortUtils.value;
+const viewPortChanged = viewPortUtils.changeCallback;
 
 QUnit.module('viewPort utils', {
     beforeEach: function() {
@@ -19,10 +19,10 @@ QUnit.test('default viewPort is body when .dx-viewport element is not found', fu
 QUnit.test('custom viewPort element', function(assert) {
     assert.expect(3);
 
-    var $customViewport = $('<div>').addClass('dx-custom-viewport');
+    const $customViewport = $('<div>').addClass('dx-custom-viewport');
     $('#qunit-fixture').append($customViewport);
 
-    var callback = function(viewport, prevViewport) {
+    const callback = function(viewport, prevViewport) {
         assert.equal(viewport.get(0), $customViewport.get(0), 'new viewport passed');
         assert.equal(prevViewport.get(0), $('body').get(0), 'old viewport passed');
     };
@@ -41,7 +41,7 @@ QUnit.test('custom viewPort element', function(assert) {
 QUnit.test('when .dx-viewport is not found body should be previousViewport', function(assert) {
     $('#qunit-fixture').append($('<div class=\'dx-viewport\'>'));
 
-    var callback = function(viewport, prevViewport) {
+    const callback = function(viewport, prevViewport) {
         assert.equal(prevViewport.get(0), $('body').get(0), 'old viewport is body');
     };
 

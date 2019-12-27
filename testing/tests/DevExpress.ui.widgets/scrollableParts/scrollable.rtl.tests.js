@@ -9,9 +9,9 @@ import {
     RTL_CLASS
 } from './scrollable.constants.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
                 <div class="content2"></div>\
@@ -36,9 +36,9 @@ var moduleConfig = {
 QUnit.module('rtl', moduleConfig);
 
 QUnit.test('option \'rtl\'', function(assert) {
-    var $element = $('#scrollable');
+    const $element = $('#scrollable');
     new Scrollable($element);
-    var instance = Scrollable.getInstance($element);
+    const instance = Scrollable.getInstance($element);
 
     assert.ok(!$element.hasClass(RTL_CLASS));
 
@@ -47,20 +47,20 @@ QUnit.test('option \'rtl\'', function(assert) {
 });
 
 QUnit.test('rtlEnabled scrolls to very right position', function(assert) {
-    var $scrollable = $('#scrollable').dxScrollable({
+    const $scrollable = $('#scrollable').dxScrollable({
         direction: 'horizontal',
         rtlEnabled: true,
         useNative: false
     });
 
-    var scrollable = $scrollable.dxScrollable('instance');
-    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const scrollable = $scrollable.dxScrollable('instance');
+    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
 
 QUnit.test('rtlEnabled scrolls to very right position after changing the size of the scrollable (T544872)', function(assert) {
-    var $scrollable = $('#scrollableVary').dxScrollable({
+    const $scrollable = $('#scrollableVary').dxScrollable({
         direction: 'horizontal',
         rtlEnabled: true,
         width: 50,
@@ -68,15 +68,15 @@ QUnit.test('rtlEnabled scrolls to very right position after changing the size of
         useNative: false
     });
 
-    var scrollable = $scrollable.dxScrollable('instance');
-    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const scrollable = $scrollable.dxScrollable('instance');
+    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
 
 QUnit.test('rtlEnabled scrolls to very right position after shown event', function(assert) {
-    var $scrollable = $('#scrollable');
-    var $wrapper = $scrollable.wrap('<div>').parent().hide();
+    const $scrollable = $('#scrollable');
+    const $wrapper = $scrollable.wrap('<div>').parent().hide();
 
     $scrollable.dxScrollable({
         direction: 'horizontal',
@@ -86,15 +86,15 @@ QUnit.test('rtlEnabled scrolls to very right position after shown event', functi
 
     $wrapper.show();
     domUtils.triggerShownEvent($wrapper);
-    var scrollable = $scrollable.dxScrollable('instance');
-    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    const scrollable = $scrollable.dxScrollable('instance');
+    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, 'scrolled to very right position');
 });
 
 QUnit.test('init option \'rtl\' is true', function(assert) {
-    var $element = $('#scrollable').dxScrollable({ rtlEnabled: true }),
-        instance = $element.dxScrollable('instance');
+    const $element = $('#scrollable').dxScrollable({ rtlEnabled: true });
+    const instance = $element.dxScrollable('instance');
 
     assert.ok($element.hasClass(RTL_CLASS));
 

@@ -1,8 +1,8 @@
-var grep = require('../core/utils/common').grep,
-    extend = require('../core/utils/extend').extend,
-    each = require('../core/utils/iterator').each,
-    arrayQuery = require('./array_query'),
-    normalizeSortingInfo = require('./utils').normalizeSortingInfo;
+const grep = require('../core/utils/common').grep;
+const extend = require('../core/utils/extend').extend;
+const each = require('../core/utils/iterator').each;
+const arrayQuery = require('./array_query');
+const normalizeSortingInfo = require('./utils').normalizeSortingInfo;
 
 function multiLevelGroup(query, groupInfo) {
     query = query.groupBy(groupInfo[0].selector);
@@ -19,9 +19,9 @@ function multiLevelGroup(query, groupInfo) {
 }
 
 function arrangeSortingInfo(groupInfo, sortInfo) {
-    var filteredGroup = [];
+    const filteredGroup = [];
     each(groupInfo, function(_, group) {
-        var collision = grep(sortInfo, function(sort) {
+        const collision = grep(sortInfo, function(sort) {
             return group.selector === sort.selector;
         });
 
@@ -35,7 +35,7 @@ function arrangeSortingInfo(groupInfo, sortInfo) {
 function queryByOptions(query, options, isCountQuery) {
     options = options || {};
 
-    var filter = options.filter;
+    const filter = options.filter;
 
     if(filter) {
         query = query.filter(filter);
@@ -45,11 +45,11 @@ function queryByOptions(query, options, isCountQuery) {
         return query;
     }
 
-    var sort = options.sort,
-        select = options.select,
-        group = options.group,
-        skip = options.skip,
-        take = options.take;
+    let sort = options.sort;
+    const select = options.select;
+    let group = options.group;
+    const skip = options.skip;
+    const take = options.take;
 
     if(group) {
         group = normalizeSortingInfo(group);

@@ -122,42 +122,42 @@ QUnit.module('Width', () => {
             const config = `, scrollingEnabled=${scrollingEnabled}, change ${setWidthApproach}.width`;
 
             QUnit.test('Show fixed tabs, resize to show stretched tabs' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createFixedTabs(400);
                 helper.setWidth(200);
                 helper.checkStretchedTabs();
             });
 
             QUnit.test('Show fixed tabs, resize to show navigation buttons' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createFixedTabs(400);
                 helper.setWidth(100);
                 helper.checkNavigationButtonsTabs();
             });
 
             QUnit.test('Show stretched tabs, resize to show navigation buttons' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createStretchedTabs();
                 helper.setWidth(100);
                 helper.checkNavigationButtonsTabs();
             });
 
             QUnit.test('Show stretched tabs, resize to show fixed tabs' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createStretchedTabs();
                 helper.setWidth(400);
                 helper.checkFixedTabs();
             });
 
             QUnit.test('Show navigation buttons, resize to show stretched tabs' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createNavigationButtonsTabs();
                 helper.setWidth(200);
                 helper.checkStretchedTabs();
             });
 
             QUnit.test('Show navigation buttons, resize to show fixed tabs' + config, function(assert) {
-                let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+                const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createFixedTabs();
                 helper.setWidth(400);
                 helper.checkFixedTabs();
@@ -166,12 +166,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Does not render navbuttons: dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }', function(assert) {
-        var styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
+        const styles = '<style>.dx-tabs{ max-width: 413px; } .dx-tab{ width: 100px; }</style>';
 
         $('#qunit-fixture').html(styles);
 
-        let $container = $('<div>');
-        let $tabs = $('<div>');
+        const $container = $('<div>');
+        const $tabs = $('<div>');
 
         $tabs.appendTo($container).dxTabs({
             items: [
@@ -194,12 +194,12 @@ QUnit.module('Width', () => {
     });
 
     QUnit.test('Render navbuttons: dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }', function(assert) {
-        var styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
+        const styles = '<style>.dx-tabs{ max-width: 380px; } .dx-tab{ width: 100px; }</style>';
 
         $('#qunit-fixture').html(styles);
 
-        let $container = $('<div>');
-        let $tabs = $('<div>');
+        const $container = $('<div>');
+        const $tabs = $('<div>');
 
         $tabs.appendTo($container).dxTabs({
             items: [

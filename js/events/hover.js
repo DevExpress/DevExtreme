@@ -1,21 +1,21 @@
-var eventsEngine = require('../events/core/events_engine'),
-    dataUtils = require('../core/element_data'),
-    Class = require('../core/class'),
-    devices = require('../core/devices'),
-    registerEvent = require('./core/event_registrator'),
-    eventUtils = require('./utils'),
-    pointerEvents = require('./pointer');
+const eventsEngine = require('../events/core/events_engine');
+const dataUtils = require('../core/element_data');
+const Class = require('../core/class');
+const devices = require('../core/devices');
+const registerEvent = require('./core/event_registrator');
+const eventUtils = require('./utils');
+const pointerEvents = require('./pointer');
 
-var HOVERSTART_NAMESPACE = 'dxHoverStart',
-    HOVERSTART = 'dxhoverstart',
-    POINTERENTER_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE),
+const HOVERSTART_NAMESPACE = 'dxHoverStart';
+const HOVERSTART = 'dxhoverstart';
+const POINTERENTER_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.enter, HOVERSTART_NAMESPACE);
 
-    HOVEREND_NAMESPACE = 'dxHoverEnd',
-    HOVEREND = 'dxhoverend',
-    POINTERLEAVE_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
+const HOVEREND_NAMESPACE = 'dxHoverEnd';
+const HOVEREND = 'dxhoverend';
+const POINTERLEAVE_NAMESPACED_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
 
 
-var Hover = Class.inherit({
+const Hover = Class.inherit({
 
     noBubble: true,
 
@@ -28,10 +28,10 @@ var Hover = Class.inherit({
     },
 
     add: function(element, handleObj) {
-        var that = this,
-            handler = function(e) {
-                that._handler(e);
-            };
+        const that = this;
+        const handler = function(e) {
+            that._handler(e);
+        };
 
         eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
         dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
@@ -50,7 +50,7 @@ var Hover = Class.inherit({
     },
 
     remove: function(element, handleObj) {
-        var handler = dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid];
+        const handler = dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid];
 
         eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
     },
@@ -61,7 +61,7 @@ var Hover = Class.inherit({
 
 });
 
-var HoverStart = Hover.inherit({
+const HoverStart = Hover.inherit({
 
     ctor: function() {
         this._eventNamespace = HOVERSTART_NAMESPACE;
@@ -71,7 +71,7 @@ var HoverStart = Hover.inherit({
     },
 
     _handler: function(e) {
-        var pointers = e.pointers || [];
+        const pointers = e.pointers || [];
         if(!pointers.length) {
             this.callBase(e);
         }
@@ -79,7 +79,7 @@ var HoverStart = Hover.inherit({
 
 });
 
-var HoverEnd = Hover.inherit({
+const HoverEnd = Hover.inherit({
 
     ctor: function() {
         this._eventNamespace = HOVEREND_NAMESPACE;

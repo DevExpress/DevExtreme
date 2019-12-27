@@ -66,7 +66,7 @@ class OverlapStrategy extends DrawerStrategy {
             };
         }
         if(panelPosition === 'right') {
-            let my = drawer.option('rtlEnabled') ? 'top left' : 'top right';
+            const my = drawer.option('rtlEnabled') ? 'top left' : 'top right';
 
             result = {
                 my: my,
@@ -115,7 +115,7 @@ class OverlapStrategy extends DrawerStrategy {
         this.setupContent(config.$content, position, config.drawer);
 
         if(animate) {
-            let animationConfig = extend(config.defaultAnimationConfig, {
+            const animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
                 position: config.panelOffset,
                 duration: drawer.option('animationDuration'),
@@ -142,7 +142,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         translator.move(config.$panelOverlayContent, { left: 0 });
 
-        let animationConfig = extend(config.defaultAnimationConfig, {
+        const animationConfig = extend(config.defaultAnimationConfig, {
             $element: config.$panelOverlayContent,
             size: config.size,
             duration: drawer.option('animationDuration'),

@@ -16,7 +16,7 @@ const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
-        var markup = '\
+        const markup = '\
             <div id="scrollable" style="height: 50px; width: 50px;">\
                 <div class="content1" style="height: 100px; width: 100px;"></div>\
                 <div class="content2"></div>\
@@ -37,7 +37,7 @@ QUnit.test('support arrow keys', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
 
@@ -46,9 +46,9 @@ QUnit.test('support arrow keys', function(assert) {
         direction: 'both'
     });
 
-    var scrollable = $scrollable.dxScrollable('instance'),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        keyboard = keyboardMock($container);
+    const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
     $container.focus();
 
@@ -71,8 +71,8 @@ QUnit.test('support pageup and pagedown', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable'),
-        containerHeight = 100;
+    const $scrollable = $('#scrollable');
+    const containerHeight = 100;
 
     $scrollable.height(containerHeight);
     $scrollable.children().height(1000);
@@ -81,9 +81,9 @@ QUnit.test('support pageup and pagedown', function(assert) {
         useNative: false
     });
 
-    var scrollable = $scrollable.dxScrollable('instance'),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        keyboard = keyboardMock($container);
+    const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
     $container.focus();
 
@@ -101,9 +101,9 @@ QUnit.test('support end and home', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable'),
-        containerHeight = 100,
-        contentHeight = 1000;
+    const $scrollable = $('#scrollable');
+    const containerHeight = 100;
+    const contentHeight = 1000;
 
     $scrollable.height(containerHeight).wrapInner('<div>').children().height(contentHeight);
 
@@ -111,9 +111,9 @@ QUnit.test('support end and home', function(assert) {
         useNative: false
     });
 
-    var scrollable = $scrollable.dxScrollable('instance');
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var keyboard = keyboardMock($container);
+    const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
     $container.focus();
 
@@ -130,7 +130,7 @@ QUnit.test('supportKeyboard option', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
 
@@ -140,7 +140,7 @@ QUnit.test('supportKeyboard option', function(assert) {
         useKeyboard: false
     });
 
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
     assert.equal($container.attr('tabindex'), null, 'scrollable has not tabindex after focus');
 
@@ -152,7 +152,7 @@ QUnit.test('supportKeyboard option after render', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.width(100);
     $scrollable.children().width(200);
 
@@ -162,9 +162,9 @@ QUnit.test('supportKeyboard option after render', function(assert) {
         useKeyboard: true
     });
 
-    var scrollable = $scrollable.dxScrollable('instance'),
-        $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS),
-        keyboard = keyboardMock($container);
+    const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
 
     $container.focus();
 
@@ -183,7 +183,7 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.height(100);
     $scrollable.wrapInner('<div>');
     $scrollable.children().height(50);
@@ -194,12 +194,12 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
         bounceEnabled: false
     });
 
-    var count = 0;
+    let count = 0;
 
     $scrollable.on('scroll', function(assert) {
         count++;
     });
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     keyboardMock($container).keyDown('down');
 
     $container.focus();
@@ -213,7 +213,7 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
         return;
     }
 
-    var $scrollable = $('#scrollable');
+    const $scrollable = $('#scrollable');
     $scrollable.height(100);
     $scrollable.children().height(200);
 
@@ -225,11 +225,11 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
         useSimulatedScrollbar: true
     });
 
-    var scrollable = $scrollable.dxScrollable('instance');
-    var $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
-    var keyboard = keyboardMock($container);
-    var $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-    var pointer = pointerMock($scrollbar).start();
+    const scrollable = $scrollable.dxScrollable('instance');
+    const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
+    const keyboard = keyboardMock($container);
+    const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+    const pointer = pointerMock($scrollbar).start();
 
     $container.focus();
 
@@ -238,15 +238,15 @@ QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
         .move(0, 10)
         .up();
 
-    var scrollLocation = scrollable.scrollOffset().top;
+    const scrollLocation = scrollable.scrollOffset().top;
 
     keyboard.keyDown('down');
     assert.equal(scrollable.scrollOffset().top, SCROLL_LINE_HEIGHT + scrollLocation);
 });
 
 QUnit.testInActiveWindow('arrows was not handled when focus on input element', function(assert) {
-    var $scrollable = $('#scrollable');
-    var $input = $('<input type=\'text\' />').appendTo($scrollable);
+    const $scrollable = $('#scrollable');
+    const $input = $('<input type=\'text\' />').appendTo($scrollable);
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -260,7 +260,7 @@ QUnit.testInActiveWindow('arrows was not handled when focus on input element', f
             assert.equal(e.isDefaultPrevented(), false, 'event was not prevented');
         });
 
-        var keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input);
         keyboard.keyDown('down');
     } finally {
         $(document).off('keydown.test');
@@ -272,8 +272,8 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((useNativeMode) => {
         ['vertical', 'horizontal'].forEach((scrollbarDirection) => {
             function checkScrollLocation($scrollable, expectedLocation) {
-                let $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-                let scrollLocation = translator.locate($scroll);
+                const $scroll = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
+                const scrollLocation = translator.locate($scroll);
                 QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
             }
 
@@ -283,7 +283,7 @@ if(devices.real().deviceType === 'desktop') {
                     return;
                 }
 
-                let done = assert.async();
+                const done = assert.async();
 
                 const scrollableContainerSize = 200;
                 const $scrollable = $('#scrollable_container').dxScrollable({
@@ -295,8 +295,8 @@ if(devices.real().deviceType === 'desktop') {
                     useSimulatedScrollbar: true
                 });
 
-                let $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
-                let $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
+                const $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
+                const $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
 
                 if(scrollbarDirection === 'horizontal') {
                     $contentContainer1.css('display', 'inline-block');
@@ -325,7 +325,7 @@ if(devices.real().deviceType === 'desktop') {
     [1, 1.5, 0.25].forEach((browserZoom) => {
         ['up', 'down', 'left', 'right'].forEach((key) => {
             QUnit.testInActiveWindow(`Offset after press "${key}" key with browser zoom - ${browserZoom * 100}%: useNative - ${false}, direction: "both"`, function(assert) {
-                var $scrollable = $('#scrollable');
+                const $scrollable = $('#scrollable');
                 $scrollable.children().width(1000);
                 $scrollable.children().height(1000);
 

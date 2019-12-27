@@ -1,17 +1,17 @@
-var extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    _extend = extend,
-    _each = each,
-    legendModule = require('../components/legend'),
-    _BaseLegend = legendModule.Legend;
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const _extend = extend;
+const _each = each;
+const legendModule = require('../components/legend');
+const _BaseLegend = legendModule.Legend;
 
-var unknownSource = { category: 'UNKNOWN', name: 'UNKNOWN' };
+const unknownSource = { category: 'UNKNOWN', name: 'UNKNOWN' };
 
 function buildData(partition, values, field) {
-    var i,
-        ii = values.length,
-        list = [],
-        item;
+    let i;
+    const ii = values.length;
+    const list = [];
+    let item;
     for(i = 0; i < ii; ++i) {
         list[i] = item = {
             start: partition[i],
@@ -26,8 +26,8 @@ function buildData(partition, values, field) {
 }
 
 // 'var' because JSHint throws W021 error
-var Legend = function(parameters) {
-    var that = this;
+let Legend = function(parameters) {
+    const that = this;
     that._params = parameters;
     that._root = parameters.renderer.g().attr({ 'class': 'dxm-legend' }).linkOn(parameters.container, { name: 'legend', after: 'legend-base' }).enableLinks().linkAppend();
     parameters.layoutControl.addItem(that);
@@ -51,7 +51,7 @@ Legend.prototype = _extend(require('../../core/utils/object').clone(_BaseLegend.
     constructor: Legend,
 
     dispose: function() {
-        var that = this;
+        const that = this;
         that._params.layoutControl.removeItem(that);
         that._unbindData();
         that._root.linkRemove().linkOff();
@@ -90,10 +90,10 @@ Legend.prototype = _extend(require('../../core/utils/object').clone(_BaseLegend.
 
     // The `_root` should be appended or removed here but there is no way to check if core.Legend is actually enabled or not
     setOptions: function(options) {
-        var that = this;
+        const that = this;
         that.update(that._data, options, this._params.themeManager.theme('legend').title);
         that._unbindData();
-        let source = options.source;
+        const source = options.source;
         that._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
         that.updateLayout();
         return that;
@@ -117,12 +117,12 @@ LegendsControl.prototype = {
     },
 
     setOptions: function(options) {
-        var optionList = options && options.length ? options : [],
-            items = this._items,
-            i,
-            ii = optionList.length,
-            params = this._params,
-            theme = params.themeManager.theme('legend');
+        const optionList = options && options.length ? options : [];
+        const items = this._items;
+        let i;
+        const ii = optionList.length;
+        const params = this._params;
+        const theme = params.themeManager.theme('legend');
 
         for(i = items.length; i < ii; ++i) {
             items[i] = new Legend(params);
@@ -142,7 +142,7 @@ LegendsControl.prototype = {
 exports.LegendsControl = LegendsControl;
 
 ///#DEBUG
-var originalLegend = Legend;
+const originalLegend = Legend;
 exports._TESTS_Legend = Legend;
 exports._TESTS_stubLegendType = function(stub) {
     Legend = stub;

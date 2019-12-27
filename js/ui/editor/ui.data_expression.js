@@ -1,14 +1,14 @@
-var variableWrapper = require('../../core/utils/variable_wrapper'),
-    dataCoreUtils = require('../../core/utils/data'),
-    commonUtils = require('../../core/utils/common'),
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    DataHelperMixin = require('../../data_helper'),
-    DataSourceModule = require('../../data/data_source/data_source'),
-    ArrayStore = require('../../data/array_store'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const variableWrapper = require('../../core/utils/variable_wrapper');
+const dataCoreUtils = require('../../core/utils/data');
+const commonUtils = require('../../core/utils/common');
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const DataHelperMixin = require('../../data_helper');
+const DataSourceModule = require('../../data/data_source/data_source');
+const ArrayStore = require('../../data/array_store');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var DataExpressionMixin = extend({}, DataHelperMixin, {
+const DataExpressionMixin = extend({}, DataHelperMixin, {
 
     _dataExpressionDefaultOptions: function() {
         return {
@@ -61,7 +61,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _loadValue: function(value) {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
         value = this._unwrappedValue(value);
 
         if(!typeUtils.isDefined(value)) {
@@ -96,11 +96,11 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _getItemKey: function(value) {
-        var key = this._dataSource.key();
+        const key = this._dataSource.key();
 
         if(Array.isArray(key)) {
-            var result = {};
-            for(var i = 0, n = key.length; i < n; i++) {
+            const result = {};
+            for(let i = 0, n = key.length; i < n; i++) {
                 result[key[i]] = value[key[i]];
             }
             return result;
@@ -114,10 +114,10 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _isValueEquals: function(value1, value2) {
-        var dataSourceKey = this._dataSource && this._dataSource.key();
+        const dataSourceKey = this._dataSource && this._dataSource.key();
 
-        var isDefined = typeUtils.isDefined;
-        var result = this._compareValues(value1, value2);
+        const isDefined = typeUtils.isDefined;
+        let result = this._compareValues(value1, value2);
 
         if(!result && dataSourceKey && isDefined(value1) && isDefined(value2)) {
             if(Array.isArray(dataSourceKey)) {
@@ -131,13 +131,13 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compareByCompositeKey: function(value1, value2, key) {
-        var isObject = typeUtils.isObject;
+        const isObject = typeUtils.isObject;
 
         if(!isObject(value1) || !isObject(value2)) {
             return false;
         }
 
-        for(var i = 0, n = key.length; i < n; i++) {
+        for(let i = 0, n = key.length; i < n; i++) {
             if(value1[key[i]] !== value2[key[i]]) {
                 return false;
             }
@@ -147,10 +147,10 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compareByKey: function(value1, value2, key) {
-        var ensureDefined = commonUtils.ensureDefined;
-        var unwrapObservable = variableWrapper.unwrap;
-        var valueKey1 = ensureDefined(unwrapObservable(value1[key]), value1);
-        var valueKey2 = ensureDefined(unwrapObservable(value2[key]), value2);
+        const ensureDefined = commonUtils.ensureDefined;
+        const unwrapObservable = variableWrapper.unwrap;
+        const valueKey1 = ensureDefined(unwrapObservable(value1[key]), value1);
+        const valueKey2 = ensureDefined(unwrapObservable(value2[key]), value2);
 
         return this._compareValues(valueKey1, valueKey2);
     },
@@ -167,8 +167,8 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _getCollectionKeyExpr: function() {
-        var valueExpr = this.option('valueExpr');
-        var isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== 'this' || typeUtils.isFunction(valueExpr);
+        const valueExpr = this.option('valueExpr');
+        const isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== 'this' || typeUtils.isFunction(valueExpr);
 
         return isValueExprField ? valueExpr : null;
     },

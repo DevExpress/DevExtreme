@@ -1,14 +1,14 @@
-var gulp = require('gulp');
-var replace = require('gulp-replace');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var header = require('gulp-header');
-var eol = require('gulp-eol');
+const gulp = require('gulp');
+const replace = require('gulp-replace');
+const concat = require('gulp-concat');
+const rename = require('gulp-rename');
+const header = require('gulp-header');
+const eol = require('gulp-eol');
 
-var context = require('./context.js');
-var headerPipes = require('./header-pipes.js');
+const context = require('./context.js');
+const headerPipes = require('./header-pipes.js');
 
-var BUNDLE_CONFIG_SOURCES = [
+const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
     'js/bundles/modules/parts/data.js',
     'js/bundles/modules/parts/widgets-base.js',

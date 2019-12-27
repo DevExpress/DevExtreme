@@ -1,27 +1,27 @@
-var common = require('./commonParts/common.js'),
-    createFunnel = common.createFunnel,
-    environment = common.environment;
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
 
 QUnit.module('Algorithms', environment);
 
 QUnit.test('Funnel. Normalize values', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [
-                {
-                    value: 430
-                },
-                {
-                    value: 201
-                },
-                {
-                    value: 300
-                },
-                {
-                    value: 45
-                }
-            ]
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        dataSource: [
+            {
+                value: 430
+            },
+            {
+                value: 201
+            },
+            {
+                value: 300
+            },
+            {
+                value: 45
+            }
+        ]
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items.length, 4);
     assert.equal(items[0].percent, 1);
@@ -48,7 +48,7 @@ QUnit.test('Funnel. Drawing', function(assert) {
         ]
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 848.8, 100, 151.1, 100]);
@@ -58,24 +58,24 @@ QUnit.test('Funnel. Drawing', function(assert) {
 });
 
 QUnit.test('Pyramid. Normalize values', function(assert) {
-    var funnel = createFunnel({
-            algorithm: 'dynamicHeight',
-            dataSource: [
-                {
-                    value: 430
-                },
-                {
-                    value: 201
-                },
-                {
-                    value: 300
-                },
-                {
-                    value: 45
-                }
-            ]
-        }),
-        items = funnel.getAllItems();
+    const funnel = createFunnel({
+        algorithm: 'dynamicHeight',
+        dataSource: [
+            {
+                value: 430
+            },
+            {
+                value: 201
+            },
+            {
+                value: 300
+            },
+            {
+                value: 45
+            }
+        ]
+    });
+    const items = funnel.getAllItems();
 
     assert.equal(items.length, 4);
     assert.roughEqual(items[0].percent, 0.44, 0.01);
@@ -102,7 +102,7 @@ QUnit.test('Pyramid. Drawing', function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);
@@ -129,7 +129,7 @@ QUnit.test('Normalize algorithm name', function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);
@@ -157,7 +157,7 @@ QUnit.test('Pyramid. Drawing with neckWidth', function(assert) {
             }
         ]
     });
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 823.7, 176.2, 176.2, 176.2]);
@@ -187,7 +187,7 @@ QUnit.test('Pyramid. Drawing with neckHeight', function(assert) {
         ]
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 785, 176.2, 214.9, 176.2]);
@@ -197,7 +197,7 @@ QUnit.test('Pyramid. Drawing with neckHeight', function(assert) {
 });
 
 QUnit.test('Pyramid. Update neckWidth and neckHeight', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         algorithm: 'dynamicHeight',
         neckWidth: 0.2,
         neckHeight: 0.18,
@@ -219,7 +219,7 @@ QUnit.test('Pyramid. Update neckWidth and neckHeight', function(assert) {
 
     funnel.option({ neckWidth: 0.3, neckHeight: 0.4 });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 743, 176.2, 257, 176.2]);
@@ -229,7 +229,7 @@ QUnit.test('Pyramid. Update neckWidth and neckHeight', function(assert) {
 });
 
 QUnit.test('Update option from funnel to pyramid', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [
             {
                 value: 430
@@ -248,7 +248,7 @@ QUnit.test('Update option from funnel to pyramid', function(assert) {
 
     funnel.option({ algorithm: 'dynamicHeight' });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 4);
     assert.checkItem(items[0].attr.firstCall.args[0].points, [0, 0, 1000, 0, 779.7, 176.2, 220.2, 176.2]);

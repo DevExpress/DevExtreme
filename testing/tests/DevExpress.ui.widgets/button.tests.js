@@ -374,20 +374,20 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should not be enabled on pending', (assert) => {
         try {
             const validator = new Validator(document.createElement('div'), {
-                    adapter: sinon.createStubInstance(DefaultAdapter),
-                    validationRules: [{
-                        type: 'async',
-                        validationCallback: function() {
-                            const d = new Deferred();
-                            return d.promise();
-                        }
-                    }]
-                }),
-                clickHandlerSpy = sinon.spy(e => {
-                    assert.ok(e.isDefaultPrevented(), 'default is prevented');
-                }),
-                $element = this.$element.dxButton({ validationGroup: 'testGroup' }),
-                buttonInstance = this.$element.dxButton('instance');
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: 'async',
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        return d.promise();
+                    }
+                }]
+            });
+            const clickHandlerSpy = sinon.spy(e => {
+                assert.ok(e.isDefaultPrevented(), 'default is prevented');
+            });
+            const $element = this.$element.dxButton({ validationGroup: 'testGroup' });
+            const buttonInstance = this.$element.dxButton('instance');
 
 
             ValidationEngine.registerValidatorInGroup('testGroup', validator);
@@ -409,19 +409,19 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed negatively', (assert) => {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
-                adapter: sinon.createStubInstance(DefaultAdapter),
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function() {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.reject();
-                        }, 10);
-                        return d.promise();
-                    }
-                }]
-            }),
-            done = assert.async();
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'async',
+                validationCallback: function() {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        });
+        const done = assert.async();
 
         this.$element.dxButton({
             validationGroup: 'testGroup',
@@ -446,19 +446,19 @@ QUnit.module('submit behavior', {
     QUnit.test('Submit button should change the \'disabled\' option to \'false\' when validation is passed positively', (assert) => {
         this.clock.restore();
         const validator = new Validator($('<div>').appendTo(this.$form), {
-                adapter: sinon.createStubInstance(DefaultAdapter),
-                validationRules: [{
-                    type: 'async',
-                    validationCallback: function() {
-                        const d = new Deferred();
-                        setTimeout(() => {
-                            d.resolve();
-                        }, 10);
-                        return d.promise();
-                    }
-                }]
-            }),
-            done = assert.async();
+            adapter: sinon.createStubInstance(DefaultAdapter),
+            validationRules: [{
+                type: 'async',
+                validationCallback: function() {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        });
+        const done = assert.async();
 
         this.$element.dxButton({
             validationGroup: 'testGroup',

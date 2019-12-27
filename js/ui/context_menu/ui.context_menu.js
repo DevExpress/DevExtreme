@@ -351,7 +351,7 @@ class ContextMenu extends MenuBase {
 
         this._overlay = this._createComponent($('<div>').appendTo(this._$element), Overlay, overlayOptions);
 
-        let $overlayContent = this._overlay.$content();
+        const $overlayContent = this._overlay.$content();
         $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
 
         this._addCustomCssClass($overlayContent);
@@ -435,7 +435,7 @@ class ContextMenu extends MenuBase {
             .addClass(DX_SUBMENU_CLASS)
             .css('visibility', submenuContainer ? 'hidden' : 'visible');
 
-        let $itemsContainer = super._renderContainer($wrapper);
+        const $itemsContainer = super._renderContainer($wrapper);
 
         if(submenuContainer) {
             return $itemsContainer;
@@ -653,7 +653,7 @@ class ContextMenu extends MenuBase {
     _getSubmenuPosition($rootItem) {
         const submenuDirection = this.option('submenuDirection').toLowerCase();
         const $rootItemWrapper = $rootItem.parent(`.${DX_MENU_ITEM_WRAPPER_CLASS}`);
-        let position = {
+        const position = {
             collision: 'flip',
             of: $rootItemWrapper,
             offset: { h: 0, v: -1 }
@@ -742,7 +742,7 @@ class ContextMenu extends MenuBase {
 
     _hideSubmenuCore($submenu) {
         const index = inArray($submenu, this._shownSubmenus);
-        let animation = this.option('animation') ? this.option('animation').hide : null;
+        const animation = this.option('animation') ? this.option('animation').hide : null;
 
         if(index >= 0) {
             this._shownSubmenus.splice(index, 1);
@@ -759,7 +759,7 @@ class ContextMenu extends MenuBase {
 
     _hideAllShownSubmenus() {
         const shownSubmenus = extend([], this._shownSubmenus);
-        let $expandedItems = this._overlay.$content().find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`);
+        const $expandedItems = this._overlay.$content().find(`.${DX_MENU_ITEM_EXPANDED_CLASS}`);
 
         $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
@@ -868,7 +868,7 @@ class ContextMenu extends MenuBase {
             position.of = jQEvent;
         }
 
-        let actionArgs = {
+        const actionArgs = {
             position: position,
             event: jQEvent
         };

@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createSankey = common.createSankey,
-    layoutBuilder = common.layoutBuilder,
-    spiesLayoutBuilder = common.spiesLayoutBuilder,
-    environment = common.environment,
-    find = common.find,
-    rendererModule = require('viz/core/renderers/renderer'),
-    paletteModule = require('viz/palette'),
-    themeModule = require('viz/themes');
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createSankey = common.createSankey;
+const layoutBuilder = common.layoutBuilder;
+const spiesLayoutBuilder = common.spiesLayoutBuilder;
+const environment = common.environment;
+const find = common.find;
+const rendererModule = require('viz/core/renderers/renderer');
+const paletteModule = require('viz/palette');
+const themeModule = require('viz/themes');
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -23,7 +23,7 @@ themeModule.registerTheme({
 QUnit.module('Initialization', environment);
 
 QUnit.test('Create empty widget', function(assert) {
-    var sankey = createSankey({});
+    const sankey = createSankey({});
 
     assert.ok(sankey);
     assert.equal(rendererModule.Renderer.firstCall.args[0].cssClass, 'dxs dxs-sankey', 'rootClass prefix rootClass');
@@ -34,13 +34,13 @@ QUnit.test('Create empty widget', function(assert) {
 
 QUnit.test('Default size', function(assert) {
     $('#test-container').hide();
-    var sankey = createSankey({});
+    const sankey = createSankey({});
 
     assert.deepEqual(sankey.getSize(), { width: 400, height: 400 });
 });
 
 QUnit.test('Base sankey not fail when tooltip api is called', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
     });
 
@@ -66,7 +66,7 @@ QUnit.module('DataSource processing', $.extend({}, environment, {
 }));
 
 QUnit.test('Process values from dataSource and pass them to layout builder', function(assert) {
-    var data = [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }];
+    const data = [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }];
     createSankey({
         layoutBuilder: layoutBuilder,
         dataSource: data
@@ -79,7 +79,7 @@ QUnit.test('Process values from dataSource and pass them to layout builder', fun
 });
 
 QUnit.test('Process values from dataSource with custom sourceField, targetField, weightField and pass them to layout builder', function(assert) {
-    var data = [{ src: 'A', destination: 'B', value: 1 }, { src: 'B', destination: 'C', value: 1 }];
+    const data = [{ src: 'A', destination: 'B', value: 1 }, { src: 'B', destination: 'C', value: 1 }];
     createSankey({
         layoutBuilder: layoutBuilder,
         dataSource: data,
@@ -96,18 +96,18 @@ QUnit.test('Process values from dataSource with custom sourceField, targetField,
 
 
 QUnit.test('Trigger error on invalid source data', function(assert) {
-    var invalidDataSets = [
-            [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
-            [{ source: 'A', target: 'B', weight: 0 }, { source: 'A', target: 'C', weight: 1 }],
-            [{ source: 'A', target: 1, weight: 1 }, { source: 'A', target: 'C', weight: 1 }],
-            [{ source: 'A', target: 'B', weight: 1 }, { source: 1, target: 'C', weight: 1 }],
-            [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C', weight: -5 }],
-            ['ABCD', { source: 'A', target: 'C', weight: 1 }]
-        ],
-        expectedErrorCodes = [
-            'E2007', 'E2009', 'E2008', 'E2008', 'E2009', 'E2007'
-        ],
-        spy = sinon.spy();
+    const invalidDataSets = [
+        [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
+        [{ source: 'A', target: 'B', weight: 0 }, { source: 'A', target: 'C', weight: 1 }],
+        [{ source: 'A', target: 1, weight: 1 }, { source: 'A', target: 'C', weight: 1 }],
+        [{ source: 'A', target: 'B', weight: 1 }, { source: 1, target: 'C', weight: 1 }],
+        [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C', weight: -5 }],
+        ['ABCD', { source: 'A', target: 'C', weight: 1 }]
+    ];
+    const expectedErrorCodes = [
+        'E2007', 'E2009', 'E2008', 'E2008', 'E2009', 'E2007'
+    ];
+    const spy = sinon.spy();
 
     invalidDataSets.forEach(function(data, dataIdx) {
         spy.reset();
@@ -124,11 +124,11 @@ QUnit.test('Trigger error on invalid source data', function(assert) {
 });
 
 QUnit.test('Trigger "cycle detected" error on invalid source data', function(assert) {
-    var invalidDataSets = [
-            [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'A', weight: 1 }],
-            [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }, { source: 'C', target: 'D', weight: 1 }, { source: 'D', target: 'A', weight: 1 }]
-        ],
-        spy = sinon.spy();
+    const invalidDataSets = [
+        [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'A', weight: 1 }],
+        [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }, { source: 'C', target: 'D', weight: 1 }, { source: 'D', target: 'A', weight: 1 }]
+    ];
+    const spy = sinon.spy();
 
     invalidDataSets.forEach(function(data) {
         spy.reset();
@@ -145,7 +145,7 @@ QUnit.test('Trigger "cycle detected" error on invalid source data', function(ass
 });
 
 QUnit.test('Empty data source, warning shouldn\'t fire', function(assert) {
-    var spy = sinon.stub();
+    const spy = sinon.stub();
     createSankey({
         layoutBuilder: layoutBuilder,
         dataSource: [],
@@ -423,35 +423,35 @@ QUnit.module('Returning correct layout data', $.extend({}, environment, {
 }));
 
 QUnit.test('Returning all nodes in getAllNodes', function(assert) {
-    var sankey = createSankey({
-            layoutBuilder: layoutBuilder,
-            dataSource: common.testData.countriesData
-        }),
-        nodes = sankey.getAllNodes();
+    const sankey = createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.countriesData
+    });
+    const nodes = sankey.getAllNodes();
 
     assert.equal(nodes.length, 16);
 });
 
 QUnit.test('Returning all links data in getAllLinks', function(assert) {
-    var sankey = createSankey({
-            layoutBuilder: layoutBuilder,
-            dataSource: common.testData.countriesData
-        }),
-        links = sankey.getAllLinks();
+    const sankey = createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.countriesData
+    });
+    const links = sankey.getAllLinks();
 
     assert.equal(links.length, 46);
 });
 
 QUnit.test('Returning correct links[].connection data in getAllLinks', function(assert) {
-    var sankey = createSankey({
-            layoutBuilder: layoutBuilder,
-            dataSource: common.testData.simpleData
-        }),
-        links = sankey.getAllLinks();
+    const sankey = createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.simpleData
+    });
+    const links = sankey.getAllLinks();
 
     assert.equal(links.length, common.testData.simpleData.length);
     common.testData.simpleData.forEach(function(linkData) {
-        var output = find(links, function(i) {
+        const output = find(links, function(i) {
             return i.connection.source === linkData.source && i.connection.target === linkData.target && i.connection.weight === linkData.weight;
         });
         assert.ok(typeof output !== 'undefined');
@@ -459,16 +459,16 @@ QUnit.test('Returning correct links[].connection data in getAllLinks', function(
 });
 
 QUnit.test('Returning correct nodes[].linksIn and nodes[].linksOut data in getAllNodes', function(assert) {
-    var sankey = createSankey({
-            layoutBuilder: layoutBuilder,
-            dataSource: common.testData.simpleData
-        }),
-        nodes = sankey.getAllNodes(),
-        expected = { 'A': [0, 1], 'B': [0, 2], 'C': [0, 1], 'M': [2, 1], Y: [3, 0] };
+    const sankey = createSankey({
+        layoutBuilder: layoutBuilder,
+        dataSource: common.testData.simpleData
+    });
+    const nodes = sankey.getAllNodes();
+    const expected = { 'A': [0, 1], 'B': [0, 2], 'C': [0, 1], 'M': [2, 1], Y: [3, 0] };
 
     assert.equal(nodes.length, 5);
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.linksIn.length, expected[nodeName][0]);
         assert.equal(node.linksOut.length, expected[nodeName][1]);
     });
@@ -492,7 +492,7 @@ QUnit.test('Draw Links', function(assert) {
         dataSource: common.testData.simpleData
     });
 
-    var links = this.links();
+    const links = this.links();
     assert.equal(links.length, 5);
     assert.equal(this.linksGroup().clear.callCount, 1);
 
@@ -531,32 +531,32 @@ QUnit.test('Draw Nodes', function(assert) {
         dataSource: common.testData.simpleData
     });
 
-    var nodes = this.nodes(),
-        expected = {
-            A: { x: 0, y: 0, height: 42, width: 15, _name: 'A' },
-            B: { x: 0, y: 72, height: 255, width: 15, _name: 'B' },
-            C: { x: 0, y: 357, height: 42, width: 15, _name: 'C' },
-            M: { x: 485, y: 94, height: 212, width: 15, _name: 'M' },
-            Y: { x: 985, y: 30, height: 340, width: 15, _name: 'Y' }
-        };
+    const nodes = this.nodes();
+    const expected = {
+        A: { x: 0, y: 0, height: 42, width: 15, _name: 'A' },
+        B: { x: 0, y: 72, height: 255, width: 15, _name: 'B' },
+        C: { x: 0, y: 357, height: 42, width: 15, _name: 'C' },
+        M: { x: 485, y: 94, height: 212, width: 15, _name: 'M' },
+        Y: { x: 985, y: 30, height: 340, width: 15, _name: 'Y' }
+    };
     assert.equal(nodes.length, 5, 'Number of nodes');
     assert.equal(this.nodesGroup().clear.callCount, 1, 'Existing nodes cleared');
 
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
+        const node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(node.attr.firstCall.args[0], expected[nodeName], 'Node ' + nodeName + ': params match');
     });
 });
 
 QUnit.test('Resize', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
     });
     this.nodesGroup().clear.reset();
 
     sankey.option('size', { width: 900, height: 600 });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.equal(nodes.length, 2);
     assert.equal(this.nodesGroup().clear.callCount, 1, 'Cleared on resize');
@@ -574,7 +574,7 @@ QUnit.test('Palette', function(assert) {
         paletteExtensionMode: 'blend'
     });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, 'red');
@@ -591,7 +591,7 @@ QUnit.test('Palette', function(assert) {
 });
 
 QUnit.test('Sankey fires drawn event', function(assert) {
-    var drawn = sinon.spy();
+    const drawn = sinon.spy();
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         onDrawn: drawn
@@ -601,8 +601,8 @@ QUnit.test('Sankey fires drawn event', function(assert) {
 });
 
 QUnit.test('Sankey fires once drawn event if asynchronus dataSource ', function(assert) {
-    var drawn = sinon.spy(),
-        d = $.Deferred();
+    const drawn = sinon.spy();
+    const d = $.Deferred();
 
     createSankey({
         dataSource: {
@@ -622,15 +622,15 @@ QUnit.test('Sankey fires once drawn event if asynchronus dataSource ', function(
 QUnit.module('Align options applying', environment);
 
 QUnit.test('Largest cascade occupies full chart height', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }]
-        }),
-        size = sankey.getSize(),
-        nodes = sankey.getAllNodes(),
-        cascadeHeight = 0;
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }]
+    });
+    const size = sankey.getSize();
+    const nodes = sankey.getAllNodes();
+    let cascadeHeight = 0;
 
     ['A', 'B', 'C'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         cascadeHeight += node.rect.height + (nodeName !== 'C' ? 30 : 0);
     });
 
@@ -638,56 +638,56 @@ QUnit.test('Largest cascade occupies full chart height', function(assert) {
 });
 
 QUnit.test('Default align option', function(assert) {
-    var sankey = createSankey({
-            dataSource: common.testData.simpleData
-        }),
-        size = sankey.getSize(),
-        nodes = sankey.getAllNodes();
+    const sankey = createSankey({
+        dataSource: common.testData.simpleData
+    });
+    const size = sankey.getSize();
+    const nodes = sankey.getAllNodes();
 
     ['M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height / 2, size.height / 2, nodeName + ' aligned to middle');
     });
 });
 
 QUnit.test('Align option as <String>', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }],
-            alignment: 'bottom'
-        }),
-        size = sankey.getSize(),
-        nodes = sankey.getAllNodes();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }],
+        alignment: 'bottom'
+    });
+    const size = sankey.getSize();
+    const nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, nodeName + ' aligned to bottom');
     });
 });
 
 QUnit.test('Align option as <Array>', function(assert) {
-    var sankey = createSankey({
-            dataSource: common.testData.simpleData,
-            alignment: ['top', 'top', 'top']
-        }),
-        nodes = sankey.getAllNodes();
+    const sankey = createSankey({
+        dataSource: common.testData.simpleData,
+        alignment: ['top', 'top', 'top']
+    });
+    const nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
 
 });
 
 QUnit.test('Default alignment value for cascade which is not mentioned in options.alignment', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [
             { source: 'A', target: 'Z', weight: 1 },
             { source: 'B', target: 'Z', weight: 1 }
         ],
         alignment: ['top']
     });
-    var nodes = sankey.getAllNodes(),
-        node = find(nodes, function(node) { return node.title === 'Z'; });
+    const nodes = sankey.getAllNodes();
+    const node = find(nodes, function(node) { return node.title === 'Z'; });
 
     // 'Z' is expected to be centered
     assert.equal(node.rect.y, 15, 'Z aligned to center');
@@ -696,13 +696,13 @@ QUnit.test('Default alignment value for cascade which is not mentioned in option
 QUnit.module('Update options', environment);
 
 QUnit.test('Update styles of nodes', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
     });
 
     sankey.option({ node: { border: { visible: true, width: 3, color: 'red', opacity: 0.1 } } });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]['stroke-width'], 3);
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]['stroke-opacity'], 0.1);
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]['stroke'], 'red');
@@ -713,7 +713,7 @@ QUnit.test('Update styles of nodes', function(assert) {
 });
 
 QUnit.test('Update styles of links', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
     });
 
@@ -725,19 +725,19 @@ QUnit.test('Update styles of links', function(assert) {
 });
 
 QUnit.test('Update color of nodes', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
     });
 
     sankey.option({ node: { color: 'green' } });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0]['fill'], 'green', 'fill applied');
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0]['fill'], 'green', 'fill applied');
 });
 
 QUnit.test('Update color of links', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }]
     });
     sankey.option({ link: { color: 'gray' } });
@@ -748,21 +748,21 @@ QUnit.test('Update color of links', function(assert) {
 QUnit.test('Update palette', function(assert) {
     sinon.spy(paletteModule, 'createPalette');
 
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
         palette: ['red', 'blue']
     });
 
     sankey.option({ palette: ['green', 'orange'] });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, 'orange');
 });
 
 QUnit.test('Update paletteExtenstionMode', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         algorithm: 'stub',
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         palette: ['green', 'red']
@@ -770,7 +770,7 @@ QUnit.test('Update paletteExtenstionMode', function(assert) {
 
     sankey.option({ paletteExtensionMode: 'alternate' });
 
-    var nodes = this.nodes();
+    const nodes = this.nodes();
 
     assert.deepEqual(nodes[0].smartAttr.lastCall.args[0].fill, 'green');
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, 'red');
@@ -778,55 +778,55 @@ QUnit.test('Update paletteExtenstionMode', function(assert) {
 });
 
 QUnit.test('SortData option', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         sortData: { A: 1, B: 2 }
     });
 
     sankey.option({ sortData: { A: 2, B: 1 } });
-    var nodesSorted = sankey.getAllNodes();
+    const nodesSorted = sankey.getAllNodes();
 
     assert.equal(nodesSorted[0].title, 'B');
     assert.equal(nodesSorted[1].title, 'A');
 });
 
 QUnit.test('Align option updated as <String>', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }],
-            alignment: 'top'
-        }),
-        size = sankey.getSize();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Y', weight: 1 }, { source: 'B', target: 'Y', weight: 1 }, { source: 'B', target: 'M', weight: 1 }, { source: 'C', target: 'M', weight: 1 }, { source: 'M', target: 'Y', weight: 1 }],
+        alignment: 'top'
+    });
+    const size = sankey.getSize();
 
     sankey.option({ alignment: 'bottom' });
-    var nodes = sankey.getAllNodes();
+    const nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, 'aligned to bottom');
     });
 });
 
 QUnit.test('Align option updated as <Array>', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: common.testData.simpleData,
         alignment: 'bottom'
     });
 
     sankey.option({ alignment: ['top', 'top', 'top'] });
-    var nodes = sankey.getAllNodes();
+    const nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        var node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.title === nodeName; });
         assert.equal(node.rect.y, 0, 'aligned to top');
     });
 });
 
 QUnit.test('Redrawn on nodes.padding option updated', function(assert) {
-    var drawn = sinon.spy(),
-        sankey = createSankey({
-            dataSource: common.testData.simpleData,
-            onDrawn: drawn
-        });
+    const drawn = sinon.spy();
+    const sankey = createSankey({
+        dataSource: common.testData.simpleData,
+        onDrawn: drawn
+    });
 
     sankey.option({ node: { padding: 50 } });
 

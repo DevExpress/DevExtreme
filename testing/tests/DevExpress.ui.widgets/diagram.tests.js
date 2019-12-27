@@ -90,7 +90,7 @@ QUnit.module('Diagram DOM Layout', {
     function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
         assert.equal($scrollContainer.width(), $actualContainer.width());
         assert.equal($scrollContainer.height(), $actualContainer.height());
-        var coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        const coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
         assert.equal(coreScrollSize.width, $actualContainer.width());
         assert.equal(coreScrollSize.height, $actualContainer.height());
     }
@@ -108,11 +108,11 @@ QUnit.module('Diagram Toolbar', {
 }, () => {
     test('should not render if toolbar.visible is false', (assert) => {
         this.instance.option('toolbar.visible', false);
-        let $toolbar = this.$element.find(TOOLBAR_SELECTOR);
+        const $toolbar = this.$element.find(TOOLBAR_SELECTOR);
         assert.equal($toolbar.length, 0);
     });
     test('should fill toolbar with default items', (assert) => {
-        let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar('instance');
+        const toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar('instance');
         assert.ok(toolbar.option('dataSource').length > 10);
     });
     test('should fill toolbar with custom items', (assert) => {
@@ -129,7 +129,7 @@ QUnit.module('Diagram Toolbar', {
         assert.equal(toolbar.option('dataSource').length, 1);
     });
     test('should enable items on diagram request', (assert) => {
-        let undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
+        const undoButton = findToolbarItem(this.$element, 'undo').dxButton('instance');
         assert.ok(undoButton.option('disabled'));
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(true);
         assert.notOk(undoButton.option('disabled'));
@@ -196,7 +196,7 @@ QUnit.module('Diagram Toolbar', {
     });
     test('should toggle fullscreen class name on button click', (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullScreenButton = findToolbarItem(this.$element, 'full screen');
+        const fullScreenButton = findToolbarItem(this.$element, 'full screen');
         fullScreenButton.trigger('dxclick');
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
         fullScreenButton.trigger('dxclick');
@@ -243,16 +243,16 @@ QUnit.module('Diagram Toolbar', {
 QUnit.module('Diagram Toolbox', moduleConfig, () => {
     test('should not render if toolbox.visible is false', (assert) => {
         this.instance.option('toolbox.visible', false);
-        let $accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR);
+        const $accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 0);
     });
     test('should fill toolbox with default items', (assert) => {
-        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
+        const accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.ok(accordion.option('dataSource').length > 1);
     });
     test('should fill toolbox with custom items', (assert) => {
         this.instance.option('toolbox.groups', ['general']);
-        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
+        const accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion('instance');
         assert.equal(accordion.option('dataSource').length, 1);
     });
 });
@@ -260,16 +260,16 @@ QUnit.module('Diagram Toolbox', moduleConfig, () => {
 QUnit.module('Diagram Properties Panel', moduleConfig, () => {
     test('should not render if propertiesPanel.enabled is false', (assert) => {
         this.instance.option('propertiesPanel.enabled', false);
-        let $accordion = this.$element.find(PROPERTIES_PANEL_ACCORDION_SELECTOR);
+        const $accordion = this.$element.find(PROPERTIES_PANEL_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 0);
     });
     test('should fill properties panel with default items', (assert) => {
-        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm('instance');
+        const form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm('instance');
         assert.ok(form.option('items').length > 1);
     });
     test('should fill toolbox with custom items', (assert) => {
         this.instance.option('propertiesPanel.groups', [{ commands: ['units'] }]);
-        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm('instance');
+        const form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm('instance');
         assert.equal(form.option('items').length, 1);
     });
 });
@@ -543,7 +543,7 @@ QUnit.module('ClientSideEvents', {
 }, () => {
     test('click on unbound diagram', (assert) => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
-        var clickedItem;
+        let clickedItem;
         this.instance.option('onItemClick', function(e) {
             clickedItem = e.item;
         });
@@ -553,7 +553,7 @@ QUnit.module('ClientSideEvents', {
     });
     test('selectionchanged on unbound diagram', (assert) => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
-        var selectedItems;
+        let selectedItems;
         this.instance.option('onSelectionChanged', function(e) {
             selectedItems = e.items;
         });
@@ -575,7 +575,7 @@ QUnit.module('ClientSideEvents', {
         this.instance.option('edges.dataSource', [
             { key: '1', from: '123', to: '345' }
         ]);
-        var clickedItem, dblClickedItem;
+        let clickedItem; let dblClickedItem;
         this.instance.option('onItemClick', function(e) {
             clickedItem = e.item;
         });

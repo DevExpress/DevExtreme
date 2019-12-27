@@ -11,7 +11,7 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 QUnit.module('CollectionWidgetItem', {
     beforeEach: function() {
-        var TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
+        const TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
             _renderWatchers: function() {
                 this._startWatcher('value', this._renderValue.bind(this));
             },
@@ -20,7 +20,7 @@ QUnit.module('CollectionWidgetItem', {
             }
         });
 
-        var TestCollection = this.TestCollection = CollectionWidget.inherit({
+        const TestCollection = this.TestCollection = CollectionWidget.inherit({
             _getDefaultOptions: function() {
                 return $.extend(this.callBase(), {
                     valueExpr: 'value'
@@ -29,7 +29,7 @@ QUnit.module('CollectionWidgetItem', {
         });
         TestCollection.ItemClass = TestCollectionItem;
 
-        var DefaultCollection = this.DefaultCollection = CollectionWidget.inherit();
+        const DefaultCollection = this.DefaultCollection = CollectionWidget.inherit();
 
         registerComponent('dxTestCollection', TestCollection);
         registerComponent('dxDefaultCollection', DefaultCollection);
@@ -44,7 +44,7 @@ QUnit.module('CollectionWidgetItem', {
 });
 
 QUnit.test('item should correctly watch changes', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('dx-test-collection', '{ itemTemplate: noop, bindingOptions: { items: \'items\' } }')
         .appendTo(this.$controller);
 
@@ -55,10 +55,10 @@ QUnit.test('item should correctly watch changes', function(assert) {
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     scope.$apply(function() { scope.items = [{ value: 1 }]; });
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 1, 'value changed');
 
     scope.$apply(function() { scope.items[0].value = 2; });
@@ -66,7 +66,7 @@ QUnit.test('item should correctly watch changes', function(assert) {
 });
 
 QUnit.test('item should correctly watch changes for complex expressions', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('dx-test-collection', '{ itemTemplate: noop, valueExpr: valueExpr, bindingOptions: { items: \'items\' } }')
         .appendTo(this.$controller);
 
@@ -80,10 +80,10 @@ QUnit.test('item should correctly watch changes for complex expressions', functi
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
     scope.$apply(function() { scope.items = [{ value: 1 }]; });
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 2, 'value changed');
 
     scope.$apply(function() { scope.items[0].value = 2; });
@@ -119,7 +119,7 @@ QUnit.test('item should correctly reset collection focus state', function(assert
 });
 
 QUnit.test('item should not be rerendered', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('dx-test-collection', '{ itemTemplate: noop, bindingOptions: { items: \'items\' } }')
         .appendTo(this.$controller);
 
@@ -130,8 +130,8 @@ QUnit.test('item should not be rerendered', function(assert) {
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const scope = $markup.scope();
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     $item.data('rendered', true);
 
     scope.$apply(function() { scope.items[0].value = 2; });
@@ -139,7 +139,7 @@ QUnit.test('item should not be rerendered', function(assert) {
 });
 
 QUnit.test('item should not generate watchers for null expressions', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('dx-test-collection', '{ itemTemplate: noop, valueExpr: null, bindingOptions: { items: \'items\' } }')
         .appendTo(this.$controller);
 
@@ -150,15 +150,15 @@ QUnit.test('item should not generate watchers for null expressions', function(as
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
-    var startWatchersCount = scope.$$watchers.length;
+    const startWatchersCount = scope.$$watchers.length;
     scope.$apply(function() { scope.items = [{ value: 1 }]; });
     assert.equal(scope.$$watchers.length, startWatchersCount + 1, 'watcher not created for value');
 });
 
 QUnit.test('item should not leak watchers', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('dx-test-collection', '{ itemTemplate: noop, bindingOptions: { items: \'items\' } }')
         .appendTo(this.$controller);
 
@@ -169,9 +169,9 @@ QUnit.test('item should not leak watchers', function(assert) {
 
     angular.bootstrap(this.$container, ['testApp']);
 
-    var scope = $markup.scope();
+    const scope = $markup.scope();
 
-    var startWatchersCount = scope.$$watchers.length;
+    const startWatchersCount = scope.$$watchers.length;
     scope.$apply(function() { scope.items = [{ value: 1 }]; });
 
     scope.$apply(function() { scope.items = []; });
@@ -183,7 +183,7 @@ QUnit.test('onItemRendered event should have a completely rendered itemElement',
         .attr('dx-test-collection', '{ bindingOptions: { items: \'items\', onItemRendered: \'onItemRendered\' }}')
         .appendTo(this.$controller);
 
-    var itemElementText;
+    let itemElementText;
 
     this.testApp.controller('my-controller', function($scope) {
         $scope.items = [{ text: 'test' }];

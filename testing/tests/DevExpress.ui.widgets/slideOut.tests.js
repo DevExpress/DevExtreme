@@ -1,23 +1,23 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    config = require('core/config'),
-    typeUtils = require('core/utils/type'),
-    hideTopOverlayCallback = require('mobile/hide_top_overlay').hideCallback,
-    pointerMock = require('../../helpers/pointerMock.js');
+const $ = require('jquery');
+const fx = require('animation/fx');
+const config = require('core/config');
+const typeUtils = require('core/utils/type');
+const hideTopOverlayCallback = require('mobile/hide_top_overlay').hideCallback;
+const pointerMock = require('../../helpers/pointerMock.js');
 
 require('ui/slide_out');
 require('common.css!');
 
-var SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container',
-    SLIDEOUT_SHIELD = 'dx-slideoutview-shield',
+const SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container';
+const SLIDEOUT_SHIELD = 'dx-slideoutview-shield';
 
-    SLIDEOUT_ITEM_CLASS = 'dx-slideout-item',
+const SLIDEOUT_ITEM_CLASS = 'dx-slideout-item';
 
-    LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_CLASS = 'dx-list-item';
 
 
 QUnit.testStart(function() {
-    var markup = '\
+    const markup = '\
         <div id="slideOut"></div>\
         <div id="slideOutWithTemplate">\
             <div data-options="dxTemplate: { name: \'content\'}">\
@@ -35,7 +35,7 @@ QUnit.module('widget options', {
     }
 }, () => {
     QUnit.test('option onItemClick', function(assert) {
-        var count = 0;
+        let count = 0;
 
         this.$element.dxSlideOut({
             onItemClick: function() {
@@ -48,7 +48,7 @@ QUnit.module('widget options', {
             ]
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
 
         pointerMock($menuItems.eq(0)).start().click();
         assert.equal(count, 1);
@@ -65,7 +65,7 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('onItemClick should be fired only after click on list item', function(assert) {
-        var count = 0;
+        let count = 0;
 
         this.$element.dxSlideOut({
             onItemClick: function() {
@@ -79,7 +79,7 @@ QUnit.module('widget options', {
             selectedIndex: 0
         });
 
-        var $items = this.$element.find('.' + SLIDEOUT_ITEM_CLASS);
+        const $items = this.$element.find('.' + SLIDEOUT_ITEM_CLASS);
         $items.trigger('dxclick');
         assert.equal(count, 0);
     });
@@ -93,8 +93,8 @@ QUnit.module('widget options', {
             ]
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS),
-            instance = this.$element.dxSlideOut('instance');
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
 
         $menuItems.eq(0).trigger('dxclick');
         assert.equal(instance.option('selectedIndex'), 0);
@@ -114,8 +114,8 @@ QUnit.module('widget options', {
             ]
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS),
-            instance = this.$element.dxSlideOut('instance');
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
 
         instance.option('selectedIndex', 1);
 
@@ -123,7 +123,7 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('list should change it\'s selection after selectedItem option was changed', function(assert) {
-        var items = [
+        const items = [
             { text: 'Item 1' },
             { text: 'Item 2' }
         ];
@@ -132,8 +132,8 @@ QUnit.module('widget options', {
             dataSource: items
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS),
-            instance = this.$element.dxSlideOut('instance');
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
 
         instance.option('selectedItem', items[1]);
 
@@ -151,8 +151,8 @@ QUnit.module('widget options', {
             ]
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS),
-            instance = this.$element.dxSlideOut('instance');
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
 
         instance.option('selectedIndex', 1);
 
@@ -160,7 +160,7 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('grouped list should change it\'s selection after selectedItem option was changed', function(assert) {
-        var items = [
+        const items = [
             { key: 'Group 1', items: [
                 { text: 'Item 1' },
                 { text: 'Item 2' }
@@ -172,8 +172,8 @@ QUnit.module('widget options', {
             dataSource: items
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS),
-            instance = this.$element.dxSlideOut('instance');
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
 
         instance.option('selectedItem', items[0].items[1]);
 
@@ -192,8 +192,8 @@ QUnit.module('widget options', {
             ]
         });
 
-        var items = this.$element.find('.dx-list-item'),
-            instance = this.$element.dxSlideOut('instance');
+        let items = this.$element.find('.dx-list-item');
+        const instance = this.$element.dxSlideOut('instance');
 
         assert.equal(items.eq(0).text(), '0: a');
         assert.equal(items.eq(1).text(), '1: b');
@@ -218,8 +218,8 @@ QUnit.module('widget options', {
             ]
         });
 
-        var items = this.$element.find('.dx-list-item'),
-            instance = this.$element.dxSlideOut('instance');
+        let items = this.$element.find('.dx-list-item');
+        const instance = this.$element.dxSlideOut('instance');
 
         assert.equal(items.eq(0).text(), '0: a');
         assert.equal(items.eq(1).text(), '1: b');
@@ -238,7 +238,7 @@ QUnit.module('widget options', {
             items: [{ text: 'a' }]
         });
 
-        var list = this.$element.find('.dx-list').dxList('instance');
+        const list = this.$element.find('.dx-list').dxList('instance');
         assert.equal(list.option('itemTemplateProperty'), 'menuTemplate', 'itemTemplateProperty option is correct');
     });
 
@@ -247,19 +247,19 @@ QUnit.module('widget options', {
             items: [{ text: 'a' }, { text: 'b' }]
         });
 
-        var instance = this.$element.dxSlideOut('instance');
+        const instance = this.$element.dxSlideOut('instance');
 
         instance.option('items[0].text', 'c');
-        var $items = this.$element.find('.dx-list-item');
+        const $items = this.$element.find('.dx-list-item');
         assert.strictEqual($items.text(), 'cb', 'items rendered correctly');
     });
 
     QUnit.test('grouped options', function(assert) {
         this.$element.dxSlideOut({});
 
-        var element = this.$element,
-            instance = element.dxSlideOut('instance'),
-            list = element.find('.dx-list').dxList('instance');
+        const element = this.$element;
+        const instance = element.dxSlideOut('instance');
+        const list = element.find('.dx-list').dxList('instance');
 
         assert.ok(!list.option('grouped'), 'default menu grouped');
         instance.option('menuGrouped', true);
@@ -290,11 +290,11 @@ QUnit.module('widget options', {
             menuGrouped: true
         });
 
-        var element = this.$element,
-            $menuItems = element.find('.' + LIST_ITEM_CLASS);
+        const element = this.$element;
+        const $menuItems = element.find('.' + LIST_ITEM_CLASS);
 
         $menuItems.eq(0).trigger('dxclick');
-        var $slideOutItems = element.find('.' + SLIDEOUT_ITEM_CLASS);
+        let $slideOutItems = element.find('.' + SLIDEOUT_ITEM_CLASS);
         assert.equal($menuItems.eq(0).text(), 'First', 'select first item');
         assert.equal($slideOutItems.eq(0).text(), 'First', 'select first item');
         $menuItems.eq(4).trigger('dxclick');
@@ -316,9 +316,9 @@ QUnit.module('widget options', {
             menuGrouped: true
         });
 
-        var $element = this.$element,
-            instance = $element.dxSlideOut('instance'),
-            $groupHeader = $element.find('.dx-list-group-header').eq(0);
+        const $element = this.$element;
+        const instance = $element.dxSlideOut('instance');
+        let $groupHeader = $element.find('.dx-list-group-header').eq(0);
 
         assert.equal($groupHeader.text(), 'Group 1', 'correct group name');
 
@@ -359,13 +359,13 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('First slideout item content should be loaded when deferred data source is used', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         try {
             this.$element.dxSlideOut({
                 dataSource: {
                     load: function() {
-                        var d = $.Deferred();
+                        const d = $.Deferred();
 
                         setTimeout(function() {
                             d.resolve([{ text: 'Item 1' }, { text: 'Item 2' }]);
@@ -390,7 +390,7 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('select item action execution', function(assert) {
-        var items = [0, 1];
+        const items = [0, 1];
 
         this.$element.dxSlideOut({
             dataSource: items,
@@ -399,28 +399,28 @@ QUnit.module('widget options', {
             }
         });
 
-        var $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
+        const $menuItems = this.$element.find('.' + LIST_ITEM_CLASS);
         $menuItems.eq(1).trigger('dxclick');
     });
 
     QUnit.test('onMenuItemRendered option on init', function(assert) {
-        var itemRendered = false,
-            $slideOut = $('#slideOut').dxSlideOut({
-                dataSource: [0, 1],
-                onMenuItemRendered: function() { itemRendered = true; }
-            }),
-            slideOut = $slideOut.dxSlideOut('instance'),
-            list = $slideOut.find('.dx-list').first().dxList('instance');
+        let itemRendered = false;
+        const $slideOut = $('#slideOut').dxSlideOut({
+            dataSource: [0, 1],
+            onMenuItemRendered: function() { itemRendered = true; }
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
+        const list = $slideOut.find('.dx-list').first().dxList('instance');
 
         assert.ok(itemRendered, 'onMenuItemRendered was called');
         assert.equal(list.option('onItemRendered'), slideOut.option('onMenuItemRendered'), 'onMenuItemRendered was transferred to list\'s onItemRendered');
     });
 
     QUnit.test('onMenuItemRendered option change', function(assert) {
-        var itemRendered = false,
-            $slideOut = $('#slideOut').dxSlideOut(),
-            slideOut = $slideOut.dxSlideOut('instance'),
-            list = $slideOut.find('.dx-list').first().dxList('instance');
+        let itemRendered = false;
+        const $slideOut = $('#slideOut').dxSlideOut();
+        const slideOut = $slideOut.dxSlideOut('instance');
+        const list = $slideOut.find('.dx-list').first().dxList('instance');
 
         slideOut.option('onMenuItemRendered', function() { itemRendered = true; });
         slideOut.option('dataSource', [0, 1]);
@@ -429,35 +429,35 @@ QUnit.module('widget options', {
     });
 
     QUnit.test('onMenuGroupRendered option on init', function(assert) {
-        var groupRendered = false,
-            $slideOut = $('#slideOut').dxSlideOut({
-                dataSource: [
-                    {
-                        key: 'a',
-                        items: ['0', '1']
-                    },
-                    {
-                        key: 'b',
-                        items: ['2']
-                    }
-                ],
-                menuGrouped: true,
-                onMenuGroupRendered: function() { groupRendered = true; }
-            }),
-            slideOut = $slideOut.dxSlideOut('instance'),
-            list = $slideOut.find('.dx-list').first().dxList('instance');
+        let groupRendered = false;
+        const $slideOut = $('#slideOut').dxSlideOut({
+            dataSource: [
+                {
+                    key: 'a',
+                    items: ['0', '1']
+                },
+                {
+                    key: 'b',
+                    items: ['2']
+                }
+            ],
+            menuGrouped: true,
+            onMenuGroupRendered: function() { groupRendered = true; }
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
+        const list = $slideOut.find('.dx-list').first().dxList('instance');
 
         assert.ok(groupRendered, 'onMenuGroupRendered was called');
         assert.equal(list.option('onGroupRendered'), slideOut.option('onMenuGroupRendered'), 'onMenuGroupRendered was transferred to list\'s onGroupRendered');
     });
 
     QUnit.test('onMenuGroupRendered option change', function(assert) {
-        var groupRendered = false,
-            $slideOut = $('#slideOut').dxSlideOut({
-                menuGrouped: true
-            }),
-            slideOut = $slideOut.dxSlideOut('instance'),
-            list = $slideOut.find('.dx-list').first().dxList('instance');
+        let groupRendered = false;
+        const $slideOut = $('#slideOut').dxSlideOut({
+            menuGrouped: true
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
+        const list = $slideOut.find('.dx-list').first().dxList('instance');
 
         slideOut.option('onMenuGroupRendered', function() { groupRendered = true; });
         slideOut.option('dataSource', [
@@ -489,12 +489,12 @@ QUnit.module('swipe', {
     QUnit.test('container swipe', function(assert) {
         this.$element.dxSlideOut();
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS),
-            pointer = pointerMock($container);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const pointer = pointerMock($container);
 
         instance.showMenu();
-        var position = $container.position().left;
+        const position = $container.position().left;
 
         pointer.start().swipeStart().swipe(-0.1);
         assert.equal($container.position().left, position - 0.1 * position);
@@ -512,12 +512,12 @@ QUnit.module('swipe', {
     QUnit.test('container swipe in RTL mode', function(assert) {
         this.$element.dxSlideOut({ rtlEnabled: true });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS),
-            pointer = pointerMock($container);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const pointer = pointerMock($container);
 
         instance.showMenu();
-        var position = $container.position().left;
+        const position = $container.position().left;
 
         pointer.start().swipeStart().swipe(0.1);
         assert.equal($container.position().left, position - 0.1 * position, 'container moves right after pointer');
@@ -525,7 +525,7 @@ QUnit.module('swipe', {
         pointer.swipeEnd(1);
         assert.equal($container.position().left, 0, 'menu is closed');
 
-        var startEvent = pointer.start().swipeStart().lastEvent();
+        let startEvent = pointer.start().swipeStart().lastEvent();
 
         assert.strictEqual(startEvent.maxRightOffset, 0, 'container was not be moved');
 
@@ -546,8 +546,8 @@ QUnit.module('swipe', {
     QUnit.test('container moves to left to show menu in RTL mode', function(assert) {
         this.$element.dxSlideOut({ rtlEnabled: true });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
         assert.equal($container.position().left, 0, 'container left == 0, so menu is hidden');
 
@@ -560,8 +560,8 @@ QUnit.module('swipe', {
             dataSource: [{ text: 'a' }]
         });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
         instance.showMenu();
         assert.equal($container.position().left, instance._getListWidth());
@@ -579,12 +579,12 @@ QUnit.module('swipe', {
     QUnit.test('\'swipeEnabled\' option', function(assert) {
         this.$element.dxSlideOut({ swipeEnabled: false });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS),
-            pointer = pointerMock($container).start();
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const pointer = pointerMock($container).start();
 
         instance.showMenu();
-        var position = $container.position().left;
+        const position = $container.position().left;
 
         pointer.swipeStart().swipe(-0.1);
         assert.equal($container.position().left, position);
@@ -609,8 +609,8 @@ QUnit.module('swipe', {
             menuVisible: true
         });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
         assert.equal($container.position().left, instance._getListWidth());
 
@@ -627,11 +627,11 @@ QUnit.module('swipe', {
             menuVisible: false
         });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS),
-            pointer = pointerMock($container);
+        const instance = this.$element.dxSlideOut('instance');
+        const $container = this.$element.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const pointer = pointerMock($container);
 
-        var $shield = this.$element.find('.' + SLIDEOUT_SHIELD);
+        const $shield = this.$element.find('.' + SLIDEOUT_SHIELD);
         assert.ok($shield.is(':hidden'), 'shield is not visible if menu is hidden');
 
         instance.showMenu();
@@ -655,8 +655,8 @@ QUnit.module('swipe', {
             menuVisible: true
         });
 
-        var instance = this.$element.dxSlideOut('instance'),
-            $shield = this.$element.find('.' + SLIDEOUT_SHIELD);
+        const instance = this.$element.dxSlideOut('instance');
+        const $shield = this.$element.find('.' + SLIDEOUT_SHIELD);
 
         $shield.trigger('dxclick');
         assert.ok(!instance.option('menuVisible'), 'menu is hidden after click');
@@ -672,7 +672,7 @@ QUnit.module('back button callback', {
     }
 }, () => {
     QUnit.test('slideout menu should be hidden after callback fired if menu is visible', function(assert) {
-        var instance = $('#slideOut').dxSlideOut({
+        const instance = $('#slideOut').dxSlideOut({
             menuVisible: true
         }).dxSlideOut('instance');
 
@@ -691,65 +691,65 @@ QUnit.module('back button callback', {
 
 QUnit.module('contentTemplate option', () => {
     QUnit.test('content should be rendered from content template if specified', function(assert) {
-        var $slideOut = $('#slideOut').dxSlideOut({
-                selectedIndex: 0,
-                items: [{ text: 'all content' }, { text: 'unread content' }],
-                contentTemplate: function(element) {
-                    assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
-                    return '<div>content</div>';
-                }
-            }),
-            $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const $slideOut = $('#slideOut').dxSlideOut({
+            selectedIndex: 0,
+            items: [{ text: 'all content' }, { text: 'unread content' }],
+            contentTemplate: function(element) {
+                assert.equal(typeUtils.isRenderer(element), !!config().useJQuery, 'element is correct');
+                return '<div>content</div>';
+            }
+        });
+        const $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
         assert.equal($itemContainer.text(), 'content', 'content rendered');
     });
 
     QUnit.test('content should be rendered from content template only once', function(assert) {
-        var renderTimes = 0;
+        let renderTimes = 0;
 
-        var $slideOut = $('#slideOut').dxSlideOut({
-                selectedIndex: 0,
-                items: [{ text: 'all content' }, { text: 'unread content' }],
-                contentTemplate: function() {
-                    renderTimes++;
-                    return '<div>content</div>';
-                }
-            }),
-            slideOut = $slideOut.dxSlideOut('instance');
+        const $slideOut = $('#slideOut').dxSlideOut({
+            selectedIndex: 0,
+            items: [{ text: 'all content' }, { text: 'unread content' }],
+            contentTemplate: function() {
+                renderTimes++;
+                return '<div>content</div>';
+            }
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
 
         slideOut._refresh();
         assert.equal(renderTimes, 1, 'content rendered only once');
-        var $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
         assert.equal($itemContainer.text(), 'content', 'content was not lost');
     });
 
     QUnit.test('content should not be changed after selected index change', function(assert) {
-        var $slideOut = $('#slideOut').dxSlideOut({
-                selectedIndex: 0,
-                items: [{ text: 'all content' }, { text: 'unread content' }],
-                contentTemplate: function() {
-                    return '<div>content</div>';
-                }
-            }),
-            slideOut = $slideOut.dxSlideOut('instance'),
-            $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const $slideOut = $('#slideOut').dxSlideOut({
+            selectedIndex: 0,
+            items: [{ text: 'all content' }, { text: 'unread content' }],
+            contentTemplate: function() {
+                return '<div>content</div>';
+            }
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
+        const $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
 
         slideOut.option('selectedIndex', 1);
         assert.equal($itemContainer.text(), 'content', 'content was not lost');
     });
 
     QUnit.test('content should be rerendered if content template changed', function(assert) {
-        var $slideOut = $('#slideOut').dxSlideOut({
-                selectedIndex: 0,
-                items: [{ text: 'all content' }, { text: 'unread content' }],
-                contentTemplate: function() {
-                    return '<div>content</div>';
-                }
-            }),
-            slideOut = $slideOut.dxSlideOut('instance');
+        const $slideOut = $('#slideOut').dxSlideOut({
+            selectedIndex: 0,
+            items: [{ text: 'all content' }, { text: 'unread content' }],
+            contentTemplate: function() {
+                return '<div>content</div>';
+            }
+        });
+        const slideOut = $slideOut.dxSlideOut('instance');
 
         slideOut.option('contentTemplate', function() { return null; }); // TODO: may be null?
-        var $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
+        const $itemContainer = $slideOut.find('.' + SLIDEOUT_ITEM_CONTAINER_CLASS);
         assert.equal($itemContainer.text(), 'all content', 'content rendered');
     });
 });
@@ -760,23 +760,23 @@ QUnit.module('regression', {
     }
 }, () => {
     QUnit.test('B252044 - Changing the navigation item visibility leads to incorrect SlideOut layout operation', function(assert) {
-        var that = this,
-            items = [
-                { title: 'testItem1' },
-                { title: 'testItem2' },
-                { title: 'testItem3' }
-            ],
-            slideOut = that.$element.dxSlideOut({
-                items: items,
-                selectedIndex: 1
-            }).dxSlideOut('instance'),
-            getFirstMenuItem = function() {
-                return that.$element.find('.' + LIST_ITEM_CLASS).eq(0);
-            },
-            getSlideOutItem = function() {
-                return that.$element.find('.' + SLIDEOUT_ITEM_CLASS);
-            },
-            firstItemText = ' Item 1 text';
+        const that = this;
+        const items = [
+            { title: 'testItem1' },
+            { title: 'testItem2' },
+            { title: 'testItem3' }
+        ];
+        const slideOut = that.$element.dxSlideOut({
+            items: items,
+            selectedIndex: 1
+        }).dxSlideOut('instance');
+        const getFirstMenuItem = function() {
+            return that.$element.find('.' + LIST_ITEM_CLASS).eq(0);
+        };
+        const getSlideOutItem = function() {
+            return that.$element.find('.' + SLIDEOUT_ITEM_CLASS);
+        };
+        const firstItemText = ' Item 1 text';
 
         assert.ok(getFirstMenuItem().is(':visible'), 'default menu item visibility');
 

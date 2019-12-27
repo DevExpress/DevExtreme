@@ -5,7 +5,7 @@ SystemJS.config({
 });
 
 define(function(require) {
-    var MarkdownConverter = require('ui/html_editor/converters/markdown').default;
+    const MarkdownConverter = require('ui/html_editor/converters/markdown').default;
 
     QUnit.module('Import 3rd party', function() {
         QUnit.test('it throw an error if the html -> markdown converter script isn\'t referenced', function(assert) {
@@ -19,13 +19,13 @@ define(function(require) {
         });
 
         QUnit.test('initialize turndown from window', function(assert) {
-            var prevWinTurndown = window.TurndownService;
+            const prevWinTurndown = window.TurndownService;
 
             window.TurndownService = function() {
                 this.initialized = true;
             };
 
-            var converter = new MarkdownConverter();
+            const converter = new MarkdownConverter();
 
             assert.ok(converter._html2Markdown.initialized);
 

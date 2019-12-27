@@ -1,17 +1,17 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    noop = require('../../core/utils/common').noop,
-    Class = require('../../core/class'),
-    swipeEvents = require('../../events/swipe'),
-    eventUtils = require('../../events/utils');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const swipeEvents = require('../../events/swipe');
+const eventUtils = require('../../events/utils');
 
 
-var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
-    SWIPE_START_EVENT_NAME = eventUtils.addNamespace(swipeEvents.start, LIST_EDIT_DECORATOR),
-    SWIPE_UPDATE_EVENT_NAME = eventUtils.addNamespace(swipeEvents.swipe, LIST_EDIT_DECORATOR),
-    SWIPE_END_EVENT_NAME = eventUtils.addNamespace(swipeEvents.end, LIST_EDIT_DECORATOR);
+const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
+const SWIPE_START_EVENT_NAME = eventUtils.addNamespace(swipeEvents.start, LIST_EDIT_DECORATOR);
+const SWIPE_UPDATE_EVENT_NAME = eventUtils.addNamespace(swipeEvents.swipe, LIST_EDIT_DECORATOR);
+const SWIPE_END_EVENT_NAME = eventUtils.addNamespace(swipeEvents.end, LIST_EDIT_DECORATOR);
 
-var EditDecorator = Class.inherit({
+const EditDecorator = Class.inherit({
 
     ctor: function(list) {
         this._list = list;
@@ -24,7 +24,7 @@ var EditDecorator = Class.inherit({
     _shouldHandleSwipe: false,
 
     _attachSwipeEvent: function(config) {
-        var swipeConfig = {
+        const swipeConfig = {
             itemSizeFunc: (function() {
                 if(this._clearSwipeCache) {
                     this._itemWidthCache = this._list.$element().width();
@@ -40,7 +40,7 @@ var EditDecorator = Class.inherit({
     },
 
     _itemSwipeStartHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+        const $itemElement = $(e.currentTarget);
         if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
             e.cancel = true;
             return;
@@ -52,13 +52,13 @@ var EditDecorator = Class.inherit({
     },
 
     _itemSwipeUpdateHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+        const $itemElement = $(e.currentTarget);
 
         this._swipeUpdateHandler($itemElement, e);
     },
 
     _itemSwipeEndHandler: function(e) {
-        var $itemElement = $(e.currentTarget);
+        const $itemElement = $(e.currentTarget);
 
         this._swipeEndHandler($itemElement, e);
 

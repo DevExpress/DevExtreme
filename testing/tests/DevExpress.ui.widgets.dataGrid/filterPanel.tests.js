@@ -5,13 +5,13 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 
-var FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel',
-    FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text',
-    FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + '-clear-filter',
-    FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox';
+const FILTER_PANEL_CLASS = 'dx-datagrid-filter-panel';
+const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';
+const FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + '-clear-filter';
+const FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
     '<div>\
         <div class="dx-datagrid">\
             <div id="container"></div>\
@@ -117,9 +117,9 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('Can customize text', function(assert) {
         // arrange
-        var assertFilterValue,
-            assertFilterText,
-            filterValue = ['field', '=', '1'];
+        let assertFilterValue;
+        let assertFilterText;
+        const filterValue = ['field', '=', '1'];
 
         this.initFilterPanelView({
             filterPanel: {
@@ -199,7 +199,7 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('from condition', function(assert) {
         // arrange
-        var filter = ['field', '=', '1'];
+        const filter = ['field', '=', '1'];
         this.initFilterPanelView({
             filterValue: filter
         });
@@ -213,7 +213,7 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('from custom operation', function(assert) {
         // arrange
-        var filter = ['field', 'anyof', [1, 2]];
+        const filter = ['field', 'anyof', [1, 2]];
         this.initFilterPanelView({
             filterValue: filter
         });
@@ -228,8 +228,8 @@ QUnit.module('Filter Panel', {
     // T663205, T813868
     QUnit.test('from anyof build-in operation and lookup', function(assert) {
         // arrange
-        var filter = ['field', 'anyof', [1, 2]];
-        var lookupDataSource = [
+        const filter = ['field', 'anyof', [1, 2]];
+        const lookupDataSource = [
             { key: 1, text: 'Text 1' },
             { key: 2, text: 'Text 2' }
         ];
@@ -258,9 +258,9 @@ QUnit.module('Filter Panel', {
 
     // T703158
     QUnit.test('skip additional load in anyof', function(assert) {
-        var spy = sinon.spy();
+        const spy = sinon.spy();
         // arrange
-        var filter = ['field', 'anyof', [1, 2]];
+        const filter = ['field', 'anyof', [1, 2]];
         this.initFilterPanelView({
             filterValue: filter,
             headerFilter: {
@@ -296,7 +296,7 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('from custom operation with value = array', function(assert) {
         // arrange
-        var filter = [
+        const filter = [
             ['field', 'anyof', [200]]
         ];
         this.initFilterPanelView({
@@ -318,10 +318,10 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('from custom operation with async customizeText', function(assert) {
         // arrange
-        var deferred = $.Deferred(),
-            filter = [
-                ['field', 'customOperation', [200]]
-            ];
+        const deferred = $.Deferred();
+        const filter = [
+            ['field', 'customOperation', [200]]
+        ];
         this.initFilterPanelView({
             filterValue: filter,
             filterBuilder: {
@@ -345,7 +345,7 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('custom operation target = \'filterPanel\'', function(assert) {
         // arrange
-        var filter = ['field', 'customOperation', 2];
+        const filter = ['field', 'customOperation', 2];
         this.initFilterPanelView();
 
         // act
@@ -364,7 +364,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from between', function(assert) {
-        var filter = ['field', 'between', [1, 2]];
+        const filter = ['field', 'between', [1, 2]];
         this.initFilterPanelView({
             filterValue: filter
         });
@@ -376,7 +376,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from between with dates', function(assert) {
-        var filter = ['field', 'between', [new Date(2012, 10, 12), new Date(2013, 2, 23)]];
+        const filter = ['field', 'between', [new Date(2012, 10, 12), new Date(2013, 2, 23)]];
         this.initFilterPanelView({
             columns: [{ dataField: 'field', dataType: 'date', format: 'MM/dd/yyyy' }],
             filterValue: filter
@@ -389,7 +389,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from isBlank / isNotBlank', function(assert) {
-        var filter = [['field', '=', null], 'and', ['field', '<>', null]];
+        const filter = [['field', '=', null], 'and', ['field', '<>', null]];
 
         this.initFilterPanelView({
             filterValue: filter
@@ -402,7 +402,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from group', function(assert) {
-        var filter = [['field', '=', '1'], 'and', ['field', '=', '2']];
+        const filter = [['field', '=', '1'], 'and', ['field', '=', '2']];
         this.initFilterPanelView({
             filterValue: filter
         });
@@ -414,7 +414,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from group with inner group', function(assert) {
-        var filter = [['field', '=', '1'], 'and', ['field', '=', '2'], 'and', [['field', '=', '3'], 'or', ['field', '=', '4']]];
+        const filter = [['field', '=', '1'], 'and', ['field', '=', '2'], 'and', [['field', '=', '3'], 'or', ['field', '=', '4']]];
         this.initFilterPanelView({
             filterValue: filter
         });
@@ -426,7 +426,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('from group with inner group with Not', function(assert) {
-        var filter = ['!', [['field', '=', '1'], 'and', ['field', '=', '2']]];
+        const filter = ['!', [['field', '=', '1'], 'and', ['field', '=', '2']]];
 
         this.initFilterPanelView({
             filterValue: filter
@@ -440,9 +440,9 @@ QUnit.module('Filter Panel', {
 
     QUnit.test('filterBuilder customOperation', function(assert) {
         // arrange
-        var filter = ['dateField', 'testOperation'],
-            customFilter = ['dateField', '=', '10/10/2010'],
-            customExpressionCounter = 0;
+        const filter = ['dateField', 'testOperation'];
+        const customFilter = ['dateField', '=', '10/10/2010'];
+        let customExpressionCounter = 0;
 
         // act, assert
         this.initFilterPanelView({
@@ -499,7 +499,7 @@ QUnit.module('Filter Panel', {
     });
 
     QUnit.test('Update state when applying filterPanel.filterEnabled', function(assert) {
-        var customSaveSpy = sinon.spy();
+        const customSaveSpy = sinon.spy();
 
         this.initFilterPanelView({
             stateStoring: {

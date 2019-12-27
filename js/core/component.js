@@ -1,22 +1,22 @@
-var Config = require('./config'),
-    extend = require('./utils/extend').extend,
-    optionManager = require('./option_manager').OptionManager,
-    bracketsToDots = require('./utils/data').bracketsToDots,
-    Class = require('./class'),
-    Action = require('./action'),
-    errors = require('./errors'),
-    commonUtils = require('./utils/common'),
-    typeUtils = require('./utils/type'),
-    objectUtils = require('./utils/object'),
-    deferredUtils = require('../core/utils/deferred'),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
-    Callbacks = require('./utils/callbacks'),
-    EventsMixin = require('./events_mixin'),
-    publicComponentUtils = require('./utils/public_component'),
-    devices = require('./devices'),
-    isFunction = typeUtils.isFunction,
-    noop = commonUtils.noop;
+const Config = require('./config');
+const extend = require('./utils/extend').extend;
+const optionManager = require('./option_manager').OptionManager;
+const bracketsToDots = require('./utils/data').bracketsToDots;
+const Class = require('./class');
+const Action = require('./action');
+const errors = require('./errors');
+const commonUtils = require('./utils/common');
+const typeUtils = require('./utils/type');
+const objectUtils = require('./utils/object');
+const deferredUtils = require('../core/utils/deferred');
+const Deferred = deferredUtils.Deferred;
+const when = deferredUtils.when;
+const Callbacks = require('./utils/callbacks');
+const EventsMixin = require('./events_mixin');
+const publicComponentUtils = require('./utils/public_component');
+const devices = require('./devices');
+const isFunction = typeUtils.isFunction;
+const noop = commonUtils.noop;
 
 
 class PostponedOperations {
@@ -28,7 +28,7 @@ class PostponedOperations {
         if(key in this._postponedOperations) {
             postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
         } else {
-            var completePromise = new Deferred();
+            const completePromise = new Deferred();
             this._postponedOperations[key] = {
                 fn: fn,
                 completePromise: completePromise,
@@ -40,8 +40,8 @@ class PostponedOperations {
     }
 
     callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
+        for(const key in this._postponedOperations) {
+            const operation = this._postponedOperations[key];
 
             if(typeUtils.isDefined(operation)) {
                 if(operation.promises && operation.promises.length) {
@@ -63,7 +63,7 @@ const normalizeOptions = (options, value) => {
     return result;
 };
 
-var Component = Class.inherit({
+const Component = Class.inherit({
 
     _setDeprecatedOptions: function() {
         this._deprecatedOptions = {};
@@ -94,7 +94,7 @@ var Component = Class.inherit({
     },
 
     _getOptionByRules: function(customRules) {
-        var rules = this._defaultOptionsRules();
+        let rules = this._defaultOptionsRules();
 
         if(Array.isArray(customRules)) {
             rules = rules.concat(customRules);
@@ -104,16 +104,16 @@ var Component = Class.inherit({
     },
 
     _setOptionsByDevice: function(customRules) {
-        var rulesOptions = this._getOptionByRules(customRules);
+        const rulesOptions = this._getOptionByRules(customRules);
 
         this._setOptionByStealth(rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
-        var options = {};
-        var currentDevice = devices.current();
-        var deviceMatch = function(device, filter) {
-            var filterArray = [];
+        const options = {};
+        const currentDevice = devices.current();
+        const deviceMatch = function(device, filter) {
+            const filterArray = [];
 
             Array.prototype.push.call(filterArray, filter);
 
@@ -121,10 +121,10 @@ var Component = Class.inherit({
                 || commonUtils.findBestMatches(device, filterArray).length > 0;
         };
 
-        for(var i = 0; i < rules.length; i++) {
-            var rule = rules[i],
-                deviceFilter = rule.device || { },
-                match;
+        for(let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            const deviceFilter = rule.device || { };
+            var match;
 
             if(isFunction(deviceFilter)) {
                 match = deviceFilter(currentDevice);
@@ -140,9 +140,9 @@ var Component = Class.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var optionValue = this.option(name),
-            initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
+        const optionValue = this.option(name);
+        const initialOptionValue = this.initialOption(name);
+        const isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
 
         return isInitialOption;
     },
@@ -223,7 +223,7 @@ var Component = Class.inherit({
     },
 
     _logDeprecatedWarning(option, info) {
-        var message = info.message || ('Use the \'' + info.alias + '\' option instead');
+        const message = info.message || ('Use the \'' + info.alias + '\' option instead');
         errors.log('W0001', this.NAME, option, info.since, message);
     },
 
@@ -287,18 +287,18 @@ var Component = Class.inherit({
     _optionChanging: noop,
 
     _notifyOptionChanged: function(option, value, previousValue) {
-        var that = this;
+        const that = this;
 
         if(this._initialized) {
-            var optionNames = [option].concat(that._getOptionAliasesByName(option));
-            for(var i = 0; i < optionNames.length; i++) {
-                var name = optionNames[i],
-                    args = {
-                        name: name.split(/[.[]/)[0],
-                        fullName: name,
-                        value: value,
-                        previousValue: previousValue
-                    };
+            const optionNames = [option].concat(that._getOptionAliasesByName(option));
+            for(let i = 0; i < optionNames.length; i++) {
+                const name = optionNames[i];
+                const args = {
+                    name: name.split(/[.[]/)[0],
+                    fullName: name,
+                    value: value,
+                    previousValue: previousValue
+                };
 
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
                 that._optionChangedAction(extend({}, args));
@@ -334,8 +334,8 @@ var Component = Class.inherit({
     },
 
     _createAction: function(actionSource, config) {
-        var that = this,
-            action;
+        const that = this;
+        let action;
 
         return function(e) {
             if(!arguments.length) {
@@ -353,12 +353,12 @@ var Component = Class.inherit({
     },
 
     _createActionByOption: function(optionName, config) {
-        var that = this,
-            action,
-            eventName,
-            actionFunc;
+        const that = this;
+        let action;
+        let eventName;
+        let actionFunc;
 
-        var result = function() {
+        let result = function() {
             if(!eventName) {
                 config = config || {};
 
@@ -383,7 +383,7 @@ var Component = Class.inherit({
             }
 
             if(!action) {
-                var beforeExecute = config.beforeExecute;
+                const beforeExecute = config.beforeExecute;
                 config.beforeExecute = function(args) {
                     beforeExecute && beforeExecute.apply(that, arguments);
                     that.fireEvent(eventName, args.args);
@@ -392,8 +392,8 @@ var Component = Class.inherit({
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option('beforeActionExecute') || noop;
-                var wrappedAction = beforeActionExecute(that, action, config) || action;
+                const beforeActionExecute = that.option('beforeActionExecute') || noop;
+                const wrappedAction = beforeActionExecute(that, action, config) || action;
                 return wrappedAction.apply(that, arguments);
             }
 
@@ -401,7 +401,7 @@ var Component = Class.inherit({
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option('onActionCreated') || noop;
+            const onActionCreated = that.option('onActionCreated') || noop;
             result = onActionCreated(that, result, config) || result;
         }
 
@@ -426,7 +426,7 @@ var Component = Class.inherit({
     },
 
     isOptionDeprecated: function(name) {
-        var deprecatedOptions = this._getDeprecatedOptions();
+        const deprecatedOptions = this._getDeprecatedOptions();
         return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
     },
 
@@ -437,7 +437,7 @@ var Component = Class.inherit({
     },
 
     _getOptionValue: function(name, context) {
-        var value = this.option(name);
+        const value = this.option(name);
 
         if(isFunction(value)) {
             return value.bind(context)();

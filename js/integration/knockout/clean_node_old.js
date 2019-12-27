@@ -1,10 +1,10 @@
-var ko = require('knockout'),
-    compareVersion = require('../../core/utils/version').compare,
-    strategyChanging = require('../../core/element_data').strategyChanging;
+const ko = require('knockout');
+const compareVersion = require('../../core/utils/version').compare;
+const strategyChanging = require('../../core/element_data').strategyChanging;
 
-var patchCleanData = function(jQuery) {
-    var cleanKoData = function(element, andSelf) {
-        var cleanNode = function() {
+const patchCleanData = function(jQuery) {
+    const cleanKoData = function(element, andSelf) {
+        const cleanNode = function() {
             ko.cleanNode(this);
         };
 
@@ -15,16 +15,16 @@ var patchCleanData = function(jQuery) {
         }
     };
 
-    var originalEmpty = jQuery.fn.empty;
+    const originalEmpty = jQuery.fn.empty;
     jQuery.fn.empty = function() {
         cleanKoData(this, false);
         return originalEmpty.apply(this, arguments);
     };
 
-    var originalRemove = jQuery.fn.remove;
+    const originalRemove = jQuery.fn.remove;
     jQuery.fn.remove = function(selector, keepData) {
         if(!keepData) {
-            var subject = this;
+            let subject = this;
             if(selector) {
                 subject = subject.filter(selector);
             }
@@ -33,7 +33,7 @@ var patchCleanData = function(jQuery) {
         return originalRemove.call(this, selector, keepData);
     };
 
-    var originalHtml = jQuery.fn.html;
+    const originalHtml = jQuery.fn.html;
     jQuery.fn.html = function(value) {
         if(typeof value === 'string') {
             cleanKoData(this, false);
@@ -41,9 +41,9 @@ var patchCleanData = function(jQuery) {
         return originalHtml.apply(this, arguments);
     };
 
-    var originalReplaceWith = jQuery.fn.replaceWith;
+    const originalReplaceWith = jQuery.fn.replaceWith;
     jQuery.fn.replaceWith = function() {
-        var result = originalReplaceWith.apply(this, arguments);
+        const result = originalReplaceWith.apply(this, arguments);
 
         if(!this.parent().length) {
             cleanKoData(this, true);
@@ -54,7 +54,7 @@ var patchCleanData = function(jQuery) {
 };
 
 strategyChanging.add(function(strategy) {
-    var isJQuery = !!strategy.fn;
+    const isJQuery = !!strategy.fn;
 
     if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) < 0) {
         patchCleanData(strategy);

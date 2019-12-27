@@ -1,131 +1,131 @@
-var $ = require('../core/renderer'),
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    domAdapter = require('../core/dom_adapter'),
-    eventsEngine = require('../events/core/events_engine'),
-    registerComponent = require('../core/component_registrator'),
-    commonUtils = require('../core/utils/common'),
-    extend = require('../core/utils/extend').extend,
-    browser = require('../core/utils/browser'),
-    translator = require('../animation/translator'),
-    positionUtils = require('../animation/position'),
-    typeUtils = require('../core/utils/type'),
-    mathUtils = require('../core/utils/math'),
-    eventUtils = require('../events/utils'),
-    Popup = require('./popup');
+const $ = require('../core/renderer');
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const domAdapter = require('../core/dom_adapter');
+const eventsEngine = require('../events/core/events_engine');
+const registerComponent = require('../core/component_registrator');
+const commonUtils = require('../core/utils/common');
+const extend = require('../core/utils/extend').extend;
+const browser = require('../core/utils/browser');
+const translator = require('../animation/translator');
+const positionUtils = require('../animation/position');
+const typeUtils = require('../core/utils/type');
+const mathUtils = require('../core/utils/math');
+const eventUtils = require('../events/utils');
+const Popup = require('./popup');
 
-var POPOVER_CLASS = 'dx-popover',
-    POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper',
-    POPOVER_ARROW_CLASS = 'dx-popover-arrow',
-    POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title',
+const POPOVER_CLASS = 'dx-popover';
+const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
+const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
+const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
 
-    POSITION_FLIP_MAP = {
-        'left': 'right',
-        'top': 'bottom',
-        'right': 'left',
-        'bottom': 'top',
-        'center': 'center'
-    },
+const POSITION_FLIP_MAP = {
+    'left': 'right',
+    'top': 'bottom',
+    'right': 'left',
+    'bottom': 'top',
+    'center': 'center'
+};
 
-    WEIGHT_OF_SIDES = {
-        'left': -1,
-        'top': -1,
-        'center': 0,
-        'right': 1,
-        'bottom': 1
-    },
+const WEIGHT_OF_SIDES = {
+    'left': -1,
+    'top': -1,
+    'center': 0,
+    'right': 1,
+    'bottom': 1
+};
 
-    POSITION_ALIASES = {
-        // NOTE: public API
-        'top': { my: 'bottom center', at: 'top center', collision: 'fit flip' },
-        'bottom': { my: 'top center', at: 'bottom center', collision: 'fit flip' },
-        'right': { my: 'left center', at: 'right center', collision: 'flip fit' },
-        'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
-    },
+const POSITION_ALIASES = {
+    // NOTE: public API
+    'top': { my: 'bottom center', at: 'top center', collision: 'fit flip' },
+    'bottom': { my: 'top center', at: 'bottom center', collision: 'fit flip' },
+    'right': { my: 'left center', at: 'right center', collision: 'flip fit' },
+    'left': { my: 'right center', at: 'left center', collision: 'flip fit' }
+};
 
-    SIDE_BORDER_WIDTH_STYLES = {
-        'left': 'borderLeftWidth',
-        'top': 'borderTopWidth',
-        'right': 'borderRightWidth',
-        'bottom': 'borderBottomWidth'
-    },
+const SIDE_BORDER_WIDTH_STYLES = {
+    'left': 'borderLeftWidth',
+    'top': 'borderTopWidth',
+    'right': 'borderRightWidth',
+    'bottom': 'borderBottomWidth'
+};
 
-    isFirefox = browser.mozilla,
+const isFirefox = browser.mozilla;
 
-    getEventName = function(that, optionName) {
-        var optionValue = that.option(optionName);
+const getEventName = function(that, optionName) {
+    const optionValue = that.option(optionName);
 
-        return getEventNameByOption(optionValue);
-    },
-    getEventNameByOption = function(optionValue) {
-        return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
-    },
-    getEventDelay = function(that, optionName) {
-        var optionValue = that.option(optionName);
+    return getEventNameByOption(optionValue);
+};
+var getEventNameByOption = function(optionValue) {
+    return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+};
+const getEventDelay = function(that, optionName) {
+    const optionValue = that.option(optionName);
 
-        return typeUtils.isObject(optionValue) && optionValue.delay;
-    },
-    attachEvent = function(that, name) {
-        var delay,
-            action,
-            handler,
-            eventName,
-            target = that.option('target'),
-            isSelector = typeUtils.isString(target),
-            event = getEventName(that, name + 'Event');
+    return typeUtils.isObject(optionValue) && optionValue.delay;
+};
+const attachEvent = function(that, name) {
+    let delay;
+    let action;
+    let handler;
+    let eventName;
+    const target = that.option('target');
+    const isSelector = typeUtils.isString(target);
+    const event = getEventName(that, name + 'Event');
 
-        if(!event || that.option('disabled')) {
-            return;
-        }
+    if(!event || that.option('disabled')) {
+        return;
+    }
 
-        eventName = eventUtils.addNamespace(event, that.NAME);
-        action = that._createAction((function() {
-            delay = getEventDelay(that, name + 'Event');
-            this._clearEventsTimeouts();
+    eventName = eventUtils.addNamespace(event, that.NAME);
+    action = that._createAction((function() {
+        delay = getEventDelay(that, name + 'Event');
+        this._clearEventsTimeouts();
 
-            if(delay) {
-                this._timeouts[name] = setTimeout(function() {
-                    that[name]();
-                }, delay);
-            } else {
+        if(delay) {
+            this._timeouts[name] = setTimeout(function() {
                 that[name]();
-            }
-        }).bind(that), { validatingTargetName: 'target' });
-
-        handler = function(e) {
-            action({ event: e, target: $(e.currentTarget) });
-        };
-
-        var EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
-        if(isSelector) {
-            that[EVENT_HANDLER_NAME] = handler;
-            eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
+            }, delay);
         } else {
-            var targetElement = getPublicElement($(target));
-            that[EVENT_HANDLER_NAME] = undefined;
-            eventsEngine.on(targetElement, eventName, handler);
+            that[name]();
         }
-    },
-    detachEvent = function(that, target, name, event) {
-        var eventName = event || getEventName(that, name + 'Event');
+    }).bind(that), { validatingTargetName: 'target' });
 
-        if(!eventName) {
-            return;
-        }
-
-        eventName = eventUtils.addNamespace(eventName, that.NAME);
-
-        var EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
-        if(that[EVENT_HANDLER_NAME]) {
-            eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
-        } else {
-            eventsEngine.off(getPublicElement($(target)), eventName);
-        }
+    handler = function(e) {
+        action({ event: e, target: $(e.currentTarget) });
     };
 
+    const EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
+    if(isSelector) {
+        that[EVENT_HANDLER_NAME] = handler;
+        eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
+    } else {
+        const targetElement = getPublicElement($(target));
+        that[EVENT_HANDLER_NAME] = undefined;
+        eventsEngine.on(targetElement, eventName, handler);
+    }
+};
+const detachEvent = function(that, target, name, event) {
+    let eventName = event || getEventName(that, name + 'Event');
 
-var Popover = Popup.inherit({
+    if(!eventName) {
+        return;
+    }
+
+    eventName = eventUtils.addNamespace(eventName, that.NAME);
+
+    const EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
+    if(that[EVENT_HANDLER_NAME]) {
+        eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
+    } else {
+        eventsEngine.off(getPublicElement($(target)), eventName);
+    }
+};
+
+
+const Popover = Popup.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             target: window,
@@ -331,15 +331,15 @@ var Popover = Popup.inherit({
         this._resetOverlayPosition();
         this._updateContentSize();
 
-        var contentPosition = this._getContainerPosition();
-        var resultLocation = positionUtils.setup(this._$content, contentPosition);
+        const contentPosition = this._getContainerPosition();
+        const resultLocation = positionUtils.setup(this._$content, contentPosition);
 
-        var positionSide = this._getSideByLocation(resultLocation);
+        const positionSide = this._getSideByLocation(resultLocation);
 
         this._togglePositionClass('dx-position-' + positionSide);
         this._toggleFlippedClass(resultLocation.h.flip, resultLocation.v.flip);
 
-        var isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
+        const isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
 
         if(isArrowVisible) {
             this._renderArrowPosition(positionSide);
@@ -362,17 +362,17 @@ var Popover = Popup.inherit({
             return;
         }
 
-        var containerLocation = positionUtils.calculate(this._$content, this._getContainerPosition());
+        const containerLocation = positionUtils.calculate(this._$content, this._getContainerPosition());
 
         if((containerLocation.h.oversize > 0) && this._isHorizontalSide() && !containerLocation.h.fit) {
-            var newContainerWidth = this._$content.width() - containerLocation.h.oversize;
+            const newContainerWidth = this._$content.width() - containerLocation.h.oversize;
 
             this._$content.width(newContainerWidth);
         }
 
         if((containerLocation.v.oversize > 0) && this._isVerticalSide() && !containerLocation.v.fit) {
-            var newOverlayContentHeight = this._$content.height() - containerLocation.v.oversize,
-                newPopupContentHeight = this._$popupContent.height() - containerLocation.v.oversize;
+            const newOverlayContentHeight = this._$content.height() - containerLocation.v.oversize;
+            const newPopupContentHeight = this._$popupContent.height() - containerLocation.v.oversize;
 
             this._$content.height(newOverlayContentHeight);
             this._$popupContent.height(newPopupContentHeight);
@@ -380,18 +380,18 @@ var Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        var offset = commonUtils.pairToObject(this._position.offset || '');
-        var hOffset = offset.h;
-        var vOffset = offset.v;
-        var isVerticalSide = this._isVerticalSide();
-        var isHorizontalSide = this._isHorizontalSide();
+        const offset = commonUtils.pairToObject(this._position.offset || '');
+        let hOffset = offset.h;
+        let vOffset = offset.v;
+        const isVerticalSide = this._isVerticalSide();
+        const isHorizontalSide = this._isHorizontalSide();
 
         if(isVerticalSide || isHorizontalSide) {
-            var isPopoverInside = this._isPopoverInside();
-            var sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
-            var arrowSize = isVerticalSide ? this._$arrow.height() : this._$arrow.width();
-            var arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
-            var arrowOffset = sign * (arrowSize - arrowSizeCorrection);
+            const isPopoverInside = this._isPopoverInside();
+            const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
+            const arrowSize = isVerticalSide ? this._$arrow.height() : this._$arrow.width();
+            const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
+            const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
 
             isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
         }
@@ -400,13 +400,13 @@ var Popover = Popup.inherit({
     },
 
     _getContentBorderWidth: function(side) {
-        var borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
+        const borderWidth = this._$content.css(SIDE_BORDER_WIDTH_STYLES[side]);
         return parseInt(borderWidth) || 0;
     },
 
     _getSideByLocation: function(location) {
-        var isFlippedByVertical = location.v.flip;
-        var isFlippedByHorizontal = location.h.flip;
+        const isFlippedByVertical = location.v.flip;
+        const isFlippedByHorizontal = location.h.flip;
 
         return (this._isVerticalSide() && isFlippedByVertical || this._isHorizontalSide() && isFlippedByHorizontal || this._isPopoverInside())
             ? POSITION_FLIP_MAP[this._positionSide]
@@ -428,22 +428,22 @@ var Popover = Popup.inherit({
     _renderArrowPosition: function(side) {
         this._$arrow.css(POSITION_FLIP_MAP[side], -(this._isVerticalSide(side) ? this._$arrow.height() : this._$arrow.width()));
 
-        var axis = this._isVerticalSide(side) ? 'left' : 'top';
-        var sizeProperty = this._isVerticalSide(side) ? 'outerWidth' : 'outerHeight';
-        var $target = $(this._position.of);
+        const axis = this._isVerticalSide(side) ? 'left' : 'top';
+        const sizeProperty = this._isVerticalSide(side) ? 'outerWidth' : 'outerHeight';
+        const $target = $(this._position.of);
 
-        var targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
-        var contentOffset = positionUtils.offset(this._$content);
+        const targetOffset = positionUtils.offset($target) || { top: 0, left: 0 };
+        const contentOffset = positionUtils.offset(this._$content);
 
-        var arrowSize = this._$arrow[sizeProperty]();
-        var contentLocation = contentOffset[axis];
-        var contentSize = this._$content[sizeProperty]();
-        var targetLocation = targetOffset[axis];
-        var targetSize = $target.get(0).preventDefault ? 0 : $target[sizeProperty]();
+        const arrowSize = this._$arrow[sizeProperty]();
+        const contentLocation = contentOffset[axis];
+        const contentSize = this._$content[sizeProperty]();
+        const targetLocation = targetOffset[axis];
+        const targetSize = $target.get(0).preventDefault ? 0 : $target[sizeProperty]();
 
-        var min = Math.max(contentLocation, targetLocation);
-        var max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
-        var arrowLocation;
+        const min = Math.max(contentLocation, targetLocation);
+        const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
+        let arrowLocation;
         if(this.option('arrowPosition') === 'start') {
             arrowLocation = min - contentLocation;
         } else if(this.option('arrowPosition') === 'end') {
@@ -452,16 +452,16 @@ var Popover = Popup.inherit({
             arrowLocation = (min + max) / 2 - contentLocation - arrowSize / 2;
         }
 
-        var borderWidth = this._getContentBorderWidth(side);
-        var finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
+        const borderWidth = this._getContentBorderWidth(side);
+        const finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
         this._$arrow.css(axis, finalArrowLocation);
     },
 
     _isPopoverInside: function() {
-        var position = this._transformStringPosition(this.option('position'), POSITION_ALIASES);
+        const position = this._transformStringPosition(this.option('position'), POSITION_ALIASES);
 
-        var my = positionUtils.setup.normalizeAlign(position.my);
-        var at = positionUtils.setup.normalizeAlign(position.at);
+        const my = positionUtils.setup.normalizeAlign(position.my);
+        const at = positionUtils.setup.normalizeAlign(position.at);
 
         return my.h === at.h && my.v === at.v;
     },
@@ -488,7 +488,7 @@ var Popover = Popup.inherit({
     },
 
     _normalizePosition: function() {
-        var position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
+        const position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
 
         if(!position.of) {
             position.of = this.option('target');
@@ -508,12 +508,12 @@ var Popover = Popup.inherit({
     },
 
     _getDisplaySide: function(position) {
-        var my = positionUtils.setup.normalizeAlign(position.my),
-            at = positionUtils.setup.normalizeAlign(position.at);
+        const my = positionUtils.setup.normalizeAlign(position.my);
+        const at = positionUtils.setup.normalizeAlign(position.at);
 
-        var weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1,
-            horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]),
-            verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
+        const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;
+        const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
+        const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
         return horizontalWeight > verticalWeight ? at.h : at.v;
     },
@@ -521,7 +521,7 @@ var Popover = Popup.inherit({
     _resetContentHeight: function() {
         this.callBase();
         if(isFirefox) { // T655040
-            var originalOverflow = this._$popupContent.css('overflow');
+            const originalOverflow = this._$popupContent.css('overflow');
             this._$popupContent.css('overflow', 'visible');
             this._$popupContent.css('overflow', originalOverflow);
         }
@@ -569,8 +569,8 @@ var Popover = Popup.inherit({
                 break;
             case 'showEvent':
             case 'hideEvent':
-                var name = args.name.substring(0, 4),
-                    event = getEventNameByOption(args.previousValue);
+                var name = args.name.substring(0, 4);
+                var event = getEventNameByOption(args.previousValue);
 
                 this.hide();
                 detachEvent(this, this.option('target'), name, event);

@@ -429,7 +429,7 @@ QUnit.module('Toolbar integration', {
 
             instance.setSelection(0, 4);
 
-            let $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
             $linkFormatButton.trigger('dxclick');
 
             $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();

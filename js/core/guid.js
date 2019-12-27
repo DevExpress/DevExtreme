@@ -1,6 +1,6 @@
-var Class = require('./class');
+const Class = require('./class');
 
-var Guid = Class.inherit({
+const Guid = Class.inherit({
 
     /**
     * @name Guidmethods.ctor
@@ -33,8 +33,8 @@ var Guid = Class.inherit({
     },
 
     _generate: function() {
-        var value = '';
-        for(var i = 0; i < 32; i++) {
+        let value = '';
+        for(let i = 0; i < 32; i++) {
             value += Math.round(Math.random() * 15).toString(16);
         }
         return value;

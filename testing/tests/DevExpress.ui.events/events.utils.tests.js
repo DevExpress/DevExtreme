@@ -24,22 +24,22 @@ testStart(() => {
 
 QUnit.module('event utils', () => {
     test('mouse support methods', assert => {
-        const time = new Date().valueOf(),
-            e1 = nativePointerMock().eventMock('mousemove', {
-                pageX: 1,
-                pageY: 2,
-                timeStamp: time,
-                which: 2
-            }),
-            e2 = nativePointerMock().eventMock('mousemove', {
-                pageX: 2,
-                pageY: 1,
-                timeStamp: time + 50,
-                which: 1
-            }),
-            data1 = eventData(e1),
-            data2 = eventData(e2),
-            delta = eventDelta(data1, data2);
+        const time = new Date().valueOf();
+        const e1 = nativePointerMock().eventMock('mousemove', {
+            pageX: 1,
+            pageY: 2,
+            timeStamp: time,
+            which: 2
+        });
+        const e2 = nativePointerMock().eventMock('mousemove', {
+            pageX: 2,
+            pageY: 1,
+            timeStamp: time + 50,
+            which: 1
+        });
+        const data1 = eventData(e1);
+        const data2 = eventData(e2);
+        const delta = eventDelta(data1, data2);
 
         assert.equal(data1.x, 1, 'eventData x');
         assert.equal(data1.y, 2, 'eventData y');
@@ -56,13 +56,13 @@ QUnit.module('event utils', () => {
     if(compare($.fn.jquery, [3]) < 0) {
         test('touch support methods', assert => {
             const e1 = nativePointerMock().eventMock('touchmove', {
-                    touches: [{
-                        pageX: 1,
-                        pageY: 2
-                    }],
-                    timeStamp: new Date().valueOf()
-                }),
-                data1 = eventData(e1);
+                touches: [{
+                    pageX: 1,
+                    pageY: 2
+                }],
+                timeStamp: new Date().valueOf()
+            });
+            const data1 = eventData(e1);
 
             assert.equal(data1.x, 1, 'eventData x');
             assert.equal(data1.y, 2, 'eventData y');
@@ -133,9 +133,9 @@ QUnit.module('event utils', () => {
     });
 
     test('addNamespace method', assert => {
-        const event = addNamespace('custom', 'Widget'),
-            severalEventsByString = addNamespace('custom1 custom2', 'Widget'),
-            severalEventsByArray = addNamespace(['custom1', 'custom2'], 'Widget');
+        const event = addNamespace('custom', 'Widget');
+        const severalEventsByString = addNamespace('custom1 custom2', 'Widget');
+        const severalEventsByArray = addNamespace(['custom1', 'custom2'], 'Widget');
 
         assert.equal(event, 'custom.Widget', 'custom event name');
         assert.equal(severalEventsByString, 'custom1.Widget custom2.Widget', 'several custom event names');
@@ -669,91 +669,91 @@ QUnit.module('skip pointer event tests', () => {
 if(compare($.fn.jquery, [3]) < 0) {
     QUnit.module('JQuery integration', () => {
         const W3CEventProps = [
-                'bubbles',
-                'cancelable',
-                'currentTarget',
-                'eventPhase',
-                'target',
-                'timeStamp',
-                'type',
-                'preventDefault',
-                'stopPropagation'
-            ],
+            'bubbles',
+            'cancelable',
+            'currentTarget',
+            'eventPhase',
+            'target',
+            'timeStamp',
+            'type',
+            'preventDefault',
+            'stopPropagation'
+        ];
 
-            W3CUIEventProps = W3CEventProps.concat([
-                'detail',
-                'view'
-            ]),
+        const W3CUIEventProps = W3CEventProps.concat([
+            'detail',
+            'view'
+        ]);
 
-            W3CMouseEventProps = W3CUIEventProps.concat([
-                'altKey',
-                'button',
-                'clientX',
-                'clientY',
-                'ctrlKey',
-                'metaKey',
-                'relatedTarget',
-                'screenX',
-                'screenY',
-                'shiftKey'
-            ]),
+        const W3CMouseEventProps = W3CUIEventProps.concat([
+            'altKey',
+            'button',
+            'clientX',
+            'clientY',
+            'ctrlKey',
+            'metaKey',
+            'relatedTarget',
+            'screenX',
+            'screenY',
+            'shiftKey'
+        ]);
 
-            W3CTouchEventProps = W3CUIEventProps.concat([
-                'altKey',
-                'changedTouches',
-                'ctrlKey',
-                'metaKey',
-                'shiftKey',
-                'targetTouches',
-                'touches'
-            ]),
+        const W3CTouchEventProps = W3CUIEventProps.concat([
+            'altKey',
+            'changedTouches',
+            'ctrlKey',
+            'metaKey',
+            'shiftKey',
+            'targetTouches',
+            'touches'
+        ]);
 
-            W3CPointerEventProps = W3CMouseEventProps.concat([
-                'pointerId',
-                'pointerType',
-                'width',
-                'height',
-                'pressure',
-                'tiltX',
-                'tiltY',
-                'isPrimary'
-            ]),
+        const W3CPointerEventProps = W3CMouseEventProps.concat([
+            'pointerId',
+            'pointerType',
+            'width',
+            'height',
+            'pressure',
+            'tiltX',
+            'tiltY',
+            'isPrimary'
+        ]);
 
-            jQueryAdditionalProps = [
-                'originalEvent',
+        const jQueryAdditionalProps = [
+            'originalEvent',
 
-                'stopPropagation',
-                'isPropagationStopped',
-                'stopImmediatePropagation',
-                'isImmediatePropagationStopped',
-                'preventDefault',
-                'isDefaultPrevented',
+            'stopPropagation',
+            'isPropagationStopped',
+            'stopImmediatePropagation',
+            'isImmediatePropagationStopped',
+            'preventDefault',
+            'isDefaultPrevented',
 
-                'result',
-                'data',
+            'result',
+            'data',
 
-                'relatedTarget',
-                'delegateTarget',
-                'originalTarget',
+            'relatedTarget',
+            'delegateTarget',
+            'originalTarget',
 
-                'which',
-                'button',
-                'charCode',
+            'which',
+            'button',
+            'charCode',
 
-                'pageX',
-                'pageY',
+            'pageX',
+            'pageY',
 
-                'clientX',
-                'clientY',
+            'clientX',
+            'clientY',
 
-                'offsetX',
-                'offsetY',
+            'offsetX',
+            'offsetY',
 
-                'screenX',
-                'screenY',
+            'screenX',
+            'screenY',
 
-                'prevValue'
-            ];
+            'prevValue'
+        ];
 
 
         if('ontouchstart' in window && !('callPhantom' in window)) {

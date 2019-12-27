@@ -1,25 +1,25 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    selectStrategy = mapLayerModule._TESTS_selectStrategy,
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const mapLayerModule = require('viz/vector_map/map_layer');
+const selectStrategy = mapLayerModule._TESTS_selectStrategy;
 
-    emptyStrategy = selectStrategy({}, createData(0)),
-    areaStrategyPolygon = selectStrategy({ type: 'area' }, createData(1)),
-    areaStrategyMultiPolygon = selectStrategy({ type: 'area' }, createData(1, [[[[1]]]])),
-    lineStrategyLineString = selectStrategy({ type: 'line' }, createData(1)),
-    lineStrategyMultiLineString = selectStrategy({ type: 'line' }, createData(1, [[[1]]])),
-    pointDotStrategy = selectStrategy({ type: 'marker', elementType: 'dot' }, createData(1)),
-    pointBubbleStrategy = selectStrategy({ type: 'marker', elementType: 'bubble' }, createData(1)),
-    pointPieStrategy = selectStrategy({ type: 'marker', elementType: 'pie' }, createData(1)),
-    pointImageStrategy = selectStrategy({ type: 'marker', elementType: 'image' }, createData(1));
+const emptyStrategy = selectStrategy({}, createData(0));
+const areaStrategyPolygon = selectStrategy({ type: 'area' }, createData(1));
+const areaStrategyMultiPolygon = selectStrategy({ type: 'area' }, createData(1, [[[[1]]]]));
+const lineStrategyLineString = selectStrategy({ type: 'line' }, createData(1));
+const lineStrategyMultiLineString = selectStrategy({ type: 'line' }, createData(1, [[[1]]]));
+const pointDotStrategy = selectStrategy({ type: 'marker', elementType: 'dot' }, createData(1));
+const pointBubbleStrategy = selectStrategy({ type: 'marker', elementType: 'bubble' }, createData(1));
+const pointPieStrategy = selectStrategy({ type: 'marker', elementType: 'pie' }, createData(1));
+const pointImageStrategy = selectStrategy({ type: 'marker', elementType: 'image' }, createData(1));
 
-var performGrouping = mapLayerModule._TESTS_performGrouping,
-    groupByColor = mapLayerModule._TESTS_groupByColor,
-    groupBySize = mapLayerModule._TESTS_groupBySize,
-    stubPerformGrouping,
-    stubGroupByColor,
-    stubGroupBySize;
+const performGrouping = mapLayerModule._TESTS_performGrouping;
+const groupByColor = mapLayerModule._TESTS_groupByColor;
+const groupBySize = mapLayerModule._TESTS_groupBySize;
+let stubPerformGrouping;
+let stubGroupByColor;
+let stubGroupBySize;
 
 QUnit.begin(function() {
     stubPerformGrouping = sinon.spy();
@@ -242,23 +242,23 @@ QUnit.test('Selecting', function(assert) {
 // });
 
 QUnit.test('Perform grouping', function(assert) {
-    var set = sinon.spy(),
-        valuesCallback = sinon.stub().returns('test-values'),
-        context = {
-            name: 'test-name',
-            params: {
-                dataExchanger: { set: set }
-            },
-            settings: {
-                color: 'default color'
-            },
-            grouping: {}
+    const set = sinon.spy();
+    const valuesCallback = sinon.stub().returns('test-values');
+    const context = {
+        name: 'test-name',
+        params: {
+            dataExchanger: { set: set }
         },
-        stub = sinon.stub().returns('test-data');
+        settings: {
+            color: 'default color'
+        },
+        grouping: {}
+    };
+    const stub = sinon.stub().returns('test-data');
 
     performGrouping(context, [1, 2, 3, 4], 'test-field-1', 'data-field', valuesCallback);
 
-    var callback = context.grouping['test-field-1'].callback;
+    let callback = context.grouping['test-field-1'].callback;
     assert.deepEqual(context.grouping['test-field-1'], {
         callback: callback,
         field: 'data-field',
@@ -303,18 +303,18 @@ QUnit.test('Perform grouping', function(assert) {
 
 QUnit.test('Group by color', function(assert) {
     stubPerformGrouping.reset();
-    var getColor = sinon.stub(),
-        createDiscretePalette = sinon.stub().returns({ getColor: getColor }),
-        context = {
-            params: {
-                themeManager: { createDiscretePalette: createDiscretePalette }
-            },
-            settings: {
-                colorGroups: 'test-groups',
-                colorGroupingField: 'test-field',
-                palette: 'test-palette'
-            }
-        };
+    const getColor = sinon.stub();
+    const createDiscretePalette = sinon.stub().returns({ getColor: getColor });
+    const context = {
+        params: {
+            themeManager: { createDiscretePalette: createDiscretePalette }
+        },
+        settings: {
+            colorGroups: 'test-groups',
+            colorGroupingField: 'test-field',
+            palette: 'test-palette'
+        }
+    };
     getColor.onCall(0).returns('c1');
     getColor.onCall(1).returns('c2');
     getColor.onCall(2).returns('c3');
@@ -322,7 +322,7 @@ QUnit.test('Group by color', function(assert) {
 
     groupByColor(context);
 
-    var callback = stubPerformGrouping.lastCall.args[4];
+    const callback = stubPerformGrouping.lastCall.args[4];
     assert.deepEqual(stubPerformGrouping.lastCall.args, [context, 'test-groups', 'color', 'test-field', callback], 'grouping');
     assert.deepEqual(callback(3), ['c1', 'c2', 'c3'], 'callback');
     assert.deepEqual(createDiscretePalette.lastCall.args, ['test-palette', 3], 'palette');
@@ -330,7 +330,7 @@ QUnit.test('Group by color', function(assert) {
 
 QUnit.test('Group by size', function(assert) {
     stubPerformGrouping.reset();
-    var context = {
+    const context = {
         settings: {
             sizeGroups: 'test-groups',
             sizeGroupingField: 'test-field',
@@ -341,7 +341,7 @@ QUnit.test('Group by size', function(assert) {
 
     groupBySize(context);
 
-    var callback = stubPerformGrouping.lastCall.args[4];
+    const callback = stubPerformGrouping.lastCall.args[4];
     assert.deepEqual(stubPerformGrouping.lastCall.args, [context, 'test-groups', 'size', 'test-field', callback], 'grouping');
     assert.deepEqual(callback(0), [], 'callback 0');
     assert.deepEqual(callback(1), [15], 'callback 1');
@@ -351,7 +351,7 @@ QUnit.test('Group by size', function(assert) {
 
 QUnit.test('Group by size with callback', function(assert) {
     stubPerformGrouping.reset();
-    var context = {
+    const context = {
         settings: {
             sizeGroups: 'test-groups',
             sizeGroupingField: 'test-field',
@@ -362,13 +362,13 @@ QUnit.test('Group by size with callback', function(assert) {
 
     groupBySize(context, 'test-callback');
 
-    var callback = stubPerformGrouping.lastCall.args[4];
+    const callback = stubPerformGrouping.lastCall.args[4];
     assert.deepEqual(stubPerformGrouping.lastCall.args, [context, 'test-groups', 'size', 'test-callback', callback], 'grouping');
 });
 
 QUnit.test('Find grouping index', function(assert) {
-    var findGroupingIndex = mapLayerModule._TESTS_findGroupingIndex,
-        groups = [1, 2, 6, 8, 10, 14, 18, 21];
+    const findGroupingIndex = mapLayerModule._TESTS_findGroupingIndex;
+    const groups = [1, 2, 6, 8, 10, 14, 18, 21];
 
     assert.strictEqual(findGroupingIndex('test', groups), -1, 'not a number');
     assert.strictEqual(findGroupingIndex(0, groups), -1, 'less then min');
@@ -392,7 +392,7 @@ QUnit.test('Find grouping index', function(assert) {
     assert.strictEqual(findGroupingIndex(18.1, groups), 6, '18.1');
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.context = {
@@ -411,7 +411,7 @@ QUnit.test('Types', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     areaStrategyPolygon.draw(this.context, figure, 'test-data');
 
@@ -421,9 +421,9 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Get label offset', function(assert) {
-    var label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() },
-        label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() },
-        label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
 
     assert.deepEqual(areaStrategyPolygon.getLabelOffset(label1), [0, 0], 'offset 1');
     assert.deepEqual(label1.text.attr.lastCall.args, [{ visibility: null }], 'visibility 1');
@@ -464,8 +464,8 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element() },
-        style = { tag: 'style' };
+    const figure = { root: new vizMocks.Element() };
+    const style = { tag: 'style' };
 
     areaStrategyPolygon.setState(figure, { root: [null, style, null] }, 1);
 
@@ -489,7 +489,7 @@ QUnit.test('GetDefaultColor - returns nothing', function(assert) {
         themeManager: { getAccentColor: sinon.stub().returns('default color') }
     };
 
-    var result = areaStrategyPolygon.getDefaultColor(this.context, 'test palette');
+    const result = areaStrategyPolygon.getDefaultColor(this.context, 'test palette');
 
     assert.strictEqual(result, undefined);
     assert.strictEqual(this.context.params.themeManager.getAccentColor.callCount, 0);
@@ -504,7 +504,7 @@ QUnit.test('Types', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     lineStrategyLineString.draw(this.context, figure, 'test-data');
 
@@ -514,10 +514,10 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Get label offset', function(assert) {
-    var label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() },
-        label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() },
-        label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() },
-        label4 = { size: [30, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label1 = { size: [10, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label2 = { size: [30, 20], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label3 = { size: [10, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
+    const label4 = { size: [30, 40], spaceSize: [30, 40], text: new vizMocks.Element() };
 
     assert.deepEqual(lineStrategyLineString.getLabelOffset(label1), [0, 0], 'offset 1');
     assert.deepEqual(label1.text.attr.lastCall.args, [{ visibility: null }], 'visibility 1');
@@ -561,8 +561,8 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element() },
-        style = { tag: 'style' };
+    const figure = { root: new vizMocks.Element() };
+    const style = { tag: 'style' };
 
     lineStrategyLineString.setState(figure, { root: [null, style, null] }, 1);
 
@@ -586,7 +586,7 @@ QUnit.test('GetDefaultColor - returns nothing', function(assert) {
         themeManager: { getAccentColor: sinon.stub().returns('default color') }
     };
 
-    var result = lineStrategyLineString.getDefaultColor(this.context, 'test palette');
+    const result = lineStrategyLineString.getDefaultColor(this.context, 'test palette');
 
     assert.strictEqual(result, undefined);
     assert.strictEqual(this.context.params.themeManager.getAccentColor.callCount, 0);
@@ -613,14 +613,14 @@ QUnit.test('Update grouping', function(assert) {
 });
 
 QUnit.test('Get default color', function(assert) {
-    var getAccentColor = sinon.stub().returns('default color'),
-        context = {
-            params: {
-                themeManager: { getAccentColor: getAccentColor }
-            }
-        };
+    const getAccentColor = sinon.stub().returns('default color');
+    const context = {
+        params: {
+            themeManager: { getAccentColor: getAccentColor }
+        }
+    };
 
-    var result = pointDotStrategy.getDefaultColor(context, 'test palette');
+    const result = pointDotStrategy.getDefaultColor(context, 'test palette');
 
     assert.equal(result, 'default color');
     assert.deepEqual(context.params.themeManager.getAccentColor.lastCall.args, ['test palette']);
@@ -642,7 +642,7 @@ QUnit.test('Setup', function(assert) {
 });
 
 QUnit.test('Reset', function(assert) {
-    var filter = this.context.filter = new vizMocks.Element();
+    const filter = this.context.filter = new vizMocks.Element();
     pointDotStrategy.reset(this.context);
 
     assert.deepEqual(filter.dispose.lastCall.args, []);
@@ -650,7 +650,7 @@ QUnit.test('Reset', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     pointDotStrategy.draw(this.context, figure, 'test-data');
 
@@ -672,7 +672,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    var figure = { dot: new vizMocks.Element() };
+    const figure = { dot: new vizMocks.Element() };
     this.context.filter = { id: 'test-filter' };
 
     pointDotStrategy.refresh(this.context, figure, null, null, { shadow: true });
@@ -742,10 +742,10 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element(), back: new vizMocks.Element(), dot: new vizMocks.Element() },
-        rootStyle = { tag: 'root' },
-        backStyle = { tag: 'back' },
-        dotStyle = { tag: 'dot' };
+    const figure = { root: new vizMocks.Element(), back: new vizMocks.Element(), dot: new vizMocks.Element() };
+    const rootStyle = { tag: 'root' };
+    const backStyle = { tag: 'back' };
+    const dotStyle = { tag: 'dot' };
 
     pointDotStrategy.setState(figure, {
         root: [null, null, rootStyle],
@@ -767,7 +767,7 @@ QUnit.test('Types', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     pointBubbleStrategy.draw(this.context, figure, 'test-data');
 
@@ -784,7 +784,7 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    var figure = { bubble: new vizMocks.Element() };
+    const figure = { bubble: new vizMocks.Element() };
 
     pointBubbleStrategy.refresh(this.context, figure, null, null, { size: 8 });
 
@@ -830,9 +830,9 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element(), bubble: new vizMocks.Element() },
-        rootStyle = { tag: 'root' },
-        bubbleStyle = { tag: 'back' };
+    const figure = { root: new vizMocks.Element(), bubble: new vizMocks.Element() };
+    const rootStyle = { tag: 'root' };
+    const bubbleStyle = { tag: 'back' };
 
     pointBubbleStrategy.setState(figure, {
         root: [rootStyle, null],
@@ -844,7 +844,7 @@ QUnit.test('Set state', function(assert) {
 });
 
 QUnit.test('Arrange', function(assert) {
-    var elements = $.map([2.3, 5, 2, 8, 4.4], function(val) {
+    const elements = $.map([2.3, 5, 2, 8, 4.4], function(val) {
         return {
             proxy: { attribute: sinon.stub().returns(val) },
             _settings: {}
@@ -870,7 +870,7 @@ QUnit.test('Arrange', function(assert) {
 });
 
 QUnit.test('Arrange / value', function(assert) {
-    var elements = $.map([2.3, 5, 2, 8, 4.4], function(val) {
+    const elements = $.map([2.3, 5, 2, 8, 4.4], function(val) {
         return {
             proxy: {
                 attribute: sinon.spy(function() {
@@ -915,7 +915,7 @@ QUnit.test('GetDefaultColor - use theme manager to get palette\'s accent color',
         themeManager: { getAccentColor: sinon.stub().returns('default color') }
     };
 
-    var result = pointBubbleStrategy.getDefaultColor(this.context, 'test palette');
+    const result = pointBubbleStrategy.getDefaultColor(this.context, 'test palette');
 
     assert.equal(result, 'default color');
     assert.deepEqual(this.context.params.themeManager.getAccentColor.lastCall.args, ['test palette']);
@@ -930,10 +930,10 @@ QUnit.test('Update grouping', function(assert) {
 
     assert.deepEqual(stubGroupByColor.lastCall.args, [this.context], 'group by color');
     assert.deepEqual(stubGroupBySize.getCall(0).args, [this.context], 'group by size 1');
-    var callback = stubGroupBySize.lastCall.args[1];
+    const callback = stubGroupBySize.lastCall.args[1];
     assert.deepEqual(stubGroupBySize.getCall(1).args, [this.context, callback], 'group by size 2');
 
-    var proxy = { attribute: sinon.stub().returns('test-1') };
+    const proxy = { attribute: sinon.stub().returns('test-1') };
     assert.strictEqual(callback(proxy), 'test-1', 'callback return value 1');
     assert.deepEqual(proxy.attribute.getCall(0).args, ['data-field'], 'data field 1');
     proxy.attribute.returns(null);
@@ -951,7 +951,7 @@ QUnit.test('Types', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     pointPieStrategy.draw(this.context, figure, 'test-data');
 
@@ -971,8 +971,8 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() },
-        stub = sinon.stub().returns([1, 2, 3]);
+    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const stub = sinon.stub().returns([1, 2, 3]);
     this.context.settings = { dataField: 'data-field' };
 
     pointPieStrategy.refresh(this.context, figure, 'test-data',
@@ -994,7 +994,7 @@ QUnit.test('Refresh', function(assert) {
 });
 
 QUnit.test('Refresh / values', function(assert) {
-    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
     this.context.settings = { dataField: 'data-field' };
 
     pointPieStrategy.refresh(this.context, figure, 'test-data',
@@ -1068,10 +1068,10 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element(), pie: new vizMocks.Element(), border: new vizMocks.Element() },
-        rootStyle = { tag: 'root' },
-        pieStyle = { tag: 'pie' },
-        borderStyle = { tag: 'border' };
+    const figure = { root: new vizMocks.Element(), pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const rootStyle = { tag: 'root' };
+    const pieStyle = { tag: 'pie' };
+    const borderStyle = { tag: 'border' };
 
     pointPieStrategy.setState(figure, {
         root: [null, rootStyle],
@@ -1085,9 +1085,9 @@ QUnit.test('Set state', function(assert) {
 });
 
 QUnit.test('Arrange', function(assert) {
-    var generateColors = sinon.stub(),
-        createPalette = sinon.stub().returns({ generateColors: generateColors }),
-        set = sinon.spy();
+    const generateColors = sinon.stub();
+    const createPalette = sinon.stub().returns({ generateColors: generateColors });
+    const set = sinon.spy();
     this.context.name = 'test-name';
     this.context.grouping = {};
     this.context.params = {
@@ -1113,7 +1113,7 @@ QUnit.test('Arrange', function(assert) {
 
 // T712894
 QUnit.test('Refresh. All values is zero', function(assert) {
-    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    const figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
     this.context.settings = { dataField: 'data-field' };
 
     pointPieStrategy.refresh(this.context, figure, 'test-data',
@@ -1141,7 +1141,7 @@ QUnit.test('Types', function(assert) {
 });
 
 QUnit.test('Draw', function(assert) {
-    var figure = {};
+    const figure = {};
 
     pointImageStrategy.draw(this.context, figure, 'test-data');
 
@@ -1155,8 +1155,8 @@ QUnit.test('Draw', function(assert) {
 });
 
 QUnit.test('Refresh', function(assert) {
-    var figure = { image: new vizMocks.Element() },
-        stub = sinon.stub().returns('test-url');
+    const figure = { image: new vizMocks.Element() };
+    const stub = sinon.stub().returns('test-url');
     this.context.settings = { dataField: 'data-field' };
 
     pointImageStrategy.refresh(this.context, figure, null, { attribute: stub });
@@ -1166,10 +1166,10 @@ QUnit.test('Refresh', function(assert) {
 });
 
 QUnit.test('Refresh / url', function(assert) {
-    var figure = { image: new vizMocks.Element() },
-        stub = sinon.spy(function() {
-            return this.url;
-        });
+    const figure = { image: new vizMocks.Element() };
+    const stub = sinon.spy(function() {
+        return this.url;
+    });
     this.context.settings = { dataField: 'data-field' };
 
     pointImageStrategy.refresh(this.context, figure, null, { attribute: stub, url: 'test-url' });
@@ -1219,9 +1219,9 @@ QUnit.test('Get styles, zero values', function(assert) {
 });
 
 QUnit.test('Set state', function(assert) {
-    var figure = { root: new vizMocks.Element(), image: new vizMocks.Element() },
-        rootStyle = { tag: 'root' },
-        imageStyle = { tag: 'pie' };
+    const figure = { root: new vizMocks.Element(), image: new vizMocks.Element() };
+    const rootStyle = { tag: 'root' };
+    const imageStyle = { tag: 'pie' };
 
     pointImageStrategy.setState(figure, {
         root: [null, rootStyle],

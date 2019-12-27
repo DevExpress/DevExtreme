@@ -1,10 +1,10 @@
 /* global currentTest, createTestContainer */
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    tooltipModule = require('viz/core/tooltip'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    baseThemeManagerModule = require('viz/core/base_theme_manager');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const tooltipModule = require('viz/core/tooltip');
+const rendererModule = require('viz/core/renderers/renderer');
+const baseThemeManagerModule = require('viz/core/base_theme_manager');
 
 require('viz/bullet');
 
@@ -13,8 +13,8 @@ $('<div>')
     .css({ width: 250, height: 20 })
     .appendTo('#qunit-fixture');
 
-var StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
-var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
+const StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager);
+const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return true; }, formatValue: function(value, format) { return value + ':' + format; } });
 
 tooltipModule.Tooltip = function(parameters) {
     return new StubTooltip(parameters);
@@ -31,7 +31,7 @@ StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
 };
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
         this.themeManager.stub('theme').returns({
@@ -63,7 +63,7 @@ var environment = {
 QUnit.module('Tooltip creating', environment);
 
 QUnit.test('Enabled tooltip', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10,
         maxScaleValue: 20,
         tooltip: {
@@ -75,7 +75,7 @@ QUnit.test('Enabled tooltip', function(assert) {
     });
     bullet._showTooltipCallback();
 
-    var arg = bullet._tooltip.ctorArgs;
+    const arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
@@ -93,7 +93,7 @@ QUnit.test('Enabled tooltip', function(assert) {
 });
 
 QUnit.test('Enabled tooltip. Empty data', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         tooltip: {
             font: {
                 size: 12
@@ -103,7 +103,7 @@ QUnit.test('Enabled tooltip. Empty data', function(assert) {
     });
     bullet._showTooltipCallback();
 
-    var arg = bullet._tooltip.ctorArgs;
+    const arg = bullet._tooltip.ctorArgs;
     assert.strictEqual(arg.length, 1);
     assert.deepEqual(arg[0].cssClass, 'dxb-tooltip', 'parameter - cssClass');
     assert.strictEqual(arg[0].eventTrigger, bullet._eventTrigger, 'parameter - event trigger');
@@ -121,7 +121,7 @@ QUnit.test('Enabled tooltip. Empty data', function(assert) {
 });
 
 QUnit.test('Disabled tooltip', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10,
         maxScaleValue: 20,
         tooltip: {
@@ -137,7 +137,7 @@ QUnit.test('Disabled tooltip', function(assert) {
 
 QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
     this.renderer.bBoxTemplate = { x: 10, width: 200 };
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10, target: 20, endScaleValue: 30,
         tooltip: {
             enabled: true
@@ -158,41 +158,41 @@ QUnit.test('dxBullet get TooltipFormatObject', function(assert) {
 });
 
 QUnit.test('Default Tooltip text', function(assert) {
-    var data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12],
+    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
 
-        bullet = this.createBullet({
-            dataSource: data,
-            tooltip: {
-                font: { size: 12 },
-                enabled: true
-            }
-        });
+    const bullet = this.createBullet({
+        dataSource: data,
+        tooltip: {
+            font: { size: 12 },
+            enabled: true
+        }
+    });
 
     bullet._showTooltipCallback();
     bullet._tooltip.formatValue = function(value, format) { return value; };
 
-    var ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
+    const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
     assert.deepEqual(ctResult, {
         html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: right\'>0</td></tr></table>'
     });
 });
 
 QUnit.test('Default Tooltip text. Rtl', function(assert) {
-    var data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12],
+    const data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12];
 
-        bullet = this.createBullet({
-            dataSource: data,
-            tooltip: {
-                font: { size: 12 },
-                enabled: true
-            },
-            rtlEnabled: true
-        });
+    const bullet = this.createBullet({
+        dataSource: data,
+        tooltip: {
+            font: { size: 12 },
+            enabled: true
+        },
+        rtlEnabled: true
+    });
 
     bullet._showTooltipCallback();
     bullet._tooltip.formatValue = function(value, format) { return value; };
 
-    var ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
+    const ctResult = bullet._tooltip.update.lastCall.args[0].customizeTooltip(bullet._getTooltipData());
     assert.deepEqual(ctResult, {
         html: '<table style=\'border-spacing:0px; line-height: 14px\'><tr><td>Actual Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr><tr><td>Target Value:</td><td style=\'width: 15px\'></td><td style=\'text-align: left\'>0</td></tr></table>'
     });

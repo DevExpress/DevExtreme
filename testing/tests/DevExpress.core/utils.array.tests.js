@@ -1,4 +1,4 @@
-var arrayUtils = require('core/utils/array');
+const arrayUtils = require('core/utils/array');
 
 QUnit.module('array utils');
 
@@ -16,8 +16,8 @@ QUnit.testInActiveWindow('intersection', function(assert) {
 });
 
 QUnit.test('merge', function(assert) {
-    var array1 = [ 1, 2 ];
-    var array2 = [ 3, 4 ];
+    const array1 = [ 1, 2 ];
+    const array2 = [ 3, 4 ];
 
     assert.deepEqual(arrayUtils.merge(array1, array2), [ 1, 2, 3, 4 ]);
     assert.deepEqual(array1, [ 1, 2, 3, 4 ]);
@@ -25,8 +25,8 @@ QUnit.test('merge', function(assert) {
 });
 
 QUnit.test('merge arrays with undefined items', function(assert) {
-    var array1 = [ 1, 2 ];
-    var array2 = [ 3, 4 ];
+    const array1 = [ 1, 2 ];
+    const array2 = [ 3, 4 ];
     array2[3] = 5;
 
     assert.deepEqual(arrayUtils.merge(array1, array2), [ 1, 2, 3, 4, undefined, 5 ]);

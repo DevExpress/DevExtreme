@@ -1,13 +1,13 @@
-var CustomStore = require('data/custom_store'),
-    ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
+const CustomStore = require('data/custom_store');
+const ErrorHandlingHelper = require('../../helpers/data.errorHandlingHelper.js');
 
-var RAW = 'raw';
+const RAW = 'raw';
 
 QUnit.module('load', function() {
 
     QUnit.test('only userData is passed to user func', function(assert) {
-        var done = assert.async(),
-            userData = { custom: 123 };
+        const done = assert.async();
+        const userData = { custom: 123 };
 
         new CustomStore({
             loadMode: RAW,
@@ -27,7 +27,7 @@ QUnit.module('load', function() {
     });
 
     QUnit.test('data is processed locally', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -62,7 +62,7 @@ QUnit.module('load', function() {
     });
 
     QUnit.test('requireTotalCount', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -78,8 +78,8 @@ QUnit.module('load', function() {
     });
 
     QUnit.test('error during local processing', function(assert) {
-        var done = assert.async(),
-            helper = new ErrorHandlingHelper();
+        const done = assert.async();
+        const helper = new ErrorHandlingHelper();
 
         helper.extraChecker = function(error) {
             assert.equal(error.message, 'expected error');
@@ -101,7 +101,7 @@ QUnit.module('load', function() {
 QUnit.module('totalCount', function() {
 
     QUnit.test('user func takes precedence', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -115,8 +115,8 @@ QUnit.module('totalCount', function() {
     });
 
     QUnit.test('based on raw load', function(assert) {
-        var done = assert.async(),
-            userData = { custom: 123 };
+        const done = assert.async();
+        const userData = { custom: 123 };
 
         new CustomStore({
             loadMode: RAW,
@@ -135,8 +135,8 @@ QUnit.module('totalCount', function() {
     });
 
     QUnit.test('error during local processing', function(assert) {
-        var done = assert.async(),
-            helper = new ErrorHandlingHelper();
+        const done = assert.async();
+        const helper = new ErrorHandlingHelper();
 
         helper.extraChecker = function(error) {
             assert.equal(error.message, 'expected error');
@@ -158,7 +158,7 @@ QUnit.module('totalCount', function() {
 QUnit.module('byKey', function() {
 
     QUnit.test('user func takes precedence', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -172,8 +172,8 @@ QUnit.module('byKey', function() {
     });
 
     QUnit.test('success', function(assert) {
-        var done = assert.async(),
-            needle = { id: 123 };
+        const done = assert.async();
+        const needle = { id: 123 };
 
         new CustomStore({
             loadMode: RAW,
@@ -188,7 +188,7 @@ QUnit.module('byKey', function() {
     });
 
     QUnit.test('not found', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         new CustomStore({
             loadMode: RAW,
@@ -219,10 +219,10 @@ QUnit.module('byKey', function() {
 QUnit.module('raw data caching', function() {
 
     QUnit.test('enabled by default', function(assert) {
-        var done = assert.async(),
-            loadCallCount = 0;
+        const done = assert.async();
+        let loadCallCount = 0;
 
-        var store = new CustomStore({
+        const store = new CustomStore({
             key: 'this',
             loadMode: RAW,
             load: function() {
@@ -238,10 +238,10 @@ QUnit.module('raw data caching', function() {
     });
 
     QUnit.test('can be disabled', function(assert) {
-        var done = assert.async(),
-            loadCallCount = 0;
+        const done = assert.async();
+        let loadCallCount = 0;
 
-        var store = new CustomStore({
+        const store = new CustomStore({
             loadMode: RAW,
             cacheRawData: false,
             load: function() {
@@ -259,9 +259,9 @@ QUnit.module('raw data caching', function() {
 });
 
 QUnit.test('ensure valid results regardless of presence of options (checks optimizations)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         loadMode: RAW,
         load: function() { return [ 1, 2, 3 ]; }
     });
@@ -287,8 +287,8 @@ QUnit.test('uses default search', function(assert) {
 });
 
 QUnit.test('async load', function(assert) {
-    var loadCallCount = 0;
-    var store = new CustomStore({
+    let loadCallCount = 0;
+    const store = new CustomStore({
         loadMode: 'raw',
         key: 'ID',
         load: function() {

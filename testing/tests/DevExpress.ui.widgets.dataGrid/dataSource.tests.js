@@ -17,13 +17,13 @@ import { GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_
 import 'ui/data_grid/ui.data_grid';
 
 
-var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-var createDataSource = function(options) {
+const createDataSource = function(options) {
     options._preferSync = true;
-    var dataSource = new DataSource(options);
+    const dataSource = new DataSource(options);
 
-    var dataGridStub = {
+    const dataGridStub = {
         options: {
             scrolling: options.scrolling,
             cacheEnabled: options.cacheEnabled,
@@ -35,11 +35,11 @@ var createDataSource = function(options) {
 
     setupDataGridModules(dataGridStub, ['data', 'columns']);
 
-    var dataSourceAdapter = dataGridStub.dataController._createDataSourceAdapter(dataSource);
+    const dataSourceAdapter = dataGridStub.dataController._createDataSourceAdapter(dataSource);
 
-    var origItems = dataSourceAdapter.items;
+    const origItems = dataSourceAdapter.items;
     var processItems = function(items) {
-        for(var i = 0; i < items.length; i++) {
+        for(let i = 0; i < items.length; i++) {
             if(typeof items[i] === 'object') {
                 if('items' in items[i] && items[i].items !== null) {
                     processItems(items[i].items);
@@ -55,7 +55,7 @@ var createDataSource = function(options) {
     };
 
     dataSourceAdapter.items = function() {
-        var items = origItems.apply(this, arguments);
+        const items = origItems.apply(this, arguments);
 
         processItems(items);
 
@@ -77,21 +77,21 @@ QUnit.module('Grid DataSource', {
 });
 
 QUnit.test('page index parallel change', function(assert) {
-    var loadingPages = [],
-        source = createDataSource({
-            store: {
-                onLoading: function(options) {
-                    loadingPages.push(source.pageIndex());
-                },
-                type: 'array',
-                data: TEN_NUMBERS
+    const loadingPages = [];
+    var source = createDataSource({
+        store: {
+            onLoading: function(options) {
+                loadingPages.push(source.pageIndex());
             },
-            pageSize: 3,
-            asyncLoadEnabled: true,
-            requireTotalCount: true,
-            remoteOperations: { filtering: true, sorting: true, paging: true }
-        }),
-        changeCallCount = 0;
+            type: 'array',
+            data: TEN_NUMBERS
+        },
+        pageSize: 3,
+        asyncLoadEnabled: true,
+        requireTotalCount: true,
+        remoteOperations: { filtering: true, sorting: true, paging: true }
+    });
+    let changeCallCount = 0;
 
     source.load().done(function() {
         source.changed.add(function(options) {
@@ -118,11 +118,11 @@ QUnit.test('page index parallel change', function(assert) {
 });
 
 QUnit.test('get page size if paginate enabled', function(assert) {
-    var source = createDataSource({
-            store: TEN_NUMBERS,
-            pageSize: 3
-        }),
-        changeCallCount = 0;
+    const source = createDataSource({
+        store: TEN_NUMBERS,
+        pageSize: 3
+    });
+    let changeCallCount = 0;
 
     source.load().done(function() {
         changeCallCount++;
@@ -135,12 +135,12 @@ QUnit.test('get page size if paginate enabled', function(assert) {
 });
 
 QUnit.test('get page size if paginate disabled', function(assert) {
-    var source = createDataSource({
-            store: TEN_NUMBERS,
-            pageSize: 3,
-            paginate: false
-        }),
-        changeCallCount = 0;
+    const source = createDataSource({
+        store: TEN_NUMBERS,
+        pageSize: 3,
+        paginate: false
+    });
+    let changeCallCount = 0;
 
     source.load().done(function() {
         changeCallCount++;
@@ -153,11 +153,11 @@ QUnit.test('get page size if paginate disabled', function(assert) {
 });
 
 QUnit.test('page size change', function(assert) {
-    var source = createDataSource({
-            store: TEN_NUMBERS,
-            pageSize: 3
-        }),
-        changeCallCount = 0;
+    const source = createDataSource({
+        store: TEN_NUMBERS,
+        pageSize: 3
+    });
+    let changeCallCount = 0;
 
     source.load().done(function() {
         assert.equal(source.items().length, 3);
@@ -174,7 +174,7 @@ QUnit.test('page size change', function(assert) {
 });
 
 QUnit.test('reload do not reset pageIndex', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3
     });
@@ -192,12 +192,12 @@ QUnit.test('reload do not reset pageIndex', function(assert) {
 });
 
 QUnit.test('reload full reset isLoaded', function(assert) {
-    var source = createDataSource({
-            store: TEN_NUMBERS,
-            pageSize: 3,
-            asyncLoadEnabled: true
-        }),
-        finalized;
+    const source = createDataSource({
+        store: TEN_NUMBERS,
+        pageSize: 3,
+        asyncLoadEnabled: true
+    });
+    let finalized;
 
     source.load().done(function() {
         assert.ok(source.isLoaded());
@@ -215,23 +215,23 @@ QUnit.test('reload full reset isLoaded', function(assert) {
 
 
 QUnit.test('reload calls before last load complete', function(assert) {
-    var totalCountDeferred = $.Deferred(),
-        source = createDataSource({
-            store: new CustomStore({
-                load: function() {
-                    return TEN_NUMBERS;
-                },
-                totalCount: function() {
-                    return totalCountDeferred;
-                }
-            }),
-            asyncLoadEnabled: true,
-            pageSize: 3,
-            requireTotalCount: true,
-            remoteOperations: { filtering: true, sorting: true, paging: true }
+    let totalCountDeferred = $.Deferred();
+    const source = createDataSource({
+        store: new CustomStore({
+            load: function() {
+                return TEN_NUMBERS;
+            },
+            totalCount: function() {
+                return totalCountDeferred;
+            }
         }),
-        loaded,
-        reloaded;
+        asyncLoadEnabled: true,
+        pageSize: 3,
+        requireTotalCount: true,
+        remoteOperations: { filtering: true, sorting: true, paging: true }
+    });
+    let loaded;
+    let reloaded;
 
     source.load().done(function() {
         loaded = true;
@@ -259,7 +259,7 @@ QUnit.test('reload calls before last load complete', function(assert) {
 });
 
 QUnit.test('pageIndex in dataSource options', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         pageIndex: 1
@@ -274,7 +274,7 @@ QUnit.test('pageIndex in dataSource options', function(assert) {
 
 // B233043
 QUnit.test('pageIndex greater then pageCount in dataSource options', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         pageIndex: 5,
@@ -290,7 +290,7 @@ QUnit.test('pageIndex greater then pageCount in dataSource options', function(as
 
 // B233043
 QUnit.test('pageIndex equals pageCount in dataSource options', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         pageIndex: 4,
@@ -305,13 +305,13 @@ QUnit.test('pageIndex equals pageCount in dataSource options', function(assert) 
 });
 
 QUnit.test('pageIndex correction before change event', function(assert) {
-    var source = createDataSource({
-            store: new ArrayStore(TEN_NUMBERS),
-            pageSize: 3,
-            pageIndex: 5,
-            requireTotalCount: true
-        }),
-        changeCallCount = 0;
+    const source = createDataSource({
+        store: new ArrayStore(TEN_NUMBERS),
+        pageSize: 3,
+        pageIndex: 5,
+        requireTotalCount: true
+    });
+    let changeCallCount = 0;
 
     source.changed.add(function() {
         changeCallCount++;
@@ -328,7 +328,7 @@ QUnit.test('pageIndex correction before change event', function(assert) {
 });
 
 QUnit.test('change pageIndex to greater then pageSize', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         pageIndex: 1,
@@ -345,7 +345,7 @@ QUnit.test('change pageIndex to greater then pageSize', function(assert) {
 });
 
 QUnit.test('itemsCount calculation', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         requireTotalCount: true
@@ -360,7 +360,7 @@ QUnit.test('itemsCount calculation', function(assert) {
 
 
 QUnit.test('pageCount calculation', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         requireTotalCount: true
@@ -374,7 +374,7 @@ QUnit.test('pageCount calculation', function(assert) {
 });
 
 QUnit.test('pageCount calculation after change pageSize', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: TEN_NUMBERS,
         pageSize: 3,
         requireTotalCount: true
@@ -389,7 +389,7 @@ QUnit.test('pageCount calculation after change pageSize', function(assert) {
 });
 
 QUnit.test('isLastPage and hasKnownLastPage for first page', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: new ArrayStore(TEN_NUMBERS),
         pageSize: 3,
         requireTotalCount: true
@@ -404,7 +404,7 @@ QUnit.test('isLastPage and hasKnownLastPage for first page', function(assert) {
 });
 
 QUnit.test('isLastPage for first page when totalCount = -1', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: new CustomStore({
             load: function() {
                 return TEN_NUMBERS;
@@ -428,7 +428,7 @@ QUnit.test('isLastPage for first page when totalCount = -1', function(assert) {
 
 
 QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
-    var source = createDataSource({
+    const source = createDataSource({
         store: new ArrayStore(TEN_NUMBERS),
         pageSize: 3,
         pageIndex: 3,
@@ -445,7 +445,7 @@ QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
 
 QUnit.test('groupingHelper when remoteOperations is auto and ArrayStore', function(assert) {
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: TEN_NUMBERS,
         remoteOperations: 'auto'
     });
@@ -456,7 +456,7 @@ QUnit.test('groupingHelper when remoteOperations is auto and ArrayStore', functi
 
 QUnit.test('groupingHelper when remoteOperations is auto and CustomStore', function(assert) {
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         load: function() { },
         remoteOperations: 'auto'
     });
@@ -467,7 +467,7 @@ QUnit.test('groupingHelper when remoteOperations is auto and CustomStore', funct
 
 QUnit.test('groupingHelper when remoteOperations is auto and ODataStore', function(assert) {
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: {
             type: 'odata',
             url: 'test'
@@ -481,17 +481,17 @@ QUnit.test('groupingHelper when remoteOperations is auto and ODataStore', functi
 
 // T298483
 QUnit.test('ODataStore customQueryParams/select when remoteOperations false', function(assert) {
-    var store = new ODataStore({
-            url: 'test'
-        }),
-        source = createDataSource({
-            store: store,
-            select: ['field1', 'field2'],
-            customQueryParams: { test: true },
-            remoteOperations: false,
-            pageSize: 3,
-            requireTotalCount: true
-        });
+    const store = new ODataStore({
+        url: 'test'
+    });
+    const source = createDataSource({
+        store: store,
+        select: ['field1', 'field2'],
+        customQueryParams: { test: true },
+        remoteOperations: false,
+        pageSize: 3,
+        requireTotalCount: true
+    });
 
     store.load = sinon.spy(function(parameters) {
         return $.Deferred().resolve(TEN_NUMBERS);
@@ -510,16 +510,16 @@ QUnit.test('ODataStore customQueryParams/select when remoteOperations false', fu
 
 // T298483
 QUnit.test('ODataStore customQueryParams when remoteOperations true', function(assert) {
-    var store = new ODataStore({
-            url: 'test'
-        }),
-        source = createDataSource({
-            store: store,
-            customQueryParams: { test: true },
-            remoteOperations: { filtering: true, sorting: true, paging: true },
-            pageSize: 3,
-            requireTotalCount: true
-        });
+    const store = new ODataStore({
+        url: 'test'
+    });
+    const source = createDataSource({
+        store: store,
+        customQueryParams: { test: true },
+        remoteOperations: { filtering: true, sorting: true, paging: true },
+        pageSize: 3,
+        requireTotalCount: true
+    });
 
     store.load = sinon.spy(function(parameters) {
         return $.Deferred().resolve([0, 1, 2], { totalCount: 3 });
@@ -540,7 +540,7 @@ QUnit.test('ODataStore customQueryParams when remoteOperations true', function(a
 // T474591
 QUnit.test('No error when store returned non-array', function(assert) {
     // arrange
-    var source = createDataSource({
+    const source = createDataSource({
         load: function() {
             return $.Deferred().resolve({ /* no data property */ });
         }
@@ -556,8 +556,8 @@ QUnit.test('No error when store returned non-array', function(assert) {
 QUnit.test('createOffsetFilter should generate filters with =/<> filter operations for boolean values', function(assert) {
     // arrange
 
-    var booleanValues = [null, false, true];
-    var descValues = [false, true];
+    const booleanValues = [null, false, true];
+    const descValues = [false, true];
 
     function checkFilter(filter) {
         if(Array.isArray(filter)) {
@@ -573,7 +573,7 @@ QUnit.test('createOffsetFilter should generate filters with =/<> filter operatio
 
     descValues.forEach(function(desc) {
         booleanValues.forEach(function(value, index) {
-            var filter = createOffsetFilter([value], { group: [{ selector: 'this', desc: desc }] });
+            const filter = createOffsetFilter([value], { group: [{ selector: 'this', desc: desc }] });
 
             checkFilter(filter);
             assert.deepEqual(dataQuery(booleanValues).filter(filter).toArray(), desc ? booleanValues.slice(index + 1) : booleanValues.slice(0, index), 'filter for value ' + value + ' and desc ' + false + ' is correct');
@@ -583,8 +583,8 @@ QUnit.test('createOffsetFilter should generate filters with =/<> filter operatio
 
 QUnit.test('Custom store with remote paging and with local filtering', function(assert) {
     // arrange
-    var loadArgs = [];
-    var source = createDataSource({
+    let loadArgs = [];
+    const source = createDataSource({
         remoteOperations: { paging: true },
         load: function(e) {
             loadArgs.push(e);
@@ -619,8 +619,8 @@ QUnit.test('Custom store with remote paging and with local filtering', function(
 // T748688
 QUnit.test('Custom store with remote paging and with local sorting', function(assert) {
     // arrange
-    var loadArgs = [];
-    var source = createDataSource({
+    let loadArgs = [];
+    const source = createDataSource({
         remoteOperations: { paging: true },
         pageSize: 2,
         load: function(e) {
@@ -670,7 +670,7 @@ QUnit.module('DataSource when not requireTotalCount', {
 });
 
 QUnit.test('isLastPage and hasKnownLastPagefor first page', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     // act
     source.load();
 
@@ -680,7 +680,7 @@ QUnit.test('isLastPage and hasKnownLastPagefor first page', function(assert) {
 });
 
 QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageIndex(3);
     // act
     source.load();
@@ -691,7 +691,7 @@ QUnit.test('isLastPage and hasKnownLastPage for last page', function(assert) {
 });
 
 QUnit.test('isLastPage and hasKnownLastPage for first page after last page', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageIndex(3);
     source.load();
 
@@ -705,7 +705,7 @@ QUnit.test('isLastPage and hasKnownLastPage for first page after last page', fun
 });
 
 QUnit.test('totalCount for first page', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     // act
     source.load();
 
@@ -714,7 +714,7 @@ QUnit.test('totalCount for first page', function(assert) {
 });
 
 QUnit.test('totalCount for last page', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageIndex(3);
     // act
     source.load();
@@ -724,7 +724,7 @@ QUnit.test('totalCount for last page', function(assert) {
 });
 
 QUnit.test('totalCount for page after last', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageIndex(5);
     // act
     source.load();
@@ -734,7 +734,7 @@ QUnit.test('totalCount for page after last', function(assert) {
 });
 
 QUnit.test('pageIndex greater then pages count', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageIndex(5);
     // act
     source.load();
@@ -744,7 +744,7 @@ QUnit.test('pageIndex greater then pages count', function(assert) {
 });
 
 QUnit.test('pageIndex equals pages count when last page has items count equals pageSize', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
     source.pageSize(5);
     source.pageIndex(2);
     // act
@@ -767,8 +767,8 @@ QUnit.module('DataSource without cache', {
 });
 
 QUnit.test('first load', function(assert) {
-    var loadedCount = 0;
-    var source = this.dataSource;
+    let loadedCount = 0;
+    const source = this.dataSource;
 
     source.loadingChanged.add(function(isLoading) {
         if(!isLoading) {
@@ -784,8 +784,8 @@ QUnit.test('first load', function(assert) {
 });
 
 QUnit.test('load next page', function(assert) {
-    var loadedCount = 0;
-    var source = this.dataSource;
+    let loadedCount = 0;
+    const source = this.dataSource;
 
     source.loadingChanged.add(function(isLoading) {
         if(!isLoading) {
@@ -805,8 +805,8 @@ QUnit.test('load next page', function(assert) {
 });
 
 QUnit.test('second load page', function(assert) {
-    var loadedCount = 0;
-    var source = this.dataSource;
+    let loadedCount = 0;
+    const source = this.dataSource;
 
 
     source.load();
@@ -829,7 +829,7 @@ QUnit.test('second load page', function(assert) {
 
 
 QUnit.test('integer pageIndex', function(assert) {
-    var source = this.dataSource;
+    const source = this.dataSource;
 
     source.load();
 
@@ -868,7 +868,7 @@ QUnit.module('Grouping with basic remoteOperations', {
 });
 
 QUnit.test('grouping without paginate', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         paginate: false
     });
 
@@ -888,13 +888,13 @@ QUnit.test('grouping without paginate', function(assert) {
 
 // T137160
 QUnit.test('collapse group with undefined value when grouping without paginate', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         paginate: false,
         group: 'field0'
     });
 
     source.load();
-    var changeRowExpandResult = source.changeRowExpand([undefined]);
+    const changeRowExpandResult = source.changeRowExpand([undefined]);
     source.load();
 
     // act
@@ -907,7 +907,7 @@ QUnit.test('collapse group with undefined value when grouping without paginate',
 
 // T136667
 QUnit.test('collapse group with date value when grouping without paginate', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: [
             { field1: new Date(2012, 1, 5), field2: 1 },
             { field1: new Date(2012, 1, 5), field2: 2 },
@@ -931,7 +931,7 @@ QUnit.test('collapse group with date value when grouping without paginate', func
 });
 
 QUnit.test('keys for items in groups', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: new ArrayStore({ key: 'field3', data: this.array }),
         paginate: false
     });
@@ -954,7 +954,7 @@ QUnit.test('keys for items in groups', function(assert) {
 });
 
 QUnit.test('grouping with pageSize more items count', function(assert) {
-    var source = this.createDataSource();
+    const source = this.createDataSource();
 
     // act
     source.load();
@@ -975,7 +975,7 @@ QUnit.test('grouping with pageSize more items count', function(assert) {
 
 // T105748
 QUnit.test('grouping with sorting', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         sort: 'field3',
         store: [
             { field1: 1, field2: 2, field3: 1 },
@@ -1019,7 +1019,7 @@ QUnit.test('grouping with sorting', function(assert) {
 });
 
 QUnit.test('grouping with pageSize less items count', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2
     });
 
@@ -1037,7 +1037,7 @@ QUnit.test('grouping with pageSize less items count', function(assert) {
 });
 
 QUnit.test('grouping with pageSize less items count. Continue group parameter', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1
     });
@@ -1057,7 +1057,7 @@ QUnit.test('grouping with pageSize less items count. Continue group parameter', 
 });
 
 QUnit.test('grouping with pageSize less items count. Continue group parameter when virtual scrolling', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1,
         scrolling: { mode: 'virtual', preventPreload: true }
@@ -1078,7 +1078,7 @@ QUnit.test('grouping with pageSize less items count. Continue group parameter wh
 });
 
 QUnit.test('collapse group on first page after loading second page', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         scrolling: { mode: 'virtual', preventPreload: true }
     });
@@ -1107,7 +1107,7 @@ QUnit.test('collapse group on first page after loading second page', function(as
 
 
 QUnit.test('changed callback fired after changeRowExpand', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         store: [
             { field1: 1, field2: 2, field3: 3 },
@@ -1137,7 +1137,7 @@ QUnit.test('changed callback fired after changeRowExpand', function(assert) {
 });
 
 QUnit.test('changed callback fired after changeRowExpand when no groups', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         group: null,
         store: [
@@ -1148,7 +1148,7 @@ QUnit.test('changed callback fired after changeRowExpand when no groups', functi
         ]
     });
 
-    var isChanged = false;
+    let isChanged = false;
 
     source.load();
     source.changed.add(function() {
@@ -1164,7 +1164,7 @@ QUnit.test('changed callback fired after changeRowExpand when no groups', functi
 });
 
 QUnit.test('grouping with pageSize less items count. Continue group parameter not set when previous page ends with collapsed group', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         store: [
             { field1: 1, field2: 2, field3: 3 },
@@ -1187,7 +1187,7 @@ QUnit.test('grouping with pageSize less items count. Continue group parameter no
 });
 
 QUnit.test('grouping with pageSize less items count. Continue group parameter not set', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         pageIndex: 1
     });
@@ -1202,7 +1202,7 @@ QUnit.test('grouping with pageSize less items count. Continue group parameter no
 });
 
 QUnit.test('grouping with pageSize less items count. Continue on next page group parameter', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2
     });
 
@@ -1219,7 +1219,7 @@ QUnit.test('grouping with pageSize less items count. Continue on next page group
 });
 
 QUnit.test('grouping with pageSize less items count. Continue on next page group parameter when has collapsed item', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         store: [
             { field1: 1, field2: 2, field3: 3 },
@@ -1245,7 +1245,7 @@ QUnit.test('grouping with pageSize less items count. Continue on next page group
 });
 
 QUnit.test('grouping with pageSize less items count. Not Continue on next page group parameter when all items on group on current page', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3
     });
 
@@ -1263,7 +1263,7 @@ QUnit.test('grouping with pageSize less items count. Not Continue on next page g
 });
 
 QUnit.test('grouping without paginate. Collapse group', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         paginate: false
     });
 
@@ -1281,7 +1281,7 @@ QUnit.test('grouping without paginate. Collapse group', function(assert) {
 });
 
 QUnit.test('grouping without paginate. Expand group after collapse', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         paginate: false
     });
 
@@ -1306,7 +1306,7 @@ QUnit.test('grouping without paginate. Expand group after collapse', function(as
 
 
 QUnit.test('grouping with paginate. Collapse group', function(assert) {
-    var source = this.createDataSource({});
+    const source = this.createDataSource({});
 
     source.load();
 
@@ -1323,7 +1323,7 @@ QUnit.test('grouping with paginate. Collapse group', function(assert) {
 
 // T635726
 QUnit.test('expand group item if group level is collapsed', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         group: [{ selector: 'field1', isExpanded: false }]
     });
 
@@ -1340,7 +1340,7 @@ QUnit.test('expand group item if group level is collapsed', function(assert) {
 });
 
 QUnit.test('grouping with paginate. Collapse group when remote sorting and local sorting are different', function(assert) {
-    var arrayStore = new ArrayStore([
+    const arrayStore = new ArrayStore([
         { field1: 'ES', field2: 1 },
         { field1: 'ES', field2: 2 },
         { field1: 'ES', field2: 3 },
@@ -1358,11 +1358,11 @@ QUnit.test('grouping with paginate. Collapse group when remote sorting and local
         { field1: 'Göd', field2: 15 }
     ]);
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4,
         store: new CustomStore({
             load: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 if(options.sort) {
                     options.sort[0].selector = function(data) {
                         return $.inArray(data.field1, ['ES', 'Göd', 'Győr']);
@@ -1411,12 +1411,12 @@ QUnit.test('grouping with paginate. Collapse group when remote sorting and local
 });
 
 QUnit.test('grouping with paginate. Collapse group when CustomStore used', function(assert) {
-    var arrayStore = new ArrayStore(this.array);
+    const arrayStore = new ArrayStore(this.array);
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: new CustomStore({
             load: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 $.when(arrayStore.load(options), arrayStore.totalCount(options)).done(function(items, totalCount) {
                     d.resolve(items, { totalCount: totalCount });
                 });
@@ -1440,14 +1440,14 @@ QUnit.test('grouping with paginate. Collapse group when CustomStore used', funct
 
 // T720420
 QUnit.test('grouping with paginate. Collapse group and paging when ODataStore used', function(assert) {
-    var arrayStore = new ArrayStore(this.array);
+    const arrayStore = new ArrayStore(this.array);
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         group: 'field2',
         store: new CustomStore({
             load: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 $.when(arrayStore.load(options), arrayStore.totalCount(options)).done(function(items, totalCount) {
                     d.resolve(items, { totalCount: totalCount });
                 });
@@ -1473,7 +1473,7 @@ QUnit.test('grouping with paginate. Collapse group and paging when ODataStore us
 });
 
 QUnit.test('grouping with paginate. Collapse group when dataSource has filter', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: [
             { field1: 1, field2: 2, field3: 3 },
             { field1: 1, field2: 2, field3: 4 },
@@ -1497,7 +1497,7 @@ QUnit.test('grouping with paginate. Collapse group when dataSource has filter', 
 });
 
 QUnit.test('grouping with paginate. Collapse group when dataSource has filter 2', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: [
             { field1: 1, field2: 2, field3: 3 },
             { field1: 1, field2: 2, field3: 4 },
@@ -1522,7 +1522,7 @@ QUnit.test('grouping with paginate. Collapse group when dataSource has filter 2'
 });
 
 QUnit.test('grouping with paginate. Expand group after collapse', function(assert) {
-    var source = this.createDataSource({});
+    const source = this.createDataSource({});
 
     source.load();
 
@@ -1544,7 +1544,7 @@ QUnit.test('grouping with paginate. Expand group after collapse', function(asser
 });
 
 QUnit.test('grouping with paginate. Update group offsets after expand by correct page offset', function(assert) {
-    var array = [
+    const array = [
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 },
         { field1: 1, field2: 3, field3: 5 },
@@ -1552,7 +1552,7 @@ QUnit.test('grouping with paginate. Update group offsets after expand by correct
         { field1: 2, field2: 5, field3: 7 },
         { field1: 3, field2: 6, field3: 8 }
     ];
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: array,
         pageSize: 3
     });
@@ -1588,7 +1588,7 @@ QUnit.test('grouping with paginate. Update group offsets after expand by correct
 });
 
 QUnit.test('sort group on add groupsInfo', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: [],
         pageSize: 3
     });
@@ -1600,7 +1600,7 @@ QUnit.test('sort group on add groupsInfo', function(assert) {
     source._grouping.addGroupInfo({ offset: 0, path: '3' });
     source._grouping.addGroupInfo({ offset: 7, path: '4' });
 
-    var offsets = $.map(source.getGroupsInfo(), function(g) {
+    const offsets = $.map(source.getGroupsInfo(), function(g) {
         return g.offset;
     });
 
@@ -1609,7 +1609,7 @@ QUnit.test('sort group on add groupsInfo', function(assert) {
 
 // T231326
 QUnit.test('grouping with paginate. Update group offsets after expand by correct page offset 2', function(assert) {
-    var array = [
+    const array = [
         { field1: 1, field2: 1, field3: 1 },
         { field1: 1, field2: 2, field3: 2 },
         { field1: 1, field2: 2, field3: 3 },
@@ -1711,7 +1711,7 @@ QUnit.test('grouping with paginate. Update group offsets after expand by correct
         { field1: 2, field2: 1, field3: 95 },
         { field1: 2, field2: 1, field3: 96 }
     ];
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: array,
         group: ['field1', 'field2'],
         pageSize: 20,
@@ -1752,19 +1752,19 @@ QUnit.test('grouping with paginate. Update group offsets after expand by correct
 
 // B254194, T310036
 QUnit.test('hide collapsed group when after filtering group has no elements', function(assert) {
-    var arrayStore = new ArrayStore(this.array);
+    const arrayStore = new ArrayStore(this.array);
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         store: new CustomStore({
             load: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 setTimeout(function() {
                     arrayStore.load(options).done(d.resolve).fail(d.reject);
                 });
                 return d;
             },
             totalCount: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 setTimeout(function() {
                     arrayStore.totalCount(options).done(d.resolve).fail(d.reject);
                 });
@@ -1800,7 +1800,7 @@ QUnit.test('hide collapsed group when after filtering group has no elements', fu
 });
 
 QUnit.test('collapseAll when no grouped columns', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         group: null
     });
@@ -1819,7 +1819,7 @@ QUnit.test('collapseAll when no grouped columns', function(assert) {
 });
 
 QUnit.test('expandAll when no grouped columns', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         group: null
     });
@@ -1838,12 +1838,12 @@ QUnit.test('expandAll when no grouped columns', function(assert) {
 });
 
 QUnit.test('loadTotalCount for CustomStore when totalCount in extra', function(assert) {
-    var lastLoadOptions;
+    let lastLoadOptions;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function(options) {
             lastLoadOptions = options;
-            var d = $.Deferred();
+            const d = $.Deferred();
             d.resolve([], {
                 totalCount: 10
             });
@@ -1858,7 +1858,7 @@ QUnit.test('loadTotalCount for CustomStore when totalCount in extra', function(a
         };
     }
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: store,
         paginate: true,
         param1: 1,
@@ -1866,7 +1866,7 @@ QUnit.test('loadTotalCount for CustomStore when totalCount in extra', function(a
         remoteOperations: { filtering: true, sorting: true, paging: true }
     });
 
-    var totalCount;
+    let totalCount;
 
     // act
     loadTotalCount(dataSource, { filter: ['this', '>=', 5] }).done(function(e) {
@@ -1885,10 +1885,10 @@ QUnit.test('loadTotalCount for CustomStore when totalCount in extra', function(a
 });
 
 QUnit.test('loadTotalCount for CustomStore when no totalCount in extra', function(assert) {
-    var lastLoadOptions,
-        lastTotalCountOptions;
+    let lastLoadOptions;
+    let lastTotalCountOptions;
 
-    var store = new CustomStore({
+    const store = new CustomStore({
         load: function(options) {
             lastLoadOptions = options;
             return [];
@@ -1899,13 +1899,13 @@ QUnit.test('loadTotalCount for CustomStore when no totalCount in extra', functio
         }
     });
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: store,
         paginate: true,
         remoteOperations: { filtering: true, sorting: true, paging: true }
     });
 
-    var totalCount;
+    let totalCount;
 
     // act
     loadTotalCount(dataSource, { filter: ['this', '>=', 5] }).done(function(e) {
@@ -1931,18 +1931,18 @@ QUnit.test('loadTotalCount for CustomStore when no totalCount in extra', functio
 // T545211
 QUnit.test('Ungrouping with custom store - there are no exceptions when remote paging', function(assert) {
     // arrange
-    var that = this,
-        dataSource = createDataSource({
-            load: function() {
-                return $.Deferred().resolve({
-                    data: that.array,
-                    totalCount: that.array.length
-                });
-            },
-            paginate: true,
-            requireTotalCount: true,
-            remoteOperations: { paging: true }
-        });
+    const that = this;
+    const dataSource = createDataSource({
+        load: function() {
+            return $.Deferred().resolve({
+                data: that.array,
+                totalCount: that.array.length
+            });
+        },
+        paginate: true,
+        requireTotalCount: true,
+        remoteOperations: { paging: true }
+    });
 
     dataSource.group('field1');
     dataSource.load();
@@ -1985,7 +1985,7 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
     }
 });
 QUnit.test('grouping with paginate', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3
     });
 
@@ -2009,8 +2009,8 @@ QUnit.test('grouping with paginate', function(assert) {
 
 // T134180
 QUnit.test('grouping with paginate and totalCount from extra', function(assert) {
-    var array = this.array;
-    var source = this.createDataSource({
+    const array = this.array;
+    const source = this.createDataSource({
         load: function() {
             return $.Deferred().resolve(array, { totalCount: array.length }).promise();
         },
@@ -2036,7 +2036,7 @@ QUnit.test('grouping with paginate and totalCount from extra', function(assert) 
 });
 
 QUnit.test('grouping without paginate', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         paginate: false
     });
 
@@ -2066,7 +2066,7 @@ QUnit.test('grouping without paginate', function(assert) {
 });
 
 QUnit.test('change group order when remote data', function(assert) {
-    var arrayStore = new ArrayStore([
+    const arrayStore = new ArrayStore([
         { field1: 1, field2: 2, field3: 3 },
         { field1: 1, field2: 2, field3: 4 },
         { field1: 1, field2: 2, field3: 5 },
@@ -2077,11 +2077,11 @@ QUnit.test('change group order when remote data', function(assert) {
         { field1: 2, field2: 4, field3: 10 }
     ]);
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         store: new CustomStore({
             load: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 setTimeout(function() {
                     arrayStore.load(options).done(function(data) {
                         d.resolve(data);
@@ -2090,7 +2090,7 @@ QUnit.test('change group order when remote data', function(assert) {
                 return d;
             },
             totalCount: function(options) {
-                var d = $.Deferred();
+                const d = $.Deferred();
                 setTimeout(function() {
                     arrayStore.totalCount(options).done(function(totalCount) {
                         d.resolve(totalCount);
@@ -2142,7 +2142,7 @@ QUnit.test('change group order when remote data', function(assert) {
 
 
 QUnit.test('Continue group parameter for first group level only', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2,
         pageIndex: 1
     });
@@ -2162,7 +2162,7 @@ QUnit.test('Continue group parameter for first group level only', function(asser
 });
 
 QUnit.test('Continue group parameter for both group levels', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3,
         pageIndex: 1
     });
@@ -2183,7 +2183,7 @@ QUnit.test('Continue group parameter for both group levels', function(assert) {
 });
 
 QUnit.test('Continue on next page group parameter for first group level only', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 2
     });
 
@@ -2205,7 +2205,7 @@ QUnit.test('Continue on next page group parameter for first group level only', f
 });
 
 QUnit.test('Continue on next page group parameter for both group levels', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3
     });
 
@@ -2232,7 +2232,7 @@ QUnit.test('Continue on next page group parameter for both group levels', functi
 });
 
 QUnit.test('Collapse second level group', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2261,7 +2261,7 @@ QUnit.test('Collapse second level group', function(assert) {
 });
 
 QUnit.test('Collapse second level group and first level group', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2297,7 +2297,7 @@ QUnit.test('Collapse second level group and first level group when scrolling mod
         { field1: 2, field2: 1, field3: 7 }
     ];
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 5,
         scrolling: { mode: 'virtual', preventPreload: true }
     });
@@ -2337,7 +2337,7 @@ QUnit.test('Collapse several second level groups', function(assert) {
         { field1: 2, field2: 5, field3: 10 },
     ];
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2363,7 +2363,7 @@ QUnit.test('Collapse several second level groups', function(assert) {
 });
 
 QUnit.test('Collapse state of items restore after expand', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2396,10 +2396,10 @@ QUnit.test('Collapse state of items restore after expand', function(assert) {
 });
 
 QUnit.test('change sortOrder of group', function(assert) {
-    var loadingChangedCount = 0;
+    let loadingChangedCount = 0;
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2440,7 +2440,7 @@ QUnit.test('change sortOrder of group', function(assert) {
 QUnit.test('reset groups info when change group fields', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2457,7 +2457,7 @@ QUnit.test('reset groups info when change group fields', function(assert) {
 QUnit.test('reset groups info when clear group fields', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2474,7 +2474,7 @@ QUnit.test('reset groups info when clear group fields', function(assert) {
 QUnit.test('clear second level groups info when change second level group field', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2502,7 +2502,7 @@ QUnit.test('clear second level groups info when change second level group field'
 QUnit.test('clear second level groups info when change change groups count to one', function(assert) {
     this.array.push({ field1: 3, field2: 5, field3: 8 });
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 4
     });
 
@@ -2542,7 +2542,7 @@ QUnit.test('Update group offset for expanded grouped row of the first level when
         { field1: 4, field2: 6, field3: 11 }
     ];
 
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 5
     });
 
@@ -2582,7 +2582,7 @@ QUnit.test('Update group offset for expanded grouped row of the first level when
 
 // T318433, T318206
 QUnit.test('change filter after collapse second level group', function(assert) {
-    var source = this.createDataSource({
+    const source = this.createDataSource({
         pageSize: 3
     });
 
@@ -2590,7 +2590,7 @@ QUnit.test('change filter after collapse second level group', function(assert) {
     source.changeRowExpand([1, 2]);
     source.load();
 
-    var loadArgs = [];
+    const loadArgs = [];
     source.store().on('loading', function(e) {
         loadArgs.push(e);
     });
@@ -2620,7 +2620,7 @@ QUnit.test('change filter after collapse second level group', function(assert) {
 
 function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOptions) {
     if($.isArray(options.store) || (options.store && options.store.type === 'array') || options.load) {
-        var arrayStore = new ArrayStore(options.store || []);
+        const arrayStore = new ArrayStore(options.store || []);
         options.executeAsync = options.executeAsync || function(func) { func(); };
         brokeOptions = brokeOptions || {};
 
@@ -2630,11 +2630,11 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
         }
         delete options.store;
         options.load = options.load || function(loadOptions) {
-            var d = $.Deferred();
+            const d = $.Deferred();
 
             var removeDataItems = function(items, groupCount) {
                 if(!groupCount) return;
-                for(var i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     if(groupCount > 1) {
                         removeDataItems(items[i].items, groupCount - 1);
                     } else {
@@ -2651,12 +2651,12 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
                     return;
                 }
                 arrayStore.load(loadOptions).done(function(data) {
-                    var groupCount = gridCore.normalizeSortingInfo(loadOptions.group).length;
+                    const groupCount = gridCore.normalizeSortingInfo(loadOptions.group).length;
 
                     removeDataItems(data, groupCount);
 
                     arrayStore.totalCount(loadOptions).done(function(totalCount) {
-                        var extra = {};
+                        const extra = {};
                         if(loadOptions.requireTotalCount && !brokeOptions.skipTotalCount) {
                             extra.totalCount = totalCount;
                         }
@@ -2695,7 +2695,7 @@ QUnit.module('Remote group paging', {
 
         this.clock = sinon.useFakeTimers();
 
-        var remoteGroupPaging = true;
+        const remoteGroupPaging = true;
 
         this.createDataSource = function(options, brokeOptions) {
             return createDataSourceWithRemoteGrouping($.extend({
@@ -2712,11 +2712,11 @@ QUnit.module('Remote group paging', {
 });
 
 QUnit.test('Load collapsed group', function(assert) {
-    var dataSource = this.createDataSource({
-            group: 'field2',
-            pageSize: 2
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: 'field2',
+        pageSize: 2
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.store().on('loading', loadingChanged);
 
@@ -2739,11 +2739,11 @@ QUnit.test('Load collapsed group', function(assert) {
 });
 
 QUnit.test('Load collapsed group and expand first item', function(assert) {
-    var dataSource = this.createDataSource({
-            group: 'field2',
-            pageSize: 3
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: 'field2',
+        pageSize: 3
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -2778,12 +2778,12 @@ QUnit.test('Load collapsed group and expand first item', function(assert) {
 
 // T511907
 QUnit.test('Load collapsed group and expand group item that contain items with white space at the end', function(assert) {
-    var loadStub = sinon.stub(),
-        dataSource = this.createDataSource({
-            load: loadStub,
-            group: 'name',
-            pageSize: 3
-        });
+    const loadStub = sinon.stub();
+    const dataSource = this.createDataSource({
+        load: loadStub,
+        group: 'name',
+        pageSize: 3
+    });
 
     loadStub.onCall(0).returns($.Deferred().resolve({ data: [
         { key: 'test1', items: null, count: 3 },
@@ -2831,7 +2831,7 @@ QUnit.test('Load collapsed group and expand group item that contain items with w
 });
 
 QUnit.test('Expand group if group key is object', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         load: function() {
             return $.Deferred().resolve({ data: [
                 { key: { groupId: 1, groupName: 'test 1' }, items: [{ id: 1 }] },
@@ -2859,11 +2859,11 @@ QUnit.test('Expand group if group key is object', function(assert) {
 });
 
 QUnit.test('Load collapsed group and expand first item when native promise is used', function(assert) {
-    var dataSource = this.createDataSource({
-            group: 'field2',
-            pageSize: 3
-        }, { useNativePromise: true }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: 'field2',
+        pageSize: 3
+    }, { useNativePromise: true });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -2882,11 +2882,11 @@ QUnit.test('Load collapsed group and expand first item when native promise is us
 });
 
 QUnit.test('Send count query on row expand when next level is group', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field2', 'field1'],
-            pageSize: 2
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field2', 'field1'],
+        pageSize: 2
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -2912,11 +2912,11 @@ QUnit.test('Send count query on row expand when next level is group', function(a
 });
 
 QUnit.test('Send count query on row expand when next level is group if group by 3 levels', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field2', 'field1', 'field3'],
-            pageSize: 2
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field2', 'field1', 'field3'],
+        pageSize: 2
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -2943,11 +2943,11 @@ QUnit.test('Send count query on row expand when next level is group if group by 
 
 // T493778
 QUnit.test('Send count query on row expand when next level is group if use native promises', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field2', 'field1'],
-            pageSize: 2
-        }, { useNativePromise: true }),
-        loaded = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field2', 'field1'],
+        pageSize: 2
+    }, { useNativePromise: true });
+    const loaded = sinon.stub();
 
     dataSource.load();
 
@@ -2975,14 +2975,14 @@ QUnit.test('Send count query on row expand when next level is group if use nativ
 });
 
 QUnit.test('Load collapsed groups and expand first item when two groups', function(assert) {
-    var dataSource = this.createDataSource({
-            executeAsync: function(func, loadOptions) {
-                setTimeout(func, 10);
-            },
-            group: ['field1', 'field2'],
-            pageSize: 3
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        executeAsync: function(func, loadOptions) {
+            setTimeout(func, 10);
+        },
+        group: ['field1', 'field2'],
+        pageSize: 3
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.summary({
         groupAggregates: [{
@@ -3040,7 +3040,7 @@ QUnit.test('Load collapsed groups and expand first item when two groups', functi
 });
 
 QUnit.test('Load collapsed groups, expand second big item and go to third page when two groups', function(assert) {
-    var array = [{ field1: 1, field2: 2, field3: 3 },
+    const array = [{ field1: 1, field2: 2, field3: 3 },
         { field1: 2, field2: 3, field3: 4 },
         { field1: 2, field2: 4, field3: 5 },
         { field1: 2, field2: 5, field3: 6 },
@@ -3049,7 +3049,7 @@ QUnit.test('Load collapsed groups, expand second big item and go to third page w
         { field1: 2, field2: 8, field3: 9 },
         { field1: 3, field2: 9, field3: 10 }];
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         store: array,
         group: ['field1', 'field2'],
         pageSize: 3
@@ -3086,7 +3086,7 @@ QUnit.test('Load collapsed groups, expand second big item and go to third page w
 });
 
 QUnit.test('Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups', function(assert) {
-    var array = [{ field1: 1, field2: 2, field3: 3 },
+    const array = [{ field1: 1, field2: 2, field3: 3 },
         { field1: 2, field2: 3, field3: 4 },
         { field1: 2, field2: 4, field3: 5 },
         { field1: 2, field2: 4, field3: 6 },
@@ -3095,7 +3095,7 @@ QUnit.test('Load collapsed groups, expand second level item, expand third level 
         { field1: 2, field2: 4, field3: 9 },
         { field1: 3, field2: 5, field3: 10 }];
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         store: array,
         group: ['field1', 'field2'],
         pageSize: 4
@@ -3134,8 +3134,8 @@ QUnit.test('Load collapsed groups, expand second level item, expand third level 
 
 // T623492
 QUnit.test('Change page several times after expand groups if data is grouped by two fields', function(assert) {
-    var array = [];
-    var i, j;
+    const array = [];
+    let i; let j;
     for(i = 0; i < 4; i++) {
         for(j = 0; j < 6; j++) {
             array.push({ group1: i, group2: 0, id: i * 9 + j + 1 });
@@ -3145,7 +3145,7 @@ QUnit.test('Change page several times after expand groups if data is grouped by 
         }
     }
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         store: array,
         group: ['group1', 'group2'],
         pageSize: 20,
@@ -3228,7 +3228,7 @@ QUnit.test('Change page several times after expand groups if data is grouped by 
 });
 
 QUnit.test('Expand third level group', function(assert) {
-    var array = [
+    const array = [
         /* 1 */
         /* 2 */
         /* 3 */
@@ -3241,7 +3241,7 @@ QUnit.test('Expand third level group', function(assert) {
         { field1: 5, field2: 3, field3: 5, id: 6 }
     ];
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         store: array,
         group: ['field1', 'field2', 'field3'],
         pageSize: 6
@@ -3274,11 +3274,11 @@ QUnit.test('Expand third level group', function(assert) {
 });
 
 QUnit.test('Load collapsed groups and expand two items when two groups', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field1', 'field2'],
-            pageSize: 5
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field1', 'field2'],
+        pageSize: 5
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -3327,11 +3327,11 @@ QUnit.test('Load collapsed groups and expand two items when two groups', functio
 });
 
 QUnit.test('Load collapsed group and expand second level item', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field1', 'field2'],
-            pageSize: 3
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field1', 'field2'],
+        pageSize: 3
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -3380,11 +3380,11 @@ QUnit.test('Load collapsed group and expand second level item', function(assert)
 
 // T452323
 QUnit.test('Reload dataSource when one expanded group and two group levels exist', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field1', 'field2'],
-            pageSize: 3
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field1', 'field2'],
+        pageSize: 3
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -3441,13 +3441,13 @@ QUnit.test('Reload dataSource when one expanded group and two group levels exist
 });
 
 QUnit.test('Error on change grouping when one expanded group and two group levels exist', function(assert) {
-    var brokeOptions = {},
-        dataSource = this.createDataSource({
-            group: ['field1'],
-            pageSize: 3
-        }, brokeOptions),
-        changed = sinon.stub(),
-        loadError = sinon.stub();
+    const brokeOptions = {};
+    const dataSource = this.createDataSource({
+        group: ['field1'],
+        pageSize: 3
+    }, brokeOptions);
+    const changed = sinon.stub();
+    const loadError = sinon.stub();
 
     dataSource.load();
 
@@ -3471,11 +3471,11 @@ QUnit.test('Error on change grouping when one expanded group and two group level
 
 // T477410
 QUnit.test('Reload dataSource when one expanded group and one group level exist', function(assert) {
-    var dataSource = this.createDataSource({
-            group: ['field1'],
-            pageSize: 3
-        }),
-        loadingChanged = sinon.stub();
+    const dataSource = this.createDataSource({
+        group: ['field1'],
+        pageSize: 3
+    });
+    const loadingChanged = sinon.stub();
 
     dataSource.load();
 
@@ -3533,7 +3533,7 @@ QUnit.test('Error when store not returned groupCount', function(assert) {
     // arrange
     assert.expect(1);
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'field2'
     }, { skipGroupCount: true });
 
@@ -3554,8 +3554,8 @@ QUnit.test('Error when store not returned groupCount during expand not last leve
     // arrange
     assert.expect(1);
 
-    var brokeOptions = {};
-    var dataSource = this.createDataSource({
+    const brokeOptions = {};
+    const dataSource = this.createDataSource({
         group: ['field1', 'field2']
     }, brokeOptions);
 
@@ -3578,8 +3578,8 @@ QUnit.test('Error when store not returned groupCount during expand not last leve
 // T477410
 QUnit.test('Exception when store not returned totalCount after full reload', function(assert) {
     // arrange
-    var brokeOptions = {};
-    var dataSource = this.createDataSource({
+    const brokeOptions = {};
+    const dataSource = this.createDataSource({
         group: ['field1']
     }, brokeOptions);
 
@@ -3600,7 +3600,7 @@ QUnit.test('Exception when store not returned totalCount after full reload', fun
 // T754708
 QUnit.test('The collapseAll method should work after expanding group row', function(assert) {
     // arrange
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'field2',
         pageSize: 2
     });
@@ -3647,7 +3647,7 @@ QUnit.test('The collapseAll method should work after expanding group row', funct
 // T754708
 QUnit.test('The expandAll method  should work after collapsing group row', function(assert) {
     // arrange
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'field2',
         pageSize: 2
     });
@@ -3723,7 +3723,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
                 { field1: 1, field2: 3, field3: 5 },
                 { field1: 2, field2: 4, field3: 6 }
             ];
-            var remoteGroupPaging = moduleIndex === 2;
+            const remoteGroupPaging = moduleIndex === 2;
 
             this.createDataSource = function(options) {
                 return (moduleIndex === 0 ? createDataSource : createDataSourceWithRemoteGrouping)($.extend({
@@ -3735,7 +3735,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
                 }, options || {}), remoteGroupPaging);
             };
             this.processItems = function(items) {
-                for(var i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     if('key' in items[i]) {
                         delete items[i].count;
                         if(items[i].items) {
@@ -3750,20 +3750,20 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     if(moduleIndex === 1) {
         QUnit.test('grouping with paginate. Group is collapsed. Async loading', function(assert) {
-            var clock = sinon.useFakeTimers(),
-                changedCount = 0,
-                source = this.createDataSource({
-                    group: [{ selector: 'field2', isExpanded: false }],
-                    pageSize: 2,
-                    executeAsync: function(func) {
-                        setTimeout(function() {
-                            func();
-                        }, 10);
-                    },
-                    onChanged: function() {
-                        changedCount++;
-                    }
-                });
+            const clock = sinon.useFakeTimers();
+            let changedCount = 0;
+            const source = this.createDataSource({
+                group: [{ selector: 'field2', isExpanded: false }],
+                pageSize: 2,
+                executeAsync: function(func) {
+                    setTimeout(function() {
+                        func();
+                    }, 10);
+                },
+                onChanged: function() {
+                    changedCount++;
+                }
+            });
 
             source.load();
             clock.tick(10);
@@ -3779,23 +3779,23 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         });
 
         QUnit.test('grouping with paginate. Group is expanded. Async loading', function(assert) {
-            var clock = sinon.useFakeTimers(),
-                loadArgs = [],
-                changedCount = 0,
-                source = this.createDataSource({
-                    group: [{ selector: 'field2', isExpanded: true }],
-                    select: ['field2', 'field3'],
-                    pageSize: 3,
-                    executeAsync: function(func, loadOptions) {
-                        loadArgs.push(loadOptions);
-                        setTimeout(function() {
-                            func();
-                        }, 10);
-                    },
-                    onChanged: function() {
-                        changedCount++;
-                    }
-                });
+            const clock = sinon.useFakeTimers();
+            const loadArgs = [];
+            let changedCount = 0;
+            const source = this.createDataSource({
+                group: [{ selector: 'field2', isExpanded: true }],
+                select: ['field2', 'field3'],
+                pageSize: 3,
+                executeAsync: function(func, loadOptions) {
+                    loadArgs.push(loadOptions);
+                    setTimeout(function() {
+                        func();
+                    }, 10);
+                },
+                onChanged: function() {
+                    changedCount++;
+                }
+            });
 
             source.load();
 
@@ -3840,18 +3840,18 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         });
 
         QUnit.test('grouping with paginate. Several groups are expanded. Async loading', function(assert) {
-            var clock = sinon.useFakeTimers(),
-                loadArgs = [],
-                source = this.createDataSource({
-                    group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
-                    pageSize: 3,
-                    executeAsync: function(func, loadOptions) {
-                        loadArgs.push(loadOptions);
-                        setTimeout(function() {
-                            func();
-                        }, 10);
-                    }
-                });
+            const clock = sinon.useFakeTimers();
+            const loadArgs = [];
+            const source = this.createDataSource({
+                group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
+                pageSize: 3,
+                executeAsync: function(func, loadOptions) {
+                    loadArgs.push(loadOptions);
+                    setTimeout(function() {
+                        func();
+                    }, 10);
+                }
+            });
 
             source.load();
 
@@ -3877,7 +3877,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         });
     }
     QUnit.test('grouping without paginate', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             paginate: false
         });
 
@@ -3895,7 +3895,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with map function', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             map: function(data) {
                 return data;
             }
@@ -3915,7 +3915,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize more items count', function(assert) {
-        var source = this.createDataSource();
+        const source = this.createDataSource();
 
         // act
         source.load();
@@ -3932,7 +3932,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -3950,7 +3950,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // T356413
     QUnit.test('grouping with pageSize less items count. Change pageSize at runtime', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             group: 'group',
             store: [
                 { group: 1, id: 1 },
@@ -3988,7 +3988,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // B254928
     QUnit.test('grouping with pageSize less items count when no requireTotalCount', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 5,
             group: [{ selector: 'field2', isExpanded: true }],
             requireTotalCount: false
@@ -4014,7 +4014,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // B239382
     QUnit.test('grouping with isExpanded group on previous page and isExpanded current group that continues on the next page', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 4,
             store: [
                 { field1: 1, field2: 2, field3: 3 },
@@ -4056,7 +4056,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // B239382
     QUnit.test('grouping on last page when group continued from several pages', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3,
             store: [
                 { field1: 1, field2: 2, field3: 3 },
@@ -4073,7 +4073,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
         // act
         source.load();
-        var changeRowExpandResult = source.changeRowExpand([1]);
+        const changeRowExpandResult = source.changeRowExpand([1]);
         source.load();
         source.pageIndex(2);
         source.load();
@@ -4089,7 +4089,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Continue group parameter', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -4110,7 +4110,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Continue group parameter when sort exists and several groups expanded', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 3 },
                 { field1: 1, field2: 2, field3: 4 },
@@ -4148,7 +4148,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Continue group parameter when virtual scrolling', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2,
             scrolling: { mode: 'virtual', preventPreload: true }
         });
@@ -4172,7 +4172,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Continue on next page group parameter', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -4192,7 +4192,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Continue group parameter not set', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2,
             pageIndex: 1
         });
@@ -4206,7 +4206,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping without paginate. Expand group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             paginate: false
         });
 
@@ -4228,7 +4228,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping without paginate. Collapse group after expand', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             paginate: false
         });
 
@@ -4249,7 +4249,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
 
     QUnit.test('grouping with paginate. Expand group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4268,7 +4268,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
     // T837927
     QUnit.test('grouping with paginate. Expand group if filterValue is defined', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             group: ['field1', 'field2'],
             pageSize: 5
         });
@@ -4295,7 +4295,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with pageSize less items count. Collapse group with undefined key', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             group: [{ selector: 'field1', isExpanded: true, desc: true }],
             store: [
                 { field1: false, field2: 1 },
@@ -4323,7 +4323,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
     });
 
     QUnit.test('grouping with paginate. Collapse group after expand', function(assert) {
-        var source = this.createDataSource({});
+        const source = this.createDataSource({});
 
         source.load();
 
@@ -4373,7 +4373,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         });
 
         QUnit.test('collapseAll when no grouped columns', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 pageSize: 2,
                 group: null
             });
@@ -4394,14 +4394,14 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         // T112478
         QUnit.test('collapseAll for remote data', function(assert) {
             // arrange
-            var source = this.createDataSource({
-                    load: function() { return [{ group: 'group 1', text: 'text 1' }, { group: 'group 1', text: 'text 2' }, { group: 'group 2', text: 'text 3' }]; },
-                    totalCount: function() { return -1; },
-                    pageSize: 2,
-                    group: [{ selector: 'group', isExpanded: true }],
-                    remoteOperations: { filtering: true, sorting: true, paging: true }
-                }),
-                messageError;
+            const source = this.createDataSource({
+                load: function() { return [{ group: 'group 1', text: 'text 1' }, { group: 'group 1', text: 'text 2' }, { group: 'group 2', text: 'text 3' }]; },
+                totalCount: function() { return -1; },
+                pageSize: 2,
+                group: [{ selector: 'group', isExpanded: true }],
+                remoteOperations: { filtering: true, sorting: true, paging: true }
+            });
+            let messageError;
 
             source.load();
 
@@ -4423,7 +4423,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
         });
 
         QUnit.test('expandAll when no grouped columns', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 pageSize: 2,
                 group: null
             });
@@ -4443,7 +4443,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
         // T183365
         QUnit.test('change grouping and reload with custom store', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 load: function() {
                     return [
                         { name: 'Chai', customer: 'John' },
@@ -4474,7 +4474,7 @@ $.each(['Grouping without remoteOperations', 'Grouping with remoteOperations', '
 
         // T266248
         QUnit.test('change sortOrder of group', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 pageSize: 5,
                 group: [{ selector: 'field1', isExpanded: true }]
             });
@@ -4517,7 +4517,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
                 { field1: 2, field2: 4, field3: 7 }
             ];
             this.createDataSource = function(options) {
-                var remoteGroupPaging = moduleIndex === 2;
+                const remoteGroupPaging = moduleIndex === 2;
 
                 return (moduleIndex === 0 ? createDataSource : createDataSourceWithRemoteGrouping)($.extend({
                     store: this.array,
@@ -4528,7 +4528,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
                 }, options || {}), remoteGroupPaging);
             };
             this.processItems = function(items) {
-                for(var i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     if('key' in items[i]) {
                         delete items[i].count;
                         if(items[i].items) {
@@ -4542,7 +4542,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('grouping with paginate', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -4558,14 +4558,14 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('grouping with paginate. Expand first level group', function(assert) {
-        var loadCount = 0,
-            source = this.createDataSource({
-                pageSize: 3,
-                executeAsync: function(func) {
-                    loadCount++;
-                    func();
-                }
-            });
+        let loadCount = 0;
+        const source = this.createDataSource({
+            pageSize: 3,
+            executeAsync: function(func) {
+                loadCount++;
+                func();
+            }
+        });
 
         source.load();
         loadCount = 0;
@@ -4590,7 +4590,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('grouping with paginate. Expand first level group and second level group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             group: [{ selector: 'field1', desc: true, isExpanded: true }, { selector: 'field2', isExpanded: true }],
             pageSize: 5
         });
@@ -4614,7 +4614,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('grouping without paginate', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             paginate: false
         });
 
@@ -4630,7 +4630,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('grouping without paginate. Expand first level group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             paginate: false
         });
 
@@ -4652,7 +4652,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
 
     QUnit.test('Continue group parameter for first group level only', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -4671,7 +4671,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Continue group parameter for first group level only when virtual scrolling', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2,
             scrolling: { mode: 'virtual', preventPreload: true }
         });
@@ -4693,7 +4693,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Continue group parameter for first group level only when page ends with group header', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 2
         });
 
@@ -4714,7 +4714,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Continue group parameter for both group levels', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4738,7 +4738,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Continue group parameter for both group levels when virtual scrolling', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3,
             scrolling: { mode: 'virtual', preventPreload: true }
         });
@@ -4775,7 +4775,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Expand second level group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 5
         });
 
@@ -4806,7 +4806,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     if(moduleIndex !== 2) {
         QUnit.test('Expand second level group ends on previous page', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 pageSize: 5
             });
 
@@ -4827,7 +4827,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
         });
 
         QUnit.test('Expand second level group ends on previous page when virtual scrolling', function(assert) {
-            var source = this.createDataSource({
+            const source = this.createDataSource({
                 pageSize: 5,
                 scrolling: { mode: 'virtual', preventPreload: true }
             });
@@ -4862,7 +4862,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     }
 
     QUnit.test('isExpanded state of items restore after collapse/expand', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 5
         });
 
@@ -4894,7 +4894,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('isExpanded all group levels', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4917,7 +4917,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('isExpanded all first group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4948,7 +4948,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Collapsed all group levels', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4967,7 +4967,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Collapse all second group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -4993,7 +4993,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Collapse all second group level when all groups isExpanded', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
         });
@@ -5018,7 +5018,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('isExpanded group parameter', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, 'field2']
         });
@@ -5038,7 +5038,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // B254818
     QUnit.test('isExpanded group parameters. Apply filter', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 5,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }]
         });
@@ -5063,7 +5063,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('change sortOrder for first group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -5086,7 +5086,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
 
     QUnit.test('change sortOrder for second group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -5108,7 +5108,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // T382926
     QUnit.test('change sortOrder for second group level when all groups expanded', function(assert) {
-        var array = [
+        const array = [
             { field1: 1, field2: 2, field3: 1 },
             { field1: 1, field2: 2, field3: 2 },
             { field1: 1, field2: 2, field3: 3 },
@@ -5118,7 +5118,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
             { field1: 2, field2: 2, field3: 7 }
         ];
 
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: array,
             pageSize: 5,
             group: [{ selector: 'field1', desc: false, isExpanded: true }, { selector: 'field2', desc: false, isExpanded: true }]
@@ -5147,7 +5147,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // B254110
     QUnit.test('change isExpanded for first group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3
         });
 
@@ -5173,7 +5173,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // B254110
     QUnit.test('change isExpanded for second group level', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             pageSize: 3,
             group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }]
         });
@@ -5199,7 +5199,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Second page for big group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 1, field2: 2, field3: 2 },
@@ -5239,13 +5239,13 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Last pages for very big group', function(assert) {
-        var array = [];
-        var i;
+        const array = [];
+        let i;
         for(i = 0; i < 29; i++) {
             array.push({ field1: 1, field2: 2, field3: i + 1 });
         }
         array.push({ field1: 2, field2: 3, field3: 30 });
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: array,
             pageSize: 5
         });
@@ -5314,7 +5314,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Third page for big group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 1, field2: 2, field3: 2 },
@@ -5357,7 +5357,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Last page for big first level group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 1, field2: 2, field3: 2 },
@@ -5402,7 +5402,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Last page for big second level group', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 1, field2: 2, field3: 2 },
@@ -5448,7 +5448,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Page ends with 2 group headers', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 2, field2: 3, field3: 2 },
@@ -5512,7 +5512,7 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
     });
 
     QUnit.test('Page ends with 1 first group header', function(assert) {
-        var source = this.createDataSource({
+        const source = this.createDataSource({
             store: [
                 { field1: 1, field2: 2, field3: 1 },
                 { field1: 1, field2: 2, field3: 2 },
@@ -5573,16 +5573,16 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // T180076
     QUnit.test('Four groups with paging', function(assert) {
-        var array = [
-                { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
-                { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
-                { field1: 3, field2: 4, field3: 5, field4: 6, field5: 7 }
-            ],
-            source = this.createDataSource({
-                group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }, { selector: 'field3', isExpanded: true }, { selector: 'field4', isExpanded: true }],
-                store: array,
-                pageSize: 10
-            });
+        const array = [
+            { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
+            { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
+            { field1: 3, field2: 4, field3: 5, field4: 6, field5: 7 }
+        ];
+        const source = this.createDataSource({
+            group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }, { selector: 'field3', isExpanded: true }, { selector: 'field4', isExpanded: true }],
+            store: array,
+            pageSize: 10
+        });
 
         // act
         source.pageIndex(1);
@@ -5602,16 +5602,16 @@ $.each(['Grouping without remoteOperations. Second level', 'Grouping with remote
 
     // T180076
     QUnit.test('Four groups with paging after collapse group', function(assert) {
-        var array = [
-                { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
-                { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
-                { field1: 3, field2: 4, field3: 5, field4: 6, field5: 7 }
-            ],
-            source = this.createDataSource({
-                group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }, { selector: 'field3', isExpanded: true }, { selector: 'field4', isExpanded: true }],
-                store: array,
-                pageSize: 10
-            });
+        const array = [
+            { field1: 1, field2: 2, field3: 3, field4: 4, field5: 5 },
+            { field1: 2, field2: 3, field3: 4, field4: 5, field5: 6 },
+            { field1: 3, field2: 4, field3: 5, field4: 6, field5: 7 }
+        ];
+        const source = this.createDataSource({
+            group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }, { selector: 'field3', isExpanded: true }, { selector: 'field4', isExpanded: true }],
+            store: array,
+            pageSize: 10
+        });
 
         // act
         source.pageIndex(1);
@@ -5646,7 +5646,7 @@ QUnit.module('Summary', {
 });
 
 QUnit.test('Total summary without grouping', function(assert) {
-    var dataSource = this.createDataSource({});
+    const dataSource = this.createDataSource({});
 
     dataSource.summary({
         totalAggregates: [{
@@ -5665,7 +5665,7 @@ QUnit.test('Total summary without grouping', function(assert) {
 });
 
 QUnit.test('Total summary and group summary', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this'
     });
 
@@ -5690,7 +5690,7 @@ QUnit.test('Total summary and group summary', function(assert) {
 });
 
 QUnit.test('Total summary and group summary when map defines', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this',
         map: function(data) {
             return data;
@@ -5718,21 +5718,21 @@ QUnit.test('Total summary and group summary when map defines', function(assert) 
 });
 
 QUnit.test('Total summary with CustomStore when remoteOperations filtering and sorting', function(assert) {
-    var storeLoadOptions,
-        dataSource = this.createDataSource({
-            filter: ['this', '>=', 0],
-            sort: 'this',
-            store: new CustomStore({
-                load: function(options) {
-                    storeLoadOptions = options;
-                    return TEN_NUMBERS;
-                }
-            }),
-            remoteOperations: {
-                filtering: true,
-                sorting: true
+    let storeLoadOptions;
+    const dataSource = this.createDataSource({
+        filter: ['this', '>=', 0],
+        sort: 'this',
+        store: new CustomStore({
+            load: function(options) {
+                storeLoadOptions = options;
+                return TEN_NUMBERS;
             }
-        });
+        }),
+        remoteOperations: {
+            filtering: true,
+            sorting: true
+        }
+    });
 
     dataSource.summary({
         totalAggregates: [{
@@ -5753,18 +5753,18 @@ QUnit.test('Total summary with CustomStore when remoteOperations filtering and s
 });
 
 QUnit.test('Total summary with CustomStore when remoteOperations false', function(assert) {
-    var storeLoadOptions,
-        dataSource = this.createDataSource({
-            filter: ['this', '>=', 0],
-            sort: 'this',
-            store: new CustomStore({
-                load: function(options) {
-                    storeLoadOptions = options;
-                    return TEN_NUMBERS;
-                }
-            }),
-            remoteOperations: false
-        });
+    let storeLoadOptions;
+    const dataSource = this.createDataSource({
+        filter: ['this', '>=', 0],
+        sort: 'this',
+        store: new CustomStore({
+            load: function(options) {
+                storeLoadOptions = options;
+                return TEN_NUMBERS;
+            }
+        }),
+        remoteOperations: false
+    });
 
     dataSource.summary({
         totalAggregates: [{
@@ -5785,7 +5785,7 @@ QUnit.test('Total summary with CustomStore when remoteOperations false', functio
 });
 
 QUnit.test('Total summary and group summary with CustomStore', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this',
         remoteOperations: false,
         store: new CustomStore({
@@ -5818,7 +5818,7 @@ QUnit.test('Total summary and group summary with CustomStore', function(assert) 
 QUnit.module('Cache', {
     beforeEach: function() {
         this.createDataSource = function(options) {
-            var that = this;
+            const that = this;
             that.loadingCount = 0;
             return createDataSource($.extend({
                 store: {
@@ -5843,7 +5843,7 @@ QUnit.module('Cache', {
 });
 
 QUnit.test('caching when all remoteOperations', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true,
             sorting: true,
@@ -5861,7 +5861,7 @@ QUnit.test('caching when all remoteOperations', function(assert) {
 });
 
 QUnit.test('no caching when all remoteOperations and legacyRendering is true', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         legacyRendering: true,
         remoteOperations: {
             filtering: true,
@@ -5880,7 +5880,7 @@ QUnit.test('no caching when all remoteOperations and legacyRendering is true', f
 });
 
 QUnit.test('caching pages when all remoteOperations', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: true
     });
     dataSource.load();
@@ -5900,7 +5900,7 @@ QUnit.test('caching pages when all remoteOperations', function(assert) {
 });
 
 QUnit.test('reset pages cache on pageSize change when all remoteOperations', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: true
     });
     dataSource.load();
@@ -5917,7 +5917,7 @@ QUnit.test('reset pages cache on pageSize change when all remoteOperations', fun
 });
 
 QUnit.test('reset pages cache on filtering change when all remoteOperations', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: true
     });
     dataSource.load();
@@ -5934,14 +5934,14 @@ QUnit.test('reset pages cache on filtering change when all remoteOperations', fu
 });
 
 QUnit.test('caching totalCount and summary on paging when all remoteOperations', function(assert) {
-    var that = this;
+    const that = this;
     that.loadingArgs = [];
 
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         load: function(options) {
             that.loadingArgs.push(options);
 
-            var data = TEN_NUMBERS.slice(options.skip, options.skip + options.take);
+            const data = TEN_NUMBERS.slice(options.skip, options.skip + options.take);
             return $.Deferred().resolve(data, {
                 totalCount: options.requireTotalCount ? TEN_NUMBERS.length : -1,
                 summary: options.totalSummary ? [666] : null
@@ -5973,10 +5973,10 @@ QUnit.test('caching totalCount and summary on paging when all remoteOperations',
 
 [false, true].forEach(function(groupPaging) {
     QUnit.test('caching pages when remote ' + (groupPaging ? 'group paging' : 'grouping'), function(assert) {
-        var that = this;
+        const that = this;
         that.loadingArgs = [];
 
-        var dataSource = createDataSourceWithRemoteGrouping({
+        const dataSource = createDataSourceWithRemoteGrouping({
             store: {
                 onLoading: function(e) {
                     that.loadingArgs.push(e);
@@ -6016,7 +6016,7 @@ QUnit.test('caching totalCount and summary on paging when all remoteOperations',
 });
 
 QUnit.test('no caching when cacheEnabled false', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         cacheEnabled: false
     });
     dataSource.load();
@@ -6030,7 +6030,7 @@ QUnit.test('no caching when cacheEnabled false', function(assert) {
 });
 
 QUnit.test('second load from cache after change filter/sort', function(assert) {
-    var dataSource = this.createDataSource({});
+    const dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
@@ -6046,7 +6046,7 @@ QUnit.test('second load from cache after change filter/sort', function(assert) {
 });
 
 QUnit.test('full reload reset cache', function(assert) {
-    var dataSource = this.createDataSource({});
+    const dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
@@ -6059,7 +6059,7 @@ QUnit.test('full reload reset cache', function(assert) {
 });
 
 QUnit.test('reload from original dataSource reset cache', function(assert) {
-    var dataSource = this.createDataSource({});
+    const dataSource = this.createDataSource({});
     dataSource.load();
 
     // act
@@ -6072,7 +6072,7 @@ QUnit.test('reload from original dataSource reset cache', function(assert) {
 });
 
 QUnit.test('load from cache when remote filtering is not changed and pageIndex is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
         }
@@ -6091,7 +6091,7 @@ QUnit.test('load from cache when remote filtering is not changed and pageIndex i
 });
 
 QUnit.test('load from cache when pageSize and pageIndex is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
         }
@@ -6110,7 +6110,7 @@ QUnit.test('load from cache when pageSize and pageIndex is changed', function(as
 
 // T328467
 QUnit.test('load from cache when remote paging but summary exists and pageIndex is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true,
             paging: true
@@ -6143,7 +6143,7 @@ QUnit.test('load from cache when remote paging but summary exists and pageIndex 
 
 
 QUnit.test('reset cache when remote filtering is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             filtering: true
         }
@@ -6162,7 +6162,7 @@ QUnit.test('reset cache when remote filtering is changed', function(assert) {
 });
 
 QUnit.test('reset cache when remote sorting is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             sorting: true
         }
@@ -6180,7 +6180,7 @@ QUnit.test('reset cache when remote sorting is changed', function(assert) {
 });
 
 QUnit.test('reset cache when remote sorting is not changed and grouping is changed', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: {
             sorting: true
         }
@@ -6198,7 +6198,7 @@ QUnit.test('reset cache when remote sorting is not changed and grouping is chang
 });
 
 QUnit.test('update cache on push', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         reshapeOnPush: true
     });
     dataSource.load();
@@ -6215,7 +6215,7 @@ QUnit.test('update cache on push', function(assert) {
 });
 
 QUnit.test('update cache on push without reshapeOnPush', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         pushAggregationTimeout: 0
     });
     dataSource.load();
@@ -6235,7 +6235,7 @@ QUnit.module('Custom Load', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.createDataSource = function(options) {
-            var that = this;
+            const that = this;
             that.loadingCount = 0;
             return (options.remoteOperations === true ? createDataSourceWithRemoteGrouping : createDataSource)($.extend({
                 store: {
@@ -6264,7 +6264,7 @@ QUnit.module('Custom Load', {
 
 // T344031
 QUnit.test('load when loadingTimeout is defined', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         loadingTimeout: 10
     });
     dataSource.load();
@@ -6272,8 +6272,8 @@ QUnit.test('load when loadingTimeout is defined', function(assert) {
     this.clock.tick(10);
 
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6283,7 +6283,7 @@ QUnit.test('load when loadingTimeout is defined', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
 
     // act
     dataSource.load({
@@ -6307,14 +6307,14 @@ QUnit.test('load when loadingTimeout is defined', function(assert) {
 });
 
 QUnit.test('load without cache with group/filter/paging options', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         filter: ['this', '>', '5'],
         remoteOperations: { filtering: true }
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6324,7 +6324,7 @@ QUnit.test('load without cache with group/filter/paging options', function(asser
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
 
     // act
     dataSource.load({
@@ -6349,14 +6349,14 @@ QUnit.test('load without cache with group/filter/paging options', function(asser
 
 // T317818
 QUnit.test('load from cache with group/filter/paging options', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         filter: ['this', '>', '5'],
         remoteOperations: { filtering: true }
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6366,7 +6366,7 @@ QUnit.test('load from cache with group/filter/paging options', function(assert) 
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
 
     // act
     dataSource.load({
@@ -6391,14 +6391,14 @@ QUnit.test('load from cache with group/filter/paging options', function(assert) 
 
 // T341843
 QUnit.test('load from cache with group as function options', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: [{ selector: 'this', desc: false }],
         remoteOperations: false
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6408,7 +6408,7 @@ QUnit.test('load from cache with group as function options', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
 
     // act
     dataSource.load({
@@ -6429,14 +6429,14 @@ QUnit.test('load from cache with group as function options', function(assert) {
 });
 
 QUnit.test('load when remote grouping and not isLoadingAll', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         filter: ['this', '>', '5'],
         remoteOperations: true
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6446,7 +6446,7 @@ QUnit.test('load when remote grouping and not isLoadingAll', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
     // act
     dataSource.load({
@@ -6471,15 +6471,15 @@ QUnit.test('load when remote grouping and not isLoadingAll', function(assert) {
 
 // T368828
 QUnit.test('load when remote grouping and first page', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this',
         remoteOperations: true,
         pageSize: 3
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6489,7 +6489,7 @@ QUnit.test('load when remote grouping and first page', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
     // act
     dataSource.load({
@@ -6513,14 +6513,14 @@ QUnit.test('load when remote grouping and first page', function(assert) {
 
 // T368828
 QUnit.test('load when remote grouping and second page', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this',
         remoteOperations: true
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6530,7 +6530,7 @@ QUnit.test('load when remote grouping and second page', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
     // act
 
@@ -6555,15 +6555,15 @@ QUnit.test('load when remote grouping and second page', function(assert) {
 
 // T368875
 QUnit.test('load when remote grouping and groupInterval is defined', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         group: 'this',
         remoteOperations: true,
         pageSize: 3
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6573,7 +6573,7 @@ QUnit.test('load when remote grouping and groupInterval is defined', function(as
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
     // act
     dataSource.load({
@@ -6597,12 +6597,12 @@ QUnit.test('load when remote grouping and groupInterval is defined', function(as
 
 // T375388
 QUnit.test('load when remote summary and summary is not defined', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         remoteOperations: { summary: true }
     });
     dataSource.load();
 
-    var customLoadData = false;
+    let customLoadData = false;
     // act
     dataSource.load({
         filter: ['this', '>=', '5'],
@@ -6622,16 +6622,16 @@ QUnit.test('load when remote summary and summary is not defined', function(asser
 
 // T344271
 QUnit.test('load when remote grouping and not isLoadingAll and expand one item', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         filter: ['this', '>', '5'],
         remoteOperations: true,
         group: 'this'
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
-    var loadingArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
+    const loadingArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6641,7 +6641,7 @@ QUnit.test('load when remote grouping and not isLoadingAll and expand one item',
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
 
     dataSource.changeRowExpand([6]);
@@ -6674,14 +6674,14 @@ QUnit.test('load when remote grouping and not isLoadingAll and expand one item',
 
 // T324247
 QUnit.test('load when remote grouping and isLoadingAll', function(assert) {
-    var dataSource = this.createDataSource({
+    const dataSource = this.createDataSource({
         filter: ['this', '>', '5'],
         remoteOperations: true
     });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6691,7 +6691,7 @@ QUnit.test('load when remote grouping and isLoadingAll', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
     this.loadingCount = 0;
 
     // act
@@ -6718,23 +6718,23 @@ QUnit.test('load when remote grouping and isLoadingAll', function(assert) {
 
 // T359403
 QUnit.test('load with group and paging options', function(assert) {
-    var loadingCount = 0,
-        dataSource = this.createDataSource({
-            store: {
-                onLoading: function() {
-                    loadingCount++;
-                },
-                type: 'array',
-                data: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+    let loadingCount = 0;
+    const dataSource = this.createDataSource({
+        store: {
+            onLoading: function() {
+                loadingCount++;
             },
+            type: 'array',
+            data: [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+        },
 
-            pageSize: 5,
-            remoteOperations: { filtering: true, sorting: true, paging: true }
-        });
+        pageSize: 5,
+        remoteOperations: { filtering: true, sorting: true, paging: true }
+    });
     dataSource.load();
 
-    var changedArgs = [];
-    var loadingChangedArgs = [];
+    const changedArgs = [];
+    const loadingChangedArgs = [];
 
     dataSource.changed.add(function(e) {
         changedArgs.push(e);
@@ -6744,7 +6744,7 @@ QUnit.test('load with group and paging options', function(assert) {
         loadingChangedArgs.push(e);
     });
 
-    var customLoadData = false;
+    let customLoadData = false;
 
     // act
     dataSource.load({
