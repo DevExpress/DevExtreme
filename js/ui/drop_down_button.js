@@ -611,6 +611,7 @@ let DropDownButton = Widget.inherit({
         }
 
         this._setOptionWithoutOptionChange('selectedItem', selectedItem);
+        this._setOptionWithoutOptionChange('selectedItemKey', this._keyGetter(selectedItem));
     },
 
     _clean() {

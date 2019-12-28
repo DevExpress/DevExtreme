@@ -804,6 +804,38 @@ QUnit.module('common use cases', {
         assert.ok($icons.eq(1).hasClass('dx-icon-spindown'), 'second icon is correct');
     });
 
+    QUnit.test('click on item should raise onSelectionChanged (T848284)', function(assert) {
+        this.dropDownButton.option({
+            items: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            onSelectionChanged: () => {
+                dropDownButton2.option({
+                    items: ['test'],
+                    selectedItemKey: 'test'
+                });
+            }
+        });
+
+        const selectionChangeHandler = sinon.spy();
+        const dropDownButton2 = new DropDownButton('#dropDownButton2', {
+            useSelectMode: true,
+            deferRendering: false,
+            onSelectionChanged: selectionChangeHandler
+        });
+
+        const firstListItems = getList(this.dropDownButton).itemElements();
+
+        eventsEngine.trigger(firstListItems[1], 'dxclick');
+        eventsEngine.trigger(firstListItems[0], 'dxclick');
+
+        assert.strictEqual(getActionButton(dropDownButton2).text(), 'test', 'actionButton text is correct');
+        assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
+    });
+
     QUnit.test('spindown secondary icon should not be rendered when showArrowIcon is false', function(assert) {
         this.dropDownButton.option({
             splitButton: false,
