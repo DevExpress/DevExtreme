@@ -246,6 +246,13 @@ export class SchedulerTestWrapper {
             getGroupHeaderHeight: () => this.grouping.getGroupHeader(0).outerHeight(),
             getGroupTable: () => $('.dx-scheduler-group-table'),
             getGroupTableHeight: () => this.grouping.getGroupTable().height()
+        },
+
+        this.viewTabs = {
+            change: viewName => {
+                const viewTab = $('.dx-scheduler-view-switcher .dx-tab').filter((index, element) => $(element).find('.dx-tab-text').text() === viewName).first();
+                viewTab.trigger('dxclick');
+            }
         };
     }
 
