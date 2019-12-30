@@ -511,18 +511,7 @@ QUnit.module('Events', {
         assert.strictEqual(params.brokenRule, null, 'Null should be passed as brokenRule ');
     });
 
-    // Skipped module
-    QUnit.skip('Subscription by "on" method', () => {
-        QUnit.test('Focused event should fire', function(assert) {
-            const handler = sinon.stub();
-            const validator = this.fixture.createValidator({});
-            validator.on('focus', handler);
-
-            validator.focus();
-
-            assert.ok(handler.calledOnce, 'Validated handler should be called');
-        });
-
+    QUnit.module('Subscription by "on" method', () => {
         QUnit.test('Validated event should fire', function(assert) {
             const value = '';
             const name = 'Login';
@@ -533,7 +522,7 @@ QUnit.module('Events', {
                 name: name,
                 validationRules: [{ type: 'required' }]
             });
-            validator.on('validate', handler);
+            validator.on('validated', handler);
             expectedFailedValidationRule.validator = validator;
             this.fixture.stubAdapter.getValue.returns(value);
 
@@ -570,18 +559,15 @@ QUnit.module('Events', {
                 validationRules: [{ type: 'required' }]
             });
 
-            validator.on('validate', handler);
             expectedFailedValidationRule.validator = validator;
             this.fixture.stubAdapter.getValue.returns(value);
 
+            validator.on('validated', handler);
             validator.validate();
-
-            validator.on('validate', handlerAfterChange);
-            this.fixture.stubAdapter.getValue.returns(value);
-
-            validator.validate();
-
             assert.ok(handler.calledOnce, 'Validated handler should be called');
+
+            validator.on('validated', handlerAfterChange);
+            validator.validate();
             assert.ok(handlerAfterChange.calledOnce, 'Validated handler should be called after option change');
         });
     });
