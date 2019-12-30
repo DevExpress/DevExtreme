@@ -608,7 +608,7 @@ module('Keyboard navigation', setupModule, () => {
         assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
     });
 
-    test('focusout should clear search value', function(assert) {
+    QUnit.testInActiveWindow('focusout should clear search value', function(assert) {
         this.keyboard.type('1');
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
@@ -898,9 +898,9 @@ module('Empty dateBox', {
         assert.strictEqual(this.$input.val(), 'January 14 2015', 'first part was changed, other parts is from the current date');
     });
 
-    test('Bluring the input after first input should update the value', function(assert) {
+    QUnit.testInActiveWindow('Bluring the input after first input should update the value', function(assert) {
         this.keyboard.type('1');
-        this.$input.focusout();
+        this.instance.blur();
 
         assert.strictEqual(this.$input.val(), 'January 14 2015', 'text is correct');
         assert.strictEqual(this.instance.option('value').getMonth(), 0, 'value is correct');
