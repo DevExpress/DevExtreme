@@ -805,6 +805,8 @@ QUnit.module('common use cases', {
     });
 
     QUnit.test('click on item should raise onSelectionChanged (T848284)', function(assert) {
+        const selectionChangeHandler = sinon.spy();
+
         this.dropDownButton.option({
             items: [{
                 id: 1, name: 'a'
@@ -812,27 +814,16 @@ QUnit.module('common use cases', {
                 id: 2, name: 'b'
             }],
             useSelectMode: true,
-            onSelectionChanged: () => {
-                dropDownButton2.option({
-                    items: ['test'],
-                    selectedItemKey: 'test'
-                });
-            }
-        });
-
-        const selectionChangeHandler = sinon.spy();
-        const dropDownButton2 = new DropDownButton('#dropDownButton2', {
-            useSelectMode: true,
-            deferRendering: false,
             onSelectionChanged: selectionChangeHandler
         });
 
         const firstListItems = getList(this.dropDownButton).itemElements();
-
-        eventsEngine.trigger(firstListItems[1], 'dxclick');
         eventsEngine.trigger(firstListItems[0], 'dxclick');
 
-        assert.strictEqual(getActionButton(dropDownButton2).text(), 'test', 'actionButton text is correct');
+        this.dropDownButton.option('items', [{ id: 1, name: 'test' }]);
+        this.dropDownButton.option('selectedItemKey', 1);
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'test', 'actionButton text is correct');
         assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
     });
 
