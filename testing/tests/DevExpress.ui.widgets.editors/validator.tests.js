@@ -422,10 +422,10 @@ QUnit.module('Events', {
         const expectedFailedValidationRule = {
             index: 0,
             type: 'required',
-            isValid: false, message:
-            'Login is required',
+            isValid: false,
+            message: 'Login is required',
             validator: {},
-            value: value
+            value
         };
         const handler = sinon.stub();
 
