@@ -169,7 +169,11 @@ class SpeedDialMainItem extends SpeedDialItem {
             action._options.silent('parentPosition', this._getPosition());
             action._options.silent('actionVisible', action._options.silent('visible'));
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options.silent(), { visible: false })));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options.silent(), {
+                visible: false,
+                onInitialized: null,
+                onDisposing: null
+            })));
         }
     }
 
@@ -282,11 +286,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
 exports.initAction = function(newAction) {
     // TODO: workaround for Angular/React/Vue
-    newAction._options.silent('onInitializing', null);
-
-    // Fix multiple call of the initialized/disposing events
-    newAction._options.silent('onInitialized', null);
-    newAction._options.silent('onDisposing', null);
+    delete newAction._options.onInitializing;
 
     let isActionExist = false;
     if(!speedDialMainItem) {
@@ -295,7 +295,9 @@ exports.initAction = function(newAction) {
 
         speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
             extend({}, newAction._options.silent(), {
-                actions: [ newAction ]
+                actions: [ newAction ],
+                onInitialized: null,
+                onDisposing: null
             })
         );
     } else {
@@ -325,7 +327,9 @@ exports.initAction = function(newAction) {
         } else if(savedActions.length === 1) {
             speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
                 actions: savedActions,
-                position: speedDialMainItem._getPosition()
+                position: speedDialMainItem._getPosition(),
+                onInitialized: null,
+                onDisposing: null
             }));
         } else {
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
@@ -354,7 +358,9 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem = null;
     } else if(savedActions.length === 1) {
         speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
-            actions: savedActions
+            actions: savedActions,
+            onInitialized: null,
+            onDisposing: null
         }));
     } else {
         speedDialMainItem.option({

@@ -852,7 +852,7 @@ QUnit.module('check action buttons events', {
         fx.off = false;
     },
 }, () => {
-    test('trigger and args', function(assert) {
+    QUnit.test('trigger and args', function(assert) {
         const contentReadyStub = sinon.stub();
         const contentReadyHandlerStub = sinon.stub();
         const initializedStub = sinon.stub();
