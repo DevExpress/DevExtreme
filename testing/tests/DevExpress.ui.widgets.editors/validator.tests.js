@@ -511,6 +511,37 @@ QUnit.module('Events', {
         assert.strictEqual(params.brokenRule, null, 'Null should be passed as brokenRule ');
     });
 
+    QUnit.test('optionChange raising', function(assert) {
+        const optionChangeHandler = sinon.stub();
+        const validator = this.fixture.createValidator({
+            name: 'a',
+            onOptionChanged: optionChangeHandler
+        });
+
+        validator.option('name', 'b');
+        assert.ok(optionChangeHandler.calledOnce, 'optionChange event is raised');
+    });
+
+    QUnit.test('initialized raising', function(assert) {
+        const initializedHandler = sinon.stub();
+        this.fixture.createValidator({
+            onInitialized: initializedHandler
+        });
+
+        assert.ok(initializedHandler.calledOnce, 'initialized event is raised');
+    });
+
+    QUnit.test('disposing raising', function(assert) {
+        const disposingHandler = sinon.stub();
+        this.fixture.createValidator({
+            onDisposing: disposingHandler
+        });
+
+        this.fixture.teardown();
+
+        assert.ok(disposingHandler.calledOnce, 'disposing event is raised');
+    });
+
     QUnit.module('Subscription by "on" method', () => {
         QUnit.test('Validated event should fire', function(assert) {
             const value = '';
@@ -569,6 +600,35 @@ QUnit.module('Events', {
             validator.on('validated', handlerAfterChange);
             validator.validate();
             assert.ok(handlerAfterChange.calledOnce, 'Validated handler should be called after option change');
+        });
+
+        QUnit.test('optionChange raising', function(assert) {
+            const optionChangeHandler = sinon.stub();
+            const validator = this.fixture.createValidator({
+                name: 'a',
+            });
+
+            validator.on('optionChanged', optionChangeHandler);
+            validator.option('name', 'b');
+            assert.ok(optionChangeHandler.calledOnce, 'optionChange event is raised');
+        });
+
+        QUnit.test('initialized raising', function(assert) {
+            const initializedHandler = sinon.stub();
+            const validator = this.fixture.createValidator({});
+
+            validator.on('initialized', initializedHandler);
+            assert.ok(initializedHandler.calledOnce, 'initialized event is raised');
+        });
+
+        QUnit.test('disposing raising', function(assert) {
+            const disposingHandler = sinon.stub();
+            const validator = this.fixture.createValidator({});
+
+            this.fixture.teardown();
+
+            validator.on('disposing', disposingHandler);
+            assert.ok(disposingHandler.calledOnce, 'disposing event is raised');
         });
     });
 });
