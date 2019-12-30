@@ -417,8 +417,9 @@ QUnit.module('Events', {
     }
 }, () => {
     QUnit.test('Validated event should fire', function(assert) {
-        const value = ''; const name = 'Login'; const expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value }; const handler = sinon.stub();
-
+        const value = ''; const name = 'Login';
+        const expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value };
+        const handler = sinon.stub();
 
         const validator = this.fixture.createValidator({
             name: name,
@@ -431,6 +432,7 @@ QUnit.module('Events', {
         validator.validate();
         // assert
         assert.ok(handler.calledOnce, 'Validated handler should be called');
+
         const params = handler.getCall(0).args[0];
         assert.ok(handler.calledOn(validator), 'Correct context of action');
         assert.strictEqual(params.validator, validator, 'Validator reference should be passed');
@@ -446,6 +448,32 @@ QUnit.module('Events', {
             value: value
         }], 'Correct rules were passed');
         assert.deepEqual(params.brokenRule, expectedFailedValidationRule, 'Failed rules were passed');
+    });
+
+    QUnit.test('Validated event should fire correctly after option runtime change', function(assert) {
+        const value = '';
+        const name = 'Login';
+        const expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value };
+        const handler = sinon.stub();
+        const handlerAfterChange = sinon.stub();
+
+        const validator = this.fixture.createValidator({
+            name: name,
+            onValidated: handler,
+            validationRules: [{ type: 'required' }]
+        });
+        expectedFailedValidationRule.validator = validator;
+        this.fixture.stubAdapter.getValue.returns(value);
+
+        validator.validate();
+
+        expectedFailedValidationRule.validator.option('onValidated', handlerAfterChange);
+        this.fixture.stubAdapter.getValue.returns(value);
+
+        validator.validate();
+
+        assert.ok(handler.calledOnce, 'Validated handler should be called');
+        assert.ok(handlerAfterChange.calledOnce, 'Validated handler should be called after option change');
     });
 
     QUnit.test('Focused event should fire', function(assert) {
@@ -481,6 +509,71 @@ QUnit.module('Events', {
         assert.strictEqual(params.validator, validator, 'Validator reference should be passed');
         assert.strictEqual(params.isValid, true, 'isValid was passed');
         assert.strictEqual(params.brokenRule, null, 'Null should be passed as brokenRule ');
+    });
+
+    // Skipped module
+    QUnit.skip('Subscription by "on" method', () => {
+        QUnit.test('Validated event should fire', function(assert) {
+            const value = '';
+            const name = 'Login';
+            const expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value };
+            const handler = sinon.stub();
+
+            const validator = this.fixture.createValidator({
+                name: name,
+                validationRules: [{ type: 'required' }]
+            });
+            validator.on('validate', handler);
+            expectedFailedValidationRule.validator = validator;
+            this.fixture.stubAdapter.getValue.returns(value);
+            // act
+            validator.validate();
+            // assert
+            assert.ok(handler.calledOnce, 'Validated handler should be called');
+
+            const params = handler.getCall(0).args[0];
+            assert.ok(handler.calledOn(validator), 'Correct context of action');
+            assert.strictEqual(params.validator, validator, 'Validator reference should be passed');
+            assert.equal(params.value, value, 'Correct value was passed');
+            assert.equal(params.name, name, 'Name of Validator should be passed');
+            assert.strictEqual(params.isValid, false, 'isValid was passed');
+            assert.deepEqual(params.validationRules, [{
+                index: 0,
+                isValid: false,
+                message: 'Login is required',
+                type: 'required',
+                validator: validator,
+                value: value
+            }], 'Correct rules were passed');
+            assert.deepEqual(params.brokenRule, expectedFailedValidationRule, 'Failed rules were passed');
+        });
+
+        QUnit.test('Validated event should fire correctly after option runtime change', function(assert) {
+            const value = '';
+            const name = 'Login';
+            const expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: 'Login is required', validator: {}, value: value };
+            const handler = sinon.stub();
+            const handlerAfterChange = sinon.stub();
+
+            const validator = this.fixture.createValidator({
+                name: name,
+                validationRules: [{ type: 'required' }]
+            });
+
+            validator.on('validate', handler);
+            expectedFailedValidationRule.validator = validator;
+            this.fixture.stubAdapter.getValue.returns(value);
+
+            validator.validate();
+
+            validator.on('validate', handlerAfterChange);
+            this.fixture.stubAdapter.getValue.returns(value);
+
+            validator.validate();
+
+            assert.ok(handler.calledOnce, 'Validated handler should be called');
+            assert.ok(handlerAfterChange.calledOnce, 'Validated handler should be called after option change');
+        });
     });
 });
 
