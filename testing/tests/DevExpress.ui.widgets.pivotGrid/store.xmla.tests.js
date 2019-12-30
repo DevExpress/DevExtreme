@@ -6,100 +6,100 @@ define(function(require) {
         return;
     }
 
-    var browser = require('core/utils/browser');
+    const browser = require('core/utils/browser');
 
     if(browser.msie && parseInt(browser.version) >= 17) return;
 
-    var $ = require('jquery'),
-        DATA_SOURCE_URL = 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
-        pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils'),
-        pivotGridDataSource = require('ui/pivot_grid/data_source'),
-        XmlaStore = require('ui/pivot_grid/xmla_store'),
+    const $ = require('jquery');
+    const DATA_SOURCE_URL = 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll';
+    const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
+    const pivotGridDataSource = require('ui/pivot_grid/data_source');
+    const XmlaStore = require('ui/pivot_grid/xmla_store');
 
-        CATEGORIES_DATA = [
-            { key: '[Product].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },
-            { key: '[Product].[Category].&[1]', value: 'Bikes', text: 'Bikes', index: 2 },
-            { key: '[Product].[Category].&[3]', value: 'Clothing', text: 'Clothing', index: 3 }
-        ],
+    const CATEGORIES_DATA = [
+        { key: '[Product].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },
+        { key: '[Product].[Category].&[1]', value: 'Bikes', text: 'Bikes', index: 2 },
+        { key: '[Product].[Category].&[3]', value: 'Clothing', text: 'Clothing', index: 3 }
+    ];
 
-        CATEGORIES_HIERARCHY_DATA = [
-            { key: '[Product].[Product Categories].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },
-            { key: '[Product].[Product Categories].[Category].&[1]', value: 'Bikes', text: 'Bikes', index: 2 },
-            { key: '[Product].[Product Categories].[Category].&[3]', value: 'Clothing', text: 'Clothing', index: 3 }
-        ],
+    const CATEGORIES_HIERARCHY_DATA = [
+        { key: '[Product].[Product Categories].[Category].&[4]', value: 'Accessories', text: 'Accessories', index: 1 },
+        { key: '[Product].[Product Categories].[Category].&[1]', value: 'Bikes', text: 'Bikes', index: 2 },
+        { key: '[Product].[Product Categories].[Category].&[3]', value: 'Clothing', text: 'Clothing', index: 3 }
+    ];
 
-        CATEGORIES_DATA_WITH_COMPONENTS = CATEGORIES_DATA.concat({
-            index: 4,
-            text: 'Components',
-            value: 'Components',
-            key: '[Product].[Category].&[2]'
-        }),
+    const CATEGORIES_DATA_WITH_COMPONENTS = CATEGORIES_DATA.concat({
+        index: 4,
+        text: 'Components',
+        value: 'Components',
+        key: '[Product].[Category].&[2]'
+    });
 
-        BIKES_SUBCATEGORY_DATA = [{
-            index: 1,
-            key: '[Product].[Product Categories].[Subcategory].&[1]',
-            text: 'Mountain Bikes',
-            value: 'Mountain Bikes'
-        },
-        {
-            index: 2,
-            key: '[Product].[Product Categories].[Subcategory].&[2]',
-            text: 'Road Bikes',
-            value: 'Road Bikes'
-        },
-        {
-            index: 3,
-            key: '[Product].[Product Categories].[Subcategory].&[3]',
-            text: 'Touring Bikes',
-            value: 'Touring Bikes'
-        }],
+    const BIKES_SUBCATEGORY_DATA = [{
+        index: 1,
+        key: '[Product].[Product Categories].[Subcategory].&[1]',
+        text: 'Mountain Bikes',
+        value: 'Mountain Bikes'
+    },
+    {
+        index: 2,
+        key: '[Product].[Product Categories].[Subcategory].&[2]',
+        text: 'Road Bikes',
+        value: 'Road Bikes'
+    },
+    {
+        index: 3,
+        key: '[Product].[Product Categories].[Subcategory].&[3]',
+        text: 'Touring Bikes',
+        value: 'Touring Bikes'
+    }];
 
-        CALENDAR_YEAR_DATA = [{
-            index: 1,
-            text: 'CY 2001',
-            value: 2001,
-            key: '[Ship Date].[Calendar Year].&[2001]'
-        }, {
-            index: 2,
-            text: 'CY 2002',
-            value: 2002,
-            key: '[Ship Date].[Calendar Year].&[2002]'
-        }, {
-            index: 3,
-            text: 'CY 2003',
-            value: 2003,
-            key: '[Ship Date].[Calendar Year].&[2003]'
-        }, {
-            index: 4,
-            text: 'CY 2004',
-            value: 2004,
-            key: '[Ship Date].[Calendar Year].&[2004]'
-        }],
+    const CALENDAR_YEAR_DATA = [{
+        index: 1,
+        text: 'CY 2001',
+        value: 2001,
+        key: '[Ship Date].[Calendar Year].&[2001]'
+    }, {
+        index: 2,
+        text: 'CY 2002',
+        value: 2002,
+        key: '[Ship Date].[Calendar Year].&[2002]'
+    }, {
+        index: 3,
+        text: 'CY 2003',
+        value: 2003,
+        key: '[Ship Date].[Calendar Year].&[2003]'
+    }, {
+        index: 4,
+        text: 'CY 2004',
+        value: 2004,
+        key: '[Ship Date].[Calendar Year].&[2004]'
+    }];
 
-        CALENDAR_HIERARCHY_YEAR_DATA = [{
-            index: 1,
-            text: 'CY 2001',
-            value: 2001,
-            key: '[Ship Date].[Calendar].[Calendar Year].&[2001]'
-        }, {
-            index: 2,
-            text: 'CY 2002',
-            value: 2002,
-            key: '[Ship Date].[Calendar].[Calendar Year].&[2002]'
-        }, {
-            index: 3,
-            text: 'CY 2003',
-            value: 2003,
-            key: '[Ship Date].[Calendar].[Calendar Year].&[2003]'
-        }, {
-            index: 4,
-            text: 'CY 2004',
-            value: 2004,
-            key: '[Ship Date].[Calendar].[Calendar Year].&[2004]'
-        }];
+    const CALENDAR_HIERARCHY_YEAR_DATA = [{
+        index: 1,
+        text: 'CY 2001',
+        value: 2001,
+        key: '[Ship Date].[Calendar].[Calendar Year].&[2001]'
+    }, {
+        index: 2,
+        text: 'CY 2002',
+        value: 2002,
+        key: '[Ship Date].[Calendar].[Calendar Year].&[2002]'
+    }, {
+        index: 3,
+        text: 'CY 2003',
+        value: 2003,
+        key: '[Ship Date].[Calendar].[Calendar Year].&[2003]'
+    }, {
+        index: 4,
+        text: 'CY 2004',
+        value: 2004,
+        key: '[Ship Date].[Calendar].[Calendar Year].&[2004]'
+    }];
 
     function findItems(data, field, value) {
-        var result = [];
+        const result = [];
         $.each(data, function(_, item) {
             if(item[field] === value) {
                 result.push(item);
@@ -124,8 +124,8 @@ define(function(require) {
     }
 
     function getValue(data, rowItem, columnItem, measureIndex) {
-        var columnIndex = columnItem ? columnItem.index : data.grandTotalColumnIndex,
-            rowIndex = rowItem ? rowItem.index : data.grandTotalRowIndex;
+        const columnIndex = columnItem ? columnItem.index : data.grandTotalColumnIndex;
+        const rowIndex = rowItem ? rowItem.index : data.grandTotalRowIndex;
 
         return data.values[rowIndex][columnIndex][measureIndex || 0];
     }
@@ -138,7 +138,7 @@ define(function(require) {
         });
         return data;
     }
-    var testEnvironment = {
+    const testEnvironment = {
         beforeEach: function() {
             this.store = new XmlaStore(this.dataSource);
 
@@ -164,7 +164,7 @@ define(function(require) {
     });
 
     QUnit.test('incorrect dataSource', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         new XmlaStore({
             url: '',
             catalog: 'Adventure Works DW Standard Edition',
@@ -180,7 +180,7 @@ define(function(require) {
     });
 
     QUnit.test('not defined data in description', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({}).done(function(data) {
             assert.ok(data);
             assert.strictEqual(data.grandTotalColumnIndex, 0);
@@ -193,7 +193,7 @@ define(function(require) {
     });
 
     QUnit.test('Adventure Works', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -215,7 +215,7 @@ define(function(require) {
     });
 
     QUnit.test('Adventure Works. Expand item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }, { dataField: '[Ship Date].[Month Of Year]' }],
@@ -250,7 +250,7 @@ define(function(require) {
     });
 
     QUnit.test('Adventure Works. Expand column & row', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }, { dataField: '[Product].[Subcategory]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }, { dataField: '[Ship Date].[Month Of Year]' }],
@@ -289,7 +289,7 @@ define(function(require) {
     });
 
     QUnit.test('Load with expand column & row', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }, { dataField: '[Product].[Subcategory]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }, { dataField: '[Ship Date].[Month Of Year]' }],
@@ -338,7 +338,7 @@ define(function(require) {
     });
 
     QUnit.test('Adventure Works. Expand second level child', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }, { dataField: '[Product].[Subcategory]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }, { dataField: '[Ship Date].[Month Of Year]' }, { dataField: '[Ship Date].[Day Of Month]' }],
@@ -374,7 +374,7 @@ define(function(require) {
     });
 
     QUnit.test('Adventure Works. Expand child when opposite axis expanded on several levels', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }, { dataField: '[Product].[Subcategory]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }, { dataField: '[Ship Date].[Month Of Year]' }, { dataField: '[Ship Date].[Day Of Month]' }],
@@ -421,7 +421,7 @@ define(function(require) {
     });
 
     QUnit.test('Load expanded axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]', expanded: true }, { dataField: '[Product].[Subcategory]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -450,7 +450,7 @@ define(function(require) {
     });
 
     QUnit.test('Load with expanded hidden level item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }, { dataField: '[Product].[Subcategory]', expanded: true }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -473,7 +473,7 @@ define(function(require) {
     });
 
     QUnit.test('Expanded all items', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]', expanded: true }, {
                 dataField: '[Product].[Subcategory]',
@@ -505,7 +505,7 @@ define(function(require) {
     });
 
     QUnit.test('Loaded with two level expanded items', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -547,7 +547,7 @@ define(function(require) {
     });
 
     QUnit.test('Expand item with expanded children', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -591,7 +591,7 @@ define(function(require) {
     });
 
     QUnit.test('defined only cells', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
         }).done(function(data) {
@@ -608,7 +608,7 @@ define(function(require) {
     });
 
     QUnit.test('defined columns and cells', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             values: [{ dataField: '[Measures].[Internet Sales Amount]', caption: 'Count' }]
@@ -630,7 +630,7 @@ define(function(require) {
     });
 
     QUnit.test('defined cells and rows', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{ dataField: '[Product].[Category]' }],
             values: [{ dataField: '[Measures].[Internet Sales Amount]', caption: 'Count' }]
@@ -655,7 +655,7 @@ define(function(require) {
     });
 
     QUnit.test('defined columns and rows', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{ dataField: '[Product].[Category]' }],
             columns: [{ dataField: '[Ship Date].[Calendar Year]' }]
@@ -680,7 +680,7 @@ define(function(require) {
     });
 
     QUnit.test('defined columns only', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Ship Date].[Calendar Year]' }]
         }).done(function(data) {
@@ -702,7 +702,7 @@ define(function(require) {
     });
 
     QUnit.test('defined rows only', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }]
         }).done(function(data) {
@@ -728,7 +728,7 @@ define(function(require) {
     });
 
     QUnit.test('Load with two measures', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -753,7 +753,7 @@ define(function(require) {
     });
 
     QUnit.test('T321308: dxPivotGrid with XMLA store - uncaught exception occurs when all field cells are empty', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Internet Sales Order Details].[Carrier Tracking Number]' }],
             rows: [],
@@ -769,7 +769,7 @@ define(function(require) {
     });
 
     QUnit.test('T566739. Get All field values without load values', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [],
@@ -786,9 +786,9 @@ define(function(require) {
     });
 
     QUnit.test('T677334. Correct parse result with empty member value', function(assert) {
-        var send = pivotGridUtils.sendRequest;
+        const send = pivotGridUtils.sendRequest;
         sinon.stub(pivotGridUtils, 'sendRequest', function() {
-            var deferred = $.Deferred();
+            const deferred = $.Deferred();
             send.apply(this, arguments)
                 .then(function() {
                     arguments[0] = arguments[0].replace(/<MEMBER_VALUE xsi:type="xsd:short">2001<\/MEMBER_VALUE>/g, '<MEMBER_VALUE/>');
@@ -799,7 +799,7 @@ define(function(require) {
             return deferred.promise();
         });
 
-        var done = assert.async();
+        const done = assert.async();
 
         this.store
             .load({
@@ -831,7 +831,7 @@ define(function(require) {
     }
 
     QUnit.test('Load from hierachy', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -859,8 +859,8 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expand item', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -895,8 +895,8 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expand column & row', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -940,8 +940,8 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expand second level child', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -990,8 +990,8 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expand child when opposite axis expanded on several levels', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -1044,7 +1044,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy Load expanded axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1082,7 +1082,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Load with expanded hidden level item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1114,7 +1114,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expanded all items', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1159,7 +1159,7 @@ define(function(require) {
     QUnit.test('Hierachy. Loaded with two level expanded items', function(assert) {
         assert.expect(30);
 
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -1214,8 +1214,8 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy. Expand item with expanded children', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -1267,7 +1267,7 @@ define(function(require) {
     QUnit.test('Hierarchy. Expand item with two expanded children', function(assert) {
         assert.expect(22);
 
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -1327,7 +1327,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Expand item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar].[Calendar Year]', hierarchyName: '[Ship Date].[Calendar]' },
@@ -1351,8 +1351,8 @@ define(function(require) {
     });
 
     QUnit.test('Not hierarchy & hierarchy. Expand item', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.store.load({
             columns: [
                 { dataField: '[Product].[Category]' },
@@ -1362,7 +1362,7 @@ define(function(require) {
             headerName: 'columns',
             path: ['&[1]']
         }).done(function(data) {
-            var calendarYearData = expectedTotalIndex === undefined ? $.map(CALENDAR_HIERARCHY_YEAR_DATA, function(item) {
+            const calendarYearData = expectedTotalIndex === undefined ? $.map(CALENDAR_HIERARCHY_YEAR_DATA, function(item) {
                 return $.extend({}, item, { index: item.index - 1 });
             }) : CALENDAR_HIERARCHY_YEAR_DATA;
 
@@ -1382,7 +1382,7 @@ define(function(require) {
     });
 
     QUnit.test('Not hierarchy & hierarchy. expanded not hierarchy level', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar Year]', expanded: true },
@@ -1419,7 +1419,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Load expanded axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1493,7 +1493,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Load expanded axis. With filter', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -1562,7 +1562,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Load expanded axis with expanded not hirarchy children', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1594,7 +1594,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Expand hierarchy item with expanded not hirarchy children', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar].[Calendar Year]', hierarchyName: '[Ship Date].[Calendar]' },
@@ -1619,7 +1619,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Expand column & row.', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar].[Calendar Year]', hierarchyName: '[Ship Date].[Calendar]' },
@@ -1685,7 +1685,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. Expand row & column.', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar].[Calendar Year]', hierarchyName: '[Ship Date].[Calendar]' },
@@ -1746,7 +1746,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & not hierarchy. expanded hierarchy level', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1769,7 +1769,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & hierarchy. expanded hierarchy level', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 {
@@ -1844,7 +1844,7 @@ define(function(require) {
     });
 
     QUnit.test('Hierarchy & hierarchy. Expand item with expanded next hierarchy level', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [
                 { dataField: '[Ship Date].[Calendar].[Calendar Year]', hierarchyName: '[Ship Date].[Calendar]' },
@@ -1915,7 +1915,7 @@ define(function(require) {
     QUnit.module('Discover', testEnvironment);
 
     QUnit.test('Discover. Incorrect dataSource url', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         new XmlaStore({
             url: '',
             catalog: 'Adventure Works DW Standard Edition',
@@ -1927,7 +1927,7 @@ define(function(require) {
     });
 
     QUnit.test('Discover. Incorrect dataSource cube', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         new XmlaStore($.extend({}, this.dataSource, {
             cube: 'cube'
         })).getFields()
@@ -1937,7 +1937,7 @@ define(function(require) {
     });
 
     QUnit.test('Discover. Incorrect dataSource catalog', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         new XmlaStore($.extend({}, this.dataSource, {
             catalog: 'catalog'
         })).getFields()
@@ -1948,7 +1948,7 @@ define(function(require) {
     });
 
     QUnit.test('Discover', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
 
         this.store.getFields().done(function(data) {
             assert.ok(data);
@@ -2075,7 +2075,7 @@ define(function(require) {
     QUnit.module('Filtering', testEnvironment);
 
     QUnit.test('FilterValues in row and column fields. Include filter', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Category]',
@@ -2109,7 +2109,7 @@ define(function(require) {
     });
 
     QUnit.test('FilterValues in row and column fields. Exclude Filter', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Category]',
@@ -2140,7 +2140,7 @@ define(function(require) {
     });
 
     QUnit.test('FilterValues in columns field', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Category]',
@@ -2173,7 +2173,7 @@ define(function(require) {
     });
 
     QUnit.test('FilterValues in rows field', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -2211,7 +2211,7 @@ define(function(require) {
     });
 
     QUnit.test('Filter field. Include type', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -2241,7 +2241,7 @@ define(function(require) {
     });
 
     QUnit.test('Filter field. Exclude type', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -2268,7 +2268,7 @@ define(function(require) {
     });
 
     QUnit.test('Filter field. Include and exclude filters', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
@@ -2305,7 +2305,7 @@ define(function(require) {
     });
 
     QUnit.test('Ignore filterValues for hierarchyLevel field', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -2332,7 +2332,7 @@ define(function(require) {
     });
 
     QUnit.test('Filter hierarchyLevel field. Include type', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             'columns': [
                 { 'dimension': 'Ship Date', 'dataField': '[Ship Date].[Calendar Year]' }
@@ -2368,7 +2368,7 @@ define(function(require) {
     });
 
     QUnit.test('Filter hierarchyLevel field. Exclude type', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product Categories].[Category]',
@@ -2399,7 +2399,7 @@ define(function(require) {
     });
 
     QUnit.test('FilterValues using full key value in row and column fields. Include filter', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [],
             rows: [{
@@ -2420,7 +2420,7 @@ define(function(require) {
     QUnit.module('Sorting', testEnvironment);
 
     QUnit.test('Sorting by value', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]', sortOrder: 'desc', sortBy: 'value' }],
             rows: [{ dataField: '[Ship Date].[Month of Year]', sortOrder: 'desc', sortBy: 'value' }],
@@ -2472,7 +2472,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by display text', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]', sortOrder: 'desc', sortBy: 'displayText' }],
             rows: [{ dataField: '[Ship Date].[Month of Year]', sortOrder: 'desc', sortBy: 'displayText' }],
@@ -2524,7 +2524,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by display text. Default sorting when sortOrder is undefined', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Ship Date].[Month of Year]', sortBy: 'displayText' }]
         }).done(function(data) {
@@ -2541,7 +2541,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by none', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]', sortOrder: 'asc', sortBy: 'none' }],
             rows: [{ dataField: '[Ship Date].[Month of Year]', sortOrder: 'desc', sortBy: 'none' }],
@@ -2594,7 +2594,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by none two dimension on axis and expanded item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -2644,7 +2644,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting group by none', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             rows: [
                 {
@@ -2702,7 +2702,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -2775,7 +2775,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field when expanded items', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -2884,7 +2884,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field when expanded items with expanded', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -2920,7 +2920,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field by caption', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -2992,7 +2992,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting group by Summary field', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -3068,7 +3068,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field in first field on axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -3140,7 +3140,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field in first field on axis with path', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{
                 dataField: '[Product].[Category]',
@@ -3203,7 +3203,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting columns by row', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             rows: [
                 { dataField: '[Product].[Category]', expanded: true, filterValues: ['Bikes'] },
@@ -3265,7 +3265,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field in with path with length greater then columns count', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]', filterValues: ['Bikes'] }],
             rows: [
@@ -3339,7 +3339,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary two dimension on axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             'rows': [
                 {
@@ -3450,7 +3450,7 @@ define(function(require) {
                 text: 'Socks'
             }]);
 
-            var column = getColumnByIndex(data.values, 4);
+            const column = getColumnByIndex(data.values, 4);
 
             assert.strictEqual(column[1], 9745, 'Accessories - CY 2004');
             assert.strictEqual(column[2], 5646, 'Bikes - CY 2004');
@@ -3460,7 +3460,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting by Summary field when hierarchy in column', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
 
             columns: [{
@@ -3529,7 +3529,7 @@ define(function(require) {
     });
 
     QUnit.test('Sort fields with several expanded levels when expanded item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]', sortOrder: 'desc', sortBy: 'value' }],
             rows: [
@@ -3576,7 +3576,7 @@ define(function(require) {
     });
 
     QUnit.test('Sort fields with several expanded levels', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [{ dataField: '[Product].[Category]' }],
             rows: [
@@ -3613,8 +3613,8 @@ define(function(require) {
     });
 
     QUnit.test('Sort group when expanded item', function(assert) {
-        var done = assert.async();
-        var expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
+        const done = assert.async();
+        const expectedTotalIndex = getGrandTotalIndexForExpanding(this.store);
         this.load({
             columns: [
                 {
@@ -3668,7 +3668,7 @@ define(function(require) {
     });
 
     QUnit.test('Sort when several groups on axis. Expand item', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -3708,7 +3708,7 @@ define(function(require) {
     });
 
     QUnit.test('Sort when several expanded groups on axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -3759,7 +3759,7 @@ define(function(require) {
     });
 
     QUnit.test('Sort last group on axis', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -3820,7 +3820,7 @@ define(function(require) {
     });
 
     QUnit.test('Sorting group in two dimension', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.load({
             columns: [
                 {
@@ -3891,12 +3891,12 @@ define(function(require) {
     QUnit.module('XMLA Store with another cubes');
 
     QUnit.test('T248791. Dimension with zero level members', function(assert) {
-        var done = assert.async(),
-            store = new XmlaStore({
-                url: DATA_SOURCE_URL,
-                catalog: 'Q380421',
-                cube: 'CubeMobile'
-            });
+        const done = assert.async();
+        const store = new XmlaStore({
+            url: DATA_SOURCE_URL,
+            catalog: 'Q380421',
+            cube: 'CubeMobile'
+        });
 
         store.load({
             columns: [
@@ -3920,12 +3920,12 @@ define(function(require) {
     });
 
     QUnit.test('T248791. Dimension with zero level members. Expand All level', function(assert) {
-        var done = assert.async(),
-            store = new XmlaStore({
-                url: DATA_SOURCE_URL,
-                catalog: 'Q380421',
-                cube: 'CubeMobile'
-            });
+        const done = assert.async();
+        const store = new XmlaStore({
+            url: DATA_SOURCE_URL,
+            catalog: 'Q380421',
+            cube: 'CubeMobile'
+        });
         store.load({
             columns: [
                 { dataField: '[Агрегация по дате].[Агрегация по дате]', area: 'column', expanded: true },
@@ -3954,7 +3954,7 @@ define(function(require) {
     }
 
     QUnit.test('Skip and take rows', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{
                 dataField: '[Product].[Subcategory]',
@@ -3975,7 +3975,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take rows if expand', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             path: ['&[2001]'],
             area: 'column',
@@ -4001,7 +4001,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take rows if expand and if oppositePath', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             area: 'column',
             headerName: 'columns',
@@ -4036,7 +4036,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take columns', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Ship Date].[Calendar Year]'
@@ -4051,7 +4051,7 @@ define(function(require) {
     });
 
     QUnit.test('take columns', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Ship Date].[Calendar Year]'
@@ -4066,7 +4066,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take columns with searchValue', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product]', searchValue: 'Men\'s'
@@ -4087,7 +4087,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take columns with wrong searchValue', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Product]', searchValue: 'wrong'
@@ -4101,7 +4101,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take rows and columns', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [{
                 dataField: '[Product].[Subcategory]',
@@ -4128,7 +4128,7 @@ define(function(require) {
 
 
     QUnit.test('Skip and take rows and columns with empty dimensions', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             columns: [],
             rows: [],
@@ -4145,7 +4145,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take rows with sortOrder desc', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{
                 dataField: '[Ship Date].[Month of Year]', sortOrder: 'desc'
@@ -4160,7 +4160,7 @@ define(function(require) {
     });
 
     QUnit.test('Skip and take rows with sortOrder desc amd sortBy displayText', function(assert) {
-        var done = assert.async();
+        const done = assert.async();
         this.store.load({
             rows: [{
                 dataField: '[Ship Date].[Month of Year]', sortOrder: 'desc', sortBy: 'displayText'

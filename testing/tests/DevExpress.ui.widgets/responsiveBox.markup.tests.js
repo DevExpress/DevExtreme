@@ -19,10 +19,10 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const BOX_CLASS = 'dx-box',
-    BOX_ITEM_CLASS = 'dx-box-item',
-    RESPONSIVE_BOX_CLASS = 'dx-responsivebox',
-    SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
+const BOX_CLASS = 'dx-box';
+const BOX_ITEM_CLASS = 'dx-box-item';
+const RESPONSIVE_BOX_CLASS = 'dx-responsivebox';
+const SCREEN_SIZE_CLASS_PREFIX = RESPONSIVE_BOX_CLASS + '-screen-';
 
 
 const moduleConfig = {
@@ -36,12 +36,12 @@ const moduleConfig = {
 
 QUnit.module('render', moduleConfig, () => {
     QUnit.test('render', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             items: [{ text: 1 }, { text: 2 }]
         });
 
         assert.ok($responsiveBox.hasClass(RESPONSIVE_BOX_CLASS), 'necessary class attached');
-        let $items = $responsiveBox.find('.' + BOX_ITEM_CLASS);
+        const $items = $responsiveBox.find('.' + BOX_ITEM_CLASS);
         assert.equal($items.length, 2, 'items rendered when rows and columns are not defined (using single column layout)');
     });
 
@@ -55,25 +55,25 @@ QUnit.module('render', moduleConfig, () => {
 
 QUnit.module('layouting', moduleConfig, () => {
     QUnit.test('grid without items', function(assert) {
-        let rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
-        let cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
-        let height = 600;
-        let width = 600;
+        const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
+        const cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
+        const height = 600;
+        const width = 600;
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: rows,
             cols: cols,
             width: width,
             height: height
         });
 
-        let $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(0);
+        const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(0);
 
         assert.equal($rowBox.dxBox('option', 'direction'), 'col', 'rowBox wraps inner content');
 
-        let $columnBoxes = $rowBox.find('.' + BOX_CLASS);
-        let columnBoxFirst = $columnBoxes.eq(0).dxBox('instance');
-        let columnBoxSecond = $columnBoxes.eq(1).dxBox('instance');
+        const $columnBoxes = $rowBox.find('.' + BOX_CLASS);
+        const columnBoxFirst = $columnBoxes.eq(0).dxBox('instance');
+        const columnBoxSecond = $columnBoxes.eq(1).dxBox('instance');
 
         assert.equal($columnBoxes.length, 2, 'two row boxes');
         assert.equal(columnBoxFirst.option('direction'), 'row');
@@ -84,12 +84,12 @@ QUnit.module('layouting', moduleConfig, () => {
     });
 
     QUnit.test('grid with items', function(assert) {
-        let rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
-        let cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
-        let height = 600;
-        let width = 600;
+        const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }];
+        const cols = [{ ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 100 }];
+        const height = 600;
+        const width = 600;
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: rows,
             cols: cols,
             items: [
@@ -102,9 +102,9 @@ QUnit.module('layouting', moduleConfig, () => {
             height: height
         });
 
-        let $boxes = $responsiveBox.find('.' + BOX_CLASS);
+        const $boxes = $responsiveBox.find('.' + BOX_CLASS);
 
-        let $rootBox = $boxes.eq(0);
+        const $rootBox = $boxes.eq(0);
         assert.equal($rootBox.text(), 'item11item12item21item22', 'items rendered correctly');
     });
 
@@ -114,7 +114,7 @@ QUnit.module('layouting', moduleConfig, () => {
 
         this.updateScreenSize(500);
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}, { screen: 'sm md lg' }, { screen: 'md lg' }, { screen: 'lg' }],
             cols: [{}, { screen: 'sm md lg' }, { screen: 'md lg' }, { screen: 'lg' }],
             items: [
@@ -143,10 +143,10 @@ QUnit.module('layouting', moduleConfig, () => {
             ]
         });
 
-        let xsExpectedText = 'item(0,0)-xs',
-            smallExpectedText = 'item(0,0)-sm item(0,1) item(1,0) item(1,1)',
-            mediumExpectedText = 'item(0,0)-md item(0,1) item(0,2) item(1,0) item(1,1) item(1,2) item(2,0) item(2,1) item(2,2)',
-            lgExpectedText = 'item(0,0)-lg item(0,1) item(0,2) item(0,3) item(1,0) item(1,1) item(1,2) item(1,3) item(2,0) item(2,1) item(2,2) item(2,3) item(3,0) item(3,1) item(3,2) item(3,3)';
+        const xsExpectedText = 'item(0,0)-xs';
+        const smallExpectedText = 'item(0,0)-sm item(0,1) item(1,0) item(1,1)';
+        const mediumExpectedText = 'item(0,0)-md item(0,1) item(0,2) item(1,0) item(1,1) item(1,2) item(2,0) item(2,1) item(2,2)';
+        const lgExpectedText = 'item(0,0)-lg item(0,1) item(0,2) item(0,3) item(1,0) item(1,1) item(1,2) item(1,3) item(2,0) item(2,1) item(2,2) item(2,3) item(3,0) item(3,1) item(3,2) item(3,3)';
 
         // xs screen
         assert.equal($responsiveBox.text(), xsExpectedText);
@@ -168,34 +168,34 @@ QUnit.module('layouting', moduleConfig, () => {
     });
 
     QUnit.test('colspan', function(assert) {
-        let cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-        let size = 900;
+        const cols = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+        const size = 900;
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: cols,
             width: size,
             items: [{ location: { row: 0, col: 0, colspan: 2 } }, { location: { row: 0, col: 2 } }]
         });
 
-        let $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
-        let $boxItems = $rowBox.find('.' + BOX_ITEM_CLASS);
+        const $rowBox = $responsiveBox.find('.' + BOX_CLASS).eq(1);
+        const $boxItems = $rowBox.find('.' + BOX_ITEM_CLASS);
 
         assert.equal($boxItems.length, 2, 'two items were rendered');
     });
 
     QUnit.test('rowspan', function(assert) {
-        let rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
-        let size = 900;
+        const rows = [{ ratio: 1, baseSize: 100 }, { ratio: 2, baseSize: 200 }, { ratio: 1, baseSize: 200 }];
+        const size = 900;
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: rows,
             cols: [{}],
             height: size,
             items: [{ location: { row: 0, col: 0, rowspan: 2 } }, { location: { row: 2, col: 0 } }]
         });
 
-        let $boxItems = $responsiveBox.find('.' + BOX_ITEM_CLASS);
+        const $boxItems = $responsiveBox.find('.' + BOX_ITEM_CLASS);
 
         assert.equal($boxItems.length, 2, 'two items were rendered');
     });
@@ -203,7 +203,7 @@ QUnit.module('layouting', moduleConfig, () => {
     QUnit.test('repaint should not detach items', function(assert) {
         assert.expect(0);
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}],
             items: [{ location: { row: 0, col: 0 }, text: 'test' }]
@@ -212,7 +212,7 @@ QUnit.module('layouting', moduleConfig, () => {
         let $childrenResponsiveBox;
 
         try {
-            let $dxItem = $responsiveBox.find('.' + BOX_ITEM_CLASS).first().children();
+            const $dxItem = $responsiveBox.find('.' + BOX_ITEM_CLASS).first().children();
             $childrenResponsiveBox = $('<div>').dxResponsiveBox({
                 onDisposing: () => {
                     assert.ok(false, 'widget disposed');
@@ -228,7 +228,7 @@ QUnit.module('layouting', moduleConfig, () => {
     QUnit.test('recalculation on size changing', function(assert) {
         // screen:   xs      sm           md          lg
         //  width: <768    768-<992    992-<1200    >1200
-        let $responsiveBox = $('#responsiveBox');
+        const $responsiveBox = $('#responsiveBox');
 
         this.setScreenSize(500);
 
@@ -241,7 +241,7 @@ QUnit.module('layouting', moduleConfig, () => {
                 { location: { screen: 'md', row: 0, col: 0 }, text: 'md' }
             ]
         });
-        let responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+        const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
 
         this.setScreenSize(1000);
         responsiveBox.repaint();
@@ -251,7 +251,7 @@ QUnit.module('layouting', moduleConfig, () => {
     QUnit.test('singleColumnScreen render items in one column', function(assert) {
         this.updateScreenSize(500);
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}, {}],
             cols: [{}, {}],
             singleColumnScreen: 'xs',
@@ -263,15 +263,15 @@ QUnit.module('layouting', moduleConfig, () => {
             ]
         });
 
-        let responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+        const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
 
-        let checkLayoutByScreen = $.proxy(function(screenWidth, expectedText) {
+        const checkLayoutByScreen = $.proxy(function(screenWidth, expectedText) {
             this.updateScreenSize(screenWidth);
 
-            let $box = $responsiveBox.find('.' + BOX_CLASS);
+            const $box = $responsiveBox.find('.' + BOX_CLASS);
             assert.equal($box.length, 1, 'one box rendered');
 
-            let $items = $box.find('.' + BOX_ITEM_CLASS);
+            const $items = $box.find('.' + BOX_ITEM_CLASS);
             assert.equal($items.length, expectedText.length, $items.length + ' items rendered');
 
             assert.equal($.trim($responsiveBox.text()), expectedText, 'rendered only needed items');
@@ -288,7 +288,7 @@ QUnit.module('layouting', moduleConfig, () => {
 
     QUnit.test('too complex layout', function(assert) {
         assert.throws(() => {
-            let size = 900;
+            const size = 900;
 
             $('#responsiveBox').dxResponsiveBox({
                 rows: [
@@ -319,12 +319,12 @@ QUnit.module('layouting', moduleConfig, () => {
     });
 
     QUnit.test('dxUpdate trigger async after render and dimension changed', function(assert) {
-        let clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
         try {
             // screen:   xs      sm           md          lg
             //  width: <768    768-<992    992-<1200    >1200
             this.updateScreenSize(900);
-            let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
                 width: 'auto',
                 height: 'auto',
                 rows: [{ ratio: 1, baseSize: 'auto' }],
@@ -361,7 +361,7 @@ QUnit.module('layouting', moduleConfig, () => {
     });
 
     QUnit.test('Box should has a class appropriate a screen resolution', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             width: 'auto',
             height: 'auto'
         });
@@ -457,13 +457,13 @@ QUnit.module('layouting', moduleConfig, () => {
 
 QUnit.module('behavior', () => {
     QUnit.test('update does not rerender items', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}],
             items: [{ location: { col: 0, row: 0 }, html: '<div class=\'test\'>' }]
         });
 
-        let $div = $responsiveBox.find('.test');
+        const $div = $responsiveBox.find('.test');
         $responsiveBox.dxResponsiveBox('repaint');
 
         assert.equal($responsiveBox.find('.test').get(0), $div.get(0), 'item was not rerendered');
@@ -472,7 +472,7 @@ QUnit.module('behavior', () => {
 
 QUnit.module('templates', () => {
     QUnit.test('custom item templates', function(assert) {
-        let $responsiveBox = $('#responsiveBoxWithTemplate').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBoxWithTemplate').dxResponsiveBox({
             rows: [{}],
             cols: [{}]
         });
@@ -480,16 +480,16 @@ QUnit.module('templates', () => {
     });
 
     QUnit.test('custom item renderer', function(assert) {
-        let templateContext,
-            $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-                rows: [{}],
-                cols: [{}],
-                itemTemplate: function() {
-                    templateContext = this.NAME;
-                    return $('<div>test</div>');
-                },
-                items: [{ location: { row: 0, col: 0 } }]
-            });
+        let templateContext;
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+            rows: [{}],
+            cols: [{}],
+            itemTemplate: function() {
+                templateContext = this.NAME;
+                return $('<div>test</div>');
+            },
+            items: [{ location: { row: 0, col: 0 } }]
+        });
 
         assert.equal(templateContext, 'dxResponsiveBox', 'Correct context');
         assert.equal($.trim($responsiveBox.text()), 'test', 'item rendered');
@@ -498,7 +498,7 @@ QUnit.module('templates', () => {
 
 QUnit.module('template rendering', moduleConfig, () => {
     QUnit.test('template rendered when it set after creation', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}],
             items: [{
@@ -521,7 +521,7 @@ QUnit.module('template rendering', moduleConfig, () => {
 
         registerComponent('dxWidget', Widget.inherit({}));
 
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}],
             items: [
@@ -540,7 +540,7 @@ QUnit.module('template rendering', moduleConfig, () => {
 
 QUnit.module('collision', moduleConfig, () => {
     QUnit.test('item located at the same cell of another item', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}, {}],
             cols: [{}, {}],
             items: [
@@ -555,7 +555,7 @@ QUnit.module('collision', moduleConfig, () => {
     });
 
     QUnit.test('item located at spanning cell', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
             cols: [{}, {}],
             items: [
@@ -568,7 +568,7 @@ QUnit.module('collision', moduleConfig, () => {
     });
 
     QUnit.test('item spanning located at spanning of another item', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}, {}],
             cols: [{}, {}],
             items: [
@@ -581,7 +581,7 @@ QUnit.module('collision', moduleConfig, () => {
     });
 
     QUnit.test('item spanning out of bounds', function(assert) {
-        let $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+        const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}, {}],
             cols: [{}],
             items: [

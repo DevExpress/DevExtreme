@@ -1,8 +1,8 @@
-var each = require('../../core/utils/iterator').each,
-    callbacks = require('./event_registrator_callbacks');
+const each = require('../../core/utils/iterator').each;
+const callbacks = require('./event_registrator_callbacks');
 
-var registerEvent = function(name, eventObject) {
-    var strategy = {};
+const registerEvent = function(name, eventObject) {
+    const strategy = {};
 
     if('noBubble' in eventObject) {
         strategy.noBubble = eventObject.noBubble;
@@ -22,7 +22,7 @@ var registerEvent = function(name, eventObject) {
         }
 
         strategy[methodName] = function() {
-            var args = [].slice.call(arguments);
+            const args = [].slice.call(arguments);
             args.unshift(this);
             return eventObject[methodName].apply(eventObject, args);
         };

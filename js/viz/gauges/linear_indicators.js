@@ -1,15 +1,15 @@
-var baseIndicatorsModule = require('./base_indicators'),
-    BaseIndicator = baseIndicatorsModule.BaseIndicator,
-    BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker,
-    BaseRangeBar = baseIndicatorsModule.BaseRangeBar,
+const baseIndicatorsModule = require('./base_indicators');
+const BaseIndicator = baseIndicatorsModule.BaseIndicator;
+const BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker;
+const BaseRangeBar = baseIndicatorsModule.BaseRangeBar;
 
-    _Number = Number,
-    _normalizeEnum = require('../core/utils').normalizeEnum;
+const _Number = Number;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
 
-var SimpleIndicator = BaseIndicator.inherit({
+const SimpleIndicator = BaseIndicator.inherit({
     _move: function() {
-        var that = this,
-            delta = that._actualPosition - that._zeroPosition;
+        const that = this;
+        const delta = that._actualPosition - that._zeroPosition;
         that._rootElement.move(that.vertical ? 0 : delta, that.vertical ? delta : 0);
         that._trackerElement && that._trackerElement.move(that.vertical ? 0 : delta, that.vertical ? delta : 0);
     },
@@ -24,14 +24,14 @@ var SimpleIndicator = BaseIndicator.inherit({
     },
 
     _getTrackerSettings: function() {
-        var options = this._options,
-            x1,
-            x2,
-            y1,
-            y2,
-            width = options.width / 2,
-            length = options.length / 2,
-            p = this._zeroPosition;
+        const options = this._options;
+        let x1;
+        let x2;
+        let y1;
+        let y2;
+        let width = options.width / 2;
+        let length = options.length / 2;
+        const p = this._zeroPosition;
 
         width > 10 || (width = 10);
         length > 10 || (length = 10);
@@ -50,7 +50,7 @@ var SimpleIndicator = BaseIndicator.inherit({
     },
 
     _render: function() {
-        var that = this;
+        const that = this;
         that._zeroPosition = that._translator.getCodomainStart();
     },
 
@@ -59,7 +59,7 @@ var SimpleIndicator = BaseIndicator.inherit({
     },
 
     measure: function(layout) {
-        var p = this.vertical ? layout.x : layout.y;
+        const p = this.vertical ? layout.x : layout.y;
         return {
             min: p - this._options.length / 2,
             max: p + this._options.length / 2
@@ -67,24 +67,24 @@ var SimpleIndicator = BaseIndicator.inherit({
     },
 
     getTooltipParameters: function() {
-        var that = this,
-            options = that._options,
-            p = that._actualPosition,
-            parameters = { x: p, y: p, value: that._currentValue, color: options.color, offset: options.width / 2 };
+        const that = this;
+        const options = that._options;
+        const p = that._actualPosition;
+        const parameters = { x: p, y: p, value: that._currentValue, color: options.color, offset: options.width / 2 };
         that.vertical ? (parameters.x = options.x) : (parameters.y = options.y);
         return parameters;
     }
 });
 
-var rectangle = SimpleIndicator.inherit({
+const rectangle = SimpleIndicator.inherit({
     _render: function() {
-        var that = this,
-            options = that._options,
-            p,
-            x1,
-            x2,
-            y1,
-            y2;
+        const that = this;
+        const options = that._options;
+        let p;
+        let x1;
+        let x2;
+        let y1;
+        let y2;
 
         that.callBase();
         p = that._zeroPosition;
@@ -104,14 +104,14 @@ var rectangle = SimpleIndicator.inherit({
     }
 });
 
-var rhombus = SimpleIndicator.inherit({
+const rhombus = SimpleIndicator.inherit({
     _render: function() {
-        var that = this,
-            options = that._options,
-            x,
-            y,
-            dx,
-            dy;
+        const that = this;
+        const options = that._options;
+        let x;
+        let y;
+        let dx;
+        let dy;
 
         that.callBase();
         if(that.vertical) {
@@ -130,13 +130,13 @@ var rhombus = SimpleIndicator.inherit({
     }
 });
 
-var circle = SimpleIndicator.inherit({
+const circle = SimpleIndicator.inherit({
     _render: function() {
-        var that = this,
-            options = that._options,
-            x,
-            y,
-            r;
+        const that = this;
+        const options = that._options;
+        let x;
+        let y;
+        let r;
 
         that.callBase();
         if(that.vertical) {
@@ -154,9 +154,9 @@ var circle = SimpleIndicator.inherit({
 
 // The following is from linearMarker.js
 
-var triangleMarker = SimpleIndicator.inherit({
+const triangleMarker = SimpleIndicator.inherit({
     _isEnabled: function() {
-        var that = this;
+        const that = this;
         that.vertical = that._options.vertical;
         that._inverted = that.vertical ? (_normalizeEnum(that._options.horizontalOrientation) === 'right') : (_normalizeEnum(that._options.verticalOrientation) === 'bottom');
         return that._options.length > 0 && that._options.width > 0;
@@ -167,13 +167,13 @@ var triangleMarker = SimpleIndicator.inherit({
     },
 
     _render: function() {
-        var that = this,
-            options = that._options,
-            x1,
-            x2,
-            y1,
-            y2,
-            settings = { stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
+        const that = this;
+        const options = that._options;
+        let x1;
+        let x2;
+        let y1;
+        let y2;
+        const settings = { stroke: 'none', 'stroke-width': 0, 'stroke-linecap': 'square' };
 
         that.callBase();
         if(that.vertical) {
@@ -197,15 +197,15 @@ var triangleMarker = SimpleIndicator.inherit({
     },
 
     _getTrackerSettings: function() {
-        var that = this,
-            options = that._options,
-            width = options.width / 2,
-            length = _Number(options.length),
-            x1,
-            x2,
-            y1,
-            y2,
-            result;
+        const that = this;
+        const options = that._options;
+        let width = options.width / 2;
+        let length = _Number(options.length);
+        let x1;
+        let x2;
+        let y1;
+        let y2;
+        let result;
 
         width > 10 || (width = 10);
         length > 20 || (length = 20);
@@ -226,10 +226,10 @@ var triangleMarker = SimpleIndicator.inherit({
     },
 
     measure: function(layout) {
-        var that = this,
-            length = _Number(that._options.length),
-            minBound,
-            maxBound;
+        const that = this;
+        const length = _Number(that._options.length);
+        let minBound;
+        let maxBound;
 
         if(that.vertical) {
             minBound = maxBound = layout.x;
@@ -250,19 +250,19 @@ var triangleMarker = SimpleIndicator.inherit({
     },
 
     getTooltipParameters: function() {
-        var that = this,
-            options = that._options,
-            s = (that._inverted ? options.length : -options.length) / 2,
-            parameters = that.callBase();
+        const that = this;
+        const options = that._options;
+        const s = (that._inverted ? options.length : -options.length) / 2;
+        const parameters = that.callBase();
         that.vertical ? (parameters.x += s) : (parameters.y += s);
         parameters.offset = options.length / 2;
         return parameters;
     }
 });
 
-var textCloud = BaseTextCloudMarker.inherit({
+const textCloud = BaseTextCloudMarker.inherit({
     _isEnabled: function() {
-        var that = this;
+        const that = this;
         that.vertical = that._options.vertical;
         that._inverted = that.vertical ? (_normalizeEnum(that._options.horizontalOrientation) === 'right') : (_normalizeEnum(that._options.verticalOrientation) === 'bottom');
         return true;
@@ -273,10 +273,10 @@ var textCloud = BaseTextCloudMarker.inherit({
     },
 
     _getTextCloudOptions: function() {
-        var that = this,
-            x = that._actualPosition,
-            y = that._actualPosition,
-            type;
+        const that = this;
+        let x = that._actualPosition;
+        let y = that._actualPosition;
+        let type;
         if(that.vertical) {
             x = that._options.x;
             type = that._inverted ? 'top-left' : 'top-right';
@@ -288,11 +288,11 @@ var textCloud = BaseTextCloudMarker.inherit({
     },
 
     measure: function(layout) {
-        var that = this,
-            minBound,
-            maxBound,
-            arrowLength = _Number(that._options.arrowLength) || 0,
-            indent;
+        const that = this;
+        let minBound;
+        let maxBound;
+        const arrowLength = _Number(that._options.arrowLength) || 0;
+        let indent;
 
         that._measureText();
         if(that.vertical) {
@@ -320,9 +320,9 @@ var textCloud = BaseTextCloudMarker.inherit({
 
 // The following is from linearRangeBar.js
 
-var rangeBar = BaseRangeBar.inherit({
+const rangeBar = BaseRangeBar.inherit({
     _isEnabled: function() {
-        var that = this;
+        const that = this;
         that.vertical = that._options.vertical;
         that._inverted = that.vertical ? (_normalizeEnum(that._options.horizontalOrientation) === 'right') : (_normalizeEnum(that._options.verticalOrientation) === 'bottom');
         return that._options.size > 0;
@@ -341,11 +341,11 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _setBarSides: function() {
-        var that = this,
-            options = that._options,
-            size = _Number(options.size),
-            minSide,
-            maxSide;
+        const that = this;
+        const options = that._options;
+        const size = _Number(options.size);
+        let minSide;
+        let maxSide;
         if(that.vertical) {
             if(that._inverted) {
                 minSide = options.x;
@@ -370,12 +370,12 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _getSpace: function() {
-        var options = this._options;
+        const options = this._options;
         return options.space > 0 ? _Number(options.space) : 0;
     },
 
     _isTextVisible: function() {
-        var textOptions = this._options.text || {};
+        const textOptions = this._options.text || {};
         return textOptions.indent > 0 || textOptions.indent < 0;
     },
 
@@ -384,8 +384,8 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _setTextItemsSides: function() {
-        var that = this,
-            indent = _Number(that._options.text.indent);
+        const that = this;
+        const indent = _Number(that._options.text.indent);
 
         if(indent > 0) {
             that._lineStart = that._maxSide;
@@ -401,16 +401,16 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _getPositions: function() {
-        var that = this,
-            startPosition = that._startPosition,
-            endPosition = that._endPosition,
-            space = that._space,
-            basePosition = that._basePosition,
-            actualPosition = that._actualPosition,
-            mainPosition1,
-            mainPosition2,
-            backPosition1,
-            backPosition2;
+        const that = this;
+        const startPosition = that._startPosition;
+        const endPosition = that._endPosition;
+        const space = that._space;
+        const basePosition = that._basePosition;
+        const actualPosition = that._actualPosition;
+        let mainPosition1;
+        let mainPosition2;
+        let backPosition1;
+        let backPosition2;
 
         if(startPosition < endPosition) {
             if(basePosition < actualPosition) {
@@ -444,15 +444,15 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _buildItemSettings: function(from, to) {
-        var that = this,
-            side1 = that._minSide,
-            side2 = that._maxSide,
-            points = that.vertical ? [side1, from, side1, to, side2, to, side2, from] : [from, side1, from, side2, to, side2, to, side1];
+        const that = this;
+        const side1 = that._minSide;
+        const side2 = that._maxSide;
+        const points = that.vertical ? [side1, from, side1, to, side2, to, side2, from] : [from, side1, from, side2, to, side2, to, side1];
         return { points: points };
     },
 
     _updateTextPosition: function() {
-        var that = this;
+        const that = this;
         that._text.attr(that.vertical ? {
             x: that._textPosition,
             y: that._actualPosition + that._textVerticalOffset
@@ -463,11 +463,11 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _updateLinePosition: function() {
-        var that = this,
-            actualPosition = that._actualPosition,
-            side1,
-            side2,
-            points;
+        const that = this;
+        const actualPosition = that._actualPosition;
+        let side1;
+        let side2;
+        let points;
         if(that.vertical) {
             if(that._basePosition >= actualPosition) {
                 side1 = actualPosition;
@@ -491,20 +491,20 @@ var rangeBar = BaseRangeBar.inherit({
     },
 
     _getTooltipPosition: function() {
-        var that = this,
-            crossCenter = (that._minSide + that._maxSide) / 2,
-            alongCenter = (that._basePosition + that._actualPosition) / 2;
+        const that = this;
+        const crossCenter = (that._minSide + that._maxSide) / 2;
+        const alongCenter = (that._basePosition + that._actualPosition) / 2;
 
         return that.vertical ? { x: crossCenter, y: alongCenter } : { x: alongCenter, y: crossCenter };
     },
 
     measure: function(layout) {
-        var that = this,
-            size = _Number(that._options.size),
-            textIndent = _Number(that._options.text.indent),
-            minBound,
-            maxBound,
-            indent;
+        const that = this;
+        const size = _Number(that._options.size);
+        const textIndent = _Number(that._options.text.indent);
+        let minBound;
+        let maxBound;
+        let indent;
 
         that._measureText();
         if(that.vertical) {

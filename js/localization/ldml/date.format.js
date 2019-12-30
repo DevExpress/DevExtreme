@@ -1,17 +1,17 @@
-var ARABIC_COMMA = '\u060C',
-    FORMAT_SEPARATORS = ' .,:;/\\<>()-[]' + ARABIC_COMMA,
-    ARABIC_ZERO_CODE = 1632;
+const ARABIC_COMMA = '\u060C';
+const FORMAT_SEPARATORS = ' .,:;/\\<>()-[]' + ARABIC_COMMA;
+const ARABIC_ZERO_CODE = 1632;
 
-var checkDigit = function(char) {
-    var code = char && char.charCodeAt(0);
+const checkDigit = function(char) {
+    const code = char && char.charCodeAt(0);
 
     return (char >= '0' && char <= '9') || (code >= ARABIC_ZERO_CODE && code < ARABIC_ZERO_CODE + 10);
 };
 
-var checkPatternContinue = function(text, index, isDigit) {
-    var char = text[index],
-        prevChar = text[index - 1],
-        nextChar = text[index + 1];
+const checkPatternContinue = function(text, index, isDigit) {
+    const char = text[index];
+    const prevChar = text[index - 1];
+    const nextChar = text[index + 1];
 
     if(!isDigit) {
         if(char === '.' || (char === ' ' && prevChar === '.')) {
@@ -24,7 +24,7 @@ var checkPatternContinue = function(text, index, isDigit) {
     return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char));
 };
 
-var getPatternStartIndex = function(defaultPattern, index) {
+const getPatternStartIndex = function(defaultPattern, index) {
     if(!checkDigit(defaultPattern[index])) {
         while(index > 0
             && !checkDigit(defaultPattern[index - 1])
@@ -36,11 +36,11 @@ var getPatternStartIndex = function(defaultPattern, index) {
     return index;
 };
 
-var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit) {
-    var i = 0,
-        result = [];
+const getDifference = function(defaultPattern, patterns, processedIndexes, isDigit) {
+    let i = 0;
+    const result = [];
 
-    var patternsFilter = function(pattern) {
+    const patternsFilter = function(pattern) {
         return defaultPattern[i] !== pattern[i] && (isDigit === undefined || checkDigit(defaultPattern[i]) === isDigit);
     };
 
@@ -71,9 +71,9 @@ var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit
     return result;
 };
 
-var replaceCharsCore = function(pattern, indexes, char, patternPositions) {
-    var baseCharIndex = indexes[0];
-    var patternIndex = baseCharIndex < patternPositions.length ? patternPositions[baseCharIndex] : baseCharIndex;
+const replaceCharsCore = function(pattern, indexes, char, patternPositions) {
+    const baseCharIndex = indexes[0];
+    const patternIndex = baseCharIndex < patternPositions.length ? patternPositions[baseCharIndex] : baseCharIndex;
 
     indexes.forEach(function(_, index) {
         pattern = pattern.substr(0, patternIndex + index) + (char.length > 1 ? char[index] : char) + pattern.substr(patternIndex + index + 1);
@@ -87,13 +87,13 @@ var replaceCharsCore = function(pattern, indexes, char, patternPositions) {
     return pattern;
 };
 
-var replaceChars = function(pattern, indexes, char, patternPositions) {
-    var i,
-        index,
-        patternIndex;
+const replaceChars = function(pattern, indexes, char, patternPositions) {
+    let i;
+    let index;
+    let patternIndex;
 
     if(!checkDigit(pattern[indexes[0]] || '0')) {
-        var letterCount = Math.max(indexes.length <= 3 ? 3 : 4, char.length);
+        const letterCount = Math.max(indexes.length <= 3 ? 3 : 4, char.length);
 
         while(indexes.length > letterCount) {
             index = indexes.pop();
@@ -124,7 +124,7 @@ var replaceChars = function(pattern, indexes, char, patternPositions) {
     return pattern;
 };
 
-var formatValue = function(value, formatter) {
+const formatValue = function(value, formatter) {
     if(Array.isArray(value)) {
         return value.map(function(value) {
             return (formatter(value) || '').toString();
@@ -133,10 +133,10 @@ var formatValue = function(value, formatter) {
     return (formatter(value) || '').toString();
 };
 
-var ESCAPE_CHARS_REGEXP = /[a-zA-Z]/g;
+const ESCAPE_CHARS_REGEXP = /[a-zA-Z]/g;
 
-var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPositions) {
-    var escapeIndexes = defaultPattern.split('').map(function(char, index) {
+const escapeChars = function(pattern, defaultPattern, processedIndexes, patternPositions) {
+    const escapeIndexes = defaultPattern.split('').map(function(char, index) {
         if(processedIndexes.indexOf(index) < 0 && (char.match(ESCAPE_CHARS_REGEXP) || char === '\'')) {
             return patternPositions[index];
         }
@@ -144,10 +144,10 @@ var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPos
     });
 
     pattern = pattern.split('').map(function(char, index) {
-        var result = char,
-            isCurrentCharEscaped = escapeIndexes.indexOf(index) >= 0,
-            isPrevCharEscaped = index > 0 && escapeIndexes.indexOf(index - 1) >= 0,
-            isNextCharEscaped = escapeIndexes.indexOf(index + 1) >= 0;
+        let result = char;
+        const isCurrentCharEscaped = escapeIndexes.indexOf(index) >= 0;
+        const isPrevCharEscaped = index > 0 && escapeIndexes.indexOf(index - 1) >= 0;
+        const isNextCharEscaped = escapeIndexes.indexOf(index + 1) >= 0;
 
         if(isCurrentCharEscaped) {
             if(!isPrevCharEscaped) {
@@ -164,29 +164,29 @@ var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPos
     return pattern;
 };
 
-var getFormat = function(formatter) {
-    var processedIndexes = [],
-        defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter),
-        patternPositions = defaultPattern.split('').map(function(_, index) { return index; }),
-        result = defaultPattern,
-        replacedPatterns = {},
-        datePatterns = [
-            { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: 'S' },
-            { date: new Date(2009, 8, 8, 6, 5, 2), pattern: 's' },
-            { date: new Date(2009, 8, 8, 6, 2, 4), pattern: 'm' },
-            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: 'H', isDigit: true },
-            { date: new Date(2009, 8, 8, 2, 5, 4), pattern: 'h', isDigit: true },
-            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: 'a', isDigit: false },
-            { date: new Date(2009, 8, 1, 6, 5, 4), pattern: 'd' },
-            { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: 'E' },
-            { date: new Date(2009, 9, 6, 6, 5, 4), pattern: 'M' },
-            { date: new Date(1998, 8, 8, 6, 5, 4), pattern: 'y' }];
+const getFormat = function(formatter) {
+    const processedIndexes = [];
+    const defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter);
+    const patternPositions = defaultPattern.split('').map(function(_, index) { return index; });
+    let result = defaultPattern;
+    const replacedPatterns = {};
+    const datePatterns = [
+        { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: 'S' },
+        { date: new Date(2009, 8, 8, 6, 5, 2), pattern: 's' },
+        { date: new Date(2009, 8, 8, 6, 2, 4), pattern: 'm' },
+        { date: new Date(2009, 8, 8, 18, 5, 4), pattern: 'H', isDigit: true },
+        { date: new Date(2009, 8, 8, 2, 5, 4), pattern: 'h', isDigit: true },
+        { date: new Date(2009, 8, 8, 18, 5, 4), pattern: 'a', isDigit: false },
+        { date: new Date(2009, 8, 1, 6, 5, 4), pattern: 'd' },
+        { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: 'E' },
+        { date: new Date(2009, 9, 6, 6, 5, 4), pattern: 'M' },
+        { date: new Date(1998, 8, 8, 6, 5, 4), pattern: 'y' }];
 
     if(!result) return;
 
     datePatterns.forEach(function(test) {
-        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit),
-            pattern = test.pattern === 'M' && !replacedPatterns['d'] ? 'L' : test.pattern;
+        const diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
+        const pattern = test.pattern === 'M' && !replacedPatterns['d'] ? 'L' : test.pattern;
 
         result = replaceChars(result, diff, pattern, patternPositions);
         replacedPatterns[pattern] = diff.length;

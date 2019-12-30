@@ -1,35 +1,35 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    Color = require('../../color'),
-    ColorView = require('./color_view'),
-    extend = require('../../core/utils/extend').extend,
-    isFunction = require('../../core/utils/type').isFunction,
-    registerComponent = require('../../core/component_registrator'),
-    DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const Color = require('../../color');
+const ColorView = require('./color_view');
+const extend = require('../../core/utils/extend').extend;
+const isFunction = require('../../core/utils/type').isFunction;
+const registerComponent = require('../../core/component_registrator');
+const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
 
-var COLOR_BOX_CLASS = 'dx-colorbox',
-    COLOR_BOX_INPUT_CLASS = COLOR_BOX_CLASS + '-input',
-    COLOR_BOX_INPUT_CONTAINER_CLASS = COLOR_BOX_INPUT_CLASS + '-container',
-    COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS = COLOR_BOX_CLASS + '-color-result-preview',
-    COLOR_BOX_COLOR_IS_NOT_DEFINED = COLOR_BOX_CLASS + '-color-is-not-defined',
-    COLOR_BOX_OVERLAY_CLASS = COLOR_BOX_CLASS + '-overlay',
+const COLOR_BOX_CLASS = 'dx-colorbox';
+const COLOR_BOX_INPUT_CLASS = COLOR_BOX_CLASS + '-input';
+const COLOR_BOX_INPUT_CONTAINER_CLASS = COLOR_BOX_INPUT_CLASS + '-container';
+const COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS = COLOR_BOX_CLASS + '-color-result-preview';
+const COLOR_BOX_COLOR_IS_NOT_DEFINED = COLOR_BOX_CLASS + '-color-is-not-defined';
+const COLOR_BOX_OVERLAY_CLASS = COLOR_BOX_CLASS + '-overlay';
 
-    COLOR_BOX_CONTAINER_CELL_CLASS = 'dx-colorview-container-cell',
-    COLOR_BOX_BUTTON_CELL_CLASS = 'dx-colorview-button-cell',
-    COLOR_BOX_BUTTONS_CONTAINER_CLASS = 'dx-colorview-buttons-container',
-    COLOR_BOX_APPLY_BUTTON_CLASS = 'dx-colorview-apply-button',
-    COLOR_BOX_CANCEL_BUTTON_CLASS = 'dx-colorview-cancel-button';
+const COLOR_BOX_CONTAINER_CELL_CLASS = 'dx-colorview-container-cell';
+const COLOR_BOX_BUTTON_CELL_CLASS = 'dx-colorview-button-cell';
+const COLOR_BOX_BUTTONS_CONTAINER_CLASS = 'dx-colorview-buttons-container';
+const COLOR_BOX_APPLY_BUTTON_CLASS = 'dx-colorview-apply-button';
+const COLOR_BOX_CANCEL_BUTTON_CLASS = 'dx-colorview-cancel-button';
 
-var colorEditorPrototype = ColorView.prototype,
-    colorUtils = {
-        makeTransparentBackground: colorEditorPrototype._makeTransparentBackground.bind(colorEditorPrototype),
-        makeRgba: colorEditorPrototype._makeRgba.bind(colorEditorPrototype)
-    };
+const colorEditorPrototype = ColorView.prototype;
+const colorUtils = {
+    makeTransparentBackground: colorEditorPrototype._makeTransparentBackground.bind(colorEditorPrototype),
+    makeRgba: colorEditorPrototype._makeRgba.bind(colorEditorPrototype)
+};
 
-var ColorBox = DropDownEditor.inherit({
+const ColorBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
-        var arrowHandler = function(e) {
+        const arrowHandler = function(e) {
             e.stopPropagation();
             if(this.option('opened')) {
                 e.preventDefault();
@@ -37,7 +37,7 @@ var ColorBox = DropDownEditor.inherit({
             }
         };
 
-        var upArrowHandler = function(e) {
+        const upArrowHandler = function(e) {
             if(!this.option('opened')) {
                 e.preventDefault();
                 return false;
@@ -49,7 +49,7 @@ var ColorBox = DropDownEditor.inherit({
             return true;
         };
 
-        var downArrowHandler = function(e) {
+        const downArrowHandler = function(e) {
             if(!this.option('opened') && !e.altKey) {
                 e.preventDefault();
                 return false;
@@ -185,7 +185,7 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _addPopupBottomClasses: function() {
-        var $popupBottom = this._popup.bottomToolbar();
+        const $popupBottom = this._popup.bottomToolbar();
         if($popupBottom) {
             $popupBottom
                 .addClass(COLOR_BOX_CONTAINER_CELL_CLASS)
@@ -206,7 +206,7 @@ var ColorBox = DropDownEditor.inherit({
     _createColorView: function() {
         this._popup.overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
-        var $colorView = $('<div>').appendTo(this._popup.$content());
+        const $colorView = $('<div>').appendTo(this._popup.$content());
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
         this._colorView.registerKeyHandler('escape', this._escapeHandler.bind(this));
@@ -235,7 +235,7 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _colorViewConfig: function() {
-        var that = this;
+        const that = this;
 
         return {
             value: that.option('value'),
@@ -257,7 +257,7 @@ var ColorBox = DropDownEditor.inherit({
                     return;
                 }
 
-                var instantlyMode = that.option('applyValueMode') === 'instantly';
+                const instantlyMode = that.option('applyValueMode') === 'instantly';
 
                 if(!instantlyMode && !that._colorViewEnterKeyPressed) {
                     return;
@@ -269,13 +269,13 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _enterKeyHandler: function() {
-        var newValue = this._input().val(),
-            value = this.option('value'),
-            oldValue = this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value;
+        const newValue = this._input().val();
+        const value = this.option('value');
+        const oldValue = this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value;
 
         if(!newValue) return false;
 
-        var color = new Color(newValue);
+        const color = new Color(newValue);
 
         if(color.colorIsInvalid) {
             this._input().val(oldValue);
@@ -288,7 +288,7 @@ var ColorBox = DropDownEditor.inherit({
         }
 
         if(this._colorView) {
-            var colorViewValue = this._colorView.option('value');
+            const colorViewValue = this._colorView.option('value');
             if(value !== colorViewValue) {
                 this.option('value', colorViewValue);
             }
@@ -354,14 +354,14 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.option('value');
+        const value = this.option('value');
         this.option('text', this.option('editAlphaChannel') ? colorUtils.makeRgba(value) : value);
         return this.callBase();
     },
 
     _resetInputValue: function() {
-        var $input = this._input(),
-            value = this.option('value');
+        const $input = this._input();
+        const value = this.option('value');
 
         $input.val(value);
         this._updateColorViewValue(value);
@@ -377,7 +377,7 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var value = this._input().val();
+        let value = this._input().val();
 
         if(value) {
             value = this._applyColorFromInput(value);
@@ -388,7 +388,7 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _applyColorFromInput: function(value) {
-        var newColor = new Color(value);
+        const newColor = new Color(value);
 
         if(newColor.colorIsInvalid) {
             this._resetInputValue();
@@ -399,8 +399,8 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value,
-            name = args.name;
+        const value = args.value;
+        const name = args.name;
 
         switch(name) {
             case 'value':

@@ -6,44 +6,44 @@ import localization from 'localization';
 import { getLanguageId } from 'localization/language_codes';
 import ajax from 'core/utils/ajax';
 
-var languageId = getLanguageId(),
-    ERROR_RESPONCE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><soap:Fault xmlns="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>XMLAnalysisError.0xc10a004d</faultcode><faultstring>Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.</faultstring><detail><Error ErrorCode="3238658125" Description="Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function." Source="Microsoft SQL Server 2008 R2 Analysis Services" HelpFile=""><Location xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100="http://schemas.microsoft.com/analysisservices/2008/engine/100" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"><Start><Line>1</Line><Column>77</Column></Start><End><Line>1</Line><Column>203</Column></End><LineOffset>0</LineOffset><TextLength>127</TextLength></Location></Error></detail></soap:Fault></soap:Body></soap:Envelope>',
+const languageId = getLanguageId();
+const ERROR_RESPONCE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><soap:Fault xmlns="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>XMLAnalysisError.0xc10a004d</faultcode><faultstring>Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.</faultstring><detail><Error ErrorCode="3238658125" Description="Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function." Source="Microsoft SQL Server 2008 R2 Analysis Services" HelpFile=""><Location xmlns="http://schemas.microsoft.com/analysisservices/2003/engine" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100="http://schemas.microsoft.com/analysisservices/2008/engine/100" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200"><Start><Line>1</Line><Column>77</Column></Start><End><Line>1</Line><Column>203</Column></End><LineOffset>0</LineOffset><TextLength>127</TextLength></Location></Error></detail></soap:Fault></soap:Body></soap:Envelope>';
 
-    stubsEnvironment = {
-        beforeEach: function() {
-            var that = this;
-            sinon.spy(errors, 'log');
-            sinon.spy(errors, 'Error');
+const stubsEnvironment = {
+    beforeEach: function() {
+        const that = this;
+        sinon.spy(errors, 'log');
+        sinon.spy(errors, 'Error');
 
-            this.store = new Store(this.dataSource);
-            that.sendDeferred = $.Deferred();
+        this.store = new Store(this.dataSource);
+        that.sendDeferred = $.Deferred();
 
-            that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest', function() {
-                return that.sendDeferred;
-            });
-        },
-        afterEach: function() {
-            this.sendRequest.restore();
-            errors.log.restore();
-            errors.Error.restore();
-        },
+        that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest', function() {
+            return that.sendDeferred;
+        });
+    },
+    afterEach: function() {
+        this.sendRequest.restore();
+        errors.log.restore();
+        errors.Error.restore();
+    },
 
-        getRequest: function(num) {
-            var call = num === undefined ? this.sendRequest.lastCall : this.sendRequest.getCall(num);
-            return call.args[0].data;
-        },
+    getRequest: function(num) {
+        const call = num === undefined ? this.sendRequest.lastCall : this.sendRequest.getCall(num);
+        return call.args[0].data;
+    },
 
-        getQuery: function(num) {
-            var query = $(this.getRequest(num)).find('Statement').text();
-            return query;
-        },
+    getQuery: function(num) {
+        const query = $(this.getRequest(num)).find('Statement').text();
+        return query;
+    },
 
-        dataSource: {
-            url: 'url',
-            catalog: 'Adventure Works DW Standard Edition',
-            cube: 'Adventure Works'
-        }
-    };
+    dataSource: {
+        url: 'url',
+        catalog: 'Adventure Works DW Standard Edition',
+        cube: 'Adventure Works'
+    }
+};
 
 
 QUnit.module('Misc', stubsEnvironment);
@@ -58,8 +58,8 @@ QUnit.test('Use fields with expression', function(assert) {
         values: [{ dataField: '[Measures].[My_Measure]', expression: '[Measures].[Customer_Count]*100' }]
     });
 
-    var query = this.getQuery(),
-        declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
+    const query = this.getQuery();
+    const declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
 
     assert.ok(query);
     assert.strictEqual(declarations.length, 1);
@@ -76,8 +76,8 @@ QUnit.test('Use fields with expression as function', function(assert) {
         }]
     });
 
-    var query = this.getQuery(),
-        declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
+    const query = this.getQuery();
+    const declarations = query.match(/(member)\s([^\s])+\sas\s([^\s])+/ig) || [];
 
     assert.ok(query);
     assert.strictEqual(declarations.length, 0);
@@ -98,8 +98,8 @@ QUnit.test('FilterValues using caption', function(assert) {
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
     });
 
-    var query = this.getQuery(),
-        filterExpr = query.match(/\(select(.+?)on 0/gi);
+    const query = this.getQuery();
+    const filterExpr = query.match(/\(select(.+?)on 0/gi);
 
     assert.strictEqual(filterExpr.length, 2);
     assert.strictEqual(filterExpr[0], '(SELECT {[Ship Date].[Calendar Year].[CY 2002],[Ship Date].[Calendar Year].[CY 2003]}on 0');
@@ -113,8 +113,8 @@ QUnit.test('Numeric value in filterValues', function(assert) {
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
     });
 
-    var query = this.getQuery(),
-        filterExpr = query.match(/\(select(.+?)on 0/gi);
+    const query = this.getQuery();
+    const filterExpr = query.match(/\(select(.+?)on 0/gi);
 
     assert.strictEqual(filterExpr.length, 1);
     assert.strictEqual(filterExpr[0], '(SELECT {[Product].[Category].[1]}on 0');
@@ -132,8 +132,8 @@ QUnit.test('FilterValues using key and caption', function(assert) {
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
     });
 
-    var query = this.getQuery(),
-        filterExpr = query.match(/\(select(.+?)on 0/gi);
+    const query = this.getQuery();
+    const filterExpr = query.match(/\(select(.+?)on 0/gi);
 
     assert.strictEqual(filterExpr.length, 2);
     assert.strictEqual(filterExpr[0], '(SELECT {[Ship Date].[Calendar Year].[CY 2002],[Ship Date].[Calendar Year].&[2003]}on 0');
@@ -256,7 +256,7 @@ QUnit.test('Language Id passed to execute query', function(assert) {
 });
 
 QUnit.test('No LocaleIdentifier in query if unknown locale is set', function(assert) {
-    var locale = localization.locale();
+    const locale = localization.locale();
 
     localization.locale('unknown');
 
@@ -300,7 +300,7 @@ QUnit.test('Use full item key in descendants expression. T620434', function(asse
         path: ['[Ship Date].[Calendar Bla Bla].&[2002]']
     });
 
-    var query = this.getQuery();
+    const query = this.getQuery();
 
     assert.ok(query.indexOf('{[Ship Date].[Calendar Bla Bla].&[2002]}') >= 0, 'Descendants argument has full key');
 });
@@ -316,7 +316,7 @@ QUnit.test('T675232. Build a correct filter query when a member has empty key', 
         values: []
     });
 
-    var filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
+    const filterExpr = this.getQuery().match(/\(select(.+?)on 0/gi);
 
     assert.deepEqual(filterExpr, ['(SELECT {[Product].[Category].[Product].[Category]&}on 0']);
 });
@@ -324,7 +324,7 @@ QUnit.test('T675232. Build a correct filter query when a member has empty key', 
 QUnit.module('getDrillDownItems', stubsEnvironment);
 
 QUnit.test('getDrillDownItems with empty paths', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{
             dataField: '[Product].[Category]',
             filterValues: ['Bikes', 'Accessories'],
@@ -344,7 +344,7 @@ QUnit.test('getDrillDownItems with empty paths', function(assert) {
 });
 
 QUnit.test('getDrillDownItems with paths', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
@@ -355,7 +355,7 @@ QUnit.test('getDrillDownItems with paths', function(assert) {
 });
 
 QUnit.test('getDrillDownItems with custom columns', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }],
@@ -370,7 +370,7 @@ QUnit.test('getDrillDownItems with custom columns', function(assert) {
 });
 
 QUnit.test('getDrillDownItems with several value fields', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{
@@ -389,7 +389,7 @@ QUnit.test('getDrillDownItems with several value fields', function(assert) {
 });
 
 QUnit.test('getDrillDownItems with paths without rows', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
     };
@@ -399,7 +399,7 @@ QUnit.test('getDrillDownItems with paths without rows', function(assert) {
 });
 
 QUnit.test('getDrillDownItems without value fields', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }]
     };
@@ -410,7 +410,7 @@ QUnit.test('getDrillDownItems without value fields', function(assert) {
 });
 
 QUnit.test('getDrillDownItems with paths when Hierarchy', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [
             {
                 dataField: '[Ship Date].[Calendar].[Calendar Year]',
@@ -436,7 +436,7 @@ QUnit.test('getDrillDownItems with paths when Hierarchy', function(assert) {
 });
 
 QUnit.test('max drillDownRowCount', function(assert) {
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
@@ -447,10 +447,10 @@ QUnit.test('max drillDownRowCount', function(assert) {
 });
 
 QUnit.test('parse drillDown response', function(assert) {
-    var textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
+    const textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
     this.sendDeferred.resolve(textResponse);
 
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
@@ -476,16 +476,16 @@ QUnit.test('parse drillDown response', function(assert) {
 });
 
 QUnit.test('create drillDown dataSource', function(assert) {
-    var textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
+    const textResponse = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><xsd:schema xmlns:sql="urn:schemas-microsoft-com:xml-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" elementFormDefault="qualified"><xsd:element name="root"><xsd:complexType><xsd:sequence minOccurs="0" maxOccurs="unbounded"><xsd:element name="row" type="row"/></xsd:sequence></xsd:complexType></xsd:element><xsd:simpleType name="uuid"><xsd:restriction base="xsd:string"><xsd:pattern value="[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}"/></xsd:restriction></xsd:simpleType><xsd:complexType name="xmlDocument"><xsd:sequence><xsd:any/></xsd:sequence></xsd:complexType><xsd:complexType name="row"><xsd:sequence><xsd:element sql:field="[Internet Customers].[$Customer.Customer]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Promotion.Promotion]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Sales Territory.Sales Territory Region]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Internet Sales Order Details.Internet Sales Order]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Ship Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Delivery Date.Date]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Product.Product]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[$Source Currency.Source Currency Code]" name="_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_" type="xsd:string" minOccurs="0"/><xsd:element sql:field="[Internet Customers].[Customer Count]" name="_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_" minOccurs="0"/></xsd:sequence></xsd:complexType></xsd:schema><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Jon V. Yang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43793   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 29, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>August 3, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 38</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Eugene L. Huang</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43767   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 18, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 25, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 30, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Black, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row><row><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_>Ruben Torres</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Customer.Customer_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_>No Discount</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Promotion.Promotion_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_>Australia</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Sales_x0020_Territory.Sales_x0020_Territory_x0020_Region_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_>SO43736   Line 1</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Internet_x0020_Sales_x0020_Order_x0020_Details.Internet_x0020_Sales_x0020_Order_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_>July 10, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_>July 17, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Ship_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_>July 22, 2001</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Delivery_x0020_Date.Date_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_>Mountain-100 Silver, 44</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Product.Product_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_>AUD</_x005B_Internet_x0020_Customers_x005D_._x005B__x0024_Source_x0020_Currency.Source_x0020_Currency_x0020_Code_x005D_><_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_ xsi:type="xsd:int">1</_x005B_Internet_x0020_Customers_x005D_._x005B_Customer_x0020_Count_x005D_></row></root></return></ExecuteResponse></soap:Body></soap:Envelope>';
     this.sendDeferred.resolve(textResponse);
 
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
     };
 
-    var drillDownDataSource = this.store.createDrillDownDataSource(loadOptions, { columnPath: [], rowPath: [] });
+    const drillDownDataSource = this.store.createDrillDownDataSource(loadOptions, { columnPath: [], rowPath: [] });
 
     drillDownDataSource.paginate(false);
 
@@ -510,7 +510,7 @@ QUnit.test('create drillDown dataSource', function(assert) {
 QUnit.test('getDrillDownItems - parse error response', function(assert) {
     this.sendDeferred.resolve(ERROR_RESPONCE);
 
-    var loadOptions = {
+    const loadOptions = {
         columns: [{ dataField: '[Product].[Category]', filterType: 'include' }],
         rows: [{ dataField: '[Ship Date].[Calendar Year]', filterType: 'include' }],
         values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
@@ -546,8 +546,8 @@ QUnit.module('Send Request', {
 });
 
 QUnit.test('send ajax request on load', function(assert) {
-    var store = new Store(this.dataSource),
-        ajaxArg;
+    const store = new Store(this.dataSource);
+    let ajaxArg;
 
     store.load(this.loadOptions);
 
@@ -563,23 +563,23 @@ QUnit.test('send ajax request on load', function(assert) {
 });
 
 QUnit.test('send ajax request with before send callback', function(assert) {
-    var dataSource = this.dataSource,
-        beforeSend = function(settings) {
-            // assert beforeSend argument
-            assert.strictEqual(settings.url, dataSource.url, 'url');
-            assert.strictEqual(settings.method, 'POST', 'method');
-            assert.ok(settings.data, 'data');
-            assert.deepEqual(settings.xhrFields, {}, 'xhrFields');
-            assert.deepEqual(settings.headers, { 'Content-Type': 'text/xml' }, 'headers');
-            assert.strictEqual(settings.beforeSend, undefined);
+    const dataSource = this.dataSource;
+    const beforeSend = function(settings) {
+        // assert beforeSend argument
+        assert.strictEqual(settings.url, dataSource.url, 'url');
+        assert.strictEqual(settings.method, 'POST', 'method');
+        assert.ok(settings.data, 'data');
+        assert.deepEqual(settings.xhrFields, {}, 'xhrFields');
+        assert.deepEqual(settings.headers, { 'Content-Type': 'text/xml' }, 'headers');
+        assert.strictEqual(settings.beforeSend, undefined);
 
-            // act
-            settings.headers['my-header'] = 'my-header-value';
-        };
+        // act
+        settings.headers['my-header'] = 'my-header-value';
+    };
     dataSource.beforeSend = beforeSend;
 
-    var store = new Store(dataSource),
-        ajaxArg;
+    const store = new Store(dataSource);
+    let ajaxArg;
 
     store.load(this.loadOptions);
     // assert

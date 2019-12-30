@@ -1,7 +1,7 @@
-var extend = require('../../../core/utils/extend').extend,
-    symbolPoint = require('./symbol_point'),
-    _extend = extend,
-    MIN_BUBBLE_HEIGHT = 20;
+const extend = require('../../../core/utils/extend').extend;
+const symbolPoint = require('./symbol_point');
+const _extend = extend;
+const MIN_BUBBLE_HEIGHT = 20;
 
 module.exports = _extend({}, symbolPoint, {
     correctCoordinates: function(diameter) {
@@ -9,8 +9,8 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _drawMarker: function(renderer, group, animationEnabled) {
-        var that = this,
-            attr = _extend({ translateX: that.x, translateY: that.y }, that._getStyle());
+        const that = this;
+        const attr = _extend({ translateX: that.x, translateY: that.y }, that._getStyle());
 
         that.graphic = renderer.circle(0, 0, animationEnabled ? 0 : that.bubbleSize)
             .smartAttr(attr)
@@ -19,9 +19,9 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     getTooltipParams: function(location) {
-        var that = this,
-            graphic = that.graphic,
-            height;
+        const that = this;
+        const graphic = that.graphic;
+        let height;
 
         if(!graphic) {
             return;
@@ -36,7 +36,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getLabelFormatObject: function() {
-        var formatObject = symbolPoint._getLabelFormatObject.call(this);
+        const formatObject = symbolPoint._getLabelFormatObject.call(this);
 
         formatObject.size = this.initialSize;
 
@@ -49,12 +49,12 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getGraphicBBox: function() {
-        var that = this;
+        const that = this;
         return that._getSymbolBBox(that.x, that.y, that.bubbleSize);
     },
 
     _updateMarker: function(animationEnabled, style) {
-        var that = this;
+        const that = this;
         if(!animationEnabled) {
             style = _extend({ r: that.bubbleSize, translateX: that.x, translateY: that.y }, style);
         }
@@ -62,7 +62,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getFormatObject: function(tooltip) {
-        var formatObject = symbolPoint._getFormatObject.call(this, tooltip);
+        const formatObject = symbolPoint._getFormatObject.call(this, tooltip);
 
         formatObject.sizeText = tooltip.formatValue(this.initialSize);
 
@@ -74,7 +74,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _getLabelCoords: function(label) {
-        var coords;
+        let coords;
 
         if(label.getLayoutOptions().position === 'inside') {
             coords = this._getLabelCoordOfPosition(label, 'inside');

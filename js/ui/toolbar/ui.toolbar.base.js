@@ -29,7 +29,7 @@ const DEFAULT_BUTTON_TYPE = 'default';
 
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 
-var ToolbarBase = AsyncCollectionWidget.inherit({
+const ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
 
     /**
@@ -70,7 +70,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-        var template = new BindableTemplate(function($container, data, rawModel) {
+        const template = new BindableTemplate(function($container, data, rawModel) {
             if(isPlainObject(data)) {
                 if(data.text) {
                     $container.text(data.text).wrapInner('<div>');
@@ -218,11 +218,11 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderSections: function() {
-        var $container = this._$toolbarItemsContainer,
-            that = this;
+        const $container = this._$toolbarItemsContainer;
+        const that = this;
         each(['before', 'center', 'after'], function() {
-            var sectionClass = 'dx-toolbar-' + this,
-                $section = $container.find('.' + sectionClass);
+            const sectionClass = 'dx-toolbar-' + this;
+            let $section = $container.find('.' + sectionClass);
 
             if(!$section.length) {
                 that['_$' + this + 'Section'] = $section = $('<div>')
@@ -251,34 +251,34 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
             float: 'none'
         });
 
-        var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
-            afterRect = this._$afterSection.get(0).getBoundingClientRect();
+        const beforeRect = this._$beforeSection.get(0).getBoundingClientRect();
+        const afterRect = this._$afterSection.get(0).getBoundingClientRect();
 
         this._alignCenterSection(beforeRect, afterRect, elementWidth);
 
-        var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
-            $section = $label.parent();
+        const $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0);
+        const $section = $label.parent();
 
         if(!$label.length) {
             return;
         }
 
-        var labelOffset = beforeRect.width ? beforeRect.width : $label.position().left,
-            widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset,
-            widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width,
-            elemsAtSectionWidth = 0;
+        const labelOffset = beforeRect.width ? beforeRect.width : $label.position().left;
+        const widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset;
+        const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width;
+        let elemsAtSectionWidth = 0;
 
         $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
             elemsAtSectionWidth += $(this).outerWidth();
         });
 
-        var freeSpace = elementWidth - elemsAtSectionWidth,
-            sectionMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection, 0);
+        const freeSpace = elementWidth - elemsAtSectionWidth;
+        const sectionMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection, 0);
 
         if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
             this._alignSection(this._$beforeSection, sectionMaxWidth);
         } else {
-            var labelPaddings = $label.outerWidth() - $label.width();
+            const labelPaddings = $label.outerWidth() - $label.width();
             $label.css('maxWidth', sectionMaxWidth - labelPaddings);
         }
     },
@@ -286,10 +286,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
         this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
 
-        var isRTL = this.option('rtlEnabled'),
-            leftRect = isRTL ? afterRect : beforeRect,
-            rightRect = isRTL ? beforeRect : afterRect,
-            centerRect = this._$centerSection.get(0).getBoundingClientRect();
+        const isRTL = this.option('rtlEnabled');
+        const leftRect = isRTL ? afterRect : beforeRect;
+        const rightRect = isRTL ? beforeRect : afterRect;
+        const centerRect = this._$centerSection.get(0).getBoundingClientRect();
 
         if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
             this._$centerSection.css({
@@ -301,13 +301,13 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _alignSection: function($section, maxWidth) {
-        var $labels = $section.find(TOOLBAR_LABEL_SELECTOR),
-            labels = $labels.toArray();
+        const $labels = $section.find(TOOLBAR_LABEL_SELECTOR);
+        let labels = $labels.toArray();
 
         maxWidth = maxWidth - this._getCurrentLabelsPaddings(labels);
 
-        var currentWidth = this._getCurrentLabelsWidth(labels),
-            difference = Math.abs(currentWidth - maxWidth);
+        const currentWidth = this._getCurrentLabelsWidth(labels);
+        const difference = Math.abs(currentWidth - maxWidth);
 
         if(maxWidth < currentWidth) {
             labels = labels.reverse();
@@ -318,18 +318,18 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _alignSectionLabels: function(labels, difference, expanding) {
-        var getRealLabelWidth = function(label) { return label.getBoundingClientRect().width; };
+        const getRealLabelWidth = function(label) { return label.getBoundingClientRect().width; };
 
-        for(var i = 0; i < labels.length; i++) {
-            var $label = $(labels[i]),
-                currentLabelWidth = Math.ceil(getRealLabelWidth(labels[i])),
-                labelMaxWidth;
+        for(let i = 0; i < labels.length; i++) {
+            const $label = $(labels[i]);
+            const currentLabelWidth = Math.ceil(getRealLabelWidth(labels[i]));
+            let labelMaxWidth;
 
             if(expanding) {
                 $label.css('maxWidth', 'inherit');
             }
 
-            var possibleLabelWidth = Math.ceil(expanding ? getRealLabelWidth(labels[i]) : currentLabelWidth);
+            const possibleLabelWidth = Math.ceil(expanding ? getRealLabelWidth(labels[i]) : currentLabelWidth);
 
             if(possibleLabelWidth < difference) {
                 labelMaxWidth = expanding ? possibleLabelWidth : 0;
@@ -345,7 +345,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _applyCompactMode: function() {
-        var $element = this.$element();
+        const $element = this.$element();
         $element.removeClass(TOOLBAR_COMPACT_CLASS);
 
         if(this.option('compactMode') && this._getSummaryItemsWidth(this.itemElements(), true) > $element.width()) {
@@ -354,7 +354,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _getCurrentLabelsWidth: function(labels) {
-        var width = 0;
+        let width = 0;
 
         labels.forEach(function(label, index) {
             width += $(label).outerWidth();
@@ -364,7 +364,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _getCurrentLabelsPaddings: function(labels) {
-        var padding = 0;
+        let padding = 0;
 
         labels.forEach(function(label, index) {
             padding += ($(label).outerWidth() - $(label).width());
@@ -374,10 +374,10 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
-        var location = item.location || 'center',
-            container = itemContainer || this['_$' + location + 'Section'],
-            itemHasText = !!(item.text || item.html),
-            itemElement = this.callBase(index, item, container, $after);
+        const location = item.location || 'center';
+        const container = itemContainer || this['_$' + location + 'Section'];
+        const itemHasText = !!(item.text || item.html);
+        const itemElement = this.callBase(index, item, container, $after);
 
         itemElement
             .toggleClass(this._buttonClass(), !itemHasText)
@@ -388,12 +388,12 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderGroupedItems: function() {
-        var that = this;
+        const that = this;
 
         each(this.option('items'), function(groupIndex, group) {
-            var groupItems = group.items,
-                $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS),
-                location = group.location || 'center';
+            const groupItems = group.items;
+            const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
+            const location = group.location || 'center';
 
             if(!groupItems || !groupItems.length) {
                 return;
@@ -408,7 +408,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
-        var grouped = this.option('grouped') && items.length && items[0].items;
+        const grouped = this.option('grouped') && items.length && items[0].items;
         grouped ? this._renderGroupedItems() : this.callBase(items);
     },
 
@@ -417,7 +417,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _renderContentImpl: function() {
-        var items = this._getToolbarItems();
+        const items = this._getToolbarItems();
 
         this.$element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
 
@@ -457,7 +457,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
+        const name = args.name;
 
         switch(name) {
             case 'width':

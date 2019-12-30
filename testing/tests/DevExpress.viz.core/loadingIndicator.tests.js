@@ -1,6 +1,6 @@
-var noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    loadingIndicatorModule = require('viz/core/loading_indicator');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
 
 QUnit.module('Common', {
     beforeEach: function() {
@@ -111,8 +111,8 @@ QUnit.test('Set size', function(assert) {
 });
 
 QUnit.test('Set options / `show` is false', function(assert) {
-    var show = sinon.spy(this.loadingIndicator, 'show'),
-        hide = sinon.spy(this.loadingIndicator, 'hide');
+    const show = sinon.spy(this.loadingIndicator, 'show');
+    const hide = sinon.spy(this.loadingIndicator, 'hide');
     this.loadingIndicator.setOptions({
         backgroundColor: 'red',
         font: { size: 13, color: 'blue' },
@@ -129,8 +129,8 @@ QUnit.test('Set options / `show` is false', function(assert) {
 });
 
 QUnit.test('Set options / `show` is true', function(assert) {
-    var show = sinon.spy(this.loadingIndicator, 'show'),
-        hide = sinon.spy(this.loadingIndicator, 'hide');
+    const show = sinon.spy(this.loadingIndicator, 'show');
+    const hide = sinon.spy(this.loadingIndicator, 'hide');
     this.loadingIndicator.setOptions({
         backgroundColor: 'red', font: { size: 13, color: 'blue' }, text: 'Loading...', show: true
     });
@@ -144,7 +144,7 @@ QUnit.test('Set options / `show` is true', function(assert) {
 
 QUnit.module('Scheduling', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         that.loadingIndicator = new loadingIndicatorModule.LoadingIndicator({
             renderer: new vizMocks.Renderer(),
             eventTrigger: noop,
@@ -195,7 +195,7 @@ QUnit.test('Fulfill hiding canceled by \'hide\'', function(assert) {
 });
 
 QUnit.test('Hiding is not scheduled on show', function(assert) {
-    var loadingIndicator = this.loadingIndicator;
+    const loadingIndicator = this.loadingIndicator;
     this.notify = function() {
         loadingIndicator.scheduleHiding();
     };
@@ -207,7 +207,7 @@ QUnit.test('Hiding is not scheduled on show', function(assert) {
 });
 
 QUnit.test('Hiding is not scheduled on hide', function(assert) {
-    var loadingIndicator = this.loadingIndicator;
+    const loadingIndicator = this.loadingIndicator;
     loadingIndicator.show();
     this.notify = function() {
         loadingIndicator.scheduleHiding();

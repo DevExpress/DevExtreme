@@ -1,13 +1,13 @@
-var $ = require('jquery');
-var typeUtils = require('core/utils/type');
-var Deferred = require('core/utils/deferred').Deferred;
-var renderer = require('core/renderer');
-var eventsEngine = require('events/core/events_engine');
+const $ = require('jquery');
+const typeUtils = require('core/utils/type');
+const Deferred = require('core/utils/deferred').Deferred;
+const renderer = require('core/renderer');
+const eventsEngine = require('events/core/events_engine');
 
 QUnit.module('Type checking');
 
 QUnit.test('type method', function(assert) {
-    var element = $('#qunit-fixture').html('"<div id="widget"></div>"');
+    const element = $('#qunit-fixture').html('"<div id="widget"></div>"');
 
     assert.strictEqual(typeUtils.type(0), 'number', 'number');
     assert.strictEqual(typeUtils.type(null), 'null', 'null');
@@ -90,11 +90,11 @@ QUnit.test('isObject', function(assert) {
 });
 
 QUnit.test('isPlainObject', function(assert) {
-    var testFunction = function() {
+    const testFunction = function() {
         return 'test';
     };
 
-    var dxEvent = eventsEngine.Event('testevent');
+    const dxEvent = eventsEngine.Event('testevent');
 
     assert.strictEqual(typeUtils.isPlainObject({}), true, 'object is plain');
     assert.strictEqual(typeUtils.isPlainObject(new Object({})), true, 'object is plain');

@@ -1,36 +1,36 @@
-var $ = require('jquery'),
-    renderer = require('core/renderer'),
-    vizMocks = require('../../../helpers/vizMocks.js'),
-    dxVectorMapModule = require('viz/vector_map/vector_map'),
+const $ = require('jquery');
+const renderer = require('core/renderer');
+const vizMocks = require('../../../helpers/vizMocks.js');
+const dxVectorMapModule = require('viz/vector_map/vector_map');
 
-    projectionModule = require('viz/vector_map/projection.main'),
-    controlBarModule = require('viz/vector_map/control_bar'),
-    gestureHandlerModule = require('viz/vector_map/gesture_handler'),
-    trackerModule = require('viz/vector_map/tracker'),
-    themeManagerModule = require('viz/core/base_theme_manager'),
-    dataExchangerModule = require('viz/vector_map/data_exchanger'),
-    legendModule = require('viz/vector_map/legend'),
-    layoutModule = require('viz/vector_map/layout'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
+const projectionModule = require('viz/vector_map/projection.main');
+const controlBarModule = require('viz/vector_map/control_bar');
+const gestureHandlerModule = require('viz/vector_map/gesture_handler');
+const trackerModule = require('viz/vector_map/tracker');
+const themeManagerModule = require('viz/core/base_theme_manager');
+const dataExchangerModule = require('viz/vector_map/data_exchanger');
+const legendModule = require('viz/vector_map/legend');
+const layoutModule = require('viz/vector_map/layout');
+const mapLayerModule = require('viz/vector_map/map_layer');
+const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
 
-    StubProjection = vizMocks.stubClass(projectionModule.Projection),
-    StubControlBar = vizMocks.stubClass(controlBarModule.ControlBar),
-    StubGestureHandler = vizMocks.stubClass(gestureHandlerModule.GestureHandler),
-    StubTracker = vizMocks.stubClass(trackerModule.Tracker),
-    StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager),
-    StubDataExchanger = vizMocks.stubClass(dataExchangerModule.DataExchanger),
-    StubLegendsControl = vizMocks.stubClass(legendModule.LegendsControl),
-    StubLayoutControl = vizMocks.stubClass(layoutModule.LayoutControl),
-    StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection),
-    StubTooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer),
+const StubProjection = vizMocks.stubClass(projectionModule.Projection);
+const StubControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
+const StubGestureHandler = vizMocks.stubClass(gestureHandlerModule.GestureHandler);
+const StubTracker = vizMocks.stubClass(trackerModule.Tracker);
+const StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager);
+const StubDataExchanger = vizMocks.stubClass(dataExchangerModule.DataExchanger);
+const StubLegendsControl = vizMocks.stubClass(legendModule.LegendsControl);
+const StubLayoutControl = vizMocks.stubClass(layoutModule.LayoutControl);
+const StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection);
+const StubTooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer);
 
-    rendererModule = require('viz/core/renderers/renderer'),
-    titleModule = require('viz/core/title'),
-    exportModule = require('viz/core/export'),
-    tooltipModule = require('viz/core/tooltip'),
+const rendererModule = require('viz/core/renderers/renderer');
+const titleModule = require('viz/core/title');
+const exportModule = require('viz/core/export');
+const tooltipModule = require('viz/core/tooltip');
 
-    StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
+const StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 
 function returnValue(value) {
     return function() { return value; };

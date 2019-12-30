@@ -1,6 +1,6 @@
-var pointerMock = require('../../helpers/pointerMock.js'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    shutterPlugin = require('viz/chart_components/shutter_zoom');
+const pointerMock = require('../../helpers/pointerMock.js');
+const vizMocks = require('../../helpers/vizMocks.js');
+const shutterPlugin = require('viz/chart_components/shutter_zoom');
 
 QUnit.module('Shutter zoom plugin', {
     initWidget: function(options) {
@@ -8,7 +8,7 @@ QUnit.module('Shutter zoom plugin', {
         this.renderer = new vizMocks.Renderer();
         this.renderer.offsetTemplate = { left: 10, top: 5 };
 
-        var chartMock = {
+        const chartMock = {
             option: function(name) {
                 return options[name];
             },
@@ -63,7 +63,7 @@ QUnit.test('Create detached shutter rect with given options on init', function(a
     });
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         enabled: true,
         fill: 'red',
@@ -89,7 +89,7 @@ QUnit.test('Append shutter rect with right size on start dragging', function(ass
     this.pointer.down(300 + 10, 250 + 5).dragStart();
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 100,
         y: 50,
@@ -114,7 +114,7 @@ QUnit.test('Change shutter rect x and width on dragging', function(assert) {
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50);
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 300,
         width: 400
@@ -136,7 +136,7 @@ QUnit.test('Change shutter rect with right x and width on dragging when cursor m
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(1000, 50);
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         x: 300,
         width: 800
@@ -159,7 +159,7 @@ QUnit.test('Change shutter rect y and height on dragging if chart is rotated', f
     this.pointer.down(300 + 10, 200 + 5).dragStart().drag(5, 100);
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         y: 200,
         height: 100
@@ -182,7 +182,7 @@ QUnit.test('Change shutter rect with right y and height on dragging if chart is 
     this.pointer.down(300 + 10, 200 + 5).dragStart().drag(5, 500);
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.deepEqual(rect.attr.lastCall.args, [{
         y: 200,
         height: 350
@@ -204,7 +204,7 @@ QUnit.test('Detach shutter rect on end dragging', function(assert) {
     this.pointer.down(300 + 10, 250 + 5).dragStart().drag(400, 50).dragEnd();
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.strictEqual(rect.remove.callCount, 1);
 });
 
@@ -345,7 +345,7 @@ QUnit.test('Do not draw anything nor triger events if shutterZoom is disabled', 
 });
 
 QUnit.test('Dispose shutter an widget dispose', function(assert) {
-    var chart = this.initWidget({
+    const chart = this.initWidget({
         shutterZoom: {
             enabled: true,
             fill: 'red',
@@ -360,6 +360,6 @@ QUnit.test('Dispose shutter an widget dispose', function(assert) {
     shutterPlugin.dispose.call(chart);
 
     // assert
-    var rect = this.renderer.rect.lastCall.returnValue;
+    const rect = this.renderer.rect.lastCall.returnValue;
     assert.strictEqual(rect.dispose.callCount, 1);
 });

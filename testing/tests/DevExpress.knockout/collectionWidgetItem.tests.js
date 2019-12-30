@@ -1,16 +1,16 @@
-var $ = require('jquery'),
-    ko = require('knockout'),
-    registerComponent = require('core/component_registrator'),
-    CollectionWidget = require('ui/collection/ui.collection_widget.edit'),
-    CollectionWidgetItem = require('ui/collection/item');
+const $ = require('jquery');
+const ko = require('knockout');
+const registerComponent = require('core/component_registrator');
+const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
+const CollectionWidgetItem = require('ui/collection/item');
 
 require('integration/knockout');
 
-var FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
+const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
 QUnit.module('observables', {
     beforeEach: function() {
-        var TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
+        const TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
             _renderWatchers: function() {
                 this._startWatcher('value', this._renderValue.bind(this));
             },
@@ -22,7 +22,7 @@ QUnit.module('observables', {
             }
         });
 
-        var TestCollection = this.TestCollection = CollectionWidget.inherit({
+        const TestCollection = this.TestCollection = CollectionWidget.inherit({
             _getDefaultOptions: function() {
                 return $.extend(this.callBase(), {
                     valueExpr: 'value'
@@ -36,15 +36,15 @@ QUnit.module('observables', {
 });
 
 QUnit.test('item should correctly watch changes', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = { items: ko.observableArray([]) };
+    const vm = { items: ko.observableArray([]) };
     ko.applyBindings(vm, $markup[0]);
 
     vm.items.push({ value: ko.observable(1) });
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 1, 'value changed');
 
     vm.items()[0].value(2);
@@ -52,15 +52,15 @@ QUnit.test('item should correctly watch changes', function(assert) {
 });
 
 QUnit.test('item should correctly watch changes in nested observable', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = { items: ko.observableArray([]) };
+    const vm = { items: ko.observableArray([]) };
     ko.applyBindings(vm, $markup[0]);
 
     vm.items.push(ko.observable({ value: ko.observable(1) }));
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 1, 'value changed');
 
     vm.items()[0]().value(2);
@@ -68,15 +68,15 @@ QUnit.test('item should correctly watch changes in nested observable', function(
 });
 
 QUnit.test('item should correctly watch changes if whole item is observable', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = { items: ko.observableArray([]) };
+    const vm = { items: ko.observableArray([]) };
     ko.applyBindings(vm, $markup[0]);
 
     vm.items.push(ko.observable({ value: 1 }));
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 1, 'value changed');
 
     vm.items()[0]({ value: 2 });
@@ -84,11 +84,11 @@ QUnit.test('item should correctly watch changes if whole item is observable', fu
 });
 
 QUnit.test('item should correctly watch changes for complex expressions', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {}, valueExpr: valueExpr }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = {
+    const vm = {
         items: ko.observableArray([]),
         valueExpr: function(data) {
             return data.value() + 1;
@@ -97,7 +97,7 @@ QUnit.test('item should correctly watch changes for complex expressions', functi
     ko.applyBindings(vm, $markup[0]);
 
     vm.items.push({ value: ko.observable(1) });
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     assert.equal($item.data('value'), 2, 'value changed');
 
     vm.items()[0].value(2);
@@ -105,27 +105,27 @@ QUnit.test('item should correctly watch changes for complex expressions', functi
 });
 
 QUnit.test('item should not watch changes for not observables', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = { items: ko.observableArray([{ value: 1 }]) };
+    const vm = { items: ko.observableArray([{ value: 1 }]) };
     ko.applyBindings(vm, $markup[0]);
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
 
     vm.items()[0].value = 2;
     assert.equal($item.data('value'), 1, 'value not changed');
 });
 
 QUnit.test('item should not be rerendered', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var vm = { items: ko.observableArray([{ value: ko.observable(1) }]) };
+    const vm = { items: ko.observableArray([{ value: ko.observable(1) }]) };
     ko.applyBindings(vm, $markup[0]);
 
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     $item.data('rendered', true);
 
     vm.items()[0].value(2);
@@ -133,15 +133,15 @@ QUnit.test('item should not be rerendered', function(assert) {
 });
 
 QUnit.test('item should not leak watchers', function(assert) {
-    var $markup = $('<div></div>')
+    const $markup = $('<div></div>')
         .attr('data-bind', 'dxTestCollection: { items: items, itemTemplate: function() {} }')
         .appendTo(FIXTURE_ELEMENT);
 
-    var item = ko.observable({ value: ko.observable(1) });
-    var vm = { items: ko.observableArray([item]) };
+    const item = ko.observable({ value: ko.observable(1) });
+    const vm = { items: ko.observableArray([item]) };
     ko.applyBindings(vm, $markup[0]);
 
-    var $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
+    const $item = this.TestCollection.getInstance($markup).itemElements().eq(0);
     $item.data('rendered', true);
 
     vm.items([]);

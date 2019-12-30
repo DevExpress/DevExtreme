@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('ui/slide_out');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="sharedTemplatesCase">\
             <div data-bind="dxSlideOut: { items: [1, 2, 3], menuItemTemplate: \'tmpl\' }">\
                 <div data-options="dxTemplate: { name: \'tmpl\' }"><div class="myItemContent" data-bind="text: $data">abc</div></div>\
@@ -39,8 +39,8 @@ QUnit.test('shared external templates should works as shared internal templates 
     ko.applyBindings({}, $('#sharedTemplatesCase')[0]);
     ko.applyBindings({}, $('#internalTemplatesCase')[0]);
 
-    var listItems1 = $('#sharedTemplatesCase .dx-list-item'),
-        listItems2 = $('#internalTemplatesCase .dx-list-item');
+    const listItems1 = $('#sharedTemplatesCase .dx-list-item');
+    const listItems2 = $('#internalTemplatesCase .dx-list-item');
 
     listItems1.each(function(i) {
         assert.equal($.trim(listItems2.eq(i).text()), $.trim($(this).text()));
@@ -48,10 +48,10 @@ QUnit.test('shared external templates should works as shared internal templates 
 });
 
 QUnit.test('slideout should delegate templates to child widgets (T131530)', function(assert) {
-    var $slideOut = $('#T131530');
+    const $slideOut = $('#T131530');
     ko.applyBindings({}, $slideOut.get(0));
 
-    var $list = $slideOut.find('.dx-list');
+    const $list = $slideOut.find('.dx-list');
 
     assert.equal($.trim($list.find('.dx-list-item').eq(0).text()), 'Template 1');
     assert.equal($.trim($list.find('.dx-list-item').eq(1).text()), 'Template 2');

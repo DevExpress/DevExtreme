@@ -1,9 +1,9 @@
-var domAdapter = require('core/dom_adapter');
-var windowUtils = require('core/utils/window');
-var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
+import domAdapter from 'core/dom_adapter';
+import windowUtils from 'core/utils/window';
+import serverSideDOMAdapter from './serverSideDOMAdapterPatch.js';
 
 (function emulateNoContains() {
-    var originalContains = Element.prototype.contains;
+    const originalContains = Element.prototype.contains;
     Element.prototype.contains = function(element) {
         if(!element) {
             throw new Error('element should be defined');
@@ -15,7 +15,7 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
 
 (function emulateNoXMLNSAttr() {
     // NOTE: Will be allowed soon https://github.com/fgnass/domino/commit/b16cb1923f83db096b7cd0638734474e54b3308d#diff-52cea43ae897a1705ec51162aed25f63
-    var originalSetAttribute = Element.prototype.setAttribute;
+    const originalSetAttribute = Element.prototype.setAttribute;
     Element.prototype.setAttribute = function(name, value) {
         if(name.toLowerCase().substring(0, 5) === 'xmlns') {
             throw new Error('the operation is not allowed by Namespaces in XML');
@@ -26,10 +26,10 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
 })();
 
 (function emulateNoElementSizes() {
-    var originalCreateElement = document.createElement;
+    const originalCreateElement = document.createElement;
 
     document.createElement = function() {
-        var result = originalCreateElement.apply(this, arguments);
+        const result = originalCreateElement.apply(this, arguments);
 
         ['offsetWidth', 'offsetHeight', 'getBoundingClientRect'].forEach(function(field) {
             Object.defineProperty(result, field, {
@@ -47,8 +47,8 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
 })();
 
 (function emulateStyleProps() {
-    var originalCreateElement = document.createElement;
-    var serverStyles = [
+    const originalCreateElement = document.createElement;
+    const serverStyles = [
         'background',
         'backgroundAttachment',
         'backgroundColor',
@@ -154,7 +154,7 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
         'zIndex'
     ];
 
-    var styleObj = {};
+    const styleObj = {};
 
     serverStyles.forEach(function(style) {
         styleObj[style] = '';
@@ -167,14 +167,14 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
 
 (function emulateIncorrectMatches() {
     // https://github.com/fgnass/domino/issues/121
-    var originalMatches = Element.prototype.matches;
+    const originalMatches = Element.prototype.matches;
     Element.prototype.matches = function(selector) {
-        var selectorParts = selector.split(/\s|>/);
-        var lastSelectorPart = selectorParts[selectorParts.length - 1];
+        const selectorParts = selector.split(/\s|>/);
+        let lastSelectorPart = selectorParts[selectorParts.length - 1];
         if(/^\.[\w|-]+$/.test(lastSelectorPart)) {
             lastSelectorPart = lastSelectorPart.substr(1);
-            var index = this.className.indexOf(lastSelectorPart);
-            var l = this.className[index + lastSelectorPart.length];
+            const index = this.className.indexOf(lastSelectorPart);
+            const l = this.className[index + lastSelectorPart.length];
             if(index > -1 && l && l !== ' ') {
                 return false;
             }
@@ -184,39 +184,39 @@ var serverSideDOMAdapter = require('./serverSideDOMAdapterPatch.js');
     };
 })();
 
-var domAdapterBackup = {};
-var makeDOMAdapterEmpty = function() {
-    for(var field in domAdapter) {
+const domAdapterBackup = {};
+const makeDOMAdapterEmpty = function() {
+    for(const field in domAdapter) {
         domAdapterBackup[field] = domAdapter[field];
         delete domAdapter[field];
     }
 };
-var restoreOriginalDomAdapter = function() {
-    for(var field in domAdapterBackup) {
+const restoreOriginalDomAdapter = function() {
+    for(const field in domAdapterBackup) {
         domAdapter[field] = domAdapterBackup[field];
     }
 };
 
-var windowMock = {
+const windowMock = {
     isWindowMock: true
 };
 
-var errorFunc = function() {
+const errorFunc = function() {
     throw new Error('Window fields using is prevented');
 };
 
-var windowGetter = function() {
+const windowGetter = function() {
     return windowMock;
 };
 
-for(var field in window) {
+for(const field in window) {
     Object.defineProperty(windowMock, field, {
         get: field === 'window' ? windowGetter : errorFunc,
         set: errorFunc
     });
 }
 
-var makeWindowEmpty = function() {
+const makeWindowEmpty = function() {
     windowUtils.hasWindow = function() {
         return false;
     };

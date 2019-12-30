@@ -1,8 +1,8 @@
-var gulp = require('gulp');
-var merge = require('merge-stream');
-var rename = require('gulp-rename');
-var headerPipes = require('./header-pipes.js');
-var compressionPipes = require('./compression-pipes.js');
+const gulp = require('gulp');
+const merge = require('merge-stream');
+const rename = require('gulp-rename');
+const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
 
 gulp.task('aspnet', function() {
     return merge(

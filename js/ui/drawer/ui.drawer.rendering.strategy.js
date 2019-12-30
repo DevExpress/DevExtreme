@@ -5,11 +5,11 @@ import { camelize } from '../../core/utils/inflector';
 
 const animation = {
     moveTo(config) {
-        let $element = config.$element,
-            position = config.position,
-            direction = config.direction || 'left',
-            toConfig = {},
-            animationType;
+        const $element = config.$element;
+        const position = config.position;
+        const direction = config.direction || 'left';
+        const toConfig = {};
+        let animationType;
 
         if(direction === 'right') {
             toConfig['transform'] = 'translate(' + position + 'px, 0px)';
@@ -34,10 +34,10 @@ const animation = {
         });
     },
     margin(config) {
-        let $element = config.$element,
-            margin = config.margin,
-            direction = config.direction || 'left',
-            toConfig = {};
+        const $element = config.$element;
+        const margin = config.margin;
+        const direction = config.direction || 'left';
+        const toConfig = {};
 
         toConfig['margin' + camelize(direction, true)] = margin;
 
@@ -58,12 +58,12 @@ const animation = {
     },
 
     size(config) {
-        let $element = config.$element,
-            size = config.size,
-            direction = config.direction || 'left',
-            marginTop = config.marginTop || 0,
-            duration = config.duration,
-            toConfig = {};
+        const $element = config.$element;
+        const size = config.size;
+        const direction = config.direction || 'left';
+        const marginTop = config.marginTop || 0;
+        const duration = config.duration;
+        const toConfig = {};
 
 
         if(direction === 'right' || direction === 'left') {
@@ -112,7 +112,7 @@ class DrawerStrategy {
 
         this.prepareAnimationDeferreds(animate);
 
-        let config = this.getPositionRenderingConfig(offset);
+        const config = this.getPositionRenderingConfig(offset);
 
         if(this.useDefaultAnimation()) {
             this.defaultPositionRendering(config, offset, animate);

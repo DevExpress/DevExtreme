@@ -1,7 +1,7 @@
-var setPublicElementWrapper = require('../../core/utils/dom').setPublicElementWrapper;
-var useJQuery = require('./use_jquery')();
+const setPublicElementWrapper = require('../../core/utils/dom').setPublicElementWrapper;
+const useJQuery = require('./use_jquery')();
 
-var getPublicElement = function($element) {
+const getPublicElement = function($element) {
     return $element;
 };
 

@@ -9,7 +9,7 @@ import 'ui/radio_group';
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -19,31 +19,31 @@ QUnit.module('Layout manager');
 
 QUnit.test('Layout strategy when flex is not supported', function(assert) {
     // arrange, act
-    var items = [
-            {
-                dataField: 'test1',
-                editorType: 'dxTextBox'
-            },
-            {
-                dataField: 'test2',
-                editorType: 'dxTextBox',
-                helpText: 'help'
-            },
-            {
-                dataField: 'test3',
-                editorType: 'dxRadioGroup'
-            },
-            {
-                dataField: 'test4',
-                editorType: 'dxCalendar'
-            },
-            {
-                dataField: 'test5',
-                editorType: 'dxTextArea'
-            }
-        ],
-        $testContainer = $('#container').dxLayoutManager(),
-        layoutManager = $testContainer.dxLayoutManager('instance');
+    const items = [
+        {
+            dataField: 'test1',
+            editorType: 'dxTextBox'
+        },
+        {
+            dataField: 'test2',
+            editorType: 'dxTextBox',
+            helpText: 'help'
+        },
+        {
+            dataField: 'test3',
+            editorType: 'dxRadioGroup'
+        },
+        {
+            dataField: 'test4',
+            editorType: 'dxCalendar'
+        },
+        {
+            dataField: 'test5',
+            editorType: 'dxTextArea'
+        }
+    ];
+    const $testContainer = $('#container').dxLayoutManager();
+    const layoutManager = $testContainer.dxLayoutManager('instance');
 
     // act
     layoutManager._hasBrowserFlex = function() {
@@ -58,31 +58,31 @@ QUnit.test('Layout strategy when flex is not supported', function(assert) {
 
 QUnit.test('Layout strategy when flex is supported', function(assert) {
     // arrange, act
-    var items = [
-            {
-                dataField: 'test1',
-                editorType: 'dxTextBox'
-            },
-            {
-                dataField: 'test2',
-                editorType: 'dxTextBox',
-                helpText: 'help'
-            },
-            {
-                dataField: 'test3',
-                editorType: 'dxRadioGroup'
-            },
-            {
-                dataField: 'test4',
-                editorType: 'dxCalendar'
-            },
-            {
-                dataField: 'test5',
-                editorType: 'dxTextArea'
-            }
-        ],
-        $testContainer = $('#container').dxLayoutManager(),
-        layoutManager = $testContainer.dxLayoutManager('instance');
+    const items = [
+        {
+            dataField: 'test1',
+            editorType: 'dxTextBox'
+        },
+        {
+            dataField: 'test2',
+            editorType: 'dxTextBox',
+            helpText: 'help'
+        },
+        {
+            dataField: 'test3',
+            editorType: 'dxRadioGroup'
+        },
+        {
+            dataField: 'test4',
+            editorType: 'dxCalendar'
+        },
+        {
+            dataField: 'test5',
+            editorType: 'dxTextArea'
+        }
+    ];
+    const $testContainer = $('#container').dxLayoutManager();
+    const layoutManager = $testContainer.dxLayoutManager('instance');
 
     // act
     layoutManager._hasBrowserFlex = function() {
@@ -97,32 +97,32 @@ QUnit.test('Layout strategy when flex is supported', function(assert) {
 
 QUnit.test('Check label alignment classes when browser is not supported flex', function(assert) {
     // arrange, act
-    var items = [
-            {
-                dataField: 'test1',
-                editorType: 'dxTextBox'
-            },
-            {
-                dataField: 'test2',
-                editorType: 'dxTextBox',
-                helpText: 'help'
-            },
-            {
-                dataField: 'test3',
-                editorType: 'dxRadioGroup'
-            },
-            {
-                dataField: 'test4',
-                editorType: 'dxCalendar'
-            },
-            {
-                dataField: 'test5',
-                editorType: 'dxTextArea'
-            }
-        ],
-        $testContainer = $('#container').dxLayoutManager(),
-        layoutManager = $testContainer.dxLayoutManager('instance'),
-        $items;
+    const items = [
+        {
+            dataField: 'test1',
+            editorType: 'dxTextBox'
+        },
+        {
+            dataField: 'test2',
+            editorType: 'dxTextBox',
+            helpText: 'help'
+        },
+        {
+            dataField: 'test3',
+            editorType: 'dxRadioGroup'
+        },
+        {
+            dataField: 'test4',
+            editorType: 'dxCalendar'
+        },
+        {
+            dataField: 'test5',
+            editorType: 'dxTextArea'
+        }
+    ];
+    const $testContainer = $('#container').dxLayoutManager();
+    const layoutManager = $testContainer.dxLayoutManager('instance');
+    let $items;
 
     // act
     layoutManager._hasBrowserFlex = function() {
@@ -141,23 +141,23 @@ QUnit.test('Check label alignment classes when browser is not supported flex', f
 
 QUnit.test('Check clickable fielditem', function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers(),
-        $testContainer = $('#container').dxLayoutManager({
-            items: [
-                {
-                    dataField: 'isRich',
-                    editorType: 'dxSwitch',
-                    editorOptions: { value: false }
-                },
-                {
-                    dataField: 'hasMansion',
-                    editorType: 'dxCheckBox',
-                    editorOptions: { value: false }
-                }
-            ]
-        }),
-        $fieldItemLabels = $testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS),
-        instance = $testContainer.dxLayoutManager('instance');
+    const clock = sinon.useFakeTimers();
+    const $testContainer = $('#container').dxLayoutManager({
+        items: [
+            {
+                dataField: 'isRich',
+                editorType: 'dxSwitch',
+                editorOptions: { value: false }
+            },
+            {
+                dataField: 'hasMansion',
+                editorType: 'dxCheckBox',
+                editorOptions: { value: false }
+            }
+        ]
+    });
+    const $fieldItemLabels = $testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS);
+    const instance = $testContainer.dxLayoutManager('instance');
 
     // act
     assert.deepEqual(instance.option('layoutData'), { isRich: false, hasMansion: false }, 'Correct initial data');
@@ -175,27 +175,27 @@ QUnit.test('Check clickable fielditem', function(assert) {
 
 QUnit.test('Generate several various widgets in layout', function(assert) {
     // arrange, act
-    var $testContainer = $('#container').dxLayoutManager({
-            items: [
-                {
-                    label: { text: 'label1' },
-                    dataField: 'name',
-                    editorType: 'dxTextBox'
-                },
-                {
-                    label: { text: 'label2' },
-                    dataField: 'name',
-                    editorType: 'dxNumberBox'
-                },
-                {
-                    label: { text: 'label3' },
-                    dataField: 'name',
-                    editorType: 'dxDateBox'
-                }
-            ]
-        }),
-        $fieldItems = $testContainer.find('.' + internals.FIELD_ITEM_CLASS),
-        $dateBox = $fieldItems.eq(2).find('.dx-datebox');
+    const $testContainer = $('#container').dxLayoutManager({
+        items: [
+            {
+                label: { text: 'label1' },
+                dataField: 'name',
+                editorType: 'dxTextBox'
+            },
+            {
+                label: { text: 'label2' },
+                dataField: 'name',
+                editorType: 'dxNumberBox'
+            },
+            {
+                label: { text: 'label3' },
+                dataField: 'name',
+                editorType: 'dxDateBox'
+            }
+        ]
+    });
+    const $fieldItems = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
+    const $dateBox = $fieldItems.eq(2).find('.dx-datebox');
 
 
     // assert
@@ -207,13 +207,13 @@ QUnit.test('Generate several various widgets in layout', function(assert) {
 
 QUnit.test('Editors with object value correctly work with values from data', function(assert) {
     // arrange, act
-    var layoutManager,
-        $testContainer = $('#container'),
-        items = [
-            { myText: 'test1', number: 1 },
-            { myText: 'test2', number: 2 },
-            { myText: 'test3', number: 3 }
-        ];
+    let layoutManager;
+    const $testContainer = $('#container');
+    const items = [
+        { myText: 'test1', number: 1 },
+        { myText: 'test2', number: 2 },
+        { myText: 'test3', number: 3 }
+    ];
 
     layoutManager = $testContainer.dxLayoutManager({
         layoutData: { testItem: items[1] },
@@ -229,7 +229,7 @@ QUnit.test('Editors with object value correctly work with values from data', fun
         ]
     }).dxLayoutManager('instance');
 
-    var lookupCurrentItemText = layoutManager.$element().find('.dx-lookup-field').text();
+    const lookupCurrentItemText = layoutManager.$element().find('.dx-lookup-field').text();
 
     // assert
     assert.equal(lookupCurrentItemText, 'test2', 'lookup has correct current item');
@@ -237,9 +237,9 @@ QUnit.test('Editors with object value correctly work with values from data', fun
 
 QUnit.test('Change a layoutData object', function(assert) {
     // arrange
-    var $editors,
-        layoutManager,
-        $testContainer = $('#container');
+    let $editors;
+    let layoutManager;
+    const $testContainer = $('#container');
 
     layoutManager = $testContainer.dxLayoutManager({
         layoutData: {
@@ -273,18 +273,16 @@ QUnit.test('Change a layoutData object', function(assert) {
 });
 
 function triggerKeyUp($element, key) {
-    var e = $.Event('keyup');
+    const e = $.Event('keyup');
     e.key = key;
     $($element.find('input').first()).trigger(e);
 }
 
 QUnit.test('onEditorEnterKey', function(assert) {
     // arrange
-    var testArgs,
-        editor,
-        layoutManager;
-
-    layoutManager = $('#container').dxLayoutManager({
+    let testArgs;
+    let editor;
+    const layoutManager = $('#container').dxLayoutManager({
         layoutData: {
             name: 'Test Name',
             profession: 'Test profession'
@@ -363,7 +361,7 @@ QUnit.module('Render multiple columns');
 
 QUnit.test('Change from fixed colCount to auto and vice versa', function(assert) {
     // arrange
-    var $testContainer = $('#container').width(450);
+    const $testContainer = $('#container').width(450);
 
     $testContainer.dxLayoutManager({
         layoutData: { test1: 'abc', test2: 'qwe', test3: 'xyz' },
@@ -372,7 +370,7 @@ QUnit.test('Change from fixed colCount to auto and vice versa', function(assert)
     });
 
     // act
-    var instance = $testContainer.dxLayoutManager('instance');
+    const instance = $testContainer.dxLayoutManager('instance');
 
     // assert
     assert.equal(instance._getColCount(), 1, 'We have only 1 column');

@@ -1,20 +1,20 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createFunnel = common.createFunnel,
-    environment = common.environment,
-    trackerModule = require('viz/funnel/tracker'),
-    clickEventName = require('events/click').name,
-    pointerEvents = require('events/pointer'),
-    labelModule = require('viz/series/points/label'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    Label = labelModule.Label,
-    stubLabel = vizMocks.stubClass(Label),
-    labels = require('viz/funnel/label'),
-    legendModule = require('viz/components/legend'),
-    Legend = legendModule.Legend,
-    stubLegend = vizMocks.stubClass(Legend);
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
+const trackerModule = require('viz/funnel/tracker');
+const clickEventName = require('events/click').name;
+const pointerEvents = require('events/pointer');
+const labelModule = require('viz/series/points/label');
+const vizMocks = require('../../helpers/vizMocks.js');
+const Label = labelModule.Label;
+const stubLabel = vizMocks.stubClass(Label);
+const labels = require('viz/funnel/label');
+const legendModule = require('viz/components/legend');
+const Legend = legendModule.Legend;
+const stubLegend = vizMocks.stubClass(Legend);
 
-var dxFunnel = require('viz/funnel/funnel');
+const dxFunnel = require('viz/funnel/funnel');
 dxFunnel.addPlugin({
     name: 'tracker-test',
     init: function() {
@@ -26,13 +26,13 @@ dxFunnel.addPlugin(trackerModule.plugin);
 dxFunnel.addPlugin(labels.plugin);
 dxFunnel.addPlugin(legendModule.plugin);
 
-var trackerEnvironment = $.extend({}, environment, {
+const trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         common.environment.beforeEach.apply(this, arguments);
         this.legend = new stubLegend();
         sinon.stub(labelModule, 'Label', function() {
-            var stub = new stubLabel();
+            const stub = new stubLabel();
             stub.stub('getBoundingRect').returns({
                 width: 0,
                 height: 0
@@ -53,7 +53,7 @@ var trackerEnvironment = $.extend({}, environment, {
     },
 
     trigger: function(name, data, options) {
-        var $target = $('<div>').appendTo(this.renderer.root.element);
+        const $target = $('<div>').appendTo(this.renderer.root.element);
         $target[0][trackerModule._TESTS_dataKey] = data;
         $target.trigger($.Event(name, options));
     }
@@ -66,7 +66,7 @@ QUnit.test('Set data for items', function(assert) {
         dataSource: [{ value: 1 }, { value: 2 }]
     });
 
-    var items = this.items();
+    const items = this.items();
 
     assert.equal(items.length, 2);
     assert.deepEqual(items[0].data.lastCall.args, [trackerModule._TESTS_dataKey, 0]);
@@ -76,7 +76,7 @@ QUnit.test('Set data for items', function(assert) {
 QUnit.module('Events', trackerEnvironment);
 
 QUnit.test('Hover on. Get item by tracker data', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
 
@@ -88,7 +88,7 @@ QUnit.test('Hover on. Get item by tracker data', function(assert) {
 });
 
 QUnit.test('Hover off', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
     this.trigger(pointerEvents.move, 2);
@@ -100,7 +100,7 @@ QUnit.test('Hover off', function(assert) {
 });
 
 QUnit.test('Hover on. Legend item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
 
@@ -118,7 +118,7 @@ QUnit.test('Hover on. Legend item', function(assert) {
 });
 
 QUnit.test('Hover on. Label item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         label: {
             visible: true
@@ -143,7 +143,7 @@ QUnit.test('Hover on. Label item', function(assert) {
 });
 
 QUnit.test('No hover any items if no data', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
     });
 
@@ -161,11 +161,11 @@ QUnit.test('No hover any items if no data', function(assert) {
 
 QUnit.test('Click', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var spy = sinon.spy(),
-        widget = createFunnel({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onItemClick: spy
-        });
+    const spy = sinon.spy();
+    const widget = createFunnel({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onItemClick: spy
+    });
 
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
@@ -176,13 +176,13 @@ QUnit.test('Click', function(assert) {
 
 QUnit.test('Legend click', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var itemClick = sinon.spy(),
-        spy = sinon.spy(),
-        widget = createFunnel({
-            dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
-            onItemClick: itemClick,
-            onLegendClick: spy
-        });
+    const itemClick = sinon.spy();
+    const spy = sinon.spy();
+    const widget = createFunnel({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        onItemClick: itemClick,
+        onLegendClick: spy
+    });
 
     this.legend.stub('coordsIn').withArgs(60, 20).returns(true);
     this.legend.stub('getItemByCoord').withArgs(60, 20).returns({ id: 2 });
@@ -197,7 +197,7 @@ QUnit.test('Legend click', function(assert) {
 QUnit.module('Tooltip', trackerEnvironment);
 
 QUnit.test('Show tooltip on hovered item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         tooltip: {
             enabled: true
@@ -212,7 +212,7 @@ QUnit.test('Show tooltip on hovered item', function(assert) {
 });
 
 QUnit.test('Show tooltip on hovered inside label item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         label: {
             visible: true,
@@ -241,7 +241,7 @@ QUnit.test('Show tooltip on hovered inside label item', function(assert) {
 });
 
 QUnit.test('Do not show tooltip on hovered outside label item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
         label: {
             visible: true,

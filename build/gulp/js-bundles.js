@@ -1,32 +1,32 @@
-var path = require('path');
-var gulp = require('gulp');
-var gulpIf = require('gulp-if');
-var plumber = require('gulp-plumber');
-var notify = require('gulp-notify');
-var named = require('vinyl-named');
-var webpack = require('webpack');
-var lazyPipe = require('lazypipe');
-var webpackStream = require('webpack-stream');
+const path = require('path');
+const gulp = require('gulp');
+const gulpIf = require('gulp-if');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+const named = require('vinyl-named');
+const webpack = require('webpack');
+const lazyPipe = require('lazypipe');
+const webpackStream = require('webpack-stream');
 
-var webpackConfig = require('../../webpack.config.js');
-var webpackConfigDev = require('../../webpack.config.dev.js');
-var headerPipes = require('./header-pipes.js');
-var compressionPipes = require('./compression-pipes.js');
-var context = require('./context.js');
+const webpackConfig = require('../../webpack.config.js');
+const webpackConfigDev = require('../../webpack.config.dev.js');
+const headerPipes = require('./header-pipes.js');
+const compressionPipes = require('./compression-pipes.js');
+const context = require('./context.js');
 
-var namedDebug = lazyPipe()
+const namedDebug = lazyPipe()
     .pipe(named, function(file) {
         return path.basename(file.path, path.extname(file.path)) + '.debug';
     });
 
-var BUNDLES = [
+const BUNDLES = [
     '/bundles/dx.all.js',
     '/bundles/dx.web.js',
     '/bundles/dx.viz.js',
     '/bundles/dx.viz-web.js'
 ];
 
-var DEBUG_BUNDLES = BUNDLES.concat([
+const DEBUG_BUNDLES = BUNDLES.concat([
     '/bundles/dx.custom.js'
 ]);
 
@@ -56,8 +56,9 @@ gulp.task('js-bundles-prod', gulp.series('version-replace', function() {
 }));
 
 
-var createDebugBundlesStream = function(watch) {
-    var debugConfig, bundles;
+const createDebugBundlesStream = function(watch) {
+    let debugConfig;
+    let bundles;
     if(watch) {
         debugConfig = Object.assign({}, webpackConfigDev);
         bundles = processDevBundles(DEBUG_BUNDLES);

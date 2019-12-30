@@ -33,8 +33,8 @@ const TICKS_CORRECTIONS = {
 };
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
-    var dateUnitInterval,
-        i;
+    let dateUnitInterval;
+    let i;
 
     if(tickInterval === 'week') {
         tickInterval = 'day';
@@ -61,15 +61,15 @@ function sortingBreaks(breaks) {
 }
 
 function filterBreaks(breaks, viewport, breakStyle) {
-    var minVisible = viewport.minVisible,
-        maxVisible = viewport.maxVisible,
-        breakSize = breakStyle ? breakStyle.width : 0;
+    const minVisible = viewport.minVisible;
+    const maxVisible = viewport.maxVisible;
+    const breakSize = breakStyle ? breakStyle.width : 0;
 
     return breaks.reduce(function(result, currentBreak) {
-        var from = currentBreak.from,
-            to = currentBreak.to,
-            lastResult = result[result.length - 1],
-            newBreak;
+        let from = currentBreak.from;
+        let to = currentBreak.to;
+        const lastResult = result[result.length - 1];
+        let newBreak;
 
         if(!isDefined(from) || !isDefined(to)) {
             return result;
@@ -106,8 +106,8 @@ function filterBreaks(breaks, viewport, breakStyle) {
 }
 
 function getMarkerDates(min, max, markerInterval) {
-    var origMin = min,
-        dates;
+    const origMin = min;
+    let dates;
 
     min = correctDateWithUnitBeginning(min, markerInterval);
     max = correctDateWithUnitBeginning(max, markerInterval);
@@ -120,7 +120,7 @@ function getMarkerDates(min, max, markerInterval) {
 }
 
 function getStripHorizontalAlignmentPosition(alignment) {
-    var position = 'start';
+    let position = 'start';
     if(alignment === 'center') {
         position = 'center';
     }
@@ -131,7 +131,7 @@ function getStripHorizontalAlignmentPosition(alignment) {
 }
 
 function getStripVerticalAlignmentPosition(alignment) {
-    var position = 'start';
+    let position = 'start';
     if(alignment === 'center') {
         position = 'center';
     }
@@ -142,7 +142,7 @@ function getStripVerticalAlignmentPosition(alignment) {
 }
 
 function getMarkerInterval(tickInterval) {
-    var markerInterval = getNextDateUnit(tickInterval);
+    let markerInterval = getNextDateUnit(tickInterval);
     if(markerInterval === 'quarter') {
         markerInterval = getNextDateUnit(markerInterval);
     }
@@ -150,8 +150,8 @@ function getMarkerInterval(tickInterval) {
 }
 
 function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
-    var format = markerInterval,
-        datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
+    let format = markerInterval;
+    const datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
     if(prevDate && tickInterval !== 'year') {
         prepareDatesDifferences(datesDifferences, tickInterval);
         format = getDateFormatByDifferences(datesDifferences);
@@ -168,7 +168,7 @@ function getMaxSide(act, boxes) {
 function getDistanceByAngle(bBox, rotationAngle) {
     rotationAngle = _math.abs(rotationAngle);
     rotationAngle = (rotationAngle % 180) >= 90 ? (90 - (rotationAngle % 90)) : (rotationAngle % 90);
-    var a = rotationAngle * (_math.PI / 180);
+    const a = rotationAngle * (_math.PI / 180);
 
     if(a >= _math.atan(bBox.height / bBox.width)) {
         return bBox.height / _math.abs(_math.sin(a));
@@ -198,13 +198,13 @@ function getRightMargin(bBox) {
 }
 
 function generateRangesOnPoints(points, edgePoints, getRange) {
-    var i,
-        length,
-        maxRange = null,
-        ranges = [],
-        curValue,
-        prevValue,
-        curRange;
+    let i;
+    let length;
+    let maxRange = null;
+    const ranges = [];
+    let curValue;
+    let prevValue;
+    let curRange;
 
     for(i = 1, length = points.length; i < length; i++) {
         curValue = points[i];
@@ -238,7 +238,7 @@ function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, 
 
     let visibleRange = getRange(minVisible, maxVisible);
     const points = series.reduce((result, s) => {
-        var points = s.getPointsInViewPort();
+        const points = s.getPointsInViewPort();
         result[0] = result[0].concat(points[0]);
         result[1] = result[1].concat(points[1]);
         return result;
@@ -276,11 +276,11 @@ function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, 
 module.exports = {
     linear: {
         _getStep: function(boxes, rotationAngle) {
-            var spacing = this._options.label.minSpacing,
-                func = this._isHorizontal ?
-                    function(box) { return box.width + spacing; }
-                    : function(box) { return box.height; },
-                maxLabelLength = getMaxSide(func, boxes);
+            const spacing = this._options.label.minSpacing;
+            const func = this._isHorizontal ?
+                function(box) { return box.width + spacing; }
+                : function(box) { return box.height; };
+            let maxLabelLength = getMaxSide(func, boxes);
 
             if(rotationAngle) {
                 maxLabelLength = getDistanceByAngle({ width: maxLabelLength, height: this._getMaxLabelHeight(boxes, 0) }, rotationAngle);
@@ -317,8 +317,8 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            var axisCoord = this._axisPosition,
-                canvas = this._getCanvasStartEnd();
+            const axisCoord = this._axisPosition;
+            const canvas = this._getCanvasStartEnd();
 
             this._axisElement.attr({
                 points: this._isHorizontal ? [canvas.start, axisCoord, canvas.end, axisCoord] : [axisCoord, canvas.start, axisCoord, canvas.end]
@@ -330,8 +330,8 @@ module.exports = {
         },
 
         _initAxisPositions: function() {
-            var that = this,
-                position = that._options.position;
+            const that = this;
+            const position = that._options.position;
 
             that._axisPosition = that._orthogonalPositions[position === 'top' || position === 'left' ? 'start' : 'end'];
         },
@@ -367,16 +367,16 @@ module.exports = {
         },
 
         _getTitleCoords: function() {
-            var that = this,
-                horizontal = that._isHorizontal,
-                x = that._axisPosition,
-                y = that._axisPosition,
-                align = that._options.title.alignment,
-                canvas = that._getCanvasStartEnd(),
-                fromStartToEnd = horizontal || that._options.position === LEFT,
-                canvasStart = fromStartToEnd ? canvas.start : canvas.end,
-                canvasEnd = fromStartToEnd ? canvas.end : canvas.start,
-                coord = align === LEFT ? canvasStart : align === RIGHT ? canvasEnd : (canvas.start + (canvas.end - canvas.start) / 2);
+            const that = this;
+            const horizontal = that._isHorizontal;
+            let x = that._axisPosition;
+            let y = that._axisPosition;
+            const align = that._options.title.alignment;
+            const canvas = that._getCanvasStartEnd();
+            const fromStartToEnd = horizontal || that._options.position === LEFT;
+            const canvasStart = fromStartToEnd ? canvas.start : canvas.end;
+            const canvasEnd = fromStartToEnd ? canvas.end : canvas.start;
+            const coord = align === LEFT ? canvasStart : align === RIGHT ? canvasEnd : (canvas.start + (canvas.end - canvas.start) / 2);
 
             if(horizontal) {
                 x = coord;
@@ -387,9 +387,9 @@ module.exports = {
         },
 
         _drawTitleText: function(group, coords) {
-            var options = this._options,
-                titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, 'class': titleOptions.cssClass };
+            const options = this._options;
+            const titleOptions = options.title;
+            const attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, 'class': titleOptions.cssClass };
 
             if(!titleOptions.text || !group) {
                 return;
@@ -399,7 +399,7 @@ module.exports = {
             if(!this._isHorizontal) {
                 attrs.rotate = options.position === LEFT ? 270 : 90;
             }
-            var text = this._renderer
+            const text = this._renderer
                 .text(titleOptions.text, coords.x, coords.y)
                 .css(vizUtils.patchFontOptions(titleOptions.font))
                 .attr(attrs)
@@ -415,7 +415,7 @@ module.exports = {
         },
 
         _drawTitle: function() {
-            var title = this._drawTitleText(this._axisTitleGroup);
+            const title = this._drawTitleText(this._axisTitleGroup);
             if(title) {
                 this._title = {
                     element: title
@@ -433,12 +433,12 @@ module.exports = {
         },
 
         _drawDateMarker: function(date, options, range) {
-            var that = this,
-                markerOptions = that._options.marker,
-                invert = that._translator.getBusinessRange().invert,
-                textIndent = markerOptions.width + markerOptions.textLeftIndent,
-                text,
-                pathElement;
+            const that = this;
+            const markerOptions = that._options.marker;
+            const invert = that._translator.getBusinessRange().invert;
+            const textIndent = markerOptions.width + markerOptions.textLeftIndent;
+            let text;
+            let pathElement;
 
             if(options.x === null) return;
 
@@ -483,17 +483,17 @@ module.exports = {
         },
 
         _drawDateMarkers: function() {
-            var that = this,
-                options = that._options,
-                translator = that._translator,
-                viewport = that._getViewportRange(),
-                minBound = viewport.minVisible,
-                tickInterval,
-                markerInterval,
-                markerDates,
-                dateMarkers = [],
-                markersAreaTop,
-                dateMarker;
+            const that = this;
+            const options = that._options;
+            const translator = that._translator;
+            const viewport = that._getViewportRange();
+            const minBound = viewport.minVisible;
+            let tickInterval;
+            let markerInterval;
+            let markerDates;
+            let dateMarkers = [];
+            let markersAreaTop;
+            let dateMarker;
 
             function draw(markerDate, format, withoutStick) {
                 return that._drawDateMarker(markerDate, {
@@ -518,7 +518,7 @@ module.exports = {
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
 
                 dateMarkers = markerDates.reduce(function(markers, curDate, i, dates) {
-                    var marker = draw(curDate, getMarkerFormat(curDate, dates[i - 1] || (minBound < curDate && minBound), tickInterval, markerInterval));
+                    const marker = draw(curDate, getMarkerFormat(curDate, dates[i - 1] || (minBound < curDate && minBound), tickInterval, markerInterval));
                     marker && markers.push(marker);
                     return markers;
                 }, []);
@@ -533,12 +533,12 @@ module.exports = {
 
         _adjustDateMarkers: function(offset) {
             offset = offset || 0;
-            var that = this,
-                markerOptions = this._options.marker,
-                textIndent = markerOptions.width + markerOptions.textLeftIndent,
-                invert = this._translator.getBusinessRange().invert,
-                canvas = that._getCanvasStartEnd(),
-                dateMarkers = this._dateMarkers;
+            const that = this;
+            const markerOptions = this._options.marker;
+            const textIndent = markerOptions.width + markerOptions.textLeftIndent;
+            const invert = this._translator.getBusinessRange().invert;
+            const canvas = that._getCanvasStartEnd();
+            const dateMarkers = this._dateMarkers;
 
             if(!dateMarkers.length) {
                 return offset;
@@ -550,7 +550,7 @@ module.exports = {
                 }
             }
 
-            var prevDateMarker;
+            let prevDateMarker;
             dateMarkers.forEach(function(marker, i, markers) {
                 if(marker.cropped) {
                     return;
@@ -567,8 +567,8 @@ module.exports = {
 
             this._dateMarkers.forEach(function(marker) {
                 if(marker.label) {
-                    var labelBBox = marker.labelBBox,
-                        dy = marker.y + markerOptions.textTopIndent - labelBBox.y;
+                    const labelBBox = marker.labelBBox;
+                    const dy = marker.y + markerOptions.textTopIndent - labelBBox.y;
 
                     marker.label.attr({
                         translateX: invert ? marker.x - textIndent - labelBBox.x - labelBBox.width : marker.x + textIndent - labelBBox.x,
@@ -596,35 +596,35 @@ module.exports = {
         },
 
         _initializeMarkersTrackers: function(offset) {
-            var that = this,
-                separatorHeight = that._options.marker.separatorHeight,
-                renderer = that._renderer,
-                businessRange = this._translator.getBusinessRange(),
-                canvas = that._getCanvasStartEnd(),
-                group = that._axisElementsGroup;
+            const that = this;
+            const separatorHeight = that._options.marker.separatorHeight;
+            const renderer = that._renderer;
+            const businessRange = this._translator.getBusinessRange();
+            const canvas = that._getCanvasStartEnd();
+            const group = that._axisElementsGroup;
 
             that._markerTrackers = this._dateMarkers
                 .filter(function(marker) { return !marker.hidden; })
                 .map(function(marker, i, markers) {
-                    var nextMarker = markers[i + 1] ||
+                    const nextMarker = markers[i + 1] ||
                         {
                             x: canvas.end,
                             date: businessRange.max
-                        },
-                        x = marker.x,
-                        y = marker.y + offset,
-                        markerTracker = renderer.path([
-                            x, y,
-                            x, y + separatorHeight,
-                            nextMarker.x, y + separatorHeight,
-                            nextMarker.x, y,
-                            x, y
-                        ], 'area').attr({
-                            'stroke-width': 1,
-                            stroke: 'grey',
-                            fill: 'grey',
-                            opacity: 0.0001
-                        }).append(group);
+                        };
+                    const x = marker.x;
+                    const y = marker.y + offset;
+                    const markerTracker = renderer.path([
+                        x, y,
+                        x, y + separatorHeight,
+                        nextMarker.x, y + separatorHeight,
+                        nextMarker.x, y,
+                        x, y
+                    ], 'area').attr({
+                        'stroke-width': 1,
+                        stroke: 'grey',
+                        fill: 'grey',
+                        opacity: 0.0001
+                    }).append(group);
 
                     markerTracker.data('range', { startValue: marker.date, endValue: nextMarker.date });
                     if(marker.title) {
@@ -636,8 +636,8 @@ module.exports = {
         },
 
         _getLabelFormatOptions: function(formatString) {
-            var that = this,
-                markerLabelOptions = that._markerLabelOptions;
+            const that = this;
+            let markerLabelOptions = that._markerLabelOptions;
 
             if(!markerLabelOptions) {
                 that._markerLabelOptions = markerLabelOptions = extend(true, {}, that._options.marker.label);
@@ -651,30 +651,30 @@ module.exports = {
         },
 
         _adjustConstantLineLabels: function(constantLines) {
-            var that = this,
-                axisPosition = that._options.position,
-                canvas = that.getCanvas(),
-                canvasLeft = canvas.left,
-                canvasRight = canvas.width - canvas.right,
-                canvasTop = canvas.top,
-                canvasBottom = canvas.height - canvas.bottom,
-                verticalCenter = canvasTop + (canvasBottom - canvasTop) / 2,
-                horizontalCenter = canvasLeft + (canvasRight - canvasLeft) / 2,
-                maxLabel = 0;
+            const that = this;
+            const axisPosition = that._options.position;
+            const canvas = that.getCanvas();
+            const canvasLeft = canvas.left;
+            const canvasRight = canvas.width - canvas.right;
+            const canvasTop = canvas.top;
+            const canvasBottom = canvas.height - canvas.bottom;
+            const verticalCenter = canvasTop + (canvasBottom - canvasTop) / 2;
+            const horizontalCenter = canvasLeft + (canvasRight - canvasLeft) / 2;
+            let maxLabel = 0;
 
             constantLines.forEach(function(item) {
-                var isHorizontal = that._isHorizontal,
-                    linesOptions = item.options,
-                    paddingTopBottom = linesOptions.paddingTopBottom,
-                    paddingLeftRight = linesOptions.paddingLeftRight,
-                    labelOptions = linesOptions.label,
-                    labelVerticalAlignment = labelOptions.verticalAlignment,
-                    labelHorizontalAlignment = labelOptions.horizontalAlignment,
-                    labelIsInside = labelOptions.position === 'inside',
-                    label = item.label,
-                    box = item.labelBBox,
-                    translateX,
-                    translateY;
+                const isHorizontal = that._isHorizontal;
+                const linesOptions = item.options;
+                const paddingTopBottom = linesOptions.paddingTopBottom;
+                const paddingLeftRight = linesOptions.paddingLeftRight;
+                const labelOptions = linesOptions.label;
+                const labelVerticalAlignment = labelOptions.verticalAlignment;
+                const labelHorizontalAlignment = labelOptions.horizontalAlignment;
+                const labelIsInside = labelOptions.position === 'inside';
+                const label = item.label;
+                const box = item.labelBBox;
+                let translateX;
+                let translateY;
 
                 if(label === null || box.isEmpty) {
                     return;
@@ -751,9 +751,9 @@ module.exports = {
         },
 
         _drawConstantLinesForEstimating: function(constantLines) {
-            var that = this,
-                renderer = this._renderer,
-                group = renderer.g();
+            const that = this;
+            const renderer = this._renderer;
+            const group = renderer.g();
 
             constantLines.forEach(function(options) {
                 that._drawConstantLineLabelText(options.label.text, 0, 0, options.label, group).attr({ align: 'center' });
@@ -763,15 +763,15 @@ module.exports = {
         },
 
         _estimateLabelHeight: function(bBox, labelOptions) {
-            var height = bBox.height,
-                drawingType = labelOptions.drawingType;
+            let height = bBox.height;
+            const drawingType = labelOptions.drawingType;
 
             if(this._validateDisplayMode(drawingType) === 'stagger' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'stagger') {
                 height = height * 2 + labelOptions.staggeringSpacing;
             }
 
             if(this._validateDisplayMode(drawingType) === 'rotate' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'rotate') {
-                var sinCos = vizUtils.getCosAndSin(labelOptions.rotationAngle);
+                const sinCos = vizUtils.getCosAndSin(labelOptions.rotationAngle);
                 height = height * sinCos.cos + bBox.width * sinCos.sin;
             }
 
@@ -780,35 +780,35 @@ module.exports = {
 
         estimateMargins: function(canvas) {
             this.updateCanvas(canvas);
-            var that = this,
-                range = that._getViewportRange(),
-                ticksData = this._createTicksAndLabelFormat(range),
-                ticks = ticksData.ticks,
-                tickInterval = ticksData.tickInterval,
-                options = this._options,
-                constantLineOptions = that._outsideConstantLines.filter(l => l.labelOptions.visible).map(l => l.options),
-                rootElement = that._renderer.root,
-                labelIsVisible = options.label.visible && !range.isEmpty() && ticks.length,
-                labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
-                labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
-                    .css(that._textFontStyles)
-                    .attr(that._textOptions)
-                    .append(rootElement),
-                titleElement = that._drawTitleText(rootElement, { x: 0, y: 0 }),
-                constantLinesLabelsElement = that._drawConstantLinesForEstimating(constantLineOptions),
-                labelBox = labelElement && labelElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 },
-                titleBox = titleElement && titleElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 },
-                constantLinesBox = constantLinesLabelsElement.getBBox(),
-                titleHeight = titleBox.height ? titleBox.height + options.title.margin : 0,
-                labelHeight = that._estimateLabelHeight(labelBox, options.label),
-                constantLinesHeight = constantLinesBox.height ? constantLinesBox.height + getMaxConstantLinePadding(constantLineOptions) : 0,
-                height = labelHeight + titleHeight,
-                margins = {
-                    left: _max(getLeftMargin(labelBox), getLeftMargin(constantLinesBox)),
-                    right: _max(getRightMargin(labelBox), getRightMargin(constantLinesBox)),
-                    top: (options.position === 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'top', constantLinesHeight),
-                    bottom: (options.position !== 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'bottom', constantLinesHeight)
-                };
+            const that = this;
+            const range = that._getViewportRange();
+            const ticksData = this._createTicksAndLabelFormat(range);
+            const ticks = ticksData.ticks;
+            const tickInterval = ticksData.tickInterval;
+            const options = this._options;
+            const constantLineOptions = that._outsideConstantLines.filter(l => l.labelOptions.visible).map(l => l.options);
+            const rootElement = that._renderer.root;
+            const labelIsVisible = options.label.visible && !range.isEmpty() && ticks.length;
+            const labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks);
+            const labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
+                .css(that._textFontStyles)
+                .attr(that._textOptions)
+                .append(rootElement);
+            const titleElement = that._drawTitleText(rootElement, { x: 0, y: 0 });
+            const constantLinesLabelsElement = that._drawConstantLinesForEstimating(constantLineOptions);
+            const labelBox = labelElement && labelElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 };
+            const titleBox = titleElement && titleElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 };
+            const constantLinesBox = constantLinesLabelsElement.getBBox();
+            const titleHeight = titleBox.height ? titleBox.height + options.title.margin : 0;
+            const labelHeight = that._estimateLabelHeight(labelBox, options.label);
+            const constantLinesHeight = constantLinesBox.height ? constantLinesBox.height + getMaxConstantLinePadding(constantLineOptions) : 0;
+            const height = labelHeight + titleHeight;
+            const margins = {
+                left: _max(getLeftMargin(labelBox), getLeftMargin(constantLinesBox)),
+                right: _max(getRightMargin(labelBox), getRightMargin(constantLinesBox)),
+                top: (options.position === 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'top', constantLinesHeight),
+                bottom: (options.position !== 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'bottom', constantLinesHeight)
+            };
 
             labelElement && labelElement.remove();
             titleElement && titleElement.remove();
@@ -818,9 +818,9 @@ module.exports = {
         },
 
         _checkAlignmentConstantLineLabels: function(labelOptions) {
-            var position = labelOptions.position,
-                verticalAlignment = (labelOptions.verticalAlignment || '').toLowerCase(),
-                horizontalAlignment = (labelOptions.horizontalAlignment || '').toLowerCase();
+            const position = labelOptions.position;
+            let verticalAlignment = (labelOptions.verticalAlignment || '').toLowerCase();
+            let horizontalAlignment = (labelOptions.horizontalAlignment || '').toLowerCase();
 
             if(this._isHorizontal) {
                 if(position === 'outside') {
@@ -845,9 +845,9 @@ module.exports = {
         },
 
         _getConstantLineLabelsCoords: function(value, lineLabelOptions) {
-            var that = this,
-                x = value,
-                y = value;
+            const that = this;
+            let x = value;
+            let y = value;
 
             if(that._isHorizontal) {
                 y = that._orthogonalPositions[lineLabelOptions.verticalAlignment === 'top' ? 'start' : 'end'];
@@ -858,17 +858,17 @@ module.exports = {
         },
 
         _getAdjustedStripLabelCoords: function(strip) {
-            var stripOptions = strip.options,
-                paddingTopBottom = stripOptions.paddingTopBottom,
-                paddingLeftRight = stripOptions.paddingLeftRight,
-                horizontalAlignment = stripOptions.label.horizontalAlignment,
-                verticalAlignment = stripOptions.label.verticalAlignment,
-                box = strip.labelBBox,
-                labelHeight = box.height,
-                labelWidth = box.width,
-                labelCoords = strip.labelCoords,
-                y = labelCoords.y - box.y,
-                x = labelCoords.x - box.x;
+            const stripOptions = strip.options;
+            const paddingTopBottom = stripOptions.paddingTopBottom;
+            const paddingLeftRight = stripOptions.paddingLeftRight;
+            const horizontalAlignment = stripOptions.label.horizontalAlignment;
+            const verticalAlignment = stripOptions.label.verticalAlignment;
+            const box = strip.labelBBox;
+            const labelHeight = box.height;
+            const labelWidth = box.width;
+            const labelCoords = strip.labelCoords;
+            let y = labelCoords.y - box.y;
+            let x = labelCoords.x - box.x;
 
             if(verticalAlignment === TOP) {
                 y += paddingTopBottom;
@@ -895,20 +895,20 @@ module.exports = {
                 return;
             }
 
-            var that = this,
-                options = that._options,
-                position = options.position,
-                margin = options.title.margin,
-                title = that._title,
-                boxTitle = title.bBox,
-                x = boxTitle.x,
-                y = boxTitle.y,
-                width = boxTitle.width,
-                height = boxTitle.height,
-                axisPosition = that._axisPosition,
-                loCoord = axisPosition - margin - offset,
-                hiCoord = axisPosition + margin + offset,
-                params = {};
+            const that = this;
+            const options = that._options;
+            const position = options.position;
+            const margin = options.title.margin;
+            const title = that._title;
+            const boxTitle = title.bBox;
+            const x = boxTitle.x;
+            const y = boxTitle.y;
+            const width = boxTitle.width;
+            const height = boxTitle.height;
+            const axisPosition = that._axisPosition;
+            const loCoord = axisPosition - margin - offset;
+            const hiCoord = axisPosition + margin + offset;
+            const params = {};
 
             if(that._isHorizontal) {
                 if(position === TOP) {
@@ -931,10 +931,10 @@ module.exports = {
                 return;
             }
 
-            var canvasLength = this._getScreenDelta(),
-                title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
-                titleOptions = this._options.title,
-                boxTitle = title.bBox;
+            const canvasLength = this._getScreenDelta();
+            const title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title;
+            const titleOptions = this._options.title;
+            const boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
                 title.element.setMaxSize(canvasLength, undefined, {
@@ -949,10 +949,10 @@ module.exports = {
         },
 
         coordsIn: function(x, y) {
-            var canvas = this.getCanvas(),
-                isHorizontal = this._options.isHorizontal,
-                position = this._options.position,
-                coord = isHorizontal ? y : x;
+            const canvas = this.getCanvas();
+            const isHorizontal = this._options.isHorizontal;
+            const position = this._options.position;
+            const coord = isHorizontal ? y : x;
 
             if(isHorizontal && (x < canvas.left || x > (canvas.width - canvas.right))
                 || !isHorizontal && (y < canvas.top || y > (canvas.height - canvas.bottom))) {
@@ -976,7 +976,7 @@ module.exports = {
 
             if(!alignToBounds) {
                 viewport = that._series.filter(s => s.isVisible()).reduce((range, s) => {
-                    var seriesRange = s.getViewport();
+                    const seriesRange = s.getViewport();
                     range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
                     range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
                     if(s.showZero) {
@@ -1012,13 +1012,13 @@ module.exports = {
         },
 
         _getStripLabelCoords: function(from, to, stripLabelOptions) {
-            var that = this,
-                orthogonalPositions = that._orthogonalPositions,
-                isHorizontal = that._isHorizontal,
-                horizontalAlignment = stripLabelOptions.horizontalAlignment,
-                verticalAlignment = stripLabelOptions.verticalAlignment,
-                x,
-                y;
+            const that = this;
+            const orthogonalPositions = that._orthogonalPositions;
+            const isHorizontal = that._isHorizontal;
+            const horizontalAlignment = stripLabelOptions.horizontalAlignment;
+            const verticalAlignment = stripLabelOptions.verticalAlignment;
+            let x;
+            let y;
 
             if(isHorizontal) {
                 if(horizontalAlignment === CENTER) {
@@ -1044,9 +1044,9 @@ module.exports = {
         },
 
         _getTranslatedValue: function(value, offset) {
-            var pos1 = this._translator.translate(value, offset, this._options.type === 'semidiscrete' && this._options.tickInterval),
-                pos2 = this._axisPosition,
-                isHorizontal = this._isHorizontal;
+            const pos1 = this._translator.translate(value, offset, this._options.type === 'semidiscrete' && this._options.tickInterval);
+            const pos2 = this._axisPosition;
+            const isHorizontal = this._isHorizontal;
             return {
                 x: isHorizontal ? pos1 : pos2,
                 y: isHorizontal ? pos2 : pos1
@@ -1064,7 +1064,7 @@ module.exports = {
         },
 
         _getSkippedCategory: function(ticks) {
-            var skippedCategory;
+            let skippedCategory;
 
             if(this._options.type === constants.discrete && this._tickOffset && ticks.length !== 0) {
                 skippedCategory = ticks[ticks.length - 1];
@@ -1074,13 +1074,13 @@ module.exports = {
         },
 
         _getScaleBreaks: function(axisOptions, viewport, series, isArgumentAxis) {
-            var that = this,
-                breaks = (axisOptions.breaks || []).map(function(b) {
-                    return {
-                        from: that.parser(b.startValue),
-                        to: that.parser(b.endValue)
-                    };
-                });
+            const that = this;
+            let breaks = (axisOptions.breaks || []).map(function(b) {
+                return {
+                    from: that.parser(b.startValue),
+                    to: that.parser(b.endValue)
+                };
+            });
             if(axisOptions.type !== 'discrete' && axisOptions.dataType === 'datetime' && axisOptions.workdaysOnly) {
                 breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
                     viewport.maxVisible,
@@ -1096,19 +1096,19 @@ module.exports = {
         },
 
         _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options, group) {
-            var that = this,
-                breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0),
-                attr = {
-                    'stroke-width': 1,
-                    stroke: options.borderColor,
-                    sharp: !options.isWaved ? options.isHorizontal ? 'h' : 'v' : undefined
-                },
-                spaceAttr = {
-                    stroke: options.color,
-                    'stroke-width': width
-                },
-                getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
-                drawer = getLineDrawer(that._renderer, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
+            const that = this;
+            const breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0);
+            const attr = {
+                'stroke-width': 1,
+                stroke: options.borderColor,
+                sharp: !options.isWaved ? options.isHorizontal ? 'h' : 'v' : undefined
+            };
+            const spaceAttr = {
+                stroke: options.color,
+                'stroke-width': width
+            };
+            const getPoints = that._isHorizontal ? rotateLine : function(p) { return p; };
+            const drawer = getLineDrawer(that._renderer, group, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
             drawer(width / 2, spaceAttr);
             drawer(0, attr);
@@ -1116,10 +1116,10 @@ module.exports = {
         },
 
         _createBreakClipRect: function(from, to) {
-            var that = this,
-                canvas = that._canvas,
-                clipWidth = to - from,
-                clipRect;
+            const that = this;
+            const canvas = that._canvas;
+            const clipWidth = to - from;
+            let clipRect;
 
             if(that._isHorizontal) {
                 clipRect = that._renderer.clipRect(canvas.left, from, canvas.width, clipWidth);
@@ -1134,11 +1134,11 @@ module.exports = {
         },
 
         _createBreaksGroup: function(clipFrom, clipTo) {
-            var that = this,
-                group = that._renderer.g().attr({
-                    'class': that._axisCssPrefix + 'breaks',
-                    'clip-path': that._createBreakClipRect(clipFrom, clipTo)
-                }).append(that._scaleBreaksGroup);
+            const that = this;
+            const group = that._renderer.g().attr({
+                'class': that._axisCssPrefix + 'breaks',
+                'clip-path': that._createBreakClipRect(clipFrom, clipTo)
+            }).append(that._scaleBreaksGroup);
 
             that._breaksElements = that._breaksElements || [];
             that._breaksElements.push(group);
@@ -1154,18 +1154,18 @@ module.exports = {
         },
 
         drawScaleBreaks: function(customCanvas) {
-            var that = this,
-                options = that._options,
-                breakStyle = options.breakStyle,
-                position = options.position,
-                positionFrom,
-                positionTo,
-                breaks = that._translator.getBusinessRange().breaks || [],
-                additionGroup,
-                additionBreakFrom,
-                additionBreakTo,
-                mainGroup,
-                breakOptions;
+            const that = this;
+            const options = that._options;
+            const breakStyle = options.breakStyle;
+            const position = options.position;
+            let positionFrom;
+            let positionTo;
+            const breaks = that._translator.getBusinessRange().breaks || [];
+            let additionGroup;
+            let additionBreakFrom;
+            let additionBreakTo;
+            let mainGroup;
+            let breakOptions;
 
             that._disposeBreaksGroup();
 
@@ -1198,7 +1198,7 @@ module.exports = {
 
             breaks.forEach(function(br) {
                 if(!br.gapSize) {
-                    var breakCoord = that._getTranslatedCoord(br.to);
+                    const breakCoord = that._getTranslatedCoord(br.to);
                     that._drawBreak(breakCoord, positionFrom, positionTo, breakStyle.width, breakOptions, mainGroup);
                     if(that._axisShift && options.visible) {
                         that._drawBreak(breakCoord, additionBreakFrom, additionBreakTo, breakStyle.width, breakOptions, additionGroup);
@@ -1210,18 +1210,18 @@ module.exports = {
         _getSpiderCategoryOption: noop,
 
         shift: function(margins) {
-            var that = this,
-                options = that._options,
-                isHorizontal = options.isHorizontal,
-                axesSpacing = that.getMultipleAxesSpacing(),
-                constantLinesGroups = that._axisConstantLineGroups;
+            const that = this;
+            const options = that._options;
+            const isHorizontal = options.isHorizontal;
+            const axesSpacing = that.getMultipleAxesSpacing();
+            const constantLinesGroups = that._axisConstantLineGroups;
 
             function shiftGroup(side, group) {
-                var attr = {
-                        translateX: 0,
-                        translateY: 0
-                    },
-                    shift = margins[side] ? margins[side] + axesSpacing : 0;
+                const attr = {
+                    translateX: 0,
+                    translateY: 0
+                };
+                const shift = margins[side] ? margins[side] + axesSpacing : 0;
 
                 attr[isHorizontal ? 'translateY' : 'translateX'] = (side === 'left' || side === 'top' ? -1 : 1) * shift;
 
@@ -1240,8 +1240,8 @@ module.exports = {
 };
 
 function getLineDrawer(renderer, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
-    var elementType = isWaved ? 'bezier' : 'line',
-        group = renderer.g().append(root);
+    const elementType = isWaved ? 'bezier' : 'line';
+    const group = renderer.g().append(root);
 
     return function(offset, attr) {
         renderer.path(rotatePoints(getPoints(positionFrom, breakStart, positionTo, offset, isWaved)), elementType).attr(attr).append(group);
@@ -1255,11 +1255,11 @@ function getPoints(positionFrom, breakStart, positionTo, offset, isWaved) {
 
     breakStart += offset;
 
-    var currentPosition,
-        topPoint = breakStart + WAVED_LINE_TOP,
-        centerPoint = breakStart + WAVED_LINE_CENTER,
-        bottomPoint = breakStart + WAVED_LINE_BOTTOM,
-        points = [[positionFrom, centerPoint]];
+    let currentPosition;
+    const topPoint = breakStart + WAVED_LINE_TOP;
+    const centerPoint = breakStart + WAVED_LINE_CENTER;
+    const bottomPoint = breakStart + WAVED_LINE_BOTTOM;
+    const points = [[positionFrom, centerPoint]];
 
     for(currentPosition = positionFrom; currentPosition < positionTo + WAVED_LINE_LENGTH; currentPosition += WAVED_LINE_LENGTH) {
         points.push([
@@ -1275,8 +1275,8 @@ function getPoints(positionFrom, breakStart, positionTo, offset, isWaved) {
 }
 
 function rotateLine(lineCoords) {
-    var points = [],
-        i;
+    const points = [];
+    let i;
 
     for(i = 0; i < lineCoords.length; i += 2) {
         points.push(lineCoords[i + 1]);

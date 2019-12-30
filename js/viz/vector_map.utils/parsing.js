@@ -1,4 +1,4 @@
-/* eslint-disable no-undef*/
+/* eslint-disable no-undef, no-var, one-var*/
 
 function noop() { }
 
@@ -9,11 +9,9 @@ function isFunction(target) {
 }
 
 function wrapSource(source) {
-    var buffer = wrapBuffer(source),
-        position = 0,
-        stream;
-
-    stream = {
+    var buffer = wrapBuffer(source);
+    var position = 0;
+    var stream = {
         pos: function() {
             return position;
         },
@@ -24,8 +22,8 @@ function wrapSource(source) {
         },
 
         ui8arr: function(length) {
-            var i = 0,
-                list = [];
+            var i = 0;
+            var list = [];
             list.length = length;
             for(; i < length; ++i) {
                 list[i] = stream.ui8();
@@ -67,10 +65,10 @@ function wrapSource(source) {
 }
 
 function parseCore(source, roundCoordinates, errors) {
-    var shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {},
-        dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {},
-        features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates),
-        result;
+    var shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {};
+    var dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {};
+    var features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates);
+    var result;
 
     if(features.length) {
         result = {
@@ -85,10 +83,10 @@ function parseCore(source, roundCoordinates, errors) {
 }
 
 function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
-    var features = [],
-        i,
-        ii = features.length = ii = Math.max(shapeData.length, dataBaseFileData.length),
-        shape;
+    var features = [];
+    var i;
+    var ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
+    var shape;
     for(i = 0; i < ii; ++i) {
         shape = shapeData[i] || {};
         features[i] = {
@@ -149,10 +147,10 @@ function parse(source, parameters, callback) {
 exports.parse = parse;
 
 function when(actions, callback) {
-    var errorArray = [],
-        dataArray = [],
-        counter = 1,
-        lock = true;
+    var errorArray = [];
+    var dataArray = [];
+    var counter = 1;
+    var lock = true;
     actions.forEach(function(action, i) {
         ++counter;
         action(function(e, data) {

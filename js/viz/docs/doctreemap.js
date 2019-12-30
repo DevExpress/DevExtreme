@@ -4,7 +4,7 @@
 * @module viz/tree_map
 * @export default
 */
-var dxTreeMap = {
+const dxTreeMap = {
     /**
     * @name dxTreeMapOptions.margin
     * @hidden

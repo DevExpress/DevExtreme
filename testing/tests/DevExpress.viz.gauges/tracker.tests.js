@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    Tracker = require('viz/gauges/tracker');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const Tracker = require('viz/gauges/tracker');
 
 QUnit.module('Tracker', {
     beforeEach: function() {
@@ -37,9 +37,9 @@ QUnit.test('Group removed on deactivation', function(assert) {
 });
 
 QUnit.test('Element is appended to group on attach', function(assert) {
-    var element = this.renderer.path([], 'area'),
-        target = {},
-        info = {};
+    const element = this.renderer.path([], 'area');
+    const target = {};
+    const info = {};
 
     this.tracker.attach(element, target, info);
 
@@ -48,21 +48,21 @@ QUnit.test('Element is appended to group on attach', function(assert) {
 });
 
 QUnit.test('Element is detached from group on detach', function(assert) {
-    var element = this.renderer.path([], 'area');
+    const element = this.renderer.path([], 'area');
 
     this.tracker.attach(element, {}, {}).detach(element);
 
     assert.ok(!element.parent, 'element is detached');
 });
 
-var tooltipEnvironment = {
+const tooltipEnvironment = {
     beforeEach: function() {
         Tracker._DEBUG_reset();
         this.renderer = new vizMocks.Renderer();
         this.renderer.draw(document.createElement('div'));
         this.root = this.renderer.g().append(this.renderer.root);
         this.tracker = new Tracker({ renderer: this.renderer, container: this.root });
-        var test = this;
+        const test = this;
         this.tracker.setTooltipState(true).setCallbacks({
             'tooltip-show': function() {
                 return test.onTooltipShow ? test.onTooltipShow.apply(test, arguments) : true;
@@ -72,7 +72,7 @@ var tooltipEnvironment = {
             }
         });
         this.trigger = function(name, element, x, y) {
-            var event = $.Event(name);
+            const event = $.Event(name);
             event.target = $(element.element).get(0);
             event.pageX = x;
             event.pageY = y;
@@ -90,7 +90,7 @@ var tooltipEnvironment = {
 QUnit.module('Tracker - tooltip events', tooltipEnvironment);
 
 QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
-    var element = this.renderer.path([], 'area'), target = {}, info = {};
+    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -104,7 +104,7 @@ QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
 });
 
 QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
-    var element = this.renderer.path([], 'area'), target = {}, info = {};
+    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -120,7 +120,7 @@ QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
 });
 
 QUnit.test('"Show" is raised when small mousemove occurs', function(assert) {
-    var element = this.renderer.path([], 'area'), target = {}, info = {};
+    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -136,8 +136,8 @@ QUnit.test('"Show" is raised when small mousemove occurs', function(assert) {
 });
 
 QUnit.test('"Hide" is raised on mousewheel without delay', function(assert) {
-    var that = this,
-        element = this.renderer.path([], 'area');
+    const that = this;
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
     this.onTooltipHide = sinon.spy(function() { return true; });
     this.trigger('mouseover', element);
@@ -149,8 +149,8 @@ QUnit.test('"Hide" is raised on mousewheel without delay', function(assert) {
 });
 
 QUnit.test('"Hide" is raised on mouseout after delay', function(assert) {
-    var that = this,
-        element = this.renderer.path([], 'area');
+    const that = this;
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
     this.onTooltipShow = sinon.spy(function() {
         that.trigger('mouseout', element);
@@ -166,7 +166,7 @@ QUnit.test('"Hide" is raised on mouseout after delay', function(assert) {
 });
 
 QUnit.test('"Hide" is not raised if tooltip is not shown', function(assert) {
-    var element = this.renderer.path([], 'area');
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
     this.onTooltipHide = sinon.spy(function() { return true; });
 
@@ -178,8 +178,8 @@ QUnit.test('"Hide" is not raised if tooltip is not shown', function(assert) {
 });
 
 QUnit.test('"Hide" is not raised if mouseover occurs after mouseout', function(assert) {
-    var that = this,
-        element = this.renderer.path([], 'area');
+    const that = this;
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
 
     this.onTooltipHide = sinon.spy(function() { return true; });
@@ -198,8 +198,8 @@ QUnit.test('"Hide" is not raised if mouseover occurs after mouseout', function(a
 
 QUnit.test('"Show" is raised after delay on mouseover on other element if tooltip is shown', function(assert) {
     assert.expect(2);
-    var element1 = this.renderer.path([], 'area'), target1 = {},
-        element2 = this.renderer.path([], 'area'), target2 = {};
+    const element1 = this.renderer.path([], 'area'); const target1 = {};
+    const element2 = this.renderer.path([], 'area'); const target2 = {};
     this.tracker.attach(element1, target1).attach(element2, target2);
     element1.element['gauge-data-target'] = target1; // emulate data attachment
     element2.element['gauge-data-target'] = target2; // emulate data attachment
@@ -219,8 +219,8 @@ QUnit.test('"Show" is raised after delay on mouseover on other element if toolti
 
 QUnit.test('"Hide" is raised after delay on mouseover then mouseout on other element if tooltip is shown', function(assert) {
     assert.expect(1);
-    var element1 = this.renderer.path([], 'area'),
-        element2 = this.renderer.path([], 'area');
+    const element1 = this.renderer.path([], 'area');
+    const element2 = this.renderer.path([], 'area');
     this.tracker.attach(element1).attach(element2);
     this.onTooltipHide = function() {
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
@@ -233,7 +233,7 @@ QUnit.test('"Hide" is raised after delay on mouseover then mouseout on other ele
 
 QUnit.test('"Show" is not raised on mouseout then mouseover if tooltip is shown', function(assert) {
     assert.expect(3);
-    var element = this.renderer.path([], 'area');
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
     this.onTooltipShow = function() {
         this.onTooltipShow = function() {
@@ -251,17 +251,17 @@ QUnit.test('"Show" is not raised on mouseout then mouseover if tooltip is shown'
     assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutCleared, 1, 'hide timeout is cleared');
 });
 
-var tooltipTouchEnvironment = {
+const tooltipTouchEnvironment = {
     beforeEach: function() {
         tooltipEnvironment.beforeEach.apply(this, arguments);
         this.triggerDocument = function(name, element) {
-            var event = $.Event(name);
+            const event = $.Event(name);
             event.target = element ? $(element.element).get(0) : null;
             event.changedTouches = [{}]; //  Because of ui.events.js
             event.touches = [];
             $(window.document).trigger(event);
         };
-        var _trigger = this.trigger;
+        const _trigger = this.trigger;
         this.trigger = function() {
             _trigger.apply(this, arguments);
             this.triggerDocument.apply(this, arguments); //  Bubbling emulation
@@ -274,7 +274,7 @@ QUnit.module('Tracker - tooltip touch events', tooltipTouchEnvironment);
 
 QUnit.test('"Show" is raised on touchstart', function(assert) {
     assert.expect(2);
-    var element = this.renderer.path([], 'area'), target = {}, info = {};
+    const element = this.renderer.path([], 'area'); const target = {}; const info = {};
     this.tracker.attach(element, target, info);
     element.element['gauge-data-target'] = target; // emulate data attachment
     element.element['gauge-data-info'] = info; // emulate data attachment
@@ -289,7 +289,7 @@ QUnit.test('"Show" is raised on touchstart', function(assert) {
 
 QUnit.test('"Hide" is raised on touchstart outside the element', function(assert) {
     assert.expect(1);
-    var element = this.renderer.path([], 'area');
+    const element = this.renderer.path([], 'area');
     this.tracker.attach(element);
     this.onTooltipShow = function() {
         this.triggerDocument('touchstart');
@@ -304,8 +304,8 @@ QUnit.test('"Hide" is raised on touchstart outside the element', function(assert
 
 QUnit.test('"Hide" is raised after delay on touchstart then touchend on other element if tooltip is shown', function(assert) {
     assert.expect(1);
-    var element1 = this.renderer.path([], 'area'),
-        element2 = this.renderer.path([], 'area');
+    const element1 = this.renderer.path([], 'area');
+    const element2 = this.renderer.path([], 'area');
     this.tracker.attach(element1, element2);
     element1.element['gauge-data-target'] = element2; // emulate data attachment
     this.onTooltipShow = function() {

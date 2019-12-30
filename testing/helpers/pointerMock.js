@@ -18,18 +18,18 @@
 
         $element = $($element);
 
-        var _x,
-            _y,
-            _scrollTop,
-            _scrollLeft,
-            _clock,
-            _shiftKey,
-            _cancelable,
-            _pointerType = 'mouse',
-            _lastEvent;
+        let _x;
+        let _y;
+        let _scrollTop;
+        let _scrollLeft;
+        let _clock;
+        let _shiftKey;
+        let _cancelable;
+        let _pointerType = 'mouse';
+        let _lastEvent;
 
-        var triggerEvent = function(type, args) {
-            var event = $.Event(
+        const triggerEvent = function(type, args) {
+            const event = $.Event(
                 $.extend($.Event(type), { timeStamp: _clock }),
                 $.extend({
                     timeStamp: _clock,
@@ -100,7 +100,7 @@
             },
 
             up: function() {
-                var requestAnimationFrameCallback = function() {};
+                let requestAnimationFrameCallback = function() {};
                 if(clickEvent.misc) {
                     clickEvent.misc.requestAnimationFrame = function(callback) { requestAnimationFrameCallback = callback; };
                 }

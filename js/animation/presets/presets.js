@@ -1,19 +1,19 @@
-var Component = require('../../core/component'),
-    each = require('../../core/utils/iterator').each,
-    extend = require('../../core/utils/extend').extend,
-    devices = require('../../core/devices'),
-    fx = require('../fx');
+const Component = require('../../core/component');
+const each = require('../../core/utils/iterator').each;
+const extend = require('../../core/utils/extend').extend;
+const devices = require('../../core/devices');
+const fx = require('../fx');
 
-var directionPostfixes = {
+const directionPostfixes = {
     forward: ' dx-forward',
     backward: ' dx-backward',
     none: ' dx-no-direction',
     undefined: ' dx-no-direction'
 };
 
-var optionPrefix = 'preset_';
+const optionPrefix = 'preset_';
 
-var AnimationPresetCollection = Component.inherit({
+const AnimationPresetCollection = Component.inherit({
     ctor: function() {
         this.callBase.apply(this, arguments);
         this._registeredPresets = [];
@@ -59,9 +59,9 @@ var AnimationPresetCollection = Component.inherit({
 
     // T257755
     _createAndroidSlideAnimationConfig: function(throughOpacity, widthMultiplier) {
-        var that = this;
+        const that = this;
 
-        var createBaseConfig = function(configModifier) {
+        const createBaseConfig = function(configModifier) {
             return {
                 type: 'slide',
                 delay: configModifier.delay === undefined ? that.option('defaultAnimationDelay') : configModifier.delay,
@@ -71,9 +71,9 @@ var AnimationPresetCollection = Component.inherit({
 
         return {
             enter: function($element, configModifier) {
-                var width = $element.parent().width() * widthMultiplier,
-                    direction = configModifier.direction,
-                    config = createBaseConfig(configModifier);
+                const width = $element.parent().width() * widthMultiplier;
+                const direction = configModifier.direction;
+                const config = createBaseConfig(configModifier);
 
                 config.to = {
                     left: 0,
@@ -100,9 +100,9 @@ var AnimationPresetCollection = Component.inherit({
                 return fx.createAnimation($element, config);
             },
             leave: function($element, configModifier) {
-                var width = $element.parent().width() * widthMultiplier,
-                    direction = configModifier.direction,
-                    config = createBaseConfig(configModifier);
+                const width = $element.parent().width() * widthMultiplier;
+                const direction = configModifier.direction;
+                const config = createBaseConfig(configModifier);
 
                 config.from = {
                     left: 0,
@@ -132,9 +132,9 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     _createOpenDoorConfig: function() {
-        var that = this;
+        const that = this;
 
-        var createBaseConfig = function(configModifier) {
+        const createBaseConfig = function(configModifier) {
             return {
                 type: 'css',
                 extraCssClasses: 'dx-opendoor-animation',
@@ -145,8 +145,8 @@ var AnimationPresetCollection = Component.inherit({
 
         return {
             enter: function($element, configModifier) {
-                var direction = configModifier.direction,
-                    config = createBaseConfig(configModifier);
+                const direction = configModifier.direction;
+                const config = createBaseConfig(configModifier);
 
                 config.delay = direction === 'none' ? config.delay : config.duration;
                 config.from = 'dx-enter dx-opendoor-animation' + directionPostfixes[direction];
@@ -155,8 +155,8 @@ var AnimationPresetCollection = Component.inherit({
                 return fx.createAnimation($element, config);
             },
             leave: function($element, configModifier) {
-                var direction = configModifier.direction,
-                    config = createBaseConfig(configModifier);
+                const direction = configModifier.direction;
+                const config = createBaseConfig(configModifier);
 
                 config.from = 'dx-leave dx-opendoor-animation' + directionPostfixes[direction];
                 config.to = 'dx-leave-active';
@@ -167,17 +167,17 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     _createWinPopConfig: function() {
-        var that = this,
-            baseConfig = {
-                type: 'css',
-                extraCssClasses: 'dx-win-pop-animation',
-                duration: that.option('defaultAnimationDuration')
-            };
+        const that = this;
+        const baseConfig = {
+            type: 'css',
+            extraCssClasses: 'dx-win-pop-animation',
+            duration: that.option('defaultAnimationDuration')
+        };
 
         return {
             enter: function($element, configModifier) {
-                var config = baseConfig,
-                    direction = configModifier.direction;
+                const config = baseConfig;
+                const direction = configModifier.direction;
 
                 config.delay = direction === 'none' ? that.option('defaultAnimationDelay') : that.option('defaultAnimationDuration') / 2;
                 config.from = 'dx-enter dx-win-pop-animation' + directionPostfixes[direction];
@@ -186,8 +186,8 @@ var AnimationPresetCollection = Component.inherit({
                 return fx.createAnimation($element, config);
             },
             leave: function($element, configModifier) {
-                var config = baseConfig,
-                    direction = configModifier.direction;
+                const config = baseConfig;
+                const direction = configModifier.direction;
 
                 config.delay = that.option('defaultAnimationDelay');
                 config.from = 'dx-leave dx-win-pop-animation' + directionPostfixes[direction];
@@ -205,8 +205,8 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     clear: function(name) {
-        var that = this,
-            newRegisteredPresets = [];
+        const that = this;
+        const newRegisteredPresets = [];
 
         each(this._registeredPresets, function(index, preset) {
             if(!name || name === preset.name) {
@@ -227,11 +227,11 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     applyChanges: function() {
-        var that = this;
-        var customRules = [];
+        const that = this;
+        const customRules = [];
 
         each(this._registeredPresets, function(index, preset) {
-            var rule = {
+            const rule = {
                 device: preset.config.device,
                 options: {}
             };
@@ -244,7 +244,7 @@ var AnimationPresetCollection = Component.inherit({
     },
 
     getPreset: function(name) {
-        var result = name;
+        let result = name;
 
         while(typeof result === 'string') {
             result = this.option(this._getPresetOptionName(result));
@@ -424,5 +424,5 @@ exports.PresetCollection = AnimationPresetCollection;
 * @name animationPresetsMethods.registerDefaultPresets
 * @publicName registerDefaultPresets()
 */
-var animationPresets = new AnimationPresetCollection();
+const animationPresets = new AnimationPresetCollection();
 exports.presets = animationPresets;

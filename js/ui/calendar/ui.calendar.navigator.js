@@ -1,17 +1,17 @@
-var $ = require('../../core/renderer'),
-    extend = require('../../core/utils/extend').extend,
-    Widget = require('../widget/ui.widget'),
-    Button = require('../button');
+const $ = require('../../core/renderer');
+const extend = require('../../core/utils/extend').extend;
+const Widget = require('../widget/ui.widget');
+const Button = require('../button');
 
-var CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator',
-    CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month',
-    CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month',
-    CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view',
-    CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view',
-    CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS = 'dx-calendar-disabled-navigator-link',
-    CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
+const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
+const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
+const CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS = 'dx-calendar-navigator-next-month';
+const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
+const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
+const CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS = 'dx-calendar-disabled-navigator-link';
+const CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 
-var Navigator = Widget.inherit({
+const Navigator = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -43,8 +43,8 @@ var Navigator = Widget.inherit({
     },
 
     _renderButtons: function() {
-        var that = this,
-            direction = this.option('rtlEnabled') ? -1 : 1;
+        const that = this;
+        const direction = this.option('rtlEnabled') ? -1 : 1;
 
         this._prevButton = this._createComponent($('<a>'),
             Button, {
@@ -54,7 +54,7 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $prevButton = this._prevButton.$element()
+        const $prevButton = this._prevButton.$element()
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS);
 
@@ -66,7 +66,7 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $nextButton = this._nextButton.$element()
+        const $nextButton = this._nextButton.$element()
             .addClass(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS);
 
@@ -77,7 +77,7 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $caption = this._caption.$element();
+        const $caption = this._caption.$element();
 
         this.$element().append($prevButton, $caption, $nextButton);
     },
@@ -87,8 +87,8 @@ var Navigator = Widget.inherit({
     },
 
     toggleButton: function(buttonPrefix, value) {
-        var buttonName = '_' + buttonPrefix + 'Button',
-            button = this[buttonName];
+        const buttonName = '_' + buttonPrefix + 'Button';
+        const button = this[buttonName];
 
         if(button) {
             button.option('disabled', value);

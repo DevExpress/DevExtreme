@@ -9,7 +9,7 @@ import axisModule from 'viz/axes/base_axis';
 
 const _SeriesDataSource = seriesDataSourceModule.SeriesDataSource;
 const formatsAreEqual = function(format1, format2) {
-    var testDate = new Date(0, 1, 2, 3, 4, 5, 6);
+    const testDate = new Date(0, 1, 2, 3, 4, 5, 6);
 
     return dateLocalization.format(testDate, format1) === dateLocalization.format(testDate, format2);
 };
@@ -55,7 +55,7 @@ QUnit.test('set range as numeric with defined valueType without datasource', fun
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(43875893457));
     assert.deepEqual(options.endValue, new Date(438758934573));
     assert.strictEqual(options.valueType, 'datetime');
@@ -70,7 +70,7 @@ QUnit.test('set range as numeric and datetime without valueType', function(asser
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(43875893457));
     assert.deepEqual(options.endValue, new Date(438758934573));
     assert.strictEqual(options.valueType, 'datetime');
@@ -96,14 +96,14 @@ QUnit.test('check default value valueType when start value is numeric', function
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.ok($.isNumeric(options.startValue));
     assert.ok($.isNumeric(options.endValue));
     assert.strictEqual(options.valueType, 'numeric');
 });
 
 QUnit.test('check default value valueType when start value is datetime', function(assert) {
-    var nowDate = new Date();
+    const nowDate = new Date();
     this.createWidget({
         scale: {
             startValue: nowDate,
@@ -111,14 +111,14 @@ QUnit.test('check default value valueType when start value is datetime', functio
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
     assert.strictEqual(options.valueType, 'datetime');
 });
 
 QUnit.test('check valueType when start value is datetime and valueType = datetime', function(assert) {
-    var nowDate = new Date();
+    const nowDate = new Date();
     this.createWidget({
         scale: {
             startValue: nowDate,
@@ -127,7 +127,7 @@ QUnit.test('check valueType when start value is datetime and valueType = datetim
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
     assert.strictEqual(options.valueType, 'datetime');
@@ -147,7 +147,7 @@ QUnit.test('set range by dataSource', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(10));
     assert.deepEqual(options.endValue, new Date(180000));
     assert.strictEqual(options.valueType, 'datetime');
@@ -164,7 +164,7 @@ QUnit.test('set range by dataSource. discrete data', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, '10');
     assert.strictEqual(options.endValue, '180000');
     assert.strictEqual(options.valueType, 'string');
@@ -181,11 +181,11 @@ QUnit.test('set range by dataSource. Numeric', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 1);
     assert.strictEqual(options.endValue, 5);
     assert.strictEqual(options.valueType, 'numeric');
-    var range = this.axis.setBusinessRange.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
     assert.strictEqual(range.minVisible, 1);
     assert.strictEqual(range.maxVisible, 5);
 });
@@ -204,7 +204,7 @@ QUnit.test('set valueType by startValue (numeric)', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 10);
     assert.strictEqual(options.endValue, 180000);
     assert.strictEqual(options.valueType, 'numeric');
@@ -223,7 +223,7 @@ QUnit.test('set valueType by endValue (numeric)', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 10);
     assert.strictEqual(options.endValue, 180000);
     assert.strictEqual(options.valueType, 'numeric');
@@ -243,7 +243,7 @@ QUnit.test('set valueType by endValue (numeric) when startValue is string', func
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 10);
     assert.strictEqual(options.endValue, 180000);
     assert.strictEqual(options.valueType, 'numeric');
@@ -263,7 +263,7 @@ QUnit.test('set valueType by startValue (datetime)', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(10));
     assert.deepEqual(options.endValue, new Date(180000));
     assert.strictEqual(options.valueType, 'datetime');
@@ -284,7 +284,7 @@ QUnit.test('set valueType by startValue (datetime) when endValue is numeric', fu
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(10));
     assert.deepEqual(options.endValue, new Date(180000));
     assert.strictEqual(options.valueType, 'datetime');
@@ -304,7 +304,7 @@ QUnit.test('set valueType by endValue (datetime)', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(10));
     assert.deepEqual(options.endValue, new Date(180000));
     assert.strictEqual(options.valueType, 'datetime');
@@ -318,7 +318,7 @@ QUnit.test('set range string and numeric', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
     assert.strictEqual(options.isEmpty, true);
@@ -341,14 +341,14 @@ QUnit.test('set ArgumentType in options of chart invalid startValue', function(a
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(10));
     assert.deepEqual(options.endValue, new Date(180000));
     assert.deepEqual(this.incidentOccurred.lastCall.args, ['E2202', ['start']]);
 });
 
 QUnit.test('check safety custom setting of scale after updating dataSource', function(assert) {
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         scale: {
             valueType: 'datetime',
         },
@@ -367,7 +367,7 @@ QUnit.test('check safety custom setting of scale after updating dataSource', fun
         ]
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(15));
     assert.deepEqual(options.endValue, new Date(20000));
 });
@@ -412,7 +412,7 @@ QUnit.test('Correct start/end values. start/endValue in scale options', function
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, 10);
     assert.deepEqual(options.endValue, 55);
     assert.strictEqual(options.valueType, 'numeric');
@@ -429,7 +429,7 @@ QUnit.test('Correct start/end values. dataSource', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, 10);
     assert.deepEqual(options.endValue, 50);
     assert.strictEqual(options.valueType, 'numeric');
@@ -448,7 +448,7 @@ QUnit.test('Correct start/end values. dataSource and scale\'s start/endValue', f
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, 25);
     assert.deepEqual(options.endValue, 55);
     assert.strictEqual(options.valueType, 'numeric');
@@ -466,7 +466,7 @@ QUnit.test('Correct start/end values. dateTime', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.startValue, new Date(2015, 0, 1));
     assert.deepEqual(options.endValue, new Date(2015, 3, 1));
     assert.strictEqual(options.valueType, 'datetime');
@@ -488,7 +488,7 @@ QUnit.test('Reset some scale options', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTick.visible, false);
     assert.strictEqual(options.marker.visible, false);
     assert.strictEqual(options.maxRange, undefined);
@@ -521,7 +521,7 @@ QUnit.test('Scale tick/minorTick intervals not provided', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 10);
     assert.strictEqual(options.tickInterval, 10);
 });
@@ -539,7 +539,7 @@ QUnit.test('Scale tick/minorTick intervals provided', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 5);
     assert.strictEqual(options.tickInterval, 2);
 });
@@ -565,8 +565,8 @@ QUnit.test('Translator and scale initialized with same range. based on dataSourc
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.axis.setBusinessRange.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
 
     assert.strictEqual(range.min, options.startValue);
     assert.strictEqual(range.minVisible, options.startValue);
@@ -584,8 +584,8 @@ QUnit.test('Translator and scale initialized with same range. based on scale sta
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.axis.setBusinessRange.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
 
     assert.strictEqual(range.min, options.startValue);
     assert.strictEqual(range.minVisible, options.startValue);
@@ -743,7 +743,7 @@ QUnit.test('Custom bound ticks only contain first customTick', function(assert) 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.customBoundTicks, [options.customTicks[0]]);
 });
 
@@ -758,7 +758,7 @@ QUnit.test('Calculate tickInterval based on screen delta (screenDelta is small, 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.tickInterval, 10);
     assert.deepEqual(options.customTicks, [0, 10]);
 });
@@ -774,7 +774,7 @@ QUnit.test('Calculate tickInterval based on screen delta (screenDelta is small, 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.tickInterval, 10);
     assert.deepEqual(options.customTicks, [0, 10]);
 });
@@ -791,7 +791,7 @@ QUnit.test('Calculate tickInterval based on screen delta (2*minRange. numeric)',
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 5);
     assert.strictEqual(options.tickInterval, 10);
     assert.deepEqual(options.customTicks, [10, 20, 30, 40, 50]);
@@ -809,7 +809,7 @@ QUnit.test('Calculate tickInterval based on screen delta (3*minRange. numeric)',
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 5);
     assert.strictEqual(options.tickInterval, 15);
     assert.deepEqual(options.customTicks, [10, 15, 30, 45]);
@@ -827,7 +827,7 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 'day');
     assert.strictEqual(options.tickInterval, 'month');
     assert.deepEqual(options.customTicks, [new Date(2015, 0, 15), new Date(2015, 1, 1)]);
@@ -845,7 +845,7 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 'month');
     assert.strictEqual(options.tickInterval, 'quarter');
     assert.deepEqual(options.customTicks, [new Date(2013, 0, 1), new Date(2013, 3, 1), new Date(2013, 6, 1), new Date(2013, 9, 1), new Date(2014, 0, 1), new Date(2014, 3, 1)]);
@@ -863,7 +863,7 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 'year');
     assert.strictEqual(options.tickInterval, 'year');
     assert.deepEqual(options.customTicks, [new Date(2000, 0, 1), new Date(2001, 0, 1), new Date(2002, 0, 1),
@@ -886,7 +886,7 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 'day');
     assert.strictEqual(options.tickInterval, 'day');
     assert.deepEqual(options.customTicks.length, 30);
@@ -905,7 +905,7 @@ QUnit.test('Calculate tickInterval based on screen delta (datetime. minRange is 
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 'day');
     assert.strictEqual(options.tickInterval, 'month');
     assert.deepEqual(options.customTicks, [new Date(2015, 0, 15), new Date(2015, 1, 1)]);
@@ -1258,7 +1258,7 @@ QUnit.test('T214998. scale multi-line text label', function(assert) {
 });
 
 QUnit.test('range selectedRangeChanged initialization', function(assert) {
-    var spy = sinon.spy(slidersControllerModule, 'SlidersController');
+    const spy = sinon.spy(slidersControllerModule, 'SlidersController');
     this.createWidget();
 
     assert.strictEqual(typeof spy.lastCall.args[0].updateSelectedRange, 'function');
@@ -1311,8 +1311,8 @@ QUnit.test('Init selection format before calculate canvas for dateTime type', fu
         }
     });
 
-    var options = this.slidersController.update.lastCall.args[4];
-    var expectedFormat = function(date) {
+    const options = this.slidersController.update.lastCall.args[4];
+    const expectedFormat = function(date) {
         return dateLocalization.format(date, 'dayofweek') + ', ' + dateLocalization.format(date, 'day');
     };
 
@@ -1335,7 +1335,7 @@ QUnit.test('range small width', function(assert) {
 });
 
 QUnit.test('initialization theme options by customized theme', function(assert) {
-    var rangeSelector = this.createWidget({
+    const rangeSelector = this.createWidget({
         scale: {
             startValue: 1,
             endValue: 11
@@ -1370,7 +1370,7 @@ QUnit.test('initialization theme options by customized theme', function(assert) 
 });
 
 QUnit.test('chart theme not initialize from main theme', function(assert) {
-    var rangeSelector = this.createWidget({
+    const rangeSelector = this.createWidget({
         scale: {
             startValue: 1,
             endValue: 11
@@ -1573,7 +1573,7 @@ QUnit.test('Compact mode. all is visible - take constant height', function(asser
 });
 
 QUnit.test('Draw first tick to measure height. Numeric', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         background: { image: { url: 'url' } }, // to prevent compact mode
         scale: {
@@ -1589,7 +1589,7 @@ QUnit.test('Draw first tick to measure height. Numeric', function(assert) {
 });
 
 QUnit.test('Draw first tick to measure height. DateTime', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         background: { image: { url: 'url' } }, // to prevent compact mode
         scale: {
@@ -1606,7 +1606,7 @@ QUnit.test('Draw first tick to measure height. DateTime', function(assert) {
 });
 
 QUnit.test('Draw first tick to measure height. Semidiscrete', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         background: { image: { url: 'url' } }, // to prevent compact mode
         scale: {
@@ -1626,8 +1626,8 @@ QUnit.test('Draw first tick to measure height. Semidiscrete', function(assert) {
 QUnit.module('API', commons.environment);
 
 QUnit.test('Render. Container size is changed - redraw widget', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.createWidget({ onDrawn: spy });
+    const spy = sinon.spy();
+    const widget = this.createWidget({ onDrawn: spy });
 
     widget.$element().height(widget.$element().height() + 1);
     spy.reset();
@@ -1637,8 +1637,8 @@ QUnit.test('Render. Container size is changed - redraw widget', function(assert)
 });
 
 QUnit.test('Render. Container size is not changed - do not redraw widget', function(assert) {
-    var spy = sinon.spy(),
-        widget = this.createWidget({ onDrawn: spy });
+    const spy = sinon.spy();
+    const widget = this.createWidget({ onDrawn: spy });
 
     spy.reset();
     widget.render();
@@ -1654,11 +1654,11 @@ QUnit.test('dataSource creation', function(assert) {
         arg: new commons.StubRange(),
         val: new commons.StubRange()
     });
-    var widget = this.createWidget({
-            dataSource: [{}],
-            chart: { series: {} }
-        }),
-        ds = widget.getDataSource();
+    const widget = this.createWidget({
+        dataSource: [{}],
+        chart: { series: {} }
+    });
+    const ds = widget.getDataSource();
 
     assert.ok(ds instanceof dataSourceModule.DataSource);
     assert.ok(ds.isLoaded());
@@ -1670,11 +1670,11 @@ QUnit.test('update dataSource after option changing', function(assert) {
         arg: new commons.StubRange(),
         val: new commons.StubRange()
     });
-    var widget = this.createWidget();
+    const widget = this.createWidget();
 
     widget.option('dataSource', [{}]);
 
-    var ds = widget.getDataSource();
+    const ds = widget.getDataSource();
 
     assert.ok(ds.isLoaded());
     assert.deepEqual(ds.items(), [{}]);

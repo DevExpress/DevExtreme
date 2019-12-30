@@ -1,14 +1,14 @@
-var Promise = require('../../core/polyfills/promise'),
-    extend = require('../../core/utils/extend').extend,
-    iteratorUtils = require('../../core/utils/iterator'),
-    Provider = require('./provider'),
-    abstract = Provider.abstract;
+const Promise = require('../../core/polyfills/promise');
+const extend = require('../../core/utils/extend').extend;
+const iteratorUtils = require('../../core/utils/iterator');
+const Provider = require('./provider');
+const abstract = Provider.abstract;
 
-var DynamicProvider = Provider.inherit({
+const DynamicProvider = Provider.inherit({
     _geocodeLocation: function(location) {
         return new Promise(function(resolve) {
-            var cache = this._geocodedLocations,
-                cachedLocation = cache[location];
+            const cache = this._geocodedLocations;
+            const cachedLocation = cache[location];
             if(cachedLocation) {
                 resolve(cachedLocation);
             } else {
@@ -33,7 +33,7 @@ var DynamicProvider = Provider.inherit({
 
             // NOTE: setTimeout is needed by providers to correctly initialize bounds
             return new Promise(function(resolve) {
-                var timeout = setTimeout(function() {
+                const timeout = setTimeout(function() {
                     clearTimeout(timeout);
                     resolve();
                 });
@@ -88,7 +88,7 @@ var DynamicProvider = Provider.inherit({
     _renderMarker: abstract,
 
     removeMarkers: function(markersOptionsToRemove) {
-        var that = this;
+        const that = this;
 
         iteratorUtils.each(markersOptionsToRemove, function(_, markerOptionToRemove) {
             that._removeMarker(markerOptionToRemove);
@@ -98,7 +98,7 @@ var DynamicProvider = Provider.inherit({
     },
 
     _removeMarker: function(markersOptionToRemove) {
-        var that = this;
+        const that = this;
 
         iteratorUtils.each(this._markers, function(markerIndex, markerObject) {
             if(markerObject.options !== markersOptionToRemove) {
@@ -155,7 +155,7 @@ var DynamicProvider = Provider.inherit({
     _renderRoute: abstract,
 
     removeRoutes: function(options) {
-        var that = this;
+        const that = this;
 
         iteratorUtils.each(options, function(routeIndex, options) {
             that._removeRoute(options);
@@ -165,7 +165,7 @@ var DynamicProvider = Provider.inherit({
     },
 
     _removeRoute: function(options) {
-        var that = this;
+        const that = this;
 
         iteratorUtils.each(this._routes, function(routeIndex, routeObject) {
             if(routeObject.options !== options) {
@@ -203,7 +203,7 @@ var DynamicProvider = Provider.inherit({
     _fitBounds: abstract,
 
     _updateBounds: function() {
-        var that = this;
+        const that = this;
 
         this._clearBounds();
 

@@ -1,57 +1,57 @@
-var $ = require('../../core/renderer'),
-    Guid = require('../../core/guid'),
-    registerComponent = require('../../core/component_registrator'),
-    noop = require('../../core/utils/common').noop,
-    typeUtils = require('../../core/utils/type'),
-    inRange = require('../../core/utils/math').inRange,
-    extend = require('../../core/utils/extend').extend,
-    Button = require('../button'),
-    Editor = require('../editor/editor'),
-    Swipeable = require('../../events/gesture/swipeable'),
-    Navigator = require('./ui.calendar.navigator'),
-    Views = require('./ui.calendar.views'),
-    translator = require('../../animation/translator'),
-    browser = require('../../core/utils/browser'),
-    dateUtils = require('../../core/utils/date'),
-    dateSerialization = require('../../core/utils/date_serialization'),
-    devices = require('../../core/devices'),
-    fx = require('../../animation/fx'),
-    windowUtils = require('../../core/utils/window'),
-    messageLocalization = require('../../localization/message'),
-    FunctionTemplate = require('../../core/templates/function_template').FunctionTemplate;
+const $ = require('../../core/renderer');
+const Guid = require('../../core/guid');
+const registerComponent = require('../../core/component_registrator');
+const noop = require('../../core/utils/common').noop;
+const typeUtils = require('../../core/utils/type');
+const inRange = require('../../core/utils/math').inRange;
+const extend = require('../../core/utils/extend').extend;
+const Button = require('../button');
+const Editor = require('../editor/editor');
+const Swipeable = require('../../events/gesture/swipeable');
+const Navigator = require('./ui.calendar.navigator');
+const Views = require('./ui.calendar.views');
+const translator = require('../../animation/translator');
+const browser = require('../../core/utils/browser');
+const dateUtils = require('../../core/utils/date');
+const dateSerialization = require('../../core/utils/date_serialization');
+const devices = require('../../core/devices');
+const fx = require('../../animation/fx');
+const windowUtils = require('../../core/utils/window');
+const messageLocalization = require('../../localization/message');
+const FunctionTemplate = require('../../core/templates/function_template').FunctionTemplate;
 
-var CALENDAR_CLASS = 'dx-calendar',
-    CALENDAR_BODY_CLASS = 'dx-calendar-body',
-    CALENDAR_CELL_CLASS = 'dx-calendar-cell',
-    CALENDAR_FOOTER_CLASS = 'dx-calendar-footer',
-    CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button',
-    CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer',
-    CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper',
-    CALENDAR_VIEW_CLASS = 'dx-calendar-view',
-    FOCUSED_STATE_CLASS = 'dx-state-focused',
+const CALENDAR_CLASS = 'dx-calendar';
+const CALENDAR_BODY_CLASS = 'dx-calendar-body';
+const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
+const CALENDAR_FOOTER_CLASS = 'dx-calendar-footer';
+const CALENDAR_TODAY_BUTTON_CLASS = 'dx-calendar-today-button';
+const CALENDAR_HAS_FOOTER_CLASS = 'dx-calendar-with-footer';
+const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
+const CALENDAR_VIEW_CLASS = 'dx-calendar-view';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-    ANIMATION_DURATION_SHOW_VIEW = 250,
-    POP_ANIMATION_FROM = 0.6,
-    POP_ANIMATION_TO = 1,
+const ANIMATION_DURATION_SHOW_VIEW = 250;
+const POP_ANIMATION_FROM = 0.6;
+const POP_ANIMATION_TO = 1;
 
-    CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd',
-    CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey',
+const CALENDAR_INPUT_STANDARD_PATTERN = 'yyyy-MM-dd';
+const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
-    LEVEL_COMPARE_MAP = {
-        'month': 3,
-        'year': 2,
-        'decade': 1,
-        'century': 0
-    };
+const LEVEL_COMPARE_MAP = {
+    'month': 3,
+    'year': 2,
+    'decade': 1,
+    'century': 0
+};
 
-var ZOOM_LEVEL = {
+const ZOOM_LEVEL = {
     MONTH: 'month',
     YEAR: 'year',
     DECADE: 'decade',
     CENTURY: 'century'
 };
 
-var Calendar = Editor.inherit({
+const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
     _getDefaultOptions: function() {
@@ -250,11 +250,11 @@ var Calendar = Editor.inherit({
             home: function(e) {
                 e.preventDefault();
 
-                var zoomLevel = this.option('zoomLevel');
-                var currentDate = this.option('currentDate');
-                var min = this._dateOption('min');
+                const zoomLevel = this.option('zoomLevel');
+                const currentDate = this.option('currentDate');
+                const min = this._dateOption('min');
 
-                var date = dateUtils.sameView(zoomLevel, currentDate, min)
+                const date = dateUtils.sameView(zoomLevel, currentDate, min)
                     ? min
                     : dateUtils.getViewFirstCellDate(zoomLevel, currentDate);
 
@@ -263,11 +263,11 @@ var Calendar = Editor.inherit({
             end: function(e) {
                 e.preventDefault();
 
-                var zoomLevel = this.option('zoomLevel');
-                var currentDate = this.option('currentDate');
-                var max = this._dateOption('max');
+                const zoomLevel = this.option('zoomLevel');
+                const currentDate = this.option('currentDate');
+                const max = this._dateOption('max');
 
-                var date = dateUtils.sameView(zoomLevel, currentDate, max)
+                const date = dateUtils.sameView(zoomLevel, currentDate, max)
                     ? max
                     : dateUtils.getViewLastCellDate(zoomLevel, currentDate);
 
@@ -286,7 +286,7 @@ var Calendar = Editor.inherit({
                 if(!this._isMaxZoomLevel()) {
                     this._navigateDown();
                 } else {
-                    var value = this._updateTimeComponent(this.option('currentDate'));
+                    const value = this._updateTimeComponent(this.option('currentDate'));
                     this._dateValue(value, e);
                 }
             }
@@ -294,7 +294,7 @@ var Calendar = Editor.inherit({
     },
 
     _getSerializationFormat: function(optionName) {
-        var value = this.option(optionName || 'value');
+        const value = this.option(optionName || 'value');
 
         if(this.option('dateSerializationFormat')) {
             return this.option('dateSerializationFormat');
@@ -325,21 +325,21 @@ var Calendar = Editor.inherit({
             return this._convertToDate(this.option(optionName), optionName);
         }
 
-        var serializationFormat = this._getSerializationFormat(optionName);
+        const serializationFormat = this._getSerializationFormat(optionName);
         this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
     },
 
     _moveCurrentDate: function(offset, baseDate) {
-        var currentDate = baseDate || new Date(this.option('currentDate')),
-            maxDate = this._getMaxDate(),
-            minDate = this._getMinDate(),
-            zoomLevel = this.option('zoomLevel'),
-            isCurrentDateInRange = inRange(currentDate, minDate, maxDate),
-            dateForward = new Date(currentDate),
-            dateBackward = new Date(currentDate),
-            isDateForwardInRange = isCurrentDateInRange,
-            isDateBackwardInRange = isCurrentDateInRange,
-            step = offset || 1;
+        let currentDate = baseDate || new Date(this.option('currentDate'));
+        const maxDate = this._getMaxDate();
+        const minDate = this._getMinDate();
+        const zoomLevel = this.option('zoomLevel');
+        const isCurrentDateInRange = inRange(currentDate, minDate, maxDate);
+        const dateForward = new Date(currentDate);
+        const dateBackward = new Date(currentDate);
+        let isDateForwardInRange = isCurrentDateInRange;
+        let isDateBackwardInRange = isCurrentDateInRange;
+        const step = offset || 1;
 
         while((!offset && (isDateForwardInRange || isDateBackwardInRange)) || (offset && isDateForwardInRange)) {
             switch(zoomLevel) {
@@ -394,9 +394,9 @@ var Calendar = Editor.inherit({
     },
 
     _correctZoomLevel: function() {
-        var minZoomLevel = this.option('minZoomLevel'),
-            maxZoomLevel = this.option('maxZoomLevel'),
-            zoomLevel = this.option('zoomLevel');
+        const minZoomLevel = this.option('minZoomLevel');
+        const maxZoomLevel = this.option('maxZoomLevel');
+        const zoomLevel = this.option('zoomLevel');
 
         if(LEVEL_COMPARE_MAP[maxZoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
             return;
@@ -410,7 +410,7 @@ var Calendar = Editor.inherit({
     },
 
     _initCurrentDate: function() {
-        var currentDate = this._getNormalizedDate(this._dateOption('value')) || this._getNormalizedDate(this.option('currentDate'));
+        const currentDate = this._getNormalizedDate(this._dateOption('value')) || this._getNormalizedDate(this.option('currentDate'));
         this.option('currentDate', currentDate);
     },
 
@@ -427,7 +427,7 @@ var Calendar = Editor.inherit({
     _initTemplates: function() {
         this._templateManager.addDefaultTemplates({
             cell: new FunctionTemplate(function(options) {
-                var data = options.model;
+                const data = options.model;
                 $(options.container).append($('<span>').text(data && data.text || String(data)));
             })
         });
@@ -439,22 +439,22 @@ var Calendar = Editor.inherit({
             fx.stop(this._$viewsWrapper, true);
         }
 
-        var min = this._getMinDate(),
-            max = this._getMaxDate();
+        const min = this._getMinDate();
+        const max = this._getMaxDate();
 
         if(min > max) {
             this.option('currentDate', new Date());
             return;
         }
 
-        var normalizedDate = this._getNormalizedDate(date);
+        const normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
             this.option('currentDate', new Date(normalizedDate));
             return;
         }
 
-        var offset = this._getViewsOffset(this._view.option('date'), normalizedDate);
+        let offset = this._getViewsOffset(this._view.option('date'), normalizedDate);
 
         if(offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
@@ -492,13 +492,13 @@ var Calendar = Editor.inherit({
     },
 
     _getViewsOffset: function(startDate, endDate) {
-        var zoomLevel = this.option('zoomLevel');
+        const zoomLevel = this.option('zoomLevel');
 
         if(zoomLevel === ZOOM_LEVEL.MONTH) {
             return this._getMonthsOffset(startDate, endDate);
         }
 
-        var zoomCorrection;
+        let zoomCorrection;
 
         switch(zoomLevel) {
             case ZOOM_LEVEL.CENTURY:
@@ -516,8 +516,8 @@ var Calendar = Editor.inherit({
     },
 
     _getMonthsOffset: function(startDate, endDate) {
-        var yearOffset = endDate.getFullYear() - startDate.getFullYear(),
-            monthOffset = endDate.getMonth() - startDate.getMonth();
+        const yearOffset = endDate.getFullYear() - startDate.getFullYear();
+        const monthOffset = endDate.getMonth() - startDate.getMonth();
 
         return yearOffset * 12 + monthOffset;
     },
@@ -529,7 +529,7 @@ var Calendar = Editor.inherit({
 
         this._alreadyViewRender = true;
 
-        var date = this._getDateByOffset(offset * this._getRtlCorrection());
+        const date = this._getDateByOffset(offset * this._getRtlCorrection());
 
         this._moveToClosestAvailableDate(date, offset);
 
@@ -545,13 +545,13 @@ var Calendar = Editor.inherit({
     _getDateByOffset: function(offset, date) {
         date = new Date(date || this.option('currentDate'));
 
-        var currentDay = date.getDate();
-        var difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
+        const currentDay = date.getDate();
+        const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
 
         date.setDate(1);
         date.setMonth(date.getMonth() + difference);
 
-        var lastDay = dateUtils.getLastMonthDate(date).getDate();
+        const lastDay = dateUtils.getLastMonthDate(date).getDate();
         date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
         return date;
@@ -566,7 +566,7 @@ var Calendar = Editor.inherit({
 
         this.callBase();
 
-        var $element = this.$element();
+        const $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
 
         this._renderBody();
@@ -614,15 +614,15 @@ var Calendar = Editor.inherit({
     _renderViews: function() {
         this.$element().addClass(CALENDAR_VIEW_CLASS + '-' + this.option('zoomLevel'));
 
-        var currentDate = this.option('currentDate');
+        const currentDate = this.option('currentDate');
 
         this._view = this._renderSpecificView(currentDate);
 
         if(windowUtils.hasWindow()) {
-            var beforeDate = this._getDateByOffset(-1, currentDate);
+            const beforeDate = this._getDateByOffset(-1, currentDate);
             this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
-            var afterDate = this._getDateByOffset(1, currentDate);
+            const afterDate = this._getDateByOffset(1, currentDate);
             afterDate.setDate(1);
 
             this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
@@ -632,15 +632,15 @@ var Calendar = Editor.inherit({
     },
 
     _renderSpecificView: function(date) {
-        var specificView = Views[this.option('zoomLevel')],
-            $view = $('<div>').appendTo(this._$viewsWrapper),
-            config = this._viewConfig(date);
+        const specificView = Views[this.option('zoomLevel')];
+        const $view = $('<div>').appendTo(this._$viewsWrapper);
+        const config = this._viewConfig(date);
 
         return new specificView($view, config);
     },
 
     _viewConfig: function(date) {
-        var disabledDates = this.option('disabledDates');
+        let disabledDates = this.option('disabledDates');
 
         disabledDates = typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
         return {
@@ -662,7 +662,7 @@ var Calendar = Editor.inherit({
     },
 
     _injectComponent: function(func) {
-        var that = this;
+        const that = this;
         return function(params) {
             extend(params, { component: that });
             return func(params);
@@ -670,9 +670,9 @@ var Calendar = Editor.inherit({
     },
 
     _isViewAvailable: function(date) {
-        var zoomLevel = this.option('zoomLevel');
-        var min = dateUtils.getViewMinBoundaryDate(zoomLevel, this._getMinDate());
-        var max = dateUtils.getViewMaxBoundaryDate(zoomLevel, this._getMaxDate());
+        const zoomLevel = this.option('zoomLevel');
+        const min = dateUtils.getViewMinBoundaryDate(zoomLevel, this._getMinDate());
+        const max = dateUtils.getViewMaxBoundaryDate(zoomLevel, this._getMaxDate());
 
         return dateUtils.dateInRange(date, min, max);
     },
@@ -692,28 +692,28 @@ var Calendar = Editor.inherit({
     },
 
     _getViewPosition: function(coefficient) {
-        var rtlCorrection = this.option('rtlEnabled') && !browser.msie ? -1 : 1;
+        const rtlCorrection = this.option('rtlEnabled') && !browser.msie ? -1 : 1;
         return (coefficient * 100 * rtlCorrection) + '%';
     },
 
     _cellClickHandler: function(e) {
-        var zoomLevel = this.option('zoomLevel'),
-            nextView = dateUtils.getViewDown(zoomLevel);
+        const zoomLevel = this.option('zoomLevel');
+        const nextView = dateUtils.getViewDown(zoomLevel);
 
-        var isMaxZoomLevel = this._isMaxZoomLevel();
+        const isMaxZoomLevel = this._isMaxZoomLevel();
 
         if(nextView && !isMaxZoomLevel) {
             this._navigateDown(e.event.currentTarget);
         } else {
-            var newValue = this._updateTimeComponent(e.value);
+            const newValue = this._updateTimeComponent(e.value);
             this._dateValue(newValue, e.event);
             this._cellClickAction(e);
         }
     },
 
     _updateTimeComponent: function(date) {
-        var result = new Date(date);
-        var currentValue = this._dateOption('value');
+        const result = new Date(date);
+        const currentValue = this._dateOption('value');
 
         if(currentValue) {
             result.setHours(currentValue.getHours());
@@ -730,19 +730,19 @@ var Calendar = Editor.inherit({
     },
 
     _navigateDown: function(cell) {
-        var zoomLevel = this.option('zoomLevel');
+        const zoomLevel = this.option('zoomLevel');
 
         if(this._isMaxZoomLevel()) {
             return;
         }
 
-        var nextView = dateUtils.getViewDown(zoomLevel);
+        const nextView = dateUtils.getViewDown(zoomLevel);
 
         if(!nextView) {
             return;
         }
 
-        var newCurrentDate = this._view.option('contouredDate') || this._view.option('date');
+        let newCurrentDate = this._view.option('contouredDate') || this._view.option('date');
 
         if(cell) {
             newCurrentDate = $(cell).data(CALENDAR_DATE_VALUE_KEY);
@@ -780,21 +780,21 @@ var Calendar = Editor.inherit({
     },
 
     _navigatorClickHandler: function(e) {
-        var currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
+        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
 
         this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
     },
 
     _navigateUp: function() {
-        var zoomLevel = this.option('zoomLevel'),
-            nextView = dateUtils.getViewUp(zoomLevel);
+        const zoomLevel = this.option('zoomLevel');
+        const nextView = dateUtils.getViewUp(zoomLevel);
 
         if(!nextView || this._isMinZoomLevel(zoomLevel)) {
             return;
         }
 
-        var contouredDate = this._view.option('contouredDate');
+        const contouredDate = this._view.option('contouredDate');
 
         this.option('zoomLevel', nextView);
         this.option('currentDate', contouredDate || this._view.option('date'));
@@ -807,8 +807,8 @@ var Calendar = Editor.inherit({
     },
 
     _isMinZoomLevel: function(zoomLevel) {
-        var min = this._getMinDate(),
-            max = this._getMaxDate();
+        const min = this._getMinDate();
+        const max = this._getMaxDate();
 
         return dateUtils.sameView(zoomLevel, min, max) || this.option('minZoomLevel') === zoomLevel;
     },
@@ -837,8 +837,8 @@ var Calendar = Editor.inherit({
     },
 
     _getRequiredView: function(name) {
-        var view;
-        var isRtl = this.option('rtlEnabled');
+        let view;
+        const isRtl = this.option('rtlEnabled');
 
         if(name === 'next') {
             view = isRtl ? this._beforeView : this._afterView;
@@ -850,22 +850,22 @@ var Calendar = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var offset = e.event.offset;
+        const offset = e.event.offset;
 
         translator.move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
         this._updateNavigatorCaption(offset);
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.event.targetOffset,
-            moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
+        const targetOffset = e.event.targetOffset;
+        const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
         if(moveOffset === 0) {
             this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
             return;
         }
 
-        var date = this._getDateByOffset(-moveOffset * this._getRtlCorrection());
+        let date = this._getDateByOffset(-moveOffset * this._getRtlCorrection());
 
         if(this._isDateInInvalidRange(date)) {
             if(moveOffset >= 0) {
@@ -889,7 +889,7 @@ var Calendar = Editor.inherit({
     _updateNavigatorCaption: function(offset) {
         offset *= this._getRtlCorrection();
 
-        var view = this._view;
+        let view = this._view;
 
         if(offset > 0.5 && this._beforeView) {
             view = this._beforeView;
@@ -905,18 +905,18 @@ var Calendar = Editor.inherit({
             return;
         }
 
-        var min = this._getMinDate(),
-            max = this._getMaxDate(),
-            normalizedDate = dateUtils.normalizeDate(date, min, max);
+        const min = this._getMinDate();
+        const max = this._getMaxDate();
+        const normalizedDate = dateUtils.normalizeDate(date, min, max);
 
         return normalizedDate === min || normalizedDate === max;
     },
 
     _renderFooter: function() {
-        var showTodayButton = this.option('showTodayButton');
+        const showTodayButton = this.option('showTodayButton');
 
         if(showTodayButton) {
-            var $todayButton = this._createComponent($('<a>'),
+            const $todayButton = this._createComponent($('<a>'),
                 Button, {
                     focusStateEnabled: false,
                     text: messageLocalization.format('dxCalendar-todayButtonText'),
@@ -945,7 +945,7 @@ var Calendar = Editor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        var dateValue = this._convertToDate(value);
+        const dateValue = this._convertToDate(value);
         this._getSubmitElement().val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
     },
 
@@ -975,7 +975,7 @@ var Calendar = Editor.inherit({
 
     _navigate: function(offset, value) {
         if(offset !== 0 && Math.abs(offset) !== 1 && this._isViewAvailable(value)) {
-            var newView = this._renderSpecificView(value);
+            const newView = this._renderSpecificView(value);
 
             if(offset > 0) {
                 this._afterView && this._afterView.$element().remove();
@@ -988,11 +988,11 @@ var Calendar = Editor.inherit({
             this._translateViews();
         }
 
-        var rtlCorrection = this._getRtlCorrection(),
-            offsetSign = offset > 0 ? 1 : offset < 0 ? -1 : 0,
-            endPosition = -rtlCorrection * offsetSign * this._viewWidth();
+        const rtlCorrection = this._getRtlCorrection();
+        const offsetSign = offset > 0 ? 1 : offset < 0 ? -1 : 0;
+        const endPosition = -rtlCorrection * offsetSign * this._viewWidth();
 
-        var viewsWrapperPosition = this._$viewsWrapper.position().left;
+        const viewsWrapperPosition = this._$viewsWrapper.position().left;
 
         if(viewsWrapperPosition !== endPosition) {
             if(this._preventViewChangeAnimation) {
@@ -1014,7 +1014,7 @@ var Calendar = Editor.inherit({
     },
 
     _toTodayView: function() {
-        var today = new Date();
+        const today = new Date();
 
         if(this._isMaxZoomLevel()) {
             this._dateOption('value', today);
@@ -1045,9 +1045,9 @@ var Calendar = Editor.inherit({
             return;
         }
 
-        var viewOffset,
-            viewToCreateKey,
-            viewToRemoveKey;
+        let viewOffset;
+        let viewToCreateKey;
+        let viewToRemoveKey;
 
         if(offset < 0) {
             viewOffset = 1;
@@ -1063,7 +1063,7 @@ var Calendar = Editor.inherit({
             return;
         }
 
-        var destinationDate = this[viewToCreateKey].option('date');
+        const destinationDate = this[viewToCreateKey].option('date');
 
         if(this[viewToRemoveKey]) {
             this[viewToRemoveKey].$element().remove();
@@ -1078,7 +1078,7 @@ var Calendar = Editor.inherit({
 
         this._view = this[viewToCreateKey];
 
-        var dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
+        const dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
         this[viewToCreateKey] = this._isViewAvailable(dateByOffset) ? this._renderSpecificView(dateByOffset) : null;
     },
 
@@ -1128,7 +1128,7 @@ var Calendar = Editor.inherit({
     },
 
     _updateViewsValue: function(value) {
-        var newValue = value ? new Date(value) : null;
+        const newValue = value ? new Date(value) : null;
 
         this._view.option('value', newValue);
         this._beforeView && this._beforeView.option('value', newValue);
@@ -1138,8 +1138,8 @@ var Calendar = Editor.inherit({
     _updateAriaSelected: function(value, previousValue) {
         value = value || this._dateOption('value');
 
-        var $prevSelectedCell = this._view._getCellByDate(previousValue);
-        var $selectedCell = this._view._getCellByDate(value);
+        const $prevSelectedCell = this._view._getCellByDate(previousValue);
+        const $selectedCell = this._view._getCellByDate(value);
 
         this.setAria('selected', undefined, $prevSelectedCell);
         this.setAria('selected', true, $selectedCell);
@@ -1152,8 +1152,8 @@ var Calendar = Editor.inherit({
     _updateAriaId: function(value) {
         value = value || this.option('currentDate');
 
-        var ariaId = 'dx-' + new Guid();
-        var $newCell = this._view._getCellByDate(value);
+        const ariaId = 'dx-' + new Guid();
+        const $newCell = this._view._getCellByDate(value);
 
         this.setAria('id', ariaId, $newCell);
         this.setAria('activedescendant', ariaId);
@@ -1168,8 +1168,8 @@ var Calendar = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
-        var previousValue = args.previousValue;
+        let value = args.value;
+        let previousValue = args.previousValue;
 
         switch(args.name) {
             case 'width':

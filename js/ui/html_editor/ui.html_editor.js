@@ -454,7 +454,7 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
-        let modulesConfig = extend({
+        const modulesConfig = extend({
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
             dropImage: this._getBaseModuleConfig(),

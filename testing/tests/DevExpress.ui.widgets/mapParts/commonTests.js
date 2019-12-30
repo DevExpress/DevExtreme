@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    testing = require('./utils.js'),
-    Map = require('ui/map'),
-    GoogleStaticProvider = require('ui/map/provider.google_static'),
-    ajaxMock = require('../../../helpers/ajaxMock.js');
+const $ = require('jquery');
+const testing = require('./utils.js');
+const Map = require('ui/map');
+const GoogleStaticProvider = require('ui/map/provider.google_static');
+const ajaxMock = require('../../../helpers/ajaxMock.js');
 
-var MARKERS = testing.MARKERS,
-    ROUTES = testing.ROUTES;
+const MARKERS = testing.MARKERS;
+const ROUTES = testing.ROUTES;
 
-var MAP_CLASS = 'dx-map',
-    MAP_CONTAINER_CLASS = 'dx-map-container',
-    MAP_SHIELD_CLASS = 'dx-map-shield',
-    NATIVE_CLICK_CLASS = 'dx-native-click';
+const MAP_CLASS = 'dx-map';
+const MAP_CONTAINER_CLASS = 'dx-map-container';
+const MAP_SHIELD_CLASS = 'dx-map-shield';
+const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 
 QUnit.module('rendering', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -30,7 +30,7 @@ QUnit.module('rendering', {
 });
 
 QUnit.test('widget should be rendered', function(assert) {
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic'
     });
 
@@ -38,7 +38,7 @@ QUnit.test('widget should be rendered', function(assert) {
 });
 
 QUnit.test('clicks inside map should be native (T349301)', function(assert) {
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic'
     });
 
@@ -46,7 +46,7 @@ QUnit.test('clicks inside map should be native (T349301)', function(assert) {
 });
 
 QUnit.test('widget should be rendered with correct dimensions', function(assert) {
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic',
         width: 100,
         height: 150
@@ -58,7 +58,7 @@ QUnit.test('widget should be rendered with correct dimensions', function(assert)
 });
 
 QUnit.test('map container should be rendered', function(assert) {
-    var $map = $('#map').dxMap({
+    const $map = $('#map').dxMap({
         provider: 'googleStatic'
     });
 
@@ -68,7 +68,7 @@ QUnit.test('map container should be rendered', function(assert) {
 
 QUnit.module('option change', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -83,10 +83,10 @@ QUnit.module('option change', {
 });
 
 QUnit.test('disabled', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic'
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic'
+    });
+    const map = $map.dxMap('instance');
 
     map.option('disabled', true);
     assert.equal($map.find('.' + MAP_SHIELD_CLASS).length, 1);
@@ -98,7 +98,7 @@ QUnit.test('disabled', function(assert) {
 
 QUnit.module('markers', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -115,12 +115,12 @@ QUnit.module('markers', {
 QUnit.test('markers option should respond on add marker as object', function(assert) {
     assert.expect(3);
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic'
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic'
+    });
+    const map = $map.dxMap('instance');
 
-    var done = assert.async();
+    const done = assert.async();
     map.addMarker(MARKERS[0]).done(function() {
         assert.ok(true, 'action resolved');
         assert.equal(this, map, 'correct context specified');
@@ -132,10 +132,10 @@ QUnit.test('markers option should respond on add marker as object', function(ass
 });
 
 QUnit.test('markers option should respond on add marker as array', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic'
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic'
+    });
+    const map = $map.dxMap('instance');
 
     map.addMarker([MARKERS[0], MARKERS[2]]);
 
@@ -145,13 +145,13 @@ QUnit.test('markers option should respond on add marker as array', function(asse
 QUnit.test('markers option should respond on remove marker as object', function(assert) {
     assert.expect(3);
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            markers: [MARKERS[0]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        markers: [MARKERS[0]]
+    });
+    const map = $map.dxMap('instance');
 
-    var done = assert.async();
+    const done = assert.async();
     map.removeMarker(MARKERS[0]).done(function() {
         assert.ok(true, 'action resolved');
         assert.equal(this, map, 'correct context specified');
@@ -163,11 +163,11 @@ QUnit.test('markers option should respond on remove marker as object', function(
 });
 
 QUnit.test('markers option should respond on remove marker as array', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            markers: [MARKERS[0], MARKERS[2]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        markers: [MARKERS[0], MARKERS[2]]
+    });
+    const map = $map.dxMap('instance');
 
     map.removeMarker([MARKERS[0], MARKERS[2]]);
 
@@ -175,11 +175,11 @@ QUnit.test('markers option should respond on remove marker as array', function(a
 });
 
 QUnit.test('markers option should respond on remove marker as number', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            markers: [MARKERS[0], MARKERS[2]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        markers: [MARKERS[0], MARKERS[2]]
+    });
+    const map = $map.dxMap('instance');
 
     map.removeMarker(1);
 
@@ -206,7 +206,7 @@ QUnit.test('markers option should not accept null at runtime', function(assert) 
 
 QUnit.module('saving previous markers', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -221,8 +221,8 @@ QUnit.module('saving previous markers', {
 });
 
 QUnit.test('pushing into markers option should render new marker', function(assert) {
-    var addedMarkers = 0,
-        removedMarkers = 0;
+    let addedMarkers = 0;
+    let removedMarkers = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -243,7 +243,7 @@ QUnit.test('pushing into markers option should render new marker', function(asse
                 resolve(map);
             });
 
-            var markers = map.option('markers');
+            const markers = map.option('markers');
             markers.push(MARKERS[0]);
             map.option('markers', markers);
         });
@@ -256,7 +256,7 @@ QUnit.test('pushing into markers option should render new marker', function(asse
                 resolve();
             });
 
-            var markers = map.option('markers');
+            const markers = map.option('markers');
             markers.push(MARKERS[1]);
             map.option('markers', markers);
         });
@@ -264,8 +264,8 @@ QUnit.test('pushing into markers option should render new marker', function(asse
 });
 
 QUnit.test('adding same marker after addMarker method call should not render marker', function(assert) {
-    var addedMarkers = 0,
-        removedMarkers = 0;
+    let addedMarkers = 0;
+    let removedMarkers = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -303,8 +303,8 @@ QUnit.test('adding same marker after addMarker method call should not render mar
 });
 
 QUnit.test('adding same marker after removeMarker should render marker', function(assert) {
-    var addedMarkers = 0,
-        removedMarkers = 0;
+    let addedMarkers = 0;
+    let removedMarkers = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -343,8 +343,8 @@ QUnit.test('adding same marker after removeMarker should render marker', functio
 });
 
 QUnit.test('changing existing marker should rerender marker', function(assert) {
-    var addedMarkers = 0,
-        removedMarkers = 0;
+    let addedMarkers = 0;
+    let removedMarkers = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -377,7 +377,7 @@ QUnit.test('changing existing marker should rerender marker', function(assert) {
 
 QUnit.module('async markers rendering', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -392,17 +392,17 @@ QUnit.module('async markers rendering', {
 });
 
 QUnit.test('addMarker method call should not render marker twice', function(assert) {
-    var addedMarkers = 0;
+    let addedMarkers = 0;
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            onMarkerAdded: function() {
-                addedMarkers++;
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        onMarkerAdded: function() {
+            addedMarkers++;
+        }
+    });
+    const map = $map.dxMap('instance');
 
     map.addMarker(MARKERS[0]).done(function() {
         assert.equal(addedMarkers, 1, 'correct number of markers added');
@@ -412,28 +412,28 @@ QUnit.test('addMarker method call should not render marker twice', function(asse
 });
 
 QUnit.test('markers option change should not render incorrect markers', function(assert) {
-    var addedMarkers = 0;
+    let addedMarkers = 0;
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            onMarkerAdded: function() {
-                addedMarkers++;
-            },
-            onReady: function() {
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        onMarkerAdded: function() {
+            addedMarkers++;
+        },
+        onReady: function() {
             // NOTE: Only second onReady matters
-                map.option('onReady', function() {
-                    assert.equal(addedMarkers, 1, 'correct number of markers added');
+            map.option('onReady', function() {
+                assert.equal(addedMarkers, 1, 'correct number of markers added');
 
-                    $map.remove();
-                    done();
-                });
-            }
-        }),
-        map = $map.dxMap('instance');
+                $map.remove();
+                done();
+            });
+        }
+    });
+    const map = $map.dxMap('instance');
 
-    var markers = [MARKERS[0]];
+    const markers = [MARKERS[0]];
     map.option('markers', markers);
     markers.push(MARKERS[1]);
     map.option('markers', markers);
@@ -448,7 +448,7 @@ QUnit.test('markers option change should not render incorrect markers', function
 
 QUnit.module('routes', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -465,12 +465,12 @@ QUnit.module('routes', {
 QUnit.test('routes option should respond on add route as object', function(assert) {
     assert.expect(3);
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic'
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic'
+    });
+    const map = $map.dxMap('instance');
 
-    var done = assert.async();
+    const done = assert.async();
     map.addRoute(ROUTES[0]).done(function() {
         assert.ok(true, 'action resolved');
         assert.equal(this, map, 'correct context specified');
@@ -482,10 +482,10 @@ QUnit.test('routes option should respond on add route as object', function(asser
 });
 
 QUnit.test('routes option should respond on add route as array', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic'
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic'
+    });
+    const map = $map.dxMap('instance');
 
     map.addRoute([ROUTES[0], ROUTES[2]]);
 
@@ -495,13 +495,13 @@ QUnit.test('routes option should respond on add route as array', function(assert
 QUnit.test('routes option should respond on remove route as object', function(assert) {
     assert.expect(3);
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            routes: [ROUTES[0]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        routes: [ROUTES[0]]
+    });
+    const map = $map.dxMap('instance');
 
-    var done = assert.async();
+    const done = assert.async();
     map.removeRoute(ROUTES[0]).done(function() {
         assert.ok(true, 'action resolved');
         assert.equal(this, map, 'correct context specified');
@@ -513,11 +513,11 @@ QUnit.test('routes option should respond on remove route as object', function(as
 });
 
 QUnit.test('routes option should respond on remove route as array', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            routes: [ROUTES[0], ROUTES[2]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        routes: [ROUTES[0], ROUTES[2]]
+    });
+    const map = $map.dxMap('instance');
 
     map.removeRoute([ROUTES[0], ROUTES[2]]);
 
@@ -525,11 +525,11 @@ QUnit.test('routes option should respond on remove route as array', function(ass
 });
 
 QUnit.test('routes option should respond on remove route as number', function(assert) {
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            routes: [ROUTES[0], ROUTES[2]]
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        routes: [ROUTES[0], ROUTES[2]]
+    });
+    const map = $map.dxMap('instance');
 
     map.removeRoute(1);
 
@@ -556,7 +556,7 @@ QUnit.test('routes option should not accept null at runtime', function(assert) {
 
 QUnit.module('saving previous routes', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -571,8 +571,8 @@ QUnit.module('saving previous routes', {
 });
 
 QUnit.test('pushing into routes option should render new route', function(assert) {
-    var addedRoutes = 0,
-        removedRoutes = 0;
+    let addedRoutes = 0;
+    let removedRoutes = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -593,7 +593,7 @@ QUnit.test('pushing into routes option should render new route', function(assert
                 resolve(map);
             });
 
-            var routes = map.option('routes');
+            const routes = map.option('routes');
             routes.push(ROUTES[0]);
             map.option('routes', routes);
         });
@@ -606,7 +606,7 @@ QUnit.test('pushing into routes option should render new route', function(assert
                 resolve();
             });
 
-            var routes = map.option('routes');
+            const routes = map.option('routes');
             routes.push(ROUTES[1]);
             map.option('routes', routes);
         });
@@ -614,8 +614,8 @@ QUnit.test('pushing into routes option should render new route', function(assert
 });
 
 QUnit.test('adding same route after addRoute should not render route', function(assert) {
-    var addedRoutes = 0,
-        removedRoutes = 0;
+    let addedRoutes = 0;
+    let removedRoutes = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -653,8 +653,8 @@ QUnit.test('adding same route after addRoute should not render route', function(
 });
 
 QUnit.test('adding route after removeRoute should render route', function(assert) {
-    var addedRoutes = 0,
-        removedRoutes = 0;
+    let addedRoutes = 0;
+    let removedRoutes = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -693,8 +693,8 @@ QUnit.test('adding route after removeRoute should render route', function(assert
 });
 
 QUnit.test('changing existing route should rerender marker', function(assert) {
-    var addedRoutes = 0,
-        removedRoutes = 0;
+    let addedRoutes = 0;
+    let removedRoutes = 0;
 
     return new Promise(function(resolve) {
         new Map($('#map'), {
@@ -727,7 +727,7 @@ QUnit.test('changing existing route should rerender marker', function(assert) {
 
 QUnit.module('async routes rendering', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -742,17 +742,17 @@ QUnit.module('async routes rendering', {
 });
 
 QUnit.test('addRoute method call should not render route twice', function(assert) {
-    var addedRoutes = 0;
+    let addedRoutes = 0;
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            onRouteAdded: function() {
-                addedRoutes++;
-            }
-        }),
-        map = $map.dxMap('instance');
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        onRouteAdded: function() {
+            addedRoutes++;
+        }
+    });
+    const map = $map.dxMap('instance');
 
     map.addRoute(ROUTES[0]).done(function() {
         assert.equal(addedRoutes, 1, 'correct number of markers added');
@@ -762,28 +762,28 @@ QUnit.test('addRoute method call should not render route twice', function(assert
 });
 
 QUnit.test('routes option change should not render incorrect routes', function(assert) {
-    var addedRoutes = 0;
+    let addedRoutes = 0;
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var $map = $('#map').dxMap({
-            provider: 'googleStatic',
-            onRouteAdded: function() {
-                addedRoutes++;
-            },
-            onReady: function() {
+    const $map = $('#map').dxMap({
+        provider: 'googleStatic',
+        onRouteAdded: function() {
+            addedRoutes++;
+        },
+        onReady: function() {
             // NOTE: Only second onReady matters
-                map.option('onReady', function() {
-                    assert.equal(addedRoutes, 1, 'correct number of routes added');
+            map.option('onReady', function() {
+                assert.equal(addedRoutes, 1, 'correct number of routes added');
 
-                    $map.remove();
-                    done();
-                });
-            }
-        }),
-        map = $map.dxMap('instance');
+                $map.remove();
+                done();
+            });
+        }
+    });
+    const map = $map.dxMap('instance');
 
-    var routes = [ROUTES[0]];
+    const routes = [ROUTES[0]];
     map.option('routes', routes);
     routes.push(ROUTES[1]);
     map.option('routes', routes);
@@ -792,7 +792,7 @@ QUnit.test('routes option change should not render incorrect routes', function(a
 
 QUnit.module('Change provider', {
     beforeEach: function() {
-        var fakeURL = '/fakeGoogleUrl?';
+        const fakeURL = '/fakeGoogleUrl?';
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
@@ -807,7 +807,7 @@ QUnit.module('Change provider', {
 });
 
 QUnit.test('change provider and async options', function(assert) {
-    var makeConfig = function(resolve) {
+    const makeConfig = function(resolve) {
         return {
             provider: 'googleStatic',
             zoom: 1000,
