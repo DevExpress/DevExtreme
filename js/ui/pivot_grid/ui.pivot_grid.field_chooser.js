@@ -684,7 +684,13 @@ const FieldChooser = BaseFieldChooser.inherit({
     },
 
     cancelChanges: function() {
-        this.option('state', this._dataSource.state());
+        const dataSource = this._dataSource;
+
+        if(!dataSource.isLoading()) {
+            this.option('state', dataSource.state());
+            return true;
+        }
+        return false;
     },
 
     getDataSource: function() {
