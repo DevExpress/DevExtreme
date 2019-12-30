@@ -584,7 +584,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
             },
 
             rowsView: {
-                _renderExpandIconCore: function($iconContainer, options) {
+                _renderIcons: function($iconContainer, options) {
                     this.callBase.apply(this, arguments);
 
                     if(this.option('selection.mode') === 'multiple') {

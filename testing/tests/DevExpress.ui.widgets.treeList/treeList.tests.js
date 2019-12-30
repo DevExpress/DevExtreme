@@ -961,7 +961,7 @@ QUnit.test('Change searchPanel.text', function(assert) {
 
 // T846709
 ['standard', 'virual'].forEach((rowRenderingMode) => {
-    QUnit.test(`Modified nodes should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
+    QUnit.test(`Modified expand state should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
         // arrange
         let data = generateData(2),
             treeList = createTreeList({
@@ -994,7 +994,7 @@ QUnit.test('Change searchPanel.text', function(assert) {
     });
 });
 
-QUnit.test('Modified nodes should be displayed correctly when repaintChangesOnly is true and selection.mode is "multiple"', function(assert) {
+QUnit.test('The select checkbox should be displayed after changing expand state when repaintChangesOnly is true', function(assert) {
     // arrange
     let data = generateData(2),
         treeList = createTreeList({

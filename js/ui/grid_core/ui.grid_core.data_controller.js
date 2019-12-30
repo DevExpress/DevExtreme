@@ -797,7 +797,7 @@ module.exports = {
                         return columnIndices;
                     }
                 },
-                _compareItems: function(item1, item2) {
+                _isItemEquals: function(item1, item2) {
                     if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
                         return false;
                     }
@@ -829,7 +829,7 @@ module.exports = {
                     }
 
                     const isItemEquals = (item1, item2) => {
-                        if(!this._compareItems(item1, item2)) {
+                        if(!this._isItemEquals(item1, item2)) {
                             return false;
                         }
 

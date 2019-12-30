@@ -37,7 +37,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             this._dataSource.load();
         },
 
-        _compareItems: function(item1, item2) {
+        _isItemEquals: function(item1, item2) {
             if(!this.callBase.apply(this, arguments)) {
                 return false;
             }
