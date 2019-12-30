@@ -1930,7 +1930,7 @@ const Scheduler = Widget.inherit({
             addDefaultTemplates: that._templateManager.addDefaultTemplates.bind(that._templateManager),
             getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
             showAppointmentPopup: that.showAppointmentPopup.bind(that),
-            getText: (data, currentData, format) => that.fire('getText', data, currentData, format),
+            getTextAndFormatDate: (data, currentData, format) => that.fire('getTextAndFormatDate', data, currentData, format),
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             getTargetedAppointmentData: (data, appointment) => that.fire('getTargetedAppointmentData', data, appointment),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),

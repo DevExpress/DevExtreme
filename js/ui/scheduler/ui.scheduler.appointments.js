@@ -341,7 +341,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
         }
 
         const currentData = extend(data, { startDate: startDate, endDate: endDate });
-        const formatText = this.invoke('getText', currentData, currentData, 'TIME');
+        const formatText = this.invoke('getTextAndFormatDate', currentData, currentData, 'TIME');
 
         $('<div>')
             .text(this.invoke('createAppointmentTitle', data))

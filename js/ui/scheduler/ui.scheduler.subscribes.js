@@ -244,7 +244,7 @@ const subscribes = {
         this._workSpace.restoreScrollTop();
     },
 
-    getText(data, currentData, format) {
+    getTextAndFormatDate(data, currentData, format) {
         const isAllDay = data.allDay;
         const startDateTimeZone = data.startDateTimeZone;
         const endDateTimeZone = data.endDateTimeZone;
