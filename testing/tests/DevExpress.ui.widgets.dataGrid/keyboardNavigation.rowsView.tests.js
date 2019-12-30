@@ -252,5 +252,4 @@ QUnit.module('Rows view', {
         assert.equal(rowsView.element().attr('tabIndex'), undefined, 'tabIndex of rowsView');
         assert.equal($cell.attr('tabIndex'), 5, 'tabIndex of clicked cell');
     });
-
 });

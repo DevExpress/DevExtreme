@@ -128,25 +128,35 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowsView = that.getView('rowsView');
 
         rowsView.renderCompleted.add(function(e) {
-            const $element = rowsView.element();
+            const $rowsView = rowsView.element();
             const isFullUpdate = !e || e.changeType === 'refresh';
             const isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name;
             let needUpdateFocus = false;
             const isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend');
             const clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
             const $focusedElement = $(':focus');
-            const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is('body'));
+            const isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($rowsView).length || (browser.msie && $focusedElement.is('body'));
 
-            eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
-            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
+            eventsEngine.off($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
+            eventsEngine.on($rowsView, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
 
-            that._initKeyDownProcessor(that, $element, that._keyDownHandler);
+            that._initKeyDownProcessor(that, $rowsView, that._keyDownHandler);
+
+            that._setRowsViewAttributes($rowsView);
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
                 needUpdateFocus && that._updateFocus(true);
             }
         });
+    },
+
+    _setRowsViewAttributes: function($rowsView) {
+        const isGridEmpty = !this._dataController.getVisibleRows().length;
+        if(isGridEmpty) {
+            const tabIndex = this.option('tabindex') || 0;
+            $rowsView.attr('tabindex', tabIndex);
+        }
     },
 
     _initKeyDownProcessor: function(context, element, handler) {
@@ -1741,11 +1751,11 @@ module.exports = {
                 renderFocusState: function() {
                     const dataController = this._dataController;
                     let rowIndex = this.option('focusedRowIndex') || 0;
-                    const $element = this.element();
+                    const $rowsView = this.element();
                     let cellElements;
 
-                    if($element && !focused($element)) {
-                        $element.attr('tabIndex', null);
+                    if($rowsView && !focused($rowsView)) {
+                        $rowsView.attr('tabIndex', null);
                     }
 
                     if(rowIndex < 0 || rowIndex >= dataController.getVisibleRows().length) {
