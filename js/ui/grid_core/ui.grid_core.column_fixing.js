@@ -468,6 +468,16 @@ const baseFixedColumns = {
                 $contentElement && $contentElement.css('height', '');
             }
         }
+    },
+
+    setScrollerSpacing: function(width) {
+        const rtlEnabled = this.option('rtlEnabled');
+
+        this.callBase(width);
+        this.element().children('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS)).css({
+            paddingLeft: rtlEnabled ? width : '',
+            paddingRight: !rtlEnabled ? width : ''
+        });
     }
 };
 
@@ -518,14 +528,6 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             }
         }
         return items;
-    },
-
-    setScrollerSpacing: function(width) {
-        const that = this;
-        const rtlEnabled = that.option('rtlEnabled');
-
-        that.callBase(width);
-        that.element().children('.' + this.addWidgetPrefix(CONTENT_FIXED_CLASS)).css(rtlEnabled ? { paddingLeft: width } : { paddingRight: width });
     },
 
     getFixedColumnElements: function(rowIndex) {

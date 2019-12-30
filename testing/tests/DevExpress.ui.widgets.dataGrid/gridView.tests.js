@@ -575,6 +575,58 @@ function createGridView(options, userOptions) {
         assert.strictEqual(footerTable.width(), headersTable.width(), 'headers and footer table widths must be equals');
     });
 
+    QUnit.test('Footer fixed container should have padding-right when using native scrolling and fixed columns (T846658)', function(assert) {
+        // arrange, act
+        const gridView = this.createGridView({
+            columnsController: new MockColumnsController([
+                { caption: 'Column 1' },
+                { caption: 'Column 2', fixed: true }
+            ]),
+            dataController: new MockDataController({
+                items: [
+                    { values: [1] },
+                    { values: [2] },
+                    { values: [3] },
+                    { values: [4] },
+                    { values: [5] }
+                ],
+                totalItem: {
+                    summaryCells: [
+                        { summaryType: 'count', value: 100 },
+                        { summaryType: 'min', value: 0 },
+                        { summaryType: 'max', value: 120001 }
+                    ]
+                }
+            })
+        });
+
+        const $container = $('#container');
+        $container.height(110).width(1000);
+
+        gridView.render($container, $.extend(this.options, {
+            scrolling: {
+                useNative: true
+            },
+            showColumnHeaders: true,
+            groupPanel: {
+                visible: false
+            },
+            searchPanel: {
+                visible: false
+            },
+            disabled: false
+        }));
+
+        gridView.update();
+        gridView.getController('resizing').resize();
+
+        // assert
+        const footerTable = $container.find('.dx-datagrid-content-fixed').eq(0);
+        const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
+
+        assert.equal(parseFloat(footerTable.css('paddingRight')), scrollerWidth, 'footer has padding');
+    });
+
     QUnit.test('Scroller not shown when scrollable is false', function(assert) {
         // arrange, act
         const gridView = this.createGridView({
