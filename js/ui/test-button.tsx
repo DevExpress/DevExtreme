@@ -173,7 +173,6 @@ export default class Button {
     @Prop() elementAttr?: { [name: string]: any } = {};
     @Prop() visible?: boolean = true;
 
-    // @Template() contentRender?: any;
     @Prop() contentRender?: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
