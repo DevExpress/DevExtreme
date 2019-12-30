@@ -1,4 +1,4 @@
-var widgets = {
+const widgets = {
     Accordion: require('ui/accordion'),
     ActionSheet: require('ui/action_sheet'),
     Autocomplete: require('ui/autocomplete'),
@@ -73,11 +73,11 @@ var widgets = {
     VectorMap: require('viz/vector_map')
 };
 
-var DataSource = require('data/data_source');
+const DataSource = require('data/data_source');
 
 QUnit.module('Widget creation', {
     beforeEach: function() {
-        var fixture = document.getElementById('qunit-fixture');
+        const fixture = document.getElementById('qunit-fixture');
         this.element = document.createElement('div');
         fixture.appendChild(this.element);
     },
@@ -92,20 +92,20 @@ Object.keys(widgets).forEach(function(widget) {
 
         assert.ok(true, 'it\'s possible to create ' + widget);
 
-        var options = this.instance.option(),
-            clock = widget === 'DataGrid' || widget === 'TreeList' ? sinon.useFakeTimers() : null;
+        const options = this.instance.option();
+        const clock = widget === 'DataGrid' || widget === 'TreeList' ? sinon.useFakeTimers() : null;
 
         if(!options || Object.keys(options).length === 0) {
             assert.ok(false, 'options is not defined ' + widget);
         }
-        for(var optionName in options) {
-            var prevValue = options[optionName],
-                newValue = prevValue;
+        for(const optionName in options) {
+            let prevValue = options[optionName];
+            let newValue = prevValue;
 
             // NOTE: some widgets doesn't support dataSource === null
             if(optionName === 'dataSource') {
                 // NOTE: dxResponsiveBox supports only plain object in items
-                var item = widget === 'ResponsiveBox' ? { text: 1 } : 1;
+                let item = widget === 'ResponsiveBox' ? { text: 1 } : 1;
                 item = widget === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
                 newValue = new DataSource([item]);

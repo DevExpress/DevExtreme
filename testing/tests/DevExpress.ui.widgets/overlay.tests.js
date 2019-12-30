@@ -730,28 +730,28 @@ testModule('visibility', moduleConfig, () => {
         // until we reconsider onShowing implementation in future versions
         fx.off = false;
         let showingCounter = 0;
-        const onHidingCounter = sinon.stub(),
-            onHiddenCounter = sinon.stub(),
-            onShownCounter = sinon.stub(),
-            $overlay = $('#overlay').dxOverlay({
-                onShowing: function(e) {
-                    showingCounter++;
-                    e.cancel = true;
-                },
-                onShown: onShownCounter,
-                onHiding: onHidingCounter,
-                onHidden: onHiddenCounter
-            }),
-            overlay = $overlay.dxOverlay('instance'),
-            done = assert.async();
+        const onHidingCounter = sinon.stub();
+        const onHiddenCounter = sinon.stub();
+        const onShownCounter = sinon.stub();
+        const $overlay = $('#overlay').dxOverlay({
+            onShowing: function(e) {
+                showingCounter++;
+                e.cancel = true;
+            },
+            onShown: onShownCounter,
+            onHiding: onHidingCounter,
+            onHidden: onHiddenCounter
+        });
+        const overlay = $overlay.dxOverlay('instance');
+        const done = assert.async();
 
         overlay.on('shown', onShownCounter)
             .on('hiding', onHidingCounter)
             .on('hidden', onHiddenCounter);
 
         overlay.show().done(function(result) {
-            const $content = $(overlay.$content()),
-                $wrapper = $content.parent();
+            const $content = $(overlay.$content());
+            const $wrapper = $content.parent();
 
             assert.notOk(result, 'result === false');
             assert.ok($wrapper.closest('#overlay').length === 1, 'overlay wrapper is inside the overlay root element');
@@ -2412,10 +2412,10 @@ testModule('target', moduleConfig, () => {
 
         });
 
-        const $overlay = $('#overlay'),
-            overlay = new OverlayTarget($overlay, {
-                target: $target
-            });
+        const $overlay = $('#overlay');
+        const overlay = new OverlayTarget($overlay, {
+            target: $target
+        });
 
         $.each([
             'position.of',
@@ -3184,8 +3184,8 @@ testModule('keyboard navigation', {
     });
 
     test('overlay doesn\'t handle keyboard propagated events', function(assert) {
-        const $overlayContent = this.$overlayContent,
-            $input = $('<input>');
+        const $overlayContent = this.$overlayContent;
+        const $input = $('<input>');
 
         $overlayContent.append($input);
         const keyboard = keyboardMock($input);
@@ -3336,11 +3336,11 @@ testModule('focus policy', {
         const $content = $(overlay.content());
         const $wrapper = $content.closest(toSelector(OVERLAY_WRAPPER_CLASS));
 
-        const contentFocusHandler = sinon.spy(),
-            $tabbableDiv = $('<div>')
-                .attr('tabindex', 0)
-                .html('Tabbable div')
-                .prependTo($wrapper);
+        const contentFocusHandler = sinon.spy();
+        const $tabbableDiv = $('<div>')
+            .attr('tabindex', 0)
+            .html('Tabbable div')
+            .prependTo($wrapper);
 
         eventsEngine.on($tabbableDiv, 'focusin', contentFocusHandler);
         keyboardMock($tabbableDiv).press('tab');

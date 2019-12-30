@@ -1,26 +1,26 @@
-var mathUtils = require('../core/utils/math'),
-    iteratorUtils = require('../core/utils/iterator'),
-    errors = require('../core/errors'),
-    eventUtils = require('./utils'),
-    Emitter = require('./core/emitter'),
-    registerEmitter = require('./core/emitter_registrator');
+const mathUtils = require('../core/utils/math');
+const iteratorUtils = require('../core/utils/iterator');
+const errors = require('../core/errors');
+const eventUtils = require('./utils');
+const Emitter = require('./core/emitter');
+const registerEmitter = require('./core/emitter_registrator');
 
 
-var DX_PREFIX = 'dx',
+const DX_PREFIX = 'dx';
 
-    TRANSFORM = 'transform',
-    TRANSLATE = 'translate',
-    ZOOM = 'zoom',
-    PINCH = 'pinch',
-    ROTATE = 'rotate',
+const TRANSFORM = 'transform';
+const TRANSLATE = 'translate';
+const ZOOM = 'zoom';
+const PINCH = 'pinch';
+const ROTATE = 'rotate';
 
-    START_POSTFIX = 'start',
-    UPDATE_POSTFIX = '',
-    END_POSTFIX = 'end';
+const START_POSTFIX = 'start';
+const UPDATE_POSTFIX = '';
+const END_POSTFIX = 'end';
 
 
-var eventAliases = [];
-var addAlias = function(eventName, eventArgs) {
+const eventAliases = [];
+const addAlias = function(eventName, eventArgs) {
     eventAliases.push({
         name: eventName,
         args: eventArgs
@@ -57,7 +57,7 @@ addAlias(ROTATE, {
 });
 
 
-var getVector = function(first, second) {
+const getVector = function(first, second) {
     return {
         x: second.pageX - first.pageX,
         y: -second.pageY + first.pageY,
@@ -66,42 +66,42 @@ var getVector = function(first, second) {
     };
 };
 
-var getEventVector = function(e) {
-    var pointers = e.pointers;
+const getEventVector = function(e) {
+    const pointers = e.pointers;
 
     return getVector(pointers[0], pointers[1]);
 };
 
-var getDistance = function(vector) {
+const getDistance = function(vector) {
     return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 };
 
-var getScale = function(firstVector, secondVector) {
+const getScale = function(firstVector, secondVector) {
     return getDistance(firstVector) / getDistance(secondVector);
 };
 
-var getRotation = function(firstVector, secondVector) {
-    var scalarProduct = firstVector.x * secondVector.x + firstVector.y * secondVector.y;
-    var distanceProduct = getDistance(firstVector) * getDistance(secondVector);
+const getRotation = function(firstVector, secondVector) {
+    const scalarProduct = firstVector.x * secondVector.x + firstVector.y * secondVector.y;
+    const distanceProduct = getDistance(firstVector) * getDistance(secondVector);
 
     if(distanceProduct === 0) {
         return 0;
     }
 
-    var sign = mathUtils.sign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
-    var angle = Math.acos(mathUtils.fitIntoRange(scalarProduct / distanceProduct, -1, 1));
+    const sign = mathUtils.sign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
+    const angle = Math.acos(mathUtils.fitIntoRange(scalarProduct / distanceProduct, -1, 1));
 
     return sign * angle;
 };
 
-var getTranslation = function(firstVector, secondVector) {
+const getTranslation = function(firstVector, secondVector) {
     return {
         x: firstVector.centerX - secondVector.centerX,
         y: firstVector.centerY - secondVector.centerY
     };
 };
 
-var TransformEmitter = Emitter.inherit({
+const TransformEmitter = Emitter.inherit({
 
     configure: function(data, eventName) {
         if(eventName.indexOf(ZOOM) > -1) {
@@ -118,7 +118,7 @@ var TransformEmitter = Emitter.inherit({
     start: function(e) {
         this._accept(e);
 
-        var startVector = getEventVector(e);
+        const startVector = getEventVector(e);
         this._startVector = startVector;
         this._prevVector = startVector;
 
@@ -126,15 +126,15 @@ var TransformEmitter = Emitter.inherit({
     },
 
     move: function(e) {
-        var currentVector = getEventVector(e),
-            eventArgs = this._getEventArgs(currentVector);
+        const currentVector = getEventVector(e);
+        const eventArgs = this._getEventArgs(currentVector);
 
         this._fireEventAliases(UPDATE_POSTFIX, e, eventArgs);
         this._prevVector = currentVector;
     },
 
     end: function(e) {
-        var eventArgs = this._getEventArgs(this._prevVector);
+        const eventArgs = this._getEventArgs(this._prevVector);
         this._fireEventAliases(END_POSTFIX, e, eventArgs);
     },
 
@@ -153,7 +153,7 @@ var TransformEmitter = Emitter.inherit({
         eventArgs = eventArgs || {};
 
         iteratorUtils.each(eventAliases, (function(_, eventAlias) {
-            var args = {};
+            const args = {};
             iteratorUtils.each(eventAlias.args, function(name) {
                 if(name in eventArgs) {
                     args[name] = eventArgs[name];
@@ -308,7 +308,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 
-let eventNames = eventAliases.reduce((result, eventAlias) => {
+const eventNames = eventAliases.reduce((result, eventAlias) => {
     [START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX].forEach(eventPostfix => {
         result.push(DX_PREFIX + eventAlias.name + eventPostfix);
     });

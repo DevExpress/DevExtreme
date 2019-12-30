@@ -1,9 +1,9 @@
-var DevExpress = require('./core');
+const DevExpress = require('./core');
 
 /// BUNDLER_PARTS
 /* Data (dx.module-core.js) */
 
-var data = DevExpress.data = require('../../../bundles/modules/data');
+const data = DevExpress.data = require('../../../bundles/modules/data');
 
 data.odata = require('../../../bundles/modules/data.odata');
 /// BUNDLER_PARTS_END

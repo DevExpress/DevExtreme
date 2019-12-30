@@ -1,11 +1,11 @@
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 import dateUtils from '../../../core/utils/date';
 
-const MAX_APPOINTMENT_HEIGHT = 100,
-    DEFAULT_APPOINTMENT_HEIGHT = 60,
-    MIN_APPOINTMENT_HEIGHT = 35,
-    DROP_DOWN_BUTTON_OFFSET = 2,
-    BOTTOM_CELL_GAP = 20;
+const MAX_APPOINTMENT_HEIGHT = 100;
+const DEFAULT_APPOINTMENT_HEIGHT = 60;
+const MIN_APPOINTMENT_HEIGHT = 35;
+const DROP_DOWN_BUTTON_OFFSET = 2;
+const BOTTOM_CELL_GAP = 20;
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -15,22 +15,17 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize(),
-            allDay = this.instance.fire('getField', 'allDay', appointment),
-            width;
-
-        var startDate = this.startDate(appointment, false, position),
-            endDate = this.endDate(appointment, position, isRecurring),
-            appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const allDay = this.instance.fire('getField', 'allDay', appointment);
+        const startDate = this.startDate(appointment, false, position);
+        const endDate = this.endDate(appointment, position, isRecurring, true);
+        let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
 
-        var cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute'),
-            durationInCells = appointmentDuration / cellDuration;
-
-        width = durationInCells * cellWidth;
-
-        width = this.cropAppointmentWidth(width, cellWidth);
+        const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
+        const durationInCells = appointmentDuration / cellDuration;
+        const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
     }
@@ -40,27 +35,27 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     getAppointmentGeometry(coordinates) {
-        var result = this._customizeAppointmentGeometry(coordinates);
+        const result = this._customizeAppointmentGeometry(coordinates);
 
         return super.getAppointmentGeometry(result);
     }
 
     _customizeAppointmentGeometry(coordinates) {
-        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
 
         if(overlappingMode) {
-            var config = this._calculateGeometryConfig(coordinates);
+            const config = this._calculateGeometryConfig(coordinates);
 
             return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
         } else {
-            var cellHeight = (this.getDefaultCellHeight() || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP,
-                height = cellHeight / coordinates.count;
+            const cellHeight = (this.getDefaultCellHeight() || this.getAppointmentMinSize()) - BOTTOM_CELL_GAP;
+            let height = cellHeight / coordinates.count;
 
             if(height > MAX_APPOINTMENT_HEIGHT) {
                 height = MAX_APPOINTMENT_HEIGHT;
             }
 
-            var top = coordinates.top + coordinates.index * height;
+            const top = coordinates.top + coordinates.index * height;
 
             return {
                 height: height,
@@ -79,7 +74,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _checkLongCompactAppointment(item, result) {
-        var overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
+        const overlappingMode = this.instance.fire('getMaxAppointmentsPerCell');
 
         if(overlappingMode) {
             this._splitLongCompactAppointment(item, result);
@@ -89,7 +84,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
-        var cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
         return itemLeft + cellWidth * index;
     }
@@ -119,7 +114,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMaxAppointmentWidth(startDate) {
-        var result;
+        let result;
         this.instance.fire('getMaxAppointmentWidth', {
             date: startDate,
             callback: function(width) {
@@ -135,8 +130,8 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     getDeltaTime(args, initialSize) {
-        var deltaTime = 0,
-            deltaWidth = args.width - initialSize.width;
+        let deltaTime = 0;
+        const deltaWidth = args.width - initialSize.width;
 
         deltaTime = toMs('minute') * Math.round(deltaWidth / this.getDefaultCellWidth() * this.instance.getAppointmentDurationInMinutes());
 

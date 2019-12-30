@@ -4,7 +4,7 @@
 * @hidden
 * @inherits BaseWidget
 */
-var BaseGauge = {
+const BaseGauge = {
     /**
     * @name BaseGaugeOptions.containerBackgroundColor
     * @type string
@@ -376,7 +376,7 @@ var BaseGauge = {
 * @module viz/circular_gauge
 * @export default
 */
-var dxCircularGauge = {
+const dxCircularGauge = {
     /**
     * @name dxCircularGaugeOptions.geometry
     * @type object
@@ -479,7 +479,7 @@ var dxCircularGauge = {
 * @module viz/linear_gauge
 * @export default
 */
-var dxLinearGauge = {
+const dxLinearGauge = {
     /**
     * @name dxLinearGaugeOptions.geometry
     * @type object
@@ -601,7 +601,7 @@ var dxLinearGauge = {
 * @module viz/bar_gauge
 * @export default
 */
-var dxBarGauge = {
+const dxBarGauge = {
     /**
     * @name dxBarGaugeOptions.animation
     * @type object
@@ -878,7 +878,7 @@ var dxBarGauge = {
 * @name BarGaugeBarInfo
 * @type object
 */
-var BarGaugeBarInfo = {
+const BarGaugeBarInfo = {
     /**
     * @name BarGaugeBarInfo.color
     * @type string
@@ -901,7 +901,7 @@ var BarGaugeBarInfo = {
 * @type object
 * @inherits BaseLegendItem
 */
-var legendItem = {
+const legendItem = {
     /**
     * @name BarGaugeLegendItem.item
     * @type BarGaugeBarInfo

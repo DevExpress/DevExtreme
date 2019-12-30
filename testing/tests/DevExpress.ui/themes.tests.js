@@ -108,8 +108,8 @@ QUnit.module('Selector check', () => {
 
                 const selectors = this.selectorText.split(/\s*,\s*/g);
                 $.each(selectors, function() {
-                    const selectorText = String(this),
-                        simplifiedSelectorText = simplifySelector(selectorText);
+                    const selectorText = String(this);
+                    const simplifiedSelectorText = simplifySelector(selectorText);
 
                     if(!isGoodSelector(simplifiedSelectorText)) {
                         badSelectors.push(selectorText);
@@ -176,20 +176,20 @@ QUnit.module('All images are defined with data-uri and will be inlined', () => {
 
 QUnit.module('dx-theme changing', () => {
     test('Themes functions return right value after themes switching', function(assert) {
-        const genericThemeName = 'generic.light',
-            materialThemeName = 'material.blue.light',
-            linksContainer = $('<div>').addClass('links-container').appendTo('body'),
-            testThemes = [{
-                functionName: 'isGeneric',
-                themeName: genericThemeName,
-                anotherThemeName: materialThemeName
-            }, {
-                functionName: 'isMaterial',
-                themeName: materialThemeName
-            }, {
-                functionName: 'isIos7',
-                themeName: 'ios7.default'
-            }];
+        const genericThemeName = 'generic.light';
+        const materialThemeName = 'material.blue.light';
+        const linksContainer = $('<div>').addClass('links-container').appendTo('body');
+        const testThemes = [{
+            functionName: 'isGeneric',
+            themeName: genericThemeName,
+            anotherThemeName: materialThemeName
+        }, {
+            functionName: 'isMaterial',
+            themeName: materialThemeName
+        }, {
+            functionName: 'isIos7',
+            themeName: 'ios7.default'
+        }];
 
         linksContainer.append('<link rel=\'dx-theme\' href=\'style2.css\' data-theme=\'' + materialThemeName + '\' />');
         linksContainer.append('<link rel=\'dx-theme\' href=\'style1.css\' data-theme=\'' + genericThemeName + '\' />');
@@ -536,7 +536,7 @@ QUnit.module('misc', () => {
     test('attachCssClasses', function(assert) {
         const attachCssClasses = themes.attachCssClasses;
         let element;
-        let expectedClasses = ['dx-theme-abc', 'dx-theme-abc-typography'];
+        const expectedClasses = ['dx-theme-abc', 'dx-theme-abc-typography'];
 
         const pixelRatio = window.devicePixelRatio;
         if(!!pixelRatio && pixelRatio >= 2) {

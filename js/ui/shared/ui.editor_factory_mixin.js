@@ -1,15 +1,15 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    eventsEngine = require('../../events/core/events_engine'),
-    typeUtils = require('../../core/utils/type'),
-    isWrapped = require('../../core/utils/variable_wrapper').isWrapped,
-    compileGetter = require('../../core/utils/data').compileGetter,
-    browser = require('../../core/utils/browser'),
-    extend = require('../../core/utils/extend').extend,
-    devices = require('../../core/devices'),
-    getPublicElement = require('../../core/utils/dom').getPublicElement,
-    normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions,
-    normalizeKeyName = require('../../events/utils').normalizeKeyName;
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const eventsEngine = require('../../events/core/events_engine');
+const typeUtils = require('../../core/utils/type');
+const isWrapped = require('../../core/utils/variable_wrapper').isWrapped;
+const compileGetter = require('../../core/utils/data').compileGetter;
+const browser = require('../../core/utils/browser');
+const extend = require('../../core/utils/extend').extend;
+const devices = require('../../core/devices');
+const getPublicElement = require('../../core/utils/dom').getPublicElement;
+const normalizeDataSourceOptions = require('../../data/data_source/data_source').normalizeDataSourceOptions;
+const normalizeKeyName = require('../../events/utils').normalizeKeyName;
 
 require('../text_box');
 require('../number_box');
@@ -17,12 +17,12 @@ require('../check_box');
 require('../select_box');
 require('../date_box');
 
-var CHECKBOX_SIZE_CLASS = 'checkbox-size',
-    CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled',
-    EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
+const CHECKBOX_SIZE_CLASS = 'checkbox-size';
+const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
+const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 
-var EditorFactoryMixin = (function() {
-    var getResultConfig = function(config, options) {
+const EditorFactoryMixin = (function() {
+    const getResultConfig = function(config, options) {
         return extend(config, {
             readOnly: options.readOnly,
             placeholder: options.placeholder,
@@ -33,14 +33,14 @@ var EditorFactoryMixin = (function() {
         }, options.editorOptions);
     };
 
-    var checkEnterBug = function() {
+    const checkEnterBug = function() {
         return browser.msie || browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
-    var getTextEditorConfig = function(options) {
-        var data = {},
-            isEnterBug = checkEnterBug(),
-            sharedData = options.sharedData || data;
+    const getTextEditorConfig = function(options) {
+        const data = {};
+        const isEnterBug = checkEnterBug();
+        const sharedData = options.sharedData || data;
 
         return getResultConfig({
             placeholder: options.placeholder,
@@ -48,11 +48,11 @@ var EditorFactoryMixin = (function() {
             value: options.value,
             onValueChanged: function(e) {
 
-                var needDelayedUpdate = options.parentType === 'filterRow' || options.parentType === 'searchPanel',
-                    isInputOrKeyUpEvent = e.event && (e.event.type === 'input' || e.event.type === 'keyup'),
-                    updateValue = function(e, notFireEvent) {
-                        options && options.setValue(e.value, notFireEvent);
-                    };
+                const needDelayedUpdate = options.parentType === 'filterRow' || options.parentType === 'searchPanel';
+                const isInputOrKeyUpEvent = e.event && (e.event.type === 'input' || e.event.type === 'keyup');
+                const updateValue = function(e, notFireEvent) {
+                    options && options.setValue(e.value, notFireEvent);
+                };
 
                 clearTimeout(data.valueChangeTimeout);
 
@@ -73,7 +73,7 @@ var EditorFactoryMixin = (function() {
         }, options);
     };
 
-    var prepareDateBox = function(options) {
+    const prepareDateBox = function(options) {
         options.editorName = 'dxDateBox';
 
         options.editorOptions = getResultConfig({
@@ -95,12 +95,12 @@ var EditorFactoryMixin = (function() {
         }, options);
     };
 
-    var prepareTextBox = function(options) {
-        var config = getTextEditorConfig(options),
-            isSearching = options.parentType === 'searchPanel',
-            toString = function(value) {
-                return typeUtils.isDefined(value) ? value.toString() : '';
-            };
+    const prepareTextBox = function(options) {
+        const config = getTextEditorConfig(options);
+        const isSearching = options.parentType === 'searchPanel';
+        const toString = function(value) {
+            return typeUtils.isDefined(value) ? value.toString() : '';
+        };
 
         if(options.editorType && options.editorType !== 'dxTextBox') {
             config.value = options.value;
@@ -114,8 +114,8 @@ var EditorFactoryMixin = (function() {
         options.editorOptions = config;
     };
 
-    var prepareNumberBox = function(options) {
-        var config = getTextEditorConfig(options);
+    const prepareNumberBox = function(options) {
+        const config = getTextEditorConfig(options);
 
         config.value = typeUtils.isDefined(options.value) ? options.value : null;
 
@@ -124,7 +124,7 @@ var EditorFactoryMixin = (function() {
         options.editorOptions = config;
     };
 
-    var prepareBooleanEditor = function(options) {
+    const prepareBooleanEditor = function(options) {
         if(options.parentType === 'filterRow' || options.parentType === 'filterBuilder') {
             prepareSelectBox(extend(options, {
                 lookup: {
@@ -143,12 +143,12 @@ var EditorFactoryMixin = (function() {
         }
     };
 
-    var prepareSelectBox = function(options) {
-        var lookup = options.lookup,
-            displayGetter,
-            dataSource,
-            postProcess,
-            isFilterRow = options.parentType === 'filterRow';
+    function prepareSelectBox(options) {
+        const lookup = options.lookup;
+        let displayGetter;
+        let dataSource;
+        let postProcess;
+        const isFilterRow = options.parentType === 'filterRow';
 
         if(lookup) {
             displayGetter = compileGetter(lookup.displayExpr);
@@ -175,7 +175,7 @@ var EditorFactoryMixin = (function() {
                 }
             }
 
-            var allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
+            const allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
 
             options.editorName = 'dxSelectBox';
             options.editorOptions = getResultConfig({
@@ -193,16 +193,16 @@ var EditorFactoryMixin = (function() {
                 },
                 dataSource: dataSource,
                 onValueChanged: function(e) {
-                    var params = [e.value];
+                    const params = [e.value];
 
                     !isFilterRow && params.push(e.component.option('text'));
                     options.setValue.apply(this, params);
                 }
             }, options);
         }
-    };
+    }
 
-    var prepareCheckBox = function(options) {
+    function prepareCheckBox(options) {
         options.editorName = 'dxCheckBox';
         options.editorOptions = getResultConfig({
             value: typeUtils.isDefined(options.value) ? options.value : undefined,
@@ -213,10 +213,10 @@ var EditorFactoryMixin = (function() {
                 options.setValue && options.setValue(e.value, e /* for selection */);
             },
         }, options);
-    };
+    }
 
-    var createEditorCore = function(that, options) {
-        var $editorElement = $(options.editorElement);
+    const createEditorCore = function(that, options) {
+        const $editorElement = $(options.editorElement);
         if(options.editorName && options.editorOptions && $editorElement[options.editorName]) {
             if(options.editorName === 'dxCheckBox') {
                 if(!options.isOnForm) {
@@ -249,8 +249,6 @@ var EditorFactoryMixin = (function() {
     };
     return {
         createEditor: function($container, options) {
-            let editorName;
-
             options.cancel = false;
             options.editorElement = getPublicElement($container);
 
@@ -278,7 +276,7 @@ var EditorFactoryMixin = (function() {
                 }
             }
 
-            editorName = options.editorName;
+            const editorName = options.editorName;
             this.executeAction('onEditorPreparing', options);
 
             if(options.cancel) {

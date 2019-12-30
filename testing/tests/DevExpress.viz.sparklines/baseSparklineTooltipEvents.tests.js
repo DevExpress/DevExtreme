@@ -1,16 +1,16 @@
 /* global createTestContainer */
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    baseSparkline = require('viz/sparklines/base_sparkline'),
-    eventsEngine = require('events/core/events_engine'),
-    devices = require('core/devices'),
-    DEFAULT_EVENTS_DELAY = 100;
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const rendererModule = require('viz/core/renderers/renderer');
+const baseSparkline = require('viz/sparklines/base_sparkline');
+const eventsEngine = require('events/core/events_engine');
+const devices = require('core/devices');
+const DEFAULT_EVENTS_DELAY = 100;
 
 require('viz/sparkline');
 
-var fixture = $('<div>')
+const fixture = $('<div>')
     .attr('id', 'qunit-fixture')
     .appendTo($('body'));
 
@@ -27,7 +27,7 @@ QUnit.begin(function() {
     };
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         baseSparkline._DEBUG_reset();
         // this._originalRendererType = dxSparkline.prototype._rendererType;
@@ -37,7 +37,7 @@ var environment = {
         };
         // dxSparkline.prototype._rendererType = vizMocks.Renderer;
         this.triggerDocument = function(name) {
-            var event = $.Event(name);
+            const event = $.Event(name);
 
             //  Because of ui.events.js
             event.changedTouches = [{}];
@@ -47,7 +47,7 @@ var environment = {
         };
 
         this.trigger = function(type, target, x, y) {
-            var event = $.Event(type);
+            const event = $.Event(type);
             event.pageX = x;
             event.pageY = y;
             target.trigger(event);
@@ -68,7 +68,7 @@ QUnit.module('Tooltip events on non-touch device', environment);
 
 QUnit.test('Mouseover after delay', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
+    const sparkline = this.createSparkline({
         dataSource: [4, 8, 6, 9, 5],
         tooltip: {
             enabled: true
@@ -84,15 +84,15 @@ QUnit.test('Mouseover after delay', function(assert) {
 
 QUnit.test('Mousemove with big distance', function(assert) {
     assert.expect(1);
-    var tooltipShown = sinon.spy();
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            },
-            onTooltipShown: tooltipShown
-        }),
-        tracker = sparkline._tooltipTracker;
+    const tooltipShown = sinon.spy();
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        },
+        onTooltipShown: tooltipShown
+    });
+    const tracker = sparkline._tooltipTracker;
 
     this.trigger('mouseover', tracker, 5, 5);
 
@@ -105,15 +105,15 @@ QUnit.test('Mousemove with big distance', function(assert) {
 
 QUnit.test('Mousemove with small distance', function(assert) {
     assert.expect(1);
-    var tooltipShown = sinon.spy();
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            },
-            onTooltipShown: tooltipShown
-        }),
-        tracker = sparkline._tooltipTracker;
+    const tooltipShown = sinon.spy();
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        },
+        onTooltipShown: tooltipShown
+    });
+    const tracker = sparkline._tooltipTracker;
 
     this.trigger('mouseover', tracker, 5, 5);
 
@@ -126,13 +126,13 @@ QUnit.test('Mousemove with small distance', function(assert) {
 
 QUnit.test('Quick mouseout after mouseover', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
 
     sparkline._DEBUG_clearShowTooltipTimeout = 0;
 
@@ -145,14 +145,14 @@ QUnit.test('Quick mouseout after mouseover', function(assert) {
 
 QUnit.test('Mouseout after mouseover', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
     sparkline._DEBUG_showCallback = function() {
@@ -166,22 +166,22 @@ QUnit.test('Mouseout after mouseover', function(assert) {
 });
 
 QUnit.test('Hide tooltip on scroll without delay', function(assert) {
-    var originalPlatform = devices.real().platform;
+    const originalPlatform = devices.real().platform;
 
     try {
         devices.real({ platform: 'generic' });
         assert.expect(2);
-        var sparkline = this.createSparkline({
-                dataSource: [4, 8, 6, 9, 5],
-                tooltip: {
-                    enabled: true
-                },
-                onTooltipHidden: function() {
-                    assert.ok(true);
-                }
-            }),
-            tracker = sparkline._tooltipTracker,
-            that = this;
+        const sparkline = this.createSparkline({
+            dataSource: [4, 8, 6, 9, 5],
+            tooltip: {
+                enabled: true
+            },
+            onTooltipHidden: function() {
+                assert.ok(true);
+            }
+        });
+        const tracker = sparkline._tooltipTracker;
+        const that = this;
 
         sparkline._DEBUG_hideTooltipTimeoutSet = 0;
         sparkline._DEBUG_hideCallback = function() {
@@ -195,12 +195,12 @@ QUnit.test('Hide tooltip on scroll without delay', function(assert) {
 });
 
 QUnit.test('Should not crash on parent scroll if tooltip was not shown', function(assert) {
-    var originalPlatform = devices.real().platform;
+    const originalPlatform = devices.real().platform;
 
     try {
         devices.real({ platform: 'generic' });
         assert.expect(0);
-        var sparkline = this.createSparkline({
+        const sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 5],
             tooltip: {
                 enabled: true
@@ -215,14 +215,14 @@ QUnit.test('Should not crash on parent scroll if tooltip was not shown', functio
 
 QUnit.test('B252494 - Tooltip exception', function(assert) {
     assert.expect(2);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
     sparkline._DEBUG_showCallback = function() {
@@ -240,11 +240,11 @@ QUnit.test('B252494 - Tooltip exception', function(assert) {
 
 QUnit.test('Dispose after show - B252555', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5]
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5]
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -264,11 +264,11 @@ QUnit.test('Dispose after show - B252555', function(assert) {
 
 QUnit.test('Dispose after hide - B252555', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5]
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5]
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -294,15 +294,15 @@ QUnit.module('Tooltip events on touch device', environment);
 
 QUnit.test('Touchstart', function(assert) {
     assert.expect(1);
-    var tooltipShown = sinon.spy(),
-        sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            },
-            onTooltipShown: tooltipShown
-        }),
-        tracker = sparkline._tooltipTracker;
+    const tooltipShown = sinon.spy();
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        },
+        onTooltipShown: tooltipShown
+    });
+    const tracker = sparkline._tooltipTracker;
 
 
     this.trigger('touchstart', tracker);
@@ -311,15 +311,15 @@ QUnit.test('Touchstart', function(assert) {
 
 QUnit.test('Pointerdown', function(assert) {
     assert.expect(1);
-    var tooltipShown = sinon.spy(),
-        sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            },
-            onTooltipShown: tooltipShown
-        }),
-        tracker = sparkline._tooltipTracker;
+    const tooltipShown = sinon.spy();
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        },
+        onTooltipShown: tooltipShown
+    });
+    const tracker = sparkline._tooltipTracker;
 
     this.trigger('pointerdown', tracker);
     assert.equal(tooltipShown.callCount, 1);
@@ -327,13 +327,13 @@ QUnit.test('Pointerdown', function(assert) {
 
 QUnit.test('Quick touchend', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -348,13 +348,13 @@ QUnit.test('Quick touchend', function(assert) {
 
 QUnit.test('Quick pointerup', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -369,14 +369,14 @@ QUnit.test('Quick pointerup', function(assert) {
 
 QUnit.test('Touchstart in another place', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -395,14 +395,14 @@ QUnit.test('Touchstart in another place', function(assert) {
 
 QUnit.test('Pointerdown in another place', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -421,14 +421,14 @@ QUnit.test('Pointerdown in another place', function(assert) {
 
 QUnit.test('Touchstart on document after tooltip showing', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 
@@ -447,14 +447,14 @@ QUnit.test('Touchstart on document after tooltip showing', function(assert) {
 
 QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
     assert.expect(1);
-    var sparkline = this.createSparkline({
-            dataSource: [4, 8, 6, 9, 5],
-            tooltip: {
-                enabled: true
-            }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+    const sparkline = this.createSparkline({
+        dataSource: [4, 8, 6, 9, 5],
+        tooltip: {
+            enabled: true
+        }
+    });
+    const tracker = sparkline._tooltipTracker;
+    const that = this;
 
     sparkline._DEBUG_hideTooltipTimeoutSet = 0;
 

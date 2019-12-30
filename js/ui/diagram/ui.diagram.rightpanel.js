@@ -55,7 +55,7 @@ class DiagramRightPanel extends DiagramPanel {
         });
     }
     _renderOptions($container) {
-        var commands = DiagramCommands.getPropertyPanelCommands(this.option('propertyGroups'));
+        const commands = DiagramCommands.getPropertyPanelCommands(this.option('propertyGroups'));
         this._formInstance = this._createComponent($container, Form, {
             items: commands.map(item => {
                 return extend(true, {
@@ -110,10 +110,10 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _setItemSubItems(key, items) {
         this._updateLocked = true;
-        var editorInstance = this._formInstance.getEditor(key.toString());
+        const editorInstance = this._formInstance.getEditor(key.toString());
         if(editorInstance) {
             editorInstance.option('items', items.map(item => {
-                var value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
+                const value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
                 return {
                     'value': value,
                     'title': item.text
@@ -126,7 +126,7 @@ class DiagramRightPanel extends DiagramPanel {
         this._formInstance.option('disabled', !enabled);
     }
     _setItemEnabled(key, enabled) {
-        var editorInstance = this._formInstance.getEditor(key.toString());
+        const editorInstance = this._formInstance.getEditor(key.toString());
         if(editorInstance) editorInstance.option('disabled', !enabled);
     }
     _optionChanged(args) {

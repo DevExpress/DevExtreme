@@ -1,5 +1,5 @@
 module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
-    var exports = {};
+    const exports = {};
 
     exports.MockDataController = function(options) {
 
@@ -12,7 +12,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         }
 
         if(options.items) {
-            for(var i = 0; i < options.items.length; i++) {
+            for(let i = 0; i < options.items.length; i++) {
                 if(options.items[i].rowIndex === undefined) {
                     options.items[i].rowIndex = i;
                 }
@@ -199,7 +199,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             reset: function() {},
 
             footerItems: function() {
-                var result = [];
+                const result = [];
                 options.totalItem && result.push(options.totalItem);
                 return result;
             },
@@ -298,7 +298,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     };
 
     exports.MockColumnsController = function(columns, commonColumnSettings) {
-        for(var key in columns) {
+        for(const key in columns) {
             if(Array.isArray(columns[key])) {
                 break;
             }
@@ -337,9 +337,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getVisibleIndex: function(index, rowIndex) {
-                var visibleColumn = this.getRowCount() > 1 && typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
+                const visibleColumn = this.getRowCount() > 1 && typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
 
-                for(var i = 0; i < visibleColumn.length; i++) {
+                for(let i = 0; i < visibleColumn.length; i++) {
                     if(visibleColumn[i].index === index) {
                         return i;
                     }
@@ -357,11 +357,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             // TODO: set fixed columns option
             getFixedColumns: function(rowIndex) {
-                var visibleColumns = this.getVisibleColumns(rowIndex),
-                    result = [],
-                    rowCount = this.getRowCount(),
-                    indexTransparentColumn,
-                    colspan = 0;
+                const visibleColumns = this.getVisibleColumns(rowIndex);
+                const result = [];
+                const rowCount = this.getRowCount();
+                let indexTransparentColumn;
+                let colspan = 0;
 
                 if(this._isColumnFixing()) {
                     $.each(visibleColumns, function(index, column) {
@@ -382,10 +382,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             _isColumnFixing: function() {
-                var i,
-                    columnsByRowIndex,
-                    isColumnFixing,
-                    rowCount = this.getRowCount();
+                let i;
+                let columnsByRowIndex;
+                let isColumnFixing;
+                const rowCount = this.getRowCount();
 
                 function processColumn() {
                     if(this.fixed) {
@@ -402,7 +402,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return isColumnFixing;
             },
             getInvisibleColumns: function() {
-                var hiddenColumns = [];
+                const hiddenColumns = [];
 
                 $.each(columns, function(_, column) {
                     if(!column.visible) {
@@ -422,10 +422,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             updateHidingQueue: commonUtils.noop,
 
             getChooserColumns: function(getAllColumns) {
-                var chooserColumns = [];
+                const chooserColumns = [];
 
                 $.each(columns, function(_, column) {
-                    var canShownInColumnChooser = column.showInColumnChooser !== false;
+                    const canShownInColumnChooser = column.showInColumnChooser !== false;
 
                     if(!column.visible && canShownInColumnChooser || getAllColumns && canShownInColumnChooser) {
                         chooserColumns.push(column);
@@ -445,7 +445,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getRowIndex: function(columnIndex) {
                 if(this.getRowCount() > 1) {
-                    for(var i = 0; i < columns[columns.length - 1].length; i++) {
+                    for(let i = 0; i < columns[columns.length - 1].length; i++) {
                         if(columns[columns.length - 1][i].index === columnIndex) {
                             return columns[columns.length - 1][i].rowIndex;
                         }
@@ -464,7 +464,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             endUpdate: function() { },
 
             columnOption: function(columnIndex, optionName, optionValue, notFireEvent) {
-                var i;
+                let i;
 
                 if(columnIndex !== undefined) {
                     if(arguments.length === 1) {
@@ -472,7 +472,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     }
                     if(typeUtils.isString(columnIndex)) {
                         if(columnIndex.indexOf('command:') === 0) {
-                            var commandName = columnIndex.substr('command:'.length);
+                            const commandName = columnIndex.substr('command:'.length);
                             for(i = 0; i < columns.length; i++) {
                                 if(columns[i].command === commandName) {
                                     columns[i][optionName] = optionValue;
@@ -493,7 +493,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         });
                     }
 
-                    var updateOption = {
+                    const updateOption = {
                         columnIndex: columnIndex,
                         optionName: optionName,
                         optionValue: optionValue
@@ -515,14 +515,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             changeSortOrder: function(columnIndex, sortOrder) {
-                var column,
-                    nextSorting = function(column) {
-                        switch(column.sortOrder) {
-                            case 'asc': return 'desc';
-                            case 'desc': return column.groupIndex !== undefined ? 'asc' : null;
-                        }
-                        return 'asc';
-                    };
+                let column;
+                const nextSorting = function(column) {
+                    switch(column.sortOrder) {
+                        case 'asc': return 'desc';
+                        case 'desc': return column.groupIndex !== undefined ? 'asc' : null;
+                    }
+                    return 'asc';
+                };
 
                 $.each(columns, function() {
                     if(this.index === columnIndex) {
@@ -557,7 +557,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getGroupColumns: function() {
-                var visibleGroupColumns = [];
+                const visibleGroupColumns = [];
 
                 $.each(columns, function(index, column) {
                     if(typeUtils.isDefined(column.groupIndex)) {
@@ -577,11 +577,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getFirstDataColumnIndex: function() {
-                var visibleColumns = this.getVisibleColumns(),
-                    visibleColumnsLength = visibleColumns.length,
-                    firstDataColumnIndex = 0;
+                const visibleColumns = this.getVisibleColumns();
+                const visibleColumnsLength = visibleColumns.length;
+                let firstDataColumnIndex = 0;
 
-                for(var i = 0; i <= visibleColumnsLength - 1; i++) {
+                for(let i = 0; i <= visibleColumnsLength - 1; i++) {
                     if(!typeUtils.isDefined(visibleColumns[i].command)) {
                         firstDataColumnIndex = visibleColumns[i].index;
                         break;
@@ -740,7 +740,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     };
 
     exports.MockColumnsSeparatorView = function(rootElement, isTransparent, customOffset) {
-        var getElement = function() {
+        const getElement = function() {
             return {
                 _offset: customOffset || {
                     top: 0,
@@ -841,7 +841,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getBoundingRect: function() {
-                var offset = options.offset;
+                const offset = options.offset;
 
                 return {
                     right: offset.right,
@@ -867,7 +867,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     });
 
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
-        var modules = [];
+        const modules = [];
 
         $.each(gridCore.modules, function() {
             if($.inArray(this.name, moduleNames) !== -1) {
@@ -880,9 +880,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.focus = commonUtils.noop;
 
         that.setAria = function(name, value, $target) {
-            var setAttribute = function(option) {
-                var attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name,
-                    attrValue = option.value;
+            const setAttribute = function(option) {
+                const attrName = ($.inArray(option.name, ['role', 'id']) + 1) ? option.name : 'aria-' + option.name;
+                let attrValue = option.value;
 
                 if(attrValue === null || attrValue === undefined) {
                     attrValue = undefined;
@@ -923,9 +923,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that.optionCalled = $.Callbacks();
 
         that.option = function(options, value) {
-            var result = that.options,
-                path,
-                changed;
+            let result = that.options;
+            let path;
+            let changed;
 
             if(typeUtils.isString(options)) {
                 path = options.split('.');
@@ -975,9 +975,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
             });
 
-            var instance;
+            let instance;
             if(typeUtils.isString(component)) {
-                var $element = $(element)[component](config);
+                const $element = $(element)[component](config);
                 instance = $element[component]('instance');
             } else if(element.length) {
                 instance = component.getInstance(element);
@@ -1059,9 +1059,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     };
 
     exports.generateItems = function(itemCount) {
-        var items = [];
+        const items = [];
 
-        for(var i = 1; i <= itemCount; i++) {
+        for(let i = 1; i <= itemCount; i++) {
             items.push({ id: i, field1: 'test1' + i, field2: 'test2' + i, field3: 'test3' + i, field4: 'test4' + i });
         }
 

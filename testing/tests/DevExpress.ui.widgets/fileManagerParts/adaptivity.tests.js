@@ -92,7 +92,7 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         this.wrapper.getToolbarButton('Copy').trigger('dxclick');
         this.clock.tick(400);
 
-        let $dialog = $('.dx-filemanager-dialog-folder-chooser:visible');
+        const $dialog = $('.dx-filemanager-dialog-folder-chooser:visible');
         assert.equal($dialog.length, 1, 'dialog is shown');
 
         const dialogWidth = $dialog.get(0).offsetWidth;

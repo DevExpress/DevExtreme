@@ -1,11 +1,11 @@
 // TODO: Move it inside the "SeriesDataSource"
 function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
-    let seriesList = seriesDataSource.getSeries();
+    const seriesList = seriesDataSource.getSeries();
     if(!seriesList.length) {
         return;
     }
 
-    let valueAxis = seriesList[0].getValueAxis();
+    const valueAxis = seriesList[0].getValueAxis();
 
     valueAxis.updateCanvas({
         top: canvas.top,
@@ -13,7 +13,7 @@ function drawSeriesView(root, seriesDataSource, canvas, isAnimationEnabled) {
         height: canvas.height + canvas.top
     });
     seriesDataSource.adjustSeriesDimensions();
-    let valueRange = seriesDataSource.getBoundRange().val;
+    const valueRange = seriesDataSource.getBoundRange().val;
     valueRange.sortCategories(valueAxis.getCategoriesSorter());
     valueAxis.setBusinessRange(valueRange);
 
@@ -37,10 +37,10 @@ RangeView.prototype = {
     constructor: RangeView,
 
     update: function(backgroundOption, backgroundTheme, canvas, isCompactMode, isAnimationEnabled, seriesDataSource) {
-        var renderer = this._params.renderer,
-            root = this._params.root,
-            canvasWidth = canvas.width - canvas.left,
-            seriesGroup;
+        const renderer = this._params.renderer;
+        const root = this._params.root;
+        const canvasWidth = canvas.width - canvas.left;
+        let seriesGroup;
 
         backgroundOption = backgroundOption || {};
         root.clear();

@@ -4,7 +4,7 @@
 * @module viz/funnel
 * @export default
 */
-var dxFunnel = {
+const dxFunnel = {
     /**
     * @name dxFunnelOptions.adaptiveLayout
     * @type object

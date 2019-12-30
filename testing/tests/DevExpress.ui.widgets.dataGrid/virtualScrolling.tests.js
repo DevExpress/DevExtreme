@@ -9,39 +9,39 @@ import devices from 'core/devices';
 import renderer from 'core/renderer';
 
 const mockComponent = {
-        option: sinon.stub()
+    option: sinon.stub()
+};
+
+const mockDataSource = {
+    pageSize: sinon.stub(),
+    totalItemsCount: sinon.stub(),
+    hasKnownLastPage: sinon.stub(),
+    pageIndex: function(pageIndex) {
+        if(pageIndex !== undefined) {
+            this._pageIndex = pageIndex;
+        }
+        return this._pageIndex || 0;
     },
-
-    mockDataSource = {
-        pageSize: sinon.stub(),
-        totalItemsCount: sinon.stub(),
-        hasKnownLastPage: sinon.stub(),
-        pageIndex: function(pageIndex) {
-            if(pageIndex !== undefined) {
-                this._pageIndex = pageIndex;
-            }
-            return this._pageIndex || 0;
-        },
-        isLoading: sinon.stub(),
-        pageCount: function() {
-            return this.totalItemsCount() / this.pageSize();
-        },
-        load: function() {
-
-        },
-        updateLoading: sinon.stub(),
-        itemsCount: sinon.stub(),
-        items: sinon.stub(),
-        viewportItems: sinon.stub(),
-
-        changingDuration: sinon.stub(),
-        onChanged: sinon.stub()
+    isLoading: sinon.stub(),
+    pageCount: function() {
+        return this.totalItemsCount() / this.pageSize();
     },
+    load: function() {
 
-    DEFAULT_TOTAL_ITEMS_COUNT = 20000,
+    },
+    updateLoading: sinon.stub(),
+    itemsCount: sinon.stub(),
+    items: sinon.stub(),
+    viewportItems: sinon.stub(),
 
-    DEFAULT_PAGE_SIZE = 20,
-    CONTENT_HEIGHT_LIMIT = virtualScrollingCore.getContentHeightLimit(browser);
+    changingDuration: sinon.stub(),
+    onChanged: sinon.stub()
+};
+
+const DEFAULT_TOTAL_ITEMS_COUNT = 20000;
+
+const DEFAULT_PAGE_SIZE = 20;
+const CONTENT_HEIGHT_LIMIT = virtualScrollingCore.getContentHeightLimit(browser);
 
 function resetMock(mock) {
     $.each(mock, function(_, method) {
@@ -50,7 +50,7 @@ function resetMock(mock) {
     });
 }
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         mockComponent.option.withArgs('scrolling.mode').returns('virtual');
 
@@ -68,7 +68,7 @@ var moduleConfig = {
 
         this.externalDataChangedHandler = sinon.stub();
 
-        var that = this;
+        const that = this;
         mockDataSource.load = sinon.spy(function() {
             that.scrollController.handleDataChanged(that.externalDataChangedHandler);
         });
@@ -159,7 +159,7 @@ QUnit.test('setContentSize. No items', function(assert) {
     this.scrollController.viewportSize(12);
     this.scrollController.setContentSize(0);
 
-    var virtualContentSize = this.scrollController.getVirtualContentSize();
+    const virtualContentSize = this.scrollController.getVirtualContentSize();
 
     assert.ok(virtualContentSize);
     assert.strictEqual(virtualContentSize, DEFAULT_TOTAL_ITEMS_COUNT * this.scrollController.viewportItemSize());
@@ -199,11 +199,11 @@ QUnit.module('Virtual scrolling', {
 
 QUnit.test('set/get viewportPosition', function(assert) {
 
-    var defaultViewportPosition = this.scrollController.getViewportPosition();
+    const defaultViewportPosition = this.scrollController.getViewportPosition();
 
     this.scrollController.setViewportPosition(50);
 
-    var viewportPosition = this.scrollController.getViewportPosition();
+    const viewportPosition = this.scrollController.getViewportPosition();
 
     assert.strictEqual(defaultViewportPosition, 0, 'default viewportPosition');
 
@@ -260,7 +260,7 @@ QUnit.test('setViewport position. Scroll to third page after scroll to second pa
 });
 
 QUnit.test('Scroll with timeout', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     mockComponent.option.withArgs('scrolling.timeout').returns(100);
     mockDataSource.changingDuration.returns(200);
     this.scrollController.setViewportPosition(this.contentSize);
@@ -287,7 +287,7 @@ QUnit.test('Scroll with timeout', function(assert) {
 });
 
 QUnit.test('Scroll with fast rendering', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     mockComponent.option.withArgs('scrolling.timeout').returns(200);
 
     mockDataSource.changingDuration.returns(150);
@@ -317,7 +317,7 @@ QUnit.test('Scroll with fast rendering', function(assert) {
 });
 
 QUnit.test('Scroll with rendering faster then rendering thresholdTime. Far scrolling', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     mockComponent.option.withArgs('scrolling.timeout').returns(200);
     mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
@@ -339,7 +339,7 @@ QUnit.test('Scroll with rendering faster then rendering thresholdTime. Far scrol
 
 
 QUnit.test('Scroll with rendering faster then rendering thresholdTime. Near scrolling', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     mockComponent.option.withArgs('scrolling.timeout').returns(200);
     mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
@@ -359,7 +359,7 @@ QUnit.test('Scroll with rendering faster then rendering thresholdTime. Near scro
 });
 
 QUnit.test('Scroll with rendering slower then rendering thresholdTime. Near scrolling', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
     mockComponent.option.withArgs('scrolling.timeout').returns(200);
     mockComponent.option.withArgs('scrolling.renderingThreshold').returns(70);
 
@@ -453,8 +453,8 @@ QUnit.test('setViewport position. Scroll to far page', function(assert) {
 });
 
 QUnit.test('getVirtualContentSize after far scroll if itemSizes are not equal to virtual item size', function(assert) {
-    var realItemSize = 10;
-    var realItemSizes = Array.apply(null, Array(20)).map(() => realItemSize);
+    const realItemSize = 10;
+    const realItemSizes = Array.apply(null, Array(20)).map(() => realItemSize);
 
     this.scrollController.setContentSize(realItemSizes);
     this.scrollController.setViewportPosition(1000);
@@ -547,12 +547,12 @@ QUnit.test('Window scroll event', function(assert) {
         return;
     }
 
-    var done = assert.async(),
-        scrollController = this.scrollController;
+    const done = assert.async();
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = this.$fixtureElement.height(30000);
+    const $element = this.$fixtureElement.height(30000);
 
     this.scrollController.subscribeToWindowScrollEvents(this.$fixtureElement);
 
@@ -569,13 +569,13 @@ QUnit.test('Window scroll event', function(assert) {
 });
 
 QUnit.test('Native scroll event', function(assert) {
-    var done = assert.async(),
-        scrollController = this.scrollController,
-        $fixtureElement = this.$fixtureElement;
+    const done = assert.async();
+    const scrollController = this.scrollController;
+    const $fixtureElement = this.$fixtureElement;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
+    const $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(10000).css('overflow', 'auto');
 
@@ -594,14 +594,14 @@ QUnit.test('Native scroll event', function(assert) {
 });
 
 QUnit.test('Native scroll event. Scrolling before the subscribed element', function(assert) {
-    var done = assert.async(),
-        scrollController = this.scrollController,
-        $fixtureElement = this.$fixtureElement;
+    const done = assert.async();
+    const scrollController = this.scrollController;
+    const $fixtureElement = this.$fixtureElement;
 
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
+    const $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(10000).css('overflow', 'auto');
 
@@ -622,13 +622,13 @@ QUnit.test('Native scroll event. Scrolling before the subscribed element', funct
 });
 
 QUnit.test('dxScrollable scroll event', function(assert) {
-    var done = assert.async(),
-        scrollController = this.scrollController;
+    const done = assert.async();
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement),
-        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
+    const $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement);
+    const scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
@@ -654,23 +654,23 @@ QUnit.test('ScrollTo when window scroll subscription', function(assert) {
         return;
     }
 
-    var done = assert.async(),
-        scrollController = this.scrollController;
+    const done = assert.async();
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = this.$fixtureElement.height(30000);
+    const $element = this.$fixtureElement.height(30000);
 
     this.scrollController.subscribeToWindowScrollEvents(this.$fixtureElement);
 
     $(window).on('scroll', assertFunction);
 
-    var elementOffset = $element.offset().top;
+    const elementOffset = $element.offset().top;
 
     scrollController.scrollTo(24000);
 
     function assertFunction() {
-        var windowScrollTop = $(window).scrollTop();
+        const windowScrollTop = $(window).scrollTop();
         assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
         assert.roughEqual(windowScrollTop, 24000 + elementOffset, 1);
 
@@ -680,7 +680,7 @@ QUnit.test('ScrollTo when window scroll subscription', function(assert) {
 });
 
 QUnit.test('ScrollTo when window scroll subscription. before the subscribed element', function(assert) {
-    var scrollController = this.scrollController;
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
@@ -694,13 +694,13 @@ QUnit.test('ScrollTo when window scroll subscription. before the subscribed elem
 });
 
 QUnit.test('Scroll to when native scroll', function(assert) {
-    var done = assert.async(),
-        scrollController = this.scrollController,
-        $fixtureElement = this.$fixtureElement;
+    const done = assert.async();
+    const scrollController = this.scrollController;
+    const $fixtureElement = this.$fixtureElement;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
+    const $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(10000).css('overflow', 'auto');
 
@@ -719,13 +719,13 @@ QUnit.test('Scroll to when native scroll', function(assert) {
 });
 
 QUnit.test('ScrollTo when dxScrollable scroll', function(assert) {
-    var done = assert.async(),
-        scrollController = this.scrollController;
+    const done = assert.async();
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement),
-        scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
+    const $element = renderer('<div>').height(40000).appendTo(this.$fixtureElement);
+    const scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable('instance');
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
@@ -744,11 +744,11 @@ QUnit.test('ScrollTo when dxScrollable scroll', function(assert) {
 });
 
 QUnit.test('Scroll To after disposing', function(assert) {
-    var scrollController = this.scrollController;
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
+    const $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(10000).css('overflow', 'auto');
 
@@ -768,15 +768,15 @@ QUnit.test('Scroll To after disposing', function(assert) {
 });
 
 QUnit.test('Remove subscription on disposing', function(assert) {
-    var scrollController = this.scrollController;
+    const scrollController = this.scrollController;
 
     $('<div>').height(300).appendTo(this.$fixtureElement);
 
-    var $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
+    const $element = $('<div>').height(40000).appendTo(this.$fixtureElement);
 
     this.$fixtureElement.height(10000).css('overflow', 'auto');
 
-    var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+    const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
     this.scrollController.subscribeToWindowScrollEvents($element);
     // act
     scrollController.dispose();

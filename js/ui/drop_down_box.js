@@ -13,8 +13,8 @@ import registerComponent from '../core/component_registrator';
 import { normalizeKeyName } from '../events/utils';
 import { keyboard } from '../events/short';
 
-var DROP_DOWN_BOX_CLASS = 'dx-dropdownbox',
-    ANONYMOUS_TEMPLATE_NAME = 'content';
+const DROP_DOWN_BOX_CLASS = 'dx-dropdownbox';
+const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 /**
  * @name dxDropDownBox
@@ -24,7 +24,7 @@ var DROP_DOWN_BOX_CLASS = 'dx-dropdownbox',
  * @module ui/drop_down_box
  * @export default
  */
-var DropDownBox = DropDownEditor.inherit({
+const DropDownBox = DropDownEditor.inherit({
     _supportedKeys: function() {
         return extend({}, this.callBase(), {
             tab: function(e) {
@@ -32,8 +32,8 @@ var DropDownBox = DropDownEditor.inherit({
                     return;
                 }
 
-                var $tabbableElements = this._getTabbableElements(),
-                    $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
+                const $tabbableElements = this._getTabbableElements();
+                const $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
                 $focusableElement && eventsEngine.trigger($focusableElement, 'focus');
                 e.preventDefault();
@@ -170,22 +170,22 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        var callBase = this.callBase.bind(this),
-            values = [];
+        const callBase = this.callBase.bind(this);
+        const values = [];
 
         if(!this._dataSource) {
             callBase(values);
             return new Deferred().resolve();
         }
 
-        var currentValue = this._getCurrentValue(),
-            keys = ensureDefined(currentValue, []);
+        const currentValue = this._getCurrentValue();
+        let keys = ensureDefined(currentValue, []);
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        var itemLoadDeferreds = map(keys, (function(key) {
+        const itemLoadDeferreds = map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
-                var displayValue = this._displayGetter(item);
+                const displayValue = this._displayGetter(item);
                 values.push(ensureDefined(displayValue, key));
             }).bind(this));
         }).bind(this));
@@ -200,10 +200,10 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _loadItem: function(value) {
-        var deferred = new Deferred(),
-            that = this;
+        const deferred = new Deferred();
+        const that = this;
 
-        var selectedItem = grep(this.option('items') || [], (function(item) {
+        const selectedItem = grep(this.option('items') || [], (function(item) {
             return this._isValueEquals(this._valueGetter(item), value);
         }).bind(this))[0];
 
@@ -233,11 +233,11 @@ var DropDownBox = DropDownEditor.inherit({
     _popupElementTabHandler: function(e) {
         if(normalizeKeyName(e) !== 'tab') return;
 
-        var $firstTabbable = this._getTabbableElements().first().get(0),
-            $lastTabbable = this._getTabbableElements().last().get(0),
-            $target = e.originalEvent.target,
-            moveBackward = !!($target === $firstTabbable && e.shift),
-            moveForward = !!($target === $lastTabbable && !e.shift);
+        const $firstTabbable = this._getTabbableElements().first().get(0);
+        const $lastTabbable = this._getTabbableElements().last().get(0);
+        const $target = e.originalEvent.target;
+        const moveBackward = !!($target === $firstTabbable && e.shift);
+        const moveForward = !!($target === $lastTabbable && !e.shift);
 
         if(moveBackward || moveForward) {
             this.close();
@@ -295,7 +295,7 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupShownHandler: function() {
         this.callBase();
-        var $firstElement = this._getTabbableElements().first();
+        const $firstElement = this._getTabbableElements().first();
         eventsEngine.trigger($firstElement, 'focus');
     },
 

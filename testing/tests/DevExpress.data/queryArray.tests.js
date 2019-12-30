@@ -7,8 +7,8 @@ QUnit.module('Misc');
 QUnit.test('no operations', function(assert) {
     assert.expect(2);
 
-    var done = assert.async(),
-        q = QUERY([1, 2, 3]);
+    const done = assert.async();
+    const q = QUERY([1, 2, 3]);
 
     $.when(
         q.enumerate().done(function(r) {
@@ -37,15 +37,15 @@ QUnit.module('Sorting');
 QUnit.test('basic usage', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var input = [
+    const input = [
         { name: 'alex', age: 21 },
         { name: 'bob', age: 0 },
         { name: 'alex', age: 27 }
     ];
 
-    var output = [
+    const output = [
         { name: 'alex', age: 27 },
         { name: 'alex', age: 21 },
         { name: 'bob', age: 0 }
@@ -60,9 +60,9 @@ QUnit.test('basic usage', function(assert) {
 QUnit.test('sort using functional getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [2, 1, 3],
-        output = [3, 2, 1];
+    const done = assert.async();
+    const input = [2, 1, 3];
+    const output = [3, 2, 1];
 
     QUERY(input).sortBy(function(item) { return 3 - item; }).enumerate().done(function(r) {
         assert.deepEqual(r, output);
@@ -73,9 +73,9 @@ QUnit.test('sort using functional getter', function(assert) {
 QUnit.test('sort using compare function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [2, 1, 3],
-        output = [3, 1, 2];
+    const done = assert.async();
+    const input = [2, 1, 3];
+    const output = [3, 1, 2];
 
     QUERY(input).sortBy('this', false, function(x, y) {
         return output.indexOf(x) - output.indexOf(y);
@@ -88,9 +88,9 @@ QUnit.test('sort using compare function', function(assert) {
 QUnit.test('thenBy with compare function', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [2, 1, 3],
-        output = [3, 1, 2];
+    const done = assert.async();
+    const input = [2, 1, 3];
+    const output = [3, 1, 2];
 
     QUERY(input).sortBy('fake').thenBy('this', false, function(x, y) {
         return output.indexOf(x) - output.indexOf(y);
@@ -103,10 +103,10 @@ QUnit.test('thenBy with compare function', function(assert) {
 QUnit.test('sort using compare function and getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        order = [2, 1],
-        input = [{ val: 1 }, { val: 2 }],
-        output = [{ val: 2 }, { val: 1 }];
+    const done = assert.async();
+    const order = [2, 1];
+    const input = [{ val: 1 }, { val: 2 }];
+    const output = [{ val: 2 }, { val: 1 }];
 
     QUERY(input).sortBy('val', false, function(x, y) {
         return order.indexOf(x) - order.indexOf(y);
@@ -119,9 +119,9 @@ QUnit.test('sort using compare function and getter', function(assert) {
 QUnit.test('sort using compare function if desc is true', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [2, 1, 3],
-        output = [3, 1, 2];
+    const done = assert.async();
+    const input = [2, 1, 3];
+    const output = [3, 1, 2];
 
     QUERY(input).sortBy('this', true, function(x, y) {
         return output.indexOf(x) - output.indexOf(y);
@@ -134,9 +134,9 @@ QUnit.test('sort using compare function if desc is true', function(assert) {
 QUnit.test('compare function arguments should not be normalized via toComparable', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = ['A', 'a', 'B'],
-        output = ['A', 'B', 'a'];
+    const done = assert.async();
+    const input = ['A', 'a', 'B'];
+    const output = ['A', 'B', 'a'];
 
     QUERY(input).sortBy('this', false, function(x, y) {
         if(x < y) return -1;
@@ -151,7 +151,7 @@ QUnit.test('compare function arguments should not be normalized via toComparable
 QUnit.test('sort without a getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY([2, 1]).sortBy().enumerate().done(function(r) {
         assert.deepEqual(r, [1, 2]);
@@ -162,9 +162,9 @@ QUnit.test('sort without a getter', function(assert) {
 QUnit.test('applying sort does not modify original query', function(assert) {
     assert.expect(2);
 
-    var done = assert.async(),
-        q = QUERY([2, 1]),
-        sorted = q.sortBy();
+    const done = assert.async();
+    const q = QUERY([2, 1]);
+    const sorted = q.sortBy();
 
     $.when(
         q.enumerate().done(function(r) {
@@ -179,9 +179,9 @@ QUnit.test('applying sort does not modify original query', function(assert) {
 QUnit.test('subsequent \'sort\' call re-sorts from scratch', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        data = [2, 1, 3],
-        q = QUERY(data);
+    const done = assert.async();
+    const data = [2, 1, 3];
+    let q = QUERY(data);
 
     q = q.sortBy(function(i) { return i; });
     q = q.sortBy(function(i) { return 10 - i; });
@@ -194,8 +194,8 @@ QUnit.test('subsequent \'sort\' call re-sorts from scratch', function(assert) {
 QUnit.test('sort uses getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        data = [new Date(2011, 11, 22), new Date(2011, 10, 1)];
+    const done = assert.async();
+    const data = [new Date(2011, 11, 22), new Date(2011, 10, 1)];
     QUERY(data).sortBy('getMonth').enumerate().done(function(r) {
         assert.equal(r[0].getMonth(), 10);
         done();
@@ -203,8 +203,8 @@ QUnit.test('sort uses getter', function(assert) {
 });
 
 QUnit.test('string are supported and letter case is ignored', function(assert) {
-    var done = assert.async(),
-        data = ['Z', 'a'];
+    const done = assert.async();
+    const data = ['Z', 'a'];
     QUERY(data).sortBy().enumerate().done(function(r) {
         assert.deepEqual(r, ['a', 'Z']);
         done();
@@ -213,8 +213,8 @@ QUnit.test('string are supported and letter case is ignored', function(assert) {
 
 QUnit.test('sort with falsy null and undefined values', function(assert) {
     // NOTE: http://www.ecma-international.org/ecma-262/6.0/#sec-sortcompare
-    var data;
-    var sort = function(data, desc) {
+    let data;
+    const sort = function(data, desc) {
         return QUERY(data)
             .sortBy('this', desc || false)
             .toArray();
@@ -230,9 +230,9 @@ QUnit.test('sort with falsy null and undefined values', function(assert) {
 });
 
 QUnit.test('sorting is stable (T123921)', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var data = [
+    const data = [
         { name: 0, type: 'M' },
         { name: 1, type: 'M' },
         { name: 2, type: 'M' },
@@ -257,11 +257,11 @@ QUnit.module('Filtering');
 QUnit.test('filter by function', function(assert) {
     assert.expect(3);
 
-    var done = assert.async(),
-        input = [2, 0, 5];
+    const done = assert.async();
+    const input = [2, 0, 5];
 
-    var q1 = QUERY(input).filter(function(i) { return i > 1; }),
-        q2 = q1.filter(function(i) { return i < 5; });
+    const q1 = QUERY(input).filter(function(i) { return i > 1; });
+    const q2 = q1.filter(function(i) { return i < 5; });
 
     $.when(
         q1.enumerate().done(function(r) {
@@ -306,10 +306,10 @@ QUnit.test('group criterion with function', function(assert) {
 QUnit.test('comparison operators', function(assert) {
     assert.expect(6);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }];
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }];
 
-    var check = function(crit, expectation) {
+    const check = function(crit, expectation) {
         return QUERY(input).filter(crit).enumerate().done(function(r) {
             assert.deepEqual(r, expectation);
         });
@@ -330,9 +330,9 @@ QUnit.test('comparison operators', function(assert) {
 QUnit.test('filter with functional getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }],
-        getter = function(obj) { return obj.f * 2; };
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }];
+    const getter = function(obj) { return obj.f * 2; };
 
     QUERY(input).filter([getter, '=', 4]).enumerate().done(function(r) {
         assert.deepEqual(r, [{ f: 2 }]);
@@ -343,8 +343,8 @@ QUnit.test('filter with functional getter', function(assert) {
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 42 }];
+    const done = assert.async();
+    const input = [{ f: 42 }];
 
 
     QUERY(input).filter(['f', 42]).enumerate().done(function(r) {
@@ -356,8 +356,8 @@ QUnit.test('missing operation means equal', function(assert) {
 QUnit.test('missing value means true', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: true }];
+    const done = assert.async();
+    const input = [{ f: true }];
 
     QUERY(input).filter(['f']).enumerate().done(function(r) {
         assert.deepEqual(r, input);
@@ -368,8 +368,8 @@ QUnit.test('missing value means true', function(assert) {
 QUnit.test('skip null and undefined values for string field', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: null }, { f: undefined }, { f: 'abc' }];
+    const done = assert.async();
+    const input = [{ f: null }, { f: undefined }, { f: 'abc' }];
 
     QUERY(input).filter(['f', 'contains', 'b']).enumerate().done(function(r) {
         assert.deepEqual(r, [{ f: 'abc' }]);
@@ -380,8 +380,8 @@ QUnit.test('skip null and undefined values for string field', function(assert) {
 QUnit.test('when arguments are not array', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 42 }];
+    const done = assert.async();
+    const input = [{ f: 42 }];
 
     QUERY(input).filter('f', 42).enumerate().done(function(r) {
         assert.deepEqual(r, input);
@@ -392,12 +392,12 @@ QUnit.test('when arguments are not array', function(assert) {
 QUnit.test('AND', function(assert) {
     assert.expect(4);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }, { f: 3 }],
-        cond1 = ['f', '>', 1],
-        cond2 = ['f', '<', 3];
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }, { f: 3 }];
+    const cond1 = ['f', '>', 1];
+    const cond2 = ['f', '<', 3];
 
-    var check = function(op) {
+    const check = function(op) {
         return QUERY(input)
             .filter([cond1, op, cond2])
             .enumerate()
@@ -424,12 +424,12 @@ QUnit.test('AND', function(assert) {
 QUnit.test('OR', function(assert) {
     assert.expect(4);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }, { f: 3 }],
-        cond1 = ['f', 1],
-        cond2 = ['f', 3];
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }, { f: 3 }];
+    const cond1 = ['f', 1];
+    const cond2 = ['f', 3];
 
-    var check = function(op) {
+    const check = function(op) {
         return QUERY(input).filter([cond1, op, cond2]).enumerate().done(function(r) {
             assert.deepEqual(r, [{ f: 1 }, { f: 3 }]);
         });
@@ -448,12 +448,12 @@ QUnit.test('OR', function(assert) {
 QUnit.test('missing logic operator means AND', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }, { f: 3 }],
-        crit = [
-            ['f', '>', 1],
-            ['f', '<', 3]
-        ];
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }, { f: 3 }];
+    const crit = [
+        ['f', '>', 1],
+        ['f', '<', 3]
+    ];
 
     QUERY(input).filter(crit).enumerate().done(function(r) {
         assert.deepEqual(r, [{ f: 2 }]);
@@ -464,10 +464,10 @@ QUnit.test('missing logic operator means AND', function(assert) {
 QUnit.test('conditions are not checked if it\'s not necessary', function(assert) {
     assert.expect(2);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var check = function(op) {
-        var callCount = 0;
+    const check = function(op) {
+        let callCount = 0;
 
         return QUERY([{ f: 1 }, { f: 2 }])
             .filter([['f', '>', 1], op, function() {
@@ -489,11 +489,11 @@ QUnit.test('conditions are not checked if it\'s not necessary', function(assert)
 QUnit.test('string functions', function(assert) {
     assert.expect(4);
 
-    var done = assert.async(),
-        input = [{ f: 'a' }, { f: 'ab' }, { f: 'abc' }];
+    const done = assert.async();
+    const input = [{ f: 'a' }, { f: 'ab' }, { f: 'abc' }];
 
 
-    var check = function(crit, expectation) {
+    const check = function(crit, expectation) {
         return QUERY(input).filter(crit).enumerate().done(function(r) {
             assert.deepEqual(r, expectation);
         });
@@ -510,8 +510,8 @@ QUnit.test('string functions', function(assert) {
 QUnit.test('operator names are case insensitive', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 'abc' }];
+    const done = assert.async();
+    const input = [{ f: 'abc' }];
 
     QUERY(input).filter('f', 'CoNtAiNs', 'b').enumerate().done(function(r) {
         assert.deepEqual(r, input);
@@ -522,8 +522,8 @@ QUnit.test('operator names are case insensitive', function(assert) {
 QUnit.test('letter case in string values does not matter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 'Abc' }];
+    const done = assert.async();
+    const input = [{ f: 'Abc' }];
 
     QUERY(input).filter(['f', 'aBc']).enumerate().done(function(r) {
         assert.deepEqual(r, input);
@@ -534,13 +534,13 @@ QUnit.test('letter case in string values does not matter', function(assert) {
 QUnit.test('date', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
-    var ms = new Date().valueOf(),
-        input = [
-            { d: new Date(ms) },
-            { d: new Date(ms + 5) }
-        ];
+    const ms = new Date().valueOf();
+    const input = [
+        { d: new Date(ms) },
+        { d: new Date(ms + 5) }
+    ];
 
     QUERY(input).filter(['d', new Date(ms)]).enumerate().done(function(r) {
         assert.deepEqual(r, [{ d: new Date(ms) }]);
@@ -551,8 +551,8 @@ QUnit.test('date', function(assert) {
 QUnit.test('filter uses getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        data = [new Date(2011, 11, 22), new Date(2011, 10, 1)];
+    const done = assert.async();
+    const data = [new Date(2011, 11, 22), new Date(2011, 10, 1)];
 
     QUERY(data).filter('getMonth', 10).enumerate().done(function(r) {
         assert.equal(r[0].getMonth(), 10);
@@ -561,7 +561,7 @@ QUnit.test('filter uses getter', function(assert) {
 });
 
 QUnit.test('filter array and func regression', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY([1, 2, 3])
         .filter([
@@ -576,7 +576,7 @@ QUnit.test('filter array and func regression', function(assert) {
 });
 
 QUnit.test('T141181: Filtering with \'endswith\' operation is not working properly in some cases', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY(['bar'])
         .filter(['this', 'endswith', 'fooo'])
@@ -599,11 +599,11 @@ QUnit.test('unknown filter operation', function(assert) {
 QUnit.test('NOT with binary operators', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 'a' }, { f: 'ab' }, { f: 'abc' }],
-        cond = ['f', 'startswith', 'ab'];
+    const done = assert.async();
+    const input = [{ f: 'a' }, { f: 'ab' }, { f: 'abc' }];
+    const cond = ['f', 'startswith', 'ab'];
 
-    var check = function(op) {
+    const check = function(op) {
         return QUERY(input)
             .filter([op, cond])
             .enumerate()
@@ -627,12 +627,12 @@ QUnit.test('NOT with binary operators', function(assert) {
 QUnit.test('NOT with group operation', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        input = [{ f: 1 }, { f: 2 }, { f: 3 }],
-        cond1 = ['f', '>=', 2],
-        cond2 = ['f', '<>', 3];
+    const done = assert.async();
+    const input = [{ f: 1 }, { f: 2 }, { f: 3 }];
+    const cond1 = ['f', '>=', 2];
+    const cond2 = ['f', '<>', 3];
 
-    var check = function(op) {
+    const check = function(op) {
         return QUERY(input)
             .filter([op, [cond1, 'and', cond2]])
             .enumerate()
@@ -698,9 +698,9 @@ QUnit.test('mixin and/or conditions inside a single group throws', function(asse
 QUnit.module('Grouping');
 
 QUnit.test('basic usage', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var input = [
+    const input = [
         { a: 2 },
         { a: 1 },
         { a: 2 }
@@ -725,8 +725,8 @@ QUnit.test('basic usage', function(assert) {
 QUnit.test('group uses getter', function(assert) {
     assert.expect(1);
 
-    var done = assert.async(),
-        data = [new Date(2011, 10, 1)];
+    const done = assert.async();
+    const data = [new Date(2011, 10, 1)];
 
     QUERY(data).groupBy('getMonth').enumerate().done(function(groups) {
         assert.equal(groups[0].key, 10);
@@ -736,7 +736,7 @@ QUnit.test('group uses getter', function(assert) {
 
 QUnit.test('T348632: Rows in a group with an undefined group value are not sorted', function(assert) {
 
-    var data = [
+    const data = [
         { foo: undefined, bar: 1 },
         { foo: undefined, bar: 2 },
         { foo: null, bar: 1 },
@@ -763,7 +763,7 @@ QUnit.module('Aggregates');
 QUnit.test('custom aggregate with 3 args', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY([{ f: 1 }, { f: 2 }]).aggregate(
         0,
@@ -778,7 +778,7 @@ QUnit.test('custom aggregate with 3 args', function(assert) {
 QUnit.test('custom aggregate with 1 args', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
     QUERY([1, 2])
         .aggregate(function(accumulator, obj) {
             return accumulator += obj;
@@ -792,8 +792,8 @@ QUnit.test('custom aggregate with 1 args', function(assert) {
 QUnit.test('standard aggregate functions', function(assert) {
     assert.expect(6);
 
-    var done = assert.async(),
-        q = QUERY([{ f: 1 }, { f: 3 }]);
+    const done = assert.async();
+    const q = QUERY([{ f: 1 }, { f: 3 }]);
 
     $.when(
         q.count().done(function(r) {
@@ -827,8 +827,8 @@ QUnit.test('standard aggregate functions', function(assert) {
 });
 
 QUnit.test('standard aggregate functions on empty collections', function(assert) {
-    var done = assert.async(),
-        q = QUERY([]);
+    const done = assert.async();
+    const q = QUERY([]);
 
     $.when(
 
@@ -864,7 +864,7 @@ QUnit.module('Select');
 QUnit.test('select', function(assert) {
     assert.expect(1);
 
-    var done = assert.async();
+    const done = assert.async();
 
     QUERY([42])
         .select(function(obj) { return obj - 41; })
@@ -876,9 +876,9 @@ QUnit.test('select', function(assert) {
 });
 
 QUnit.test('select with prop name list', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var data = [
+    const data = [
         { a: 'A', b: 'B', c: 'C' }
     ];
 
@@ -896,8 +896,8 @@ QUnit.test('select with prop name list', function(assert) {
 });
 
 QUnit.test('select single property returns object', function(assert) {
-    var done = assert.async(),
-        data = [{ a: 'A' }];
+    const done = assert.async();
+    const data = [{ a: 'A' }];
 
     QUERY(data)
         .select('a')
@@ -913,8 +913,8 @@ QUnit.module('Slice');
 QUnit.test('slice', function(assert) {
     assert.expect(3);
 
-    var done = assert.async(),
-        q = QUERY([1, 2, 3]);
+    const done = assert.async();
+    const q = QUERY([1, 2, 3]);
 
     $.when(
 
@@ -936,8 +936,8 @@ QUnit.test('slice', function(assert) {
 QUnit.test('slice reset method', function(assert) {
     assert.expect(2);
 
-    var done = assert.async(),
-        q = QUERY([1, 2, 3]).slice(1, 1);
+    const done = assert.async();
+    const q = QUERY([1, 2, 3]).slice(1, 1);
 
     $.when(
         q.enumerate().done(function(r) {
@@ -954,7 +954,7 @@ QUnit.test('slice reset method', function(assert) {
 QUnit.module('Error handling');
 
 QUnit.test('error handlers (enumerate)', function(assert) {
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.run(function() {
         return QUERY([1], { errorHandler: helper.optionalHandler })
@@ -964,7 +964,7 @@ QUnit.test('error handlers (enumerate)', function(assert) {
 });
 
 QUnit.test('error handlers (aggregate)', function(assert) {
-    var helper = new ErrorHandlingHelper();
+    const helper = new ErrorHandlingHelper();
 
     helper.run(function() {
         return QUERY([1, 2, 3], { errorHandler: helper.optionalHandler })
@@ -975,9 +975,9 @@ QUnit.test('error handlers (aggregate)', function(assert) {
 QUnit.module('Regression tests');
 
 QUnit.test('re-enumeration of changed data (sorting)', function(assert) {
-    var done = assert.async(),
-        data = [2, 1],
-        q = QUERY(data).sortBy();
+    const done = assert.async();
+    const data = [2, 1];
+    const q = QUERY(data).sortBy();
 
     $.when(
         q.enumerate()
@@ -991,9 +991,9 @@ QUnit.test('re-enumeration of changed data (sorting)', function(assert) {
 });
 
 QUnit.test('re-enumeration of changed data (grouping)', function(assert) {
-    var done = assert.async(),
-        data = [1, 2, 3],
-        q = QUERY(data).groupBy();
+    const done = assert.async();
+    const data = [1, 2, 3];
+    const q = QUERY(data).groupBy();
 
     $.when(
         q.enumerate()
@@ -1008,9 +1008,9 @@ QUnit.test('re-enumeration of changed data (grouping)', function(assert) {
 });
 
 QUnit.test('special for javascript cases (filtering)', function(assert) {
-    var done = assert.async(),
-        data = ['', 0, false, undefined, null],
-        query = QUERY(data);
+    const done = assert.async();
+    const data = ['', 0, false, undefined, null];
+    const query = QUERY(data);
 
     $.when(
         query.filter(['this', 0]).enumerate().done(function(r) {

@@ -43,8 +43,8 @@ module('Basic markup', () => {
             tabIndex: 3
         });
 
-        const input = element.find(`.${INPUT_CLASS}`),
-            placeholder = element.find(`.${PLACEHOLDER_CLASS}`);
+        const input = element.find(`.${INPUT_CLASS}`);
+        const placeholder = element.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.equal(input.val(), 'custom');
         assert.equal(input.prop('placeholder') || element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'enter value');
@@ -111,11 +111,11 @@ module('Basic markup', () => {
 
 module('the \'name\' option', () => {
     test('widget input should get the \'name\' attribute with a correct value', function(assert) {
-        const expectedName = 'some_name',
-            $element = $('#texteditor').dxTextEditor({
-                name: expectedName
-            }),
-            $input = $element.find(`.${INPUT_CLASS}`);
+        const expectedName = 'some_name';
+        const $element = $('#texteditor').dxTextEditor({
+            name: expectedName
+        });
+        const $input = $element.find(`.${INPUT_CLASS}`);
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
     });

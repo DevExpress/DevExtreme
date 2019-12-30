@@ -1,8 +1,8 @@
-var themeModule = require('../../themes'),
-    IOS7_DEFAULT = 'ios7.default',
-    SECONDARY_TEXT_COLOR = '#767676',
-    BORDER_COLOR = '#d3d3d3',
-    BLACK = '#000000';
+const themeModule = require('../../themes');
+const IOS7_DEFAULT = 'ios7.default';
+const SECONDARY_TEXT_COLOR = '#767676';
+const BORDER_COLOR = '#d3d3d3';
+const BLACK = '#000000';
 
 themeModule.registerTheme({
     name: IOS7_DEFAULT,

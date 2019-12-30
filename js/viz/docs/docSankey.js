@@ -4,7 +4,7 @@
 * @module viz/sankey
 * @export default
 */
-var dxSankey = {
+const dxSankey = {
     /**
     * @name dxSankeyOptions.hoverEnabled
     * @type boolean
@@ -561,4 +561,4 @@ var dxSankey = {
     * @publicName hideTooltip()
     */
     hideTooltip: function() { }
-}
+};

@@ -1,4 +1,4 @@
-var common = require('./commonParts/common.js');
+const common = require('./commonParts/common.js');
 
 require('viz/tree_map/selection');
 
@@ -8,18 +8,18 @@ QUnit.test('Select tile', function(assert) {
     function onSelectionChanged(e) {
         assert.strictEqual(e.node.isSelected(), true, 'state inside callback');
     }
-    var spy = sinon.spy(onSelectionChanged),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            tile: {
-                selectionStyle: {
-                    color: 'green',
-                    border: { color: 'black', width: 3 }
-                }
+    const spy = sinon.spy(onSelectionChanged);
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        tile: {
+            selectionStyle: {
+                color: 'green',
+                border: { color: 'black', width: 3 }
             }
-        }).getRootNode(),
-        tile = this.tile(0);
+        }
+    }).getRootNode();
+    const tile = this.tile(0);
     tile.smartAttr.reset();
 
     root.getChild(0).select(true);
@@ -37,19 +37,19 @@ QUnit.test('Unselect tile', function(assert) {
     function onSelectionChanged(e) {
         assert.strictEqual(e.node.isSelected(), false, 'state inside callback');
     }
-    var spy = sinon.spy(onSelectionChanged),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            tile: {
-                color: 'red',
-                border: { color: 'blue', width: 2 }
-            },
-            colorizer: {
-                type: 'none'
-            }
-        }),
-        root = widget.getRootNode(),
-        tile = this.tile(0);
+    const spy = sinon.spy(onSelectionChanged);
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        tile: {
+            color: 'red',
+            border: { color: 'blue', width: 2 }
+        },
+        colorizer: {
+            type: 'none'
+        }
+    });
+    const root = widget.getRootNode();
+    const tile = this.tile(0);
     root.getChild(0).select(true);
     tile.smartAttr.reset();
     widget.on('selectionChanged', spy);
@@ -63,23 +63,23 @@ QUnit.test('Unselect tile', function(assert) {
 });
 
 QUnit.test('Select group', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 3 }]
-            }, {
-                items: [{ value: 1 }, { value: 2 }]
-            }],
-            onSelectionChanged: spy,
-            group: {
-                selectionStyle: {
-                    color: 'red',
-                    border: { color: 'blue', width: 2 }
-                }
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 3 }]
+        }, {
+            items: [{ value: 1 }, { value: 2 }]
+        }],
+        onSelectionChanged: spy,
+        group: {
+            selectionStyle: {
+                color: 'red',
+                border: { color: 'blue', width: 2 }
             }
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1);
+        }
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
     outer.attr.reset();
     inner.smartAttr.reset();
 
@@ -96,21 +96,21 @@ QUnit.test('Select group', function(assert) {
 });
 
 QUnit.test('Unselect group', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 3 }]
-            }, {
-                items: [{ value: 1 }, { value: 2 }]
-            }],
-            onSelectionChanged: spy,
-            group: {
-                color: 'green',
-                border: { color: 'black', width: 3 }
-            }
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1);
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 3 }]
+        }, {
+            items: [{ value: 1 }, { value: 2 }]
+        }],
+        onSelectionChanged: spy,
+        group: {
+            color: 'green',
+            border: { color: 'black', width: 3 }
+        }
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
     root.getChild(0).select(true);
     outer.attr.reset();
     inner.smartAttr.reset();
@@ -126,11 +126,11 @@ QUnit.test('Unselect group', function(assert) {
 });
 
 QUnit.test('Select tile when another one is selected', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy
-        }).getRootNode();
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy
+    }).getRootNode();
     root.getChild(0).select(true);
     spy.reset();
 
@@ -144,12 +144,12 @@ QUnit.test('Select tile when another one is selected', function(assert) {
 });
 
 QUnit.test('Select tile when another one is selected - multiple selection', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            selectionMode: 'MULTIPLE'
-        }).getRootNode();
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        selectionMode: 'MULTIPLE'
+    }).getRootNode();
     root.getChild(0).select(true);
     spy.reset();
 
@@ -161,12 +161,12 @@ QUnit.test('Select tile when another one is selected - multiple selection', func
 });
 
 QUnit.test('Disabled selection', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            selectionMode: 'NONE'
-        }).getRootNode();
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        selectionMode: 'NONE'
+    }).getRootNode();
 
     root.getChild(0).select(true);
 
@@ -174,13 +174,13 @@ QUnit.test('Disabled selection', function(assert) {
 });
 
 QUnit.test('Clear selection', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            selectionMode: 'multiple'
-        }),
-        root = widget.getRootNode();
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        selectionMode: 'multiple'
+    });
+    const root = widget.getRootNode();
     root.getChild(0).select(true);
     root.getChild(1).select(true);
     spy.reset();
@@ -195,13 +195,13 @@ QUnit.test('Clear selection', function(assert) {
 });
 
 QUnit.test('Change from multiple to single', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            selectionMode: 'multiple'
-        }),
-        root = widget.getRootNode();
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        selectionMode: 'multiple'
+    });
+    const root = widget.getRootNode();
     root.getChild(1).select(true);
     root.getChild(0).select(true);
     spy.reset();
@@ -214,13 +214,13 @@ QUnit.test('Change from multiple to single', function(assert) {
 });
 
 QUnit.test('Change from multiple to none', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onSelectionChanged: spy,
-            selectionMode: 'multiple'
-        }),
-        root = widget.getRootNode();
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onSelectionChanged: spy,
+        selectionMode: 'multiple'
+    });
+    const root = widget.getRootNode();
     root.getChild(0).select(true);
     root.getChild(1).select(true);
     spy.reset();
@@ -235,16 +235,16 @@ QUnit.test('Change from multiple to none', function(assert) {
 });
 
 QUnit.test('Selection state is not applied until endUpdate', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            tile: {
-                hoverStyle: {
-                    color: 'red'
-                }
-            },
-            onSelectionChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        tile: {
+            hoverStyle: {
+                color: 'red'
+            }
+        },
+        onSelectionChanged: spy
+    });
     this.tile(1).attr.reset();
 
     widget.beginUpdate();

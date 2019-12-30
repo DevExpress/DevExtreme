@@ -1,16 +1,16 @@
-var seriesModule = require('../series/base_series'),
-    seriesFamilyModule = require('../core/series_family'),
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    each = require('../../core/utils/iterator').each,
-    vizUtils = require('../core/utils'),
-    rangeModule = require('../translators/range'),
-    dataValidatorModule = require('../components/data_validator'),
-    ChartThemeManager = require('../components/chart_theme_manager').ThemeManager,
-    SeriesDataSource;
+const seriesModule = require('../series/base_series');
+const seriesFamilyModule = require('../core/series_family');
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const each = require('../../core/utils/iterator').each;
+const vizUtils = require('../core/utils');
+const rangeModule = require('../translators/range');
+const dataValidatorModule = require('../components/data_validator');
+const ChartThemeManager = require('../components/chart_theme_manager').ThemeManager;
+let SeriesDataSource;
 
-var createThemeManager = function(chartOptions) {
+const createThemeManager = function(chartOptions) {
     return new ChartThemeManager({
         options: chartOptions,
         themeSection: 'rangeSelector.chart',
@@ -18,9 +18,9 @@ var createThemeManager = function(chartOptions) {
     });
 };
 
-var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
-    var families = [],
-        types = [];
+const processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
+    const families = [];
+    const types = [];
 
     each(series, function(i, item) {
         if(inArray(item.type, types) === -1) {
@@ -29,7 +29,7 @@ var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBu
     });
 
     each(types, function(_, type) {
-        var family = new seriesFamilyModule.SeriesFamily({
+        const family = new seriesFamilyModule.SeriesFamily({
             type: type,
             equalBarWidth: equalBarWidth,
             minBubbleSize: minBubbleSize,
@@ -48,10 +48,10 @@ var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBu
 };
 
 SeriesDataSource = function(options) {
-    var that = this,
-        themeManager = that._themeManager = createThemeManager(options.chart),
-        topIndent,
-        bottomIndent;
+    const that = this;
+    const themeManager = that._themeManager = createThemeManager(options.chart);
+    let topIndent;
+    let bottomIndent;
 
     themeManager.setTheme(options.chart.theme);
     topIndent = themeManager.getOptions('topIndent');
@@ -72,20 +72,20 @@ SeriesDataSource.prototype = {
     constructor: SeriesDataSource,
 
     _calculateSeries: function(options) {
-        var that = this,
-            series = [],
-            particularSeriesOptions,
-            seriesTheme,
-            data = options.dataSource || [],
-            parsedData,
-            chartThemeManager = that._themeManager,
-            seriesTemplate = chartThemeManager.getOptions('seriesTemplate'),
-            allSeriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data) : options.chart.series,
-            dataSourceField,
-            valueAxis = that._valueAxis,
-            i,
-            newSeries,
-            groupsData;
+        const that = this;
+        const series = [];
+        let particularSeriesOptions;
+        let seriesTheme;
+        const data = options.dataSource || [];
+        let parsedData;
+        const chartThemeManager = that._themeManager;
+        const seriesTemplate = chartThemeManager.getOptions('seriesTemplate');
+        let allSeriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data) : options.chart.series;
+        let dataSourceField;
+        const valueAxis = that._valueAxis;
+        let i;
+        let newSeries;
+        let groupsData;
 
         if(options.dataSource && !allSeriesOptions) {
             dataSourceField = options.dataSourceField || 'arg';
@@ -151,12 +151,12 @@ SeriesDataSource.prototype = {
             return;
         }
 
-        var series = this._series,
-            viewport = new rangeModule.Range(),
-            axis = series[0].getArgumentAxis(),
-            themeManager = this._themeManager,
-            negativesAsZeroes = themeManager.getOptions('negativesAsZeroes'),
-            negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
+        const series = this._series;
+        const viewport = new rangeModule.Range();
+        const axis = series[0].getArgumentAxis();
+        const themeManager = this._themeManager;
+        const negativesAsZeroes = themeManager.getOptions('negativesAsZeroes');
+        const negativesAsZeros = themeManager.getOptions('negativesAsZeros'); // misspelling case
 
         series.forEach(function(s) {
             viewport.addRange(s.getArgumentRange());
@@ -185,22 +185,22 @@ SeriesDataSource.prototype = {
     },
 
     getBoundRange: function() {
-        var that = this,
-            rangeData,
-            valueAxis = that._valueAxis,
-            valRange = new rangeModule.Range({
-                min: valueAxis.min,
-                minVisible: valueAxis.min,
-                max: valueAxis.max,
-                maxVisible: valueAxis.max,
-                axisType: valueAxis.type,
-                base: valueAxis.logarithmBase
-            }),
-            argRange = new rangeModule.Range({}),
-            rangeYSize,
-            rangeVisibleSizeY,
-            minIndent,
-            maxIndent;
+        const that = this;
+        let rangeData;
+        const valueAxis = that._valueAxis;
+        const valRange = new rangeModule.Range({
+            min: valueAxis.min,
+            minVisible: valueAxis.min,
+            max: valueAxis.max,
+            maxVisible: valueAxis.max,
+            axisType: valueAxis.type,
+            base: valueAxis.logarithmBase
+        });
+        const argRange = new rangeModule.Range({});
+        let rangeYSize;
+        let rangeVisibleSizeY;
+        let minIndent;
+        let maxIndent;
 
         each(that._series, function(_, series) {
             rangeData = series.getRangeData();
@@ -236,10 +236,10 @@ SeriesDataSource.prototype = {
     },
 
     getMarginOptions: function(canvas) {
-        var bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
+        const bubbleSize = Math.min(canvas.width, canvas.height) * this._themeManager.getOptions('maxBubbleSize');
 
         return this._series.reduce(function(marginOptions, series) {
-            var seriesOptions = series.getMarginOptions();
+            const seriesOptions = series.getMarginOptions();
 
             if(seriesOptions.processBubbleSize === true) {
                 seriesOptions.size = bubbleSize;
@@ -261,7 +261,7 @@ SeriesDataSource.prototype = {
     },
 
     getCalculatedValueType: function() {
-        var series = this._series[0];
+        const series = this._series[0];
         return series && series.argumentType;
     },
 

@@ -1,19 +1,19 @@
-var Callbacks = require('../../core/utils/callbacks');
+const Callbacks = require('../../core/utils/callbacks');
 
-var eventEmitterMethods = {
+const eventEmitterMethods = {
     _initEvents: function() {
-        var names = this._eventNames,
-            i,
-            ii = names.length,
-            events = this._events = {};
+        const names = this._eventNames;
+        let i;
+        const ii = names.length;
+        const events = this._events = {};
         for(i = 0; i < ii; ++i) {
             events[names[i]] = Callbacks();
         }
     },
 
     _disposeEvents: function() {
-        var events = this._events,
-            name;
+        const events = this._events;
+        let name;
         for(name in events) {
             events[name].empty();
         }
@@ -21,8 +21,8 @@ var eventEmitterMethods = {
     },
 
     on: function(handlers) {
-        var events = this._events,
-            name;
+        const events = this._events;
+        let name;
         for(name in handlers) {
             events[name].add(handlers[name]);
         }
@@ -40,8 +40,8 @@ var eventEmitterMethods = {
 };
 
 exports.makeEventEmitter = function(target) {
-    var proto = target.prototype,
-        name;
+    const proto = target.prototype;
+    let name;
     for(name in eventEmitterMethods) {
         proto[name] = eventEmitterMethods[name];
     }

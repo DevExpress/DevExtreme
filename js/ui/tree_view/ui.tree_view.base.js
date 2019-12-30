@@ -58,8 +58,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             e.currentTarget = $itemElement;
             this._itemClickHandler(e, $itemElement.children('.' + ITEM_CLASS));
 
-            const expandEventName = this._getEventNameByOption(this.option('expandEvent')),
-                expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+            const expandEventName = this._getEventNameByOption(this.option('expandEvent'));
+            const expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
 
             if(expandByClick) {
                 this._expandEventHandler(e);
@@ -97,8 +97,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckBoxState: function($element) {
-        const checkboxInstance = this._getCheckBoxInstance($element),
-            currentState = checkboxInstance.option('value');
+        const checkboxInstance = this._getCheckBoxInstance($element);
+        const currentState = checkboxInstance.option('value');
         if(!checkboxInstance.option('disabled')) {
             this._updateItemSelection(!currentState, $element.find('.' + ITEM_CLASS).get(0), true, $element);
         }
@@ -110,8 +110,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         for(let i = 0, len = items.length; i < len; i++) {
-            const item = items[i],
-                node = this._dataAdapter.getNodeByItem(item);
+            const item = items[i];
+            const node = this._dataAdapter.getNodeByItem(item);
 
             this._toggleExpandedState(node, state);
             this._toggleExpandedNestedItems(item.items, state);
@@ -583,9 +583,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getSelectedKeysDiff(oldSelectedKeys, newSelectedKeys) {
-        let toSelect = [],
-            toDeselect = [],
-            isRecursiveSelection = this._isRecursiveSelection();
+        let toSelect = [];
+        let toDeselect = [];
+        const isRecursiveSelection = this._isRecursiveSelection();
 
         newSelectedKeys.forEach((newKey) => {
             if(oldSelectedKeys.indexOf(newKey) !== -1) {
@@ -786,7 +786,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        let accessors = this.callBase();
+        const accessors = this.callBase();
 
         accessors.push('hasItems');
 
@@ -839,8 +839,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireContentReadyAction: function() {
-        var dataSource = this.getDataSource();
-        var skipContentReadyAction = dataSource && !dataSource.isLoaded();
+        const dataSource = this.getDataSource();
+        const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
         if(!skipContentReadyAction) {
             this.callBase();
@@ -1071,7 +1071,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._hasChildren(node)) {
-            var $node = this._getNodeElement(node);
+            const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
                 return;
@@ -1219,11 +1219,10 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _animateNodeContainer: function(node, state, e) {
         const $node = this._getNodeElement(node);
         const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
-        let nodeHeight;
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
-        nodeHeight = $nodeContainer.height();
+        const nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {
@@ -1423,8 +1422,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(!value && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
-                const $node = this._getNodeElement(node),
-                    checkbox = this._getCheckBoxInstance($node);
+                const $node = this._getNodeElement(node);
+                const checkbox = this._getCheckBoxInstance($node);
 
                 checkbox && checkbox.option('value', true);
             }
@@ -1441,8 +1440,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
 
-        const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
-            handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
+        const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item);
+        const handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
 
         handler.call(this, initiator, 'onItemSelectionChanged', {
             node: this._dataAdapter.getPublicNode(node),
@@ -1460,8 +1459,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const cache = {};
 
         each(this._dataAdapter.getData(), (_, node) => {
-            const $node = this._getNodeElement(node, cache),
-                nodeSelection = node.internalFields.selected;
+            const $node = this._getNodeElement(node, cache);
+            const nodeSelection = node.internalFields.selected;
 
             if(!$node.length) {
                 return;
@@ -1648,24 +1647,26 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         switch(location) {
-            case FOCUS_UP:
-                var $prevItem = this._prevItem($items);
+            case FOCUS_UP: {
+                const $prevItem = this._prevItem($items);
 
                 this.option('focusedElement', getPublicElement($prevItem));
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $prevItem.find('.' + ITEM_CLASS).get(0));
                 }
                 break;
-            case FOCUS_DOWN:
-                var $nextItem = this._nextItem($items);
+            }
+            case FOCUS_DOWN: {
+                const $nextItem = this._nextItem($items);
 
                 this.option('focusedElement', getPublicElement($nextItem));
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $nextItem.find('.' + ITEM_CLASS).get(0));
                 }
                 break;
-            case FOCUS_FIRST:
-                var $firstItem = $items.first();
+            }
+            case FOCUS_FIRST: {
+                const $firstItem = $items.first();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
@@ -1673,8 +1674,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 this.option('focusedElement', getPublicElement($firstItem));
                 break;
-            case FOCUS_LAST:
-                var $lastItem = $items.last();
+            }
+            case FOCUS_LAST: {
+                const $lastItem = $items.last();
 
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
@@ -1682,12 +1684,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
                 this.option('focusedElement', getPublicElement($lastItem));
                 break;
-            case FOCUS_RIGHT:
+            }
+            case FOCUS_RIGHT: {
                 this._expandFocusedContainer();
                 break;
-            case FOCUS_LEFT:
+            }
+            case FOCUS_LEFT: {
                 this._collapseFocusedContainer();
                 break;
+            }
             default:
                 this.callBase.apply(this, arguments);
                 return;

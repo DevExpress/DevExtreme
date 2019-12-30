@@ -3,7 +3,7 @@
  * @type object
  * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
  */
-var polarChartSeries = {
+const polarChartSeries = {
     /**
     * @name PolarChartSeries.name
     * @type string
@@ -33,7 +33,7 @@ var polarChartSeries = {
 * @type object
 * @hidden
 */
-var CommonPolarChartSeries = {
+const CommonPolarChartSeries = {
     /**
     * @name dxPolarChartSeriesTypes.CommonPolarChartSeries.color
     * @type string
@@ -773,7 +773,7 @@ var CommonPolarChartSeries = {
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
 */
-var areaPolarSeries = {
+const areaPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.areapolarseries.point
     * @type object
@@ -808,7 +808,7 @@ var areaPolarSeries = {
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
 */
-var barPolarSeries = {
+const barPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.barpolarseries.hoverMode
     * @type string
@@ -830,7 +830,7 @@ var barPolarSeries = {
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
 */
-var linePolarSeries = {
+const linePolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.linepolarseries.hoverMode
     * @type string
@@ -853,14 +853,14 @@ var linePolarSeries = {
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
 */
-var scatterPolarSeries = {};
+const scatterPolarSeries = {};
 /**
 * @name dxPolarChartSeriesTypes.stackedbarpolarseries
 * @publicName StackedBarSeries
 * @type object
 * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
 */
-var stackedbarPolarSeries = {
+const stackedbarPolarSeries = {
     /**
     * @name dxPolarChartSeriesTypes.stackedbarpolarseries.label
     * @type object

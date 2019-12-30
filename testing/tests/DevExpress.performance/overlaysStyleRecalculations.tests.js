@@ -5,13 +5,13 @@ require('ui/popup');
 require('common.css!');
 require('generic_light.css!');
 
-var $ = require('jquery'),
-    positionUtils = require('animation/position');
+const $ = require('jquery');
+const positionUtils = require('animation/position');
 
 positionUtils.calculateScrollbarWidth();
 
 QUnit.testStart(function() {
-    var markup = '\
+    const markup = '\
     <div id="element">\
         <div>item1</div>\
         <div>item2</div>\
@@ -29,7 +29,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.performanceTest('dxOverlay should not force relayout on creation', function(assert) {
-    var measureFunction = function() {
+    const measureFunction = function() {
         $('#element').dxOverlay({});
     };
 
@@ -38,7 +38,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
 
 [true, false].forEach(shading => {
     QUnit.performanceTest(`dxOverlay with shading=${shading} should be rendered with minimum count of relayouts`, function(assert) {
-        var measureFunction = function() {
+        const measureFunction = function() {
             $('#element').dxOverlay({
                 shading,
                 visible: true,
@@ -50,13 +50,13 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
     });
 
     QUnit.performanceTest(`showing dxOverlay with shading=${shading} should be with minimum count of relayouts`, function(assert) {
-        var overlay = $('#element').dxOverlay({
+        const overlay = $('#element').dxOverlay({
             shading,
             visible: false,
             animation: null
         }).dxOverlay('instance');
 
-        var measureFunction = function() {
+        const measureFunction = function() {
             overlay.show();
         };
 
@@ -65,7 +65,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
 
 
     QUnit.performanceTest(`dxPopup with shading=${shading} should be rendered with minimum count of relayouts`, function(assert) {
-        var measureFunction = function() {
+        const measureFunction = function() {
             $('#element').dxPopup({
                 shading,
                 visible: true,

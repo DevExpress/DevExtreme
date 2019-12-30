@@ -1,7 +1,11 @@
 import $ from 'jquery';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
+import localization from 'localization';
+import ja from 'localization/messages/ja.json!';
+import messageLocalization from 'localization/message';
 import { isDefined } from 'core/utils/type';
+import { extend } from 'core/utils/extend';
 import ExcelJS from 'exceljs';
 import ExcelJSTestHelper from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'exporter/exceljs/excelExporter';
@@ -11,7 +15,6 @@ import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 
 import typeUtils from 'core/utils/type';
-
 import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
@@ -37,7 +40,7 @@ const alignCenterWrap = { horizontal: 'center', wrapText: true };
 
 
 QUnit.testStart(() => {
-    let markup = '<div id=\'dataGrid\'></div>';
+    const markup = '<div id=\'dataGrid\'></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -70,13 +73,13 @@ const moduleConfig = {
 
 QUnit.module('API', moduleConfig, () => {
     [undefined, { row: 1, column: 1 }, { row: 2, column: 3 }].forEach((topLeftCell) => {
-        let topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
-        let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
+        const topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
+        const topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
         [true, false, undefined].forEach((autoFilterEnabled) => {
-            let testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
+            const testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
             const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-                let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+                const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
                 const result = {
                     component: dataGrid,
@@ -99,7 +102,7 @@ QUnit.module('API', moduleConfig, () => {
 
                 const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
 
-                let expectedCells = [];
+                const expectedCells = [];
 
                 exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
@@ -1991,7 +1994,7 @@ QUnit.module('API', moduleConfig, () => {
                     { value: '2019/10/9', expected: dateValue },
                     { value: dateTimeValue.getTime(), expected: dateTimeValue }
                 ].forEach((date) => {
-                    QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format} ${testCaption}`, function(assert) {
+                    QUnit.test(`Data - columns.dataType: date, columns.format: ${format.format}, cell.value: ${JSON.stringify(date.value)} ${testCaption}`, function(assert) {
                         const done = assert.async();
 
                         const ds = [{ f1: date.value }];
@@ -6453,12 +6456,115 @@ QUnit.module('API', moduleConfig, () => {
         });
     });
 
-    ExcelJSLocalizationFormatTests.runCurrencyTests([
-        { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
-        { value: 'RUB', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
-        { value: 'JPY', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
-        { value: 'KPW', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
-        { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
-        { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
-    ]);
+    [undefined, { enabled: true, text: 'Export to .xlsx...' }].forEach((loadPanelConfig) => {
+        QUnit.test(`LoadPanel - loadPanel: ${JSON.stringify(loadPanelConfig)}`, function(assert) {
+            const done = assert.async();
+            const ds = [{ f1: 'f1_1' }];
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: ds,
+                loadingTimeout: undefined,
+                showColumnHeaders: false
+            }).dxDataGrid('instance');
+
+            let actualLoadPanelSettingsOnExporting;
+
+            const loadPanelOnShownHandler = () => {
+                actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
+            };
+
+            dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+            const initialLoadPanelSettings = extend({}, dataGrid.option('loadPanel'));
+            const expectedLoadPanelSettingsOnExporting = extend({}, initialLoadPanelSettings, loadPanelConfig || { enabled: true, text: 'Exporting...' }, { onShown: loadPanelOnShownHandler });
+
+            if(browser.webkit) {
+                extend(expectedLoadPanelSettingsOnExporting, { animation: null });
+            }
+
+            exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
+                assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
+                assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
+                done();
+            });
+        });
+    });
+
+    QUnit.test('LoadPanel - loadPanel: { enabled: false }', function(assert) {
+        assert.expect();
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        let loadPanelOnShownHandlerCallCount = 0;
+
+        const loadPanelOnShownHandler = (e) => {
+            loadPanelOnShownHandlerCallCount++;
+        };
+
+        dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+        const initialLoadPanelSettings = dataGrid.option('loadPanel');
+
+        exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: { enabled: false } }).then(() => {
+            assert.strictEqual(loadPanelOnShownHandlerCallCount, 0, 'loadPanel should not be shown on Exporting');
+            assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings');
+            done();
+        });
+    });
+
+    [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
+        QUnit.test(`LoadPanel - ${localizationText.type} localization text, locale('ja')`, function(assert) {
+            const done = assert.async();
+            const ds = [{ f1: 'f1_1' }];
+            const locale = localization.locale();
+
+            try {
+                if(localizationText.type === 'default') {
+                    localization.loadMessages(ja);
+                } else {
+                    messageLocalization.load({
+                        'ja': {
+                            'dxDataGrid-exporting': '!CUSTOM TEXT!'
+                        }
+                    });
+                }
+
+                localization.locale('ja');
+
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false
+                }).dxDataGrid('instance');
+
+                let actualLoadPanelText;
+
+                const loadPanelOnShownHandler = () => {
+                    actualLoadPanelText = dataGrid.option('loadPanel').text;
+                };
+
+                dataGrid.option('loadPanel.onShown', loadPanelOnShownHandler);
+
+                exportDataGrid({ component: dataGrid, worksheet: this.worksheet }).then(() => {
+                    assert.strictEqual(actualLoadPanelText, localizationText.expected, 'loadPanel.text');
+                    done();
+                });
+            } finally {
+                localization.locale(locale);
+            }
+        });
+    });
 });
+
+ExcelJSLocalizationFormatTests.runCurrencyTests([
+    { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
+    { value: 'RUB', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
+    { value: 'JPY', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
+    { value: 'KPW', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
+    { value: 'LBP', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
+    { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
+]);

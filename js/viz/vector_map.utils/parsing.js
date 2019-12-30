@@ -1,4 +1,4 @@
-/* eslint-disable no-undef*/
+/* eslint-disable no-undef, no-var, one-var*/
 
 function noop() { }
 
@@ -9,11 +9,9 @@ function isFunction(target) {
 }
 
 function wrapSource(source) {
-    var buffer = wrapBuffer(source),
-        position = 0,
-        stream;
-
-    stream = {
+    const buffer = wrapBuffer(source);
+    let position = 0;
+    const stream = {
         pos: function() {
             return position;
         },
@@ -24,8 +22,8 @@ function wrapSource(source) {
         },
 
         ui8arr: function(length) {
-            var i = 0,
-                list = [];
+            let i = 0;
+            const list = [];
             list.length = length;
             for(; i < length; ++i) {
                 list[i] = stream.ui8();
@@ -34,31 +32,31 @@ function wrapSource(source) {
         },
 
         ui8: function() {
-            var val = ui8(buffer, position);
+            const val = ui8(buffer, position);
             position += 1;
             return val;
         },
 
         ui16LE: function() {
-            var val = ui16LE(buffer, position);
+            const val = ui16LE(buffer, position);
             position += 2;
             return val;
         },
 
         ui32LE: function() {
-            var val = ui32LE(buffer, position);
+            const val = ui32LE(buffer, position);
             position += 4;
             return val;
         },
 
         ui32BE: function() {
-            var val = ui32BE(buffer, position);
+            const val = ui32BE(buffer, position);
             position += 4;
             return val;
         },
 
         f64LE: function() {
-            var val = f64LE(buffer, position);
+            const val = f64LE(buffer, position);
             position += 8;
             return val;
         }
@@ -67,10 +65,10 @@ function wrapSource(source) {
 }
 
 function parseCore(source, roundCoordinates, errors) {
-    var shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {},
-        dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {},
-        features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates),
-        result;
+    const shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {};
+    const dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {};
+    const features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates);
+    let result;
 
     if(features.length) {
         result = {
@@ -85,10 +83,10 @@ function parseCore(source, roundCoordinates, errors) {
 }
 
 function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
-    var features = [],
-        i,
-        ii = features.length = ii = Math.max(shapeData.length, dataBaseFileData.length),
-        shape;
+    const features = [];
+    let i;
+    const ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
+    let shape;
     for(i = 0; i < ii; ++i) {
         shape = shapeData[i] || {};
         features[i] = {
@@ -104,7 +102,7 @@ function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
 }
 
 function createCoordinatesRounder(precision) {
-    var factor = Number('1E' + precision);
+    const factor = Number('1E' + precision);
     function round(x) {
         return Math.round(x * factor) / factor;
     }
@@ -131,11 +129,11 @@ function buildParseArgs(source) {
 }
 
 function parse(source, parameters, callback) {
-    var result;
+    let result;
     when(buildParseArgs(source), function(errorArray, dataArray) {
         callback = (isFunction(parameters) && parameters) || (isFunction(callback) && callback) || noop;
         parameters = (!isFunction(parameters) && parameters) || {};
-        var errors = [];
+        const errors = [];
         errorArray.forEach(function(e) {
             e && errors.push(e);
         });
@@ -149,10 +147,10 @@ function parse(source, parameters, callback) {
 exports.parse = parse;
 
 function when(actions, callback) {
-    var errorArray = [],
-        dataArray = [],
-        counter = 1,
-        lock = true;
+    const errorArray = [];
+    const dataArray = [];
+    let counter = 1;
+    let lock = true;
     actions.forEach(function(action, i) {
         ++counter;
         action(function(e, data) {

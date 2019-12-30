@@ -24,7 +24,7 @@ const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 * @module ui/tab_panel
 * @export default
 */
-var TabPanel = MultiView.inherit({
+const TabPanel = MultiView.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -251,7 +251,7 @@ var TabPanel = MultiView.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
+        const that = this;
 
         this.callBase();
         if(this.option('templatesRenderAsynchronously')) {
@@ -266,13 +266,13 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var $element = this.$element();
+        const $element = this.$element();
 
         this._$tabContainer = $('<div>')
             .addClass(TABPANEL_TABS_CLASS)
             .appendTo($element);
 
-        var $tabs = $('<div>').appendTo(this._$tabContainer);
+        const $tabs = $('<div>').appendTo(this._$tabContainer);
 
         this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
 
@@ -286,7 +286,7 @@ var TabPanel = MultiView.inherit({
 
     _updateLayout: function() {
         if(windowUtils.hasWindow()) {
-            var tabsHeight = this._$tabContainer.outerHeight();
+            const tabsHeight = this._$tabContainer.outerHeight();
             this._$container.css({
                 'marginTop': -tabsHeight,
                 'paddingTop': tabsHeight
@@ -299,10 +299,10 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var tabs = this._tabs,
-            tabItems = tabs.itemElements(),
-            $activeTab = $(tabItems[tabs.option('selectedIndex')]),
-            id = this.getFocusedItemId();
+        const tabs = this._tabs;
+        const tabItems = tabs.itemElements();
+        const $activeTab = $(tabItems[tabs.option('selectedIndex')]);
+        const id = this.getFocusedItemId();
 
         this.setAria('controls', undefined, $(tabItems));
         this.setAria('controls', id, $activeTab);
@@ -337,8 +337,8 @@ var TabPanel = MultiView.inherit({
             onOptionChanged: (function(args) {
                 if(args.name === 'focusedElement') {
                     if(args.value) {
-                        var $value = $(args.value);
-                        var $newItem = this._itemElements().eq($value.index());
+                        const $value = $(args.value);
+                        const $newItem = this._itemElements().eq($value.index());
                         this.option('focusedElement', getPublicElement($newItem));
                     } else {
                         this.option('focusedElement', args.value);
@@ -402,9 +402,9 @@ var TabPanel = MultiView.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name,
-            value = args.value,
-            fullName = args.fullName;
+        const name = args.name;
+        const value = args.value;
+        const fullName = args.fullName;
 
         switch(name) {
             case 'dataSource':
@@ -435,12 +435,13 @@ var TabPanel = MultiView.inherit({
             case 'showNavButtons':
                 this._setTabsOption(fullName, value);
                 break;
-            case 'focusedElement':
-                var id = value ? $(value).index() : value;
-                var newItem = value ? this._tabs._itemElements().eq(id) : value;
+            case 'focusedElement': {
+                const id = value ? $(value).index() : value;
+                const newItem = value ? this._tabs._itemElements().eq(id) : value;
                 this._setTabsOption('focusedElement', getPublicElement(newItem));
                 this.callBase(args);
                 break;
+            }
             case 'itemTitleTemplate':
                 this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
                 break;

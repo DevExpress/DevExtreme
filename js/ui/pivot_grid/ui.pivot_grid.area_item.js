@@ -4,9 +4,9 @@ import { getPublicElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 
-var PIVOTGRID_EXPAND_CLASS = 'dx-expand';
+const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 
-var getRealElementWidth = function(element) {
+const getRealElementWidth = function(element) {
     let width = 0;
 
     const offsetWidth = element.offsetWidth;
@@ -27,9 +27,9 @@ var getRealElementWidth = function(element) {
 };
 
 function getFakeTableOffset(scrollPos, elementOffset, tableSize, viewPortSize) {
-    var offset = 0,
-        halfTableCount = 0,
-        halfTableSize = tableSize / 2;
+    let offset = 0;
+    let halfTableCount = 0;
+    const halfTableSize = tableSize / 2;
 
     if(scrollPos + viewPortSize - (elementOffset + tableSize) > 1) {
 
@@ -58,7 +58,7 @@ exports.getRealElementWidth = getRealElementWidth;
 
 exports.AreaItem = Class.inherit({
     _getRowElement: function(index) {
-        var that = this;
+        const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
             return that._tableElement[0].rows[index];
         }
@@ -74,7 +74,7 @@ exports.AreaItem = Class.inherit({
     },
 
     _getCellText: function(cell, encodeHtml) {
-        var cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
+        let cellText = cell.isWhiteSpace ? '&nbsp' : cell.text || '&nbsp';
 
         if(encodeHtml && (cellText.indexOf('<') !== -1 || cellText.indexOf('>') !== -1)) {
             cellText = $('<div>').text(cellText).html();
@@ -105,21 +105,21 @@ exports.AreaItem = Class.inherit({
     },
 
     _renderTableContent: function(tableElement, data) {
-        var that = this,
-            rowsCount = data.length,
-            row,
-            cell,
-            i,
-            j,
-            rowElement,
-            cellElement,
-            cellText,
-            rtlEnabled = that.option('rtlEnabled'),
-            markupArray = [],
-            encodeHtml = that.option('encodeHtml'),
-            rowClassNames,
-            colspan = 'colspan=\'',
-            rowspan = 'rowspan=\'';
+        const that = this;
+        const rowsCount = data.length;
+        let row;
+        let cell;
+        let i;
+        let j;
+        let rowElement;
+        let cellElement;
+        let cellText;
+        const rtlEnabled = that.option('rtlEnabled');
+        const markupArray = [];
+        const encodeHtml = that.option('encodeHtml');
+        let rowClassNames;
+        const colspan = 'colspan=\'';
+        const rowspan = 'rowspan=\'';
 
         tableElement.data('area', that._getAreaName());
         tableElement.data('data', data);
@@ -130,7 +130,7 @@ exports.AreaItem = Class.inherit({
 
         for(i = 0; i < rowsCount; i++) {
             row = data[i];
-            var columnMarkupArray = [];
+            const columnMarkupArray = [];
             rowClassNames = [];
 
             markupArray.push('<tr ');
@@ -148,7 +148,7 @@ exports.AreaItem = Class.inherit({
                     cell.rowspan && columnMarkupArray.push(rowspan + (cell.rowspan || 1) + '\'');
                     cell.colspan && columnMarkupArray.push(colspan + (cell.colspan || 1) + '\'');
 
-                    var styleOptions = {
+                    const styleOptions = {
                         cellElement: cellElement,
                         cell: cell,
                         cellsCount: row.length,
@@ -220,19 +220,19 @@ exports.AreaItem = Class.inherit({
     },
 
     _triggerOnCellPrepared: function(tableElement, data) {
-        var that = this,
-            rowElements = tableElement.find('tr'),
-            areaName = that._getAreaName(),
-            onCellPrepared = that.option('onCellPrepared'),
-            hasEvent = that.component._eventsStrategy.hasEvent('cellPrepared'),
-            rowElement,
-            $cellElement,
-            onCellPreparedArgs,
-            defaultActionArgs = this.component._defaultActionArgs(),
-            row,
-            cell,
-            rowIndex,
-            columnIndex;
+        const that = this;
+        const rowElements = tableElement.find('tr');
+        const areaName = that._getAreaName();
+        const onCellPrepared = that.option('onCellPrepared');
+        const hasEvent = that.component._eventsStrategy.hasEvent('cellPrepared');
+        let rowElement;
+        let $cellElement;
+        let onCellPreparedArgs;
+        const defaultActionArgs = this.component._defaultActionArgs();
+        let row;
+        let cell;
+        let rowIndex;
+        let columnIndex;
 
         if(onCellPrepared || hasEvent) {
             for(rowIndex = 0; rowIndex < data.length; rowIndex++) {
@@ -281,7 +281,7 @@ exports.AreaItem = Class.inherit({
     },
 
     _setRowHeight: function(index, value) {
-        var row = this._getRowElement(index);
+        const row = this._getRowElement(index);
         if(row) {
             row.style.height = value + 'px';
         }
@@ -296,7 +296,7 @@ exports.AreaItem = Class.inherit({
     },
 
     getRowsLength: function() {
-        var that = this;
+        const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
             return that._tableElement[0].rows.length;
         }
@@ -304,10 +304,10 @@ exports.AreaItem = Class.inherit({
     },
 
     getRowsHeight: function() {
-        var that = this,
-            result = [],
-            rowsLength = that.getRowsLength(),
-            i;
+        const that = this;
+        const result = [];
+        const rowsLength = that.getRowsLength();
+        let i;
 
         for(i = 0; i < rowsLength; i++) {
             result.push(that._getRowHeight(i));
@@ -316,10 +316,10 @@ exports.AreaItem = Class.inherit({
     },
 
     setRowsHeight: function(values) {
-        var that = this,
-            totalHeight = 0,
-            valuesLength = values.length,
-            i;
+        const that = this;
+        let totalHeight = 0;
+        const valuesLength = values.length;
+        let i;
 
         for(i = 0; i < valuesLength; i++) {
             totalHeight += values[i];
@@ -330,22 +330,23 @@ exports.AreaItem = Class.inherit({
     },
 
     getColumnsWidth: function() {
-        var rowsLength = this.getRowsLength(),
-            rowIndex,
-            row,
-            i,
-            columnIndex,
-            processedCells = [],
-            result = [],
-            fillCells = function(cells, rowIndex, columnIndex, rowSpan, colSpan) {
-                var rowOffset, columnOffset;
-                for(rowOffset = 0; rowOffset < rowSpan; rowOffset++) {
-                    for(columnOffset = 0; columnOffset < colSpan; columnOffset++) {
-                        cells[rowIndex + rowOffset] = cells[rowIndex + rowOffset] || [];
-                        cells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
-                    }
+        const rowsLength = this.getRowsLength();
+        let rowIndex;
+        let row;
+        let i;
+        let columnIndex;
+        const processedCells = [];
+        const result = [];
+        const fillCells = function(cells, rowIndex, columnIndex, rowSpan, colSpan) {
+            let rowOffset;
+            let columnOffset;
+            for(rowOffset = 0; rowOffset < rowSpan; rowOffset++) {
+                for(columnOffset = 0; columnOffset < colSpan; columnOffset++) {
+                    cells[rowIndex + rowOffset] = cells[rowIndex + rowOffset] || [];
+                    cells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
                 }
-            };
+            }
+        };
 
         if(rowsLength) {
             for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
@@ -365,12 +366,12 @@ exports.AreaItem = Class.inherit({
     },
 
     setColumnsWidth: function(values) {
-        var i,
-            totalWidth = 0,
-            tableElement = this._tableElement[0],
-            colgroupElementHTML = '',
-            columnsCount = this.getColumnsCount(),
-            columnWidth = [];
+        let i;
+        let totalWidth = 0;
+        const tableElement = this._tableElement[0];
+        let colgroupElementHTML = '';
+        const columnsCount = this.getColumnsCount();
+        const columnWidth = [];
 
         for(i = 0; i < columnsCount; i++) {
             columnWidth.push(values[i] || 0);
@@ -463,15 +464,15 @@ exports.AreaItem = Class.inherit({
     },
 
     _renderVirtualContent: function() {
-        var that = this;
+        const that = this;
         if(!that._virtualContent && that.option('scrolling.mode') === 'virtual') {
             that._virtualContent = $('<div>').addClass('dx-virtual-content').insertBefore(that._tableElement);
         }
     },
 
     reset: function() {
-        var that = this,
-            tableElement = that._tableElement[0];
+        const that = this;
+        const tableElement = that._tableElement[0];
 
         that._fakeTable && that._fakeTable.detach();
         that._fakeTable = null;
@@ -483,7 +484,7 @@ exports.AreaItem = Class.inherit({
         that.resetColumnsWidth();
 
         if(tableElement) {
-            for(var i = 0; i < tableElement.rows.length; i++) {
+            for(let i = 0; i < tableElement.rows.length; i++) {
                 tableElement.rows[i].style.height = '';
             }
             tableElement.style.height = '';
@@ -492,10 +493,10 @@ exports.AreaItem = Class.inherit({
     },
 
     _updateFakeTableVisibility: function() {
-        var that = this,
-            tableElement = that.tableElement()[0],
-            horizontalOffsetName = that.option('rtlEnabled') ? 'right' : 'left',
-            fakeTableElement = that._fakeTable[0];
+        const that = this;
+        const tableElement = that.tableElement()[0];
+        const horizontalOffsetName = that.option('rtlEnabled') ? 'right' : 'left';
+        const fakeTableElement = that._fakeTable[0];
 
         if(tableElement.style.top === fakeTableElement.style.top && fakeTableElement.style[horizontalOffsetName] === tableElement.style[horizontalOffsetName]) {
             that._fakeTable.addClass('dx-hidden');
@@ -505,20 +506,20 @@ exports.AreaItem = Class.inherit({
     },
 
     _moveFakeTableHorizontally: function(scrollPos) {
-        var that = this,
-            rtlEnabled = that.option('rtlEnabled'),
-            offsetStyleName = rtlEnabled ? 'right' : 'left',
-            tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]),
-            offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
+        const that = this;
+        const rtlEnabled = that.option('rtlEnabled');
+        const offsetStyleName = rtlEnabled ? 'right' : 'left';
+        const tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]);
+        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
         if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
             that._fakeTable[0].style[offsetStyleName] = offset + 'px';
         }
     },
 
     _moveFakeTableTop: function(scrollPos) {
-        var that = this,
-            tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top),
-            offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
+        const that = this;
+        const tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top);
+        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
 
         if(parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
             that._fakeTable[0].style.top = offsetTop + 'px';
@@ -530,7 +531,7 @@ exports.AreaItem = Class.inherit({
     },
 
     _createFakeTable: function() {
-        var that = this;
+        const that = this;
 
         if(!that._fakeTable) {
             that._fakeTable = that.tableElement()
@@ -541,7 +542,7 @@ exports.AreaItem = Class.inherit({
     },
 
     render: function(rootElement, data) {
-        var that = this;
+        const that = this;
 
         if(that._tableElement) {
             try {
@@ -570,8 +571,8 @@ exports.AreaItem = Class.inherit({
     },
 
     on: function(eventName, handler) {
-        var that = this,
-            scrollable = that._getScrollable();
+        const that = this;
+        const scrollable = that._getScrollable();
 
         if(scrollable) {
             scrollable.on(eventName, function(e) {
@@ -585,15 +586,15 @@ exports.AreaItem = Class.inherit({
     },
 
     off: function(eventName) {
-        var scrollable = this._getScrollable();
+        const scrollable = this._getScrollable();
         if(scrollable) {
             scrollable.off(eventName);
         }
         return this;
     },
     scrollTo: function(pos) {
-        var scrollable = this._getScrollable(),
-            scrollablePos = pos;
+        const scrollable = this._getScrollable();
+        let scrollablePos = pos;
 
         if(scrollable) {
             if(this.option('rtlEnabled')) {
@@ -612,20 +613,20 @@ exports.AreaItem = Class.inherit({
     },
 
     updateScrollable: function() {
-        var scrollable = this._getScrollable();
+        const scrollable = this._getScrollable();
         if(scrollable) {
             return scrollable.update();
         }
     },
 
     getColumnsCount: function() {
-        var columnCount = 0,
-            row = this._getRowElement(0),
-            cells;
+        let columnCount = 0;
+        const row = this._getRowElement(0);
+        let cells;
 
         if(row) {
             cells = row.cells;
-            for(var i = 0, len = cells.length; i < len; ++i) {
+            for(let i = 0, len = cells.length; i < len; ++i) {
                 columnCount += cells[i].colSpan;
             }
         }
@@ -634,7 +635,7 @@ exports.AreaItem = Class.inherit({
     },
 
     getData: function() {
-        var tableElement = this._tableElement;
+        const tableElement = this._tableElement;
         return tableElement ? tableElement.data('data') : [];
     }
 });

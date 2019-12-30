@@ -789,9 +789,9 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const INKRIPPLE_MATERIAL_SHOW_TIMEOUT = 100;
 
 QUnit.test('button should have no inkRipple after fast swipe for Material theme', function(assert) {
-    const origIsMaterial = themes.isMaterial,
-        origCurrent = themes.current,
-        clock = sinon.useFakeTimers();
+    const origIsMaterial = themes.isMaterial;
+    const origCurrent = themes.current;
+    const clock = sinon.useFakeTimers();
 
     themes.isMaterial = () => { return true; };
     themes.current = () => { return 'material'; };
@@ -945,7 +945,7 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 });
 
 QUnit.test('optimizations', function(assert) {
-    let origOuterWidth = renderer.fn.outerWidth;
+    const origOuterWidth = renderer.fn.outerWidth;
     const outerWidthStub = sinon.stub();
 
     try {
@@ -2540,12 +2540,61 @@ QUnit.test('sortable options', function(assert) {
         itemDragging: { allowReordering: true }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
-    assert.equal(sortable.option('filter'), '.dx-list-item', 'filter');
+    assert.equal(sortable.option('filter'), '> .dx-list-item', 'filter');
     assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
     assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
+});
+
+QUnit.test('sortable options for grouped List', function(assert) {
+    const $list = $('#templated-list').dxList({
+        items: [{
+            key: 'Group 1',
+            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+        }],
+        grouped: true,
+        itemDragging: { allowReordering: true }
+    });
+
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
+
+
+    assert.equal(sortable.option('dragDirection'), 'vertical', 'dragDirection');
+    assert.equal(sortable.option('filter'), '> .dx-list-group > .dx-list-group-body > .dx-list-item', 'filter');
+    assert.equal(sortable.option('handle'), '.dx-list-reorder-handle', 'handle');
+    assert.equal(sortable.option('component'), $list.dxList('instance'), 'component');
+});
+
+QUnit.test('sortable filter is correct after "grouped" option changed', function(assert) {
+    const $list = $('#templated-list').dxList({
+        items: ['0'],
+        itemDragging: { allowReordering: true }
+    });
+    const instance = $list.dxList('instance');
+
+    instance.option({
+        items: [{
+            key: 'Group 1',
+            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+        }],
+        grouped: true
+    });
+
+    let sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const groupedFilter = '> .dx-list-group > .dx-list-group-body > .dx-list-item';
+    const simpleFilter = '> .dx-list-item';
+
+    assert.strictEqual(sortable.option('filter'), groupedFilter, 'correct grouped filter');
+
+    instance.option({
+        items: ['0'],
+        grouped: false
+    });
+    sortable = $list.find('.dx-sortable').dxSortable('instance');
+
+    assert.strictEqual(sortable.option('filter'), simpleFilter, 'correct simple filter');
 });
 
 QUnit.test('no sortable without allowReordering', function(assert) {
@@ -2562,7 +2611,7 @@ QUnit.test('sortable should be created with deprecated option allowItemReorderin
         allowItemReordering: true
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.ok(sortable, 'sortable is created');
     assert.strictEqual(sortable.option('allowReordering'), true, 'allowReordering is true');
@@ -2574,7 +2623,7 @@ QUnit.test('sortable should be created with option itemDragging.allowDropInsideI
         itemDragging: { allowDropInsideItem: true }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.ok(sortable, 'sortable is created');
     assert.strictEqual(sortable.option('allowDropInsideItem'), true, 'allowDropInsideItem is true');
@@ -2589,7 +2638,7 @@ QUnit.test('passing itemDragging options to sortable if group is defined', funct
         }
     });
 
-    var sortable = $list.find('.dx-sortable').dxSortable('instance');
+    const sortable = $list.find('.dx-sortable').dxSortable('instance');
 
     assert.equal(sortable.option('group'), 'myGroup', 'group parameter is passed');
     assert.strictEqual(sortable.option('allowReordering'), false, 'allowReordering is false by default');
@@ -2824,6 +2873,37 @@ QUnit.test('drop item should reorder list items with correct indexes', function(
     const pointer = reorderingPointerMock($item1, this.clock);
 
     pointer.dragStart(0.5).drag(1);
+    this.clock.tick();
+    pointer.dragEnd();
+});
+
+QUnit.test('reordering should correctly handle items contains List widget', function(assert) {
+    const $list = $('#list').dxList({
+        items: [
+            '0',
+            '1',
+            {
+                template: (data, index, container) => $('<div>').appendTo(container).dxList({ items: ['2-1', '2-2'] })
+            },
+            '3',
+            '4',
+            '5'
+        ],
+        itemDragging: { allowReordering: true }
+    });
+    const list = $list.dxList('instance');
+
+    list.reorderItem = (itemElement, toItemElement) => {
+        assert.strictEqual(itemElement.text(), $item1.text());
+        assert.strictEqual(toItemElement.text(), $item2.text());
+    };
+
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item1 = $items.eq(1);
+    const $item2 = $items.eq(2);
+    const pointer = reorderingPointerMock($item1, this.clock);
+
+    pointer.dragStart(0.5).drag(2);
     this.clock.tick();
     pointer.dragEnd();
 });

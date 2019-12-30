@@ -1,32 +1,32 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
-    vizUtils = require('viz/core/utils'),
-    titleModule = require('viz/core/title'),
-    exportModule = require('viz/core/export'),
-    tooltipModule = require('viz/core/tooltip'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip),
-    legendModule = require('viz/components/legend'),
-    layoutManagerModule = require('viz/chart_components/layout_manager'),
-    LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager),
-    validateData, // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
-    dataValidatorModule = require('viz/components/data_validator'),
-    CustomStore = require('data/custom_store'),
-    chartThemeManagerModule = require('viz/components/chart_theme_manager'),
-    scrollBarModule = require('viz/chart_components/scroll_bar'),
-    ScrollBar = scrollBarModule.ScrollBar,
-    trackerModule = require('viz/chart_components/tracker'),
-    ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker),
-    dxChart = require('viz/chart'),
-    chartMocks = require('../../helpers/chartMocks.js'),
-    MockSeries = chartMocks.MockSeries,
-    MockPoint = chartMocks.MockSeries,
-    insertMockFactory = chartMocks.insertMockFactory,
-    resetMockFactory = chartMocks.resetMockFactory,
-    restoreMockFactory = chartMocks.restoreMockFactory,
-    setupSeriesFamily = chartMocks.setupSeriesFamily;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+const vizUtils = require('viz/core/utils');
+const titleModule = require('viz/core/title');
+const exportModule = require('viz/core/export');
+const tooltipModule = require('viz/core/tooltip');
+const rendererModule = require('viz/core/renderers/renderer');
+const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip);
+const legendModule = require('viz/components/legend');
+const layoutManagerModule = require('viz/chart_components/layout_manager');
+const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
+let validateData; // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
+const dataValidatorModule = require('viz/components/data_validator');
+const CustomStore = require('data/custom_store');
+const chartThemeManagerModule = require('viz/components/chart_theme_manager');
+const scrollBarModule = require('viz/chart_components/scroll_bar');
+const ScrollBar = scrollBarModule.ScrollBar;
+const trackerModule = require('viz/chart_components/tracker');
+const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
+const dxChart = require('viz/chart');
+const chartMocks = require('../../helpers/chartMocks.js');
+const MockSeries = chartMocks.MockSeries;
+const MockPoint = chartMocks.MockSeries;
+const insertMockFactory = chartMocks.insertMockFactory;
+const resetMockFactory = chartMocks.resetMockFactory;
+const restoreMockFactory = chartMocks.restoreMockFactory;
+const setupSeriesFamily = chartMocks.setupSeriesFamily;
 
 $('<div id="chartContainer">').appendTo('#qunit-fixture');
 setupSeriesFamily();
@@ -35,13 +35,13 @@ rendererModule.Renderer = function(parameters) {
     return new vizMocks.Renderer(parameters);
 };
 
-var ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
+const ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 exportModule.ExportMenu = sinon.spy(function() {
     return new ExportMenu();
 });
 
 legendModule.Legend = sinon.spy(function(parameters) {
-    var legend = new vizMocks.Legend(parameters);
+    const legend = new vizMocks.Legend(parameters);
     legend.update = sinon.spy(function(params, settings) {
         legend.getPosition = sinon.stub().returns(settings.position);
         legend.getLayoutOptions = sinon.stub().returns({
@@ -67,9 +67,9 @@ function getTrackerStub() {
     return trackerModule.ChartTracker.lastCall.returnValue;
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         that.$container = $('<div>').appendTo($('#chartContainer'));
         setupMocks(that.$container);
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
@@ -103,7 +103,7 @@ var environment = {
         that.themeManager.getOptions.returns({});
 
         titleModule.Title = sinon.spy(function(parameters) {
-            var title = new vizMocks.Title(parameters);
+            const title = new vizMocks.Title(parameters);
             title.getLayoutOptions = sinon.stub().returns({
                 verticalAlignment: that.titleVerticalAlignment || 'bottom'
             });
@@ -146,7 +146,7 @@ var environment = {
         });
 
         sinon.stub(layoutManagerModule, 'LayoutManager', function() {
-            var layoutManager = new LayoutManager();
+            const layoutManager = new LayoutManager();
             layoutManager
                 .stub('needMoreSpaceForPanesCanvas')
                 .returns({ width: 10, height: 10 });
@@ -203,13 +203,13 @@ var environment = {
     QUnit.module('Legend', environment);
 
     QUnit.test('Check the canvas when the legend position is inside', function(assert) {
-        var stubSeries = new MockSeries({
-                name: 'First series',
-                visible: true,
-                showInLegend: true
-            }),
-            rect = { width: 100, height: 110, top: 1, bottom: 2, left: 3, right: 4 },
-            spyLayoutManager = layoutManagerModule.LayoutManager;
+        const stubSeries = new MockSeries({
+            name: 'First series',
+            visible: true,
+            showInLegend: true
+        });
+        const rect = { width: 100, height: 110, top: 1, bottom: 2, left: 3, right: 4 };
+        const spyLayoutManager = layoutManagerModule.LayoutManager;
 
         vizUtils.updatePanesCanvases.restore();
         sinon.stub(vizUtils, 'updatePanesCanvases', function(panes) {
@@ -227,8 +227,8 @@ var environment = {
         });
 
         assert.ok(spyLayoutManager.calledTwice, 'layout manager was called twice');
-        var layoutManagerForLegend = spyLayoutManager.returnValues[1],
-            legend = getLegendStub();
+        const layoutManagerForLegend = spyLayoutManager.returnValues[1];
+        const legend = getLegendStub();
 
         assert.deepEqual(layoutManagerForLegend.setOptions.lastCall.args, [{ width: 0, height: 0 }], 'options for legend in layout manager');
         assert.ok(layoutManagerForLegend.layoutElements.called, 'legend drawn');
@@ -236,7 +236,7 @@ var environment = {
         assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[1], rect, 'rect for layout manager');
         assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[3][0], { canvas: rect }, 'canvas for layout manager');
 
-        var legendData = legend.update.lastCall.args[0];
+        const legendData = legend.update.lastCall.args[0];
 
         assert.ok(legendData, 'Series were passed to legend');
         assert.deepEqual(legendData[0].states, { hover: {}, selection: {}, normal: {} }, 'Legend item color');
@@ -246,7 +246,7 @@ var environment = {
     QUnit.module('Adaptive layout', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            var stubSeries = new MockSeries();
+            const stubSeries = new MockSeries();
             chartMocks.seriesMockData.series.push(stubSeries);
 
         },
@@ -257,7 +257,7 @@ var environment = {
 
     QUnit.test('Keep labels = false', function(assert) {
         this.themeManager.getOptions.withArgs('adaptiveLayout').returns({ keepLabels: false });
-        var chart = this.createChart({
+        const chart = this.createChart({
             series: { type: 'line' }
         });
 
@@ -266,7 +266,7 @@ var environment = {
 
     QUnit.test('Keep labels = true', function(assert) {
         this.themeManager.getOptions.withArgs('adaptiveLayout').returns({ keepLabels: true });
-        var chart = this.createChart({
+        const chart = this.createChart({
             series: { type: 'line' }
         });
 
@@ -275,7 +275,7 @@ var environment = {
 
     QUnit.test('show labels after hiding', function(assert) {
         this.themeManager.getOptions.withArgs('adaptiveLayout').returns({ keepLabels: false });
-        var chart = this.createChart({
+        const chart = this.createChart({
             series: { type: 'line' }
         });
         chart.layoutManager.needMoreSpaceForPanesCanvas.returns(false);
@@ -295,7 +295,7 @@ var environment = {
     });
 
     QUnit.test('draw Series', function(assert) {
-        var chart = this.createChart({
+        const chart = this.createChart({
             series: { type: 'line' }
         });
 
@@ -306,7 +306,7 @@ var environment = {
     QUnit.test('Draw everything on first request', function(assert) {
         this.$container.width(300);
         this.$container.height(150);
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -332,7 +332,7 @@ var environment = {
         // arrange
         this.$container.hide();
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' },
@@ -353,7 +353,7 @@ var environment = {
         // arrange
         this.$container.width(350);
         this.$container.hide();
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' },
@@ -372,7 +372,7 @@ var environment = {
     QUnit.test('Redraw if hidden container is already shown', function(assert) {
         // arrange
         this.$container.hide();
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -403,9 +403,9 @@ var environment = {
 
     QUnit.test('Re-draw if size container with chart set 0;0 then restore old size ', function(assert) {
         // arrange
-        var oldWidth = this.$container.width(),
-            oldHeight = this.$container.height();
-        var chart = this.createChart({
+        const oldWidth = this.$container.width();
+        const oldHeight = this.$container.height();
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -444,7 +444,7 @@ var environment = {
 
     QUnit.test('Force full redraw', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -480,7 +480,7 @@ var environment = {
 
     QUnit.test('Redraw after width change', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -516,7 +516,7 @@ var environment = {
 
     QUnit.test('Redraw after height change', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -553,7 +553,7 @@ var environment = {
         // arrange
         this.$container.width(300);
         this.$container.height(150);
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' },
@@ -585,7 +585,7 @@ var environment = {
 
     QUnit.test('Redraw after series changed', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1, val2: 1 }, { arg: 2, val2: 2 }],
@@ -601,7 +601,7 @@ var environment = {
         });
         resetMocksInChart(chart);
 
-        var stubSeries = new MockSeries({
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
@@ -627,24 +627,24 @@ var environment = {
 
     QUnit.test('Refresh - reload data, recreate series, draw even container size not changed', function(assert) {
         // arrange
-        var chart = this.createChart({
-                tooltip: { enabled: true },
-                legend: { position: 'outside' },
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' },
-                title: {
-                    text: 'test title',
-                    subtitle: {},
-                    verticalAlignment: 'bottom'
-                },
-                'export': {
-                    enabled: true
-                }
-            }),
-            paneClipRect,
-            stubSeries = new MockSeries({
-                points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
-            });
+        const chart = this.createChart({
+            tooltip: { enabled: true },
+            legend: { position: 'outside' },
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' },
+            title: {
+                text: 'test title',
+                subtitle: {},
+                verticalAlignment: 'bottom'
+            },
+            'export': {
+                enabled: true
+            }
+        });
+        let paneClipRect;
+        const stubSeries = new MockSeries({
+            points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
+        });
         chartMocks.seriesMockData.series.push(stubSeries);
         paneClipRect = chart._panesClipRects.base[0];
         resetMocksInChart(chart);
@@ -671,23 +671,23 @@ var environment = {
 
     QUnit.test('Refresh - use new container size if it\'s changed', function(assert) {
         // arrange
-        var chart = this.createChart({
-                tooltip: { enabled: true },
-                legend: { position: 'outside' },
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' },
-                title: {
-                    text: 'test title',
-                    subtitle: {},
-                    verticalAlignment: 'bottom'
-                },
-                'export': {
-                    enabled: true
-                }
-            }),
-            stubSeries = new MockSeries({
-                points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
-            });
+        const chart = this.createChart({
+            tooltip: { enabled: true },
+            legend: { position: 'outside' },
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' },
+            title: {
+                text: 'test title',
+                subtitle: {},
+                verticalAlignment: 'bottom'
+            },
+            'export': {
+                enabled: true
+            }
+        });
+        const stubSeries = new MockSeries({
+            points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
+        });
         chartMocks.seriesMockData.series.push(stubSeries);
         resetMocksInChart(chart);
 
@@ -703,7 +703,7 @@ var environment = {
     QUnit.test('draw chart when scrollBar is visible', function(assert) {
         // arrange
         sinon.stub(scrollBarModule, 'ScrollBar', function() {
-            var stub = sinon.createStubInstance(ScrollBar);
+            const stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
             stub.update.returns(stub);
             stub.getMargins.returns({ left: 0, top: 0, bottom: 0, right: 0 });
@@ -711,7 +711,7 @@ var environment = {
             return stub;
         });
 
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1, val2: 1 }, { arg: 2, val2: 2 }],
@@ -736,7 +736,7 @@ var environment = {
 
     QUnit.test('draw chart when scrollBar is not visible', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1, val2: 1 }, { arg: 2, val2: 2 }],
@@ -760,7 +760,7 @@ var environment = {
 
     QUnit.test('Redraw after dataPrepareSettings changed', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             tooltip: { enabled: true },
             legend: { position: 'outside' },
             dataSource: [{ arg: 1, val: 1 }],
@@ -786,18 +786,18 @@ var environment = {
 
     QUnit.test('Tracker disposed on reinit', function(assert) {
         // arrange
-        var chart = this.createChart({
-                tooltip: { enabled: true },
-                legend: { position: 'outside' },
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' },
-                title: {
-                    text: 'test title',
-                    subtitle: {}
-                }
-            }),
-            paneClipRect;
-        var stubSeries = new MockSeries({
+        const chart = this.createChart({
+            tooltip: { enabled: true },
+            legend: { position: 'outside' },
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' },
+            title: {
+                text: 'test title',
+                subtitle: {}
+            }
+        });
+        let paneClipRect;
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
@@ -822,14 +822,14 @@ var environment = {
 
     QUnit.test('EqualBarWidth updating', function(assert) {
         // arrange
-        var chart = this.createChart({
-                equalBarWidth: false,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries()[0],
-            valAxis = chart._valueAxes[0],
-            argAxis = chart._argumentAxes[0];
+        const chart = this.createChart({
+            equalBarWidth: false,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries()[0];
+        const valAxis = chart._valueAxes[0];
+        const argAxis = chart._argumentAxes[0];
 
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
@@ -854,12 +854,12 @@ var environment = {
 
     QUnit.test('T552944. Update series family and option that recreates series - series families are processed first', function(assert) {
         // arrange
-        var chart = this.createChart({
-                equalBarWidth: false,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries();
+        const chart = this.createChart({
+            equalBarWidth: false,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries();
 
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
 
@@ -876,14 +876,14 @@ var environment = {
 
     QUnit.test('MinBubbleSize updating', function(assert) {
         // arrange
-        var chart = this.createChart({
-                minBubbleSize: 2,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries()[0],
-            valAxis = chart._valueAxes[0],
-            argAxis = chart._argumentAxes[0];
+        const chart = this.createChart({
+            minBubbleSize: 2,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries()[0];
+        const valAxis = chart._valueAxes[0];
+        const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, 'updateOptions', function(options) {
@@ -907,14 +907,14 @@ var environment = {
 
     QUnit.test('MaxBubbleSize updating', function(assert) {
         // arrange
-        var chart = this.createChart({
-                maxBubbleSize: 4,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries()[0],
-            valAxis = chart._valueAxes[0],
-            argAxis = chart._argumentAxes[0];
+        const chart = this.createChart({
+            maxBubbleSize: 4,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries()[0];
+        const valAxis = chart._valueAxes[0];
+        const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, 'updateOptions', function(options) {
@@ -938,14 +938,14 @@ var environment = {
 
     QUnit.test('BarWidth updating', function(assert) {
         // arrange
-        var chart = this.createChart({
-                barWidth: 7,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries()[0],
-            valAxis = chart._valueAxes[0],
-            argAxis = chart._argumentAxes[0];
+        const chart = this.createChart({
+            barWidth: 7,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries()[0];
+        const valAxis = chart._valueAxes[0];
+        const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, 'updateOptions', function(options) {
@@ -969,7 +969,7 @@ var environment = {
 
     QUnit.test('barGroupPadding updating', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             barGroupPadding: 2,
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
@@ -992,7 +992,7 @@ var environment = {
 
     QUnit.test('barGroupWidth updating', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             barGroupWidth: 7,
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
@@ -1016,14 +1016,14 @@ var environment = {
 
     QUnit.test('NegativesAsZeroes updating', function(assert) {
         // arrange
-        var chart = this.createChart({
-                negativesAsZeroes: false,
-                dataSource: [{ arg: 1, val: 1 }],
-                series: { type: 'line' }
-            }),
-            series = chart.getAllSeries()[0],
-            valAxis = chart._valueAxes[0],
-            argAxis = chart._argumentAxes[0];
+        const chart = this.createChart({
+            negativesAsZeroes: false,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: 'line' }
+        });
+        const series = chart.getAllSeries()[0];
+        const valAxis = chart._valueAxes[0];
+        const argAxis = chart._argumentAxes[0];
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, 'updateOptions', function(options) {
@@ -1045,10 +1045,10 @@ var environment = {
         assert.ok(argAxis === chart._argumentAxes[0], 'Arg axis should not be recreated');
     });
 
-    var testEverythingWasDrawn = function(assert, chart, options) {
+    const testEverythingWasDrawn = function(assert, chart, options) {
         options = options || {};
-        var firstDraw = options.firstDraw,
-            withNewData = options.withNewData;
+        const firstDraw = options.firstDraw;
+        const withNewData = options.withNewData;
         assert.ok(!chart._renderer.stub('clear').called, 'Renderer should be cleared');
 
         assert.ok(chart._canvasClipRect.attr.called, 'Canvas clip rectangle should be updated');
@@ -1085,13 +1085,13 @@ var environment = {
 
         withNewData && assert.ok(getTrackerStub().stub('update').called, 'Tracker should be initialized');
         options.noTrackerUpdateCheck || assert.ok(getTrackerStub().stub('update').called, 'Tracker should be prepared');
-        for(var i = 0; i < chart.seriesFamilies.length; i++) {
+        for(let i = 0; i < chart.seriesFamilies.length; i++) {
             assert.ok(chart.seriesFamilies[i].adjustedDimensions);
             assert.ok(chart.seriesFamilies[i].updatedValues);
         }
     };
 
-    var testNothingWasDrawn = function(assert, chart, nothingBut) {
+    const testNothingWasDrawn = function(assert, chart, nothingBut) {
         nothingBut = nothingBut || {};
 
         if(!nothingBut.containerWasKilled) {
@@ -1117,7 +1117,7 @@ var environment = {
         beforeEach: function() {
             environment.beforeEach.call(this);
             executeAsyncMock.setup();
-            var stubSeries = new MockSeries({ argumentField: 'arg', valueField: 'val', type: 'line' });
+            const stubSeries = new MockSeries({ argumentField: 'arg', valueField: 'val', type: 'line' });
             chartMocks.seriesMockData.series.push(stubSeries);
         },
         afterEach: function() {
@@ -1128,25 +1128,25 @@ var environment = {
 
     QUnit.test('dxChart with single series request default type', function(assert) {
         // arrange
-        var chart = this.createChart({
-                legend: {
-                    position: 'outside'
-                },
-                title: {
-                    text: 'title',
-                    subtitle: {},
-                    verticalAlignment: 'bottom'
-                },
-                'export': {
-                    enabled: true
-                },
-                series: {
-                    argumentField: 'arg',
-                    valueField: 'val',
-                    type: 'line'
-                }
-            }),
-            updatedData = [1, 2, 3, 4, 5];
+        const chart = this.createChart({
+            legend: {
+                position: 'outside'
+            },
+            title: {
+                text: 'title',
+                subtitle: {},
+                verticalAlignment: 'bottom'
+            },
+            'export': {
+                enabled: true
+            },
+            series: {
+                argumentField: 'arg',
+                valueField: 'val',
+                type: 'line'
+            }
+        });
+        const updatedData = [1, 2, 3, 4, 5];
 
 
         chart.series[0].setOptions({ range: { val: { min: 1, max: 5 } } });
@@ -1164,7 +1164,7 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, 'Data is correct');
 
-        var businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+        const businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
         assert.equal(businessRange.min, 1, 'Correct val min');
         assert.equal(businessRange.max, 5, 'Correct val max');
 
@@ -1192,30 +1192,30 @@ var environment = {
 
     QUnit.test('dxChart with single series request default type', function(assert) {
         // arrange
-        var loadingDeferred = $.Deferred(),
-            store = new CustomStore({
-                load: function() {
-                    return loadingDeferred.promise();
-                }
-            }),
-            chart = this.createChart({
-                dataSource: store,
-                legend: {
-                    position: 'outside'
-                },
-                title: {
-                    text: 'title',
-                    subtitle: {},
-                    verticalAlignment: 'bottom'
-                },
-                'export': {
-                    enabled: true
-                },
-                series: {
-                    type: 'line'
-                }
-            }),
-            updatedData = [1, 2, 3, 4, 5];
+        const loadingDeferred = $.Deferred();
+        const store = new CustomStore({
+            load: function() {
+                return loadingDeferred.promise();
+            }
+        });
+        const chart = this.createChart({
+            dataSource: store,
+            legend: {
+                position: 'outside'
+            },
+            title: {
+                text: 'title',
+                subtitle: {},
+                verticalAlignment: 'bottom'
+            },
+            'export': {
+                enabled: true
+            },
+            series: {
+                type: 'line'
+            }
+        });
+        const updatedData = [1, 2, 3, 4, 5];
 
         chart.series[0].setOptions({ range: { val: { min: 1, max: 5 } } });
         resetMocksInChart(chart);
@@ -1228,7 +1228,7 @@ var environment = {
         assert.ok(chart.series[0].dataReinitialized, 'Series data was reinitialized');
         assert.deepEqual(chart.series[0].reinitializedData, updatedData, 'Data is correct');
 
-        var businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+        const businessRange = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
         assert.equal(businessRange.min, 1, 'Correct val min');
         assert.equal(businessRange.max, 5, 'Correct val max');
 
@@ -1257,7 +1257,7 @@ var environment = {
 
     QUnit.test('Smoke', function(assert) {
         // arrange
-        var chart = this.createChart({
+        const chart = this.createChart({
             series: { type: 'line' }
         });
 
@@ -1296,17 +1296,17 @@ var environment = {
     });
 
     QUnit.module('Animation', environment);
-    var DEFAULT_ANIMATION_LIMIT = 300;
+    const DEFAULT_ANIMATION_LIMIT = 300;
 
     QUnit.test('Disabled animation', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
 
-        var chart = this.createChart({
+        const chart = this.createChart({
             animation: {
                 enabled: false
             },
@@ -1319,12 +1319,12 @@ var environment = {
 
     QUnit.test('Series animation with default - less than Limit', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
         });
@@ -1334,13 +1334,13 @@ var environment = {
 
     QUnit.test('Series animation. Renderer unsupported animation', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
         });
 
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
         });
@@ -1357,12 +1357,12 @@ var environment = {
 
     QUnit.test('Series animation with default - more than Limit', function(assert) {
         // arrange
-        var stubSeries = new MockSeries({
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             dataSource: [{ arg: 1, val: 1 }],
             series: { type: 'line' }
         });
@@ -1372,13 +1372,13 @@ var environment = {
 
     QUnit.test('Series animation - less than overridden limit', function(assert) {
         // arrange
-        var newLimit = DEFAULT_ANIMATION_LIMIT + 1000;
-        var stubSeries = new MockSeries({
+        const newLimit = DEFAULT_ANIMATION_LIMIT + 1000;
+        const stubSeries = new MockSeries({
             points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
         });
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             animation: {
                 maxPointCountSupported: newLimit
             },
@@ -1391,16 +1391,16 @@ var environment = {
 
     QUnit.test('One series is animated while second one is not', function(assert) {
         // arrange
-        var stubSeries1 = new MockSeries({
-                points: getPoints(DEFAULT_ANIMATION_LIMIT - 500)
-            }),
-            stubSeries2 = new MockSeries({
-                points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
-            });
+        const stubSeries1 = new MockSeries({
+            points: getPoints(DEFAULT_ANIMATION_LIMIT - 500)
+        });
+        const stubSeries2 = new MockSeries({
+            points: getPoints(DEFAULT_ANIMATION_LIMIT + 500)
+        });
         chartMocks.seriesMockData.series.push(stubSeries1);
         chartMocks.seriesMockData.series.push(stubSeries2);
         // act
-        var chart = this.createChart({
+        const chart = this.createChart({
             dataSource: [{ arg: 1, val: 1, val2: 2 }],
             series: [{ type: 'line' },
                 { valueField: 'val2', type: 'line' }]
@@ -1418,26 +1418,26 @@ var environment = {
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
 
-        var chart = this.createChart({
-                crosshair: {
-                    enabled: true,
-                    horizontalLine: { visible: true },
-                    verticalLine: { visible: true }
-                },
-                tooltip: { enabled: true },
-                legend: { position: 'outside' },
-                commonPaneSettings: { backgroundColor: 'red' },
-                series: [{ type: 'line' }, { type: 'line' }, { type: 'candlestick' }],
-                title: {
-                    text: 'test title',
-                    subtitle: {}
-                }
-            }),
-            loadIndicator;
+        const chart = this.createChart({
+            crosshair: {
+                enabled: true,
+                horizontalLine: { visible: true },
+                verticalLine: { visible: true }
+            },
+            tooltip: { enabled: true },
+            legend: { position: 'outside' },
+            commonPaneSettings: { backgroundColor: 'red' },
+            series: [{ type: 'line' }, { type: 'line' }, { type: 'candlestick' }],
+            title: {
+                text: 'test title',
+                subtitle: {}
+            }
+        });
+        let loadIndicator;
         chart.showLoadingIndicator();
         loadIndicator = chart._loadingIndicator;
 
-        var countDisposedObjects = function(propName, fields) {
+        const countDisposedObjects = function(propName, fields) {
             chart[propName + 'Disposed'] = chart[propName + 'Disposed'] || 0;
 
             $.each(chart[propName], function(_, item) {
@@ -1451,7 +1451,7 @@ var environment = {
             });
         };
 
-        var countDisposedObjectsInArrays = function(propName) {
+        const countDisposedObjectsInArrays = function(propName) {
             chart[propName + 'Disposed'] = chart[propName + 'Disposed'] || 0;
 
             $.each(chart[propName], function(_, items) {
@@ -1461,7 +1461,7 @@ var environment = {
             });
         };
 
-        var mockObjectDispose = function(propName) {
+        const mockObjectDispose = function(propName) {
             chart[propName] && (chart[propName].dispose = function() { chart[propName + 'Disposed'] = true; });
         };
 
@@ -1577,7 +1577,7 @@ var environment = {
     QUnit.module('events on div element', environment);
 
     QUnit.test('event contextmenu on div element', function(assert) {
-        var chart = this.createChart();
+        const chart = this.createChart();
 
         $(chart.$element()).trigger(new $.Event('contextmenu'));
 
@@ -1586,7 +1586,7 @@ var environment = {
     });
 
     QUnit.test('event MSHoldVisual on div element', function(assert) {
-        var chart = this.createChart();
+        const chart = this.createChart();
 
         $(chart.$element()).trigger(new $.Event('MSHoldVisual'));
 
@@ -1595,9 +1595,9 @@ var environment = {
     });
 }());
 
-var getPoints = function(count) {
-    var i,
-        points = [];
+const getPoints = function(count) {
+    let i;
+    const points = [];
     for(i = 0; i < count; i++) {
         points.push(new MockPoint({}));
     }
@@ -1606,7 +1606,7 @@ var getPoints = function(count) {
 };
 
 function resetMocksInChart(chart) {
-    var i;
+    let i;
     chart._renderer.stub('resize').reset();
     chart._renderer.stub('clear').reset();
 
@@ -1672,7 +1672,7 @@ function resetMocksInChart(chart) {
 function createChartInstance(options, container) {
     /* global currentAssert */
 
-    var chart = new dxChart(container, options);
+    const chart = new dxChart(container, options);
 
     currentAssert().ok(chart, 'dxChart created');
     return chart;

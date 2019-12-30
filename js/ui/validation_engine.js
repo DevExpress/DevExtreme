@@ -149,11 +149,11 @@ class RangeRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        const validNumber = rulesValidators['numeric'].validate(value, rule),
-            validValue = typeUtils.isDefined(value) && value !== '',
-            number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
-            min = rule.min,
-            max = rule.max;
+        const validNumber = rulesValidators['numeric'].validate(value, rule);
+        const validValue = typeUtils.isDefined(value) && value !== '';
+        const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
+        const min = rule.min;
+        const max = rule.max;
         if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
         }
@@ -259,14 +259,14 @@ class CustomRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
-            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
-            params = {
-                value: value,
-                validator: validator,
-                rule: rule
-            };
+        const validator = rule.validator;
+        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const params = {
+            value: value,
+            validator: validator,
+            rule: rule
+        };
         if(extraParams) {
             extend(params, extraParams);
         }
@@ -318,14 +318,14 @@ class AsyncRuleValidator extends CustomRuleValidator {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        const validator = rule.validator,
-            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter'),
-            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
-            params = {
-                value: value,
-                validator: validator,
-                rule: rule
-            };
+        const validator = rule.validator;
+        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const params = {
+            value: value,
+            validator: validator,
+            rule: rule
+        };
         if(extraParams) {
             extend(params, extraParams);
         }
@@ -341,7 +341,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
         promise.then(function(res) {
             deferred.resolve(res);
         }, function(err) {
-            let res = {
+            const res = {
                 isValid: false
             };
             if(typeUtils.isDefined(err)) {
@@ -400,8 +400,8 @@ class CompareRuleValidator extends BaseRuleValidator {
             return true;
         }
         extend(rule, { reevaluate: true });
-        const otherValue = rule.comparisonTarget(),
-            type = rule.comparisonType || '==';
+        const otherValue = rule.comparisonTarget();
+        const type = rule.comparisonType || '==';
         switch(type) {
             case '==':
                 return value == otherValue; // eslint-disable-line eqeqeq
@@ -713,8 +713,8 @@ const GroupConfig = Class.inherit({
             }
             this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? STATUS.valid : STATUS.invalid;
             this._validationInfo.result.isValid = this._validationInfo.result.status === STATUS.valid;
-            const res = extend({}, this._validationInfo.result, { complete: null }),
-                deferred = this._validationInfo.deferred;
+            const res = extend({}, this._validationInfo.result, { complete: null });
+            const deferred = this._validationInfo.deferred;
             this._resetValidationInfo();
             this._raiseValidatedEvent(res);
             deferred && setTimeout(() => {
@@ -837,8 +837,8 @@ const ValidationEngine = {
     },
 
     removeGroup(group) {
-        const config = this.getGroupConfig(group),
-            index = inArray(config, this.groups);
+        const config = this.getGroupConfig(group);
+        const index = inArray(config, this.groups);
         if(index > -1) {
             this.groups.splice(index, 1);
         }
@@ -1066,8 +1066,8 @@ const ValidationEngine = {
     },
 
     _shouldRemoveGroup(group, validatorsInGroup) {
-        const isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
+        const isDefaultGroup = group === undefined;
+        const isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
@@ -1120,7 +1120,7 @@ const ValidationEngine = {
                 return newStatus !== validationStatus ? { validationStatus: newStatus } : {};
             }
             case 'validationErrors': {
-                let validationError = !value || !value.length ? null : value[0];
+                const validationError = !value || !value.length ? null : value[0];
 
                 return options.validationError !== validationError ? { validationError } : {};
             }

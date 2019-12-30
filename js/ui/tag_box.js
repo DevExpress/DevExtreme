@@ -904,9 +904,9 @@ const TagBox = SelectBox.inherit({
     },
 
     _getItemsByValues: function(values) {
-        var resultItems = [];
+        const resultItems = [];
         values.forEach(function(value) {
-            var item = this._getItemFromPlain(value);
+            const item = this._getItemFromPlain(value);
             if(isDefined(item)) {
                 resultItems.push(item);
             }
@@ -915,7 +915,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilteredGroupedItems: function(values) {
-        var selectedItems = new Deferred();
+        const selectedItems = new Deferred();
         if(!this._dataSource.items().length) {
             this._dataSource.load().done(function() {
                 selectedItems.resolve(this._getItemsByValues(values));
@@ -933,7 +933,7 @@ const TagBox = SelectBox.inherit({
 
         this._selectedItems = [];
 
-        var filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
+        const filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
 
         filteredItemsPromise
             .done((filteredItems) => {
@@ -1077,8 +1077,8 @@ const TagBox = SelectBox.inherit({
         let result = false;
 
         for(let i = 0; i < tagsLength; i++) {
-            const $tag = $tags[i],
-                tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+            const $tag = $tags[i];
+            const tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
 
             if(value === tagData || (equalByValue(value, tagData))) {
                 result = $($tag);
@@ -1397,8 +1397,8 @@ const TagBox = SelectBox.inherit({
 
     reset: function() {
         this._restoreInputText();
-        const defaultValue = this._getDefaultOptions().value,
-            currentValue = this.option('value');
+        const defaultValue = this._getDefaultOptions().value;
+        const currentValue = this.option('value');
         if(defaultValue && defaultValue.length === 0 && currentValue && defaultValue.length === currentValue.length) {
             return;
         }

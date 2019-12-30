@@ -42,7 +42,7 @@ QUnit.module('Keyboard navigation', {
         this.changeValueAndPressKey = function(key, eventType) {
             this.getValueButtonElement().trigger('dxclick');
 
-            var textEditorElement = this.getTextEditorElement();
+            const textEditorElement = this.getTextEditorElement();
             textEditorElement.dxTextBox('instance').option('value', 'Test');
 
             keyboardMock(this.getTextEditorElement()).keyUp(key);
@@ -72,7 +72,7 @@ QUnit.module('Keyboard navigation', {
     QUnit.test('keyup for enter key should not fired between compositionstart & compositionend events', function(assert) {
         this.instance.option('value', ['State', '<>', 'State']);
         this.showTextEditor();
-        var textEditorElement = this.getTextEditorElement();
+        const textEditorElement = this.getTextEditorElement();
         textEditorElement.find('input').trigger('compositionstart');
 
         keyboardMock(textEditorElement).keyUp(ENTER_KEY);
@@ -90,7 +90,7 @@ QUnit.module('Keyboard navigation', {
     QUnit.test('keyup for enter key shouled fired after compositionend on safari', function(assert) {
         this.instance.option('value', ['State', '<>', 'State']);
         this.showTextEditor();
-        var textEditorElement = this.getTextEditorElement();
+        const textEditorElement = this.getTextEditorElement();
         textEditorElement.find('input').trigger('compositionstart');
 
         keyboardMock(textEditorElement).keyUp(ENTER_KEY);
@@ -119,7 +119,7 @@ QUnit.module('Keyboard navigation', {
     });
 
     QUnit.test('condition isn\'t changed after escape key press', function(assert) {
-        var value = this.instance.option('value');
+        const value = this.instance.option('value');
 
         this.changeValueAndPressKey(ESCAPE_KEY, 'keyup');
 
@@ -130,7 +130,7 @@ QUnit.module('Keyboard navigation', {
     QUnit.test('change condition value after tab press', function(assert) {
         this.getValueButtonElement().trigger('dxclick');
 
-        var textEditorElement = this.getTextEditorElement();
+        const textEditorElement = this.getTextEditorElement();
         textEditorElement.dxTextBox('instance').option('value', 'Test');
         this.setFocusToBody();
 
@@ -149,7 +149,7 @@ QUnit.module('Keyboard navigation', {
     });
 
     QUnit.test('change condition value after enter key press', function(assert) {
-        var value = this.instance.option('value');
+        let value = this.instance.option('value');
 
         this.changeValueAndPressKey(ENTER_KEY);
 
@@ -197,7 +197,7 @@ QUnit.module('Keyboard navigation', {
     QUnit.testInActiveWindow('select item in menu', function(assert) {
         keyboardMock(this.getOperationButtonElement()).keyUp(ENTER_KEY);
 
-        var menuKeyboard = keyboardMock(this.getMenuElement());
+        const menuKeyboard = keyboardMock(this.getMenuElement());
 
         menuKeyboard.keyDown(DOWN_ARROW_KEY);
 
@@ -214,9 +214,9 @@ QUnit.module('Keyboard navigation', {
     QUnit.testInActiveWindow('editor.value is changed after \'keyup\' and saved in filterBulder.value by outer click (T653968)', function(assert) {
         this.showTextEditor();
 
-        var textEditorElement = this.getTextEditorElement(),
-            textEditorInput = textEditorElement.find('input'),
-            textEditorInstance = textEditorElement.dxTextBox('instance');
+        const textEditorElement = this.getTextEditorElement();
+        const textEditorInput = textEditorElement.find('input');
+        const textEditorInstance = textEditorElement.dxTextBox('instance');
 
         textEditorInput.focus();
         textEditorInput.val('Test');

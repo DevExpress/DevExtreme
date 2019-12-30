@@ -1,13 +1,13 @@
-var Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    typeUtils = require('../../core/utils/type'),
-    noop = require('../../core/utils/common').noop,
-    isFunction = typeUtils.isFunction;
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const typeUtils = require('../../core/utils/type');
+const noop = require('../../core/utils/common').noop;
+const isFunction = typeUtils.isFunction;
 
-var EMPTY_CHAR = ' ';
+const EMPTY_CHAR = ' ';
 
-var BaseMaskRule = Class.inherit({
+const BaseMaskRule = Class.inherit({
 
     ctor: function(config) {
         this._value = EMPTY_CHAR;
@@ -30,7 +30,7 @@ var BaseMaskRule = Class.inherit({
 
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
-        var handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
+        const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
         args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
         args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
         args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
@@ -61,7 +61,7 @@ var BaseMaskRule = Class.inherit({
     isValid: noop
 });
 
-var EmptyMaskRule = BaseMaskRule.inherit({
+const EmptyMaskRule = BaseMaskRule.inherit({
 
     next: noop,
 
@@ -95,7 +95,7 @@ var EmptyMaskRule = BaseMaskRule.inherit({
 
 });
 
-var MaskRule = BaseMaskRule.inherit({
+const MaskRule = BaseMaskRule.inherit({
 
     text: function() {
         return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
@@ -110,7 +110,7 @@ var MaskRule = BaseMaskRule.inherit({
     },
 
     handle: function(args) {
-        var str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
+        const str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
         if(!str || !str.length || !args.length) {
             return 0;
         }
@@ -119,8 +119,8 @@ var MaskRule = BaseMaskRule.inherit({
             return this.next().handle(this._prepareHandlingArgs(args, { start: args.start - 1 }));
         }
 
-        var char = str[0];
-        var rest = str.substring(1);
+        const char = str[0];
+        const rest = str.substring(1);
 
         this._tryAcceptChar(char, args);
 
@@ -145,7 +145,7 @@ var MaskRule = BaseMaskRule.inherit({
         if(!this._isAllowed(char, args)) {
             return;
         }
-        var acceptedChar = char === EMPTY_CHAR ? this.maskChar : char;
+        const acceptedChar = char === EMPTY_CHAR ? this.maskChar : char;
         args.fullText = args.fullText.substring(0, args.index) + acceptedChar + args.fullText.substring(args.index + 1);
         this._accepted(true);
         this._value = char;
@@ -173,7 +173,7 @@ var MaskRule = BaseMaskRule.inherit({
     },
 
     _isValid: function(char, args) {
-        var allowedChars = this.allowedChars;
+        const allowedChars = this.allowedChars;
 
         if(allowedChars instanceof RegExp) {
             return allowedChars.test(char);
@@ -218,15 +218,15 @@ var MaskRule = BaseMaskRule.inherit({
 
 });
 
-var StubMaskRule = MaskRule.inherit({
+const StubMaskRule = MaskRule.inherit({
 
     value: function() {
         return this.next().value();
     },
 
     handle: function(args) {
-        var hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
-        var str = hasValueProperty ? args.value : args.text;
+        const hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
+        const str = hasValueProperty ? args.value : args.text;
         if(!str.length || !args.length) {
             return 0;
         }
@@ -235,12 +235,12 @@ var StubMaskRule = MaskRule.inherit({
             return this.next().handle(this._prepareHandlingArgs(args, { start: args.start && args.start - 1 }));
         }
 
-        var char = str[0];
-        var rest = str.substring(1);
+        const char = str[0];
+        const rest = str.substring(1);
 
         this._tryAcceptChar(char);
 
-        var nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }) : args;
+        const nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }) : args;
         return this.next().handle(nextArgs) + 1;
     },
 

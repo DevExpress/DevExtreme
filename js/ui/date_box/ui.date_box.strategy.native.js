@@ -1,11 +1,11 @@
-var noop = require('../../core/utils/common').noop,
-    DateBoxStrategy = require('./ui.date_box.strategy'),
-    support = require('../../core/utils/support'),
-    inArray = require('../../core/utils/array').inArray,
-    dateUtils = require('./ui.date_utils'),
-    dateSerialization = require('../../core/utils/date_serialization');
+const noop = require('../../core/utils/common').noop;
+const DateBoxStrategy = require('./ui.date_box.strategy');
+const support = require('../../core/utils/support');
+const inArray = require('../../core/utils/array').inArray;
+const dateUtils = require('./ui.date_utils');
+const dateSerialization = require('../../core/utils/date_serialization');
 
-var NativeStrategy = DateBoxStrategy.inherit({
+const NativeStrategy = DateBoxStrategy.inherit({
 
     NAME: 'Native',
 
@@ -31,7 +31,7 @@ var NativeStrategy = DateBoxStrategy.inherit({
     _getWidgetOptions: noop,
 
     _getDateBoxType: function() {
-        var type = this.dateBox.option('type');
+        let type = this.dateBox.option('type');
 
         if(inArray(type, dateUtils.SUPPORTED_FORMATS) === -1) {
             type = 'date';
@@ -43,7 +43,7 @@ var NativeStrategy = DateBoxStrategy.inherit({
     },
 
     customizeButtons: function() {
-        var dropDownButton = this.dateBox.getButton('dropDown');
+        const dropDownButton = this.dateBox.getButton('dropDown');
         if(dropDownButton) {
             dropDownButton.on('click', function() {
                 this.dateBox._input().get(0).click();
@@ -58,7 +58,7 @@ var NativeStrategy = DateBoxStrategy.inherit({
     },
 
     getDisplayFormat: function(displayFormat) {
-        var type = this._getDateBoxType();
+        const type = this._getDateBoxType();
         return displayFormat || dateUtils.FORMATS_MAP[type];
     },
 

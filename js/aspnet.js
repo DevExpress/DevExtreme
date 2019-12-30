@@ -1,3 +1,4 @@
+/* eslint-disable no-var, one-var*/
 (function(factory) {
     /* global define, DevExpress, window */
     if(typeof define === 'function' && define.amd) {

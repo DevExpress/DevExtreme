@@ -1,13 +1,13 @@
-var $ = require('../../core/renderer'),
-    EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper'),
-    messageLocalization = require('../../localization/message'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    EditDecorator = require('./ui.list.edit.decorator'),
-    Overlay = require('../overlay'),
-    ListBase = require('./ui.list.base');
+const $ = require('../../core/renderer');
+const EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper');
+const messageLocalization = require('../../localization/message');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const EditDecorator = require('./ui.list.edit.decorator');
+const Overlay = require('../overlay');
+const ListBase = require('./ui.list.base');
 
-var CONTEXTMENU_CLASS = 'dx-list-context-menu',
-    CONTEXTMENU_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
+const CONTEXTMENU_CLASS = 'dx-list-context-menu';
+const CONTEXTMENU_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 
 registerDecorator(
     'menu',
@@ -15,7 +15,7 @@ registerDecorator(
     EditDecorator.inherit({
 
         _init: function() {
-            var $menu = $('<div>').addClass(CONTEXTMENU_CLASS);
+            const $menu = $('<div>').addClass(CONTEXTMENU_CLASS);
             this._list.$element().append($menu);
 
             this._menu = this._renderOverlay($menu);
@@ -60,9 +60,9 @@ registerDecorator(
         },
 
         _renderMenuContent: function(e) {
-            var $overlayContent = e.component.$content();
+            const $overlayContent = e.component.$content();
 
-            var items = this._menuItems().slice();
+            const items = this._menuItems().slice();
             if(this._deleteEnabled()) {
                 items.push({
                     text: messageLocalization.format('dxListEditDecorator-delete'),

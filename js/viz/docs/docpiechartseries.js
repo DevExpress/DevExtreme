@@ -4,7 +4,7 @@
  * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
  * @hidden
  */
-var pieChartSeries = {
+const pieChartSeries = {
     /**
     * @name PieChartSeries.name
     * @type string
@@ -28,7 +28,7 @@ var pieChartSeries = {
 * @type object
 * @hidden
 */
-var commonPieChartSeries = {
+const commonPieChartSeries = {
     /**
     * @name dxPieChartSeriesTypes.CommonPieChartSeries.color
     * @type string
@@ -427,7 +427,7 @@ var commonPieChartSeries = {
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
 */
-var doughnutSeries = {
+const doughnutSeries = {
 
 };
 
@@ -436,7 +436,7 @@ var doughnutSeries = {
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
 */
-var pieSeries = {
+const pieSeries = {
 
 };
 

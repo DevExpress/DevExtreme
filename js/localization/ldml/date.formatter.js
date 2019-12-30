@@ -5,54 +5,54 @@ function leftPad(text, length) {
     return text;
 }
 
-var FORMAT_TYPES = {
+const FORMAT_TYPES = {
     '3': 'abbreviated',
     '4': 'wide',
     '5': 'narrow'
 };
 
-var LDML_FORMATTERS = {
+const LDML_FORMATTERS = {
     y: function(date, count, useUtc) {
-        var year = date[useUtc ? 'getUTCFullYear' : 'getFullYear']();
+        let year = date[useUtc ? 'getUTCFullYear' : 'getFullYear']();
         if(count === 2) {
             year = year % 100;
         }
         return leftPad(year.toString(), count);
     },
     M: function(date, count, useUtc, dateParts) {
-        var month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
-        var formatType = FORMAT_TYPES[count];
+        const month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
+        const formatType = FORMAT_TYPES[count];
         if(formatType) {
             return dateParts.getMonthNames(formatType, 'format')[month];
         }
         return leftPad((month + 1).toString(), Math.min(count, 2));
     },
     L: function(date, count, useUtc, dateParts) {
-        var month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
-        var formatType = FORMAT_TYPES[count];
+        const month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
+        const formatType = FORMAT_TYPES[count];
         if(formatType) {
             return dateParts.getMonthNames(formatType, 'standalone')[month];
         }
         return leftPad((month + 1).toString(), Math.min(count, 2));
     },
     Q: function(date, count, useUtc, dateParts) {
-        var month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
-        var quarter = Math.floor(month / 3);
-        var formatType = FORMAT_TYPES[count];
+        const month = date[useUtc ? 'getUTCMonth' : 'getMonth']();
+        const quarter = Math.floor(month / 3);
+        const formatType = FORMAT_TYPES[count];
         if(formatType) {
             return dateParts.getQuarterNames(formatType)[quarter];
         }
         return leftPad((quarter + 1).toString(), Math.min(count, 2));
     },
     E: function(date, count, useUtc, dateParts) {
-        var day = date[useUtc ? 'getUTCDay' : 'getDay']();
-        var formatType = FORMAT_TYPES[count < 3 ? 3 : count];
+        const day = date[useUtc ? 'getUTCDay' : 'getDay']();
+        const formatType = FORMAT_TYPES[count < 3 ? 3 : count];
         return dateParts.getDayNames(formatType)[day];
     },
     a: function(date, count, useUtc, dateParts) {
-        var hours = date[useUtc ? 'getUTCHours' : 'getHours'](),
-            period = hours < 12 ? 0 : 1,
-            formatType = FORMAT_TYPES[count];
+        const hours = date[useUtc ? 'getUTCHours' : 'getHours']();
+        const period = hours < 12 ? 0 : 1;
+        const formatType = FORMAT_TYPES[count];
         return dateParts.getPeriodNames(formatType)[period];
     },
     d: function(date, count, useUtc) {
@@ -62,7 +62,7 @@ var LDML_FORMATTERS = {
         return leftPad(date[useUtc ? 'getUTCHours' : 'getHours']().toString(), Math.min(count, 2));
     },
     h: function(date, count, useUtc) {
-        var hours = date[useUtc ? 'getUTCHours' : 'getHours']();
+        const hours = date[useUtc ? 'getUTCHours' : 'getHours']();
         return leftPad((hours % 12 || 12).toString(), Math.min(count, 2));
     },
     m: function(date, count, useUtc) {
@@ -75,13 +75,13 @@ var LDML_FORMATTERS = {
         return leftPad(date[useUtc ? 'getUTCMilliseconds' : 'getMilliseconds']().toString(), 3).substr(0, count);
     },
     x: function(date, count, useUtc) {
-        var timezoneOffset = useUtc ? 0 : date.getTimezoneOffset(),
-            signPart = timezoneOffset > 0 ? '-' : '+',
-            timezoneOffsetAbs = Math.abs(timezoneOffset),
-            hours = Math.floor(timezoneOffsetAbs / 60),
-            minutes = timezoneOffsetAbs % 60,
-            hoursPart = leftPad(hours.toString(), 2),
-            minutesPart = leftPad(minutes.toString(), 2);
+        const timezoneOffset = useUtc ? 0 : date.getTimezoneOffset();
+        const signPart = timezoneOffset > 0 ? '-' : '+';
+        const timezoneOffsetAbs = Math.abs(timezoneOffset);
+        const hours = Math.floor(timezoneOffsetAbs / 60);
+        const minutes = timezoneOffsetAbs % 60;
+        const hoursPart = leftPad(hours.toString(), 2);
+        const minutesPart = leftPad(minutes.toString(), 2);
 
         return signPart + hoursPart + (count >= 3 ? ':' : '') + (count > 1 || minutes ? minutesPart : '');
     },
@@ -96,22 +96,22 @@ var LDML_FORMATTERS = {
     }
 };
 
-var getFormatter = function(format, dateParts) {
+const getFormatter = function(format, dateParts) {
     return function(date) {
-        var charIndex,
-            formatter,
-            char,
-            charCount = 0,
-            separator = '\'',
-            isEscaping = false,
-            isCurrentCharEqualsNext,
-            result = '';
+        let charIndex;
+        let formatter;
+        let char;
+        let charCount = 0;
+        const separator = '\'';
+        let isEscaping = false;
+        let isCurrentCharEqualsNext;
+        let result = '';
 
         if(!date) return null;
 
         if(!format) return date;
 
-        var useUtc = format[format.length - 1] === 'Z' || format.slice(-3) === '\'Z\'';
+        const useUtc = format[format.length - 1] === 'Z' || format.slice(-3) === '\'Z\'';
 
         for(charIndex = 0; charIndex < format.length; charIndex++) {
             char = format[charIndex];

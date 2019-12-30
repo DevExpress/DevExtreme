@@ -1,23 +1,23 @@
-var $ = require('../../core/renderer'),
-    ko = require('knockout'),
-    Callbacks = require('../../core/utils/callbacks'),
-    errors = require('../../core/errors'),
-    inflector = require('../../core/utils/inflector'),
-    isPlainObject = require('../../core/utils/type').isPlainObject,
-    registerComponentCallbacks = require('../../core/component_registrator_callbacks'),
-    Widget = require('../../ui/widget/ui.widget'),
-    KoTemplate = require('./template').KoTemplate,
-    Editor = require('../../ui/editor/editor'),
-    Locker = require('../../core/utils/locker'),
-    getClosestNodeWithContext = require('./utils').getClosestNodeWithContext,
-    config = require('../../core/config');
+const $ = require('../../core/renderer');
+const ko = require('knockout');
+const Callbacks = require('../../core/utils/callbacks');
+const errors = require('../../core/errors');
+const inflector = require('../../core/utils/inflector');
+const isPlainObject = require('../../core/utils/type').isPlainObject;
+const registerComponentCallbacks = require('../../core/component_registrator_callbacks');
+const Widget = require('../../ui/widget/ui.widget');
+const KoTemplate = require('./template').KoTemplate;
+const Editor = require('../../ui/editor/editor');
+const Locker = require('../../core/utils/locker');
+const getClosestNodeWithContext = require('./utils').getClosestNodeWithContext;
+const config = require('../../core/config');
 
-var LOCKS_DATA_KEY = 'dxKoLocks',
-    CREATED_WITH_KO_DATA_KEY = 'dxKoCreation';
+const LOCKS_DATA_KEY = 'dxKoLocks';
+const CREATED_WITH_KO_DATA_KEY = 'dxKoCreation';
 
-var editorsBindingHandlers = [];
+const editorsBindingHandlers = [];
 
-var registerComponentKoBinding = function(componentName, componentClass) {
+const registerComponentKoBinding = function(componentName, componentClass) {
 
     if(componentClass.subclassOf(Editor)) {
         editorsBindingHandlers.push(componentName);
@@ -25,95 +25,95 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
     ko.bindingHandlers[componentName] = {
         init: function(domNode, valueAccessor) {
-            var $element = $(domNode),
-                optionChangedCallbacks = Callbacks(),
-                optionsByReference = {},
-                component,
-                knockoutConfig = config().knockout,
-                isBindingPropertyPredicateName = knockoutConfig && knockoutConfig.isBindingPropertyPredicateName,
-                isBindingPropertyPredicate,
-                ctorOptions = {
-                    onInitializing: function() {
-                        optionsByReference = this._getOptionsByReference();
+            const $element = $(domNode);
+            const optionChangedCallbacks = Callbacks();
+            let optionsByReference = {};
+            let component;
+            const knockoutConfig = config().knockout;
+            const isBindingPropertyPredicateName = knockoutConfig && knockoutConfig.isBindingPropertyPredicateName;
+            let isBindingPropertyPredicate;
+            let ctorOptions = {
+                onInitializing: function() {
+                    optionsByReference = this._getOptionsByReference();
 
-                        ko.computed(function() {
-                            var model = ko.unwrap(valueAccessor());
+                    ko.computed(function() {
+                        const model = ko.unwrap(valueAccessor());
 
-                            if(component) {
-                                component.beginUpdate();
-                            }
-
-                            isBindingPropertyPredicate = isBindingPropertyPredicateName && model && model[isBindingPropertyPredicateName];
-
-                            unwrapModel(model);
-
-                            if(component) {
-                                component.endUpdate();
-                            }
-
-                        }, null, { disposeWhenNodeIsRemoved: domNode });
-
-                        component = this;
-                    },
-                    modelByElement: function($element) {
-                        if($element.length) {
-                            const node = getClosestNodeWithContext($element.get(0));
-                            return ko.dataFor(node);
+                        if(component) {
+                            component.beginUpdate();
                         }
-                    },
-                    nestedComponentOptions: function(component) {
-                        return {
-                            modelByElement: component.option('modelByElement'),
-                            nestedComponentOptions: component.option('nestedComponentOptions')
-                        };
-                    },
-                    _optionChangedCallbacks: optionChangedCallbacks,
-                    integrationOptions: {
-                        watchMethod: function(fn, callback, options) {
-                            options = options || {};
 
-                            var skipCallback = options.skipImmediate;
-                            var watcher = ko.computed(function() {
-                                var newValue = ko.unwrap(fn());
-                                if(!skipCallback) {
-                                    callback(newValue);
-                                }
-                                skipCallback = false;
-                            });
-                            return function() {
-                                watcher.dispose();
-                            };
-                        },
-                        templates: {
-                            'dx-polymorph-widget': {
-                                render: function(options) {
-                                    var widgetName = ko.utils.unwrapObservable(options.model.widget);
-                                    if(!widgetName) {
-                                        return;
-                                    }
+                        isBindingPropertyPredicate = isBindingPropertyPredicateName && model && model[isBindingPropertyPredicateName];
 
-                                    if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
-                                        var deprecatedName = widgetName;
-                                        widgetName = inflector.camelize('dx-' + widgetName);
-                                        errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
-                                    }
+                        unwrapModel(model);
 
-                                    var markup = $('<div>').attr('data-bind', widgetName + ': options').get(0);
-                                    $(options.container).append(markup);
-                                    ko.applyBindings(options.model, markup);
-                                }
-                            }
-                        },
-                        createTemplate: function(element) {
-                            return new KoTemplate(element);
+                        if(component) {
+                            component.endUpdate();
                         }
+
+                    }, null, { disposeWhenNodeIsRemoved: domNode });
+
+                    component = this;
+                },
+                modelByElement: function($element) {
+                    if($element.length) {
+                        const node = getClosestNodeWithContext($element.get(0));
+                        return ko.dataFor(node);
                     }
                 },
-                optionNameToModelMap = {};
+                nestedComponentOptions: function(component) {
+                    return {
+                        modelByElement: component.option('modelByElement'),
+                        nestedComponentOptions: component.option('nestedComponentOptions')
+                    };
+                },
+                _optionChangedCallbacks: optionChangedCallbacks,
+                integrationOptions: {
+                    watchMethod: function(fn, callback, options) {
+                        options = options || {};
 
-            var applyModelValueToOption = function(optionName, modelValue, unwrap) {
-                var locks = $element.data(LOCKS_DATA_KEY),
-                    optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
+                        let skipCallback = options.skipImmediate;
+                        const watcher = ko.computed(function() {
+                            const newValue = ko.unwrap(fn());
+                            if(!skipCallback) {
+                                callback(newValue);
+                            }
+                            skipCallback = false;
+                        });
+                        return function() {
+                            watcher.dispose();
+                        };
+                    },
+                    templates: {
+                        'dx-polymorph-widget': {
+                            render: function(options) {
+                                let widgetName = ko.utils.unwrapObservable(options.model.widget);
+                                if(!widgetName) {
+                                    return;
+                                }
+
+                                if(widgetName === 'button' || widgetName === 'tabs' || widgetName === 'dropDownMenu') {
+                                    const deprecatedName = widgetName;
+                                    widgetName = inflector.camelize('dx-' + widgetName);
+                                    errors.log('W0001', 'dxToolbar - \'widget\' item field', deprecatedName, '16.1', 'Use: \'' + widgetName + '\' instead');
+                                }
+
+                                const markup = $('<div>').attr('data-bind', widgetName + ': options').get(0);
+                                $(options.container).append(markup);
+                                ko.applyBindings(options.model, markup);
+                            }
+                        }
+                    },
+                    createTemplate: function(element) {
+                        return new KoTemplate(element);
+                    }
+                }
+            };
+            const optionNameToModelMap = {};
+
+            const applyModelValueToOption = function(optionName, modelValue, unwrap) {
+                const locks = $element.data(LOCKS_DATA_KEY);
+                const optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
                 if(ko.isWriteableObservable(modelValue)) {
                     optionNameToModelMap[optionName] = modelValue;
@@ -140,16 +140,16 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 }
             };
 
-            var handleOptionChanged = function(args) {
-                var optionName = args.fullName,
-                    optionValue = args.value;
+            const handleOptionChanged = function(args) {
+                const optionName = args.fullName;
+                const optionValue = args.value;
 
                 if(!(optionName in optionNameToModelMap)) {
                     return;
                 }
 
-                var $element = this._$element,
-                    locks = $element.data(LOCKS_DATA_KEY);
+                const $element = this._$element;
+                const locks = $element.data(LOCKS_DATA_KEY);
 
                 if(locks.locked(optionName)) {
                     return;
@@ -163,7 +163,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 }
             };
 
-            var createComponent = function() {
+            const createComponent = function() {
                 optionChangedCallbacks.add(handleOptionChanged);
                 $element
                     .data(CREATED_WITH_KO_DATA_KEY, true)
@@ -174,7 +174,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 ctorOptions = null;
             };
 
-            var unwrapModelValue = function(currentModel, propertyName, propertyPath) {
+            const unwrapModelValue = function(currentModel, propertyName, propertyPath) {
                 if(propertyPath === isBindingPropertyPredicateName) {
                     return;
                 }
@@ -183,10 +183,10 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                     !isBindingPropertyPredicate ||
                     isBindingPropertyPredicate(propertyPath, propertyName, currentModel)
                 ) {
-                    var unwrappedPropertyValue;
+                    let unwrappedPropertyValue;
 
                     ko.computed(function() {
-                        var propertyValue = currentModel[propertyName];
+                        const propertyValue = currentModel[propertyName];
                         applyModelValueToOption(propertyPath, propertyValue, true);
                         unwrappedPropertyValue = ko.unwrap(propertyValue);
                     }, null, { disposeWhenNodeIsRemoved: domNode });
@@ -201,13 +201,13 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 }
             };
 
-            var unwrapModel = function(model, propertyPath) {
-                for(var propertyName in model) {
+            function unwrapModel(model, propertyPath) {
+                for(const propertyName in model) {
                     if(Object.prototype.hasOwnProperty.call(model, propertyName)) {
                         unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join('.') : propertyName);
                     }
                 }
-            };
+            }
 
             createComponent();
 

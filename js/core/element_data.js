@@ -1,26 +1,26 @@
-var WeakMap = require('./polyfills/weak_map');
-var domAdapter = require('./dom_adapter');
-var eventsEngine = require('../events/core/events_engine');
-var MemorizedCallbacks = require('./memorized_callbacks');
+const WeakMap = require('./polyfills/weak_map');
+const domAdapter = require('./dom_adapter');
+const eventsEngine = require('../events/core/events_engine');
+const MemorizedCallbacks = require('./memorized_callbacks');
 
-var dataMap = new WeakMap();
-var strategy;
+const dataMap = new WeakMap();
+let strategy;
 
-var strategyChanging = new MemorizedCallbacks();
-var beforeCleanData = function() {};
-var afterCleanData = function() {};
+const strategyChanging = new MemorizedCallbacks();
+let beforeCleanData = function() {};
+let afterCleanData = function() {};
 
-var setDataStrategy = exports.setDataStrategy = function(value) {
+const setDataStrategy = exports.setDataStrategy = function(value) {
     strategyChanging.fire(value);
 
     strategy = value;
 
-    var cleanData = strategy.cleanData;
+    const cleanData = strategy.cleanData;
 
     strategy.cleanData = function(nodes) {
         beforeCleanData(nodes);
 
-        var result = cleanData.call(this, nodes);
+        const result = cleanData.call(this, nodes);
 
         afterCleanData(nodes);
 
@@ -30,13 +30,13 @@ var setDataStrategy = exports.setDataStrategy = function(value) {
 
 setDataStrategy({
     data: function() {
-        var element = arguments[0];
-        var key = arguments[1];
-        var value = arguments[2];
+        const element = arguments[0];
+        const key = arguments[1];
+        const value = arguments[2];
 
         if(!element) return;
 
-        var elementData = dataMap.get(element);
+        let elementData = dataMap.get(element);
 
         if(!elementData) {
             elementData = {};
@@ -60,7 +60,7 @@ setDataStrategy({
         if(key === undefined) {
             dataMap.delete(element);
         } else {
-            var elementData = dataMap.get(element);
+            const elementData = dataMap.get(element);
             if(elementData) {
                 delete elementData[key];
             }
@@ -68,7 +68,7 @@ setDataStrategy({
     },
 
     cleanData: function(elements) {
-        for(var i = 0; i < elements.length; i++) {
+        for(let i = 0; i < elements.length; i++) {
             eventsEngine.off(elements[i]);
             dataMap.delete(elements[i]);
         }
@@ -108,7 +108,7 @@ exports.cleanDataRecursive = function(element, cleanSelf) {
         return;
     }
 
-    var childElements = element.getElementsByTagName('*');
+    const childElements = element.getElementsByTagName('*');
 
     strategy.cleanData(childElements);
 

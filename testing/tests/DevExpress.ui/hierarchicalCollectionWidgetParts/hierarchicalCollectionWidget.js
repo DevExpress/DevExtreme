@@ -4,7 +4,7 @@ import { DataSource } from 'data/data_source/data_source';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-let { module, test } = QUnit;
+const { module, test } = QUnit;
 
 class TestComponent extends HierarchicalCollectionWidget {
     constructor(element, options) {
@@ -57,12 +57,12 @@ module('render', {
     });
 
     test('create item by custom model using expressions set as functions', function(assert) {
-        let condition = false,
-            newItems = [{ name: 'item 1' }],
-            widget = createHierarchicalCollectionWidget({
-                displayExpr: () => condition ? 'name' : 'text',
-                items: [{ text: 'first item' }]
-            });
+        let condition = false;
+        const newItems = [{ name: 'item 1' }];
+        const widget = createHierarchicalCollectionWidget({
+            displayExpr: () => condition ? 'name' : 'text',
+            items: [{ text: 'first item' }]
+        });
 
         assert.equal($.trim(this.element.children().eq(0).text()), 'text');
 
@@ -98,7 +98,7 @@ module('render', {
                     items: [{ name: 'item 1' }]
                 });
 
-                let $item = $('#hcw').find('.dx-item').eq(0);
+                const $item = $('#hcw').find('.dx-item').eq(0);
                 assert.equal($item.text(), '');
             } catch(e) {
                 assert.ok(false, 'Error has been raised');
@@ -112,7 +112,7 @@ module('render', {
                     items: [{ text: 'item 1' }]
                 });
 
-                let $item = $('#hcw').find('.dx-item').eq(0);
+                const $item = $('#hcw').find('.dx-item').eq(0);
                 assert.equal($item.text(), 'item 1');
             } catch(e) {
                 assert.ok(false, 'Error has been raised');
@@ -122,27 +122,27 @@ module('render', {
 
     test('Expressions should be reinitialized if *expr option was changed', function(assert) {
         const widget = createHierarchicalCollectionWidget({
-                displayExpr: 'FirstName',
-                selectedExpr: 'isSelected',
-                itemsExpr: 'subItems',
-                disabledExpr: 'isDisabled',
-                items: [
-                    {
-                        FirstName: 'John',
-                        LastName: 'Smith',
+            displayExpr: 'FirstName',
+            selectedExpr: 'isSelected',
+            itemsExpr: 'subItems',
+            disabledExpr: 'isDisabled',
+            items: [
+                {
+                    FirstName: 'John',
+                    LastName: 'Smith',
 
-                        isSelected: true,
-                        wasSelected: false,
+                    isSelected: true,
+                    wasSelected: false,
 
-                        subItems: [{ FirstName: 'Mike', LastName: 'Smith' }],
-                        subLevel: [{ FirstName: 'Jack', LastName: 'John', }],
+                    subItems: [{ FirstName: 'Mike', LastName: 'Smith' }],
+                    subLevel: [{ FirstName: 'Jack', LastName: 'John', }],
 
-                        isDisabled: true,
-                        wasDisabled: false,
-                    }
-                ]
-            }),
-            item = widget.option('items')[0];
+                    isDisabled: true,
+                    wasDisabled: false,
+                }
+            ]
+        });
+        const item = widget.option('items')[0];
 
         widget.option('displayExpr', 'LastName');
         assert.equal(widget._displayGetter(item), 'Smith');
@@ -190,7 +190,7 @@ module('render', {
     });
 
     test('Datasource should load once on hcw init', function(assert) {
-        let dataSourceLoaded = sinon.spy();
+        const dataSourceLoaded = sinon.spy();
 
         createHierarchicalCollectionWidget({
             dataSource: new DataSource({

@@ -159,7 +159,7 @@ window.initTree = function(options) {
 };
 
 window.stripFunctions = function(obj) {
-    var result = $.extend(true, {}, obj);
+    const result = $.extend(true, {}, obj);
     $.each(result, function(field, value) {
         if($.isFunction(value)) {
             delete result[field];

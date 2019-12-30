@@ -32,7 +32,7 @@ export const labelEnvironment = $.extend({}, environment, {
         let labelBoxesIndex = 0;
 
         sinon.stub(labelModule, 'Label', ()=> {
-            var stub = new stubLabel();
+            const stub = new stubLabel();
             stub.stub('getBoundingRect').returns(this.labelBoxes[(labelBoxesIndex++) % this.labelBoxes.length]);
             return stub;
         });

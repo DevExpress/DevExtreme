@@ -1,34 +1,34 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    noop = require('../core/utils/common').noop,
-    fx = require('../animation/fx'),
-    clickEvent = require('../events/click'),
-    translator = require('../animation/translator'),
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    hideTopOverlayCallback = require('../mobile/hide_top_overlay').hideCallback,
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    AsyncTemplateMixin = require('./shared/async_template_mixin'),
-    Widget = require('./widget/ui.widget'),
-    Swipeable = require('../events/gesture/swipeable'),
-    EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate,
-    Deferred = require('../core/utils/deferred').Deferred,
-    windowUtils = require('../core/utils/window');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const noop = require('../core/utils/common').noop;
+const fx = require('../animation/fx');
+const clickEvent = require('../events/click');
+const translator = require('../animation/translator');
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const hideTopOverlayCallback = require('../mobile/hide_top_overlay').hideCallback;
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const AsyncTemplateMixin = require('./shared/async_template_mixin');
+const Widget = require('./widget/ui.widget');
+const Swipeable = require('../events/gesture/swipeable');
+const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
+const Deferred = require('../core/utils/deferred').Deferred;
+const windowUtils = require('../core/utils/window');
 
-var SLIDEOUTVIEW_CLASS = 'dx-slideoutview',
-    SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper',
-    SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content',
-    SLIDEOUTVIEW_CONTENT_CLASS = 'dx-slideoutview-content',
-    SLIDEOUTVIEW_SHIELD_CLASS = 'dx-slideoutview-shield',
+const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
+const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';
+const SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content';
+const SLIDEOUTVIEW_CONTENT_CLASS = 'dx-slideoutview-content';
+const SLIDEOUTVIEW_SHIELD_CLASS = 'dx-slideoutview-shield';
 
-    INVISIBLE_STATE_CLASS = 'dx-state-invisible',
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-    ANONYMOUS_TEMPLATE_NAME = 'content',
+const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-    ANIMATION_DURATION = 400;
+const ANIMATION_DURATION = 400;
 
 
-var animation = {
+const animation = {
     moveTo: function($element, position, completeAction) {
         fx.animate($element, {
             type: 'slide',
@@ -49,7 +49,7 @@ var animation = {
 * @module ui/slide_out_view
 * @export default
 */
-var SlideOutView = Widget.inherit({
+const SlideOutView = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -189,9 +189,9 @@ var SlideOutView = Widget.inherit({
             }
         });
 
-        const contentTemplateOption = this.option('contentTemplate'),
-            contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
+        const contentTemplateOption = this.option('contentTemplate');
+        const contentTemplate = this._getTemplate(contentTemplateOption);
+        const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
             container: this.content(),
@@ -212,7 +212,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _renderMarkup: function() {
-        var $wrapper = $('<div>').addClass(SLIDEOUTVIEW_WRAPPER_CLASS);
+        const $wrapper = $('<div>').addClass(SLIDEOUTVIEW_WRAPPER_CLASS);
         this._$menu = $('<div>').addClass(SLIDEOUTVIEW_MENU_CONTENT_CLASS);
         this._$container = $('<div>').addClass(SLIDEOUTVIEW_CONTENT_CLASS);
 
@@ -244,17 +244,17 @@ var SlideOutView = Widget.inherit({
     },
 
     _isRightMenuPosition: function() {
-        var invertedPosition = this.option('menuPosition') === 'inverted',
-            rtl = this.option('rtlEnabled');
+        const invertedPosition = this.option('menuPosition') === 'inverted';
+        const rtl = this.option('rtlEnabled');
 
         return (rtl && !invertedPosition) || (!rtl && invertedPosition);
     },
 
     _swipeStartHandler: function(e) {
         animation.complete($(this.content()));
-        var event = e.event,
-            menuVisible = this.option('menuVisible'),
-            rtl = this._isRightMenuPosition();
+        const event = e.event;
+        const menuVisible = this.option('menuVisible');
+        const rtl = this._isRightMenuPosition();
 
         event.maxLeftOffset = +(rtl ? !menuVisible : menuVisible);
         event.maxRightOffset = +(rtl ? menuVisible : !menuVisible);
@@ -263,16 +263,16 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var event = e.event,
-            offset = this.option('menuVisible') ? event.offset + 1 * this._getRTLSignCorrection() : event.offset;
+        const event = e.event;
+        let offset = this.option('menuVisible') ? event.offset + 1 * this._getRTLSignCorrection() : event.offset;
 
         offset *= this._getRTLSignCorrection();
         this._renderPosition(offset, false);
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.event.targetOffset * this._getRTLSignCorrection() + this.option('menuVisible'),
-            menuVisible = targetOffset !== 0;
+        const targetOffset = e.event.targetOffset * this._getRTLSignCorrection() + this.option('menuVisible');
+        const menuVisible = targetOffset !== 0;
 
         if(this.option('menuVisible') === menuVisible) {
             this._renderPosition(this.option('menuVisible'), true);
@@ -282,9 +282,9 @@ var SlideOutView = Widget.inherit({
     },
 
     _toggleMenuPositionClass: function() {
-        var left = SLIDEOUTVIEW_CLASS + '-left',
-            right = SLIDEOUTVIEW_CLASS + '-right',
-            menuPosition = this._isRightMenuPosition() ? 'right' : 'left';
+        const left = SLIDEOUTVIEW_CLASS + '-left';
+        const right = SLIDEOUTVIEW_CLASS + '-right';
+        const menuPosition = this._isRightMenuPosition() ? 'right' : 'left';
 
         this._$menu.removeClass(left + ' ' + right);
         this._$menu.addClass(SLIDEOUTVIEW_CLASS + '-' + menuPosition);
@@ -293,7 +293,7 @@ var SlideOutView = Widget.inherit({
     _renderPosition: function(offset, animate) {
         if(!windowUtils.hasWindow()) return;
 
-        var pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
+        const pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
         this._toggleHideMenuCallback(offset);
 
@@ -312,10 +312,10 @@ var SlideOutView = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            var maxMenuWidth = this.$element().width() - this.option('contentOffset'),
-                menuContent = $(this.menuContent());
+            const maxMenuWidth = this.$element().width() - this.option('contentOffset');
+            const menuContent = $(this.menuContent());
             menuContent.css('maxWidth', maxMenuWidth < 0 ? 0 : maxMenuWidth);
-            var currentMenuWidth = menuContent.width();
+            const currentMenuWidth = menuContent.width();
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
         }

@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    Tooltip = require('ui/tooltip'),
-    tooltip = require('ui/tooltip/ui.tooltip'),
-    viewPort = require('core/utils/view_port').value,
-    fx = require('animation/fx');
+const $ = require('jquery');
+const Tooltip = require('ui/tooltip');
+const tooltip = require('ui/tooltip/ui.tooltip');
+const viewPort = require('core/utils/view_port').value;
+const fx = require('animation/fx');
 
 function checkTooltip(assert) {
-    var $testContent = $('.dx-tooltip').find('.dx-popup-content').find('.test-content');
+    const $testContent = $('.dx-tooltip').find('.dx-popup-content').find('.test-content');
     assert.equal($('.dx-tooltip').length, 1);
     assert.equal($testContent.length, 1);
     assert.equal($testContent.text(), 'My tooltip');
@@ -14,7 +14,7 @@ function checkTooltip(assert) {
 
 
 QUnit.testStart(function() {
-    var markup = '<button id="tooltip-target">My button</button>';
+    const markup = '<button id="tooltip-target">My button</button>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -41,7 +41,7 @@ QUnit.test('show tooltip', function(assert) {
 });
 
 QUnit.test('show tooltip using $ target', function(assert) {
-    var $target = $('#tooltip-target');
+    const $target = $('#tooltip-target');
 
     tooltip.show({
         target: $target,
@@ -53,7 +53,7 @@ QUnit.test('show tooltip using $ target', function(assert) {
 });
 
 QUnit.test('show tooltip once', function(assert) {
-    var $target = $('#tooltip-target');
+    const $target = $('#tooltip-target');
 
     $target.on('dxclick', function() {
         tooltip.show({
@@ -70,7 +70,7 @@ QUnit.test('show tooltip once', function(assert) {
 });
 
 QUnit.test('show tooltip with custom animation', function(assert) {
-    var $target = $('#tooltip-target');
+    const $target = $('#tooltip-target');
 
     tooltip.show({
         target: $target,
@@ -79,12 +79,12 @@ QUnit.test('show tooltip with custom animation', function(assert) {
         animation: { hide: false }
     });
 
-    var tooltipInstance = Tooltip.getInstance($('.dx-tooltip'));
+    const tooltipInstance = Tooltip.getInstance($('.dx-tooltip'));
     assert.deepEqual(tooltipInstance.option('animation'), { hide: false });
 });
 
 QUnit.test('tooltip option', function(assert) {
-    var $target = $('#tooltip-target');
+    const $target = $('#tooltip-target');
 
     tooltip.show({
         target: $target,
@@ -95,7 +95,7 @@ QUnit.test('tooltip option', function(assert) {
         width: 300
     });
 
-    var tooltipInstance = Tooltip.getInstance($('.dx-tooltip'));
+    const tooltipInstance = Tooltip.getInstance($('.dx-tooltip'));
     assert.ok(!tooltipInstance.option('content'));
     assert.equal(tooltipInstance.option('height'), 200);
     assert.equal(tooltipInstance.option('width'), 300);
@@ -103,7 +103,7 @@ QUnit.test('tooltip option', function(assert) {
 
 QUnit.test('second shown tooltip should remove first shown (T107568)', function(assert) {
     fx.off = false;
-    var done = assert.async();
+    const done = assert.async();
 
     tooltip.show().done(function() {
         tooltip.show();

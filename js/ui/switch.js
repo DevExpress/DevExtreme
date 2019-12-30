@@ -1,29 +1,29 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    devices = require('../core/devices'),
-    extend = require('../core/utils/extend').extend,
-    inkRipple = require('./widget/utils.ink_ripple'),
-    registerComponent = require('../core/component_registrator'),
-    Editor = require('./editor/editor'),
-    eventUtils = require('../events/utils'),
-    feedbackEvents = require('../events/core/emitter.feedback'),
-    themes = require('./themes'),
-    fx = require('../animation/fx'),
-    messageLocalization = require('../localization/message'),
-    clickEvent = require('../events/click'),
-    Swipeable = require('../events/gesture/swipeable'),
-    Deferred = require('../core/utils/deferred').Deferred;
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const devices = require('../core/devices');
+const extend = require('../core/utils/extend').extend;
+const inkRipple = require('./widget/utils.ink_ripple');
+const registerComponent = require('../core/component_registrator');
+const Editor = require('./editor/editor');
+const eventUtils = require('../events/utils');
+const feedbackEvents = require('../events/core/emitter.feedback');
+const themes = require('./themes');
+const fx = require('../animation/fx');
+const messageLocalization = require('../localization/message');
+const clickEvent = require('../events/click');
+const Swipeable = require('../events/gesture/swipeable');
+const Deferred = require('../core/utils/deferred').Deferred;
 
-var SWITCH_CLASS = 'dx-switch',
-    SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper',
-    SWITCH_CONTAINER_CLASS = SWITCH_CLASS + '-container',
-    SWITCH_INNER_CLASS = SWITCH_CLASS + '-inner',
-    SWITCH_HANDLE_CLASS = SWITCH_CLASS + '-handle',
-    SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + '-on-value',
-    SWITCH_ON_CLASS = SWITCH_CLASS + '-on',
-    SWITCH_OFF_CLASS = SWITCH_CLASS + '-off',
+const SWITCH_CLASS = 'dx-switch';
+const SWITCH_WRAPPER_CLASS = SWITCH_CLASS + '-wrapper';
+const SWITCH_CONTAINER_CLASS = SWITCH_CLASS + '-container';
+const SWITCH_INNER_CLASS = SWITCH_CLASS + '-inner';
+const SWITCH_HANDLE_CLASS = SWITCH_CLASS + '-handle';
+const SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + '-on-value';
+const SWITCH_ON_CLASS = SWITCH_CLASS + '-on';
+const SWITCH_OFF_CLASS = SWITCH_CLASS + '-off';
 
-    SWITCH_ANIMATION_DURATION = 100;
+const SWITCH_ANIMATION_DURATION = 100;
 
 /**
 * @name dxSwitch
@@ -32,19 +32,19 @@ var SWITCH_CLASS = 'dx-switch',
 * @module ui/switch
 * @export default
 */
-var Switch = Editor.inherit({
+const Switch = Editor.inherit({
     _supportedKeys: function() {
-        var isRTL = this.option('rtlEnabled');
+        const isRTL = this.option('rtlEnabled');
 
-        var click = function(e) {
-                e.preventDefault();
-                this._clickAction({ event: e });
-            },
-            move = function(value, e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._animateValue(value);
-            };
+        const click = function(e) {
+            e.preventDefault();
+            this._clickAction({ event: e });
+        };
+        const move = function(value, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this._animateValue(value);
+        };
         return extend(this.callBase(), {
             space: click,
             enter: click,
@@ -102,7 +102,7 @@ var Switch = Editor.inherit({
     },
 
     _defaultOptionsRules: function() {
-        var themeName = themes.current();
+        const themeName = themes.current();
 
         return this.callBase().concat([
             {
@@ -151,8 +151,8 @@ var Switch = Editor.inherit({
 
     _getLocalizationMessage: function(state) {
         // todo: remove this method when deprecated dxSwitchOptions.switchedOnText/switchedOffText will be removed
-        var newMessage = messageLocalization.format('dxSwitch-switched' + state + 'Text'),
-            oldMessage = messageLocalization.format('dxSwitch-' + state.toLowerCase() + 'Text');
+        const newMessage = messageLocalization.format('dxSwitch-switched' + state + 'Text');
+        const oldMessage = messageLocalization.format('dxSwitch-' + state.toLowerCase() + 'Text');
 
         return newMessage || oldMessage;
     },
@@ -184,7 +184,7 @@ var Switch = Editor.inherit({
     },
 
     _getInnerOffset: function(value, offset) {
-        var ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
+        const ratio = (offset - this._offsetDirection() * Number(!value)) / 2;
         return 100 * ratio + '%';
     },
 
@@ -194,7 +194,7 @@ var Switch = Editor.inherit({
         }
 
         if(value) {
-            var calcValue = -100 + 100 * (-offset);
+            const calcValue = -100 + 100 * (-offset);
             return calcValue + '%';
         } else {
             return 100 * (-offset) + '%';
@@ -271,7 +271,7 @@ var Switch = Editor.inherit({
             return;
         }
 
-        var config = {
+        const config = {
             element: element,
             event: dxEvent,
             wave: waveIndex
@@ -299,8 +299,8 @@ var Switch = Editor.inherit({
     },
 
     _renderPosition: function(state, swipeOffset) {
-        var innerOffset = this._getInnerOffset(state, swipeOffset),
-            handleOffset = this._getHandleOffset(state, swipeOffset);
+        const innerOffset = this._getInnerOffset(state, swipeOffset);
+        const handleOffset = this._getHandleOffset(state, swipeOffset);
 
         if(this.option('_animateHandle')) {
             this._$switchInner.css('transform', ' translateX(' + innerOffset + ')');
@@ -309,15 +309,15 @@ var Switch = Editor.inherit({
     },
 
     _validateValue: function() {
-        var check = this.option('value');
+        const check = this.option('value');
         if(typeof check !== 'boolean') {
             this._options.silent('value', !!check);
         }
     },
 
     _renderClick: function() {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        var $element = this.$element();
+        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
         eventsEngine.off($element, eventName);
@@ -327,7 +327,7 @@ var Switch = Editor.inherit({
     },
 
     _clickHandler: function(args) {
-        var e = args.event;
+        const e = args.event;
 
         this._saveValueChangeEvent(e);
 
@@ -339,8 +339,8 @@ var Switch = Editor.inherit({
     },
 
     _animateValue: function(value) {
-        var startValue = this.option('value'),
-            endValue = value;
+        const startValue = this.option('value');
+        const endValue = value;
 
         if(startValue === endValue) {
             return;
@@ -348,16 +348,16 @@ var Switch = Editor.inherit({
 
         this._animating = true;
 
-        var fromInnerOffset = this._getInnerOffset(startValue, 0),
-            toInnerOffset = this._getInnerOffset(endValue, 0),
-            fromHandleOffset = this._getHandleOffset(startValue, 0),
-            toHandleOffset = this._getHandleOffset(endValue, 0);
+        const fromInnerOffset = this._getInnerOffset(startValue, 0);
+        const toInnerOffset = this._getInnerOffset(endValue, 0);
+        const fromHandleOffset = this._getHandleOffset(startValue, 0);
+        const toHandleOffset = this._getHandleOffset(endValue, 0);
 
-        var that = this,
-            fromInnerConfig = {},
-            toInnerConfig = {},
-            fromHandleConfig = {},
-            toHandlerConfig = {};
+        const that = this;
+        const fromInnerConfig = {};
+        const toInnerConfig = {};
+        const fromHandleConfig = {};
+        const toHandlerConfig = {};
 
         fromInnerConfig['transform'] = ' translateX(' + fromInnerOffset + ')';
         toInnerConfig['transform'] = ' translateX(' + toInnerOffset + ')';
@@ -384,10 +384,10 @@ var Switch = Editor.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        var state = this.option('value'),
-            rtlEnabled = this.option('rtlEnabled'),
-            maxOffOffset = rtlEnabled ? 0 : 1,
-            maxOnOffset = rtlEnabled ? 1 : 0;
+        const state = this.option('value');
+        const rtlEnabled = this.option('rtlEnabled');
+        const maxOffOffset = rtlEnabled ? 0 : 1;
+        const maxOnOffset = rtlEnabled ? 1 : 0;
 
         e.event.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
         e.event.maxRightOffset = state ? maxOnOffset : maxOffOffset;
@@ -403,13 +403,13 @@ var Switch = Editor.inherit({
     },
 
     _swipeEndHandler: function(e) {
-        var that = this,
-            offsetDirection = this._offsetDirection(),
-            toInnerConfig = {},
-            toHandleConfig = {};
+        const that = this;
+        const offsetDirection = this._offsetDirection();
+        const toInnerConfig = {};
+        const toHandleConfig = {};
 
-        var innerOffset = this._getInnerOffset(that.option('value'), e.event.targetOffset),
-            handleOffset = this._getHandleOffset(that.option('value'), e.event.targetOffset);
+        const innerOffset = this._getInnerOffset(that.option('value'), e.event.targetOffset);
+        const handleOffset = this._getHandleOffset(that.option('value'), e.event.targetOffset);
 
         toInnerConfig['transform'] = ' translateX(' + innerOffset + ')';
         toHandleConfig['transform'] = ' translateX(' + handleOffset + ')';
@@ -424,7 +424,7 @@ var Switch = Editor.inherit({
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._swiping = false;
-                var pos = that.option('value') + offsetDirection * e.event.targetOffset;
+                const pos = that.option('value') + offsetDirection * e.event.targetOffset;
                 that.option('value', Boolean(pos));
                 that._feedbackDeferred.resolve();
                 that._toggleActiveState(that.$element(), false);
@@ -435,7 +435,7 @@ var Switch = Editor.inherit({
     _renderValue: function() {
         this._validateValue();
 
-        var val = this.option('value');
+        const val = this.option('value');
         this._renderPosition(val, 0);
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);

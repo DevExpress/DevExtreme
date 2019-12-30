@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    devices = require('core/devices'),
-    support = require('core/utils/support'),
-    holdEvent = require('events/hold'),
-    contextMenuEvent = require('events/contextmenu');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const devices = require('core/devices');
+const support = require('core/utils/support');
+const holdEvent = require('events/hold');
+const contextMenuEvent = require('events/contextmenu');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="element"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -20,7 +20,7 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
         assert.ok(true);
         return;
     }
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
         assert.ok(e.target === $element[0]);
@@ -30,12 +30,12 @@ QUnit.test('contextmenu should be fired on hold event', function(assert) {
 });
 
 QUnit.test('dxhold should be unsubscribed on unsubscribing contextmenu', function(assert) {
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(contextMenuEvent.name, noop).off(contextMenuEvent.name);
 
-    var events = $._data($element[0], 'events') || {},
-        holdEvents = events[holdEvent.name] || [];
+    const events = $._data($element[0], 'events') || {};
+    const holdEvents = events[holdEvent.name] || [];
 
     assert.equal(holdEvents.length, 0, 'dxhold event handler was removed');
 });
@@ -46,7 +46,7 @@ QUnit.module('desktop contextmenu');
 QUnit.test('contextmenu should be fired on contextmenu event', function(assert) {
     assert.expect(1);
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
         assert.ok(e.target === $element[0]);
@@ -58,11 +58,11 @@ QUnit.test('contextmenu should be fired on contextmenu event', function(assert) 
 QUnit.test('contextmenu should be fired on dxhold in simulator', function(assert) {
     assert.expect(1);
 
-    var originalIsSimulator = devices.isSimulator;
+    const originalIsSimulator = devices.isSimulator;
 
     try {
         devices.isSimulator = function() { return true; };
-        var $element = $('#element');
+        const $element = $('#element');
 
         $element.on(contextMenuEvent.name, function(e) {
             assert.ok(e.target === $element[0]);
@@ -77,7 +77,7 @@ QUnit.test('contextmenu should be fired on dxhold in simulator', function(assert
 QUnit.test('contextmenu should not be fired on dxhold event with mouse pointer', function(assert) {
     assert.expect(0);
 
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(contextMenuEvent.name, function(e) {
         assert.ok(false);
@@ -87,12 +87,12 @@ QUnit.test('contextmenu should not be fired on dxhold event with mouse pointer',
 });
 
 QUnit.test('contextmenu should be unsubscribed on unsubscribing contextmenu', function(assert) {
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(contextMenuEvent.name, noop).off(contextMenuEvent.name);
 
-    var events = $._data($element[0], 'events') || {},
-        holdEvents = events['contextmenu'] || [];
+    const events = $._data($element[0], 'events') || {};
+    const holdEvents = events['contextmenu'] || [];
 
     assert.equal(holdEvents.length, 0, 'contextmenu event handler was removed');
 });

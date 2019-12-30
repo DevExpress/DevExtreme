@@ -49,7 +49,7 @@ class TreeViewTestWrapper {
     hasInvisibleClass($item) { return $item.hasClass(INVISIBLE_ITEM_CLASS); }
 
     checkSelectedNodes(selectedIndexes, additionalErrorMessage) {
-        let $node = this.getNodes();
+        const $node = this.getNodes();
 
         selectedIndexes.forEach((index) => {
             assert.equal(this.hasSelectedClass($node.eq(index)), true, `item ${index} has selected class`);
@@ -65,7 +65,7 @@ class TreeViewTestWrapper {
     }
 
     checkSelectedItems(selectedIndexes, items) {
-        let itemsArray = this.convertTreeToFlatList(items);
+        const itemsArray = this.convertTreeToFlatList(items);
 
         itemsArray.forEach((_, index) => {
             if(selectedIndexes.indexOf(index) === -1) {
@@ -101,8 +101,8 @@ class TreeViewTestWrapper {
     }
 
     convertTreeToFlatList(items) {
-        let itemsArray = [];
-        let inOrder = (items) => {
+        const itemsArray = [];
+        const inOrder = (items) => {
             items.forEach((item) => {
                 itemsArray.push(item);
                 if(item.items) {

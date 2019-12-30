@@ -14,7 +14,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import '../../../testing/content/orders.js';
 
 function createDataSource(options) {
-    var dataSource = new DataSource(options);
+    const dataSource = new DataSource(options);
     dataSource.load();
     return dataSource;
 }
@@ -28,7 +28,7 @@ function prepareFields(fields) {
 }
 
 function prepareLoadArgs(args) {
-    var data = args[0];
+    const data = args[0];
 
     prepareFields(data.columns);
     prepareFields(data.rows);
@@ -45,7 +45,7 @@ function prepareLoadedData(data) {
     return data;
 }
 
-var defaultEnvironment = {
+const defaultEnvironment = {
     beforeEach: function() {
         this.testStore = sinon.createStubInstance(XmlaStore);
 
@@ -112,7 +112,7 @@ var defaultEnvironment = {
 
 QUnit.module('dxPivotGrid dataSource with Store', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         defaultEnvironment.beforeEach.apply(that, arguments);
         sinon.stub(inflector, 'titleize');
         inflector.titleize.returns('');
@@ -128,7 +128,7 @@ QUnit.test('Create XmlaStore', function(assert) {
 
     sinon.spy(xmlaStore, 'XmlaStore');
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: {
             type: 'xmla',
             url: ''
@@ -149,7 +149,7 @@ QUnit.test('Create XmlaStore with paginate', function(assert) {
 
     sinon.spy(xmlaStore, 'XmlaStore');
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         paginate: true,
         store: {
             type: 'xmla',
@@ -166,7 +166,7 @@ QUnit.test('Create XmlaStore by Instance', function(assert) {
 
     sinon.spy(xmlaStore, 'XmlaStore');
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: new xmlaStore.XmlaStore({
             type: 'xmla',
             url: ''
@@ -184,7 +184,7 @@ QUnit.test('Create XmlaStore by Instance', function(assert) {
 });
 
 QUnit.test('Create LocalStore when store with type', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: { type: 'array', data: [] }
     });
 
@@ -192,7 +192,7 @@ QUnit.test('Create LocalStore when store with type', function(assert) {
 });
 
 QUnit.test('Create RemoteStore when store with type', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         remoteOperations: true,
         store: { type: 'array', data: [] }
     });
@@ -201,7 +201,7 @@ QUnit.test('Create RemoteStore when store with type', function(assert) {
 });
 
 QUnit.test('Create store with class instance', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: this.testStore
     });
 
@@ -210,8 +210,8 @@ QUnit.test('Create store with class instance', function(assert) {
 });
 
 QUnit.test('Create store with ArrayStore instance', function(assert) {
-    var arrayStore = new ArrayStore([]);
-    var dataSource = createDataSource({
+    const arrayStore = new ArrayStore([]);
+    const dataSource = createDataSource({
         store: arrayStore
     });
 
@@ -220,8 +220,8 @@ QUnit.test('Create store with ArrayStore instance', function(assert) {
 });
 
 QUnit.test('Create store with ArrayStore instance and remote operations', function(assert) {
-    var arrayStore = new ArrayStore([]);
-    var dataSource = createDataSource({
+    const arrayStore = new ArrayStore([]);
+    const dataSource = createDataSource({
         remoteOperations: true,
         store: arrayStore
     });
@@ -231,7 +231,7 @@ QUnit.test('Create store with ArrayStore instance and remote operations', functi
 });
 
 QUnit.test('Create store with load function', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         load: function() {
             return [];
         }
@@ -242,7 +242,7 @@ QUnit.test('Create store with load function', function(assert) {
 });
 
 QUnit.test('Create store with load function and remote operations', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         remoteOperations: true,
         load: function() {
             return [];
@@ -255,7 +255,7 @@ QUnit.test('Create store with load function and remote operations', function(ass
 });
 
 QUnit.test('Create store with load function and paginate', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         paginate: true,
         load: function() {
             return [];
@@ -268,14 +268,14 @@ QUnit.test('Create store with load function and paginate', function(assert) {
 });
 
 QUnit.test('Create LocalStore with onChanged event', function(assert) {
-    var onChangedCallCount = 0,
-        dataSource = createDataSource({
-            store: { type: 'array', data: [] },
-            onChanged: function() {
-                assert.equal(arguments.length, 0, 'no changed arguments');
-                onChangedCallCount++;
-            }
-        });
+    let onChangedCallCount = 0;
+    const dataSource = createDataSource({
+        store: { type: 'array', data: [] },
+        onChanged: function() {
+            assert.equal(arguments.length, 0, 'no changed arguments');
+            onChangedCallCount++;
+        }
+    });
 
     assert.ok(dataSource.store() instanceof LocalStore);
     assert.equal(onChangedCallCount, 1, 'changed call count');
@@ -285,7 +285,7 @@ QUnit.test('Create LocalStore with onChanged event', function(assert) {
 QUnit.test('Create simple store by data', function(assert) {
     executeAsyncMock.teardown();
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { area: 'column' },
             { area: 'data', caption: 'Sum', format: 'fixedPoint' }
@@ -311,21 +311,21 @@ QUnit.test('Create simple store by data', function(assert) {
 
 QUnit.test('onChanged event reset data to default loaded data', function(assert) {
     // act
-    var onChangedCallCount = 0,
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'test', area: 'data', summaryType: 'sum' }
-            ],
-            store: { type: 'array', data: [{ test: 5 }] },
-            onChanged: function() {
-                var data = this.getData();
+    let onChangedCallCount = 0;
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'test', area: 'data', summaryType: 'sum' }
+        ],
+        store: { type: 'array', data: [{ test: 5 }] },
+        onChanged: function() {
+            const data = this.getData();
 
-                assert.equal(data.values[0][0][0], 5, 'loaded test value');
+            assert.equal(data.values[0][0][0], 5, 'loaded test value');
 
-                data.values[0][0][0] = data.values[0][0][0] + 1;
-                onChangedCallCount++;
-            }
-        });
+            data.values[0][0][0] = data.values[0][0][0] + 1;
+            onChangedCallCount++;
+        }
+    });
 
     // assert
     assert.equal(dataSource.getData().values[0][0][0], 6, 'test value after changed handler');
@@ -340,7 +340,7 @@ QUnit.test('onChanged event reset data to default loaded data', function(assert)
 });
 
 QUnit.test('Create LocalStore with filter', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [{ dataField: 'value', area: 'row' }],
         filter: ['value', '>', 1],
         store: { type: 'array', data: [{ value: 1 }, { value: 2 }] }
@@ -352,16 +352,16 @@ QUnit.test('Create LocalStore with filter', function(assert) {
 });
 
 QUnit.test('CreateDrillDown dataSource', function(assert) {
-    var dataSource = createDataSource({
-            fields: [{ dataField: 'value', area: 'row' }],
-            store: this.testStore
-        }),
-        drillDownParams = {
-            columnPath: [],
-            rowPath: []
-        };
+    const dataSource = createDataSource({
+        fields: [{ dataField: 'value', area: 'row' }],
+        store: this.testStore
+    });
+    const drillDownParams = {
+        columnPath: [],
+        rowPath: []
+    };
 
-    var drillDownDataSource = dataSource.createDrillDownDataSource(drillDownParams);
+    const drillDownDataSource = dataSource.createDrillDownDataSource(drillDownParams);
 
     prepareFields(dataSource.fields());
 
@@ -384,7 +384,7 @@ QUnit.test('CreateDrillDown dataSource', function(assert) {
 });
 
 QUnit.test('getAreaFields', function(assert) {
-    var fields = [
+    const fields = [
         { dataField: '[Color]', area: 'row', areaIndex: 2 },
         { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1 },
         { dataField: '[Date]', groupName: '[Date]', area: 'row', areaIndex: 0 },
@@ -396,7 +396,7 @@ QUnit.test('getAreaFields', function(assert) {
         { dataField: '[Customer Count]', groupName: '[Customer Count]', groupIndex: 1, groupInterval: 10 }
     ];
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: fields,
         store: this.testStore
     });
@@ -413,7 +413,7 @@ QUnit.test('getAreaFields', function(assert) {
 
 // T317225
 QUnit.test('getAreaFields for many data fields', function(assert) {
-    var fields = [
+    const fields = [
         { area: 'data', caption: '1' },
         { area: 'data', caption: '2' },
         { area: 'data', caption: '3' },
@@ -428,18 +428,18 @@ QUnit.test('getAreaFields for many data fields', function(assert) {
         { area: 'data', caption: '12' }
     ];
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: fields,
         store: this.testStore
     });
 
 
     // assert
-    var dataFields = dataSource.getAreaFields('data');
+    const dataFields = dataSource.getAreaFields('data');
     assert.equal(dataFields.length, 12, 'data fields count');
 
     $.each(dataFields, function(index, dataField) {
-        var caption = (index + 1).toString();
+        const caption = (index + 1).toString();
         assert.equal(dataField.caption, caption, 'field ' + caption + ' caption');
     });
 });
@@ -447,30 +447,30 @@ QUnit.test('getAreaFields for many data fields', function(assert) {
 QUnit.test('Load Field Values', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var customizeFunction = function(arg) {
-            return 'customized' + arg.value;
-        },
-        dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'filter', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0, customizeText: customizeFunction },
-                { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
-            ],
-            store: this.testStore
+    const customizeFunction = function(arg) {
+        return 'customized' + arg.value;
+    };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'filter', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0, customizeText: customizeFunction },
+            { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{ value: 2001 }, { value: 2002 }, { value: 2003 }],
-            rows: [],
-            values: [[6, 1, 2, 3]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{ value: 2001 }, { value: 2002 }, { value: 2003 }],
+        rows: [],
+        values: [[6, 1, 2, 3]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     this.testStore.load.returns($.Deferred().resolve(loadResult));
 
 
-    var fieldValues;
+    let fieldValues;
 
     dataSource.getFieldValues(1).done(function(data) {
         fieldValues = data;
@@ -506,25 +506,25 @@ QUnit.test('Load Field Values', function(assert) {
 QUnit.test('Load Field Values with paginate', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'filter' }
-            ],
-            store: this.testStore
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'filter' }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{}, { value: 'cat2' }, { value: 'cat3' }, {}, {}],
-            rows: [],
-            values: [],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{}, { value: 'cat2' }, { value: 'cat3' }, {}, {}],
+        rows: [],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     this.testStore.load.returns($.Deferred().resolve(loadResult));
 
 
-    var fieldValues;
+    let fieldValues;
 
     dataSource.getFieldValues(0, false, { skip: 1, take: 2, searchValue: 'cat' }).done(function(data) {
         fieldValues = data;
@@ -562,28 +562,28 @@ QUnit.test('Load Field Values with paginate', function(assert) {
 QUnit.test('Load Field Values with showRelevantValues', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Ship Date].[Calendar Year]', area: 'column', areaIndex: 0, filterValues: [2001] },
-                { dataField: '[Product].[Category]', area: 'filter', areaIndex: 0, filterValues: ['Bikes'] },
-                { dataField: '[Product].[Subcategory]', area: 'row', areaIndex: 0, filterValues: ['Bike 1'] }
-            ],
-            store: this.testStore
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Ship Date].[Calendar Year]', area: 'column', areaIndex: 0, filterValues: [2001] },
+            { dataField: '[Product].[Category]', area: 'filter', areaIndex: 0, filterValues: ['Bikes'] },
+            { dataField: '[Product].[Subcategory]', area: 'row', areaIndex: 0, filterValues: ['Bike 1'] }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{ value: 'Bike 1' }, { value: 'Bike 2' }],
-            rows: [],
-            values: [],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{ value: 'Bike 1' }, { value: 'Bike 2' }],
+        rows: [],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     this.testStore.load.returns($.Deferred().resolve(loadResult));
 
 
-    var fieldValues;
-    var showRelevantValues = true;
+    let fieldValues;
+    const showRelevantValues = true;
 
     dataSource.getFieldValues(2, showRelevantValues).done(function(data) {
         fieldValues = data;
@@ -633,25 +633,25 @@ QUnit.test('Load Field Values with showRelevantValues', function(assert) {
 });
 
 QUnit.test('Reload data', function(assert) {
-    var testStore = this.testStore;
+    const testStore = this.testStore;
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
-            ],
-            store: this.testStore
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{ value: 2001 }, { value: 2002 }, { value: 2003 }],
-            rows: [],
-            values: [[6, 1, 2, 3]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{ value: 2001 }, { value: 2002 }, { value: 2003 }],
+        rows: [],
+        values: [[6, 1, 2, 3]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     this.testStore.load.returns($.Deferred().resolve(loadResult));
 
@@ -693,7 +693,7 @@ QUnit.test('Reload data', function(assert) {
 
 QUnit.test('Filter', function(assert) {
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
@@ -706,7 +706,7 @@ QUnit.test('Filter', function(assert) {
     this.testStore.filter.returns('storeFilterResult');
     // act
 
-    var result = dataSource.filter('a', '>', 10);
+    const result = dataSource.filter('a', '>', 10);
 
     assert.ok(this.testStore.filter.calledOnce);
     assert.deepEqual(this.testStore.filter.lastCall.args, ['a', '>', 10]);
@@ -716,34 +716,34 @@ QUnit.test('Filter', function(assert) {
 QUnit.test('Load Field Values for group', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var customize1 = function(arg) {
-            return 'customized1_' + arg.value;
-        },
-        customize2 = function(arg) {
-            return 'customized2_' + arg.value;
-        },
-        dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar]', groupName: '[Ship Date].[Calendar]', area: 'row', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar].[Year]', groupName: '[Ship Date].[Calendar]', groupIndex: 0, customizeText: customize1 },
-                { dataField: '[Ship Date].[Calendar].[Month]', groupName: '[Ship Date].[Calendar]', groupIndex: 1, customizeText: customize2 },
-                { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
-            ],
-            store: this.testStore
+    const customize1 = function(arg) {
+        return 'customized1_' + arg.value;
+    };
+    const customize2 = function(arg) {
+        return 'customized2_' + arg.value;
+    };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar]', groupName: '[Ship Date].[Calendar]', area: 'row', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar].[Year]', groupName: '[Ship Date].[Calendar]', groupIndex: 0, customizeText: customize1 },
+            { dataField: '[Ship Date].[Calendar].[Month]', groupName: '[Ship Date].[Calendar]', groupIndex: 1, customizeText: customize2 },
+            { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{ value: 2001, children: [{ value: 1 }, { value: 2 }] }, { value: 2002, children: [{ value: 1 }, { value: 2 }] }, { value: 2003, children: [{ value: 1 }, { value: 2 }] }],
-            rows: [],
-            values: [[6, 1, 2, 3]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{ value: 2001, children: [{ value: 1 }, { value: 2 }] }, { value: 2002, children: [{ value: 1 }, { value: 2 }] }, { value: 2003, children: [{ value: 1 }, { value: 2 }] }],
+        rows: [],
+        values: [[6, 1, 2, 3]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     this.testStore.load.returns($.Deferred().resolve(loadResult));
 
-    var fieldValues;
+    let fieldValues;
 
     dataSource.getFieldValues(1).done(function(data) {
         fieldValues = data;
@@ -794,11 +794,11 @@ QUnit.test('Load Field Values for group', function(assert) {
 });
 
 QUnit.test('Fields visibility', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Month]', area: 'row', areaIndex: 0, visible: false },
@@ -868,33 +868,33 @@ QUnit.test('Fields visibility', function(assert) {
 });
 
 QUnit.test('Load store', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', allMember: '[All Products]', area: 'column', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 },
-                { dataField: 'FilterField', area: 'filter', areaIndex: 0 }
-            ],
-            store: this.testStore
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', allMember: '[All Products]', area: 'column', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 },
+            { dataField: 'FilterField', area: 'filter', areaIndex: 0 }
+        ],
+        store: this.testStore
 
-        }),
-        loadResult = {
-            columns: [{
-                value: 'column1'
-            }],
-            rows: [
-                {
-                    value: 'rowValue'
-                }
-            ],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    });
+    const loadResult = {
+        columns: [{
+            value: 'column1'
+        }],
+        rows: [
+            {
+                value: 'rowValue'
+            }
+        ],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -938,8 +938,8 @@ QUnit.test('Load store', function(assert) {
 });
 
 QUnit.test('Handle error on loading', function(assert) {
-    var def = $.Deferred(),
-        errorHandler = sinon.stub();
+    const def = $.Deferred();
+    const errorHandler = sinon.stub();
 
     this.testStore.load.returns(def);
     // act
@@ -959,26 +959,26 @@ QUnit.test('Handle error on loading', function(assert) {
 });
 
 QUnit.test('retrieve Fields', function(assert) {
-    var retrieveFieldsDef = $.Deferred();
+    const retrieveFieldsDef = $.Deferred();
 
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
-    var userFields = [
-            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-            { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
-            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
-            { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
-            { dataField: 'date', area: 'row' },
-            { dataField: 'date', area: 'column', groupInterval: 'year' },
-            { dataField: 'Measure', summaryType: 'sum' },
-            { dataField: 'Measure' }
-        ],
+    const userFields = [
+        { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+        { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
+        { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
+        { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
+        { dataField: 'date', area: 'row' },
+        { dataField: 'date', area: 'column', groupInterval: 'year' },
+        { dataField: 'Measure', summaryType: 'sum' },
+        { dataField: 'Measure' }
+    ];
 
-        dataSource = createDataSource({
-            fields: userFields,
-            store: this.testStore,
-            retrieveFields: true
-        });
+    const dataSource = createDataSource({
+        fields: userFields,
+        store: this.testStore,
+        retrieveFields: true
+    });
 
     retrieveFieldsDef.resolve([
         { dataField: '[Product].[Category]', allMember: '[All Products]' },
@@ -1020,7 +1020,7 @@ QUnit.test('retrieve Fields', function(assert) {
 QUnit.test('retrieve Fields. Pass dataType to getFields method', function(assert) {
     this.testStore.getFields.returns($.Deferred());
 
-    var userFields = [
+    const userFields = [
         { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
         { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
         { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
@@ -1044,11 +1044,11 @@ QUnit.test('retrieve Fields. Pass dataType to getFields method', function(assert
 });
 
 QUnit.test('retrieve Fields by default', function(assert) {
-    var retrieveFieldsDef = $.Deferred();
+    const retrieveFieldsDef = $.Deferred();
 
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
@@ -1100,7 +1100,7 @@ QUnit.test('Retrieve fields. Create custom Group', function(assert) {
         { dataField: 'Field3' }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { groupName: 'Group1' },
             { dataField: 'Field1', groupName: 'Group1', groupIndex: 0 },
@@ -1131,7 +1131,7 @@ QUnit.test('Retrieve fields. Create custom Group with dataField', function(asser
         { dataField: 'Field2' }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Field1', groupName: 'Group1', dataType: 'date' },
             { groupName: 'Group1', groupIndex: 0, groupInterval: 'interval1' },
@@ -1165,7 +1165,7 @@ QUnit.test('Retrieve fields. Create custom Group. Use one field in some groups',
         { dataField: 'Field3' }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { groupName: 'Group1' },
             { dataField: 'Field1', groupName: 'Group1', groupIndex: 0 },
@@ -1209,7 +1209,7 @@ QUnit.test('Retrieve fields. Create custom Group. Get field from other store gro
         { dataField: 'Field3', groupName: 'StoreGroup', groupIndex: 2 }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { groupName: 'UserGroup' },
             { dataField: 'Field2', groupName: 'UserGroup', groupIndex: 0 },
@@ -1248,7 +1248,7 @@ QUnit.test('Retrieve fields. Customize store group', function(assert) {
         { dataField: 'Field3', groupName: 'StoreGroup', groupIndex: 2 }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'StoreGroup', groupName: 'StoreGroup', userProperty: 'value' },
             { dataField: 'Field2', groupName: 'StoreGroup', groupIndex: 0 },
@@ -1280,7 +1280,7 @@ QUnit.test('Retrieve fields. Add field without group when group exists', functio
         { dataField: 'OrderDate', groupName: 'OrderDate', groupInterval: 'year', groupIndex: 0 }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'OrderDate', dataType: 'date' },
             { dataField: 'OrderDate', groupInterval: 'year' },
@@ -1291,7 +1291,7 @@ QUnit.test('Retrieve fields. Add field without group when group exists', functio
     });
     // assert
     assert.strictEqual(dataSource.fields().length, 4);
-    var fields = prepareFields(dataSource.fields());
+    const fields = prepareFields(dataSource.fields());
 
     assert.deepEqual(fields[0], {
         dataField: 'OrderDate', groupName: 'OrderDate', dataType: 'date', caption: '',
@@ -1316,7 +1316,7 @@ QUnit.test('Retrieve fields. Hide store default group', function(assert) {
         { dataField: 'ShipDate', groupName: 'ShipDate', groupInterval: 'month', groupIndex: 0 }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'OrderDate', visible: false },
             { dataField: 'OrderDate', groupInterval: 'month' },
@@ -1329,7 +1329,7 @@ QUnit.test('Retrieve fields. Hide store default group', function(assert) {
     // assert
 
     assert.strictEqual(dataSource.fields().length, 5);
-    var fields = prepareFields(dataSource.fields());
+    const fields = prepareFields(dataSource.fields());
     assert.deepEqual(fields[0], {
         dataField: 'OrderDate', groupName: 'OrderDate', caption: '', visible: false,
         levels: [
@@ -1365,7 +1365,7 @@ QUnit.test('Retrieve fields is false - merge fields but no add fields from store
         { dataField: 'date', groupInterval: 'month', caption: 'date.month' }
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
 
@@ -1398,7 +1398,7 @@ QUnit.test('T447446. Date field without group interval. Retrieve fields is disab
         { dataField: 'OrderDate', dataType: 'date', groupName: 'OrderDate', groupInterval: 'year', groupIndex: 0 },
     ]));
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'OrderDate', dataType: 'date' }
         ],
@@ -1407,7 +1407,7 @@ QUnit.test('T447446. Date field without group interval. Retrieve fields is disab
     });
 
     // assert
-    var fields = prepareFields(dataSource.fields());
+    const fields = prepareFields(dataSource.fields());
     assert.strictEqual(fields.length, 1, 'fields count');
     assert.deepEqual(fields[0], {
         caption: '',
@@ -1418,29 +1418,29 @@ QUnit.test('T447446. Date field without group interval. Retrieve fields is disab
 });
 
 QUnit.test('retrieve Fields. Fail on load store fields', function(assert) {
-    var def = $.Deferred(),
-        retrieveFieldsDef = $.Deferred();
+    const def = $.Deferred();
+    const retrieveFieldsDef = $.Deferred();
 
     this.testStore.load.returns(def);
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-                { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
-                { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
-                { dataField: 'date', area: 'row' },
-                { dataField: 'date', area: 'column', groupInterval: 'year' }
-            ],
-            store: this.testStore,
-            retrieveFields: true
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: []
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+            { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
+            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
+            { dataField: 'date', area: 'row' },
+            { dataField: 'date', area: 'column', groupInterval: 'year' }
+        ],
+        store: this.testStore,
+        retrieveFields: true
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: []
+    };
 
     def.resolve(loadResult);
     retrieveFieldsDef.reject();
@@ -1451,7 +1451,7 @@ QUnit.test('retrieve Fields. Fail on load store fields', function(assert) {
 });
 
 QUnit.test('Retrieve Fields. Create data field with summaryType', function(assert) {
-    var retrieveFieldsDef = $.Deferred().resolve([
+    const retrieveFieldsDef = $.Deferred().resolve([
         {
             dataField: 'Date',
             dataType: 'date',
@@ -1476,7 +1476,7 @@ QUnit.test('Retrieve Fields. Create data field with summaryType', function(asser
 
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Date', area: 'data', summaryType: 'min' },
             { dataField: 'Date', area: 'column' }
@@ -1631,37 +1631,37 @@ QUnit.test('Retrieve Fields. Create data field with summaryType', function(asser
 });
 
 QUnit.test('Fields order', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
     // act
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'ColumnField2', area: 'column', areaIndex: 2 },
-                { dataField: 'RowField1', area: 'row', areaIndex: 1 },
-                { dataField: 'ColumnField0', area: 'column', areaIndex: 0 },
-                { dataField: 'RowField0', area: 'row', areaIndex: 0 },
-                { dataField: 'CellField1', area: 'data', areaIndex: -1 },
-                { dataField: 'ColumnField01', area: 'column', areaIndex: 0 },
-                { dataField: 'UnknownArea', area: 'page', areaIndex: 0 },
-                { dataField: 'CellUndefinedIndex', area: 'data' },
-                { dataField: 'FilterField2', area: 'filter', areaIndex: 4 },
-                { dataField: 'FilterField1', area: 'filter', areaIndex: 0 }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [{
-                value: 'column1'
-            }],
-            rows: [
-                {
-                    value: 'rowValue'
-                }
-            ],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'ColumnField2', area: 'column', areaIndex: 2 },
+            { dataField: 'RowField1', area: 'row', areaIndex: 1 },
+            { dataField: 'ColumnField0', area: 'column', areaIndex: 0 },
+            { dataField: 'RowField0', area: 'row', areaIndex: 0 },
+            { dataField: 'CellField1', area: 'data', areaIndex: -1 },
+            { dataField: 'ColumnField01', area: 'column', areaIndex: 0 },
+            { dataField: 'UnknownArea', area: 'page', areaIndex: 0 },
+            { dataField: 'CellUndefinedIndex', area: 'data' },
+            { dataField: 'FilterField2', area: 'filter', areaIndex: 4 },
+            { dataField: 'FilterField1', area: 'filter', areaIndex: 0 }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [{
+            value: 'column1'
+        }],
+        rows: [
+            {
+                value: 'rowValue'
+            }
+        ],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
     // assert
@@ -1691,19 +1691,19 @@ QUnit.test('Fields order', function(assert) {
 });
 
 QUnit.test('Expand columns && rows', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', expanded: true, area: 'column', areaIndex: 1 }, { dataField: 'Color', area: 'column', areaIndex: 2 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', expanded: true, area: 'column', areaIndex: 1 }, { dataField: 'Color', area: 'column', areaIndex: 2 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
+        store: this.testStore
+    });
 
     def.resolve({
         columns: [{
@@ -1806,19 +1806,19 @@ QUnit.test('Expand columns && rows', function(assert) {
 });
 
 QUnit.test('Expand rows && columns', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', area: 'column', areaIndex: 1 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', area: 'column', areaIndex: 1 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
+        store: this.testStore
+    });
 
     def.resolve({
         rows: [{
@@ -1909,63 +1909,63 @@ QUnit.test('Expand rows && columns', function(assert) {
 });
 
 QUnit.test('Deep expand rows && columns', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', area: 'column', areaIndex: 1 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1 }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
-            store: this.testStore
-        }),
-        data = {
-            columns: [{
-                value: 'Cat1',
-                index: 1
-            }, {
-                value: 'Cat2',
-                index: 2
-            }],
-            rows: [{
-                value: '2005',
-                index: 1,
-                children: [{
-                    value: 'January',
-                    index: 2,
-                    children: [
-                        {
-                            value: '1',
-                            index: 3
-                        },
-                        {
-                            value: '2',
-                            index: 4
-                        }]
-                }]
-            }, {
-                value: '2006',
-                index: 5
-            }, {
-                value: '2007',
-                index: 5,
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0 }, { dataField: 'SubCategory', area: 'column', areaIndex: 1 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0 }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1 }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)),
+        store: this.testStore
+    });
+    const data = {
+        columns: [{
+            value: 'Cat1',
+            index: 1
+        }, {
+            value: 'Cat2',
+            index: 2
+        }],
+        rows: [{
+            value: '2005',
+            index: 1,
+            children: [{
+                value: 'January',
+                index: 2,
                 children: [
                     {
-                        value: 'January',
-                        index: 6
-                    }
-                ]
-            }],
-            values: [[[1], [2], [3], [4], [5]],
-                [[6], [7], [8], [9], [10]],
-                [[11], [12], [13], [14], [15]]
-            ],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+                        value: '1',
+                        index: 3
+                    },
+                    {
+                        value: '2',
+                        index: 4
+                    }]
+            }]
+        }, {
+            value: '2006',
+            index: 5
+        }, {
+            value: '2007',
+            index: 5,
+            children: [
+                {
+                    value: 'January',
+                    index: 6
+                }
+            ]
+        }],
+        values: [[[1], [2], [3], [4], [5]],
+            [[6], [7], [8], [9], [10]],
+            [[11], [12], [13], [14], [15]]
+        ],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve($.extend(true, {}, data));
 
@@ -1996,7 +1996,7 @@ QUnit.test('Deep expand rows && columns', function(assert) {
 QUnit.test('Change field by index', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', allMember: '[All Products]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]', area: 'row', areaIndex: 0 },
@@ -2047,7 +2047,7 @@ QUnit.test('Change field by index', function(assert) {
 });
 
 QUnit.test('Change field by dataField', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
@@ -2069,7 +2069,7 @@ QUnit.test('Change field by dataField', function(assert) {
 });
 
 QUnit.test('fieldChanged event', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
@@ -2078,7 +2078,7 @@ QUnit.test('fieldChanged event', function(assert) {
         store: this.testStore
     });
 
-    var fieldChangedStub = sinon.stub();
+    const fieldChangedStub = sinon.stub();
 
     dataSource.on('fieldChanged', fieldChangedStub);
 
@@ -2091,7 +2091,7 @@ QUnit.test('fieldChanged event', function(assert) {
 });
 
 QUnit.test('Change field by caption', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
@@ -2114,31 +2114,31 @@ QUnit.test('Change field by caption', function(assert) {
 });
 
 QUnit.test('Change field non exist field', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', allMember: '[All Products]', area: 'column', areaIndex: 0 },
-                { dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [{
-                value: 'column1'
-            }],
-            rows: [
-                {
-                    value: 'rowValue'
-                }
-            ],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', allMember: '[All Products]', area: 'column', areaIndex: 0 },
+            { dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [{
+            value: 'column1'
+        }],
+        rows: [
+            {
+                value: 'rowValue'
+            }
+        ],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -2214,7 +2214,7 @@ QUnit.test('Change field after expand', function(assert) {
         grandTotalRowIndex: 0
     }));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Year', area: 'row', areaIndex: 0 },
             { dataField: 'Month', area: 'row', areaIndex: 1 },
@@ -2317,11 +2317,11 @@ QUnit.test('Change field after expand', function(assert) {
 QUnit.test('Reset calculated field\'s properties on changed', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
 
-    var dataSource = createDataSource({
-            fields: [{ dataField: 'Field1', selector: 'selector', format: 'date', customizeText: 'customizeText', notCalculatedProperty: 'value' }],
-            store: this.testStore
-        }),
-        field = dataSource.field(0);
+    const dataSource = createDataSource({
+        fields: [{ dataField: 'Field1', selector: 'selector', format: 'date', customizeText: 'customizeText', notCalculatedProperty: 'value' }],
+        store: this.testStore
+    });
+    const field = dataSource.field(0);
 
     setFieldProperty(field, 'format', 'percent');
     setFieldProperty(field, 'customizeText', function() { });
@@ -2358,11 +2358,11 @@ QUnit.test('Reset calculated field\'s properties on changed', function(assert) {
 QUnit.test('Reset calculated field\'s properties on fields changed', function(assert) {
     this.testStore.load.returns($.Deferred().reject());
 
-    var dataSource = createDataSource({
-            fields: [{ dataField: 'Field1', selector: 'selector', format: 'date', customizeText: 'customizeText', notCalculatedProperty: 'value' }],
-            store: this.testStore
-        }),
-        field = dataSource.field(0);
+    const dataSource = createDataSource({
+        fields: [{ dataField: 'Field1', selector: 'selector', format: 'date', customizeText: 'customizeText', notCalculatedProperty: 'value' }],
+        store: this.testStore
+    });
+    const field = dataSource.field(0);
 
     setFieldProperty(field, 'format', 'percent');
     setFieldProperty(field, 'customizeText', function() { });
@@ -2429,7 +2429,7 @@ QUnit.test('Remove fields when expanded items exist', function(assert) {
         grandTotalRowIndex: 0
     }));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Category', area: 'column', areaIndex: 0 },
             { dataField: 'SubCategory', area: 'column', areaIndex: 1 },
@@ -2443,7 +2443,7 @@ QUnit.test('Remove fields when expanded items exist', function(assert) {
     });
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var changedFields = [
+    const changedFields = [
         dataSource.field(0, { area: undefined, areaIndex: 1 }),
         dataSource.field(1, { area: undefined, areaIndex: 1 })
     ];
@@ -2507,7 +2507,7 @@ QUnit.test('Remove field when expanded items exist', function(assert) {
         grandTotalRowIndex: 0
     }));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Category', area: 'column', areaIndex: 0 },
             { dataField: 'SubCategory', area: 'column', areaIndex: 1 },
@@ -2522,7 +2522,7 @@ QUnit.test('Remove field when expanded items exist', function(assert) {
     });
     this.testStore.load.returns($.Deferred().reject());
     // act
-    var changedFields = [
+    const changedFields = [
         dataSource.field(1, { area: undefined, areaIndex: 1 })
     ];
     dataSource.load();
@@ -2560,7 +2560,7 @@ QUnit.test('Reorder field when expanded items exist', function(assert) {
         grandTotalRowIndex: 0
     }));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Field1', area: 'row', areaIndex: 0 },
             { dataField: 'Field2', area: 'row', areaIndex: 1 },
@@ -2579,37 +2579,37 @@ QUnit.test('Reorder field when expanded items exist', function(assert) {
 });
 
 QUnit.test('Change field when fields not loaded', function(assert) {
-    var def = $.Deferred(),
-        retrieveFieldsDef = $.Deferred();
+    const def = $.Deferred();
+    const retrieveFieldsDef = $.Deferred();
 
     this.testStore.load.returns(def);
     this.testStore.getFields.returns(retrieveFieldsDef);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-                { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
-                { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
-                { dataField: 'date', area: 'row', areaIndex: 1 },
-                { dataField: 'date', area: 'column', groupInterval: 'year', areaIndex: 2 }
-            ],
-            store: this.testStore,
-            retrieveFields: true
-        }),
-        loadResult = {
-            columns: [{
-                value: 'column1'
-            }],
-            rows: [
-                {
-                    value: 'rowValue'
-                }
-            ],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+            { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
+            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 },
+            { dataField: 'date', area: 'row', areaIndex: 1 },
+            { dataField: 'date', area: 'column', groupInterval: 'year', areaIndex: 2 }
+        ],
+        store: this.testStore,
+        retrieveFields: true
+    });
+    const loadResult = {
+        columns: [{
+            value: 'column1'
+        }],
+        rows: [
+            {
+                value: 'rowValue'
+            }
+        ],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -2685,11 +2685,11 @@ QUnit.test('Change field when fields not loaded', function(assert) {
 });
 
 QUnit.test('Change areaIndex to begin', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
             { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
@@ -2743,11 +2743,11 @@ QUnit.test('Change areaIndex to begin', function(assert) {
 });
 
 QUnit.test('Change areaIndex to begin when group', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { area: 'column', areaIndex: 0, groupName: 'Group1' },
             { groupName: 'Group1', groupIndex: 1, dataField: 'Field1' },
@@ -2790,7 +2790,7 @@ QUnit.test('Change areaIndex to begin when group', function(assert) {
         }
     ], 'load args');
 
-    var columnFields = dataSource.getAreaFields('column', true);
+    const columnFields = dataSource.getAreaFields('column', true);
     assert.strictEqual(columnFields.length, 2);
     assert.strictEqual(columnFields[0].dataField, '[Product].[Subcategory]');
     assert.strictEqual(columnFields[1].dataField, undefined);
@@ -2798,26 +2798,26 @@ QUnit.test('Change areaIndex to begin when group', function(assert) {
 });
 
 QUnit.test('Change areaIndex to end', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
-                { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
-                { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
-                { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
+            { dataField: '[Product].[Subcategory]', area: 'column', areaIndex: 1 },
+            { dataField: '[Ship Date].[Calendar Year]', area: 'row', areaIndex: 0 },
+            { dataField: '[Measures].[Customer Count]', area: 'data', areaIndex: 0 }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -2847,27 +2847,27 @@ QUnit.test('Change areaIndex to end', function(assert) {
 });
 
 QUnit.test('Load with group field', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Color]', area: 'row', areaIndex: 2 },
-                { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1 },
-                { dataField: '[Date]', area: 'row', areaIndex: 0 },
-                { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0 },
-                { dataField: '[Product]', groupName: '[Product]', area: 'row', areaIndex: 1 }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Color]', area: 'row', areaIndex: 2 },
+            { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1 },
+            { dataField: '[Date]', area: 'row', areaIndex: 0 },
+            { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0 },
+            { dataField: '[Product]', groupName: '[Product]', area: 'row', areaIndex: 1 }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -2893,7 +2893,7 @@ QUnit.test('Load with group field', function(assert) {
 QUnit.test('Sort group fields', function(assert) {
     this.testStore.load.returns($.Deferred());
 
-    var fields = [
+    const fields = [
         {
             caption: 'Date Problem',
             displayFolder: 'Project',
@@ -3097,7 +3097,7 @@ QUnit.test('Load with group field. Pass expanded and showTotals params', functio
 });
 
 QUnit.test('Load with group field. change group field', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Color]', area: 'row', areaIndex: 2 },
             { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1, sortOrder: 'asc', sortBySummaryField: '[Measures]', sortBy: 'caption', sortBySummaryPath: ['Bikes'] },
@@ -3127,30 +3127,30 @@ QUnit.test('Load with group field. change group field', function(assert) {
 });
 
 QUnit.test('Load several groups on single axis', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Product]', area: 'row', groupName: '[Product]' },
-                { dataField: '[Calendar]', area: 'row', groupName: '[Calendar]', dataType: 'date' },
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Product]', area: 'row', groupName: '[Product]' },
+            { dataField: '[Calendar]', area: 'row', groupName: '[Calendar]', dataType: 'date' },
 
-                { dataField: '[Category]', groupName: '[Product]', groupIndex: 0 },
-                { dataField: '[Subcategory]', groupName: '[Product]', groupIndex: 1 },
+            { dataField: '[Category]', groupName: '[Product]', groupIndex: 0 },
+            { dataField: '[Subcategory]', groupName: '[Product]', groupIndex: 1 },
 
-                { dataField: '[Year]', groupName: '[Calendar]', groupIndex: 0 },
-                { dataField: '[Month]', groupName: '[Calendar]', groupIndex: 1 }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+            { dataField: '[Year]', groupName: '[Calendar]', groupIndex: 0 },
+            { dataField: '[Month]', groupName: '[Calendar]', groupIndex: 1 }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -3174,7 +3174,7 @@ QUnit.test('Load several groups on single axis', function(assert) {
 });
 
 QUnit.test('Change group item', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: '[Product]', area: 'row', groupName: '[Product]', areaIndex: 0 },
             { dataField: '[Calendar]', area: 'column', groupName: '[Calendar]', areaIndex: 0 },
@@ -3211,27 +3211,27 @@ QUnit.test('Change group item', function(assert) {
 });
 
 QUnit.test('Load with group fields with filterValues', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Color]', area: 'row', areaIndex: 2 },
-                { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1, filterValues: ['Cat1 SubCat2', 'Cat1 SubCat3'] },
-                { dataField: '[Date]', area: 'row', areaIndex: 0 },
-                { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0, filterValues: ['Cat2'] },
-                { dataField: '[Product]', groupName: '[Product]', area: 'row', areaIndex: 1, filterValues: ['Cat1 SubCat1'] }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Color]', area: 'row', areaIndex: 2 },
+            { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1, filterValues: ['Cat1 SubCat2', 'Cat1 SubCat3'] },
+            { dataField: '[Date]', area: 'row', areaIndex: 0 },
+            { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0, filterValues: ['Cat2'] },
+            { dataField: '[Product]', groupName: '[Product]', area: 'row', areaIndex: 1, filterValues: ['Cat1 SubCat1'] }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -3265,26 +3265,26 @@ QUnit.test('Load with group fields with filterValues', function(assert) {
 });
 
 QUnit.test('Load with group fields with filterValues and filter area', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: '[Color]', area: 'row', areaIndex: 2 },
-                { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1, filterValues: ['Cat1 SubCat2', 'Cat1 SubCat3'] },
-                { dataField: '[Date]', area: 'row', areaIndex: 0 },
-                { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0, filterValues: ['Cat2'] },
-                { dataField: '[Product]', groupName: '[Product]', area: 'filter', areaIndex: 1, filterValues: ['Cat1 SubCat1'] }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [],
-            rows: [],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: '[Color]', area: 'row', areaIndex: 2 },
+            { dataField: '[Product].[Subcategory]', groupName: '[Product]', area: 'column', groupIndex: 1, filterValues: ['Cat1 SubCat2', 'Cat1 SubCat3'] },
+            { dataField: '[Date]', area: 'row', areaIndex: 0 },
+            { dataField: '[Product].[Category]', groupName: '[Product]', area: 'filter', groupIndex: 0, filterValues: ['Cat2'] },
+            { dataField: '[Product]', groupName: '[Product]', area: 'filter', areaIndex: 1, filterValues: ['Cat1 SubCat1'] }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [],
+        rows: [],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -3321,16 +3321,16 @@ QUnit.test('Collapse level', function(assert) {
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     dataSource.on('changed', assertFunction);
 
@@ -3340,7 +3340,7 @@ QUnit.test('Collapse level', function(assert) {
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.columns[0].value, 'Brazil');
         assert.ok(!data.columns[0].children);
         assert.deepEqual(prepareLoadedData(data.columns[0].collapsedChildren), [{
@@ -3395,7 +3395,7 @@ QUnit.test('Collapse group', function(assert) {
     dataSource.collapseAll(0);
     // assert
     function assertFunction() {
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.columns[0].value, 'Brazil');
         assert.ok(!data.columns[0].children);
         assert.deepEqual(prepareLoadedData(data.columns[0].collapsedChildren), [{
@@ -3434,16 +3434,16 @@ QUnit.test('Collapse level by field id', function(assert) {
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     dataSource.on('changed', assertFunction);
 
@@ -3453,7 +3453,7 @@ QUnit.test('Collapse level by field id', function(assert) {
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.columns[0].value, 'Brazil');
         assert.ok(!data.columns[0].children);
         assert.deepEqual(prepareLoadedData(data.columns[0].collapsedChildren), [{
@@ -3498,19 +3498,19 @@ QUnit.test('Collapse level when group', function(assert) {
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { groupName: 'group', groupIndex: 1, expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field', groupName: 'group', area: 'column' },
-                { groupName: 'group', expanded: true, groupIndex: 0 },
-                expandedField,
-                { groupName: 'group', groupIndex: 2 },
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+    const expandedField = { groupName: 'group', groupIndex: 1, expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field', groupName: 'group', area: 'column' },
+            { groupName: 'group', expanded: true, groupIndex: 0 },
+            expandedField,
+            { groupName: 'group', groupIndex: 2 },
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     dataSource.on('changed', assertFunction);
 
@@ -3520,7 +3520,7 @@ QUnit.test('Collapse level when group', function(assert) {
     assert.equal(this.testStore.load.callCount, 1);
 
     function assertFunction() {
-        var data = this.getData();
+        const data = this.getData();
         assert.strictEqual(data.columns[0].value, 'Brazil');
         assert.ok(data.columns[2].children[0]);
         assert.ok(!data.columns[2].children[0].children);
@@ -3542,17 +3542,17 @@ QUnit.test('Collapse level when group', function(assert) {
 QUnit.test('Collapse level when fieldIndex incorrect', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        }),
-        dataSourceChanged = sinon.stub();
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
+    const dataSourceChanged = sinon.stub();
 
     dataSource.on('changed', dataSourceChanged);
 
@@ -3569,16 +3569,16 @@ QUnit.test('Collapse level when there are not expanded items', function(assert) 
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        }),
-        dataSourceChanged = sinon.stub();
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
+    const dataSourceChanged = sinon.stub();
 
     dataSource.on('changed', dataSourceChanged);
 
@@ -3593,16 +3593,16 @@ QUnit.test('Collapse level when there are not expanded items', function(assert) 
 QUnit.test('Expand level', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: false },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: false };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     // act
     dataSource.expandAll(0);
@@ -3641,23 +3641,23 @@ QUnit.test('Expand group', function(assert) {
     // act
     dataSource.expandAll(0);
     // assert
-    var expandedValues = this.testStore.load.lastCall.args[0].columns.map(f => f.expanded);
+    const expandedValues = this.testStore.load.lastCall.args[0].columns.map(f => f.expanded);
     assert.deepEqual(expandedValues, [true, true, false]);
 });
 
 QUnit.test('Expand level by fieldId', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: false },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: false };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     // act
     dataSource.expandAll('ShipCountry');
@@ -3683,17 +3683,17 @@ QUnit.test('Expand level by fieldId', function(assert) {
 QUnit.test('expand level when fieldIndex incorrect', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
-    var expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true },
-        dataSource = createDataSource({
-            fields: [
-                expandedField,
-                { dataField: 'ShipCity', area: 'column' },
-                { dataField: 'ShipVia', area: 'row' },
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        }),
-        dataSourceChanged = sinon.stub();
+    const expandedField = { dataField: 'ShipCountry', area: 'column', expanded: true };
+    const dataSource = createDataSource({
+        fields: [
+            expandedField,
+            { dataField: 'ShipCity', area: 'column' },
+            { dataField: 'ShipVia', area: 'row' },
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
+    const dataSourceChanged = sinon.stub();
 
     dataSource.on('changed', dataSourceChanged);
 
@@ -3707,25 +3707,25 @@ QUnit.test('expand level when fieldIndex incorrect', function(assert) {
 QUnit.test('Fields Caption generation', function(assert) {
     // act
     inflector.titleize.restore();
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', caption: 'userCaption', summaryType: 'sum', groupName: 'Group1' },
-                { dataField: 'Field2', caption: '' },
-                { dataField: 'fieldName_caption' },
-                {},
-                { summaryType: 'avg' },
-                { dataField: 'Field3', summaryType: 'avg' },
-                { dataField: 'date', groupInterval: 'year' },
-                { dataField: 'number', groupInterval: 10 },
-                { dataField: 'date', groupInterval: 'month', summaryType: 'count' },
-                { dataField: 'Field4', summaryType: 'custom' },
-                { dataField: 'Field5' },
-                { dataField: 'Field6', groupName: 'Group2' },
-                { groupName: 'Group3' }
-            ],
-            store: this.testStore
-        }),
-        fields = dataSource.fields();
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', caption: 'userCaption', summaryType: 'sum', groupName: 'Group1' },
+            { dataField: 'Field2', caption: '' },
+            { dataField: 'fieldName_caption' },
+            {},
+            { summaryType: 'avg' },
+            { dataField: 'Field3', summaryType: 'avg' },
+            { dataField: 'date', groupInterval: 'year' },
+            { dataField: 'number', groupInterval: 10 },
+            { dataField: 'date', groupInterval: 'month', summaryType: 'count' },
+            { dataField: 'Field4', summaryType: 'custom' },
+            { dataField: 'Field5' },
+            { dataField: 'Field6', groupName: 'Group2' },
+            { groupName: 'Group3' }
+        ],
+        store: this.testStore
+    });
+    const fields = dataSource.fields();
     // assert
 
     assert.strictEqual(fields[0].caption, 'userCaption');
@@ -3746,25 +3746,25 @@ QUnit.test('Fields Caption generation', function(assert) {
 QUnit.test('Fields Caption generation. Change field option', function(assert) {
     // act
     inflector.titleize.restore();
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', caption: 'userCaption', summaryType: 'sum', groupName: 'Group1' },
-                { dataField: 'Field2', caption: '' },
-                { dataField: 'fieldName_caption' },
-                {},
-                { summaryType: 'avg' },
-                { dataField: 'Field3', summaryType: 'avg' },
-                { dataField: 'date', groupInterval: 'year' },
-                { dataField: 'number', groupInterval: 10 },
-                { dataField: 'date', groupInterval: 'month', summaryType: 'count' },
-                { dataField: 'Field4', summaryType: 'custom' },
-                { dataField: 'Field5' },
-                { dataField: 'Field6', groupName: 'Group2' },
-                { groupName: 'Group3' }
-            ],
-            store: this.testStore
-        }),
-        fields;
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', caption: 'userCaption', summaryType: 'sum', groupName: 'Group1' },
+            { dataField: 'Field2', caption: '' },
+            { dataField: 'fieldName_caption' },
+            {},
+            { summaryType: 'avg' },
+            { dataField: 'Field3', summaryType: 'avg' },
+            { dataField: 'date', groupInterval: 'year' },
+            { dataField: 'number', groupInterval: 10 },
+            { dataField: 'date', groupInterval: 'month', summaryType: 'count' },
+            { dataField: 'Field4', summaryType: 'custom' },
+            { dataField: 'Field5' },
+            { dataField: 'Field6', groupName: 'Group2' },
+            { groupName: 'Group3' }
+        ],
+        store: this.testStore
+    });
+    let fields;
 
     // acts
     dataSource.field(1, { summaryType: 'max' });
@@ -3797,12 +3797,12 @@ QUnit.test('Fields Caption generation. Change field option', function(assert) {
 
 QUnit.test('T411764. Change generated caption on fields prepared', function(assert) {
     inflector.titleize.restore();
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Field1', area: 'row' }
         ],
         onFieldsPrepared: function(fields) {
-            for(var i = 0; i < fields.length; i++) {
+            for(let i = 0; i < fields.length; i++) {
                 fields[i].caption = fields[i].caption.toUpperCase();
             }
         },
@@ -3820,14 +3820,14 @@ QUnit.test('Change fields at runtime', function(assert) {
         { dataField: 'Field1', dataType: 'number' },
         { dataField: 'Field2' }
     ]));
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', caption: 'Field1Caption', dataType: 'string' },
-                { dataField: 'Field2', caption: 'Filed2Caption', dataType: 'string' }
-            ],
-            store: this.testStore
-        }),
-        fieldsPrepared = sinon.stub();
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', caption: 'Field1Caption', dataType: 'string' },
+            { dataField: 'Field2', caption: 'Filed2Caption', dataType: 'string' }
+        ],
+        store: this.testStore
+    });
+    const fieldsPrepared = sinon.stub();
     dataSource.on('fieldsPrepared', fieldsPrepared);
     // Act
     dataSource.fields([
@@ -3851,7 +3851,7 @@ QUnit.test('Set fields at runtime', function(assert) {
         { dataField: 'Field2' }
     ]));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         store: this.testStore
     });
     // Act
@@ -3877,17 +3877,17 @@ QUnit.test('Set fields at runtime', function(assert) {
 });
 
 QUnit.test('Change fields at runtime when store fields not yet loaded', function(assert) {
-    var deferred = $.Deferred();
+    const deferred = $.Deferred();
     this.testStore.getFields.returns(deferred);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', caption: 'Field1Caption', dataType: 'string' },
-                { dataField: 'Field2', caption: 'Filed2Caption', dataType: 'string' }
-            ],
-            store: this.testStore
-        }),
-        fieldsPrepared = sinon.stub();
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', caption: 'Field1Caption', dataType: 'string' },
+            { dataField: 'Field2', caption: 'Filed2Caption', dataType: 'string' }
+        ],
+        store: this.testStore
+    });
+    const fieldsPrepared = sinon.stub();
 
     dataSource.on('fieldsPrepared', fieldsPrepared);
     // Act
@@ -3914,10 +3914,10 @@ QUnit.test('Change fields at runtime when store fields not yet loaded', function
 QUnit.test('isLoading() in dataSource changed event', function(assert) {
     assert.expect(1);
 
-    var d = $.Deferred();
+    const d = $.Deferred();
     this.testStore.load.returns(d);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: this.defaultFields,
         store: this.testStore
     });
@@ -3936,11 +3936,11 @@ QUnit.test('isLoading() in dataSource changed event when expand header item', fu
     assert.expect(1);
 
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
-    var d = $.Deferred(),
-        dataSource = createDataSource({
-            fields: this.defaultFields,
-            store: this.testStore
-        });
+    const d = $.Deferred();
+    const dataSource = createDataSource({
+        fields: this.defaultFields,
+        store: this.testStore
+    });
 
     this.testStore.load.returns(d);
     dataSource.on('changed', assertFunction);
@@ -3959,11 +3959,11 @@ QUnit.test('data on load done when async loading', function(assert) {
     assert.expect(8);
 
     this.testStore.load.returns($.Deferred().reject());
-    var d = $.Deferred(),
-        dataSource = createDataSource({
-            fields: this.defaultFields,
-            store: this.testStore
-        });
+    const d = $.Deferred();
+    const dataSource = createDataSource({
+        fields: this.defaultFields,
+        store: this.testStore
+    });
 
     this.testStore.load.returns(d);
     dataSource.on('changed', assertFunction);
@@ -3973,7 +3973,7 @@ QUnit.test('data on load done when async loading', function(assert) {
     // assert
     function assertFunction() {
         assert.ok(!dataSource.isLoading());
-        var data = dataSource.getData();
+        const data = dataSource.getData();
         assert.strictEqual(data.columns[0].value, 'Brazil');
         assert.strictEqual(data.columns[1].value, 'Canada');
         assert.strictEqual(data.columns[2].value, 'USA');
@@ -3985,7 +3985,7 @@ QUnit.test('data on load done when sync loading', function(assert) {
     assert.expect(4);
 
     this.testStore.load.returns($.Deferred().reject());
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: this.defaultFields,
         store: this.testStore
     });
@@ -4008,27 +4008,27 @@ QUnit.test('headers formatting', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
 
 
-    var customizeText = sinon.spy(function() {
-            return 'custom Text';
-        }),
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', area: 'column' },
-                { dataField: 'Field2', area: 'column', customizeText: customizeText },
-                { dataField: 'Field3', area: 'row', format: { type: 'currency', precision: 2 } }
-            ],
-            store: this.testStore
-        });
+    const customizeText = sinon.spy(function() {
+        return 'custom Text';
+    });
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', area: 'column' },
+            { dataField: 'Field2', area: 'column', customizeText: customizeText },
+            { dataField: 'Field3', area: 'row', format: { type: 'currency', precision: 2 } }
+        ],
+        store: this.testStore
+    });
 
     // assert
-    var rows = dataSource.getData().rows;
+    const rows = dataSource.getData().rows;
 
     assert.strictEqual(rows.length, 3);
     assert.strictEqual(rows[0].text, '$1,985.00');
     assert.strictEqual(rows[1].text, '$1,991.00');
     assert.strictEqual(rows[2].text, '$1,991.00');
 
-    var columns = dataSource.getData().columns;
+    const columns = dataSource.getData().columns;
     assert.strictEqual(columns[0].text, 'Brazil');
 
     assert.strictEqual(columns[0].children[0].text, 'custom Text');
@@ -4042,18 +4042,18 @@ QUnit.test('headers formatting', function(assert) {
 
 QUnit.test('header formatting when expanding', function(assert) {
     this.testStore.load.returns($.Deferred().resolve(this.storeData));
-    var customizeText = sinon.spy(function() {
-            return 'custom Text';
-        }),
-        d = $.Deferred(),
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'Field1', area: 'column' },
-                { dataField: 'Field2', area: 'column', customizeText: customizeText },
-                { dataField: 'Field3', area: 'row', format: { type: 'currency', precision: 2 } }
-            ],
-            store: this.testStore
-        });
+    const customizeText = sinon.spy(function() {
+        return 'custom Text';
+    });
+    const d = $.Deferred();
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'Field1', area: 'column' },
+            { dataField: 'Field2', area: 'column', customizeText: customizeText },
+            { dataField: 'Field3', area: 'row', format: { type: 'currency', precision: 2 } }
+        ],
+        store: this.testStore
+    });
 
     this.testStore.load.returns(d);
 
@@ -4062,14 +4062,14 @@ QUnit.test('header formatting when expanding', function(assert) {
     this.storeData.columns = [{ value: 'Vancouver' }];
     d.resolve(this.storeData);
     // assert
-    var rows = dataSource.getData().rows;
+    const rows = dataSource.getData().rows;
 
     assert.strictEqual(rows.length, 3);
     assert.strictEqual(rows[0].text, '$1,985.00');
     assert.strictEqual(rows[1].text, '$1,991.00');
     assert.strictEqual(rows[2].text, '$1,991.00');
 
-    var columns = dataSource.getData().columns;
+    const columns = dataSource.getData().columns;
     assert.strictEqual(columns[0].text, 'Brazil');
     assert.strictEqual(columns[1].text, 'Canada');
 
@@ -4086,20 +4086,20 @@ QUnit.test('header formatting when expanding', function(assert) {
 if(window.INTRANET && (!browser.msie || parseInt(browser.version) < 17)) {
 
     QUnit.test('XMLA store integration', function(assert) {
-        var done = assert.async(),
-            dataSource = createDataSource({
-                descriptions: {
-                    columns: [{ dataField: '[Product].[Category]', allMember: '[All Products]' }],
-                    rows: [{ dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]' }],
-                    values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
-                },
-                store: {
-                    type: 'xmla',
-                    url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
-                    catalog: 'Adventure Works DW Standard Edition',
-                    cube: 'Adventure Works'
-                }
-            });
+        const done = assert.async();
+        const dataSource = createDataSource({
+            descriptions: {
+                columns: [{ dataField: '[Product].[Category]', allMember: '[All Products]' }],
+                rows: [{ dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]' }],
+                values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
+            },
+            store: {
+                type: 'xmla',
+                url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
+                catalog: 'Adventure Works DW Standard Edition',
+                cube: 'Adventure Works'
+            }
+        });
 
         dataSource.on('changed', function() {
 
@@ -4128,20 +4128,20 @@ if(window.INTRANET && (!browser.msie || parseInt(browser.version) < 17)) {
     });
 
     QUnit.test('XMLA store. Sorting data', function(assert) {
-        var done = assert.async(),
-            dataSource = createDataSource({
-                descriptions: {
-                    columns: [{ dataField: '[Product].[Category]' }],
-                    rows: [{ dataField: '[Ship Date].[Month Of Year]' }],
-                    values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
-                },
-                store: {
-                    type: 'xmla',
-                    url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
-                    catalog: 'Adventure Works DW Standard Edition',
-                    cube: 'Adventure Works'
-                }
-            });
+        const done = assert.async();
+        const dataSource = createDataSource({
+            descriptions: {
+                columns: [{ dataField: '[Product].[Category]' }],
+                rows: [{ dataField: '[Ship Date].[Month Of Year]' }],
+                values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
+            },
+            store: {
+                type: 'xmla',
+                url: 'http://teamdashboard.corp.devexpress.com/MSOLAP2008/msmdpump.dll',
+                catalog: 'Adventure Works DW Standard Edition',
+                cube: 'Adventure Works'
+            }
+        });
 
         dataSource.on('changed', function() {
             assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
@@ -4175,11 +4175,11 @@ if(window.INTRANET && (!browser.msie || parseInt(browser.version) < 17)) {
 
 
 QUnit.test('Do not perform summary calculation if dataSource is empty', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             {
                 dataField: 'ShipCountry', area: 'column', sortOrder: 'desc', sortingMethod: function(a, b) {
@@ -4204,11 +4204,11 @@ QUnit.test('Do not perform summary calculation if dataSource is empty', function
 });
 
 QUnit.test('Do not perform running total calculation if dataSource is empty', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             {
                 dataField: 'ShipCountry', area: 'column', sortOrder: 'desc', sortingMethod: function(a, b) {
@@ -4235,10 +4235,10 @@ QUnit.test('Do not perform running total calculation if dataSource is empty', fu
 QUnit.module('Sorting', defaultEnvironment);
 
 QUnit.test('Sort data', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', sortOrder: 'asc', area: 'column' },
             { dataField: 'ShipCity', sortOrder: 'desc', area: 'column' },
@@ -4296,10 +4296,10 @@ QUnit.test('Sort data', function(assert) {
 });
 
 QUnit.test('Local sorting should not work if paginate', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         paginate: true,
         fields: [
             { dataField: 'ShipVia', area: 'row', sortOrder: 'asc' },
@@ -4328,10 +4328,10 @@ QUnit.test('Local sorting should not work if paginate', function(assert) {
 });
 
 QUnit.test('Data order by default', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column', sortOrder: 'wrongOrder' },
 
@@ -4372,23 +4372,23 @@ QUnit.test('Data order by default', function(assert) {
 });
 
 QUnit.test('Data order with sortingMethod', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var sortingMethod = sinon.spy(function(a, b) {
-            return b.index - a.index;
-        }),
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'ShipCountry', area: 'column', sortBy: 'value', sortOrder: 'asc', sortingMethod: sortingMethod },
+    const sortingMethod = sinon.spy(function(a, b) {
+        return b.index - a.index;
+    });
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'ShipCountry', area: 'column', sortBy: 'value', sortOrder: 'asc', sortingMethod: sortingMethod },
 
-                { dataField: 'ShipVia', area: 'row' },
+            { dataField: 'ShipVia', area: 'row' },
 
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     this.storeData.columns = this.storeData.columns[0].children;
     def.resolve(this.storeData);
@@ -4425,11 +4425,11 @@ QUnit.test('Data order with sortingMethod', function(assert) {
 });
 
 QUnit.test('Data order with sortBy: none', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column', sortBy: 'none' },
             { dataField: 'ShipVia', area: 'row', sortBy: 'none' },
@@ -4455,11 +4455,11 @@ QUnit.test('Data order with sortBy: none', function(assert) {
 });
 
 QUnit.test('Data order with sortBy: none and desc sort order', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column', sortBy: 'none', sortOrder: 'desc' },
             { dataField: 'ShipVia', area: 'row', sortBy: 'none', sortOrder: 'desc' },
@@ -4485,23 +4485,23 @@ QUnit.test('Data order with sortBy: none and desc sort order', function(assert) 
 });
 
 QUnit.test('Data order with sortingMethod. Desc', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var sortingMethod = sinon.spy(function(a, b) {
-            return b.index - a.index;
-        }),
-        dataSource = createDataSource({
-            fields: [
-                { dataField: 'ShipCountry', area: 'column', sortBy: 'value', sortOrder: 'desc', sortingMethod: sortingMethod },
+    const sortingMethod = sinon.spy(function(a, b) {
+        return b.index - a.index;
+    });
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'ShipCountry', area: 'column', sortBy: 'value', sortOrder: 'desc', sortingMethod: sortingMethod },
 
-                { dataField: 'ShipVia', area: 'row' },
+            { dataField: 'ShipVia', area: 'row' },
 
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        });
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
 
     this.storeData.columns = this.storeData.columns[0].children;
     def.resolve(this.storeData);
@@ -4537,11 +4537,11 @@ QUnit.test('Data order with sortingMethod. Desc', function(assert) {
 });
 
 QUnit.test('Sort data by displayText', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column', sortBy: 'displayText', sortOrder: 'desc' },
 
@@ -4582,54 +4582,54 @@ QUnit.test('Sort data by displayText', function(assert) {
 });
 
 QUnit.test('Sort data after expand item', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
-            fields: [
-                { dataField: 'ShipCountry', sortOrder: 'asc', area: 'column' },
-                { dataField: 'ShipCity', sortOrder: 'desc', area: 'column' },
+    const dataSource = createDataSource({
+        fields: [
+            { dataField: 'ShipCountry', sortOrder: 'asc', area: 'column' },
+            { dataField: 'ShipCity', sortOrder: 'desc', area: 'column' },
 
-                { dataField: 'ShipVia', area: 'row', sort: 'desc' },
+            { dataField: 'ShipVia', area: 'row', sort: 'desc' },
 
-                { summaryType: 'count', area: 'data' }
-            ],
-            store: this.testStore
-        }),
-        loadResult = {
-            columns: [{
-                index: 1,
-                value: 'USA'
+            { summaryType: 'count', area: 'data' }
+        ],
+        store: this.testStore
+    });
+    const loadResult = {
+        columns: [{
+            index: 1,
+            value: 'USA'
+        }, {
+            index: 5,
+            value: 'Canada'
+        }, {
+            index: 6,
+            value: 'Brazil',
+            children: [{
+                index: 7,
+                value: 'Campinas'
             }, {
-                index: 5,
-                value: 'Canada'
-            }, {
-                index: 6,
-                value: 'Brazil',
-                children: [{
-                    index: 7,
-                    value: 'Campinas'
-                }, {
-                    index: 8,
-                    value: 'Sao Paulo'
-                }]
-            }],
-            rows: [{
-                index: 1,
-                value: 1991
-            },
-            {
-                index: 2,
-                value: 1991
-            },
-            {
-                index: 3,
-                value: 1985
-            }],
-            values: [[1]],
-            grandTotalColumnIndex: 0,
-            grandTotalRowIndex: 0
-        };
+                index: 8,
+                value: 'Sao Paulo'
+            }]
+        }],
+        rows: [{
+            index: 1,
+            value: 1991
+        },
+        {
+            index: 2,
+            value: 1991
+        },
+        {
+            index: 3,
+            value: 1985
+        }],
+        values: [[1]],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    };
 
     def.resolve(loadResult);
 
@@ -4742,7 +4742,7 @@ QUnit.test('Sort by summary with path', function(assert) {
         ]
     }));
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Count', area: 'row', sortBySummaryPath: [1] },
             { dataField: 'ShipVia', area: 'column' },
@@ -4751,7 +4751,7 @@ QUnit.test('Sort by summary with path', function(assert) {
         store: this.testStore
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 3);
     assert.strictEqual(data.rows[0].value, 'B');
@@ -4760,10 +4760,10 @@ QUnit.test('Sort by summary with path', function(assert) {
 });
 
 QUnit.test('Sorting with null values', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipVia', area: 'row', sortOrder: 'asc' },
             { summaryType: 'count', area: 'data' }
@@ -4771,7 +4771,7 @@ QUnit.test('Sorting with null values', function(assert) {
         store: this.testStore
     });
 
-    var storeData = {
+    const storeData = {
         columns: [],
         rows: [
             { value: null, index: 1 },
@@ -4800,7 +4800,7 @@ QUnit.test('Sorting with null values', function(assert) {
 
 QUnit.module('Sorting by summary', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.XmlaStore = XmlaStore;
         this.testStore = sinon.createStubInstance(that.XmlaStore);
         executeAsyncMock.setup();
@@ -4811,7 +4811,7 @@ QUnit.module('Sorting by summary', {
 });
 
 QUnit.test('Sort by summary Field with summaryType', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', sortOrder: 'asc', sortBySummaryField: 'Freight (Sum)', area: 'row' },
 
@@ -4824,7 +4824,7 @@ QUnit.test('Sort by summary Field with summaryType', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.deepEqual(prepareLoadedData(data.rows), [
         {
@@ -4915,7 +4915,7 @@ QUnit.test('Sort by summary Field with summaryType', function(assert) {
 });
 
 QUnit.test('Sort row by summary Field with summaryType', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', sortOrder: 'asc', sortBySummaryField: 'Freight (Sum)', area: 'column' },
 
@@ -4928,7 +4928,7 @@ QUnit.test('Sort row by summary Field with summaryType', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.deepEqual(prepareLoadedData(data.columns), [
         {
@@ -5019,7 +5019,7 @@ QUnit.test('Sort row by summary Field with summaryType', function(assert) {
 });
 
 QUnit.test('Sort by summary second level', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', expanded: true, area: 'row' },
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Freight (Avg)', area: 'row' },
@@ -5033,7 +5033,7 @@ QUnit.test('Sort by summary second level', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 21);
     assert.strictEqual(data.rows[0].value, 'Argentina');
@@ -5094,7 +5094,7 @@ QUnit.test('Sort by summary second level', function(assert) {
 });
 
 QUnit.test('Sort by summary with path', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
 
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Freight (Avg)', area: 'row', sortBySummaryPath: [1] },
@@ -5110,7 +5110,7 @@ QUnit.test('Sort by summary with path', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 12);
     assert.strictEqual(data.rows[0].value, 'Kirkland');
@@ -5119,7 +5119,7 @@ QUnit.test('Sort by summary with path', function(assert) {
 });
 
 QUnit.test('Sort by summary Field with empty path', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', sortOrder: 'asc', sortBySummaryField: 'Freight (Sum)', area: 'row', sortBySummaryPath: [] },
 
@@ -5132,7 +5132,7 @@ QUnit.test('Sort by summary Field with empty path', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.deepEqual(prepareLoadedData(data.rows), [
         {
@@ -5223,7 +5223,7 @@ QUnit.test('Sort by summary Field with empty path', function(assert) {
 });
 
 QUnit.test('Sort by summary with wrong path', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
 
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Freight (Avg)', area: 'row', sortBySummaryPath: [1996, 2] },
@@ -5239,7 +5239,7 @@ QUnit.test('Sort by summary with wrong path', function(assert) {
         store: window.orders
     });
 
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 12);
     assert.strictEqual(data.rows[0].value, 'Albuquerque');
@@ -5250,7 +5250,7 @@ QUnit.test('Sort by summary with wrong path', function(assert) {
 });
 
 QUnit.test('Sort by summary with path expand item', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Freight (Avg)', area: 'row', sortBySummaryPath: [1996, 2] },
 
@@ -5269,7 +5269,7 @@ QUnit.test('Sort by summary with path expand item', function(assert) {
     // act
     dataSource.expandHeaderItem('column', [1996]);
     // assert
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 7);
     assert.strictEqual(data.rows[0].value, 'Anchorage');
@@ -5281,7 +5281,7 @@ QUnit.test('Sort by summary with path expand item', function(assert) {
 });
 
 QUnit.test('Sort by summary with path collapse item', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCity', sortOrder: 'asc', sortBySummaryField: 'Freight (Avg)', area: 'row', sortBySummaryPath: [1996, 2] },
 
@@ -5300,7 +5300,7 @@ QUnit.test('Sort by summary with path collapse item', function(assert) {
     // Act
     dataSource.collapseHeaderItem('column', [1996]);
     // assert
-    var data = dataSource.getData();
+    const data = dataSource.getData();
 
     assert.strictEqual(data.rows.length, 7);
     assert.strictEqual(data.rows[0].value, 'Albuquerque');
@@ -5315,7 +5315,7 @@ QUnit.test('Sort by summary with path collapse item', function(assert) {
 
 QUnit.module('Apply summary mode', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         defaultEnvironment.beforeEach.apply(this, arguments);
 
         sinon.stub(summaryDisplayModes, 'applyDisplaySummaryMode', function(descriptions, data) {
@@ -5334,11 +5334,11 @@ QUnit.module('Apply summary mode', {
 });
 
 QUnit.test('apply Display Summary Mode when expressions were not used', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column' },
 
@@ -5383,7 +5383,7 @@ QUnit.test('apply Display Summary Mode when expressions were not used', function
 
 QUnit.test('load fields without area if it is used in calculateSummaryValue', function(assert) {
     // act
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Field1', caption: 'Field1', visible: false },
             { dataField: '[Product].[Category]', area: 'column', areaIndex: 0 },
@@ -5412,7 +5412,7 @@ QUnit.test('load fields without area if it is used in calculateSummaryValue', fu
     });
 
     // assert
-    var dataFields = prepareFields(this.testStore.load.lastCall.args[0].values);
+    const dataFields = prepareFields(this.testStore.load.lastCall.args[0].values);
     assert.equal(dataFields.length, 2);
     assert.equal(dataFields[0].dataField, '[Measures].[Customer Count]');
     assert.equal(dataFields[1].dataField, 'Field1');
@@ -5422,11 +5422,11 @@ QUnit.test('load fields without area if it is used in calculateSummaryValue', fu
 
 
 QUnit.test('apply Display Summary Mode when expressions were used', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column' },
             { dataField: 'ShipVia', area: 'row' },
@@ -5487,18 +5487,18 @@ QUnit.test('apply Display Summary Mode when expressions were used', function(ass
 
     assert.ok(summaryDisplayModes.applyDisplaySummaryMode.calledOnce);
 
-    var descriptions = this.testStore.load.lastCall.args[0];
+    const descriptions = this.testStore.load.lastCall.args[0];
     delete descriptions.columnExpandedPaths;
     delete descriptions.rowExpandedPaths;
     assert.deepEqual(summaryDisplayModes.applyDisplaySummaryMode.lastCall.args[0], descriptions);
 });
 
 QUnit.test('apply Display Summary Mode when summaryDisplayType was used', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column' },
 
@@ -5561,11 +5561,11 @@ QUnit.test('apply Display Summary Mode when summaryDisplayType was used', functi
 });
 
 QUnit.test('apply Display Summary Mode when runningTotal is used', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column' },
 
@@ -5630,11 +5630,11 @@ QUnit.test('apply Display Summary Mode when runningTotal is used', function(asse
 });
 
 QUnit.test('apply Display Summary Mode when expressions were used and data is sorted', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'ShipCountry', area: 'column', sortBy: 'displayText', sortOrder: 'desc' },
 
@@ -5691,11 +5691,11 @@ QUnit.test('apply Display Summary Mode when expressions were used and data is so
 });
 
 QUnit.test('apply Display Summary Mode when expressions were used when data sorted with sorting method', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             {
                 dataField: 'ShipCountry', area: 'column', sortOrder: 'desc', sortingMethod: function(a, b) {
@@ -5770,18 +5770,18 @@ QUnit.test('Get current State. DataSource is not loaded', function(assert) {
     this.testStore.load.returns($.Deferred());
     this.testStore.getFields.returns($.Deferred());
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'desc' }, { dataField: 'SubCategory', area: 'column', areaIndex: 1, expanded: true, }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortBySummaryPath: ['sortPath'], sortBySummaryField: '[Measures].[Customer Count]', sortOrder: 'asc' }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1, sortBy: 'text' }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([{ dataField: 'Field1', filterValues: [1, 2, 3, 4], filterType: 'exclude' }]),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'desc' }, { dataField: 'SubCategory', area: 'column', areaIndex: 1, expanded: true, }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortBySummaryPath: ['sortPath'], sortBySummaryField: '[Measures].[Customer Count]', sortOrder: 'asc' }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1, sortBy: 'text' }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([{ dataField: 'Field1', filterValues: [1, 2, 3, 4], filterType: 'exclude' }]),
+        store: this.testStore
+    });
 
     // act
-    var state = dataSource.state();
+    const state = dataSource.state();
 
     assert.ok(state);
     assert.ok(state.fields);
@@ -5793,19 +5793,19 @@ QUnit.test('Get current State. DataSource is not loaded', function(assert) {
 });
 
 QUnit.test('Get current State', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'desc', name: 'CategoryField' }, { dataField: 'SubCategory', area: 'column', areaIndex: 1, expanded: true }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortBySummaryPath: ['sortPath'], sortBySummaryField: '[Measures].[Customer Count]', sortOrder: 'asc' }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1, sortBy: 'text' }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0, summaryType: 'sum', summaryDisplayMode: 'absoluteVariation' }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([{ dataField: 'Field1', filterValues: [1, 2, 3, 4], filterType: 'exclude' }]),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'desc', name: 'CategoryField' }, { dataField: 'SubCategory', area: 'column', areaIndex: 1, expanded: true }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortBySummaryPath: ['sortPath'], sortBySummaryField: '[Measures].[Customer Count]', sortOrder: 'asc' }, { dataField: 'Month', area: 'row', areaIndex: 1 }, { dataField: 'Day', area: 'row', areaIndex: 1, sortBy: 'text' }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0, summaryType: 'sum', summaryDisplayMode: 'absoluteVariation' }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([{ dataField: 'Field1', filterValues: [1, 2, 3, 4], filterType: 'exclude' }]),
+        store: this.testStore
+    });
 
     def.resolve({
         columns: [{
@@ -5858,7 +5858,7 @@ QUnit.test('Get current State', function(assert) {
     });
 
     // act
-    var state = dataSource.state();
+    const state = dataSource.state();
 
     assert.ok(state);
     assert.ok(state.fields);
@@ -5983,23 +5983,23 @@ QUnit.test('Get current State', function(assert) {
 });
 
 QUnit.test('Set State', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
-                { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
-                { dataField: 'SubCategory' },
-                { dataField: 'Day', sortBy: 'value' }
-            ]),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
+            { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
+            { dataField: 'SubCategory' },
+            { dataField: 'Day', sortBy: 'value' }
+        ]),
+        store: this.testStore
+    });
 
     def.resolve({
         columns: [{
@@ -6242,7 +6242,7 @@ QUnit.test('Set State', function(assert) {
 });
 
 QUnit.test('T399271: dxPivotGrid - It is impossible to apply the state of a grid saved in v15.2 to a grid in v16.1', function(assert) {
-    var dataSource = createDataSource({
+    const dataSource = createDataSource({
         fields: [
             { dataField: 'Field1', summaryType: 'sum', summaryDisplayMode: 'percentOfGrandTotal', area: 'row' },
             { dataField: 'Field2', summaryType: 'sum', summaryDisplayMode: 'percentOfGrandTotal' },
@@ -6313,22 +6313,22 @@ QUnit.test('T399271: dxPivotGrid - It is impossible to apply the state of a grid
 
 QUnit.test('Set State. After new field have added. T389504', function(assert) {
     this.testStore.load.returns($.Deferred());
-    var fields = [
-            { dataField: 'Field1', groupName: 'Group1', area: 'column', name: 'Name1' },
-            { groupName: 'Group1', groupIndex: 0 },
-            { groupName: 'Group1', dataField: 'Field2', groupIndex: 1 },
-            { dataField: 'Field3', area: 'row' },
-            { dataField: 'Field4' },
-            { dataField: 'Field5', area: 'data', summaryType: 'sum' },
-            { summaryType: 'count' },
-            { dataField: 'Field5', area: 'data', summaryType: 'avg' }
-        ],
-        dataSource = createDataSource({
-            fields: fields,
-            store: this.testStore
-        });
+    const fields = [
+        { dataField: 'Field1', groupName: 'Group1', area: 'column', name: 'Name1' },
+        { groupName: 'Group1', groupIndex: 0 },
+        { groupName: 'Group1', dataField: 'Field2', groupIndex: 1 },
+        { dataField: 'Field3', area: 'row' },
+        { dataField: 'Field4' },
+        { dataField: 'Field5', area: 'data', summaryType: 'sum' },
+        { summaryType: 'count' },
+        { dataField: 'Field5', area: 'data', summaryType: 'avg' }
+    ];
+    const dataSource = createDataSource({
+        fields: fields,
+        store: this.testStore
+    });
 
-    var state = dataSource.state();
+    const state = dataSource.state();
     dataSource.fields([{ dataField: 'Field6' }].concat(fields));
 
     // act
@@ -6496,23 +6496,23 @@ QUnit.test('Set State. After new field have added. T389504', function(assert) {
 });
 
 QUnit.test('Set State state fields count less fields count', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
-                { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
-                { dataField: 'SubCategory' },
-                { dataField: 'Day', sortBy: 'value' }
-            ]),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
+            { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
+            { dataField: 'SubCategory' },
+            { dataField: 'Day', sortBy: 'value' }
+        ]),
+        store: this.testStore
+    });
 
     def.resolve({
         columns: [{
@@ -6572,23 +6572,23 @@ QUnit.test('Set State state fields count less fields count', function(assert) {
 });
 
 QUnit.test('Set State without fields', function(assert) {
-    var def = $.Deferred();
+    const def = $.Deferred();
 
     this.testStore.load.returns(def);
 
-    var descriptions = {
-            columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
-            rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
-            values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
-        },
-        dataSource = createDataSource({
-            fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
-                { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
-                { dataField: 'SubCategory' },
-                { dataField: 'Day', sortBy: 'value' }
-            ]),
-            store: this.testStore
-        });
+    const descriptions = {
+        columns: [{ dataField: 'Category', area: 'column', areaIndex: 0, sortOrder: 'asc' }, { dataField: 'Month', area: 'column', areaIndex: 1 }],
+        rows: [{ dataField: 'Year', area: 'row', areaIndex: 0, sortOrder: 'desc' }],
+        values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count', area: 'data', areaIndex: 0 }]
+    };
+    const dataSource = createDataSource({
+        fields: descriptions.rows.concat(descriptions.values.concat(descriptions.columns)).concat([
+            { dataField: 'Field1', filterValues: [1, 2], filterType: 'exclude' },
+            { dataField: 'SubCategory' },
+            { dataField: 'Day', sortBy: 'value' }
+        ]),
+        store: this.testStore
+    });
 
     def.resolve({
         columns: [{
@@ -6635,9 +6635,9 @@ QUnit.test('Set State without fields', function(assert) {
 });
 
 QUnit.test('set state when store fields not loaded', function(assert) {
-    var retrieveFieldsDef = $.Deferred(),
-        fieldsPrepared = sinon.stub(),
-        dataSource;
+    const retrieveFieldsDef = $.Deferred();
+    const fieldsPrepared = sinon.stub();
+    let dataSource;
 
     this.testStore.getFields.returns(retrieveFieldsDef);
     // act
@@ -6676,7 +6676,7 @@ QUnit.test('set state when store fields not loaded', function(assert) {
 });
 
 QUnit.test('Set default state', function(assert) {
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         fields: [
             { dataField: 'Field1', area: 'row' },
             { dataField: 'Field2', area: 'column', sortOrder: 'asc' }
@@ -6708,7 +6708,7 @@ QUnit.test('Set default state', function(assert) {
 
     assert.ok(this.testStore.load.calledOnce);
 
-    var storeLoadArgs = this.testStore.load.lastCall.args[0];
+    const storeLoadArgs = this.testStore.load.lastCall.args[0];
 
     assert.deepEqual(storeLoadArgs, {
         columns: [dataSource.fields()[1]],
@@ -6721,7 +6721,7 @@ QUnit.test('Set default state', function(assert) {
 });
 
 QUnit.test('T388396. update auto generated caption if state is reset', function(assert) {
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         fields: [
             { dataField: 'Field1', area: 'data', summaryType: 'sum' },
         ],
@@ -6749,7 +6749,7 @@ QUnit.test('reset expanded paths', function(assert) {
         values: []
     }));
 
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         fields: [
             { dataField: 'Field1', area: 'row' },
             { dataField: 'Field2', area: 'row' },
@@ -6770,7 +6770,7 @@ QUnit.test('reset expanded paths', function(assert) {
 
     assert.ok(this.testStore.load.calledOnce);
 
-    var storeLoadArgs = this.testStore.load.lastCall.args[0];
+    const storeLoadArgs = this.testStore.load.lastCall.args[0];
 
     assert.deepEqual(storeLoadArgs.rowExpandedPaths, []);
     assert.deepEqual(storeLoadArgs.columnExpandedPaths, []);
@@ -6779,9 +6779,9 @@ QUnit.test('reset expanded paths', function(assert) {
 QUnit.module('Stores');
 
 QUnit.test('All stores implement correct interface', function(assert) {
-    var methods = ['load', 'key', 'createDrillDownDataSource', 'getFields', 'filter'];
+    const methods = ['load', 'key', 'createDrillDownDataSource', 'getFields', 'filter'];
     $.each([XmlaStore, LocalStore, RemoteStore], function(i, Store) {
-        var store = new Store({});
+        const store = new Store({});
 
         $.each(methods, function(_, methodName) {
             assert.ok(typeof store[methodName] === 'function', i + ' Store should implement ' + methodName);
