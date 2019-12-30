@@ -855,7 +855,6 @@ QUnit.module('check action buttons events', {
     QUnit.test('trigger and args', function(assert) {
         const contentReadyStub = sinon.stub();
         const contentReadyHandlerStub = sinon.stub();
-        const initializedStub = sinon.stub();
         const disposingHandlerStub = sinon.stub();
         const initializedHandlerStub = sinon.stub();
         const disposingStub = sinon.stub();
@@ -869,7 +868,6 @@ QUnit.module('check action buttons events', {
             })
             .dxSpeedDialAction('instance')
             .on('contentReady', contentReadyStub)
-            .on('initialized', initializedStub)
             .on('disposing', disposingStub)
             .on('click', clickStub);
 
@@ -896,7 +894,6 @@ QUnit.module('check action buttons events', {
 
         const contentReadyTwoStub = sinon.stub();
         const contentReadyTwoHandlerStub = sinon.stub();
-        const initializedTwoStub = sinon.stub();
         const disposingTwoHandlerStub = sinon.stub();
         const initializedTwoHandlerStub = sinon.stub();
         const disposingTwoStub = sinon.stub();
@@ -909,7 +906,6 @@ QUnit.module('check action buttons events', {
             })
             .dxSpeedDialAction('instance')
             .on('contentReady', contentReadyTwoStub)
-            .on('initialized', initializedTwoStub)
             .on('disposing', disposingTwoStub);
 
 
