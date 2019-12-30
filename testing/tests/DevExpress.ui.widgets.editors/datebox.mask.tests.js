@@ -590,7 +590,7 @@ if(devices.real().deviceType === 'desktop') {
             this.keyboard.type('1');
             assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
-            this.instance.focusout();
+            this.$input.focusout();
             this.keyboard.type('2');
             assert.strictEqual(this.instance.option('text'), 'February 10 2012', 'search value and position was cleared');
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
