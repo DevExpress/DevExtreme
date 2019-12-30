@@ -8,7 +8,7 @@ const SWATCH_SELECTOR_PREFIX = '.dx-swatch-';
 
 const createModifyVars = modifyVars => {
     let result = '';
-    for(let key in modifyVars) {
+    for(const key in modifyVars) {
         if(Object.prototype.hasOwnProperty.call(modifyVars, key)) {
             result += `@${key}: ${modifyVars[key]};`;
         }
@@ -36,9 +36,9 @@ class LessMetadataPreCompiler {
 
     process(less) {
         less += '#devexpress-metadata-compiler{';
-        for(let key in this._metadata) {
+        for(const key in this._metadata) {
             if(Object.prototype.hasOwnProperty.call(this._metadata, key)) {
-                let value = this._metadata[key];
+                const value = this._metadata[key];
                 less += key + ': ' + value + ';';
             }
         }
@@ -55,10 +55,10 @@ class LessMetadataPostCompiler {
     }
 
     process(css) {
-        let metadataRegex = new RegExp('(?:' + this.swatchSelector + '\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}');
+        const metadataRegex = new RegExp('(?:' + this.swatchSelector + '\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}');
         metadataRegex.exec(css)[1].split(';').forEach(item => {
-            let rule = getCompiledRule(item);
-            for(let key in rule) {
+            const rule = getCompiledRule(item);
+            for(const key in rule) {
                 if(Object.prototype.hasOwnProperty.call(rule, key)) {
                     this._metadata[key] = rule[key];
                 }
@@ -86,8 +86,8 @@ class LessMetadataPostCompiler {
 
 const getCompiledRule = cssString => {
     let result = {};
-    let ruleRegex = /([-\w\d]*)\s*:\s*(.*)\s*/;
-    let matches = ruleRegex.exec(cssString);
+    const ruleRegex = /([-\w\d]*)\s*:\s*(.*)\s*/;
+    const matches = ruleRegex.exec(cssString);
     if(matches) {
         result['@' + matches[1]] = matches[2];
     } else {
@@ -131,15 +131,15 @@ class LessTemplateLoader {
         return new Promise((resolve, reject) => {
             const browsersList = require('../package.json').browserslist;
             const modulesHandler = new ModulesHandler(widgets);
-            let compiledMetadata = {};
-            let options = {};
+            const compiledMetadata = {};
+            const options = {};
 
             // while using `less/lib/less-browser`, the global options are not passed to the `render` method, lets do it by ourselves
             if(this.lessCompiler.options && typeof (this.lessCompiler.options) === 'object') {
                 Object.assign(options, this.lessCompiler.options);
             }
 
-            let customOptions = {
+            const customOptions = {
                 modifyVars: modifyVars,
                 plugins: [
                     new LessPluginAutoPrefix({ browsers: browsersList }),
@@ -197,7 +197,7 @@ class LessTemplateLoader {
 
     analyzeBootstrapTheme(theme, colorScheme, metadata, bootstrapMetadata, customLessContent, version) {
         let metadataVariables = '';
-        for(let key in bootstrapMetadata) {
+        for(const key in bootstrapMetadata) {
             if(Object.prototype.hasOwnProperty.call(bootstrapMetadata, key)) {
                 metadataVariables += bootstrapMetadata[key] + ': dx-empty' + (version === 4 ? ' !default' : '') + ';';
             }
@@ -205,11 +205,11 @@ class LessTemplateLoader {
 
         return new Promise(resolve => {
             const processDxTheme = (data) => {
-                let compiledMetadata = data.compiledMetadata;
-                let modifyVars = {};
-                for(let key in compiledMetadata) {
+                const compiledMetadata = data.compiledMetadata;
+                const modifyVars = {};
+                for(const key in compiledMetadata) {
                     if(Object.prototype.hasOwnProperty.call(compiledMetadata, key)) {
-                        let value = compiledMetadata[key];
+                        const value = compiledMetadata[key];
                         if(value !== 'dx-empty') {
                             modifyVars[key] = value;
                         }
@@ -217,7 +217,7 @@ class LessTemplateLoader {
                 }
 
                 this._loadLess(theme, colorScheme).then(less => {
-                    let metadataVariables = {};
+                    const metadataVariables = {};
 
                     metadata.forEach(metaItem => {
                         metadataVariables[metaItem.Key.replace('@', '')] = metaItem.Key;
@@ -236,8 +236,8 @@ class LessTemplateLoader {
             if(version === 3) {
                 this.compileLess(metadataVariables + customLessContent, {}, bootstrapMetadata).then(processDxTheme);
             } else if(version === 4) {
-                let defaultBootstrapVariablesUrl = this.bootstrapScssPath + '_variables.scss',
-                    defaultBootstrapFunctionsUrl = this.bootstrapScssPath + '_functions.scss';
+                const defaultBootstrapVariablesUrl = this.bootstrapScssPath + '_variables.scss';
+                const defaultBootstrapFunctionsUrl = this.bootstrapScssPath + '_functions.scss';
 
                 Promise.all([this.readFile(defaultBootstrapFunctionsUrl), this.readFile(defaultBootstrapVariablesUrl)])
                     .then(files => {
@@ -259,9 +259,9 @@ class LessTemplateLoader {
     }
 
     _makeInfoHeader() {
-        let generatedBy = '* Generated by the DevExpress ThemeBuilder';
-        let versionString = '* Version: ' + this.version;
-        let link = '* http://js.devexpress.com/ThemeBuilder/';
+        const generatedBy = '* Generated by the DevExpress ThemeBuilder';
+        const versionString = '* Version: ' + this.version;
+        const link = '* http://js.devexpress.com/ThemeBuilder/';
 
         return ['/*', generatedBy, versionString, link, '*/'].join('\n') + '\n\n';
     }

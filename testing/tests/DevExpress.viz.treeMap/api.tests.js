@@ -1,11 +1,11 @@
-var common = require('./commonParts/common.js');
+const common = require('./commonParts/common.js');
 
 require('viz/tree_map/api');
 
 QUnit.module('Basics', common.environment);
 
 QUnit.test('root', function(assert) {
-    var root = common.createWidget().getRootNode();
+    const root = common.createWidget().getRootNode();
 
     assert.strictEqual(root.getParent(), null, 'parent');
     assert.strictEqual(root.getChildrenCount(), 0, 'count');
@@ -13,7 +13,7 @@ QUnit.test('root', function(assert) {
 });
 
 QUnit.test('elements / one level', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }]
     }).getRootNode();
 
@@ -24,7 +24,7 @@ QUnit.test('elements / one level', function(assert) {
 });
 
 QUnit.test('elements / two levels', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -38,20 +38,20 @@ QUnit.test('elements / two levels', function(assert) {
 });
 
 QUnit.test('all nodes', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
             items: [{ value: 2 }, { value: 3 }]
         }]
     });
-    var root = widget.getRootNode();
+    const root = widget.getRootNode();
 
     assert.deepEqual(root.getAllNodes(), [root.getChild(0), root.getChild(0).getChild(0), root.getChild(1), root.getChild(1).getChild(0), root.getChild(1).getChild(1)], 'all nodes');
 });
 
 QUnit.test('root fields', function(assert) {
-    var root = common.createWidget().getRootNode();
+    const root = common.createWidget().getRootNode();
 
     assert.strictEqual(root.level, -1, 'root level');
     assert.strictEqual(root.index, -1, 'root index');
@@ -59,12 +59,12 @@ QUnit.test('root fields', function(assert) {
 });
 
 QUnit.test('elements fields', function(assert) {
-    var root,
-        dataSource = [{
-            items: [{ value: 1 }]
-        }, {
-            items: [{ value: 2 }, { value: 3 }]
-        }];
+    let root;
+    const dataSource = [{
+        items: [{ value: 1 }]
+    }, {
+        items: [{ value: 2 }, { value: 3 }]
+    }];
     root = common.createWidget({ dataSource: dataSource }).getRootNode();
 
     assert.strictEqual(root.getChild(0).level, 0, 'tile 1 - level');
@@ -89,7 +89,7 @@ QUnit.test('elements fields', function(assert) {
 });
 
 QUnit.test('isLeaf and isActive', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -106,7 +106,7 @@ QUnit.test('isLeaf and isActive', function(assert) {
 });
 
 QUnit.test('isLeaf and isActive with max depth', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             items: [{ value: 1 }]
         }, {
@@ -124,7 +124,7 @@ QUnit.test('isLeaf and isActive with max depth', function(assert) {
 });
 
 QUnit.test('get value and label', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             value: 1, name: 'Text 1'
         }, {
@@ -141,14 +141,14 @@ QUnit.test('get value and label', function(assert) {
 });
 
 QUnit.test('Update values - batch update (non completed)', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1
         }, {
             value: 2
         }]
     });
-    var root = widget.getRootNode();
+    const root = widget.getRootNode();
     this.resetTilesAttr();
 
     widget.beginUpdate();
@@ -158,14 +158,14 @@ QUnit.test('Update values - batch update (non completed)', function(assert) {
     assert.strictEqual(root.value(), 6, 'root - value');
     assert.strictEqual(root.getChild(0).value(), 3, 'node 1 - value');
     assert.strictEqual(root.getChild(1).value(), 3, 'node 2 - value');
-    var i;
+    let i;
     for(i = 0; i < this.tileCount(); ++i) {
         assert.strictEqual(this.tile(i).attr.callCount, 0, 'node ' + (i + 1) + ' - settings are not updated');
     }
 });
 
 QUnit.test('Update values - batch update (completed)', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -179,14 +179,14 @@ QUnit.test('Update values - batch update (completed)', function(assert) {
     widget.getRootNode().getChild(1).value(3);
     widget.endUpdate();
 
-    var i;
+    let i;
     for(i = 0; i < this.tileCount(); ++i) {
         assert.strictEqual(this.tile(i).attr.callCount, 1, 'node ' + (i + 1) + ' - settings are updated');
     }
 });
 
 QUnit.test('Update values - non batch update', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -198,14 +198,14 @@ QUnit.test('Update values - non batch update', function(assert) {
     widget.getRootNode().getChild(0).value(3);
     widget.getRootNode().getChild(1).value(3);
 
-    var i;
+    let i;
     for(i = 0; i < this.tileCount(); ++i) {
         assert.strictEqual(this.tile(i).attr.callCount, 2, 'node ' + (i + 1) + ' - settings are updated');
     }
 });
 
 QUnit.test('Update labels', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1, name: 'old 1'
         }, {
@@ -220,7 +220,7 @@ QUnit.test('Update labels', function(assert) {
     widget.endUpdate();
 
     assert.strictEqual(this.renderer.text.callCount, 2, 'text count');
-    var i;
+    let i;
     for(i = 0; i < 2; ++i) {
         assert.strictEqual(this.renderer.text.returnValues[i].attr.callCount, 2, 'node ' + (i + 1) + ' - settings call count');
     }
@@ -233,14 +233,14 @@ QUnit.test('Update labels', function(assert) {
 });
 
 QUnit.test('Reset nodes', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1, name: 'Text 1'
         }, {
             value: 2, name: 'Text 2'
         }]
     });
-    var root = widget.getRootNode();
+    const root = widget.getRootNode();
 
     widget.resetNodes();
 
@@ -248,7 +248,7 @@ QUnit.test('Reset nodes', function(assert) {
 });
 
 QUnit.test('Customize node / tile', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -274,7 +274,7 @@ QUnit.test('Customize node / tile', function(assert) {
 });
 
 QUnit.test('Customize node / group', function(assert) {
-    var widget = common.createWidget({
+    const widget = common.createWidget({
         dataSource: [{
             items: [{
                 value: 1
@@ -308,7 +308,7 @@ QUnit.test('Customize node / group', function(assert) {
 });
 
 QUnit.test('Customize / changes are accumulated', function(assert) {
-    var node = common.createWidget({
+    const node = common.createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -344,22 +344,22 @@ QUnit.test('Customize / changes are accumulated', function(assert) {
 });
 
 QUnit.test('Nodes initialized event', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{
-                value: 1
-            }, {
-                value: 2
-            }],
-            onNodesInitialized: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{
+            value: 1
+        }, {
+            value: 2
+        }],
+        onNodesInitialized: spy
+    });
 
     assert.strictEqual(spy.callCount, 1, 'events count');
     assert.strictEqual(spy.lastCall.args[0].root, widget.getRootNode(), 'event arg - root');
 });
 
 QUnit.test('Reset customization', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             value: 1
         }, {
@@ -393,7 +393,7 @@ QUnit.test('Nodes rendering event', function(assert) {
         }],
         maxDepth: 2,
         onNodesRendering: function(e) {
-            var root = e.node;
+            const root = e.node;
             assert.strictEqual(root.getChild(0).getChild(0).isLeaf(), true, 'tile 1-1');
             assert.strictEqual(root.getChild(0).isLeaf(), false, 'tile 1');
             assert.strictEqual(root.getChild(1).isLeaf(), true, 'tile 2');
@@ -403,7 +403,7 @@ QUnit.test('Nodes rendering event', function(assert) {
 });
 
 QUnit.test('Customize - disabled labels', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }],
@@ -423,7 +423,7 @@ QUnit.test('Customize - disabled labels', function(assert) {
 });
 
 QUnit.test('Customize - hide label', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }]
@@ -438,7 +438,7 @@ QUnit.test('Customize - hide label', function(assert) {
 });
 
 QUnit.test('Customize - show initially hidden label', function(assert) {
-    var root = common.createWidget({
+    const root = common.createWidget({
         dataSource: [{
             value: 1, name: 'Tile 1'
         }],

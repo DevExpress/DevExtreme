@@ -7,7 +7,7 @@ const Image = quill.import('formats/image');
 class ExtImage extends Image {
     static create(data) {
         const SRC = data && data.src || data;
-        let node = super.create(SRC);
+        const node = super.create(SRC);
 
         if(isObject(data)) {
             const setAttribute = (attr, value) => {
@@ -23,7 +23,7 @@ class ExtImage extends Image {
     }
 
     static formats(domNode) {
-        let formats = super.formats(domNode);
+        const formats = super.formats(domNode);
 
         formats['imageSrc'] = domNode.getAttribute('src');
 

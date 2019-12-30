@@ -1,6 +1,6 @@
-var $ = require('jquery'),
-    GoogleProvider = require('ui/map/provider.dynamic.google'),
-    memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
+const $ = require('jquery');
+const GoogleProvider = require('ui/map/provider.dynamic.google');
+const memoryLeaksHelper = require('../../helpers/memoryLeaksHelper.js');
 
 require('bundles/modules/parts/widgets-all');
 
@@ -19,17 +19,17 @@ $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
         QUnit.test(componentName + ' should not leak memory by not removing additional dom elements after disposing', function(assert) {
             // NOTE: $.getScript() create <script> element
-            var originalGetScript = $.fn.getScript;
+            const originalGetScript = $.fn.getScript;
             $.getScript = function() {
                 return $.Deferred().promise();
             };
 
             try {
-                var originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets(),
-                    testNode = memoryLeaksHelper.createTestNode(),
-                    newDomElements,
-                    ignorePatterns,
-                    errorMessage;
+                const originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
+                const testNode = memoryLeaksHelper.createTestNode();
+                let newDomElements;
+                let ignorePatterns;
+                let errorMessage;
 
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
                 this.clock.tick(0);

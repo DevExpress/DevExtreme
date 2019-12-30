@@ -1,4 +1,4 @@
-var variableWrapper = require('core/utils/variable_wrapper');
+const variableWrapper = require('core/utils/variable_wrapper');
 
 QUnit.test('Base wrapper methods', function(assert) {
     assert.strictEqual(variableWrapper.isWrapped(3), false, 'isWrapped method');
@@ -8,9 +8,9 @@ QUnit.test('Base wrapper methods', function(assert) {
 });
 
 QUnit.test('Custom wrapper methods', function(assert) {
-    var log = {};
+    const log = {};
 
-    var mockVariableWrapper = {
+    const mockVariableWrapper = {
         isWrapped: function(value) {
             log.method = 'isWrapped',
             log.args = arguments;

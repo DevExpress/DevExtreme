@@ -1,4 +1,4 @@
-var compare = require('core/utils/version').compare;
+const compare = require('core/utils/version').compare;
 
 QUnit.module('version');
 

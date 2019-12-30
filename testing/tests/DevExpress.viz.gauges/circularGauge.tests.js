@@ -1,18 +1,18 @@
 /* global createTestContainer */
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    dxCircularGauge = require('viz/circular_gauge'),
-    factory = dxCircularGauge.prototype._factory,
-    axisModule = require('viz/axes/base_axis'),
-    Class = require('core/class'),
-    rendererModule = require('viz/core/renderers/renderer');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const dxCircularGauge = require('viz/circular_gauge');
+const factory = dxCircularGauge.prototype._factory;
+const axisModule = require('viz/axes/base_axis');
+const Class = require('core/class');
+const rendererModule = require('viz/core/renderers/renderer');
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 
 factory.RangeContainer = function(parameters) {
     parameters.className = 'test-range-container';
-    var item = new TestElement(parameters);
+    const item = new TestElement(parameters);
     item.measure = function(layout) {
         return {
             min: layout.radius,
@@ -23,7 +23,7 @@ factory.RangeContainer = function(parameters) {
 };
 
 factory.createIndicator = function(parameters) {
-    var item = new TestPointerElement(parameters);
+    const item = new TestPointerElement(parameters);
     if(parameters.className === 'dxg-value-indicator') {
         item.measure = function(layout) {
             return {
@@ -45,7 +45,7 @@ factory.createIndicator = function(parameters) {
     return item;
 };
 
-var TestElement = Class.inherit({
+const TestElement = Class.inherit({
     ctor: function(parameters) {
         this.renderer = parameters.renderer;
         this.translator = parameters.translator;
@@ -87,7 +87,7 @@ var TestElement = Class.inherit({
     }
 });
 
-var TestPointerElement = TestElement.inherit({
+const TestPointerElement = TestElement.inherit({
     value: function(val) {
         if(arguments.length) {
             val = Number(val);
@@ -105,7 +105,7 @@ var TestPointerElement = TestElement.inherit({
     rendererModule.Renderer = sinon.stub();
 
     sinon.stub(axisModule, 'Axis', function(parameters) {
-        var axis = new vizMocks.Axis(parameters);
+        const axis = new vizMocks.Axis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,
             height: 15
@@ -120,12 +120,12 @@ var TestPointerElement = TestElement.inherit({
         return axis;
     });
 
-    var environment = {
+    const environment = {
         beforeEach: function() {
             this.renderer = new vizMocks.Renderer();
             this.container = createTestContainer('#test-container', { width: 800, height: 600 });
             rendererModule.Renderer.onCall(0).returns(this.renderer);
-            var tooltipRender = new vizMocks.Renderer();
+            const tooltipRender = new vizMocks.Renderer();
             rendererModule.Renderer.onCall(1).returns(tooltipRender);
 
         },
@@ -136,7 +136,7 @@ var TestPointerElement = TestElement.inherit({
             rendererModule.Renderer.reset();
         }
     };
-    var canvas = {
+    const canvas = {
         left: 0,
         right: 0,
         top: 0,
@@ -150,7 +150,7 @@ var TestPointerElement = TestElement.inherit({
     QUnit.test('Gauge creation', function(assert) {
         new dxCircularGauge(this.container, {});
 
-        var scale = axisModule.Axis.getCall(0).returnValue;
+        const scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxg dxg-circular-gauge', 'root class');
 
@@ -269,7 +269,7 @@ var TestPointerElement = TestElement.inherit({
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
             this.check = function(assert, options, expected) {
-                var gauge = new dxCircularGauge(this.container, $.extend(true, {
+                const gauge = new dxCircularGauge(this.container, $.extend(true, {
                     scale: {
                         size: 10,
                         horizontalOffset: 23,
@@ -311,7 +311,7 @@ var TestPointerElement = TestElement.inherit({
                 assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, 'sub pointers set y');
                 assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, 'sub pointers set radius');
 
-                var scale = axisModule.Axis.getCall(0).returnValue;
+                const scale = axisModule.Axis.getCall(0).returnValue;
                 assert.deepEqual(scale.shift.getCall(0).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], 'shift scale');
                 assert.equal(scale.draw.callCount, 2, 'draw scale');
                 assert.equal(scale.measureLabels.callCount, 2, 'measure labels of scale');
@@ -424,7 +424,7 @@ var TestPointerElement = TestElement.inherit({
 
     //  B232105
     QUnit.test('Offset validation', function(assert) {
-        var gauge = new dxCircularGauge(this.container, {
+        const gauge = new dxCircularGauge(this.container, {
             scale: {
                 size: 10,
                 horizontalOffset: 23,
@@ -450,9 +450,9 @@ var TestPointerElement = TestElement.inherit({
             value: 50,
             subvalues: [10, 20]
         });
-        var x = 400,
-            y = 348,
-            radius = 316;
+        const x = 400;
+        const y = 348;
+        const radius = 316;
 
         assert.strictEqual(gauge._rangeContainer._options.x, x, 'range container x');
         assert.strictEqual(gauge._rangeContainer._options.y, y, 'range container y');
@@ -475,7 +475,7 @@ var TestPointerElement = TestElement.inherit({
     });
 
     QUnit.test('Default after apply subvalues', function(assert) {
-        var gauge = new dxCircularGauge(this.container, {
+        const gauge = new dxCircularGauge(this.container, {
             scale: {
                 size: 10,
                 horizontalOffset: 23,
@@ -503,7 +503,7 @@ var TestPointerElement = TestElement.inherit({
 
         gauge.option('subvalues', [10, 20]);
 
-        var expected = { x: 400, y: 348, radius: 311, start: 225, end: -45 };
+        const expected = { x: 400, y: 348, radius: 311, start: 225, end: -45 };
 
         assert.strictEqual(gauge._translator.getCodomainStart(), expected.start, 'translator codomain start');
         assert.strictEqual(gauge._translator.getCodomainEnd(), expected.end, 'translator codomain end');
@@ -520,7 +520,7 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, expected.y, 'sub pointers set y');
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, 'sub pointers set radius');
 
-        var scale = axisModule.Axis.getCall(0).returnValue;
+        const scale = axisModule.Axis.getCall(0).returnValue;
         assert.deepEqual(scale.shift.getCall(1).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], 'shift scale');
         assert.equal(scale.draw.callCount, 6, 'draw scale');
         assert.equal(scale.measureLabels.callCount, 6, 'measure labels of scale');

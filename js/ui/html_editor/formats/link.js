@@ -7,7 +7,7 @@ const Link = quill.import('formats/link');
 class ExtLink extends Link {
     static create(data) {
         const HREF = data && data.href || data;
-        let node = super.create(HREF);
+        const node = super.create(HREF);
 
         if(isObject(data)) {
             if(data.text) {

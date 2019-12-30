@@ -4,7 +4,7 @@
 * @type object
 * @inherits baseSeriesObject
 */
-var chartSeriesObject = {
+const chartSeriesObject = {
     /**
     * @name chartSeriesObjectFields.axis
     * @type string
@@ -37,14 +37,14 @@ var chartSeriesObject = {
     * @return chartAxisObject
     */
     getValueAxis: function() { }
-}
+};
 
 /**
 * @name chartPointAggregationInfoObject
 * @publicName aggregationInfo
 * @type object
 */
-var chartPointAggregationInfoObject = {
+const chartPointAggregationInfoObject = {
     /**
     * @name chartPointAggregationInfoObject.data
     * @type Array<any>
@@ -65,7 +65,7 @@ var chartPointAggregationInfoObject = {
     * @type any
     */
     intervalEnd: null
-}
+};
 
 /**
 * @name chartPointObject
@@ -73,7 +73,7 @@ var chartPointAggregationInfoObject = {
 * @type object
 * @inherits basePointObject
 */
-var chartPointObject = {
+const chartPointObject = {
     /**
     * @name chartPointObjectFields.aggregationInfo
     * @type chartPointAggregationInfoObject
@@ -121,7 +121,7 @@ var chartPointObject = {
 * @name chartAxisObject
 * @type object
 */
-var chartAxisObject = {
+const chartAxisObject = {
     /**
     * @name chartAxisObjectMethods.visualRange
     * @publicName visualRange()

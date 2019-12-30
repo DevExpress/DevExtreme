@@ -1,12 +1,12 @@
-var easing = require('animation/easing');
+const easing = require('animation/easing');
 
 QUnit.module('easing');
 
 QUnit.test('css transition timing func parsing', function(assert) {
-    var convert = easing.convertTransitionTimingFuncToEasing,
-        getEasing = easing.getEasing;
+    const convert = easing.convertTransitionTimingFuncToEasing;
+    const getEasing = easing.getEasing;
 
-    var easingName = convert('linear');
+    let easingName = convert('linear');
     assert.equal(easingName, 'cubicbezier_0_0_1_1');
 
     easingName = convert('swing');
@@ -25,10 +25,10 @@ QUnit.test('css transition timing func parsing', function(assert) {
 });
 
 QUnit.test('Fallback \'linear\' easing should be added in `easing` object', function(assert) {
-    var convert = easing.convertTransitionTimingFuncToEasing,
-        getEasing = easing.getEasing;
+    const convert = easing.convertTransitionTimingFuncToEasing;
+    const getEasing = easing.getEasing;
 
-    var easingName = convert('nonexistentEasing');
+    const easingName = convert('nonexistentEasing');
     assert.equal(easingName, 'linear');
     assert.equal(typeof getEasing(easingName), 'function');
 });

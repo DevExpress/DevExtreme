@@ -1,10 +1,10 @@
-var Class = require('../../core/class'),
-    deferredStrategy = require('./selection.strategy.deferred'),
-    standardStrategy = require('./selection.strategy.standard'),
-    extend = require('../../core/utils/extend').extend,
-    noop = require('../../core/utils/common').noop,
-    isDefined = require('../../core/utils/type').isDefined,
-    Deferred = require('../../core/utils/deferred').Deferred;
+const Class = require('../../core/class');
+const deferredStrategy = require('./selection.strategy.deferred');
+const standardStrategy = require('./selection.strategy.standard');
+const extend = require('../../core/utils/extend').extend;
+const noop = require('../../core/utils/common').noop;
+const isDefined = require('../../core/utils/type').isDefined;
+const Deferred = require('../../core/utils/deferred').Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -59,7 +59,7 @@ module.exports = Class.inherit({
             return this.options.selectionFilter;
         }
 
-        var filterIsChanged = this.options.selectionFilter !== value && JSON.stringify(this.options.selectionFilter) !== JSON.stringify(value);
+        const filterIsChanged = this.options.selectionFilter !== value && JSON.stringify(this.options.selectionFilter) !== JSON.stringify(value);
 
         this.options.selectionFilter = value;
 
@@ -79,7 +79,7 @@ module.exports = Class.inherit({
     },
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
-        var that = this;
+        const that = this;
 
         keys = keys || [];
         keys = Array.isArray(keys) ? keys : [keys];
@@ -109,16 +109,16 @@ module.exports = Class.inherit({
     },
 
     changeItemSelection: function(itemIndex, keys) {
-        var isSelectedItemsChanged,
-            items = this.options.plainItems(),
-            item = items[itemIndex];
+        let isSelectedItemsChanged;
+        const items = this.options.plainItems();
+        const item = items[itemIndex];
 
         if(!this.isSelectable() || !this.isDataItem(item)) {
             return false;
         }
 
-        var itemData = this.options.getItemData(item),
-            itemKey = this.options.keyOf(itemData);
+        const itemData = this.options.getItemData(item);
+        const itemKey = this.options.keyOf(itemData);
 
         keys = keys || {};
 
@@ -126,7 +126,7 @@ module.exports = Class.inherit({
             isSelectedItemsChanged = this.changeItemSelectionWhenShiftKeyPressed(itemIndex, items);
         } else if(keys.control) {
             this._resetItemSelectionWhenShiftKeyPressed();
-            var isSelected = this._selectionStrategy.isItemDataSelected(itemData);
+            const isSelected = this._selectionStrategy.isItemDataSelected(itemData);
             if(this.options.mode === 'single') {
                 this.clearSelectedItems();
             }
@@ -138,7 +138,7 @@ module.exports = Class.inherit({
             isSelectedItemsChanged = true;
         } else {
             this._resetItemSelectionWhenShiftKeyPressed();
-            var isKeysEqual = this._selectionStrategy.equalKeys(this.options.selectedItemKeys[0], itemKey);
+            const isKeysEqual = this._selectionStrategy.equalKeys(this.options.selectedItemKeys[0], itemKey);
             if(this.options.selectedItemKeys.length !== 1 || !isKeysEqual) {
                 this._setSelectedItems([itemKey], [itemData]);
                 isSelectedItemsChanged = true;
@@ -177,21 +177,21 @@ module.exports = Class.inherit({
     },
 
     changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items) {
-        var isSelectedItemsChanged = false,
-            itemIndexStep,
-            index,
-            keyOf = this.options.keyOf,
-            focusedItem = items[this._focusedItemIndex],
-            focusedData = this.options.getItemData(focusedItem),
-            focusedKey = keyOf(focusedData),
-            isFocusedItemSelected = focusedItem && this.isItemDataSelected(focusedData);
+        let isSelectedItemsChanged = false;
+        let itemIndexStep;
+        let index;
+        const keyOf = this.options.keyOf;
+        const focusedItem = items[this._focusedItemIndex];
+        const focusedData = this.options.getItemData(focusedItem);
+        const focusedKey = keyOf(focusedData);
+        const isFocusedItemSelected = focusedItem && this.isItemDataSelected(focusedData);
 
         if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
         }
 
-        var data,
-            itemKey;
+        let data;
+        let itemKey;
 
         if(this._shiftFocusedItemIndex !== this._focusedItemIndex) {
             itemIndexStep = this._focusedItemIndex < this._shiftFocusedItemIndex ? 1 : -1;
@@ -250,14 +250,14 @@ module.exports = Class.inherit({
     },
 
     _onePageSelectAll: function(isDeselect) {
-        var items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
-        for(var i = 0; i < items.length; i++) {
-            var item = items[i];
+        const items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
 
             if(this.isDataItem(item)) {
-                var itemData = this.options.getItemData(item),
-                    itemKey = this.options.keyOf(itemData),
-                    isSelected = this.isItemSelected(itemKey);
+                const itemData = this.options.getItemData(item);
+                const itemKey = this.options.keyOf(itemData);
+                const isSelected = this.isItemSelected(itemKey);
 
                 if(!isSelected && !isDeselect) {
                     this._addSelectedItem(itemData, itemKey);

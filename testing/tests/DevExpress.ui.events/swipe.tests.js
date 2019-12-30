@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    swipeEvents = require('events/swipe'),
-    mathUtils = require('core/utils/math'),
-    domUtils = require('core/utils/dom'),
-    Action = require('core/action'),
-    devices = require('core/devices'),
-    GestureEmitter = require('events/gesture/emitter.gesture'),
-    pointerMock = require('../../helpers/pointerMock.js');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const swipeEvents = require('events/swipe');
+const mathUtils = require('core/utils/math');
+const domUtils = require('core/utils/dom');
+const Action = require('core/action');
+const devices = require('core/devices');
+const GestureEmitter = require('events/gesture/emitter.gesture');
+const pointerMock = require('../../helpers/pointerMock.js');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="element"></div>\
         </div>';
@@ -17,13 +17,13 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var TOUCH_BOUNDARY = GestureEmitter.initialTouchBoundary;
+const TOUCH_BOUNDARY = GestureEmitter.initialTouchBoundary;
 
 
 GestureEmitter.touchBoundary(TOUCH_BOUNDARY);
 
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.element = $('<div></div>').appendTo('body');
         this.mouse = pointerMock(this.element);
@@ -38,7 +38,7 @@ var moduleConfig = {
 
 $.each(['horizontal', 'vertical'], function(_, direction) {
 
-    var prepareMoveCoord = function(x, y) {
+    const prepareMoveCoord = function(x, y) {
         if(direction === 'horizontal') {
             return [x, y];
         }
@@ -50,9 +50,9 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
     QUnit.module(direction, moduleConfig);
 
     QUnit.test('swipe update event', function(assert) {
-        var element = this.element,
-            mouse = this.mouse,
-            updateHistory = [];
+        const element = this.element;
+        const mouse = this.mouse;
+        const updateHistory = [];
 
         element.on(swipeEvents.swipe, {
             itemSizeFunc: function() {
@@ -76,10 +76,10 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
 
     function testSwipeEndEvent(testName, pixelOffset, expectedItemOffset) {
         QUnit.test(testName, function(assert) {
-            var element = this.element,
-                mouse = this.mouse,
-                updateCount = 0,
-                itemSize = 1000;
+            const element = this.element;
+            const mouse = this.mouse;
+            let updateCount = 0;
+            const itemSize = 1000;
 
             element.on(swipeEvents.swipe, {
                 itemSizeFunc: function() { return itemSize; },
@@ -102,8 +102,8 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
 
     QUnit.test('fast swipe', function(assert) {
 
-        var mouse = this.mouse,
-            targetOffset;
+        const mouse = this.mouse;
+        let targetOffset;
 
         this.element.on(swipeEvents.end, {
             itemSizeFunc: function() { return 1000; },
@@ -179,7 +179,7 @@ $.each(['horizontal', 'vertical'], function(_, direction) {
     });
 
     QUnit.test('max offsets', function(assert) {
-        var offsetHistory = [];
+        const offsetHistory = [];
 
         this.element.on(swipeEvents.start, {
             itemSizeFunc: function() { return 100; },
@@ -229,8 +229,8 @@ QUnit.test('swipe should not be crashed if element deleted at swiping', function
 });
 
 QUnit.test('swipe event handler should not stop working on the element if another element was removed', function(assert) {
-    var $children = $('<div></div><div></div>'),
-        called = 0;
+    const $children = $('<div></div><div></div>');
+    let called = 0;
 
     $children
         .appendTo(this.element)
@@ -287,8 +287,8 @@ QUnit.testInActiveWindow('swiper should reset active element inside (B250228)', 
         return;
     }
 
-    var $innerInput = $('<input>').appendTo(this.element),
-        originalDevice;
+    const $innerInput = $('<input>').appendTo(this.element);
+    let originalDevice;
 
     try {
         originalDevice = devices.real();
@@ -316,7 +316,7 @@ QUnit.testInActiveWindow('swiper should not reset active element outside (B25022
         return;
     }
 
-    var $outerInput = $('<input>').appendTo('#container');
+    const $outerInput = $('<input>').appendTo('#container');
 
     try {
         this.element.on(swipeEvents.swipe, noop);
@@ -345,7 +345,7 @@ QUnit.module('subscriptions', {
 });
 
 QUnit.test('subscription on element should work correctly when event triggered', function(assert) {
-    var subscriptionCalled = 0;
+    let subscriptionCalled = 0;
     this.element.on(swipeEvents.end, function(e) {
         subscriptionCalled++;
     });
@@ -355,7 +355,7 @@ QUnit.test('subscription on element should work correctly when event triggered',
 });
 
 QUnit.test('swipe event is not bubble', function(assert) {
-    var subscriptionCalled = 0;
+    let subscriptionCalled = 0;
     $('body').on(swipeEvents.end + '.testNamespace', '.el', function(e) {
         subscriptionCalled++;
     });
@@ -374,13 +374,13 @@ QUnit.test('swipe event is not bubble', function(assert) {
 QUnit.module('hacks');
 
 QUnit.test('default behaviour on dxpointermove should be prevented to reduce user selection while swipe', function(assert) {
-    var $element = $('#element');
+    const $element = $('#element');
 
     $element.on(swipeEvents.start, noop);
 
     $element.trigger($.Event('dxpointerdown', { pointerType: 'mouse', pageX: 200, pageY: 200, pointers: [0] }));
 
-    var moveEvent = $.Event('dxpointermove', { pointerType: 'mouse', pageX: 210, pageY: 200, pointers: [0] });
+    const moveEvent = $.Event('dxpointermove', { pointerType: 'mouse', pageX: 210, pageY: 200, pointers: [0] });
     $element.trigger(moveEvent);
     assert.ok(moveEvent.isDefaultPrevented(), 'default prevented');
 
@@ -391,7 +391,7 @@ QUnit.test('default behaviour on dxpointermove should be prevented to reduce use
 QUnit.module('integration', moduleConfig);
 
 QUnit.test('action in swipeend callback', function(assert) {
-    var actionCalled = 0;
+    let actionCalled = 0;
 
     this.element.on(swipeEvents.end, function(e) {
         return new Action(function() {
@@ -409,7 +409,7 @@ QUnit.test('body event handler should be unsubscribed if no one swipe event hand
     this.element
         .on(swipeEvents.swipe, noop)
         .off(swipeEvents.swipe);
-    var moveHandlers = $.grep(($._data($('body')[0], 'events') || {})['dxpointermove'] || [], function(item) {
+    const moveHandlers = $.grep(($._data($('body')[0], 'events') || {})['dxpointermove'] || [], function(item) {
         return item.namespace === 'dxSwipe';
     });
     assert.equal(moveHandlers.length, 0, 'handler removed');

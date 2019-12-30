@@ -7,7 +7,7 @@ import ScrollView from './../scroll_view';
 import Popup from './../popup';
 import { restoreFocus } from '../shared/accessibility';
 
-var FilterBuilderView = modules.View.inherit({
+const FilterBuilderView = modules.View.inherit({
     _renderCore: function() {
         this._updatePopupOptions();
     },
@@ -32,7 +32,7 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _initPopup: function() {
-        var that = this;
+        const that = this;
 
         that._disposePopup();
         that._filterBuilderPopup = that._createComponent(that.element(), Popup, extend({
@@ -55,8 +55,8 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _getPopupContentTemplate: function(contentElement) {
-        var $contentElement = $(contentElement),
-            $filterBuilderContainer = $('<div>').appendTo($(contentElement));
+        const $contentElement = $(contentElement);
+        const $filterBuilderContainer = $('<div>').appendTo($(contentElement));
 
         this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
             value: this.option('filterValue'),
@@ -69,7 +69,7 @@ var FilterBuilderView = modules.View.inherit({
     },
 
     _getPopupToolbarItems: function() {
-        var that = this;
+        const that = this;
         return [
             {
                 toolbar: 'bottom',
@@ -78,7 +78,7 @@ var FilterBuilderView = modules.View.inherit({
                 options: {
                     text: messageLocalization.format('OK'),
                     onClick: function(e) {
-                        var filter = that._filterBuilder.option('value');
+                        const filter = that._filterBuilder.option('value');
                         that.option('filterValue', filter);
                         that._filterBuilderPopup.hide();
                     }

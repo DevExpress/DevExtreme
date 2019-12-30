@@ -1,8 +1,8 @@
-var noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
-    StubMapLayerCollection;
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const mapLayerModule = require('viz/vector_map/map_layer');
+const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
+let StubMapLayerCollection;
 
 QUnit.begin(function() {
     StubMapLayerCollection = vizMocks.stubClass(mapLayerModule.MapLayerCollection);
@@ -30,18 +30,18 @@ QUnit.module('TooltipViewer', {
 });
 
 QUnit.test('Tracker callbacks', function(assert) {
-    var trackerHandlers = this.tracker.on.lastCall.args[0];
+    const trackerHandlers = this.tracker.on.lastCall.args[0];
     assert.strictEqual(typeof trackerHandlers['focus-on'], 'function', 'focus-on');
     assert.strictEqual(typeof trackerHandlers['focus-off'], 'function', 'focus-off');
     assert.strictEqual(typeof trackerHandlers['focus-move'], 'function', 'focus-move');
 });
 
 QUnit.test('Focus-on - tooltip is shown', function(assert) {
-    var done = sinon.spy(),
-        proxy = { tag: 'proxy' },
-        layer = {
-            getProxy: sinon.stub().withArgs('test-index').returns(proxy)
-        };
+    const done = sinon.spy();
+    const proxy = { tag: 'proxy' };
+    const layer = {
+        getProxy: sinon.stub().withArgs('test-index').returns(proxy)
+    };
     this.tooltip.stub('isEnabled').returns(true);
     this.tooltip.stub('show').returns(true);
     this.layerCollection.stub('byName').withArgs('test-layer').returns(layer);
@@ -54,11 +54,11 @@ QUnit.test('Focus-on - tooltip is shown', function(assert) {
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of tooltip.show', function(assert) {
-    var done = sinon.spy(),
-        proxy = { tag: 'proxy' },
-        layer = {
-            getProxy: sinon.stub().withArgs('test-index').returns(proxy)
-        };
+    const done = sinon.spy();
+    const proxy = { tag: 'proxy' };
+    const layer = {
+        getProxy: sinon.stub().withArgs('test-index').returns(proxy)
+    };
     this.tooltip.stub('isEnabled').returns(true);
     this.tooltip.stub('show').returns(false);
     this.layerCollection.stub('byName').withArgs('test-layer').returns(layer);
@@ -71,10 +71,10 @@ QUnit.test('Focus-on - tooltip is not shown because of tooltip.show', function(a
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of index', function(assert) {
-    var done = sinon.spy(),
-        layer = {
-            getProxy: sinon.stub()
-        };
+    const done = sinon.spy();
+    const layer = {
+        getProxy: sinon.stub()
+    };
     this.tooltip.stub('isEnabled').returns(true);
     this.layerCollection.stub('byName').withArgs('test-layer').returns(layer);
 
@@ -86,7 +86,7 @@ QUnit.test('Focus-on - tooltip is not shown because of index', function(assert) 
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of name', function(assert) {
-    var done = sinon.spy();
+    const done = sinon.spy();
     this.tooltip.stub('isEnabled').returns(true);
     this.layerCollection.stub('byName');
 
@@ -98,7 +98,7 @@ QUnit.test('Focus-on - tooltip is not shown because of name', function(assert) {
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of tooltip.isEnabled', function(assert) {
-    var done = sinon.spy();
+    const done = sinon.spy();
     this.tooltip.stub('isEnabled').returns(false);
 
     this.trigger('focus-on', { x: 10, y: 20, data: { name: 'test-layer', index: 'test-index' }, done: done });

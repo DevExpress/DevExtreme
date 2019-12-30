@@ -9,9 +9,9 @@ const Legend = legendModule.Legend;
 
 const defaultMarkerBBox = { x: 0, y: 0, height: 14, width: 14 };
 
-var environment = {
+const environment = {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         this.renderer = new vizMocks.Renderer();
         this.bBoxes = [];
         this.markerBBoxes = [];
@@ -45,8 +45,8 @@ var environment = {
     },
     afterEach: noop,
     createSimpleLegend: function() {
-        var that = this,
-            bBoxes = this.bBoxes;
+        const that = this;
+        const bBoxes = this.bBoxes;
 
         if(bBoxes && bBoxes.length) {
             this.data = this.createData(bBoxes.length);
@@ -56,7 +56,7 @@ var environment = {
         return this.createLegend({
             renderer: this.renderer, group: this.rootGroup, textField: this.nameField,
             getFormatObject: function(data) {
-                var res = {};
+                const res = {};
                 res[that.indexField] = data.id;
                 res[that.colorField] = data.states.normal.fill;
                 res[that.nameField] = data.text;
@@ -86,14 +86,14 @@ var environment = {
         return this.createSimpleLegend().draw(this.size.width, this.size.height);
     },
     getRenderedElements: function() {
-        var insideLegendGroup = this.renderer.g.returnValues[1],
-            items = $.map(insideLegendGroup.children, function(item) {
-                return {
-                    group: item,
-                    marker: item.children[0],
-                    text: item.children[1]
-                };
-            });
+        const insideLegendGroup = this.renderer.g.returnValues[1];
+        const items = $.map(insideLegendGroup.children, function(item) {
+            return {
+                group: item,
+                marker: item.children[0],
+                text: item.children[1]
+            };
+        });
 
         return { insideLegendGroup: insideLegendGroup, items: items };
     },
@@ -101,11 +101,11 @@ var environment = {
         return this.options.border.visible ? 1 : 0;
     },
     checkItems: function(assert, items) {
-        var i = 0,
-            titleCorrection = this.options.title.text ? 1 : 0,
-            subtitleCorrection = titleCorrection,
-            item,
-            itemsCount = items.length;
+        let i = 0;
+        const titleCorrection = this.options.title.text ? 1 : 0;
+        const subtitleCorrection = titleCorrection;
+        let item;
+        const itemsCount = items.length;
 
         this._checkMarkup(assert, itemsCount);
 
@@ -119,8 +119,8 @@ var environment = {
         this._checkCreatingMarkerAndLabel(assert, itemsCount);
     },
     createData: function(itemCount) {
-        var data = [],
-            i;
+        const data = [];
+        let i;
 
         for(i = 0; i < itemCount; i++) {
             data.push({
@@ -135,9 +135,9 @@ var environment = {
     },
 
     findMarkersGroup: function() {
-        var insideLegendGroup = this.renderer.g.secondCall.returnValue;
-        for(var i = 0; i < insideLegendGroup.children.length; i++) {
-            var child = insideLegendGroup.children[i];
+        const insideLegendGroup = this.renderer.g.secondCall.returnValue;
+        for(let i = 0; i < insideLegendGroup.children.length; i++) {
+            const child = insideLegendGroup.children[i];
             if(child.attr.firstCall.args[0].class === 'dxc-item') {
                 return child;
             }
@@ -145,12 +145,12 @@ var environment = {
     },
 
     _checkMarkup: function(assert, itemsCount) {
-        var that = this,
-            i,
-            markersGroup = this.findMarkersGroup(),
-            titleCorrection = this.options.title.text ? 1 : 0,
-            subtitleCorrection = titleCorrection,
-            borderCorrection = this.borderCorrection();
+        const that = this;
+        let i;
+        const markersGroup = this.findMarkersGroup();
+        const titleCorrection = this.options.title.text ? 1 : 0;
+        const subtitleCorrection = titleCorrection;
+        const borderCorrection = this.borderCorrection();
 
         assert.equal(markersGroup.children.length, itemsCount, 'Legend created the correct items count.');
         for(i = 0; i < itemsCount; i++) {
@@ -161,21 +161,21 @@ var environment = {
         }
     },
     _checkCreatingMarkerAndLabel: function(assert, itemsCount) {
-        var i = 0;
+        let i = 0;
         for(; i < itemsCount; i++) {
             this._checkCreatingMarker(assert, i);
             this._checkCreatingLabel(assert, i);
         }
     },
     _checkCreatingMarker: function(assert, indexItem) {
-        var marker = this.renderer.rect.getCall(indexItem);
+        const marker = this.renderer.rect.getCall(indexItem);
         assert.equal(marker.args[0], 0);
         assert.equal(marker.args[1], 0);
     },
     _checkCreatingLabel: function(assert, indexItem) {
-        var titleCorrection = this.options.title.text ? 1 : 0,
-            subtitleCorrection = titleCorrection,
-            label = this.renderer.text.getCall(indexItem + titleCorrection + subtitleCorrection);
+        const titleCorrection = this.options.title.text ? 1 : 0;
+        const subtitleCorrection = titleCorrection;
+        const label = this.renderer.text.getCall(indexItem + titleCorrection + subtitleCorrection);
         assert.equal(label.args[1], 0);
         assert.equal(label.args[2], 0);
     },
@@ -197,8 +197,8 @@ var environment = {
         });
     },
     _checkLabel: function(assert, labelAttr, index) {
-        var label = this.renderer.text.getCall(index).returnValue,
-            settings = label._stored_settings;
+        const label = this.renderer.text.getCall(index).returnValue;
+        const settings = label._stored_settings;
 
         $.each(labelAttr, function(key, value) {
             switch(key) {
@@ -214,7 +214,7 @@ var environment = {
         });
     },
     checkTrackers: function(assert, trackerAttr, indexItem) {
-        var tracker = this.legend._items[indexItem].tracker;
+        const tracker = this.legend._items[indexItem].tracker;
         assert.equal(tracker.left, trackerAttr.left, 'left');
         assert.equal(tracker.top, trackerAttr.top, 'top');
         assert.equal(tracker.right, trackerAttr.right, 'right');
@@ -264,9 +264,9 @@ function getLegendOptions(options) {
 }
 
 function getLegendData(count) {
-    var states = getDefaultStates(),
-        array = [],
-        i;
+    const states = getDefaultStates();
+    const array = [];
+    let i;
 
     for(i = 0; i < count; i++) {
         array.push({
@@ -286,7 +286,7 @@ QUnit.module('constructor', environment);
 
 QUnit.test('getOptions', function(assert) {
     this.options.hoverMode = 'customHoverMode';
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.strictEqual(legend.getOptions().hoverMode, 'customhovermode');
 });
@@ -300,7 +300,9 @@ QUnit.test('visible = false', function(assert) {
 });
 
 QUnit.test('Creates correct types of objects for series', function(assert) {
-    var marker, text, elements;
+    let marker;
+    let text;
+    let elements;
 
     this.createAndDrawLegend(200, 200);
 
@@ -311,7 +313,7 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
     assert.equal(elements.insideLegendGroup.children.length, 1, 'insideLegendGroup must contain just markers group');
     assert.equal(elements.insideLegendGroup.children[0].children.length, this.data.length, 'markersGroup must contain all groups with rects and labels');
 
-    for(var i = 0; i < this.data.length; i++) {
+    for(let i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
         text = this.renderer.text.getCall(i).returnValue;
         assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1 }, 'Rect element not found for series ' + i);
@@ -334,14 +336,14 @@ QUnit.test('Draw with Title', function(assert) {
 
     const itemGroups = this.findMarkersGroup().children;
 
-    for(var i = 0; i < this.data.length; i++) {
-        var expectedValue = this.data[i].text + ' ' + this.data[i].states.normal.fill + ' ' + this.data[i].id;
+    for(let i = 0; i < this.data.length; i++) {
+        const expectedValue = this.data[i].text + ' ' + this.data[i].states.normal.fill + ' ' + this.data[i].id;
         assert.equal(itemGroups[i].setTitle.firstCall.args[0], expectedValue, 'Text element for series ' + i);
     }
 });
 
 QUnit.test('Create legend, hover fill is "none"', function(assert) {
-    var states = {
+    let states = {
         hover: { hatching: {}, fill: 'none' },
         selection: { hatching: {}, fill: 'black' }
     };
@@ -365,7 +367,7 @@ QUnit.test('Create legend, hover fill is "none"', function(assert) {
             visible: true
         }
     ];
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -383,7 +385,7 @@ QUnit.test('Create legend, hover fill is "none"', function(assert) {
 
 QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
     this.options.font.opacity = 0.5;
-    var states = {
+    const states = {
         hover: { hatching: {}, fill: 'none' },
         selection: { hatching: {}, fill: 'black' }
     };
@@ -406,7 +408,7 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
 
 QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
     this.options.font.opacity = 0.5;
-    var states = {
+    const states = {
         hover: { hatching: {}, fill: 'none' },
         selection: { hatching: {}, fill: 'black' }
     };
@@ -425,7 +427,7 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
 });
 
 QUnit.test('Create legend, selected fill is "none"', function(assert) {
-    var states = {
+    let states = {
         hover: { hatching: {}, fill: 'red' },
         selection: { hatching: {}, fill: 'none' }
     };
@@ -446,7 +448,7 @@ QUnit.test('Create legend, selected fill is "none"', function(assert) {
         states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } },
         visible: true
     }];
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -464,14 +466,14 @@ QUnit.test('Create legend, selected fill is "none"', function(assert) {
 });
 
 QUnit.test('Update', function(assert) {
-    var states = getDefaultStates();
+    let states = getDefaultStates();
     this.data = [{
         text: 'First',
         id: 0,
         states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
         visible: true
     }];
-    var legend = this.createSimpleLegend()
+    const legend = this.createSimpleLegend()
         .draw(200, 200)
         .update([{
             text: 'newText',
@@ -558,7 +560,7 @@ QUnit.test('Draw legend, itemTextPosition = "bottom"', function(assert) {
         id: 0, states: getDefaultStates(),
         visible: true
     }];
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1013,14 +1015,14 @@ QUnit.module('legend', environment);
 
 QUnit.test('Draw trackers after enabled legend after disable legend', function(assert) {
     this.data = this.data.slice(0, 3);
-    var legend = this.createSimpleLegend().draw(200, 200);
+    const legend = this.createSimpleLegend().draw(200, 200);
     legend._options.visible = false;
     legend.draw();
 
     legend._options.visible = true;
     legend.draw();
 
-    var trackers = $.map(legend._items, function(item) {
+    const trackers = $.map(legend._items, function(item) {
         return item.tracker;
     });
 
@@ -1055,27 +1057,27 @@ QUnit.test('Draw trackers after enabled legend after disable legend', function(a
 
 QUnit.test('Default label format', function(assert) {
     this.nameField = 'seriesName';
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
-    var formatResult = legend._options.customizeText.call({ seriesName: 'test name' }, { seriesName: 'test name' });
+    const formatResult = legend._options.customizeText.call({ seriesName: 'test name' }, { seriesName: 'test name' });
 
     assert.equal(formatResult, 'test name');
 });
 
 QUnit.test('Custom label format', function(assert) {
     this.options.customizeText = function() { return this.text + ' ' + this.itemIndex; };
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
-    var formatResult = legend._options.customizeText.call({ text: 'test name', itemIndex: 1 }, { text: 'test name', itemIndex: 1 });
+    const formatResult = legend._options.customizeText.call({ text: 'test name', itemIndex: 1 }, { text: 'test name', itemIndex: 1 });
 
     assert.equal(formatResult, 'test name 1');
 });
 
 QUnit.test('Custom label title format', function(assert) {
     this.options.customizeHint = function() { return this.text + ' ' + this.itemIndex; };
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
-    var formatResult = legend._options.customizeHint.call({ text: 'test name', itemIndex: 1 }, { text: 'test name', itemIndex: 1 });
+    const formatResult = legend._options.customizeHint.call({ text: 'test name', itemIndex: 1 }, { text: 'test name', itemIndex: 1 });
 
     assert.equal(formatResult, 'test name 1');
 });
@@ -1092,7 +1094,7 @@ QUnit.test('Draw legend with custom format label', function(assert) {
     this.nameField = 'seriesName';
     this.indexField = 'seriesIndex';
     this.colorField = 'seriesColor';
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1102,18 +1104,18 @@ QUnit.test('Draw legend with custom format label', function(assert) {
 });
 
 QUnit.test('Border is not drawn, position = "inside", backgroundColor is not specify', function(assert) {
-    var options = {
-            containerBackgroundColor: '#ffffff',
-            position: 'inside'
-        },
-        legendData = [{
-            text: 'First', id: 0,
-            states: getDefaultStates(),
-            visible: true
-        }];
+    const options = {
+        containerBackgroundColor: '#ffffff',
+        position: 'inside'
+    };
+    const legendData = [{
+        text: 'First', id: 0,
+        states: getDefaultStates(),
+        visible: true
+    }];
     this.data = legendData;
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1125,18 +1127,18 @@ QUnit.test('Border is not drawn, position = "inside", backgroundColor is not spe
 });
 
 QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
-    var options = {
-            containerBackgroundColor: '#ffffff',
-            backgroundColor: '#123456'
-        },
-        legendData = [{
-            text: 'First',
-            id: 0, states: getDefaultStates(),
-            visible: true
-        }];
+    const options = {
+        containerBackgroundColor: '#ffffff',
+        backgroundColor: '#123456'
+    };
+    const legendData = [{
+        text: 'First',
+        id: 0, states: getDefaultStates(),
+        visible: true
+    }];
     this.data = legendData;
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1147,23 +1149,23 @@ QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
 });
 
 QUnit.test('Border is drawn', function(assert) {
-    var options = {
-            border: {
-                visible: true,
-                width: 1,
-                color: 'black',
-                dashStyle: 'dot'
-            }
-        },
-        legendData = [{
-            text: 'First',
-            id: 0,
-            states: getDefaultStates(),
-            visible: true
-        }];
+    const options = {
+        border: {
+            visible: true,
+            width: 1,
+            color: 'black',
+            dashStyle: 'dot'
+        }
+    };
+    const legendData = [{
+        text: 'First',
+        id: 0,
+        states: getDefaultStates(),
+        visible: true
+    }];
     this.data = legendData;
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1172,7 +1174,7 @@ QUnit.test('Border is drawn', function(assert) {
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
     assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
 
-    var borderGroup = legend._insideLegendGroup.children[0];
+    const borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, 'none');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
     assert.equal(borderGroup._stored_settings['stroke-width'], 1);
@@ -1181,25 +1183,25 @@ QUnit.test('Border is drawn', function(assert) {
 });
 
 QUnit.test('Border is drawn, position = "inside"', function(assert) {
-    var options = {
-            containerBackgroundColor: '#ffffff',
-            border: {
-                visible: true,
-                width: 1,
-                color: 'black',
-                dashStyle: 'dot'
-            },
-            position: 'inside'
+    const options = {
+        containerBackgroundColor: '#ffffff',
+        border: {
+            visible: true,
+            width: 1,
+            color: 'black',
+            dashStyle: 'dot'
         },
-        legendData = [{
-            text: 'First',
-            id: 0,
-            states: getDefaultStates(),
-            visible: true
-        }];
+        position: 'inside'
+    };
+    const legendData = [{
+        text: 'First',
+        id: 0,
+        states: getDefaultStates(),
+        visible: true
+    }];
     this.data = legendData;
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1208,7 +1210,7 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
     assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
 
-    var borderGroup = legend._insideLegendGroup.children[0];
+    const borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, '#ffffff');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
     assert.equal(borderGroup._stored_settings['stroke-width'], 1);
@@ -1217,19 +1219,19 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
 });
 
 QUnit.test('Draw background rect.Legend with border', function(assert) {
-    var states = getDefaultStates(),
-        options = {
-            border: {
-                visible: true,
-                color: 'green',
-                width: 1,
-                dashStyle: 'dash',
-                opacity: 0.5
-            },
-            paddingLeftRight: 5,
-            paddingTopBottom: 10
+    const states = getDefaultStates();
+    const options = {
+        border: {
+            visible: true,
+            color: 'green',
+            width: 1,
+            dashStyle: 'dash',
+            opacity: 0.5
         },
-        legendMockBBox = { width: 120, height: 40, x: 30, y: 50 };
+        paddingLeftRight: 5,
+        paddingTopBottom: 10
+    };
+    const legendMockBBox = { width: 120, height: 40, x: 30, y: 50 };
     this.data = [{
         text: 'first item',
         id: 0,
@@ -1247,13 +1249,13 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
         visible: true
     }];
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend._legendGroup.stub('getBBox') && (legend._legendGroup.getBBox = function() { return legendMockBBox; });
 
     legend.draw(200, 200);
 
-    var borderRect = legend._insideLegendGroup.children[0];
+    const borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
         'class': 'dxc-border',
@@ -1273,20 +1275,20 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
 });
 
 QUnit.test('Draw background rect.Legend without border', function(assert) {
-    var states = getDefaultStates(),
-        options = {
-            backgroundColor: 'red',
-            border: {
-                visible: false,
-                color: 'green',
-                width: 1,
-                dashStyle: 'dash',
-                opacity: 0.5
-            },
-            paddingLeftRight: 5,
-            paddingTopBottom: 10
+    const states = getDefaultStates();
+    const options = {
+        backgroundColor: 'red',
+        border: {
+            visible: false,
+            color: 'green',
+            width: 1,
+            dashStyle: 'dash',
+            opacity: 0.5
         },
-        mockBBox = { width: 120, height: 40, x: 30, y: 50 };
+        paddingLeftRight: 5,
+        paddingTopBottom: 10
+    };
+    const mockBBox = { width: 120, height: 40, x: 30, y: 50 };
     this.data = [{
         text: 'first item',
         id: 0,
@@ -1304,13 +1306,13 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
         visible: true
     }];
     this.options = getLegendOptions(options);
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend._legendGroup.stub('getBBox') && (legend._legendGroup.getBBox = function() { return mockBBox; });
 
     legend.draw(200, 200);
 
-    var borderRect = legend._insideLegendGroup.children[0];
+    const borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
         'class': 'dxc-border',
@@ -1325,28 +1327,28 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
 
 QUnit.test('Legend with incorrect margin number', function(assert) {
     this.options.margin = -20;
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 10, right: 10, top: 10, bottom: 10 }, 'Margin should have default margin');
 });
 
 QUnit.test('Legend with incorrect margin number - string', function(assert) {
     this.options.margin = 'bad';
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 10, right: 10, top: 10, bottom: 10 }, 'Margin should have default margin');
 });
 
 QUnit.test('Legend with incorrect margin number - string number', function(assert) {
     this.options = getLegendOptions({ margin: '5' });
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 5, right: 5, top: 5, bottom: 5 }, 'Margin should have default margin');
 });
 
 QUnit.test('Legend with incorrect margin number - null', function(assert) {
     this.options = getLegendOptions({ margin: null });
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 0, right: 0, top: 0, bottom: 0 }, 'Margin should have default margin');
 });
@@ -1360,7 +1362,7 @@ QUnit.test('Legend with incorrect margin object', function(assert) {
             right: 'abs'
         }
     });
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 10, right: 10, top: 10, bottom: 10 }, 'Margin should have default margin');
 });
@@ -1374,13 +1376,13 @@ QUnit.test('Legend with incorrect margin object - all fields are string number',
             right: '4'
         }
     });
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.deepEqual(legend._options.margin, { left: 3, right: 4, top: 1, bottom: 2 }, 'Margin should have default margin');
 });
 
 QUnit.test('Mapping indexes', function(assert) {
-    var states = getDefaultStates();
+    const states = getDefaultStates();
     this.data = [{
         text: 'first item',
         id: 11,
@@ -1399,7 +1401,7 @@ QUnit.test('Mapping indexes', function(assert) {
     }];
 
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
 
@@ -1415,7 +1417,7 @@ QUnit.test('Mapping indexes', function(assert) {
 QUnit.test('shift legend', function(assert) {
     this.data = getLegendData(3);
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
     legend.shift(10, 15);
@@ -1428,7 +1430,7 @@ QUnit.test('coordsIn', function(assert) {
     this.renderer.bBoxTemplate = { x: 10, y: 15, height: 30, width: 20 };
     this.data = getLegendData(3);
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
     legend.shift(10, 15);
@@ -1450,7 +1452,7 @@ QUnit.test('coordsIn', function(assert) {
 
 QUnit.test('coordsIn after erase', function(assert) {
     this.renderer.bBoxTemplate = { x: 10, y: 15, height: 30, width: 20 };
-    var legend = this.createSimpleLegend()
+    const legend = this.createSimpleLegend()
         .draw(200, 200)
         .shift(10, 15)
         .erase();
@@ -1467,8 +1469,8 @@ QUnit.test('coordsIn after erase', function(assert) {
 // T205280
 QUnit.test('coordsIn after update without data', function(assert) {
     // arrange
-    var legend = this.createSimpleLegend(),
-        legendSize = { width: 200, height: 200, top: 0, bottom: 0, left: 0, right: 0 };
+    const legend = this.createSimpleLegend();
+    const legendSize = { width: 200, height: 200, top: 0, bottom: 0, left: 0, right: 0 };
 
     legend.draw(200, 200);
     legend.shift(10, 15);
@@ -1483,27 +1485,27 @@ QUnit.test('coordsIn after update without data', function(assert) {
 
 QUnit.test('getItemByCoord', function(assert) {
     this.data = getLegendData(2);
-    var legend = this.createSimpleLegend()
-            .draw(200, 200)
-            .shift(10, 15),
-        element1 = {
-            bottom: 18,
-            id: 0,
-            left: -4,
-            right: 45,
-            top: -4,
-            argument: 'argument0',
-            argumentIndex: 'argumentIndex0'
-        },
-        element2 = {
-            bottom: 40,
-            id: 1,
-            left: -4,
-            right: 45,
-            top: 18,
-            argument: 'argument1',
-            argumentIndex: 'argumentIndex1'
-        };
+    const legend = this.createSimpleLegend()
+        .draw(200, 200)
+        .shift(10, 15);
+    const element1 = {
+        bottom: 18,
+        id: 0,
+        left: -4,
+        right: 45,
+        top: -4,
+        argument: 'argument0',
+        argumentIndex: 'argumentIndex0'
+    };
+    const element2 = {
+        bottom: 40,
+        id: 1,
+        left: -4,
+        right: 45,
+        top: 18,
+        argument: 'argument1',
+        argumentIndex: 'argumentIndex1'
+    };
 
     assert.strictEqual(legend.getItemByCoord(12, 30), null);
     assert.deepEqual(legend.getItemByCoord(17, 30), element1);
@@ -1521,7 +1523,7 @@ QUnit.test('getItemByCoord', function(assert) {
 });
 
 QUnit.test('Pass color & opacity to markers on create', function(assert) {
-    var states = getDefaultStates();
+    const states = getDefaultStates();
     this.data = [{
         text: 'text_0',
         id: 0,
@@ -1547,14 +1549,14 @@ QUnit.test('Pass color & opacity to markers on create', function(assert) {
 });
 
 QUnit.test('Pass color & opacity to markers on update', function(assert) {
-    var states = getDefaultStates(),
-        legendData = [{
-            text: 'text_0',
-            id: 0,
-            states: $.extend(true, {}, states, { normal: { opacity: 0.1, fill: 'color_0' } }),
-            visible: true
-        }],
-        legend = this.createSimpleLegend(legendData);
+    const states = getDefaultStates();
+    const legendData = [{
+        text: 'text_0',
+        id: 0,
+        states: $.extend(true, {}, states, { normal: { opacity: 0.1, fill: 'color_0' } }),
+        visible: true
+    }];
+    const legend = this.createSimpleLegend(legendData);
 
     legend.draw(200, 200);
 
@@ -1669,7 +1671,7 @@ QUnit.test('After draw. horizontalAlignment = "center"', function(assert) {
 });
 
 QUnit.test('layoutOptions', function(assert) {
-    var options = this.createSimpleLegend().layoutOptions();
+    const options = this.createSimpleLegend().layoutOptions();
 
     assert.equal(options.horizontalAlignment, 'right');
     assert.equal(options.verticalAlignment, 'top');
@@ -1679,7 +1681,7 @@ QUnit.test('layoutOptions', function(assert) {
 
 QUnit.test('layoutOptions is null if legend is not visible', function(assert) {
     this.options.visible = false;
-    var options = this.createSimpleLegend().layoutOptions();
+    const options = this.createSimpleLegend().layoutOptions();
 
     assert.strictEqual(options, null);
 });
@@ -1695,7 +1697,7 @@ QUnit.test('move', function(assert) {
 });
 
 QUnit.test('free space', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.measure(100, 200);
 
     legend.freeSpace();
@@ -1710,25 +1712,25 @@ QUnit.module('Legend Options', environment);
 QUnit.test('Default center for not-set align', function(assert) {
     this.options = getLegendOptions({ horizontalAlignment: 'center' });
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.equal(legend._options.orientation, 'horizontal');
 });
 
 QUnit.test('Default vertical for right align', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.equal(legend._options.orientation, 'vertical');
 });
 
 QUnit.test('Default vertical for left align', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.equal(legend._options.orientation, 'vertical');
 });
 
 QUnit.test('horizontalAlignment specified incorrectly', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     assert.equal(legend._options.horizontalAlignment, 'right');
 });
@@ -1742,7 +1744,7 @@ QUnit.module('Life cycle', $.extend({}, environment, {
 }));
 
 QUnit.test('Disposing', function(assert) {
-    var legend = this.legend;
+    const legend = this.legend;
 
     legend.dispose();
 
@@ -1757,7 +1759,7 @@ QUnit.test('Disposing', function(assert) {
 QUnit.module('States', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var states = getDefaultStates();
+        const states = getDefaultStates();
 
         this.renderer.stub('lockHatching').returns('DevExpress');
 
@@ -1969,8 +1971,8 @@ QUnit.test('Circles', function(assert) {
 QUnit.test('Appended to container', function(assert) {
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker,
-        markersGroup = this.findMarkersGroup();
+    const createMarker = this.createMarker;
+    const markersGroup = this.findMarkersGroup();
 
     this.data.forEach((_, i) => {
         assert.equal(createMarker.getCall(i).returnValue.append.lastCall.args[0].element, markersGroup.children[i].children[0].element, String(i));
@@ -1980,7 +1982,7 @@ QUnit.test('Appended to container', function(assert) {
 QUnit.test('Colors', function(assert) {
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
@@ -1993,7 +1995,7 @@ QUnit.test('Common color', function(assert) {
     this.options.markerColor = 'common-color';
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1 }], String(i));
     });
@@ -2006,7 +2008,7 @@ QUnit.test('No state color, no marker color - use default color', function(asser
     this.options.defaultColor = 'default-color';
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1 }], String(i));
     });
@@ -2016,15 +2018,15 @@ QUnit.test('Sizes', function(assert) {
     this.options.markerSize = 8;
     this.createAndDrawLegend();
 
-    var renderer = this.renderer,
-        createMarker = this.createMarker;
+    const renderer = this.renderer;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i) {
         assert.deepEqual(createMarker.getCall(i).args, [renderer, 8], String(i));
     });
 });
 
 QUnit.test('Partial sizes', function(assert) {
-    var that = this;
+    const that = this;
     $.each(this.data, function(i, data) {
         data.size = i + 4;
     });
@@ -2040,7 +2042,7 @@ QUnit.test('Items in inverted order', function(assert) {
     this.options.inverted = true;
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
@@ -2052,7 +2054,7 @@ QUnit.test('Customize order using customizeItems', function(assert) {
     };
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
@@ -2062,7 +2064,7 @@ QUnit.test('Process items return nothing - get original items', function(assert)
     this.options.customizeItems = noop;
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
@@ -2072,7 +2074,7 @@ QUnit.test('Do not render hidden items', function(assert) {
     this.data[1].visible = false;
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
 
     assert.equal(createMarker.callCount, this.data.length - 1);
 });
@@ -2084,13 +2086,13 @@ QUnit.test('Can hide all items', function(assert) {
     });
     this.createAndDrawLegend();
 
-    var createMarker = this.createMarker;
+    const createMarker = this.createMarker;
 
     assert.equal(createMarker.callCount, 0);
 });
 
 QUnit.test('markers centering(partial markers sizes).', function(assert) {
-    var createMarker;
+    let createMarker;
 
     this.options.itemTextPosition = 'right';
     $.each(this.data, function(i, data) {
@@ -2107,7 +2109,7 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
 });
 
 QUnit.test('markers centering(partial markers sizes). markerShape = circle', function(assert) {
-    var createMarker;
+    let createMarker;
 
     this.options.itemTextPosition = 'right';
     this.options.markerShape = 'circle';
@@ -2126,7 +2128,7 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
 QUnit.module('probeDraw', environment);
 
 QUnit.test('probeDraw', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw = sinon.stub();
     legend.probeDraw();
     assert.ok(legend.draw.calledOnce);
@@ -2135,7 +2137,7 @@ QUnit.test('probeDraw', function(assert) {
 QUnit.module('getActionCallback', environment);
 
 QUnit.test('applying some action', function(assert) {
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw = sinon.stub();
     legend.applyAction = sinon.stub();
     legend.getActionCallback({ index: 1 })('applyAction');
@@ -2146,7 +2148,7 @@ QUnit.test('applying some action', function(assert) {
 
 QUnit.test('legend is not visible', function(assert) {
     this.options.visible = false;
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
 
     legend.applyAction = sinon.stub();
     legend.getActionCallback({ index: 1 })('applyAction');
@@ -2154,12 +2156,12 @@ QUnit.test('legend is not visible', function(assert) {
     assert.ok(!legend.applyAction.called);
 });
 
-var titleEnvironment = $.extend({}, environment, {
+const titleEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         environment.beforeEach.apply(that, arguments);
 
-        var titleConstructor = module.Title;
+        const titleConstructor = module.Title;
 
         that.titleLayout = { height: 17, width: 20, x: 4, y: 5 };
         module.Title = function(params) {
@@ -2168,7 +2170,7 @@ var titleEnvironment = $.extend({}, environment, {
             that.title.getLayoutOptions = sinon.stub();
             that.title.getLayoutOptions.returns((function() {
                 if(that.options.title) {
-                    var margin = that.options.title.margin || { left: 0, right: 0 };
+                    const margin = that.options.title.margin || { left: 0, right: 0 };
                     that.titleLayout.x -= margin.left;
                     that.titleLayout.width += margin.left + margin.right;
                 }
@@ -2197,10 +2199,10 @@ var titleEnvironment = $.extend({}, environment, {
     },
 
     checkTitle: function(assert, titleDescription) {
-        var titleGroup = this.renderer.g.firstCall.returnValue,
-            titleText = this.options.title.text ? 1 : 0,
-            subtitleText = (this.options.title.subtitle || {}).text && titleText ? 1 : 0,
-            insideLegendGroup = this.renderer.g.secondCall.returnValue;
+        const titleGroup = this.renderer.g.firstCall.returnValue;
+        const titleText = this.options.title.text ? 1 : 0;
+        const subtitleText = (this.options.title.subtitle || {}).text && titleText ? 1 : 0;
+        const insideLegendGroup = this.renderer.g.secondCall.returnValue;
 
         assert.equal(titleGroup.linkOn.lastCall.args[0], insideLegendGroup, 'title must be into insideLegendGroup');
         assert.equal(titleGroup.linkAppend.callCount, 2);
@@ -2216,7 +2218,7 @@ var titleEnvironment = $.extend({}, environment, {
 
         const marker = this.findMarkersGroup().children[0].children[0];
         assert.equal(marker.move.firstCall.args[0], titleDescription.expectedOffset.x);
-        var sign = this.options.title.verticalAlignment === 'bottom' ? -1 : 1;
+        const sign = this.options.title.verticalAlignment === 'bottom' ? -1 : 1;
         assert.equal(marker.move.firstCall.args[1], sign * titleDescription.expectedOffset.y);
     },
 
@@ -2309,11 +2311,11 @@ QUnit.test('Title width more than markers width; legend horizontalAlignment = \'
     this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 30;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    var markersGroup = this.findMarkersGroup();
+    const markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 5, translateY: 17 }, 'markers must moved');
 
     this.checkTrackers(assert, {
@@ -2337,11 +2339,11 @@ QUnit.test('Title width less than markers width; legend horizontalAlignment = \'
     this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 10;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    var markersGroup = this.findMarkersGroup();
+    const markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 2, 'attr function just calling for set class name and set Y position');
     assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 0, translateY: 17 }, 'markers must move under title');
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
@@ -2365,11 +2367,11 @@ QUnit.test('Shift simple title; horizontalAlignment = \'center\' verticalAlignme
     this.options.horizontalAlignment = 'center';
     this.titleLayout.width = 12;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    var markersGroup = this.findMarkersGroup();
+    const markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 1, 'attr function just calling for set class name');
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
     assert.deepEqual(this.title.shift.lastCall.args, [1, 5], 'title must have moved');
@@ -2388,7 +2390,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignmen
 
     this.options.horizontalAlignment = 'right';
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
@@ -2412,7 +2414,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'center\'; border exist',
     this.options.border.visible = true;
     this.titleLayout.width = 18;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
@@ -2437,7 +2439,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'center\'; legend positio
     this.options.position = 'inside';
     this.titleLayout.width = 18;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
 
@@ -2451,7 +2453,7 @@ QUnit.test('Shift simple title; itemTextPosition = \'left\'', function(assert) {
     this.options.itemTextPosition = 'left';
     this.titleLayout.width = 16;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.strictEqual(this.title.getOptions().horizontalAlignment, 'right');
@@ -2463,7 +2465,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'right\'', function(asser
 
     this.options.horizontalAlignment = 'right';
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
@@ -2474,7 +2476,7 @@ QUnit.test('Shift simple title; itemTextPosition = \'top\'', function(assert) {
 
     this.options.itemTextPosition = 'top';
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.deepEqual(this.title.shift.lastCall.args, [0, 2], 'title must have moved');
@@ -2486,7 +2488,7 @@ QUnit.test('Shift simple title; itemTextPosition = \'bottom\'', function(assert)
     this.options.itemTextPosition = 'bottom';
     this.titleLayout.width = 16;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.deepEqual(this.title.shift.lastCall.args, [2, 2], 'title must have moved');
@@ -2505,7 +2507,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'right\' verticalAlignmen
     this.options.horizontalAlignment = 'right';
     this.titleLayout.width = 10;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
@@ -2526,7 +2528,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'center\' verticalAlignme
     this.options.verticalAlignment = 'bottom';
     this.titleLayout.width = 10;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');
@@ -2546,7 +2548,7 @@ QUnit.test('Shift simple title; horizontalAlignment = \'left\' verticalAlignment
     this.options.horizontalAlignment = 'left';
     this.titleLayout.width = 20;
 
-    var legend = this.createSimpleLegend();
+    const legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
     assert.equal(this.title.shift.callCount, 2, 'method \'shift\' must be called');

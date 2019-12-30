@@ -1,25 +1,25 @@
-var WHITE = '#ffffff',
-    BLACK = '#000000',
-    LIGHT_GREY = '#d3d3d3',
-    GREY_GREEN = '#303030',
-    SOME_GREY = '#2b2b2b',
-    RED = '#ff0000',
-    PRIMARY_TITLE_COLOR = '#232323',
-    SECONDARY_TITLE_COLOR = '#767676',
+const WHITE = '#ffffff';
+const BLACK = '#000000';
+const LIGHT_GREY = '#d3d3d3';
+const GREY_GREEN = '#303030';
+const SOME_GREY = '#2b2b2b';
+const RED = '#ff0000';
+const PRIMARY_TITLE_COLOR = '#232323';
+const SECONDARY_TITLE_COLOR = '#767676';
 
-    NONE = 'none',
-    SOLID = 'solid',
-    TOP = 'top',
-    RIGHT = 'right',
-    BOTTOM = 'bottom',
-    LEFT = 'left',
-    CENTER = 'center',
-    INSIDE = 'inside',
-    OUTSIDE = 'outside',
+const NONE = 'none';
+const SOLID = 'solid';
+const TOP = 'top';
+const RIGHT = 'right';
+const BOTTOM = 'bottom';
+const LEFT = 'left';
+const CENTER = 'center';
+const INSIDE = 'inside';
+const OUTSIDE = 'outside';
 
-    themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias;
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
 
 registerTheme({
     name: 'generic.light',

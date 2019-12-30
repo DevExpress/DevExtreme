@@ -24,25 +24,25 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const GALLERY_CLASS = 'dx-gallery',
-    GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper',
-    GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container',
-    GALLERY_ITEM_CLASS = GALLERY_CLASS + '-item',
+const GALLERY_CLASS = 'dx-gallery';
+const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
+const GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + '-container';
+const GALLERY_ITEM_CLASS = GALLERY_CLASS + '-item';
 
-    prepareItemTest = (data) => {
-        let gallery = new Gallery($('<div>'), {
-            items: [data]
-        });
+const prepareItemTest = (data) => {
+    const gallery = new Gallery($('<div>'), {
+        items: [data]
+    });
 
-        return gallery.itemElements().eq(0).find('.dx-item-content').contents();
-    };
+    return gallery.itemElements().eq(0).find('.dx-item-content').contents();
+};
 
 QUnit.module('base', () => {
     QUnit.test('default classes', function(assert) {
-        let $gallery = $('#gallerySimple').dxGallery({
-                items: [0, 1, 2, 3]
-            }),
-            $galleryItems = $gallery.find('.' + GALLERY_ITEM_CLASS);
+        const $gallery = $('#gallerySimple').dxGallery({
+            items: [0, 1, 2, 3]
+        });
+        const $galleryItems = $gallery.find('.' + GALLERY_ITEM_CLASS);
 
         assert.ok($gallery.hasClass(GALLERY_CLASS), 'element has a widget-specific class');
         assert.equal($gallery.find('.' + GALLERY_WRAPPER_CLASS).length, 1, 'gallery wrapper attached');
@@ -51,8 +51,8 @@ QUnit.module('base', () => {
     });
 
     QUnit.test('item template', function(assert) {
-        let $gallery = $('#galleryWithTmpl').dxGallery({ items: [ 1, 2, 3 ] }),
-            items = $gallery.find('.' + GALLERY_ITEM_CLASS);
+        const $gallery = $('#galleryWithTmpl').dxGallery({ items: [ 1, 2, 3 ] });
+        const items = $gallery.find('.' + GALLERY_ITEM_CLASS);
 
         if(windowUtils.hasWindow()) {
             assert.equal(items.length, 3, '3 items were rendered');
@@ -67,20 +67,20 @@ QUnit.module('base', () => {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role', function(assert) {
-        let $element = $('#gallerySimple').dxGallery();
+        const $element = $('#gallerySimple').dxGallery();
 
         assert.equal($element.attr('role'), 'listbox', 'aria role is correct');
     });
 
     QUnit.test('aria label', function(assert) {
-        let $element = $('#gallerySimple').dxGallery();
+        const $element = $('#gallerySimple').dxGallery();
 
         assert.equal($element.attr('aria-label'), 'gallery', 'widget should have aria-label to have difference from text list');
     });
 
     QUnit.test('aria role for items', function(assert) {
-        let $element = $('#gallerySimple').dxGallery({ items: [1] }),
-            $item = $element.find('.' + GALLERY_ITEM_CLASS);
+        const $element = $('#gallerySimple').dxGallery({ items: [1] });
+        const $item = $element.find('.' + GALLERY_ITEM_CLASS);
 
         assert.equal($item.attr('role'), 'option', 'item\'s role is correct');
     });
@@ -89,39 +89,39 @@ QUnit.module('aria accessibility', () => {
 
 QUnit.module('default template', () => {
     QUnit.test('template should be rendered correctly with image as string', function(assert) {
-        let $content = prepareItemTest('test'),
-            $img = $content.filter('img');
+        const $content = prepareItemTest('test');
+        const $img = $content.filter('img');
 
         assert.equal($img.length, 1);
         assert.equal($img.attr('src'), 'test');
     });
 
     QUnit.test('template should be rendered correctly with imageSrc', function(assert) {
-        let $content = prepareItemTest({ imageSrc: 'test.jpg' }),
-            $img = $content.filter('img');
+        const $content = prepareItemTest({ imageSrc: 'test.jpg' });
+        const $img = $content.filter('img');
 
         assert.equal($img.length, 1);
         assert.equal($img.attr('src'), 'test.jpg');
     });
 
     QUnit.test('template should be rendered correctly with imageSrc & imageAlt', function(assert) {
-        let $content = prepareItemTest({ imageSrc: 'test.jpg', imageAlt: 'test' }),
-            $img = $content.filter('img');
+        const $content = prepareItemTest({ imageSrc: 'test.jpg', imageAlt: 'test' });
+        const $img = $content.filter('img');
 
         assert.equal($img.length, 1);
         assert.equal($img.attr('alt'), 'test');
     });
 
     QUnit.test('template should be rendered correctly with html', function(assert) {
-        let $content = prepareItemTest({ html: '<span>test</span>' });
+        const $content = prepareItemTest({ html: '<span>test</span>' });
 
-        let $span = $content.is('span') ? $content : $content.children();
+        const $span = $content.is('span') ? $content : $content.children();
         assert.ok($span.length);
         assert.equal($span.text(), 'test');
     });
 
     QUnit.test('template should be rendered correctly with text', function(assert) {
-        let $content = prepareItemTest({ text: 'custom' });
+        const $content = prepareItemTest({ text: 'custom' });
 
         assert.equal($.trim($content.text()), 'custom');
     });

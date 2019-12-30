@@ -1,12 +1,12 @@
-var proto = require('./tree_map.base').prototype,
-    _expand = require('../core/helpers').expand;
+const proto = require('./tree_map.base').prototype;
+const _expand = require('../core/helpers').expand;
 
 require('./api');
 
 proto._eventsMap.onDrill = { name: 'drill' };
 
 _expand(proto, '_extendProxyType', function(proto) {
-    var that = this;
+    const that = this;
 
     proto.drillDown = function() {
         that._drillToNode(this._id);
@@ -18,8 +18,8 @@ _expand(proto, '_onNodesCreated', function() {
 });
 
 proto._drillToNode = function(index) {
-    var that = this,
-        node;
+    const that = this;
+    let node;
 
     if(that._drilldownIndex !== index) {
         node = that._nodes[index] || that._root;

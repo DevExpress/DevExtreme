@@ -1,24 +1,24 @@
-var $ = require('../../core/renderer'),
-    Widget = require('../widget/ui.widget'),
-    Tooltip = require('../tooltip'),
-    translator = require('../../animation/translator'),
-    positionUtils = require('../../animation/position'),
-    mathUtils = require('../../core/utils/math'),
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    numberLocalization = require('../../localization/number');
+const $ = require('../../core/renderer');
+const Widget = require('../widget/ui.widget');
+const Tooltip = require('../tooltip');
+const translator = require('../../animation/translator');
+const positionUtils = require('../../animation/position');
+const mathUtils = require('../../core/utils/math');
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const numberLocalization = require('../../localization/number');
 
-var SLIDER_CLASS = 'dx-slider',
-    SLIDER_HANDLE_CLASS = 'dx-slider-handle';
+const SLIDER_CLASS = 'dx-slider';
+const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
-var POSITION_ALIASES = {
+const POSITION_ALIASES = {
     'top': { my: 'bottom center', at: 'top center', collision: 'none' },
     'bottom': { my: 'top center', at: 'bottom center', collision: 'none' },
     'right': { my: 'left center', at: 'right center', collision: 'none' },
     'left': { my: 'right center', at: 'left center', collision: 'none' }
 };
 
-var SliderHandle = Widget.inherit({
+const SliderHandle = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             hoverStateEnabled: false,
@@ -100,7 +100,7 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var position = this.option('tooltipPosition');
+        let position = this.option('tooltipPosition');
 
         this._saveTooltipElements();
         this._resetTooltipPosition();
@@ -139,14 +139,14 @@ var SliderHandle = Widget.inherit({
 
         this._$tooltipContent.outerWidth('auto');
 
-        var outerWidthWithoutRounding = this._$tooltipContent.get(0).getBoundingClientRect().width;
-        var tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
-        var roundedTooltipOuterWidth = tooltipOuterWidth % 2 + tooltipOuterWidth;
+        const outerWidthWithoutRounding = this._$tooltipContent.get(0).getBoundingClientRect().width;
+        const tooltipOuterWidth = Math.ceil(outerWidthWithoutRounding);
+        const roundedTooltipOuterWidth = tooltipOuterWidth % 2 + tooltipOuterWidth;
 
         this._$tooltipContent
             .outerWidth(roundedTooltipOuterWidth);
 
-        var tooltipCenter = (roundedTooltipOuterWidth - this.$element().width()) / 2;
+        const tooltipCenter = (roundedTooltipOuterWidth - this.$element().width()) / 2;
 
         this._contentLocate.left = -tooltipCenter;
         this._$tooltipArrow.css({
@@ -162,7 +162,7 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var position = this.option('tooltipPosition');
+        let position = this.option('tooltipPosition');
 
         if(typeUtils.type(position) === 'string') {
             position = extend({
@@ -172,12 +172,12 @@ var SliderHandle = Widget.inherit({
             }, POSITION_ALIASES[position], { collision: 'fit none' });
         }
 
-        var calculatePosition = positionUtils.calculate(this._$tooltipContent, position);
-        var isLeftSide = calculatePosition.h.collisionSide === 'left';
+        const calculatePosition = positionUtils.calculate(this._$tooltipContent, position);
+        const isLeftSide = calculatePosition.h.collisionSide === 'left';
 
-        var arrowLeft = (isLeftSide ? -1 : 1) * calculatePosition.h.oversize,
-            arrowMinLeft = this._contentLocate.left,
-            arrowMaxRight = this._contentLocate.left + this._$tooltipContent.outerWidth() - this._$tooltipArrow.outerWidth();
+        const arrowLeft = (isLeftSide ? -1 : 1) * calculatePosition.h.oversize;
+        const arrowMinLeft = this._contentLocate.left;
+        const arrowMaxRight = this._contentLocate.left + this._$tooltipContent.outerWidth() - this._$tooltipArrow.outerWidth();
 
         translator.move(this._$tooltipContent, { left: this._contentLocate.left + (isLeftSide ? 1 : -1) * calculatePosition.h.oversize });
         translator.move(this._$tooltipArrow, { left: mathUtils.fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
@@ -192,13 +192,13 @@ var SliderHandle = Widget.inherit({
             return;
         }
 
-        var value = this.option('value');
+        const value = this.option('value');
         this._tooltip.$content().html(this._getFormattedValue(value));
         this._fitTooltip();
     },
 
     _updateTooltip: function() {
-        var hoverMode = /^onhover$/i.test(this.option('tooltipShowMode'));
+        const hoverMode = /^onhover$/i.test(this.option('tooltipShowMode'));
         if(!hoverMode) {
             this._createTooltip();
         }
@@ -226,15 +226,16 @@ var SliderHandle = Widget.inherit({
             case 'tooltipFormat':
                 this._renderValue();
                 break;
-            case 'value':
+            case 'value': {
                 this._renderValue();
 
-                var value = this._getFormattedValue(args.value);
-                var previousValue = this._getFormattedValue(args.previousValue);
+                const value = this._getFormattedValue(args.value);
+                const previousValue = this._getFormattedValue(args.previousValue);
                 this._ensureTooltipIsCentered(value, previousValue);
 
                 this.setAria('valuenow', args.value);
                 break;
+            }
             case 'tooltipEnabled':
                 this._renderTooltip();
                 break;

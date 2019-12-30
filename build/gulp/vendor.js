@@ -65,8 +65,8 @@ const CSS_VENDORS = [
 
 gulp.task('vendor-js', function() {
     return merge.apply(this, JS_VENDORS.map(function(vendor) {
-        let sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
-        let stream = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig).pipe(gulp.dest(DESTINATION_JS_PATH));
+        const sourceConfig = vendor.base ? { base: PACKAGES_SOURCE + vendor.base } : null;
+        const stream = gulp.src(PACKAGES_SOURCE + vendor.path, sourceConfig).pipe(gulp.dest(DESTINATION_JS_PATH));
 
         if(vendor.noUglyFile) {
             return stream
@@ -75,7 +75,7 @@ gulp.task('vendor-js', function() {
                 .pipe(gulp.dest(DESTINATION_JS_PATH));
         }
 
-        let path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
+        const path = PACKAGES_SOURCE + vendor.path.replace(/js$/, `${vendor.suffix || 'min'}.js`);
 
         return merge(stream, gulp.src(path, sourceConfig).pipe(gulp.dest(DESTINATION_JS_PATH)));
     }));

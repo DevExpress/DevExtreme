@@ -1,4 +1,4 @@
-var TOOLTIP_OFFSET = 12;
+const TOOLTIP_OFFSET = 12;
 
 // TODO: Somehow it should be merged with the core.Tooltip
 function TooltipViewer(params) {
@@ -16,9 +16,9 @@ TooltipViewer.prototype = {
     _subscribeToTracker: function(tracker, tooltip, layerCollection) {
         this._offTracker = tracker.on({
             'focus-on': function(arg) {
-                var result = false,
-                    layer,
-                    proxy;
+                let result = false;
+                let layer;
+                let proxy;
                 if(tooltip.isEnabled()) {
                     layer = layerCollection.byName(arg.data.name);
                     proxy = layer && layer.getProxy(arg.data.index);

@@ -226,7 +226,7 @@ const polarChartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            let coords = {
+            const coords = {
                 offsetX: annotation.offsetX,
                 offsetY: annotation.offsetY,
                 canvas: this._calcCanvas()

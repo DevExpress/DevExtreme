@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, no-unused-vars*/
+/* eslint-disable no-undef, no-unused-vars, no-var, one-var*/
 
 function wrapBuffer(arrayBuffer) {
     return new DataView(arrayBuffer);

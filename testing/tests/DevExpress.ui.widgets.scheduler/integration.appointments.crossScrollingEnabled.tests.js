@@ -102,8 +102,8 @@ module('crossScrollingEnabled = true', config, () => {
             crossScrollingEnabled: true
         });
 
-        const $appointment = scheduler.appointments.getAppointment(),
-            dragDistance = -50;
+        const $appointment = scheduler.appointments.getAppointment();
+        const dragDistance = -50;
 
         const pointer = pointerMock($appointment).start();
         const startPosition = $appointment.offset();
@@ -167,9 +167,9 @@ module('crossScrollingEnabled = true', config, () => {
 
             const scrollOffset = 100;
             const $appointment = scheduler.appointments.getAppointment();
-            const initialResizableAreaLeft = $appointment.dxResizable('instance').option('area').left,
-                initialResizableAreaRight = $appointment.dxResizable('instance').option('area').right,
-                scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+            const initialResizableAreaLeft = $appointment.dxResizable('instance').option('area').left;
+            const initialResizableAreaRight = $appointment.dxResizable('instance').option('area').right;
+            const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
 
             scrollable.scrollTo({ left: scrollOffset, top: 0 });
 
@@ -193,8 +193,8 @@ module('crossScrollingEnabled = true', config, () => {
             });
 
             const $appointment = scheduler.appointments.getAppointment();
-            const pointer = pointerMock($appointment).start(),
-                startPosition = $appointment.offset();
+            const pointer = pointerMock($appointment).start();
+            const startPosition = $appointment.offset();
 
             pointer.down().move(dragDistance, 0);
 
@@ -216,11 +216,11 @@ module('crossScrollingEnabled = true', config, () => {
                 crossScrollingEnabled: true
             });
 
-            const $appointment = scheduler.appointments.getAppointment(),
-                dragDistance = 150;
+            const $appointment = scheduler.appointments.getAppointment();
+            const dragDistance = 150;
 
-            const pointer = pointerMock($appointment).start(),
-                startPosition = $appointment.offset();
+            const pointer = pointerMock($appointment).start();
+            const startPosition = $appointment.offset();
 
             pointer.down().move(dragDistance, 0);
 
@@ -250,9 +250,9 @@ module('crossScrollingEnabled = true', config, () => {
                 crossScrollingEnabled: true
             });
 
-            const $appointment = scheduler.appointments.getAppointment(),
-                scrollable = scheduler.instance.getWorkSpace().$element().find('.dx-scrollable').dxScrollable('instance'),
-                startPosition = $appointment.offset();
+            const $appointment = scheduler.appointments.getAppointment();
+            const scrollable = scheduler.instance.getWorkSpace().$element().find('.dx-scrollable').dxScrollable('instance');
+            const startPosition = $appointment.offset();
 
             scrollable.scrollTo({ left: 400, top: 0 });
 

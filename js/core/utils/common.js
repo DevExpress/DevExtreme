@@ -113,7 +113,7 @@ const findBestMatches = function(targetFilter, items, mapFn) {
         const item = mapFn ? mapFn(itemSrc) : itemSrc;
 
         each(targetFilter, (paramName, targetValue) => {
-            let value = item[paramName];
+            const value = item[paramName];
 
             if(value === undefined) {
                 return;

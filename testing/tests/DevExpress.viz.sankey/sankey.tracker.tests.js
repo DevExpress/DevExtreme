@@ -20,7 +20,7 @@ dxSankey.addPlugin(trackerModule.plugin);
 dxSankey.addPlugin(tooltipModule.plugin);
 setTooltipCustomOptions(dxSankey);
 
-var trackerEnvironment = $.extend({}, environment, {
+const trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         common.environment.beforeEach.apply(this, arguments);
         this.linksGroupIndex = 0;
@@ -33,7 +33,7 @@ var trackerEnvironment = $.extend({}, environment, {
     },
 
     trigger: function(name, data, options) {
-        var $target = $('<div>').appendTo(this.renderer.root.element);
+        const $target = $('<div>').appendTo(this.renderer.root.element);
         $target[0][trackerModule._TESTS_dataKey] = data;
         $target.trigger($.Event(name, options));
     }
@@ -46,8 +46,8 @@ QUnit.test('Set data for items', function(assert) {
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
     });
 
-    var nodes = this.nodes(),
-        links = this.links();
+    const nodes = this.nodes();
+    const links = this.links();
 
     assert.equal(nodes.length, 3);
     assert.equal(links.length, 2);
@@ -63,7 +63,7 @@ QUnit.test('Set data for items', function(assert) {
 QUnit.module('Events', trackerEnvironment);
 
 QUnit.test('Node hover on. Get item by tracker data', function(assert) {
-    var widget = createSankey({
+    const widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
@@ -78,7 +78,7 @@ QUnit.test('Node hover on. Get item by tracker data', function(assert) {
 });
 
 QUnit.test('Link hover on. Get item by tracker data', function(assert) {
-    var widget = createSankey({
+    const widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
 
@@ -93,7 +93,7 @@ QUnit.test('Link hover on. Get item by tracker data', function(assert) {
 });
 
 QUnit.test('Hover off', function(assert) {
-    var widget = createSankey({
+    const widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
     });
     this.trigger(pointerEvents.move, 2);
@@ -106,11 +106,11 @@ QUnit.test('Hover off', function(assert) {
 
 QUnit.test('Click on node', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var spy = sinon.spy(),
-        widget = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            onNodeClick: spy
-        });
+    const spy = sinon.spy();
+    const widget = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        onNodeClick: spy
+    });
 
     this.trigger(clickEventName, 2, { pageX: 400, pageY: 300 });
 
@@ -120,12 +120,12 @@ QUnit.test('Click on node', function(assert) {
 
 QUnit.test('Click on link', function(assert) {
     this.renderer.offsetTemplate = { left: 40, top: 30 };
-    var spy = sinon.spy(),
-        widget = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            node: { width: 5 },
-            onLinkClick: spy
-        });
+    const spy = sinon.spy();
+    const widget = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        node: { width: 5 },
+        onLinkClick: spy
+    });
 
     this.trigger(clickEventName, 3, { pageX: 200, pageY: 200 });
 
@@ -137,7 +137,7 @@ QUnit.test('Click on link', function(assert) {
 QUnit.module('Tooltip', trackerEnvironment);
 
 QUnit.test('Show tooltip on hovered node', function(assert) {
-    var widget = createSankey({
+    const widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true
@@ -152,7 +152,7 @@ QUnit.test('Show tooltip on hovered node', function(assert) {
 });
 
 QUnit.test('Show tooltip on hovered link', function(assert) {
-    var widget = createSankey({
+    const widget = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
             enabled: true
@@ -167,7 +167,7 @@ QUnit.test('Show tooltip on hovered link', function(assert) {
 });
 
 QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
-    var stub = sinon.stub().returns({ text: 'custom text' });
+    const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -182,7 +182,7 @@ QUnit.test('Show custom tooltip (text) on hovered node', function(assert) {
 });
 
 QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
-    var stub = sinon.stub().returns({ text: 'custom text' });
+    const stub = sinon.stub().returns({ text: 'custom text' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -197,7 +197,7 @@ QUnit.test('Show custom tooltip (text) on hovered link', function(assert) {
 });
 
 QUnit.test('Show custom tooltip (html) on hovered node', function(assert) {
-    var stub = sinon.stub().returns({ html: 'custom html' });
+    const stub = sinon.stub().returns({ html: 'custom html' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {
@@ -212,7 +212,7 @@ QUnit.test('Show custom tooltip (html) on hovered node', function(assert) {
 });
 
 QUnit.test('Show custom tooltip (html) on hovered link', function(assert) {
-    var stub = sinon.stub().returns({ html: 'custom html' });
+    const stub = sinon.stub().returns({ html: 'custom html' });
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         tooltip: {

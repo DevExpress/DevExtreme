@@ -3,7 +3,7 @@
 * @publicName Series
 * @type object
 */
-var BaseBaseSeries = {
+const BaseBaseSeries = {
     /**
     * @name baseSeriesObjectFields.fullState
     * @type number
@@ -116,14 +116,14 @@ var BaseBaseSeries = {
   * @publicName hide()
   */
     hide: function() { }
-}
+};
 
 /**
 * @name basePointObject
 * @publicName Point
 * @type object
 */
-var BasePoint = {
+const BasePoint = {
     /**
     * @name basePointObjectFields.data
     * @type any
@@ -214,7 +214,7 @@ var BasePoint = {
 * @publicName Label
 * @type object
 */
-var BaseLabel = {
+const BaseLabel = {
     /**
     * @name baseLabelObjectMethods.getBoundingRect
     * @publicName getBoundingRect()
@@ -247,14 +247,14 @@ var BaseLabel = {
     * @return boolean
     */
     isVisible: function() { }
-}
+};
 
 /**
 * @name BaseChartLegendItem
 * @type object
 * @inherits BaseLegendItem
 */
-var legendItem = {
+const legendItem = {
   /**
   * @name BaseChartLegendItem.series
   * @type baseSeriesObject

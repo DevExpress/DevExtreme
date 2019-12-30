@@ -2,7 +2,7 @@ import $ from 'jquery';
 import dataUtils from 'core/element_data';
 
 QUnit.testStart(function() {
-    var markup = '<div><div id="container" class="dx-datagrid"></div></div>';
+    const markup = '<div><div id="container" class="dx-datagrid"></div></div>';
     $('#qunit-fixture').html(markup);
 });
 
@@ -14,13 +14,13 @@ import columnsView from 'ui/grid_core/ui.grid_core.columns_view';
 import fx from 'animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
-var MockColumnsController = dataGridMocks.MockColumnsController,
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+const MockColumnsController = dataGridMocks.MockColumnsController;
+const setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 
 QUnit.module('API methods', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
         that.widths = [100, 200, 50, 50, 200];
 
         that.columns = [{ caption: 'Column 1', width: that.widths[0] },
@@ -65,9 +65,9 @@ QUnit.test('Get column widths', function(assert) {
 
 // T208053
 QUnit.test('Get column widths during css animation', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
-    var that = this;
+    const that = this;
 
     // act
     fx.animate('#container', {
@@ -101,8 +101,8 @@ QUnit.test('Get column widths with detail row (editForm)', function(assert) {
 
 QUnit.test('Set column widths', function(assert) {
     // arrange
-    var that = this,
-        newWidths = [250, 100, 50, 50, 150];
+    const that = this;
+    const newWidths = [250, 100, 50, 50, 150];
 
     // act
     that.columnsView.setColumnWidths({ widths: newWidths });
@@ -113,7 +113,7 @@ QUnit.test('Set column widths', function(assert) {
 
 QUnit.test('Create table by default', function(assert) {
     // act
-    var $table = this.columnsView._createTable();
+    const $table = this.columnsView._createTable();
 
     // assert
     assert.ok($table.hasClass('dx-datagrid-table-fixed'), 'is contains data grid table class');
@@ -122,12 +122,12 @@ QUnit.test('Create table by default', function(assert) {
 // T198380, T809552
 QUnit.test('Create table with thead in safari', function(assert) {
     // arrange
-    var oldSafari = browser.safari;
+    const oldSafari = browser.safari;
     try {
         browser.safari = true;
         // act
-        var $table = this.columnsView._createTable(this.columns),
-            $thead = $table.children('thead');
+        const $table = this.columnsView._createTable(this.columns);
+        const $thead = $table.children('thead');
 
         // assert
         assert.ok($thead.length, 'table contains thead element');
@@ -142,7 +142,7 @@ QUnit.test('Create table by columnWidth auto', function(assert) {
     this.options.columnAutoWidth = true;
 
     // act
-    var $table = this.columnsView._createTable();
+    const $table = this.columnsView._createTable();
 
     // assert
     assert.ok($table.hasClass('dx-datagrid-table-fixed'), 'is contains data grid table class');
@@ -151,11 +151,11 @@ QUnit.test('Create table by columnWidth auto', function(assert) {
 // S173138
 QUnit.test('Set title attribute when cell text is trimmed', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -183,11 +183,11 @@ QUnit.test('Set title attribute when cell text is trimmed', function(assert) {
 // S173138
 QUnit.test('Not set title attribute when cell text is trimmed with cellHintEnabled false', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', false);
     that.columns.length = 0;
@@ -215,11 +215,11 @@ QUnit.test('Not set title attribute when cell text is trimmed with cellHintEnabl
 // T180556
 QUnit.test('Not set title attribute when cell text is trimmed and cellTemplate defined', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -247,11 +247,11 @@ QUnit.test('Not set title attribute when cell text is trimmed and cellTemplate d
 // T356806
 QUnit.test('Not set title attribute when group cell text is trimmed and groupCellTemplate defined', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(100),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(100);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -287,11 +287,11 @@ QUnit.test('Not set title attribute when group cell text is trimmed and groupCel
 // T268245
 QUnit.test('Not set title attribute when cell text is trimmed and headerCellTemplate defined', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -319,11 +319,11 @@ QUnit.test('Not set title attribute when cell text is trimmed and headerCellTemp
 // T222924
 QUnit.test('Not set title attribute when cell text is trimmed and user title defined', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -353,11 +353,11 @@ QUnit.test('Not set title attribute when cell text is trimmed and user title def
 // S173138
 QUnit.test('Set title attribute when cell text is trimmed in dx-datagrid-text-content container', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', true);
     that.columns.length = 0;
@@ -385,11 +385,11 @@ QUnit.test('Set title attribute when cell text is trimmed in dx-datagrid-text-co
 // S173138
 QUnit.test('Not set title attribute when cell text is trimmed in dx-datagrid-text-content container with cellHintEnabled false', function(assert) {
     // arrange
-    var that = this,
-        $container = $('#container').width(200),
-        $table,
-        firstCellElement,
-        lastCellElement;
+    const that = this;
+    const $container = $('#container').width(200);
+    let $table;
+    let firstCellElement;
+    let lastCellElement;
 
     that.option('cellHintEnabled', false);
     that.columns.length = 0;
@@ -416,7 +416,7 @@ QUnit.test('Not set title attribute when cell text is trimmed in dx-datagrid-tex
 
 QUnit.test('Invalidate instead of render for options', function(assert) {
     // arrange
-    var renderCounter = 0;
+    let renderCounter = 0;
     this.columnsView.render($('#container'));
     this.columnsView.renderCompleted.add(function() {
         renderCounter++;
@@ -439,7 +439,7 @@ QUnit.test('Invalidate instead of render for options', function(assert) {
 
 QUnit.test('Invalidate when data is loading', function(assert) {
     // arrange
-    var renderCounter = 0;
+    let renderCounter = 0;
     this.columnsView.render($('#container'));
     this.columnsView.renderCompleted.add(function() {
         renderCounter++;
@@ -481,17 +481,17 @@ QUnit.test('Require resize of render for options', function(assert) {
 
 QUnit.test('Options of template have the \'component\'', function(assert) {
     // arrange
-    var that = this,
-        callRenderTemplate,
-        template = {
-            allowRenderToDetachedContainer: true,
-            render: function($container, options) {
-                callRenderTemplate = true;
+    const that = this;
+    let callRenderTemplate;
+    const template = {
+        allowRenderToDetachedContainer: true,
+        render: function($container, options) {
+            callRenderTemplate = true;
 
-                // assert
-                assert.deepEqual(options.component, that, 'component');
-            }
-        };
+            // assert
+            assert.deepEqual(options.component, that, 'component');
+        }
+    };
 
     // act
     that.columnsView.renderTemplate($('#container'), template, {});
@@ -503,8 +503,8 @@ QUnit.test('Options of template have the \'component\'', function(assert) {
 // T616759
 QUnit.test('The title attribute should not be set for content inside detail row', function(assert) {
     // arrange
-    var $table,
-        $container = $('#container').width(200);
+    let $table;
+    const $container = $('#container').width(200);
 
     this.option('cellHintEnabled', true);
     $table = $(this.columnsView._createTable());

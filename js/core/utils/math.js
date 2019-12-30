@@ -1,6 +1,6 @@
-var isExponential = require('./type').isExponential;
+const isExponential = require('./type').isExponential;
 
-var sign = function(value) {
+const sign = function(value) {
     if(value === 0) {
         return 0;
     }
@@ -8,9 +8,9 @@ var sign = function(value) {
     return value / Math.abs(value);
 };
 
-var fitIntoRange = function(value, minValue, maxValue) {
-    var isMinValueUndefined = !minValue && minValue !== 0,
-        isMaxValueUndefined = !maxValue && maxValue !== 0;
+const fitIntoRange = function(value, minValue, maxValue) {
+    const isMinValueUndefined = !minValue && minValue !== 0;
+    const isMaxValueUndefined = !maxValue && maxValue !== 0;
 
     isMinValueUndefined && (minValue = !isMaxValueUndefined ? Math.min(value, maxValue) : value);
     isMaxValueUndefined && (maxValue = !isMinValueUndefined ? Math.max(value, minValue) : value);
@@ -18,7 +18,7 @@ var fitIntoRange = function(value, minValue, maxValue) {
     return Math.min(Math.max(value, minValue), maxValue);
 };
 
-var inRange = function(value, minValue, maxValue) {
+const inRange = function(value, minValue, maxValue) {
     return value >= minValue && value <= maxValue;
 };
 
@@ -28,20 +28,20 @@ function getExponent(value) {
 
 // T570217
 function _isEdgeBug() {
-    var value = 0.0003,
-        correctValue = '0.000300',
-        precisionValue = 3;
+    const value = 0.0003;
+    const correctValue = '0.000300';
+    const precisionValue = 3;
     return correctValue !== value.toPrecision(precisionValue);
 }
 
 function adjust(value, interval) {
-    var precision = getPrecision(interval || 0) + 2,
-        separatedValue = value.toString().split('.'),
-        sourceValue = value,
-        absValue = Math.abs(value),
-        separatedAdjustedValue,
-        isExponentValue = isExponential(value),
-        integerPart = absValue > 1 ? 10 : 0;
+    let precision = getPrecision(interval || 0) + 2;
+    const separatedValue = value.toString().split('.');
+    const sourceValue = value;
+    const absValue = Math.abs(value);
+    let separatedAdjustedValue;
+    const isExponentValue = isExponential(value);
+    const integerPart = absValue > 1 ? 10 : 0;
 
     if(separatedValue.length === 1) {
         return value;
@@ -67,9 +67,9 @@ function adjust(value, interval) {
 }
 
 function getPrecision(value) {
-    var str = value.toString(),
-        mantissa,
-        positionOfDelimiter;
+    const str = value.toString();
+    let mantissa;
+    let positionOfDelimiter;
 
     if(str.indexOf('.') < 0) {
         return 0;
@@ -85,12 +85,12 @@ function getRoot(x, n) {
         return NaN;
     }
 
-    var y = Math.pow(Math.abs(x), 1 / n);
+    const y = Math.pow(Math.abs(x), 1 / n);
     return n % 2 === 1 && x < 0 ? -y : y;
 }
 
 function solveCubicEquation(a, b, c, d) {
-    var min = 1e-8;
+    const min = 1e-8;
     if(Math.abs(a) < min) {
         a = b; b = c; c = d;
         if(Math.abs(a) < min) {
@@ -101,7 +101,7 @@ function solveCubicEquation(a, b, c, d) {
             return [-b / a];
         }
 
-        var D2 = b * b - 4 * a * c;
+        const D2 = b * b - 4 * a * c;
         if(Math.abs(D2) < min) {
             return [-b / (2 * a)];
         } else if(D2 > 0) {
@@ -110,17 +110,17 @@ function solveCubicEquation(a, b, c, d) {
         return [];
     }
 
-    var p = (3 * a * c - b * b) / (3 * a * a);
-    var q = (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a);
-    var roots;
-    var u;
+    const p = (3 * a * c - b * b) / (3 * a * a);
+    const q = (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a);
+    let roots;
+    let u;
 
     if(Math.abs(p) < min) {
         roots = [getRoot(-q, 3)];
     } else if(Math.abs(q) < min) {
         roots = [0].concat(p < 0 ? [Math.sqrt(-p), -Math.sqrt(-p)] : []);
     } else {
-        var D3 = q * q / 4 + p * p * p / 27;
+        const D3 = q * q / 4 + p * p * p / 27;
         if(Math.abs(D3) < min) {
             roots = [-1.5 * q / p, 3 * q / p];
         } else if(D3 > 0) {
@@ -128,13 +128,13 @@ function solveCubicEquation(a, b, c, d) {
             roots = [u - p / (3 * u)];
         } else {
             u = 2 * Math.sqrt(-p / 3);
-            var t = Math.acos(3 * q / p / u) / 3;
-            var k = 2 * Math.PI / 3;
+            const t = Math.acos(3 * q / p / u) / 3;
+            const k = 2 * Math.PI / 3;
             roots = [u * Math.cos(t), u * Math.cos(t - k), u * Math.cos(t - 2 * k)];
         }
     }
 
-    for(var i = 0; i < roots.length; i++) {
+    for(let i = 0; i < roots.length; i++) {
         roots[i] -= b / (3 * a);
     }
 

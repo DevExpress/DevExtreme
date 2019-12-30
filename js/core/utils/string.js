@@ -1,7 +1,7 @@
-var typeUtils = require('./type');
+const typeUtils = require('./type');
 
-var encodeHtml = (function() {
-    var encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
+const encodeHtml = (function() {
+    const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
     return function(str) {
         return String(str)
@@ -14,7 +14,7 @@ var encodeHtml = (function() {
 })();
 
 
-var splitQuad = function(raw) {
+const splitQuad = function(raw) {
     switch(typeof raw) {
         case 'string':
             return raw.split(/\s+/, 4);
@@ -31,12 +31,12 @@ var splitQuad = function(raw) {
     }
 };
 
-var quadToObject = function(raw) {
-    var quad = splitQuad(raw),
-        left = parseInt(quad && quad[0], 10),
-        top = parseInt(quad && quad[1], 10),
-        right = parseInt(quad && quad[2], 10),
-        bottom = parseInt(quad && quad[3], 10);
+const quadToObject = function(raw) {
+    const quad = splitQuad(raw);
+    let left = parseInt(quad && quad[0], 10);
+    let top = parseInt(quad && quad[1], 10);
+    let right = parseInt(quad && quad[2], 10);
+    let bottom = parseInt(quad && quad[3], 10);
 
     if(!isFinite(left)) {
         left = 0;
@@ -54,18 +54,18 @@ var quadToObject = function(raw) {
     return { top: top, right: right, bottom: bottom, left: left };
 };
 
-var stringFormat = function() {
-    var s = arguments[0],
-        values = [].slice.call(arguments).slice(1),
-        replaceDollarCount,
-        reg,
-        value;
+const stringFormat = function() {
+    let s = arguments[0];
+    const values = [].slice.call(arguments).slice(1);
+    let replaceDollarCount;
+    let reg;
+    let value;
 
     if(typeUtils.isFunction(s)) {
         return s.apply(this, values);
     }
 
-    for(var i = 0; i < values.length; i++) {
+    for(let i = 0; i < values.length; i++) {
         reg = new RegExp('\\{' + i + '\\}', 'gm');
         value = values[i];
         if(typeUtils.type(value) === 'string' && value.indexOf('$') >= 0) {
@@ -78,8 +78,8 @@ var stringFormat = function() {
     return s;
 };
 
-var replaceAll = (function() {
-    var quote = function(str) {
+const replaceAll = (function() {
+    const quote = function(str) {
         return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1');
     };
 
@@ -88,8 +88,8 @@ var replaceAll = (function() {
     };
 })();
 
-var isEmpty = (function() {
-    var SPACE_REGEXP = /\s/g;
+const isEmpty = (function() {
+    const SPACE_REGEXP = /\s/g;
 
     return function(text) {
         return !text || !text.replace(SPACE_REGEXP, '');

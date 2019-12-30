@@ -1,16 +1,16 @@
-var each = require('../../core/utils/iterator').each,
-    eventsEngine = require('../../events/core/events_engine'),
-    Promise = require('../../core/polyfills/promise'),
-    Provider = require('./provider'),
-    Color = require('../../color'),
-    clickEvent = require('../../events/click');
+const each = require('../../core/utils/iterator').each;
+const eventsEngine = require('../../events/core/events_engine');
+const Promise = require('../../core/polyfills/promise');
+const Provider = require('./provider');
+const Color = require('../../color');
+const clickEvent = require('../../events/click');
 
-var GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
+let GOOGLE_STATIC_URL = 'https://maps.google.com/maps/api/staticmap?';
 
-var GoogleStaticProvider = Provider.inherit({
+const GoogleStaticProvider = Provider.inherit({
 
     _locationToString: function(location) {
-        var latLng = this._getLatLng(location);
+        const latLng = this._getLatLng(location);
         return latLng ? (latLng.lat + ',' + latLng.lng) : location.toString().replace(/ /g, '+');
     },
 
@@ -43,7 +43,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     addMarkers: function(options) {
-        var that = this;
+        const that = this;
 
         return this._updateMap().then(function(result) {
             each(options, function(_, options) {
@@ -56,7 +56,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     removeMarkers: function(options) {
-        var that = this;
+        const that = this;
 
         return this._updateMap().then(function(result) {
             each(options, function(_, options) {
@@ -73,7 +73,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     addRoutes: function(options) {
-        var that = this;
+        const that = this;
 
         return this._updateMap().then(function(result) {
             each(options, function(_, options) {
@@ -86,7 +86,7 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     removeRoutes: function(options) {
-        var that = this;
+        const that = this;
 
         return this._updateMap().then(function(result) {
             each(options, function(_, options) {
@@ -110,10 +110,10 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     _updateMap: function() {
-        var key = this._keyOption('googleStatic'),
-            $container = this._$container;
+        const key = this._keyOption('googleStatic');
+        const $container = this._$container;
 
-        var requestOptions = [
+        const requestOptions = [
             'sensor=false',
             'size=' + Math.round($container.width()) + 'x' + Math.round($container.height()),
             'maptype=' + this._option('type'),
@@ -126,7 +126,7 @@ var GoogleStaticProvider = Provider.inherit({
             requestOptions.push('key=' + key);
         }
 
-        var request = GOOGLE_STATIC_URL + requestOptions.join('&');
+        const request = GOOGLE_STATIC_URL + requestOptions.join('&');
 
         this._$container.css('background', 'url("' + request + '") no-repeat 0 0');
 
@@ -136,9 +136,9 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     _markersSubstring: function() {
-        var that = this,
-            markers = [],
-            markerIcon = this._option('markerIconSrc');
+        const that = this;
+        const markers = [];
+        const markerIcon = this._option('markerIconSrc');
 
         if(markerIcon) {
             markers.push('icon:' + markerIcon);
@@ -152,14 +152,14 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     _routeSubstrings: function() {
-        var that = this,
-            routes = [];
+        const that = this;
+        const routes = [];
 
         each(this._option('routes'), function(_, route) {
-            var color = new Color(route.color || that._defaultRouteColor()).toHex().replace('#', '0x'),
-                opacity = Math.round((route.opacity || that._defaultRouteOpacity()) * 255).toString(16),
-                width = route.weight || that._defaultRouteWeight(),
-                locations = [];
+            const color = new Color(route.color || that._defaultRouteColor()).toHex().replace('#', '0x');
+            const opacity = Math.round((route.opacity || that._defaultRouteOpacity()) * 255).toString(16);
+            const width = route.weight || that._defaultRouteWeight();
+            const locations = [];
             each(route.locations, function(_, routePoint) {
                 locations.push(that._locationToString(routePoint));
             });
@@ -171,8 +171,8 @@ var GoogleStaticProvider = Provider.inherit({
     },
 
     _attachClickEvent: function() {
-        var that = this,
-            eventName = this._addEventNamespace(clickEvent.name);
+        const that = this;
+        const eventName = this._addEventNamespace(clickEvent.name);
 
         eventsEngine.off(this._$container, eventName);
         eventsEngine.on(this._$container, eventName, function(e) {

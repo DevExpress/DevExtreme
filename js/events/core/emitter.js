@@ -1,11 +1,11 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    Class = require('../../core/class'),
-    Callbacks = require('../../core/utils/callbacks'),
-    extend = require('../../core/utils/extend').extend,
-    eventUtils = require('../utils');
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const Callbacks = require('../../core/utils/callbacks');
+const extend = require('../../core/utils/extend').extend;
+const eventUtils = require('../utils');
 
-var Emitter = Class.inherit({
+const Emitter = Class.inherit({
 
     ctor: function(element) {
         this._$element = $(element);
@@ -79,7 +79,7 @@ var Emitter = Class.inherit({
     },
 
     _fireEvent: function(eventName, e, params) {
-        var eventData = extend({
+        const eventData = extend({
             type: eventName,
             originalEvent: e,
             target: this._getEmitterTarget(e),

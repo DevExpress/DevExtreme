@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createFunnel = common.createFunnel,
-    environment = common.environment,
-    stubAlgorithm = common.stubAlgorithm,
-    legendModule = require('viz/components/legend'),
-    Legend = legendModule.Legend,
-    stubLegend = require('../../helpers/vizMocks.js').stubClass(Legend);
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
+const stubAlgorithm = common.stubAlgorithm;
+const legendModule = require('viz/components/legend');
+const Legend = legendModule.Legend;
+const stubLegend = require('../../helpers/vizMocks.js').stubClass(Legend);
 
-var dxFunnel = require('viz/funnel/funnel');
+const dxFunnel = require('viz/funnel/funnel');
 dxFunnel.addPlugin(legendModule.plugin);
 
 QUnit.module('Legend', $.extend({}, environment, {
@@ -15,7 +15,7 @@ QUnit.module('Legend', $.extend({}, environment, {
         environment.beforeEach.call(this);
         this.itemGroupNumber = 1;
         sinon.stub(legendModule, 'Legend', function() {
-            var stub = new stubLegend();
+            const stub = new stubLegend();
             stub.stub('coordsIn').returns(true);
             stub.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
             stub.stub('measure').returns([100, 100]);
@@ -34,14 +34,14 @@ QUnit.module('Legend', $.extend({}, environment, {
 }));
 
 QUnit.test('Creation', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: 'One', color: 'orange' }],
-            legend: { visible: true }
-        }),
-        legendCtorArgs = legendModule.Legend.lastCall.args[0],
-        legendData = funnel._getLegendData()[0],
-        formatObject = legendCtorArgs.getFormatObject(legendData),
-        legendGroup = this.renderer.g.getCall(0).returnValue;
+    const funnel = createFunnel({
+        dataSource: [{ value: 5, argument: 'One', color: 'orange' }],
+        legend: { visible: true }
+    });
+    const legendCtorArgs = legendModule.Legend.lastCall.args[0];
+    const legendData = funnel._getLegendData()[0];
+    const formatObject = legendCtorArgs.getFormatObject(legendData);
+    const legendGroup = this.renderer.g.getCall(0).returnValue;
 
     assert.equal(legendGroup.attr.lastCall.args[0].class, 'dxf-legend');
     assert.equal(legendCtorArgs.renderer, this.renderer);
@@ -55,14 +55,14 @@ QUnit.test('Creation', function(assert) {
 });
 
 QUnit.test('Update', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems(),
-        lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
+    const funnel = createFunnel({
+        dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
+        legend: { visible: true }
+    });
+    const items = funnel.getAllItems();
+    const lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
 
-    for(var i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
         assert.equal(lastCallUpdate[i].text, items[i].data.argument);
         assert.equal(lastCallUpdate[i].item.data.argument, items[i].data.argument);
         assert.deepEqual(lastCallUpdate[i].states, {
@@ -89,19 +89,19 @@ QUnit.test('Legend options', function(assert) {
         dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
         legend: { visible: true, horizontalAlignment: 'center', verticalAlignment: 'bottom' }
     });
-    var legend = legendModule.Legend.getCall(0).returnValue;
+    const legend = legendModule.Legend.getCall(0).returnValue;
 
     assert.equal(legend.update.lastCall.args[1].horizontalAlignment, 'center');
     assert.equal(legend.update.lastCall.args[1].verticalAlignment, 'bottom');
 });
 
 QUnit.test('Hover legend', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems(),
-        legend = legendModule.Legend.getCall(0).returnValue;
+    const funnel = createFunnel({
+        dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
+        legend: { visible: true }
+    });
+    const items = funnel.getAllItems();
+    const legend = legendModule.Legend.getCall(0).returnValue;
 
     items[1].hover(true);
 
@@ -109,12 +109,12 @@ QUnit.test('Hover legend', function(assert) {
 });
 
 QUnit.test('Selection legend', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems(),
-        legend = legendModule.Legend.getCall(0).returnValue;
+    const funnel = createFunnel({
+        dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
+        legend: { visible: true }
+    });
+    const items = funnel.getAllItems();
+    const legend = legendModule.Legend.getCall(0).returnValue;
 
     items[1].select(true);
 
@@ -122,12 +122,12 @@ QUnit.test('Selection legend', function(assert) {
 });
 
 QUnit.test('Hover and unhover legend', function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems(),
-        legend = legendModule.Legend.getCall(0).returnValue;
+    const funnel = createFunnel({
+        dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
+        legend: { visible: true }
+    });
+    const items = funnel.getAllItems();
+    const legend = legendModule.Legend.getCall(0).returnValue;
 
     items[1].hover(true);
     items[1].hover(false);
@@ -136,17 +136,17 @@ QUnit.test('Hover and unhover legend', function(assert) {
 });
 
 QUnit.test('Update items', function(assert) {
-    var funnel = createFunnel({
+    const funnel = createFunnel({
         dataSource: [{ value: 5, argument: 'One' }, { value: 10, argument: 'Two' }],
         legend: { visible: true }
     });
 
     funnel.option({ dataSource: [{ value: 1, argument: 'One' }, { value: 4, argument: 'Two' }] });
 
-    var items = funnel.getAllItems(),
-        lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
+    const items = funnel.getAllItems();
+    const lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
 
-    for(var i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
         assert.deepEqual(lastCallUpdate[i].item.data.value, items[i].data.value);
     }
 });

@@ -15,7 +15,7 @@
 * @type object
 * @hidden
 */
-var CommonIndicator = {
+const CommonIndicator = {
     /**
     * @name CommonIndicator.color
     * @type string
@@ -187,9 +187,9 @@ var CommonIndicator = {
 * @type CommonIndicator
 * @default '#C2C2C2' @prop color
 */
-var circularRectangleNeedle = {
+const circularRectangleNeedle = {
     color: '#C2C2C2'
-}
+};
 /**
 * @name circularTriangleNeedle
 * @publicName TriangleNeedle
@@ -197,9 +197,9 @@ var circularRectangleNeedle = {
 * @type CommonIndicator
 * @default '#C2C2C2' @prop color
 */
-var circularTriangleNeedle = {
+const circularTriangleNeedle = {
     color: '#C2C2C2'
-}
+};
 /**
 * @name circularTwoColorNeedle
 * @publicName TwoColorNeedle
@@ -207,9 +207,9 @@ var circularTriangleNeedle = {
 * @type CommonIndicator
 * @default '#C2C2C2' @prop color
 */
-var circularTwoColorNeedle = {
+const circularTwoColorNeedle = {
     color: '#C2C2C2'
-}
+};
 /**
 * @name circularRangeBar
 * @publicName RangeBar
@@ -218,10 +218,10 @@ var circularTwoColorNeedle = {
 * @default '#CBC5CF' @prop color
 * @default 30 @prop offset
 */
-var circularRangeBar = {
+const circularRangeBar = {
     color: '#CBC5CF',
     offset: 30
-}
+};
 /**
 * @name circularTriangleMarker
 * @publicName TriangleMarker
@@ -232,12 +232,12 @@ var circularRangeBar = {
 * @default 14 @prop length
 * @default 6 @prop offset
 */
-var circularTriangleMarker = {
+const circularTriangleMarker = {
     color: '#8798A5',
     width: 13,
     length: 14,
     offset: 6
-}
+};
 /**
 * @name circularTextCloud
 * @publicName TextCloud
@@ -248,7 +248,7 @@ var circularTriangleMarker = {
 * @default 18 @prop text.font.size
 * @default -6 @prop offset
 */
-var circularTextCloud = {
+const circularTextCloud = {
     color: '#679EC5',
     text: {
         font: {
@@ -268,11 +268,11 @@ var circularTextCloud = {
 * @default 15 @prop width
 * @default 2.5 @prop offset
 */
-var linearRectangle = {
+const linearRectangle = {
     color: '#C2C2C2',
     width: 15,
     offset: 2.5
-}
+};
 /**
 * @name linearCircle
 * @publicName Circle
@@ -281,10 +281,10 @@ var linearRectangle = {
 * @default '#C2C2C2' @prop color
 * @default 2.5 @prop offset
 */
-var linearCircle = {
+const linearCircle = {
     color: '#C2C2C2',
     offset: 2.5
-}
+};
 /**
 * @name linearRhombus
 * @publicName Rhombus
@@ -294,11 +294,11 @@ var linearCircle = {
 * @default 15 @prop width
 * @default 2.5 @prop offset
 */
-var linearRhombus = {
+const linearRhombus = {
     color: '#C2C2C2',
     width: 15,
     offset: 2.5
-}
+};
 /**
 * @name linearRangeBar
 * @publicName RangeBar
@@ -307,10 +307,10 @@ var linearRhombus = {
 * @default '#CBC5CF' @prop color
 * @default 10 @prop offset
 */
-var linearRangeBar = {
+const linearRangeBar = {
     color: '#CBC5CF',
     offset: 10
-}
+};
 /**
 * @name linearTriangleMarker
 * @publicName TriangleMarker
@@ -321,12 +321,12 @@ var linearRangeBar = {
 * @default 14 @prop length
 * @default 10 @prop offset
 */
-var linearTriangleMarker = {
+const linearTriangleMarker = {
     color: '#8798A5',
     width: 13,
     length: 14,
     offset: 10
-}
+};
 /**
 * @name linearTextCloud
 * @publicName TextCloud
@@ -337,7 +337,7 @@ var linearTriangleMarker = {
 * @default 18 @prop text.font.size
 * @default -1 @prop offset
 */
-var linearTextCloud = {
+const linearTextCloud = {
     color: '#679EC5',
     text: {
         font: {
@@ -346,4 +346,4 @@ var linearTextCloud = {
         }
     },
     offset: -1
-}
+};

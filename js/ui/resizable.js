@@ -1,38 +1,38 @@
-var $ = require('../core/renderer'),
-    eventsEngine = require('../events/core/events_engine'),
-    registerComponent = require('../core/component_registrator'),
-    commonUtils = require('../core/utils/common'),
-    extend = require('../core/utils/extend').extend,
-    inArray = require('../core/utils/array').inArray,
-    each = require('../core/utils/iterator').each,
-    typeUtils = require('../core/utils/type'),
-    windowUtils = require('../core/utils/window'),
-    translator = require('../animation/translator'),
-    fitIntoRange = require('../core/utils/math').fitIntoRange,
-    DOMComponent = require('../core/dom_component'),
-    eventUtils = require('../events/utils'),
-    dragEvents = require('../events/drag'),
-    isPlainObject = typeUtils.isPlainObject,
-    isFunction = typeUtils.isFunction,
-    domUtils = require('../core/utils/dom');
+const $ = require('../core/renderer');
+const eventsEngine = require('../events/core/events_engine');
+const registerComponent = require('../core/component_registrator');
+const commonUtils = require('../core/utils/common');
+const extend = require('../core/utils/extend').extend;
+const inArray = require('../core/utils/array').inArray;
+const each = require('../core/utils/iterator').each;
+const typeUtils = require('../core/utils/type');
+const windowUtils = require('../core/utils/window');
+const translator = require('../animation/translator');
+const fitIntoRange = require('../core/utils/math').fitIntoRange;
+const DOMComponent = require('../core/dom_component');
+const eventUtils = require('../events/utils');
+const dragEvents = require('../events/drag');
+const isPlainObject = typeUtils.isPlainObject;
+const isFunction = typeUtils.isFunction;
+const domUtils = require('../core/utils/dom');
 
-var RESIZABLE = 'dxResizable',
-    RESIZABLE_CLASS = 'dx-resizable',
-    RESIZABLE_RESIZING_CLASS = 'dx-resizable-resizing',
+const RESIZABLE = 'dxResizable';
+const RESIZABLE_CLASS = 'dx-resizable';
+const RESIZABLE_RESIZING_CLASS = 'dx-resizable-resizing';
 
-    RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle',
-    RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top',
-    RESIZABLE_HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom',
-    RESIZABLE_HANDLE_LEFT_CLASS = 'dx-resizable-handle-left',
-    RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right',
+const RESIZABLE_HANDLE_CLASS = 'dx-resizable-handle';
+const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
+const RESIZABLE_HANDLE_BOTTOM_CLASS = 'dx-resizable-handle-bottom';
+const RESIZABLE_HANDLE_LEFT_CLASS = 'dx-resizable-handle-left';
+const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 
-    RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner',
+const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
-    DRAGSTART_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, RESIZABLE),
-    DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE),
-    DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
+const DRAGSTART_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, RESIZABLE);
+const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, RESIZABLE);
+const DRAGSTART_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, RESIZABLE);
 
-var SIDE_BORDER_WIDTH_STYLES = {
+const SIDE_BORDER_WIDTH_STYLES = {
     'left': 'borderLeftWidth',
     'top': 'borderTopWidth',
     'right': 'borderRightWidth',
@@ -45,7 +45,7 @@ var SIDE_BORDER_WIDTH_STYLES = {
 * @module ui/resizable
 * @export default
 */
-var Resizable = DOMComponent.inherit({
+const Resizable = DOMComponent.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -171,13 +171,13 @@ var Resizable = DOMComponent.inherit({
     },
 
     _renderHandles: function() {
-        var handles = this.option('handles');
+        const handles = this.option('handles');
 
         if(handles === 'none') {
             return;
         }
 
-        var directions = handles === 'all' ? ['top', 'bottom', 'left', 'right'] : handles.split(' ');
+        const directions = handles === 'all' ? ['top', 'bottom', 'left', 'right'] : handles.split(' ');
 
         each(directions, (function(index, handleName) {
             this._renderHandle(handleName);
@@ -190,8 +190,8 @@ var Resizable = DOMComponent.inherit({
     },
 
     _renderHandle: function(handleName) {
-        var $element = this.$element(),
-            $handle = $('<div>');
+        const $element = this.$element();
+        const $handle = $('<div>');
 
         $handle
             .addClass(RESIZABLE_HANDLE_CLASS)
@@ -206,7 +206,7 @@ var Resizable = DOMComponent.inherit({
             return;
         }
 
-        var handlers = {};
+        const handlers = {};
         handlers[DRAGSTART_START_EVENT_NAME] = this._dragStartHandler.bind(this);
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
@@ -218,7 +218,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        var $element = this.$element();
+        const $element = this.$element();
         if($element.is('.dx-state-disabled, .dx-state-disabled *')) {
             e.cancel = true;
             return;
@@ -229,7 +229,7 @@ var Resizable = DOMComponent.inherit({
 
         this._elementLocation = translator.locate($element);
 
-        var elementRect = $element.get(0).getBoundingClientRect();
+        const elementRect = $element.get(0).getBoundingClientRect();
 
         this._elementSize = {
             width: elementRect.width,
@@ -253,18 +253,18 @@ var Resizable = DOMComponent.inherit({
     },
 
     _renderDragOffsets: function(e) {
-        var area = this._getArea();
+        const area = this._getArea();
 
         if(!area) {
             return;
         }
 
-        var $handle = $(e.target).closest('.' + RESIZABLE_HANDLE_CLASS),
-            handleWidth = $handle.outerWidth(),
-            handleHeight = $handle.outerHeight(),
-            handleOffset = $handle.offset(),
-            areaOffset = area.offset,
-            scrollOffset = this._getAreaScrollOffset();
+        const $handle = $(e.target).closest('.' + RESIZABLE_HANDLE_CLASS);
+        const handleWidth = $handle.outerWidth();
+        const handleHeight = $handle.outerHeight();
+        const handleOffset = $handle.offset();
+        const areaOffset = area.offset;
+        const scrollOffset = this._getAreaScrollOffset();
 
 
         e.maxLeftOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
@@ -275,27 +275,27 @@ var Resizable = DOMComponent.inherit({
 
     _getBorderWidth: function($element, direction) {
         if(typeUtils.isWindow($element.get(0))) return 0;
-        var borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
+        const borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
         return parseInt(borderWidth) || 0;
     },
 
     _dragHandler: function(e) {
-        var $element = this.$element(),
-            sides = this._movingSides;
+        const $element = this.$element();
+        const sides = this._movingSides;
 
-        var location = this._elementLocation,
-            size = this._elementSize,
-            offset = this._getOffset(e);
+        const location = this._elementLocation;
+        const size = this._elementSize;
+        const offset = this._getOffset(e);
 
-        var width = size.width + offset.x * (sides.left ? -1 : 1),
-            height = size.height + offset.y * (sides.top ? -1 : 1);
+        const width = size.width + offset.x * (sides.left ? -1 : 1);
+        const height = size.height + offset.y * (sides.top ? -1 : 1);
 
         if(offset.x || this.option('stepPrecision') === 'strict') this._renderWidth(width);
         if(offset.y || this.option('stepPrecision') === 'strict') this._renderHeight(height);
 
-        var elementRect = $element.get(0).getBoundingClientRect(),
-            offsetTop = offset.y - ((elementRect.height || height) - height),
-            offsetLeft = offset.x - ((elementRect.width || width) - width);
+        const elementRect = $element.get(0).getBoundingClientRect();
+        const offsetTop = offset.y - ((elementRect.height || height) - height);
+        const offsetLeft = offset.x - ((elementRect.width || width) - width);
 
         translator.move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
@@ -313,10 +313,10 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getOffset: function(e) {
-        var offset = e.offset,
-            steps = commonUtils.pairToObject(this.option('step'), !this.option('roundStepValue')),
-            sides = this._getMovingSides(e),
-            strictPrecision = this.option('stepPrecision') === 'strict';
+        const offset = e.offset;
+        const steps = commonUtils.pairToObject(this.option('step'), !this.option('roundStepValue'));
+        const sides = this._getMovingSides(e);
+        const strictPrecision = this.option('stepPrecision') === 'strict';
 
         if(!sides.left && !sides.right) offset.x = 0;
         if(!sides.top && !sides.bottom) offset.y = 0;
@@ -332,28 +332,28 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getStrictOffset: function(offset, steps, sides) {
-        var location = this._elementLocation,
-            size = this._elementSize,
-            xPos = sides.left ? location.left : location.left + size.width,
-            yPos = sides.top ? location.top : location.top + size.height,
-            newXShift = (xPos + offset.x) % steps.h,
-            newYShift = (yPos + offset.y) % steps.v,
-            sign = Math.sign || function(x) {
-                x = +x;
-                if(x === 0 || isNaN(x)) {
-                    return x;
-                }
-                return x > 0 ? 1 : -1;
-            },
-            separatorOffset = function(steps, offset) {
-                return (1 + sign(offset) * 0.2) % 1 * steps;
-            },
-            isSmallOffset = function(offset, steps) {
-                return Math.abs(offset) < 0.2 * steps;
-            };
+        const location = this._elementLocation;
+        const size = this._elementSize;
+        const xPos = sides.left ? location.left : location.left + size.width;
+        const yPos = sides.top ? location.top : location.top + size.height;
+        const newXShift = (xPos + offset.x) % steps.h;
+        const newYShift = (yPos + offset.y) % steps.v;
+        const sign = Math.sign || function(x) {
+            x = +x;
+            if(x === 0 || isNaN(x)) {
+                return x;
+            }
+            return x > 0 ? 1 : -1;
+        };
+        const separatorOffset = function(steps, offset) {
+            return (1 + sign(offset) * 0.2) % 1 * steps;
+        };
+        const isSmallOffset = function(offset, steps) {
+            return Math.abs(offset) < 0.2 * steps;
+        };
 
-        var newOffsetX = offset.x - newXShift,
-            newOffsetY = offset.y - newYShift;
+        let newOffsetX = offset.x - newXShift;
+        let newOffsetY = offset.y - newYShift;
 
         if(newXShift > separatorOffset(steps.h, offset.x)) {
             newOffsetX += steps.h;
@@ -371,11 +371,11 @@ var Resizable = DOMComponent.inherit({
 
 
     _getMovingSides: function(e) {
-        var $target = $(e.target),
-            hasCornerTopLeftClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-top-left'),
-            hasCornerTopRightClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-top-right'),
-            hasCornerBottomLeftClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-left'),
-            hasCornerBottomRightClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
+        const $target = $(e.target);
+        const hasCornerTopLeftClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-top-left');
+        const hasCornerTopRightClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-top-right');
+        const hasCornerBottomLeftClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-left');
+        const hasCornerBottomRightClass = $target.hasClass(RESIZABLE_HANDLE_CORNER_CLASS + '-bottom-right');
 
         return {
             'top': $target.hasClass(RESIZABLE_HANDLE_TOP_CLASS) || hasCornerTopLeftClass || hasCornerTopRightClass,
@@ -386,7 +386,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getArea: function() {
-        var area = this.option('area');
+        let area = this.option('area');
 
         if(isFunction(area)) {
             area = area.call(this);
@@ -400,11 +400,11 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getAreaScrollOffset: function() {
-        var area = this.option('area');
-        var isElement = !isFunction(area) && !isPlainObject(area);
-        var scrollOffset = { scrollY: 0, scrollX: 0 };
+        const area = this.option('area');
+        const isElement = !isFunction(area) && !isPlainObject(area);
+        const scrollOffset = { scrollY: 0, scrollX: 0 };
         if(isElement) {
-            var areaElement = $(area)[0];
+            const areaElement = $(area)[0];
             if(typeUtils.isWindow(areaElement)) {
                 scrollOffset.scrollX = areaElement.pageXOffset;
                 scrollOffset.scrollY = areaElement.pageYOffset;
@@ -415,7 +415,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getAreaFromObject: function(area) {
-        var result = {
+        const result = {
             width: area.right - area.left,
             height: area.bottom - area.top,
             offset: {
@@ -431,8 +431,8 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getAreaFromElement: function(area) {
-        var $area = $(area),
-            result;
+        const $area = $(area);
+        let result;
 
         if($area.length) {
             result = {
@@ -451,8 +451,8 @@ var Resizable = DOMComponent.inherit({
     },
 
     _correctAreaGeometry: function(result, $area) {
-        var areaBorderLeft = $area ? this._getBorderWidth($area, 'left') : 0,
-            areaBorderTop = $area ? this._getBorderWidth($area, 'top') : 0;
+        const areaBorderLeft = $area ? this._getBorderWidth($area, 'left') : 0;
+        const areaBorderTop = $area ? this._getBorderWidth($area, 'top') : 0;
 
         result.offset.left += areaBorderLeft + this._getBorderWidth(this.$element(), 'left');
         result.offset.top += areaBorderTop + this._getBorderWidth(this.$element(), 'top');
@@ -462,7 +462,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _dragEndHandler: function(e) {
-        var $element = this.$element();
+        const $element = this.$element();
 
         this._resizeEndAction({
             event: e,

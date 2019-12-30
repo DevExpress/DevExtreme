@@ -20,11 +20,11 @@ QUnit.testStart(function() {
                                 <div id="scheduler-timeline-rtl"></div>');
 });
 
-var CELL_CLASS = 'dx-scheduler-date-table-cell';
+const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
-var stubInvokeMethod = function(instance) {
+const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
-        var subscribe = arguments[0];
+        const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
             return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
         }
@@ -53,9 +53,9 @@ QUnit.module('Timeline Base', {
 
 QUnit.test('Header scrollable should update position if date scrollable position is changed to right', function(assert) {
     const done = assert.async();
-    var $element = this.instance.$element(),
-        headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -69,17 +69,17 @@ QUnit.test('Header scrollable should update position if date scrollable position
 });
 
 QUnit.test('Header scrollable should have right scrolloByContent (T708008)', function(assert) {
-    var $element = this.instance.$element(),
-        headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
 
     assert.strictEqual(headerScrollable.option('scrollByContent'), true, 'scrolloByContent is OK');
 });
 
 
 QUnit.test('Header scrollable shouldn\'t update position if date scrollable position is changed to bottom', function(assert) {
-    var $element = this.instance.$element(),
-        headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -92,15 +92,15 @@ QUnit.test('Header scrollable shouldn\'t update position if date scrollable posi
 QUnit.test('Date table should have a correct width if cell is less than 75px', function(assert) {
     this.instance.option('crossScrollingEnabled', true);
 
-    var $element = this.instance.$element(),
-        $cells = $element.find('.dx-scheduler-date-table-cell');
+    const $element = this.instance.$element();
+    const $cells = $element.find('.dx-scheduler-date-table-cell');
 
     $cells.css('width', 30);
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
     assert.equal(dateTableWidth, 1440, 'Width is OK');
 });
 
@@ -114,9 +114,9 @@ QUnit.test('Sidebar scrollable should update position if date scrollable positio
         groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
     });
 
-    var $element = this.instance.$element(),
-        groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -137,9 +137,9 @@ QUnit.test('Date table scrollable should update position if sidebar position is 
         groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]
     });
 
-    var $element = this.instance.$element(),
-        groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const groupPanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -150,9 +150,9 @@ QUnit.test('Date table scrollable should update position if sidebar position is 
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', function(assert) {
-    var $element = this.instance.$element(),
-        headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -163,35 +163,35 @@ QUnit.test('Date table scrollable should update position if header scrollable po
 });
 
 QUnit.test('Sidebar should be hidden in simple mode', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
-    var $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
+    const $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
 
     assert.equal($sidebar.css('display'), 'none', 'Sidebar is invisible');
 });
 
 QUnit.test('Sidebar should be visible in grouped mode', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
-    var $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
+    const $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
 
     assert.equal($sidebar.css('display'), 'block', 'Sidebar is visible');
 });
 
 QUnit.test('Group table cells should have correct height', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     this.instance.option('groups', [
         { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
         { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
     ]);
 
-    var $groupTable = $element.find('.dx-scheduler-sidebar-scrollable .dx-scheduler-group-table'),
-        $groupRows = $groupTable.find('.dx-scheduler-group-row'),
-        $groupHeader = $groupRows.eq(1).find('.dx-scheduler-group-header').eq(0),
-        dateTableCellHeight = $element.find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().height,
-        groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
+    const $groupTable = $element.find('.dx-scheduler-sidebar-scrollable .dx-scheduler-group-table');
+    const $groupRows = $groupTable.find('.dx-scheduler-group-row');
+    const $groupHeader = $groupRows.eq(1).find('.dx-scheduler-group-header').eq(0);
+    const dateTableCellHeight = $element.find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().height;
+    const groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
     assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
@@ -203,10 +203,10 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates'
         hoursInterval: 1
     });
 
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    var $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1),
-        expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+    const $expectedCell = this.instance.$element()
+        .find('.dx-scheduler-date-table-cell').eq(1);
+    const expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
 
     assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 });
@@ -221,17 +221,17 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
         hoursInterval: 1
     });
 
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    var $expectedCell = this.instance.$element()
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
+    const $expectedCell = this.instance.$element()
         .find('.dx-scheduler-date-table-cell').eq(1);
 
-    var expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
+    const expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
 
     assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 });
 
 QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline', function(assert) {
-    var instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
+    const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
         'currentDate': new Date(2015, 9, 28),
         groupOrientation: 'vertical'
     }).dxSchedulerTimelineDay('instance');
@@ -242,8 +242,8 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
             { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
             { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
         ]);
-        var coordinates = instance.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
-        var expectedPosition = instance.$element()
+        const coordinates = instance.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
+        const expectedPosition = instance.$element()
             .find('.dx-scheduler-date-table-row').eq(1)
             .find('.dx-scheduler-date-table-cell').eq(2)
             .position();
@@ -257,8 +257,8 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
 
 
 QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordinates', function(assert) {
-    var cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
-    var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
+    const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
 
     assert.equal(cellIndex, 15, 'Cell index is OK');
 });
@@ -269,10 +269,10 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordin
         { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
     ]);
 
-    var cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth(),
-        cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
+    const cellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+    const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).outerHeight();
 
-    var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
+    let cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
 
     assert.equal(cellIndex, 63, 'Cell index is OK');
 
@@ -286,14 +286,14 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordin
 });
 
 QUnit.test('Timeline should not have time panel offset', function(assert) {
-    var offset = this.instance.getTimePanelWidth();
+    const offset = this.instance.getTimePanelWidth();
 
     assert.strictEqual(offset, 0, 'Offset is 0');
 });
 
 QUnit.test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', function(assert) {
     this.instance.option('crossScrollingEnabled', true);
-    var stub = sinon.stub(this.instance, '_setTableSizes');
+    const stub = sinon.stub(this.instance, '_setTableSizes');
 
     resizeCallbacks.fire();
 
@@ -301,9 +301,9 @@ QUnit.test('Tables should be rerendered if dimension was changed and horizontal 
 });
 
 QUnit.test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', function(assert) {
-    var stub = sinon.stub(dateUtils, 'getTimezonesDifference'),
-        minDate = new Date('Thu Mar 10 2016 00:00:00 GMT-0500'),
-        maxDate = new Date('Mon Mar 15 2016 00:00:00 GMT-0400');
+    const stub = sinon.stub(dateUtils, 'getTimezonesDifference');
+    const minDate = new Date('Thu Mar 10 2016 00:00:00 GMT-0500');
+    const maxDate = new Date('Mon Mar 15 2016 00:00:00 GMT-0400');
 
     this.instance._getIntervalBetween(minDate, maxDate, true);
 
@@ -313,7 +313,7 @@ QUnit.test('dateUtils.getTimezonesDifference should be called when calculating i
 });
 
 QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(assert) {
-    var stub = sinon.stub(this.instance, 'getCellHeight').returns(10);
+    const stub = sinon.stub(this.instance, 'getCellHeight').returns(10);
 
     this.instance.option({
         groups: [
@@ -324,8 +324,8 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', function(a
 
     try {
         this.instance.option('currentDate', new Date(2010, 10, 10));
-        var height = this.instance.$element().find('.dx-scheduler-group-header').eq(0).outerHeight(),
-            expectedHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').first().outerHeight() - 1;
+        const height = this.instance.$element().find('.dx-scheduler-group-header').eq(0).outerHeight();
+        const expectedHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').first().outerHeight() - 1;
 
         assert.roughEqual(height, expectedHeight, 2.001, 'Group cell height is OK');
 
@@ -348,13 +348,13 @@ QUnit.test('Get visible bounds', function(assert) {
         width: 950
     });
 
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 0, minutes: 0, date: new Date(2015, 5, 30) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 2, minutes: 0, date: new Date(2015, 5, 30) }, 'Right bound is OK');
@@ -367,13 +367,13 @@ QUnit.test('Get visible bounds if scroll position is not null', function(assert)
         width: 950
     });
 
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 5, 30) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 5, 30) }, 'Right bound is OK');
@@ -387,13 +387,13 @@ QUnit.test('Get visible bounds if hoursInterval is set', function(assert) {
         hoursInterval: 1.5
     });
 
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 7, minutes: 30, date: new Date(2015, 2, 2) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 13, minutes: 30, date: new Date(2015, 2, 2) }, 'Right bound is OK');
@@ -417,32 +417,32 @@ QUnit.test('Get visible bounds, groupOrientation = horizontal', function(assert)
         width: 950
     });
 
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 0, minutes: 0, date: new Date(2015, 5, 30) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 2, minutes: 0, date: new Date(2015, 5, 30) }, 'Right bound is OK');
 });
 
 QUnit.test('Sidebar should not be visible in grouped mode, groupOrientation = horizontal', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
-    var $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
+    const $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
 
     assert.equal($sidebar.css('display'), 'none', 'Sidebar is visible');
 });
 
 QUnit.test('Group table cells should have correct height, groupOrientation = horizontal', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
-    var $groupRows = $element.find('.dx-scheduler-header-panel .dx-scheduler-group-row'),
-        $groupHeader = $groupRows.eq(0).find('.dx-scheduler-group-header').eq(0),
-        groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
+    const $groupRows = $element.find('.dx-scheduler-header-panel .dx-scheduler-group-row');
+    const $groupHeader = $groupRows.eq(0).find('.dx-scheduler-group-header').eq(0);
+    const groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
     assert.roughEqual(30, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
@@ -456,8 +456,8 @@ QUnit.test('the \'getCoordinatesByDate\' method should return right coordinates 
         hoursInterval: 1
     });
 
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 9, 21, 6), 1);
-    var expectedPosition = this.instance.$element()
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 9, 21, 6), 1);
+    const expectedPosition = this.instance.$element()
         .find('.dx-scheduler-date-table-row').eq(0)
         .find('.dx-scheduler-date-table-cell').eq(4)
         .position();
@@ -478,11 +478,11 @@ QUnit.test('Scheduler timeline week header cells should have right width', funct
     this.instance.option({
         currentDate: new Date(2015, 9, 29)
     });
-    var $element = this.instance.$element(),
-        $firstRow = $element.find('.dx-scheduler-header-row').first(),
-        $lastRow = $element.find('.dx-scheduler-header-row').last(),
-        $firstHeaderCell = $firstRow.find('.dx-scheduler-header-panel-cell').eq(0),
-        $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0);
+    const $element = this.instance.$element();
+    const $firstRow = $element.find('.dx-scheduler-header-row').first();
+    const $lastRow = $element.find('.dx-scheduler-header-row').last();
+    const $firstHeaderCell = $firstRow.find('.dx-scheduler-header-panel-cell').eq(0);
+    const $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0);
 
     assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, 'First row cell has correct width');
 });
@@ -495,12 +495,12 @@ QUnit.test('Scheduler timeline week header cells should have right width if cros
 
     resizeCallbacks.fire();
 
-    var $element = this.instance.$element(),
-        $firstRow = $element.find('.dx-scheduler-header-row').first(),
-        $lastRow = $element.find('.dx-scheduler-header-row').last(),
-        $firstHeaderCell = $firstRow.find('.dx-scheduler-header-panel-cell').eq(0),
-        $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0),
-        $dateTableCell = $element.find('.dx-scheduler-date-table-cell').eq(0);
+    const $element = this.instance.$element();
+    const $firstRow = $element.find('.dx-scheduler-header-row').first();
+    const $lastRow = $element.find('.dx-scheduler-header-row').last();
+    const $firstHeaderCell = $firstRow.find('.dx-scheduler-header-panel-cell').eq(0);
+    const $lastHeaderCell = $lastRow.find('.dx-scheduler-header-panel-cell').eq(0);
+    const $dateTableCell = $element.find('.dx-scheduler-date-table-cell').eq(0);
 
     assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.get(0).getBoundingClientRect().width, 1.5, 'First row cell has correct width');
     assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.get(0).getBoundingClientRect().width, 1.5, 'Last row cell has correct width');
@@ -515,9 +515,9 @@ QUnit.test('Scheduler timeline week cells should have right height if crossScrol
 
     resizeCallbacks.fire();
 
-    var $element = this.instance.$element(),
-        $firstRowCell = $element.find('.dx-scheduler-date-table-cell').first(),
-        $lastRowCell = $element.find('.dx-scheduler-date-table-cell').eq(336);
+    const $element = this.instance.$element();
+    const $firstRowCell = $element.find('.dx-scheduler-date-table-cell').first();
+    const $lastRowCell = $element.find('.dx-scheduler-date-table-cell').eq(336);
 
     assert.roughEqual($firstRowCell.outerHeight(), $lastRowCell.outerHeight(), 1.5, 'Cells has correct height');
 });
@@ -530,27 +530,10 @@ QUnit.test('The part of long appointment should have right coordinates on curren
         endDayHour: 10,
         hoursInterval: 0.5
     });
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
-    var $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
+    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    var expectedPositionLeft = $expectedCell.position().left;
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-
-});
-
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
-    });
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
-    var $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
-
-    var expectedPositionLeft = $expectedCell.position().left;
+    const expectedPositionLeft = $expectedCell.position().left;
 
     assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 
@@ -564,17 +547,34 @@ QUnit.test('The part of long appointment should have right coordinates on curren
         endDayHour: 10,
         hoursInterval: 0.5
     });
-    var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
-    var $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(115);
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
+    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(108);
 
-    var expectedPositionLeft = $expectedCell.position().left;
+    const expectedPositionLeft = $expectedCell.position().left;
+
+    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
+
+});
+
+QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 1, 23),
+        firstDayOfWeek: 1,
+        startDayHour: 1,
+        endDayHour: 10,
+        hoursInterval: 0.5
+    });
+    const coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
+    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(115);
+
+    const expectedPositionLeft = $expectedCell.position().left;
 
     assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
 
 });
 
 QUnit.test('Timeline should find cell coordinates by date depend on start/end day hour & hoursInterval', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     this.instance.option({
         currentDate: new Date(2015, 2, 1),
@@ -584,7 +584,7 @@ QUnit.test('Timeline should find cell coordinates by date depend on start/end da
         hoursInterval: 0.75
     });
 
-    var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
+    const coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
 
     assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(11).position().top, 'Cell coordinates are right');
     assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(11).position().left, 'Cell coordinates are right');
@@ -599,13 +599,13 @@ QUnit.test('Get visible bounds for timelineWeek on init', function(assert) {
         width: 850
     });
 
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 1, minutes: 0, date: new Date(2015, 2, 2) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 3, minutes: 0, date: new Date(2015, 2, 2) }, 'Right bound is OK');
@@ -618,20 +618,20 @@ QUnit.test('Get visible bounds for timelineWeek', function(assert) {
         height: 400,
         width: 850
     });
-    var scrollable = this.instance.getScrollable();
+    const scrollable = this.instance.getScrollable();
 
     domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(10600);
 
-    var bounds = this.instance.getVisibleBounds();
+    const bounds = this.instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 2, 3) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 2, 3) }, 'Right bound is OK');
 });
 
 QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
-    var instance = $('#scheduler-timeline-rtl').dxSchedulerTimelineWeek({
+    const instance = $('#scheduler-timeline-rtl').dxSchedulerTimelineWeek({
         width: 850,
         rtlEnabled: true,
         currentDate: new Date(2015, 2, 2),
@@ -639,13 +639,13 @@ QUnit.test('Get visible bounds for timelineWeek, rtl mode', function(assert) {
         height: 400
     }).dxSchedulerTimelineWeek('instance');
 
-    var scrollable = instance.getScrollable();
+    const scrollable = instance.getScrollable();
 
     domUtils.triggerShownEvent(instance.$element());
 
     scrollable.scrollBy(-10600);
 
-    var bounds = instance.getVisibleBounds();
+    const bounds = instance.getVisibleBounds();
 
     assert.deepEqual(bounds.left, { hours: 2, minutes: 30, date: new Date(2015, 2, 3) }, 'Left bound is OK');
     assert.deepEqual(bounds.right, { hours: 4, minutes: 30, date: new Date(2015, 2, 3) }, 'Right bound is OK');
@@ -678,8 +678,8 @@ QUnit.test('Scrollables should be updated after currentDate changing', function(
         currentDate: new Date(2017, 1, 15)
     });
 
-    var scrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
-        updateSpy = sinon.spy(scrollable, 'update');
+    const scrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const updateSpy = sinon.spy(scrollable, 'update');
 
     try {
         this.instance.option('currentDate', new Date(2017, 2, 15));
@@ -720,9 +720,9 @@ QUnit.test('Timeline should select/unselect cells with shift & arrows', function
         groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
     });
 
-    var $element = this.instance.$element(),
-        $cells = this.instance.$element().find('.' + CELL_CLASS),
-        keyboard = keyboardMock($element);
+    const $element = this.instance.$element();
+    const $cells = this.instance.$element().find('.' + CELL_CLASS);
+    const keyboard = keyboardMock($element);
 
     pointerMock($cells.eq(2)).start().click();
     keyboard.keyDown('down', { shiftKey: true });
@@ -751,9 +751,9 @@ QUnit.test('Timeline should select/unselect cells with mouse', function(assert) 
         groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
     });
 
-    var $element = this.instance.$element(),
-        cells = $element.find('.' + CELL_CLASS),
-        $table = $element.find('.dx-scheduler-date-table');
+    const $element = this.instance.$element();
+    const cells = $element.find('.' + CELL_CLASS);
+    const $table = $element.find('.dx-scheduler-date-table');
 
     $($table).trigger($.Event('dxpointerdown', { target: cells.eq(3).get(0), which: 1, pointerType: 'mouse' }));
 
@@ -779,10 +779,10 @@ QUnit.test('\'getCoordinatesByDate\' should return right coordinates with view o
         endDayHour: 20
     });
 
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
-    var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false),
-        targetCellPosition = $element.find('.dx-scheduler-date-table tbody td').eq(200).position();
+    const coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false);
+    const targetCellPosition = $element.find('.dx-scheduler-date-table tbody td').eq(200).position();
 
     assert.equal(coords.top, targetCellPosition.top, 'Cell coordinates are right');
     assert.equal(coords.left, targetCellPosition.left, 'Cell coordinates are right');
@@ -817,18 +817,18 @@ QUnit.test('Get date range', function(assert) {
 });
 
 QUnit.test('Group header should be rendered correct, groupByDate = true', function(assert) {
-    var $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel'),
-        $groupRow = $headerPanel.find('.dx-scheduler-group-row'),
-        $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header'),
-        dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width,
-        groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
+    const $headerPanel = this.instance.$element().find('.dx-scheduler-header-scrollable .dx-scheduler-header-panel');
+    const $groupRow = $headerPanel.find('.dx-scheduler-group-row');
+    const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
+    const dateTableCellWidth = this.instance.$element().find('.dx-scheduler-date-table-cell').get(0).getBoundingClientRect().width;
+    const groupHeaderWidth = $groupHeaderCells.get(0).getBoundingClientRect().width;
 
     assert.equal($groupHeaderCells.length, 84, 'Group header cells count is OK');
     assert.roughEqual(dateTableCellWidth, groupHeaderWidth, 1.1, 'Group header cell has correct size');
 });
 
 QUnit.test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
-    var $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
     assert.deepEqual($cells.eq(0).data('dxCellData'), {
         startDate: new Date(2018, 1, 25, 9, 0),
@@ -886,8 +886,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
 });
 
 QUnit.test('Group table cells should have right cellData, groupByDate = true', function(assert) {
-    var $groupRow = this.instance.$element().find('.dx-scheduler-group-row'),
-        $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
+    const $groupRow = this.instance.$element().find('.dx-scheduler-group-row');
+    const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
 
     assert.equal($groupHeaderCells.eq(0).text(), 'a', 'Group header content height is OK');
     assert.equal($groupHeaderCells.eq(1).text(), 'b', 'Group header content height is OK');
@@ -896,10 +896,10 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', f
 });
 
 QUnit.test('Timeline should find cell coordinates by date, groupByDate = true', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     this.instance.option('currentDate', new Date(2015, 2, 4));
-    var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
+    let coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 4, 2, 0), 1, false);
 
     assert.equal(coords.top, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().top, 'Top cell coordinates are right');
     assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(17).position().left, 'Left cell coordinates are right');

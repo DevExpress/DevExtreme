@@ -34,7 +34,7 @@ module('selecting of items', {
     }
 }, () => {
     test('selectItem by node should add class to element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem($item);
 
@@ -42,7 +42,7 @@ module('selecting of items', {
     });
 
     test('selectItem by index should add class to element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
 
@@ -50,7 +50,7 @@ module('selecting of items', {
     });
 
     test('selectItem by itemData should add class to element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(this.items[0]);
 
@@ -58,13 +58,13 @@ module('selecting of items', {
     });
 
     test('selectItem by itemData should not fail if itemData is a string with special chars', function(assert) {
-        var items = ['one.', 'two.', 'three.', 'four.'];
+        const items = ['one.', 'two.', 'three.', 'four.'];
         this.instance.option('items', items);
 
         try {
             this.instance.selectItem(items[2]);
 
-            var $item = this.instance.itemElements().eq(2);
+            const $item = this.instance.itemElements().eq(2);
             assert.ok($item.hasClass(ITEM_SELECTED_CLASS), 'class added');
         } catch(error) {
             assert.ok(false, 'no error was thrown');
@@ -72,22 +72,22 @@ module('selecting of items', {
     });
 
     test('Items should not be unwrapped if plain edit strategy is used', function(assert) {
-        var items = [{ text: 'Item 1', items: [1] }, { text: 'Item 2', items: [2] }];
+        const items = [{ text: 'Item 1', items: [1] }, { text: 'Item 2', items: [2] }];
         this.instance.option({
             'items': items,
             selectedIndex: 0
         });
 
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), 'item was selected');
     });
 
     test('selectItem should add item to selectedItems', function(assert) {
-        var selection = [1, 5, 0, 6, 8],
-            $items = this.instance.itemElements(),
-            that = this;
+        const selection = [1, 5, 0, 6, 8];
+        const $items = this.instance.itemElements();
+        const that = this;
 
-        var selectItem = function(index) {
+        const selectItem = function(index) {
             that.instance.selectItem($items.eq(index));
         };
 
@@ -95,7 +95,7 @@ module('selecting of items', {
             selectItem(value);
         });
 
-        var selected = this.instance.option('selectedItems');
+        const selected = this.instance.option('selectedItems');
 
         assert.equal(selected.length, selection.length, 'selection must have same length with selected');
 
@@ -116,7 +116,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by node should remove class from element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem($item);
         this.instance.unselectItem($item);
@@ -125,7 +125,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by index should remove class from element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
         this.instance.unselectItem(0);
@@ -134,7 +134,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by itemData should remove class from element', function(assert) {
-        var $item = this.instance.itemElements().eq(0);
+        const $item = this.instance.itemElements().eq(0);
 
         this.instance.selectItem(0);
         this.instance.unselectItem(this.items[0]);
@@ -143,14 +143,14 @@ module('selecting of items', {
     });
 
     test('unselectItem should remove item from selectedItems', function(assert) {
-        var twiceClicking = [1, 5, 0, 6, 8],
-            $items = this.instance.itemElements(),
-            that = this;
+        const twiceClicking = [1, 5, 0, 6, 8];
+        const $items = this.instance.itemElements();
+        const that = this;
 
-        var selectItem = function(index) {
+        const selectItem = function(index) {
             that.instance.selectItem($items.eq(index));
         };
-        var unselectItem = function(index) {
+        const unselectItem = function(index) {
             that.instance.unselectItem($items.eq(index));
         };
 
@@ -177,7 +177,7 @@ module('selecting of items', {
     });
 
     test('isItemSelected by node should reflect current item state', function(assert) {
-        var $items = this.instance.itemElements();
+        const $items = this.instance.itemElements();
 
         this.instance.selectItem($items.eq(0));
         assert.equal(this.instance.isItemSelected($items.eq(0)), true, 'isItemSelected return proper state');
@@ -195,11 +195,11 @@ module('selecting of items', {
     });
 
     test('selection should be same when list refresh', function(assert) {
-        var selection = [1, 5, 0, 6, 8],
-            $items = this.instance.itemElements(),
-            that = this;
+        const selection = [1, 5, 0, 6, 8];
+        let $items = this.instance.itemElements();
+        const that = this;
 
-        var selectItem = function(index) {
+        const selectItem = function(index) {
             that.instance.selectItem($items.eq(index));
         };
 
@@ -209,7 +209,7 @@ module('selecting of items', {
 
         this.instance._refresh();
 
-        var selected = this.instance.option('selectedItems');
+        const selected = this.instance.option('selectedItems');
 
         assert.equal(selected.length, selection.length, 'items in _selectedItems is presented');
         assert.equal(this.$element.find('.' + ITEM_SELECTED_CLASS).length, selection.length, 'selected elements is presented');
@@ -222,14 +222,14 @@ module('selecting of items', {
     });
 
     test('selection shouldn be correct after item property was changed', function(assert) {
-        var items = [{ a: 0, disabled: true }, { a: 1 }];
+        const items = [{ a: 0, disabled: true }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                selectionMode: 'multiple',
-                items: items,
-                selectedIndex: 0
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            selectionMode: 'multiple',
+            items: items,
+            selectedIndex: 0
+        });
 
         instance.option('items[0].disabled', false);
         instance.option('selectedIndex', 1);
@@ -239,9 +239,9 @@ module('selecting of items', {
 
     test('deleteItem should change selected items', function(assert) {
 
-        var that = this;
+        const that = this;
 
-        var item = function(index) {
+        const item = function(index) {
             return that.instance.itemElements().eq(index);
         };
 
@@ -256,9 +256,9 @@ module('selecting of items', {
     test('onItemSelect should not be fired on widget rendering', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp');
+        const $element = $('#cmp');
 
         new TestComponent($element, {
             items: items,
@@ -290,7 +290,7 @@ module('selecting of items', {
     });
 
     test('onSelectionChanged should be fired with correct added items', function(assert) {
-        var that = this;
+        const that = this;
 
         this.instance.option({
             selectedItems: [this.items[1]],
@@ -303,19 +303,19 @@ module('selecting of items', {
     });
 
     test('onSelectionChanged should be fired with correct added and removed items when keyExpr or DataSource Store key is specified', function(assert) {
-        var items = [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
-            $element = $('<div>'),
-            selectionChangedHandler = sinon.spy(),
-            instance = new TestComponent($element, {
-                dataSource: new DataSource({
-                    store: new ArrayStore({
-                        key: 'id',
-                        data: items
-                    })
-                }),
-                selectedItemKeys: [2],
-                onSelectionChanged: selectionChangedHandler
-            });
+        const items = [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }];
+        const $element = $('<div>');
+        const selectionChangedHandler = sinon.spy();
+        const instance = new TestComponent($element, {
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: 'id',
+                    data: items
+                })
+            }),
+            selectedItemKeys: [2],
+            onSelectionChanged: selectionChangedHandler
+        });
 
         instance.option('selectedItemKeys', [1]);
 
@@ -325,7 +325,7 @@ module('selecting of items', {
     });
 
     test('onSelectionChanged should be fired with correct removed items', function(assert) {
-        var that = this;
+        const that = this;
 
         this.instance.option({
             selectedItems: [this.items[0], this.items[1]],
@@ -351,7 +351,7 @@ module('selecting of items', {
     });
 
     test('changing selection should work inside onSelectionChanged handler', function(assert) {
-        var that = this;
+        const that = this;
 
         this.instance.option({
             selectedItems: [this.items[0], this.items[1]],
@@ -462,18 +462,18 @@ module('selecting of items', {
     });
 
     test('select should work when items are not equal by the link and store key is specified', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         try {
-            var instance = new TestComponent($('<div>'), {
+            const instance = new TestComponent($('<div>'), {
                 selectionMode: 'multiple',
                 dataSource: {
                     load: function(options) {
-                        var d = $.Deferred(),
-                            items = [
-                                { id: 1, text: 'Item 1' },
-                                { id: 2, text: 'Item 2' }
-                            ];
+                        const d = $.Deferred();
+                        const items = [
+                            { id: 1, text: 'Item 1' },
+                            { id: 2, text: 'Item 2' }
+                        ];
 
                         setTimeout(function() {
                             if(options.filter) {
@@ -503,18 +503,18 @@ module('selecting of items', {
     });
 
     test('selection should work with custom store without filter implementation', function(assert) {
-        var clock = sinon.useFakeTimers();
+        const clock = sinon.useFakeTimers();
 
         try {
-            var instance = new TestComponent($('<div>'), {
+            const instance = new TestComponent($('<div>'), {
                 selectionMode: 'multiple',
                 dataSource: {
                     load: function() {
-                        var d = $.Deferred(),
-                            items = [
-                                { id: 1, text: 'Item 1' },
-                                { id: 2, text: 'Item 2' }
-                            ];
+                        const d = $.Deferred();
+                        const items = [
+                            { id: 1, text: 'Item 1' },
+                            { id: 2, text: 'Item 2' }
+                        ];
 
                         setTimeout(function() {
                             d.resolve(items);
@@ -540,7 +540,7 @@ module('selecting of items', {
     });
 
     test('selectedItems should be cleared if datasource instance has been changed to null', function(assert) {
-        var instance = new TestComponent($('<div>'), {
+        const instance = new TestComponent($('<div>'), {
             selectionMode: 'multiple',
             dataSource: [1, 2, 3],
             selectedItemKeys: [1, 2]
@@ -558,7 +558,7 @@ module('selecting of items', {
     });
 
     test('selectedItems should be cleared if datasource instance has been changed to empty array', function(assert) {
-        var instance = new TestComponent($('<div>'), {
+        const instance = new TestComponent($('<div>'), {
             selectionMode: 'multiple',
             dataSource: [1, 2, 3],
             selectedItemKeys: [1, 2]
@@ -576,7 +576,7 @@ module('selecting of items', {
     });
 
     test('selectedItems should not be cleared if datasource instance has been changed', function(assert) {
-        var instance = new TestComponent($('<div>'), {
+        const instance = new TestComponent($('<div>'), {
             selectionMode: 'multiple',
             dataSource: [1, 2, 3],
             selectedItemKeys: [1, 2]
@@ -595,7 +595,7 @@ module('selecting of items', {
 
     // T579731
     test('selectedItems should not be cleared if datasource instance has been changed to a dataSource config', function(assert) {
-        var instance = new TestComponent($('<div>'), {
+        const instance = new TestComponent($('<div>'), {
             selectionMode: 'multiple',
             dataSource: [1, 2, 3],
             selectedItemKeys: [1, 2]
@@ -615,7 +615,7 @@ module('selecting of items', {
     test('option change should hsve correct arguments after deselecting a value', function(assert) {
         assert.expect(3);
 
-        var instance = new TestComponent($('<div>'), {
+        const instance = new TestComponent($('<div>'), {
             selectionMode: 'multiple',
             dataSource: [1, 2, 3],
             onOptionChanged: function(args) {
@@ -634,7 +634,7 @@ module('selecting of items', {
 
 module('selecting of item keys', {
     beforeEach: function() {
-        var items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
+        const items = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }];
         this.items = items;
         this.$element = $('#cmp');
         this.instance = new TestComponent(this.$element, {
@@ -658,13 +658,13 @@ module('selecting of item keys', {
     });
 
     test('selecting options should be synchronized when selectedItemKeys is set with complex keys', function(assert) {
-        var items = [
+        const items = [
             { id: 1, key: 'key1', text: 'Item 1' },
             { id: 2, key: 'key2', text: 'Item 2' },
             { id: 3, key: 'key3', text: 'Item 3' }
         ];
 
-        var instance = new TestComponent(this.$element, {
+        const instance = new TestComponent(this.$element, {
             dataSource: new DataSource({
                 store: new ArrayStore({
                     key: ['id', 'key'],
@@ -674,7 +674,7 @@ module('selecting of item keys', {
             selectionMode: 'multiple'
         });
 
-        var $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
 
         instance.option('selectedItems', [{ id: 2, key: 'key2', text: 'Item 2' }]);
 
@@ -692,13 +692,13 @@ module('selecting of item keys', {
     }
 }, () => {
     test('widget works fine if selectedItemKeys is null', function(assert) {
-        var items = [
+        const items = [
             { id: 1, key: 'key1', text: 'Item 1' },
             { id: 2, key: 'key2', text: 'Item 2' },
             { id: 3, key: 'key3', text: 'Item 3' }
         ];
 
-        var instance = new TestComponent(this.$element, {
+        const instance = new TestComponent(this.$element, {
             items: items,
             keyExpr: 'id',
             selectionMode: 'multiple',
@@ -712,20 +712,20 @@ module('selecting of item keys', {
     });
 
     test('selectedItemKeys should work when it is set on initialization', function(assert) {
-        var items = [
+        const items = [
             { id: 1, key: 'key1', text: 'Item 1' },
             { id: 2, key: 'key2', text: 'Item 2' },
             { id: 3, key: 'key3', text: 'Item 3' }
         ];
 
-        var instance = new TestComponent(this.$element, {
+        const instance = new TestComponent(this.$element, {
             items: items,
             keyExpr: 'id',
             selectionMode: 'multiple',
             selectedItemKeys: [2]
         });
 
-        var $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
 
         assert.deepEqual(instance.option('selectedItems'), [items[1]], 'selectedItems is correct');
         assert.deepEqual(instance.option('selectedItem'), items[1], 'selectedItem is correct');
@@ -734,17 +734,17 @@ module('selecting of item keys', {
     });
 
     test('using keyExpr as primitive', function(assert) {
-        var items = [
-                { key: 'key1', text: 'Item 1' },
-                { key: 'key2', text: 'Item 2' },
-                { key: 'key3', text: 'Item 3' }
-            ],
-            instance = new TestComponent(this.$element, {
-                items: items,
-                keyExpr: 'key',
-                selectionMode: 'multiple'
-            }),
-            $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+        const items = [
+            { key: 'key1', text: 'Item 1' },
+            { key: 'key2', text: 'Item 2' },
+            { key: 'key3', text: 'Item 3' }
+        ];
+        const instance = new TestComponent(this.$element, {
+            items: items,
+            keyExpr: 'key',
+            selectionMode: 'multiple'
+        });
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
 
         instance.option('selectedItemKeys', ['key2']);
 
@@ -755,17 +755,17 @@ module('selecting of item keys', {
     });
 
     test('changing keyExpr by option', function(assert) {
-        var items = [
-                { key: 'key1', text: 'Item 1' },
-                { key: 'key2', text: 'Item 2' },
-                { key: 'key3', text: 'Item 3' }
-            ],
-            instance = new TestComponent(this.$element, {
-                items: items,
-                keyExpr: 'text',
-                selectionMode: 'multiple'
-            }),
-            $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+        const items = [
+            { key: 'key1', text: 'Item 1' },
+            { key: 'key2', text: 'Item 2' },
+            { key: 'key3', text: 'Item 3' }
+        ];
+        const instance = new TestComponent(this.$element, {
+            items: items,
+            keyExpr: 'text',
+            selectionMode: 'multiple'
+        });
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
 
         instance.option('keyExpr', 'key');
         instance.option('selectedItemKeys', ['key2']);
@@ -777,22 +777,22 @@ module('selecting of item keys', {
     });
 
     test('using keyExpr with dataSource', function(assert) {
-        var items = [
-                { key: 'key1', text: 'Item 1' },
-                { key: 'key2', text: 'Item 2' },
-                { key: 'key3', text: 'Item 3' }
-            ],
-            instance = new TestComponent(this.$element, {
-                dataSource: new DataSource({
-                    store: new ArrayStore({
-                        key: 'text',
-                        data: items
-                    })
-                }),
-                keyExpr: 'key',
-                selectionMode: 'multiple'
+        const items = [
+            { key: 'key1', text: 'Item 1' },
+            { key: 'key2', text: 'Item 2' },
+            { key: 'key3', text: 'Item 3' }
+        ];
+        const instance = new TestComponent(this.$element, {
+            dataSource: new DataSource({
+                store: new ArrayStore({
+                    key: 'text',
+                    data: items
+                })
             }),
-            $item = this.$element.find('.' + ITEM_CLASS).eq(1);
+            keyExpr: 'key',
+            selectionMode: 'multiple'
+        });
+        const $item = this.$element.find('.' + ITEM_CLASS).eq(1);
 
         instance.option('keyExpr', 'key');
         instance.option('selectedItemKeys', ['key2']);
@@ -914,43 +914,43 @@ module('selecting of item keys', {
 
 module('selecting of items with datasource', () => {
     test('added and removed selection should be correct', function(assert) {
-        var items = [1, 2, 3, 4, 5];
-        var ds = new DataSource({
+        const items = [1, 2, 3, 4, 5];
+        const ds = new DataSource({
             store: items,
             pageSize: 2,
             paginate: true
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: ds,
-                selectedItems: items.slice(),
-                selectionMode: 'multiple',
-                onSelectionChanged: function(args) {
-                    assert.ok(args.addedItems.length <= 1, 'unloaded items does not present in selection');
-                    assert.ok(args.removedItems.length <= 1, 'unloaded items does not present in selection');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: ds,
+            selectedItems: items.slice(),
+            selectionMode: 'multiple',
+            onSelectionChanged: function(args) {
+                assert.ok(args.addedItems.length <= 1, 'unloaded items does not present in selection');
+                assert.ok(args.removedItems.length <= 1, 'unloaded items does not present in selection');
+            }
+        });
 
         instance.unselectItem(0);
         instance.selectItem(0);
     });
 
     test('added and removed selection should be correct, if items are mapped', function(assert) {
-        var items = [{ id: 1, name: 'alex' }, { id: 2, name: 'john' }, { id: 3, name: 'bob' }, { id: 4, name: 'amanda' }];
+        const items = [{ id: 1, name: 'alex' }, { id: 2, name: 'john' }, { id: 3, name: 'bob' }, { id: 4, name: 'amanda' }];
 
-        var ds = new DataSource({
+        const ds = new DataSource({
             store: items,
             pageSize: 2,
             paginate: true
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: ds,
-                selectedItems: items.slice(),
-                selectionMode: 'multiple'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: ds,
+            selectedItems: items.slice(),
+            selectionMode: 'multiple'
+        });
 
         ds._mapFunc = function(item) {
             return $.extend(item, { map: item.id + item.name });
@@ -962,21 +962,21 @@ module('selecting of items with datasource', () => {
     });
 
     test('dynamically loaded items should be selected', function(assert) {
-        var items = [1, 2, 3, 4];
-        var ds = new DataSource({
+        const items = [1, 2, 3, 4];
+        const ds = new DataSource({
             store: items,
             pageSize: 2,
             paginate: true
         });
 
-        var $element = $('#cmp');
+        const $element = $('#cmp');
 
         new TestComponent($element, {
             dataSource: ds,
             selectedItems: items.slice(0, 3),
             selectionMode: 'multiple',
             onItemRendered: function(args) {
-                var isSelected = $.inArray(args.itemData, args.component.option('selectedItems')) > -1;
+                const isSelected = $.inArray(args.itemData, args.component.option('selectedItems')) > -1;
                 assert.equal($(args.itemElement).hasClass(ITEM_SELECTED_CLASS), isSelected, 'item selection is correct');
             }
         });
@@ -986,64 +986,64 @@ module('selecting of items with datasource', () => {
     });
 
     test('selectItem should not remove not loaded items', function(assert) {
-        var items = [1, 2, 3, 4, 5];
-        var ds = new DataSource({
+        const items = [1, 2, 3, 4, 5];
+        const ds = new DataSource({
             store: items,
             pageSize: 2,
             paginate: true
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: ds,
-                selectedItems: items.slice(1),
-                selectionMode: 'multiple'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: ds,
+            selectedItems: items.slice(1),
+            selectionMode: 'multiple'
+        });
 
         instance.selectItem(0);
         assert.deepEqual(instance.option('selectedItems'), items, 'selected items is correct');
     });
 
     test('it should not be possible to select multiple items in \'single\' selection mode (T386482)', function(assert) {
-        var items = [1, 3];
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                dataSource: items,
-                selectedItem: ''
-            });
+        const items = [1, 3];
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            dataSource: items,
+            selectedItem: ''
+        });
 
         instance.selectItem($element.find('.' + ITEM_CLASS).eq(0));
         assert.equal(instance.option('selectedItems').length, 1, 'only one item is selected');
     });
 
     test('unselectItem should remove only unselected item', function(assert) {
-        var items = [1, 2, 3, 4, 5];
-        var ds = new DataSource({
+        const items = [1, 2, 3, 4, 5];
+        const ds = new DataSource({
             store: items,
             pageSize: 2,
             paginate: true
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: ds,
-                selectedItems: items.slice(),
-                selectionMode: 'multiple'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: ds,
+            selectedItems: items.slice(),
+            selectionMode: 'multiple'
+        });
 
         instance.unselectItem(0);
         assert.deepEqual(instance.option('selectedItems'), items.slice().splice(1, 4), 'selected items is correct');
     });
 
     test('selectedIndex after initialization test', function(assert) {
-        var clock;
+        let clock;
         try {
             clock = sinon.useFakeTimers();
 
-            var ds = new CustomStore({
+            const ds = new CustomStore({
                 load: function() {
-                    var deferred = $.Deferred();
+                    const deferred = $.Deferred();
 
                     setTimeout(function() {
                         deferred.resolve([1, 2, 3, 4, 5]);
@@ -1053,12 +1053,12 @@ module('selecting of items with datasource', () => {
                 }
             });
 
-            var $element = $('#cmp'),
-                instance = new TestComponent($element, {
-                    dataSource: ds,
-                    selectedIndex: 2,
-                    selectionMode: 'single'
-                });
+            const $element = $('#cmp');
+            const instance = new TestComponent($element, {
+                dataSource: ds,
+                selectedIndex: 2,
+                selectionMode: 'single'
+            });
 
             clock.tick(4000);
 
@@ -1069,16 +1069,16 @@ module('selecting of items with datasource', () => {
     });
 
     test('selection should be applied with deferred dataSource if selectedItemKeys has value on init', function(assert) {
-        var clock;
+        let clock;
 
         try {
             clock = sinon.useFakeTimers();
 
-            var instance = new TestComponent($('#cmp'), {
+            const instance = new TestComponent($('#cmp'), {
                 dataSource: {
                     key: 'id',
                     load: function() {
-                        var deferred = $.Deferred();
+                        const deferred = $.Deferred();
 
                         setTimeout(function() {
                             deferred.resolve([{ id: 1, text: 'Item 1' }]);
@@ -1102,15 +1102,15 @@ module('selecting of items with datasource', () => {
 
 module('selecting of items in single mode', () => {
     test('selectedItem should select only one item', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectionMode: 'single'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectionMode: 'single'
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index);
         };
 
@@ -1121,14 +1121,14 @@ module('selecting of items in single mode', () => {
     });
 
     test('selectedItems should accept only one item', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedItems: items,
-                selectionMode: 'single'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedItems: items,
+            selectionMode: 'single'
+        });
 
         assert.deepEqual(instance.option('selectedItems'), [{ a: 0 }], 'selected only one item');
 
@@ -1139,9 +1139,9 @@ module('selecting of items in single mode', () => {
     test('onSelectionChanged should not be fired on widget rendering after adjusting selected items', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp');
+        const $element = $('#cmp');
 
         new TestComponent($element, {
             items: items,
@@ -1156,9 +1156,9 @@ module('selecting of items in single mode', () => {
     test('onSelectionChanged should be fired on widget rendering after adjusting selected items', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp');
+        const $element = $('#cmp');
 
         new TestComponent($element, {
             items: items,
@@ -1171,38 +1171,38 @@ module('selecting of items in single mode', () => {
     });
 
     test('selectedItem is set on init', function(assert) {
-        var $element = $('#cmp'),
-            items = [1, 2, 3],
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                items: items,
-                selectedItem: items[2]
-            });
+        const $element = $('#cmp');
+        const items = [1, 2, 3];
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            items: items,
+            selectedItem: items[2]
+        });
 
         assert.equal(instance.option('selectedIndex'), 2, 'selectedIndex option value is correct');
         assert.deepEqual(instance.option('selectedItems'), [items[2]], 'selectedItems option value is correct');
     });
 
     test('selectedIndex is set on init', function(assert) {
-        var $element = $('#cmp'),
-            items = [1, 2, 3],
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                items: items,
-                selectedIndex: 2
-            });
+        const $element = $('#cmp');
+        const items = [1, 2, 3];
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            items: items,
+            selectedIndex: 2
+        });
 
         assert.equal(instance.option('selectedItem'), items[2], 'selectedItem option value is correct');
         assert.deepEqual(instance.option('selectedItems'), [items[2]], 'selectedItems option value is correct');
     });
 
     test('selectedItem and selectedIndex options should depend on each other', function(assert) {
-        var $element = $('#cmp'),
-            items = [1, 2, 3],
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                items: items
-            });
+        const $element = $('#cmp');
+        const items = [1, 2, 3];
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            items: items
+        });
 
         assert.equal(instance.option('selectedItem'), null, 'selectedItem is null on init');
 
@@ -1214,12 +1214,12 @@ module('selecting of items in single mode', () => {
     });
 
     test('selectedItem and selectedItems options should depend on each other', function(assert) {
-        var $element = $('#cmp'),
-            items = [1, 2, 3],
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                items: items
-            });
+        const $element = $('#cmp');
+        const items = [1, 2, 3];
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            items: items
+        });
 
         instance.option('selectedItem', items[0]);
         assert.deepEqual(instance.option('selectedItems'), [items[0]], 'selectedItems option value is correct after selectedItem change');
@@ -1229,12 +1229,12 @@ module('selecting of items in single mode', () => {
     });
 
     test('selection change should not block other options change', function(assert) {
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                selectionMode: 'single',
-                items: [1, 2],
-                selectedIndex: 0
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            selectionMode: 'single',
+            items: [1, 2],
+            selectedIndex: 0
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name === 'selectedItem') {
@@ -1252,23 +1252,23 @@ module('selecting of items in multiple mode', {
     }
 }, () => {
     test('selectedItems should have precedence over selectedIndex if initialized with empty collection', function(assert) {
-        var $element = $('#cmp'),
-            instance = new this.TestComponent($element, {
-                selectionMode: 'multiple',
-                items: [1, 2, 3],
-                selectedItems: []
-            });
+        const $element = $('#cmp');
+        const instance = new this.TestComponent($element, {
+            selectionMode: 'multiple',
+            items: [1, 2, 3],
+            selectedItems: []
+        });
 
         assert.deepEqual(instance.option('selectedItems'), [], 'selectedItems option value is correct after selectedItem change');
     });
 
     test('selectedItemKeys should have precedence over selectedIndex if initialized with empty collection', function(assert) {
-        var $element = $('#cmp'),
-            instance = new this.TestComponent($element, {
-                selectionMode: 'multiple',
-                items: [1, 2, 3],
-                selectedItemKeys: []
-            });
+        const $element = $('#cmp');
+        const instance = new this.TestComponent($element, {
+            selectionMode: 'multiple',
+            items: [1, 2, 3],
+            selectedItemKeys: []
+        });
 
         assert.deepEqual(instance.option('selectedItemKeys'), [], 'selectedItems option value is correct after selectedItem change');
     });
@@ -1278,7 +1278,7 @@ module('selection mode', () => {
     test('selection mode option none', function(assert) {
         assert.expect(1);
 
-        var $element = $('#cmp');
+        const $element = $('#cmp');
 
         new TestComponent($element, {
             selectedIndex: 1,
@@ -1286,8 +1286,8 @@ module('selection mode', () => {
             selectionMode: 'none'
         });
 
-        var $items = $element.find('.item'),
-            $item = $items.eq(1);
+        const $items = $element.find('.item');
+        const $item = $items.eq(1);
 
         assert.ok(!$item.hasClass('dx-item-selected'), 'selected class was not attached');
     });
@@ -1295,14 +1295,14 @@ module('selection mode', () => {
     test('selection mode option single', function(assert) {
         assert.expect(3);
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                selectedIndex: 1,
-                items: [0, 1, 2, 3, 4],
-                selectionMode: 'single'
-            }),
-            $items = $element.find('.item'),
-            $item = $items.eq(1);
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            selectedIndex: 1,
+            items: [0, 1, 2, 3, 4],
+            selectionMode: 'single'
+        });
+        const $items = $element.find('.item');
+        const $item = $items.eq(1);
 
         assert.ok($item.hasClass('dx-item-selected'), 'selected class was attached');
 
@@ -1316,14 +1316,14 @@ module('selection mode', () => {
 
 module('selection mode changing', () => {
     test('selectedItems should be updated with one item', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedItems: items,
-                selectionMode: 'multiple'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedItems: items,
+            selectionMode: 'multiple'
+        });
 
         instance.option('selectionMode', 'single');
         assert.deepEqual(instance.option('selectedItems'), [{ a: 0 }], 'selected only one item');
@@ -1332,17 +1332,17 @@ module('selection mode changing', () => {
     test('onItemSelect should not be fired', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedItems: items,
-                selectionMode: 'multiple',
-                onItemSelect: function() {
-                    assert.ok(false, 'select action triggered');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedItems: items,
+            selectionMode: 'multiple',
+            onItemSelect: function() {
+                assert.ok(false, 'select action triggered');
+            }
+        });
 
         instance.option('selectionMode', 'single');
     });
@@ -1350,19 +1350,19 @@ module('selection mode changing', () => {
     test('onSelectionChanged should be fired', function(assert) {
         assert.expect(3);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedItems: items,
-                selectionMode: 'multiple',
-                onSelectionChanged: function(e) {
-                    assert.ok(true, 'unselect action triggered');
-                    assert.deepEqual(e.removedItems, [items[1]], 'one removed item');
-                    assert.deepEqual(e.addedItems, [], 'no added items');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedItems: items,
+            selectionMode: 'multiple',
+            onSelectionChanged: function(e) {
+                assert.ok(true, 'unselect action triggered');
+                assert.deepEqual(e.removedItems, [items[1]], 'one removed item');
+                assert.deepEqual(e.addedItems, [], 'no added items');
+            }
+        });
 
         instance.option('selectionMode', 'single');
     });
@@ -1370,44 +1370,44 @@ module('selection mode changing', () => {
 
 module('selection required', () => {
     test('first item should be selected if selection required', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedIndex: -1,
-                selectionMode: 'single',
-                selectionRequired: true
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedIndex: -1,
+            selectionMode: 'single',
+            selectionRequired: true
+        });
 
         assert.equal(instance.option('selectedIndex'), 0, 'selection present');
     });
 
     test('selection should not be dropped if selection removed', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedIndex: 1,
-                selectionMode: 'single',
-                selectionRequired: true
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedIndex: 1,
+            selectionMode: 'single',
+            selectionRequired: true
+        });
 
         instance.option('selectedIndex', -1);
         assert.equal(instance.option('selectedIndex'), 1, 'previous selection present');
     });
 
     test('at least one item should be selected if \'selectionRequired\' option changed to \'true\'', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedIndex: -1,
-                selectionMode: 'single',
-                selectionRequired: false
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedIndex: -1,
+            selectionMode: 'single',
+            selectionRequired: false
+        });
 
         assert.equal(instance.option('selectedItems').length, 0, 'no items are selected on init');
 
@@ -1416,15 +1416,15 @@ module('selection required', () => {
     });
 
     test('several items should be selected if \'selectionItemKeys\' is set and \'selectionRequired\' option is \'true\'', function(assert) {
-        var items = [{ key: 0 }, { key: 1 }, { key: 2 }];
+        const items = [{ key: 0 }, { key: 1 }, { key: 2 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                keyExpr: 'key',
-                selectionMode: 'multiple',
-                selectionRequired: true
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            keyExpr: 'key',
+            selectionMode: 'multiple',
+            selectionRequired: true
+        });
         instance.option('selectedItemKeys', [1, 2]);
 
         assert.deepEqual(instance.option('selectedItems'), items.slice(1), 'items is selected');
@@ -1433,12 +1433,12 @@ module('selection required', () => {
 
 module('deleting of items', () => {
     test('deleteItem should remove item by node', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
+        const items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.deleteItem(instance.itemElements().eq(2));
 
@@ -1447,12 +1447,12 @@ module('deleting of items', () => {
     });
 
     test('deleteItem should remove item by index', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
+        const items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.deleteItem(2);
 
@@ -1463,12 +1463,12 @@ module('deleting of items', () => {
     test('deleteItem should be resolved', function(assert) {
         assert.expect(1);
 
-        var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
+        const items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.deleteItem(instance.itemElements().eq(2)).done(function() {
             assert.ok(true, 'resolved');
@@ -1476,19 +1476,19 @@ module('deleting of items', () => {
     });
 
     test('deleteItem should trigger delete callback only once with correct itemData', function(assert) {
-        var item = '0',
-            deleteActionFlag = 0,
-            deletedItem = null;
+        const item = '0';
+        let deleteActionFlag = 0;
+        let deletedItem = null;
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: [item],
-                onItemDeleted: function(e) {
-                    deleteActionFlag++;
-                    deletedItem = e.itemData;
-                    assert.equal(e.itemIndex, 0, 'correct index specified');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [item],
+            onItemDeleted: function(e) {
+                deleteActionFlag++;
+                deletedItem = e.itemData;
+                assert.equal(e.itemIndex, 0, 'correct index specified');
+            }
+        });
 
         instance.deleteItem(instance.itemElements().eq(0));
 
@@ -1500,12 +1500,12 @@ module('deleting of items', () => {
     test('deleteItem should not process item which is not presented', function(assert) {
         assert.expect(3);
 
-        var items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
+        const items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.deleteItem($('<div>')).fail(function() {
             assert.ok(true, 'rejected');
@@ -1516,14 +1516,14 @@ module('deleting of items', () => {
     });
 
     test('deleteItem should not cause refresh', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index);
         };
 
@@ -1536,12 +1536,12 @@ module('deleting of items', () => {
     test('deleteItem should trigger onOptionChanged action', function(assert) {
         assert.expect(2);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'items') return;
@@ -1553,14 +1553,14 @@ module('deleting of items', () => {
     });
 
     test('item should not be deleted if \'cancel\' flag in onItemDeleting is true', function(assert) {
-        var instance = new TestComponent($('#cmp'), {
+        const instance = new TestComponent($('#cmp'), {
             items: [0],
             onItemDeleting: function(e) {
                 e.cancel = true;
             }
         });
 
-        var $item = instance.itemElements().eq(0);
+        let $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
 
         $item = instance.itemElements().eq(0);
@@ -1568,14 +1568,14 @@ module('deleting of items', () => {
     });
 
     test('item should not be deleted if \'cancel\' flag in onItemDeleting is resolved with true', function(assert) {
-        var instance = new TestComponent($('#cmp'), {
+        const instance = new TestComponent($('#cmp'), {
             items: [0],
             onItemDeleting: function(e) {
                 e.cancel = $.Deferred().resolve(true);
             }
         });
 
-        var $item = instance.itemElements().eq(0);
+        let $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
 
         $item = instance.itemElements().eq(0);
@@ -1583,14 +1583,14 @@ module('deleting of items', () => {
     });
 
     test('item should be deleted if \'cancel\' flag in onItemDeleting is resolved', function(assert) {
-        var instance = new TestComponent($('#cmp'), {
+        const instance = new TestComponent($('#cmp'), {
             dataSource: [0],
             onItemDeleting: function(e) {
                 e.cancel = $.Deferred().resolve();
             }
         });
 
-        var $item = instance.itemElements().eq(0);
+        let $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
 
         $item = instance.itemElements().eq(0);
@@ -1598,19 +1598,19 @@ module('deleting of items', () => {
     });
 
     test('\'cancel\' flag in onItemDeleting option should support Promise/A+ standart', function(assert) {
-        var resolve;
-        var promise = new Promise(function(onResolve) {
+        let resolve;
+        const promise = new Promise(function(onResolve) {
             resolve = onResolve;
         });
 
-        var instance = new TestComponent($('#cmp'), {
+        const instance = new TestComponent($('#cmp'), {
             dataSource: [0],
             onItemDeleting: function(e) {
                 e.cancel = promise;
             }
         });
 
-        var $item = instance.itemElements().eq(0);
+        let $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
 
         promise.then(function() {
@@ -1625,19 +1625,19 @@ module('deleting of items', () => {
 
 module('deleting with confirmation', () => {
     test('item should be deleted if confirmation resolved', function(assert) {
-        var confirmation = $.Deferred(),
-            itemDeleted = false;
+        const confirmation = $.Deferred();
+        let itemDeleted = false;
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return confirmation.promise();
-                },
-                onItemDeleted: function() {
-                    itemDeleted = true;
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return confirmation.promise();
+            },
+            onItemDeleted: function() {
+                itemDeleted = true;
+            }
+        });
 
         instance.deleteItem(0);
         assert.equal(itemDeleted, false, 'item not deleted');
@@ -1647,19 +1647,19 @@ module('deleting with confirmation', () => {
     });
 
     test('item should be deleted if confirmation resolved with true', function(assert) {
-        var confirmation = $.Deferred(),
-            itemDeleted = false;
+        const confirmation = $.Deferred();
+        let itemDeleted = false;
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return confirmation.promise();
-                },
-                onItemDeleted: function() {
-                    itemDeleted = true;
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return confirmation.promise();
+            },
+            onItemDeleted: function() {
+                itemDeleted = true;
+            }
+        });
 
         instance.deleteItem(0);
         assert.equal(itemDeleted, false, 'item not deleted');
@@ -1669,19 +1669,19 @@ module('deleting with confirmation', () => {
     });
 
     test('item should not be deleted if confirmation rejected', function(assert) {
-        var confirmation = $.Deferred(),
-            itemDeleted = false;
+        const confirmation = $.Deferred();
+        let itemDeleted = false;
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return confirmation.promise();
-                },
-                onItemDeleted: function() {
-                    itemDeleted = true;
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return confirmation.promise();
+            },
+            onItemDeleted: function() {
+                itemDeleted = true;
+            }
+        });
 
         instance.deleteItem(0);
         assert.equal(itemDeleted, false, 'item not deleted');
@@ -1691,19 +1691,19 @@ module('deleting with confirmation', () => {
     });
 
     test('item should not be deleted if confirmation resolved with false', function(assert) {
-        var confirmation = $.Deferred(),
-            itemDeleted = false;
+        const confirmation = $.Deferred();
+        let itemDeleted = false;
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return confirmation.promise();
-                },
-                onItemDeleted: function() {
-                    itemDeleted = true;
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return confirmation.promise();
+            },
+            onItemDeleted: function() {
+                itemDeleted = true;
+            }
+        });
 
         instance.deleteItem(0);
         assert.equal(itemDeleted, false, 'item not deleted');
@@ -1713,13 +1713,13 @@ module('deleting with confirmation', () => {
     });
 
     test('deleteItem should be resolved if confirmation pass', function(assert) {
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return $.Deferred().resolve().promise();
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return $.Deferred().resolve().promise();
+            }
+        });
 
         instance.deleteItem(0).done(function() {
             assert.ok(true, 'deleteItem resolved');
@@ -1727,13 +1727,13 @@ module('deleting with confirmation', () => {
     });
 
     test('deleteItem should not be resolved if confirmation not pass', function(assert) {
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return $.Deferred().reject().promise();
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return $.Deferred().reject().promise();
+            }
+        });
 
         instance.deleteItem(0).fail(function() {
             assert.ok(true, 'deleteItem rejected');
@@ -1741,16 +1741,16 @@ module('deleting with confirmation', () => {
     });
 
     test('deleteItem should delete item without confirmation if item is already deleting', function(assert) {
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    instance.deleteItem(0);
-                },
-                onItemDeleted: function() {
-                    assert.ok(true, 'item deleted');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                instance.deleteItem(0);
+            },
+            onItemDeleted: function() {
+                assert.ok(true, 'item deleted');
+            }
+        });
 
         instance.deleteItem(0);
     });
@@ -1758,16 +1758,16 @@ module('deleting with confirmation', () => {
     test('deleteItem should not delete item without confirmation if previous confirmation fails', function(assert) {
         assert.expect(0);
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: ['0'],
-                onItemDeleting: function(e) {
-                    return $.Deferred().reject().promise();
-                },
-                onItemDeleted: function() {
-                    assert.ok(false, 'item deleted');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: ['0'],
+            onItemDeleting: function(e) {
+                return $.Deferred().reject().promise();
+            },
+            onItemDeleted: function() {
+                assert.ok(false, 'item deleted');
+            }
+        });
 
         instance.deleteItem(0);
         instance.deleteItem(0);
@@ -1787,7 +1787,7 @@ module('deleting from dataSource', {
     test('deleteItem should remove item', function(assert) {
         assert.expect(2);
 
-        var store = new ArrayStore({
+        const store = new ArrayStore({
             data: [
                 { id: 0, text: 0 },
                 { id: 1, text: 1 },
@@ -1796,12 +1796,12 @@ module('deleting from dataSource', {
             key: 'id'
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: {
-                    store: store
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: {
+                store: store
+            }
+        });
 
         instance.deleteItem(instance.itemElements().eq(1)).done(function() {
             assert.equal(instance.itemElements().length, 2, 'item deleted');
@@ -1812,7 +1812,7 @@ module('deleting from dataSource', {
     test('deleteItem should not remove when error occurred', function(assert) {
         assert.expect(2);
 
-        var store = new ArrayStore({
+        const store = new ArrayStore({
             data: [
                 { text: 0 },
                 { text: 1 },
@@ -1820,12 +1820,12 @@ module('deleting from dataSource', {
             ]
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: {
-                    store: store
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: {
+                store: store
+            }
+        });
 
         store._removeImpl = function() {
             return $.Deferred().reject().promise();
@@ -1840,9 +1840,9 @@ module('deleting from dataSource', {
     test('deleteItem should fade deleting item when deleting and disable widget', function(assert) {
         assert.expect(4);
 
-        var deferred = $.Deferred();
+        const deferred = $.Deferred();
 
-        var store = new ArrayStore({
+        const store = new ArrayStore({
             data: [
                 { text: 0 },
                 { text: 1 },
@@ -1850,15 +1850,15 @@ module('deleting from dataSource', {
             ]
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: {
-                    store: store
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: {
+                store: store
+            }
+        });
 
         store._removeImpl = function() {
-            var d = $.Deferred();
+            const d = $.Deferred();
 
             deferred.done(function() {
                 d.reject();
@@ -1867,7 +1867,7 @@ module('deleting from dataSource', {
             return d.promise();
         };
 
-        var $item = instance.itemElements().eq(1);
+        const $item = instance.itemElements().eq(1);
 
         instance.deleteItem($item).fail(function() {
             assert.equal($item.hasClass(ITEM_RESPONSE_WAIT_CLASS), false, 'item not wait for response');
@@ -1883,40 +1883,40 @@ module('deleting from dataSource', {
     test('only needed items should be rendered after delete', function(assert) {
         assert.expect(1);
 
-        var dataSource = new DataSource({
+        const dataSource = new DataSource({
             store: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
             pageSize: 2
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: dataSource
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: dataSource
+        });
 
         instance.deleteItem(0);
 
-        var $newItems = $('.' + ITEM_CLASS, $element);
+        const $newItems = $('.' + ITEM_CLASS, $element);
         assert.equal($newItems.text(), '12', 'element was not removed');
     });
 
     test('last item should not be duplicated after delete items', function(assert) {
-        var dataSource = new DataSource({
+        const dataSource = new DataSource({
             store: [0, 1, 2, 3]
         });
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: dataSource
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: dataSource
+        });
 
         instance.deleteItem(0);
-        var $newItems = $('.' + ITEM_CLASS, $element);
+        const $newItems = $('.' + ITEM_CLASS, $element);
 
         assert.equal($newItems.text(), '123');
     });
 
     test('deleteItem should trigger delete callback only once with correct itemData even if items changed at runtime', function(assert) {
-        var dataSource = new DataSource({
+        const dataSource = new DataSource({
             store: new ArrayStore({
                 data: [0],
                 onRemoved: function() {
@@ -1925,15 +1925,15 @@ module('deleting from dataSource', {
             })
         });
 
-        var args;
-        var instance = new TestComponent($('#cmp'), {
+        let args;
+        const instance = new TestComponent($('#cmp'), {
             dataSource: dataSource,
             onItemDeleted: function(e) {
                 args = e;
             }
         });
 
-        var $item = instance.itemElements().eq(0);
+        const $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
         assert.strictEqual($(args.itemElement).get(0), $item.get(0), 'item equals selected item');
         assert.strictEqual(args.itemData, 0, 'item equals selected item');
@@ -1943,12 +1943,12 @@ module('deleting from dataSource', {
     test('deleteItem should trigger onOptionChanged action', function(assert) {
         assert.expect(2);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: items
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'dataSource') return;
@@ -1962,12 +1962,12 @@ module('deleting from dataSource', {
     test('deleteItem should not trigger onOptionChanged action if instance of DataSource', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: new DataSource(items)
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: new DataSource(items)
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'dataSource') return;
@@ -1980,19 +1980,19 @@ module('deleting from dataSource', {
 
 module('reordering of items', () => {
     test('reorderItem should swap items by index', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 
-        var item0 = item(0),
-            item1 = item(1);
+        const item0 = item(0);
+        const item1 = item(1);
 
         instance.reorderItem(0, 1);
         assert.equal(item0, item(1));
@@ -2000,19 +2000,19 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should swap items by node', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 
-        var item0 = item(0),
-            item1 = item(1);
+        const item0 = item(0);
+        const item1 = item(1);
 
         instance.reorderItem(item0, item1);
         assert.equal(item0, item(1));
@@ -2020,19 +2020,19 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should swap last with first items', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 
-        var item0 = item(0),
-            item1 = item(1);
+        const item0 = item(0);
+        const item1 = item(1);
 
         instance.reorderItem(1, 0);
         assert.equal(item0, item(1));
@@ -2040,12 +2040,12 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should swap items in items option', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.reorderItem(0, 1);
 
@@ -2053,12 +2053,12 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should swap last with first items in items option', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.reorderItem(1, 0);
 
@@ -2066,14 +2066,14 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should not cause refresh', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index);
         };
 
@@ -2084,12 +2084,12 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should be resolved', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
 
         instance.reorderItem(0, 1).done(function() {
             assert.ok(true, 'resolved');
@@ -2098,16 +2098,16 @@ module('reordering of items', () => {
     });
 
     test('reorderItem should not be executed if items are equal', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                itemReorder: function(args) {
-                    assert.ok(false, 'items reordered');
-                }
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            itemReorder: function(args) {
+                assert.ok(false, 'items reordered');
+            }
 
-            });
+        });
 
         instance.reorderItem(0, 0).fail(function() {
             assert.ok(true, 'failed');
@@ -2115,19 +2115,19 @@ module('reordering of items', () => {
     });
 
     test('onItemReordered should be fired if items reordered', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                onItemReordered: function(args) {
-                    assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
-                    assert.equal(args.fromIndex, 0, 'correct from index');
-                    assert.equal(args.toIndex, 1, 'correct to index');
-                }
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            onItemReordered: function(args) {
+                assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
+                assert.equal(args.fromIndex, 0, 'correct from index');
+                assert.equal(args.toIndex, 1, 'correct to index');
+            }
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 
@@ -2135,16 +2135,16 @@ module('reordering of items', () => {
     });
 
     test('selection should be updated after items reordered', function(assert) {
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items,
-                selectedItems: [items[0]],
-                selectionMode: 'multiple'
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items,
+            selectedItems: [items[0]],
+            selectionMode: 'multiple'
+        });
 
-        var item = function(index) {
+        const item = function(index) {
             return instance.itemElements().eq(index).get(0);
         };
 
@@ -2156,12 +2156,12 @@ module('reordering of items', () => {
     test('deleteItem should trigger onOptionChanged action', function(assert) {
         assert.expect(2);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                items: items.slice()
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items.slice()
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'items') return;
@@ -2177,12 +2177,12 @@ module('reordering with dataSource', () => {
     test('deleteItem should not trigger onOptionChanged action', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: items.slice()
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: items.slice()
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'dataSource') return;
@@ -2195,12 +2195,12 @@ module('reordering with dataSource', () => {
     test('deleteItem should not trigger onOptionChanged action if instance of DataSource', function(assert) {
         assert.expect(0);
 
-        var items = [{ a: 0 }, { a: 1 }];
+        const items = [{ a: 0 }, { a: 1 }];
 
-        var $element = $('#cmp'),
-            instance = new TestComponent($element, {
-                dataSource: new DataSource(items.slice())
-            });
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            dataSource: new DataSource(items.slice())
+        });
 
         instance.option('onOptionChanged', function(args) {
             if(args.name !== 'dataSource') return;
@@ -2211,7 +2211,7 @@ module('reordering with dataSource', () => {
     });
 
     test('items should update when datasource option changed', function(assert) {
-        var widget = new TestComponent('#cmp', {
+        const widget = new TestComponent('#cmp', {
             dataSource: new DataSource({
                 store: new ArrayStore([{ text: 'item 1' }])
             })

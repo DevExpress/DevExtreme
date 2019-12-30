@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    angular = require('angular'),
-    registerComponent = require('core/component_registrator'),
-    Widget = require('ui/widget/ui.widget');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const angular = require('angular');
+const registerComponent = require('core/component_registrator');
+const Widget = require('ui/widget/ui.widget');
 
 require('integration/angular');
 
@@ -10,8 +10,8 @@ QUnit.module('simple component tests', {
     beforeEach: function() {
         registerComponent('testWidget', Widget.inherit({}));
 
-        var that = this,
-            testModule = angular.module('test', ['dx']);
+        const that = this;
+        const testModule = angular.module('test', ['dx']);
 
         this.testBindingInit = noop;
         testModule.directive('testBinding', function() {
@@ -24,8 +24,8 @@ QUnit.module('simple component tests', {
         });
 
         this.$fixtureElement = $('<div/>').attr('ng-app', 'testApp').appendTo('#qunit-fixture');
-        var $container = $('<div/>').appendTo(this.$fixtureElement),
-            $widget = $('<div/>').attr('test-widget', '').appendTo($container);
+        const $container = $('<div/>').appendTo(this.$fixtureElement);
+        const $widget = $('<div/>').attr('test-widget', '').appendTo($container);
 
         angular.bootstrap($container, ['test']);
 
@@ -37,29 +37,29 @@ QUnit.module('simple component tests', {
 });
 
 QUnit.test('template should be rendered to container directly', function(assert) {
-    var $container = $('<div class=\'container\'>');
+    const $container = $('<div class=\'container\'>');
 
     this.testBindingInit = function(element) {
         assert.equal($(element).parent().get(0), $container.get(0), 'template rendered in attached container');
     };
 
     this.instance.$element().append($container);
-    var template = this.instance._getTemplate($('<div class=\'content\' test-binding>'));
+    const template = this.instance._getTemplate($('<div class=\'content\' test-binding>'));
     template.render({
         container: $container
     });
 });
 
 QUnit.test('template result should be correct', function(assert) {
-    var $container = $('<div class=\'container\'>');
+    const $container = $('<div class=\'container\'>');
 
-    var $result;
+    let $result;
     this.testBindingInit = function(element) {
         $result = element;
     };
 
     this.instance.$element().append($container);
-    var template = this.instance._getTemplate($('<div class=\'content\' test-binding>'));
+    const template = this.instance._getTemplate($('<div class=\'content\' test-binding>'));
     template.render({
         container: $container
     });

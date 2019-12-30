@@ -2,7 +2,7 @@
 * @name dxTreeMapNode
 * @publicName Node
 */
-var Node = {
+const Node = {
     /**
     * @name dxTreeMapNodeFields.level
     * @type number

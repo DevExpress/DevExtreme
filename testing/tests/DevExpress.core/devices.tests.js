@@ -1,16 +1,16 @@
 window.includeThemesLinks();
 
-var $ = require('jquery'),
-    renderer = require('core/renderer'),
-    themes = require('ui/themes'),
-    devices = require('core/devices'),
-    fromUA = $.proxy(devices._fromUA, devices),
-    viewPort = require('core/utils/view_port'),
-    viewPortChanged = viewPort.changeCallback,
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    config = require('core/config');
+const $ = require('jquery');
+const renderer = require('core/renderer');
+const themes = require('ui/themes');
+const devices = require('core/devices');
+const fromUA = $.proxy(devices._fromUA, devices);
+const viewPort = require('core/utils/view_port');
+const viewPortChanged = viewPort.changeCallback;
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const config = require('core/config');
 
-var userAgents = {
+const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
     ipad_10: 'Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1',
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
@@ -32,7 +32,7 @@ QUnit.module('devices', {
 });
 
 QUnit.test('ios by userAgent', function(assert) {
-    var device = fromUA(userAgents.iphone_12);
+    let device = fromUA(userAgents.iphone_12);
 
     assert.equal(device.platform, 'ios', 'platform is ios');
     assert.equal(device.version.toString(), '12,3,1', 'correct version');
@@ -46,7 +46,7 @@ QUnit.test('ios by userAgent', function(assert) {
 });
 
 QUnit.test('android by userAgent', function(assert) {
-    var device = fromUA(userAgents.android_4_3_4);
+    let device = fromUA(userAgents.android_4_3_4);
 
     assert.equal(device.platform, 'android', 'platform is android');
     assert.equal(device.version.toString(), '4,3,4', 'correct version');
@@ -74,21 +74,21 @@ QUnit.test('android by userAgent', function(assert) {
 });
 
 QUnit.test('win8 tablet by userAgent', function(assert) {
-    var device = fromUA(userAgents.win_arm_8);
+    const device = fromUA(userAgents.win_arm_8);
 
     assert.equal(device.platform, 'generic', 'platform is generic');
     assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
 });
 
 QUnit.test('win8.1 IE11 by userAgent', function(assert) {
-    var device = fromUA(userAgents.win8_1_ie11);
+    const device = fromUA(userAgents.win8_1_ie11);
 
     assert.equal(device.platform, 'generic', 'platform is generic');
     assert.equal(device.deviceType, 'desktop', 'deviceType is desktop');
 });
 
 QUnit.test('iphone by device name', function(assert) {
-    var device;
+    let device;
 
     devices.current('iPhone');
     device = devices.current();
@@ -116,7 +116,7 @@ QUnit.test('iphone by device name', function(assert) {
 
 QUnit.test('ipad by device name', function(assert) {
     devices.current('iPad');
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'ios', 'correct platform');
     assert.equal(device.deviceType, 'tablet', 'correct deviceType');
@@ -124,7 +124,7 @@ QUnit.test('ipad by device name', function(assert) {
 
 QUnit.test('ipad mini by device name', function(assert) {
     devices.current('iPadMini');
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'ios', 'correct platform');
     assert.equal(device.deviceType, 'tablet', 'correct deviceType');
@@ -132,7 +132,7 @@ QUnit.test('ipad mini by device name', function(assert) {
 
 QUnit.test('android phone by device name', function(assert) {
     devices.current('androidPhone');
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'android', 'correct platform');
     assert.equal(device.deviceType, 'phone', 'correct deviceType');
@@ -140,14 +140,14 @@ QUnit.test('android phone by device name', function(assert) {
 
 QUnit.test('android tablet by device name', function(assert) {
     devices.current('androidTablet');
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'android', 'correct platform');
     assert.equal(device.deviceType, 'tablet', 'correct deviceType');
 });
 
 QUnit.test('winphone10 by userAgent', function(assert) {
-    var device = fromUA(userAgents.win_phone_10);
+    const device = fromUA(userAgents.win_phone_10);
 
     assert.strictEqual(device.deviceType, 'phone', 'correct deviceType');
     assert.strictEqual(device.platform, 'generic', 'platform is generic because win is deprecated');
@@ -155,7 +155,7 @@ QUnit.test('winphone10 by userAgent', function(assert) {
 
 QUnit.test('generic phone by device name', function(assert) {
     devices.current('genericPhone');
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'generic', 'correct platform');
     assert.equal(device.deviceType, 'phone', 'correct deviceType');
@@ -163,7 +163,7 @@ QUnit.test('generic phone by device name', function(assert) {
 
 QUnit.test('current', function(assert) {
     devices.current(fromUA(userAgents.iphone_12));
-    var device = devices.current();
+    const device = devices.current();
 
     assert.equal(device.platform, 'ios', 'platform is ios');
     assert.equal(device.version.toString(), '12,3,1', 'correct version');
@@ -176,7 +176,7 @@ QUnit.test('method current sets necessary flags', function(assert) {
         deviceType: 'tablet'
     });
 
-    var device = devices.current();
+    const device = devices.current();
 
     assert.ok(device.android, 'correct android flag');
     assert.ok(device.tablet, 'correct tablet flag');
@@ -192,7 +192,7 @@ QUnit.test('method current sets correct shortcuts if deviceType was not forced (
         platform: 'ios'
     });
 
-    var device = devices.current();
+    const device = devices.current();
 
     assert.ok(device.ios, 'correct ios flag');
     assert.equal(device.deviceType, 'tablet', 'correct deviceType value');
@@ -200,7 +200,7 @@ QUnit.test('method current sets correct shortcuts if deviceType was not forced (
 });
 
 QUnit.test('method themes.ready calls a callback function after device setting and themes loading', function(assert) {
-    var done = assert.async();
+    const done = assert.async();
 
     themes.ready(function() {
         assert.ok(devices.current().ios, 'correct ios flag');
@@ -214,10 +214,10 @@ QUnit.test('method themes.ready calls a callback function after device setting a
 
 
 QUnit.test('attach css classes', function(assert) {
-    var originalRealDevice = devices.real();
+    const originalRealDevice = devices.real();
 
     try {
-        var $element = $('<div>');
+        const $element = $('<div>');
 
         devices.real({ platform: 'ios', version: [7, 1] });
         devices.attachCssClasses($element);
@@ -230,10 +230,10 @@ QUnit.test('attach css classes', function(assert) {
 });
 
 QUnit.test('attach css classes (dx-device-mobile)', function(assert) {
-    var originalCurrentDevice = devices.current();
+    const originalCurrentDevice = devices.current();
 
     try {
-        var $element = $('<div>');
+        let $element = $('<div>');
         devices.current({ platform: 'generic', deviceType: 'phone' });
         devices.attachCssClasses($element);
         assert.ok(!$element.hasClass('dx-device-desktop'));
@@ -263,9 +263,9 @@ QUnit.test('attach css classes (dx-device-mobile)', function(assert) {
 });
 
 QUnit.test('detach css classes', function(assert) {
-    var originalRealDevice = devices.real();
+    const originalRealDevice = devices.real();
     try {
-        var $element = $('<div>');
+        const $element = $('<div>');
         devices.real({ platform: 'ios', version: [7, 1] });
 
         devices.attachCssClasses($element);
@@ -279,9 +279,9 @@ QUnit.test('detach css classes', function(assert) {
 });
 
 QUnit.test('detach only attached classes', function(assert) {
-    var originalRealDevice = devices.real();
+    const originalRealDevice = devices.real();
     try {
-        var $element = $('<div>');
+        const $element = $('<div>');
         devices.real({ platform: 'ios', version: [7, 1] });
 
         devices.attachCssClasses($element);
@@ -296,13 +296,13 @@ QUnit.test('detach only attached classes', function(assert) {
 });
 
 QUnit.test('move classes from previous viewport to new viewport', function(assert) {
-    var originalRealDevice = devices.real();
+    const originalRealDevice = devices.real();
     try {
-        var $element = $('<div>');
+        const $element = $('<div>');
         devices.real({ platform: 'ios', version: [7, 1] });
         devices.attachCssClasses($element);
 
-        var $newElement = $('<div>');
+        const $newElement = $('<div>');
 
         viewPortChanged.fire($newElement, $element);
 
@@ -317,10 +317,10 @@ QUnit.test('move classes from previous viewport to new viewport', function(asser
 });
 
 QUnit.test('attach css classes RTL', function(assert) {
-    var originalRTL = config().rtlEnabled;
+    const originalRTL = config().rtlEnabled;
 
     try {
-        var $element = $('<div>');
+        const $element = $('<div>');
 
         config({ rtlEnabled: false });
         devices.attachCssClasses($element);
@@ -336,14 +336,14 @@ QUnit.test('attach css classes RTL', function(assert) {
 });
 
 QUnit.test('attach css classes in simulator', function(assert) {
-    var originalIsSimulator = devices.isSimulator;
+    const originalIsSimulator = devices.isSimulator;
 
     try {
         devices.isSimulator = function() {
             return true;
         };
 
-        var $element = $('<div>');
+        const $element = $('<div>');
 
         devices.attachCssClasses($element);
         assert.ok($element.hasClass('dx-simulator'), 'simulator class added');
@@ -354,11 +354,11 @@ QUnit.test('attach css classes in simulator', function(assert) {
 });
 
 QUnit.test('classes not attached to body ', function(assert) {
-    var originalCurrentDevice = devices.current();
-    var $style = $('<style>').text('.dx-theme-marker {font-family: "dx.ios7.default" }');
+    const originalCurrentDevice = devices.current();
+    const $style = $('<style>').text('.dx-theme-marker {font-family: "dx.ios7.default" }');
     $style.appendTo('head');
     try {
-        var $body = $('body');
+        const $body = $('body');
         devices.current({ platform: 'ios', version: [7, 1] });
         assert.ok(!$body.hasClass('dx-theme-ios7'), 'classes is not added on ');
 
@@ -374,7 +374,7 @@ QUnit.test('simulator forcing', function(assert) {
 });
 
 QUnit.test('isSimulator return true when is ripple emulator', function(assert) {
-    var ripple = window.tinyHippos;
+    const ripple = window.tinyHippos;
     try {
         window.tinyHippos = true;
         assert.ok(devices.isSimulator(), 'ripple emulator detected as simulator');
@@ -386,7 +386,7 @@ QUnit.test('isSimulator return true when is ripple emulator', function(assert) {
 
 QUnit.module('orientation', {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         that.currentWidth = 100;
         that.currentHeight = 200;
@@ -410,7 +410,7 @@ QUnit.module('orientation', {
 QUnit.test('orientation detecting', function(assert) {
     assert.expect(3);
 
-    var device = new devices.constructor();
+    const device = new devices.constructor();
 
     assert.equal(device.orientation(), 'portrait');
 
@@ -426,7 +426,7 @@ QUnit.test('orientation detecting', function(assert) {
 });
 
 QUnit.test('no unnecessary orientationChanged on screen keyboard appearing', function(assert) {
-    var device = new devices.constructor();
+    const device = new devices.constructor();
 
     device.on('orientationChanged', function(args) {
         assert.ok(false, 'orientationChanged should not fire');

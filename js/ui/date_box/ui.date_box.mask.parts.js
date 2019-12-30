@@ -8,9 +8,9 @@ const monthGetter = (date) => {
 };
 
 const monthSetter = (date, value) => {
-    let day = date.getDate(),
-        monthLimits = getLimits('M', date),
-        newValue = fitIntoRange(parseInt(value), monthLimits.min, monthLimits.max);
+    const day = date.getDate();
+    const monthLimits = getLimits('M', date);
+    const newValue = fitIntoRange(parseInt(value), monthLimits.min, monthLimits.max);
 
     date.setMonth(newValue - 1, 1);
 
@@ -36,8 +36,8 @@ const PATTERN_GETTERS = {
 
 const PATTERN_SETTERS = extend({}, getPatternSetters(), {
     a: (date, value) => {
-        let hours = date.getHours(),
-            current = hours >= 12;
+        const hours = date.getHours();
+        const current = hours >= 12;
 
         if(current === !!(parseInt(value))) {
             return;
@@ -67,10 +67,10 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         date.setDate(date.getDate() - date.getDay() + parseInt(value));
     },
     y: (date, value) => {
-        let currentYear = date.getFullYear(),
-            valueLength = String(value).length,
-            maxLimitLength = String(getLimits('y', date).max).length,
-            newValue = parseInt(String(currentYear).substr(0, maxLimitLength - valueLength) + value);
+        const currentYear = date.getFullYear();
+        const valueLength = String(value).length;
+        const maxLimitLength = String(getLimits('y', date).max).length;
+        const newValue = parseInt(String(currentYear).substr(0, maxLimitLength - valueLength) + value);
 
         date.setFullYear(newValue);
     }
@@ -84,16 +84,16 @@ const getPatternGetter = (patternChar) => {
 const renderDateParts = (text, regExpInfo) => {
     const result = regExpInfo.regexp.exec(text);
 
-    let start = 0,
-        end = 0,
-        sections = [];
+    let start = 0;
+    let end = 0;
+    const sections = [];
 
     for(let i = 1; i < result.length; i++) {
         start = end;
         end = start + result[i].length;
 
-        let pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, ''),
-            getter = getPatternGetter(pattern[0]);
+        const pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, '');
+        const getter = getPatternGetter(pattern[0]);
 
         sections.push({
             index: i - 1,
@@ -134,7 +134,7 @@ const getLimits = (pattern, date, forcedPattern) => {
 
 const getDatePartIndexByPosition = (dateParts, position) => {
     for(let i = 0; i < dateParts.length; i++) {
-        let caretInGroup = dateParts[i].caret.end >= position;
+        const caretInGroup = dateParts[i].caret.end >= position;
 
         if(!dateParts[i].isStub && caretInGroup) {
             return i;

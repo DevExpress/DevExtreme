@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 QUnit.testStart(function() {
-    var markup = '<div id="container"></div>';
+    const markup = '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
 });
@@ -15,7 +15,7 @@ import { AreaItem } from 'ui/pivot_grid/ui.pivot_grid.area_item';
 QUnit.module('Creation');
 
 QUnit.test('Create Fields area', function(assert) {
-    var fieldsArea = new FieldsArea();
+    const fieldsArea = new FieldsArea();
 
     assert.ok(fieldsArea);
     assert.ok(fieldsArea instanceof AreaItem);
@@ -47,7 +47,7 @@ QUnit.test('Render without data', function(assert) {
     assert.strictEqual($(this.area.tableElement()[0].rows[0].cells[0]).find('.dx-empty-area-text').text(), 'Drop Fields Here', 'Empty area text');
     assert.ok(this.area.tableElement().hasClass('dx-area-field-container'));
 
-    var groupElement = this.area.groupElement();
+    const groupElement = this.area.groupElement();
 
     assert.ok(groupElement.hasClass('dx-area-fields'));
     assert.ok(groupElement.hasClass('dx-pivotgrid-drag-action'), 'items in area are draggable');
@@ -57,7 +57,7 @@ QUnit.test('Render without data', function(assert) {
 QUnit.test('Render fields', function(assert) {
     this.area.render(this.$container, [{ dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'myArea' }, { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'myArea' }]);
 
-    var rows = this.area.tableElement()[0].rows;
+    const rows = this.area.tableElement()[0].rows;
 
     assert.strictEqual(rows.length, 1);
     assert.strictEqual(rows[0].cells.length, 2);
@@ -67,7 +67,7 @@ QUnit.test('Render fields', function(assert) {
 QUnit.test('Render fields for row area', function(assert) {
     this.component.option.withArgs('fieldPanel.showRowFields').returns(true);
 
-    var area = new FieldsArea(this.component, 'row');
+    const area = new FieldsArea(this.component, 'row');
 
     area.render(this.$container, [{ dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row' }]);
 
@@ -111,7 +111,7 @@ QUnit.test('Render group fields', function(assert) {
         { dataField: 'Field4', area: 'myArea' }
     ]);
 
-    var cells = this.area.tableElement().find('td');
+    const cells = this.area.tableElement().find('td');
 
     assert.strictEqual(cells.length, 4);
 
@@ -138,7 +138,7 @@ QUnit.test('Not render field for incorrect area', function(assert) {
         { dataField: 'Field2', area: 'filter' }
     ]);
 
-    var fields = this.area.tableElement().find('.dx-area-field');
+    const fields = this.area.tableElement().find('.dx-area-field');
 
     assert.strictEqual(fields.length, 1);
     assert.strictEqual(fields.eq(0).data('field').area, 'myArea');
@@ -151,7 +151,7 @@ QUnit.test('Render empty area when all fields with incorrect area', function(ass
         { dataField: 'Field2', area: 'filter' }
     ]);
 
-    var fields = this.area.tableElement().find('.dx-area-field');
+    const fields = this.area.tableElement().find('.dx-area-field');
 
     assert.strictEqual(fields.length, 0);
     assert.strictEqual($(this.area.tableElement()[0].rows[0].cells[0]).find('.dx-empty-area-text').text(), 'Drop Fields Here', 'Empty area text');
@@ -163,7 +163,7 @@ QUnit.test('Not render hidden field', function(assert) {
         { dataField: 'Field2', area: 'myArea' }
     ]);
 
-    var fields = this.area.tableElement().find('.dx-area-field');
+    const fields = this.area.tableElement().find('.dx-area-field');
 
     assert.strictEqual(fields.length, 1, 'rendered fields count');
     assert.strictEqual(fields.eq(0).data('field').dataField, 'Field2', 'rendered field');

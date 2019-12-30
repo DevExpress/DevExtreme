@@ -1,70 +1,70 @@
-var mixins = {},
-    statesConsts = require('../../components/consts').states,
-    symbolPoint = require('./symbol_point'),
-    barPoint = require('./bar_point'),
-    bubblePoint = require('./bubble_point'),
-    piePoint = require('./pie_point'),
-    rangeSymbolPoint = require('./range_symbol_point'),
-    rangeBarPoint = require('./range_bar_point'),
-    candlestickPoint = require('./candlestick_point'),
-    stockPoint = require('./stock_point'),
-    polarPoints = require('./polar_point'),
-    _normalizeEnum = require('../../core/utils').normalizeEnum,
-    extend = require('../../../core/utils/extend').extend,
-    _extend = extend,
-    _isDefined = require('../../../core/utils/type').isDefined,
-    _noop = require('../../../core/utils/common').noop,
-    SYMBOL_POINT = 'symbolPoint',
-    POLAR_SYMBOL_POINT = 'polarSymbolPoint',
-    BAR_POINT = 'barPoint',
-    POLAR_BAR_POINT = 'polarBarPoint',
-    PIE_POINT = 'piePoint',
-    SELECTED_STATE = statesConsts.selectedMark,
-    HOVER_STATE = statesConsts.hoverMark,
-    NORMAL_STATE = statesConsts.normalMark,
-    HOVER = statesConsts.hover,
-    NORMAL = statesConsts.normal,
-    SELECTION = statesConsts.selection,
+const mixins = {};
+const statesConsts = require('../../components/consts').states;
+const symbolPoint = require('./symbol_point');
+const barPoint = require('./bar_point');
+const bubblePoint = require('./bubble_point');
+const piePoint = require('./pie_point');
+const rangeSymbolPoint = require('./range_symbol_point');
+const rangeBarPoint = require('./range_bar_point');
+const candlestickPoint = require('./candlestick_point');
+const stockPoint = require('./stock_point');
+const polarPoints = require('./polar_point');
+const _normalizeEnum = require('../../core/utils').normalizeEnum;
+const extend = require('../../../core/utils/extend').extend;
+const _extend = extend;
+const _isDefined = require('../../../core/utils/type').isDefined;
+const _noop = require('../../../core/utils/common').noop;
+const SYMBOL_POINT = 'symbolPoint';
+const POLAR_SYMBOL_POINT = 'polarSymbolPoint';
+const BAR_POINT = 'barPoint';
+const POLAR_BAR_POINT = 'polarBarPoint';
+const PIE_POINT = 'piePoint';
+const SELECTED_STATE = statesConsts.selectedMark;
+const HOVER_STATE = statesConsts.hoverMark;
+const NORMAL_STATE = statesConsts.normalMark;
+const HOVER = statesConsts.hover;
+const NORMAL = statesConsts.normal;
+const SELECTION = statesConsts.selection;
 
-    pointTypes = {
-        chart: {
-            'scatter': SYMBOL_POINT,
-            'line': SYMBOL_POINT,
-            'spline': SYMBOL_POINT,
-            'stepline': SYMBOL_POINT,
-            'stackedline': SYMBOL_POINT,
-            'fullstackedline': SYMBOL_POINT,
-            'stackedspline': SYMBOL_POINT,
-            'fullstackedspline': SYMBOL_POINT,
-            'stackedsplinearea': SYMBOL_POINT,
-            'fullstackedsplinearea': SYMBOL_POINT,
-            'area': SYMBOL_POINT,
-            'splinearea': SYMBOL_POINT,
-            'steparea': SYMBOL_POINT,
-            'stackedarea': SYMBOL_POINT,
-            'fullstackedarea': SYMBOL_POINT,
-            'rangearea': 'rangeSymbolPoint',
-            'bar': BAR_POINT,
-            'stackedbar': BAR_POINT,
-            'fullstackedbar': BAR_POINT,
-            'rangebar': 'rangeBarPoint',
-            'bubble': 'bubblePoint',
-            'stock': 'stockPoint',
-            'candlestick': 'candlestickPoint'
-        },
-        pie: {
-            'pie': PIE_POINT,
-            'doughnut': PIE_POINT,
-            'donut': PIE_POINT
-        },
-        polar: {
-            'scatter': POLAR_SYMBOL_POINT,
-            'line': POLAR_SYMBOL_POINT,
-            'area': POLAR_SYMBOL_POINT,
-            'bar': POLAR_BAR_POINT,
-            'stackedbar': POLAR_BAR_POINT
-        }
-    };
+const pointTypes = {
+    chart: {
+        'scatter': SYMBOL_POINT,
+        'line': SYMBOL_POINT,
+        'spline': SYMBOL_POINT,
+        'stepline': SYMBOL_POINT,
+        'stackedline': SYMBOL_POINT,
+        'fullstackedline': SYMBOL_POINT,
+        'stackedspline': SYMBOL_POINT,
+        'fullstackedspline': SYMBOL_POINT,
+        'stackedsplinearea': SYMBOL_POINT,
+        'fullstackedsplinearea': SYMBOL_POINT,
+        'area': SYMBOL_POINT,
+        'splinearea': SYMBOL_POINT,
+        'steparea': SYMBOL_POINT,
+        'stackedarea': SYMBOL_POINT,
+        'fullstackedarea': SYMBOL_POINT,
+        'rangearea': 'rangeSymbolPoint',
+        'bar': BAR_POINT,
+        'stackedbar': BAR_POINT,
+        'fullstackedbar': BAR_POINT,
+        'rangebar': 'rangeBarPoint',
+        'bubble': 'bubblePoint',
+        'stock': 'stockPoint',
+        'candlestick': 'candlestickPoint'
+    },
+    pie: {
+        'pie': PIE_POINT,
+        'doughnut': PIE_POINT,
+        'donut': PIE_POINT
+    },
+    polar: {
+        'scatter': POLAR_SYMBOL_POINT,
+        'line': POLAR_SYMBOL_POINT,
+        'area': POLAR_SYMBOL_POINT,
+        'bar': POLAR_BAR_POINT,
+        'stackedbar': POLAR_BAR_POINT
+    }
+};
 
 function isNoneMode(mode) {
     return _normalizeEnum(mode) === 'none';
@@ -119,7 +119,7 @@ Point.prototype = {
     },
 
     updateData: function(dataItem) {
-        var that = this;
+        const that = this;
         const argumentWasChanged = that.argument !== dataItem.argument;
         that.argument = that.initialArgument = that.originalArgument = dataItem.argument;
         that.tag = dataItem.tag;
@@ -143,7 +143,7 @@ Point.prototype = {
     },
 
     deleteMarker: function() {
-        var that = this;
+        const that = this;
         if(that.graphic) {
             that.graphic.dispose();
         }
@@ -151,7 +151,7 @@ Point.prototype = {
     },
 
     draw: function(renderer, groups, animationEnabled, firstDrawing) {
-        var that = this;
+        const that = this;
         if(that._needDeletingOnDraw || (that.series.autoHidePointMarkers && !that.isSelected())) {
             that.deleteMarker();
             that._needDeletingOnDraw = false;
@@ -174,9 +174,9 @@ Point.prototype = {
     },
 
     _getViewStyle: function() {
-        var state = NORMAL_STATE,
-            fullState = this.fullState,
-            styles = [NORMAL, HOVER, SELECTION, SELECTION];
+        let state = NORMAL_STATE;
+        let fullState = this.fullState;
+        const styles = [NORMAL, HOVER, SELECTION, SELECTION];
 
         if(this._viewCounters.hover) {
             state |= HOVER_STATE;
@@ -200,8 +200,8 @@ Point.prototype = {
     },
 
     applyView: function(legendCallback) {
-        var style = this._getViewStyle();
-        var that = this;
+        const style = this._getViewStyle();
+        const that = this;
         that._currentStyle = style;
         if(!that.graphic && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
             that._drawMarker(that.series.getRenderer(), that.series.getMarkersGroup());
@@ -226,7 +226,7 @@ Point.prototype = {
     },
 
     resetView: function(style) {
-        var viewCounters = this._viewCounters;
+        const viewCounters = this._viewCounters;
 
         --viewCounters[style];
         if(viewCounters[style] < 0) { // T661080
@@ -236,7 +236,7 @@ Point.prototype = {
     },
 
     releaseHoverState: function() {
-        var that = this;
+        const that = this;
         if(that.graphic && !that.isSelected()) {
             that.graphic.toBackground();
         }
@@ -267,8 +267,8 @@ Point.prototype = {
     },
 
     _checkLabelsChanging: function(oldType, newType) {
-        var isNewRange = ~newType.indexOf('range'),
-            isOldRange = ~oldType.indexOf('range');
+        const isNewRange = ~newType.indexOf('range');
+        const isOldRange = ~oldType.indexOf('range');
 
         return (isOldRange && !isNewRange) || (!isOldRange && isNewRange);
     },
@@ -278,12 +278,12 @@ Point.prototype = {
             return;
         }
 
-        var that = this,
-            oldOptions = that._options,
-            widgetType = newOptions.widgetType,
-            oldType = oldOptions && oldOptions.type,
-            newType = newOptions.type,
-            newPointTypeMixin = pointTypes[widgetType][newType];
+        const that = this;
+        const oldOptions = that._options;
+        const widgetType = newOptions.widgetType;
+        const oldType = oldOptions && oldOptions.type;
+        const newType = newOptions.type;
+        const newPointTypeMixin = pointTypes[widgetType][newType];
 
         if(oldType !== newType) {
             that._needDeletingOnDraw = true;
@@ -325,13 +325,13 @@ Point.prototype = {
     },
 
     _resetType: function(methods) {
-        for(var methodName in methods) {
+        for(const methodName in methods) {
             delete this[methodName];
         }
     },
 
     _setType: function(methods) {
-        for(var methodName in methods) {
+        for(const methodName in methods) {
             this[methodName] = methods[methodName];
         }
     },
@@ -361,7 +361,7 @@ Point.prototype = {
     },
 
     getCoords: function(min) {
-        var that = this;
+        const that = this;
         if(!min) {
             return { x: that.x, y: that.y };
         }
@@ -374,7 +374,7 @@ Point.prototype = {
     },
 
     getDefaultCoords: function() {
-        var that = this;
+        const that = this;
         return !that._options.rotated ? { x: that.x, y: that.defaultY } : { x: that.defaultX, y: that.y };
     },
 
@@ -398,9 +398,9 @@ Point.prototype = {
     },
 
     _calculateVisibility: function(x, y, width, height) {
-        var that = this,
-            visibleArea = that._getVisibleArea(),
-            rotated = that._options.rotated;
+        const that = this;
+        const visibleArea = that._getVisibleArea();
+        const rotated = that._options.rotated;
 
         if(((visibleArea.minX) > (x + (width || 0)) || ((visibleArea.maxX) < x) ||
             ((visibleArea.minY) > (y + (height || 0))) || ((visibleArea.maxY) < y)) ||
@@ -457,7 +457,7 @@ Point.prototype = {
     _drawErrorBar: _noop,
     getMarkerVisibility: _noop,
     dispose: function() {
-        var that = this;
+        const that = this;
         that.deleteMarker();
         that.deleteLabel();
         that._errorBar && this._errorBar.dispose();
@@ -498,8 +498,8 @@ Point.prototype = {
     },
 
     setHole: function(holeValue, position) {
-        var that = this,
-            minValue = isFinite(that.minValue) ? that.minValue : 0;
+        const that = this;
+        const minValue = isFinite(that.minValue) ? that.minValue : 0;
         if(_isDefined(holeValue)) {
             if(position === 'left') {
                 that.leftHole = that.value - holeValue;

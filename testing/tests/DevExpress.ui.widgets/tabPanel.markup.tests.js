@@ -18,12 +18,12 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TABPANEL_CLASS = 'dx-tabpanel',
-    MULTIVIEW_CLASS = 'dx-multiview',
-    TABS_CLASS = 'dx-tabs',
-    MULTIVIEW_ITEM_CLASS = 'dx-multiview-item',
-    TABS_ITEM_CLASS = 'dx-tab',
-    MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
+const TABPANEL_CLASS = 'dx-tabpanel';
+const MULTIVIEW_CLASS = 'dx-multiview';
+const TABS_CLASS = 'dx-tabs';
+const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
+const TABS_ITEM_CLASS = 'dx-tab';
+const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -57,8 +57,8 @@ QUnit.module('TabPanel markup', () => {
             dataSource: items
         });
 
-        var tabsCount = nestedElementsCount($tabPanel.find('.' + TABS_CLASS), TABS_ITEM_CLASS);
-        var multiViewItemsCount = nestedElementsCount($tabPanel.find('.' + MUTIVIEW_WRAPPER_CLASS), MULTIVIEW_ITEM_CLASS);
+        const tabsCount = nestedElementsCount($tabPanel.find('.' + TABS_CLASS), TABS_ITEM_CLASS);
+        const multiViewItemsCount = nestedElementsCount($tabPanel.find('.' + MUTIVIEW_WRAPPER_CLASS), MULTIVIEW_ITEM_CLASS);
 
         assert.equal(tabsCount, multiViewItemsCount, 'tab widget items count and multiview widget items count is equal');
     });
@@ -119,8 +119,8 @@ QUnit.module('TabPanel items', () => {
 
         tabPanel.option('items[1].disabled', true);
 
-        const $disabledItem = tabPanel.itemElements().eq(1),
-            $tabs = tabPanel.$element().find('.' + TABS_ITEM_CLASS);
+        const $disabledItem = tabPanel.itemElements().eq(1);
+        const $tabs = tabPanel.$element().find('.' + TABS_ITEM_CLASS);
 
         assert.ok($disabledItem.hasClass('dx-state-disabled'), 'Item is disabled');
         assert.notEqual($tabs.length, 0, 'Tabs are rendered');
@@ -165,8 +165,8 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.test('tabpanel should NOT have aria-activedescendant', function(assert) {
-        const $element = $('#tabPanel').dxTabPanel({ items: [1, 2] }),
-            instance = $element.dxTabPanel('instance');
+        const $element = $('#tabPanel').dxTabPanel({ items: [1, 2] });
+        const instance = $element.dxTabPanel('instance');
 
         assert.equal($element.attr('aria-activedescendant'), undefined, 'aria-activedescendant does not exist');
 

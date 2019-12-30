@@ -1,11 +1,11 @@
-var DevExpress = require('./core');
+const DevExpress = require('./core');
 require('./data');
 require('./file_providers');
 
 /// BUNDLER_PARTS
 /* UI core (dx.module-core.js) */
 
-var ui = DevExpress.ui = require('../../../bundles/modules/ui');
+const ui = DevExpress.ui = require('../../../bundles/modules/ui');
 
 ui.themes = require('../../../ui/themes');
 

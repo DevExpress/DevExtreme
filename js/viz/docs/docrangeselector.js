@@ -4,7 +4,7 @@
 * @module viz/range_selector
 * @export default
 */
-var dxRangeSelector = {
+const dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.selectedRangeUpdateMode
     * @type Enums.VisualRangeUpdateMode

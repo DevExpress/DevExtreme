@@ -2,26 +2,24 @@ import HorizontalAppointmentsStrategy from './ui.scheduler.appointments.strategy
 import dateUtils from '../../../core/utils/date';
 import query from '../../../data/query';
 
-var HOURS_IN_DAY = 24,
-    MINUTES_IN_HOUR = 60,
-    MILLISECONDS_IN_MINUTE = 60000;
+const HOURS_IN_DAY = 24;
+const MINUTES_IN_HOUR = 60;
+const MILLISECONDS_IN_MINUTE = 60000;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
     calculateAppointmentWidth(appointment, position, isRecurring) {
-        var startDate = new Date(this.startDate(appointment, false, position)),
-            endDate = new Date(this.endDate(appointment, position, isRecurring)),
-            cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
+        const startDate = dateUtils.trimTime(new Date(this.startDate(appointment, false, position)));
+        const endDate = new Date(this.endDate(appointment, position, isRecurring, true));
+        const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
 
-        startDate = dateUtils.trimTime(startDate);
-
-        var width = Math.ceil(this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY) * cellWidth;
-        width = this.cropAppointmentWidth(width, cellWidth);
+        const duration = this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY;
+        const width = this.cropAppointmentWidth(Math.ceil(duration) * cellWidth, cellWidth);
 
         return width;
     }
 
     _getDurationInHour(startDate, endDate) {
-        var adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
+        const adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
         return adjustedDuration / dateUtils.dateToMilliseconds('hour');
     }
 
@@ -42,7 +40,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     }
 
     _getSortedPositions(map, skipSorting) {
-        var result = super._getSortedPositions(map);
+        let result = super._getSortedPositions(map);
 
         if(!skipSorting) {
             result = query(result).sortBy('top').thenBy('left').thenBy('cellPosition').thenBy('i').toArray();

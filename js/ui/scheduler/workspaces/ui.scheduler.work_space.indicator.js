@@ -7,20 +7,20 @@ import windowUtils from '../../../core/utils/window';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator',
-    TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell',
-    HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
+const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
+const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
+const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
-var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
+const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _getToday: function() {
-        var date = this.option('indicatorTime') || new Date();
+        const date = this.option('indicatorTime') || new Date();
 
         return this.invoke('convertDateByTimezone', date) || date;
     },
 
     _needRenderDateTimeIndicator: function() {
-        var today = this._getToday(),
-            endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        const today = this._getToday();
+        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
         return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
     },
@@ -30,7 +30,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             return false;
         }
 
-        var today = this._getToday();
+        const today = this._getToday();
 
         return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
     },
@@ -42,10 +42,10 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             }
 
             if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
-                var groupCount = this._getGroupCount() || 1,
-                    $container = this._dateTableScrollable.$content(),
-                    height = this.getIndicationHeight(),
-                    rtlOffset = this._getRtlOffset(this.getCellWidth());
+                const groupCount = this._getGroupCount() || 1;
+                const $container = this._dateTableScrollable.$content();
+                const height = this.getIndicationHeight();
+                const rtlOffset = this._getRtlOffset(this.getCellWidth());
 
                 if(height > 0) {
                     this._renderIndicator(height, rtlOffset, $container, groupCount);
@@ -55,8 +55,8 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _renderIndicator: function(height, rtlOffset, $container, groupCount) {
-        for(var i = 0; i < groupCount; i++) {
-            var $indicator = this._createIndicator($container);
+        for(let i = 0; i < groupCount; i++) {
+            const $indicator = this._createIndicator($container);
 
             $indicator.width(this.getCellWidth());
             this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
@@ -64,7 +64,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _createIndicator: function($container) {
-        var $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
         $container.append($indicator);
 
         return $indicator;
@@ -98,27 +98,27 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     getIndicationWidth: function(groupIndex) {
-        var maxWidth = this.getCellWidth() * this._getCellCount();
+        const maxWidth = this.getCellWidth() * this._getCellCount();
 
-        var difference = this._getIndicatorDuration();
+        let difference = this._getIndicatorDuration();
         if(difference > this._getCellCount()) {
             difference = this._getCellCount();
         }
-        var width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+        const width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return maxWidth < width ? maxWidth : width;
     },
 
     getIndicatorOffset: function(groupIndex) {
-        var difference = this._getIndicatorDuration() - 1,
-            offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+        const difference = this._getIndicatorDuration() - 1;
+        const offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return offset;
     },
 
     _getIndicatorDuration: function() {
-        let today = this._getToday(),
-            firstViewDate = new Date(this._firstViewDate);
+        const today = this._getToday();
+        const firstViewDate = new Date(this._firstViewDate);
         let timeDiff = today.getTime() - firstViewDate.getTime();
         if(this.option('type') === 'workWeek') {
             timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day'));
@@ -128,16 +128,16 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     getIndicationHeight: function() {
-        var today = this._getToday(),
-            cellHeight = this.getCellHeight(),
-            date = new Date(this._firstViewDate);
+        const today = this._getToday();
+        const cellHeight = this.getCellHeight();
+        const date = new Date(this._firstViewDate);
 
         if(this._needRenderDateTimeIndicator()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
-        var duration = today.getTime() - date.getTime(),
-            cellCount = duration / this.getCellDuration();
+        const duration = today.getTime() - date.getTime();
+        const cellCount = duration / this.getCellDuration();
 
         return cellCount * cellHeight;
     },
@@ -155,14 +155,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
     _isCurrentTime: function(date) {
         if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
-            var today = this._getToday(),
-                result = false;
+            const today = this._getToday();
+            let result = false;
             date = new Date(date);
 
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
 
-            var startCellDate = new Date(date),
-                endCellDate = new Date(date);
+            let startCellDate = new Date(date);
+            let endCellDate = new Date(date);
 
             if(dateUtils.sameDate(today, date)) {
                 startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration() + 1);
@@ -175,11 +175,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTimeHeaderCell: function(headerIndex) {
-        var result = false;
+        let result = false;
 
         if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
-            var date = this._getDateByIndex(headerIndex),
-                now = this.option('indicatorTime') || new Date();
+            const date = this._getDateByIndex(headerIndex);
+            const now = this.option('indicatorTime') || new Date();
 
             result = dateUtils.sameDate(date, now);
         }
@@ -188,8 +188,8 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getTimeCellClass: function(i) {
-        var startViewDate = this._getTimeCellDate(i),
-            cellClass = this.callBase(i);
+        const startViewDate = this._getTimeCellDate(i);
+        const cellClass = this.callBase(i);
 
         if(this._isCurrentTime(startViewDate)) {
             return cellClass + ' ' + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
@@ -199,7 +199,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getHeaderPanelCellClass: function(i) {
-        var cellClass = this.callBase(i);
+        const cellClass = this.callBase(i);
 
         if(this._isCurrentTimeHeaderCell(i)) {
             return cellClass + ' ' + HEADER_CURRENT_TIME_CELL_CLASS;

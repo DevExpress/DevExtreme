@@ -10,15 +10,15 @@ require('localization/globalize/currency');
 require('localization/globalize/date');
 require('localization/globalize/message');
 
-var Globalize = require('globalize');
+const Globalize = require('globalize');
 
-var NBSP = String.fromCharCode(160),
-    RUB = String.fromCharCode(8381);
+const NBSP = String.fromCharCode(160);
+const RUB = String.fromCharCode(8381);
 
-var noop = require('core/utils/common').noop,
-    formatHelper = require('format_helper'),
-    browser = require('core/utils/browser'),
-    dateUtils = require('core/utils/date');
+const noop = require('core/utils/common').noop;
+const formatHelper = require('format_helper');
+const browser = require('core/utils/browser');
+const dateUtils = require('core/utils/date');
 
 QUnit.module('Numeric and dateTime formats', {
     beforeEach: function() {
@@ -32,7 +32,7 @@ QUnit.test('Currency numeric formats', function(assert) {
     assert.equal(formatHelper.format(-1204, { type: 'currency', precision: 2 }), '($1,204.00)');
 });
 QUnit.test('currency RUB large number format with different locales', function(assert) {
-    var currentCultureName = Globalize.locale().locale;
+    const currentCultureName = Globalize.locale().locale;
 
     assert.equal(formatHelper.format(1.204, { type: 'currency', precision: 2, currency: 'RUB' }), 'RUB' + NBSP + '1.20');
 
@@ -184,8 +184,8 @@ QUnit.test('Short Year date time interval format', function(assert) {
 });
 
 function isIosWithMSKTimeZone() {
-    var isIos = navigator.userAgent.indexOf('Mac OS X') > -1 && browser['webkit'],
-        hasMSKTimeZone = new Date().toString().indexOf('MSK') > -1;
+    const isIos = navigator.userAgent.indexOf('Mac OS X') > -1 && browser['webkit'];
+    const hasMSKTimeZone = new Date().toString().indexOf('MSK') > -1;
 
     return isIos && hasMSKTimeZone;
 }
@@ -194,9 +194,9 @@ function isIosWithMSKTimeZone() {
 if(!isIosWithMSKTimeZone()) {
     QUnit.test('getDateMarkerFormat for second range', function(assert) {
         // assert
-        var date1 = new Date(2010, 0, 1, 2, 23, 33),
-            date2 = new Date(date1.getTime()),
-            format;
+        const date1 = new Date(2010, 0, 1, 2, 23, 33);
+        const date2 = new Date(date1.getTime());
+        let format;
 
         date2.setMilliseconds(3000);
         format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
@@ -204,9 +204,9 @@ if(!isIosWithMSKTimeZone()) {
     });
     QUnit.test('getDateMarkerFormat for minute range', function(assert) {
         // assert
-        var date1 = new Date(2010, 0, 1, 2, 23, 33, 990),
-            date2 = new Date(date1.getTime()),
-            format;
+        const date1 = new Date(2010, 0, 1, 2, 23, 33, 990);
+        let date2 = new Date(date1.getTime());
+        let format;
 
         date2.setSeconds(63);
         format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
@@ -219,9 +219,9 @@ if(!isIosWithMSKTimeZone()) {
     });
     QUnit.test('getDateMarkerFormat for hour range', function(assert) {
         // assert
-        var date1 = new Date(2010, 0, 1, 2, 23, 33, 990),
-            date2 = new Date(date1.getTime()),
-            format;
+        const date1 = new Date(2010, 0, 1, 2, 23, 33, 990);
+        let date2 = new Date(date1.getTime());
+        let format;
 
         date2.setSeconds(30000);
         format = formatHelper.getDateFormatByDifferences(dateUtils.getDatesDifferences(date1, date2));
@@ -236,9 +236,9 @@ if(!isIosWithMSKTimeZone()) {
 
 QUnit.test('getDateMarkerFormat for day range', function(assert) {
     // assert
-    var date1 = new Date(2010, 0, 29, 12, 23, 33, 990),
-        date2 = new Date(date1.getTime()),
-        format;
+    const date1 = new Date(2010, 0, 29, 12, 23, 33, 990);
+    let date2 = new Date(date1.getTime());
+    let format;
 
     // day and time
     date2 = new Date(date1.getTime());
@@ -254,9 +254,9 @@ QUnit.test('getDateMarkerFormat for day range', function(assert) {
 });
 QUnit.test('getDateMarkerFormat for month range', function(assert) {
     // assert
-    var date1 = new Date(2010, 10, 29, 12, 23, 33, 990),
-        date2 = new Date(date1.getTime()),
-        format;
+    const date1 = new Date(2010, 10, 29, 12, 23, 33, 990);
+    let date2 = new Date(date1.getTime());
+    let format;
 
     // month, day and time
     date2.setHours(74);
@@ -285,9 +285,9 @@ QUnit.test('getDateMarkerFormat for month range', function(assert) {
 });
 QUnit.test('getDateMarkerFormat for year range', function(assert) {
     // assert
-    var date1 = new Date(2010, 10, 29, 12, 23, 33, 990),
-        date2 = new Date(date1.getTime()),
-        format;
+    const date1 = new Date(2010, 10, 29, 12, 23, 33, 990);
+    const date2 = new Date(date1.getTime());
+    let format;
 
     // year
     date2.setFullYear(2031);
