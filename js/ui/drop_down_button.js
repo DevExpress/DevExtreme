@@ -440,6 +440,7 @@ const DropDownButton = Widget.inherit({
         }
 
         this._setOptionSilent('selectedItem', selectedItem);
+        this._setOptionSilent('selectedItemKey', this._keyGetter(selectedItem));
     },
 
     _clean() {
