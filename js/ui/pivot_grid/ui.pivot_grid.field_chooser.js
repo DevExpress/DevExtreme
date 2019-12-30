@@ -749,7 +749,13 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName cancelChanges()
     */
     cancelChanges: function() {
-        this.option('state', this._dataSource.state());
+        const dataSource = this._dataSource;
+
+        if(!dataSource.isLoading()) {
+            this.option('state', dataSource.state());
+            return true;
+        }
+        return false;
     },
 
     /**
