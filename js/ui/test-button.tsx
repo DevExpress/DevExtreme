@@ -123,7 +123,7 @@ export const viewModelFunction = (model: Button) => {
             width: model.width,
             height: model.height
         },
-        icon,
+        icon
     };
 }
 
