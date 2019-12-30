@@ -89,8 +89,8 @@ export class CompactAppointmentsHelper {
     _createTooltipDragBehavior(options) {
         return (e) => {
             let dragElement;
-            const $element = $(e.element),
-                dragBehavior = this.instance.getWorkSpace().dragBehavior;
+            const $element = $(e.element);
+            const dragBehavior = this.instance.getWorkSpace().dragBehavior;
 
             dragBehavior.addTo($element, {
                 filter: `.${LIST_ITEM_CLASS}`,
@@ -106,8 +106,8 @@ export class CompactAppointmentsHelper {
                     return dragElement;
                 },
                 onDragStart: (e) => {
-                    const event = e.event,
-                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                    const event = e.event;
+                    const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
                     if(itemData && !itemData.data.disabled) {
                         event.data = event.data || {};

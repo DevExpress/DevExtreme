@@ -243,12 +243,12 @@ const subscribes = {
         this._workSpace.restoreScrollTop();
     },
 
-    getText(data, currentData, format) {
-        const isAllDay = data.allDay,
-            startDateTimeZone = data.startDateTimeZone,
-            endDateTimeZone = data.endDateTimeZone,
-            startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone),
-            endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+    getTextAndFormatDate(data, currentData, format) {
+        const isAllDay = data.allDay;
+        const startDateTimeZone = data.startDateTimeZone;
+        const endDateTimeZone = data.endDateTimeZone;
+        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
         return {
             text: this.fire('createAppointmentTitle', data),
             formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
@@ -268,8 +268,8 @@ const subscribes = {
 
         const formatTypes = {
             'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+                const dateTimeFormat = 'mediumdatemediumtime';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
 
                 const endDateString = (startDate.getDate() === endDate.getDate()) ?
                     dateLocalization.format(endDate, 'shorttime') :
@@ -281,9 +281,9 @@ const subscribes = {
                 return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
             },
             'DATE': function() {
-                const dateTimeFormat = 'monthAndDay',
-                    startDateString = dateLocalization.format(startDate, dateTimeFormat),
-                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+                const dateTimeFormat = 'monthAndDay';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
+                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
 
                 const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
                     ' - ' + dateLocalization.format(endDate, dateTimeFormat) :

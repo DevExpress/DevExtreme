@@ -16,7 +16,7 @@ const stubSetDefaultTemplate = sinon.stub();
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
 const stubGetTargetedAppointmentData = sinon.stub().returns('targetedAppointmentData');
 const stubCheckAndDeleteAppointment = sinon.stub();
-const stubGetText = sinon.stub().returns('text');
+const stubGetTextAndFormatDate = sinon.stub().returns('text');
 const stubIsAppointmentInAllDayPanel = sinon.stub().returns(true);
 const environment = {
     createSimpleTooltip: function(tooltipOptions) {
@@ -28,7 +28,7 @@ const environment = {
         setDefaultTemplate: stubSetDefaultTemplate,
         getAppointmentTemplate: stubGetAppointmentTemplate,
         showAppointmentPopup: stubShowAppointmentPopup,
-        getText: stubGetText,
+        getTextAndFormatDate: stubGetTextAndFormatDate,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
         getTargetedAppointmentData: stubGetTargetedAppointmentData,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel
@@ -46,7 +46,7 @@ const environment = {
         stubShowAppointmentPopup.reset();
         stubSetDefaultTemplate.reset();
         stubGetAppointmentTemplate.reset();
-        stubGetText.reset();
+        stubGetTextAndFormatDate.reset();
         stubCheckAndDeleteAppointment.reset();
         stubGetTargetedAppointmentData.reset();
     }
@@ -278,7 +278,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', functio
     assert.equal(stubSetDefaultTemplate.getCall(0).args[0], 'appointmentTooltip');
     assert.ok(stubSetDefaultTemplate.getCall(0).args[1] instanceof FunctionTemplate);
     assert.equal(stubGetAppointmentTemplate.getCall(0).args[0], 'appointmentTooltipTemplate');
-    assert.deepEqual(stubGetText.getCall(0).args, [item.data, item.currentData]);
+    assert.deepEqual(stubGetTextAndFormatDate.getCall(0).args, [item.data, item.currentData]);
 
     // create delete button
     assert.equal(stubCreateComponent.getCall(2).args[0][0].className, 'dx-tooltip-appointment-item-delete-button');
