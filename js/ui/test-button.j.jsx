@@ -13,7 +13,8 @@ class Button extends Widget {
 
     _renderContent() {
         const options = this.option();
-        const container = this.$element().children().length === 0 /** isFirstRender*/ ? this.$element().get(0) : undefined;
+        const isFirstRender = this.$element().children().length === 0;
+        const container = isFirstRender ? this.$element().get(0) : undefined;
 
         let contentRender;
         if(options.contentRender) {
