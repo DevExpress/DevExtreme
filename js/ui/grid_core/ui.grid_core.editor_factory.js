@@ -104,7 +104,7 @@ const EditorFactory = modules.ViewController.inherit({
         const that = this;
         const isCell = $element && $element.is(that._getFocusCellSelector());
         const keyboardController = that.getController('keyboardNavigation');
-      
+
         let focusedCellPosition;
 
         if($element === undefined) {
