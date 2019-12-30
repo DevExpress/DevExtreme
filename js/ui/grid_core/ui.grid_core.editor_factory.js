@@ -101,7 +101,10 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     focus: function($element, hideBorder) {
-        var that = this;
+        var that = this,
+            focusedCellPosition,
+            isCell = $element && $element.is(that._getFocusCellSelector()),
+            keyboardController = that.getController('keyboardNavigation');
 
         if($element === undefined) {
             return that._$focusedElement;
@@ -113,24 +116,18 @@ var EditorFactory = modules.ViewController.inherit({
             }
             that._$focusedElement = $element;
 
-            if($element.is('td')) {
-                that._focusedCellPosition = {
-                    colIndex: $element.attr('aria-colindex') - 1,
-                    rowIndex: $element.parent().attr('aria-rowindex') - 1
-                };
+            if(isCell) {
+                focusedCellPosition = keyboardController && keyboardController.getFocusedCellPosition();
             }
 
             clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
-                let element = $element.get(0),
-                    ownerDocument = element && element.ownerDocument,
-                    isElementInDocument = ownerDocument && ownerDocument.body.contains(element),
-                    rowsView = that.getView('rowsView');
+                let rowsView = that.getView('rowsView');
 
                 delete that._focusTimeoutID;
 
-                if(!isElementInDocument && that._focusedCellPosition && rowsView) {
-                    $element = $(rowsView.getCellElement(that._focusedCellPosition.rowIndex, that._focusedCellPosition.colIndex));
+                if(!isElementInCurrentGrid(that, $element) && focusedCellPosition && rowsView) {
+                    $element = $(rowsView.getCellElement(focusedCellPosition.rowIndex, focusedCellPosition.columnIndex));
 
                     that._$focusedElement = $element;
                 }

@@ -3280,9 +3280,13 @@ QUnit.module('Keyboard keys', {
 
     QUnit.testInActiveWindow('Enter on grouped row with isContinuation is true, is not worked', function(assert) {
         // arrange
+        this.options = {
+            grouping: { allowCollapsing: true },
+            editing: {}
+        };
+
         setupModules(this);
 
-        this.options = { grouping: { allowCollapsing: true }, editing: {} };
         this.keyboardNavigationController._focusedView = this.rowsView;
 
         this.keyboardNavigationController._focusedCellPosition = {

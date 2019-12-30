@@ -82,12 +82,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
     init: function() {
         var that = this;
 
+        that._dataController = that.getController('data');
+        that._selectionController = that.getController('selection');
+        that._editingController = that.getController('editing');
+        that._headerPanel = that.getView('headerPanel');
+        that._columnsController = that.getController('columns');
+
+        that._fastEditingStarted = false;
+
+        that._focusedCellPosition = {};
+
+        that._canceledCellPosition = null;
+
+        that._initViewHandlers();
+
         if(that.isKeyboardEnabled()) {
-            that._dataController = that.getController('data');
-            that._selectionController = that.getController('selection');
-            that._editingController = that.getController('editing');
-            that._headerPanel = that.getView('headerPanel');
-            that._columnsController = that.getController('columns');
             that.getController('editorFactory').focused.add(function($element) {
                 that.setupFocusedView();
 
@@ -98,14 +107,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     }
                 }
             });
-
-            that._fastEditingStarted = false;
-
-            that._focusedCellPosition = {};
-
-            that._canceledCellPosition = null;
-
-            that._initViewHandlers();
 
             that._documentClickHandler = that.createAction(function(e) {
                 var $target = $(e.event.target),
@@ -127,26 +128,36 @@ var KeyboardNavigationController = core.ViewController.inherit({
             clickAction = that.createAction(that._clickHandler),
             rowsView = that.getView('rowsView');
 
-        rowsView.renderCompleted.add(function(e) {
+        rowsView && rowsView.renderCompleted.add(function(e) {
             var $element = rowsView.element(),
-                isFullUpdate = !e || e.changeType === 'refresh',
-                isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name,
-                needUpdateFocus = false,
-                isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend'),
-                clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
-                $focusedElement = $(':focus'),
-                isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is('body'));
+                clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickAction);
             eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, 'dxDataGridKeyboardNavigation'), clickSelector, clickAction);
 
-            that._initKeyDownProcessor(that, $element, that._keyDownHandler);
-
-            if(isFocusedViewCorrect && isFocusedElementCorrect) {
-                needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
-                needUpdateFocus && that._updateFocus(true);
+            if(that.isKeyboardEnabled()) {
+                that._initKeyboardNavigation(e);
             }
         });
+    },
+
+    _initKeyboardNavigation: function(e) {
+        let that = this,
+            rowsView = that.getView('rowsView'),
+            $element = rowsView.element(),
+            $focusedElement = $(':focus'),
+            isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is('body')),
+            needUpdateFocus = false,
+            isAppend = e && (e.changeType === 'append' || e.changeType === 'prepend'),
+            isFullUpdate = !e || e.changeType === 'refresh',
+            isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name;
+
+        that._initKeyDownProcessor(that, $element, that._keyDownHandler);
+
+        if(isFocusedViewCorrect && isFocusedElementCorrect) {
+            needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
+            needUpdateFocus && that._updateFocus(true);
+        }
     },
 
     _initKeyDownProcessor: function(context, element, handler) {
@@ -1281,6 +1292,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
 
         return $result;
+    },
+
+    getFocusedCellPosition: function() {
+        return this._focusedCellPosition || {};
     },
 
     _getNextCell: function(keyCode, elementType, cellPosition) {
