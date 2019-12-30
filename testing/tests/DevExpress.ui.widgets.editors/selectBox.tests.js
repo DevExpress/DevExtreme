@@ -568,7 +568,7 @@ QUnit.module('functionality', moduleSetup, () => {
     });
 
     [false, true].forEach((searchEnabled) => {
-        QUnit.test(`Widget selects current value in the dropDownList if dxSelectBox with async data and searchEnabled: ${searchEnabled} is opened on initialization (T822930)`, function(assert) {
+        QUnit.test(`Widget selects current value in the dropDownList if dxSelectBox with async data and searchEnabled: ${searchEnabled} is opened on initialization (T822930)`, (assert) => {
             const selectBox = $('#selectBox').dxSelectBox({
                 deferRendering: true,
                 searchEnabled,
@@ -1852,7 +1852,7 @@ QUnit.module('editing', moduleSetup, () => {
     });
 
 
-    QUnit.test('load function should have no unnecessary calls if search and custom items options are enabled (T847864)', function(assert) {
+    QUnit.test('load function should have no unnecessary calls if search and custom items options are enabled (T847864)', (assert) => {
         const data = [{
             ID: 1,
             Name: 'Item 11'
@@ -1903,7 +1903,7 @@ QUnit.module('editing', moduleSetup, () => {
     });
 
 
-    QUnit.test('acceptCustomValue', function(assert) {
+    QUnit.test('acceptCustomValue', (assert) => {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true,
             items: ['item1', 'item2', 'text3'],
