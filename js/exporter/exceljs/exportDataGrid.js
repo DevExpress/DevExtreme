@@ -108,7 +108,13 @@ function _getFullOptions(options) {
         fullOptions.selectedRowsOnly = false;
     }
     if(!isDefined(fullOptions.loadPanel)) {
-        fullOptions.loadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
+        fullOptions.loadPanel = {};
+    }
+    if(!isDefined(fullOptions.loadPanel.enabled)) {
+        fullOptions.loadPanel.enabled = true;
+    }
+    if(!isDefined(fullOptions.loadPanel.text)) {
+        fullOptions.loadPanel.text = messageLocalization.format('dxDataGrid-exporting');
     }
     if(!isDefined(fullOptions.autoFilterEnabled) && isDefined(fullOptions.component)) {
         fullOptions.autoFilterEnabled = !!fullOptions.component.option('export.excelFilterEnabled');

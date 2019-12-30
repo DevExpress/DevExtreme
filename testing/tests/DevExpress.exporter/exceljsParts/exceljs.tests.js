@@ -6456,55 +6456,59 @@ const moduleConfig = {
 
 QUnit.module('_getFullOptions', () => {
     QUnit.test('topLeftCell', function(assert) {
-        assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'default value if no member');
-        assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'default value if undefined');
-        assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'default value if null');
+        assert.deepEqual(_getFullOptions({}).topLeftCell, { row: 1, column: 1 }, 'no member');
+        assert.deepEqual(_getFullOptions({ topLeftCell: undefined }).topLeftCell, { row: 1, column: 1 }, 'undefined');
+        assert.deepEqual(_getFullOptions({ topLeftCell: null }).topLeftCell, { row: 1, column: 1 }, 'null');
 
-        assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, 'has value');
+        assert.deepEqual(_getFullOptions({ topLeftCell: { row: 2, column: 3 } }).topLeftCell, { row: 2, column: 3 }, '{ row: 2, column: 3 }');
     });
 
     QUnit.test('keepColumnWidths', function(assert) {
-        assert.deepEqual(_getFullOptions({}).keepColumnWidths, true, 'default value if no member');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: undefined }).keepColumnWidths, true, 'default value if undefined');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: null }).keepColumnWidths, true, 'default value if null');
+        assert.deepEqual(_getFullOptions({}).keepColumnWidths, true, 'no member');
+        assert.deepEqual(_getFullOptions({ keepColumnWidths: undefined }).keepColumnWidths, true, 'undefined');
+        assert.deepEqual(_getFullOptions({ keepColumnWidths: null }).keepColumnWidths, true, 'null');
 
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: false }).keepColumnWidths, false, 'has false value');
-        assert.deepEqual(_getFullOptions({ keepColumnWidths: true }).keepColumnWidths, true, 'has true value');
+        assert.deepEqual(_getFullOptions({ keepColumnWidths: false }).keepColumnWidths, false, 'false');
+        assert.deepEqual(_getFullOptions({ keepColumnWidths: true }).keepColumnWidths, true, 'true');
     });
 
     QUnit.test('selectedRowsOnly', function(assert) {
-        assert.deepEqual(_getFullOptions({}).selectedRowsOnly, false, 'default value if no member');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: undefined }).selectedRowsOnly, false, 'default value if undefined');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: null }).selectedRowsOnly, false, 'default value if null');
+        assert.deepEqual(_getFullOptions({}).selectedRowsOnly, false, 'no member');
+        assert.deepEqual(_getFullOptions({ selectedRowsOnly: undefined }).selectedRowsOnly, false, 'undefined');
+        assert.deepEqual(_getFullOptions({ selectedRowsOnly: null }).selectedRowsOnly, false, 'null');
 
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: false }).selectedRowsOnly, false, 'has false value');
-        assert.deepEqual(_getFullOptions({ selectedRowsOnly: true }).selectedRowsOnly, true, 'has true value');
+        assert.deepEqual(_getFullOptions({ selectedRowsOnly: false }).selectedRowsOnly, false, 'false');
+        assert.deepEqual(_getFullOptions({ selectedRowsOnly: true }).selectedRowsOnly, true, 'true');
     });
 
     QUnit.test('autoFilterEnabled', function(assert) {
         function _getComponent(exportExcelFilterEnabled) { return { option: function() { return exportExcelFilterEnabled; } }; }
 
-        assert.deepEqual(_getFullOptions({ component: _getComponent(undefined) }).autoFilterEnabled, false, 'default value if no member');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(undefined), autoFilterEnabled: false }).autoFilterEnabled, false, 'has false value');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(undefined), autoFilterEnabled: true }).autoFilterEnabled, true, 'has true value');
+        assert.deepEqual(_getFullOptions({ component: _getComponent(undefined) }).autoFilterEnabled, false, 'no member && grid.exportExcelFilterEnabled: undefined');
+        assert.deepEqual(_getFullOptions({ component: _getComponent(false) }).autoFilterEnabled, false, 'no member && grid.exportExcelFilterEnabled: false');
+        assert.deepEqual(_getFullOptions({ component: _getComponent(true) }).autoFilterEnabled, true, 'no member && grid.exportExcelFilterEnabled: true');
 
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false) }).autoFilterEnabled, false, 'default value if export.excelFilterEnabled is false');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false), autoFilterEnabled: false }).autoFilterEnabled, false, 'has false value');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false), autoFilterEnabled: true }).autoFilterEnabled, true, 'has true value');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(undefined) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: undefined');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(false) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: false');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: false, component: _getComponent(true) }).autoFilterEnabled, false, 'false && grid.exportExcelFilterEnabled: true');
 
-        assert.deepEqual(_getFullOptions({ component: _getComponent(true) }).autoFilterEnabled, true, 'default value if export.excelFilterEnabled is false');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false), autoFilterEnabled: false }).autoFilterEnabled, false, 'has false value');
-        assert.deepEqual(_getFullOptions({ component: _getComponent(false), autoFilterEnabled: true }).autoFilterEnabled, true, 'has true value');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(undefined) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: undefined');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(false) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: false');
+        assert.deepEqual(_getFullOptions({ autoFilterEnabled: true, component: _getComponent(true) }).autoFilterEnabled, true, 'true && grid.exportExcelFilterEnabled: true');
     });
 
     QUnit.test('loadPanel', function(assert) {
         const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
-        assert.deepEqual(_getFullOptions({}).loadPanel, defaultLoadPanel, 'default value if no member');
-        assert.deepEqual(_getFullOptions({ loadPanel: undefined }).loadPanel, defaultLoadPanel, 'default value if undefined');
-        assert.deepEqual(_getFullOptions({ loadPanel: null }).loadPanel, defaultLoadPanel, 'default value if null');
+        assert.deepEqual(_getFullOptions({}).loadPanel, defaultLoadPanel, 'no member');
+        assert.deepEqual(_getFullOptions({ loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
+        assert.deepEqual(_getFullOptions({ loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
 
-        assert.deepEqual(_getFullOptions({ loadPanel: {} }).loadPanel, {}, 'has value 1');
-        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: true } }).loadPanel, { enabled: true }, 'has value 2');
+        assert.deepEqual(_getFullOptions({ loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');
+        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: true } }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, '{ enabled: true } }');
+        assert.deepEqual(_getFullOptions({ loadPanel: { text: 'my text' } }).loadPanel, { enabled: true, text: 'my text' }, '{ text: my text }');
+
+        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
+        assert.deepEqual(_getFullOptions({ loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
     });
 });
 
