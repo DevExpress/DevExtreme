@@ -421,7 +421,7 @@ var SelectBox = DropDownList.inherit({
 
         this.callBase(isUnknownItem ? null : item);
 
-        if(!isUnknownItem) {
+        if(!isUnknownItem && (!this._isEditable() || this._isCustomItemSelected())) {
             this._setListOption('selectedItem', this.option('selectedItem'));
         }
     },
@@ -588,7 +588,7 @@ var SelectBox = DropDownList.inherit({
             this._clearSearchTimer();
             this._restoreInputText();
 
-            if(this._isEditable() && !this._isOverlayNestedTarget(e.relatedTarget)) {
+            if(!this.option('acceptCustomValue') && this.option('searchEnabled') && !this._isOverlayNestedTarget(e.relatedTarget)) {
                 this._searchCanceled();
             }
         }
