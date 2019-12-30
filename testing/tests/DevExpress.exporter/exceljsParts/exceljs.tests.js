@@ -74,7 +74,6 @@ const moduleConfig = {
 [true, false].forEach((autoFilterEnabled) => {
     QUnit.module(`Scenarios, autoFilterEnabled: ${autoFilterEnabled}`, moduleConfig, () => {
         const topLeft = { row: 2, column: 3 };
-        const topLeftCell1 = topLeft;
 
         const testCaption = '';
         const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
@@ -96,7 +95,7 @@ const moduleConfig = {
             return result;
         };
 
-        QUnit.test('Empty grid' + testCaption, function(assert) {
+        QUnit.test('Empty grid', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
@@ -113,7 +112,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -141,7 +140,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 dataGrid X 1 column, autoFilter' + testCaption, function(assert) {
+        QUnit.test('Header - 2 dataGrid X 1 column, autoFilter', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({ columns: [{ caption: 'f1' }] }).dxDataGrid('instance');
@@ -170,7 +169,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, paging.enabled: true' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, paging.enabled: true', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -197,7 +196,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, width: 1700' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, width: 1700', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -214,7 +213,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, width: 1800' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, width: 1800', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -231,7 +230,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, showColumnHeaders: false' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, showColumnHeaders: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -252,7 +251,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, column.visible: false' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, column.visible: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -274,7 +273,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, width: 300, column.visible: false, show on export' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, width: 300, column.visible: false, show on export', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -303,7 +302,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, column.visible: true, hide on export' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, column.visible: true, hide on export', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -329,7 +328,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, column.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, column.allowExporting: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -351,7 +350,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, default alignment' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, default alignment', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -370,7 +369,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, grid.wordWrapEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, grid.wordWrapEnabled: true', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -390,7 +389,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, export.excelWrapTextEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, export.excelWrapTextEnabled: true', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -412,7 +411,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, export.excelWrapTextEnabled: false' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, export.excelWrapTextEnabled: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -434,7 +433,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 1 column, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false' + testCaption, function(assert) {
+        QUnit.test('Header - 1 column, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -457,7 +456,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 column' + testCaption, function(assert) {
+        QUnit.test('Header - 2 column', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -484,7 +483,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 column, column.width: XXXpx' + testCaption, function(assert) {
+        QUnit.test('Header - 2 column, column.width: XXXpx', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -498,7 +497,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 column, column.width: XX%' + testCaption, function(assert) {
+        QUnit.test('Header - 2 column, column.width: XX%', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -512,7 +511,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 column, column.width: auto' + testCaption, function(assert) {
+        QUnit.test('Header - 2 column, column.width: auto', function(assert) {
             const currentDevice = devices.current();
             const isWinPhone = currentDevice.deviceType === 'phone' && currentDevice.platform === 'generic';
             const done = assert.async();
@@ -534,7 +533,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - 2 column, keepColumnWidths: false' + testCaption, function(assert) {
+        QUnit.test('Header - 2 column, keepColumnWidths: false', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -548,7 +547,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visible, { caption: f1, visible: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visible, { caption: f1, visible: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -567,7 +566,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visible, { caption: f1 }, { caption: f2, visible: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visible, { caption: f1 }, { caption: f2, visible: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -593,7 +592,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visible, { caption: f1, visible: false }, { caption: f2 }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visible, { caption: f1, visible: false }, { caption: f2 }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -619,7 +618,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -649,7 +648,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -678,7 +677,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false, allowExporting: true }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false, allowExporting: true }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -707,7 +706,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false }, { caption: f2, allowExporting: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f1, visible: false }, { caption: f2, allowExporting: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -735,7 +734,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f2, visible: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f2, visible: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -764,7 +763,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f2, allowExporting: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f2, allowExporting: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -793,7 +792,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Header - column.visibleIndex, { caption: f3, visible: false }' + testCaption, function(assert) {
+        QUnit.test('Header - column.visibleIndex, { caption: f3, visible: false }', function(assert) {
             const done = assert.async();
 
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -823,7 +822,7 @@ const moduleConfig = {
         });
 
         [true, false, undefined].forEach((gridExcelFilterEnabled) => {
-            QUnit.test(`Data - 1 column & 2 rows, grid.export.excelFilterEnabled: ${gridExcelFilterEnabled}` + testCaption, function(assert) {
+            QUnit.test(`Data - 1 column & 2 rows, grid.export.excelFilterEnabled: ${gridExcelFilterEnabled}`, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: '1' }];
                 const dataGrid = $('#dataGrid').dxDataGrid({
@@ -858,7 +857,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 1 row & 1 columns, value as html' + testCaption, function(assert) {
+        QUnit.test('Data - 1 row & 1 columns, value as html', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '<p><strong>text</strong></p>' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -889,7 +888,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 1 row & 1 columns, value as html, col.encodeHtml: false' + testCaption, function(assert) {
+        QUnit.test('Data - 1 row & 1 columns, value as html, col.encodeHtml: false', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '<p><strong>text</strong></p>' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -921,7 +920,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 1 row & 4 columns, values as formula string' + testCaption, function(assert) {
+        QUnit.test('Data - 1 row & 4 columns, values as formula string', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '@123', f2: '=123', f3: '-123', f4: '+123' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -952,7 +951,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 1 column & 3 rows, paging[enabled: true; pageSize: 1]' + testCaption, function(assert) {
+        QUnit.test('Data - 1 column & 3 rows, paging[enabled: true; pageSize: 1]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1' }, { f1: 'f2_1' }, { f1: 'f3_1' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -989,7 +988,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1020,7 +1019,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, grid.rtlEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, grid.rtlEnabled: true', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1052,7 +1051,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 dataGrid X 2 column & 2 rows' + testCaption, function(assert) {
+        QUnit.test('Data - 2 dataGrid X 2 column & 2 rows', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1093,7 +1092,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, grid.rowTemplate: () => {}' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, grid.rowTemplate: () => {}', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1125,7 +1124,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, editing command columns' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, editing command columns', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1166,7 +1165,7 @@ const moduleConfig = {
         });
 
         // width for adaptive command column is NOT SUPPORTED
-        QUnit.test('Data - 2 column & 2 rows, detail, adaptive, selection command columns' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, detail, adaptive, selection command columns', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1207,7 +1206,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, col_1.visible: false, show on export using beginUpdate/endUpdate, width is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, col_1.visible: false, show on export using beginUpdate/endUpdate, width is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1246,7 +1245,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, col_1.visible: false, show on export without beginUpdate/endUpdate' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, col_1.visible: false, show on export without beginUpdate/endUpdate', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1283,7 +1282,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, col_1.visible: true, hide on export using beginUpdate/endUpdate, width is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, col_1.visible: true, hide on export using beginUpdate/endUpdate, width is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1320,7 +1319,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, clearing predefined font settings' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, clearing predefined font settings', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
 
@@ -1332,7 +1331,7 @@ const moduleConfig = {
             exportDataGrid({
                 component: dataGrid,
                 worksheet: this.worksheet,
-                topLeftCell: topLeftCell1,
+                topLeftCell: topLeft,
                 customizeCell: (testCaption) => {
                     const { gridCell, excelCell } = testCaption;
 
@@ -1349,7 +1348,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, wordWrapEnabled = true, col_2.alignment: \'right\'' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, wordWrapEnabled = true, col_2.alignment: \'right\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
 
@@ -1363,7 +1362,7 @@ const moduleConfig = {
             exportDataGrid({
                 component: dataGrid,
                 worksheet: this.worksheet,
-                topLeftCell: topLeftCell1
+                topLeftCell: topLeft
             }).then((cellsRange) => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, alignCenterWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, alignCenterWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
@@ -1374,7 +1373,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, wordWrapEnabled = true, export.excelWrapTextEnabled = false' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, wordWrapEnabled = true, export.excelWrapTextEnabled = false', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
 
@@ -1390,7 +1389,7 @@ const moduleConfig = {
             exportDataGrid({
                 component: dataGrid,
                 worksheet: this.worksheet,
-                topLeftCell: topLeftCell1
+                topLeftCell: topLeft
             }).then((cellsRange) => {
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column).alignment, alignCenterWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).alignment`);
                 assert.deepEqual(this.worksheet.getCell(topLeft.row, topLeft.column + 1).alignment, alignCenterWrap, `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).alignment`);
@@ -1401,7 +1400,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, export.excelWrapTextEnabled = true, clearing predefined alignment settings' + testCaption, function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, export.excelWrapTextEnabled = true, clearing predefined alignment settings', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1', f2: '2' }];
 
@@ -1418,7 +1417,7 @@ const moduleConfig = {
             exportDataGrid({
                 component: dataGrid,
                 worksheet: this.worksheet,
-                topLeftCell: topLeftCell1,
+                topLeftCell: topLeft,
                 customizeCell: (testCaption) => {
                     const { gridCell, excelCell } = testCaption;
 
@@ -1435,7 +1434,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -1472,7 +1471,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, col_1.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, col_1.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -1501,7 +1500,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, grid.wordWrapEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, grid.wordWrapEnabled: true', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -1532,7 +1531,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '0' }, { f1: '1' }];
 
@@ -1562,7 +1561,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, unbound' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, unbound', function(assert) {
             const done = assert.async();
             const ds = [{ id: 0 }];
 
@@ -1602,7 +1601,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]]' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]]', function(assert) {
             const done = assert.async();
             const ds = [{ id: 0 }, { id: 1 }];
 
@@ -1637,7 +1636,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property does not exist in dataSource' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property does not exist in dataSource', function(assert) {
             const done = assert.async();
             const ds = [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }];
 
@@ -1674,7 +1673,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, grid.wordWrapEnabled: false' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, grid.wordWrapEnabled: false', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1709,7 +1708,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, col_1.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, col_1.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1737,7 +1736,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, unbound' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, unbound', function(assert) {
             const done = assert.async();
             const ds = [{ id: 0 }];
 
@@ -1787,7 +1786,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, unbound, selectedRowKeys: [ds[0]]' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, unbound, selectedRowKeys: [ds[0]]', function(assert) {
             const done = assert.async();
             const ds = [{ id: 0 }, { id: 1 }];
 
@@ -1820,7 +1819,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: boolean' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: boolean', function(assert) {
             const done = assert.async();
             const ds = [{ f1: true }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1855,7 +1854,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: boolean, col_1.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: boolean, col_1.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: true }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1884,7 +1883,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: date' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: date', function(assert) {
             const done = assert.async();
             const date = new Date(2019, 3, 12);
             const ds = [{ f1: undefined, f2: null, f3: date, f4: date }];
@@ -1923,7 +1922,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: date, col_1.format: () => {}, col_2.format: { type: date, formatter: () => {}}' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: date, col_1.format: () => {}, col_2.format: { type: date, formatter: () => {}}', function(assert) {
             const done = assert.async();
             const date = new Date(2019, 3, 12);
             const ds = [{ f1: date }];
@@ -2026,7 +2025,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: datetime' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: datetime', function(assert) {
             const done = assert.async();
             const dateTime = new Date(2019, 3, 12, 12, 15);
             const ds = [{ f1: undefined, f2: null, f3: dateTime, f4: dateTime }];
@@ -2065,7 +2064,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: date & dateTime, col_1.customizeText: (cell) => \'custom date\': (cell) => \'custom datetime\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: date & dateTime, col_1.customizeText: (cell) => \'custom date\': (cell) => \'custom datetime\'', function(assert) {
             const done = assert.async();
             const date = new Date(2019, 3, 12);
             const dateTime = new Date(2019, 3, 12, 12, 15);
@@ -2101,7 +2100,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: object' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: object', function(assert) {
             const done = assert.async();
             const ds = [{ f1: { value: 'f1_1' } }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -2134,7 +2133,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'percent\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'percent\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2172,7 +2171,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'fixedPoint\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'fixedPoint\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2210,7 +2209,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'decimal\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'decimal\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2248,7 +2247,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'exponential\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'exponential\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2286,7 +2285,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'largeNumber\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'largeNumber\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2324,7 +2323,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'thousands\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'thousands\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2362,7 +2361,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'millions\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'millions\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2400,7 +2399,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'billions\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'billions\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2438,7 +2437,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'trillions\'' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'trillions\'', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2476,7 +2475,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: number, columns.format.type: \'currency\' with presicion' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: number, columns.format.type: \'currency\' with presicion', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 1 }];
 
@@ -2516,7 +2515,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - columns.dataType: [string, number, date, boolean, lookup, datetime]' + testCaption, function(assert) {
+        QUnit.test('Data - columns.dataType: [string, number, date, boolean, lookup, datetime]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 1, f3: new Date(2019, 3, 12), f4: true, f5: 1, f6: new Date(2019, 3, 12, 16, 10) }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -2572,7 +2571,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 columns, col_2.lookup ' + testCaption, function(assert) {
+        QUnit.test('Data - 2 columns, col_2.lookup ', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 0 }, { f1: 'f1_2', f2: 1 }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -2621,7 +2620,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2664,7 +2663,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false, col_1.alignment: \'center\', col_2.alignment: \'right\', col_3.alignment: \'left\'' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false, col_1.alignment: \'center\', col_2.alignment: \'right\', col_3.alignment: \'left\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: true, f3: 1 },
@@ -2710,7 +2709,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_1.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_1.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2753,7 +2752,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_2.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_2.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2796,7 +2795,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_3.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_3.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2839,7 +2838,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_1.fixed: true, fixedPosition: \'right\'' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_1.fixed: true, fixedPosition: \'right\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2884,7 +2883,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_3.fixed: true, fixedPosition: \'left\'' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_3.fixed: true, fixedPosition: \'left\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2929,7 +2928,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 3 columns - col_2.fixed: true, fixedPosition: \'right\'' + testCaption, function(assert) {
+        QUnit.test('Data - 3 columns - col_2.fixed: true, fixedPosition: \'right\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -2974,7 +2973,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3016,7 +3015,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, col_1.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, col_1.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3051,7 +3050,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3084,7 +3083,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\', showWhenGrouped: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, col_1_group.calculateGroupValue: () => \'custom\', showWhenGrouped: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3129,7 +3128,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, col_1_group.calculateDisplayValue: () => \'custom\', col_2.calculateDisplayValue: () => \'custom_2\'' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, col_1_group.calculateDisplayValue: () => \'custom\', col_2.calculateDisplayValue: () => \'custom_2\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3162,7 +3161,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, grid.wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: \'center\', col_2.alignment: \'right\'' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, grid.wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: \'center\', col_2.alignment: \'right\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3208,7 +3207,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, export.excelWrapTextEnabled: true, rtlEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, export.excelWrapTextEnabled: true, rtlEnabled: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3254,7 +3253,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -3290,7 +3289,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -3326,7 +3325,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0], ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, selectedRowKeys: [ds[0], ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -3364,7 +3363,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, unbound' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, unbound', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
@@ -3404,7 +3403,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, unbound, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, unbound, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -3442,7 +3441,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'str1_1', f2: 'str1_2', f3: 'str1_3' }, { f1: 'str2_1', f2: 'str2_2', f3: 'str2_3' }];
 
@@ -3478,7 +3477,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level - 1 summary group node' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level - 1 summary group node', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 1 },
@@ -3522,7 +3521,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level - 1 summary group node, group.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level - 1 summary group node, group.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 1 },
@@ -3560,7 +3559,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level - 1 summary showInGroupFooter' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level - 1 summary showInGroupFooter', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3610,7 +3609,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level - 1 summary showInGroupFooter, rtlEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level - 1 summary showInGroupFooter, rtlEnabled: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -3661,7 +3660,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level & 2 column' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level & 2 column', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
@@ -3714,7 +3713,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 1 level & 2 column, 1 summary showInGroupFooter, 1 summary alignByColumn, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Grouping - 1 level & 2 column, 1 summary showInGroupFooter, 1 summary alignByColumn, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
@@ -3765,7 +3764,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 2 level' + testCaption, function(assert) {
+        QUnit.test('Grouping - 2 level', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
@@ -3812,7 +3811,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 2 level - 2 summary group node' + testCaption, function(assert) {
+        QUnit.test('Grouping - 2 level - 2 summary group node', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
@@ -3859,7 +3858,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 2 level - 2 summary showInGroupFooter' + testCaption, function(assert) {
+        QUnit.test('Grouping - 2 level - 2 summary showInGroupFooter', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
@@ -3919,7 +3918,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 2 level & 2 column - 2 summary showInGroupFooter' + testCaption, function(assert) {
+        QUnit.test('Grouping - 2 level & 2 column - 2 summary showInGroupFooter', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1' },
@@ -3993,7 +3992,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn' + testCaption, function(assert) {
+        QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
@@ -4055,7 +4054,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4105,7 +4104,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & group.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & group.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4155,7 +4154,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4202,7 +4201,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4249,7 +4248,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_3.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_3.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4296,7 +4295,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_3.fixed: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_3.fixed: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4346,7 +4345,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4403,7 +4402,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4456,7 +4455,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4509,7 +4508,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4562,7 +4561,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4612,7 +4611,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4665,7 +4664,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false' + testCaption, function(assert) {
+        QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4715,7 +4714,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary' + testCaption, function(assert) {
+        QUnit.test('Total summary', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -4767,7 +4766,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary, total_col_1.customizeText: (cell) => \'custom\'' + testCaption, function(assert) {
+        QUnit.test('Total summary, total_col_1.customizeText: (cell) => \'custom\'', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1' }
@@ -4801,7 +4800,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary, export.excelWrapTextEnabled: false, rtlEnabled: true' + testCaption, function(assert) {
+        QUnit.test('Total summary, export.excelWrapTextEnabled: false, rtlEnabled: true', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -4854,7 +4853,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('TODO: not supported - Total summary, export.excelWrapTextEnabled: true, totalItems.alignment, total_2.alignment: center, total_3: right' + testCaption, function(assert) {
+        QUnit.test('TODO: not supported - Total summary, export.excelWrapTextEnabled: true, totalItems.alignment, total_2.alignment: center, total_3: right', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -4907,7 +4906,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary, selectedRowKeys: [ds[1]]' + testCaption, function(assert) {
+        QUnit.test('Total summary, selectedRowKeys: [ds[1]]', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1' },
@@ -4958,7 +4957,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5007,7 +5006,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5056,7 +5055,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5104,7 +5103,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5153,7 +5152,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5202,7 +5201,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false' + testCaption, function(assert) {
+        QUnit.test('Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false', function(assert) {
             const done = assert.async();
             const ds = [
                 { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
@@ -5250,7 +5249,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, col2_band x without columns' + testCaption, function(assert) {
+        QUnit.test('Bands, col2_band x without columns', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1' }];
 
@@ -5288,7 +5287,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[empty]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[empty]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1' }];
 
@@ -5329,7 +5328,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2, f3]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2, f3]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -5377,7 +5376,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2, f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2, f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [];
 
@@ -5425,7 +5424,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2, f3], band[f4, f5]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2, f3], band[f4, f5]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -5487,7 +5486,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2, f3.visible:false, f4], band[f5.visible: false, f6, f7]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2, f3.visible:false, f4], band[f5.visible: false, f6, f7]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: '1' }];
 
@@ -5551,7 +5550,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2, f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2, f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
 
@@ -5595,7 +5594,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.visible: false, f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.visible: false, f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
 
@@ -5638,7 +5637,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.allowExporting: false, f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.allowExporting: false, f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
 
@@ -5681,7 +5680,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2, f3].visible: false, f4]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2, f3].visible: false, f4]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5726,7 +5725,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.skip('Bands, [f1, band[f2, f3].allowExporting: false, f4] is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.skip('Bands, [f1, band[f2, f3].allowExporting: false, f4] is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5774,7 +5773,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2.visible: false, f3.visible: false], f4.visible: false]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2.visible: false, f3.visible: false], f4.visible: false]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5819,7 +5818,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.skip('Bands, [f1, band[f2.allowExporting: false, f3.allowExporting: false], f4] is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.skip('Bands, [f1, band[f2.allowExporting: false, f3.allowExporting: false], f4] is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5863,7 +5862,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2.visible: false(allowExporting: true), f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2.visible: false(allowExporting: true), f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5913,7 +5912,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [f1, band[f2.allowExporting: false, f3, f4]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [f1, band[f2.allowExporting: false, f3, f4]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
 
@@ -5963,7 +5962,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[band[f1, f2, f3]]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[band[f1, f2, f3]]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6021,7 +6020,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[band[f1.visible: false, f2, f3]]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[band[f1.visible: false, f2, f3]]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6075,7 +6074,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[band[f1, f2.allowExporting: false, f3.visible: false]]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[band[f1, f2.allowExporting: false, f3.visible: false]]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6125,7 +6124,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[f1, band[f2, f3]]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[f1, band[f2, f3]]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6183,7 +6182,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[f1.visible: false, band[f2, f3]]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[f1.visible: false, band[f2, f3]]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6237,7 +6236,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.skip('Bands, [band[f1.allowExporting: false, band[f2, f3.visible: false]]] is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.skip('Bands, [band[f1.allowExporting: false, band[f2, f3.visible: false]]] is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6287,7 +6286,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[band[f1, f2], f3]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[band[f1, f2], f3]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6345,7 +6344,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Bands, [band[band[f1, f2], f3.visible: false]]' + testCaption, function(assert) {
+        QUnit.test('Bands, [band[band[f1, f2], f3.visible: false]]', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
@@ -6399,7 +6398,7 @@ const moduleConfig = {
             });
         });
 
-        QUnit.skip('Bands, [band[band[f1, f2], f3.allowExporting: false]] is NOT SUPPORTED' + testCaption, function(assert) {
+        QUnit.skip('Bands, [band[band[f1, f2], f3.allowExporting: false]] is NOT SUPPORTED', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
 
