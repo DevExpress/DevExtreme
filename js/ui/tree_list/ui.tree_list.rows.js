@@ -29,18 +29,8 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         return $iconElement;
     };
 
-    const renderIcons = function($container, row) {
-        const level = row.level;
-
-        for(let i = 0; i <= level; i++) {
-            $container.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
-        }
-
-        return $container;
-    };
-
     return {
-        _renderExpandIcon: function($container, options) {
+        _renderIconContainer: function($container, options) {
             const $iconContainer = $('<div>')
                 .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                 .appendTo($container);
@@ -49,20 +39,27 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
                 return [options.row.level, options.row.isExpanded, options.row.node.hasChildren];
             }, () => {
                 $iconContainer.empty();
-                this._renderExpandIconCore($iconContainer, options);
+                this._renderIcons($iconContainer, options);
             });
 
             $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 
-            return this._renderExpandIconCore($iconContainer, options);
+            return this._renderIcons($iconContainer, options);
         },
 
-        _renderExpandIconCore: function($iconContainer, options) {
-            return renderIcons($iconContainer, options.row);
+        _renderIcons: function($iconContainer, options) {
+            const row = options.row;
+            const level = row.level;
+
+            for(let i = 0; i <= level; i++) {
+                $iconContainer.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
+            }
+
+            return $iconContainer;
         },
 
         _renderCellCommandContent: function(container, model) {
-            this._renderExpandIcon(container, model);
+            this._renderIconContainer(container, model);
             return true;
         },
 
