@@ -513,6 +513,16 @@ QUnit.module('Events', {
 
     // Skipped module
     QUnit.skip('Subscription by "on" method', () => {
+        QUnit.test('Focused event should fire', function(assert) {
+            const handler = sinon.stub();
+            const validator = this.fixture.createValidator({});
+            validator.on('focus', handler);
+
+            validator.focus();
+
+            assert.ok(handler.calledOnce, 'Validated handler should be called');
+        });
+
         QUnit.test('Validated event should fire', function(assert) {
             const value = '';
             const name = 'Login';
@@ -526,9 +536,9 @@ QUnit.module('Events', {
             validator.on('validate', handler);
             expectedFailedValidationRule.validator = validator;
             this.fixture.stubAdapter.getValue.returns(value);
-            // act
+
             validator.validate();
-            // assert
+
             assert.ok(handler.calledOnce, 'Validated handler should be called');
 
             const params = handler.getCall(0).args[0];
