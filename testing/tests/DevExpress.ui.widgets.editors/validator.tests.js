@@ -430,7 +430,7 @@ QUnit.module('Events', {
         const handler = sinon.stub();
 
         const validator = this.fixture.createValidator({
-            name: name,
+            name,
             onValidated: handler,
             validationRules: [{ type: 'required' }]
         });
@@ -469,12 +469,10 @@ QUnit.module('Events', {
             validator: {},
             value: value
         };
-        const handler = sinon.stub();
         const handlerAfterChange = sinon.stub();
 
         const validator = this.fixture.createValidator({
-            name: name,
-            onValidated: handler,
+            name,
             validationRules: [{ type: 'required' }]
         });
 
@@ -573,7 +571,7 @@ QUnit.module('Events', {
             const handler = sinon.stub();
 
             const validator = this.fixture.createValidator({
-                name: name,
+                name,
                 validationRules: [{ type: 'required' }]
             });
             validator.on('validated', handler);
@@ -612,11 +610,10 @@ QUnit.module('Events', {
                 validator: {},
                 value: value
             };
-            const handler = sinon.stub();
-            const handlerAfterChange = sinon.stub();
 
+            const handlerAfterChange = sinon.stub();
             const validator = this.fixture.createValidator({
-                name: name,
+                name,
                 validationRules: [{ type: 'required' }]
             });
 
