@@ -9,9 +9,9 @@ function isFunction(target) {
 }
 
 function wrapSource(source) {
-    const buffer = wrapBuffer(source);
-    let position = 0;
-    const stream = {
+    var buffer = wrapBuffer(source);
+    var position = 0;
+    var stream = {
         pos: function() {
             return position;
         },
@@ -22,8 +22,8 @@ function wrapSource(source) {
         },
 
         ui8arr: function(length) {
-            let i = 0;
-            const list = [];
+            var i = 0;
+            var list = [];
             list.length = length;
             for(; i < length; ++i) {
                 list[i] = stream.ui8();
@@ -32,31 +32,31 @@ function wrapSource(source) {
         },
 
         ui8: function() {
-            const val = ui8(buffer, position);
+            var val = ui8(buffer, position);
             position += 1;
             return val;
         },
 
         ui16LE: function() {
-            const val = ui16LE(buffer, position);
+            var val = ui16LE(buffer, position);
             position += 2;
             return val;
         },
 
         ui32LE: function() {
-            const val = ui32LE(buffer, position);
+            var val = ui32LE(buffer, position);
             position += 4;
             return val;
         },
 
         ui32BE: function() {
-            const val = ui32BE(buffer, position);
+            var val = ui32BE(buffer, position);
             position += 4;
             return val;
         },
 
         f64LE: function() {
-            const val = f64LE(buffer, position);
+            var val = f64LE(buffer, position);
             position += 8;
             return val;
         }
@@ -65,10 +65,10 @@ function wrapSource(source) {
 }
 
 function parseCore(source, roundCoordinates, errors) {
-    const shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {};
-    const dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {};
-    const features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates);
-    let result;
+    var shapeData = source[0] ? parseShape(wrapSource(source[0]), errors) : {};
+    var dataBaseFileData = source[1] ? parseDBF(wrapSource(source[1]), errors) : {};
+    var features = buildFeatures(shapeData.shapes || [], dataBaseFileData.records || [], roundCoordinates);
+    var result;
 
     if(features.length) {
         result = {
@@ -83,10 +83,10 @@ function parseCore(source, roundCoordinates, errors) {
 }
 
 function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
-    const features = [];
-    let i;
-    const ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
-    let shape;
+    var features = [];
+    var i;
+    var ii = features.length = Math.max(shapeData.length, dataBaseFileData.length);
+    var shape;
     for(i = 0; i < ii; ++i) {
         shape = shapeData[i] || {};
         features[i] = {
@@ -102,7 +102,7 @@ function buildFeatures(shapeData, dataBaseFileData, roundCoordinates) {
 }
 
 function createCoordinatesRounder(precision) {
-    const factor = Number('1E' + precision);
+    var factor = Number('1E' + precision);
     function round(x) {
         return Math.round(x * factor) / factor;
     }
@@ -129,11 +129,11 @@ function buildParseArgs(source) {
 }
 
 function parse(source, parameters, callback) {
-    let result;
+    var result;
     when(buildParseArgs(source), function(errorArray, dataArray) {
         callback = (isFunction(parameters) && parameters) || (isFunction(callback) && callback) || noop;
         parameters = (!isFunction(parameters) && parameters) || {};
-        const errors = [];
+        var errors = [];
         errorArray.forEach(function(e) {
             e && errors.push(e);
         });
@@ -147,10 +147,10 @@ function parse(source, parameters, callback) {
 exports.parse = parse;
 
 function when(actions, callback) {
-    const errorArray = [];
-    const dataArray = [];
-    let counter = 1;
-    let lock = true;
+    var errorArray = [];
+    var dataArray = [];
+    var counter = 1;
+    var lock = true;
     actions.forEach(function(action, i) {
         ++counter;
         action(function(e, data) {
