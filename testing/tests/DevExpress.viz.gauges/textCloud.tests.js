@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
+const $ = require('jquery');
+const getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
 
-var data = {
+const data = {
     'right-bottom': {
         cx: 355,
         cy: 150,

@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    SlidersController = require('viz/range_selector/sliders_controller').SlidersController,
-    rendererModule = require('viz/core/renderers/renderer'),
-    translator2DModule = require('viz/translators/translator2d'),
-    support = require('core/utils/support');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const SlidersController = require('viz/range_selector/sliders_controller').SlidersController;
+const rendererModule = require('viz/core/renderers/renderer');
+const translator2DModule = require('viz/translators/translator2d');
+const support = require('core/utils/support');
 
-var environment = {
+const environment = {
     beforeEach: function() {
-        var renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new vizMocks.Renderer();
 
         rendererModule.Renderer = function() {
             return renderer;
@@ -16,7 +16,7 @@ var environment = {
         this.translator.update({ min: 10, max: 30 }, { left: 1000, width: 3000 }, { isHorizontal: true });
         this.root = new vizMocks.Element();
         this.trackersGroup = new vizMocks.Element();
-        var notifications = this.notifications = [];
+        const notifications = this.notifications = [];
         this.controller = new SlidersController({
             renderer: renderer,
             translator: this.translator,
@@ -259,8 +259,8 @@ QUnit.test('Selected area cursor when range is full (no data)', function(assert)
 QUnit.module('Positioning', environment);
 
 QUnit.test('Total area and selected area trackers', function(assert) {
-    var _touchEvents = support.touchEvents,
-        _pointer = support.pointer;
+    const _touchEvents = support.touchEvents;
+    const _pointer = support.pointer;
     try {
         support.touchEvents = support.pointer = false;
         this.update({
@@ -283,8 +283,8 @@ QUnit.test('Total area and selected area trackers', function(assert) {
 });
 
 QUnit.test('Slider tracker width when slider handler width is rather small', function(assert) {
-    var _touchEvents = support.touchEvents,
-        _pointer = support.pointer;
+    const _touchEvents = support.touchEvents;
+    const _pointer = support.pointer;
     try {
         support.touchEvents = support.pointer = false;
         this.update({
@@ -301,8 +301,8 @@ QUnit.test('Slider tracker width when slider handler width is rather small', fun
 });
 
 QUnit.test('Slider tracker width on touch devices', function(assert) {
-    var _touchEvents = support.touchEvents,
-        _pointer = support.pointer;
+    const _touchEvents = support.touchEvents;
+    const _pointer = support.pointer;
     try {
         support.touchEvents = support.pointer = true;
         this.update({
@@ -768,7 +768,7 @@ QUnit.test('Overlapping near end', function(assert) {
     assert.deepEqual(this.sliderBorder(1).attr.lastCall.args, [{ x: -108, height: 20 }], 'border 2');
 });
 
-var environmentForMethods = $.extend({}, environment, {
+const environmentForMethods = $.extend({}, environment, {
     check: function(assert, values, positions) {
         assert.deepEqual(this.controller.getSelectedRange(), { startValue: values[0], endValue: values[1] }, 'selected range');
         assert.deepEqual(this.sliderRoot(0).animate.lastCall.args, [{ translateX: positions[0] }, { duration: 250 }], 'slider 1');
@@ -776,11 +776,11 @@ var environmentForMethods = $.extend({}, environment, {
     },
 
     checkMoves: function(assert, moves) {
-        var attr1 = this.sliderRoot(0).attr,
-            attr2 = this.sliderRoot(1).attr,
-            ii = moves.length,
-            base = attr1.callCount - ii,
-            i;
+        const attr1 = this.sliderRoot(0).attr;
+        const attr2 = this.sliderRoot(1).attr;
+        const ii = moves.length;
+        const base = attr1.callCount - ii;
+        let i;
         for(i = 0; i < ii; ++i) {
             assert.deepEqual(attr1.getCall(base + i).args, [{ translateX: moves[i][0] }], 'slider 1 - ' + i);
             assert.deepEqual(attr2.getCall(base + i).args, [{ translateX: moves[i][1] }], 'slider 2 - ' + i);
@@ -788,17 +788,17 @@ var environmentForMethods = $.extend({}, environment, {
     },
 
     checkSliderMoves: function(assert, index, moves) {
-        var attr = this.sliderRoot(index).attr,
-            ii = moves.length,
-            base = attr.callCount - ii,
-            i;
+        const attr = this.sliderRoot(index).attr;
+        const ii = moves.length;
+        const base = attr.callCount - ii;
+        let i;
         for(i = 0; i < ii; ++i) {
             assert.deepEqual(attr.getCall(base + i).args, [{ translateX: moves[i] }], 'slider ' + (index + 1) + ' - ' + i);
         }
     },
 
     checkSliderAnimated: function(assert, index, pos) {
-        var animate = this.sliderRoot(index).animate;
+        const animate = this.sliderRoot(index).animate;
         assert.deepEqual(animate.getCall(animate.callCount - 1).args, [{ translateX: pos }, { duration: 250 }], 'slider ' + (index + 1) + ' - animated');
     }
 });
@@ -921,7 +921,7 @@ QUnit.test('Common', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1300);
     handler(1500);
     handler.complete({ isEvent: true });
@@ -938,7 +938,7 @@ QUnit.test('Docking', function(assert) {
     });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1340);
     handler(1560);
     handler.complete({ isEvent: true });
@@ -956,7 +956,7 @@ QUnit.test('Docking with DateTime (irregular scale, from small range to big)', f
     });
     this.setRange(new Date(2011, 1, 1), new Date(2011, 2, 1));
 
-    var handler = this.controller.beginSelectedAreaMoving(1300);
+    const handler = this.controller.beginSelectedAreaMoving(1300);
     handler(1350);
     handler(1400);
     handler.complete({ isEvent: true });
@@ -974,7 +974,7 @@ QUnit.test('Docking with DateTime (irregular scale, from big range to small)', f
     });
     this.setRange(new Date(2011, 0, 1), new Date(2011, 1, 1));
 
-    var handler = this.controller.beginSelectedAreaMoving(1100);
+    const handler = this.controller.beginSelectedAreaMoving(1100);
     handler(1155);
     handler(1210);
     handler.complete({ isEvent: true });
@@ -989,7 +989,7 @@ QUnit.test('Categories', function(assert) {
     this.update();
     this.setRange('b', 'c');
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1300);
     handler(1500);
     handler.complete({ isEvent: true });
@@ -1006,7 +1006,7 @@ QUnit.test('Notifications on moving, callValueChanged', function(assert) {
     });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1340, { firstEvent: true });
     handler(1560, { secondEvent: true });
     handler.complete();
@@ -1018,7 +1018,7 @@ QUnit.test('Close to start', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1100);
     handler(900);
     handler(1150);
@@ -1030,7 +1030,7 @@ QUnit.test('Close to end', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSelectedAreaMoving(1200);
+    const handler = this.controller.beginSelectedAreaMoving(1200);
     handler(2700);
     handler(2900);
     handler(2600);
@@ -1044,7 +1044,7 @@ QUnit.test('Common', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSliderMoving(1, 1600);
+    const handler = this.controller.beginSliderMoving(1, 1600);
     handler(1800);
     handler(1900);
     handler.complete({ isEvent: true });
@@ -1061,7 +1061,7 @@ QUnit.test('Docking', function(assert) {
     });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSliderMoving(0, 1000);
+    const handler = this.controller.beginSliderMoving(0, 1000);
     handler(900);
     handler(1250);
     handler.complete({ isEvent: true });
@@ -1076,7 +1076,7 @@ QUnit.test('Categories', function(assert) {
     this.update();
     this.setRange('b', 'c');
 
-    var handler = this.controller.beginSliderMoving(1, 2300);
+    const handler = this.controller.beginSliderMoving(1, 2300);
     handler(1900);
     handler(2500);
     handler.complete({ isEvent: true });
@@ -1088,7 +1088,7 @@ QUnit.test('Categories', function(assert) {
 
 QUnit.test('Categories and snapping to axis ticks', function(assert) {
     // Since strings are comparable such special category names are required for the test.
-    var categories = ['C', 'P', 'A', 'R', 'F'];
+    const categories = ['C', 'P', 'A', 'R', 'F'];
     this.setCategories(categories);
     this.update({
         behavior: { snapToTicks: true },
@@ -1096,7 +1096,7 @@ QUnit.test('Categories and snapping to axis ticks', function(assert) {
     });
     this.setRange('R', 'F');
 
-    var handler = this.controller.beginSliderMoving(0, 2100);
+    const handler = this.controller.beginSliderMoving(0, 2100);
     handler(1300);
     handler.complete();
 
@@ -1110,7 +1110,7 @@ QUnit.test('Notifications on moving, callValueChanged option', function(assert) 
     });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSliderMoving(1, 1600);
+    const handler = this.controller.beginSliderMoving(1, 1600);
     handler(1700, { firstEvent: true });
     handler(2150, { secondEvent: true });
     handler.complete();
@@ -1124,7 +1124,7 @@ QUnit.test('Swapping', function(assert) {
     this.update({ behavior: { allowSlidersSwap: true } });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSliderMoving(0, 1000);
+    const handler = this.controller.beginSliderMoving(0, 1000);
     handler(1100);
     handler(1350);
     handler(1450);
@@ -1141,7 +1141,7 @@ QUnit.test('Disabled swapping', function(assert) {
     this.update({ behavior: { allowSlidersSwap: true } });
     this.setRange(11, 15);
 
-    var handler = this.controller.beginSliderMoving(1, 1600);
+    const handler = this.controller.beginSliderMoving(1, 1600);
     handler(1400);
     handler(1250);
     handler(1000);
@@ -1156,7 +1156,7 @@ QUnit.test('Inverted scale', function(assert) {
     this.update();
     this.setRange(15, 11);
 
-    var handler = this.controller.beginSliderMoving(0, 2400);
+    const handler = this.controller.beginSliderMoving(0, 2400);
     handler(2200);
     handler(2000);
     handler.complete();
@@ -1169,17 +1169,17 @@ QUnit.test('Min range restriction', function(assert) {
     this.update({ rangeBounds: { minRange: 2 } });
     this.setRange(21, 25);
 
-    var handler = this.controller.beginSliderMoving(0, 2000);
+    const handler = this.controller.beginSliderMoving(0, 2000);
     handler(2100);
     handler(2300);
     handler.complete();
 
     this.checkSliderMoves(assert, 0, [2400]);
     this.check(assert, [22, 25], [2200, 2500]);
-    var lineAttr = this.sliderLine(0).attr;
+    const lineAttr = this.sliderLine(0).attr;
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 2).args, [{ stroke: 'invalid-color' }], 'line color is set to invalid');
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 1).args, [{ stroke: 'handle-color' }], 'line color is set to valid');
-    var cloudAttr = this.sliderCloud(0).attr;
+    const cloudAttr = this.sliderCloud(0).attr;
     assert.deepEqual(cloudAttr.getCall(cloudAttr.callCount - 4).args, [{ fill: 'invalid-color' }], 'cloud color is set to invalid');
     assert.deepEqual(cloudAttr.getCall(cloudAttr.callCount - 2).args, [{ fill: 'marker-color' }], 'cloud color is set to valid');
 });
@@ -1188,17 +1188,17 @@ QUnit.test('Max range restriction', function(assert) {
     this.update({ rangeBounds: { maxRange: 8 } });
     this.setRange(15, 17);
 
-    var handler = this.controller.beginSliderMoving(1, 1800);
+    const handler = this.controller.beginSliderMoving(1, 1800);
     handler(2300);
     handler(2700);
     handler.complete();
 
     this.checkSliderMoves(assert, 1, [2200, 2600]);
     this.check(assert, [15, 22], [1500, 2200]);
-    var lineAttr = this.sliderLine(1).attr;
+    const lineAttr = this.sliderLine(1).attr;
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 2).args, [{ stroke: 'invalid-color' }], 'line color is set to invalid');
     assert.deepEqual(lineAttr.getCall(lineAttr.callCount - 1).args, [{ stroke: 'handle-color' }], 'line color is set to valid');
-    var cloudAttr = this.sliderCloud(1).attr;
+    const cloudAttr = this.sliderCloud(1).attr;
     assert.deepEqual(cloudAttr.getCall(cloudAttr.callCount - 4).args, [{ fill: 'invalid-color' }], 'cloud color is set to invalid');
     assert.deepEqual(cloudAttr.getCall(cloudAttr.callCount - 2).args, [{ fill: 'marker-color' }], 'cloud color is set to valid');
 });
@@ -1209,7 +1209,7 @@ QUnit.test('Left slider', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.placeSliderAndBeginMoving(2100, 1900);
+    const handler = this.controller.placeSliderAndBeginMoving(2100, 1900);
     handler(1800);
     handler.complete({ isEvent: true });
 
@@ -1225,7 +1225,7 @@ QUnit.test('Right slider', function(assert) {
     this.update();
     this.setRange(11, 15);
 
-    var handler = this.controller.placeSliderAndBeginMoving(1900, 2100);
+    const handler = this.controller.placeSliderAndBeginMoving(1900, 2100);
     handler(2300);
     handler.complete({ isEvent: true });
 
@@ -1279,7 +1279,7 @@ QUnit.test('Notifications on moving, callValueChanged option', function(assert) 
     });
     this.setRange(11, 13);
 
-    var handler = this.controller.placeSliderAndBeginMoving(1450, 2150, { firstEvent: true });
+    const handler = this.controller.placeSliderAndBeginMoving(1450, 2150, { firstEvent: true });
     handler(1550, { secondEvent: true });
     handler.complete();
 

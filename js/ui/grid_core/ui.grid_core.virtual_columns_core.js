@@ -6,18 +6,18 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
     lastProcessedIndexes = lastProcessedIndexes || [];
     offsets[rowIndex] = offsets[rowIndex] || 0;
 
-    var row = info[rowIndex],
-        startIndex = lastProcessedIndexes[rowIndex] + 1 || 0,
-        processedColumnCount = 0;
+    const row = info[rowIndex];
+    const startIndex = lastProcessedIndexes[rowIndex] + 1 || 0;
+    let processedColumnCount = 0;
 
     if(!row) {
         return;
     }
 
     for(var colIndex = startIndex; colIndex < row.length; colIndex++) {
-        var cell = row[colIndex],
-            visibleIndex = colIndex + offsets[rowIndex],
-            colspan = cell.colspan || 1;
+        const cell = row[colIndex];
+        const visibleIndex = colIndex + offsets[rowIndex];
+        const colspan = cell.colspan || 1;
 
         foreachColumnInfo(info, callback, rowIndex + (cell.rowspan || 1), offsets, colspan, lastProcessedIndexes);
 
@@ -26,7 +26,7 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
         processedColumnCount += colspan;
 
         if(cell.rowspan) {
-            for(var i = rowIndex + 1; i < rowIndex + cell.rowspan; i++) {
+            for(let i = rowIndex + 1; i < rowIndex + cell.rowspan; i++) {
                 offsets[i] = offsets[i] || 0;
                 offsets[i] += (cell.colspan || 1);
             }
@@ -44,13 +44,13 @@ function foreachColumnInfo(info, callback, rowIndex, offsets, columnCount, lastP
 }
 
 function createColumnsInfo(info, startIndex, endIndex) {
-    var newInfo = [];
+    const newInfo = [];
 
     foreachColumnInfo(info, function(columnInfo, visibleIndex, rowIndex) {
-        var cell = columnInfo,
-            colspan,
-            cellColspan = cell.colspan || 1,
-            isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
+        let cell = columnInfo;
+        let colspan;
+        const cellColspan = cell.colspan || 1;
+        const isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
         newInfo[rowIndex] = newInfo[rowIndex] || [];
 
@@ -79,7 +79,7 @@ function createColumnsInfo(info, startIndex, endIndex) {
         }
     });
 
-    for(var i = 0; i < newInfo.length; i++) {
+    for(let i = 0; i < newInfo.length; i++) {
         newInfo[i] = newInfo[i] || [];
     }
 

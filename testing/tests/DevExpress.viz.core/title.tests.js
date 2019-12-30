@@ -2,7 +2,7 @@ import $ from 'jquery';
 import vizMocks from '../../helpers/vizMocks.js';
 import { Title } from 'viz/core/title';
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.canvas = {
             top: 10,
@@ -79,7 +79,7 @@ QUnit.test('Clip rect, placeholderSize is not specify, shifted', function(assert
 QUnit.module('Alignment options parsing', environment);
 
 QUnit.test('Empty alignments', function(assert) {
-    var options = this.createTitle().getLayoutOptions();
+    const options = this.createTitle().getLayoutOptions();
 
     assert.strictEqual(options.verticalAlignment, 'top');
     assert.strictEqual(options.horizontalAlignment, 'center');
@@ -88,7 +88,7 @@ QUnit.test('Empty alignments', function(assert) {
 QUnit.test('Wrong alignments', function(assert) {
     this.options.verticalAlignment = 'middle';
     this.options.horizontalAlignment = 'leftSide';
-    var options = this.createTitle().getLayoutOptions();
+    const options = this.createTitle().getLayoutOptions();
 
     assert.strictEqual(options.verticalAlignment, 'top');
     assert.strictEqual(options.horizontalAlignment, 'center');
@@ -97,7 +97,7 @@ QUnit.test('Wrong alignments', function(assert) {
 QUnit.test('TopLeft alignments', function(assert) {
     this.options.verticalAlignment = 'top';
     this.options.horizontalAlignment = 'left';
-    var options = this.createTitle().getLayoutOptions();
+    const options = this.createTitle().getLayoutOptions();
 
     assert.strictEqual(options.verticalAlignment, 'top');
     assert.strictEqual(options.horizontalAlignment, 'left');
@@ -109,7 +109,7 @@ QUnit.test('TopLeft alignments', function(assert) {
 QUnit.test('TopCenter alignments', function(assert) {
     this.options.verticalAlignment = 'top';
     this.options.horizontalAlignment = 'center';
-    var options = this.createTitle().getLayoutOptions();
+    const options = this.createTitle().getLayoutOptions();
 
     assert.strictEqual(options.verticalAlignment, 'top');
     assert.strictEqual(options.horizontalAlignment, 'center');
@@ -121,7 +121,7 @@ QUnit.test('TopCenter alignments', function(assert) {
 QUnit.test('BottomRight alignments', function(assert) {
     this.options.verticalAlignment = 'bottom';
     this.options.horizontalAlignment = 'right';
-    var options = this.createTitle().getLayoutOptions();
+    const options = this.createTitle().getLayoutOptions();
 
     assert.strictEqual(options.verticalAlignment, 'bottom');
     assert.strictEqual(options.horizontalAlignment, 'right');
@@ -133,7 +133,7 @@ QUnit.test('BottomRight alignments', function(assert) {
 QUnit.module('margin options parsing', environment);
 
 QUnit.test('default margin option', function(assert) {
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     assert.deepEqual(title.DEBUG_getOptions().margin, {
         top: 10,
@@ -145,7 +145,7 @@ QUnit.test('default margin option', function(assert) {
 
 QUnit.test('zero margin', function(assert) {
     this.options.margin = 0;
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     assert.deepEqual(title.DEBUG_getOptions().margin, {
         top: 0,
@@ -157,7 +157,7 @@ QUnit.test('zero margin', function(assert) {
 
 QUnit.test('margin is not zero', function(assert) {
     this.options.margin = 24;
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     assert.deepEqual(title.DEBUG_getOptions().margin, {
         top: 24,
@@ -174,7 +174,7 @@ QUnit.test('margin is object', function(assert) {
         left: 30,
         right: 40
     };
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     assert.deepEqual(title.DEBUG_getOptions().margin, {
         top: 10,
@@ -191,7 +191,7 @@ QUnit.test('margin is object, zero values', function(assert) {
         left: 0,
         right: 0
     };
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     assert.deepEqual(title.DEBUG_getOptions().margin, {
         top: 0,
@@ -204,7 +204,7 @@ QUnit.test('margin is object, zero values', function(assert) {
 QUnit.module('Life cycle', environment);
 
 QUnit.test('Creation', function(assert) {
-    var title = this.createTitle().draw(this.canvas.width, this.height);
+    const title = this.createTitle().draw(this.canvas.width, this.height);
 
     assert.ok(title);
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { 'class': 'test' });
@@ -217,7 +217,7 @@ QUnit.test('Creation', function(assert) {
 });
 
 QUnit.test('Update', function(assert) {
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     title.update({
         horizontalAlignment: 'left',
@@ -248,7 +248,7 @@ QUnit.test('Update', function(assert) {
 });
 
 QUnit.test('Update to empty text', function(assert) {
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     title.update({
         horizontalAlignment: 'left',
@@ -271,7 +271,7 @@ QUnit.test('Update to empty text', function(assert) {
 });
 
 QUnit.test('Update to empty subtitle text', function(assert) {
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     title.update({
         horizontalAlignment: 'left',
@@ -297,7 +297,7 @@ QUnit.test('Update to empty subtitle text', function(assert) {
 });
 
 QUnit.test('Dispose', function(assert) {
-    var title = this.createTitle().draw(this.canvas.width, this.height);
+    const title = this.createTitle().draw(this.canvas.width, this.height);
 
     title.dispose();
 
@@ -352,7 +352,7 @@ QUnit.test('Draw with size', function(assert) {
 });
 
 QUnit.test('Probe draw', function(assert) {
-    var title = this.createTitle();
+    const title = this.createTitle();
 
     sinon.spy(title, 'draw');
     title.probeDraw(50, 20);
@@ -450,7 +450,7 @@ QUnit.test('Do not set title if text has correct size', function(assert) {
 });
 
 QUnit.test('Dispose renderer elements. Height', function(assert) {
-    var title = this.createTitle().draw(100, 3);
+    const title = this.createTitle().draw(100, 3);
 
     this.rendererElementsIsDispose(assert);
 
@@ -496,7 +496,7 @@ QUnit.test('get options', function(assert) {
 
 QUnit.test('Get options rect with placeholder', function(assert) {
     this.options.placeholderSize = 50;
-    var box = this.createTitle().draw().getLayoutOptions();
+    const box = this.createTitle().draw().getLayoutOptions();
 
     assert.ok(this.renderer.g.getCall(0).returnValue.getBBox.called, 'bbox from group');
     assert.equal(box.height, 50, 'height title like placeholderSize');
@@ -505,7 +505,7 @@ QUnit.test('Get options rect with placeholder', function(assert) {
 QUnit.test('Get options rect if nothing drawn', function(assert) {
     this.options = { subtitle: {}, placeholderSize: 10 };
 
-    var box = this.createTitle().getLayoutOptions();
+    const box = this.createTitle().getLayoutOptions();
 
     assert.deepEqual(box, {
         cutLayoutSide: 'top',
@@ -524,7 +524,7 @@ QUnit.test('Get options rect if nothing drawn', function(assert) {
 });
 
 QUnit.test('shift title', function(assert) {
-    var title = this.createTitle().draw();
+    const title = this.createTitle().draw();
 
     title.shift(10, 20);
     title.shift(15, 25);
@@ -549,8 +549,8 @@ QUnit.test('measure', function(assert) {
 });
 
 QUnit.test('move', function(assert) {
-    var title = this.createTitle().draw(),
-        spy = sinon.spy(title, 'draw');
+    const title = this.createTitle().draw();
+    const spy = sinon.spy(title, 'draw');
 
     title.move([20, 10, 90, 80]);
 
@@ -559,8 +559,8 @@ QUnit.test('move', function(assert) {
 });
 
 QUnit.test('move - not enough size in rect - move to second rect', function(assert) {
-    var title = this.createTitle().draw(),
-        spy = sinon.spy(title, 'draw');
+    const title = this.createTitle().draw();
+    const spy = sinon.spy(title, 'draw');
 
     title.move([20, 10, 50, 40], [10, 10, 100, 40]);
 

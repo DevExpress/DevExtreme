@@ -1,8 +1,8 @@
-var each = require('../../core/utils/iterator').each,
-    readyCallbacks = require('../../core/utils/ready_callbacks'),
-    domAdapter = require('../../core/dom_adapter');
+const each = require('../../core/utils/iterator').each;
+const readyCallbacks = require('../../core/utils/ready_callbacks');
+const domAdapter = require('../../core/dom_adapter');
 
-var addEventsListener = function(events, handler) {
+const addEventsListener = function(events, handler) {
     readyCallbacks.add(function() {
         events
             .split(' ')
@@ -12,14 +12,14 @@ var addEventsListener = function(events, handler) {
     });
 };
 
-var Observer = function(eventMap, pointerEquals, onPointerAdding) {
+const Observer = function(eventMap, pointerEquals, onPointerAdding) {
 
     onPointerAdding = onPointerAdding || function() { };
 
-    var pointers = [];
+    let pointers = [];
 
-    var getPointerIndex = function(e) {
-        var index = -1;
+    const getPointerIndex = function(e) {
+        let index = -1;
 
         each(pointers, function(i, pointer) {
             if(!pointerEquals(e, pointer)) {
@@ -33,21 +33,21 @@ var Observer = function(eventMap, pointerEquals, onPointerAdding) {
         return index;
     };
 
-    var addPointer = function(e) {
+    const addPointer = function(e) {
         if(getPointerIndex(e) === -1) {
             onPointerAdding(e);
             pointers.push(e);
         }
     };
 
-    var removePointer = function(e) {
-        var index = getPointerIndex(e);
+    const removePointer = function(e) {
+        const index = getPointerIndex(e);
         if(index > -1) {
             pointers.splice(index, 1);
         }
     };
 
-    var updatePointer = function(e) {
+    const updatePointer = function(e) {
         pointers[getPointerIndex(e)] = e;
     };
 

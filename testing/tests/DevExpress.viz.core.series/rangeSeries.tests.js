@@ -9,9 +9,9 @@ import { noop } from 'core/utils/common';
 const originalPoint = pointModule.Point;
 let seriesType;
 
-var createSeries = function(options, renderSettings) {
+const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    var renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
 
     options = $.extend(true, {
         containerBackgroundColor: 'containerColor',
@@ -49,7 +49,7 @@ var createSeries = function(options, renderSettings) {
     return new Series(renderSettings, options);
 };
 
-var environment = {
+const environment = {
     beforeEach: function() {
         insertMockFactory();
         this.renderer = new vizMocks.Renderer();
@@ -62,8 +62,8 @@ var environment = {
     afterEach: restoreMockFactory
 };
 
-var createPoint = function() {
-    var stub = sinon.createStubInstance(pointModule.Point);
+const createPoint = function() {
+    const stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
     stub.isInVisibleArea.returns(true);
@@ -71,13 +71,13 @@ var createPoint = function() {
     stub.getDefaultCoords.returns({ x: 0, y: 0 });
     return stub;
 };
-var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint()];
-var environmentWithSinonStubPoint = {
+const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint()];
+const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        var mockPointIndex = 0;
+        let mockPointIndex = 0;
         this.createPoint = sinon.stub(pointModule, 'Point', function(params, data) {
-            var stub = mockPoints[mockPointIndex++];
+            const stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
             stub.hasValue.returns(true);
             stub.isInVisibleArea.returns(true);
@@ -100,13 +100,13 @@ var environmentWithSinonStubPoint = {
     QUnit.module('creation', environmentWithSinonStubPoint);
 
     QUnit.test('Creation range point', function(assert) {
-        var series = createSeries({
-                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
-                    visible: false
-                }
-            }),
-            data = [{ arg: 1, val1: 3, val2: 4 }],
-            points;
+        const series = createSeries({
+            type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
+                visible: false
+            }
+        });
+        const data = [{ arg: 1, val1: 3, val2: 4 }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -135,13 +135,13 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Null values, ignoreEmptyPoints false', function(assert) {
-        var series = createSeries({
-                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
-                    visible: false
-                }
-            }),
-            data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }],
-            points;
+        const series = createSeries({
+            type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2', label: {
+                visible: false
+            }
+        });
+        const data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -158,15 +158,15 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Null values, ignoreEmptyPoints true', function(assert) {
-        var series = createSeries({
-                type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2',
-                ignoreEmptyPoints: true,
-                label: {
-                    visible: false
-                }
-            }),
-            data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }],
-            points;
+        const series = createSeries({
+            type: 'rangearea', rangeValue1Field: 'val1', rangeValue2Field: 'val2',
+            ignoreEmptyPoints: true,
+            label: {
+                visible: false
+            }
+        });
+        const data = [{ arg: 1, val1: 3, val2: 4 }, { arg: 2, val1: null, val2: null }];
+        let points;
         series.updateData(data);
         series.createPoints();
         points = series.getPoints();
@@ -182,7 +182,7 @@ var environmentWithSinonStubPoint = {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.createPoint = sinon.stub(pointModule, 'Point', function() {
-                var stub = sinon.createStubInstance(originalPoint);
+                const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
                 stub.isInVisibleArea.returns(true);
@@ -198,7 +198,7 @@ var environmentWithSinonStubPoint = {
     seriesType = 'rangebar';
 
     QUnit.test('getValueFields default', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType
         });
 
@@ -206,7 +206,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('getValueFields', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             valueField: 'customValueField',
             rangeValue1Field: 'customValue1Field',
@@ -217,7 +217,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('getArgumentField default', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType
         });
 
@@ -225,7 +225,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('getArgumentField', function(assert) {
-        var series = createSeries({
+        const series = createSeries({
             type: seriesType,
             argumentField: 'customArgumentField'
         });
@@ -341,7 +341,7 @@ var environmentWithSinonStubPoint = {
                 type: 'rangearea'
             };
             this.createPoint = sinon.stub(pointModule, 'Point', function() {
-                var stub = sinon.createStubInstance(originalPoint);
+                const stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
                 stub.isInVisibleArea.returns(true);
@@ -355,8 +355,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Argument is undefined', function(assert) {
-        var data = [{ arg: undefined, val1: 1, val2: 1 }],
-            series = createSeries(this.options);
+        const data = [{ arg: undefined, val1: 1, val2: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -365,8 +365,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Argument is null', function(assert) {
-        var data = [{ arg: null, val1: 1, val2: 1 }],
-            series = createSeries(this.options);
+        const data = [{ arg: null, val1: 1, val2: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -375,8 +375,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Value is undefined', function(assert) {
-        var data = [{ arg: 1, val1: undefined, val2: 1 }],
-            series = createSeries(this.options);
+        const data = [{ arg: 1, val1: undefined, val2: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -385,8 +385,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Value is null', function(assert) {
-        var data = [{ arg: 1, val1: null, val2: 1 }],
-            series = createSeries(this.options);
+        const data = [{ arg: 1, val1: null, val2: 1 }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -395,8 +395,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('minValue is undefined', function(assert) {
-        var data = [{ arg: 1, val1: 1, val2: undefined }],
-            series = createSeries(this.options);
+        const data = [{ arg: 1, val1: 1, val2: undefined }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -405,8 +405,8 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('minValue is null', function(assert) {
-        var data = [{ arg: 1, val1: 1, val2: null }],
-            series = createSeries(this.options);
+        const data = [{ arg: 1, val1: 1, val2: null }];
+        const series = createSeries(this.options);
 
         series.updateData(data);
         series.createPoints();
@@ -429,7 +429,7 @@ var environmentWithSinonStubPoint = {
     seriesType = 'rangearea';
 
     QUnit.test('Draw without data', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false }
         });
@@ -440,7 +440,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Draw simple data without animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             border: {
@@ -466,7 +466,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Update simple data without animation', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             border: {
                 visible: true,
@@ -499,10 +499,10 @@ var environmentWithSinonStubPoint = {
         // assert
         assert.equal(this.renderer.stub('path').callCount, 3);
 
-        var element = this.renderer.stub('path').getCall(0).returnValue,
-            elementPoints = element._stored_settings.points,
-            bottomElement = this.renderer.stub('path').getCall(2).returnValue,
-            bottomElementPoints = bottomElement._stored_settings.points;
+        let element = this.renderer.stub('path').getCall(0).returnValue;
+        let elementPoints = element._stored_settings.points;
+        const bottomElement = this.renderer.stub('path').getCall(2).returnValue;
+        const bottomElementPoints = bottomElement._stored_settings.points;
 
         assert.equal(element.stub('append').lastCall.args[0], series._bordersGroup);
         assert.equal(bottomElement.stub('append').lastCall.args[0], series._bordersGroup);
@@ -536,15 +536,15 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Draw simple data with animation', function(assert) {
-        var renderer = this.renderer,
-            series = this.createSeries({
-                type: seriesType,
-                point: { visible: false },
-                border: {
-                    visible: true,
-                    width: 1
-                }
-            });
+        const renderer = this.renderer;
+        const series = this.createSeries({
+            type: seriesType,
+            point: { visible: false },
+            border: {
+                visible: true,
+                width: 1
+            }
+        });
         series.updateData(this.data);
         series.createPoints();
         $.each(series.getPoints(), function(i, pt) {
@@ -560,10 +560,10 @@ var environmentWithSinonStubPoint = {
         // assert
         assert.equal(this.renderer.stub('path').callCount, 3);
 
-        var element = this.renderer.stub('path').getCall(0).returnValue,
-            animatePoints = element.stub('animate').lastCall.args[0].points,
-            bottomElement = this.renderer.stub('path').getCall(2).returnValue,
-            bottomAnimatePoints = bottomElement.stub('animate').lastCall.args[0].points;
+        const element = this.renderer.stub('path').getCall(0).returnValue;
+        const animatePoints = element.stub('animate').lastCall.args[0].points;
+        const bottomElement = this.renderer.stub('path').getCall(2).returnValue;
+        const bottomAnimatePoints = bottomElement.stub('animate').lastCall.args[0].points;
 
         assert.equal(animatePoints.length, 3);
         assert.equal(animatePoints[0].x, 1);
@@ -590,7 +590,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Draw data with null values. Remove segment', function(assert) {
-        var series = this.createSeries({
+        const series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             border: {
@@ -610,12 +610,12 @@ var environmentWithSinonStubPoint = {
         });
         series.draw(true);
 
-        var element1 = this.renderer.stub('path').getCall(0).returnValue,
-            element2 = this.renderer.stub('path').getCall(1).returnValue,
-            element3 = this.renderer.stub('path').getCall(2).returnValue,
-            element4 = this.renderer.stub('path').getCall(3).returnValue,
-            element5 = this.renderer.stub('path').getCall(4).returnValue,
-            element6 = this.renderer.stub('path').getCall(5).returnValue;
+        const element1 = this.renderer.stub('path').getCall(0).returnValue;
+        const element2 = this.renderer.stub('path').getCall(1).returnValue;
+        const element3 = this.renderer.stub('path').getCall(2).returnValue;
+        const element4 = this.renderer.stub('path').getCall(3).returnValue;
+        const element5 = this.renderer.stub('path').getCall(4).returnValue;
+        const element6 = this.renderer.stub('path').getCall(5).returnValue;
 
         // act
         series.updateData(this.data);
@@ -698,7 +698,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('First draw - Normal State', function(assert) {
-        var series = this.createSeries(this.options);
+        const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
 
@@ -726,7 +726,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Apply hover state', function(assert) {
-        var series = this.createSeries(this.options);
+        const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
 
@@ -753,7 +753,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Apply normal state after hover', function(assert) {
-        var series = this.createSeries(this.options);
+        const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
 
@@ -781,7 +781,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Apply selection state', function(assert) {
-        var series = this.createSeries(this.options);
+        const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
 
@@ -808,7 +808,7 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test('Select series before drawing', function(assert) {
-        var series = this.createSeries(this.options);
+        const series = this.createSeries(this.options);
         series.updateData(this.data);
         series.createPoints();
 

@@ -1,14 +1,14 @@
-var deferredUtils = require('../../core/utils/deferred'),
-    windowUtils = require('../../core/utils/window'),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
-    promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
+const deferredUtils = require('../../core/utils/deferred');
+const windowUtils = require('../../core/utils/window');
+const Deferred = deferredUtils.Deferred;
+const when = deferredUtils.when;
+let promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
 
 if(!promise) {
     // NOTE: This is an incomplete Promise polyfill but it is enough for creation purposes
 
     promise = function(resolver) {
-        var d = new Deferred();
+        const d = new Deferred();
         resolver(d.resolve.bind(this), d.reject.bind(this));
         return d.promise();
     };

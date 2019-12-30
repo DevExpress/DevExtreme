@@ -19,8 +19,8 @@ module.exports = {
     },
 
     _prepareItems: function(items) {
-        var that = this,
-            resultItems = [];
+        const that = this;
+        const resultItems = [];
 
         const cols = (items[0] || []).reduce((sum, item) => sum + that._defaultSetter(item.colspan), 0);
 

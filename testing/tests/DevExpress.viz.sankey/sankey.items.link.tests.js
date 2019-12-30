@@ -1,8 +1,8 @@
-var common = require('./commonParts/common.js'),
-    createSankey = common.createSankey,
-    environment = common.environment,
-    themeModule = require('viz/themes'),
-    find = common.find;
+const common = require('./commonParts/common.js');
+const createSankey = common.createSankey;
+const environment = common.environment;
+const themeModule = require('viz/themes');
+const find = common.find;
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -20,10 +20,10 @@ themeModule.registerTheme({
 QUnit.module('Items: links', environment);
 
 QUnit.test('Creation', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-        }),
-        links = sankey.getAllLinks();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+    });
+    const links = sankey.getAllLinks();
 
     assert.equal(links[0].connection.source, 'A');
     assert.equal(links[0].connection.target, 'Z');
@@ -58,7 +58,7 @@ QUnit.test('Normal style, border is not visible', function(assert) {
         }
     });
 
-    var base = this.link(0)[0];
+    const base = this.link(0)[0];
     assert.deepEqual(base.smartAttr.lastCall.args[0].stroke, '#ffeedd');
     assert.deepEqual(base.smartAttr.lastCall.args[0]['stroke-width'], 0);
 
@@ -67,7 +67,7 @@ QUnit.test('Normal style, border is not visible', function(assert) {
 });
 
 QUnit.test('Hover style', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         link: {
             color: '#432432',
@@ -93,7 +93,7 @@ QUnit.test('Hover style', function(assert) {
         }
     });
 
-    var overlay = this.link(1)[0], base = this.link(1)[1];
+    const overlay = this.link(1)[0]; const base = this.link(1)[1];
     assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0, 'overlay element is invisible');
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.1, 'base element is visible');
     assert.equal(base.smartAttr.lastCall.args[0].fill, '#432432');
@@ -116,11 +116,11 @@ QUnit.test('Hover style', function(assert) {
 });
 
 QUnit.test('Sankey does not fire drawn event on link hover', function(assert) {
-    var drawn = sinon.spy(),
-        sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
-            onDrawn: drawn
-        });
+    const drawn = sinon.spy();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        onDrawn: drawn
+    });
 
     drawn.reset();
 
@@ -130,34 +130,34 @@ QUnit.test('Sankey does not fire drawn event on link hover', function(assert) {
 });
 
 QUnit.test('Clear hover of item', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            link: {
-                color: '#111111',
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        link: {
+            color: '#111111',
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2
+            },
+            hoverStyle: {
                 border: {
                     visible: true,
-                    color: '#ffffff',
-                    width: 2
+                    color: '#123123',
+                    width: 3
                 },
-                hoverStyle: {
-                    border: {
-                        visible: true,
-                        color: '#123123',
-                        width: 3
-                    },
-                    hatching: {
-                        direction: 'left'
-                    }
+                hatching: {
+                    direction: 'left'
                 }
             }
-        }),
-        link = sankey.getAllLinks()[1];
+        }
+    });
+    const link = sankey.getAllLinks()[1];
 
     link.hover(true);
     link.hover(false);
 
-    var overlay = this.link(1)[0],
-        base = this.link(1)[1];
+    const overlay = this.link(1)[0];
+    const base = this.link(1)[1];
 
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0.3, 'base element visible');
     assert.equal(base.smartAttr.lastCall.args[0].fill, '#111111');
@@ -169,24 +169,24 @@ QUnit.test('Clear hover of item', function(assert) {
 });
 
 QUnit.test('Inherit border from normal style if hoverStyle.border option is not set', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            link: {
-                color: '#234234',
-                border: {
-                    visible: true,
-                    color: '#ffffff',
-                    width: 2,
-                    opacity: 0.4
-                }
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        link: {
+            color: '#234234',
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2,
+                opacity: 0.4
             }
-        }),
-        link = sankey.getAllLinks()[1];
+        }
+    });
+    const link = sankey.getAllLinks()[1];
 
     link.hover(true);
 
-    var overlay = this.link(1)[0],
-        base = this.link(1)[1];
+    const overlay = this.link(1)[0];
+    const base = this.link(1)[1];
 
     assert.equal(base.smartAttr.lastCall.args[0].opacity, 0, 'base invisible');
     assert.equal(overlay.smartAttr.lastCall.args[0].opacity, 0.5, 'overlay visible');
@@ -197,27 +197,27 @@ QUnit.test('Inherit border from normal style if hoverStyle.border option is not 
 });
 
 QUnit.test('Border for hoverStyle can be disabled', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            link: {
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        link: {
+            border: {
+                visible: true,
+                color: '#ffffff',
+                width: 2
+            },
+            hoverStyle: {
                 border: {
-                    visible: true,
-                    color: '#ffffff',
-                    width: 2
-                },
-                hoverStyle: {
-                    border: {
-                        visible: false
-                    }
+                    visible: false
                 }
             }
-        }),
-        link = sankey.getAllLinks()[1];
+        }
+    });
+    const link = sankey.getAllLinks()[1];
 
     link.hover(true);
 
-    var overlay = this.link(1)[0],
-        base = this.link(1)[1];
+    const overlay = this.link(1)[0];
+    const base = this.link(1)[1];
 
     assert.deepEqual(base.smartAttr.lastCall.args[0].opacity, 0);
     assert.deepEqual(overlay.smartAttr.lastCall.args[0].opacity, 0.5);
@@ -225,12 +225,12 @@ QUnit.test('Border for hoverStyle can be disabled', function(assert) {
 });
 
 QUnit.test('hover changed event', function(assert) {
-    var hoverChanged = sinon.spy(),
-        sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            onLinkHoverChanged: hoverChanged
-        }),
-        link = sankey.getAllLinks()[0];
+    const hoverChanged = sinon.spy();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        onLinkHoverChanged: hoverChanged
+    });
+    const link = sankey.getAllLinks()[0];
 
     link.hover(true);
 
@@ -239,12 +239,12 @@ QUnit.test('hover changed event', function(assert) {
 });
 
 QUnit.test('hover changed event after hover second item', function(assert) {
-    var hoverChanged = sinon.spy(),
-        sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            onLinkHoverChanged: hoverChanged
-        }),
-        link = sankey.getAllLinks()[0];
+    const hoverChanged = sinon.spy();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        onLinkHoverChanged: hoverChanged
+    });
+    const link = sankey.getAllLinks()[0];
 
     link.hover(true);
     hoverChanged.reset();
@@ -255,12 +255,12 @@ QUnit.test('hover changed event after hover second item', function(assert) {
 });
 
 QUnit.test('Hover item two times, hover changed event should fire only one time', function(assert) {
-    var hoverChanged = sinon.spy(),
-        sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            onLinkHoverChanged: hoverChanged
-        }),
-        link = sankey.getAllLinks()[0];
+    const hoverChanged = sinon.spy();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        onLinkHoverChanged: hoverChanged
+    });
+    const link = sankey.getAllLinks()[0];
 
     link.hover(true);
     link.hover(true);
@@ -269,12 +269,12 @@ QUnit.test('Hover item two times, hover changed event should fire only one time'
 });
 
 QUnit.test('Unhover item if it is not hovered, hover changed event shouldn\'t fire', function(assert) {
-    var hoverChanged = sinon.spy(),
-        sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            onLinkHoverChanged: hoverChanged
-        }),
-        link = sankey.getAllLinks()[0];
+    const hoverChanged = sinon.spy();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        onLinkHoverChanged: hoverChanged
+    });
+    const link = sankey.getAllLinks()[0];
 
     link.hover(false);
 
@@ -282,11 +282,11 @@ QUnit.test('Unhover item if it is not hovered, hover changed event shouldn\'t fi
 });
 
 QUnit.test('disable hover', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
-            hoverEnabled: false
-        }),
-        links = sankey.getAllLinks();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
+        hoverEnabled: false
+    });
+    const links = sankey.getAllLinks();
 
     links[0].hover(true);
 
@@ -295,10 +295,10 @@ QUnit.test('disable hover', function(assert) {
 
 
 QUnit.test('isHovered method', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
-        }),
-        links = sankey.getAllLinks();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }]
+    });
+    const links = sankey.getAllLinks();
 
     links[1].hover(true);
 
@@ -307,16 +307,16 @@ QUnit.test('isHovered method', function(assert) {
 });
 
 QUnit.test('links colorMode \'source\'', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            link: {
-                colorMode: 'source'
-            }
-        }),
-        nodes = this.nodes();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        link: {
+            colorMode: 'source'
+        }
+    });
+    const nodes = this.nodes();
 
     sankey.getAllLinks().forEach(function(linkItem) {
-        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.source; });
+        const node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.source; });
         assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
     });
 });
@@ -337,16 +337,16 @@ QUnit.test('links colorMode \'source\' with fixed color of nodes', function(asse
 });
 
 QUnit.test('links colorMode \'target\'', function(assert) {
-    var sankey = createSankey({
-            dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
-            link: {
-                colorMode: 'target'
-            }
-        }),
-        nodes = this.nodes();
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        link: {
+            colorMode: 'target'
+        }
+    });
+    const nodes = this.nodes();
 
     sankey.getAllLinks().forEach(function(linkItem) {
-        var node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.target; });
+        const node = find(nodes, function(node) { return node.attr.firstCall.args[0]._name === linkItem.connection.target; });
         assert.equal(node.smartAttr.firstCall.args[0].fill, linkItem.color);
     });
 });
@@ -367,7 +367,7 @@ QUnit.test('links colorMode \'target\' with fixed color of nodes', function(asse
 });
 
 QUnit.test('links style when adjacent node is hovered', function(assert) {
-    var sankey = createSankey({
+    const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }, { source: 'C', target: 'Z', weight: 1 }],
         node: {
             color: '#aabbcc'

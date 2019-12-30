@@ -13,15 +13,15 @@ exports.compare = function(x, y, maxLevel) {
     x = normalizeArg(x);
     y = normalizeArg(y);
 
-    var length = Math.max(x.length, y.length);
+    let length = Math.max(x.length, y.length);
 
     if(isFinite(maxLevel)) {
         length = Math.min(length, maxLevel);
     }
 
-    for(var i = 0; i < length; i++) {
-        var xItem = parseInt(x[i] || 0, 10),
-            yItem = parseInt(y[i] || 0, 10);
+    for(let i = 0; i < length; i++) {
+        const xItem = parseInt(x[i] || 0, 10);
+        const yItem = parseInt(y[i] || 0, 10);
 
         if(xItem < yItem) {
             return -1;

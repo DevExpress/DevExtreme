@@ -1,22 +1,22 @@
-var Translator1D = require('viz/translators/translator1d').Translator1D;
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var EPSILON = 1E-8;
+const EPSILON = 1E-8;
 
 QUnit.module('Translator1D');
 
 QUnit.test('Instance type', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     assert.ok(translator instanceof Translator1D);
 });
 
 QUnit.test('construction', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     assert.deepEqual(translator.getDomain(), [NaN, NaN], 'domain');
     assert.deepEqual(translator.getCodomain(), [NaN, NaN], 'codomain');
 });
 
 QUnit.test('setDomain', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
 
     translator.setDomain();
     assert.deepEqual(translator.getDomain(), [NaN, NaN], 'no arguments');
@@ -32,7 +32,7 @@ QUnit.test('setDomain', function(assert) {
 });
 
 QUnit.test('setCodomain', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
 
     translator.setCodomain();
     assert.deepEqual(translator.getCodomain(), [NaN, NaN], 'no arguments');
@@ -48,7 +48,7 @@ QUnit.test('setCodomain', function(assert) {
 });
 
 QUnit.test('State getters', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(1, 2).setCodomain(10, 20);
 
     assert.strictEqual(translator.getDomainStart(), 1, 'domain start');
@@ -60,7 +60,7 @@ QUnit.test('State getters', function(assert) {
 });
 
 QUnit.test('translate', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(0, 100).setCodomain(180, 0);
 
     assert.roughEqual(translator.translate(0), 180, EPSILON, '0');
@@ -73,7 +73,7 @@ QUnit.test('translate', function(assert) {
 });
 
 QUnit.test('translate - out of ranges', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(0, 100).setCodomain(180, 0);
 
     assert.ok(isNaN(translator.translate(-1)), '-1');
@@ -82,7 +82,7 @@ QUnit.test('translate - out of ranges', function(assert) {
 });
 
 QUnit.test('translate - not numbers', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(0, 100).setCodomain(180, 0);
 
     assert.ok(isNaN(translator.translate(undefined)), 'undefined');
@@ -92,7 +92,7 @@ QUnit.test('translate - not numbers', function(assert) {
 });
 
 QUnit.test('adjust', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(0, 100).setCodomain(180, 0);
 
     assert.strictEqual(translator.adjust(0), 0, '0');
@@ -105,7 +105,7 @@ QUnit.test('adjust', function(assert) {
 });
 
 QUnit.test('adjust - not numbers', function(assert) {
-    var translator = new Translator1D();
+    const translator = new Translator1D();
     translator.setDomain(0, 100).setCodomain(180, 0);
 
     assert.ok(isNaN(translator.adjust('A')), 'A');

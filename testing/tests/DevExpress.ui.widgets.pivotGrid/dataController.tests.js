@@ -7,11 +7,11 @@ import pivotGridUtils from 'ui/pivot_grid/ui.pivot_grid.utils';
 import PivotGridDataSource from 'ui/pivot_grid/data_source';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
-        var StateStoringController = stateStoring.StateStoringController;
+        const StateStoringController = stateStoring.StateStoringController;
 
-        var stateStoringController = sinon.createStubInstance(StateStoringController);
+        const stateStoringController = sinon.createStubInstance(StateStoringController);
         stateStoringController.init.returns(stateStoringController);
 
         sinon.stub(stateStoring, 'StateStoringController', function() {
@@ -38,35 +38,35 @@ function prepareLoadedData(data) {
 
 QUnit.module('dxPivotGrid DataController', moduleConfig);
 
-var texts = {
+const texts = {
     grandTotal: 'Grand Total',
     total: '{0} Total',
     dataNotAvailable: 'Error'
 };
 
 QUnit.test('Without options', function(assert) {
-    var dataController = new DataController({});
+    const dataController = new DataController({});
     assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
 QUnit.test('With empty fields', function(assert) {
-    var dataController = new DataController({ dataSource: { fields: [] } });
+    const dataController = new DataController({ dataSource: { fields: [] } });
     assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
 QUnit.test('No dataSource options', function(assert) {
-    var dataController = new DataController({});
+    const dataController = new DataController({});
     assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
     assert.deepEqual(dataController.getCellsInfo(), []);
 });
 
 QUnit.test('Empty dataSource', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {}
     });
     assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: 'GT', isLast: true }]]);
@@ -76,7 +76,7 @@ QUnit.test('Empty dataSource', function(assert) {
 });
 
 QUnit.test('DataSource with empty data', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -94,7 +94,7 @@ QUnit.test('DataSource with empty data', function(assert) {
 });
 
 QUnit.test('Empty dataSource when showRowGrandTotals/showColumnGrandTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {},
@@ -107,12 +107,12 @@ QUnit.test('Empty dataSource when showRowGrandTotals/showColumnGrandTotals disab
 });
 
 QUnit.test('dataSource by options disposing', function(assert) {
-    var dataController = new DataController({
-            dataSource: {}
-        }),
-        onScrollChanged = sinon.stub();
+    const dataController = new DataController({
+        dataSource: {}
+    });
+    const onScrollChanged = sinon.stub();
 
-    var dataSource = dataController.getDataSource();
+    const dataSource = dataController.getDataSource();
     dataController.scrollChanged.add(onScrollChanged);
 
     // act
@@ -127,8 +127,8 @@ QUnit.test('dataSource by options disposing', function(assert) {
 });
 
 QUnit.test('dataSource by instance disposing', function(assert) {
-    var dataSource = new PivotGridDataSource({});
-    var dataController = new DataController({
+    const dataSource = new PivotGridDataSource({});
+    const dataController = new DataController({
         dataSource: dataSource
     });
 
@@ -143,7 +143,7 @@ QUnit.test('dataSource by instance disposing', function(assert) {
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -172,7 +172,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1', function(assert) {
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' },
@@ -201,7 +201,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when used key in summary Path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['&[A]', '&[P2]'], area: 'row' },
@@ -230,7 +230,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when caption path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext', 'P2text'], area: 'row' },
@@ -259,7 +259,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('Sort local total when sortBysummary path by caption', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext'], area: 'row' },
@@ -288,7 +288,7 @@ QUnit.test('Sort local total when sortBysummary path by caption', function(asser
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when caption path and one level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['Atext'], area: 'row' },
@@ -331,7 +331,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary when key are used', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' },
@@ -360,7 +360,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summary for total', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
 
         dataSource: {
             fields: [
@@ -390,7 +390,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 and sorting by summa
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showColumnTotals: false,
 
         dataSource: {
@@ -419,7 +419,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnTotal
 });
 
 QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnGrandTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showColumnGrandTotals: false,
         dataSource: {
             fields: [
@@ -447,7 +447,7 @@ QUnit.test('columnsInfo when cells descriptions count === 1 when showColumnGrand
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showColumnGrandTotals: false,
         showRowGrandTotals: false,
 
@@ -477,7 +477,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
 
         dataSource: {
             fields: [
@@ -507,7 +507,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
@@ -552,7 +552,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level. Two data fields, dataFieldArea = row', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
@@ -600,7 +600,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field.', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
@@ -635,7 +635,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 });
 
 QUnit.test('T541266. No dublicate cells in Chrome 60', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -647,14 +647,14 @@ QUnit.test('T541266. No dublicate cells in Chrome 60', function(assert) {
         texts: texts
     });
 
-    var rowsInfo = dataController.getRowsInfo(true);
+    const rowsInfo = dataController.getRowsInfo(true);
 
     assert.equal(rowsInfo[0].length, 2);
     assert.equal(rowsInfo[5].length, 3);
 });
 
 QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field and dataFieldArea = row', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { dataField: 'sum', caption: 'Sum', format: 'fixedPoint', area: 'data', showGrandTotals: false },
@@ -703,7 +703,7 @@ QUnit.test('columnsInfo and rowsInfo without dimension fields when showGrandTota
 
 // B234872
 QUnit.test('columnsInfo with empty array children when cells descriptions count === 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' }, { area: 'column' },
@@ -730,7 +730,7 @@ QUnit.test('columnsInfo with empty array children when cells descriptions count 
 });
 
 QUnit.test('columnsInfo with two expanded items when cells descriptions count === 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -762,7 +762,7 @@ QUnit.test('columnsInfo with two expanded items when cells descriptions count ==
 });
 
 QUnit.test('columnsInfo when cells descriptions count > 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -805,7 +805,7 @@ QUnit.test('columnsInfo when cells descriptions count > 1', function(assert) {
 });
 
 QUnit.test('rowsInfo when cells descriptions count > 1. dataFieldArea is \'rowArea\'', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row', width: 100 },
@@ -835,7 +835,7 @@ QUnit.test('rowsInfo when cells descriptions count > 1. dataFieldArea is \'rowAr
 });
 
 QUnit.test('Pass wordWrapEnabled option to HeaderInfo', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row', wordWrapEnabled: true }, { area: 'row', width: 100, wordWrapEnabled: false },
@@ -955,7 +955,7 @@ QUnit.test('Pass wordWrapEnabled option to HeaderInfo', function(assert) {
 
 
 QUnit.test('columnsInfo when cells descriptions count > 1 when sorting by summary', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { sortBySummaryField: 'sum', sortBySummaryPath: ['A', 'P2'], area: 'row' }, { sortBySummaryField: 'avg', area: 'row' },
@@ -1000,7 +1000,7 @@ QUnit.test('columnsInfo when cells descriptions count > 1 when sorting by summar
 
 // B234872
 QUnit.test('columnsInfo with empty array children when cells descriptions count > 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1043,7 +1043,7 @@ QUnit.test('columnsInfo with empty array children when cells descriptions count 
 });
 
 QUnit.test('columnsInfo when no column descriptions', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { caption: 'Sum', format: 'fixedPoint', area: 'data' }
@@ -1057,31 +1057,31 @@ QUnit.test('columnsInfo when no column descriptions', function(assert) {
 });
 
 QUnit.test('columns formatting', function(assert) {
-    var customizeTextThisObjects = [],
-        column = {
-            area: 'column',
-            areaIndex: 0,
-            format: 'decimal', customizeText: function(e) {
-                customizeTextThisObjects.push(this);
-                return e.valueText + ' year';
-            },
-            caption: 'Caption'
+    const customizeTextThisObjects = [];
+    const column = {
+        area: 'column',
+        areaIndex: 0,
+        format: 'decimal', customizeText: function(e) {
+            customizeTextThisObjects.push(this);
+            return e.valueText + ' year';
         },
-        dataController = new DataController({
-            dataSource: {
-                fields: [
-                    column,
-                    { format: 'month', area: 'column' },
-                    { caption: 'Sum', format: 'fixedPoint', area: 'data' }
-                ],
+        caption: 'Caption'
+    };
+    const dataController = new DataController({
+        dataSource: {
+            fields: [
+                column,
+                { format: 'month', area: 'column' },
+                { caption: 'Sum', format: 'fixedPoint', area: 'data' }
+            ],
 
-                columns: [{
-                    value: 2009, children: [{ value: new Date(2009, 5, 11) }, { value: new Date(2009, 7, 5) }]
-                },
-                { value: 2010 }]
+            columns: [{
+                value: 2009, children: [{ value: new Date(2009, 5, 11) }, { value: new Date(2009, 7, 5) }]
             },
-            texts: texts
-        });
+            { value: 2010 }]
+        },
+        texts: texts
+    });
     assert.deepEqual(dataController.getColumnsInfo(), [
         [
             { text: '2009 year', colspan: 2, expanded: true, path: [2009], type: 'D' },
@@ -1096,13 +1096,13 @@ QUnit.test('columns formatting', function(assert) {
 
     assert.strictEqual(customizeTextThisObjects.length, 2); // TODO
 
-    var compareColumn = $.extend({ index: 0 }, column);
+    const compareColumn = $.extend({ index: 0 }, column);
     assert.deepEqual(customizeTextThisObjects[0], compareColumn);
     assert.deepEqual(customizeTextThisObjects[1], compareColumn);
 });
 
 QUnit.test('rowsInfo', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { width: 100, area: 'row' }, { area: 'row' },
@@ -1135,7 +1135,7 @@ QUnit.test('rowsInfo', function(assert) {
 });
 
 QUnit.test('rowsInfo when showRowTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: false,
         dataSource: {
             fields: [
@@ -1166,7 +1166,7 @@ QUnit.test('rowsInfo when showRowTotals disabled', function(assert) {
 });
 
 QUnit.test('rowsInfo when showRowGrandTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: false,
         dataSource: {
             fields: [
@@ -1197,7 +1197,7 @@ QUnit.test('rowsInfo when showRowGrandTotals disabled', function(assert) {
 });
 
 QUnit.test('rowsInfo when no row fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [{ area: 'data' }]
         },
@@ -1209,7 +1209,7 @@ QUnit.test('rowsInfo when no row fields', function(assert) {
 });
 
 QUnit.test('rows formatting', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row', format: 'decimal' }, { area: 'row', format: 'month' },
@@ -1234,12 +1234,12 @@ QUnit.test('rows formatting', function(assert) {
     ]);
 });
 
-var prepareCellsInfo = function(cellsInfo) {
-    var result = [],
-        rowIndex,
-        cellInfo,
-        preparedCellInfo,
-        columnIndex;
+const prepareCellsInfo = function(cellsInfo) {
+    const result = [];
+    let rowIndex;
+    let cellInfo;
+    let preparedCellInfo;
+    let columnIndex;
 
     for(rowIndex = 0; rowIndex < cellsInfo.length; rowIndex++) {
         result.push([]);
@@ -1260,7 +1260,7 @@ var prepareCellsInfo = function(cellsInfo) {
 };
 
 QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1313,7 +1313,7 @@ QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
 });
 
 QUnit.test('Get Cell info for column depth = 3', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1344,7 +1344,7 @@ QUnit.test('Get Cell info for column depth = 3', function(assert) {
 });
 
 QUnit.test('get cells info with hidden data field', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1373,7 +1373,7 @@ QUnit.test('get cells info with hidden data field', function(assert) {
 });
 
 QUnit.test('cellInfo when cells when no dataFields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1397,7 +1397,7 @@ QUnit.test('cellInfo when cells when no dataFields', function(assert) {
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1 when showTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: false,
         showColumnTotals: false,
         dataSource: {
@@ -1450,7 +1450,7 @@ QUnit.test('cellInfo when cells descriptions count === 1 when showTotals disable
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1 when showGrandTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {
@@ -1489,7 +1489,7 @@ QUnit.test('cellInfo when cells descriptions count === 1 when showGrandTotals di
 });
 
 QUnit.test('cellInfo when no columns and when showGrandTotals disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
         dataSource: {
@@ -1511,7 +1511,7 @@ QUnit.test('cellInfo when no columns and when showGrandTotals disabled', functio
 });
 
 QUnit.test('cellInfo when cells descriptions count > 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1571,7 +1571,7 @@ QUnit.test('cellInfo when cells descriptions count > 1', function(assert) {
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1, dataFieldArea = row', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataFieldArea: 'row',
         dataSource: {
             fields: [
@@ -1606,7 +1606,7 @@ QUnit.test('cellInfo when cells descriptions count === 1, dataFieldArea = row', 
 });
 
 QUnit.test('cellInfo when no column descriptions', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1627,7 +1627,7 @@ QUnit.test('cellInfo when no column descriptions', function(assert) {
 });
 
 QUnit.test('collapse column item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1651,7 +1651,7 @@ QUnit.test('collapse column item', function(assert) {
 });
 
 QUnit.test('collapse column item second level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' }, { area: 'column' },
@@ -1684,7 +1684,7 @@ QUnit.test('collapse column item second level', function(assert) {
 });
 
 QUnit.test('collapse column item for incorrect path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1702,7 +1702,7 @@ QUnit.test('collapse column item for incorrect path', function(assert) {
 });
 
 QUnit.test('collapse collapsed item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1720,7 +1720,7 @@ QUnit.test('collapse collapsed item', function(assert) {
 });
 
 QUnit.test('collapse row item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -1747,7 +1747,7 @@ QUnit.test('collapse row item', function(assert) {
 });
 
 QUnit.test('expand collapsed column item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1780,7 +1780,7 @@ QUnit.test('expand collapsed column item', function(assert) {
 });
 
 QUnit.test('expand not collapsed column item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' }, { area: 'column' },
@@ -1800,7 +1800,7 @@ QUnit.test('expand not collapsed column item', function(assert) {
 });
 
 QUnit.test('apply partial dataController with columns path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1833,7 +1833,7 @@ QUnit.test('apply partial dataController with columns path', function(assert) {
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1847,7 +1847,7 @@ QUnit.test('apply partial dataController with columns path', function(assert) {
 });
 
 QUnit.test('Apply partial dataController with empty data. Update columns', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -1878,7 +1878,7 @@ QUnit.test('Apply partial dataController with empty data. Update columns', funct
         { value: 'C', index: 3, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1892,7 +1892,7 @@ QUnit.test('Apply partial dataController with empty data. Update columns', funct
 });
 
 QUnit.test('Apply partial dataController with empty data. Update rows', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -1925,7 +1925,7 @@ QUnit.test('Apply partial dataController with empty data. Update rows', function
         { value: 'Vasya', index: 0 }, { value: 'Piter', index: 1, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -1940,7 +1940,7 @@ QUnit.test('Apply partial dataController with empty data. Update rows', function
 
 // T737140
 QUnit.test('Apply partial dataController by rows after column collapsing', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -1988,7 +1988,7 @@ QUnit.test('Apply partial dataController by rows after column collapsing', funct
         { value: 'C', index: 3 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -2003,7 +2003,7 @@ QUnit.test('Apply partial dataController by rows after column collapsing', funct
 });
 
 QUnit.test('Apply partial dataController with empty data. Update Rows', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -2033,7 +2033,7 @@ QUnit.test('Apply partial dataController with empty data. Update Rows', function
         { value: 'Vasya', index: 0, children: [] }, { value: 'Piter', index: 1 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell && cell.text;
@@ -2048,7 +2048,7 @@ QUnit.test('Apply partial dataController with empty data. Update Rows', function
 
 // B234872
 QUnit.test('apply partial dataController with empty data', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -2081,7 +2081,7 @@ QUnit.test('apply partial dataController with empty data', function(assert) {
         { value: 'C', index: 3, children: [] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2096,7 +2096,7 @@ QUnit.test('apply partial dataController with empty data', function(assert) {
 
 // B234219
 QUnit.test('collapse column after apply partial dataController with column path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -2131,7 +2131,7 @@ QUnit.test('collapse column after apply partial dataController with column path'
         { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: 'P3' }, { value: 'P4', index: 6, text: 'P4' }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2145,7 +2145,7 @@ QUnit.test('collapse column after apply partial dataController with column path'
 });
 
 QUnit.test('apply partial dataController with columns path, removed row item', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -2179,7 +2179,7 @@ QUnit.test('apply partial dataController with columns path, removed row item', f
 
     assert.deepEqual(prepareLoadedData(dataController.getData().rows), [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2193,7 +2193,7 @@ QUnit.test('apply partial dataController with columns path, removed row item', f
 });
 
 QUnit.test('apply partial dataController with columns path length 2', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -2227,7 +2227,7 @@ QUnit.test('apply partial dataController with columns path length 2', function(a
         { value: 'C', index: 3 }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2241,7 +2241,7 @@ QUnit.test('apply partial dataController with columns path length 2', function(a
 });
 
 QUnit.test('apply partial dataController with rows path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -2276,7 +2276,7 @@ QUnit.test('apply partial dataController with rows path', function(assert) {
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2295,7 +2295,7 @@ QUnit.test('apply partial dataController with rows path', function(assert) {
 
 // B234219
 QUnit.test('collapse row after apply partial dataController with rows path', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -2330,7 +2330,7 @@ QUnit.test('collapse row after apply partial dataController with rows path', fun
         { value: 'C', index: 3, collapsedChildren: [{ value: 'P3', index: 5, text: 'P3' }, { value: 'P4', index: 6, text: 'P4' }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2347,7 +2347,7 @@ QUnit.test('collapse row after apply partial dataController with rows path', fun
 
 // B232736
 QUnit.test('lost cells after several collapse/expand/applyPartialDataSource', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -2389,7 +2389,7 @@ QUnit.test('lost cells after several collapse/expand/applyPartialDataSource', fu
         { value: 'C', index: 1, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2407,7 +2407,7 @@ QUnit.test('lost cells after several collapse/expand/applyPartialDataSource', fu
 });
 
 QUnit.test('apply partial dataController with rows path when no column descriptions', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' }, { area: 'row' },
@@ -2439,7 +2439,7 @@ QUnit.test('apply partial dataController with rows path when no column descripti
         { value: 'C', index: 3, children: [{ value: 'P3', index: 5 }, { value: 'P4', index: 6 }] }
     ]);
 
-    var cells = [];
+    const cells = [];
     $.each(dataController.getCellsInfo(), function() {
         cells.push($.map(this, function(cell) {
             return cell ? cell.text : '';
@@ -2458,7 +2458,7 @@ QUnit.test('apply partial dataController with rows path when no column descripti
 
 // Q561802
 QUnit.test('Header item text for an item with displayText equal to empty string', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column', caption: 'column' },
@@ -2476,7 +2476,7 @@ QUnit.test('Header item text for an item with displayText equal to empty string'
 });
 
 QUnit.test('update options', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -2516,7 +2516,7 @@ QUnit.test('update options', function(assert) {
 });
 
 QUnit.test('Hide empty columns in a single group', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -2632,7 +2632,7 @@ QUnit.test('Hide empty columns in a single group', function(assert) {
 });
 
 QUnit.test('Hide empty columns in a single group isEmpty field is array', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -2748,7 +2748,7 @@ QUnit.test('Hide empty columns in a single group isEmpty field is array', functi
 });
 
 QUnit.test('Hide empty rows in a single group', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -2875,7 +2875,7 @@ QUnit.test('Hide empty rows in a single group', function(assert) {
 });
 
 QUnit.test('Hide empty columns in different groups', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -2992,7 +2992,7 @@ QUnit.test('Hide empty columns in different groups', function(assert) {
 });
 
 QUnit.test('Not hide empty columns', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showEmptyColumns: false,
         dataSource: {
             fields: [
@@ -3019,7 +3019,7 @@ QUnit.test('Not hide empty columns', function(assert) {
 });
 
 QUnit.test('Not hide empty rows', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: false,
         dataSource: {
             fields: [
@@ -3048,7 +3048,7 @@ QUnit.test('Not hide empty rows', function(assert) {
 });
 
 QUnit.test('Hide all children items', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -3166,7 +3166,7 @@ QUnit.test('Hide all children items', function(assert) {
 });
 
 QUnit.test('Hide totals on data field level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
@@ -3195,7 +3195,7 @@ QUnit.test('Hide totals on data field level', function(assert) {
 });
 
 QUnit.test('Hide values on data column field level when showTotals is true. Two fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
@@ -3229,7 +3229,7 @@ QUnit.test('Hide values on data column field level when showTotals is true. Two 
 });
 
 QUnit.test('Hide totals on data column field level when showValues is true. Two fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
@@ -3267,7 +3267,7 @@ QUnit.test('Hide totals on data column field level when showValues is true. Two 
 });
 
 QUnit.test('Hide values on data column field level when showTotals is true. One data field', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
@@ -3295,7 +3295,7 @@ QUnit.test('Hide values on data column field level when showTotals is true. One 
 });
 
 QUnit.test('Not hide row with not empty second cell', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         hideEmptySummaryCells: true,
         dataSource: {
             fields: [
@@ -3349,7 +3349,7 @@ QUnit.test('Not hide row with not empty second cell', function(assert) {
 
 
 QUnit.test('Hide totals on data column field level when showValues is true. One data field', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowTotals: true,
         showColumnTotals: true,
         dataSource: {
@@ -3379,7 +3379,7 @@ QUnit.test('Hide totals on data column field level when showValues is true. One 
 });
 
 QUnit.test('Hide GrandTotals on data field level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: true,
         showColumnGrandTotals: true,
         dataSource: {
@@ -3418,7 +3418,7 @@ QUnit.test('Hide GrandTotals on data field level', function(assert) {
 });
 
 QUnit.test('hide grand totals on field level when two data fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showRowGrandTotals: true,
         showColumnGrandTotals: true,
         showRowTotals: true,
@@ -3486,7 +3486,7 @@ QUnit.test('hide grand totals on field level when two data fields', function(ass
 });
 
 QUnit.test('Hide totals on data column header field level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -3541,7 +3541,7 @@ QUnit.test('Hide totals on data column header field level', function(assert) {
 });
 
 QUnit.test('Hide totals when showColumnsTotals is false and showTotal is true for header field', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showColumnTotals: false,
         dataSource: {
             fields: [
@@ -3597,7 +3597,7 @@ QUnit.test('Hide totals when showColumnsTotals is false and showTotal is true fo
 });
 
 QUnit.test('Hide totals on data row header field level', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -3660,7 +3660,7 @@ QUnit.test('Hide totals on data row header field level', function(assert) {
 
 // T504918
 QUnit.test('Format cell with error value', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'column', caption: 'column' },
@@ -3678,7 +3678,7 @@ QUnit.test('Format cell with error value', function(assert) {
 });
 
 QUnit.test('T492326. Not set colspan in rowInfo item if all values and totals are hidden', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -3724,7 +3724,7 @@ QUnit.test('T492326. Not set colspan in rowInfo item if all values and totals ar
 QUnit.module('Showing total on the top', moduleConfig);
 
 QUnit.test('Get header info. Show column totals near', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'columns',
         dataSource: {
             fields: [
@@ -3780,7 +3780,7 @@ QUnit.test('Get header info. Show column totals near', function(assert) {
 });
 
 QUnit.test('Get header info. Show row totals near', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'rows',
         dataSource: {
             fields: [
@@ -3837,7 +3837,7 @@ QUnit.test('Get header info. Show row totals near', function(assert) {
 });
 
 QUnit.test('Get header info. Show all totals near', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'both',
         dataSource: {
             fields: [
@@ -3894,7 +3894,7 @@ QUnit.test('Get header info. Show all totals near', function(assert) {
 });
 
 QUnit.test('Get header info with near total and two level expanded', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'columns',
         dataSource: {
             fields: [
@@ -3934,7 +3934,7 @@ QUnit.test('Get header info with near total and two level expanded', function(as
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'both',
         dataSource: {
             fields: [
@@ -3978,7 +3978,7 @@ QUnit.test('cellInfo when cells descriptions count === 1', function(assert) {
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1. Show only row totals near', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'rows',
         dataSource: {
             fields: [
@@ -4024,7 +4024,7 @@ QUnit.test('cellInfo when cells descriptions count === 1. Show only row totals n
 });
 
 QUnit.test('cellInfo when cells descriptions count === 1. Show only column totals near', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'columns',
         dataSource: {
             fields: [
@@ -4070,7 +4070,7 @@ QUnit.test('cellInfo when cells descriptions count === 1. Show only column total
 });
 
 QUnit.test('Hide empty columns in different groups', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         showTotalsPrior: 'columns',
         hideEmptySummaryCells: true,
         dataSource: {
@@ -4191,7 +4191,7 @@ QUnit.test('Hide empty columns in different groups', function(assert) {
 QUnit.module('Tree-Like row layout', moduleConfig);
 
 QUnit.test('get Rows info', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         rowHeaderLayout: 'tree',
         dataSource: {
             fields: [
@@ -4223,7 +4223,7 @@ QUnit.test('get Rows info', function(assert) {
 });
 
 QUnit.test('get Rows info. with data fields', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         rowHeaderLayout: 'tree',
         dataFieldArea: 'row',
         dataSource: {
@@ -4280,7 +4280,7 @@ QUnit.test('get Rows info. with data fields', function(assert) {
 });
 
 QUnit.test('get Rows info. Totals are Disabled', function(assert) {
-    var dataController = new DataController({
+    const dataController = new DataController({
         rowHeaderLayout: 'tree',
         showRowTotals: false,
         showRowGrandTotals: false,
@@ -4368,7 +4368,7 @@ QUnit.module('Virtual scrolling', {
                 ]
             }];
 
-        var VirtualScrollController = virtualScrolling.VirtualScrollController;
+        const VirtualScrollController = virtualScrolling.VirtualScrollController;
 
         this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController', function() {
             return sinon.createStubInstance(VirtualScrollController);
@@ -4393,7 +4393,7 @@ QUnit.module('Virtual scrolling', {
 });
 
 QUnit.test('create dataController with virtual scrollController when scrolling is virtual', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         fields: [
             { area: 'row' },
             { area: 'column' }, { area: 'column' },
@@ -4425,10 +4425,10 @@ QUnit.test('create dataController with virtual scrollController when scrolling i
 });
 
 QUnit.test('Calculate virtual content params', function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        scrollChanged = sinon.stub();
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const scrollChanged = sinon.stub();
 
     dataController.scrollChanged.add(scrollChanged);
 
@@ -4443,10 +4443,10 @@ QUnit.test('Calculate virtual content params', function(assert) {
     columnsScrollController.getViewportPosition.returns(400);
     rowsScrollController.getViewportPosition.returns(500);
 
-    var itemWidths = [100, 100, 100, 100, 100, 100];
-    var itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
+    const itemWidths = [100, 100, 100, 100, 100, 100];
+    const itemHeights = [100, 100, 100, 100, 100, 100, 100, 100];
     // act
-    var result = dataController.calculateVirtualContentParams({
+    const result = dataController.calculateVirtualContentParams({
         virtualRowHeight: 40,
         virtualColumnWidth: 15,
         itemWidths: itemWidths,
@@ -4490,9 +4490,9 @@ QUnit.test('Calculate virtual content params', function(assert) {
 });
 
 QUnit.test('setViewPortPosition', function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
     // act
     dataController.setViewportPosition(20, 100);
@@ -4512,10 +4512,10 @@ QUnit.test('setViewPortPosition', function(assert) {
 });
 
 QUnit.test('subscribeToWindowScrollEvents', function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        testElement = $('<div>');
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const testElement = $('<div>');
 
     // act
     dataController.subscribeToWindowScrollEvents(testElement);
@@ -4527,9 +4527,9 @@ QUnit.test('subscribeToWindowScrollEvents', function(assert) {
 });
 
 QUnit.test('updateWindowScrollPosition', function(assert) {
-    var dataController = new DataController(this.getOptions({})),
-        rowsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const dataController = new DataController(this.getOptions({}));
+    const rowsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsScrollController = this.VirtualScrollController.secondCall.returnValue;
 
     // act
     dataController.updateWindowScrollPosition(145);
@@ -4541,33 +4541,33 @@ QUnit.test('updateWindowScrollPosition', function(assert) {
 });
 
 QUnit.test('dataAdapter for columnsScrollController', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' }, { area: 'column' },
-                    { caption: 'Sum', format: 'decimal', area: 'data' }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataSourceChanged = sinon.stub();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataSourceChanged = sinon.stub();
 
     dataController.changed.add(changed);
     dataController.dataSourceChanged.add(dataSourceChanged);
 
-    var dataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const dataAdapter = this.VirtualScrollController.secondCall.args[1];
 
     dataController.columnPageSize(2);
     dataController.rowPageSize(3);
@@ -4598,24 +4598,24 @@ QUnit.test('dataAdapter for columnsScrollController', function(assert) {
 
 
 QUnit.test('dataSourceChanged should fired only on data change', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }],
-                columns: [
-                    { value: 'A', index: 0 },
-                    { value: 'C', index: 3 }
-                ],
-                values: [
-                    [1, 6, 7],
-                    [1, 6, 7]
-                ]
-            }
-        })),
-        dataSourceChanged = sinon.stub();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }],
+            columns: [
+                { value: 'A', index: 0 },
+                { value: 'C', index: 3 }
+            ],
+            values: [
+                [1, 6, 7],
+                [1, 6, 7]
+            ]
+        }
+    }));
+    const dataSourceChanged = sinon.stub();
 
     dataController.dataSourceChanged.add(dataSourceChanged);
 
@@ -4624,29 +4624,29 @@ QUnit.test('dataSourceChanged should fired only on data change', function(assert
 });
 
 QUnit.test('dataAdapter for columnsScrollController. Load when rowPageIndex greater then pagecount', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' }, { area: 'column' },
-                    { caption: 'Sum', format: 'decimal', area: 'data' }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.secondCall.args[1],
-        scrollController = this.VirtualScrollController.secondCall.returnValue;
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const scrollController = this.VirtualScrollController.secondCall.returnValue;
 
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
@@ -4661,28 +4661,28 @@ QUnit.test('dataAdapter for columnsScrollController. Load when rowPageIndex grea
 });
 
 QUnit.test('dataAdapter for rowsScrollController', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' }, { area: 'column' },
-                    { caption: 'Sum', format: 'decimal', area: 'data' }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.firstCall.args[1];
 
     dataController.changed.add(changed);
     dataController.rowPageSize(2);
@@ -4710,29 +4710,29 @@ QUnit.test('dataAdapter for rowsScrollController', function(assert) {
 });
 
 QUnit.test('dataAdapter for rowsScrollController. Load when rowPageIndex greater then pagecount', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'row' },
-                    { area: 'column' }, { area: 'column' },
-                    { caption: 'Sum', format: 'decimal', area: 'data' }
-                ],
-                rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
-                columns: [{
-                    value: 'A', index: 0,
-                    children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
-                },
-                { value: 'C', index: 3 }],
-                values: [
-                    [1, 2, 3, 6, 12],
-                    [2, 3, 4, 9, 18],
-                    [3, 5, 7, 15, 30]
-                ]
-            }
-        })),
-        changed = sinon.stub(),
-        dataAdapter = this.VirtualScrollController.firstCall.args[1],
-        scrollController = this.VirtualScrollController.firstCall.returnValue;
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'row' },
+                { area: 'column' }, { area: 'column' },
+                { caption: 'Sum', format: 'decimal', area: 'data' }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [{
+                value: 'A', index: 0,
+                children: [{ value: 'P1', index: 1 }, { value: 'P2', index: 2 }]
+            },
+            { value: 'C', index: 3 }],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    }));
+    const changed = sinon.stub();
+    const dataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const scrollController = this.VirtualScrollController.firstCall.returnValue;
 
     dataController.changed.add(changed);
     scrollController.pageIndex.returns(10);
@@ -4747,7 +4747,7 @@ QUnit.test('dataAdapter for rowsScrollController. Load when rowPageIndex greater
 });
 
 QUnit.test('Dispose DataController', function(assert) {
-    var dataController = new DataController(this.getOptions());
+    const dataController = new DataController(this.getOptions());
 
     dataController.dispose();
 
@@ -4756,7 +4756,7 @@ QUnit.test('Dispose DataController', function(assert) {
 });
 
 QUnit.test('Paging methods. Get/set', function(assert) {
-    var dataController = new DataController({});
+    const dataController = new DataController({});
 
     assert.strictEqual(dataController.rowPageSize(), 20, 'get default row page size');
     assert.strictEqual(dataController.rowPageSize(100), 100, 'set row page size');
@@ -4778,7 +4778,7 @@ QUnit.test('Paging methods. Get/set', function(assert) {
 });
 
 QUnit.test('Get data by pageIndex, pageSize, pageCount. Rows', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -4956,7 +4956,7 @@ QUnit.test('T318502. Get rows info with three level expanded items', function(as
         value: 'Black'
     }];
 
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -5187,7 +5187,7 @@ QUnit.test('Get data by pageIndex, pageSize, pageCount. Rows first level when th
     this.data[2].children = null;
     this.data[3].children = null;
 
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -5244,18 +5244,18 @@ QUnit.test('Get data by pageIndex, pageSize, pageCount. Rows first level when th
 });
 
 QUnit.test('Get data by pageIndex, pageSize, pageCount. Columns', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
+    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(1);
@@ -5441,7 +5441,7 @@ QUnit.test('Get data by pageIndex, pageSize, pageCount. Columns', function(asser
 });
 
 QUnit.test('T522627. Columns info. Second row not in the visible pages', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -5468,25 +5468,25 @@ QUnit.test('T522627. Columns info. Second row not in the visible pages', functio
     dataController._columnsScrollController.beginPageIndex.returns(0);
     dataController._columnsScrollController.endPageIndex.returns(0);
 
-    var columnsInfo = dataController.getColumnsInfo();
+    const columnsInfo = dataController.getColumnsInfo();
 
     assert.strictEqual(columnsInfo.length, 3);
     assert.deepEqual(columnsInfo[1], []);
 });
 
 QUnit.test('Get page start with begin of header element. Columns', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
+    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
@@ -5516,18 +5516,18 @@ QUnit.test('Get page start with begin of header element. Columns', function(asse
 });
 
 QUnit.test('Get all data when paging. Columns', function(assert) {
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            },
-            texts: texts
-        })),
-        columnsInfo;
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        },
+        texts: texts
+    }));
+    let columnsInfo;
 
     dataController.columnPageSize(2);
     dataController._columnsScrollController.beginPageIndex.returns(4);
@@ -5540,7 +5540,7 @@ QUnit.test('Get all data when paging. Columns', function(assert) {
 });
 
 QUnit.test('Get all data when paging. Rows', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -5556,13 +5556,13 @@ QUnit.test('Get all data when paging. Rows', function(assert) {
     dataController._rowsScrollController.beginPageIndex.returns(1);
     dataController._rowsScrollController.endPageIndex.returns(2);
 
-    var rowsInfo = dataController.getRowsInfo(true);
+    const rowsInfo = dataController.getRowsInfo(true);
 
     assert.strictEqual(rowsInfo.length, 38);
 });
 
 QUnit.test('get cells info', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -5631,7 +5631,7 @@ QUnit.test('get cells info', function(assert) {
 });
 
 QUnit.test('Get total count cells. Rows with data and empty columns', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'row' },
@@ -5648,7 +5648,7 @@ QUnit.test('Get total count cells. Rows with data and empty columns', function(a
 });
 
 QUnit.test('Get total count cells. columns with data and empty rows', function(assert) {
-    var dataController = new DataController(this.getOptions({
+    const dataController = new DataController(this.getOptions({
         dataSource: {
             fields: [
                 { area: 'column' },
@@ -5665,30 +5665,30 @@ QUnit.test('Get total count cells. columns with data and empty rows', function(a
 });
 
 QUnit.test('Can get changingTime. after load columnsScrollController', function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController.changed.add(function() {
         clock.tick(377);
     });
 
-    var columnsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const columnsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
     columnsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = columnsDataAdapter.load(),
-        handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = columnsDataAdapter.load();
+    const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
@@ -5703,18 +5703,18 @@ QUnit.test('Can get changingTime. after load columnsScrollController', function(
 });
 
 QUnit.test('changingDuration if paginate', function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                paginate: true,
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            paginate: true,
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController._dataSource.paginate = function() {
         return true;
@@ -5724,14 +5724,14 @@ QUnit.test('changingDuration if paginate', function(assert) {
         clock.tick(377);
     });
 
-    var columnsScrollController = this.VirtualScrollController.firstCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const columnsScrollController = this.VirtualScrollController.firstCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
     columnsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = columnsDataAdapter.load(),
-        handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = columnsDataAdapter.load();
+    const handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
@@ -5746,30 +5746,30 @@ QUnit.test('changingDuration if paginate', function(assert) {
 });
 
 QUnit.test('Can get changingTime. after load rowsScrollController', function(assert) {
-    var clock = sinon.useFakeTimers(),
-        dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        }));
+    const clock = sinon.useFakeTimers();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
 
     dataController.changed.add(function() {
         clock.tick(377);
     });
 
-    var rowsScrollController = this.VirtualScrollController.secondCall.returnValue,
-        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
-        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+    const rowsScrollController = this.VirtualScrollController.secondCall.returnValue;
+    const columnsDataAdapter = this.VirtualScrollController.firstCall.args[1];
+    const rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
 
     rowsScrollController.handleDataChanged.returns('handleChangedResult');
 
-    var loadResult = rowsDataAdapter.load(),
-        handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
+    const loadResult = rowsDataAdapter.load();
+    const handleDataChangedArg = rowsScrollController.handleDataChanged.lastCall.args[0];
 
     // act
     handleDataChangedArg();
@@ -5787,17 +5787,17 @@ QUnit.test('Can get changingTime. after load rowsScrollController', function(ass
 QUnit.test('T327502. DataController changed once on update', function(assert) {
     this.VirtualScrollController.restore();
 
-    var dataController = new DataController(this.getOptions({
-            dataSource: {
-                fields: [
-                    { area: 'column' },
-                    { area: 'column' },
-                    { area: 'data', caption: 'Sum', format: 'fixedPoint' }
-                ],
-                columns: this.data
-            }
-        })),
-        changedCallback = sinon.stub();
+    const dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: 'column' },
+                { area: 'column' },
+                { area: 'data', caption: 'Sum', format: 'fixedPoint' }
+            ],
+            columns: this.data
+        }
+    }));
+    const changedCallback = sinon.stub();
 
     dataController.changed.add(changedCallback);
     // act
@@ -5866,7 +5866,7 @@ QUnit.module('StateStoring', {
     });
 
     QUnit.test('Load dataController when stateStoring isEnabled', function(assert) {
-        var dataController = new DataController({
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5906,7 +5906,7 @@ QUnit.module('StateStoring', {
     QUnit.test('Load dataController when stateStoring is disabled', function(assert) {
         this.stateStoringController.isEnabled.returns(false);
 
-        var dataController = new DataController({
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5927,7 +5927,7 @@ QUnit.module('StateStoring', {
         this.stateStoringController.isEnabled.returns(false);
         this.stateStoringController.load.returns($.Deferred().resolve(undefined));
 
-        var dataController = new DataController({
+        const dataController = new DataController({
             component: this.component,
             dataSource: {
                 fields: [{}]
@@ -5986,11 +5986,11 @@ QUnit.module('StateStoring', {
 
 QUnit.module('Remote paging', {
     beforeEach: function() {
-        var createItems = function(count, prefix, skip, take, desc) {
-            var items = [];
+        const createItems = function(count, prefix, skip, take, desc) {
+            const items = [];
 
-            for(var i = 0; i < count; i++) {
-                var value = prefix + (desc ? count - i : i + 1);
+            for(let i = 0; i < count; i++) {
+                const value = prefix + (desc ? count - i : i + 1);
 
                 if((skip && i < skip) || (take && i >= skip + take)) {
                     items.push({});
@@ -6005,22 +6005,22 @@ QUnit.module('Remote paging', {
             return items;
         };
 
-        var createValues = function(loadOptions, columnCount) {
-            var result = [];
-            for(var rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
-                var row = [];
+        const createValues = function(loadOptions, columnCount) {
+            const result = [];
+            for(let rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
+                const row = [];
                 result.push(row);
-                for(var columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
+                for(let columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
                     row.push([ rowIndex * 10 + columnIndex ]);
                 }
             }
             return result;
         };
 
-        var that = this;
+        const that = this;
         this.loadArgs = [];
 
-        var MockStore = Class.inherit({
+        const MockStore = Class.inherit({
             ctor: function(options) {
                 this._rowCount = options.rowCount;
                 this._columnCount = options.columnCount;
@@ -6033,8 +6033,8 @@ QUnit.module('Remote paging', {
             },
             load: function(loadOptions) {
                 that.loadArgs.push(loadOptions);
-                var rowCount = loadOptions.rows.length ? this._rowCount : 0;
-                var columnCount = loadOptions.columns.length ? this._columnCount : 0;
+                const rowCount = loadOptions.rows.length ? this._rowCount : 0;
+                const columnCount = loadOptions.columns.length ? this._columnCount : 0;
 
                 return $.Deferred().resolve({
                     rows: createItems(rowCount, 'row ', loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === 'desc'),
@@ -6080,7 +6080,7 @@ QUnit.module('Remote paging', {
         };
 
         this.setup = function(dataSourceOptions) {
-            var dataController = new DataController(this.getOptions({
+            const dataController = new DataController(this.getOptions({
                 dataSource: dataSourceOptions || this.createDataSource(),
                 texts: texts
             }));
@@ -6105,7 +6105,7 @@ QUnit.module('Remote paging', {
 });
 
 QUnit.test('first load', function(assert) {
-    var dataController = this.setup();
+    const dataController = this.setup();
 
     assert.strictEqual(this.loadArgs.length, 1, 'one load');
     assert.strictEqual(this.loadArgs[0].rows.length, 1, 'load args rows');
@@ -6138,7 +6138,7 @@ QUnit.test('first load', function(assert) {
 });
 
 QUnit.test('expanded field option should be ignored', function(assert) {
-    var dataController = this.setup({
+    const dataController = this.setup({
         paginate: true,
         store: new this.MockStore({
             rowCount: 10,
@@ -6172,7 +6172,7 @@ QUnit.test('expanded field option should be ignored', function(assert) {
 });
 
 QUnit.test('load after scroll', function(assert) {
-    var dataController = this.setup();
+    const dataController = this.setup();
 
     this.loadArgs = [];
 
@@ -6202,7 +6202,7 @@ QUnit.test('load after scroll', function(assert) {
 });
 
 QUnit.test('load from cache after scroll and return scroll', function(assert) {
-    var dataController = this.setup();
+    const dataController = this.setup();
 
     dataController.setViewportPosition(0, 0);
     dataController.setViewportPosition(0, 8 * 20);
@@ -6227,7 +6227,7 @@ QUnit.test('load from cache after scroll and return scroll', function(assert) {
 });
 
 QUnit.test('change sort order', function(assert) {
-    var dataController = this.setup();
+    const dataController = this.setup();
 
     this.loadArgs = [];
 
@@ -6254,7 +6254,7 @@ QUnit.test('change sort order', function(assert) {
 });
 
 QUnit.test('expand row', function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     this.loadArgs = [];
     dataController.expandHeaderItem('row', ['row 1']);
@@ -6280,7 +6280,7 @@ QUnit.test('expand row', function(assert) {
 });
 
 QUnit.test('reload after expand row', function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 1));
+    const dataController = this.setup(this.createDataSource(2, 1));
 
     dataController.expandHeaderItem('row', ['row 1']);
 
@@ -6311,7 +6311,7 @@ QUnit.test('reload after expand row', function(assert) {
 });
 
 QUnit.test('expand column', function(assert) {
-    var dataController = this.setup(this.createDataSource(0, 2));
+    const dataController = this.setup(this.createDataSource(0, 2));
 
     this.loadArgs = [];
     dataController.expandHeaderItem('column', ['column 1']);
@@ -6337,7 +6337,7 @@ QUnit.test('expand column', function(assert) {
 });
 
 QUnit.test('collapse row', function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 1']);
 
@@ -6353,7 +6353,7 @@ QUnit.test('collapse row', function(assert) {
 });
 
 QUnit.test('expand several rows and columns', function(assert) {
-    var dataController = this.setup({
+    const dataController = this.setup({
         paginate: true,
         store: new this.MockStore({
             rowCount: 10,
@@ -6496,12 +6496,12 @@ QUnit.test('expand several rows and columns', function(assert) {
 });
 
 QUnit.test('scroll after expand row', function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 4 * 20);
@@ -6528,12 +6528,12 @@ QUnit.test('scroll after expand row', function(assert) {
 });
 
 QUnit.test('scroll by columns after expand column', function(assert) {
-    var dataController = this.setup(this.createDataSource(0, 2));
+    const dataController = this.setup(this.createDataSource(0, 2));
 
     dataController.expandHeaderItem('column', ['column 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(4 * 20, 0);
@@ -6560,12 +6560,12 @@ QUnit.test('scroll by columns after expand column', function(assert) {
 });
 
 QUnit.test('scroll by rows after expand column', function(assert) {
-    var dataController = this.setup(this.createDataSource(1, 2));
+    const dataController = this.setup(this.createDataSource(1, 2));
 
     dataController.expandHeaderItem('column', ['column 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 4 * 20);
@@ -6599,12 +6599,12 @@ QUnit.test('scroll by rows after expand column', function(assert) {
 });
 
 QUnit.test('scroll to end of expanded row', function(assert) {
-    var dataController = this.setup(this.createDataSource(2, 0));
+    const dataController = this.setup(this.createDataSource(2, 0));
 
     dataController.expandHeaderItem('row', ['row 2']);
 
     this.loadArgs = [];
-    var changedSpy = sinon.spy();
+    const changedSpy = sinon.spy();
     dataController.changed.add(changedSpy);
 
     dataController.setViewportPosition(0, 10 * 20);
@@ -6634,9 +6634,9 @@ QUnit.test('scroll to end of expanded row', function(assert) {
 });
 
 QUnit.skip('load with CustomStore', function(assert) {
-    var that = this;
+    const that = this;
 
-    var dataController = that.setup({
+    const dataController = that.setup({
         paginate: true,
         fields: [{ dataField: 'row', area: 'row' }],
         load: function(loadOptions) {

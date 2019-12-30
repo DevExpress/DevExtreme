@@ -1,14 +1,14 @@
 /* global currentTest */
 
-var vizMocks = require('../../helpers/vizMocks.js'),
-    circularIndicatorsModule = require('viz/gauges/circular_indicators'),
-    Translator1D = require('viz/translators/translator1d').Translator1D;
+const vizMocks = require('../../helpers/vizMocks.js');
+const circularIndicatorsModule = require('viz/gauges/circular_indicators');
+const Translator1D = require('viz/translators/translator1d').Translator1D;
 
-var rangeBar,
-    renderer,
-    tracker,
-    owner,
-    options;
+let rangeBar;
+let renderer;
+let tracker;
+let owner;
+let options;
 
 QUnit.module('CircularRangeBar', {
     beforeEach: function() {
@@ -18,7 +18,7 @@ QUnit.module('CircularRangeBar', {
             attach: function(arg) { this.attached = arg; },
             detach: function(arg) { this.detached = arg; }
         };
-        var translator = new Translator1D(0, 100, 180, 0);
+        const translator = new Translator1D(0, 100, 180, 0);
         rangeBar = new circularIndicatorsModule['rangebar']({ renderer: renderer, translator: translator, owner: owner, tracker: tracker, className: 'root-class' });
         this.layout = {
             x: 200,
@@ -44,9 +44,9 @@ QUnit.module('CircularRangeBar', {
             baseValue: 50,
             currentValue: 25
         };
-        var baseCreateText = renderer.stub('text');
+        const baseCreateText = renderer.stub('text');
         renderer.text = sinon.spy(function() {
-            var text = baseCreateText.apply(this, arguments);
+            const text = baseCreateText.apply(this, arguments);
             text.getBBox = sinon.spy(function() { return { x: -20, y: -10, width: 40, height: 16 }; });
             return text;
         });
@@ -246,7 +246,7 @@ QUnit.test('not valid radius (not rendered)', function(assert) {
 
 QUnit.test('getTooltipParameters', function(assert) {
     render();
-    var parameters = rangeBar.getTooltipParameters();
+    const parameters = rangeBar.getTooltipParameters();
     assert.strictEqual(parameters.color, 'black', 'color');
     assert.strictEqual(parameters.value, 25, 'value');
     assert.strictEqual(parameters.offset, 0, 'offset');

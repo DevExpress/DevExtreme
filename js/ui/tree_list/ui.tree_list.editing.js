@@ -9,15 +9,15 @@ import treeListCore from './ui.tree_list.core';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import editingModule from '../grid_core/ui.grid_core.editing';
 
-var TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container',
-    SELECT_CHECKBOX_CLASS = 'dx-select-checkbox',
+const TREELIST_EXPAND_ICON_CONTAINER_CLASS = 'dx-treelist-icon-container';
+const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 
-    DATA_EDIT_DATA_INSERT_TYPE = 'insert';
+const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
-var EditingController = editingModule.controllers.editing.inherit((function() {
+const EditingController = editingModule.controllers.editing.inherit((function() {
     return {
         _generateNewItem: function(key) {
-            var item = this.callBase(key);
+            const item = this.callBase(key);
 
             item.data = {
                 key: key
@@ -30,9 +30,9 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         _needInsertItem: function(editData, changeType, items, item) {
-            var parentKey = editData.key.parentKey;
+            const parentKey = editData.key.parentKey;
             if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
-                var rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
+                const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
                 if(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
                     items.splice(rowIndex + 1, 0, item);
                 }
@@ -42,15 +42,15 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         _isEditColumnVisible: function() {
-            var result = this.callBase.apply(this, arguments),
-                editingOptions = this.option('editing');
+            const result = this.callBase.apply(this, arguments);
+            const editingOptions = this.option('editing');
 
             return result || editingOptions && editingOptions.allowAdding;
         },
 
         _isDefaultButtonVisible: function(button, options) {
-            var result = this.callBase.apply(this, arguments),
-                row = options.row;
+            const result = this.callBase.apply(this, arguments);
+            const row = options.row;
 
             if(button.name === 'add') {
                 return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.isNewRow);
@@ -60,7 +60,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         _getEditingButtons: function(options) {
-            var buttons = this.callBase.apply(this, arguments);
+            const buttons = this.callBase.apply(this, arguments);
 
             if(!options.column.buttons) {
                 buttons.unshift(this._getButtonConfig('add', options));
@@ -70,10 +70,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         _beforeSaveEditData: function(editData) {
-            var key,
-                store,
-                dataController = this._dataController,
-                result = this.callBase.apply(this, arguments);
+            let key;
+            let store;
+            const dataController = this._dataController;
+            const result = this.callBase.apply(this, arguments);
 
             if(editData && editData.type !== DATA_EDIT_DATA_INSERT_TYPE) {
                 store = dataController && dataController.store();
@@ -88,19 +88,19 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         addRowByRowIndex: function(rowIndex) {
-            var dataController = this.getController('data'),
-                row = dataController.getVisibleRows()[rowIndex];
+            const dataController = this.getController('data');
+            const row = dataController.getVisibleRows()[rowIndex];
 
             return this.addRow(row ? row.key : undefined);
         },
 
         addRow: function(key) {
-            var that = this,
-                callBase = that.callBase,
-                dataController = that.getController('data');
+            const that = this;
+            const callBase = that.callBase;
+            const dataController = that.getController('data');
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
-                var d = new Deferred();
+                const d = new Deferred();
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
                         callBase.call(that, key);
@@ -118,9 +118,9 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         _initNewRow: function(options, parentKey) {
-            var dataController = this.getController('data'),
-                dataSourceAdapter = dataController.dataSource(),
-                parentIdSetter = dataSourceAdapter.createParentIdSetter();
+            const dataController = this.getController('data');
+            const dataSourceAdapter = dataController.dataSource();
+            const parentIdSetter = dataSourceAdapter.createParentIdSetter();
 
             parentIdSetter(options.data, parentKey);
 
@@ -136,7 +136,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
         },
 
         getButtonLocalizationNames() {
-            var names = this.callBase.apply(this);
+            const names = this.callBase.apply(this);
             names.add = 'dxTreeList-editingAddRowToNode';
 
             return names;
@@ -144,12 +144,12 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
     };
 })());
 
-var originalRowClick = editingModule.extenders.views.rowsView._rowClick,
-    originalRowDblClick = editingModule.extenders.views.rowsView._rowDblClick;
+const originalRowClick = editingModule.extenders.views.rowsView._rowClick;
+const originalRowDblClick = editingModule.extenders.views.rowsView._rowDblClick;
 
-var validateClick = function(e) {
-    var $targetElement = $(e.event.target),
-        originalClickHandler = e.event.type === 'dxdblclick' ? originalRowDblClick : originalRowClick;
+const validateClick = function(e) {
+    const $targetElement = $(e.event.target);
+    const originalClickHandler = e.event.type === 'dxdblclick' ? originalRowDblClick : originalRowClick;
 
     if($targetElement.closest('.' + SELECT_CHECKBOX_CLASS).length) {
         return false;
@@ -159,7 +159,7 @@ var validateClick = function(e) {
 };
 
 var needToCallOriginalClickHandler = function(e, originalClickHandler) {
-    var $targetElement = $(e.event.target);
+    const $targetElement = $(e.event.target);
 
     if(!$targetElement.closest('.' + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length) {
         originalClickHandler.call(this, e);
@@ -169,11 +169,11 @@ var needToCallOriginalClickHandler = function(e, originalClickHandler) {
     return false;
 };
 
-var RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
+const RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
     _renderCellCommandContent: function($container, options) {
-        var editingController = this._editingController,
-            isEditRow = options.row && editingController.isEditRow(options.row.rowIndex),
-            isEditing = options.isEditing || isEditRow;
+        const editingController = this._editingController;
+        const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
+        const isEditing = options.isEditing || isEditRow;
 
         if(!isEditing) {
             return this.callBase.apply(this, arguments);

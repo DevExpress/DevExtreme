@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div class="dx-widget">\
             <div class="dx-datagrid">\
                 <div id="container"></div>\
@@ -25,7 +25,7 @@ import renderer from 'core/renderer';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
-var device = devices.real();
+const device = devices.real();
 
 const CLICK_NAMESPACE = 'dxclick.dxDataGridAdaptivity';
 const dataGridWrapper = new DataGridWrapper('.dx-datagrid');
@@ -91,8 +91,8 @@ QUnit.test('Show adaptive command column', function(assert) {
 // https://github.com/jquery/jquery/issues/3698
 // https://github.com/jquery/jquery/pull/3738
 QUnit.test('Check adaptive column rendering not use $.css() to change element\'s width/height', function(assert) {
-    var cssFunc = renderer.fn.css,
-        cssInvokeCounter = 0;
+    const cssFunc = renderer.fn.css;
+    let cssInvokeCounter = 0;
 
     renderer.fn.css = function(name) {
         if(name === 'width' || name === 'height') {
@@ -243,7 +243,7 @@ QUnit.test('Hide the adaptive command column when all columns are shown', functi
     this.resizingController.updateDimensions();
     this.clock.tick();
 
-    var $cols = $('.dx-datagrid-rowsview col');
+    const $cols = $('.dx-datagrid-rowsview col');
 
     // assert
     assert.ok(checkAdaptiveWidth($cols.get(2).style.width), 'adaptive column is hidden');
@@ -265,7 +265,7 @@ QUnit.test('Hide the adaptive command column when it is located on a left side a
     this.resizingController.updateDimensions();
     this.clock.tick();
 
-    var $cols = $('.dx-datagrid-rowsview col');
+    const $cols = $('.dx-datagrid-rowsview col');
 
     // assert
     assert.ok(checkAdaptiveWidth($cols.get(0).style.width), 'adaptive column is hidden');
@@ -293,7 +293,7 @@ QUnit.test('The last data column has correct width when \'columnAutoWidth\' opti
     this.clock.tick();
 
     // act
-    var $cols = $('.dx-datagrid-rowsview col');
+    const $cols = $('.dx-datagrid-rowsview col');
 
     // assert
     assert.ok(checkAdaptiveWidth($cols.get(2).style.width), 'Third column is hidden');
@@ -325,7 +325,7 @@ QUnit.test('Hidden columns must have zero widths for virtual scrolling table', f
     this.clock.tick();
 
     // act
-    var $tables = $('.dx-datagrid-rowsview table');
+    const $tables = $('.dx-datagrid-rowsview table');
 
     // assert
     assert.equal($tables.length, 1, 'Table count');
@@ -349,7 +349,7 @@ QUnit.test('Fitted column when width defined by user should not be hidden when h
     this.clock.tick();
 
     // act
-    var $tables = $('.dx-datagrid-rowsview table');
+    const $tables = $('.dx-datagrid-rowsview table');
 
     // assert
     assert.equal($tables.length, 1, 'Table count');
@@ -374,7 +374,7 @@ QUnit.test('Column hiding when one column is grouped', function(assert) {
     this.clock.tick();
 
     // act
-    var $tables = $('.dx-datagrid-rowsview table');
+    const $tables = $('.dx-datagrid-rowsview table');
 
     // assert
     assert.equal($tables.length, 1, 'Table count');
@@ -403,15 +403,15 @@ QUnit.test('Width of adaptive command column is not should be changed when all g
         ]
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.gridView.render($container);
 
     $('.dx-datagrid').width(100);
     this.resizingController.updateDimensions();
     this.clock.tick();
-    var $cols = $('.dx-datagrid-rowsview col'),
-        adaptiveHeadersWidth,
-        adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
+    let $cols = $('.dx-datagrid-rowsview col');
+    let adaptiveHeadersWidth;
+    const adaptiveRowsWidth = $cols.eq($cols.length - 1).css('width');
 
     this.dataController.collapseAll();
     this.clock.tick();
@@ -485,7 +485,7 @@ QUnit.test('Show the form when an adaptive row is expanded', function(assert) {
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
 
     // assert
-    var form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
     assert.ok(form !== undefined, 'form is initialized');
     assert.equal(form.option('items')[0].column.dataField, 'lastName', 'dataField of column');
     assert.equal(form.option('items')[0].dataField, 'lastName', 'dataField of item');
@@ -506,7 +506,7 @@ QUnit.test('Adaptive row form should contains only visible columns', function(as
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
 
     // assert
-    var $formElement = $('.dx-master-detail-row .dx-form');
+    const $formElement = $('.dx-master-detail-row .dx-form');
     assert.equal($formElement.find('.dx-datagrid-hidden-column').length, 0, 'form doesn\'t contains hidden columns');
 });
 
@@ -540,7 +540,7 @@ QUnit.test('Text of form item is displayed in according with the displayExpr opt
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
     // assert
-    var $fieldItemsContent = $('.dx-field-item-content');
+    const $fieldItemsContent = $('.dx-field-item-content');
     assert.equal($fieldItemsContent.eq(0).text(), 'Psy', 'text of lastName');
     assert.equal($fieldItemsContent.eq(1).text(), 'Test 1', 'text of lookup');
 });
@@ -572,7 +572,7 @@ QUnit.test('Form items order is equal to the grid columns order', function(asser
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
 
     // assert
-    var $formFieldLabels = $('.dx-master-detail-row .dx-form .dx-field-item-label');
+    const $formFieldLabels = $('.dx-master-detail-row .dx-form .dx-field-item-label');
 
     assert.equal($formFieldLabels.length, 2, 'There are two hidden columns');
 
@@ -609,7 +609,7 @@ QUnit.test('Form items were created readOnly if columns were readOnly', function
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
 
     // assert
-    var checkbox = $('.dx-form .dx-checkbox').eq(0).dxCheckBox('instance');
+    const checkbox = $('.dx-form .dx-checkbox').eq(0).dxCheckBox('instance');
 
     assert.ok(checkbox.option('readOnly'), 'CheckBox was created readOnly');
 });
@@ -700,7 +700,7 @@ QUnit.test('Update adaptive state when all items are hidden inside a form', func
 
     // assert
     assert.equal($('.dx-form .dx-field-item-content').length, 0, 'items count');
-    var cols = $('col');
+    const cols = $('col');
     assert.ok(checkAdaptiveWidth(cols.get(cols.length - 1).style.width), 'adaptive command column is hidden');
 });
 
@@ -733,14 +733,14 @@ QUnit.test('Update adaptive state when adaptive command column is located on lef
     this.clock.tick();
 
     // assert
-    var cols = $('col');
+    const cols = $('col');
     assert.ok(checkAdaptiveWidth(cols.get(0).style.width), 'adaptive command column is hidden');
 });
 
 QUnit.test('Show the form with cellTemplate when an adaptive row is expanded', function(assert) {
     // arrange
     $('.dx-datagrid').width(200);
-    var _data;
+    let _data;
 
     this.columns = [
         {
@@ -770,7 +770,7 @@ QUnit.test('Show the form with cellTemplate when an adaptive row is expanded', f
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
 
     // assert
-    var form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
     assert.ok(form !== undefined, 'form is initialized');
     assert.equal(form.option('items')[0].column.dataField, 'lastName', 'dataField of column');
     assert.equal(form.option('items')[0].dataField, 'lastName', 'dataField of item');
@@ -814,7 +814,7 @@ QUnit.test('Hide the form widget when an adaptive row has an empty data', functi
     this.resizingController.updateDimensions();
     this.clock.tick();
 
-    var $cols = $('.dx-datagrid-rowsview col');
+    const $cols = $('.dx-datagrid-rowsview col');
 
     // assert
     assert.ok(checkAdaptiveWidth($cols.get(2).style.width), 'adaptive column is hidden');
@@ -907,7 +907,7 @@ QUnit.test('Skip a hidden columns from pointsByColumns when resizing is enabled 
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.resizingController.updateDimensions();
@@ -943,7 +943,7 @@ QUnit.test('Skip a hidden columns from pointsByColumns when resizing is enabled 
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.resizingController.updateDimensions();
@@ -975,7 +975,7 @@ QUnit.test('Skip a hidden columns from pointsByColumns when resizing is enabled 
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.resizingController.updateDimensions();
@@ -1007,7 +1007,7 @@ QUnit.test('Skip a hidden columns from pointsByColumns when reordering is enable
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.draggingHeaderView.render($container);
@@ -1015,7 +1015,7 @@ QUnit.test('Skip a hidden columns from pointsByColumns when reordering is enable
     this.clock.tick();
 
     // act
-    var that = this;
+    const that = this;
     this.draggingHeaderView._dragOptions = {
         rowIndex: 0,
         sourceColumn: that.columns[0]
@@ -1051,7 +1051,7 @@ QUnit.test('Reordering to the last column should be allowed when columnHidingEna
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.draggingHeaderView.render($container);
@@ -1059,7 +1059,7 @@ QUnit.test('Reordering to the last column should be allowed when columnHidingEna
     this.clock.tick();
 
     // act
-    var that = this;
+    const that = this;
     this.draggingHeaderView._dragOptions = {
         rowIndex: 0,
         sourceColumn: that.columns[0]
@@ -1100,7 +1100,7 @@ QUnit.test('Resize column when hidden columns are located in the middle ', funct
         showColumnHeaders: true
     };
     setupDataGrid(this);
-    var $container = $('#container');
+    const $container = $('#container');
     this.columnHeadersView.render($container);
     this.rowsView.render($container);
     this.columnsSeparatorView.render($container);
@@ -1123,7 +1123,7 @@ QUnit.test('Resize column when hidden columns are located in the middle ', funct
     });
 
     // assert
-    var $cols = $('.dx-datagrid-headers col');
+    const $cols = $('.dx-datagrid-headers col');
     assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 2, 'hidden columns count');
     assert.equal($cols.get(0).style.width, '160px', '1 column width');
     assert.ok(checkAdaptiveWidth($cols.get(1).style.width), '2 column width');
@@ -1142,9 +1142,9 @@ QUnit.test('Export a hidden columns with bestFitWidth option', function(assert) 
     this.clock.tick();
 
     // act
-    var columns = this.exportController._getColumns(),
-        visibleColumns = this.columnsController.getVisibleColumns(),
-        hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
+    const columns = this.exportController._getColumns();
+    const visibleColumns = this.columnsController.getVisibleColumns();
+    const hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
 
     // assert
     assert.equal(hiddenColumns.length, 1, 'hidden columns count');
@@ -1170,8 +1170,8 @@ QUnit.test('ShowEditorAlways option for form\'s item', function(assert) {
     this.clock.tick();
 
     // assert
-    var $editors = $('.dx-form .dx-texteditor'),
-        editor = $editors.first().dxTextBox('instance');
+    const $editors = $('.dx-form .dx-texteditor');
+    const editor = $editors.first().dxTextBox('instance');
 
     assert.equal($editors.length, 1, 'editors count');
     assert.equal(editor.option('value'), 'Psy', 'editor\'s value');
@@ -1187,8 +1187,8 @@ QUnit.test('Apply the css styles for a hidden columns inside the rows view', fun
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-rowsview table td');
+    const col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-rowsview table td');
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1208,8 +1208,8 @@ QUnit.test('Remove the css styles from a hidden columns inside the rows view', f
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-rowsview table td');
+    const col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-rowsview table td');
 
     assert.ok(!checkAdaptiveWidth(col.style.width));
     assert.ok(!$cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1226,8 +1226,8 @@ QUnit.test('Apply the css styles for a hidden columns inside the column headers 
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-headers table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-headers table td');
+    const col = $('.dx-datagrid-headers table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-headers table td');
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1247,8 +1247,8 @@ QUnit.test('Apply the css styles for a hidden columns inside the column headers 
     this.clock.tick();
 
     // assert
-    var $cols = $('.dx-datagrid-headers table').eq(0).find('col'),
-        $headerRows = $('.dx-datagrid-headers .dx-header-row');
+    const $cols = $('.dx-datagrid-headers table').eq(0).find('col');
+    const $headerRows = $('.dx-datagrid-headers .dx-header-row');
 
     assert.ok(checkAdaptiveWidth($cols.get(0).style.width), 'first column is hidden');
     assert.notOk(checkAdaptiveWidth($cols.get(1).style.width), 'second column is not hidden');
@@ -1275,8 +1275,8 @@ QUnit.test('Remove the css styles from a hidden columns inside the column header
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-headers table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-headers table td');
+    const col = $('.dx-datagrid-headers table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-headers table td');
 
     assert.ok(!checkAdaptiveWidth(col.style.width));
     assert.ok(!$cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1300,8 +1300,8 @@ QUnit.test('Apply the css styles for a hidden columns inside the summary view', 
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-total-footer table td');
+    const col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-total-footer table td');
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1330,8 +1330,8 @@ QUnit.test('Remove the css styles from a hidden columns inside the summary view'
     this.clock.tick();
 
     // assert
-    var col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-total-footer table td');
+    const col = $('.dx-datagrid-total-footer table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-total-footer table td');
 
     assert.ok(!checkAdaptiveWidth(col.style.width));
     assert.ok(!$cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1374,7 +1374,7 @@ QUnit.test('The css styles for a hidden columns are not applied before calculati
     this.resizingController.updateDimensions();
     this.clock.tick();
 
-    var $hiddenColumns;
+    let $hiddenColumns;
     this.resizingController._getBestFitWidths = function() {
         $hiddenColumns = $('.dx-datagrid-hidden-column');
         return [];
@@ -1675,8 +1675,8 @@ QUnit.test('Apply a hidden css class on cell prepared event of rows view', funct
     this.editingController.cancelEditData();
 
     // assert
-    var col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1),
-        $cells = $('.dx-datagrid-rowsview table td');
+    const col = $('.dx-datagrid-rowsview table').eq(0).find('col').get(1);
+    const $cells = $('.dx-datagrid-rowsview table td');
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass('dx-datagrid-hidden-column'));
@@ -1696,7 +1696,7 @@ QUnit.test('Row elements are should get only once when CSS for hidden column is 
 });
 
 QUnit.test('Form has 2 columns in material theme', function(assert) {
-    var origIsMaterial = themes.isMaterial;
+    const origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
 
     // arrange, act
@@ -1706,8 +1706,8 @@ QUnit.test('Form has 2 columns in material theme', function(assert) {
     $('.dx-data-row .dx-datagrid-adaptive-more').first().trigger('dxclick');
     this.clock.tick();
 
-    var form = $('#container').find('.dx-form').dxForm('instance');
-    var colWidth = form.option('colCount');
+    const form = $('#container').find('.dx-form').dxForm('instance');
+    const colWidth = form.option('colCount');
 
     // assert
     assert.equal(colWidth, 2);
@@ -1717,7 +1717,7 @@ QUnit.test('Form has 2 columns in material theme', function(assert) {
 
 QUnit.test('Custom command column should not be hidden', function(assert) {
     // arrange
-    var hiddenColumns;
+    let hiddenColumns;
 
     $('.dx-datagrid').width(200);
 
@@ -1750,7 +1750,7 @@ QUnit.test('Custom command column should not be hidden', function(assert) {
 
 QUnit.test('The last data column should be hidden when the command column has width and columnAutoWidth is enabled', function(assert) {
     // arrange
-    var hiddenColumns;
+    let hiddenColumns;
 
     $('.dx-datagrid').width(200);
 
@@ -1783,7 +1783,7 @@ QUnit.test('The last data column should be hidden when the command column has wi
 
 QUnit.test('The adaptive cell should be empty in a grouped row with a summary', function(assert) {
     // arrange
-    var $testElement = $('#container');
+    const $testElement = $('#container');
 
     $('.dx-datagrid').width(200);
 
@@ -1940,7 +1940,7 @@ QUnit.test('Show the adaptive detail row when the master detail row is expanded'
     // act
     this.dataController.expandRow(this.items[0]);
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-    var $rows = $('.dx-master-detail-row');
+    const $rows = $('.dx-master-detail-row');
 
     // assert
     assert.equal($rows.length, 2, 'master detail rows count');
@@ -1969,7 +1969,7 @@ QUnit.test('Show the master detail row when the adaptive detail row is expanded'
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.dataController.expandRow(this.items[0]);
-    var $rows = $('.dx-master-detail-row');
+    const $rows = $('.dx-master-detail-row');
 
     // assert
     assert.equal($rows.length, 2, 'master detail rows count');
@@ -1999,7 +1999,7 @@ QUnit.test('Hide the adaptive detail row when the master detail row is expanded'
     this.dataController.expandRow(this.items[0]);
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.adaptiveColumnsController.collapseAdaptiveDetailRow(this.items[0]);
-    var $rows = $('.dx-master-detail-row');
+    const $rows = $('.dx-master-detail-row');
 
     // assert
     assert.equal($rows.length, 1, 'master detail rows count');
@@ -2029,7 +2029,7 @@ QUnit.test('Hide the adaptive and master detail row', function(assert) {
     this.dataController.expandRow(this.items[0]);
     this.dataController.collapseRow(this.items[0]);
     this.adaptiveColumnsController.collapseAdaptiveDetailRow(this.items[0]);
-    var $rows = $('.dx-master-detail-row');
+    const $rows = $('.dx-master-detail-row');
 
     // assert
     assert.equal($rows.length, 1, 'master detail rows count');
@@ -2040,8 +2040,8 @@ QUnit.test('Expand adaptive row when row as tbody', function(assert) {
     // arrange
     $('.dx-datagrid').width(200);
 
-    var $rowElements,
-        $testElement = $('#container');
+    let $rowElements;
+    const $testElement = $('#container');
 
     this.options = {
         rowTemplate: function(container, options) {
@@ -2098,7 +2098,7 @@ QUnit.test('Edit form. Check that adaptive form is hidden', function(assert) {
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.clock.tick();
 
-    var adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
+    let adaptiveDetailForm = $('.dx-adaptive-detail-row .dx-form').dxForm('instance');
     assert.ok(adaptiveDetailForm !== undefined, 'adaptive detail form is initialized');
 
     this.editingController.editRow(0);
@@ -2111,7 +2111,7 @@ QUnit.test('Edit form. Check that adaptive form is hidden', function(assert) {
 // T458653
 QUnit.test('Edit form. Editors of hidden columns are visible', function(assert) {
     // arrange
-    var $formItemElements;
+    let $formItemElements;
 
     this.options = {
         editing: {
@@ -2208,10 +2208,10 @@ QUnit.test('Edit row', function(assert) {
     this.editingController.editRow(0);
 
     // assert
-    var form = $('.dx-master-detail-row .dx-form').dxForm('instance'),
-        $editors = $('.dx-texteditor'),
-        editor1 = $editors.eq(0).dxTextBox('instance'),
-        editor2 = $editors.eq(2).dxTextBox('instance');
+    let form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    let $editors = $('.dx-texteditor');
+    const editor1 = $editors.eq(0).dxTextBox('instance');
+    const editor2 = $editors.eq(2).dxTextBox('instance');
 
     assert.ok(form !== undefined, 'form is initialized');
     assert.equal($editors.length, 3, 'editors count');
@@ -2252,14 +2252,14 @@ QUnit.test('Edit row. Cascade update detailAdaptive row when modify data row', f
 
     this.editingController.editRow(0);
 
-    var editor = $('.dx-texteditor').eq(0).dxTextBox('instance');
+    const editor = $('.dx-texteditor').eq(0).dxTextBox('instance');
 
     // act
     editor.option('value', 'Man');
     this.clock.tick();
 
     // assert
-    var $editors = $('.dx-texteditor');
+    const $editors = $('.dx-texteditor');
 
     assert.equal($editors.length, 3, 'editors count');
     assert.equal($editors.eq(0).dxTextBox('instance').option('value'), 'Man', 'the editor value');
@@ -2288,14 +2288,14 @@ QUnit.test('Edit row. Cascade update data row when modify detailAdaptive row', f
 
     this.editingController.editRow(0);
 
-    var editor = $('.dx-texteditor').eq(2).dxTextBox('instance');
+    const editor = $('.dx-texteditor').eq(2).dxTextBox('instance');
 
     // act
     editor.option('value', 'Man');
     this.clock.tick();
 
     // assert
-    var $editors = $('.dx-texteditor');
+    const $editors = $('.dx-texteditor');
 
     assert.equal($editors.length, 3, 'editors count');
     assert.equal($editors.eq(2).dxTextBox('instance').option('value'), 'Man', 'the editor value');
@@ -2324,10 +2324,10 @@ QUnit.test('Edit row. Check repeat edit', function(assert) {
     // act
     this.editingController.editRow(0);
 
-    var form,
-        $editors = $('.dx-texteditor'),
-        editor1 = $editors.eq(0).dxTextBox('instance'),
-        editor2 = $editors.eq(2).dxTextBox('instance');
+    let form;
+    let $editors = $('.dx-texteditor');
+    const editor1 = $editors.eq(0).dxTextBox('instance');
+    const editor2 = $editors.eq(2).dxTextBox('instance');
 
     editor1.option('value', 'Man');
     editor2.option('value', 'Girl');
@@ -2363,9 +2363,9 @@ QUnit.test('Edit row. Texts inside the form widget is rendered when editing data
     // act
     this.editingController.editRow(0);
 
-    var $editors = $('.dx-texteditor'),
-        editor1 = $editors.eq(0).dxTextBox('instance'),
-        editor2 = $editors.eq(1).dxTextBox('instance');
+    const $editors = $('.dx-texteditor');
+    const editor1 = $editors.eq(0).dxTextBox('instance');
+    const editor2 = $editors.eq(1).dxTextBox('instance');
 
     editor1.option('value', 'Man');
     editor2.option('value', 'Girl');
@@ -2397,8 +2397,8 @@ QUnit.test('Edit row. Editor is not rendered inside the form widget when clicked
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
-    var $itemContent = $('.dx-field-item-content'),
-        form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    const $itemContent = $('.dx-field-item-content');
+    const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
 
     $($itemContent).trigger('dxclick');
 
@@ -2430,7 +2430,7 @@ QUnit.test('Edit row. Adaptive detail row is not expanded for other rows when a 
     this.editingController.editRow(0);
 
     // assert
-    var $rows = $('.dx-row');
+    let $rows = $('.dx-row');
     assert.ok($rows.eq(1).hasClass('dx-adaptive-detail-row'), 'second row is adaptive detail');
 
     // act
@@ -2445,12 +2445,12 @@ QUnit.test('Edit row. Adaptive detail row is not expanded for other rows when a 
 QUnit.test('Check \'onAdaptiveDetailRowPreparing\' action', function(assert) {
     // arrange
     $('.dx-datagrid').width(400);
-    var isCustomizeItemCalled,
-        isContentReadyCalled;
+    let isCustomizeItemCalled;
+    let isContentReadyCalled;
 
     this.options = {
         onAdaptiveDetailRowPreparing: function(args) {
-            var formOptions = args.formOptions;
+            const formOptions = args.formOptions;
             formOptions.colCount = 5;
             formOptions.items[0].label = { text: 'LaLa' };
             formOptions.customizeItem = function() {
@@ -2476,8 +2476,8 @@ QUnit.test('Check \'onAdaptiveDetailRowPreparing\' action', function(assert) {
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
-    var $itemContent = $('.dx-field-item-content'),
-        form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    const $itemContent = $('.dx-field-item-content');
+    const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
 
     $($itemContent).trigger('dxclick');
 
@@ -2510,7 +2510,7 @@ QUnit.test('Edit row. Editors are rendered inside the form widget when the adapt
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.editingController.editRow(0);
 
-    var form = $('.dx-master-detail-row .dx-form').dxForm('instance');
+    const form = $('.dx-master-detail-row .dx-form').dxForm('instance');
 
     // assert
     assert.ok(form !== undefined, 'form is initialized');
@@ -2647,8 +2647,8 @@ QUnit.test('Edit row. The adaptive detail row is collapsed when an other row is 
     this.editingController.editRow(2);
 
     // assert
-    var $form = $('.dx-master-detail-row .dx-form'),
-        $editors = $form.find('.dx-texteditor');
+    const $form = $('.dx-master-detail-row .dx-form');
+    const $editors = $form.find('.dx-texteditor');
 
     assert.equal($form.length, 1, 'form element');
     assert.equal($editors.length, 1, 'editor\'s count');
@@ -2678,8 +2678,8 @@ QUnit.test('Edit row. Expand the adaptive detail row when an other row is edited
     this.adaptiveColumnsController.toggleExpandAdaptiveDetailRow(this.items[1]);
 
     // assert
-    var $form = $('.dx-master-detail-row .dx-form'),
-        $editors = $form.find('.dx-texteditor');
+    const $form = $('.dx-master-detail-row .dx-form');
+    const $editors = $form.find('.dx-texteditor');
 
     assert.equal($form.length, 1, 'form element');
     assert.equal($editors.length, 0, 'editor\'s count');
@@ -2712,8 +2712,8 @@ QUnit.test('Edit row. ShowEditorAlways option for form\'s item', function(assert
     this.clock.tick();
 
     // assert
-    var $editors = $('.dx-form .dx-texteditor'),
-        editor = $editors.first().dxTextBox('instance');
+    const $editors = $('.dx-form .dx-texteditor');
+    const editor = $editors.first().dxTextBox('instance');
 
     assert.equal($editors.length, 1, 'editors count');
     assert.ok(!editor.option('readOnly'), 'editor has not readOnly mode');
@@ -2773,7 +2773,7 @@ QUnit.test('Edit batch. Editor is rendered only one when click on text', functio
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -2804,7 +2804,7 @@ QUnit.test('Edit batch. Editor is rendered only one when click on text', functio
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content');
+    let $itemsContent = $('.dx-field-item-content');
 
     // assert
     assert.equal($itemsContent.length, 2, 'items count');
@@ -2814,7 +2814,7 @@ QUnit.test('Edit batch. Editor is rendered only one when click on text', functio
 
     // assert
     assert.equal($('.dx-texteditor').length, 1, 'editor\'s count');
-    var editor = $('.dx-texteditor').first().dxNumberBox('instance');
+    let editor = $('.dx-texteditor').first().dxNumberBox('instance');
     assert.equal(editor.option('value'), 0.2, 'editor\'s value');
 
     // act
@@ -2831,7 +2831,7 @@ QUnit.test('Edit batch. Close edit mode for the form widget when a data is saved
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -2862,8 +2862,8 @@ QUnit.test('Edit batch. Close edit mode for the form widget when a data is saved
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -2880,7 +2880,7 @@ QUnit.test('Edit batch. Close edit mode and cancel editing when click out the da
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -2910,8 +2910,8 @@ QUnit.test('Edit batch. Close edit mode and cancel editing when click out the da
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -2931,7 +2931,7 @@ QUnit.test('Edit batch. Close edit mode for the form widget when a editing is ca
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -2962,8 +2962,8 @@ QUnit.test('Edit batch. Close edit mode for the form widget when a editing is ca
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -2980,7 +2980,7 @@ QUnit.test('Edit batch. Form\'s item is marked as modified', function(assert) {
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3009,8 +3009,8 @@ QUnit.test('Edit batch. Form\'s item is marked as modified', function(assert) {
 
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     this.clock.tick();
@@ -3035,7 +3035,7 @@ QUnit.test('Edit batch. Form\'s item is marked as modified for other adaptive ro
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3062,8 +3062,8 @@ QUnit.test('Edit batch. Form\'s item is marked as modified for other adaptive ro
     this.resizingController.updateDimensions();
     this.clock.tick();
 
-    var editor,
-        $itemsContent;
+    let editor;
+    let $itemsContent;
 
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -3102,7 +3102,7 @@ QUnit.test('Edit batch. Modified is removed from form\'s item when data is saved
     // arrange
     $('.dx-datagrid').width(400);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3132,8 +3132,8 @@ QUnit.test('Edit batch. Modified is removed from form\'s item when data is saved
 
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -3150,7 +3150,7 @@ QUnit.test('Edit batch. Modified is removed from form\'s item when editing is ca
     // arrange
     $('.dx-datagrid').width(400);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3180,8 +3180,8 @@ QUnit.test('Edit batch. Modified is removed from form\'s item when editing is ca
 
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    let $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -3223,8 +3223,8 @@ QUnit.test('Edit batch. ShowEditorAlways option for form\'s item', function(asse
     this.clock.tick();
 
     // assert
-    var $editors = $('.dx-form .dx-texteditor'),
-        editor = $editors.first().dxTextBox('instance');
+    const $editors = $('.dx-form .dx-texteditor');
+    const editor = $editors.first().dxTextBox('instance');
 
     assert.equal($editors.length, 1, 'editors count');
     assert.ok(!editor.option('readOnly'), 'editor has not readOnly mode');
@@ -3234,7 +3234,7 @@ QUnit.test('Edit batch. Show modified state in a cell when cell is edited inside
     // arrange
     $('.dx-datagrid').width(400);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3264,8 +3264,8 @@ QUnit.test('Edit batch. Show modified state in a cell when cell is edited inside
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content'),
-        editor;
+    const $itemsContent = $('.dx-field-item-content');
+    let editor;
 
     $($itemsContent.last()).trigger('dxclick');
     this.clock.tick();
@@ -3286,7 +3286,7 @@ QUnit.test('Edit batch. Repaint form with unsaved data', function(assert) {
     // arrange
     $('.dx-datagrid').width(400);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3317,9 +3317,9 @@ QUnit.test('Edit batch. Repaint form with unsaved data', function(assert) {
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content'),
-        editor,
-        formInstance;
+    const $itemsContent = $('.dx-field-item-content');
+    let editor;
+    let formInstance;
 
     $($itemsContent.last()).trigger('dxclick');
     editor = $('.dx-texteditor').first().dxNumberBox('instance');
@@ -3361,7 +3361,7 @@ QUnit.test('Edit cell. Editor is rendered only one when click on text', function
     // arrange
     $('.dx-datagrid').width(300);
 
-    var dataSource = [
+    const dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', count: 0.2 },
         { firstName: 'Super', lastName: 'Man', count: 0.5 }
     ];
@@ -3392,7 +3392,7 @@ QUnit.test('Edit cell. Editor is rendered only one when click on text', function
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    var $itemsContent = $('.dx-field-item-content');
+    let $itemsContent = $('.dx-field-item-content');
 
     // assert
     assert.equal($itemsContent.length, 2, 'items count');
@@ -3402,7 +3402,7 @@ QUnit.test('Edit cell. Editor is rendered only one when click on text', function
 
     // assert
     assert.equal($('.dx-texteditor').length, 1, 'editor\'s count');
-    var editor = $('.dx-texteditor').first().dxNumberBox('instance');
+    let editor = $('.dx-texteditor').first().dxNumberBox('instance');
     assert.equal(editor.option('value'), 0.2, 'editor\'s value');
 
     // act
@@ -3472,7 +3472,7 @@ QUnit.test('Create new row in the batch mode', function(assert) {
 
     // assert
     assert.equal($('.dx-adaptive-detail-row .dx-texteditor').length, 0, 'editor\'s count');
-    var $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
+    const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
     assert.equal($itemsContent.length, 1, 'items count');
     assert.equal($itemsContent.eq(0).html(), '&nbsp;', 'empty html markup');
     assert.ok(this.adaptiveColumnsController.hasAdaptiveDetailRowExpanded(), 'row is expanded');
@@ -3496,8 +3496,8 @@ QUnit.test('Create new row is the batch mode. Save new values', function(assert)
 
     // act
     this.editingController.addRow();
-    var $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content'),
-        editors;
+    const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
+    let editors;
 
     $($itemsContent.first()).trigger('dxclick');
 
@@ -3529,8 +3529,8 @@ QUnit.test('Create new row is the batch mode. Cancel new values', function(asser
 
     // act
     this.editingController.addRow();
-    var $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content'),
-        editors;
+    const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
+    let editors;
 
     $($itemsContent.first()).trigger('dxclick');
 
@@ -3562,7 +3562,7 @@ QUnit.test('Create new row in the cell mode', function(assert) {
 
     // act
     this.editingController.addRow();
-    var $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
+    const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
 
     // assert
     assert.equal($itemsContent.length, 1, 'editor\'s count');
@@ -3590,8 +3590,8 @@ QUnit.test('Create new row is the cell mode. Save new values', function(assert) 
     this.editingController.addRow();
     this.clock.tick();
 
-    var $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content'),
-        editors;
+    const $itemsContent = $('.dx-adaptive-detail-row .dx-field-item-content');
+    let editors;
 
     $($itemsContent.first()).trigger('dxclick');
     this.clock.tick();
@@ -3683,7 +3683,7 @@ QUnit.test('Edit row. Re-render adaptive detail after re-inserting row', functio
     // arrange
     $('.dx-datagrid').width(400);
 
-    var args = [];
+    const args = [];
 
     this.options = {
         editing: {
@@ -3729,7 +3729,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(200);
 
-        var dataSource = [
+        const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
             { firstName: 'Super', lastName: 'Man' }
         ];
@@ -3761,7 +3761,7 @@ QUnit.module('Validation', {
 
         $('.dx-form .dx-texteditor input').first().focus();
 
-        var editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         this.clock.tick(10);
 
@@ -3774,7 +3774,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(200);
 
-        var dataSource = [
+        const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
             { firstName: 'Super', lastName: 'Man' }
         ];
@@ -3805,7 +3805,7 @@ QUnit.module('Validation', {
 
         $('.dx-form .dx-texteditor input').first().focus();
 
-        var editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
+        const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         this.clock.tick(10);
 
@@ -3819,7 +3819,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(200);
 
-        var dataSource = [
+        const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
             { firstName: 'Super', lastName: 'Man' }
         ];
@@ -3847,8 +3847,8 @@ QUnit.module('Validation', {
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-        var $itemsContent = $('.dx-field-item-content'),
-            editor;
+        let $itemsContent = $('.dx-field-item-content');
+        let editor;
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
@@ -3907,7 +3907,7 @@ QUnit.module('Validation', {
 
         // act
         this.editingController.addRow();
-        var $itemsContent = $('.dx-field-item-content');
+        const $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
@@ -3920,7 +3920,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(200);
 
-        var dataSource = [
+        const dataSource = [
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum' },
             { firstName: 'Super', lastName: 'Man' }
         ];
@@ -3944,13 +3944,13 @@ QUnit.module('Validation', {
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
         this.clock.tick();
-        var showRevertButtonStub = sinon.stub(this.editorFactoryController, '_showRevertButton');
+        const showRevertButtonStub = sinon.stub(this.editorFactoryController, '_showRevertButton');
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-        var $itemsContent = $('.dx-field-item-content'),
-            editor;
+        const $itemsContent = $('.dx-field-item-content');
+        let editor;
 
         $($itemsContent.first()).trigger('dxclick');
         this.clock.tick();
@@ -3969,7 +3969,7 @@ QUnit.module('Validation', {
 
     QUnit.testInActiveWindow('Tooltips selector for the revert button', function(assert) {
         setupDataGrid(this);
-        var expected = '.dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-cell-modified .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip';
+        const expected = '.dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-cell-modified .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip';
         assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, 'tooltips selector');
     });
 
@@ -3977,7 +3977,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(200);
 
-        var dataSource = [
+        const dataSource = [
             { firstName: 'Super', lastName: 'Man', description: 'Test Test Test' },
             { firstName: 'Blablablablablablablablablabla', lastName: 'ShumShumShum Shum', description: 'Test Test Test' }
         ];
@@ -4017,8 +4017,8 @@ QUnit.module('Validation', {
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-        var $itemsContent = $('.dx-field-item-content'),
-            editor;
+        let $itemsContent = $('.dx-field-item-content');
+        let editor;
 
         $($itemsContent.eq(1)).trigger('dxclick');
         this.clock.tick();
@@ -4088,7 +4088,7 @@ QUnit.module('Validation', {
         // arrange
         $('.dx-datagrid').width(800);
 
-        var rowValidatingCounter = 0;
+        let rowValidatingCounter = 0;
 
         this.options = {
             columns: [
@@ -4186,7 +4186,7 @@ QUnit.module('Keyboard navigation', {
         this.triggerFormItemClick(0);
 
         // assert
-        var $nextItemContent = this.getActiveInputElement().closest('.dx-item').next().find('.dx-field-item-content');
+        const $nextItemContent = this.getActiveInputElement().closest('.dx-item').next().find('.dx-field-item-content');
         assert.equal($nextItemContent.text(), 'Full Name', 'next item text');
         assert.equal($nextItemContent.attr('tabindex'), 0, 'next item has tabindex');
 
@@ -4195,7 +4195,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // assert
-        var $input = this.getActiveInputElement();
+        const $input = this.getActiveInputElement();
         assert.equal($input.val(), 'Full Name', 'current input is correct');
     });
 
@@ -4205,7 +4205,7 @@ QUnit.module('Keyboard navigation', {
         this.triggerFormItemClick(1);
 
         // assert
-        var $nextItemContent = this.getActiveInputElement().closest('.dx-item').prev().find('.dx-field-item-content');
+        const $nextItemContent = this.getActiveInputElement().closest('.dx-item').prev().find('.dx-field-item-content');
         assert.equal($nextItemContent.text(), 'Psy', 'next item text');
         assert.equal($nextItemContent.attr('tabindex'), 0, 'next item has tabindex');
 
@@ -4214,7 +4214,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // assert
-        var $input = this.getActiveInputElement();
+        const $input = this.getActiveInputElement();
         assert.equal($input.val(), 'Psy', 'current input is correct');
     });
 
@@ -4224,16 +4224,16 @@ QUnit.module('Keyboard navigation', {
         this.triggerFormItemClick(1);
 
         // act
-        var e = $.Event('keydown');
+        const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
         this.clock.tick();
 
-        var $cell = this.$dataGrid.find('td:not([class])').eq(1);
+        const $cell = this.$dataGrid.find('td:not([class])').eq(1);
         eventsEngine.triggerHandler($cell, 'focus');
         this.clock.tick();
 
-        var $input = this.getActiveInputElement();
+        const $input = this.getActiveInputElement();
         assert.equal($input.val(), 'Super', 'current input is correct');
     });
 
@@ -4255,7 +4255,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // act
-        var e = $.Event('keydown');
+        const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
 
@@ -4282,7 +4282,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // act
-        var e = $.Event('keydown');
+        const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
 
@@ -4293,7 +4293,7 @@ QUnit.module('Keyboard navigation', {
     // T821699
     QUnit.test('The onRowClick event is not called after focusing adaptive panel item', function(assert) {
         // arrange
-        var rowClickCounter = 0;
+        let rowClickCounter = 0;
 
         this.options = {
             keyboardNavigation: {
@@ -4325,8 +4325,8 @@ QUnit.module('Keyboard navigation', {
         }
 
         // arrange
-        var rowDblClickCounter = 0,
-            $fieldItemContent;
+        let rowDblClickCounter = 0;
+        let $fieldItemContent;
 
         this.options = {
             keyboardNavigation: {
@@ -4368,7 +4368,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // act
-        var e = $.Event('keydown');
+        const e = $.Event('keydown');
         e.key = 'Tab';
         e.shiftKey = true;
         this.getActiveInputElement().trigger(e);
@@ -4389,7 +4389,7 @@ QUnit.module('Keyboard navigation', {
         this.clock.tick();
 
         // act
-        var e = $.Event('keydown');
+        const e = $.Event('keydown');
         e.key = 'Tab';
         this.getActiveInputElement().trigger(e);
 

@@ -1,9 +1,9 @@
-var objectUtils = require('core/utils/object');
+const objectUtils = require('core/utils/object');
 
 QUnit.test('orderEach', function(assert) {
-    var checkOrderEach = function(mapKeys, keys) {
-        var i,
-            map = {};
+    const checkOrderEach = function(mapKeys, keys) {
+        let i;
+        const map = {};
         for(i = 0; i < mapKeys.length; i++) {
             map[mapKeys[i]] = i;
         }
@@ -23,8 +23,8 @@ QUnit.test('orderEach', function(assert) {
 QUnit.test('orderEach when there is custom method in prototype of the array', function(assert) {
     /* eslint-disable no-extend-native */
     // arrange
-    var array = [1, 2, 3],
-        keys = [];
+    const array = [1, 2, 3];
+    const keys = [];
 
     Array.prototype.add = function(item) {
         this[this.length] = item;
@@ -53,7 +53,7 @@ QUnit.module('Object cloning', {
 
 QUnit.test('Prototypical cloning', function(assert) {
     // act
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // assert
     assert.ok(clone);
@@ -65,7 +65,7 @@ QUnit.test('Prototypical cloning', function(assert) {
 
 QUnit.test('External source changes affect clone', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     this.source.a = 'aa';
@@ -77,7 +77,7 @@ QUnit.test('External source changes affect clone', function(assert) {
 
 QUnit.test('External clone changes don\'t affect source', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     clone.a = 'aa';
@@ -89,7 +89,7 @@ QUnit.test('External clone changes don\'t affect source', function(assert) {
 
 QUnit.test('Internal source changes affect clone', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     this.source.changeB(15);
@@ -101,7 +101,7 @@ QUnit.test('Internal source changes affect clone', function(assert) {
 
 QUnit.test('Internal clone changes don\'t affect source', function(assert) {
     // arrange
-    var clone = objectUtils.clone(this.source);
+    const clone = objectUtils.clone(this.source);
 
     // act
     clone.changeB([]);
@@ -121,13 +121,13 @@ QUnit.module('deepExtendArraySafe utility', {
 });
 
 QUnit.test('deepExtendArraySafe utility does not change complex \'object\' to plain \'object\' by default', function(assert) {
-    var target = {
+    const target = {
         deepProp: new this.SomeClass('simple value', 'value to be changed')
     };
-    var changes = {
+    const changes = {
         deepProp: { toChange: 'changed value' }
     };
-    var result;
+    let result;
 
     result = objectUtils.deepExtendArraySafe(target, changes);
 
@@ -136,13 +136,13 @@ QUnit.test('deepExtendArraySafe utility does not change complex \'object\' to pl
 });
 
 QUnit.test('deepExtendArraySafe utility can extend complex \'object\' by plain \'object\' (T482160)', function(assert) {
-    var target = {
+    const target = {
         deepProp: new this.SomeClass('simple value', 'value to be changed')
     };
-    var changes = {
+    const changes = {
         deepProp: { toChange: 'changed value' }
     };
-    var result;
+    let result;
 
     result = objectUtils.deepExtendArraySafe(target, changes, true);
 
@@ -151,13 +151,13 @@ QUnit.test('deepExtendArraySafe utility can extend complex \'object\' by plain \
 });
 
 QUnit.test('deepExtendArraySafe utility could not extend complex \'object\' by another complex \'object\' ', function(assert) {
-    var oldValue = {
+    const oldValue = {
         deepProp: new this.SomeClass('some value', 'missed value')
     };
-    var newValue = {
+    const newValue = {
         deepProp: new this.SomeClass('new value')
     };
-    var result;
+    let result;
 
     result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 
@@ -166,13 +166,13 @@ QUnit.test('deepExtendArraySafe utility could not extend complex \'object\' by a
 });
 
 QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' deep property', function(assert) {
-    var oldValue = {
+    const oldValue = {
         deepProp: null
     };
-    var newValue = {
+    const newValue = {
         deepProp: { toChange: 'changed value' }
     };
-    var result;
+    let result;
 
     result = objectUtils.deepExtendArraySafe(oldValue, newValue, true);
 

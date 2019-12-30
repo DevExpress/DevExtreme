@@ -1,12 +1,12 @@
-var Callbacks = require('../../core/utils/callbacks'),
-    ngModule = require('./module');
+const Callbacks = require('../../core/utils/callbacks');
+const ngModule = require('./module');
 
 ngModule.service('dxDigestCallbacks', ['$rootScope', function($rootScope) {
-    var begin = Callbacks(),
-        prioritizedEnd = Callbacks(),
-        end = Callbacks();
+    const begin = Callbacks();
+    const prioritizedEnd = Callbacks();
+    const end = Callbacks();
 
-    var digestPhase = false;
+    let digestPhase = false;
 
     $rootScope.$watch(function() {
         if(digestPhase) {

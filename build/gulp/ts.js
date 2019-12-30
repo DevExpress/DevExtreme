@@ -1,24 +1,24 @@
-var gulp = require('gulp');
-var file = require('gulp-file');
-var footer = require('gulp-footer');
+const gulp = require('gulp');
+const file = require('gulp-file');
+const footer = require('gulp-footer');
 const fs = require('fs');
-var concat = require('gulp-concat');
-var map = require('map-stream');
-var path = require('path');
-var replace = require('gulp-replace');
-var ts = require('gulp-typescript');
+const concat = require('gulp-concat');
+const map = require('map-stream');
+const path = require('path');
+const replace = require('gulp-replace');
+const ts = require('gulp-typescript');
 
-var context = require('./context.js');
-var headerPipes = require('./header-pipes.js');
-var MODULES = require('./modules_metadata.json');
+const context = require('./context.js');
+const headerPipes = require('./header-pipes.js');
+const MODULES = require('./modules_metadata.json');
 
-var PACKAGE_DIR = context.RESULT_NPM_PATH + '/devextreme';
-var DIST_DIR = PACKAGE_DIR + '/dist';
-var OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
-var OUTPUT_PACKAGE_DIR = path.join(PACKAGE_DIR, 'bundles');
-var TS_BUNDLE_FILE = './ts/dx.all.d.ts';
-var TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-var TS_MODULES_GLOB = './js/**/*.d.ts';
+const PACKAGE_DIR = context.RESULT_NPM_PATH + '/devextreme';
+const DIST_DIR = PACKAGE_DIR + '/dist';
+const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
+const OUTPUT_PACKAGE_DIR = path.join(PACKAGE_DIR, 'bundles');
+const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
+const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
+const TS_MODULES_GLOB = './js/**/*.d.ts';
 
 gulp.task('ts-vendor', function() {
     return gulp.src('./ts/vendor/*')
@@ -39,7 +39,7 @@ gulp.task('ts-bundle', function writeTsBundle() {
 });
 
 gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmentations() {
-    var content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
+    let content = `/// <reference path='${TS_BUNDLE_FILE}' />\n`;
 
     content += MODULES
         .map(function(moduleMeta) {
@@ -50,8 +50,8 @@ gulp.task('ts-jquery-check', gulp.series('ts-bundle', function checkJQueryAugmen
                 const exportEntry = moduleMeta.exports[name];
                 if(!exportEntry.isWidget) { return ''; }
 
-                var globalPath = exportEntry.path;
-                var widgetName = widgetNameByPath(globalPath);
+                const globalPath = exportEntry.path;
+                const widgetName = widgetNameByPath(globalPath);
                 if(!widgetName) { return ''; }
 
                 return `$().${widgetName}();\n` +
@@ -73,7 +73,7 @@ gulp.task('ts-compilation-check', function() {
 });
 
 gulp.task('ts-modules', function generateModules() {
-    var bundleImport = 'import DevExpress from \'../bundles/dx.all\';';
+    const bundleImport = 'import DevExpress from \'../bundles/dx.all\';';
 
     return gulp.src(TS_MODULES_GLOB)
         /* legacy modules */
@@ -112,10 +112,10 @@ gulp.task('ts-angular-hack', function() {
 gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle', 'ts-angular-hack'));
 
 gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() {
-    var content = 'import $ from \'jquery\';\n';
+    let content = 'import $ from \'jquery\';\n';
 
     content += MODULES.map(function(moduleMeta) {
-        var modulePath = '\'./npm/devextreme/' + moduleMeta.name + '\'';
+        const modulePath = '\'./npm/devextreme/' + moduleMeta.name + '\'';
         if(!moduleMeta.exports) {
             return 'import ' + modulePath + ';';
         }
@@ -123,16 +123,16 @@ gulp.task('ts-modules-check', gulp.series('ts-modules', function checkModules() 
         return Object.keys(moduleMeta.exports).map(function(name) {
             const exportEntry = moduleMeta.exports[name];
 
-            var uniqueIdentifier = moduleMeta.name
+            const uniqueIdentifier = moduleMeta.name
                 .replace(/\./g, '_')
                 .split('/')
                 .concat([name])
                 .join('__');
 
-            var importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
+            const importIdentifier = name === 'default' ? uniqueIdentifier : `{ ${name} as ${uniqueIdentifier} }`;
 
             const importStatement = `import ${importIdentifier} from ${modulePath};`;
-            var widgetName = widgetNameByPath(exportEntry.path);
+            const widgetName = widgetNameByPath(exportEntry.path);
             if(exportEntry.isWidget && widgetName) {
                 return `$('<div>').${widgetName}();\n${importStatement}`;
             }
@@ -157,7 +157,7 @@ gulp.task('ts', gulp.series(
 
 function widgetNameByPath(widgetPath) {
     if(widgetPath.startsWith('ui.dx') || widgetPath.startsWith('viz.dx')) {
-        var parts = widgetPath.split('.');
+        const parts = widgetPath.split('.');
         return parts.length === 2 ? parts[1] : '';
     }
 }

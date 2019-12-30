@@ -10,15 +10,15 @@ import { when, Deferred } from '../../core/utils/deferred';
 import inflector from '../../core/utils/inflector';
 import { registerKeyboardAction } from './ui.grid_core.accessibility';
 
-var FILTER_PANEL_CLASS = 'filter-panel',
-    FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text',
-    FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox',
-    FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + '-clear-filter',
-    FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + '-left';
+const FILTER_PANEL_CLASS = 'filter-panel';
+const FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + '-text';
+const FILTER_PANEL_CHECKBOX_CLASS = FILTER_PANEL_CLASS + '-checkbox';
+const FILTER_PANEL_CLEAR_FILTER_CLASS = FILTER_PANEL_CLASS + '-clear-filter';
+const FILTER_PANEL_LEFT_CONTAINER = FILTER_PANEL_CLASS + '-left';
 
-var FILTER_PANEL_TARGET = 'filterPanel';
+const FILTER_PANEL_TARGET = 'filterPanel';
 
-var FilterPanelView = modules.View.inherit({
+const FilterPanelView = modules.View.inherit({
     isVisible: function() {
         return this.option('filterPanel.visible') && this.getController('data').dataSource();
     },
@@ -28,9 +28,9 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _renderCore: function() {
-        var that = this,
-            $element = that.element(),
-            $leftContainer;
+        const that = this;
+        const $element = that.element();
+        let $leftContainer;
 
         $element
             .empty()
@@ -51,9 +51,9 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getCheckElement: function() {
-        var that = this,
-            $element = $('<div>')
-                .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
+        const that = this;
+        const $element = $('<div>')
+            .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
 
         that._createComponent($element, CheckBox, {
             value: that.option('filterPanel.filterEnabled'),
@@ -66,8 +66,8 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getFilterElement: function() {
-        var that = this,
-            $element = $('<div>').addClass('dx-icon-filter');
+        const that = this;
+        const $element = $('<div>').addClass('dx-icon-filter');
 
         eventsEngine.on($element, 'click', () => that._showFilterBuilder());
 
@@ -79,15 +79,15 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getTextElement: function() {
-        var that = this,
-            $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS)),
-            filterText,
-            filterValue = that.option('filterValue');
+        const that = this;
+        const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
+        let filterText;
+        const filterValue = that.option('filterValue');
         if(filterValue) {
             when(that.getFilterText(filterValue, that.getController('filterSync').getCustomFilterOperations())).done(function(filterText) {
-                var customizeText = that.option('filterPanel.customizeText');
+                const customizeText = that.option('filterPanel.customizeText');
                 if(customizeText) {
-                    var customText = customizeText({
+                    const customText = customizeText({
                         component: that.component,
                         filterValue: filterValue,
                         text: filterText
@@ -117,11 +117,11 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getRemoveButtonElement: function() {
-        var that = this,
-            clearFilterValue = () => that.option('filterValue', null),
-            $element = $('<div>')
-                .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-                .text(that.option('filterPanel.texts.clearFilter'));
+        const that = this;
+        const clearFilterValue = () => that.option('filterValue', null);
+        const $element = $('<div>')
+            .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
+            .text(that.option('filterPanel.texts.clearFilter'));
 
         eventsEngine.on($element, 'click', clearFilterValue);
 
@@ -134,7 +134,7 @@ var FilterPanelView = modules.View.inherit({
 
     _addTabIndexToElement: function($element) {
         if(!this.option('useLegacyKeyboardNavigation')) {
-            let tabindex = this.option('tabindex') || 0;
+            const tabindex = this.option('tabindex') || 0;
             $element.attr('tabindex', tabindex);
         }
     },
@@ -156,7 +156,7 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getConditionText: function(fieldText, operationText, valueText) {
-        var result = `[${fieldText}] ${operationText}`;
+        let result = `[${fieldText}] ${operationText}`;
         if(isDefined(valueText)) {
             result += valueText;
         }
@@ -168,15 +168,15 @@ var FilterPanelView = modules.View.inherit({
     },
 
     _getValueText: function(field, customOperation, value) {
-        const deferred = new Deferred(),
-            hasCustomOperation = customOperation && customOperation.customizeText;
+        const deferred = new Deferred();
+        const hasCustomOperation = customOperation && customOperation.customizeText;
         if(isDefined(value) || hasCustomOperation) {
             if(!hasCustomOperation && field.lookup) {
                 utils.getCurrentLookupValueText(field, value, data => {
                     deferred.resolve(this._getValueMaskedText(data));
                 });
             } else {
-                let displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value);
+                const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value);
                 when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
                     deferred.resolve(this._getValueMaskedText(data));
                 });
@@ -188,14 +188,14 @@ var FilterPanelView = modules.View.inherit({
     },
 
     getConditionText: function(filterValue, options) {
-        var that = this,
-            operation = filterValue[1],
-            deferred = new Deferred(),
-            customOperation = utils.getCustomOperation(options.customOperations, operation),
-            operationText,
-            field = utils.getField(filterValue[0], options.columns),
-            fieldText = field.caption || '',
-            value = filterValue[2];
+        const that = this;
+        const operation = filterValue[1];
+        const deferred = new Deferred();
+        const customOperation = utils.getCustomOperation(options.customOperations, operation);
+        let operationText;
+        const field = utils.getField(filterValue[0], options.columns);
+        const fieldText = field.caption || '';
+        const value = filterValue[2];
 
         if(customOperation) {
             operationText = customOperation.caption || inflector.captionize(customOperation.name);
@@ -211,10 +211,10 @@ var FilterPanelView = modules.View.inherit({
     },
 
     getGroupText: function(filterValue, options, isInnerGroup) {
-        var that = this,
-            result = new Deferred(),
-            textParts = [],
-            groupValue = utils.getGroupValue(filterValue);
+        const that = this;
+        const result = new Deferred();
+        const textParts = [];
+        const groupValue = utils.getGroupValue(filterValue);
 
         filterValue.forEach(item => {
             if(utils.isCondition(item)) {
@@ -227,7 +227,7 @@ var FilterPanelView = modules.View.inherit({
         when.apply(this, textParts).done((...args) => {
             let text;
             if(groupValue[0] === '!') {
-                var groupText = options.groupOperationDescriptions['not' + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(' ');
+                const groupText = options.groupOperationDescriptions['not' + groupValue.substring(1, 2).toUpperCase() + groupValue.substring(2)].split(' ');
                 text = `${groupText[0]} ${args[0]}`;
             } else {
                 text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
@@ -241,13 +241,13 @@ var FilterPanelView = modules.View.inherit({
     },
 
     getFilterText: function(filterValue, customOperations) {
-        var that = this,
-            options = {
-                customOperations: customOperations,
-                columns: that.getController('columns').getFilteringColumns(),
-                filterOperationDescriptions: that.option('filterBuilder.filterOperationDescriptions'),
-                groupOperationDescriptions: that.option('filterBuilder.groupOperationDescriptions')
-            };
+        const that = this;
+        const options = {
+            customOperations: customOperations,
+            columns: that.getController('columns').getFilteringColumns(),
+            filterOperationDescriptions: that.option('filterBuilder.filterOperationDescriptions'),
+            groupOperationDescriptions: that.option('filterBuilder.groupOperationDescriptions')
+        };
         return utils.isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
     }
 });

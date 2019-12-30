@@ -1,11 +1,11 @@
-var _noop = require('../core/utils/common').noop,
-    registerComponent = require('../core/component_registrator'),
-    extend = require('../core/utils/extend').extend,
-    vizUtils = require('./core/utils'),
-    AdvancedChart = require('./chart_components/advanced_chart').AdvancedChart,
-    DEFAULT_PANE_NAME = 'default';
+const _noop = require('../core/utils/common').noop;
+const registerComponent = require('../core/component_registrator');
+const extend = require('../core/utils/extend').extend;
+const vizUtils = require('./core/utils');
+const AdvancedChart = require('./chart_components/advanced_chart').AdvancedChart;
+const DEFAULT_PANE_NAME = 'default';
 
-var dxPolarChart = AdvancedChart.inherit({
+const dxPolarChart = AdvancedChart.inherit({
     _themeSection: 'polar',
 
     _createPanes: function() {
@@ -18,9 +18,9 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _getAxisRenderingOptions: function(typeSelector) {
-        var isArgumentAxis = typeSelector === 'argumentAxis',
-            type = isArgumentAxis ? 'circular' : 'linear',
-            useSpiderWeb = this.option('useSpiderWeb');
+        const isArgumentAxis = typeSelector === 'argumentAxis';
+        let type = isArgumentAxis ? 'circular' : 'linear';
+        const useSpiderWeb = this.option('useSpiderWeb');
 
         if(useSpiderWeb) {
             type += 'Spider';
@@ -33,11 +33,11 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _prepareAxisOptions: function(typeSelector, axisOptions) {
-        var isArgumentAxis = typeSelector === 'argumentAxis',
-            themeManager = this._themeManager,
-            axisUserOptions = this.option('argumentAxis'),
-            argumentAxisOptions = themeManager.getOptions('argumentAxis', axisUserOptions) || {},
-            startAngle = isFinite(argumentAxisOptions.startAngle) ? vizUtils.normalizeAngle(argumentAxisOptions.startAngle) : 0;
+        const isArgumentAxis = typeSelector === 'argumentAxis';
+        const themeManager = this._themeManager;
+        const axisUserOptions = this.option('argumentAxis');
+        const argumentAxisOptions = themeManager.getOptions('argumentAxis', axisUserOptions) || {};
+        const startAngle = isFinite(argumentAxisOptions.startAngle) ? vizUtils.normalizeAngle(argumentAxisOptions.startAngle) : 0;
 
         return {
             type: this.option('useSpiderWeb') && isArgumentAxis ? 'discrete' : axisOptions.type,
@@ -70,9 +70,9 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _renderAxes: function(drawOptions) {
-        var that = this,
-            valueAxis = that._getValueAxis(),
-            argumentAxis = that.getArgumentAxis();
+        const that = this;
+        const valueAxis = that._getValueAxis();
+        const argumentAxis = that.getArgumentAxis();
 
         argumentAxis.draw(that._canvas);
         valueAxis.setSpiderTicks(argumentAxis.getSpiderTicks());
@@ -90,8 +90,8 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _shrinkAxes: function(sizeStorage) {
-        var valueAxis = this._getValueAxis(),
-            argumentAxis = this.getArgumentAxis();
+        const valueAxis = this._getValueAxis();
+        const argumentAxis = this.getArgumentAxis();
 
         if(sizeStorage && (sizeStorage.width || sizeStorage.height)
         ) {

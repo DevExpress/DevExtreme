@@ -7,7 +7,7 @@ import 'common.css!';
 
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dataGrid"></div>';
 
     $('#qunit-fixture').html(markup);
@@ -23,10 +23,10 @@ QUnit.module('DataGrid markup', {
 });
 
 QUnit.test('markup init', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid(),
-        $container = $element.children(),
-        $headersView = $container.children('.dx-datagrid-headers'),
-        $rowsView = $container.children('.dx-datagrid-rowsview');
+    const $element = $('#dataGrid').dxDataGrid();
+    const $container = $element.children();
+    const $headersView = $container.children('.dx-datagrid-headers');
+    const $rowsView = $container.children('.dx-datagrid-rowsview');
 
     assert.ok($element.hasClass('dx-widget'), 'dx-widget');
     assert.ok($container.hasClass('dx-datagrid'), 'dx-datagrid');
@@ -38,15 +38,15 @@ QUnit.test('markup init', function(assert) {
 });
 
 QUnit.test('markup with dataSource', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         dataSource: [{ id: 1, name: 'Alex' }]
     });
 
     this.clock.tick(30);
 
-    var $container = $element.children(),
-        $headersView = $container.children('.dx-datagrid-headers'),
-        $rowsView = $container.children('.dx-datagrid-rowsview');
+    const $container = $element.children();
+    const $headersView = $container.children('.dx-datagrid-headers');
+    const $rowsView = $container.children('.dx-datagrid-rowsview');
 
     assert.ok($element.hasClass('dx-widget'), 'dx-widget');
     assert.ok($container.hasClass('dx-datagrid'), 'dx-datagrid');
@@ -64,16 +64,16 @@ QUnit.test('markup with dataSource', function(assert) {
 });
 
 QUnit.test('markup with column width', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         dataSource: [{ id: 1, name: 'Alex' }],
         columns: ['id', { dataField: 'name', width: 200 }]
     });
 
     this.clock.tick(30);
 
-    var $container = $element.children(),
-        $headersView = $container.children('.dx-datagrid-headers'),
-        $rowsView = $container.children('.dx-datagrid-rowsview');
+    const $container = $element.children();
+    const $headersView = $container.children('.dx-datagrid-headers');
+    const $rowsView = $container.children('.dx-datagrid-rowsview');
 
     assert.ok($element.hasClass('dx-widget'), 'dx-widget');
     assert.ok($container.hasClass('dx-datagrid'), 'dx-datagrid');
@@ -88,7 +88,7 @@ QUnit.test('markup with column width', function(assert) {
 });
 
 QUnit.test('markup with fixed column', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         dataSource: [{ id: 1, name: 'Alex' }],
         columns: ['id', { dataField: 'name', fixed: true }]
     });
@@ -99,7 +99,7 @@ QUnit.test('markup with fixed column', function(assert) {
 });
 
 QUnit.test('markup with columns resizing/reordering', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         allowColumnResizing: true,
         allowColumnReordering: true,
         dataSource: [{ id: 1, name: 'Alex' }]
@@ -107,9 +107,9 @@ QUnit.test('markup with columns resizing/reordering', function(assert) {
 
     this.clock.tick(30);
 
-    var $separator = $element.find('.dx-datagrid-columns-separator'),
-        $tracker = $element.find('.dx-datagrid-tracker'),
-        $dragHeader = $element.find('.dx-datagrid-drag-header');
+    const $separator = $element.find('.dx-datagrid-columns-separator');
+    const $tracker = $element.find('.dx-datagrid-tracker');
+    const $dragHeader = $element.find('.dx-datagrid-drag-header');
 
     assert.equal($separator.length, 1, 'separator is rendered');
     assert.equal($tracker.length, 1, 'tracker is rendered');
@@ -117,7 +117,7 @@ QUnit.test('markup with columns resizing/reordering', function(assert) {
 });
 
 QUnit.test('markup with virtual scrolling', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         height: 100,
         paging: { pageSize: 4 },
         scrolling: { mode: 'virtual' },
@@ -126,13 +126,13 @@ QUnit.test('markup with virtual scrolling', function(assert) {
     });
 
     this.clock.tick(300);
-    var $virtualRows = $element.find('.dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row');
+    const $virtualRows = $element.find('.dx-datagrid-rowsview .dx-datagrid-table .dx-virtual-row');
     assert.equal($virtualRows.length, 1, 'one virtual row is rendered');
     assert.ok(parseInt($virtualRows.eq(0).children().get(0).style.height) > 20, 'first virtual row height');
 });
 
 QUnit.test('markup with editing', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         editing: {
             allowUpdating: true,
             allowDeleting: true,
@@ -143,14 +143,14 @@ QUnit.test('markup with editing', function(assert) {
 
     this.clock.tick(30);
 
-    var $editCell = $element.find('.dx-data-row .dx-command-edit');
+    const $editCell = $element.find('.dx-data-row .dx-command-edit');
     assert.equal($editCell.length, 1, 'one command edit column in data rows');
     assert.equal($editCell.get(0).style.textAlign, 'center', 'text-align style for edit column');
     assert.equal($element.find('colgroup col').last().get(0).style.width, windowUtils.hasWindow() ? '100px' : 'auto', 'width style for edit command column');
 });
 
 QUnit.test('markup with grouping', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         dataSource: [{ id: 1, name: 'Alex' }],
         columns: ['id', { dataField: 'name', groupIndex: 0 }]
     });
@@ -162,7 +162,7 @@ QUnit.test('markup with grouping', function(assert) {
 });
 
 QUnit.test('markup with column hiding', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         columnHidingEnabled: true,
         dataSource: [{ id: 1, name: 'Alex' }]
     });
@@ -176,7 +176,7 @@ QUnit.test('markup with column hiding', function(assert) {
 });
 
 QUnit.test('markup with pager', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         paging: { pageSize: 2 },
         pager: {
             showPageSizeSelector: true,
@@ -187,7 +187,7 @@ QUnit.test('markup with pager', function(assert) {
     });
 
     this.clock.tick(30);
-    var $pagerView = $element.find('.dx-datagrid-pager');
+    const $pagerView = $element.find('.dx-datagrid-pager');
     assert.equal($pagerView.length, 1, 'pager view is rendered');
     assert.ok($pagerView.hasClass('dx-pager'), 'pager is rendered');
     assert.equal($pagerView.children().length, windowUtils.hasWindow() ? 2 : 1, 'pager content is rendered');
@@ -196,7 +196,7 @@ QUnit.test('markup with pager', function(assert) {
 });
 
 QUnit.test('markup with virtual columns', function(assert) {
-    var $element = $('#dataGrid').dxDataGrid({
+    const $element = $('#dataGrid').dxDataGrid({
         width: 400,
         columnWidth: 100,
         scrolling: { columnRenderingMode: 'virtual' },

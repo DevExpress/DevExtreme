@@ -1,41 +1,41 @@
-var $ = require('../core/renderer'),
-    domAdapter = require('../core/dom_adapter'),
-    windowUtils = require('../core/utils/window'),
-    window = windowUtils.getWindow(),
-    Deferred = require('../core/utils/deferred').Deferred,
-    errors = require('./widget/ui.errors'),
-    domUtils = require('../core/utils/dom'),
-    readyCallbacks = require('../core/utils/ready_callbacks'),
-    ready = readyCallbacks.add,
-    each = require('../core/utils/iterator').each,
-    devices = require('../core/devices'),
-    viewPortUtils = require('../core/utils/view_port'),
-    themeReadyCallback = require('./themes_callback'),
-    viewPort = viewPortUtils.value,
-    Promise = require('../core/polyfills/promise'),
-    viewPortChanged = viewPortUtils.changeCallback;
+const $ = require('../core/renderer');
+const domAdapter = require('../core/dom_adapter');
+const windowUtils = require('../core/utils/window');
+const window = windowUtils.getWindow();
+const Deferred = require('../core/utils/deferred').Deferred;
+const errors = require('./widget/ui.errors');
+const domUtils = require('../core/utils/dom');
+const readyCallbacks = require('../core/utils/ready_callbacks');
+const ready = readyCallbacks.add;
+const each = require('../core/utils/iterator').each;
+const devices = require('../core/devices');
+const viewPortUtils = require('../core/utils/view_port');
+const themeReadyCallback = require('./themes_callback');
+const viewPort = viewPortUtils.value;
+const Promise = require('../core/polyfills/promise');
+const viewPortChanged = viewPortUtils.changeCallback;
 
-var DX_LINK_SELECTOR = 'link[rel=dx-theme]',
-    THEME_ATTR = 'data-theme',
-    ACTIVE_ATTR = 'data-active',
-    DX_HAIRLINES_CLASS = 'dx-hairlines';
+const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
+const THEME_ATTR = 'data-theme';
+const ACTIVE_ATTR = 'data-active';
+const DX_HAIRLINES_CLASS = 'dx-hairlines';
 
-var context,
-    $activeThemeLink,
-    knownThemes,
-    currentThemeName,
-    pendingThemeName;
+let context;
+let $activeThemeLink;
+let knownThemes;
+let currentThemeName;
+let pendingThemeName;
 
-var timerId;
+let timerId;
 
-var THEME_MARKER_PREFIX = 'dx.';
+const THEME_MARKER_PREFIX = 'dx.';
 
 function readThemeMarker() {
     if(!windowUtils.hasWindow()) {
         return null;
     }
-    var element = $('<div>', context).addClass('dx-theme-marker').appendTo(context.documentElement),
-        result;
+    const element = $('<div>', context).addClass('dx-theme-marker').appendTo(context.documentElement);
+    let result;
 
     try {
         result = element.css('fontFamily');
@@ -57,7 +57,7 @@ function readThemeMarker() {
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
 function waitForThemeLoad(themeName) {
-    var waitStartTime;
+    let waitStartTime;
 
     pendingThemeName = themeName;
 
@@ -73,8 +73,8 @@ function waitForThemeLoad(themeName) {
     } else {
         waitStartTime = Date.now();
         timerId = setInterval(function() {
-            var isLoaded = isPendingThemeLoaded(),
-                isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
+            const isLoaded = isPendingThemeLoaded();
+            const isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
 
             if(isTimeout) {
                 errors.log('W0004', pendingThemeName);
@@ -95,7 +95,7 @@ function isPendingThemeLoaded() {
 }
 
 function processMarkup() {
-    var $allThemeLinks = $(DX_LINK_SELECTOR, context);
+    const $allThemeLinks = $(DX_LINK_SELECTOR, context);
     if(!$allThemeLinks.length) {
         return;
     }
@@ -104,10 +104,10 @@ function processMarkup() {
     $activeThemeLink = $(domUtils.createMarkupFromString('<link rel=stylesheet>'), context);
 
     $allThemeLinks.each(function() {
-        var link = $(this, context),
-            fullThemeName = link.attr(THEME_ATTR),
-            url = link.attr('href'),
-            isActive = link.attr(ACTIVE_ATTR) === 'true';
+        const link = $(this, context);
+        const fullThemeName = link.attr(THEME_ATTR);
+        const url = link.attr('href');
+        const isActive = link.attr(ACTIVE_ATTR) === 'true';
 
         knownThemes[fullThemeName] = {
             url: url,
@@ -121,8 +121,8 @@ function processMarkup() {
 
 function resolveFullThemeName(desiredThemeName) {
 
-    var desiredThemeParts = desiredThemeName ? desiredThemeName.split('.') : [],
-        result = null;
+    const desiredThemeParts = desiredThemeName ? desiredThemeName.split('.') : [];
+    let result = null;
 
     if(knownThemes) {
         if(desiredThemeName in knownThemes) {
@@ -130,7 +130,7 @@ function resolveFullThemeName(desiredThemeName) {
         }
 
         each(knownThemes, function(knownThemeName, themeData) {
-            var knownThemeParts = knownThemeName.split('.');
+            const knownThemeParts = knownThemeName.split('.');
 
             if(desiredThemeParts[0] && knownThemeParts[0] !== desiredThemeParts[0]) {
                 return;
@@ -193,9 +193,9 @@ function current(options) {
         options = { theme: options };
     }
 
-    var isAutoInit = options._autoInit,
-        loadCallback = options.loadCallback,
-        currentThemeData;
+    const isAutoInit = options._autoInit;
+    const loadCallback = options.loadCallback;
+    let currentThemeData;
 
     currentThemeName = resolveFullThemeName(options.theme || currentThemeName);
 
@@ -238,8 +238,8 @@ function current(options) {
 function getCssClasses(themeName) {
     themeName = themeName || current();
 
-    var result = [],
-        themeNameParts = themeName && themeName.split('.');
+    const result = [];
+    const themeNameParts = themeName && themeName.split('.');
 
     if(themeNameParts) {
         result.push(
@@ -255,19 +255,19 @@ function getCssClasses(themeName) {
     return result;
 }
 
-var themeClasses;
+let themeClasses;
 function attachCssClasses(element, themeName) {
     themeClasses = getCssClasses(themeName).join(' ');
     $(element).addClass(themeClasses);
 
-    var activateHairlines = function() {
-        var pixelRatio = windowUtils.hasWindow() && window.devicePixelRatio;
+    const activateHairlines = function() {
+        const pixelRatio = windowUtils.hasWindow() && window.devicePixelRatio;
 
         if(!pixelRatio || pixelRatio < 2) {
             return;
         }
 
-        var $tester = $('<div>');
+        const $tester = $('<div>');
         $tester.css('border', '.5px solid transparent');
         $('body').append($tester);
         if($tester.outerHeight() === 1) {
@@ -367,7 +367,7 @@ function waitWebFont(text, fontWeight) {
     });
 }
 
-var initDeferred = new Deferred();
+const initDeferred = new Deferred();
 
 function autoInit() {
     init({

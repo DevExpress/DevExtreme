@@ -7,8 +7,8 @@ import objectUtils from '../core/utils/object';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
-    var key,
-        keys = typeof keyOrKeys === 'string' ? keyOrKeys.split() : keyOrKeys.slice();
+    let key;
+    const keys = typeof keyOrKeys === 'string' ? keyOrKeys.split() : keyOrKeys.slice();
 
     while(keys.length) {
         key = keys.shift();
@@ -21,11 +21,11 @@ function hasKey(target, keyOrKeys) {
 }
 
 function findItems(keyInfo, items, key, groupCount) {
-    var childItems,
-        result;
+    let childItems;
+    let result;
 
     if(groupCount) {
-        for(var i = 0; i < items.length; i++) {
+        for(let i = 0; i < items.length; i++) {
             childItems = items[i].items || items[i].collapsedItems || [];
             result = findItems(keyInfo, childItems || [], key, groupCount - 1);
             if(result) {
@@ -47,7 +47,7 @@ function getItems(keyInfo, items, key, groupCount) {
 
 function generateDataByKeyMap(keyInfo, array) {
     if(keyInfo.key() && (!array._dataByKeyMap || array._dataByKeyMapLength !== array.length)) {
-        var dataByKeyMap = {};
+        const dataByKeyMap = {};
         for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
             dataByKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = array[i];
         }
@@ -79,7 +79,7 @@ function setDataByKeyMapValue(array, key, data) {
 
 function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
-        var items = item.type === 'insert' ? array : getItems(keyInfo, array, item.key, groupCount);
+        const items = item.type === 'insert' ? array : getItems(keyInfo, array, item.key, groupCount);
 
         generateDataByKeyMap(keyInfo, items);
 
@@ -92,9 +92,9 @@ function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
 }
 
 function update(keyInfo, array, key, data, isBatch) {
-    var target,
-        extendComplexObject = true,
-        keyExpr = keyInfo.key();
+    let target;
+    const extendComplexObject = true;
+    const keyExpr = keyInfo.key();
 
     if(keyExpr) {
         if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
@@ -103,7 +103,7 @@ function update(keyInfo, array, key, data, isBatch) {
 
         target = getCacheValue(array, key);
         if(!target) {
-            let index = indexByKey(keyInfo, array, key);
+            const index = indexByKey(keyInfo, array, key);
             if(index < 0) {
                 return !isBatch && rejectedPromise(errors.Error('E4009'));
             }
@@ -124,9 +124,9 @@ function update(keyInfo, array, key, data, isBatch) {
 }
 
 function insert(keyInfo, array, data, index, isBatch) {
-    var keyValue,
-        obj,
-        keyExpr = keyInfo.key();
+    let keyValue;
+    let obj;
+    const keyExpr = keyInfo.key();
 
     obj = isPlainObject(data) ? extend({}, data) : data;
 
@@ -159,7 +159,7 @@ function insert(keyInfo, array, data, index, isBatch) {
 }
 
 function remove(keyInfo, array, key, isBatch) {
-    var index = indexByKey(keyInfo, array, key);
+    const index = indexByKey(keyInfo, array, key);
     if(index > -1) {
         array.splice(index, 1);
     }
@@ -169,13 +169,13 @@ function remove(keyInfo, array, key, isBatch) {
 }
 
 function indexByKey(keyInfo, array, key) {
-    var keyExpr = keyInfo.key();
+    const keyExpr = keyInfo.key();
 
     if(!getHasKeyCacheValue(array, key)) {
         return -1;
     }
 
-    for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
+    for(let i = 0, arrayLength = array.length; i < arrayLength; i++) {
         if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
             return i;
         }

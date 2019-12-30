@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    loading = require('ui/scheduler/ui.loading'),
-    viewPort = require('core/utils/view_port').value,
-    fx = require('animation/fx'),
-    LoadPanel = require('ui/load_panel');
+const $ = require('jquery');
+const loading = require('ui/scheduler/ui.loading');
+const viewPort = require('core/utils/view_port').value;
+const fx = require('animation/fx');
+const LoadPanel = require('ui/load_panel');
 
 QUnit.module('loading tests', {
     beforeEach: function() {
@@ -39,7 +39,7 @@ QUnit.test('loadPanel options are right', function(assert) {
         message: 'Loading ...'
     });
 
-    var loadingInstance = $('.dx-loadpanel').dxLoadPanel('instance');
+    const loadingInstance = $('.dx-loadpanel').dxLoadPanel('instance');
 
     assert.equal(loadingInstance.option('width'), 222);
     assert.equal(loadingInstance.option('position.at'), 'center');
@@ -47,7 +47,7 @@ QUnit.test('loadPanel options are right', function(assert) {
 });
 
 QUnit.test('loadPanel can be attached to container', function(assert) {
-    var $container = $('<div class="container">');
+    const $container = $('<div class="container">');
 
     loading.show({
         container: $container

@@ -1,23 +1,23 @@
-var $ = require('../../core/renderer');
-var INKRIPPLE_CLASS = 'dx-inkripple',
-    INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave',
-    INKRIPPLE_SHOWING_CLASS = 'dx-inkripple-showing',
-    INKRIPPLE_HIDING_CLASS = 'dx-inkripple-hiding';
+const $ = require('../../core/renderer');
+const INKRIPPLE_CLASS = 'dx-inkripple';
+const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
+const INKRIPPLE_SHOWING_CLASS = 'dx-inkripple-showing';
+const INKRIPPLE_HIDING_CLASS = 'dx-inkripple-hiding';
 
-var DEFAULT_WAVE_SIZE_COEFFICIENT = 2,
-    MAX_WAVE_SIZE = 4000, // NOTE: incorrect scaling of ink with big size (T310238)
-    ANIMATION_DURATION = 300,
-    HOLD_ANIMATION_DURATION = 1000,
-    DEFAULT_WAVE_INDEX = 0;
+const DEFAULT_WAVE_SIZE_COEFFICIENT = 2;
+const MAX_WAVE_SIZE = 4000; // NOTE: incorrect scaling of ink with big size (T310238)
+const ANIMATION_DURATION = 300;
+const HOLD_ANIMATION_DURATION = 1000;
+const DEFAULT_WAVE_INDEX = 0;
 
-var render = function(args) {
+const render = function(args) {
     args = args || {};
 
     if(args.useHoldAnimation === undefined) {
         args.useHoldAnimation = true;
     }
 
-    var config = {
+    const config = {
         waveSizeCoefficient: args.waveSizeCoefficient || DEFAULT_WAVE_SIZE_COEFFICIENT,
         isCentered: args.isCentered || false,
         wavesNumber: args.wavesNumber || 1,
@@ -30,8 +30,8 @@ var render = function(args) {
     };
 };
 
-var getInkRipple = function(element) {
-    var result = element.children('.' + INKRIPPLE_CLASS);
+const getInkRipple = function(element) {
+    let result = element.children('.' + INKRIPPLE_CLASS);
 
     if(result.length === 0) {
         result = $('<div>')
@@ -42,12 +42,12 @@ var getInkRipple = function(element) {
     return result;
 };
 
-var getWaves = function(element, wavesNumber) {
-    var inkRipple = getInkRipple(element),
-        result = inkRipple.children('.' + INKRIPPLE_WAVE_CLASS).toArray();
+const getWaves = function(element, wavesNumber) {
+    const inkRipple = getInkRipple(element);
+    const result = inkRipple.children('.' + INKRIPPLE_WAVE_CLASS).toArray();
 
-    for(var i = result.length; i < wavesNumber; i++) {
-        var $currentWave = $('<div>')
+    for(let i = result.length; i < wavesNumber; i++) {
+        const $currentWave = $('<div>')
             .appendTo(inkRipple)
             .addClass(INKRIPPLE_WAVE_CLASS);
 
@@ -57,23 +57,23 @@ var getWaves = function(element, wavesNumber) {
     return $(result);
 };
 
-var getWaveStyleConfig = function(args, config) {
-    var element = config.element,
-        elementWidth = element.outerWidth(),
-        elementHeight = element.outerHeight(),
-        elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight)),
-        waveSize = Math.min(MAX_WAVE_SIZE, parseInt(elementDiagonal * args.waveSizeCoefficient)),
-        left,
-        top;
+const getWaveStyleConfig = function(args, config) {
+    const element = config.element;
+    const elementWidth = element.outerWidth();
+    const elementHeight = element.outerHeight();
+    const elementDiagonal = parseInt(Math.sqrt(elementWidth * elementWidth + elementHeight * elementHeight));
+    const waveSize = Math.min(MAX_WAVE_SIZE, parseInt(elementDiagonal * args.waveSizeCoefficient));
+    let left;
+    let top;
 
     if(args.isCentered) {
         left = (elementWidth - waveSize) / 2;
         top = (elementHeight - waveSize) / 2;
     } else {
-        var event = config.event,
-            position = config.element.offset(),
-            x = event.pageX - position.left,
-            y = event.pageY - position.top;
+        const event = config.event;
+        const position = config.element.offset();
+        const x = event.pageX - position.left;
+        const y = event.pageY - position.top;
 
         left = x - waveSize / 2;
         top = y - waveSize / 2;
@@ -88,7 +88,7 @@ var getWaveStyleConfig = function(args, config) {
 };
 
 var showWave = function(args, config) {
-    var $wave = getWaves(config.element, args.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
+    const $wave = getWaves(config.element, args.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
 
     args.hidingTimeout && clearTimeout(args.hidingTimeout);
     hideSelectedWave($wave);
@@ -97,7 +97,7 @@ var showWave = function(args, config) {
 };
 
 var showingWaveHandler = function(args, $wave) {
-    var durationCss = args.durations.showingScale + 'ms';
+    const durationCss = args.durations.showingScale + 'ms';
 
     $wave
         .addClass(INKRIPPLE_SHOWING_CLASS)
@@ -121,16 +121,16 @@ var hideSelectedWave = function($wave) {
 var hideWave = function(args, config) {
     args.showingTimeout && clearTimeout(args.showingTimeout);
 
-    var $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX),
-        durations = args.durations,
-        durationCss = durations.hidingScale + 'ms, ' + durations.hidingOpacity + 'ms';
+    const $wave = getWaves(config.element, config.wavesNumber).eq(config.wave || DEFAULT_WAVE_INDEX);
+    const durations = args.durations;
+    const durationCss = durations.hidingScale + 'ms, ' + durations.hidingOpacity + 'ms';
 
     $wave
         .addClass(INKRIPPLE_HIDING_CLASS)
         .removeClass(INKRIPPLE_SHOWING_CLASS)
         .css('transitionDuration', durationCss);
 
-    var animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
+    const animationDuration = Math.max(durations.hidingScale, durations.hidingOpacity);
     args.hidingTimeout = setTimeout(hideSelectedWave.bind(this, $wave), animationDuration);
 };
 

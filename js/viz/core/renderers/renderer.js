@@ -18,7 +18,7 @@ const PI_DIV_180 = PI / 180;
 const SHARPING_CORRECTION = 0.5;
 const ARC_COORD_PREC = 5;
 
-let pxAddingExceptions = {
+const pxAddingExceptions = {
     'column-count': true,
     'fill-opacity': true,
     'flex-grow': true,
@@ -46,10 +46,10 @@ const NONE = 'none';
 const DEFAULT_FONT_SIZE = 12;
 const ELLIPSIS = '...';
 
-let objectCreate = (function() {
+const objectCreate = (function() {
     if(!Object.create) {
         return function(proto) {
-            let F = function() { };
+            const F = function() { };
             F.prototype = proto;
             return new F();
         };
@@ -60,15 +60,15 @@ let objectCreate = (function() {
     }
 })();
 
-let DEFAULTS = {
+const DEFAULTS = {
     scaleX: 1,
     scaleY: 1,
     'pointer-events': null
 };
 
-let getBackup = callOnce(function() {
-    let backupContainer = domAdapter.createElement('div'),
-        backupCounter = 0;
+const getBackup = callOnce(function() {
+    const backupContainer = domAdapter.createElement('div');
+    const backupCounter = 0;
     backupContainer.style.left = '-9999px';
     backupContainer.style.position = 'absolute';
 
@@ -137,7 +137,7 @@ function getBoundingClientRect(element) {
     return box || { left: 0, top: 0 };
 }
 
-let preserveAspectRatioMap = {
+const preserveAspectRatioMap = {
     'full': NONE,
     'lefttop': 'xMinYMin',
     'leftcenter': 'xMinYMid',
@@ -169,9 +169,9 @@ module.exports.processHatchingAttrs = processHatchingAttrs;
 //
 
 function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
-    let isCircle,
-        noArc = true,
-        angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
+    let isCircle;
+    let noArc = true;
+    const angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
 
     if(angleDiff) {
         if((abs(angleDiff) % 360) === 0) {
@@ -213,7 +213,7 @@ function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
     ];
 }
 
-let buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
+const buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
     return [
         'M', (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
         'A', outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
@@ -251,9 +251,9 @@ function buildCurveSegments(points, close) {
 }
 
 function buildSegments(points, buildSimpleSegment, close) {
-    let i,
-        ii,
-        list = [];
+    let i;
+    let ii;
+    const list = [];
     if(points[0] && points[0].length) {
         for(i = 0, ii = points.length; i < ii; ++i) {
             buildSimpleSegment(points[i], close, list);
@@ -265,10 +265,10 @@ function buildSegments(points, buildSimpleSegment, close) {
 }
 
 function buildSimpleLineSegment(points, close, list) {
-    let i = 0,
-        k0 = list.length,
-        k = k0,
-        ii = (points || []).length;
+    let i = 0;
+    const k0 = list.length;
+    let k = k0;
+    const ii = (points || []).length;
     if(ii) {
         // backward compatibility
         if(points[0].x !== undefined) {
@@ -289,9 +289,9 @@ function buildSimpleLineSegment(points, close, list) {
 }
 
 function buildSimpleCurveSegment(points, close, list) {
-    let i,
-        k = list.length,
-        ii = (points || []).length;
+    let i;
+    let k = list.length;
+    const ii = (points || []).length;
     if(ii) {
         // backward compatibility
         if(points[0].x !== undefined) {
@@ -329,13 +329,13 @@ function buildSimpleCurveSegment(points, close, list) {
 }
 
 function combinePathParam(segments) {
-    let d = [],
-        k = 0,
-        i,
-        ii = segments.length,
-        segment,
-        j,
-        jj;
+    const d = [];
+    let k = 0;
+    let i;
+    const ii = segments.length;
+    let segment;
+    let j;
+    let jj;
     for(i = 0; i < ii; ++i) {
         segment = segments[i];
         for(j = 0, jj = segment.length; j < jj; ++j) {
@@ -346,11 +346,11 @@ function combinePathParam(segments) {
 }
 
 function compensateSegments(oldSegments, newSegments, type) {
-    let oldLength = oldSegments.length,
-        newLength = newSegments.length,
-        i,
-        originalNewSegments,
-        makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
+    const oldLength = oldSegments.length;
+    const newLength = newSegments.length;
+    let i;
+    let originalNewSegments;
+    const makeEqualSegments = (type.indexOf('area') !== -1) ? makeEqualAreaSegments : makeEqualLineSegments;
 
     if(oldLength === 0) {
         for(i = 0; i < newLength; i++) {
@@ -366,8 +366,8 @@ function compensateSegments(oldSegments, newSegments, type) {
 }
 
 function prepareConstSegment(constSeg, type) {
-    let x = constSeg[constSeg.length - 2],
-        y = constSeg[constSeg.length - 1];
+    const x = constSeg[constSeg.length - 2];
+    const y = constSeg[constSeg.length - 1];
     switch(type) {
         case 'line':
         case 'area':
@@ -383,8 +383,8 @@ function prepareConstSegment(constSeg, type) {
 }
 
 function makeEqualLineSegments(short, long, type) {
-    let constSeg = short[short.length - 1].slice(),
-        i = short.length;
+    const constSeg = short[short.length - 1].slice();
+    let i = short.length;
     prepareConstSegment(constSeg, type);
     for(; i < long.length; i++) {
         short[i] = constSeg.slice(0);
@@ -392,12 +392,12 @@ function makeEqualLineSegments(short, long, type) {
 }
 
 function makeEqualAreaSegments(short, long, type) {
-    let i,
-        head,
-        shortLength = short.length,
-        longLength = long.length,
-        constsSeg1,
-        constsSeg2;
+    let i;
+    let head;
+    const shortLength = short.length;
+    const longLength = long.length;
+    let constsSeg1;
+    let constsSeg2;
 
     if((shortLength - 1) % 2 === 0 && (longLength - 1) % 2 === 0) {
         i = (shortLength - 1) / 2 - 1;
@@ -414,10 +414,10 @@ function makeEqualAreaSegments(short, long, type) {
 }
 
 function baseCss(that, styles) {
-    let elemStyles = that._styles,
-        str = '',
-        key,
-        value;
+    const elemStyles = that._styles;
+    let str = '';
+    let key;
+    let value;
 
     styles = styles || {};
     for(key in styles) {
@@ -440,8 +440,8 @@ function baseCss(that, styles) {
 }
 
 function fixFuncIri(wrapper, attribute) {
-    let element = wrapper.element,
-        id = wrapper.attr(attribute);
+    const element = wrapper.element;
+    const id = wrapper.attr(attribute);
 
     if(id && id.indexOf('DevExpress') !== -1) {
         element.removeAttribute(attribute);
@@ -451,17 +451,17 @@ function fixFuncIri(wrapper, attribute) {
 
 function baseAttr(that, attrs) {
     attrs = attrs || {};
-    let settings = that._settings,
-        attributes = {},
-        key,
-        value,
-        elem = that.element,
-        renderer = that.renderer,
-        rtl = renderer.rtl,
-        hasTransformations,
-        recalculateDashStyle,
-        sw,
-        i;
+    const settings = that._settings;
+    const attributes = {};
+    let key;
+    let value;
+    const elem = that.element;
+    const renderer = that.renderer;
+    const rtl = renderer.rtl;
+    let hasTransformations;
+    let recalculateDashStyle;
+    let sw;
+    let i;
 
     if(!isObjectArgument(attrs)) {
         if(attrs in settings) {
@@ -534,8 +534,8 @@ function baseAttr(that, attrs) {
 }
 
 function pathAttr(attrs) {
-    let that = this,
-        segments;
+    const that = this;
+    let segments;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
@@ -554,8 +554,8 @@ function pathAttr(attrs) {
 }
 
 function arcAttr(attrs) {
-    let settings = this._settings,
-        x, y, innerRadius, outerRadius, startAngle, endAngle;
+    const settings = this._settings;
+    let x; let y; let innerRadius; let outerRadius; let startAngle; let endAngle;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
@@ -574,14 +574,14 @@ function arcAttr(attrs) {
 }
 
 function rectAttr(attrs) {
-    let that = this,
-        x,
-        y,
-        width,
-        height,
-        sw,
-        maxSW,
-        newSW;
+    const that = this;
+    let x;
+    let y;
+    let width;
+    let height;
+    let sw;
+    let maxSW;
+    let newSW;
 
     if(isObjectArgument(attrs)) {
         attrs = extend({}, attrs);
@@ -615,11 +615,11 @@ function rectAttr(attrs) {
 }
 
 function textAttr(attrs) {
-    let that = this,
-        settings,
-        isResetRequired,
-        wasStroked,
-        isStroked;
+    const that = this;
+    let settings;
+    let isResetRequired;
+    let wasStroked;
+    let isStroked;
 
     if(!isObjectArgument(attrs)) {
         return baseAttr(that, attrs);
@@ -677,11 +677,11 @@ function textCss(styles) {
 }
 
 function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
-    let style,
-        realStyle,
-        i,
-        ii,
-        nodes;
+    let style;
+    let realStyle;
+    let i;
+    let ii;
+    let nodes;
 
     if(node.wholeText !== undefined) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
@@ -716,9 +716,9 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
 }
 
 function adjustLineHeights(items) {
-    let i, ii,
-        currentItem = items[0],
-        item;
+    let i; let ii;
+    let currentItem = items[0];
+    let item;
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
         if(item.line === currentItem.line) {
@@ -733,8 +733,8 @@ function adjustLineHeights(items) {
 }
 
 function removeExtraAttrs(html) {
-    let findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi,
-        findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
+    const findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi;
+    const findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
     return html.replace(findTagAttrs, function(allTagAttrs, p1, p2, p3) {
         p2 = (p2 && p2.match(findStyleAndClassAttrs) || []).map(function(str) {
@@ -746,8 +746,8 @@ function removeExtraAttrs(html) {
 }
 
 function parseHTML(text) {
-    let items = [],
-        div = domAdapter.createElement('div');
+    const items = [];
+    const div = domAdapter.createElement('div');
     div.innerHTML = text.replace(/\r/g, '').replace(/\n/g, '<br/>');
     orderHtmlTree(items, 0, div, {}, '');
     adjustLineHeights(items);
@@ -755,9 +755,9 @@ function parseHTML(text) {
 }
 
 function parseMultiline(text) {
-    let texts = text.replace(/\r/g, '').split(/\n/g),
-        i = 0,
-        items = [];
+    const texts = text.replace(/\r/g, '').split(/\n/g);
+    let i = 0;
+    const items = [];
     for(; i < texts.length; i++) {
         items.push({ value: texts[i].trim(), height: 0, line: i });
     }
@@ -765,7 +765,7 @@ function parseMultiline(text) {
 }
 
 function createTspans(items, element, fieldName) {
-    let i, ii, item;
+    let i; let ii; let item;
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement('tspan');
@@ -783,17 +783,17 @@ function restoreText() {
 }
 
 function applyEllipsis(maxWidth) {
-    let that = this,
-        lines,
-        hasEllipsis = false,
-        i,
-        ii,
-        lineParts,
-        j,
-        jj,
-        text,
-        ellipsis,
-        ellipsisWidth;
+    const that = this;
+    let lines;
+    let hasEllipsis = false;
+    let i;
+    let ii;
+    let lineParts;
+    let j;
+    let jj;
+    let text;
+    let ellipsis;
+    let ellipsisWidth;
 
     restoreText.call(that);
 
@@ -855,13 +855,13 @@ function detachAndStoreTitleElements(element) {
 }
 
 function setMaxSize(maxWidth, maxHeight, options = {}) {
-    let that = this,
-        lines = [],
-        textChanged = false,
-        textIsEmpty = false,
-        ellipsis,
-        ellipsisWidth,
-        ellipsisMaxWidth = maxWidth;
+    const that = this;
+    let lines = [];
+    let textChanged = false;
+    let textIsEmpty = false;
+    let ellipsis;
+    let ellipsisWidth;
+    let ellipsisMaxWidth = maxWidth;
 
     restoreText.call(that);
     const restoreTitleElement = detachAndStoreTitleElements(this.element);
@@ -909,8 +909,8 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
-    let k,
-        kk;
+    let k;
+    let kk;
     if(startBox <= maxWidth && endBox > maxWidth) {
         for(k = 1, kk = text.value.length; k <= kk; ++k) {
             if(startBox + text.tspan.getSubStringLength(0, k) > maxWidth) {
@@ -925,12 +925,12 @@ function getTextWidth(text) {
 }
 
 function prepareLines(element, texts, maxWidth) {
-    let lines = [],
-        i,
-        ii,
-        text,
-        startBox,
-        endBox;
+    let lines = [];
+    let i;
+    let ii;
+    let text;
+    let startBox;
+    let endBox;
 
     if(texts) {
         for(i = 0, ii = texts.length; i < ii; ++i) {
@@ -987,7 +987,7 @@ function getEllipsisString(ellipsisMaxWidth, { hideOverflowEllipsis }) {
 }
 
 function setEllipsis(text, ellipsisMaxWidth, options) {
-    let ellipsis = getEllipsisString(ellipsisMaxWidth, options);
+    const ellipsis = getEllipsisString(ellipsisMaxWidth, options);
     if(text.value.length && text.tspan.parentNode) {
         for(let i = text.value.length - 1; i >= 1; i--) {
             if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
@@ -1163,7 +1163,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 }
 
 function setNewText(text, index, insertString = ELLIPSIS) {
-    let newText = text.value.substr(0, index) + insertString;
+    const newText = text.value.substr(0, index) + insertString;
     text.value = text.tspan.textContent = newText;
     text.stroke && (text.stroke.textContent = newText);
     if(insertString === ELLIPSIS) {
@@ -1177,8 +1177,8 @@ function removeTextSpan(text) {
 }
 
 function createTextNodes(wrapper, text, isStroked) {
-    let items,
-        parsedHtml;
+    let items;
+    let parsedHtml;
 
     wrapper._texts = null;
     wrapper.clear();
@@ -1221,11 +1221,11 @@ function getItemLineHeight(item, defaultValue) {
 
 function locateTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    let items = wrapper._texts,
-        x = wrapper._settings.x,
-        lineHeight = wrapper._getLineHeight(),
-        i, ii,
-        item = items[0];
+    const items = wrapper._texts;
+    const x = wrapper._settings.x;
+    const lineHeight = wrapper._getLineHeight();
+    let i; let ii;
+    let item = items[0];
     setTextNodeAttribute(item, 'x', x);
     setTextNodeAttribute(item, 'y', wrapper._settings.y);
     for(i = 1, ii = items.length; i < ii; ++i) {
@@ -1257,21 +1257,21 @@ function alignTextNodes(wrapper, alignment) {
 }
 
 function maxLengthFontSize(fontSize1, fontSize2) {
-    let parsedHeight1 = parseFloat(fontSize1),
-        parsedHeight2 = parseFloat(fontSize2),
-        height1 = parsedHeight1 || DEFAULT_FONT_SIZE,
-        height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
+    const parsedHeight1 = parseFloat(fontSize1);
+    const parsedHeight2 = parseFloat(fontSize2);
+    const height1 = parsedHeight1 || DEFAULT_FONT_SIZE;
+    const height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
 
     return height1 > height2 ? (!isNaN(parsedHeight1) ? fontSize1 : height1) : (!isNaN(parsedHeight2) ? fontSize2 : height2);
 }
 
 function strokeTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    let items = wrapper._texts,
-        stroke = wrapper._settings[KEY_STROKE],
-        strokeWidth = wrapper._settings[KEY_STROKE_WIDTH],
-        strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1,
-        tspan, i, ii;
+    const items = wrapper._texts;
+    const stroke = wrapper._settings[KEY_STROKE];
+    const strokeWidth = wrapper._settings[KEY_STROKE_WIDTH];
+    const strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1;
+    let tspan; let i; let ii;
     for(i = 0, ii = items.length; i < ii; ++i) {
         tspan = items[i].stroke;
         tspan.setAttribute(KEY_STROKE, stroke);
@@ -1283,13 +1283,13 @@ function strokeTextNodes(wrapper) {
 
 function baseAnimate(that, params, options, complete) {
     options = options || {};
-    let key,
-        value,
-        renderer = that.renderer,
-        settings = that._settings,
-        animationParams = {};
+    let key;
+    let value;
+    const renderer = that.renderer;
+    const settings = that._settings;
+    const animationParams = {};
 
-    let defaults = {
+    const defaults = {
         translateX: 0,
         translateY: 0,
         scaleX: 1,
@@ -1330,10 +1330,10 @@ function baseAnimate(that, params, options, complete) {
 }
 
 function pathAnimate(params, options, complete) {
-    let that = this,
-        curSegments = that.segments || [],
-        newSegments,
-        endSegments;
+    const that = this;
+    const curSegments = that.segments || [];
+    let newSegments;
+    let endSegments;
 
     if(that.renderer.animationEnabled() && 'points' in params) {
         newSegments = buildPathSegments(params.points, that.type);
@@ -1347,9 +1347,9 @@ function pathAnimate(params, options, complete) {
 }
 
 function arcAnimate(params, options, complete) {
-    let that = this,
-        settings = that._settings,
-        arcParams = { from: {}, to: {} };
+    const that = this;
+    const settings = that._settings;
+    const arcParams = { from: {}, to: {} };
 
     if(that.renderer.animationEnabled() &&
         ('x' in params || 'y' in params || 'innerRadius' in params || 'outerRadius' in params || 'startAngle' in params || 'endAngle' in params)) {
@@ -1388,7 +1388,7 @@ exports.DEBUG_removeBackupContainer = function() {
 ///#ENDDEBUG
 
 function buildLink(target, parameters) {
-    let obj = { is: false, name: parameters.name || parameters, after: parameters.after };
+    const obj = { is: false, name: parameters.name || parameters, after: parameters.after };
     if(target) {
         obj.to = target;
     } else {
@@ -1399,7 +1399,7 @@ function buildLink(target, parameters) {
 
 // SvgElement
 function SvgElement(renderer, tagName, type) {
-    let that = this;
+    const that = this;
     that.renderer = renderer;
     that.element = createElement(tagName);
     that._settings = {};
@@ -1424,12 +1424,12 @@ SvgElement.prototype = {
     },
 
     _addFixIRICallback: function() {
-        let that = this,
-            fn = function() {
-                fixFuncIri(that, 'fill');
-                fixFuncIri(that, 'clip-path');
-                fixFuncIri(that, 'filter');
-            };
+        const that = this;
+        const fn = function() {
+            fixFuncIri(that, 'fill');
+            fixFuncIri(that, 'clip-path');
+            fixFuncIri(that, 'filter');
+        };
 
         that.element._fixFuncIri = fn;
         fn.renderer = that.renderer;
@@ -1438,7 +1438,7 @@ SvgElement.prototype = {
     },
 
     _clearChildrenFuncIri: function() {
-        let clearChildren = function(element) {
+        const clearChildren = function(element) {
             let i;
 
             for(i = 0; i < element.childNodes.length; i++) {
@@ -1463,7 +1463,7 @@ SvgElement.prototype = {
     },
 
     remove: function() {
-        let element = this.element;
+        const element = this.element;
         element.parentNode && element.parentNode.removeChild(element);
         return this;
     },
@@ -1476,10 +1476,10 @@ SvgElement.prototype = {
 
     ///#DEBUG
     checkLinks: function() {
-        let count = 0,
-            links = this._links,
-            i,
-            ii = links.length;
+        let count = 0;
+        const links = this._links;
+        let i;
+        const ii = links.length;
         for(i = 0; i < ii; ++i) {
             if(!links[i]._link.virtual) {
                 ++count;
@@ -1515,10 +1515,10 @@ SvgElement.prototype = {
 
     // It might be better to traverse list to start (not to end) as widget components more likely will be rendered in the same order as they were created
     linkAppend: function() {
-        let link = this._link,
-            items = link.to._links,
-            i,
-            next;
+        const link = this._link;
+        const items = link.to._links;
+        let i;
+        let next;
         for(i = link.i + 1; (next = items[i]) && !next._link.is; ++i);
         this._insert(link.to, next);
         link.is = true;
@@ -1543,15 +1543,15 @@ SvgElement.prototype = {
     },
 
     toBackground: function() {
-        let elem = this.element,
-            parent = elem.parentNode;
+        const elem = this.element;
+        const parent = elem.parentNode;
         parent && parent.insertBefore(elem, parent.firstChild);
         return this;
     },
 
     toForeground: function() {
-        let elem = this.element,
-            parent = elem.parentNode;
+        const elem = this.element;
+        const parent = elem.parentNode;
         parent && parent.appendChild(elem);
         return this;
     },
@@ -1618,7 +1618,7 @@ SvgElement.prototype = {
     },
 
     move: function(x, y, animate, animOptions) {
-        let obj = {};
+        const obj = {};
 
         isDefined(x) && (obj.translateX = x);
         isDefined(y) && (obj.translateY = y);
@@ -1632,7 +1632,7 @@ SvgElement.prototype = {
     },
 
     rotate: function(angle, x, y, animate, animOptions) {
-        let obj = {
+        const obj = {
             rotate: angle || 0
         };
 
@@ -1648,8 +1648,8 @@ SvgElement.prototype = {
     },
 
     _getElementBBox: function() {
-        let elem = this.element,
-            bBox;
+        const elem = this.element;
+        let bBox;
 
         try {
             bBox = elem.getBBox && elem.getBBox();
@@ -1660,8 +1660,8 @@ SvgElement.prototype = {
 
     // TODO do we need to round results and consider rotation coordinates?
     getBBox: function() {
-        let transformation = this._settings,
-            bBox = this._getElementBBox();
+        const transformation = this._settings;
+        let bBox = this._getElementBBox();
 
         if(transformation.rotate) {
             bBox = rotateBBox(bBox, [
@@ -1683,20 +1683,20 @@ SvgElement.prototype = {
     },
 
     stopAnimation: function(disableComplete) {
-        let animation = this.animation;
+        const animation = this.animation;
         animation && animation.stop(disableComplete);
         return this;
     },
 
     setTitle: function(text) {
-        let titleElem = createElement('title');
+        const titleElem = createElement('title');
         titleElem.textContent = text || '';
         this.element.appendChild(titleElem);
     },
 
     data: function(obj, val) {
-        let elem = this.element,
-            key;
+        const elem = this.element;
+        let key;
         if(val !== undefined) {
             elem[obj] = val;
         } else {
@@ -1708,21 +1708,21 @@ SvgElement.prototype = {
     },
 
     on: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.on.apply(eventsEngine, args);
         return this;
     },
 
     off: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.off.apply(eventsEngine, args);
         return this;
     },
 
     trigger: function() {
-        let args = [ this._getJQElement() ];
+        const args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.trigger.apply(eventsEngine, args);
         return this;
@@ -1797,18 +1797,18 @@ extend(TextSvgElement.prototype, {
 // TextSvgElement
 
 function updateIndexes(items, k) {
-    let i,
-        item;
+    let i;
+    let item;
     for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
     }
 }
 
 function linkItem(target, container) {
-    let items = container._links,
-        key = (target._link.after = target._link.after || container._linkAfter),
-        i,
-        item;
+    const items = container._links;
+    const key = (target._link.after = target._link.after || container._linkAfter);
+    let i;
+    let item;
     if(key) {
         for(i = 0; (item = items[i]) && item._link.name !== key; ++i);
         if(item) {
@@ -1822,15 +1822,15 @@ function linkItem(target, container) {
 }
 
 function unlinkItem(target) {
-    let i,
-        items = target._link.to._links;
+    let i;
+    const items = target._link.to._links;
     for(i = 0; items[i] !== target; ++i);
     items.splice(i, 1);
     updateIndexes(items, i);
 }
 
 function Renderer(options) {
-    let that = this;
+    const that = this;
     that.root = that._createElement('svg', {
         xmlns: 'http://www.w3.org/2000/svg',
         version: '1.1',
@@ -1864,7 +1864,7 @@ Renderer.prototype = {
     constructor: Renderer,
 
     _init: function() {
-        let that = this;
+        const that = this;
         that._defs = that._createElement('defs').append(that.root);
 
         that._animationController = new animation.AnimationController(that.root.element);
@@ -1876,9 +1876,9 @@ Renderer.prototype = {
             return;
         }
 
-        let box = getBoundingClientRect(this._$container.get(0)),
-            dx = roundValue(box.left % 1, 2),
-            dy = roundValue(box.top % 1, 2);
+        const box = getBoundingClientRect(this._$container.get(0));
+        const dx = roundValue(box.left % 1, 2);
+        const dy = roundValue(box.top % 1, 2);
 
         if(browser.msie) {
             this.root.css({
@@ -1902,7 +1902,7 @@ Renderer.prototype = {
     },
 
     setOptions: function(options) {
-        let that = this;
+        const that = this;
         that.rtl = !!options.rtl;
         that.encodeHtml = !!options.encodeHtml;
 
@@ -1913,13 +1913,13 @@ Renderer.prototype = {
     },
 
     _createElement: function(tagName, attr, type) {
-        let elem = new exports.SvgElement(this, tagName, type);
+        const elem = new exports.SvgElement(this, tagName, type);
         attr && elem.attr(attr);
         return elem;
     },
 
     lock: function() {
-        let that = this;
+        const that = this;
         if(that._locker === 0) {
             that._backed = !that._$container.is(':visible');
             if(that._backed) {
@@ -1931,7 +1931,7 @@ Renderer.prototype = {
     },
 
     unlock: function() {
-        let that = this;
+        const that = this;
         --that._locker;
         if(that._locker === 0) {
             if(that._backed) {
@@ -1951,8 +1951,8 @@ Renderer.prototype = {
     },
 
     dispose: function() {
-        let that = this,
-            key;
+        const that = this;
+        let key;
         that.root.dispose();
         that._defs.dispose();
         that._animationController.dispose();
@@ -1986,7 +1986,7 @@ Renderer.prototype = {
 
     svg: function() {
         this.removePlacementFix();
-        let markup = this.root.markup();
+        const markup = this.root.markup();
         this.fixPlacement();
         return markup;
     },
@@ -2000,7 +2000,7 @@ Renderer.prototype = {
     },
 
     rect: function(x, y, width, height) {
-        let elem = new exports.RectSvgElement(this);
+        const elem = new exports.RectSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, width: width || 0, height: height || 0 });
     },
 
@@ -2017,7 +2017,7 @@ Renderer.prototype = {
     },
 
     image: function(x, y, w, h, href, location) {
-        let image = this._createElement('image', {
+        const image = this._createElement('image', {
             x: x || 0, y: y || 0, width: w || 0, height: h || 0,
             preserveAspectRatio: preserveAspectRatioMap[normalizeEnum(location)] || NONE
         });
@@ -2028,26 +2028,26 @@ Renderer.prototype = {
 
     // to combine different d attributes use helper methods
     path: function(points, type) {
-        let elem = new exports.PathSvgElement(this, type);
+        const elem = new exports.PathSvgElement(this, type);
         return elem.attr({ points: points || [] });
     },
 
     // TODO check B232257
     // TODO animate end angle special case
     arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
-        let elem = new exports.ArcSvgElement(this);
+        const elem = new exports.ArcSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0 });
     },
 
     text: function(text, x, y) {
-        let elem = new exports.TextSvgElement(this);
+        const elem = new exports.TextSvgElement(this);
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
     linearGradient: function(stops) {
-        let gradient,
-            id = getNextDefsSvgId(),
-            that = this;
+        let gradient;
+        const id = getNextDefsSvgId();
+        const that = this;
         gradient = that._createElement('linearGradient', { id: id }).append(that._defs);
         gradient.id = id;
 
@@ -2062,15 +2062,15 @@ Renderer.prototype = {
     pattern: function(color, hatching, _id) {
         hatching = hatching || {};
 
-        let that = this,
-            id,
-            d,
-            pattern,
-            rect,
-            path,
-            step = hatching.step || 6,
-            stepTo2 = step / 2,
-            stepBy15 = step * 1.5;
+        const that = this;
+        let id;
+        let d;
+        let pattern;
+        let rect;
+        let path;
+        const step = hatching.step || 6;
+        const stepTo2 = step / 2;
+        const stepBy15 = step * 1.5;
 
         id = _id || getNextDefsSvgId();
 
@@ -2134,14 +2134,14 @@ Renderer.prototype = {
 
     // appended automatically
     shadowFilter: function(x, y, width, height, offsetX, offsetY, blur, color, opacity) {
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement('filter', { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs),
-            gaussianBlur = that._createElement('feGaussianBlur', { 'in': 'SourceGraphic', 'result': 'gaussianBlurResult', 'stdDeviation': blur || 0 }).append(filter),
-            offset = that._createElement('feOffset', { 'in': 'gaussianBlurResult', 'result': 'offsetResult', 'dx': offsetX || 0, 'dy': offsetY || 0 }).append(filter),
-            flood = that._createElement('feFlood', { 'result': 'floodResult', 'flood-color': color || '', 'flood-opacity': opacity }).append(filter),
-            composite = that._createElement('feComposite', { 'in': 'floodResult', 'in2': 'offsetResult', 'operator': 'in', 'result': 'compositeResult' }).append(filter),
-            finalComposite = that._createElement('feComposite', { 'in': 'SourceGraphic', 'in2': 'compositeResult', 'operator': 'over' }).append(filter);
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs);
+        const gaussianBlur = that._createElement('feGaussianBlur', { 'in': 'SourceGraphic', 'result': 'gaussianBlurResult', 'stdDeviation': blur || 0 }).append(filter);
+        const offset = that._createElement('feOffset', { 'in': 'gaussianBlurResult', 'result': 'offsetResult', 'dx': offsetX || 0, 'dy': offsetY || 0 }).append(filter);
+        const flood = that._createElement('feFlood', { 'result': 'floodResult', 'flood-color': color || '', 'flood-opacity': opacity }).append(filter);
+        const composite = that._createElement('feComposite', { 'in': 'floodResult', 'in2': 'offsetResult', 'operator': 'in', 'result': 'compositeResult' }).append(filter);
+        const finalComposite = that._createElement('feComposite', { 'in': 'SourceGraphic', 'in2': 'compositeResult', 'operator': 'over' }).append(filter);
 
         filter.id = id;
         filter.gaussianBlur = gaussianBlur;
@@ -2151,10 +2151,10 @@ Renderer.prototype = {
         filter.finalComposite = finalComposite;
 
         filter.attr = function(attrs) {
-            let that = this,
-                filterAttrs = {},
-                offsetAttrs = {},
-                floodAttrs = {};
+            const that = this;
+            const filterAttrs = {};
+            const offsetAttrs = {};
+            const floodAttrs = {};
 
             ('x' in attrs) && (filterAttrs.x = attrs.x);
             ('y' in attrs) && (filterAttrs.y = attrs.y);
@@ -2179,14 +2179,14 @@ Renderer.prototype = {
     },
 
     brightFilter: function(type, slope) {
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement('filter', { id: id }).append(that._defs),
-            componentTransferElement = that._createElement('feComponentTransfer').append(filter),
-            attrs = {
-                type: type,
-                slope: slope
-            };
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id }).append(that._defs);
+        const componentTransferElement = that._createElement('feComponentTransfer').append(filter);
+        const attrs = {
+            type: type,
+            slope: slope
+        };
 
         filter.id = id;
         that._createElement('feFuncR', attrs).append(componentTransferElement);
@@ -2200,9 +2200,9 @@ Renderer.prototype = {
             return this._grayScaleFilter;
         }
 
-        let that = this,
-            id = getNextDefsSvgId(),
-            filter = that._createElement('filter', { id: id }).append(that._defs);
+        const that = this;
+        const id = getNextDefsSvgId();
+        const filter = that._createElement('filter', { id: id }).append(that._defs);
 
         that._createElement('feColorMatrix')
             .attr({ type: 'matrix', values: '0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 0.6 0' })
@@ -2215,9 +2215,9 @@ Renderer.prototype = {
     },
 
     initHatching: function() {
-        let storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() },
-            byHash = storage.byHash,
-            name;
+        const storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() };
+        const byHash = storage.byHash;
+        let name;
 
         for(name in byHash) {
             byHash[name].pattern.dispose();
@@ -2228,10 +2228,10 @@ Renderer.prototype = {
     },
 
     lockHatching: function(color, hatching, ref) {
-        let storage = this._hatchingStorage,
-            hash = getHatchingHash(color, hatching),
-            storageItem,
-            pattern;
+        const storage = this._hatchingStorage;
+        const hash = getHatchingHash(color, hatching);
+        let storageItem;
+        let pattern;
 
         if(storage.refToHash[ref] !== hash) {
             if(ref) {
@@ -2250,9 +2250,9 @@ Renderer.prototype = {
     },
 
     releaseHatching: function(ref) {
-        let storage = this._hatchingStorage,
-            hash = storage.refToHash[ref],
-            storageItem = storage.byHash[hash];
+        const storage = this._hatchingStorage;
+        const hash = storage.refToHash[ref];
+        const storageItem = storage.byHash[hash];
 
         if(storageItem && --storageItem.count === 0) {
             storageItem.pattern.dispose();
@@ -2267,7 +2267,7 @@ function getHatchingHash(color, hatching) {
 }
 
 // paths modifier
-let fixFuncIriCallbacks = (function() {
+const fixFuncIriCallbacks = (function() {
     let callbacks = [];
 
     return {

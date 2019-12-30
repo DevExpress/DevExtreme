@@ -38,7 +38,7 @@ class ItemsOption extends Component {
         );
     }
     update(key, data, callback, errorCallback) {
-        var storeKey = this._getStoreKey(data);
+        const storeKey = this._getStoreKey(data);
         this._getStore().update(storeKey, data).done(
             function(data, key) {
                 if(callback) {
@@ -55,7 +55,7 @@ class ItemsOption extends Component {
     }
     remove(key, data, callback, errorCallback) {
         this._resetCache();
-        var storeKey = this._getStoreKey(data);
+        const storeKey = this._getStoreKey(data);
         this._getStore().remove(storeKey).done(
             (key) => {
                 if(callback) {
@@ -87,14 +87,14 @@ class ItemsOption extends Component {
     }
 
     _getIndexByKey(key) {
-        const cache = this._cache,
-            keys = cache.keys || this._getKeys() || [];
+        const cache = this._cache;
+        const keys = cache.keys || this._getKeys() || [];
         if(!cache.keys) {
             cache.keys = keys;
         }
 
         if(typeof key === 'object') {
-            for(var i = 0, length = keys.length; i < length; i++) {
+            for(let i = 0, length = keys.length; i < length; i++) {
                 if(keys[i] === key) return i;
             }
         } else {

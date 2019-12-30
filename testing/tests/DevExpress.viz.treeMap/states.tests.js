@@ -1,5 +1,5 @@
-var common = require('./commonParts/common.js'),
-    $ = require('jquery');
+const common = require('./commonParts/common.js');
+const $ = require('jquery');
 
 require('viz/tree_map/hover');
 require('viz/tree_map/selection');
@@ -22,8 +22,8 @@ QUnit.module('Basics', $.extend({
 }, common.environment));
 
 QUnit.test('Hover selected tile', function(assert) {
-    var node = this.create().getRootNode().getChild(0),
-        tile = this.tile(0);
+    const node = this.create().getRootNode().getChild(0);
+    const tile = this.tile(0);
     node.select(true);
     tile.attr.reset();
 
@@ -34,8 +34,8 @@ QUnit.test('Hover selected tile', function(assert) {
 });
 
 QUnit.test('Selected hovered tile', function(assert) {
-    var node = this.create().getRootNode().getChild(0),
-        tile = this.tile(0);
+    const node = this.create().getRootNode().getChild(0);
+    const tile = this.tile(0);
     node.setHover();
     tile.attr.reset();
 
@@ -46,9 +46,9 @@ QUnit.test('Selected hovered tile', function(assert) {
 });
 
 QUnit.test('Unhover selected tile', function(assert) {
-    var widget = this.create(),
-        node = widget.getRootNode().getChild(0),
-        tile = this.tile(0);
+    const widget = this.create();
+    const node = widget.getRootNode().getChild(0);
+    const tile = this.tile(0);
     node.setHover();
     node.select(true);
     tile.attr.reset();
@@ -60,8 +60,8 @@ QUnit.test('Unhover selected tile', function(assert) {
 });
 
 QUnit.test('Deselect hovered tile', function(assert) {
-    var node = this.create().getRootNode().getChild(0),
-        tile = this.tile(0);
+    const node = this.create().getRootNode().getChild(0);
+    const tile = this.tile(0);
     node.setHover();
     node.select(true);
     tile.attr.reset();

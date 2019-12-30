@@ -1,5 +1,5 @@
-var dateSerialization = require('core/utils/date_serialization');
-var config = require('core/config');
+const dateSerialization = require('core/utils/date_serialization');
+const config = require('core/config');
 
 QUnit.module('date serialization tests', {
     beforeEach: function() {
@@ -12,8 +12,8 @@ QUnit.module('date serialization tests', {
 });
 
 QUnit.test('serialization/deserialization', function(assert) {
-    var date = new Date(2015, 7, 16);
-    var assertData = [
+    const date = new Date(2015, 7, 16);
+    const assertData = [
         {
             value: date,
             serializedValue: date.valueOf()
@@ -67,8 +67,8 @@ QUnit.test('serialization/deserialization', function(assert) {
             data.format = dateSerialization.getDateSerializationFormat(data.serializedValue);
         }
 
-        var serializedDate = dateSerialization.serializeDate(data.value, data.format);
-        var parsedDate = dateSerialization.deserializeDate(data.serializedValue);
+        const serializedDate = dateSerialization.serializeDate(data.value, data.format);
+        const parsedDate = dateSerialization.deserializeDate(data.serializedValue);
 
         assert.equal(serializedDate, data.serializedValue, data.format);
         assert.equal(parsedDate.getTime(), data.value.getTime(), data.format);
@@ -76,9 +76,9 @@ QUnit.test('serialization/deserialization', function(assert) {
 });
 
 QUnit.test('serialization/deserialization when value is null (T420231)', function(assert) {
-    var serializationFormat = dateSerialization.getDateSerializationFormat(null);
-    var serializedDate = dateSerialization.serializeDate(null, serializationFormat);
-    var parsedDate = dateSerialization.deserializeDate(null);
+    const serializationFormat = dateSerialization.getDateSerializationFormat(null);
+    const serializedDate = dateSerialization.serializeDate(null, serializationFormat);
+    const parsedDate = dateSerialization.deserializeDate(null);
 
     assert.equal(serializedDate, null, 'value returned if no serialized value is specified');
     assert.equal(parsedDate, null, 'value returned if no deserialized value is specified');
@@ -92,18 +92,18 @@ QUnit.test('serialization when serializationFormat is not defined', function(ass
 });
 
 QUnit.test('deserializing first date (serialization format is string)', function(assert) {
-    var date = new Date(1970, 0, 1);
-    var value = '1970-01-01';
+    const date = new Date(1970, 0, 1);
+    const value = '1970-01-01';
 
-    var result = dateSerialization.deserializeDate(value);
+    const result = dateSerialization.deserializeDate(value);
 
     assert.deepEqual(result, date, 'date is returned');
 });
 
 QUnit.test('serialization ISO8601 dates', function(assert) {
-    var date = new Date(2015, 3, 5, 6, 7, 25, 125);
+    const date = new Date(2015, 3, 5, 6, 7, 25, 125);
 
-    var timezoneOffset = -180;
+    let timezoneOffset = -180;
 
     sinon.stub(date, 'getTimezoneOffset', function() {
         return timezoneOffset;
@@ -146,9 +146,9 @@ QUnit.test('serialization ISO8601 dates', function(assert) {
 });
 
 QUnit.test('serialization LDML dates', function(assert) {
-    var date = new Date(2015, 3, 5, 6, 7, 25, 125);
-    var datePm = new Date(2015, 3, 5, 18, 7, 25, 125);
-    var dateMidday = new Date(2015, 3, 5, 12);
+    const date = new Date(2015, 3, 5, 6, 7, 25, 125);
+    const datePm = new Date(2015, 3, 5, 18, 7, 25, 125);
+    const dateMidday = new Date(2015, 3, 5, 12);
 
     assert.equal(dateSerialization.serializeDate(date, 'd/M/yyyy'), '5/4/2015', 'date with numeric one letter month and date');
     assert.equal(dateSerialization.serializeDate(date, 'dd/MM/yyyy'), '05/04/2015', 'date with numeric two letter month and date');

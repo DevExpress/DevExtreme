@@ -1,6 +1,6 @@
-var jQuery = require('jquery');
-var config = require('../../core/config');
-var useJQuery = config().useJQuery;
+const jQuery = require('jquery');
+const config = require('../../core/config');
+const useJQuery = config().useJQuery;
 
 if(jQuery && useJQuery !== false) {
     config({ useJQuery: true });

@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    ko = require('knockout'),
-    registerComponent = require('core/component_registrator'),
-    DOMComponent = require('core/dom_component'),
-    Widget = require('ui/widget/ui.widget'),
-    KoTemplate = require('integration/knockout/template').KoTemplate,
-    CollectionWidget = require('ui/collection/ui.collection_widget.edit'),
-    config = require('core/config'),
-    dataUtils = require('core/element_data');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const ko = require('knockout');
+const registerComponent = require('core/component_registrator');
+const DOMComponent = require('core/dom_component');
+const Widget = require('ui/widget/ui.widget');
+const KoTemplate = require('integration/knockout/template').KoTemplate;
+const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
+const config = require('core/config');
+const dataUtils = require('core/element_data');
 
 require('ui/select_box');
 require('ui/lookup');
 require('integration/knockout');
 
-var FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
+const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
-var cleanComponentRegistrations = function() {
+const cleanComponentRegistrations = function() {
     $.each(arguments, function() {
         delete ko.bindingHandlers[this];
         delete $.fn[this];
@@ -26,7 +26,7 @@ var cleanComponentRegistrations = function() {
 QUnit.module(
     'simple component tests', {
         beforeEach: function() {
-            var TestComponent = DOMComponent.inherit({
+            const TestComponent = DOMComponent.inherit({
                 _defaultOptions: function() {
                     return {
                         text: '',
@@ -67,17 +67,17 @@ QUnit.module(
     function() {
 
         QUnit.test('basic binding', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: text }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 text: ko.observable('my text')
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             assert.equal(instance.option('text'), 'my text');
 
@@ -95,11 +95,11 @@ QUnit.module(
                 assert.expect(0);
                 return;
             }
-            var markup = $('<div>')
+            const markup = $('<div>')
                 .attr('data-bind', 'dxTest: {obj: obj, onOptionChanged: optionChangedHandler}')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var count = 0;
+            let count = 0;
             var vm = {
                 obj: ko.observable({}),
                 dependentOption: ko.observable('initial state'),
@@ -117,17 +117,17 @@ QUnit.module(
         });
 
         QUnit.test('nested option binding', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { complex: { first: { second: value } } }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 value: ko.observable('test')
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.equal(instance.option('complex.first.second'), 'test');
 
             vm.value('testchanged1');
@@ -138,11 +138,11 @@ QUnit.module(
         });
 
         QUnit.test('nested viewmodel value binding', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: complex.nested }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 complex: {
                     nested: ko.observable('test')
                 }
@@ -150,7 +150,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.equal(instance.option('text'), 'test');
 
             vm.complex.nested('testchanged1');
@@ -161,11 +161,11 @@ QUnit.module(
         });
 
         QUnit.test('nested viewmodel value and option binding', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { complex: complex }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 complex: {
                     nested: ko.observable('test')
                 }
@@ -173,7 +173,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.equal(instance.option('complex.nested'), 'test');
 
             vm.complex.nested('testchanged1');
@@ -184,11 +184,11 @@ QUnit.module(
         });
 
         QUnit.test('nested viewmodel value should be unwrapped', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { complex: complex }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 complex: {
                     nested: ko.observable('test')
                 }
@@ -196,16 +196,16 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.equal(instance.option().complex.nested, 'test');
         });
 
         QUnit.test('nested viewModel value should not be unwrapped for reference option', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { complexByReference: complexByReference }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 complexByReference: {
                     nested: ko.observable('test')
                 }
@@ -213,7 +213,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             assert.equal(typeof vm.complexByReference.nested, 'function', 'variable from viewModel is function');
 
@@ -225,14 +225,14 @@ QUnit.module(
         });
 
         QUnit.test('foreach binding', function(assert) {
-            var vm = {
+            const vm = {
                 items: ko.observableArray([
                     { text: ko.observable('0') },
                     { text: ko.observable('1') }
                 ])
             };
 
-            var markup = $(
+            const markup = $(
                 '<div>' +
                 '   <!-- ko foreach: items -->' +
                 '       <div data-bind=\'dxTest: { text: text }\'></div>' +
@@ -254,7 +254,7 @@ QUnit.module(
         });
 
         QUnit.test('DOMComponent does not control descendant bindings', function(assert) {
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'dxTest: { }\'>' +
                 '   <ul data-bind=\'foreach: items\'>' +
                 '       <li data-bind=\'text: $data\'></li>' +
@@ -262,31 +262,31 @@ QUnit.module(
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 items: ko.observableArray([1, 2, 3])
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var listItems = markup.find('ul').children();
+            const listItems = markup.find('ul').children();
             assert.equal(listItems.length, 3);
             assert.equal(listItems.text(), '123');
         });
 
         QUnit.test('circular notifications regression', function(assert) {
-            var vm = {
+            const vm = {
                 scalar: ko.observable('a'),
                 array: ko.observableArray()
             };
 
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: scalar, array: array }')
                 .appendTo(FIXTURE_ELEMENT);
 
             ko.applyBindings(vm, markup[0]);
 
-            var vmScalarChangeCount = 0,
-                vmArrayChangeCount = 0;
+            let vmScalarChangeCount = 0;
+            let vmArrayChangeCount = 0;
 
             vm.scalar.subscribe(function() { vmScalarChangeCount++; }, undefined, 'beforeChange');
             vm.array.subscribe(function() { vmArrayChangeCount++; }, undefined, 'beforeChange');
@@ -299,11 +299,11 @@ QUnit.module(
         });
 
         QUnit.test('dependency from outer observable', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: a().b().c }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 a: ko.observable({
                     b: ko.observable({
                         c: 1
@@ -312,7 +312,7 @@ QUnit.module(
             };
 
             ko.applyBindings(vm, markup[0]);
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             assert.equal(instance.option('text'), 1);
 
@@ -321,7 +321,7 @@ QUnit.module(
         });
 
         QUnit.test('binding to the whole options bag', function(assert) {
-            var vm = {
+            const vm = {
                 x: ko.observable({
                     text: ko.observable('text')
                 })
@@ -329,10 +329,10 @@ QUnit.module(
 
             assert.ok('x' in vm, 'it is important that property name is so short, because of ko peculiarities');
 
-            var markup = $('<div></div>').attr('data-bind', 'dxTest: x').appendTo(FIXTURE_ELEMENT);
+            const markup = $('<div></div>').attr('data-bind', 'dxTest: x').appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             vm.x().text('new text');
             assert.equal(instance.option('text'), 'new text');
@@ -342,23 +342,23 @@ QUnit.module(
         });
 
         QUnit.test('two non-comparable properties, stack overflow regression', function(assert) {
-            var vm = {
+            const vm = {
                 array: ko.observableArray(),
                 obj: ko.observable({})
             };
 
-            var markup = $('<div></div>').attr('data-bind', 'dxTest: { array: array, obj: obj }').appendTo(FIXTURE_ELEMENT);
+            const markup = $('<div></div>').attr('data-bind', 'dxTest: { array: array, obj: obj }').appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, markup[0]);
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             instance.option('obj', { a: 1 });
             assert.deepEqual(instance.option('obj'), { a: 1 });
         });
 
         QUnit.test('quoted names in binding, regression case', function(assert) {
-            var markup = $('<div><div /><div /></div>').appendTo(FIXTURE_ELEMENT),
-                child1 = markup.children().eq(0).attr('data-bind', '"dxTest": { "text": 1}'),
-                child2 = markup.children().eq(1).attr('data-bind', '\'dxTest\': { \'text\': 2}');
+            const markup = $('<div><div /><div /></div>').appendTo(FIXTURE_ELEMENT);
+            const child1 = markup.children().eq(0).attr('data-bind', '"dxTest": { "text": 1}');
+            const child2 = markup.children().eq(1).attr('data-bind', '\'dxTest\': { \'text\': 2}');
 
             ko.applyBindings({}, markup[0]);
 
@@ -367,28 +367,28 @@ QUnit.module(
         });
 
         QUnit.test('model property name is not necessarily equal component option name, regression case', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: textInModel }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 textInModel: ko.observable('initial')
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
 
             instance.option('text', 'changed');
             assert.equal(vm.textInModel(), 'changed');
         });
 
         QUnit.test('remove from DOM, append back and apply bindings again', function(assert) {
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTest: { text: text }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 text: ko.observable('value')
             };
 
@@ -406,16 +406,16 @@ QUnit.module(
         });
 
         QUnit.test('remove all subscription after widget was removed', function(assert) {
-            var markup = $('<div></div>')
+            const markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: text }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 text: ko.observable('my text')
             };
 
             ko.applyBindings(vm, markup[0]);
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             markup.remove();
 
             instance.option('text', 'new value');
@@ -423,11 +423,11 @@ QUnit.module(
         });
 
         QUnit.test('B239952 - simple case', function(assert) {
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTest: { option1: field1, option2: field2 }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 field1: ko.observableArray([1, 2, 3])
             };
 
@@ -437,7 +437,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup.get(0));
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.equal(instance.option('option2'), true);
 
             instance.option('option1', []);
@@ -446,11 +446,11 @@ QUnit.module(
         });
 
         QUnit.test('B239952 - complex case', function(assert) {
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTest: { option1: field1, option2: field2, option3: field3 }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 field1: ko.observableArray([1, 2, 3])
             };
 
@@ -465,7 +465,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup.get(0));
 
-            var instance = markup.dxTest('instance');
+            const instance = markup.dxTest('instance');
             assert.deepEqual(instance.option('option1'), [1, 2, 3, 4]);
             assert.equal(instance.option('option2'), true);
             assert.equal(instance.option('option3'), false);
@@ -479,11 +479,11 @@ QUnit.module(
 
         QUnit.test('batch option changing involves several component re-rendering (B251357)', function(assert) {
 
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTest: { option1: componentOptions().option1, option2: componentOptions().option1, option3: componentOptions().option1 }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 componentOptions: ko.observable({
                     option1: ko.observableArray([1, 2, 3]),
                     option2: ko.observable(true),
@@ -493,9 +493,9 @@ QUnit.module(
 
             ko.applyBindings(vm, markup.get(0));
 
-            var component = markup.dxTest('instance');
+            const component = markup.dxTest('instance');
 
-            var renderCount = 0;
+            let renderCount = 0;
             component._render = function() {
                 renderCount++;
             };
@@ -510,15 +510,15 @@ QUnit.module(
         });
 
         QUnit.test('changing an observable option must correctly notify all the option\'s alias subscribers', function(assert) {
-            var markup = $('<div><div />').attr('data-bind', 'dxTest: { checked: observable }').appendTo(FIXTURE_ELEMENT),
-                vm = { observable: ko.observable(false) };
+            const markup = $('<div><div />').attr('data-bind', 'dxTest: { checked: observable }').appendTo(FIXTURE_ELEMENT);
+            const vm = { observable: ko.observable(false) };
             ko.applyBindings(vm, markup.get(0));
             markup.dxTest('instance').option('value', true);
             assert.strictEqual(vm.observable(), true);
         });
 
         QUnit.test('KO integration don\'t breaks defaultOptions', function(assert) {
-            var TestDOMComponent = DOMComponent.inherit();
+            const TestDOMComponent = DOMComponent.inherit();
 
             registerComponent('TestDOMComponent', TestDOMComponent);
 
@@ -532,16 +532,16 @@ QUnit.module(
         });
 
         QUnit.test('expression with nested observable binding (T120420)', function(assert) {
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTest: { option1: point() ? point().x : 0 }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var ObservablePoint = function(x, y) {
+            const ObservablePoint = function(x, y) {
                 this.x = ko.observable(x);
                 this.y = ko.observable(y);
             };
 
-            var vm = {
+            const vm = {
                 points: ko.observableArray([new ObservablePoint(1, 2), new ObservablePoint(3, 4)]),
                 point: ko.observable()
             };
@@ -550,7 +550,7 @@ QUnit.module(
 
             vm.point(vm.points()[0]);
 
-            var component = markup.dxTest('instance');
+            const component = markup.dxTest('instance');
             component.option('option1', 10);
 
             assert.equal(vm.point().x(), 10);
@@ -563,7 +563,7 @@ QUnit.module(
                 _renderContentImpl: noop
             }));
 
-            var markup = $('<div><div />')
+            const markup = $('<div><div />')
                 .attr('data-bind', 'dxTestWidget: { option1: myValue, onContentReady: onContentReady }')
                 .appendTo(FIXTURE_ELEMENT);
 
@@ -580,7 +580,7 @@ QUnit.module(
         QUnit.test('component should not fire option changed callbacks after disposing (T215559)', function(assert) {
             assert.expect(0);
 
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'if: visible\'>\
                     <div data-bind=\'dxSelectBox: {\
                         items: values,\
@@ -589,7 +589,7 @@ QUnit.module(
                 </div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 values: ['1', '2'],
                 value: ko.observable(null)
             };
@@ -604,7 +604,7 @@ QUnit.module(
         });
 
         QUnit.test('\'value\' option should be updated when the valueChanged event fires (T221193)', function(assert) {
-            var $lookup = $('<div data-bind=\'dxLookup: {\
+            const $lookup = $('<div data-bind=\'dxLookup: {\
                 dataSource: dataSource,\
                 onValueChanged: onValueChanged,\
                 value: value\
@@ -620,12 +620,12 @@ QUnit.module(
 
             ko.applyBindings(vm, $lookup.get(0));
 
-            var lookup = $lookup.dxLookup('instance');
+            const lookup = $lookup.dxLookup('instance');
             lookup.option('value', '1');
         });
 
         QUnit.test('component should notify view model if option changed on ctor after initialization (T219862)', function(assert) {
-            var ComponentClass = this.TestComponent.inherit({
+            const ComponentClass = this.TestComponent.inherit({
                 _render: function() {
                     this.callBase();
                     this.option('a', 2);
@@ -634,11 +634,11 @@ QUnit.module(
 
             registerComponent('T219862', ComponentClass);
 
-            var vm = {
+            const vm = {
                 a: ko.observable(1)
             };
 
-            var $component = $('<div data-bind=\'T219862: {\
+            const $component = $('<div data-bind=\'T219862: {\
                 a: a\
             }\'></div>').appendTo(FIXTURE_ELEMENT);
 
@@ -653,10 +653,10 @@ QUnit.module(
                 return;
             }
 
-            var ComponentClass = this.TestComponent.inherit({}),
-                titleObservable = ko.observable('title');
+            const ComponentClass = this.TestComponent.inherit({});
+            const titleObservable = ko.observable('title');
 
-            var vm = {
+            const vm = {
                 options: {
                     showIcon: {
                         desktop: true,
@@ -679,10 +679,10 @@ QUnit.module(
 
             registerComponent('T257177', ComponentClass);
 
-            var $component = $('<div data-bind=\'T257177: options\'></div>').appendTo(FIXTURE_ELEMENT);
+            const $component = $('<div data-bind=\'T257177: options\'></div>').appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, $component.get(0));
 
-            var callArgs = [];
+            const callArgs = [];
             $component.T257177('instance').on('optionChanged', function(a) { callArgs.push(a); });
 
             vm.options.title = 'new title';
@@ -691,9 +691,9 @@ QUnit.module(
         });
 
         QUnit.test('unwrap 3rd level option (T504726)', function(assert) {
-            var observableValue = ko.observable(true);
+            const observableValue = ko.observable(true);
 
-            var vm = {
+            const vm = {
                 options: {
                     option1: {
                         option2: {
@@ -703,7 +703,7 @@ QUnit.module(
                 }
             };
 
-            var markup = $('<div></div>').attr('data-bind', 'dxTest: options').appendTo(FIXTURE_ELEMENT);
+            const markup = $('<div></div>').attr('data-bind', 'dxTest: options').appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, markup[0]);
 
             assert.strictEqual(observableValue(), true);
@@ -716,7 +716,7 @@ QUnit.module(
     'nested Widget with templates enabled',
     {
         beforeEach: function() {
-            var TestContainer = Widget.inherit({
+            const TestContainer = Widget.inherit({
 
                 _defaultOptions: function() {
                     return $.extend(this.callBase(), {
@@ -725,7 +725,7 @@ QUnit.module(
                 },
 
                 _render: function() {
-                    var content = $('<div />')
+                    const content = $('<div />')
                         .addClass('dx-content')
                         .appendTo(this.$element());
 
@@ -733,7 +733,7 @@ QUnit.module(
                         container: content
                     });
 
-                    var text = this.option('text');
+                    const text = this.option('text');
                     if(text) {
                         content.append($('<span />').text(text));
                     }
@@ -751,7 +751,7 @@ QUnit.module(
 
             });
 
-            var TestWidget = Widget.inherit({
+            const TestWidget = Widget.inherit({
 
                 _defaultOptions: function() {
                     return $.extend(this.callBase(), {
@@ -782,7 +782,7 @@ QUnit.module(
     },
     function() {
         QUnit.test('two nested containers', function(assert) {
-            var markup = $(
+            const markup = $(
                 '<div class=outerWidget data-bind=\'dxTestContainer: { }\'>' +
                 '   <div data-options=\'dxTemplate: { name: "template" }\' class=outer-template>' +
                 '       <span data-bind=\'text: outerText\'></span>' +
@@ -795,27 +795,27 @@ QUnit.module(
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 outerText: 'outer',
                 innerText: 'inner'
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var outerWidget = markup;
+            const outerWidget = markup;
             assert.equal(outerWidget.length, 1);
 
-            var outerContent = outerWidget.children().children().children();
+            const outerContent = outerWidget.children().children().children();
             assert.equal(outerContent.length, 2);
             assert.equal(outerContent.filter('span').text(), 'outer');
 
-            var innerWidget = outerContent.filter('.innerWidget');
+            const innerWidget = outerContent.filter('.innerWidget');
             assert.equal(innerWidget.length, 1);
             assert.equal(innerWidget.find('span').text(), 'inner');
         });
 
         QUnit.test('B233347, B233267', function(assert) {
-            var markup = $(
+            const markup = $(
                 '<div class=outerWidget data-bind=\'dxTestContainer: { }\'>' +
                 '   <div data-options=\'dxTemplate: { name: "template" }\'>' +
                 '       <span class=template-content data-bind=\'text: text\'></span>' +
@@ -823,13 +823,13 @@ QUnit.module(
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 text: ko.observable('outer')
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var templateContent = markup.find('.template-content');
+            const templateContent = markup.find('.template-content');
 
             assert.equal(vm.text.getSubscriptionsCount(), 1);
 
@@ -840,7 +840,7 @@ QUnit.module(
         });
 
         QUnit.test('widget inside two nested containers', function(assert) {
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'dxTestContainer: { text: outerText }\'>' +
                 '   <div class=middle data-bind=\'dxTestContainer: { text: middleText }\'>' +
                 '       <div class=inner data-bind=\'dxTestWidget: { text: innerText }\'></div>' +
@@ -848,7 +848,7 @@ QUnit.module(
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 outerText: ko.observable('outerText'),
                 middleText: ko.observable('middleText'),
                 innerText: ko.observable('innerText')
@@ -860,20 +860,20 @@ QUnit.module(
             vm.middleText('new middleText');
             vm.innerText('new innerText');
 
-            var outer = markup;
+            const outer = markup;
             assert.equal($.trim(outer.find('.dx-content:first > span').text()), 'new outerText');
 
-            var middle = markup.find('.middle');
+            const middle = markup.find('.middle');
             assert.equal($.trim(middle.find('.dx-content:first > span').text()), 'new middleText');
 
-            var inner = markup.find('.inner');
+            const inner = markup.find('.inner');
             assert.equal($.trim(inner.find('span').text()), 'new innerText');
         });
     }
 );
 
 QUnit.module('Widget & CollectionWidget with templates enabled', function() {
-    var TestContainer = Widget.inherit({
+    const TestContainer = Widget.inherit({
         _renderContentImpl: function() {
             if(this.option('integrationOptions.templates').template) {
                 this.option('integrationOptions.templates').template.render({ container: this.$element() });
@@ -883,7 +883,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
 
     QUnit.test('widget should use Template, but not KoTemplate, if it created not as KO binding', function(assert) {
         registerComponent('dxTestContainer', TestContainer);
-        var testContainer = $('<div></div>').appendTo(FIXTURE_ELEMENT).dxTestContainer({ myTemplate: 'item' }).dxTestContainer('instance');
+        const testContainer = $('<div></div>').appendTo(FIXTURE_ELEMENT).dxTestContainer({ myTemplate: 'item' }).dxTestContainer('instance');
         assert.ok(!(testContainer._getTemplateByOption('myTemplate') instanceof KoTemplate));
     });
 
@@ -891,9 +891,9 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
         registerComponent('dxTestContainer', TestContainer);
 
         try {
-            var markup,
-                instance,
-                template;
+            let markup;
+            let instance;
+            let template;
 
             // knockout scenario
             markup = $('<div data-bind=\'dxTestContainer: { }\'></div>').appendTo(FIXTURE_ELEMENT);
@@ -915,7 +915,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
     });
 
     QUnit.test('retrieving default KO template only for collection widgets created with knockout', function(assert) {
-        var TestContainer = CollectionWidget.inherit({
+        const TestContainer = CollectionWidget.inherit({
             _renderContentImpl: function() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
@@ -926,9 +926,9 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
         registerComponent('dxTestContainer', TestContainer);
 
         try {
-            var markup,
-                instance,
-                template;
+            let markup;
+            let instance;
+            let template;
 
             // knockout scenario
             markup = $('<div data-bind=\'dxTestContainer: { }\'></div>').appendTo(FIXTURE_ELEMENT);
@@ -950,7 +950,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
     });
 
     QUnit.test('creates default template from its contents', function(assert) {
-        var TestContainer = Widget.inherit({
+        const TestContainer = Widget.inherit({
             _defaultOptions: function() {
                 return $.extend(this.callBase(), {
                     items: null
@@ -971,7 +971,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
         registerComponent('dxTestContainer', TestContainer);
         try {
 
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'dxTestContainer: { items: items }\'>' +
                 '   <ul data-bind=\'foreach: items\'>' +
                 '       <li data-bind=\'text: $data\'></li>' +
@@ -979,21 +979,21 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 items: ko.observableArray([1, 2, 3])
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.dxTestContainer('instance');
+            const instance = markup.dxTestContainer('instance');
 
             assert.ok(instance.option('integrationOptions.templates'));
             assert.ok(instance.option('integrationOptions.templates')['template']);
 
-            var list = markup.find('ul');
+            const list = markup.find('ul');
             assert.equal(list.length, 1);
 
-            var listItems = list.children();
+            const listItems = list.children();
             assert.equal(listItems.length, 3);
             assert.equal(listItems.text(), '123');
 
@@ -1003,7 +1003,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
     });
 
     QUnit.test('binding-context of KoTemplate', function(assert) {
-        var TestRepeater = Widget.inherit({
+        const TestRepeater = Widget.inherit({
 
             _defaultOptions: function() {
                 return $.extend(this.callBase(), {
@@ -1012,7 +1012,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
             },
 
             _render: function() {
-                var that = this;
+                const that = this;
                 $.each(that.option('items'), function(index, item) {
                     that.option('integrationOptions.templates')['itemTemplate'].render({
                         model: item,
@@ -1030,7 +1030,7 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
 
         registerComponent('dxTestRepeater', TestRepeater);
         try {
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'dxTestRepeater: { items: items }\'>' +
                 '    <div data-options=\'dxTemplate: { name: ' + '"itemTemplate"' + '}\'>' +
                 '        <div class=item data-bind=\'text: $data\'></div>' +
@@ -1038,13 +1038,13 @@ QUnit.module('Widget & CollectionWidget with templates enabled', function() {
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            const vm = {
                 items: [1, 2, 3]
             };
 
             ko.applyBindings(vm, markup[0]);
 
-            var items = markup.find('.item');
+            const items = markup.find('.item');
             assert.ok(ko.contextFor(items[1]).$parent);
             assert.ok(ko.contextFor(items[1]).$parentContext);
 
@@ -1067,7 +1067,7 @@ QUnit.module(
     },
     function() {
         QUnit.test('ko.observable subscriptions should be disposed', function(assert) {
-            var TestComponent = DOMComponent.inherit({
+            const TestComponent = DOMComponent.inherit({
                 _defaultOptions: function() {
                     return { text: '', array: [], obj: null };
                 }
@@ -1075,11 +1075,11 @@ QUnit.module(
 
             registerComponent('dxTest', TestComponent);
 
-            var markup = $('<div></div>')
+            let markup = $('<div></div>')
                 .attr('data-bind', 'dxTest: { text: text }')
                 .appendTo(FIXTURE_ELEMENT);
 
-            var vm = {
+            let vm = {
                 text: ko.observable('my text')
             };
 
@@ -1115,7 +1115,7 @@ QUnit.module(
         });
 
         QUnit.test('regressions: nested component should be disposed', function(assert) {
-            var TestComponent = DOMComponent.inherit({
+            const TestComponent = DOMComponent.inherit({
                 NAME: 'TestComponent',
                 _dispose: function() {
                     this.__disposed__ = true;
@@ -1124,10 +1124,10 @@ QUnit.module(
 
             registerComponent('TestComponent', TestComponent);
 
-            var $outerComponent = this.$element,
-                $innerComponent = $('<div></div>').appendTo($outerComponent),
-                outerComponent = new TestComponent($outerComponent, {}),
-                innerComponent = new TestComponent($innerComponent, {});
+            const $outerComponent = this.$element;
+            const $innerComponent = $('<div></div>').appendTo($outerComponent);
+            const outerComponent = new TestComponent($outerComponent, {});
+            const innerComponent = new TestComponent($innerComponent, {});
 
             $outerComponent.remove();
 
@@ -1151,13 +1151,13 @@ QUnit.module(
                 );
 
                 try {
-                    var $component = this.$element.attr('data-bind', 'dxTestComponent:{ }'),
-                        $innerComponent = $('<div data-bind="dxTestComponent:{ }"></div>').appendTo($component);
+                    const $component = this.$element.attr('data-bind', 'dxTestComponent:{ }');
+                    const $innerComponent = $('<div data-bind="dxTestComponent:{ }"></div>').appendTo($component);
 
                     ko.applyBindings({}, $component.get(0));
 
-                    var component = $component.dxTestComponent('instance'),
-                        innerComponent = $innerComponent.dxTestComponent('instance');
+                    const component = $component.dxTestComponent('instance');
+                    const innerComponent = $innerComponent.dxTestComponent('instance');
 
                     removeFunc($component);
 
@@ -1170,7 +1170,7 @@ QUnit.module(
         });
 
         QUnit.test('CollectionWidget clean subscriptions', function(assert) {
-            var TestCollectionContainer = CollectionWidget.inherit({
+            const TestCollectionContainer = CollectionWidget.inherit({
                 _itemClass: function() {
                     return 'dx-test-item';
                 },
@@ -1182,14 +1182,14 @@ QUnit.module(
 
             registerComponent('dxTestCollectionContainer', TestCollectionContainer);
 
-            var vm = {
+            const vm = {
                 items: ko.observableArray([
                     { text: ko.observable('0') },
                     { text: ko.observable('1') }
                 ])
             };
 
-            var markup = $(
+            const markup = $(
                 '<div data-bind=\'dxTestCollectionContainer: { items: items }\'>' +
                 '</div>'
             ).appendTo(FIXTURE_ELEMENT);
@@ -1250,24 +1250,24 @@ QUnit.module(
     },
     function() {
         QUnit.test('component action context is component', function(assert) {
-            var context;
-            var handler = function(e) {
+            let context;
+            const handler = function(e) {
                 context = this;
             };
 
-            var markup = $('<div></div>').appendTo(FIXTURE_ELEMENT);
+            const markup = $('<div></div>').appendTo(FIXTURE_ELEMENT);
             markup.dxTest({ onHandler: handler });
 
-            var component = markup.dxTest('instance');
+            const component = markup.dxTest('instance');
             component.trigger();
 
             assert.equal(context, component);
         });
 
         QUnit.test('component action context is model', function(assert) {
-            var markup = $('<div></div>').attr('data-bind', 'dxTest: { onHandler: handler }').appendTo(FIXTURE_ELEMENT);
-            var context;
-            var vm = {
+            const markup = $('<div></div>').attr('data-bind', 'dxTest: { onHandler: handler }').appendTo(FIXTURE_ELEMENT);
+            let context;
+            const vm = {
                 handler: function(e) {
                     context = this;
                 }
@@ -1281,15 +1281,15 @@ QUnit.module(
         });
 
         QUnit.test('component action context is aggregated model', function(assert) {
-            var context;
+            let context;
 
-            var subVM = {
+            const subVM = {
                 handler: function(e) {
                     context = this;
                 }
             };
 
-            var vm = {
+            const vm = {
                 subVM: subVM
             };
 
@@ -1306,7 +1306,7 @@ QUnit.module(
 QUnit.module('Template w/o ko scenario', function() {
 
     QUnit.test('widget with templates enabled', function(assert) {
-        var TestContainer = Widget.inherit({
+        const TestContainer = Widget.inherit({
             _renderContentImpl: function() {
                 if(this.option('integrationOptions.templates').template) {
                     this.option('integrationOptions.templates').template.render({ container: this.$element() });
@@ -1320,7 +1320,7 @@ QUnit.module('Template w/o ko scenario', function() {
         registerComponent('dxTestContainer', TestContainer);
 
         try {
-            var $markup = $(
+            const $markup = $(
                 '<div data-bind=\'dxTestContainer: { }\'>' +
                 '    <div class=\'content\'>Test</div>' +
                 '</div>'
@@ -1335,7 +1335,7 @@ QUnit.module('Template w/o ko scenario', function() {
     });
 
     QUnit.test('collection container widget', function(assert) {
-        var TestCollectionContainer = CollectionWidget.inherit({
+        const TestCollectionContainer = CollectionWidget.inherit({
             _itemClass: function() {
                 return 'dx-test-item';
             },
@@ -1348,7 +1348,7 @@ QUnit.module('Template w/o ko scenario', function() {
         registerComponent('dxTestCollectionContainer', TestCollectionContainer);
 
         try {
-            var $markup = $(
+            const $markup = $(
                 '<div data-bind=\'dxTestCollectionContainer: { items: items }\'>' +
                 '    <div data-options=\'dxTemplate: {name: "item"}\'>' +
                 '        <div>Test</div>' +
@@ -1390,7 +1390,7 @@ QUnit.module('predicate for manual option binding control', {
 }, function() {
 
     QUnit.test('returns false - observable property value should not be unwrapped', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: function(propertyPath, propertyName, model) {
                 return propertyPath !== 'bindingProperty';
             },
@@ -1404,7 +1404,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('returns false - nested observable property value should not be unwrapped', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: function(propertyPath, propertyName, model) {
                 return propertyPath.indexOf('objectProperty') < 0;
             },
@@ -1419,7 +1419,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('returns true - observable property value should be unwrapped', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: function(propertyPath, propertyName, model) {
                 return propertyPath === 'bindingProperty';
             },
@@ -1432,7 +1432,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('returns true - nested observable property value should be unwrapped', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: function(propertyPath, propertyName, model) {
                 return propertyPath.indexOf('objectProperty') === 0;
             },
@@ -1447,7 +1447,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('returns undefined = returns false', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: noop,
             bindingProperty: ko.observable('value')
         };
@@ -1458,11 +1458,11 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('despite the return value, property value should be passed to component', function(assert) {
-        var bindingPropertyValue = '1',
-            nonBindingPropertyValue = '2',
-            primitiveProperty = '3';
+        const bindingPropertyValue = '1';
+        const nonBindingPropertyValue = '2';
+        const primitiveProperty = '3';
 
-        var vm = {
+        const vm = {
             isBindingProperty: function(propertyPath, propertyName, model) {
                 switch(propertyPath) {
                     case 'bindingProperty':
@@ -1486,7 +1486,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('should be taken in account only at the first viewmodel level', function(assert) {
-        var vm = {
+        const vm = {
             objectOption: {
                 isBindingProperty: sinon.spy()
             },
@@ -1500,7 +1500,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('should not be called for itself', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: sinon.spy()
         };
 
@@ -1510,7 +1510,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('should not be unwrapped and passed to component', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: ko.observable(true)
         };
 
@@ -1521,7 +1521,7 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('arguments are \'propertyPath\', \'propertyName\', \'currentModel\'', function(assert) {
-        var vm = {
+        const vm = {
             isBindingProperty: sinon.spy(function() { return true; }),
 
             objectProperty: {
@@ -1538,18 +1538,18 @@ QUnit.module('predicate for manual option binding control', {
     });
 
     QUnit.test('options changing after component created', function(assert) {
-        var isBindingProperty = function() {
+        const isBindingProperty = function() {
             return false;
         };
 
-        var vm = {
+        const vm = {
             options: ko.observable({
                 isBindingProperty: isBindingProperty,
                 option1: true
             })
         };
 
-        var markup = $('<div></div>').attr('data-bind', 'dxTest: $data').appendTo(FIXTURE_ELEMENT);
+        const markup = $('<div></div>').attr('data-bind', 'dxTest: $data').appendTo(FIXTURE_ELEMENT);
         ko.applyBindings(vm.options, markup[0]);
 
         vm.options({

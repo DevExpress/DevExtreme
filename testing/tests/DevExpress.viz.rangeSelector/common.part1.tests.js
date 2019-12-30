@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    trackerModule = require('viz/range_selector/tracker'),
-    dataSourceModule = require('data/data_source/data_source'),
-    seriesDataSourceModule = require('viz/range_selector/series_data_source'),
-    commons = require('./rangeSelectorParts/commons.js');
+const $ = require('jquery');
+const trackerModule = require('viz/range_selector/tracker');
+const dataSourceModule = require('data/data_source/data_source');
+const seriesDataSourceModule = require('viz/range_selector/series_data_source');
+const commons = require('./rangeSelectorParts/commons.js');
 
 QUnit.module('Basic', commons.environment);
 
@@ -21,7 +21,7 @@ QUnit.test('startValue equals endValue', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined, 'start value');
     assert.strictEqual(options.endValue, undefined, 'end value');
 });
@@ -34,7 +34,7 @@ QUnit.test('one category', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 'q1', 'start value');
     assert.strictEqual(options.endValue, 'q1', 'end value');
 });
@@ -44,7 +44,7 @@ QUnit.test('Pass containerBackgroundColor to scale', function(assert) {
         containerBackgroundColor: 'red'
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.deepEqual(options.containerColor, 'red');
 });
 
@@ -56,7 +56,7 @@ QUnit.test('default selected range', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 2);
     assert.strictEqual(options.endValue, 50);
 });
@@ -121,7 +121,7 @@ QUnit.test('initialize with numeric inverted scale', function(assert) {
         }
     });
 
-    var range = this.axis.setBusinessRange.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
     assert.ok(range.invert, 'invert');
     assert.equal(range.min, 2, 'min');
     assert.equal(range.max, 50, 'max');
@@ -135,7 +135,7 @@ QUnit.test('initialize with dateTime inverted scale', function(assert) {
         }
     });
 
-    var range = this.axis.setBusinessRange.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
     assert.ok(range.invert, 'invert');
     assert.deepEqual(range.min, new Date(2010, 5, 1), 'min');
     assert.deepEqual(range.max, new Date(2012, 1, 1), 'max');
@@ -151,7 +151,7 @@ QUnit.test('initialize with logarithmic axis', function(assert) {
         }
     });
 
-    var range = this.axis.setBusinessRange.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
     assert.equal(range.min, 1, 'min');
     assert.equal(range.max, 10, 'max');
     assert.equal(range.axisType, 'logarithmic', 'axisType');
@@ -175,7 +175,7 @@ QUnit.test('Pass series dataType to range', function(assert) {
         }
     });
 
-    var range = this.axis.setBusinessRange.lastCall.args[0];
+    const range = this.axis.setBusinessRange.lastCall.args[0];
     assert.equal(range.addRange.firstCall.args[0].dataType, 'datetime');
 });
 
@@ -193,7 +193,7 @@ QUnit.test('correct sliders place holder size by values', function(assert) {
 });
 
 QUnit.test('Tracker creation', function(assert) {
-    var spy = sinon.spy(trackerModule, 'Tracker');
+    const spy = sinon.spy(trackerModule, 'Tracker');
     this.createWidget();
 
     assert.deepEqual(spy.lastCall.args, [{ renderer: this.renderer, controller: this.slidersController }]);
@@ -220,8 +220,8 @@ QUnit.test('Creation', function(assert) {
         arg: new commons.StubRange(),
         val: new commons.StubRange()
     });
-    var widget = this.createWidget({ dataSource: [1, 2, 3] }),
-        ds = widget.getDataSource();
+    const widget = this.createWidget({ dataSource: [1, 2, 3] });
+    const ds = widget.getDataSource();
 
     assert.ok(ds instanceof dataSourceModule.DataSource);
     assert.deepEqual(ds.items(), [1, 2, 3]);
@@ -239,18 +239,18 @@ QUnit.module('isReady', $.extend({}, commons.environment, {
 }));
 
 QUnit.test('dataSource is not loaded', function(assert) {
-    var ds = new dataSourceModule.DataSource();
+    const ds = new dataSourceModule.DataSource();
     ds.isLoaded = sinon.stub().returns(false);
-    var rangeSelector = this.createWidget({ dataSource: ds });
+    const rangeSelector = this.createWidget({ dataSource: ds });
 
     assert.strictEqual(rangeSelector.isReady(), false, 'ready state');
     assert.ok(!this.renderer.stub('onEndAnimation').called, 'end animation');
 });
 
 QUnit.test('dataSource is loaded', function(assert) {
-    var ds = new dataSourceModule.DataSource();
+    const ds = new dataSourceModule.DataSource();
     ds.isLoaded = sinon.stub().returns(true);
-    var rangeSelector = this.createWidget({ dataSource: ds });
+    const rangeSelector = this.createWidget({ dataSource: ds });
 
     assert.strictEqual(rangeSelector.isReady(), false, 'ready state before end animation');
     this.renderer.onEndAnimation.lastCall.args[0]();
@@ -258,7 +258,7 @@ QUnit.test('dataSource is loaded', function(assert) {
 });
 
 QUnit.test('Update axis canvas before create series dataSorce', function(assert) {
-    var spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new commons.StubRange(),
         val: new commons.StubRange()
@@ -270,7 +270,7 @@ QUnit.test('Update axis canvas before create series dataSorce', function(assert)
         }
     });
 
-    var argumentAxis = spy.lastCall.args[0].argumentAxis;
+    const argumentAxis = spy.lastCall.args[0].argumentAxis;
 
     assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args[0].isEmpty(), true);
     assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args[1], {
@@ -293,7 +293,7 @@ QUnit.test('Pass all scale options to axis on first update', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.secondCall.args[0];
+    const options = this.axis.updateOptions.secondCall.args[0];
     assert.strictEqual(options.someOptions, true);
 });
 QUnit.module('logarithmic type', commons.environment);
@@ -308,7 +308,7 @@ QUnit.test('scale. logarithmic type', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 0.001);
     assert.strictEqual(options.endValue, 1000);
     assert.strictEqual(options.type, 'logarithmic');
@@ -316,7 +316,7 @@ QUnit.test('scale. logarithmic type', function(assert) {
 });
 
 QUnit.test('scale. not valid logarithmBase, less than zero', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         scale: {
             startValue: 0.001,
@@ -327,7 +327,7 @@ QUnit.test('scale. not valid logarithmBase, less than zero', function(assert) {
         onIncidentOccurred: spy
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 0.001);
     assert.strictEqual(options.endValue, 1000);
     assert.strictEqual(options.type, 'logarithmic');
@@ -336,7 +336,7 @@ QUnit.test('scale. not valid logarithmBase, less than zero', function(assert) {
 });
 
 QUnit.test('scale. not valid logarithmBase, equal zero', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         scale: {
             startValue: 0.001,
@@ -347,7 +347,7 @@ QUnit.test('scale. not valid logarithmBase, equal zero', function(assert) {
         onIncidentOccurred: spy
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 0.001);
     assert.strictEqual(options.endValue, 1000);
     assert.strictEqual(options.type, 'logarithmic');
@@ -356,7 +356,7 @@ QUnit.test('scale. not valid logarithmBase, equal zero', function(assert) {
 });
 
 QUnit.test('scale. not valid logarithmBase, string', function(assert) {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     this.createWidget({
         scale: {
             startValue: 0.001,
@@ -367,7 +367,7 @@ QUnit.test('scale. not valid logarithmBase, string', function(assert) {
         onIncidentOccurred: spy
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 0.001);
     assert.strictEqual(options.endValue, 1000);
     assert.strictEqual(options.type, 'logarithmic');
@@ -376,7 +376,7 @@ QUnit.test('scale. not valid logarithmBase, string', function(assert) {
 });
 
 QUnit.test('valueAxis. logarithmic type', function(assert) {
-    var spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new commons.StubRange(),
         val: new commons.StubRange()
@@ -391,24 +391,24 @@ QUnit.test('valueAxis. logarithmic type', function(assert) {
         }
     });
 
-    var obj = spy.lastCall.args[0].chart.valueAxis;
+    const obj = spy.lastCall.args[0].chart.valueAxis;
     assert.strictEqual(obj.type, 'logarithmic', 'type');
     assert.strictEqual(obj.logarithmBase, 2, 'logarithmic base');
 });
 
 QUnit.test('valueAxis. not valid logarithmBase', function(assert) {
-    var spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
+    const spy = sinon.spy(seriesDataSourceModule, 'SeriesDataSource');
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
         arg: new commons.StubRange(),
         val: new commons.StubRange()
     });
     this.seriesDataSource.getThemeManager = function() {
-        var themeManager = new commons.StubThemeManager();
+        const themeManager = new commons.StubThemeManager();
         themeManager.getOptions = sinon.stub().withArgs('valueAxis').returns({ logarithmBase: 2 });
         return themeManager;
     };
-    var incidentOccurred = sinon.spy();
+    const incidentOccurred = sinon.spy();
     this.createWidget({
         dataSource: [],
         chart: {
@@ -421,7 +421,7 @@ QUnit.test('valueAxis. not valid logarithmBase', function(assert) {
         onIncidentOccurred: incidentOccurred
     });
 
-    var obj = spy.lastCall.args[0].chart.valueAxis;
+    const obj = spy.lastCall.args[0].chart.valueAxis;
     assert.deepEqual(obj.type, 'logarithmic');
     assert.deepEqual(obj.logarithmBase, 2);
     assert.strictEqual(incidentOccurred.getCall(0).args[0].target.id, 'E2104', 'incident');
@@ -438,7 +438,7 @@ QUnit.test('scale. discrete type', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.equal(options.type, 'discrete');
     assert.equal(options.startValue, 'a2');
     assert.equal(options.endValue, 'a4');

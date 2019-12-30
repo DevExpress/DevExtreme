@@ -23,18 +23,18 @@
         },
 
         run: function(action, done, assert) {
-            var globalFired = $.Deferred(),
-                optionalFired = $.Deferred(),
-                failFired = $.Deferred();
+            const globalFired = $.Deferred();
+            const optionalFired = $.Deferred();
+            const failFired = $.Deferred();
 
-            var globalHandlerArg,
-                optionalHandlerArg,
-                failHandlerArg;
+            let globalHandlerArg;
+            let optionalHandlerArg;
+            let failHandlerArg;
 
-            var log = [],
-                that = this;
+            const log = [];
+            const that = this;
 
-            var prevGlobalHandler = errorsModule.errorHandler;
+            const prevGlobalHandler = errorsModule.errorHandler;
 
             errorsModule.errorHandler = function(arg) {
                 log.push('global');
@@ -48,7 +48,7 @@
                 optionalFired.resolve();
             };
 
-            var actionResult = action();
+            const actionResult = action();
             if(!actionResult || !actionResult.fail) {
                 throw Error('Deferred result is expected');
             }

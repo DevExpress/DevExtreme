@@ -1,25 +1,25 @@
-var $ = require('../../core/renderer'),
-    typeUtils = require('../../core/utils/type'),
-    noop = require('../../core/utils/common').noop,
-    isDefined = require('../../core/utils/type').isDefined,
-    extend = require('../../core/utils/extend').extend,
-    each = require('../../core/utils/iterator').each,
-    inArray = require('../../core/utils/array').inArray,
-    camelize = require('../../core/utils/inflector').camelize,
-    registerComponent = require('../../core/component_registrator'),
-    Widget = require('../widget/ui.widget'),
-    publisherMixin = require('./ui.scheduler.publisher_mixin'),
-    SchedulerNavigator = require('./ui.scheduler.navigator'),
-    DropDownMenu = require('../drop_down_menu'),
-    Tabs = require('../tabs'),
-    errors = require('../../core/errors'),
-    messageLocalization = require('../../localization/message');
+const $ = require('../../core/renderer');
+const typeUtils = require('../../core/utils/type');
+const noop = require('../../core/utils/common').noop;
+const isDefined = require('../../core/utils/type').isDefined;
+const extend = require('../../core/utils/extend').extend;
+const each = require('../../core/utils/iterator').each;
+const inArray = require('../../core/utils/array').inArray;
+const camelize = require('../../core/utils/inflector').camelize;
+const registerComponent = require('../../core/component_registrator');
+const Widget = require('../widget/ui.widget');
+const publisherMixin = require('./ui.scheduler.publisher_mixin');
+const SchedulerNavigator = require('./ui.scheduler.navigator');
+const DropDownMenu = require('../drop_down_menu');
+const Tabs = require('../tabs');
+const errors = require('../../core/errors');
+const messageLocalization = require('../../localization/message');
 
-var COMPONENT_CLASS = 'dx-scheduler-header',
-    VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher',
-    VIEW_SWITCHER_LABEL_CLASS = 'dx-scheduler-view-switcher-label';
+const COMPONENT_CLASS = 'dx-scheduler-header';
+const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
+const VIEW_SWITCHER_LABEL_CLASS = 'dx-scheduler-view-switcher-label';
 
-var STEP_MAP = {
+const STEP_MAP = {
     day: 'day',
     week: 'week',
     workWeek: 'workWeek',
@@ -31,9 +31,9 @@ var STEP_MAP = {
     agenda: 'agenda'
 };
 
-var VIEWS = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'];
+const VIEWS = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth', 'agenda'];
 
-var SchedulerHeader = Widget.inherit({
+const SchedulerHeader = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -58,7 +58,7 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
+        const value = args.value;
 
         switch(args.name) {
             case 'views':
@@ -135,7 +135,7 @@ var SchedulerHeader = Widget.inherit({
     _renderViewSwitcher: function() {
         this._validateViews();
 
-        var $viewSwitcher = $('<div>').addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
+        const $viewSwitcher = $('<div>').addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
 
         if(!this.option('useDropDownViewSwitcher')) {
             this._renderViewSwitcherTabs($viewSwitcher);
@@ -145,11 +145,11 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _validateViews: function() {
-        var views = this.option('views');
+        const views = this.option('views');
 
         each(views, function(_, view) {
-            var isViewIsObject = typeUtils.isObject(view),
-                viewType = isViewIsObject && view.type ? view.type : view;
+            const isViewIsObject = typeUtils.isObject(view);
+            const viewType = isViewIsObject && view.type ? view.type : view;
 
             if(inArray(viewType, VIEWS) === -1) {
                 errors.log('W0008', viewType);
@@ -158,12 +158,12 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _getCurrentViewType: function() {
-        var currentView = this.option('currentView');
+        const currentView = this.option('currentView');
         return currentView.type || currentView;
     },
 
     _renderViewSwitcherTabs: function($element) {
-        var that = this;
+        const that = this;
 
         $element.addClass(Tabs.getTabsExpandedClass);
 
@@ -208,7 +208,7 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _renderViewSwitcherDropDownMenu: function($element) {
-        var that = this;
+        const that = this;
 
         this._$viewSwitcherLabel = $('<div>').addClass(VIEW_SWITCHER_LABEL_CLASS).appendTo(this.$element());
 
@@ -230,8 +230,8 @@ var SchedulerHeader = Widget.inherit({
         if(!isDefined(this._$viewSwitcherLabel)) {
             return;
         }
-        var currentView = this.option('currentView'),
-            currentViewText = this._getItemText(currentView);
+        const currentView = this.option('currentView');
+        const currentViewText = this._getItemText(currentView);
 
         this._$viewSwitcherLabel.text(currentViewText);
     },
@@ -241,9 +241,9 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _updateCurrentView: function(e) {
-        var selectedItem = e.itemData || e.component.option('selectedItem');
+        const selectedItem = e.itemData || e.component.option('selectedItem');
 
-        var viewName = this._getCurrentViewName(selectedItem);
+        const viewName = this._getCurrentViewName(selectedItem);
 
         this.notifyObserver('currentViewUpdated', viewName);
     },

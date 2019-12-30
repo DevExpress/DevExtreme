@@ -1,4 +1,4 @@
-var errorUtils = require('./utils/error');
+const errorUtils = require('./utils/error');
 
 /**
 * @docid

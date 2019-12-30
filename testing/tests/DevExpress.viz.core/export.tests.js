@@ -1,7 +1,7 @@
-var vizMocks = require('../../helpers/vizMocks.js'),
-    exportModule = require('viz/core/export'),
-    themeModule = require('viz/themes'),
-    clientExporter = require('exporter');
+const vizMocks = require('../../helpers/vizMocks.js');
+const exportModule = require('viz/core/export');
+const themeModule = require('viz/themes');
+const clientExporter = require('exporter');
 
 themeModule.registerTheme({
     name: 'someTheme.light',
@@ -64,7 +64,7 @@ QUnit.module('Creation', {
         this.toDataURLStub.restore();
     },
     createExportMenu: function() {
-        var exportMenu = new exportModule.ExportMenu({
+        const exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
             incidentOccurred: this.incidentOccurred
         });
@@ -348,63 +348,63 @@ QUnit.test('Enabled options is false', function(assert) {
 QUnit.module('API. Markup manipulations');
 
 QUnit.test('getMarkup method', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg </svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg </svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
     assert.equal(markup, '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
 QUnit.test('getMarkup. BackgroundColor in theme', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg </svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'theme') return 'someTheme.light';
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg </svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'theme') return 'someTheme.light';
+            }
+        };
+    };
+    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
     assert.equal(markup, '<svg data-backgroundcolor="some_theme_color" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
 QUnit.test('getMarkup. Different colors in charts. No backgroundColor in result', function(assert) {
-    var colors = ['color_1', 'color_2'],
-        i = 0,
-        createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg </svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return colors[i++];
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const colors = ['color_1', 'color_2'];
+    let i = 0;
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg </svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return colors[i++];
+            }
+        };
+    };
+    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
     assert.equal(markup, '<svg data-backgroundcolor="" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), just widget', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg></svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg></svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
 
     assert.deepEqual(markupData, {
         markup: '<svg data-backgroundcolor="backgroundColor" height="25" width="10" version="1.1" xmlns="http://www.w3.org/2000/svg">'
@@ -416,16 +416,16 @@ QUnit.test('Combine widgets markups (combineMarkups), just widget', function(ass
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), array of widgets - column', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg></svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markupData = exportModule.combineMarkups([createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })]);
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg></svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markupData = exportModule.combineMarkups([createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })]);
 
     assert.deepEqual(markupData, {
         markup: '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg">'
@@ -438,19 +438,19 @@ QUnit.test('Combine widgets markups (combineMarkups), array of widgets - column'
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), array of arrays of widgets - nested arrays are rows', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg></svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markupData = exportModule.combineMarkups([
-            [createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })],
-            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
-        ]);
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg></svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markupData = exportModule.combineMarkups([
+        [createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })],
+        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+    ]);
 
     assert.deepEqual(markupData, {
         markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="30" version="1.1" xmlns="http://www.w3.org/2000/svg">'
@@ -463,23 +463,23 @@ QUnit.test('Combine widgets markups (combineMarkups), array of arrays of widgets
 });
 
 QUnit.test('Combine widgets markups (combineMarkups) in grid layout with center-center alignments', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg></svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markupData = exportModule.combineMarkups([
-            [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
-            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
-        ], {
-            gridLayout: true,
-            verticalAlignment: 'center',
-            horizontalAlignment: 'center'
-        });
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg></svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markupData = exportModule.combineMarkups([
+        [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
+        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+    ], {
+        gridLayout: true,
+        verticalAlignment: 'center',
+        horizontalAlignment: 'center'
+    });
 
     assert.deepEqual(markupData, {
         markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
@@ -492,23 +492,23 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with center-
 });
 
 QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-right alignments', function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns('<svg></svg>'),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === 'backgroundColor') return 'backgroundColor';
-                }
-            };
-        },
-        markupData = exportModule.combineMarkups([
-            [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
-            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
-        ], {
-            gridLayout: true,
-            verticalAlignment: 'bottom',
-            horizontalAlignment: 'right'
-        });
+    const createWidget = function(size) {
+        return {
+            svg: sinon.stub().returns('<svg></svg>'),
+            getSize: sinon.stub().returns(size),
+            option: function(param) {
+                if(param === 'backgroundColor') return 'backgroundColor';
+            }
+        };
+    };
+    const markupData = exportModule.combineMarkups([
+        [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
+        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+    ], {
+        gridLayout: true,
+        verticalAlignment: 'bottom',
+        horizontalAlignment: 'right'
+    });
 
     assert.deepEqual(markupData, {
         markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
@@ -536,11 +536,11 @@ QUnit.module('API. Export methods', {
 
 QUnit.test('exportFromMarkup method. Defaults', function(assert) {
     // arrange
-    var options = {
-            width: 600,
-            height: 400
-        },
-        markup = 'testMarkup';
+    const options = {
+        width: 600,
+        height: 400
+    };
+    const markup = 'testMarkup';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -563,20 +563,20 @@ QUnit.test('exportFromMarkup method. Defaults', function(assert) {
 
 QUnit.test('exportFromMarkup method. Set options', function(assert) {
     // arrange
-    var options = {
-            format: 'jpeg',
-            fileName: 'file1',
-            proxyUrl: 'testUrl',
-            width: 600,
-            height: 400,
-            margin: 0,
-            backgroundColor: '#00ff00',
-            onFileSaving: 'file saving callback',
-            onExporting: 'exporting callback',
-            onExported: 'exported callback',
-            forceProxy: true
-        },
-        markup = 'testMarkup';
+    const options = {
+        format: 'jpeg',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
+        width: 600,
+        height: 400,
+        margin: 0,
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
+        forceProxy: true
+    };
+    const markup = 'testMarkup';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -606,20 +606,20 @@ QUnit.test('exportFromMarkup unsupported image format - export as PNG', function
     // arrange
     this.toDataURLStub.withArgs('image/gif').returns('image/png');
 
-    var options = {
-            format: 'gif',
-            fileName: 'file1',
-            proxyUrl: 'testUrl',
-            width: 600,
-            height: 400,
-            margin: 0,
-            backgroundColor: '#00ff00',
-            onFileSaving: 'file saving callback',
-            onExporting: 'exporting callback',
-            onExported: 'exported callback',
-            forceProxy: true
-        },
-        markup = 'testMarkup data-backgroundcolor="someColor"';
+    const options = {
+        format: 'gif',
+        fileName: 'file1',
+        proxyUrl: 'testUrl',
+        width: 600,
+        height: 400,
+        margin: 0,
+        backgroundColor: '#00ff00',
+        onFileSaving: 'file saving callback',
+        onExporting: 'exporting callback',
+        onExported: 'exported callback',
+        forceProxy: true
+    };
+    const markup = 'testMarkup data-backgroundcolor="someColor"';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -645,11 +645,11 @@ QUnit.test('exportFromMarkup unsupported image format - export as PNG', function
 
 QUnit.test('exportFromMarkup. backgroundColor from markup', function(assert) {
     // arrange
-    var options = {
-            width: 600,
-            height: 400
-        },
-        markup = 'testMarkup data-backgroundcolor="someColor"';
+    const options = {
+        width: 600,
+        height: 400
+    };
+    const markup = 'testMarkup data-backgroundcolor="someColor"';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -671,12 +671,12 @@ QUnit.test('exportFromMarkup. backgroundColor from markup', function(assert) {
 
 QUnit.test('exportFromMarkup. backgroundColor from current theme', function(assert) {
     // arrange
-    var options = {
-            width: 600,
-            height: 400
-        },
-        markup = 'testMarkup',
-        currentTheme = themeModule.currentTheme();
+    const options = {
+        width: 600,
+        height: 400
+    };
+    const markup = 'testMarkup';
+    const currentTheme = themeModule.currentTheme();
 
     themeModule.currentTheme('someTheme.light');
 
@@ -724,7 +724,7 @@ QUnit.test('exportWidgets method. Defaults', function(assert) {
 
 QUnit.test('exportWidgets method. Set options. Size options are ignored', function(assert) {
     // arrange
-    var options = {
+    const options = {
         format: 'jpeg',
         fileName: 'file1',
         proxyUrl: 'testUrl',
@@ -832,7 +832,7 @@ QUnit.module('API', {
         themeModule.currentTheme(this.srcCurrentTheme);
     },
     createExportMenu: function() {
-        var exportMenu = new exportModule.ExportMenu({
+        const exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
             incidentOccurred: this.incidentOccurred
         });
@@ -843,8 +843,8 @@ QUnit.module('API', {
 
 QUnit.test('Get layout options', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu(),
-        layout;
+    const exportMenu = this.createExportMenu();
+    let layout;
 
     // act
     layout = exportMenu.getLayoutOptions();
@@ -869,7 +869,7 @@ QUnit.test('Get layout options', function(assert) {
 
 QUnit.test('Draw', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.draw(100, 60, { width: 30, height: 30, left: 50 });
@@ -880,7 +880,7 @@ QUnit.test('Draw', function(assert) {
 
 QUnit.test('Shift', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     this.renderer.g.getCall(0).returnValue.attr.reset();
 
@@ -893,7 +893,7 @@ QUnit.test('Shift', function(assert) {
 
 QUnit.test('Move', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     this.renderer.g.getCall(0).returnValue.attr.reset();
 
@@ -906,16 +906,16 @@ QUnit.test('Move', function(assert) {
 
 QUnit.test('Measure', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     // act
-    var size = exportMenu.measure();
+    const size = exportMenu.measure();
     // assert
     assert.deepEqual(size, [40, 40]);
 });
 
 QUnit.test('Hide', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.hide();
@@ -926,7 +926,7 @@ QUnit.test('Hide', function(assert) {
 
 QUnit.test('Show', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.show();
@@ -937,7 +937,7 @@ QUnit.test('Show', function(assert) {
 
 QUnit.test('Set options', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     this.renderer.rect.reset();
     this.renderer.text.reset();
@@ -983,7 +983,7 @@ QUnit.test('Set options', function(assert) {
     });
 
     // assert
-    var listGroup = this.renderer.g.getCall(2).returnValue;
+    const listGroup = this.renderer.g.getCall(2).returnValue;
 
     assert.equal(listGroup.clear.callCount, 2, 'clearing');
     assert.equal(this.renderer.rect.callCount, 1, 'rect');
@@ -1020,7 +1020,7 @@ QUnit.test('Set options', function(assert) {
 
 QUnit.test('Dispose', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.dispose();
@@ -1072,7 +1072,7 @@ QUnit.module('Events', {
         clientExporter.export.restore();
     },
     createExportMenu: function() {
-        var exportMenu = new exportModule.ExportMenu({
+        const exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
             exportTo: this.exportTo || function() {},
             print: this.print || function() {},
@@ -1104,7 +1104,7 @@ QUnit.test('\'On\' subscribe', function(assert) {
 
 QUnit.test('\'Off\' unsubscribe', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.dispose();
@@ -1157,7 +1157,7 @@ QUnit.test('Button unhover', function(assert) {
 QUnit.test('menuItem hover', function(assert) {
     // arrange
     this.createExportMenu();
-    var menuItemRect = this.renderer.rect.getCall(2).returnValue;
+    const menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
     menuItemRect.attr.reset();
 
@@ -1171,7 +1171,7 @@ QUnit.test('menuItem hover', function(assert) {
 QUnit.test('menuItem unhover', function(assert) {
     // arrange
     this.createExportMenu();
-    var menuItemRect = this.renderer.rect.getCall(2).returnValue;
+    const menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
     menuItemRect.attr.reset();
 
@@ -1302,7 +1302,7 @@ QUnit.test('Exporting by click on format text', function(assert) {
     // arrange
     this.exportTo = sinon.spy();
 
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
@@ -1327,10 +1327,10 @@ QUnit.test('Exporting by click on format text', function(assert) {
 });
 
 QUnit.test('Open list after exporting - previously clicked item is unhovered. T511729', function(assert) {
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
-    var menuItemRect = this.renderer.rect.getCall(2).returnValue;
+    const menuItemRect = this.renderer.rect.getCall(2).returnValue;
     menuItemRect.attr.reset();
 
     // act
@@ -1372,7 +1372,7 @@ QUnit.test('Printing by menu - close list', function(assert) {
 // T397838
 QUnit.test('Localization', function(assert) {
     // assert
-    var localization = require('localization');
+    const localization = require('localization');
 
     localization.loadMessages({
         it: {
@@ -1434,7 +1434,7 @@ QUnit.module('Layout', {
         clientExporter.export.restore();
     },
     createExportMenu: function() {
-        var exportMenu = new exportModule.ExportMenu({
+        const exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
             incidentOccurred: this.incidentOccurred
         });
@@ -1445,7 +1445,7 @@ QUnit.module('Layout', {
 
 QUnit.test('Menu is hidden if there is no enough space', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.draw(10, 20, { width: 30, height: 30 });
@@ -1456,7 +1456,7 @@ QUnit.test('Menu is hidden if there is no enough space', function(assert) {
 
 QUnit.test('freeSpace', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(100, 200, { width: 30, height: 30 });
 
     // act
@@ -1468,11 +1468,11 @@ QUnit.test('freeSpace', function(assert) {
 
 QUnit.test('Return empty layout options if was hidden due to small container', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
     // act
-    var layout = exportMenu.getLayoutOptions();
+    const layout = exportMenu.getLayoutOptions();
 
     // assert
     assert.deepEqual(layout, { width: 0, height: 0, cutSide: 'vertical', cutLayoutSide: 'top' });
@@ -1480,7 +1480,7 @@ QUnit.test('Return empty layout options if was hidden due to small container', f
 
 QUnit.test('Send warning message if was hidden due to small container', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
 
     // act
     exportMenu.draw(10, 20, { width: 30, height: 30 });
@@ -1491,7 +1491,7 @@ QUnit.test('Send warning message if was hidden due to small container', function
 
 QUnit.test('Menu is hidden first time and shown if container gets bigger', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
     // act
@@ -1504,13 +1504,13 @@ QUnit.test('Menu is hidden first time and shown if container gets bigger', funct
 
 QUnit.test('Return real layout options if container gets bigger', function(assert) {
     // arrange
-    var exportMenu = this.createExportMenu();
+    const exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
     exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
     exportMenu.draw(100, 60, { width: 30, height: 30 });
 
     // act
-    var layout = exportMenu.getLayoutOptions();
+    const layout = exportMenu.getLayoutOptions();
 
     // assert
     assert.deepEqual(layout, {

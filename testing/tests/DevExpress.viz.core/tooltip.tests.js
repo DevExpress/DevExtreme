@@ -52,7 +52,7 @@ function getInitialOptions() {
 }
 
 rendererModule.Renderer = function(parameters) {
-    var renderer = new vizMocks.Renderer(parameters);
+    const renderer = new vizMocks.Renderer(parameters);
     currentTest().renderer = renderer;
     return renderer;
 };
@@ -61,8 +61,8 @@ QUnit.module('Main functionality', {
     beforeEach: function() {
         this.options = getInitialOptions();
         this.patchFontOptions = sinon.stub(vizUtils, 'patchFontOptions', function(arg) {
-            var obj = {};
-            for(var key in arg) {
+            const obj = {};
+            for(const key in arg) {
                 obj[key + 'Patched'] = arg[key];
             }
             return obj;
@@ -74,10 +74,10 @@ QUnit.module('Main functionality', {
 });
 
 QUnit.test('Create tooltip', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip,
-        wrapper,
-        div;
+    const et = { event: 'trigger' };
+    let tooltip;
+    let wrapper;
+    let div;
 
     // act
     tooltip = new Tooltip({ eventTrigger: et, cssClass: 'tooltip-class', pathModified: 'pathModified-option' });
@@ -129,9 +129,9 @@ QUnit.test('Create tooltip', function(assert) {
 });
 
 QUnit.test('Set options. All options', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
 
     // act
     result = tooltip.setOptions(this.options);
@@ -149,9 +149,9 @@ QUnit.test('Set options. All options', function(assert) {
 });
 
 QUnit.test('Set options. Cloud border options', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
     this.options.border.visible = false;
     // act
     result = tooltip.setOptions(this.options);
@@ -162,9 +162,9 @@ QUnit.test('Set options. Cloud border options', function(assert) {
 });
 
 QUnit.test('Set options. ZIndex', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
     this.options.zIndex = 1000;
     // act
     sinon.spy(tooltip._wrapper, 'css');
@@ -177,9 +177,9 @@ QUnit.test('Set options. ZIndex', function(assert) {
 });
 
 QUnit.test('Set options. Container is incorrect', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
     this.options.container = '.some-wrong-class-name';
     // act
     result = tooltip.setOptions(this.options);
@@ -190,9 +190,9 @@ QUnit.test('Set options. Container is incorrect', function(assert) {
 });
 
 QUnit.test('Set options. Container is correct', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
     this.options.container = '.some-correct-class-name';
     // act
     result = tooltip.setOptions(this.options);
@@ -207,8 +207,8 @@ QUnit.test('Append tooltip to container on shown', function(assert) {
         .append('<div class=\'tooltip-container\'></div>')
         .append('<div class=\'tooltip-container\'></div>');
 
-    var et = { eventTrigger: function() {}, cssClass: 'test-tooltip' },
-        tooltip = new Tooltip(et);
+    const et = { eventTrigger: function() {}, cssClass: 'test-tooltip' };
+    const tooltip = new Tooltip(et);
 
     this.options.container = '.tooltip-container';
     tooltip.setOptions(this.options);
@@ -226,8 +226,8 @@ QUnit.test('Tooltip should be appended in the closest element to root', function
         .append('<div class=\'tooltip-container far\'></div>')
         .append('<div class=\'tooltip-container\'><div id=\'root\'></div></div>');
 
-    var et = { eventTrigger: function() { }, cssClass: 'test-tooltip', widgetRoot: $('#root').get(0) },
-        tooltip = new Tooltip(et);
+    const et = { eventTrigger: function() { }, cssClass: 'test-tooltip', widgetRoot: $('#root').get(0) };
+    const tooltip = new Tooltip(et);
 
     this.options.container = '.tooltip-container';
 
@@ -235,7 +235,7 @@ QUnit.test('Tooltip should be appended in the closest element to root', function
 
     tooltip.show({ valueText: 'text' }, {});
     // act
-    var $tooltipContainer = $('.test-tooltip').parent().eq(0);
+    const $tooltipContainer = $('.test-tooltip').parent().eq(0);
     assert.ok($tooltipContainer.hasClass('tooltip-container'));
     assert.ok(!$tooltipContainer.hasClass('far'));
 });
@@ -298,9 +298,9 @@ QUnit.test('Body has horizontal scroll', function(assert) {
 });
 
 QUnit.test('Set options. customizeTooltip', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
     this.options.customizeTooltip = {};
     // act
     result = tooltip.setOptions(this.options);
@@ -311,46 +311,46 @@ QUnit.test('Set options. customizeTooltip', function(assert) {
 });
 
 QUnit.test('Set options. Two times', function(assert) {
-    var et = { event: 'trigger' },
-        options2 = {
-            enabled: false,
-            shared: true,
-            location: 'left',
-            border: {
-                width: 2,
-                color: 'color1',
-                dashStyle: 'dashStyle',
-                opacity: 0.9,
-                visible: true
-            },
-            color: 'color2',
-            opacity: 0.8,
-            customizeTooltip: {},
-            format: 'format10',
-            argumentFormat: 'format20',
-            precision: 10,
-            argumentPrecision: 20,
-            percentPrecision: 30,
-            font: {
-                size: 120,
-                family: 'Some font',
-                weight: 40,
-                color: 'color3',
-                opacity: 0.7
-            },
-            arrowLength: 100,
-            paddingLeftRight: 180,
-            paddingTopBottom: 150,
-            shadow: {
-                opacity: 0.6,
-                color: 'color4',
-                offsetX: 13,
-                offsetY: 40,
-                blur: 20
-            }
+    const et = { event: 'trigger' };
+    const options2 = {
+        enabled: false,
+        shared: true,
+        location: 'left',
+        border: {
+            width: 2,
+            color: 'color1',
+            dashStyle: 'dashStyle',
+            opacity: 0.9,
+            visible: true
         },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+        color: 'color2',
+        opacity: 0.8,
+        customizeTooltip: {},
+        format: 'format10',
+        argumentFormat: 'format20',
+        precision: 10,
+        argumentPrecision: 20,
+        percentPrecision: 30,
+        font: {
+            size: 120,
+            family: 'Some font',
+            weight: 40,
+            color: 'color3',
+            opacity: 0.7
+        },
+        arrowLength: 100,
+        paddingLeftRight: 180,
+        paddingTopBottom: 150,
+        shadow: {
+            opacity: 0.6,
+            color: 'color4',
+            offsetX: 13,
+            offsetY: 40,
+            blur: 20
+        }
+    };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
 
     tooltip.setOptions(this.options);
 
@@ -367,8 +367,8 @@ QUnit.test('Set options. Two times', function(assert) {
 });
 
 QUnit.test('Set renderer options', function(assert) {
-    var options = { tag: 'options' },
-        tooltip = new Tooltip({});
+    const options = { tag: 'options' };
+    const tooltip = new Tooltip({});
 
     tooltip.setRendererOptions(options);
 
@@ -377,8 +377,8 @@ QUnit.test('Set renderer options', function(assert) {
 });
 
 QUnit.test('Set renderer options / rtl enabled', function(assert) {
-    var options = { tag: 'options', rtl: 1 },
-        tooltip = new Tooltip({});
+    const options = { tag: 'options', rtl: 1 };
+    const tooltip = new Tooltip({});
 
     tooltip.setRendererOptions(options);
 
@@ -387,9 +387,9 @@ QUnit.test('Set renderer options / rtl enabled', function(assert) {
 });
 
 QUnit.test('Render, enabled', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        result;
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    let result;
 
     tooltip.setOptions(this.options);
 
@@ -418,12 +418,12 @@ QUnit.test('Render, enabled', function(assert) {
 });
 
 QUnit.test('Update', function(assert) {
-    var et = { event: 'trigger' },
-        options = { enabled: false, font: {} },
-        tooltip = new Tooltip({ eventTrigger: et }),
-        setOptions = tooltip.setOptions,
-        render = tooltip.render,
-        result;
+    const et = { event: 'trigger' };
+    const options = { enabled: false, font: {} };
+    const tooltip = new Tooltip({ eventTrigger: et });
+    const setOptions = tooltip.setOptions;
+    const render = tooltip.render;
+    let result;
 
     tooltip.setOptions = sinon.spy(function() { return setOptions.apply(tooltip, arguments); });
     tooltip.render = sinon.spy(function() { return render.apply(tooltip, arguments); });
@@ -440,8 +440,8 @@ QUnit.test('Update', function(assert) {
 });
 
 QUnit.test('Disposing', function(assert) {
-    var et = { event: 'trigger' },
-        tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $('#qunit-fixture') });
+    const et = { event: 'trigger' };
+    const tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $('#qunit-fixture') });
     tooltip._wrapper.remove && (tooltip._wrapper.remove = sinon.spy());
 
     // act
@@ -455,7 +455,7 @@ QUnit.test('Disposing', function(assert) {
 });
 
 QUnit.test('formatValue. Default format', function(assert) {
-    var tooltip = new Tooltip({ eventTrigger: {} });
+    const tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
         { format: '' }));
 
@@ -463,7 +463,7 @@ QUnit.test('formatValue. Default format', function(assert) {
 });
 
 QUnit.test('formatValue. Custom format', function(assert) {
-    var tooltip = new Tooltip({ eventTrigger: {} });
+    const tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
         { format: { type: 'currency', precision: 3, percentPrecision: 4 }, argumentFormat: { type: 'percent', precision: 1 } }));
 
@@ -473,7 +473,7 @@ QUnit.test('formatValue. Custom format', function(assert) {
 });
 
 QUnit.test('formatValue. Custom format without precision', function(assert) {
-    var tooltip = new Tooltip({ eventTrigger: {} });
+    const tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
         { format: 'currency', argumentFormat: '' }));
 
@@ -483,7 +483,7 @@ QUnit.test('formatValue. Custom format without precision', function(assert) {
 });
 
 QUnit.test('formatValue. Null argumentFormat', function(assert) {
-    var tooltip = new Tooltip({ eventTrigger: {} });
+    const tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
         { argumentFormat: null }));
 
@@ -491,7 +491,7 @@ QUnit.test('formatValue. Null argumentFormat', function(assert) {
 });
 
 QUnit.test('formatValue. Null valueFormat', function(assert) {
-    var tooltip = new Tooltip({ eventTrigger: {} });
+    const tooltip = new Tooltip({ eventTrigger: {} });
     tooltip.setOptions($.extend(this.options,
         { format: null }));
 
@@ -500,7 +500,7 @@ QUnit.test('formatValue. Null valueFormat', function(assert) {
 
 QUnit.test('getLocation', function(assert) {
     this.testCase = function(option, expected) {
-        var tooltip = new Tooltip({ eventTrigger: {} });
+        const tooltip = new Tooltip({ eventTrigger: {} });
         tooltip.setOptions($.extend(this.options, { location: option }));
 
         assert.equal(tooltip.getLocation(), expected);
@@ -514,7 +514,7 @@ QUnit.test('getLocation', function(assert) {
 
 QUnit.test('isEnabled', function(assert) {
     this.testCase = function(option, expected) {
-        var tooltip = new Tooltip({ eventTrigger: {} });
+        const tooltip = new Tooltip({ eventTrigger: {} });
         tooltip.setOptions($.extend(this.options, { enabled: option }));
 
         assert.equal(tooltip.isEnabled(), expected);
@@ -528,7 +528,7 @@ QUnit.test('isEnabled', function(assert) {
 
 QUnit.test('isShared', function(assert) {
     this.testCase = function(option, expected) {
-        var tooltip = new Tooltip({ eventTrigger: {} });
+        const tooltip = new Tooltip({ eventTrigger: {} });
         tooltip.setOptions($.extend(this.options, { shared: option }));
 
         assert.equal(tooltip.isShared(), expected);
@@ -542,8 +542,8 @@ QUnit.test('isShared', function(assert) {
 
 QUnit.module('Manipulation', {
     beforeEach: function() {
-        var tooltip,
-            getComputedStyle = window.getComputedStyle;
+        let tooltip;
+        const getComputedStyle = window.getComputedStyle;
 
         this.options = getInitialOptions();
         this.eventTrigger = sinon.spy();
@@ -592,7 +592,7 @@ QUnit.test('Show preparations. W/o customize, empty text', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var result = this.tooltip.show({ valueText: '' }, {});
+    const result = this.tooltip.show({ valueText: '' }, {});
 
     assert.strictEqual(result, false);
     assert.equal(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -612,7 +612,7 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -664,7 +664,7 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
 
     const formatObject = { description: 'some-text' };
 
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -688,9 +688,9 @@ QUnit.test('Show preparations. W/ customize empty text, empty text', function(as
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.equal(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -713,9 +713,9 @@ QUnit.test('Show preparations. W/ customize undefined text, empty text', functio
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.equal(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -738,9 +738,9 @@ QUnit.test('Show preparations. W/ customize w/o text, empty text', function(asse
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.equal(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -763,9 +763,9 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: 'some-text' };
+    const formatObject = { valueText: 'some-text' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -791,9 +791,9 @@ QUnit.test('Show preparations. customizeTooltip is not function - use custom for
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: 'some-text' };
+    const formatObject = { valueText: 'some-text' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state.text, 'some-text');
@@ -806,9 +806,9 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -835,9 +835,9 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: 'some-text' };
+    const formatObject = { valueText: 'some-text' };
 
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -864,9 +864,9 @@ QUnit.test('Show preparations. W/ customize empty html', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.strictEqual(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -889,9 +889,9 @@ QUnit.test('Show preparations. W/ customize empty html, w/text', function(assert
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '10' };
+    const formatObject = { valueText: '10' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.strictEqual(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -914,9 +914,9 @@ QUnit.test('Show preparations. W/ customize undefined html', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, {});
 
     assert.strictEqual(result, false);
     assert.strictEqual(this.eventTrigger.callCount, 0, 'event is not triggered');
@@ -939,9 +939,9 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -969,9 +969,9 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
+    const formatObject = { valueText: '' };
 
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -1002,7 +1002,7 @@ QUnit.test('Show preparations. Certain container', function(assert) {
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
@@ -1032,11 +1032,11 @@ QUnit.test('Show. W/o params', function(assert) {
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
     this.tooltip._textHtml.empty = sinon.spy();
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
 
     const formatObject = { valueText: 'some-text' };
     // act
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
@@ -1066,7 +1066,7 @@ QUnit.test('Show. W/o params', function(assert) {
 });
 
 QUnit.test('Show. W/o params. Html', function(assert) {
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
     this.options.customizeTooltip = function() { return { html: 'some-html' }; };
     this.tooltip.update(this.options);
@@ -1081,14 +1081,14 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     this.tooltip._textHtml.html = sinon.spy();
     this.tooltip._textHtml.empty = sinon.spy();
 
-    var textHtmlElement = this.tooltip._textHtml.get(0);
+    const textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
     const formatObject = { valueText: 'some-text' };
     // act
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
@@ -1126,7 +1126,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
 });
 
 QUnit.test('Show. W/o params. Template', function(assert) {
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
     this.options.contentTemplate = sinon.spy(function(_, container) {
@@ -1145,14 +1145,14 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     sinon.spy(this.tooltip._textHtml, 'html');
     this.tooltip._textHtml.empty = sinon.spy();
 
-    var textHtmlElement = this.tooltip._textHtml.get(0);
+    const textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
     const formatObject = { valueText: 'some-text' };
     // act
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
@@ -1193,7 +1193,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
 });
 
 QUnit.test('Do not show tooltip if html is not set in contentTemplate', function(assert) {
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
     this.options.contentTemplate = () => null;
@@ -1209,7 +1209,7 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
-    var textHtmlElement = this.tooltip._textHtml.get(0);
+    const textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
@@ -1222,7 +1222,7 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
 });
 
 QUnit.test('Call template if empty text', function(assert) {
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
     this.options.contentTemplate = sinon.spy(function(_, container) {
@@ -1240,14 +1240,14 @@ QUnit.test('Call template if empty text', function(assert) {
     this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
 
-    var textHtmlElement = this.tooltip._textHtml.get(0);
+    const textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
     const formatObject = { valueText: '' };
     // act
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
@@ -1270,11 +1270,11 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
     this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
     this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
     this.tooltip._textHtml.empty = sinon.spy();
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
 
     const formatObject = { valueText: 'some-text', skipTemplate: true };
     // act
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
@@ -1306,7 +1306,7 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
 });
 
 QUnit.test('Show. W/o params. Html. T298249', function(assert) {
-    var eventData = { tag: 'event-data' };
+    const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
     this.options.customizeTooltip = function() { return { html: 'some-html' }; };
     this.tooltip.update(this.options);
@@ -1320,7 +1320,7 @@ QUnit.test('Show. W/o params. Html. T298249', function(assert) {
     this.tooltip._textGroupHtml.height = sinon.spy();
     this.tooltip._textHtml.html = sinon.spy();
 
-    var textHtmlElement = this.tooltip._textHtml.get(0);
+    const textHtmlElement = this.tooltip._textHtml.get(0);
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 123.13, left: 20, bottom: 33.45, top: 20, width: 83.13, height: 23.45 }; });
     }
@@ -1346,8 +1346,8 @@ QUnit.test('Show preparations. Use external customizeText', function(assert) {
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._state = { a: 'b' };
 
-    var formatObject = { valueText: '' };
-    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, null, function() {
+    const formatObject = { valueText: '' };
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, null, function() {
         return {
             text: 'custom text from external customizeText'
         };
@@ -1368,7 +1368,7 @@ QUnit.test('Show. W/ params', function(assert) {
 
     const formatObject = { valueText: 'some-text' };
     // act
-    var result = this.tooltip.show(formatObject, { x: 10, y: 20, offset: 30 });
+    const result = this.tooltip.show(formatObject, { x: 10, y: 20, offset: 30 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state, {
@@ -1381,8 +1381,8 @@ QUnit.test('Show. W/ params', function(assert) {
 });
 
 QUnit.test('\'tooltipHidden\' is triggered on show if tooltip is already shown', function(assert) {
-    var eventData1 = { tag: 'data-1' },
-        eventData2 = { tag: 'data-2' };
+    const eventData1 = { tag: 'data-1' };
+    const eventData2 = { tag: 'data-2' };
     this.tooltip.update(this.options);
     this.tooltip.show({ valueText: 'text-1' }, {}, eventData1);
 
@@ -1414,7 +1414,7 @@ QUnit.test('\'tooltipHidden\' is not triggered on hide if tooltip is already hid
 });
 
 QUnit.test('Hide.', function(assert) {
-    var eventObject = { 'some-event-object': 'some-event-value' };
+    const eventObject = { 'some-event-object': 'some-event-value' };
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options).show({ valueText: 'some-text' }, {}, eventObject);
     this.tooltip.move(100, 200, 30);
@@ -1466,9 +1466,9 @@ function getCloudPoints() {
 
 QUnit.module('Movements', {
     beforeEach: function() {
-        var that = this,
-            tooltip,
-            getComputedStyle = window.getComputedStyle;
+        const that = this;
+        let tooltip;
+        const getComputedStyle = window.getComputedStyle;
 
         that._initialBodyMargin = $(document.body).css('margin');
         $(document.body).css({ margin: 0 });
@@ -1760,7 +1760,7 @@ QUnit.test('RB corner of page', function(assert) {
 });
 
 QUnit.test('Orientation is not changed', function(assert) {
-    var wrapper;
+    let wrapper;
 
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -1874,7 +1874,7 @@ QUnit.test('Show after move w/o orientation changing', function(assert) {
 
 // T277991, T447623
 QUnit.test('Position when page\'s body has relative position and margins and page is scrolled. T277991, T447623', function(assert) {
-    var wrapper;
+    let wrapper;
 
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options);
@@ -1928,8 +1928,8 @@ QUnit.test('Remove old plaque on update options', function(assert) {
 
 QUnit.module('Movements. Out of visible borders', {
     beforeEach: function() {
-        var that = this,
-            tooltip;
+        const that = this;
+        let tooltip;
 
         that._initialBodyMargin = $(document.body).css('margin');
         $(document.body).css({ margin: 0 });

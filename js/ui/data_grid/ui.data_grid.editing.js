@@ -9,7 +9,7 @@ gridCore.registerModule('editing', extend(true, {}, editingModule, {
         controllers: {
             data: {
                 _changeRowExpandCore: function(key) {
-                    var editingController = this._editingController;
+                    const editingController = this._editingController;
 
                     if(Array.isArray(key)) {
                         editingController && editingController.refresh();

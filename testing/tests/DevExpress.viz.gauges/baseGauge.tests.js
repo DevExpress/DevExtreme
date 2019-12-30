@@ -1,39 +1,39 @@
 /* global currentTest */
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    registerComponent = require('core/component_registrator'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    baseGaugeModule = require('viz/gauges/base_gauge'),
-    dxBaseGauge = baseGaugeModule.dxBaseGauge,
-    formatValue = baseGaugeModule.formatValue,
-    getSampleText = baseGaugeModule.getSampleText,
-    titleModule = require('viz/core/title'),
-    loadingIndicatorModule = require('viz/core/loading_indicator'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    tooltipModule = require('viz/core/tooltip'),
-    translator1DModule = require('viz/translators/translator1d'),
-    themeManagerModule = require('viz/gauges/theme_manager'),
-    ThemeManager = themeManagerModule.ThemeManager,
-    Tracker = require('viz/gauges/tracker');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const registerComponent = require('core/component_registrator');
+const resizeCallbacks = require('core/utils/resize_callbacks');
+const baseGaugeModule = require('viz/gauges/base_gauge');
+const dxBaseGauge = baseGaugeModule.dxBaseGauge;
+const formatValue = baseGaugeModule.formatValue;
+const getSampleText = baseGaugeModule.getSampleText;
+const titleModule = require('viz/core/title');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
+const rendererModule = require('viz/core/renderers/renderer');
+const tooltipModule = require('viz/core/tooltip');
+const translator1DModule = require('viz/translators/translator1d');
+const themeManagerModule = require('viz/gauges/theme_manager');
+const ThemeManager = themeManagerModule.ThemeManager;
+const Tracker = require('viz/gauges/tracker');
 
 registerComponent('dxBaseGauge', dxBaseGauge);
 
-var factory = dxBaseGauge.prototype._factory;
+const factory = dxBaseGauge.prototype._factory;
 
-var BASE_METHODS = ['_invalidate', '_refresh'];
+const BASE_METHODS = ['_invalidate', '_refresh'];
 // var ABSTRACT_FIELDS = ["_width", "_height", "_rootRect"];
-var ABSTRACT_METHODS = ['_setupDomainCore', '_setupCodomain', '_getDefaultSize', '_cleanContent', '_renderContent', '_getApproximateScreenRange'];
+const ABSTRACT_METHODS = ['_setupDomainCore', '_setupCodomain', '_getDefaultSize', '_cleanContent', '_renderContent', '_getApproximateScreenRange'];
 
-var CONTAINER_WIDTH = 200,
-    CONTAINER_HEIGHT = 100;
+const CONTAINER_WIDTH = 200;
+const CONTAINER_HEIGHT = 100;
 
-var StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D),
-    StubThemeManager = vizMocks.stubClass(ThemeManager),
-    StubTracker = vizMocks.stubClass(Tracker),
-    // StubLayoutManager = null,
-    StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } }),
-    StubTitle = vizMocks.Title;
+const StubTranslator = vizMocks.stubClass(translator1DModule.Translator1D);
+const StubThemeManager = vizMocks.stubClass(ThemeManager);
+const StubTracker = vizMocks.stubClass(Tracker);
+// StubLayoutManager = null,
+const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
+const StubTitle = vizMocks.Title;
 
 StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
@@ -74,7 +74,7 @@ $.extend(factory, {
     })
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.$container = $('<div>').css({ width: CONTAINER_WIDTH, height: CONTAINER_HEIGHT }).appendTo('#qunit-fixture');
         this.renderer = new vizMocks.Renderer();
@@ -85,11 +85,11 @@ var environment = {
         this.tracker = new StubTracker();
         // this.layoutManager = new StubLayoutManager();
         this.title = new StubTitle();
-        var baseMethods = this.baseMethods = {};
+        const baseMethods = this.baseMethods = {};
         $.each(BASE_METHODS, function(_, name) {
             baseMethods[name] = dxBaseGauge.prototype[name];
         });
-        var abstractMethods = this.abstractMethods = {};
+        const abstractMethods = this.abstractMethods = {};
         $.each(ABSTRACT_METHODS, function(_, name) {
             abstractMethods[name] = dxBaseGauge.prototype[name];
         });
@@ -136,7 +136,7 @@ var environment = {
 QUnit.module('General', environment);
 
 QUnit.test('Instance type', function(assert) {
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.ok(gauge instanceof dxBaseGauge);
 });
@@ -153,7 +153,7 @@ QUnit.test('Components creation', function(assert) {
     assert.deepEqual(factory.createTracker.lastCall.args, [{ renderer: this.renderer, container: this.renderer.root }], 'tracker');
     // assert.deepEqual(factory.createLayoutManager.lastCall.args, [], "layout manager");
 
-    var arg = this.tracker.setCallbacks.lastCall.args[0];
+    const arg = this.tracker.setCallbacks.lastCall.args[0];
     assert.ok(typeof arg['tooltip-show'] === 'function', 'show callback');
     assert.ok(typeof arg['tooltip-hide'] === 'function', 'hide callback');
 });
@@ -181,7 +181,7 @@ QUnit.test('Codomain', function(assert) {
 });
 
 QUnit.test('Tooltip is hidden on loading indicator showing', function(assert) {
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     gauge._loadingIndicator.ctorArgs[0].notify(true);
 
@@ -191,7 +191,7 @@ QUnit.test('Tooltip is hidden on loading indicator showing', function(assert) {
 QUnit.module('Base fields processing', environment);
 
 QUnit.test('Animation / default', function(assert) {
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.deepEqual(gauge._animationSettings, {
         duration: 1000,
@@ -200,7 +200,7 @@ QUnit.test('Animation / default', function(assert) {
 });
 
 QUnit.test('Animation / disabled', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         animation: {
             enabled: false,
             duration: 500
@@ -211,7 +211,7 @@ QUnit.test('Animation / disabled', function(assert) {
 });
 
 QUnit.test('Animation', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         animation: {
             duration: 150,
             easing: 'linear'
@@ -225,7 +225,7 @@ QUnit.test('Animation', function(assert) {
 });
 
 QUnit.test('Animation / duration is zero', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         animation: { duration: 0 }
     });
 
@@ -233,7 +233,7 @@ QUnit.test('Animation / duration is zero', function(assert) {
 });
 
 QUnit.test('Animation / duration is negative', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         animation: { duration: -10 }
     });
 
@@ -241,7 +241,7 @@ QUnit.test('Animation / duration is negative', function(assert) {
 });
 
 QUnit.test('Animation / options priority', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         animation: {},
         animationDuration: 100
     });
@@ -250,7 +250,7 @@ QUnit.test('Animation / options priority', function(assert) {
 });
 
 QUnit.test('Container background color', function(assert) {
-    var gauge = this.createGauge({
+    const gauge = this.createGauge({
         containerBackgroundColor: 'red'
     });
 
@@ -262,7 +262,7 @@ QUnit.test('Default format options / very big numbers', function(assert) {
     this.translator.stub('getDomain').returns([1E100, 2E100]);
     this.abstractMethods._getApproximateScreenRange.returns(1000);
 
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.deepEqual(gauge._defaultFormatOptions, { type: 'exponential', precision: 2 });
 });
@@ -272,7 +272,7 @@ QUnit.test('Default format options / very small numbers', function(assert) {
     this.translator.stub('getDomain').returns([1E-20, 2E-20]);
     this.abstractMethods._getApproximateScreenRange.returns(100);
 
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.deepEqual(gauge._defaultFormatOptions, { type: 'exponential', precision: 1 });
 });
@@ -282,7 +282,7 @@ QUnit.test('Default format options / small numbers', function(assert) {
     this.translator.stub('getDomain').returns([0.0001, 0.0004]);
     this.abstractMethods._getApproximateScreenRange.returns(3);
 
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.deepEqual(gauge._defaultFormatOptions, { type: 'fixedPoint', precision: 4 });
 });
@@ -292,7 +292,7 @@ QUnit.test('Default format options / common numbers', function(assert) {
     this.translator.stub('getDomain').returns([0, 1000]);
     this.abstractMethods._getApproximateScreenRange.returns(10);
 
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     assert.deepEqual(gauge._defaultFormatOptions, { type: 'fixedPoint', precision: 0 });
 });
@@ -339,14 +339,14 @@ QUnit.test('Tracker is activated', function(assert) {
 QUnit.test('Content is rendered', function(assert) {
     this.createGauge();
 
-    var _renderContent = this.abstractMethods._renderContent.lastCall;
+    const _renderContent = this.abstractMethods._renderContent.lastCall;
     assert.deepEqual(_renderContent.args, [], 'content');
     assert.ok(this.renderer.lock.lastCall.calledBefore(_renderContent) && this.renderer.unlock.lastCall.calledAfter(_renderContent), 'lock');
 });
 
 // T130599
 QUnit.test('Not rendered when value range is empty', function(assert) {
-    var onIncidentOccurred = sinon.stub();
+    const onIncidentOccurred = sinon.stub();
     this.translator.stub('getDomain').returns([0, 0]);
 
     this.createGauge({
@@ -359,8 +359,8 @@ QUnit.test('Not rendered when value range is empty', function(assert) {
 });
 
 QUnit.test('Drawn callback', function(assert) {
-    var onDrawn = sinon.spy();
-    var gauge = this.createGauge({
+    const onDrawn = sinon.spy();
+    const gauge = this.createGauge({
         onDrawn: onDrawn
     });
 
@@ -374,8 +374,8 @@ QUnit.test('Drawn callback', function(assert) {
 });
 
 QUnit.test('Hide loadingIndicator after beginValueChanging - endValueChanging', function(assert) {
-    var onDrawn = sinon.spy();
-    var gauge = this.createGauge({
+    const onDrawn = sinon.spy();
+    const gauge = this.createGauge({
         onDrawn: onDrawn
     });
 
@@ -392,14 +392,14 @@ QUnit.test('Hide loadingIndicator after beginValueChanging - endValueChanging', 
 QUnit.test('Show tooltip', function(assert) {
     this.createGauge();
 
-    var target = {
-            getTooltipParameters: sinon.stub().returns({
-                value: 'value',
-                color: 'color',
-                x: 100, y: 200, offset: 50
-            })
-        },
-        info = { tag: 'info' };
+    const target = {
+        getTooltipParameters: sinon.stub().returns({
+            value: 'value',
+            color: 'color',
+            x: 100, y: 200, offset: 50
+        })
+    };
+    const info = { tag: 'info' };
     this.renderer.getRootOffset = sinon.stub().returns({ left: 10, top: 20 });
     this.tooltip.stub('formatValue').returns('formatted-value');
 
@@ -440,7 +440,7 @@ QUnit.test('Not resized when domain is not valid', function(assert) {
 QUnit.module('Option changing', environment);
 
 QUnit.test('startValue and endValue', function(assert) {
-    var gauge = this.createGauge();
+    const gauge = this.createGauge();
 
     gauge.option({ startValue: 10, endValue: 20 });
 
@@ -448,7 +448,7 @@ QUnit.test('startValue and endValue', function(assert) {
 });
 
 QUnit.test('Tooltip - options changing', function(assert) {
-    var gauge = this.createGauge({ tooltip: 'tooltip-options' });
+    const gauge = this.createGauge({ tooltip: 'tooltip-options' });
 
     gauge.option('tooltip', { tooltip: 'new_tooltip-options' });
 

@@ -5,19 +5,19 @@ import $ from 'jquery';
 QUnit.module('Custom item template via expressions');
 
 QUnit.test('Render items with custom model', function(assert) {
-    var data = $.extend(true, [], DATA[3]);
+    const data = $.extend(true, [], DATA[3]);
     data[0].children[0].expanded = true;
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         keyExpr: 'itemId',
         displayExpr: 'itemName',
         itemsExpr: 'children'
     });
 
-    var $rootNode = $treeView.find('.' + internals.NODE_CONTAINER_CLASS + ':first-child'),
-        $rootNodeFirstItem = $rootNode.find('.' + internals.NODE_CLASS).eq(0),
-        $rootNodeSecondItem = $rootNode.find(' > .' + internals.NODE_CLASS).eq(1);
+    const $rootNode = $treeView.find('.' + internals.NODE_CONTAINER_CLASS + ':first-child');
+    const $rootNodeFirstItem = $rootNode.find('.' + internals.NODE_CLASS).eq(0);
+    const $rootNodeSecondItem = $rootNode.find(' > .' + internals.NODE_CLASS).eq(1);
 
     assert.equal($rootNodeFirstItem.find('> .' + internals.ITEM_CLASS + ' span').text(), 'Item 1');
     assert.equal($rootNodeSecondItem.find('.' + internals.ITEM_CLASS + ' span').text(), 'Item 2');
@@ -25,7 +25,7 @@ QUnit.test('Render items with custom model', function(assert) {
 });
 
 QUnit.test('T202554: dxTreeView - The selectedExpr option does not link the checkbox to a data source item', function(assert) {
-    var treeView = $('#treeView').dxTreeView({
+    const treeView = $('#treeView').dxTreeView({
         items: [
             { Id: 1, ParentId: 0, Name: 'Item 1', expanded: true },
             { Id: 2, ParentId: 1, Name: 'Item 2', isSelected: true },
@@ -45,7 +45,7 @@ QUnit.test('T202554: dxTreeView - The selectedExpr option does not link the chec
 });
 
 QUnit.test('Expressions should be reinitialized if *expr option was changed', function(assert) {
-    var treeView = $('#treeView').dxTreeView({
+    const treeView = $('#treeView').dxTreeView({
         items: [
             {
                 Key: 1,
@@ -63,7 +63,7 @@ QUnit.test('Expressions should be reinitialized if *expr option was changed', fu
         parentIdExpr: 'ParentId'
     }).dxTreeView('instance');
 
-    var item = treeView.option('items')[0];
+    const item = treeView.option('items')[0];
 
     treeView.option('keyExpr', 'Id');
     assert.equal(treeView._keyGetter(item), 2);
@@ -76,7 +76,7 @@ QUnit.test('Expressions should be reinitialized if *expr option was changed', fu
 });
 
 QUnit.test('displayExpr should be updated correctly in runtime', function(assert) {
-    var treeView = $('#treeView').dxTreeView({
+    const treeView = $('#treeView').dxTreeView({
         items: [
             { text: 'John', lastName: 'Smith' }
         ]
@@ -90,14 +90,14 @@ QUnit.test('displayExpr should be updated correctly in runtime', function(assert
 });
 
 QUnit.test('VirtualMode: Only root nodes should be rendered in virtualMode with parentIdExpr', function(assert) {
-    var $treeView = initTree({
+    const $treeView = initTree({
         dataSource: dataID,
         parentIdExpr: 'elternId',
         dataStructure: 'plain',
         virtualModeEnabled: true
     });
 
-    var items = $treeView.find('.' + internals.ITEM_CLASS);
+    const items = $treeView.find('.' + internals.ITEM_CLASS);
 
     assert.equal(items.length, 2);
 });

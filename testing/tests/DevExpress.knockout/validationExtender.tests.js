@@ -10,12 +10,12 @@ import { Deferred } from 'core/utils/deferred';
 import 'ui/button';
 import 'integration/knockout';
 
-var FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
+const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
 QUnit.module('Ko Extender');
 
 QUnit.test('dxValidator should be stuck to observable', function(assert) {
-    var vm = {
+    const vm = {
         login: ko.observable('test').extend({
             dxValidator: {
                 validationRules: [{ type: 'required' }]
@@ -30,7 +30,7 @@ QUnit.test('dxValidator should be stuck to observable', function(assert) {
 
 
 QUnit.test('Engine can subscribe to validate group', function(assert) {
-    var vm = {
+    const vm = {
         login: ko.observable('test').extend({
             dxValidator: {
                 validationRules: [{ type: 'required' }]
@@ -41,14 +41,14 @@ QUnit.test('Engine can subscribe to validate group', function(assert) {
     ValidationEngine.registerModelForValidation(vm);
 
     // assert
-    var groupConfig = ValidationEngine.getGroupConfig(vm);
+    const groupConfig = ValidationEngine.getGroupConfig(vm);
     assert.ok(groupConfig, 'Config should be retrieved');
     assert.equal(groupConfig.validators.length, 1, 'Single validator should be registered');
     assert.strictEqual(groupConfig.validators[0], vm.login.dxValidator, 'Correct validator should be passed');
 });
 
 QUnit.test('Engine can validate model', function(assert) {
-    var vm = {
+    const vm = {
         login: ko.observable('').extend({
             dxValidator: {
                 validationRules: [{ type: 'required' }]
@@ -57,7 +57,7 @@ QUnit.test('Engine can validate model', function(assert) {
     };
     ValidationEngine.registerModelForValidation(vm);
     // act
-    var result = ValidationEngine.validateModel(vm);
+    const result = ValidationEngine.validateModel(vm);
 
     // assert
     assert.ok(result, 'Result should be retrieved');
@@ -68,7 +68,7 @@ QUnit.test('Engine can validate model', function(assert) {
 });
 
 QUnit.test('Unregister knockout model for validation', function(assert) {
-    var vm = {
+    const vm = {
         login: ko.observable('test').extend({
             dxValidator: {
                 validationRules: [{ type: 'required' }]
@@ -78,7 +78,7 @@ QUnit.test('Unregister knockout model for validation', function(assert) {
 
     ValidationEngine.registerModelForValidation(vm);
 
-    var groupConfig = ValidationEngine.getGroupConfig(vm);
+    const groupConfig = ValidationEngine.getGroupConfig(vm);
 
     assert.equal(groupConfig.validators.length, 1, 'Single validator should be registered');
 
@@ -88,21 +88,21 @@ QUnit.test('Unregister knockout model for validation', function(assert) {
 });
 
 QUnit.test('validated handler should be called', function(assert) {
-    var vm = {
-            login: ko.observable('').extend({
-                dxValidator: {
-                    validationRules: [{ type: 'required' }]
-                }
-            })
-        },
-        validatedHandler = sinon.stub();
+    const vm = {
+        login: ko.observable('').extend({
+            dxValidator: {
+                validationRules: [{ type: 'required' }]
+            }
+        })
+    };
+    const validatedHandler = sinon.stub();
     vm.login.dxValidator.on('validated', validatedHandler);
     // act
     vm.login.dxValidator.validate();
 
     // assert
     assert.ok(validatedHandler.calledOnce, 'Handler should be called');
-    var args = validatedHandler.getCall(0).args;
+    const args = validatedHandler.getCall(0).args;
     assert.ok(args, 'Args should be passed');
     assert.strictEqual(args[0].value, '', 'Value should be passed');
     assert.strictEqual(args[0].isValid, false, 'validation result should be passed');
@@ -111,67 +111,67 @@ QUnit.test('validated handler should be called', function(assert) {
 
 
 QUnit.test('changing observable value should cause validation', function(assert) {
-    var vm = {
-            login: ko.observable('').extend({
-                dxValidator: {
-                    validationRules: [{ type: 'required' }]
-                }
-            })
-        },
-        validatedHandler = sinon.stub();
+    const vm = {
+        login: ko.observable('').extend({
+            dxValidator: {
+                validationRules: [{ type: 'required' }]
+            }
+        })
+    };
+    const validatedHandler = sinon.stub();
     vm.login.dxValidator.on('validated', validatedHandler);
     // act
     vm.login('new value');
 
     // assert
     assert.ok(validatedHandler.calledOnce, 'Handler should be called');
-    var args = validatedHandler.getCall(0).args;
+    const args = validatedHandler.getCall(0).args;
     assert.ok(args, 'Args should be passed');
     assert.strictEqual(args[0].value, 'new value', 'Value should be passed');
 });
 
 
 QUnit.test('Model should be found as a validation group', function(assert) {
-    var vm = {},
-        $buttonContainer = $('<div></div>')
-            .attr('data-bind', 'dxButton: { }')
-            .appendTo(FIXTURE_ELEMENT);
+    const vm = {};
+    const $buttonContainer = $('<div></div>')
+        .attr('data-bind', 'dxButton: { }')
+        .appendTo(FIXTURE_ELEMENT);
 
     ko.applyBindings(vm, $buttonContainer[0]);
     // act
-    var group = $buttonContainer.dxButton('_findGroup');
+    const group = $buttonContainer.dxButton('_findGroup');
     // assert
     assert.strictEqual(group, vm, 'View model should be found as a group');
 });
 
 QUnit.test('dxValidationGroup should win Model', function(assert) {
-    var vm = {},
-        $groupContainer = $('<div></div>')
-            .attr('data-bind', 'dxValidationGroup: { }')
-            .appendTo(FIXTURE_ELEMENT),
-        $buttonContainer = $('<div></div>')
-            .attr('data-bind', 'dxButton: { }')
-            .appendTo($groupContainer);
+    const vm = {};
+    const $groupContainer = $('<div></div>')
+        .attr('data-bind', 'dxValidationGroup: { }')
+        .appendTo(FIXTURE_ELEMENT);
+    const $buttonContainer = $('<div></div>')
+        .attr('data-bind', 'dxButton: { }')
+        .appendTo($groupContainer);
 
 
     ko.applyBindings(vm, $groupContainer[0]);
-    var groupInstance = new ValidationGroup($groupContainer);
+    const groupInstance = new ValidationGroup($groupContainer);
     // act
-    var group = $buttonContainer.dxButton('_findGroup');
+    const group = $buttonContainer.dxButton('_findGroup');
     // assert
     assert.strictEqual(group, groupInstance, 'dxValidationGroup should be found as a group');
 });
 
 QUnit.test('validationGroup string key should win Model', function(assert) {
-    var vm = {},
-        $buttonContainer = $('<div></div>')
-            .attr('data-bind', 'dxButton: { validationGroup: \'uniqueGroupKey\' }')
-            .appendTo(FIXTURE_ELEMENT);
+    const vm = {};
+    const $buttonContainer = $('<div></div>')
+        .attr('data-bind', 'dxButton: { validationGroup: \'uniqueGroupKey\' }')
+        .appendTo(FIXTURE_ELEMENT);
 
 
     ko.applyBindings(vm, $buttonContainer[0]);
     // act
-    var group = $buttonContainer.dxButton('_findGroup');
+    const group = $buttonContainer.dxButton('_findGroup');
     // assert
     assert.strictEqual(group, 'uniqueGroupKey', 'validationGroup option should be found as a group');
 });
@@ -186,20 +186,20 @@ QUnit.test('dxValidator binding handler should be evaluated after editor binding
         }
     }));
 
-    var $editor = $('<div data-bind=\'dxValidator: { adapter: { } }, dxTestEditor: { }\'></div>').appendTo(FIXTURE_ELEMENT);
+    const $editor = $('<div data-bind=\'dxValidator: { adapter: { } }, dxTestEditor: { }\'></div>').appendTo(FIXTURE_ELEMENT);
     ko.applyBindings({}, $editor.get(0));
 });
 
 QUnit.test('Validator can be reset', function(assert) {
     // arrange
-    var vm = {
+    const vm = {
         login: ko.observable('testuser').extend({
             dxValidator: {
                 validationRules: [{ type: 'custom', validationCallback: function() { return false; } }]
             }
         })
     };
-    var validator = vm.login.dxValidator;
+    const validator = vm.login.dxValidator;
     validator.validate();
     // act
     validator.reset();
@@ -211,7 +211,7 @@ QUnit.test('Validator can be reset', function(assert) {
 
 QUnit.test('T437697: dxValidationSummary - validator.focus is not a function', function(assert) {
     try {
-        var vm = {
+        const vm = {
             buttonSettings: {
                 text: 'Test',
                 onClick: function(params) {
@@ -276,8 +276,8 @@ QUnit.test('Validator should be validated positively (async)', function(assert) 
         })
     };
     const done = assert.async();
-    const validator = vm.login.dxValidator,
-        result = validator.validate();
+    const validator = vm.login.dxValidator;
+    const result = validator.validate();
 
     // assert
     assert.strictEqual(result.isValid, true, 'result.isValid === true');

@@ -1,10 +1,10 @@
-var $ = require('../../core/renderer'),
-    Class = require('../../core/class'),
-    equalByValue = require('../../core/utils/common').equalByValue,
-    abstract = Class.abstract;
+const $ = require('../../core/renderer');
+const Class = require('../../core/class');
+const equalByValue = require('../../core/utils/common').equalByValue;
+const abstract = Class.abstract;
 
 
-var EditStrategy = Class.inherit({
+const EditStrategy = Class.inherit({
 
     ctor: function(collectionWidget) {
         this._collectionWidget = collectionWidget;
@@ -21,7 +21,7 @@ var EditStrategy = Class.inherit({
     itemsGetter: abstract,
 
     getKeyByIndex: function(index) {
-        var resultIndex = this._denormalizeItemIndex(index);
+        const resultIndex = this._denormalizeItemIndex(index);
 
         return this.getKeysByItems([this.getItemDataByIndex(resultIndex)])[0];
     },
@@ -89,7 +89,7 @@ var EditStrategy = Class.inherit({
             return $(value);
         }
 
-        var normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value));
+        const normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value));
         return this._getItemByNormalizedIndex(normalizedItemIndex);
     },
 
@@ -106,7 +106,7 @@ var EditStrategy = Class.inherit({
     },
 
     _isDOMNode: function(value) {
-        var $value;
+        let $value;
 
         try {
             $value = $(value);

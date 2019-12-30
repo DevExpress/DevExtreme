@@ -328,8 +328,8 @@ QUnit.module('popup integration', {
             },
         });
 
-        const instance = $dropDownButton.dxDropDownButton('instance'),
-            dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
+        const instance = $dropDownButton.dxDropDownButton('instance');
+        const dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
         let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
@@ -381,7 +381,7 @@ QUnit.module('popup integration', {
             }
         };
 
-        for(let name in options) {
+        for(const name in options) {
             assert.deepEqual(this.popup.option(name), options[name], 'option ' + name + ' is correct');
         }
     });
@@ -697,6 +697,29 @@ QUnit.module('common use cases', {
         assert.strictEqual($icons.length, 2, '2 icons are rendered');
         assert.ok($icons.eq(0).hasClass('dx-icon-group'), 'first icon is correct');
         assert.ok($icons.eq(1).hasClass('dx-icon-spindown'), 'second icon is correct');
+    });
+
+    QUnit.test('click on item should raise onSelectionChanged (T848284)', (assert) => {
+        const selectionChangeHandler = sinon.spy();
+
+        this.dropDownButton.option({
+            items: [{
+                id: 1, name: 'a'
+            }, {
+                id: 2, name: 'b'
+            }],
+            useSelectMode: true,
+            onSelectionChanged: selectionChangeHandler
+        });
+
+        const firstListItems = getList(this.dropDownButton).itemElements();
+        eventsEngine.trigger(firstListItems[0], 'dxclick');
+
+        this.dropDownButton.option('items', [{ id: 1, name: 'test' }]);
+        this.dropDownButton.option('selectedItemKey', 1);
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), 'test', 'actionButton text is correct');
+        assert.strictEqual(selectionChangeHandler.callCount, 2, 'onSelectionChange is raised');
     });
 
     QUnit.test('spindown secondary icon should not be rendered when showArrowIcon is false', (assert) => {

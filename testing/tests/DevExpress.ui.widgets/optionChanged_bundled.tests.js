@@ -1,11 +1,11 @@
 define(function(require) {
-    var $ = require('jquery'),
-        Component = require('core/component'),
-        devices = require('core/devices'),
-        GoogleStaticProvider = require('ui/map/provider.google_static'),
-        fx = require('animation/fx'),
-        executeAsyncMock = require('../../helpers/executeAsyncMock.js'),
-        DataSource = require('data/data_source/data_source').DataSource;
+    const $ = require('jquery');
+    const Component = require('core/component');
+    const devices = require('core/devices');
+    const GoogleStaticProvider = require('ui/map/provider.google_static');
+    const fx = require('animation/fx');
+    const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
+    const DataSource = require('data/data_source/data_source').DataSource;
 
     require('bundles/modules/parts/widgets-all');
 
@@ -23,7 +23,7 @@ define(function(require) {
             this._originalOptionChanged = Component.prototype._optionChanged;
 
             Component.prototype._optionChanged = function(args) {
-                var name = args.name;
+                const name = args.name;
 
                 if(this._getDeprecatedOptions()[name] ||
                     name === 'rtlEnabled' ||
@@ -51,96 +51,97 @@ define(function(require) {
             this.$element.remove();
             executeAsyncMock.teardown();
         }
-    });
+    }, () => {
+        const excludedComponents = [
+            'dxLayoutManager'
+        ];
 
-    var excludedComponents = [
-        'dxLayoutManager'
-    ];
+        const getDefaultOptions = function(componentName) {
+            switch(componentName) {
+                case 'dxValidator':
+                    return { adapter: {} };
+                case 'dxMap':
+                    return { provider: 'googleStatic' };
+                default:
+                    return {};
+            }
+        };
 
-    var getDefaultOptions = function(componentName) {
-        switch(componentName) {
-            case 'dxValidator':
-                return { adapter: {} };
-            case 'dxMap':
-                return { provider: 'googleStatic' };
-            default:
-                return {};
-        }
-    };
+        $.each(DevExpress.ui, function(componentName, componentConstructor) {
+            if($.inArray(componentName, excludedComponents) !== -1) {
+                return;
+            }
 
-    $.each(DevExpress.ui, function(componentName, componentConstructor) {
-        if($.inArray(componentName, excludedComponents) !== -1) {
-            return;
-        }
+            const widgetName = componentName.replace('dx', '').toLowerCase();
 
-        var widgetName = componentName.replace('dx', '').toLowerCase();
+            if($.fn[componentName]) {
+                componentConstructor.prototype._defaultOptionsRules = function() {
+                    return [];
+                };
 
-        if($.fn[componentName]) {
-            componentConstructor.prototype._defaultOptionsRules = function() {
-                return [];
-            };
+                QUnit.test(componentName, function(assert) {
+                    const done = assert.async();
 
-            QUnit.test(componentName, function(assert) {
-                var done = assert.async();
+                    const $element = this.$element;
+                    const component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance');
+                    const options = component.option();
+                    let optionCount = 0;
 
-                var $element = this.$element,
-                    component = $element[componentName](getDefaultOptions(componentName))[componentName]('instance'),
-                    options = component.option(),
-                    optionCount = 0;
+                    component.QUnitAssert = assert;
 
-                component.QUnitAssert = assert;
+                    const classes = $element.attr('class').split(' ');
 
-                var classes = $element.attr('class').split(' ');
-
-                $.each(classes, function(_, className) {
-                    className = className.replace('dx-', '');
-
-                    if(className.indexOf(widgetName) === 0) {
-                        assert.ok(true, ' class name was checked');
-                    } else {
-                        className = className.replace('-', '');
+                    $.each(classes, function(_, className) {
+                        className = className.replace('dx-', '');
 
                         if(className.indexOf(widgetName) === 0) {
-                            assert.ok(false, className + ' is failed');
+                            assert.ok(true, ' class name was checked');
+                        } else {
+                            className = className.replace('-', '');
+
+                            if(className.indexOf(widgetName) === 0) {
+                                assert.ok(false, className + ' is failed');
+                            }
                         }
-                    }
-                });
+                    });
 
-                $.each(options, function(option) {
-                    var prevValue = options[option],
-                        newValue = prevValue;
+                    $.each(options, function(option) {
+                        const prevValue = options[option];
+                        let newValue = prevValue;
 
-                    // NOTE: some widgets doesn't support dataSource === null
-                    if(option === 'dataSource') {
+                        // NOTE: some widgets doesn't support dataSource === null
+                        if(option === 'dataSource') {
                         // NOTE: dxResponsiveBox supports only plain object in items
-                        var item = componentName === 'dxResponsiveBox' ? { text: 1 } : 1;
-                        item = componentName === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
+                            let item = componentName === 'dxResponsiveBox' ? { text: 1 } : 1;
+                            item = componentName === 'dxScheduler' ? { text: 1, startDate: new Date(2015, 0, 1) } : item;
 
-                        newValue = new DataSource([item]);
-                        options[option] = newValue;
-                    }
+                            newValue = new DataSource([item]);
+                            options[option] = newValue;
+                        }
 
-                    if(componentName === 'dxDateViewRoller' && option === 'selectedIndex') {
-                        return;
-                    }
+                        if(componentName === 'dxDateViewRoller' && option === 'selectedIndex') {
+                            return;
+                        }
 
-                    component.beginUpdate();
+                        component.beginUpdate();
 
-                    component._notifyOptionChanged(option, newValue, prevValue);
-                    component.endUpdate();
+                        component._notifyOptionChanged(option, newValue, prevValue);
+                        component.endUpdate();
 
-                    optionCount++;
+                        optionCount++;
+                    });
+
+                    assert.ok(true, optionCount + ' options was checked');
+
+                    // Since jQuery 2.2.0 have the following code
+                    // https://github.com/jquery/jquery/blob/2.2-stable/src/ajax/xhr.js#L133
+                    // QUnit recognize it as uncleared timeout, so this test are async now.
+                    setTimeout(function() {
+                        done();
+                    });
                 });
-
-                assert.ok(true, optionCount + ' options was checked');
-
-                // Since jQuery 2.2.0 have the following code
-                // https://github.com/jquery/jquery/blob/2.2-stable/src/ajax/xhr.js#L133
-                // QUnit recognize it as uncleared timeout, so this test are async now.
-                setTimeout(function() {
-                    done();
-                });
-            });
-        }
+            }
+        });
     });
 });
+

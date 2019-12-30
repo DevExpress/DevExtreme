@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         `<style>
             .qunit-fixture-static {
                 position: static !important;
@@ -26,9 +26,9 @@ import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
-var generateData = function(rowCount) {
-    let i,
-        result = [];
+const generateData = function(rowCount) {
+    let i;
+    const result = [];
 
     for(i = 1; i <= rowCount; i = i + 2) {
         result.push({ id: i, parentId: 0, field1: 'test' + i, field2: 'test' + (i + 1), field3: 'test' + (i + 2) });
@@ -39,7 +39,7 @@ var generateData = function(rowCount) {
 };
 
 function createRowsView() {
-    var mockTreeList = {
+    const mockTreeList = {
         options: this.options,
         isReady: function() {
             return true;
@@ -64,7 +64,7 @@ function createRowsView() {
     return mockTreeList.rowsView;
 }
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         $('#qunit-fixture').addClass('qunit-fixture-visible');
         this.options = {
@@ -92,18 +92,18 @@ QUnit.module('Drag and Drop nodes', moduleConfig);
 
 QUnit.test('Drag and drop node', function(assert) {
     // arrange
-    let $draggableElement,
-        $placeholderElement,
-        onDragEndSpy = sinon.spy(),
-        $testElement = $('#container');
+    let $draggableElement;
+    let $placeholderElement;
+    const onDragEndSpy = sinon.spy();
+    const $testElement = $('#container');
 
     this.options.rowDragging.onDragEnd = onDragEndSpy;
 
-    let rowsView = this.createRowsView();
+    const rowsView = this.createRowsView();
     rowsView.render($testElement);
 
     // act
-    let pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+    const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
     // assert
     $draggableElement = $('body').children('.dx-sortable-dragging');
@@ -124,17 +124,17 @@ QUnit.test('Drag and drop node', function(assert) {
 
 QUnit.test('Drag and drop a node into another node', function(assert) {
     // arrange
-    let $placeholderElement,
-        onDragEndSpy = sinon.spy(),
-        $testElement = $('#container');
+    let $placeholderElement;
+    const onDragEndSpy = sinon.spy();
+    const $testElement = $('#container');
 
     this.options.rowDragging.onDragEnd = onDragEndSpy;
 
-    let rowsView = this.createRowsView();
+    const rowsView = this.createRowsView();
     rowsView.render($testElement);
 
     // act
-    let pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+    const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
 
     // assert
     $placeholderElement = $('body').children('.dx-sortable-placeholder');

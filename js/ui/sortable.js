@@ -6,15 +6,15 @@ import { getPublicElement } from '../core/utils/dom';
 import translator from '../animation/translator';
 import fx from '../animation/fx';
 
-var SORTABLE = 'dxSortable',
+const SORTABLE = 'dxSortable';
 
-    PLACEHOLDER_CLASS = 'placeholder',
-    CLONE_CLASS = 'clone';
+const PLACEHOLDER_CLASS = 'placeholder';
+const CLONE_CLASS = 'clone';
 
 
-var isElementVisible = itemElement => $(itemElement).is(':visible');
+const isElementVisible = itemElement => $(itemElement).is(':visible');
 
-var Sortable = Draggable.inherit({
+const Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             clone: true,
@@ -89,7 +89,7 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        let $sourceElement = this._getSourceElement();
+        const $sourceElement = this._getSourceElement();
 
         this._updateItemPoints();
         this.option('fromIndex', this._getElementIndex($sourceElement));
@@ -106,33 +106,33 @@ var Sortable = Draggable.inherit({
         this.option('fromIndex', -1);
 
         if(!this._isIndicateMode()) {
-            let itemPoints = this.option('itemPoints'),
-                lastItemPoint = itemPoints[itemPoints.length - 1];
+            const itemPoints = this.option('itemPoints');
+            const lastItemPoint = itemPoints[itemPoints.length - 1];
 
             if(lastItemPoint) {
-                let $element = this.$element(),
-                    $sourceElement = this._getSourceElement(),
-                    isVertical = this._isVerticalOrientation(),
-                    sourceElementSize = isVertical ? $sourceElement.outerHeight(true) : $sourceElement.outerWidth(true),
-                    scrollSize = $element.get(0)[isVertical ? 'scrollHeight' : 'scrollWidth'],
-                    scrollPosition = $element.get(0)[isVertical ? 'scrollTop' : 'scrollLeft'],
-                    positionProp = isVertical ? 'top' : 'left',
-                    lastPointPosition = lastItemPoint[positionProp],
-                    elementPosition = $element.offset()[positionProp],
-                    freeSize = elementPosition + scrollSize - scrollPosition - lastPointPosition;
+                const $element = this.$element();
+                const $sourceElement = this._getSourceElement();
+                const isVertical = this._isVerticalOrientation();
+                const sourceElementSize = isVertical ? $sourceElement.outerHeight(true) : $sourceElement.outerWidth(true);
+                const scrollSize = $element.get(0)[isVertical ? 'scrollHeight' : 'scrollWidth'];
+                const scrollPosition = $element.get(0)[isVertical ? 'scrollTop' : 'scrollLeft'];
+                const positionProp = isVertical ? 'top' : 'left';
+                const lastPointPosition = lastItemPoint[positionProp];
+                const elementPosition = $element.offset()[positionProp];
+                const freeSize = elementPosition + scrollSize - scrollPosition - lastPointPosition;
 
                 if(freeSize < sourceElementSize) {
                     if(isVertical) {
-                        let items = this._getItems(),
-                            $lastItem = $(this._getPrevVisibleItem(items));
+                        const items = this._getItems();
+                        const $lastItem = $(this._getPrevVisibleItem(items));
 
                         this._$modifiedItem = $lastItem;
                         this._modifiedItemMargin = $lastItem.get(0).style.marginBottom;
 
                         $lastItem.css('marginBottom', sourceElementSize - freeSize);
 
-                        let $sortable = $lastItem.closest('.dx-sortable'),
-                            sortable = $sortable.data('dxScrollable') || $sortable.data('dxScrollView');
+                        const $sortable = $lastItem.closest('.dx-sortable');
+                        const sortable = $sortable.data('dxScrollable') || $sortable.data('dxScrollView');
 
                         sortable && sortable.update();
                     }
@@ -158,14 +158,14 @@ var Sortable = Draggable.inherit({
     },
 
     dragEnd: function(sourceEvent) {
-        let $sourceElement = this._getSourceElement(),
-            sourceDraggable = this._getSourceDraggable(),
-            isSourceDraggable = sourceDraggable.NAME !== this.NAME,
-            toIndex = this.option('toIndex');
+        const $sourceElement = this._getSourceElement();
+        const sourceDraggable = this._getSourceDraggable();
+        const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
+        const toIndex = this.option('toIndex');
 
         if(toIndex !== null && toIndex >= 0) {
-            let cancelAdd,
-                cancelRemove;
+            let cancelAdd;
+            let cancelRemove;
 
             if(sourceDraggable !== this) {
                 cancelAdd = this._fireAddEvent(sourceEvent);
@@ -189,19 +189,19 @@ var Sortable = Draggable.inherit({
     },
 
     dragMove: function(e) {
-        let itemPoints = this.option('itemPoints');
+        const itemPoints = this.option('itemPoints');
 
         if(!itemPoints) {
             return;
         }
 
-        let isVertical = this._isVerticalOrientation(),
-            axisName = isVertical ? 'top' : 'left',
-            cursorPosition = isVertical ? e.pageY : e.pageX,
-            itemPoint;
+        const isVertical = this._isVerticalOrientation();
+        const axisName = isVertical ? 'top' : 'left';
+        const cursorPosition = isVertical ? e.pageY : e.pageX;
+        let itemPoint;
 
         for(let i = itemPoints.length - 1; i >= 0; i--) {
-            let centerPosition = itemPoints[i + 1] && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
+            const centerPosition = itemPoints[i + 1] && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
 
             if(centerPosition > cursorPosition || centerPosition === undefined) {
                 itemPoint = itemPoints[i];
@@ -237,7 +237,7 @@ var Sortable = Draggable.inherit({
     },
 
     _getItems: function() {
-        let itemsSelector = this._getItemsSelector();
+        const itemsSelector = this._getItemsSelector();
 
         return this._$content()
             .find(itemsSelector)
@@ -247,14 +247,14 @@ var Sortable = Draggable.inherit({
     },
 
     _allowReordering: function() {
-        let sourceDraggable = this._getSourceDraggable(),
-            targetDraggable = this._getTargetDraggable();
+        const sourceDraggable = this._getSourceDraggable();
+        const targetDraggable = this._getTargetDraggable();
 
         return sourceDraggable !== targetDraggable || this.option('allowReordering');
     },
 
     _isValidPoint: function(visibleIndex, draggableVisibleIndex, dropInsideItem) {
-        let allowReordering = dropInsideItem || this._allowReordering();
+        const allowReordering = dropInsideItem || this._allowReordering();
 
         if(!allowReordering && visibleIndex !== 0) {
             return false;
@@ -268,13 +268,13 @@ var Sortable = Draggable.inherit({
     },
 
     _getItemPoints: function() {
-        let that = this,
-            result,
-            isVertical = that._isVerticalOrientation(),
-            itemElements = that._getItems(),
-            visibleItemElements = itemElements.filter(isElementVisible),
-            $draggableItem = this._getDraggableElement(),
-            draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
+        const that = this;
+        let result;
+        const isVertical = that._isVerticalOrientation();
+        const itemElements = that._getItems();
+        const visibleItemElements = itemElements.filter(isElementVisible);
+        const $draggableItem = this._getDraggableElement();
+        const draggableVisibleIndex = visibleItemElements.indexOf($draggableItem.get(0));
 
         result = visibleItemElements
             .map((item, visibleIndex) => {
@@ -293,7 +293,7 @@ var Sortable = Draggable.inherit({
             });
 
         if(result.length) {
-            let lastItem = result[result.length - 1];
+            const lastItem = result[result.length - 1];
 
             result.push({
                 dropInsideItem: false,
@@ -304,7 +304,7 @@ var Sortable = Draggable.inherit({
             });
 
             if(this.option('allowDropInsideItem')) {
-                let points = result;
+                const points = result;
                 result = [];
                 for(let i = 0; i < points.length; i++) {
                     result.push(points[i]);
@@ -338,7 +338,7 @@ var Sortable = Draggable.inherit({
     },
 
     _getDragTemplateArgs: function($element) {
-        let args = this.callBase.apply(this, arguments);
+        const args = this.callBase.apply(this, arguments);
 
         args.model.fromIndex = this._getElementIndex($element);
 
@@ -354,8 +354,8 @@ var Sortable = Draggable.inherit({
     },
 
     _normalizeToIndex: function(toIndex, dropInsideItem) {
-        let isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable(),
-            fromIndex = this.option('fromIndex');
+        const isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable();
+        const fromIndex = this.option('fromIndex');
 
         if(toIndex === null) {
             return fromIndex;
@@ -365,10 +365,10 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderPosition: function(e, itemPoint) {
-        let sourceDraggable = this._getSourceDraggable(),
-            toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
+        const sourceDraggable = this._getSourceDraggable();
+        const toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
-        let eventArgs = extend(this._getEventArgs(e), {
+        const eventArgs = extend(this._getEventArgs(e), {
             toIndex,
             dropInsideItem: itemPoint.dropInsideItem
         });
@@ -398,12 +398,12 @@ var Sortable = Draggable.inherit({
     },
 
     _makeWidthCorrection: function($item, width) {
-        var that = this;
+        const that = this;
 
         if(that._$scrollable && that._$scrollable.width() < width) {
-            let scrollableWidth = that._$scrollable.width(),
-                offsetLeft = $item.offset().left - that._$scrollable.offset().left,
-                offsetRight = scrollableWidth - $item.outerWidth() - offsetLeft;
+            const scrollableWidth = that._$scrollable.width();
+            const offsetLeft = $item.offset().left - that._$scrollable.offset().left;
+            const offsetRight = scrollableWidth - $item.outerWidth() - offsetLeft;
 
             if(offsetLeft > 0) {
                 width = scrollableWidth - offsetLeft;
@@ -418,12 +418,12 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderSizes: function($placeholderElement, itemElement) {
-        var that = this,
-            dropInsideItem = that.option('dropInsideItem'),
-            $item = itemElement ? $(itemElement) : that._getSourceElement(),
-            isVertical = that._isVerticalOrientation(),
-            width = '',
-            height = '';
+        const that = this;
+        const dropInsideItem = that.option('dropInsideItem');
+        const $item = itemElement ? $(itemElement) : that._getSourceElement();
+        const isVertical = that._isVerticalOrientation();
+        let width = '';
+        let height = '';
 
         $placeholderElement.toggleClass(that._addWidgetPrefix('placeholder-inside'), dropInsideItem);
 
@@ -440,10 +440,10 @@ var Sortable = Draggable.inherit({
     },
 
     _moveItem: function($itemElement, index, cancelRemove) {
-        let $prevTargetItemElement,
-            $itemElements = this._getItems(),
-            $targetItemElement = $itemElements[index],
-            sourceDraggable = this._getSourceDraggable();
+        let $prevTargetItemElement;
+        const $itemElements = this._getItems();
+        const $targetItemElement = $itemElements[index];
+        const sourceDraggable = this._getSourceDraggable();
 
         if(cancelRemove) {
             $itemElement = $itemElement.clone();
@@ -474,9 +474,9 @@ var Sortable = Draggable.inherit({
     },
 
     _getEventArgs: function(e) {
-        let sourceDraggable = this._getSourceDraggable(),
-            targetDraggable = this._getTargetDraggable(),
-            dropInsideItem = targetDraggable.option('dropInsideItem');
+        const sourceDraggable = this._getSourceDraggable();
+        const targetDraggable = this._getTargetDraggable();
+        const dropInsideItem = targetDraggable.option('dropInsideItem');
 
         return extend(this.callBase.apply(this, arguments), {
             fromIndex: sourceDraggable.option('fromIndex'),
@@ -486,7 +486,7 @@ var Sortable = Draggable.inherit({
     },
 
     _optionChanged: function(args) {
-        var name = args.name;
+        const name = args.name;
 
         switch(name) {
             case 'onDragChange':
@@ -518,16 +518,16 @@ var Sortable = Draggable.inherit({
 
     _optionChangedDropInsideItem: function(args) {
         if(this._isIndicateMode() && this._$placeholderElement) {
-            let toIndex = this.option('toIndex'),
-                itemElement = this._getItems()[toIndex];
+            const toIndex = this.option('toIndex');
+            const itemElement = this._getItems()[toIndex];
 
             this._updatePlaceholderSizes(this._$placeholderElement, itemElement);
         }
     },
 
     _isPositionVisible: function(position) {
-        var $element = this.$element(),
-            scrollContainer;
+        const $element = this.$element();
+        let scrollContainer;
 
         if($element.css('overflow') !== 'hidden') {
             scrollContainer = $element.get(0);
@@ -541,10 +541,10 @@ var Sortable = Draggable.inherit({
         }
 
         if(scrollContainer) {
-            let clientRect = scrollContainer.getBoundingClientRect(),
-                isVerticalOrientation = this._isVerticalOrientation(),
-                start = isVerticalOrientation ? 'top' : 'left',
-                end = isVerticalOrientation ? 'bottom' : 'right';
+            const clientRect = scrollContainer.getBoundingClientRect();
+            const isVerticalOrientation = this._isVerticalOrientation();
+            const start = isVerticalOrientation ? 'top' : 'left';
+            const end = isVerticalOrientation ? 'bottom' : 'right';
 
             if(position[start] < clientRect[start] || position[start] > clientRect[end]) {
                 return false;
@@ -555,10 +555,10 @@ var Sortable = Draggable.inherit({
     },
 
     _optionChangedToIndex: function(args) {
-        let toIndex = args.value;
+        const toIndex = args.value;
 
         if(this._isIndicateMode()) {
-            let showPlaceholder = toIndex !== null && toIndex >= 0;
+            const showPlaceholder = toIndex !== null && toIndex >= 0;
 
             this._togglePlaceholder(showPlaceholder);
 
@@ -571,8 +571,8 @@ var Sortable = Draggable.inherit({
     },
 
     _makeLeftCorrection: function(left, leftMargin) {
-        var that = this,
-            $scrollable = that._$scrollable;
+        const that = this;
+        const $scrollable = that._$scrollable;
 
         if($scrollable && that._isVerticalOrientation() && $scrollable.scrollLeft() > leftMargin) {
             left += $scrollable.scrollLeft() - leftMargin;
@@ -582,24 +582,24 @@ var Sortable = Draggable.inherit({
     },
 
     _movePlaceholder: function() {
-        let that = this,
-            $placeholderElement = that._$placeholderElement || that._createPlaceholder(),
-            items = that._getItems(),
-            toIndex = that.option('toIndex'),
-            itemElement = items[toIndex],
-            isVerticalOrientation = that._isVerticalOrientation(),
-            position = null,
-            leftMargin = 0;
+        const that = this;
+        const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
+        const items = that._getItems();
+        const toIndex = that.option('toIndex');
+        const itemElement = items[toIndex];
+        const isVerticalOrientation = that._isVerticalOrientation();
+        let position = null;
+        let leftMargin = 0;
 
         that._updatePlaceholderSizes($placeholderElement, itemElement);
 
         if(itemElement) {
-            let $itemElement = $(itemElement);
+            const $itemElement = $(itemElement);
 
             position = $itemElement.offset();
             leftMargin = parseFloat($itemElement.css('marginLeft'));
         } else {
-            let prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
+            const prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
 
             if(prevVisibleItemElement) {
                 position = $(prevVisibleItemElement).offset();
@@ -621,7 +621,7 @@ var Sortable = Draggable.inherit({
     },
 
     _getPositions: function(items, elementSize, fromIndex, toIndex) {
-        let positions = [];
+        const positions = [];
 
         for(let i = 0; i < items.length; i++) {
             let position = 0;
@@ -655,20 +655,20 @@ var Sortable = Draggable.inherit({
     },
 
     _moveItems: function(prevToIndex, toIndex) {
-        let fromIndex = this.option('fromIndex'),
-            isVerticalOrientation = this._isVerticalOrientation(),
-            positionPropName = isVerticalOrientation ? 'top' : 'left',
-            $draggableItem = this._getDraggableElement(),
-            elementSize = isVerticalOrientation ? ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 : ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2,
-            items = this._getItems(),
-            prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex),
-            positions = this._getPositions(items, elementSize, fromIndex, toIndex),
-            animationConfig = this.option('animation');
+        const fromIndex = this.option('fromIndex');
+        const isVerticalOrientation = this._isVerticalOrientation();
+        const positionPropName = isVerticalOrientation ? 'top' : 'left';
+        const $draggableItem = this._getDraggableElement();
+        const elementSize = isVerticalOrientation ? ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 : ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2;
+        const items = this._getItems();
+        const prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex);
+        const positions = this._getPositions(items, elementSize, fromIndex, toIndex);
+        const animationConfig = this.option('animation');
 
         for(let i = 0; i < items.length; i++) {
-            let $item = $(items[i]),
-                prevPosition = prevPositions[i],
-                position = positions[i];
+            const $item = $(items[i]);
+            const prevPosition = prevPositions[i];
+            const position = positions[i];
 
             if(toIndex === null || fromIndex === null) {
                 fx.stop($item);
@@ -683,7 +683,7 @@ var Sortable = Draggable.inherit({
     },
 
     _toggleDragSourceClass: function(value, $element) {
-        let $sourceElement = $element || this._$sourceElement;
+        const $sourceElement = $element || this._$sourceElement;
 
         this.callBase.apply(this, arguments);
         if(!this._isIndicateMode()) {
@@ -697,7 +697,7 @@ var Sortable = Draggable.inherit({
     },
 
     _fireAddEvent: function(sourceEvent) {
-        let args = this._getEventArgs(sourceEvent);
+        const args = this._getEventArgs(sourceEvent);
 
         this._getAction('onAdd')(args);
 
@@ -705,8 +705,8 @@ var Sortable = Draggable.inherit({
     },
 
     _fireRemoveEvent: function(sourceEvent) {
-        let sourceDraggable = this._getSourceDraggable(),
-            args = this._getEventArgs(sourceEvent);
+        const sourceDraggable = this._getSourceDraggable();
+        const args = this._getEventArgs(sourceEvent);
 
         sourceDraggable._getAction('onRemove')(args);
 
@@ -714,7 +714,7 @@ var Sortable = Draggable.inherit({
     },
 
     _fireReorderEvent: function(sourceEvent) {
-        let args = this._getEventArgs(sourceEvent);
+        const args = this._getEventArgs(sourceEvent);
 
         this._getAction('onReorder')(args);
     }

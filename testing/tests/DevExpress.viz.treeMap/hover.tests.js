@@ -1,4 +1,4 @@
-var common = require('./commonParts/common.js');
+const common = require('./commonParts/common.js');
 
 require('viz/tree_map/hover');
 
@@ -8,27 +8,27 @@ QUnit.test('Turn tile hover on', function(assert) {
     function onHoverChanged(e) {
         assert.strictEqual(e.node.isHovered(), true, 'state inside callback');
     }
-    var spy = sinon.spy(onHoverChanged),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            tile: {
-                border: {
-                    color: 'black',
-                    width: 1,
-                    opacity: 0.5
-                },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
+    const spy = sinon.spy(onHoverChanged);
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        tile: {
+            border: {
+                color: 'black',
+                width: 1,
+                opacity: 0.5
             },
-            onHoverChanged: spy
-        }).getRootNode(),
-        tile = this.tile(1);
+            color: 'red',
+            hoverStyle: {
+                border: {
+                    color: 'yellow',
+                    width: 2
+                },
+                color: 'blue'
+            }
+        },
+        onHoverChanged: spy
+    }).getRootNode();
+    const tile = this.tile(1);
     tile.smartAttr.reset();
 
     root.getChild(1).setHover();
@@ -46,29 +46,29 @@ QUnit.test('Turn tile hover off', function(assert) {
     function onHoverChanged(e) {
         assert.strictEqual(e.node.isHovered(), false, 'state inside callback');
     }
-    var spy = sinon.spy(onHoverChanged),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            colorizer: {
-                type: 'none'
+    const spy = sinon.spy(onHoverChanged);
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        colorizer: {
+            type: 'none'
+        },
+        tile: {
+            border: {
+                color: 'black',
+                width: 1,
+                opacity: 0.5
             },
-            tile: {
+            color: 'red',
+            hoverStyle: {
                 border: {
-                    color: 'black',
-                    width: 1,
-                    opacity: 0.5
+                    color: 'yellow',
+                    width: 2
                 },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
+                color: 'blue'
             }
-        }),
-        tile = this.tile(1);
+        }
+    });
+    const tile = this.tile(1);
     widget.getRootNode().getChild(1).setHover();
     tile.smartAttr.reset();
     widget.on('hoverChanged', spy);
@@ -82,29 +82,29 @@ QUnit.test('Turn tile hover off', function(assert) {
 });
 
 QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            colorizer: {
-                type: 'none'
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        colorizer: {
+            type: 'none'
+        },
+        tile: {
+            border: {
+                color: 'black',
+                width: 1,
+                opacity: 0.4
             },
-            tile: {
+            color: 'red',
+            hoverStyle: {
                 border: {
-                    color: 'black',
-                    width: 1,
-                    opacity: 0.4
+                    color: 'yellow',
+                    width: 2
                 },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
-            },
-            onHoverChanged: spy
-        }).getRootNode();
+                color: 'blue'
+            }
+        },
+        onHoverChanged: spy
+    }).getRootNode();
     root.getChild(1).setHover();
     spy.reset();
 
@@ -118,36 +118,36 @@ QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
 });
 
 QUnit.test('Turn group hover on', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1 }, { value: 2 }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            tile: {
-                hoverStyle: { color: 'green' }
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1 }, { value: 2 }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        tile: {
+            hoverStyle: { color: 'green' }
+        },
+        group: {
+            border: {
+                color: 'black',
+                width: 1
             },
-            group: {
+            color: 'red',
+            hoverStyle: {
                 border: {
-                    color: 'black',
-                    width: 1
+                    color: 'yellow',
+                    width: 2
                 },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
-            },
-            onHoverChanged: spy
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1),
-        tile1 = this.tile(2),
-        tile2 = this.tile(3);
+                color: 'blue'
+            }
+        },
+        onHoverChanged: spy
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
+    const tile1 = this.tile(2);
+    const tile2 = this.tile(3);
     outer.attr.reset();
     inner.smartAttr.reset();
     tile1.smartAttr.reset();
@@ -168,33 +168,33 @@ QUnit.test('Turn group hover on', function(assert) {
 });
 
 QUnit.test('Turn group hover off', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1, color: 'green' }, { value: 2, color: 'grey' }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            group: {
-                border: {
-                    color: 'black',
-                    width: 1
-                },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1, color: 'green' }, { value: 2, color: 'grey' }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        group: {
+            border: {
+                color: 'black',
+                width: 1
             },
-            onHoverChanged: spy
-        }),
-        outer = this.tile(0),
-        inner = this.tile(1),
-        tile1 = this.tile(2),
-        tile2 = this.tile(3);
+            color: 'red',
+            hoverStyle: {
+                border: {
+                    color: 'yellow',
+                    width: 2
+                },
+                color: 'blue'
+            }
+        },
+        onHoverChanged: spy
+    });
+    const outer = this.tile(0);
+    const inner = this.tile(1);
+    const tile1 = this.tile(2);
+    const tile2 = this.tile(3);
     widget.getRootNode().getChild(0).setHover();
     outer.attr.reset();
     inner.smartAttr.reset();
@@ -214,29 +214,29 @@ QUnit.test('Turn group hover off', function(assert) {
 });
 
 QUnit.test('Turn group hover on when another group is hovered', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1 }, { value: 2 }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            group: {
-                border: {
-                    color: 'black',
-                    width: 1
-                },
-                color: 'red',
-                hoverStyle: {
-                    border: {
-                        color: 'yellow',
-                        width: 2
-                    },
-                    color: 'blue'
-                }
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1 }, { value: 2 }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        group: {
+            border: {
+                color: 'black',
+                width: 1
             },
-            onHoverChanged: spy
-        }).getRootNode();
+            color: 'red',
+            hoverStyle: {
+                border: {
+                    color: 'yellow',
+                    width: 2
+                },
+                color: 'blue'
+            }
+        },
+        onHoverChanged: spy
+    }).getRootNode();
     root.getChild(1).setHover();
     spy.reset();
 
@@ -250,12 +250,12 @@ QUnit.test('Turn group hover on when another group is hovered', function(assert)
 });
 
 QUnit.test('Disabled hover', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            hoverEnabled: false,
-            onHoverChanged: spy
-        }).getRootNode();
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        hoverEnabled: false,
+        onHoverChanged: spy
+    }).getRootNode();
 
     root.getChild(0).setHover();
 
@@ -263,22 +263,22 @@ QUnit.test('Disabled hover', function(assert) {
 });
 
 QUnit.test('Disabled hover for group', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1 }, { value: 2 }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            group: {
-                hoverEnabled: false
-            },
-            onHoverChanged: spy
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1),
-        tile1 = this.tile(2),
-        tile2 = this.tile(3);
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1 }, { value: 2 }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        group: {
+            hoverEnabled: false
+        },
+        onHoverChanged: spy
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
+    const tile1 = this.tile(2);
+    const tile2 = this.tile(3);
     outer.attr.reset();
     inner.smartAttr.reset();
     tile1.smartAttr.reset();
@@ -295,22 +295,22 @@ QUnit.test('Disabled hover for group', function(assert) {
 });
 
 QUnit.test('Turn tile hover on with disabled hover for group', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1 }, { value: 2 }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            group: {
-                hoverEnabled: false
-            },
-            onHoverChanged: spy
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1),
-        tile1 = this.tile(2),
-        tile2 = this.tile(3);
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1 }, { value: 2 }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        group: {
+            hoverEnabled: false
+        },
+        onHoverChanged: spy
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
+    const tile1 = this.tile(2);
+    const tile2 = this.tile(3);
     outer.attr.reset();
     inner.smartAttr.reset();
     tile1.smartAttr.reset();
@@ -327,22 +327,22 @@ QUnit.test('Turn tile hover on with disabled hover for group', function(assert) 
 });
 
 QUnit.test('Hover group after hover tile with disabled hover for group', function(assert) {
-    var spy = sinon.spy(),
-        root = common.createWidget({
-            dataSource: [{
-                items: [{ value: 1 }, { value: 2 }]
-            }, {
-                items: [{ value: 3 }]
-            }],
-            group: {
-                hoverEnabled: false
-            },
-            onHoverChanged: spy
-        }).getRootNode(),
-        outer = this.tile(0),
-        inner = this.tile(1),
-        tile1 = this.tile(2),
-        tile2 = this.tile(3);
+    const spy = sinon.spy();
+    const root = common.createWidget({
+        dataSource: [{
+            items: [{ value: 1 }, { value: 2 }]
+        }, {
+            items: [{ value: 3 }]
+        }],
+        group: {
+            hoverEnabled: false
+        },
+        onHoverChanged: spy
+    }).getRootNode();
+    const outer = this.tile(0);
+    const inner = this.tile(1);
+    const tile1 = this.tile(2);
+    const tile2 = this.tile(3);
     root.getChild(0).getChild(0).setHover();
 
     outer.attr.reset();
@@ -361,11 +361,11 @@ QUnit.test('Hover group after hover tile with disabled hover for group', functio
 });
 
 QUnit.test('Change hover mode', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onHoverChanged: spy
+    });
     widget.getRootNode().getChild(0).setHover();
     spy.reset();
 
@@ -377,11 +377,11 @@ QUnit.test('Change hover mode', function(assert) {
 });
 
 QUnit.test('Change hover mode of the group', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        onHoverChanged: spy
+    });
     widget.getRootNode().getChild(0).setHover();
     spy.reset();
 
@@ -393,16 +393,16 @@ QUnit.test('Change hover mode of the group', function(assert) {
 });
 
 QUnit.test('Hover state is not applied until endUpdate', function(assert) {
-    var spy = sinon.spy(),
-        widget = common.createWidget({
-            dataSource: [{ value: 1 }, { value: 2 }],
-            tile: {
-                hoverStyle: {
-                    color: 'red'
-                }
-            },
-            onHoverChanged: spy
-        });
+    const spy = sinon.spy();
+    const widget = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }],
+        tile: {
+            hoverStyle: {
+                color: 'red'
+            }
+        },
+        onHoverChanged: spy
+    });
     this.tile(1).attr.reset();
 
     widget.beginUpdate();

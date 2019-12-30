@@ -1,10 +1,10 @@
-var $ = require('./renderer'),
-    config = require('./config'),
-    window = require('./utils/window').getWindow(),
-    typeUtils = require('./utils/type'),
-    each = require('./utils/iterator').each,
-    Class = require('./class'),
-    errors = require('./errors');
+const $ = require('./renderer');
+const config = require('./config');
+const window = require('./utils/window').getWindow();
+const typeUtils = require('./utils/type');
+const each = require('./utils/iterator').each;
+const Class = require('./class');
+const errors = require('./errors');
 
 var Action = Class.inherit({
 
@@ -16,17 +16,17 @@ var Action = Class.inherit({
         this._afterExecute = config.afterExecute;
         this._component = config.component;
         this._validatingTargetName = config.validatingTargetName;
-        var excludeValidators = this._excludeValidators = {};
+        const excludeValidators = this._excludeValidators = {};
 
         if(config.excludeValidators) {
-            for(var i = 0; i < config.excludeValidators.length; i++) {
+            for(let i = 0; i < config.excludeValidators.length; i++) {
                 excludeValidators[config.excludeValidators[i]] = true;
             }
         }
     },
 
     execute: function() {
-        var e = {
+        const e = {
             action: this._action,
             args: Array.prototype.slice.call(arguments),
             context: this._context,
@@ -36,10 +36,10 @@ var Action = Class.inherit({
             handled: false
         };
 
-        var beforeExecute = this._beforeExecute,
-            afterExecute = this._afterExecute;
+        const beforeExecute = this._beforeExecute;
+        const afterExecute = this._afterExecute;
 
-        var argsBag = e.args[0] || {};
+        const argsBag = e.args[0] || {};
 
         ///#DEBUG
         if('jQueryEvent' in argsBag && !argsBag.event) {
@@ -70,7 +70,7 @@ var Action = Class.inherit({
             return;
         }
 
-        var result = this._executeAction(e);
+        const result = this._executeAction(e);
 
         if(argsBag.cancel) {
             return;
@@ -82,12 +82,12 @@ var Action = Class.inherit({
     },
 
     _validateAction: function(e) {
-        var excludeValidators = this._excludeValidators,
-            executors = Action.executors;
+        const excludeValidators = this._excludeValidators;
+        const executors = Action.executors;
 
-        for(var name in executors) {
+        for(const name in executors) {
             if(!excludeValidators[name]) {
-                var executor = executors[name];
+                const executor = executors[name];
                 if(executor.validate) {
                     executor.validate(e);
                 }
@@ -102,11 +102,11 @@ var Action = Class.inherit({
     },
 
     _executeAction: function(e) {
-        var result,
-            executors = Action.executors;
+        let result;
+        const executors = Action.executors;
 
-        for(var name in executors) {
-            var executor = executors[name];
+        for(const name in executors) {
+            const executor = executors[name];
             if(executor.execute) {
                 executor.execute(e);
             }
@@ -132,7 +132,7 @@ Action.registerExecutor = function(name, executor) {
 };
 
 Action.unregisterExecutor = function() {
-    var args = [].slice.call(arguments);
+    const args = [].slice.call(arguments);
 
     each(args, function() {
         delete Action.executors[this];
@@ -160,14 +160,14 @@ Action.registerExecutor({
 });
 
 
-var createValidatorByTargetElement = function(condition) {
+const createValidatorByTargetElement = function(condition) {
     return function(e) {
         if(!e.args.length) {
             return;
         }
 
-        var args = e.args[0],
-            element = args[e.validatingTargetName] || args.element;
+        const args = e.args[0];
+        const element = args[e.validatingTargetName] || args.element;
 
         if(element && condition($(element))) {
             e.cancel = true;

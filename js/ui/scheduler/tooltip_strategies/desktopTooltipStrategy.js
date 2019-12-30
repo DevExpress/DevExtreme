@@ -43,7 +43,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     }
 
     _createTooltip(target, dataList) {
-        var tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
+        const tooltip = this._createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
         return this._options.createComponent(tooltip, Tooltip, {
             target: target,

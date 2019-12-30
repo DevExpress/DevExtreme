@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    Class = require('core/class'),
-    Views = require('ui/calendar/ui.calendar.views');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const Class = require('core/class');
+const Views = require('ui/calendar/ui.calendar.views');
 
-var TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
+const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 window.DevExpress = window.DevExpress || {};
 
@@ -29,8 +29,8 @@ $.extend(true, DevExpress.ui = DevExpress.ui || {}, {
                 });
             },
             typeIntoInput: function(dateString, input) {
-                var keyPress = $.Event('keypress'),
-                    i;
+                const keyPress = $.Event('keypress');
+                let i;
                 for(i = 0; i < dateString.length; ++i) {
                     keyPress.key = dateString[i];
                     input.val(input.val() + dateString[i]);

@@ -13,33 +13,33 @@ import gridCoreUtils from './ui.grid_core.utils';
 import fx from '../../animation/fx';
 import { getSwatchContainer } from '../widget/swatch_container';
 
-var COLUMNS_SEPARATOR_CLASS = 'columns-separator',
-    COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent',
-    DRAGGING_HEADER_CLASS = 'drag-header',
-    CELL_CONTENT_CLASS = 'text-content',
-    HEADERS_DRAG_ACTION_CLASS = 'drag-action',
-    TRACKER_CLASS = 'tracker',
-    HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight',
-    BLOCK_SEPARATOR_CLASS = 'dx-block-separator',
-    HEADER_ROW_CLASS = 'dx-header-row',
-    WIDGET_CLASS = 'dx-widget',
-    DRAGGING_COMMAND_CELL_CLASS = 'dx-drag-command-cell',
+const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
+const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
+const DRAGGING_HEADER_CLASS = 'drag-header';
+const CELL_CONTENT_CLASS = 'text-content';
+const HEADERS_DRAG_ACTION_CLASS = 'drag-action';
+const TRACKER_CLASS = 'tracker';
+const HEADERS_DROP_HIGHLIGHT_CLASS = 'drop-highlight';
+const BLOCK_SEPARATOR_CLASS = 'dx-block-separator';
+const HEADER_ROW_CLASS = 'dx-header-row';
+const WIDGET_CLASS = 'dx-widget';
+const DRAGGING_COMMAND_CELL_CLASS = 'dx-drag-command-cell';
 
-    MODULE_NAMESPACE = 'dxDataGridResizingReordering',
+const MODULE_NAMESPACE = 'dxDataGridResizingReordering';
 
-    COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10,
-    DRAGGING_DELTA = 5,
-    COLUMN_OPACITY = 0.5;
+const COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10;
+const DRAGGING_DELTA = 5;
+const COLUMN_OPACITY = 0.5;
 
-var allowResizing = function(that) {
+const allowResizing = function(that) {
     return that.option('allowColumnResizing') || that.getController('columns').isColumnOptionUsed('allowResizing');
 };
 
-var allowReordering = function(that) {
+const allowReordering = function(that) {
     return that.option('allowColumnReordering') || that.getController('columns').isColumnOptionUsed('allowReordering');
 };
 
-var TrackerView = modules.View.inherit({
+const TrackerView = modules.View.inherit({
     _renderCore: function() {
         this.callBase();
         this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
@@ -53,10 +53,10 @@ var TrackerView = modules.View.inherit({
     },
 
     _subscribeToCallback: function() {
-        var that = this;
+        const that = this;
 
         that._positionChanged = function(position) {
-            var $element = that.element();
+            const $element = that.element();
             if($element && $element.hasClass(that.addWidgetPrefix(TRACKER_CLASS))) {
                 $element.css({ top: position.top });
                 $element.height(position.height);
@@ -106,7 +106,7 @@ var TrackerView = modules.View.inherit({
     }
 });
 
-var SeparatorView = modules.View.inherit({
+const SeparatorView = modules.View.inherit({
     _renderSeparator: function() { },
 
     _renderCore: function(options) {
@@ -125,7 +125,7 @@ var SeparatorView = modules.View.inherit({
     },
 
     height: function(value) {
-        var $element = this.element();
+        const $element = this.element();
         if($element) {
             if(typeUtils.isDefined(value)) {
                 $element.height(value);
@@ -136,7 +136,7 @@ var SeparatorView = modules.View.inherit({
     },
 
     width: function(value) {
-        var $element = this.element();
+        const $element = this.element();
         if($element) {
             if(typeUtils.isDefined(value)) {
                 $element.width(value);
@@ -147,17 +147,17 @@ var SeparatorView = modules.View.inherit({
     }
 });
 
-var ColumnsSeparatorView = SeparatorView.inherit({
+const ColumnsSeparatorView = SeparatorView.inherit({
     _renderSeparator: function() {
         this.callBase();
 
-        var $element = this.element();
+        const $element = this.element();
         $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
     },
 
     _subscribeToCallback: function() {
-        var that = this,
-            $element;
+        const that = this;
+        let $element;
 
         that._positionChanged = function(position) {
             $element = that.element();
@@ -207,8 +207,8 @@ var ColumnsSeparatorView = SeparatorView.inherit({
     },
 
     show: function() {
-        var that = this,
-            $element = this.element();
+        const that = this;
+        const $element = this.element();
 
         if($element && !that._isShown) {
             if(that._isTransparent) {
@@ -221,8 +221,8 @@ var ColumnsSeparatorView = SeparatorView.inherit({
     },
 
     hide: function(force) {
-        var $element = this.element(),
-            columnsSeparatorTransparent = this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT);
+        const $element = this.element();
+        const columnsSeparatorTransparent = this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT);
 
         if($element && (this._isShown || force)) {
             if(this._isTransparent) {
@@ -240,7 +240,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
     },
 
     moveByX: function(outerX) {
-        var $element = this.element();
+        const $element = this.element();
         if($element) {
             $element.css('left', outerX - this._parentElement().offset().left);
             ///#DEBUG
@@ -251,7 +251,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
 
     changeCursor: function(cursorName) {
         cursorName = typeUtils.isDefined(cursorName) ? cursorName : '';
-        var $element = this.element();
+        const $element = this.element();
         if($element) {
             $element.css('cursor', cursorName);
             ///#DEBUG
@@ -266,9 +266,9 @@ var ColumnsSeparatorView = SeparatorView.inherit({
     }
 });
 
-var BlockSeparatorView = SeparatorView.inherit({
+const BlockSeparatorView = SeparatorView.inherit({
     init: function() {
-        var that = this;
+        const that = this;
 
         this.callBase();
 
@@ -285,9 +285,9 @@ var BlockSeparatorView = SeparatorView.inherit({
     },
 
     hide: function() {
-        var that = this,
-            $parent = this._parentElement(),
-            $element = this.element();
+        const that = this;
+        const $parent = this._parentElement();
+        const $element = this.element();
 
         if($element && this._isShown) {
             $element.css('display', 'none');
@@ -301,28 +301,28 @@ var BlockSeparatorView = SeparatorView.inherit({
     },
 
     isVisible: function() {
-        var groupPanelOptions = this.option('groupPanel'),
-            columnChooserOptions = this.option('columnChooser');
+        const groupPanelOptions = this.option('groupPanel');
+        const columnChooserOptions = this.option('columnChooser');
 
         return (groupPanelOptions && groupPanelOptions.visible) || (columnChooserOptions && columnChooserOptions.enabled);
     },
 
     show: function(targetLocation) {
-        var that = this,
-            $element = this.element(),
-            startAnimate = function(toOptions) {
-                fx.stop($element, true);
-                fx.animate($element, {
-                    type: 'slide',
-                    from: {
-                        width: 0,
-                        display: toOptions.display
-                    },
-                    to: toOptions,
-                    duration: 300,
-                    easing: 'swing'
-                });
-            };
+        const that = this;
+        const $element = this.element();
+        const startAnimate = function(toOptions) {
+            fx.stop($element, true);
+            fx.animate($element, {
+                type: 'slide',
+                from: {
+                    width: 0,
+                    display: toOptions.display
+                },
+                to: toOptions,
+                duration: 300,
+                easing: 'swing'
+            });
+        };
 
         if($element && !that._isShown) {
             switch(targetLocation) {
@@ -341,16 +341,16 @@ var BlockSeparatorView = SeparatorView.inherit({
     }
 });
 
-var DraggingHeaderView = modules.View.inherit({
+const DraggingHeaderView = modules.View.inherit({
     _isDragging: false,
 
     _getDraggingPanelByPos: function(pos) {
-        var that = this,
-            result;
+        const that = this;
+        let result;
 
         each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
             if(draggingPanel) {
-                var boundingRect = draggingPanel.getBoundingRect();
+                const boundingRect = draggingPanel.getBoundingRect();
                 if(boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
                     && (boundingRect.left === undefined || pos.x > boundingRect.left) && (boundingRect.right === undefined || pos.x < boundingRect.right)) {
                     result = draggingPanel;
@@ -369,7 +369,7 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     _resetTargetColumnOptions: function() {
-        var params = this._dropOptions;
+        const params = this._dropOptions;
 
         params.targetColumnIndex = -1;
         delete params.targetColumnElement;
@@ -390,28 +390,28 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     dispose: function() {
-        var element = this.element();
+        const element = this.element();
 
         this._dragOptions = null;
         element && element.parent().find('.' + this.addWidgetPrefix(DRAGGING_HEADER_CLASS)).remove();
     },
 
     isVisible: function() {
-        var columnsController = this.getController('columns'),
-            commonColumnSettings = columnsController.getCommonSettings();
+        const columnsController = this.getController('columns');
+        const commonColumnSettings = columnsController.getCommonSettings();
 
         return this.option('showColumnHeaders') && (allowReordering(this) || commonColumnSettings.allowGrouping || commonColumnSettings.allowHiding);
     },
 
     init: function() {
-        var that = this;
+        const that = this;
 
         this.callBase();
         this._controller = this.getController('draggingHeader');
         this._columnsResizerViewController = this.getController('columnsResizer');
 
         this.getController('data').loadingChanged.add(function(isLoading) {
-            var element = that.element();
+            const element = that.element();
 
             if(!isLoading && element) {
                 element.hide();
@@ -420,9 +420,9 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     dragHeader: function(options) {
-        var that = this,
-            columnElement = options.columnElement,
-            isCommandColumn = !!options.sourceColumn.type;
+        const that = this;
+        const columnElement = options.columnElement;
+        const isCommandColumn = !!options.sourceColumn.type;
 
         that._isDragging = true;
         that._dragOptions = options;
@@ -433,7 +433,7 @@ var DraggingHeaderView = modules.View.inherit({
             sourceLocation: options.sourceLocation
         };
 
-        var document = domAdapter.getDocument();
+        const document = domAdapter.getDocument();
         that._onSelectStart = document['onselectstart'];
 
         document['onselectstart'] = function() {
@@ -456,18 +456,18 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     moveHeader: function(args) {
-        var e = args.event,
-            that = e.data.that,
-            newLeft,
-            newTop,
-            moveDeltaX,
-            moveDeltaY,
-            eventData = getEventData(e),
-            isResizing = that._columnsResizerViewController ? that._columnsResizerViewController.isResizing() : false,
-            dragOptions = that._dragOptions;
+        const e = args.event;
+        const that = e.data.that;
+        let newLeft;
+        let newTop;
+        let moveDeltaX;
+        let moveDeltaY;
+        const eventData = getEventData(e);
+        const isResizing = that._columnsResizerViewController ? that._columnsResizerViewController.isResizing() : false;
+        const dragOptions = that._dragOptions;
 
         if(that._isDragging && !isResizing) {
-            var $element = that.element();
+            const $element = that.element();
 
             moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
             moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
@@ -487,30 +487,30 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     dockHeader: function(eventData) {
-        var that = this,
-            targetDraggingPanel = that._getDraggingPanelByPos(eventData),
-            controller = that._controller,
-            i,
-            params = that._dropOptions,
-            dragOptions = that._dragOptions,
-            centerPosition;
+        const that = this;
+        const targetDraggingPanel = that._getDraggingPanelByPos(eventData);
+        const controller = that._controller;
+        let i;
+        const params = that._dropOptions;
+        const dragOptions = that._dragOptions;
+        let centerPosition;
 
         if(targetDraggingPanel) {
-            var rtlEnabled = that.option('rtlEnabled'),
-                isVerticalOrientation = targetDraggingPanel.getName() === 'columnChooser',
-                axisName = isVerticalOrientation ? 'y' : 'x',
-                targetLocation = targetDraggingPanel.getName(),
-                rowIndex = targetLocation === 'headers' ? dragOptions.rowIndex : undefined,
-                sourceColumn = dragOptions.sourceColumn,
-                columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [],
-                pointsByTarget = dragOptions.pointsByTarget = dragOptions.pointsByTarget || {},
-                pointsByColumns = targetLocation === 'columnChooser' ? [] : pointsByTarget[targetLocation] || controller._generatePointsByColumns(extend({}, dragOptions, {
-                    targetDraggingPanel: targetDraggingPanel,
-                    columns: targetDraggingPanel.getColumns(rowIndex),
-                    columnElements: columnElements,
-                    isVerticalOrientation: isVerticalOrientation,
-                    startColumnIndex: targetLocation === 'headers' && $(columnElements[0]).index()
-                }));
+            const rtlEnabled = that.option('rtlEnabled');
+            const isVerticalOrientation = targetDraggingPanel.getName() === 'columnChooser';
+            const axisName = isVerticalOrientation ? 'y' : 'x';
+            const targetLocation = targetDraggingPanel.getName();
+            const rowIndex = targetLocation === 'headers' ? dragOptions.rowIndex : undefined;
+            const sourceColumn = dragOptions.sourceColumn;
+            const columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [];
+            const pointsByTarget = dragOptions.pointsByTarget = dragOptions.pointsByTarget || {};
+            const pointsByColumns = targetLocation === 'columnChooser' ? [] : pointsByTarget[targetLocation] || controller._generatePointsByColumns(extend({}, dragOptions, {
+                targetDraggingPanel: targetDraggingPanel,
+                columns: targetDraggingPanel.getColumns(rowIndex),
+                columnElements: columnElements,
+                isVerticalOrientation: isVerticalOrientation,
+                startColumnIndex: targetLocation === 'headers' && $(columnElements[0]).index()
+            }));
 
             pointsByTarget[targetLocation] = pointsByColumns;
 
@@ -545,9 +545,9 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     dropHeader: function(args) {
-        var e = args.event,
-            that = e.data.that,
-            controller = that._controller;
+        const e = args.event;
+        const that = e.data.that;
+        const controller = that._controller;
 
         that.element().hide();
 
@@ -563,16 +563,16 @@ var DraggingHeaderView = modules.View.inherit({
     }
 });
 
-var isNextColumnResizingMode = function(that) {
+const isNextColumnResizingMode = function(that) {
     return that.option('columnResizingMode') !== 'widget';
 };
 
-var ColumnsResizerViewController = modules.ViewController.inherit({
+const ColumnsResizerViewController = modules.ViewController.inherit({
     _isHeadersRowArea: function(posY) {
         if(this._columnHeadersView) {
-            var element = this._columnHeadersView.element(),
-                headersRowHeight,
-                offsetTop;
+            const element = this._columnHeadersView.element();
+            let headersRowHeight;
+            let offsetTop;
 
             if(element) {
                 offsetTop = element.offset().top;
@@ -584,11 +584,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _pointCreated: function(point, cellsLength, columns) {
-        var currentColumn,
-            isNextColumnMode = isNextColumnResizingMode(this),
-            rtlEnabled = this.option('rtlEnabled'),
-            firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1,
-            nextColumn;
+        let currentColumn;
+        const isNextColumnMode = isNextColumnResizingMode(this);
+        const rtlEnabled = this.option('rtlEnabled');
+        const firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1;
+        let nextColumn;
 
         if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && !rtlEnabled ? 1 : 0)) {
             point.columnIndex -= firstPointColumnIndex;
@@ -602,7 +602,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 
     _getTargetPoint: function(pointsByColumns, currentX, deltaX) {
         if(pointsByColumns) {
-            for(var i = 0; i < pointsByColumns.length; i++) {
+            for(let i = 0; i < pointsByColumns.length; i++) {
                 if(pointsByColumns[i].x === pointsByColumns[0].x && pointsByColumns[i + 1] && pointsByColumns[i].x === pointsByColumns[i + 1].x) {
                     continue;
                 }
@@ -615,19 +615,19 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _moveSeparator: function(args) {
-        var e = args.event,
-            that = e.data,
-            columnsSeparatorWidth = that._columnsSeparatorView.width(),
-            isNextColumnMode = isNextColumnResizingMode(that),
-            deltaX = columnsSeparatorWidth / 2,
-            parentOffset = that._$parentContainer.offset(),
-            parentOffsetLeft = parentOffset.left,
-            eventData = getEventData(e);
+        const e = args.event;
+        const that = e.data;
+        const columnsSeparatorWidth = that._columnsSeparatorView.width();
+        const isNextColumnMode = isNextColumnResizingMode(that);
+        const deltaX = columnsSeparatorWidth / 2;
+        const parentOffset = that._$parentContainer.offset();
+        const parentOffsetLeft = parentOffset.left;
+        const eventData = getEventData(e);
 
         if(that._isResizing && that._resizingInfo) {
             if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
-                    var $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
+                    const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
                     that._columnsSeparatorView.moveByX($cell.offset().left + (isNextColumnMode && that.option('rtlEnabled') ? 0 : $cell.outerWidth()));
                     that._tablePositionController.update(that._targetPoint.y);
                     e.preventDefault();
@@ -663,8 +663,8 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _endResizing: function(args) {
-        var e = args.event,
-            that = e.data;
+        const e = args.event;
+        const that = e.data;
 
         if(that._isResizing) {
             that.pointsByColumns(null);
@@ -676,7 +676,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._trackerView.hide();
 
             if(!isNextColumnResizingMode(that)) {
-                var pageIndex = that.component.pageIndex();
+                const pageIndex = that.component.pageIndex();
                 that.component.updateDimensions();
 
                 if(that.option('wordWrapEnabled') && that.option('scrolling.mode') === 'virtual') {
@@ -697,11 +697,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _setupResizingInfo: function(posX) {
-        var that = this,
-            currentColumnIndex = that._targetPoint.columnIndex,
-            nextColumnIndex = that._getNextColumnIndex(currentColumnIndex),
-            currentHeader = that._columnHeadersView.getHeaderElement(currentColumnIndex),
-            nextHeader = that._columnHeadersView.getHeaderElement(nextColumnIndex);
+        const that = this;
+        const currentColumnIndex = that._targetPoint.columnIndex;
+        const nextColumnIndex = that._getNextColumnIndex(currentColumnIndex);
+        const currentHeader = that._columnHeadersView.getHeaderElement(currentColumnIndex);
+        const nextHeader = that._columnHeadersView.getHeaderElement(nextColumnIndex);
 
         that._resizingInfo = {
             startPosX: posX,
@@ -713,12 +713,12 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _startResizing: function(args) {
-        var e = args.event,
-            that = e.data,
-            eventData = getEventData(e),
-            editingController = that.getController('editing'),
-            editingMode = that.option('editing.mode'),
-            isCellEditing = editingController.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
+        const e = args.event;
+        const that = e.data;
+        const eventData = getEventData(e);
+        const editingController = that.getController('editing');
+        const editingMode = that.option('editing.mode');
+        const isCellEditing = editingController.isEditing() && (editingMode === 'batch' || editingMode === 'cell');
 
         if(isTouchEvent(e)) {
             if(that._isHeadersRowArea(eventData.y)) {
@@ -752,10 +752,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _generatePointsByColumns: function() {
-        var that = this,
-            columns = that._columnsController ? that._columnsController.getVisibleColumns() : [],
-            cells = that._columnHeadersView.getColumnElements(),
-            pointsByColumns = [];
+        const that = this;
+        const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
+        const cells = that._columnHeadersView.getColumnElements();
+        let pointsByColumns = [];
 
         if(cells && cells.length > 0) {
             pointsByColumns = gridCoreUtils.getPointsByColumns(cells, function(point) {
@@ -787,20 +787,20 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _updateColumnsWidthIfNeeded: function(posX) {
-        var deltaX,
-            needUpdate = false,
-            nextCellWidth,
-            resizingInfo = this._resizingInfo,
-            columnsController = this._columnsController,
-            visibleColumns = columnsController.getVisibleColumns(),
-            columnsSeparatorWidth = this._columnsSeparatorView.width(),
-            contentWidth = this._rowsView.contentWidth(),
-            isNextColumnMode = isNextColumnResizingMode(this),
-            adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth'),
-            column,
-            minWidth,
-            nextColumn,
-            cellWidth;
+        let deltaX;
+        let needUpdate = false;
+        let nextCellWidth;
+        const resizingInfo = this._resizingInfo;
+        const columnsController = this._columnsController;
+        const visibleColumns = columnsController.getVisibleColumns();
+        const columnsSeparatorWidth = this._columnsSeparatorView.width();
+        let contentWidth = this._rowsView.contentWidth();
+        const isNextColumnMode = isNextColumnResizingMode(this);
+        const adaptColumnWidthByRatio = isNextColumnMode && this.option('adaptColumnWidthByRatio') && !this.option('columnAutoWidth');
+        let column;
+        let minWidth;
+        let nextColumn;
+        let cellWidth;
 
         function isPercentWidth(width) {
             return typeUtils.isString(width) && width.slice(-1) === '%';
@@ -808,7 +808,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 
         function setColumnWidth(column, columnWidth, contentWidth, adaptColumnWidthByRatio) {
             if(column) {
-                var oldColumnWidth = column.width;
+                const oldColumnWidth = column.width;
                 if(oldColumnWidth) {
                     adaptColumnWidthByRatio = isPercentWidth(oldColumnWidth);
                 }
@@ -824,8 +824,8 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         }
 
         function correctContentWidth(contentWidth, visibleColumns) {
-            var allColumnsHaveWidth = visibleColumns.every(column => column.width),
-                totalPercent;
+            const allColumnsHaveWidth = visibleColumns.every(column => column.width);
+            let totalPercent;
 
             if(allColumnsHaveWidth) {
                 totalPercent = visibleColumns.reduce((sum, column) => {
@@ -872,16 +872,16 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                 nextCellWidth = Math.floor(nextCellWidth);
                 setColumnWidth(nextColumn, nextCellWidth, contentWidth, adaptColumnWidthByRatio);
             } else {
-                var columnWidths = this._columnHeadersView.getColumnWidths();
+                const columnWidths = this._columnHeadersView.getColumnWidths();
                 columnWidths[resizingInfo.currentColumnIndex] = cellWidth;
-                var hasScroll = columnWidths.reduce((totalWidth, width) => totalWidth + width, 0) > this._rowsView.contentWidth();
+                const hasScroll = columnWidths.reduce((totalWidth, width) => totalWidth + width, 0) > this._rowsView.contentWidth();
                 if(!hasScroll) {
-                    var lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+                    const lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
                     if(lastColumnIndex >= 0) {
                         columnsController.columnOption(visibleColumns[lastColumnIndex].index, 'visibleWidth', 'auto');
                     }
                 }
-                for(var i = 0; i < columnWidths.length; i++) {
+                for(let i = 0; i < columnWidths.length; i++) {
                     if(visibleColumns[i] && visibleColumns[i] !== column && visibleColumns[i].width === undefined) {
                         columnsController.columnOption(visibleColumns[i].index, 'width', columnWidths[i]);
                     }
@@ -903,8 +903,8 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromCallbacks: function() {
-        var i,
-            subscribe;
+        let i;
+        let subscribe;
 
         for(i = 0; i < this._subscribesToCallbacks.length; i++) {
             subscribe = this._subscribesToCallbacks[i];
@@ -920,18 +920,18 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _init: function() {
-        var that = this,
-            generatePointsByColumnsHandler = function() {
-                if(!that._isResizing) {
-                    that.pointsByColumns(null);
-                }
-            },
-            generatePointsByColumnsScrollHandler = function(offset) {
-                if(that._scrollLeft !== offset.left) {
-                    that._scrollLeft = offset.left;
-                    that.pointsByColumns(null);
-                }
-            };
+        const that = this;
+        const generatePointsByColumnsHandler = function() {
+            if(!that._isResizing) {
+                that.pointsByColumns(null);
+            }
+        };
+        const generatePointsByColumnsScrollHandler = function(offset) {
+            if(that._scrollLeft !== offset.left) {
+                that._scrollLeft = offset.left;
+                that.pointsByColumns(null);
+            }
+        };
 
         that._columnsSeparatorView = that.getView('columnsSeparatorView');
         that._columnHeadersView = that.getView('columnHeadersView');
@@ -952,12 +952,12 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._rowsView.scrollChanged.add(generatePointsByColumnsScrollHandler);
         });
 
-        var previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
-        var previousTableHeight = 0;
+        let previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
+        let previousTableHeight = 0;
 
         that._subscribeToCallback(that.getController('tablePosition').positionChanged, function(e) {
             if(that._isResizing && !that._rowsView.isResizing) {
-                var scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
+                const scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
                 if(previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
                     previousScrollbarVisibility = scrollbarVisibility;
                     previousTableHeight = e.height;
@@ -1012,18 +1012,18 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     }
 });
 
-var TablePositionViewController = modules.ViewController.inherit({
+const TablePositionViewController = modules.ViewController.inherit({
     update: function(top) {
-        var that = this,
-            params = {},
-            $element = that._columnHeadersView.element(),
-            offset = $element && $element.offset(),
-            offsetTop = offset && offset.top || 0,
-            diffOffsetTop = typeUtils.isDefined(top) ? Math.abs(top - offsetTop) : 0,
-            columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0,
-            scrollBarWidth = that._rowsView.getScrollbarWidth(true),
-            rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0,
-            columnsResizerController = that.component.getController('columnsResizer');
+        const that = this;
+        const params = {};
+        const $element = that._columnHeadersView.element();
+        const offset = $element && $element.offset();
+        const offsetTop = offset && offset.top || 0;
+        const diffOffsetTop = typeUtils.isDefined(top) ? Math.abs(top - offsetTop) : 0;
+        const columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0;
+        const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
+        const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
+        const columnsResizerController = that.component.getController('columnsResizer');
 
         params.height = columnsHeadersHeight;
         if(columnsResizerController.isResizing() !== false) {
@@ -1038,7 +1038,7 @@ var TablePositionViewController = modules.ViewController.inherit({
     },
 
     init: function() {
-        var that = this;
+        const that = this;
 
         that.callBase();
 
@@ -1059,9 +1059,9 @@ var TablePositionViewController = modules.ViewController.inherit({
     }
 });
 
-var DraggingHeaderViewController = modules.ViewController.inherit({
+const DraggingHeaderViewController = modules.ViewController.inherit({
     _generatePointsByColumns: function(options) {
-        var that = this;
+        const that = this;
 
         return gridCoreUtils.getPointsByColumns(options.columnElements, function(point) {
             return that._pointCreated(point, options.columns, options.targetDraggingPanel.getName(), options.sourceColumn);
@@ -1069,8 +1069,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     _pointCreated: function(point, columns, location, sourceColumn) {
-        var targetColumn = columns[point.columnIndex],
-            prevColumn = columns[point.columnIndex - 1];
+        const targetColumn = columns[point.columnIndex];
+        const prevColumn = columns[point.columnIndex - 1];
 
         switch(location) {
             case 'columnChooser':
@@ -1083,45 +1083,45 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     _subscribeToEvents: function(draggingHeader, draggingPanels) {
-        var that = this;
+        const that = this;
 
         each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
-                var i,
-                    columns,
-                    columnElements,
-                    rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1,
-                    nameDraggingPanel = draggingPanel.getName(),
-                    subscribeToEvents = function(index, columnElement) {
-                        if(!columnElement) {
-                            return;
-                        }
+                let i;
+                let columns;
+                let columnElements;
+                const rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1;
+                const nameDraggingPanel = draggingPanel.getName();
+                const subscribeToEvents = function(index, columnElement) {
+                    if(!columnElement) {
+                        return;
+                    }
 
-                        var $columnElement = $(columnElement),
-                            column = columns[index];
+                    const $columnElement = $(columnElement);
+                    const column = columns[index];
 
-                        if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
-                            $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
-                            eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
-                                var e = args.event,
-                                    eventData = getEventData(e);
+                    if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
+                        $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
+                        eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
+                            const e = args.event;
+                            const eventData = getEventData(e);
 
-                                draggingHeader.dragHeader({
-                                    deltaX: eventData.x - $(e.currentTarget).offset().left,
-                                    deltaY: eventData.y - $(e.currentTarget).offset().top,
-                                    sourceColumn: column,
-                                    index: column.index,
-                                    columnIndex: index,
-                                    columnElement: $columnElement,
-                                    sourceLocation: nameDraggingPanel,
-                                    draggingPanels: draggingPanels,
-                                    rowIndex: that._columnsController.getRowIndex(column.index, true)
-                                });
-                            }));
-                            eventsEngine.on($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
-                            eventsEngine.on($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
-                        }
-                    };
+                            draggingHeader.dragHeader({
+                                deltaX: eventData.x - $(e.currentTarget).offset().left,
+                                deltaY: eventData.y - $(e.currentTarget).offset().top,
+                                sourceColumn: column,
+                                index: column.index,
+                                columnIndex: index,
+                                columnElement: $columnElement,
+                                sourceLocation: nameDraggingPanel,
+                                draggingPanels: draggingPanels,
+                                rowIndex: that._columnsController.getRowIndex(column.index, true)
+                            });
+                        }));
+                        eventsEngine.on($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
+                        eventsEngine.on($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
+                    }
+                };
 
                 for(i = 0; i < rowCount; i++) {
                     columnElements = draggingPanel.getColumnElements(i) || [];
@@ -1135,14 +1135,14 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromEvents: function(draggingHeader, draggingPanels) {
-        var that = this;
+        const that = this;
 
         each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
-                var columnElements = draggingPanel.getColumnElements() || [];
+                const columnElements = draggingPanel.getColumnElements() || [];
 
                 each(columnElements, function(index, columnElement) {
-                    var $columnElement = $(columnElement);
+                    const $columnElement = $(columnElement);
                     eventsEngine.off($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE));
                     eventsEngine.off($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE));
                     eventsEngine.off($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE));
@@ -1157,8 +1157,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     hideSeparators: function(type) {
-        var blockSeparator = this._blockSeparatorView,
-            columnsSeparator = this._columnsSeparatorView;
+        const blockSeparator = this._blockSeparatorView;
+        const columnsSeparator = this._columnsSeparatorView;
 
         this._animationColumnIndex = null;
         blockSeparator && blockSeparator.hide();
@@ -1166,8 +1166,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     init: function() {
-        var that = this,
-            subscribeToEvents;
+        const that = this;
+        let subscribeToEvents;
 
         that.callBase();
         that._columnsController = that.getController('columns');
@@ -1182,7 +1182,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
         subscribeToEvents = function() {
             if(that._draggingHeaderView) {
-                var draggingPanels = [that._columnChooserView, that._columnHeadersView, that._headerPanelView];
+                const draggingPanels = [that._columnChooserView, that._columnHeadersView, that._headerPanelView];
 
                 that._unsubscribeFromEvents(that._draggingHeaderView, draggingPanels);
                 that._subscribeToEvents(that._draggingHeaderView, draggingPanels);
@@ -1199,11 +1199,11 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     drag: function(parameters) {
-        var sourceIndex = parameters.sourceIndex,
-            sourceLocation = parameters.sourceLocation,
-            sourceColumnElement = parameters.sourceColumnElement,
-            headersView = this._columnHeadersView,
-            rowsView = this._rowsView;
+        const sourceIndex = parameters.sourceIndex;
+        const sourceLocation = parameters.sourceLocation;
+        const sourceColumnElement = parameters.sourceColumnElement;
+        const headersView = this._columnHeadersView;
+        const rowsView = this._rowsView;
 
         if(sourceColumnElement) {
             sourceColumnElement.css({ opacity: COLUMN_OPACITY });
@@ -1216,14 +1216,14 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     dock: function(parameters) {
-        var that = this,
-            targetColumnIndex = typeUtils.isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex,
-            sourceLocation = parameters.sourceLocation,
-            targetLocation = parameters.targetLocation,
-            separator = that._getSeparator(targetLocation),
-            hasTargetVisibleIndex = targetColumnIndex >= 0;
+        const that = this;
+        const targetColumnIndex = typeUtils.isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex;
+        const sourceLocation = parameters.sourceLocation;
+        const targetLocation = parameters.targetLocation;
+        const separator = that._getSeparator(targetLocation);
+        const hasTargetVisibleIndex = targetColumnIndex >= 0;
 
-        var showSeparator = function() {
+        const showSeparator = function() {
             if(that._animationColumnIndex !== targetColumnIndex) {
                 that.hideSeparators();
                 separator.element()[parameters.isLast ? 'insertAfter' : 'insertBefore'](parameters.targetColumnElement);
@@ -1252,7 +1252,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     },
 
     drop: function(parameters) {
-        var sourceColumnElement = parameters.sourceColumnElement;
+        const sourceColumnElement = parameters.sourceColumnElement;
 
         if(sourceColumnElement) {
             sourceColumnElement.css({ opacity: '' });
@@ -1262,7 +1262,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
         }
 
         if(this.allowDrop(parameters)) {
-            var separator = this._getSeparator(parameters.targetLocation);
+            const separator = this._getSeparator(parameters.targetLocation);
             if(separator) {
                 separator.hide();
             }
@@ -1294,9 +1294,9 @@ module.exports = {
         views: {
             rowsView: {
                 _needUpdateRowHeight: function(itemCount) {
-                    var wordWrapEnabled = this.option('wordWrapEnabled'),
-                        columnsResizerController = this.getController('columnsResizer'),
-                        isResizing = columnsResizerController.isResizing();
+                    const wordWrapEnabled = this.option('wordWrapEnabled');
+                    const columnsResizerController = this.getController('columnsResizer');
+                    const isResizing = columnsResizerController.isResizing();
 
                     return this.callBase.apply(this, arguments) || itemCount > 0 && wordWrapEnabled && isResizing;
                 }

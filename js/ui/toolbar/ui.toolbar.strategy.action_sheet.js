@@ -1,8 +1,8 @@
-var ToolbarStrategy = require('./ui.toolbar.strategy'),
-    extend = require('../../core/utils/extend').extend,
-    ActionSheet = require('../action_sheet');
+const ToolbarStrategy = require('./ui.toolbar.strategy');
+const extend = require('../../core/utils/extend').extend;
+const ActionSheet = require('../action_sheet');
 
-var ActionSheetStrategy = ToolbarStrategy.inherit({
+const ActionSheetStrategy = ToolbarStrategy.inherit({
 
     NAME: 'actionSheet',
 

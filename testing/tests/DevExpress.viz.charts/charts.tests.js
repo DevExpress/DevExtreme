@@ -1,11 +1,11 @@
-var testGlobalExports = require('../../helpers/publicModulesHelper.js'),
-    AdvancedChartModule = require('viz/chart_components/advanced_chart'),
-    baseChartModule = require('viz/chart_components/base_chart'),
-    CrosshairModule = require('viz/chart_components/crosshair'),
-    LayoutManagerModule = require('viz/chart_components/layout_manager'),
-    multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer'),
-    ScrollBarModule = require('viz/chart_components/scroll_bar'),
-    trackerModule = require('viz/chart_components/tracker');
+const testGlobalExports = require('../../helpers/publicModulesHelper.js');
+const AdvancedChartModule = require('viz/chart_components/advanced_chart');
+const baseChartModule = require('viz/chart_components/base_chart');
+const CrosshairModule = require('viz/chart_components/crosshair');
+const LayoutManagerModule = require('viz/chart_components/layout_manager');
+const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
+const ScrollBarModule = require('viz/chart_components/scroll_bar');
+const trackerModule = require('viz/chart_components/tracker');
 
 require('viz/chart');
 require('viz/pie_chart');

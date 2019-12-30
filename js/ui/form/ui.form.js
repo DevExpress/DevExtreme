@@ -253,9 +253,9 @@ const Form = Widget.inherit({
     },
 
     _getColCount: function($element) {
-        var index = 0,
-            isColsExist = true,
-            $cols;
+        let index = 0;
+        let isColsExist = true;
+        let $cols;
 
         while(isColsExist) {
             $cols = $element.find('.' + FORM_FIELD_ITEM_COL_CLASS + index);
@@ -274,7 +274,7 @@ const Form = Widget.inherit({
             .addClass(HIDDEN_LABEL_CLASS)
             .appendTo('body');
 
-        var $hiddenLabel = rootLayoutManager._renderLabel({
+        const $hiddenLabel = rootLayoutManager._renderLabel({
             text: ' ',
             location: this._labelLocation()
         }).appendTo(this._$hiddenElement);
@@ -296,18 +296,18 @@ const Form = Widget.inherit({
     _getLabelsSelectorByCol: function(index, options) {
         options = options || {};
 
-        var fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index,
-            cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '',
-            childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
+        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
+        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
 
         return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
     },
 
     _getLabelText: function(labelText) {
-        var length = labelText.children.length,
-            child,
-            result = '',
-            i;
+        const length = labelText.children.length;
+        let child;
+        let result = '';
+        let i;
 
         for(i = 0; i < length; i++) {
             child = labelText.children[i];
@@ -318,11 +318,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthByCol: function($container, index, options) {
-        var $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options)),
-            $labelTextsLength = $labelTexts.length,
-            labelWidth,
-            i,
-            maxWidth = 0;
+        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
+        const $labelTextsLength = $labelTexts.length;
+        let labelWidth;
+        let i;
+        let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
             labelWidth = this._getLabelWidthByText(this._getLabelText($labelTexts[i]));
@@ -337,11 +337,11 @@ const Form = Widget.inherit({
 
     _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
         colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
-        var applyLabelsOptions = {
-                excludeTabbed: excludeTabbed,
-                inOneColumn: inOneColumn
-            },
-            i;
+        const applyLabelsOptions = {
+            excludeTabbed: excludeTabbed,
+            inOneColumn: inOneColumn
+        };
+        let i;
 
         for(i = 0; i < colCount; i++) {
             this._applyLabelsWidthByCol($container, i, applyLabelsOptions);
@@ -349,20 +349,20 @@ const Form = Widget.inherit({
     },
 
     _getGroupElementsInColumn: function($container, columnIndex, colCount) {
-        var cssColCountSelector = isDefined(colCount) ? '.' + GROUP_COL_COUNT_CLASS + colCount : '',
-            groupSelector = '.' + FORM_FIELD_ITEM_COL_CLASS + columnIndex + ' > .' + FIELD_ITEM_CONTENT_CLASS + ' > .' + FORM_GROUP_CLASS + cssColCountSelector;
+        const cssColCountSelector = isDefined(colCount) ? '.' + GROUP_COL_COUNT_CLASS + colCount : '';
+        const groupSelector = '.' + FORM_FIELD_ITEM_COL_CLASS + columnIndex + ' > .' + FIELD_ITEM_CONTENT_CLASS + ' > .' + FORM_GROUP_CLASS + cssColCountSelector;
 
         return $container.find(groupSelector);
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        var alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
+        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
 
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
-            var $groups = this.$element().find('.' + FORM_GROUP_CLASS),
-                i;
+            const $groups = this.$element().find('.' + FORM_GROUP_CLASS);
+            let i;
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
             }
@@ -370,11 +370,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithNestedGroups: function($container, colCount, excludeTabbed) {
-        var applyLabelsOptions = { excludeTabbed: excludeTabbed },
-            colIndex,
-            groupsColIndex,
-            groupColIndex,
-            $groupsByCol;
+        const applyLabelsOptions = { excludeTabbed: excludeTabbed };
+        let colIndex;
+        let groupsColIndex;
+        let groupColIndex;
+        let $groupsByCol;
 
         for(colIndex = 0; colIndex < colCount; colIndex++) {
             $groupsByCol = this._getGroupElementsInColumn($container, colIndex);
@@ -382,7 +382,7 @@ const Form = Widget.inherit({
 
             for(groupsColIndex = 0; groupsColIndex < this._groupsColCount.length; groupsColIndex++) {
                 $groupsByCol = this._getGroupElementsInColumn($container, colIndex, this._groupsColCount[groupsColIndex]);
-                var groupColCount = this._getColCount($groupsByCol);
+                const groupColCount = this._getColCount($groupsByCol);
 
                 for(groupColIndex = 1; groupColIndex < groupColCount; groupColIndex++) {
                     this._applyLabelsWidthByCol($groupsByCol, groupColIndex, applyLabelsOptions);
@@ -466,7 +466,7 @@ const Form = Widget.inherit({
     },
 
     _renderScrollable: function() {
-        var useNativeScrolling = this.option('useNativeScrolling');
+        const useNativeScrolling = this.option('useNativeScrolling');
         this._scrollable = new Scrollable(this.$element(), {
             useNative: !!useNativeScrolling,
             useSimulatedScrollbar: !useNativeScrolling,
@@ -481,7 +481,7 @@ const Form = Widget.inherit({
     },
 
     _renderValidationSummary: function() {
-        var $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
+        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
 
         if($validationSummary.length > 0) {
             $validationSummary.remove();
@@ -500,7 +500,7 @@ const Form = Widget.inherit({
 
     _prepareItems(items, parentIsTabbedItem, currentPath, isTabs) {
         if(items) {
-            let result = [];
+            const result = [];
             for(let i = 0; i < items.length; i++) {
                 let item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
@@ -561,8 +561,8 @@ const Form = Widget.inherit({
 
     _checkGrouping: function(items) {
         if(items) {
-            for(var i = 0; i < items.length; i++) {
-                var item = items[i];
+            for(let i = 0; i < items.length; i++) {
+                const item = items[i];
                 if(item.itemType === 'group') {
                     return true;
                 }
@@ -571,9 +571,9 @@ const Form = Widget.inherit({
     },
 
     _renderLayout: function() {
-        var that = this,
-            items = that.option('items'),
-            $content = that._getContent();
+        const that = this;
+        let items = that.option('items');
+        const $content = that._getContent();
 
         items = that._prepareItems(items);
 
@@ -656,13 +656,13 @@ const Form = Widget.inherit({
     },
 
     _itemGroupTemplate: function(item, e, $container) {
-        var $group = $('<div>')
-                .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
-                .addClass(FORM_GROUP_CLASS)
-                .appendTo($container),
-            $groupContent,
-            colCount,
-            layoutManager;
+        const $group = $('<div>')
+            .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
+            .addClass(FORM_GROUP_CLASS)
+            .appendTo($container);
+        let $groupContent;
+        let colCount;
+        let layoutManager;
 
         if(item.caption) {
             $('<span>')
@@ -676,7 +676,7 @@ const Form = Widget.inherit({
             .appendTo($group);
 
         if(item.groupContentTemplate) {
-            var data = {
+            const data = {
                 formData: this.option('formData'),
                 component: this
             };
@@ -703,16 +703,16 @@ const Form = Widget.inherit({
     },
 
     _renderLayoutManager: function(items, $rootElement, options) {
-        var $element = $('<div>'),
-            that = this,
-            instance,
-            config = that._getLayoutManagerConfig(items, options),
-            baseColCountByScreen = {
-                lg: options.colCount,
-                md: options.colCount,
-                sm: options.colCount,
-                xs: 1
-            };
+        const $element = $('<div>');
+        const that = this;
+        let instance;
+        const config = that._getLayoutManagerConfig(items, options);
+        const baseColCountByScreen = {
+            lg: options.colCount,
+            md: options.colCount,
+            sm: options.colCount,
+            xs: 1
+        };
 
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
@@ -770,7 +770,7 @@ const Form = Widget.inherit({
     },
 
     _createComponent: function($element, type, config) {
-        var that = this;
+        const that = this;
         config = config || {};
 
         that._extendConfig(config, {
@@ -781,10 +781,10 @@ const Form = Widget.inherit({
     },
 
     _attachSyncSubscriptions: function() {
-        var that = this;
+        const that = this;
 
         that.on('optionChanged', function(args) {
-            var optionFullName = args.fullName;
+            const optionFullName = args.fullName;
 
             if(optionFullName === 'formData') {
                 if(!isDefined(args.value)) {
@@ -811,7 +811,7 @@ const Form = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
+        const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
 
         if(rootNameOfComplexOption) {
             this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
@@ -879,12 +879,12 @@ const Form = Widget.inherit({
     },
 
     _getRootLevelOfExpectedComplexOption: function(fullOptionName, expectedRootNames) {
-        var splitFullName = fullOptionName.split('.'),
-            result;
+        const splitFullName = fullOptionName.split('.');
+        let result;
 
         if(splitFullName.length > 1) {
-            var i,
-                rootOptionName = splitFullName[0];
+            let i;
+            const rootOptionName = splitFullName[0];
 
             for(i = 0; i < expectedRootNames.length; i++) {
                 if(rootOptionName.search(expectedRootNames[i]) !== -1) {
@@ -1025,8 +1025,8 @@ const Form = Widget.inherit({
     },
 
     _getItemPath: function(nameParts) {
-        var itemPath = nameParts[0],
-            i;
+        let itemPath = nameParts[0];
+        let i;
 
         for(i = 1; i < nameParts.length; i++) {
             if(nameParts[i].search(/items\[\d+]|tabs\[\d+]/) !== -1) {
@@ -1044,7 +1044,7 @@ const Form = Widget.inherit({
     },
 
     _triggerOnFieldDataChangedByDataSet: function(data) {
-        var that = this;
+        const that = this;
         if(data && isObject(data)) {
             each(data, function(dataField, value) {
                 that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
@@ -1054,12 +1054,12 @@ const Form = Widget.inherit({
 
     _updateFieldValue: function(dataField, value) {
         if(isDefined(this.option('formData'))) {
-            var editor = this.getEditor(dataField);
+            const editor = this.getEditor(dataField);
 
             this.option('formData.' + dataField, value);
 
             if(editor) {
-                var editorValue = editor.option('value');
+                const editorValue = editor.option('value');
 
                 if(editorValue !== value) {
                     editor.option('value', value);
@@ -1069,8 +1069,8 @@ const Form = Widget.inherit({
     },
 
     _generateItemsFromData: function(items) {
-        var formData = this.option('formData'),
-            result = [];
+        const formData = this.option('formData');
+        const result = [];
 
         if(!items && isDefined(formData)) {
             each(formData, function(dataField) {
@@ -1096,22 +1096,22 @@ const Form = Widget.inherit({
     },
 
     _getItemByField: function(field, items) {
-        var that = this,
-            fieldParts = isObject(field) ? field : that._getFieldParts(field),
-            fieldName = fieldParts.fieldName,
-            fieldPath = fieldParts.fieldPath,
-            resultItem;
+        const that = this;
+        const fieldParts = isObject(field) ? field : that._getFieldParts(field);
+        const fieldName = fieldParts.fieldName;
+        const fieldPath = fieldParts.fieldPath;
+        let resultItem;
 
         if(items.length) {
             each(items, function(index, item) {
-                var itemType = item.itemType;
+                const itemType = item.itemType;
 
                 if(fieldPath.length) {
-                    var path = fieldPath.slice();
+                    const path = fieldPath.slice();
 
                     item = that._getItemByFieldPath(path, fieldName, item);
                 } else if(itemType === 'group' && !(item.caption || item.name) || itemType === 'tabbed' && !item.name) {
-                    var subItemsField = that._getSubItemField(itemType);
+                    const subItemsField = that._getSubItemField(itemType);
 
                     item.items = that._generateItemsFromData(item.items);
 
@@ -1129,10 +1129,10 @@ const Form = Widget.inherit({
     },
 
     _getFieldParts: function(field) {
-        var fieldSeparator = '.',
-            fieldName = field,
-            separatorIndex = fieldName.indexOf(fieldSeparator),
-            resultPath = [];
+        const fieldSeparator = '.';
+        let fieldName = field;
+        let separatorIndex = fieldName.indexOf(fieldSeparator);
+        const resultPath = [];
 
 
         while(separatorIndex !== -1) {
@@ -1148,18 +1148,18 @@ const Form = Widget.inherit({
     },
 
     _getItemByFieldPath: function(path, fieldName, item) {
-        var that = this,
-            itemType = item.itemType,
-            subItemsField = that._getSubItemField(itemType),
-            isItemWithSubItems = itemType === 'group' || itemType === 'tabbed' || item.title,
-            result;
+        const that = this;
+        const itemType = item.itemType;
+        const subItemsField = that._getSubItemField(itemType);
+        const isItemWithSubItems = itemType === 'group' || itemType === 'tabbed' || item.title;
+        let result;
 
         do {
             if(isItemWithSubItems) {
-                var name = item.name || item.caption || item.title,
-                    isGroupWithName = isDefined(name),
-                    nameWithoutSpaces = getTextWithoutSpaces(name),
-                    pathNode;
+                const name = item.name || item.caption || item.title;
+                const isGroupWithName = isDefined(name);
+                const nameWithoutSpaces = getTextWithoutSpaces(name);
+                var pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
 
@@ -1193,8 +1193,8 @@ const Form = Widget.inherit({
     },
 
     _searchItemInEverySubItem: function(path, fieldName, items) {
-        var that = this,
-            result;
+        const that = this;
+        let result;
 
         each(items, function(index, groupItem) {
             result = that._getItemByFieldPath(path.slice(), fieldName, groupItem);
@@ -1217,7 +1217,7 @@ const Form = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        var currentScreenFactor = this._getCurrentScreenFactor();
+        const currentScreenFactor = this._getCurrentScreenFactor();
 
         if(this._lastMarkupScreenFactor !== currentScreenFactor) {
             if(this._isColCountChanged(this._lastMarkupScreenFactor, currentScreenFactor)) {
@@ -1231,7 +1231,7 @@ const Form = Widget.inherit({
     },
 
     _isColCountChanged: function(oldScreenSize, newScreenSize) {
-        var isChanged = false;
+        let isChanged = false;
 
         each(this._cachedColCountOptions, function(index, item) {
             if(item.colCountByScreen[oldScreenSize] !== item.colCountByScreen[newScreenSize]) {
@@ -1244,7 +1244,7 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        var editorSelector = '.' + FOCUSED_STATE_CLASS + ' input, .' + FOCUSED_STATE_CLASS + ' textarea';
+        const editorSelector = '.' + FOCUSED_STATE_CLASS + ' input, .' + FOCUSED_STATE_CLASS + ' textarea';
 
         eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
@@ -1263,8 +1263,8 @@ const Form = Widget.inherit({
     },
 
     _updateData: function(data, value, isComplexData) {
-        var that = this,
-            _data = isComplexData ? value : data;
+        const that = this;
+        const _data = isComplexData ? value : data;
 
         if(isObject(_data)) {
             each(_data, function(dataField, fieldValue) {
@@ -1316,8 +1316,8 @@ const Form = Widget.inherit({
     },
 
     updateDimensions: function() {
-        var that = this,
-            deferred = new Deferred();
+        const that = this;
+        const deferred = new Deferred();
 
         if(that._scrollable) {
             that._scrollable.update().done(function() {

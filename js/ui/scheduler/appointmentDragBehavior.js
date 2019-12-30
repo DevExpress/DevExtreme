@@ -71,7 +71,7 @@ export default class AppointmentDragBehavior {
     }
 
     getItemData(appointment) {
-        let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
         return itemData && itemData.data || this.appointments._getItemData(appointment);
     }
 
@@ -113,15 +113,15 @@ export default class AppointmentDragBehavior {
     }
 
     addTo(container, config) {
-        let appointmentDragging = this.scheduler.option('appointmentDragging') || {},
-            options = extend({
-                component: this.scheduler,
-                contentTemplate: null,
-                filter: `.${APPOINTMENT_ITEM_CLASS}`,
-                immediate: false,
-                onDragStart: this.onDragStart.bind(this),
-                onDragEnd: this.onDragEnd.bind(this)
-            }, config);
+        const appointmentDragging = this.scheduler.option('appointmentDragging') || {};
+        const options = extend({
+            component: this.scheduler,
+            contentTemplate: null,
+            filter: `.${APPOINTMENT_ITEM_CLASS}`,
+            immediate: false,
+            onDragStart: this.onDragStart.bind(this),
+            onDragEnd: this.onDragEnd.bind(this)
+        }, config);
 
         this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),

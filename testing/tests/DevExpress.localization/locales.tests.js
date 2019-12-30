@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    messageLocalization = require('localization/message'),
-    localization = require('localization'),
-    de = require('localization/messages/de.json!'),
-    ja = require('localization/messages/ja.json!'),
-    ru = require('localization/messages/ru.json!');
+const $ = require('jquery');
+const messageLocalization = require('localization/message');
+const localization = require('localization');
+const de = require('localization/messages/de.json!');
+const ja = require('localization/messages/ja.json!');
+const ru = require('localization/messages/ru.json!');
 
 localization.loadMessages(de);
 localization.loadMessages(ja);
@@ -12,50 +12,50 @@ localization.loadMessages(ru);
 QUnit.module('Locales of DevExtreme');
 
 QUnit.test('Four locales should be linked', function(assert) {
-    var result = messageLocalization.getMessagesByLocales();
+    const result = messageLocalization.getMessagesByLocales();
     assert.ok(result['en'], 'Default (English)');
     assert.ok(result['ru'], 'Russian');
     assert.ok(result['de'], 'Deutch (German)');
     assert.ok(result['ja'], 'Japan');
 });
 
-var compareLocales = function(first, second, assert) {
-    var cultures = messageLocalization.getMessagesByLocales(),
-        firstLocaleMessages = cultures[first],
-        secondLocaleMessages = cultures[second],
-        knownMatchingKeys = [
-            'OK',
-            'dxDataGrid-editingConfirmDeleteTitle',
-            'dxFileUploader-kb',
-            'dxFileUploader-Mb',
-            'dxFileUploader-Gb',
-            'dxDataGrid-summaryMin',
-            'dxDataGrid-summaryMax',
-            'dxDataGrid-summaryAvg',
-            'dxDataGrid-trueText',
-            'dxDataGrid-falseText',
-            'dxDataGrid-headerFilterOK',
-            'dxForm-optionalMark',
-            'dxScheduler-switcherAgenda',
-            'dxPivotGrid-dataNotAvailable',
-            'dxFilterBuilder-and',
-            'dxFilterBuilder-or',
-            'dxFilterBuilder-notAnd',
-            'dxFilterBuilder-notOr',
-            'dxHtmlEditor-dialogImageUrlField',
-            'dxHtmlEditor-dialogLinkUrlField',
-            'dxHtmlEditor-dialogLinkTextField',
-            'dxDiagram-commandExport',
-            'dxDiagram-commandAutoLayoutHorizontal',
-            'dxDiagram-unitIn',
-            'dxDiagram-unitCm',
-            'dxDiagram-unitPx',
-            'dxDiagram-dialogButtonOK',
-            'dxFileManager-listDetailsColumnCaptionName'
-        ];
+const compareLocales = function(first, second, assert) {
+    const cultures = messageLocalization.getMessagesByLocales();
+    const firstLocaleMessages = cultures[first];
+    const secondLocaleMessages = cultures[second];
+    const knownMatchingKeys = [
+        'OK',
+        'dxDataGrid-editingConfirmDeleteTitle',
+        'dxFileUploader-kb',
+        'dxFileUploader-Mb',
+        'dxFileUploader-Gb',
+        'dxDataGrid-summaryMin',
+        'dxDataGrid-summaryMax',
+        'dxDataGrid-summaryAvg',
+        'dxDataGrid-trueText',
+        'dxDataGrid-falseText',
+        'dxDataGrid-headerFilterOK',
+        'dxForm-optionalMark',
+        'dxScheduler-switcherAgenda',
+        'dxPivotGrid-dataNotAvailable',
+        'dxFilterBuilder-and',
+        'dxFilterBuilder-or',
+        'dxFilterBuilder-notAnd',
+        'dxFilterBuilder-notOr',
+        'dxHtmlEditor-dialogImageUrlField',
+        'dxHtmlEditor-dialogLinkUrlField',
+        'dxHtmlEditor-dialogLinkTextField',
+        'dxDiagram-commandExport',
+        'dxDiagram-commandAutoLayoutHorizontal',
+        'dxDiagram-unitIn',
+        'dxDiagram-unitCm',
+        'dxDiagram-unitPx',
+        'dxDiagram-dialogButtonOK',
+        'dxFileManager-listDetailsColumnCaptionName'
+    ];
 
     $.each(firstLocaleMessages, function(name, value) {
-        var otherLocalValue = secondLocaleMessages[name];
+        const otherLocalValue = secondLocaleMessages[name];
 
         if(value === otherLocalValue) {
             if($.inArray(name, knownMatchingKeys) !== -1) {

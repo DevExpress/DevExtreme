@@ -22,10 +22,10 @@ import 'ui/filter_builder/filter_builder';
 QUnit.module('Events', function() {
     QUnit.test('onEditorPreparing', function(assert) {
         // arrange
-        var args,
-            spy = sinon.spy(),
-            container = $('#container'),
-            companyNameValueField;
+        let args;
+        const spy = sinon.spy();
+        const container = $('#container');
+        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -50,9 +50,9 @@ QUnit.module('Events', function() {
 
     QUnit.test('onEditorPreparing for between', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container'),
-            companyNameValueField;
+        const spy = sinon.spy();
+        const container = $('#container');
+        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -72,21 +72,21 @@ QUnit.module('Events', function() {
         // assert
         assert.strictEqual(spy.callCount, 2, 'onEditorPreparing is called');
 
-        var startArgs = spy.args[0][0];
+        const startArgs = spy.args[0][0];
         assert.strictEqual(startArgs.value, 1, 'args -> value');
         assert.strictEqual(startArgs.filterOperation, 'between', 'args -> filterOperation');
 
-        var endArgs = spy.args[1][0];
+        const endArgs = spy.args[1][0];
         assert.strictEqual(endArgs.value, 2, 'args -> value');
         assert.strictEqual(endArgs.filterOperation, 'between', 'args -> filterOperation');
     });
 
     QUnit.test('onEditorPrepared', function(assert) {
         // arrange
-        var args,
-            spy = sinon.spy(),
-            container = $('#container'),
-            companyNameValueField;
+        let args;
+        const spy = sinon.spy();
+        const container = $('#container');
+        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -111,9 +111,9 @@ QUnit.module('Events', function() {
 
     QUnit.test('onEditorPrepared for between', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container'),
-            companyNameValueField;
+        const spy = sinon.spy();
+        const container = $('#container');
+        let companyNameValueField;
 
         container.dxFilterBuilder({
             value: [
@@ -133,20 +133,20 @@ QUnit.module('Events', function() {
         // assert
         assert.strictEqual(spy.callCount, 2, 'onEditorPrepared is called');
 
-        var startArgs = spy.args[0][0];
+        const startArgs = spy.args[0][0];
         assert.strictEqual(startArgs.value, 1, 'args -> value');
         assert.strictEqual(startArgs.filterOperation, 'between', 'args -> filterOperation');
 
-        var endArgs = spy.args[1][0];
+        const endArgs = spy.args[1][0];
         assert.strictEqual(endArgs.value, 2, 'args -> value');
         assert.strictEqual(endArgs.filterOperation, 'between', 'args -> filterOperation');
     });
 
     QUnit.test('Clear keyup & dxpointerdown events after dispose', function(assert) {
         // arrange
-        let dxPointerDownSpy = sinon.spy(),
-            keyUpSpy = sinon.spy(),
-            container = $('#container');
+        const dxPointerDownSpy = sinon.spy();
+        const keyUpSpy = sinon.spy();
+        const container = $('#container');
 
         const filterBuilder = container.dxFilterBuilder({
             value: ['NumberField', '=', ''],
@@ -186,9 +186,9 @@ QUnit.module('Events', function() {
 
     QUnit.test('onValueChanged', function(assert) {
         // arrange
-        var args,
-            spy = sinon.spy(),
-            container = $('#container');
+        let args;
+        const spy = sinon.spy();
+        const container = $('#container');
 
         container.dxFilterBuilder({
             value: ['Zipcode', '=', '666'],
@@ -209,9 +209,9 @@ QUnit.module('Events', function() {
     // T732074
     QUnit.test('Change value in onValueChanged on remove item', function(assert) {
         // arrange
-        var container = $('#container');
+        const container = $('#container');
 
-        var filterBuilder = container.dxFilterBuilder({
+        const filterBuilder = container.dxFilterBuilder({
             value: ['Zipcode', '=', '666'],
             fields: fields,
             onValueChanged: function(e) {
@@ -222,7 +222,7 @@ QUnit.module('Events', function() {
         }).dxFilterBuilder('instance');
 
         // act
-        var $removeButton = $('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
+        const $removeButton = $('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
         $removeButton.trigger('dxclick');
 
         // assert
@@ -233,8 +233,8 @@ QUnit.module('Events', function() {
 
     QUnit.test('Skip the onValueChanged after change operation of an invalid condition to another invalid condition ', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container');
+        const spy = sinon.spy();
+        const container = $('#container');
 
         container.dxFilterBuilder({
             value: ['NumberField', '=', ''],
@@ -243,7 +243,7 @@ QUnit.module('Events', function() {
         });
 
         // act
-        var $operationButton = container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        const $operationButton = container.find('.' + FILTER_BUILDER_ITEM_OPERATION_CLASS);
         clickByButtonAndSelectMenuItem($operationButton, 1);
         // assert
         assert.strictEqual($operationButton.text(), 'Does not equal');
@@ -270,8 +270,8 @@ QUnit.module('Events', function() {
 
     QUnit.test('onValueChanged after change field', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container');
+        const spy = sinon.spy();
+        const container = $('#container');
 
         container.dxFilterBuilder({
             value: ['NumberField', '=', ''],
@@ -280,7 +280,7 @@ QUnit.module('Events', function() {
         });
 
         // act
-        var $fieldButton = container.find('.' + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        const $fieldButton = container.find('.' + FILTER_BUILDER_ITEM_FIELD_CLASS);
         clickByButtonAndSelectMenuItem($fieldButton, 3);
         // assert
         assert.strictEqual($fieldButton.text(), 'Zipcode');
@@ -301,8 +301,8 @@ QUnit.module('Events', function() {
 
     QUnit.test('onValueChanged after change groupValue', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container');
+        const spy = sinon.spy();
+        const container = $('#container');
 
         container.dxFilterBuilder({
             value: [['NumberField', '=', ''], 'and', ['NumberField', '=', '']],
@@ -311,14 +311,14 @@ QUnit.module('Events', function() {
         });
 
         // act
-        var $groupButton = container.find('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        const $groupButton = container.find('.' + FILTER_BUILDER_GROUP_OPERATION_CLASS);
         clickByButtonAndSelectMenuItem($groupButton, 1);
         // assert
         assert.strictEqual($groupButton.text(), 'Or');
         assert.strictEqual(spy.callCount, 0, 'onValueChanged is not called'); // group is not valid
 
         // act
-        var $fieldButton = container.find('.' + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        const $fieldButton = container.find('.' + FILTER_BUILDER_ITEM_FIELD_CLASS);
         clickByButtonAndSelectMenuItem($fieldButton.eq(0), 6);
         clickByButtonAndSelectMenuItem($fieldButton.eq(1), 6);
         // assert
@@ -348,8 +348,8 @@ QUnit.module('Events', function() {
     // T701542
     QUnit.test('Content ready', function(assert) {
         // arrange
-        var spy = sinon.spy(),
-            container = $('#container');
+        const spy = sinon.spy();
+        const container = $('#container');
 
         container.dxFilterBuilder({
             value: [
@@ -367,14 +367,14 @@ QUnit.module('Events', function() {
         clickByOutside();
         assert.strictEqual(spy.callCount, 3);
 
-        var $addButton = $('.' + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(0);
+        const $addButton = $('.' + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(0);
         clickByButtonAndSelectMenuItem($addButton, 0);
         assert.strictEqual(spy.callCount, 4);
 
         clickByButtonAndSelectMenuItem($addButton, 1);
         assert.strictEqual(spy.callCount, 5);
 
-        var $removeButton = $('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
+        const $removeButton = $('.' + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
         $removeButton.trigger('dxclick');
         assert.strictEqual(spy.callCount, 6);
     });

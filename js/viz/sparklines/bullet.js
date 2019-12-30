@@ -1,20 +1,20 @@
-var each = require('../../core/utils/iterator').each,
-    BaseSparkline = require('./base_sparkline'),
+const each = require('../../core/utils/iterator').each;
+const BaseSparkline = require('./base_sparkline');
 
-    TARGET_MIN_Y = 0.02,
-    TARGET_MAX_Y = 0.98,
-    BAR_VALUE_MIN_Y = 0.1,
-    BAR_VALUE_MAX_Y = 0.9,
+const TARGET_MIN_Y = 0.02;
+const TARGET_MAX_Y = 0.98;
+const BAR_VALUE_MIN_Y = 0.1;
+const BAR_VALUE_MAX_Y = 0.9;
 
-    DEFAULT_CANVAS_WIDTH = 300,
-    DEFAULT_CANVAS_HEIGHT = 30,
-    DEFAULT_HORIZONTAL_MARGIN = 1,
-    DEFAULT_VERTICAL_MARGIN = 2,
+const DEFAULT_CANVAS_WIDTH = 300;
+const DEFAULT_CANVAS_HEIGHT = 30;
+const DEFAULT_HORIZONTAL_MARGIN = 1;
+const DEFAULT_VERTICAL_MARGIN = 2;
 
-    _Number = Number,
-    _isFinite = isFinite;
+const _Number = Number;
+const _isFinite = isFinite;
 
-var dxBullet = BaseSparkline.inherit({
+const dxBullet = BaseSparkline.inherit({
     _rootClassPrefix: 'dxb',
 
     _rootClass: 'dxb-bullet',
@@ -48,22 +48,22 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _createHtmlElements: function() {
-        var renderer = this._renderer;
+        const renderer = this._renderer;
         this._zeroLevelPath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-zero-level', 'stroke-linecap': 'square' });
         this._targetPath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-target', 'stroke-linecap': 'square' });
         this._barValuePath = renderer.path(undefined, 'line').attr({ 'class': 'dxb-bar-value', 'stroke-linecap': 'square' });
     },
 
     _prepareOptions: function() {
-        var that = this,
-            options,
-            startScaleValue,
-            endScaleValue,
-            level,
-            value,
-            target,
-            isValueUndefined,
-            isTargetUndefined;
+        const that = this;
+        let options;
+        let startScaleValue;
+        let endScaleValue;
+        let level;
+        let value;
+        let target;
+        let isValueUndefined;
+        let isTargetUndefined;
 
         that._allOptions = options = that.callBase();
         isValueUndefined = that._allOptions.value === undefined;
@@ -101,8 +101,8 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _updateRange: function() {
-        var that = this,
-            options = that._allOptions;
+        const that = this;
+        const options = that._allOptions;
 
         that._ranges = {
             arg: {
@@ -122,13 +122,13 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _drawBullet: function() {
-        var that = this,
-            options = that._allOptions,
-            isValidBounds = options.startScaleValue !== options.endScaleValue,
-            isValidMin = _isFinite(options.startScaleValue),
-            isValidMax = _isFinite(options.endScaleValue),
-            isValidValue = _isFinite(options.value),
-            isValidTarget = _isFinite(options.target);
+        const that = this;
+        const options = that._allOptions;
+        const isValidBounds = options.startScaleValue !== options.endScaleValue;
+        const isValidMin = _isFinite(options.startScaleValue);
+        const isValidMax = _isFinite(options.endScaleValue);
+        const isValidValue = _isFinite(options.value);
+        const isValidTarget = _isFinite(options.target);
 
         if(isValidBounds && isValidMax && isValidMin && isValidTarget && isValidValue) {
             this._drawBarValue();
@@ -138,10 +138,10 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _getTargetParams: function() {
-        var that = this,
-            options = that._allOptions,
-            translatorY = that._valueAxis.getTranslator(),
-            x = that._argumentAxis.getTranslator().translate(options.target);
+        const that = this;
+        const options = that._allOptions;
+        const translatorY = that._valueAxis.getTranslator();
+        const x = that._argumentAxis.getTranslator().translate(options.target);
 
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],
@@ -151,17 +151,17 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _getBarValueParams: function() {
-        var that = this,
-            options = that._allOptions,
-            translatorX = that._argumentAxis.getTranslator(),
-            translatorY = that._valueAxis.getTranslator(),
-            startLevel = options.startScaleValue,
-            endLevel = options.endScaleValue,
-            value = options.value,
-            y2 = translatorY.translate(BAR_VALUE_MIN_Y),
-            y1 = translatorY.translate(BAR_VALUE_MAX_Y),
-            x1,
-            x2;
+        const that = this;
+        const options = that._allOptions;
+        const translatorX = that._argumentAxis.getTranslator();
+        const translatorY = that._valueAxis.getTranslator();
+        const startLevel = options.startScaleValue;
+        const endLevel = options.endScaleValue;
+        const value = options.value;
+        const y2 = translatorY.translate(BAR_VALUE_MIN_Y);
+        const y1 = translatorY.translate(BAR_VALUE_MAX_Y);
+        let x1;
+        let x2;
 
         if(value > 0) {
             x1 = startLevel <= 0 ? 0 : startLevel;
@@ -185,9 +185,9 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _getZeroLevelParams: function() {
-        var that = this,
-            translatorY = that._valueAxis.getTranslator(),
-            x = that._argumentAxis.getTranslator().translate(0);
+        const that = this;
+        const translatorY = that._valueAxis.getTranslator();
+        const x = that._argumentAxis.getTranslator().translate(0);
 
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],
@@ -197,8 +197,8 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _drawZeroLevel: function() {
-        var that = this,
-            options = that._allOptions;
+        const that = this;
+        const options = that._allOptions;
 
         if((0 > options.endScaleValue) || (0 < options.startScaleValue) || (!options.showZeroLevel)) {
             return;
@@ -208,9 +208,9 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _drawTarget: function() {
-        var that = this,
-            options = that._allOptions,
-            target = options.target;
+        const that = this;
+        const options = that._allOptions;
+        const target = options.target;
 
         if((target > options.endScaleValue) || (target < options.startScaleValue) || (!options.showTarget)) {
             return;
@@ -224,9 +224,9 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _getTooltipCoords: function() {
-        var canvas = this._canvas,
-            rootOffset = this._renderer.getRootOffset(),
-            bBox = this._barValuePath.getBBox();
+        const canvas = this._canvas;
+        const rootOffset = this._renderer.getRootOffset();
+        const bBox = this._barValuePath.getBBox();
 
         return {
             x: bBox.x + bBox.width / 2 + rootOffset.left,
@@ -235,13 +235,13 @@ var dxBullet = BaseSparkline.inherit({
     },
 
     _getTooltipData: function() {
-        var that = this,
-            tooltip = that._tooltip,
-            options = that._allOptions,
-            value = options.value,
-            target = options.target,
-            valueText = tooltip.formatValue(value),
-            targetText = tooltip.formatValue(target);
+        const that = this;
+        const tooltip = that._tooltip;
+        const options = that._allOptions;
+        const value = options.value;
+        const target = options.target;
+        const valueText = tooltip.formatValue(value);
+        const targetText = tooltip.formatValue(target);
 
         return {
             originalValue: value,

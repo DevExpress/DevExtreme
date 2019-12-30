@@ -1,20 +1,20 @@
-var Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    typeUtils = require('../../core/utils/type'),
-    each = require('../../core/utils/iterator').each,
-    errorsModule = require('../errors'),
-    ODataStore = require('./store'),
-    mixins = require('./mixins'),
-    deferredUtils = require('../../core/utils/deferred'),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const typeUtils = require('../../core/utils/type');
+const each = require('../../core/utils/iterator').each;
+const errorsModule = require('../errors');
+const ODataStore = require('./store');
+const mixins = require('./mixins');
+const deferredUtils = require('../../core/utils/deferred');
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
 
 require('./query_adapter');
 
-var ODataContext = Class.inherit({
+const ODataContext = Class.inherit({
 
     ctor: function(options) {
-        var that = this;
+        const that = this;
 
         that._extractServiceOptions(options);
 
@@ -40,9 +40,9 @@ var ODataContext = Class.inherit({
         params = params || {};
         httpMethod = (httpMethod || 'POST').toLowerCase();
 
-        var d = new Deferred(),
-            url = this._url + '/' + encodeURIComponent(operationName),
-            payload;
+        const d = new Deferred();
+        let url = this._url + '/' + encodeURIComponent(operationName);
+        let payload;
 
         if(this.version() === 4) {
             if(httpMethod === 'get') {
@@ -69,7 +69,7 @@ var ODataContext = Class.inherit({
     },
 
     objectLink: function(entityAlias, key) {
-        var store = this[entityAlias];
+        const store = this[entityAlias];
         if(!store) {
             throw errorsModule.errors.Error('E4015', entityAlias);
         }

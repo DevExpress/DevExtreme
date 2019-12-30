@@ -6,7 +6,7 @@ const excelColumnWidthFrom_100 = '13.57';
 const excelColumnWidthFrom_200 = '27.86';
 
 QUnit.testStart(function() {
-    var markup = '<div id="dataGrid"></div>';
+    const markup = '<div id="dataGrid"></div>';
     $('#qunit-fixture').html(markup);
 });
 
