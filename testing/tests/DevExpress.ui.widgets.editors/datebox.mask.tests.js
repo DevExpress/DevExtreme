@@ -607,11 +607,11 @@ module('Keyboard navigation', setupModule, () => {
         assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
     });
 
-    test('focusout should clear search value', (assert) => {
+    QUnit.testInActiveWindow('focusout should clear search value', (assert) => {
         this.keyboard.type('1');
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
-        this.instance.blur();
+        this.$input.focusout();
         this.keyboard.type('2');
         assert.strictEqual(this.instance.option('text'), 'February 10 2012', 'search value and position was cleared');
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
@@ -896,7 +896,7 @@ module('Empty dateBox', {
         assert.strictEqual(this.$input.val(), 'January 14 2015', 'first part was changed, other parts is from the current date');
     });
 
-    test('Bluring the input after first input should update the value', (assert) => {
+    QUnit.testInActiveWindow('Bluring the input after first input should update the value', (assert) => {
         this.keyboard.type('1');
         this.instance.blur();
 
