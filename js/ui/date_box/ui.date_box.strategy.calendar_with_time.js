@@ -1,16 +1,16 @@
-var $ = require('../../core/renderer'),
-    window = require('../../core/utils/window').getWindow(),
-    CalendarStrategy = require('./ui.date_box.strategy.calendar'),
-    TimeView = require('./ui.time_view'),
-    dateLocalization = require('../../localization/date'),
-    extend = require('../../core/utils/extend').extend,
-    Box = require('../box'),
-    uiDateUtils = require('./ui.date_utils');
+const $ = require('../../core/renderer');
+const window = require('../../core/utils/window').getWindow();
+const CalendarStrategy = require('./ui.date_box.strategy.calendar');
+const TimeView = require('./ui.time_view');
+const dateLocalization = require('../../localization/date');
+const extend = require('../../core/utils/extend').extend;
+const Box = require('../box');
+const uiDateUtils = require('./ui.date_utils');
 
-var SHRINK_VIEW_SCREEN_WIDTH = 573,
-    DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
+const SHRINK_VIEW_SCREEN_WIDTH = 573;
+const DATEBOX_ADAPTIVITY_MODE_CLASS = 'dx-datebox-adaptivity-mode';
 
-var CalendarWithTimeStrategy = CalendarStrategy.inherit({
+const CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
     NAME: 'CalendarWithTime',
 
@@ -46,7 +46,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
     renderOpenedState: function() {
         this.callBase();
-        var popup = this._getPopup();
+        const popup = this._getPopup();
 
         if(popup) {
             popup._wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
@@ -60,8 +60,8 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     isAdaptivityChanged: function() {
-        var isAdaptiveMode = this._isShrinkView(),
-            currentAdaptiveMode = this._currentAdaptiveMode;
+        const isAdaptiveMode = this._isShrinkView();
+        const currentAdaptiveMode = this._currentAdaptiveMode;
 
         if(isAdaptiveMode !== currentAdaptiveMode) {
             this._currentAdaptiveMode = isAdaptiveMode;
@@ -72,7 +72,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _updateValue: function(preventDefaultValue) {
-        var date = this.dateBoxValue();
+        let date = this.dateBoxValue();
 
         if(!date && !preventDefaultValue) {
             date = new Date();
@@ -96,7 +96,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _getBoxItems: function() {
-        var items = [{ ratio: 0, shrink: 0, baseSize: 'auto', name: 'calendar' }];
+        const items = [{ ratio: 0, shrink: 0, baseSize: 'auto', name: 'calendar' }];
 
         if(!this._isShrinkView()) {
             items.push({ ratio: 0, shrink: 0, baseSize: 'auto', name: 'time' });
@@ -109,14 +109,14 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
         this.callBase();
         this._currentAdaptiveMode = this._isShrinkView();
 
-        var $popupContent = this._getPopup().$content();
+        const $popupContent = this._getPopup().$content();
 
         this._box = this.dateBox._createComponent($('<div>').appendTo($popupContent), Box, {
             direction: 'row',
             crossAlign: 'start',
             items: this._getBoxItems(),
             itemTemplate: (function(data) {
-                var $container = $('<div>');
+                const $container = $('<div>');
 
                 switch(data.name) {
                     case 'calendar':
@@ -136,16 +136,16 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        var calendarPopupConfig = this.callBase(popupConfig),
-            result = extend(calendarPopupConfig, {
-                onShowing: (function() {
-                    if(this._box.option('_layoutStrategy') === 'fallback') {
-                        var clockMinWidth = this._getPopup().$content().find('.dx-timeview-clock').css('minWidth');
+        const calendarPopupConfig = this.callBase(popupConfig);
+        const result = extend(calendarPopupConfig, {
+            onShowing: (function() {
+                if(this._box.option('_layoutStrategy') === 'fallback') {
+                    const clockMinWidth = this._getPopup().$content().find('.dx-timeview-clock').css('minWidth');
 
-                        this._timeView.$element().css('maxWidth', clockMinWidth);
-                    }
-                }).bind(this),
-            });
+                    this._timeView.$element().css('maxWidth', clockMinWidth);
+                }
+            }).bind(this),
+        });
 
         return result;
     },
@@ -155,13 +155,13 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     _attachTabHandler: function() {
-        var dateBox = this.dateBox,
-            handler = function(e) {
-                if(e.shiftKey) {
-                    e.preventDefault();
-                    dateBox.focus();
-                }
-            };
+        const dateBox = this.dateBox;
+        const handler = function(e) {
+            if(e.shiftKey) {
+                e.preventDefault();
+                dateBox.focus();
+            }
+        };
 
         this._timeView._hourBox.registerKeyHandler('tab', handler);
     },
@@ -176,8 +176,8 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     getValue: function() {
-        var date = this._widget.option('value'),
-            time = this._timeView.option('value');
+        let date = this._widget.option('value');
+        const time = this._timeView.option('value');
 
         date = date ? new Date(date) : new Date();
         date.setHours(time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());

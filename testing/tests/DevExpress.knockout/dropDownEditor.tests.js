@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('integration/knockout');
 require('ui/drop_down_editor/ui.drop_down_editor');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="dropDownEditorWithFieldTemplate" data-bind="dxDropDownEditor: { fieldTemplate: \'field\', value: \'test\'}">\
             <div data-options="dxTemplate: { name: \'field\' }">\
                 <span id="customField" data-bind="text: $data"></span>\
@@ -30,37 +30,37 @@ QUnit.testStart(function() {
 QUnit.module('Templates');
 
 QUnit.test('fieldTemplate', function(assert) {
-    var vm = {};
-    var $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const vm = {};
+    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     assert.equal($.trim($dropDownEditor.text()), 'test', 'template rendered');
 });
 
 QUnit.test('contentTemplate', function(assert) {
-    var vm = {
+    const vm = {
         value: 'test'
     };
 
-    var $dropDownEditor = $('#dropDownEditorWithContentTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithContentTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     assert.equal($.trim($('.dx-popup-wrapper').text()), 'test', 'content rendered');
 });
 
 QUnit.test('drop button template', function(assert) {
-    var vm = {
+    const vm = {
         text: 'V'
     };
-    var $dropDownEditor = $('#dropDownEditorWithButtonTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithButtonTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     assert.equal($.trim($('.dx-button-content').text()), 'V', 'template was rendered');
 });
 
 QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
-    var vm = {};
-    var $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const vm = {};
+    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
     ko.applyBindings(vm, $dropDownEditor.get(0));
 
     $dropDownEditor.dxDropDownEditor('option', 'value', 'newtest');
@@ -71,10 +71,10 @@ QUnit.test('fieldTemplate is rendered after changing value', function(assert) {
 QUnit.module('options');
 
 QUnit.test('openOnFieldClick option with custom template', function(assert) {
-    var $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
+    const $dropDownEditor = $('#dropDownEditorWithFieldTemplate');
     ko.applyBindings({}, $dropDownEditor.get(0));
 
-    var dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+    const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
     dropDownEditor.option('openOnFieldClick', true);
 
     $dropDownEditor.find('#customField').trigger('dxclick');

@@ -8,7 +8,7 @@ const { module, test } = QUnit;
 
 let helper;
 
-let moduleConfig = {
+const moduleConfig = {
     beforeEach() {
         helper = new HierarchicalCollectionTestHelper();
     }
@@ -18,15 +18,15 @@ module('plain structure', moduleConfig, () => {
     test('all items should be converted', function(assert) {
         const items = helper.plainData;
 
-        const dataAdapter = helper.initDataAdapter({ items: items, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: items, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.equal(data.length, 7, 'all items was converted');
     });
 
     test('parent keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].internalFields.parentKey, 0);
         assert.equal(data[2].internalFields.parentKey, 1);
@@ -34,16 +34,16 @@ module('plain structure', moduleConfig, () => {
     });
 
     test('children keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.childrenKeys, [2, 3]);
         assert.deepEqual(data[1].internalFields.childrenKeys, [4, 5]);
     });
 
     test('items should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.item, helper.plainData[0]);
         assert.deepEqual(data[1].internalFields.item, helper.plainData[1]);
@@ -52,8 +52,8 @@ module('plain structure', moduleConfig, () => {
     test('item fields should exist in the node', function(assert) {
         helper.plainData[0].custom = 'Custom item field';
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].custom, 'Custom item field');
     });
@@ -76,8 +76,8 @@ module('plain structure', moduleConfig, () => {
         delete helper.plainData[0].expanded;
         delete helper.plainData[0].disabled;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const data = dataAdapter.getData();
 
         assert.strictEqual(data[0].internalFields.selected, false, 'selected exist');
         assert.strictEqual(data[0].internalFields.expanded, false, 'expanded exist');
@@ -86,8 +86,8 @@ module('plain structure', moduleConfig, () => {
 
     test('public node should exist in internalFields', function(assert) {
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.ok(Object.keys(data[0].internalFields.publicNode).length, 'publicNode is not empty');
     });
@@ -96,15 +96,15 @@ module('plain structure', moduleConfig, () => {
 
 module('tree structure with keys', moduleConfig, () => {
     test('all items should be converted', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data.length, 7, 'all items was converted');
     });
 
     test('parent keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].internalFields.parentKey, 0);
         assert.equal(data[1].internalFields.parentKey, 1);
@@ -112,16 +112,16 @@ module('tree structure with keys', moduleConfig, () => {
     });
 
     test('children keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.childrenKeys, [2, 5]);
         assert.deepEqual(data[1].internalFields.childrenKeys, [3, 4]);
     });
 
     test('items should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.item, helper.treeDataWithKeys[0]);
         assert.deepEqual(data[1].internalFields.item, helper.treeDataWithKeys[0].items[0]);
@@ -130,8 +130,8 @@ module('tree structure with keys', moduleConfig, () => {
     test('item fields should exist in the node', function(assert) {
         helper.treeDataWithKeys[0].custom = 'Custom item field';
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].custom, 'Custom item field');
     });
@@ -141,8 +141,8 @@ module('tree structure with keys', moduleConfig, () => {
         delete helper.plainData[0].expanded;
         delete helper.plainData[0].disabled;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.strictEqual(data[0].internalFields.selected, false, 'selected exist');
         assert.strictEqual(data[0].internalFields.expanded, false, 'expanded exist');
@@ -150,26 +150,26 @@ module('tree structure with keys', moduleConfig, () => {
     });
 
     test('public node should exist in internalFields', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithKeys });
+        const data = dataAdapter.getData();
 
         assert.ok(Object.keys(data[0].internalFields.publicNode).length, 'publicNode is not empty');
     });
 
     test('dataAdapter should work correct with circular data', function(assert) {
-        var parent = {
-                id: 1,
-                items: []
-            },
-            child1 = {
-                id: 11,
-                parent: parent
-            };
+        const parent = {
+            id: 1,
+            items: []
+        };
+        const child1 = {
+            id: 11,
+            parent: parent
+        };
 
         parent.items.push(child1);
 
-        const dataAdapter = helper.initDataAdapter({ items: [parent] }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: [parent] });
+        const data = dataAdapter.getData();
 
         assert.equal(data.length, 2, 'circular items were converted');
     });
@@ -178,15 +178,15 @@ module('tree structure with keys', moduleConfig, () => {
 
 module('tree structure without keys', moduleConfig, () => {
     test('all items should be converted', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data.length, 7, 'all items was converted');
     });
 
     test('parent keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].internalFields.parentKey, 0);
         assert.equal(data[1].internalFields.parentKey, 1);
@@ -194,16 +194,16 @@ module('tree structure without keys', moduleConfig, () => {
     });
 
     test('children keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.childrenKeys, [2, 5]);
         assert.deepEqual(data[1].internalFields.childrenKeys, [3, 4]);
     });
 
     test('items should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.item, helper.treeDataWithoutKeys[0]);
         assert.deepEqual(data[1].internalFields.item, helper.treeDataWithoutKeys[0].items[0]);
@@ -212,8 +212,8 @@ module('tree structure without keys', moduleConfig, () => {
     test('item fields should exist in the node', function(assert) {
         helper.treeDataWithoutKeys[0].custom = 'Custom item field';
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].custom, 'Custom item field');
     });
@@ -223,8 +223,8 @@ module('tree structure without keys', moduleConfig, () => {
         delete helper.treeDataWithoutKeys[0].expanded;
         delete helper.treeDataWithoutKeys[0].disabled;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.strictEqual(data[0].internalFields.selected, false, 'selected exist');
         assert.strictEqual(data[0].internalFields.expanded, false, 'expanded exist');
@@ -232,8 +232,8 @@ module('tree structure without keys', moduleConfig, () => {
     });
 
     test('public node should exist in internalFields', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
 
         assert.ok(Object.keys(data[0].internalFields.publicNode).length, 'publicNode is not empty');
     });
@@ -242,15 +242,15 @@ module('tree structure without keys', moduleConfig, () => {
 
 module('tree structure with object instances', moduleConfig, () => {
     test('all items should be converted', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() });
+        const data = dataAdapter.getData();
 
         assert.equal(data.length, 4, 'all items was converted');
     });
 
     test('parent keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].internalFields.parentKey, 0);
         assert.equal(data[1].internalFields.parentKey, 1);
@@ -258,30 +258,30 @@ module('tree structure with object instances', moduleConfig, () => {
     });
 
     test('children keys should be correct', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.childrenKeys, [2, 3]);
         assert.deepEqual(data[1].internalFields.childrenKeys, []);
     });
 
     test('items should be correct', function(assert) {
-        let items = helper.getTreeDataWithObjects();
+        const items = helper.getTreeDataWithObjects();
 
-        const dataAdapter = helper.initDataAdapter({ items: items }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: items });
+        const data = dataAdapter.getData();
 
         assert.deepEqual(data[0].internalFields.item, items[0]);
         assert.deepEqual(data[1].internalFields.item, items[0].items[0]);
     });
 
     test('item fields should exist in the node', function(assert) {
-        let items = helper.getTreeDataWithObjects();
+        const items = helper.getTreeDataWithObjects();
 
         items[0].custom = 'Custom item field';
 
-        const dataAdapter = helper.initDataAdapter({ items: items }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: items });
+        const data = dataAdapter.getData();
 
         assert.equal(data[0].custom, 'Custom item field');
     });
@@ -291,8 +291,8 @@ module('tree structure with object instances', moduleConfig, () => {
         delete helper.getTreeDataWithObjects()[0].expanded;
         delete helper.getTreeDataWithObjects()[0].disabled;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() });
+        const data = dataAdapter.getData();
 
         assert.strictEqual(data[0].internalFields.selected, false, 'selected exist');
         assert.strictEqual(data[0].internalFields.expanded, false, 'expanded exist');
@@ -301,8 +301,8 @@ module('tree structure with object instances', moduleConfig, () => {
 
     test('public node should exist in internalFields', function(assert) {
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() }),
-            data = dataAdapter.getData();
+        const dataAdapter = helper.initDataAdapter({ items: helper.getTreeDataWithObjects() });
+        const data = dataAdapter.getData();
 
         assert.ok(Object.keys(data[0].internalFields.publicNode).length, 'publicNode is not empty');
     });
@@ -319,28 +319,28 @@ module('public methods', moduleConfig, () => {
         helper.plainData[0].isExpanded = true;
         helper.plainData[1].isExpanded = true;
 
-        var accessors = {
-                getters: {
-                    selected: function(item) { return item.isSelected; },
-                    display: function(item) { return item.caption; },
-                    expanded: function(item) { return item.isExpanded; },
-                    disabled: function(item) { return item.isDisabled; },
-                    parentKey: function(item) { return item.parentId; },
-                    key: function(item) { return item.id; },
-                    items: function(item) { return item.items; }
-                },
-                setters: {
-                    selected: function(item, value) { item.isSelected = value; },
-                    display: function(item, value) { item.caption = value; },
-                    expanded: function(item, value) { item.isExpanded = value; },
-                    disabled: function(item, value) { item.isDisabled = value; },
-                    parentKey: function(item, value) { item.parentId = value; },
-                    key: function(item, value) { item.id = value; },
-                    items: function(item, value) { item.items = value; }
-                }
+        const accessors = {
+            getters: {
+                selected: function(item) { return item.isSelected; },
+                display: function(item) { return item.caption; },
+                expanded: function(item) { return item.isExpanded; },
+                disabled: function(item) { return item.isDisabled; },
+                parentKey: function(item) { return item.parentId; },
+                key: function(item) { return item.id; },
+                items: function(item) { return item.items; }
             },
-            dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataAccessors: accessors, recursiveSelection: true, dataType: 'plain' }),
-            nodes = dataAdapter.getTreeNodes();
+            setters: {
+                selected: function(item, value) { item.isSelected = value; },
+                display: function(item, value) { item.caption = value; },
+                expanded: function(item, value) { item.isExpanded = value; },
+                disabled: function(item, value) { item.isDisabled = value; },
+                parentKey: function(item, value) { item.parentId = value; },
+                key: function(item, value) { item.id = value; },
+                items: function(item, value) { item.items = value; }
+            }
+        };
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataAccessors: accessors, recursiveSelection: true, dataType: 'plain' });
+        const nodes = dataAdapter.getTreeNodes();
 
         assert.ok(nodes[0].itemData.isExpanded, 'node is expanded');
         assert.ok(nodes[0].children[0].itemData.isExpanded, 'node is expanded');
@@ -355,8 +355,8 @@ module('public methods', moduleConfig, () => {
     });
 
     test('getTreeNodes if data was without keys', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            treeNodes = dataAdapter.getTreeNodes();
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const treeNodes = dataAdapter.getTreeNodes();
 
         assert.equal(treeNodes[0].key, 1);
         assert.equal(treeNodes[1].key, 6);
@@ -371,11 +371,11 @@ module('public methods', moduleConfig, () => {
         helper.plainData[5].selected = true;
 
         const dataAdapter = helper.initDataAdapter({
-                items: helper.plainData,
-                recursiveSelection: true,
-                dataType: 'plain'
-            }),
-            selectedNodes = [4, 6, 7];
+            items: helper.plainData,
+            recursiveSelection: true,
+            dataType: 'plain'
+        });
+        const selectedNodes = [4, 6, 7];
 
         assert.deepEqual(dataAdapter.getSelectedNodesKeys(), selectedNodes, 'selected keys are correct');
     });
@@ -385,32 +385,32 @@ module('public methods', moduleConfig, () => {
         helper.plainData[2].expanded = true;
         helper.plainData[4].expanded = true;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            expandedNodes = [2, 3, 5];
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const expandedNodes = [2, 3, 5];
 
         assert.deepEqual(dataAdapter.getExpandedNodesKeys(), expandedNodes, 'expanded keys are correct');
     });
 
     test('getNodeByItem', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            node = dataAdapter.getNodeByItem(helper.plainData[1]);
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const node = dataAdapter.getNodeByItem(helper.plainData[1]);
 
         assert.deepEqual(node.text, 'Item 11', 'node is correct');
     });
 
     test('getNodesByItems', function(assert) {
-        var items = helper.plainData,
-            dataAdapter = helper.initDataAdapter({ items: items, dataType: 'plain' }),
-            nodes = dataAdapter.getNodesByItems(helper.plainData);
+        const items = helper.plainData;
+        const dataAdapter = helper.initDataAdapter({ items: items, dataType: 'plain' });
+        const nodes = dataAdapter.getNodesByItems(helper.plainData);
 
-        for(var i = 0, n = helper.plainData.length; i < n; i++) {
+        for(let i = 0, n = helper.plainData.length; i < n; i++) {
             assert.deepEqual(nodes[i].internalFields.item, items[i], 'nodes[i] is correct');
         }
     });
 
     test('getNodeByKey', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            node = dataAdapter.getNodeByKey(2);
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const node = dataAdapter.getNodeByKey(2);
 
         assert.deepEqual(node.text, 'Item 11', 'node is correct');
     });
@@ -506,9 +506,9 @@ module('public methods', moduleConfig, () => {
     });
 
     test('getRootNodes', function(assert) {
-        var items = [];
+        const items = [];
 
-        for(var i = 1; i <= 100; i++) {
+        for(let i = 1; i <= 100; i++) {
             items.push({
                 id: i,
                 text: i.toString()
@@ -524,7 +524,7 @@ module('public methods', moduleConfig, () => {
     });
 
     test('getRootNodes with deferred datasource (T310879)', function(assert) {
-        var items = [{ id: 1, text: 'item 1' }];
+        const items = [{ id: 1, text: 'item 1' }];
         const dataAdapter = helper.initDataAdapter({ items: items });
         try {
             dataUtils.processRequestResultLock.obtain();
@@ -535,8 +535,8 @@ module('public methods', moduleConfig, () => {
     });
 
     test('getChildrenNodes', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            children = dataAdapter.getChildrenNodes(1);
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const children = dataAdapter.getChildrenNodes(1);
 
         assert.equal(children.length, 2, 'nodes count is correct');
         assert.equal(children[0].internalFields.key, 2, 'first node');
@@ -544,8 +544,8 @@ module('public methods', moduleConfig, () => {
     });
 
     test('addItem - root', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            item = { id: 8, text: 'Item 3', parentId: 0 };
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const item = { id: 8, text: 'Item 3', parentId: 0 };
 
         dataAdapter.addItem(item);
 
@@ -554,8 +554,8 @@ module('public methods', moduleConfig, () => {
     });
 
     test('addItem - subLevel', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' }),
-            item = { id: 8, text: 'Item 1-3', parentId: 1 };
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData, dataType: 'plain' });
+        const item = { id: 8, text: 'Item 1-3', parentId: 1 };
 
         dataAdapter.addItem(item);
 
@@ -580,9 +580,9 @@ module('public methods', moduleConfig, () => {
 
 module('getPublicNode method', moduleConfig, () => {
     test('public node should have correct accessor fields', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData(),
-            publicNode = dataAdapter.getPublicNode(data[2]);
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
+        const publicNode = dataAdapter.getPublicNode(data[2]);
 
         assert.strictEqual(publicNode.disabled, false);
         assert.strictEqual(publicNode.expanded, false);
@@ -591,17 +591,17 @@ module('getPublicNode method', moduleConfig, () => {
     });
 
     test('public node should have correct item field', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData(),
-            publicNode = dataAdapter.getPublicNode(data[5]);
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
+        const publicNode = dataAdapter.getPublicNode(data[5]);
 
         assert.deepEqual(publicNode.items[0].itemData, helper.getTreeDataWithoutKeys()[1].items[0]);
     });
 
     test('public node should have correct hierarchy', function(assert) {
-        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys }),
-            data = dataAdapter.getData(),
-            publicNode = dataAdapter.getPublicNode(data[2]);
+        const dataAdapter = helper.initDataAdapter({ items: helper.treeDataWithoutKeys });
+        const data = dataAdapter.getData();
+        const publicNode = dataAdapter.getPublicNode(data[2]);
 
         assert.equal(publicNode.key, 3);
         assert.equal(publicNode.parent.key, 2);
@@ -615,9 +615,9 @@ module('getPublicNode method', moduleConfig, () => {
     test('public node should depend on original node', function(assert) {
         helper.plainData[0].selected = true;
 
-        const dataAdapter = helper.initDataAdapter({ items: helper.plainData }),
-            data = dataAdapter.getData(),
-            publicNode = dataAdapter.getPublicNode(data[0]);
+        const dataAdapter = helper.initDataAdapter({ items: helper.plainData });
+        const data = dataAdapter.getData();
+        const publicNode = dataAdapter.getPublicNode(data[0]);
 
         assert.strictEqual(publicNode.selected, true, 'public node is selected');
 
@@ -634,11 +634,11 @@ module('selection', moduleConfig, () => {
         helper.plainData[5].selected = true;
 
         const dataAdapter = helper.initDataAdapter({
-                items: helper.plainData,
-                recursiveSelection: true,
-                dataType: 'plain'
-            }),
-            nodes = dataAdapter.getTreeNodes();
+            items: helper.plainData,
+            recursiveSelection: true,
+            dataType: 'plain'
+        });
+        const nodes = dataAdapter.getTreeNodes();
 
         assert.strictEqual(nodes[0].selected, undefined, 'item 1 is in undetermined state');
         assert.ok(nodes[0].items[0].selected, 'item 11 was selected');
@@ -651,11 +651,11 @@ module('selection', moduleConfig, () => {
         helper.randomData[3].selected = true;
 
         const dataAdapter = helper.initDataAdapter({
-                items: helper.randomData,
-                recursiveSelection: true,
-                dataType: 'plain'
-            }),
-            nodes = dataAdapter.getTreeNodes();
+            items: helper.randomData,
+            recursiveSelection: true,
+            dataType: 'plain'
+        });
+        const nodes = dataAdapter.getTreeNodes();
 
         assert.strictEqual(nodes[1].selected, undefined, 'item 1 is in undetermined state');
         assert.ok(nodes[1].items[1].selected, 'item 11 was selected');
@@ -709,11 +709,11 @@ module('expand', moduleConfig, () => {
         helper.plainData[3].expanded = true;
 
         const dataAdapter = helper.initDataAdapter({
-                items: helper.plainData,
-                recursiveExpansion: true,
-                dataType: 'plain'
-            }),
-            nodes = dataAdapter.getTreeNodes();
+            items: helper.plainData,
+            recursiveExpansion: true,
+            dataType: 'plain'
+        });
+        const nodes = dataAdapter.getTreeNodes();
 
         assert.ok(nodes[0].expanded, 'node was expanded');
         assert.ok(nodes[0].items[0].expanded, 'node was expanded');
@@ -829,7 +829,7 @@ module('Search operation', moduleConfig, () => {
             ]
         });
 
-        var result = dataAdapter.search('ike');
+        const result = dataAdapter.search('ike');
 
         assert.equal(result.length, 2, 'Two entries were found');
         assert.equal(result[0].internalFields.key, 2, 'The first entry is OK');
@@ -837,34 +837,34 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('It should be possible to find items if text is set via expression', function(assert) {
-        var accessors = {
-                getters: {
-                    items: function(item) { return item['items']; },
-                    key: function(item) { return item['id']; },
-                    parentKey: function(item) { return item['parentId']; },
-                    expanded: function(item) { return item['expanded'] || false; },
-                    selected: function(item) { return item['selected'] || false; },
-                    disabled: function(item) { return item['disabled'] || false; },
-                    display: function(item) { return item['name'] || ''; }
-                },
-                setters: {
-                    items: function(item, value) { item['items'] = value; },
-                    key: function(item, value) { item['id'] = value; },
-                    parentKey: function(item, value) { item['parentId'] = value; },
-                    expanded: function(item, value) { item['expanded'] = value; },
-                    selected: function(item, value) { item['selected'] = value; },
-                    disabled: function(item, value) { item['disabled'] = value; },
-                    display: function(item, value) { item['name'] = value; }
-                }
+        const accessors = {
+            getters: {
+                items: function(item) { return item['items']; },
+                key: function(item) { return item['id']; },
+                parentKey: function(item) { return item['parentId']; },
+                expanded: function(item) { return item['expanded'] || false; },
+                selected: function(item) { return item['selected'] || false; },
+                disabled: function(item) { return item['disabled'] || false; },
+                display: function(item) { return item['name'] || ''; }
             },
-            items = [
-                { id: 1, parentId: 0, name: 'Cars' },
-                { id: 2, parentId: 0, name: 'Bikes' },
-                { id: 3, parentId: 0, name: 'Motobikes' }
-            ],
-            dataAdapter = new HierarchicalDataAdapter({ dataAccessors: accessors, items: items, dataType: 'plain' });
+            setters: {
+                items: function(item, value) { item['items'] = value; },
+                key: function(item, value) { item['id'] = value; },
+                parentKey: function(item, value) { item['parentId'] = value; },
+                expanded: function(item, value) { item['expanded'] = value; },
+                selected: function(item, value) { item['selected'] = value; },
+                disabled: function(item, value) { item['disabled'] = value; },
+                display: function(item, value) { item['name'] = value; }
+            }
+        };
+        const items = [
+            { id: 1, parentId: 0, name: 'Cars' },
+            { id: 2, parentId: 0, name: 'Bikes' },
+            { id: 3, parentId: 0, name: 'Motobikes' }
+        ];
+        const dataAdapter = new HierarchicalDataAdapter({ dataAccessors: accessors, items: items, dataType: 'plain' });
 
-        var result = dataAdapter.search('ike');
+        const result = dataAdapter.search('ike');
 
         assert.equal(result.length, 2, 'Two entries were found');
         assert.equal(result[0].internalFields.key, 2, 'The first entry is OK');
@@ -881,7 +881,7 @@ module('Search operation', moduleConfig, () => {
             dataType: 'plain'
         });
 
-        var result = dataAdapter.search('bike');
+        const result = dataAdapter.search('bike');
 
         assert.equal(result.length, 2, 'Two entries were found');
         assert.equal(result[0].internalFields.key, 2, 'The first entry is OK');
@@ -895,7 +895,7 @@ module('Search operation', moduleConfig, () => {
             ]
         });
 
-        var result = dataAdapter.search('bla-bla-bla');
+        const result = dataAdapter.search('bla-bla-bla');
 
         assert.ok($.isArray(result), 'The result is array');
         assert.equal(result.length, 0, 'The result is empty');
@@ -920,7 +920,7 @@ module('Search operation', moduleConfig, () => {
             dataType: 'plain'
         });
 
-        var result = dataAdapter.search('X');
+        const result = dataAdapter.search('X');
 
         assert.equal(result.length, 9, 'Nine entries were found');
         assert.equal(result[0].text, 'Cars', 'The entry is OK');
@@ -953,7 +953,7 @@ module('Search operation', moduleConfig, () => {
             dataType: 'plain'
         });
 
-        var result = dataAdapter.search('X');
+        const result = dataAdapter.search('X');
 
         assert.ok(result[0].internalFields.expanded, 'Cars', 'The entry is OK');
         assert.ok(result[1].internalFields.expanded, 'BMWX', 'The entry is OK');
@@ -967,12 +967,12 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('Search should work with warning when the parent node is lost', function(assert) {
-        var items = [
-                { id: 1, parentId: 0, text: 'Cars' },
-                { id: 5, parentId: 154, text: 'X1' },
-                { id: 6, parentId: 1, text: 'X5' }
-            ],
-            warningHandler = sinon.spy(errors, 'log');
+        const items = [
+            { id: 1, parentId: 0, text: 'Cars' },
+            { id: 5, parentId: 154, text: 'X1' },
+            { id: 6, parentId: 1, text: 'X5' }
+        ];
+        const warningHandler = sinon.spy(errors, 'log');
 
         try {
             const dataAdapter = helper.initDataAdapter({
@@ -992,13 +992,13 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('Node changed should fire if any node was changed', function(assert) {
-        var handler = sinon.spy(),
-            dataAdapter = helper.initDataAdapter({
-                items: [{ text: 'item 1', expanded: true, items: [{ text: 'item 11' }] }],
-                dataType: 'tree',
-                onNodeChanged: handler
-            }),
-            nodes = dataAdapter.getData();
+        const handler = sinon.spy();
+        const dataAdapter = helper.initDataAdapter({
+            items: [{ text: 'item 1', expanded: true, items: [{ text: 'item 11' }] }],
+            dataType: 'tree',
+            onNodeChanged: handler
+        });
+        const nodes = dataAdapter.getData();
 
         dataAdapter.toggleExpansion(1, false);
 
@@ -1007,12 +1007,12 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('Searching with special symbols should not crash the regular expression', function(assert) {
-        var symbols = '[]{}()-+?*,.\\^$|#'.split(''),
+        const symbols = '[]{}()-+?*,.\\^$|#'.split('');
 
-            dataAdapter = helper.initDataAdapter({
-                items: [{ text: 'item 1', expanded: true, items: [{ text: 'item 11' }] }],
-                dataType: 'tree'
-            }), breakingSymbols = [];
+        const dataAdapter = helper.initDataAdapter({
+            items: [{ text: 'item 1', expanded: true, items: [{ text: 'item 11' }] }],
+            dataType: 'tree'
+        }); const breakingSymbols = [];
 
         $.each(symbols, function(_, symbol) {
             try {
@@ -1026,43 +1026,43 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('searchExpr is array', function(assert) {
-        var items = [
-                { key: 1, text: 'Item 1', value: 'test 3' },
-                { key: 2, text: 'Item 2', value: 'test 3' },
-                { key: 3, text: 'Item 3', value: 'test 1' }],
-            dataAdapter = helper.initDataAdapter({
-                items: items,
-                dataType: 'plain',
-                searchExpr: ['value', 'text']
-            }),
-            result = dataAdapter.search('1');
+        const items = [
+            { key: 1, text: 'Item 1', value: 'test 3' },
+            { key: 2, text: 'Item 2', value: 'test 3' },
+            { key: 3, text: 'Item 3', value: 'test 1' }];
+        const dataAdapter = helper.initDataAdapter({
+            items: items,
+            dataType: 'plain',
+            searchExpr: ['value', 'text']
+        });
+        const result = dataAdapter.search('1');
 
         assert.equal(result.length, 2, 'count item');
     });
 
     test('search should consider simple sorting', function(assert) {
-        var items = [
-                { id: 1, parentId: 0, text: 'Bikes' },
-                { id: 4, parentId: 3, text: 'BMW' },
-                { id: 3, parentId: 0, text: 'Cars' },
-                { id: 11, parentId: 10, text: 'YX 1' },
-                { id: 12, parentId: 10, text: 'YX 2' },
-                { id: 2, parentId: 0, text: 'Motobikes' },
-                { id: 5, parentId: 4, text: 'X1' },
-                { id: 6, parentId: 4, text: 'X5' },
-                { id: 7, parentId: 4, text: 'X6' },
-                { id: 10, parentId: 2, text: 'Yamaha' },
-                { id: 8, parentId: 1, text: 'Stels' },
-                { id: 9, parentId: 2, text: 'Honda' }
-            ],
-            dataAdapter = helper.initDataAdapter({
-                items: items,
-                dataType: 'plain',
-                sort: 'text',
-                searchExpr: ['value', 'text']
-            }),
-            result = dataAdapter.search('1'),
-            expectedValues = ['BMW', 'Cars', 'Motobikes', 'X1', 'Yamaha', 'YX 1'];
+        const items = [
+            { id: 1, parentId: 0, text: 'Bikes' },
+            { id: 4, parentId: 3, text: 'BMW' },
+            { id: 3, parentId: 0, text: 'Cars' },
+            { id: 11, parentId: 10, text: 'YX 1' },
+            { id: 12, parentId: 10, text: 'YX 2' },
+            { id: 2, parentId: 0, text: 'Motobikes' },
+            { id: 5, parentId: 4, text: 'X1' },
+            { id: 6, parentId: 4, text: 'X5' },
+            { id: 7, parentId: 4, text: 'X6' },
+            { id: 10, parentId: 2, text: 'Yamaha' },
+            { id: 8, parentId: 1, text: 'Stels' },
+            { id: 9, parentId: 2, text: 'Honda' }
+        ];
+        const dataAdapter = helper.initDataAdapter({
+            items: items,
+            dataType: 'plain',
+            sort: 'text',
+            searchExpr: ['value', 'text']
+        });
+        const result = dataAdapter.search('1');
+        const expectedValues = ['BMW', 'Cars', 'Motobikes', 'X1', 'Yamaha', 'YX 1'];
 
         $.each(result, function(index, item) {
             assert.equal(item.text, expectedValues[index], 'Correct item');
@@ -1070,31 +1070,31 @@ module('Search operation', moduleConfig, () => {
     });
 
     test('search should consider sorting expression', function(assert) {
-        var items = [
-                { id: 1, parentId: 0, text: 'Bikes' },
-                { id: 4, parentId: 3, text: 'BMW' },
-                { id: 13, parentId: 3, text: 'Audi' },
-                { id: 3, parentId: 0, text: 'Cars' },
-                { id: 11, parentId: 10, text: 'YX 1' },
-                { id: 12, parentId: 10, text: 'YX 2' },
-                { id: 14, parentId: 13, text: 'A1' },
-                { id: 15, parentId: 13, text: 'A5' },
-                { id: 2, parentId: 0, text: 'Motobikes' },
-                { id: 5, parentId: 4, text: 'X1' },
-                { id: 6, parentId: 4, text: 'X5' },
-                { id: 7, parentId: 4, text: 'X6' },
-                { id: 10, parentId: 2, text: 'Yamaha' },
-                { id: 8, parentId: 1, text: 'Stels' },
-                { id: 9, parentId: 2, text: 'Honda' }
-            ],
-            dataAdapter = helper.initDataAdapter({
-                items: items,
-                dataType: 'plain',
-                sort: { field: 'text', desc: true },
-                searchExpr: ['value', 'text']
-            }),
-            result = dataAdapter.search('1'),
-            expectedValues = ['YX 1', 'Yamaha', 'X1', 'Motobikes', 'Cars', 'BMW', 'Audi', 'A1'];
+        const items = [
+            { id: 1, parentId: 0, text: 'Bikes' },
+            { id: 4, parentId: 3, text: 'BMW' },
+            { id: 13, parentId: 3, text: 'Audi' },
+            { id: 3, parentId: 0, text: 'Cars' },
+            { id: 11, parentId: 10, text: 'YX 1' },
+            { id: 12, parentId: 10, text: 'YX 2' },
+            { id: 14, parentId: 13, text: 'A1' },
+            { id: 15, parentId: 13, text: 'A5' },
+            { id: 2, parentId: 0, text: 'Motobikes' },
+            { id: 5, parentId: 4, text: 'X1' },
+            { id: 6, parentId: 4, text: 'X5' },
+            { id: 7, parentId: 4, text: 'X6' },
+            { id: 10, parentId: 2, text: 'Yamaha' },
+            { id: 8, parentId: 1, text: 'Stels' },
+            { id: 9, parentId: 2, text: 'Honda' }
+        ];
+        const dataAdapter = helper.initDataAdapter({
+            items: items,
+            dataType: 'plain',
+            sort: { field: 'text', desc: true },
+            searchExpr: ['value', 'text']
+        });
+        const result = dataAdapter.search('1');
+        const expectedValues = ['YX 1', 'Yamaha', 'X1', 'Motobikes', 'Cars', 'BMW', 'Audi', 'A1'];
 
         $.each(result, function(index, item) {
             assert.equal(item.text, expectedValues[index], 'Correct item');

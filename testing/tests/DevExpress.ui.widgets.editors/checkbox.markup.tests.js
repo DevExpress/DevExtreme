@@ -1,10 +1,10 @@
-var $ = require('jquery');
+const $ = require('jquery');
 
 require('common.css!');
 require('ui/check_box');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture">\
             <div id="checkbox"></div>\
         </div>';
@@ -12,21 +12,21 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var CHECKBOX_CLASS = 'dx-checkbox',
-    CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container',
-    CHECKBOX_CONTAINER_SELECTOR = '.dx-checkbox-container',
-    ICON_SELECTOR = '.dx-checkbox-icon',
-    CHECKBOX_TEXT_CLASS = 'dx-checkbox-text',
-    CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
+const CHECKBOX_CLASS = 'dx-checkbox';
+const CHECKBOX_CONTAINER_CLASS = 'dx-checkbox-container';
+const CHECKBOX_CONTAINER_SELECTOR = '.dx-checkbox-container';
+const ICON_SELECTOR = '.dx-checkbox-icon';
+const CHECKBOX_TEXT_CLASS = 'dx-checkbox-text';
+const CHECKBOX_HAS_TEXT_CLASS = 'dx-checkbox-has-text';
 
 
 QUnit.module('Checkbox markup', () => {
     QUnit.test('markup init', function(assert) {
-        var element = $('#checkbox').dxCheckBox();
+        const element = $('#checkbox').dxCheckBox();
 
         assert.ok(element.hasClass(CHECKBOX_CLASS));
 
-        var checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
+        const checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
 
         assert.ok(checkboxContent.hasClass(CHECKBOX_CONTAINER_CLASS), 'checkbox has a container');
 
@@ -34,19 +34,19 @@ QUnit.module('Checkbox markup', () => {
     });
 
     QUnit.test('checkbox should have correct text', function(assert) {
-        var element = $('#checkbox').dxCheckBox({
+        const element = $('#checkbox').dxCheckBox({
             text: 'text'
         });
 
-        var checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
+        const checkboxContent = element.find(CHECKBOX_CONTAINER_SELECTOR);
 
         assert.equal($.trim(checkboxContent.find('.' + CHECKBOX_TEXT_CLASS).text()), 'text');
         assert.ok(element.hasClass(CHECKBOX_HAS_TEXT_CLASS), 'checkbox with text has text class');
     });
 
     QUnit.test('a hidden input should be rendered', function(assert) {
-        var $element = $('#checkbox').dxCheckBox(),
-            $input = $element.find('input');
+        const $element = $('#checkbox').dxCheckBox();
+        const $input = $element.find('input');
 
         assert.equal($input.length, 1, 'input is rendered');
         assert.equal($input.attr('type'), 'hidden', 'type attribute of hidden input');
@@ -55,13 +55,13 @@ QUnit.module('Checkbox markup', () => {
 
 QUnit.module('aria accessibility', () => {
     QUnit.test('aria role', function(assert) {
-        var $element = $('#checkbox').dxCheckBox({});
+        const $element = $('#checkbox').dxCheckBox({});
         assert.equal($element.attr('role'), 'checkbox', 'aria role is correct');
     });
 
     QUnit.test('aria checked attributes', function(assert) {
-        var $element = $('#checkbox').dxCheckBox({ value: true }),
-            instance = $element.dxCheckBox('instance');
+        const $element = $('#checkbox').dxCheckBox({ value: true });
+        const instance = $element.dxCheckBox('instance');
 
         assert.equal($element.attr('aria-checked'), 'true', 'checked state is correct');
 

@@ -125,6 +125,7 @@
         "dxDataGrid-columnFixingRightPosition": "Направо",
         "dxDataGrid-exportTo": "Экспортировать",
         "dxDataGrid-exportToExcel": "Экспортировать в Excel файл",
+        "dxDataGrid-exporting": "Экспорт...",
         "dxDataGrid-excelFormat": "Excel файл",
         "dxDataGrid-selectedRows": "Выбранные строки",
         "dxDataGrid-exportAll": "Экспортировать всё",

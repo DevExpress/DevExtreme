@@ -6,10 +6,10 @@ import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import treeListCore from './ui.tree_list.core';
 import themes from '../themes';
-var callModuleItemsMethod = treeListCore.callModuleItemsMethod;
+const callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
-var DATAGRID_ROW_SELECTOR = '.dx-row',
-    TREELIST_CLASS = 'dx-treelist';
+const DATAGRID_ROW_SELECTOR = '.dx-row';
+const TREELIST_CLASS = 'dx-treelist';
 
 import './ui.tree_list.column_headers';
 import './ui.tree_list.columns_controller';
@@ -51,12 +51,12 @@ treeListCore.registerModulesOrder([
     'export',
     'gridView']);
 
-var TreeList = Widget.inherit({
+const TreeList = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
     _getDefaultOptions: function() {
-        var that = this,
-            result = that.callBase();
+        const that = this;
+        const result = that.callBase();
 
         each(treeListCore.modules, function() {
             if(typeUtils.isFunction(this.defaultOptions)) {
@@ -87,7 +87,7 @@ var TreeList = Widget.inherit({
     },
 
     _init: function() {
-        var that = this;
+        const that = this;
 
         that.callBase();
 
@@ -99,7 +99,7 @@ var TreeList = Widget.inherit({
     _clean: commonUtils.noop,
 
     _optionChanged: function(args) {
-        var that = this;
+        const that = this;
 
         callModuleItemsMethod(that, 'optionChanged', [args]);
         if(!args.handled) {
@@ -128,7 +128,7 @@ var TreeList = Widget.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
+        const that = this;
 
         commonUtils.deferRender(function() {
             that._renderContentImpl();
@@ -136,7 +136,7 @@ var TreeList = Widget.inherit({
     },
 
     _dispose: function() {
-        var that = this;
+        const that = this;
         that.callBase();
 
         callModuleItemsMethod(that, 'dispose');
@@ -147,14 +147,14 @@ var TreeList = Widget.inherit({
     },
 
     beginUpdate: function() {
-        var that = this;
+        const that = this;
 
         that.callBase();
         callModuleItemsMethod(that, 'beginUpdate');
     },
 
     endUpdate: function() {
-        var that = this;
+        const that = this;
 
         callModuleItemsMethod(that, 'endUpdate');
         that.callBase();

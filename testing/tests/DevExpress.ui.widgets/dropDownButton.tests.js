@@ -328,8 +328,8 @@ QUnit.module('popup integration', {
             },
         });
 
-        const instance = $dropDownButton.dxDropDownButton('instance'),
-            dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
+        const instance = $dropDownButton.dxDropDownButton('instance');
+        const dropDownButtonElementRect = $dropDownButton.get(0).getBoundingClientRect();
 
         let popupContentElementRect = $(getPopup(instance).content()).get(0).getBoundingClientRect();
         assert.strictEqual(popupContentElementRect.left, dropDownButtonElementRect.left, 'popup position is correct, rtlEnabled = false');
@@ -381,7 +381,7 @@ QUnit.module('popup integration', {
             }
         };
 
-        for(let name in options) {
+        for(const name in options) {
             assert.deepEqual(this.popup.option(name), options[name], 'option ' + name + ' is correct');
         }
     });

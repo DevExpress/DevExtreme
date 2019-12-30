@@ -1,5 +1,5 @@
-var numberLocalization = require('localization/number'),
-    dateLocalization = require('localization/date');
+const numberLocalization = require('localization/number');
+const dateLocalization = require('localization/date');
 
 QUnit.module('Custom date names', {
     beforeEach: function() {
@@ -67,14 +67,14 @@ QUnit.module('Custom digits', {
 });
 
 QUnit.test('format date by LDML pattern', function(assert) {
-    var date = new Date(2015, 2, 3, 4, 5, 6, 789);
+    const date = new Date(2015, 2, 3, 4, 5, 6, 789);
     assert.equal(dateLocalization.format(date, 'dd/MM/yyyy'), '٠٣/٠٣/٢٠١٥');
     assert.equal(dateLocalization.format(date, 'HH:mm:ss'), '٠٤:٠٥:٠٦');
     assert.equal(dateLocalization.format(date, 'SSS'), '٧٨٩');
 });
 
 QUnit.test('format date by predefined format', function(assert) {
-    var date = new Date(2015, 2, 3, 4, 5, 6, 789);
+    const date = new Date(2015, 2, 3, 4, 5, 6, 789);
     assert.equal(dateLocalization.format(date, 'shortDate'), '٣/٣/٢٠١٥');
     assert.equal(dateLocalization.format(date, 'millisecond'), '٧٨٩');
 });

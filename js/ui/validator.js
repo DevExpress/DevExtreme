@@ -10,10 +10,10 @@ import registerComponent from '../core/component_registrator';
 import { Deferred } from '../core/utils/deferred';
 import Guid from '../core/guid';
 
-const VALIDATOR_CLASS = 'dx-validator',
-    VALIDATION_STATUS_VALID = 'valid',
-    VALIDATION_STATUS_INVALID = 'invalid',
-    VALIDATION_STATUS_PENDING = 'pending';
+const VALIDATOR_CLASS = 'dx-validator';
+const VALIDATION_STATUS_VALID = 'valid';
+const VALIDATION_STATUS_INVALID = 'invalid';
+const VALIDATION_STATUS_PENDING = 'pending';
 
 const Validator = DOMComponent.inherit({
     _initOptions: function(options) {
@@ -109,8 +109,8 @@ const Validator = DOMComponent.inherit({
     },
 
     _initAdapter() {
-        const element = this.$element()[0],
-            dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        const element = this.$element()[0];
+        const dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
         let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
@@ -197,12 +197,12 @@ const Validator = DOMComponent.inherit({
     },
 
     validate(args) {
-        const adapter = this.option('adapter'),
-            name = this.option('name'),
-            bypass = adapter.bypass && adapter.bypass(),
-            value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
-            currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = this._getValidationRules();
+        const adapter = this.option('adapter');
+        const name = this.option('name');
+        const bypass = adapter.bypass && adapter.bypass();
+        const value = (args && args.value !== undefined) ? args.value : adapter.getValue();
+        const currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError();
+        const rules = this._getValidationRules();
         const currentResult = this._validationInfo && this._validationInfo.result;
         if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return extend({}, currentResult);
@@ -227,16 +227,16 @@ const Validator = DOMComponent.inherit({
     },
 
     reset() {
-        const adapter = this.option('adapter'),
-            result = {
-                id: null,
-                isValid: true,
-                brokenRule: null,
-                brokenRules: null,
-                pendingRules: null,
-                status: VALIDATION_STATUS_VALID,
-                complete: null
-            };
+        const adapter = this.option('adapter');
+        const result = {
+            id: null,
+            isValid: true,
+            brokenRule: null,
+            brokenRules: null,
+            pendingRules: null,
+            status: VALIDATION_STATUS_VALID,
+            complete: null
+        };
 
         this._validationInfo.skipValidation = true;
         adapter.reset();
@@ -250,7 +250,7 @@ const Validator = DOMComponent.inherit({
             const complete = this._validationInfo.deferred && this._validationInfo.result.complete;
             this._validationInfo.result = extend({}, result, { complete });
         } else {
-            for(let prop in result) {
+            for(const prop in result) {
                 if(prop !== 'id' && prop !== 'complete') {
                     this._validationInfo.result[prop] = result[prop];
                 }

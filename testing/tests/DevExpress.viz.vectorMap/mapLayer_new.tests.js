@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    loadingIndicatorModule = require('viz/core/loading_indicator'),
-    titleModule = require('viz/core/title'),
-    projectionEnginesModule = require('viz/vector_map/projection'),
-    controlBarModule = require('viz/vector_map/control_bar'),
-    legendModule = require('viz/vector_map/legend'),
-    tooltipModule = require('viz/core/tooltip'),
-    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
-    dataSourceModule = require('data/data_source/data_source'),
-    exportMenuModule = require('viz/core/export'), // TODO maybe if you test layer - you should create exact layer?
-    rendererModule = require('viz/core/renderers/renderer');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const loadingIndicatorModule = require('viz/core/loading_indicator');
+const titleModule = require('viz/core/title');
+const projectionEnginesModule = require('viz/vector_map/projection');
+const controlBarModule = require('viz/vector_map/control_bar');
+const legendModule = require('viz/vector_map/legend');
+const tooltipModule = require('viz/core/tooltip');
+const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
+const dataSourceModule = require('data/data_source/data_source');
+const exportMenuModule = require('viz/core/export'); // TODO maybe if you test layer - you should create exact layer?
+const rendererModule = require('viz/core/renderers/renderer');
 
 require('viz/vector_map/vector_map');
 
@@ -23,7 +23,7 @@ controlBarModule.ControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
 legendModule.LegendsControl = vizMocks.stubClass(legendModule.LegendsControl);
 tooltipViewerModule.TooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer);
 
-var simpleProjection = projectionEnginesModule.projection({
+const simpleProjection = projectionEnginesModule.projection({
     aspectRatio: 4 / 3,
 
     to: function(coordinates) {
@@ -41,7 +41,7 @@ var simpleProjection = projectionEnginesModule.projection({
     }
 });
 
-var createData = function(featureType, items) {
+const createData = function(featureType, items) {
     return {
         type: 'FeatureCollection',
         features: $.map(items, function(item) {
@@ -57,9 +57,9 @@ var createData = function(featureType, items) {
     };
 };
 
-var environment = {
+const environment = {
     beforeEach: function() {
-        var renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
@@ -350,7 +350,7 @@ QUnit.test('Area labels', function(assert) {
     assert.deepEqual(getLabelPosition(this.getLabel(3)), [NaN, NaN], 'label 4 (degenerate)');
 
     function getLabelPosition(label) {
-        var arg = label.attr.getCall(1).args[0];
+        const arg = label.attr.getCall(1).args[0];
         return [Math.round(arg.translateX), Math.round(arg.translateY)];
     }
 });
@@ -377,14 +377,14 @@ QUnit.test('Line labels', function(assert) {
     assert.deepEqual(getLabelPosition(this.getLabel(1)), [NaN, NaN], 'label 2 (degenerate)');
 
     function getLabelPosition(label) {
-        var arg = label.attr.getCall(1).args[0];
+        const arg = label.attr.getCall(1).args[0];
         return [Math.round(arg.translateX), Math.round(arg.translateY)];
     }
 });
 
 QUnit.module('Layers management', {
     beforeEach: function() {
-        var renderer = this.renderer = new vizMocks.Renderer();
+        const renderer = this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = function() { return renderer; };
     },
 
@@ -396,14 +396,14 @@ QUnit.module('Layers management', {
 });
 
 QUnit.test('Array option', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-a' },
         {},
         { name: 'layer-b' },
         {}
     ]);
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(layers.length, 4, 'count');
     assert.strictEqual(layers[0].name, 'layer-a', 'layer 1 name');
     assert.strictEqual(layers[1].name, 'map-layer-1', 'layer 2 name');
@@ -412,23 +412,23 @@ QUnit.test('Array option', function(assert) {
 });
 
 QUnit.test('Object option', function(assert) {
-    var map = this.createLayers({
+    const map = this.createLayers({
         name: 'layer'
     });
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(layers.length, 1, 'count');
     assert.strictEqual(layers[0].name, 'layer', 'layer 1 name');
 });
 
 QUnit.test('Empty option', function(assert) {
-    var map = this.createLayers();
+    const map = this.createLayers();
 
     assert.deepEqual(map.getLayers(), []);
 });
 
 QUnit.test('Change option - increase layers count', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-1' },
         { name: 'layer-2' }
     ]);
@@ -439,7 +439,7 @@ QUnit.test('Change option - increase layers count', function(assert) {
         { name: 'layer-3' }
     ]);
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(layers.length, 3, 'count');
     assert.strictEqual(layers[0].name, 'map-layer-0', 'layer 1 name');
     assert.strictEqual(layers[1].name, 'map-layer-1', 'layer 2 name');
@@ -447,7 +447,7 @@ QUnit.test('Change option - increase layers count', function(assert) {
 });
 
 QUnit.test('Change option - decrease layers count', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-1' },
         { name: 'layer-2' },
         { name: 'layer-3' }
@@ -458,27 +458,27 @@ QUnit.test('Change option - decrease layers count', function(assert) {
         {}
     ]);
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(layers.length, 2, 'count');
     assert.strictEqual(layers[0].name, 'map-layer-0', 'layer 1 name');
     assert.strictEqual(layers[1].name, 'map-layer-1', 'layer 2 name');
 });
 
 QUnit.test('Change name of one layer', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-1' },
         { name: 'layer-2' },
         { name: 'layer-3' }
     ]);
 
-    var oldLayers = map.getLayers();
+    const oldLayers = map.getLayers();
     map.option('layers', [
         { name: 'layer-1' },
         { name: 'new_layer-2' },
         { name: 'layer-3' }
     ]);
 
-    var updatedLayers = map.getLayers();
+    const updatedLayers = map.getLayers();
 
     updatedLayers.forEach(function(l, i) {
         assert.ok(l !== oldLayers[i]);
@@ -486,18 +486,18 @@ QUnit.test('Change name of one layer', function(assert) {
 });
 
 QUnit.test('Layers shouldn\'t be created on updating when name not set', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { color: 'some_color_1' }
     ]);
 
-    var oldLayer = map.getLayers()[0];
+    const oldLayer = map.getLayers()[0];
     map.option('layers', [{ color: 'some_color_1' }]);
 
     assert.ok(map.getLayers()[0] === oldLayer);
 });
 
 QUnit.test('No crush on updating when on of layer in null', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { color: 'some_color_1' }
     ]);
 
@@ -507,13 +507,13 @@ QUnit.test('No crush on updating when on of layer in null', function(assert) {
 });
 
 QUnit.test('Get layer by name', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-a' },
         {},
         { name: 'layer-b' }
     ]);
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(map.getLayerByName('layer-a'), layers[0], 'layer 1');
     assert.strictEqual(map.getLayerByName('map-layer-1'), layers[1], 'layer 2');
     assert.strictEqual(map.getLayerByName('layer-b'), layers[2], 'layer 3');
@@ -521,13 +521,13 @@ QUnit.test('Get layer by name', function(assert) {
 });
 
 QUnit.test('Get layer by index', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         {},
         {},
         {}
     ]);
 
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(map.getLayerByIndex(0), layers[0], 'layer 1');
     assert.strictEqual(map.getLayerByIndex(1), layers[1], 'layer 2');
     assert.strictEqual(map.getLayerByIndex(2), layers[2], 'layer 3');
@@ -535,7 +535,7 @@ QUnit.test('Get layer by index', function(assert) {
 });
 
 QUnit.test('Change layer name', function(assert) {
-    var map = this.createLayers([
+    const map = this.createLayers([
         { name: 'layer-1' },
         {}
     ]);
@@ -547,14 +547,14 @@ QUnit.test('Change layer name', function(assert) {
 
     assert.ok(map.getLayerByName('layer-2'), 'get by new name');
     assert.ok(!map.getLayerByName('layer-1'), 'get by old name');
-    var layers = map.getLayers();
+    const layers = map.getLayers();
     assert.strictEqual(layers.length, 2, 'count');
     assert.strictEqual(layers[0].name, 'layer-2', 'layer 1 name');
     assert.strictEqual(layers[1].name, 'map-layer-1', 'layer 2 name');
 });
 
 QUnit.test('getDataSource method', function(assert) {
-    var map = this.createLayers({
+    const map = this.createLayers({
         dataSource: createData('Polygon', [
             [
                 [[100, 50], [200, 50], [200, 200], [100, 200]]
@@ -571,7 +571,7 @@ QUnit.test('getDataSource method', function(assert) {
 });
 
 QUnit.test('Bounds calculation', function(assert) {
-    var map = this.createLayers({
+    const map = this.createLayers({
         dataSource: createData('Polygon', [
             [
                 [[100, 50], [200, 50], [200, 200], [100, 200]]
@@ -584,7 +584,7 @@ QUnit.test('Bounds calculation', function(assert) {
         ])
     });
 
-    var bounds = map.getLayers()[0].getBounds();
+    const bounds = map.getLayers()[0].getBounds();
 
     assert.deepEqual(bounds, [0, 0, 400, 300]);
 });

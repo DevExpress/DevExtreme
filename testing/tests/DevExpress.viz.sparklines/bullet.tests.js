@@ -1,11 +1,11 @@
 /* global currentTest, createTestContainer */
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    translator2DModule = require('viz/translators/translator2d'),
-    tooltipModule = require('viz/core/tooltip'),
-    BaseWidget = require('viz/core/base_widget');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const rendererModule = require('viz/core/renderers/renderer');
+const translator2DModule = require('viz/translators/translator2d');
+const tooltipModule = require('viz/core/tooltip');
+const BaseWidget = require('viz/core/base_widget');
 
 require('viz/bullet');
 
@@ -14,8 +14,8 @@ $('<div>')
     .css({ width: 250, height: 30 })
     .appendTo('#qunit-fixture');
 
-var StubTranslator,
-    StubTooltip = vizMocks.Tooltip;
+let StubTranslator;
+const StubTooltip = vizMocks.Tooltip;
 
 QUnit.begin(function() {
     StubTranslator = vizMocks.stubClass(translator2DModule.Translator2D, {
@@ -40,7 +40,7 @@ tooltipModule.Tooltip = sinon.spy(function() {
     return currentTest().tooltip;
 });
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.$container = createTestContainer('#container');
         this.resetTranslators();
@@ -64,7 +64,7 @@ var environment = {
 QUnit.module('Canvas', environment);
 
 QUnit.test('Create canvas when size option is defined', function(assert) {
-    var options = {
+    const options = {
         size: {
             width: 250,
             height: 30
@@ -73,8 +73,8 @@ QUnit.test('Create canvas when size option is defined', function(assert) {
 
     this.createBullet(options);
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.equal(this.renderer.resize.callCount, 1, 'Resize call count'); // renderer for sparkline and tooltip
@@ -82,7 +82,7 @@ QUnit.test('Create canvas when size option is defined', function(assert) {
 });
 
 QUnit.test('Create canvas when margin option is defined', function(assert) {
-    var options = {
+    const options = {
         value: 10,
         startScaleValue: 0,
         endScaleValue: 10,
@@ -100,8 +100,8 @@ QUnit.test('Create canvas when margin option is defined', function(assert) {
 
     this.createBullet(options);
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
     assert.equal(this.renderer.resize.callCount, 1);
@@ -111,8 +111,8 @@ QUnit.test('Create canvas when margin option is defined', function(assert) {
 QUnit.test('Create canvas when container size is defined', function(assert) {
     this.createBullet({});
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.equal(this.renderer.stub('resize').callCount, 1);
@@ -124,8 +124,8 @@ QUnit.module('Range', environment);
 QUnit.test('Create range when all value options are defined', function(assert) {
     this.createBullet({ value: 10, target: 20, startScaleValue: 0, endScaleValue: 30 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
@@ -141,8 +141,8 @@ QUnit.test('Create range when all value options are defined', function(assert) {
 QUnit.test('Create range without min level', function(assert) {
     this.createBullet({ value: 10, target: 20, endScaleValue: 30 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
@@ -158,8 +158,8 @@ QUnit.test('Create range without min level', function(assert) {
 QUnit.test('Create range without max level when target > value', function(assert) {
     this.createBullet({ value: 10, target: 20 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
@@ -175,8 +175,8 @@ QUnit.test('Create range without max level when target > value', function(assert
 QUnit.test('Create range without max level when value > target', function(assert) {
     this.createBullet({ value: 20, target: 10 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
@@ -192,8 +192,8 @@ QUnit.test('Create range without max level when value > target', function(assert
 QUnit.test('Create range without value', function(assert) {
     this.createBullet({ target: 20, endScaleValue: 30 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
@@ -209,8 +209,8 @@ QUnit.test('Create range without value', function(assert) {
 QUnit.test('Create range without target', function(assert) {
     this.createBullet({ value: 10, endScaleValue: 30 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
@@ -226,8 +226,8 @@ QUnit.test('Create range without target', function(assert) {
 QUnit.test('Create range when all value are negative', function(assert) {
     this.createBullet({ value: -10, target: -20, startScaleValue: 0, endScaleValue: -30 });
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.equal(argTranslator.update.lastCall.args[0].min, -30, 'Min arg should be like endScaleValue');
     assert.equal(argTranslator.update.lastCall.args[0].max, 0, 'Max arg should be like startScaleValue');
@@ -243,13 +243,13 @@ QUnit.test('Create range when all value are negative', function(assert) {
 QUnit.module('Prepare options', environment);
 
 QUnit.test('Prepare options whe max level is undefined', function(assert) {
-    var bullet = this.createBullet({ value: 10, target: 25 });
+    const bullet = this.createBullet({ value: 10, target: 25 });
 
     assert.equal(bullet._allOptions.endScaleValue, 25, 'Max level should be 25');
 });
 
 QUnit.test('Prepare options whe max level < min level', function(assert) {
-    var bullet = this.createBullet({ value: 10, target: 25, startScaleValue: 30, endScaleValue: 0 });
+    const bullet = this.createBullet({ value: 10, target: 25, startScaleValue: 30, endScaleValue: 0 });
 
     assert.equal(bullet._allOptions.endScaleValue, 30, 'Max level should be 30');
     assert.equal(bullet._allOptions.startScaleValue, 0, 'Min level should be 0');
@@ -260,8 +260,8 @@ QUnit.module('Creating', environment);
 QUnit.test('Create helpers', function(assert) {
     this.createBullet({});
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
     assert.ok(argTranslator.update.lastCall.args[0], 'Arg Range should be create');
     assert.ok(valTranslator.update.lastCall.args[0], 'Val Range should be create');
@@ -272,7 +272,7 @@ QUnit.test('Create helpers', function(assert) {
 });
 
 QUnit.test('Tooltip is not created on widget creation', function(assert) {
-    var bullet = this.createBullet({});
+    const bullet = this.createBullet({});
 
     assert.equal(tooltipModule.Tooltip.callCount, 0);
     assert.ok(!('_tooltip' in bullet));
@@ -286,7 +286,7 @@ QUnit.module('Structure', environment);
 QUnit.test('Groups structure', function(assert) {
     this.createBullet({ value: 10, minScaleValue: 0, maxScaleValue: 10 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -311,7 +311,7 @@ QUnit.test('Groups structure', function(assert) {
 QUnit.test('Groups structure when zero level is not in interval', function(assert) {
     this.createBullet({ endScaleValue: 20, target: 8, value: 10, startScaleValue: 5 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -332,7 +332,7 @@ QUnit.test('Groups structure when zero level is not in interval', function(asser
 QUnit.test('Groups structure when zero level is not visible', function(assert) {
     this.createBullet({ endScaleValue: 20, target: 8, value: 10, startScaleValue: 5, showZeroLevel: false });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -353,7 +353,7 @@ QUnit.test('Groups structure when zero level is not visible', function(assert) {
 QUnit.test('Groups structure when target is not in interval', function(assert) {
     this.createBullet({ endScaleValue: 20, target: 30, value: 10 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -374,7 +374,7 @@ QUnit.test('Groups structure when target is not in interval', function(assert) {
 QUnit.test('Groups structure when target is not visible', function(assert) {
     this.createBullet({ showTarget: false, value: 10 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 2, 'Root should have 2 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -395,14 +395,14 @@ QUnit.test('Groups structure when target is not visible', function(assert) {
 QUnit.test('Groups structure when empty bullet', function(assert) {
     this.createBullet({});
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
     assert.deepEqual(renderer.root.children, [], 'Root should have 0 children');
 });
 
 QUnit.test('Groups structure when value is string', function(assert) {
     this.createBullet({ value: '10' });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -423,14 +423,14 @@ QUnit.test('Groups structure when value is string', function(assert) {
 QUnit.test('Groups structure when value is incorrect string', function(assert) {
     this.createBullet({ value: 'hey' });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
     assert.deepEqual(renderer.root.children, [], 'Root should have 0 children');
 });
 
 QUnit.test('Groups structure when value is null', function(assert) {
     this.createBullet({ value: '10' });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -451,7 +451,7 @@ QUnit.test('Groups structure when value is null', function(assert) {
 QUnit.test('Groups structure when target is string', function(assert) {
     this.createBullet({ target: '10' });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -472,7 +472,7 @@ QUnit.test('Groups structure when target is string', function(assert) {
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target < value', function(assert) {
     this.createBullet({ target: -10, endScaleValue: 20, value: -5 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -493,7 +493,7 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined,
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined, value < 0. target < value', function(assert) {
     this.createBullet({ target: -10, endScaleValue: 20, value: -15 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -514,7 +514,7 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined,
 QUnit.test('Groups structure when target < 0 and startScaleValue is not defined', function(assert) {
     this.createBullet({ target: -10, endScaleValue: 20 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
 
     assert.equal(renderer.root.children.length, 3, 'Root should have 3 children');
     assert.equal(renderer.stub('path').callCount, 3);
@@ -535,7 +535,7 @@ QUnit.test('Groups structure when target < 0 and startScaleValue is not defined'
 QUnit.test('Groups structure when minScaleValue = endScaleValue', function(assert) {
     this.createBullet({ startScaleValue: 10, endScaleValue: 10 });
 
-    var renderer = this.renderer;
+    const renderer = this.renderer;
     assert.deepEqual(renderer.root.children, [], 'Root should have 0 children');
 });
 
@@ -548,9 +548,9 @@ QUnit.test('Get target params', function(assert) {
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20, targetColor: '#000000', targetWidth: 2 });
 
-    var targetElem = this.renderer.path.secondCall.returnValue,
-        creatingParams = targetElem.attr.firstCall.args,
-        drawingParams = targetElem.attr.lastCall.args;
+    const targetElem = this.renderer.path.secondCall.returnValue;
+    const creatingParams = targetElem.attr.firstCall.args;
+    const drawingParams = targetElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -575,9 +575,9 @@ QUnit.test('Get bar value params when all values are positive', function(assert)
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -603,9 +603,9 @@ QUnit.test('Get bar value params when all values are positive and inverted', fun
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 0, startScaleValue: 20, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -631,9 +631,9 @@ QUnit.test('Get bar value params when value = 0', function(assert) {
 
     this.createBullet({ value: 0, target: 10, endScaleValue: 20, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -659,9 +659,9 @@ QUnit.test('Get bar value params when max level > 0 and value < max level', func
 
     this.createBullet({ value: 15, target: 10, endScaleValue: 10, startScaleValue: -10, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -687,9 +687,9 @@ QUnit.test('Get bar value params when min level > 0', function(assert) {
 
     this.createBullet({ value: 15, target: 10, endScaleValue: 20, startScaleValue: 5, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -715,9 +715,9 @@ QUnit.test('Get bar value params when min level < 0 and value < min level', func
 
     this.createBullet({ value: -15, target: 10, endScaleValue: 20, startScaleValue: -10, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -743,9 +743,9 @@ QUnit.test('Get bar value params when max level < 0', function(assert) {
 
     this.createBullet({ value: -15, target: -10, endScaleValue: -5, startScaleValue: -20, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -771,9 +771,9 @@ QUnit.test('Get bar value params when all values are negative', function(assert)
 
     this.createBullet({ value: -10, target: -5, endScaleValue: 0, startScaleValue: -15, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -799,9 +799,9 @@ QUnit.test('Get bar value params when all values are negative and inverted', fun
 
     this.createBullet({ value: -10, target: -5, endScaleValue: 0, startScaleValue: -15, color: '#FFFF00', inverted: true });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -827,9 +827,9 @@ QUnit.test('T180366. Get bar value params when value < start scale value and end
 
     this.createBullet({ value: 20, target: 10, endScaleValue: 90, startScaleValue: 67, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -855,9 +855,9 @@ QUnit.test('T180366. Get bar value params when value > start scale value and end
 
     this.createBullet({ value: -20, target: 10, endScaleValue: -67, startScaleValue: -90, color: '#FFFF00' });
 
-    var barElem = this.renderer.path.thirdCall.returnValue,
-        creatingParams = barElem.attr.firstCall.args,
-        drawingParams = barElem.attr.lastCall.args;
+    const barElem = this.renderer.path.thirdCall.returnValue;
+    const creatingParams = barElem.attr.firstCall.args;
+    const drawingParams = barElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -882,9 +882,9 @@ QUnit.test('Get zero level params', function(assert) {
 
     this.createBullet({ value: 5, target: 10, endScaleValue: 20 });
 
-    var zeroElem = this.renderer.path.firstCall.returnValue,
-        creatingParams = zeroElem.attr.firstCall.args,
-        drawingParams = zeroElem.attr.lastCall.args;
+    const zeroElem = this.renderer.path.firstCall.returnValue;
+    const creatingParams = zeroElem.attr.firstCall.args;
+    const drawingParams = zeroElem.attr.lastCall.args;
 
     assert.ok(creatingParams, 'Params should be created');
     assert.ok(drawingParams, 'Params should be created');
@@ -905,14 +905,14 @@ QUnit.test('Get zero level params', function(assert) {
 QUnit.module('Options changed', environment);
 
 QUnit.test('Refresh', function(assert) {
-    var options = {
-            value: 10,
-            startScaleValue: 0,
-            endScaleValue: 10,
-            target: 8
-        },
-        sparkCont = $('<div style="width: 200px; height: 30px">').appendTo(this.$container),
-        bullet;
+    const options = {
+        value: 10,
+        startScaleValue: 0,
+        endScaleValue: 10,
+        target: 8
+    };
+    const sparkCont = $('<div style="width: 200px; height: 30px">').appendTo(this.$container);
+    let bullet;
 
     bullet = this.createBullet(options, sparkCont);
     sparkCont.width(300);
@@ -921,8 +921,8 @@ QUnit.test('Refresh', function(assert) {
 
     bullet.render();
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas width should have new value');
     assert.deepEqual(valTranslator.update.lastCall.args[1].height, 40, 'Canvas height should have new value');
 
@@ -931,7 +931,7 @@ QUnit.test('Refresh', function(assert) {
 });
 
 QUnit.test('Change size of container', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10,
         startScaleValue: 0,
         endScaleValue: 10,
@@ -943,8 +943,8 @@ QUnit.test('Change size of container', function(assert) {
 
     assert.ok(bullet, 'bullet should be created');
 
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    const argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+    const valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
     assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas should have new width');
     assert.deepEqual(valTranslator.update.lastCall.args[1].height, 100, 'Canvas should have new height');
 
@@ -953,7 +953,7 @@ QUnit.test('Change size of container', function(assert) {
 });
 
 QUnit.test('B239673 - Tooltip does not update location after resize', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10,
         startScaleValue: 0,
         endScaleValue: 10,
@@ -969,7 +969,7 @@ QUnit.test('B239673 - Tooltip does not update location after resize', function(a
 });
 
 QUnit.test('Change value', function(assert) {
-    var bullet = this.createBullet({
+    const bullet = this.createBullet({
         value: 10,
         startScaleValue: 0,
         endScaleValue: 10,
@@ -986,13 +986,13 @@ QUnit.test('Change value', function(assert) {
 });
 
 QUnit.test('Change size - B239871', function(assert) {
-    var bullet = this.createBullet({
-            value: 10,
-            startScaleValue: 0,
-            endScaleValue: 10,
-            target: 8
-        }),
-        redrawFunctionCalled = false;
+    const bullet = this.createBullet({
+        value: 10,
+        startScaleValue: 0,
+        endScaleValue: 10,
+        target: 8
+    });
+    let redrawFunctionCalled = false;
 
     bullet._update = function() {
         redrawFunctionCalled = true;
@@ -1004,17 +1004,17 @@ QUnit.test('Change size - B239871', function(assert) {
 });
 
 QUnit.test('Change size if size = 0,0 - B239871', function(assert) {
-    var bullet = this.createBullet({
-            value: 10,
-            startScaleValue: 0,
-            endScaleValue: 10,
-            target: 8,
-            size: {
-                width: 0,
-                height: 0
-            }
-        }),
-        redrawFunctionCalled = false;
+    const bullet = this.createBullet({
+        value: 10,
+        startScaleValue: 0,
+        endScaleValue: 10,
+        target: 8,
+        size: {
+            width: 0,
+            height: 0
+        }
+    });
+    let redrawFunctionCalled = false;
 
     bullet._update = function() {
         redrawFunctionCalled = true;
@@ -1026,17 +1026,17 @@ QUnit.test('Change size if size = 0,0 - B239871', function(assert) {
 });
 
 QUnit.test('Change size if size = 10,0 - B239871', function(assert) {
-    var bullet = this.createBullet({
-            value: 10,
-            startScaleValue: 0,
-            endScaleValue: 10,
-            target: 8,
-            size: {
-                width: 10,
-                height: 0
-            }
-        }),
-        redrawFunctionCalled = false;
+    const bullet = this.createBullet({
+        value: 10,
+        startScaleValue: 0,
+        endScaleValue: 10,
+        target: 8,
+        size: {
+            width: 10,
+            height: 0
+        }
+    });
+    let redrawFunctionCalled = false;
 
     bullet._update = function() {
         redrawFunctionCalled = true;
@@ -1048,17 +1048,17 @@ QUnit.test('Change size if size = 10,0 - B239871', function(assert) {
 });
 
 QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
-    var bullet = this.createBullet({
-            value: 10,
-            startScaleValue: 0,
-            endScaleValue: 10,
-            target: 8,
-            size: {
-                width: 0,
-                height: 10
-            }
-        }),
-        redrawFunctionCalled = false;
+    const bullet = this.createBullet({
+        value: 10,
+        startScaleValue: 0,
+        endScaleValue: 10,
+        target: 8,
+        size: {
+            width: 0,
+            height: 10
+        }
+    });
+    let redrawFunctionCalled = false;
 
     bullet._update = function() {
         redrawFunctionCalled = true;
@@ -1157,7 +1157,7 @@ QUnit.test('call drawn in BaseWidget', function(assert) {
 });
 
 QUnit.test('drawn is called after resize', function(assert) {
-    var bullet = this.createBullet({});
+    const bullet = this.createBullet({});
     this.resetTranslators();
     bullet.option('size', { width: 300 });
 

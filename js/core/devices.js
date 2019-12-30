@@ -1,20 +1,20 @@
-var $ = require('../core/renderer'),
-    windowUtils = require('./utils/window'),
-    navigator = windowUtils.getNavigator(),
-    window = windowUtils.getWindow(),
-    extend = require('./utils/extend').extend,
-    isPlainObject = require('./utils/type').isPlainObject,
-    each = require('./utils/iterator').each,
-    Class = require('./class'),
-    errors = require('./errors'),
-    Callbacks = require('./utils/callbacks'),
-    resizeCallbacks = require('./utils/resize_callbacks'),
-    EventsMixin = require('./events_mixin'),
-    SessionStorage = require('./utils/storage').sessionStorage,
-    viewPort = require('./utils/view_port'),
-    Config = require('./config');
+const $ = require('../core/renderer');
+const windowUtils = require('./utils/window');
+const navigator = windowUtils.getNavigator();
+const window = windowUtils.getWindow();
+const extend = require('./utils/extend').extend;
+const isPlainObject = require('./utils/type').isPlainObject;
+const each = require('./utils/iterator').each;
+const Class = require('./class');
+const errors = require('./errors');
+const Callbacks = require('./utils/callbacks');
+const resizeCallbacks = require('./utils/resize_callbacks');
+const EventsMixin = require('./events_mixin');
+const SessionStorage = require('./utils/storage').sessionStorage;
+const viewPort = require('./utils/view_port');
+const Config = require('./config');
 
-var KNOWN_UA_TABLE = {
+const KNOWN_UA_TABLE = {
     'iPhone': 'iPhone',
     'iPhone5': 'iPhone',
     'iPhone6': 'iPhone',
@@ -35,7 +35,7 @@ var KNOWN_UA_TABLE = {
 * @module core/devices
 * @export default
 */
-var DEFAULT_DEVICE = {
+const DEFAULT_DEVICE = {
     deviceType: 'desktop',
     platform: 'generic',
     version: [],
@@ -50,12 +50,12 @@ var DEFAULT_DEVICE = {
     mac: false
 };
 
-var uaParsers = {
+const uaParsers = {
     generic: function(userAgent) {
-        var isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/),
-            isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent),
-            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent),
-            isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
+        const isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/);
+        const isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent);
+        const isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
+        const isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
 
         if(!(isPhone || isTablet || isDesktop || isMac)) {
             return;
@@ -75,11 +75,11 @@ var uaParsers = {
             return;
         }
 
-        var isPhone = /ip(hone|od)/i.test(userAgent),
-            matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i),
-            version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [],
-            isIPhone4 = (window.screen.height === (960 / 2)),
-            grade = isIPhone4 ? 'B' : 'A';
+        const isPhone = /ip(hone|od)/i.test(userAgent);
+        const matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i);
+        const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [];
+        const isIPhone4 = (window.screen.height === (960 / 2));
+        const grade = isIPhone4 ? 'B' : 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
@@ -94,11 +94,11 @@ var uaParsers = {
             return;
         }
 
-        var isPhone = /mobile/i.test(userAgent),
-            matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i),
-            version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [],
-            worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4),
-            grade = worseThan4_4 ? 'B' : 'A';
+        const isPhone = /mobile/i.test(userAgent);
+        const matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i);
+        const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [];
+        const worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4);
+        const grade = worseThan4_4 ? 'B' : 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
@@ -109,7 +109,7 @@ var uaParsers = {
     }
 };
 
-var Devices = Class.inherit({
+const Devices = Class.inherit({
     /**
     * @name DevicesObjectevents.orientationChanged
     * @type classEventType
@@ -167,7 +167,7 @@ var Devices = Class.inherit({
 
     real: function() {
         ///#DEBUG
-        var forceDevice = arguments[0];
+        const forceDevice = arguments[0];
         if(isPlainObject(forceDevice)) {
             extend(this._realDevice, forceDevice);
             return;
@@ -189,8 +189,8 @@ var Devices = Class.inherit({
     },
 
     _getCssClasses: function(device) {
-        var result = [];
-        var realDevice = this._realDevice;
+        const result = [];
+        const realDevice = this._realDevice;
 
         device = device || this.current();
 
@@ -253,7 +253,7 @@ var Devices = Class.inherit({
         if(isPlainObject(deviceName)) {
             return this._fromConfig(deviceName);
         } else {
-            var ua;
+            let ua;
             if(deviceName) {
                 ua = KNOWN_UA_TABLE[deviceName];
                 if(!ua) {
@@ -267,7 +267,7 @@ var Devices = Class.inherit({
     },
 
     _getDeviceOrNameFromWindowScope: function() {
-        var result;
+        let result;
 
         if(windowUtils.hasWindow() && (this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'])) {
             result = this._window.top['dx-force-device-object'] || this._window.top['dx-force-device'];
@@ -277,13 +277,13 @@ var Devices = Class.inherit({
     },
 
     _getDeviceNameFromSessionStorage: function() {
-        var sessionStorage = SessionStorage();
+        const sessionStorage = SessionStorage();
 
         if(!sessionStorage) {
             return;
         }
 
-        var deviceOrName = sessionStorage.getItem('dx-force-device');
+        const deviceOrName = sessionStorage.getItem('dx-force-device');
 
         try {
             return JSON.parse(deviceOrName);
@@ -293,20 +293,20 @@ var Devices = Class.inherit({
     },
 
     _fromConfig: function(config) {
-        var result = extend({}, DEFAULT_DEVICE, this._currentDevice, config),
-            shortcuts = {
-                phone: result.deviceType === 'phone',
-                tablet: result.deviceType === 'tablet',
-                android: result.platform === 'android',
-                ios: result.platform === 'ios',
-                generic: result.platform === 'generic'
-            };
+        const result = extend({}, DEFAULT_DEVICE, this._currentDevice, config);
+        const shortcuts = {
+            phone: result.deviceType === 'phone',
+            tablet: result.deviceType === 'tablet',
+            android: result.platform === 'android',
+            ios: result.platform === 'ios',
+            generic: result.platform === 'generic'
+        };
 
         return extend(result, shortcuts);
     },
 
     _fromUA: function(ua) {
-        var config;
+        let config;
 
         each(uaParsers, function(platform, parser) {
             config = parser(ua);
@@ -321,8 +321,8 @@ var Devices = Class.inherit({
     },
 
     _changeOrientation: function() {
-        var $window = $(this._window),
-            orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
+        const $window = $(this._window);
+        const orientation = $window.height() > $window.width() ? 'portrait' : 'landscape';
 
         if(this._currentOrientation === orientation) {
             return;
@@ -336,7 +336,7 @@ var Devices = Class.inherit({
     },
 
     _recalculateOrientation: function() {
-        var windowWidth = $(this._window).width();
+        const windowWidth = $(this._window).width();
 
         if(this._currentWidth === windowWidth) {
             return;

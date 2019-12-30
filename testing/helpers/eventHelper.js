@@ -1,6 +1,6 @@
-var registerEventCallbacks = require('events/core/event_registrator_callbacks');
+const registerEventCallbacks = require('events/core/event_registrator_callbacks');
 
-var special = {};
+const special = {};
 
 registerEventCallbacks.add(function(name, eventObject) {
     special[name] = eventObject;

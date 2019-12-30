@@ -1,43 +1,43 @@
-var registerEventCallbacks = require('./event_registrator_callbacks');
-var extend = require('../../core/utils/extend').extend;
-var domAdapter = require('../../core/dom_adapter');
-var windowUtils = require('../../core/utils/window');
-var window = windowUtils.getWindow();
-var injector = require('../../core/utils/dependency_injector');
-var typeUtils = require('../../core/utils/type');
-var Callbacks = require('../../core/utils/callbacks');
-var isWindow = typeUtils.isWindow;
-var isFunction = typeUtils.isFunction;
-var isString = typeUtils.isString;
-var errors = require('../../core/errors');
-var WeakMap = require('../../core/polyfills/weak_map');
-var hookTouchProps = require('../../events/core/hook_touch_props');
-var callOnce = require('../../core/utils/call_once');
+const registerEventCallbacks = require('./event_registrator_callbacks');
+const extend = require('../../core/utils/extend').extend;
+const domAdapter = require('../../core/dom_adapter');
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
+const injector = require('../../core/utils/dependency_injector');
+const typeUtils = require('../../core/utils/type');
+const Callbacks = require('../../core/utils/callbacks');
+const isWindow = typeUtils.isWindow;
+const isFunction = typeUtils.isFunction;
+const isString = typeUtils.isString;
+const errors = require('../../core/errors');
+const WeakMap = require('../../core/polyfills/weak_map');
+const hookTouchProps = require('../../events/core/hook_touch_props');
+const callOnce = require('../../core/utils/call_once');
 
-var EMPTY_EVENT_NAME = 'dxEmptyEventType';
-var NATIVE_EVENTS_TO_SUBSCRIBE = {
+const EMPTY_EVENT_NAME = 'dxEmptyEventType';
+const NATIVE_EVENTS_TO_SUBSCRIBE = {
     'mouseenter': 'mouseover',
     'mouseleave': 'mouseout',
     'pointerenter': 'pointerover',
     'pointerleave': 'pointerout'
 };
-var NATIVE_EVENTS_TO_TRIGGER = {
+const NATIVE_EVENTS_TO_TRIGGER = {
     'focusin': 'focus',
     'focusout': 'blur'
 };
-var NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
+const NO_BUBBLE_EVENTS = ['blur', 'focus', 'load'];
 
-var forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
+const forcePassiveFalseEventNames = ['touchmove', 'wheel', 'mousewheel', 'touchstart'];
 
-var matchesSafe = function(target, selector) {
+const matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== '#document' && domAdapter.elementMatches(target, selector);
 };
-var elementDataMap = new WeakMap();
-var guid = 0;
-var skipEvent;
+const elementDataMap = new WeakMap();
+let guid = 0;
+let skipEvent;
 
-var special = (function() {
-    var specialData = {};
+const special = (function() {
+    const specialData = {};
 
     registerEventCallbacks.add(function(eventName, eventObject) {
         specialData[eventName] = eventObject;
@@ -54,7 +54,7 @@ var special = (function() {
 }());
 
 var applyForEach = function(args, method) {
-    var element = args[0];
+    const element = args[0];
 
     if(!element) {
         return;
@@ -63,7 +63,7 @@ var applyForEach = function(args, method) {
     if(domAdapter.isNode(element) || isWindow(element)) {
         method.apply(eventsEngine, args);
     } else if(!isString(element) && 'length' in element) {
-        var itemArgs = Array.prototype.slice.call(args, 0);
+        const itemArgs = Array.prototype.slice.call(args, 0);
 
         Array.prototype.forEach.call(element, function(itemElement) {
             itemArgs[0] = itemElement;
@@ -74,17 +74,17 @@ var applyForEach = function(args, method) {
     }
 };
 
-var getHandler = function(method) {
+const getHandler = function(method) {
     return function() {
         applyForEach(arguments, method);
     };
 };
 
-var detectPassiveEventHandlersSupport = function() {
-    var isSupported = false;
+const detectPassiveEventHandlersSupport = function() {
+    let isSupported = false;
 
     try {
-        var options = Object.defineProperty({ }, 'passive', {
+        const options = Object.defineProperty({ }, 'passive', {
             get: function() {
                 isSupported = true;
                 return true;
@@ -97,16 +97,16 @@ var detectPassiveEventHandlersSupport = function() {
     return isSupported;
 };
 
-var passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
+const passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
 
-var getHandlersController = function(element, eventName) {
-    var elementData = elementDataMap.get(element);
+const getHandlersController = function(element, eventName) {
+    let elementData = elementDataMap.get(element);
 
     eventName = eventName || '';
 
-    var eventNameParts = eventName.split('.');
-    var namespaces = eventNameParts.slice(1);
-    var eventNameIsDefined = !!eventNameParts[0];
+    const eventNameParts = eventName.split('.');
+    const namespaces = eventNameParts.slice(1);
+    const eventNameIsDefined = !!eventNameParts[0];
 
     eventName = eventNameParts[0] || EMPTY_EVENT_NAME;
 
@@ -122,16 +122,16 @@ var getHandlersController = function(element, eventName) {
         };
     }
 
-    var eventData = elementData[eventName];
+    const eventData = elementData[eventName];
 
     return {
         addHandler: function(handler, selector, data) {
-            var callHandler = function(e, extraParameters) {
-                var handlerArgs = [e],
-                    target = e.currentTarget,
-                    relatedTarget = e.relatedTarget,
-                    secondaryTargetIsInside,
-                    result;
+            const callHandler = function(e, extraParameters) {
+                const handlerArgs = [e];
+                const target = e.currentTarget;
+                const relatedTarget = e.relatedTarget;
+                let secondaryTargetIsInside;
+                let result;
 
                 if(eventName in NATIVE_EVENTS_TO_SUBSCRIBE) {
                     secondaryTargetIsInside = relatedTarget && target && (relatedTarget === target || target.contains(relatedTarget));
@@ -153,7 +153,7 @@ var getHandlersController = function(element, eventName) {
                 }
             };
 
-            var wrappedHandler = function(e, extraParameters) {
+            const wrappedHandler = function(e, extraParameters) {
                 if(skipEvent && e.type === skipEvent) {
                     return;
                 }
@@ -162,7 +162,7 @@ var getHandlersController = function(element, eventName) {
                 e.delegateTarget = element;
 
                 if(selector) {
-                    var currentTarget = e.target;
+                    let currentTarget = e.target;
 
                     while(currentTarget && currentTarget !== element) {
                         if(matchesSafe(currentTarget, selector)) {
@@ -177,7 +177,7 @@ var getHandlersController = function(element, eventName) {
                 }
             };
 
-            var handleObject = {
+            const handleObject = {
                 handler: handler,
                 wrappedHandler: wrappedHandler,
                 selector: selector,
@@ -190,9 +190,9 @@ var getHandlersController = function(element, eventName) {
 
             eventData.handleObjects.push(handleObject);
 
-            var firstHandlerForTheType = eventData.handleObjects.length === 1;
-            var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
-            var nativeListenerOptions;
+            const firstHandlerForTheType = eventData.handleObjects.length === 1;
+            let shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
+            let nativeListenerOptions;
 
             if(shouldAddNativeListener) {
                 shouldAddNativeListener = !special.callMethod(eventName, 'setup', element, [ data, namespaces, handler ]);
@@ -214,17 +214,17 @@ var getHandlersController = function(element, eventName) {
         },
 
         removeHandler: function(handler, selector) {
-            var removeByEventName = function(eventName) {
-                var eventData = elementData[eventName];
+            const removeByEventName = function(eventName) {
+                const eventData = elementData[eventName];
 
                 if(!eventData.handleObjects.length) {
                     delete elementData[eventName];
                     return;
                 }
-                var removedHandler;
+                let removedHandler;
 
                 eventData.handleObjects = eventData.handleObjects.filter(function(handleObject) {
-                    var skip = namespaces.length && !isSubset(handleObject.namespaces, namespaces)
+                    const skip = namespaces.length && !isSubset(handleObject.namespaces, namespaces)
                         || handler && handleObject.handler !== handler
                         || selector && handleObject.selector !== selector;
 
@@ -236,8 +236,8 @@ var getHandlersController = function(element, eventName) {
                     return skip;
                 });
 
-                var lastHandlerForTheType = !eventData.handleObjects.length;
-                var shouldRemoveNativeListener = lastHandlerForTheType && eventName !== EMPTY_EVENT_NAME;
+                const lastHandlerForTheType = !eventData.handleObjects.length;
+                const shouldRemoveNativeListener = lastHandlerForTheType && eventName !== EMPTY_EVENT_NAME;
 
                 if(shouldRemoveNativeListener) {
                     special.callMethod(eventName, 'teardown', element, [ namespaces, removedHandler ]);
@@ -251,12 +251,12 @@ var getHandlersController = function(element, eventName) {
             if(eventNameIsDefined) {
                 removeByEventName(eventName);
             } else {
-                for(var name in elementData) {
+                for(const name in elementData) {
                     removeByEventName(name);
                 }
             }
 
-            var elementDataIsEmpty = Object.keys(elementData).length === 0;
+            const elementDataIsEmpty = Object.keys(elementData).length === 0;
 
             if(elementDataIsEmpty) {
                 elementDataMap.delete(element);
@@ -264,9 +264,9 @@ var getHandlersController = function(element, eventName) {
         },
 
         callHandlers: function(event, extraParameters) {
-            var forceStop = false;
+            let forceStop = false;
 
-            var handleCallback = function(handleObject) {
+            const handleCallback = function(handleObject) {
                 if(forceStop) {
                     return;
                 }
@@ -287,20 +287,20 @@ var getHandlersController = function(element, eventName) {
 
 var getNativeHandler = function(subscribeName) {
     return function(event, extraParameters) {
-        var handlersController = getHandlersController(this, subscribeName);
+        const handlersController = getHandlersController(this, subscribeName);
         event = eventsEngine.Event(event);
         handlersController.callHandlers(event, extraParameters);
     };
 };
 
 var isSubset = function(original, checked) {
-    for(var i = 0; i < checked.length; i++) {
+    for(let i = 0; i < checked.length; i++) {
         if(original.indexOf(checked[i]) < 0) return false;
     }
     return true;
 };
 
-var normalizeOnArguments = function(callback) {
+const normalizeOnArguments = function(callback) {
     return function(element, eventName, selector, data, handler) {
         if(!handler) {
             handler = data;
@@ -321,7 +321,7 @@ var normalizeOnArguments = function(callback) {
     };
 };
 
-var normalizeOffArguments = function(callback) {
+const normalizeOffArguments = function(callback) {
     return function(element, eventName, selector, handler) {
         if(typeof selector === 'function') {
             handler = selector;
@@ -332,7 +332,7 @@ var normalizeOffArguments = function(callback) {
     };
 };
 
-var normalizeTriggerArguments = function(callback) {
+const normalizeTriggerArguments = function(callback) {
     return function(element, src, extraParameters) {
         if(typeof src === 'string') {
             src = {
@@ -358,7 +358,7 @@ var normalizeTriggerArguments = function(callback) {
     };
 };
 
-var normalizeEventArguments = function(callback) {
+const normalizeEventArguments = function(callback) {
     return function(src, config) {
         if(!(this instanceof eventsEngine.Event)) {
             return new eventsEngine.Event(src, config);
@@ -382,10 +382,10 @@ var normalizeEventArguments = function(callback) {
     };
 };
 
-var iterate = function(callback) {
-    var iterateEventNames = function(element, eventName) {
+const iterate = function(callback) {
+    const iterateEventNames = function(element, eventName) {
         if(eventName && eventName.indexOf(' ') > -1) {
-            var args = Array.prototype.slice.call(arguments, 0);
+            const args = Array.prototype.slice.call(arguments, 0);
             eventName.split(' ').forEach(function(eventName) {
                 args[1] = eventName;
                 callback.apply(this, args);
@@ -397,9 +397,9 @@ var iterate = function(callback) {
 
     return function(element, eventName) {
         if(typeof eventName === 'object') {
-            var args = Array.prototype.slice.call(arguments, 0);
+            const args = Array.prototype.slice.call(arguments, 0);
 
-            for(var name in eventName) {
+            for(const name in eventName) {
                 args[1] = name;
                 args[args.length - 1] = eventName[name];
                 iterateEventNames.apply(this, args);
@@ -410,10 +410,10 @@ var iterate = function(callback) {
     };
 };
 
-var callNativeMethod = function(eventName, element) {
-    var nativeMethodName = NATIVE_EVENTS_TO_TRIGGER[eventName] || eventName;
+const callNativeMethod = function(eventName, element) {
+    const nativeMethodName = NATIVE_EVENTS_TO_TRIGGER[eventName] || eventName;
 
-    var isLinkClickEvent = function(eventName, element) {
+    const isLinkClickEvent = function(eventName, element) {
         return eventName === 'click' && element.localName === 'a';
     };
 
@@ -426,13 +426,13 @@ var callNativeMethod = function(eventName, element) {
     }
 };
 
-var calculateWhich = function(event) {
-    var setForMouseEvent = function(event) {
-        var mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
+const calculateWhich = function(event) {
+    const setForMouseEvent = function(event) {
+        const mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
         return !event.which && event.button !== undefined && mouseEventRegex.test(event.type);
     };
 
-    var setForKeyEvent = function(event) {
+    const setForKeyEvent = function(event) {
         return event.which == null && event.type.indexOf('key') === 0;
     };
 
@@ -441,7 +441,7 @@ var calculateWhich = function(event) {
     }
 
     if(setForMouseEvent(event)) {
-        var whichByButton = { 1: 1, 2: 3, 3: 1, 4: 2 };
+        const whichByButton = { 1: 1, 2: 3, 3: 1, 4: 2 };
         return whichByButton[event.button];
     }
 
@@ -450,7 +450,7 @@ var calculateWhich = function(event) {
 
 var eventsEngine = injector({
     on: getHandler(normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
-        var handlersController = getHandlersController(element, eventName);
+        const handlersController = getHandlersController(element, eventName);
         handlersController.addHandler(handler, selector, data);
     }))),
 
@@ -464,25 +464,25 @@ var eventsEngine = injector({
     })),
 
     off: getHandler(normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
-        var handlersController = getHandlersController(element, eventName);
+        const handlersController = getHandlersController(element, eventName);
         handlersController.removeHandler(handler, selector);
     }))),
 
     trigger: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
-        var eventName = event.type;
-        var handlersController = getHandlersController(element, event.type);
+        const eventName = event.type;
+        const handlersController = getHandlersController(element, event.type);
 
         special.callMethod(eventName, 'trigger', element, [ event, extraParameters ]);
         handlersController.callHandlers(event, extraParameters);
 
-        var noBubble = special.getField(eventName, 'noBubble')
+        const noBubble = special.getField(eventName, 'noBubble')
             || event.isPropagationStopped()
             || NO_BUBBLE_EVENTS.indexOf(eventName) !== -1;
 
         if(!noBubble) {
-            var parents = [];
+            const parents = [];
             var getParents = function(element) {
-                var parent = element.parentNode;
+                const parent = element.parentNode;
                 if(parent) {
                     parents.push(parent);
                     getParents(parent);
@@ -491,10 +491,10 @@ var eventsEngine = injector({
             getParents(element);
             parents.push(window);
 
-            var i = 0;
+            let i = 0;
 
             while(parents[i] && !event.isPropagationStopped()) {
-                var parentDataByEvent = getHandlersController(parents[i], event.type);
+                const parentDataByEvent = getHandlersController(parents[i], event.type);
                 parentDataByEvent.callHandlers(extend(event, { currentTarget: parents[i] }), extraParameters);
                 i++;
             }
@@ -507,12 +507,12 @@ var eventsEngine = injector({
     })),
 
     triggerHandler: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
-        var handlersController = getHandlersController(element, event.type);
+        const handlersController = getHandlersController(element, event.type);
         handlersController.callHandlers(event, extraParameters);
     }))
 });
 
-var initEvent = function(EventClass) {
+const initEvent = function(EventClass) {
     if(EventClass) {
         eventsEngine.Event = EventClass;
         eventsEngine.Event.prototype = EventClass.prototype;
@@ -520,10 +520,10 @@ var initEvent = function(EventClass) {
 };
 
 initEvent(normalizeEventArguments(function(src, config) {
-    var that = this;
-    var propagationStopped = false;
-    var immediatePropagationStopped = false;
-    var defaultPrevented = false;
+    const that = this;
+    let propagationStopped = false;
+    let immediatePropagationStopped = false;
+    let defaultPrevented = false;
 
     extend(that, src);
 
@@ -593,8 +593,8 @@ var addProperty = function(propName, hook, eventInstance) {
 
 hookTouchProps(addProperty);
 
-var beforeSetStrategy = Callbacks();
-var afterSetStrategy = Callbacks();
+const beforeSetStrategy = Callbacks();
+const afterSetStrategy = Callbacks();
 
 eventsEngine.set = function(engine) {
     beforeSetStrategy.fire();
@@ -605,12 +605,12 @@ eventsEngine.set = function(engine) {
 
 eventsEngine.subscribeGlobal = function() {
     applyForEach(arguments, normalizeOnArguments(function() {
-        var args = arguments;
+        const args = arguments;
 
         eventsEngine.on.apply(this, args);
 
         beforeSetStrategy.add(function() {
-            var offArgs = Array.prototype.slice.call(args, 0);
+            const offArgs = Array.prototype.slice.call(args, 0);
             offArgs.splice(3, 1);
             eventsEngine.off.apply(this, offArgs);
         });

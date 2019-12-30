@@ -1,28 +1,28 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    windowUtils = require('../../core/utils/window'),
-    window = windowUtils.getWindow(),
-    eventsEngine = require('../../events/core/events_engine'),
-    extend = require('../../core/utils/extend').extend,
-    resizeCallbacks = require('../../core/utils/resize_callbacks'),
-    support = require('../../core/utils/support'),
-    styleUtils = require('../../core/utils/style'),
-    devices = require('../../core/devices');
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
+const eventsEngine = require('../../events/core/events_engine');
+const extend = require('../../core/utils/extend').extend;
+const resizeCallbacks = require('../../core/utils/resize_callbacks');
+const support = require('../../core/utils/support');
+const styleUtils = require('../../core/utils/style');
+const devices = require('../../core/devices');
 
-var initMobileViewport = function(options) {
+const initMobileViewport = function(options) {
     options = extend({}, options);
-    var realDevice = devices.real();
-    var allowZoom = options.allowZoom;
-    var allowPan = options.allowPan;
-    var allowSelection = ('allowSelection' in options) ? options.allowSelection : realDevice.platform === 'generic';
+    let realDevice = devices.real();
+    const allowZoom = options.allowZoom;
+    const allowPan = options.allowPan;
+    const allowSelection = ('allowSelection' in options) ? options.allowSelection : realDevice.platform === 'generic';
 
-    var metaSelector = 'meta[name=viewport]';
+    const metaSelector = 'meta[name=viewport]';
     if(!$(metaSelector).length) {
         $('<meta>').attr('name', 'viewport').appendTo('head');
     }
 
-    var metaVerbs = ['width=device-width'],
-        msTouchVerbs = [];
+    const metaVerbs = ['width=device-width'];
+    const msTouchVerbs = [];
 
     if(allowZoom) {
         msTouchVerbs.push('pinch-zoom');
@@ -56,10 +56,10 @@ var initMobileViewport = function(options) {
     if(support.touch) {
         eventsEngine.off(domAdapter.getDocument(), '.dxInitMobileViewport');
         eventsEngine.on(domAdapter.getDocument(), 'dxpointermove.dxInitMobileViewport', function(e) {
-            var count = e.pointers.length,
-                isTouchEvent = e.pointerType === 'touch',
-                zoomDisabled = !allowZoom && count > 1,
-                panDisabled = !allowPan && count === 1 && !e.isScrollingEvent;
+            const count = e.pointers.length;
+            const isTouchEvent = e.pointerType === 'touch';
+            const zoomDisabled = !allowZoom && count > 1;
+            const panDisabled = !allowPan && count === 1 && !e.isScrollingEvent;
 
             if(isTouchEvent && (zoomDisabled || panDisabled)) {
                 e.preventDefault();
@@ -68,12 +68,12 @@ var initMobileViewport = function(options) {
     }
 
     if(realDevice.ios) {
-        var isPhoneGap = (domAdapter.getLocation().protocol === 'file:');
+        const isPhoneGap = (domAdapter.getLocation().protocol === 'file:');
 
         if(!isPhoneGap) {
             // NOTE: fix app size after device rotation in Safari when keyboard was shown
             resizeCallbacks.add(function() {
-                var windowWidth = $(window).width();
+                const windowWidth = $(window).width();
                 $('body').width(windowWidth);
             });
         }
@@ -82,7 +82,7 @@ var initMobileViewport = function(options) {
     if(realDevice.android) {
         resizeCallbacks.add(function() {
             setTimeout(function() {
-                var activeElement = domAdapter.getActiveElement();
+                const activeElement = domAdapter.getActiveElement();
 
                 activeElement.scrollIntoViewIfNeeded ?
                     activeElement.scrollIntoViewIfNeeded() :

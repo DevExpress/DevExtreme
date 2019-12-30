@@ -22,7 +22,7 @@ export default CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._customizeStoreLoadOptions = (e) => {
-            var dataSource = this._dataSource;
+            const dataSource = this._dataSource;
             if(dataSource && !dataSource.isLoaded()) {
                 this._correctionIndex = 0;
             }
@@ -46,10 +46,10 @@ export default CollectionWidget.inherit({
 
     _findItemElementByKey: function(key) {
         let result = $();
-        var keyExpr = this.key();
+        const keyExpr = this.key();
         this.itemElements().each((_, item) => {
-            let $item = $(item),
-                itemData = this._getItemData($item);
+            const $item = $(item);
+            const itemData = this._getItemData($item);
             if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
@@ -81,7 +81,7 @@ export default CollectionWidget.inherit({
                 }
                 return this.keyOf(data);
             };
-            let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
+            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
@@ -121,7 +121,7 @@ export default CollectionWidget.inherit({
         if(isPartialRefresh) {
             this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
         } else {
-            let changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
+            const changedItem = items[arrayUtils.indexByKey(keyInfo, items, change.key)];
             if(changedItem) {
                 arrayUtils.update(keyInfo, items, change.key, change.data).done(() => {
                     this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByKey(change.key));
@@ -140,7 +140,7 @@ export default CollectionWidget.inherit({
     },
 
     _updateSelectionAfterRemoveByChange: function(removeIndex) {
-        var selectedIndex = this.option('selectedIndex');
+        const selectedIndex = this.option('selectedIndex');
 
         if(selectedIndex > removeIndex) {
             this.option('selectedIndex', selectedIndex - 1);
@@ -152,7 +152,7 @@ export default CollectionWidget.inherit({
     },
 
     _beforeItemElementInserted: function(change) {
-        var selectedIndex = this.option('selectedIndex');
+        const selectedIndex = this.option('selectedIndex');
 
         if(change.index <= selectedIndex) {
             this.option('selectedIndex', selectedIndex + 1);
@@ -162,11 +162,11 @@ export default CollectionWidget.inherit({
     _afterItemElementInserted: noop,
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
-        let index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key),
-            removedItem = isPartialRefresh ? change.oldItem : items[index];
+        const index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key);
+        const removedItem = isPartialRefresh ? change.oldItem : items[index];
         if(removedItem) {
-            let $removedItemElement = this._findItemElementByKey(change.key),
-                deletedActionArgs = this._extendActionArgs($removedItemElement);
+            const $removedItemElement = this._findItemElementByKey(change.key);
+            const deletedActionArgs = this._extendActionArgs($removedItemElement);
 
             this._waitDeletingPrepare($removedItemElement).done(()=>{
                 if(isPartialRefresh) {
@@ -184,11 +184,11 @@ export default CollectionWidget.inherit({
     },
 
     _modifyByChanges: function(changes, isPartialRefresh) {
-        let items = this._editStrategy.itemsGetter(),
-            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) },
-            dataSource = this._dataSource,
-            paginate = dataSource && dataSource.paginate(),
-            group = dataSource && dataSource.group();
+        const items = this._editStrategy.itemsGetter();
+        const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+        const dataSource = this._dataSource;
+        const paginate = dataSource && dataSource.paginate();
+        const group = dataSource && dataSource.group();
 
         if(paginate || group) {
             changes = changes.filter(item => item.type !== 'insert' || item.index !== undefined);
@@ -201,7 +201,7 @@ export default CollectionWidget.inherit({
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {
-        let nextSiblingElement = $container.children(this._itemSelector()).get(index);
+        const nextSiblingElement = $container.children(this._itemSelector()).get(index);
         insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
     },
 

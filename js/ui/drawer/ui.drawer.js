@@ -154,7 +154,7 @@ const Drawer = Widget.inherit({
     },
 
     _outsideClickHandler(e) {
-        var closeOnOutsideClick = this.option('closeOnOutsideClick');
+        let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
         if(typeUtils.isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
@@ -185,9 +185,9 @@ const Drawer = Widget.inherit({
         this._whenPanelRendered = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option('template')), this._whenPanelRendered);
 
-        const contentTemplateOption = this.option('contentTemplate'),
-            contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+        const contentTemplateOption = this.option('contentTemplate');
+        const contentTemplate = this._getTemplate(contentTemplateOption);
+        const transclude = this._getAnonymousTemplateName() === contentTemplateOption;
 
         contentTemplate && contentTemplate.render({
             container: this.viewContent(),
@@ -308,7 +308,7 @@ const Drawer = Widget.inherit({
     },
 
     getElementWidth($element) {
-        var $children = $element.children();
+        const $children = $element.children();
 
         return $children.length ? $children.eq(0).get(0).getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
     },
@@ -326,7 +326,7 @@ const Drawer = Widget.inherit({
     },
 
     getElementHeight($element) {
-        var $children = $element.children();
+        const $children = $element.children();
 
         return $children.length ? $children.eq(0).get(0).getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },

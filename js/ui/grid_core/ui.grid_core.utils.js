@@ -15,41 +15,41 @@ import { deepExtendArraySafe } from '../../core/utils/object';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 
-var DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled',
-    DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened',
-    DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed',
-    DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand',
-    NO_DATA_CLASS = 'nodata',
-    DATE_INTERVAL_SELECTORS = {
-        'year': function(value) {
-            return value && value.getFullYear();
-        },
-        'month': function(value) {
-            return value && (value.getMonth() + 1);
-        },
-        'day': function(value) {
-            return value && value.getDate();
-        },
-        'quarter': function(value) {
-            return value && (Math.floor(value.getMonth() / 3) + 1);
-        },
-        'hour': function(value) {
-            return value && value.getHours();
-        },
-        'minute': function(value) {
-            return value && value.getMinutes();
-        },
-        'second': function(value) {
-            return value && value.getSeconds();
-        }
-    };
+const DATAGRID_SELECTION_DISABLED_CLASS = 'dx-selection-disabled';
+const DATAGRID_GROUP_OPENED_CLASS = 'dx-datagrid-group-opened';
+const DATAGRID_GROUP_CLOSED_CLASS = 'dx-datagrid-group-closed';
+const DATAGRID_EXPAND_CLASS = 'dx-datagrid-expand';
+const NO_DATA_CLASS = 'nodata';
+const DATE_INTERVAL_SELECTORS = {
+    'year': function(value) {
+        return value && value.getFullYear();
+    },
+    'month': function(value) {
+        return value && (value.getMonth() + 1);
+    },
+    'day': function(value) {
+        return value && value.getDate();
+    },
+    'quarter': function(value) {
+        return value && (Math.floor(value.getMonth() / 3) + 1);
+    },
+    'hour': function(value) {
+        return value && value.getHours();
+    },
+    'minute': function(value) {
+        return value && value.getMinutes();
+    },
+    'second': function(value) {
+        return value && value.getSeconds();
+    }
+};
 
 module.exports = (function() {
-    var getIntervalSelector = function() {
-        var groupInterval,
-            data = arguments[1],
-            nameIntervalSelector,
-            value = this.calculateCellValue(data);
+    const getIntervalSelector = function() {
+        let groupInterval;
+        const data = arguments[1];
+        let nameIntervalSelector;
+        const value = this.calculateCellValue(data);
 
         if(!isDefined(value)) {
             return null;
@@ -62,7 +62,7 @@ module.exports = (function() {
         }
     };
 
-    var equalSelectors = function(selector1, selector2) {
+    const equalSelectors = function(selector1, selector2) {
         if(isFunction(selector1) && isFunction(selector2)) {
             if(selector1.originalCallback && selector2.originalCallback) {
                 return selector1.originalCallback === selector2.originalCallback;
@@ -76,31 +76,31 @@ module.exports = (function() {
         return dataType === 'date' || dataType === 'datetime';
     };
 
-    var setEmptyText = function($container) {
+    const setEmptyText = function($container) {
         $container.get(0).textContent = '\u00A0';
     };
 
-    var getWidgetInstance = function($element) {
-        var editorData = $element.data && $element.data(),
-            dxComponents = editorData && editorData.dxComponents,
-            widgetName = dxComponents && dxComponents[0];
+    const getWidgetInstance = function($element) {
+        const editorData = $element.data && $element.data();
+        const dxComponents = editorData && editorData.dxComponents;
+        const widgetName = dxComponents && dxComponents[0];
 
         return widgetName && editorData[widgetName];
     };
 
     return {
         renderNoDataText: function($element) {
-            var that = this;
+            const that = this;
             $element = $element || this.element();
 
             if(!$element) {
                 return;
             }
 
-            var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
-                noDataElement = $element.find('.' + noDataClass).last(),
-                isVisible = this._dataController.isEmpty(),
-                isLoading = this._dataController.isLoading();
+            const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
+            let noDataElement = $element.find('.' + noDataClass).last();
+            const isVisible = this._dataController.isEmpty();
+            const isLoading = this._dataController.isLoading();
 
             if(!noDataElement.length) {
                 noDataElement = $('<span>')
@@ -119,8 +119,8 @@ module.exports = (function() {
         },
 
         renderLoadPanel: function($element, $container, isLocalStore) {
-            var that = this,
-                loadPanelOptions;
+            const that = this;
+            let loadPanelOptions;
 
             that._loadPanel && that._loadPanel.$element().remove();
             loadPanelOptions = that.option('loadPanel');
@@ -130,7 +130,7 @@ module.exports = (function() {
                     shading: false,
                     message: loadPanelOptions.text,
                     position: function() {
-                        var $window = $(getWindow());
+                        const $window = $(getWindow());
                         if($element.height() > $window.height()) {
                             return {
                                 of: $window,
@@ -150,12 +150,12 @@ module.exports = (function() {
         },
 
         getIndexByKey: function(key, items, keyName) {
-            var index = -1,
-                item;
+            let index = -1;
+            let item;
 
             if(key !== undefined && Array.isArray(items)) {
                 keyName = arguments.length <= 2 ? 'key' : keyName;
-                for(var i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     item = isDefined(keyName) ? items[i][keyName] : items[i];
 
                     if(equalByValue(key, item)) {
@@ -169,8 +169,8 @@ module.exports = (function() {
         },
 
         combineFilters: function(filters, operation) {
-            var resultFilter = [],
-                i;
+            let resultFilter = [];
+            let i;
 
             operation = operation || 'and';
 
@@ -190,8 +190,8 @@ module.exports = (function() {
         },
 
         checkChanges: function(changes, changeNames) {
-            var changesWithChangeNamesCount = 0,
-                i;
+            let changesWithChangeNamesCount = 0;
+            let i;
 
             for(i = 0; i < changeNames.length; i++) {
                 if(changes[changeNames[i]]) {
@@ -203,7 +203,7 @@ module.exports = (function() {
         },
 
         equalFilterParameters: function(filter1, filter2) {
-            var i;
+            let i;
 
             if(Array.isArray(filter1) && Array.isArray(filter2)) {
                 if(filter1.length !== filter2.length) {
@@ -226,20 +226,20 @@ module.exports = (function() {
         proxyMethod: function(instance, methodName, defaultResult) {
             if(!instance[methodName]) {
                 instance[methodName] = function() {
-                    var dataSource = this._dataSource;
+                    const dataSource = this._dataSource;
                     return dataSource ? dataSource[methodName].apply(dataSource, arguments) : defaultResult;
                 };
             }
         },
 
         formatValue: function(value, options) {
-            var valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '',
-                formatObject = {
-                    value: value,
-                    valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
-                    target: options.target || 'row',
-                    groupInterval: options.groupInterval
-                };
+            const valueText = formatHelper.format(value, options.format) || (value && value.toString()) || '';
+            const formatObject = {
+                value: value,
+                valueText: options.getDisplayFormat ? options.getDisplayFormat(valueText) : valueText,
+                target: options.target || 'row',
+                groupInterval: options.groupInterval
+            };
 
             return options.customizeText ? options.customizeText.call(options, formatObject) : formatObject.valueText;
         },
@@ -267,9 +267,9 @@ module.exports = (function() {
         },
 
         getGroupRowSummaryText: function(summaryItems, summaryTexts) {
-            var result = '(',
-                i,
-                summaryItem;
+            let result = '(';
+            let i;
+            let summaryItem;
 
             for(i = 0; i < summaryItems.length; i++) {
                 summaryItem = summaryItems[i];
@@ -279,7 +279,7 @@ module.exports = (function() {
         },
 
         getSummaryText: function(summaryItem, summaryTexts) {
-            var displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + 'OtherColumn']) || summaryTexts[summaryItem.summaryType];
+            const displayFormat = summaryItem.displayFormat || (summaryItem.columnCaption && summaryTexts[summaryItem.summaryType + 'OtherColumn']) || summaryTexts[summaryItem.summaryType];
 
             return this.formatValue(summaryItem.value, {
                 format: summaryItem.valueFormat,
@@ -293,8 +293,8 @@ module.exports = (function() {
         normalizeSortingInfo: function(sort) {
             sort = sort || [];
 
-            var result,
-                i;
+            let result;
+            let i;
 
             result = normalizeSortingInfo(sort);
             for(i = 0; i < sort.length; i++) {
@@ -318,9 +318,9 @@ module.exports = (function() {
         },
 
         getHeaderFilterGroupParameters: function(column, remoteGrouping) {
-            var result = [],
-                dataField = column.dataField || column.name,
-                groupInterval = getGroupInterval(column);
+            let result = [];
+            const dataField = column.dataField || column.name;
+            const groupInterval = getGroupInterval(column);
 
             if(groupInterval) {
                 each(groupInterval, function(index, interval) {
@@ -334,7 +334,7 @@ module.exports = (function() {
                 result = [{ selector: dataField, isExpanded: false }];
             } else {
                 result = function(data) {
-                    var result = column.calculateCellValue(data);
+                    let result = column.calculateCellValue(data);
                     if(result === undefined || result === '') {
                         result = null;
                     }
@@ -350,7 +350,7 @@ module.exports = (function() {
         },
 
         equalSortParameters: function(sortParameters1, sortParameters2, ignoreIsExpanded) {
-            var i;
+            let i;
 
             sortParameters1 = module.exports.normalizeSortingInfo(sortParameters1);
             sortParameters2 = module.exports.normalizeSortingInfo(sortParameters2);
@@ -372,16 +372,16 @@ module.exports = (function() {
         },
 
         getPointsByColumns: function(items, pointCreated, isVertical, startColumnIndex) {
-            var cellsLength = items.length,
-                notCreatePoint = false,
-                point,
-                i,
-                item,
-                offset,
-                columnIndex = startColumnIndex || 0,
-                prevItemOffset,
-                result = [],
-                rtlEnabled;
+            const cellsLength = items.length;
+            let notCreatePoint = false;
+            let point;
+            let i;
+            let item;
+            let offset;
+            let columnIndex = startColumnIndex || 0;
+            let prevItemOffset;
+            const result = [];
+            let rtlEnabled;
 
             for(i = 0; i <= cellsLength; i++) {
                 if(i < cellsLength) {
@@ -418,8 +418,8 @@ module.exports = (function() {
         },
 
         createObjectWithChanges: function(target, changes) {
-            var result = target ? Object.create(Object.getPrototypeOf(target)) : {},
-                targetWithoutPrototype = extendFromObject({}, target);
+            const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
+            const targetWithoutPrototype = extendFromObject({}, target);
 
             deepExtendArraySafe(result, targetWithoutPrototype, true, true);
             return deepExtendArraySafe(result, changes, true, true);
@@ -429,8 +429,8 @@ module.exports = (function() {
             return {
                 allowRenderToDetachedContainer: true,
                 render: function(container, options) {
-                    var rowsView,
-                        $container = $(container);
+                    let rowsView;
+                    const $container = $(container);
 
                     if(isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.isNewRow) {
                         rowsView = options.component.getView('rowsView');
@@ -478,12 +478,12 @@ module.exports = (function() {
         focusAndSelectElement: function(component, $element) {
             eventsEngine.trigger($element, 'focus');
 
-            let isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart'),
-                keyboardController = component.getController('keyboardNavigation'),
-                isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+            const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
+            const keyboardController = component.getController('keyboardNavigation');
+            const isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
             if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input')) {
-                var editor = getWidgetInstance($element.closest('.dx-texteditor'));
+                const editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
                 when(editor && editor._loadItemDeferred).done(function() {
                     $element.get(0).select();
@@ -494,12 +494,12 @@ module.exports = (function() {
         getWidgetInstance: getWidgetInstance,
 
         getLastResizableColumnIndex: function(columns, resultWidths) {
-            var hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
+            const hasResizableColumns = columns.some(column => column && !column.command && !column.fixed && column.allowResizing !== false);
 
             for(var lastColumnIndex = columns.length - 1; columns[lastColumnIndex]; lastColumnIndex--) {
-                var column = columns[lastColumnIndex],
-                    width = resultWidths && resultWidths[lastColumnIndex],
-                    allowResizing = !hasResizableColumns || column.allowResizing !== false;
+                const column = columns[lastColumnIndex];
+                const width = resultWidths && resultWidths[lastColumnIndex];
+                const allowResizing = !hasResizableColumns || column.allowResizing !== false;
 
                 if(!column.command && !column.fixed && width !== 'adaptiveHidden' && allowResizing) {
                     break;
@@ -511,7 +511,7 @@ module.exports = (function() {
 
         isElementInCurrentGrid: function(controller, $element) {
             if($element && $element.length) {
-                var $grid = $element.closest('.' + controller.getWidgetContainerClass()).parent();
+                const $grid = $element.closest('.' + controller.getWidgetContainerClass()).parent();
                 return $grid.is(controller.component.$element());
             }
             return false;

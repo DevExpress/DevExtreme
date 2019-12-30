@@ -26,7 +26,7 @@ const SCROLLBAR_VISIBLE = {
     never: 'never'
 };
 
-var Scrollbar = Widget.inherit({
+const Scrollbar = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             direction: null,
@@ -74,12 +74,12 @@ var Scrollbar = Widget.inherit({
     },
 
     _isHoverMode: function() {
-        var visibilityMode = this.option('visibilityMode');
+        const visibilityMode = this.option('visibilityMode');
         return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && this.option('expandable');
     },
 
     _renderDirection: function() {
-        var direction = this.option('direction');
+        const direction = this.option('direction');
         this.$element().addClass('dx-scrollbar-' + direction);
         this._dimension = direction === HORIZONTAL ? 'width' : 'height';
         this._prop = direction === HORIZONTAL ? 'left' : 'top';
@@ -161,7 +161,7 @@ var Scrollbar = Widget.inherit({
             location = location[this._prop] || 0;
         }
 
-        var scrollBarLocation = {};
+        const scrollBarLocation = {};
         scrollBarLocation[this._prop] = this._calculateScrollBarPosition(location);
         translator.move(this._$thumb, scrollBarLocation);
     },
@@ -172,10 +172,10 @@ var Scrollbar = Widget.inherit({
 
 
     _update: function() {
-        var containerSize = Math.round(this.option('containerSize')),
-            contentSize = Math.round(this.option('contentSize')),
-            baseContainerSize = Math.round(this.option('baseContainerSize')),
-            baseContentSize = Math.round(this.option('baseContentSize'));
+        const containerSize = Math.round(this.option('containerSize'));
+        const contentSize = Math.round(this.option('contentSize'));
+        let baseContainerSize = Math.round(this.option('baseContainerSize'));
+        let baseContentSize = Math.round(this.option('baseContentSize'));
 
         // NOTE: if current scrollbar's using outside of scrollable
         if(isNaN(baseContainerSize)) {
@@ -185,7 +185,7 @@ var Scrollbar = Widget.inherit({
 
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
         this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
-        var thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
+        const thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
         this._thumbRatio = (containerSize - thumbSize) / (this.option('scaleRatio') * (contentSize - containerSize));
 
         this.option(this._dimension, thumbSize / this.option('scaleRatio'));

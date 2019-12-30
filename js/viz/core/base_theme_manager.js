@@ -1,16 +1,16 @@
-var Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    typeUtils = require('../../core/utils/type'),
-    each = require('../../core/utils/iterator').each,
-    paletteModule = require('../palette'),
-    _isString = typeUtils.isString,
-    _parseScalar = require('./utils').parseScalar,
-    themeModule = require('../themes'),
-    _getTheme = themeModule.getTheme,
-    _addCacheItem = themeModule.addCacheItem,
-    _removeCacheItem = themeModule.removeCacheItem,
-    _extend = extend,
-    _each = each;
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const typeUtils = require('../../core/utils/type');
+const each = require('../../core/utils/iterator').each;
+const paletteModule = require('../palette');
+const _isString = typeUtils.isString;
+const _parseScalar = require('./utils').parseScalar;
+const themeModule = require('../themes');
+const _getTheme = themeModule.getTheme;
+const _addCacheItem = themeModule.addCacheItem;
+const _removeCacheItem = themeModule.removeCacheItem;
+const _extend = extend;
+const _each = each;
 
 // register themes
 require('./themes/generic.light');
@@ -25,7 +25,7 @@ require('./themes/material');
 require('./themes/ios');
 
 function getThemePart(theme, path) {
-    var _theme = theme;
+    let _theme = theme;
     path && _each(path.split('.'), function(_, pathItem) {
         return (_theme = _theme[pathItem]);
     });
@@ -40,7 +40,7 @@ exports.BaseThemeManager = Class.inherit({ // TODO: test hack
     },
 
     dispose: function() {
-        var that = this;
+        const that = this;
         _removeCacheItem(that);
         that._callback = that._theme = that._font = null;
         return that;
@@ -60,9 +60,9 @@ exports.BaseThemeManager = Class.inherit({ // TODO: test hack
 
     // Officially we do not support objects as "theme" option value - we should stop doing it in code
     refresh: function() {
-        var that = this,
-            current = that._current || {},
-            theme = _getTheme(current.name || current);
+        const that = this;
+        const current = that._current || {};
+        let theme = _getTheme(current.name || current);
         that._themeName = theme.name;
         that._defaultPalette = theme.defaultPalette;
         that._font = _extend({}, theme.font, current.font);
@@ -105,7 +105,7 @@ exports.BaseThemeManager = Class.inherit({ // TODO: test hack
     },
 
     _initializeTheme: function() {
-        var that = this;
+        const that = this;
         _each(that._fontFields || [], function(_, path) {
             that._initializeFont(getThemePart(that._theme, path));
         });

@@ -1,9 +1,9 @@
-var _isFunction = require('../../core/utils/type').isFunction,
-    _normalizeEnum = require('../core/utils').normalizeEnum,
-    _round = Math.round,
+const _isFunction = require('../../core/utils/type').isFunction;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
+const _round = Math.round;
 
-    algorithms = {},
-    defaultAlgorithm;
+const algorithms = {};
+let defaultAlgorithm;
 
 exports.getAlgorithm = function(value) {
     return algorithms[_normalizeEnum(value)] || (_isFunction(value) && value) || defaultAlgorithm;
@@ -17,23 +17,23 @@ exports.setDefaultAlgorithm = function(name) {
     defaultAlgorithm = algorithms[name];
 };
 
-var directionToIndexOffsets = {};
+const directionToIndexOffsets = {};
 directionToIndexOffsets[-1] = [2, 0];
 directionToIndexOffsets[+1] = [0, 2];
 
-var getStaticSideIndex = function(rect) {
+const getStaticSideIndex = function(rect) {
     return (rect[2] - rect[0]) < (rect[3] - rect[1]) ? 0 : 1;
 };
 
 exports.getStaticSideIndex = getStaticSideIndex;
 
 exports.buildSidesData = function(rect, directions, _staticSideIndex) {
-    var staticSideIndex = _staticSideIndex !== undefined ? _staticSideIndex : getStaticSideIndex(rect),
-        variedSideIndex = 1 - staticSideIndex,
-        staticSideDirection = directions[staticSideIndex],
-        variedSideDirection = directions[variedSideIndex],
-        staticSideIndexOffsets = directionToIndexOffsets[staticSideDirection],
-        variedSideIndexOffsets = directionToIndexOffsets[variedSideDirection];
+    const staticSideIndex = _staticSideIndex !== undefined ? _staticSideIndex : getStaticSideIndex(rect);
+    const variedSideIndex = 1 - staticSideIndex;
+    const staticSideDirection = directions[staticSideIndex];
+    const variedSideDirection = directions[variedSideIndex];
+    const staticSideIndexOffsets = directionToIndexOffsets[staticSideDirection];
+    const variedSideIndexOffsets = directionToIndexOffsets[variedSideDirection];
     return {
         staticSide: rect[2 + staticSideIndex] - rect[staticSideIndex],
         variedSide: rect[2 + variedSideIndex] - rect[variedSideIndex],
@@ -47,17 +47,17 @@ exports.buildSidesData = function(rect, directions, _staticSideIndex) {
 };
 
 exports.calculateRectangles = function(nodes, head, totalRect, sidesData, rowData) {
-    var i,
-        ii,
-        variedSidePart = [0, 0, 0, 0],
-        static1 = sidesData.static1,
-        static2 = sidesData.static2,
-        position = totalRect[static1],
-        dir = sidesData.staticDir,
-        side = sidesData.staticSide,
-        sum = rowData.sum,
-        rect,
-        delta;
+    let i;
+    let ii;
+    const variedSidePart = [0, 0, 0, 0];
+    const static1 = sidesData.static1;
+    const static2 = sidesData.static2;
+    let position = totalRect[static1];
+    const dir = sidesData.staticDir;
+    let side = sidesData.staticSide;
+    let sum = rowData.sum;
+    let rect;
+    let delta;
 
     variedSidePart[sidesData.varied1] = totalRect[sidesData.varied1];
     variedSidePart[sidesData.varied2] = totalRect[sidesData.varied1] + sidesData.variedDir * rowData.side;

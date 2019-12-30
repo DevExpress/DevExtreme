@@ -1,13 +1,13 @@
-var ko = require('knockout'),
-    variableWrapper = require('core/utils/variable_wrapper');
+const ko = require('knockout');
+const variableWrapper = require('core/utils/variable_wrapper');
 
 require('integration/knockout');
 
 QUnit.test('wrapped value', function(assert) {
-    var observableValue = ko.observable(3),
-        computedValue = ko.computed(function() { return '4'; }),
-        wrappedValue = variableWrapper.wrap(3),
-        notWrappedValue = 3;
+    const observableValue = ko.observable(3);
+    const computedValue = ko.computed(function() { return '4'; });
+    const wrappedValue = variableWrapper.wrap(3);
+    const notWrappedValue = 3;
 
     assert.equal(variableWrapper.isWrapped(3), false, 'isWrapped must return true for observable variable');
     assert.equal(variableWrapper.isWrapped(observableValue), true, 'isWrapped must return false for not observable variable');

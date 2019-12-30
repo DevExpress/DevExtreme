@@ -1,10 +1,10 @@
-var $ = require('./renderer');
-var beforeCleanData = require('./element_data').beforeCleanData;
-var eventsEngine = require('../events/core/events_engine');
-var registerEvent = require('../events/core/event_registrator');
+const $ = require('./renderer');
+const beforeCleanData = require('./element_data').beforeCleanData;
+const eventsEngine = require('../events/core/events_engine');
+const registerEvent = require('../events/core/event_registrator');
 
-var eventName = 'dxremove';
-var eventPropName = 'dxRemoveEvent';
+const eventName = 'dxremove';
+const eventPropName = 'dxRemoveEvent';
 
 /**
   * @name UI Events.dxremove
@@ -15,8 +15,8 @@ var eventPropName = 'dxRemoveEvent';
 
 beforeCleanData(function(elements) {
     elements = [].slice.call(elements);
-    for(var i = 0; i < elements.length; i++) {
-        var $element = $(elements[i]);
+    for(let i = 0; i < elements.length; i++) {
+        const $element = $(elements[i]);
         if($element.prop(eventPropName)) {
             $element[0][eventPropName] = null;
             eventsEngine.triggerHandler($element, eventName);

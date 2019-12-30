@@ -1,28 +1,28 @@
-var typeUtils = require('../../core/utils/type'),
-    inArray = require('../../core/utils/array').inArray,
-    iteratorUtils = require('../../core/utils/iterator');
+const typeUtils = require('../../core/utils/type');
+const inArray = require('../../core/utils/array').inArray;
+const iteratorUtils = require('../../core/utils/iterator');
 
-var DEFAULT_DATE_INTERVAL = ['year', 'month', 'day'],
-    DEFAULT_DATETIME_INTERVAL = ['year', 'month', 'day', 'hour', 'minute'];
+const DEFAULT_DATE_INTERVAL = ['year', 'month', 'day'];
+const DEFAULT_DATETIME_INTERVAL = ['year', 'month', 'day', 'hour', 'minute'];
 
 module.exports = (function() {
-    var getFilterSelector = function(column, target) {
-        var selector = column.dataField || column.selector;
+    const getFilterSelector = function(column, target) {
+        let selector = column.dataField || column.selector;
         if(target === 'search') {
             selector = column.displayField || column.calculateDisplayValue || selector;
         }
         return selector;
     };
 
-    var isZeroTime = function(date) {
+    const isZeroTime = function(date) {
         return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
     };
 
-    var isDateType = function(dataType) {
+    const isDateType = function(dataType) {
         return dataType === 'date' || dataType === 'datetime';
     };
 
-    var getDateValues = function(dateValue) {
+    const getDateValues = function(dateValue) {
         if(typeUtils.isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
@@ -31,12 +31,12 @@ module.exports = (function() {
         });
     };
 
-    var getFilterExpressionByRange = function(filterValue, target) {
-        var column = this,
-            endFilterValue,
-            startFilterExpression,
-            endFilterExpression,
-            selector = getFilterSelector(column, target);
+    const getFilterExpressionByRange = function(filterValue, target) {
+        const column = this;
+        let endFilterValue;
+        let startFilterExpression;
+        let endFilterExpression;
+        const selector = getFilterSelector(column, target);
 
         if(Array.isArray(filterValue) && typeUtils.isDefined(filterValue[0]) && typeUtils.isDefined(filterValue[1])) {
             startFilterExpression = [selector, '>=', filterValue[0]];
@@ -54,13 +54,13 @@ module.exports = (function() {
         }
     };
 
-    var getFilterExpressionForDate = function(filterValue, selectedFilterOperation, target) {
-        var column = this,
-            dateStart,
-            dateEnd,
-            dateInterval,
-            values = getDateValues(filterValue),
-            selector = getFilterSelector(column, target);
+    const getFilterExpressionForDate = function(filterValue, selectedFilterOperation, target) {
+        const column = this;
+        let dateStart;
+        let dateEnd;
+        let dateInterval;
+        const values = getDateValues(filterValue);
+        const selector = getFilterSelector(column, target);
 
         if(target === 'headerFilter') {
             dateInterval = module.exports.getGroupInterval(column)[values.length - 1];
@@ -114,22 +114,22 @@ module.exports = (function() {
         }
     };
 
-    var getFilterExpressionForNumber = function(filterValue, selectedFilterOperation, target) {
-        var column = this,
-            selector = getFilterSelector(column, target),
-            groupInterval = module.exports.getGroupInterval(column);
+    const getFilterExpressionForNumber = function(filterValue, selectedFilterOperation, target) {
+        const column = this;
+        const selector = getFilterSelector(column, target);
+        const groupInterval = module.exports.getGroupInterval(column);
 
         if(target === 'headerFilter' && groupInterval && typeUtils.isDefined(filterValue)) {
-            var values = ('' + filterValue).split('/'),
-                value = Number(values[values.length - 1]),
-                interval,
-                startFilterValue,
-                endFilterValue;
+            const values = ('' + filterValue).split('/');
+            const value = Number(values[values.length - 1]);
+            let interval;
+            let startFilterValue;
+            let endFilterValue;
 
             interval = groupInterval[values.length - 1];
             startFilterValue = [selector, '>=', value];
             endFilterValue = [selector, '<', value + interval];
-            var condition = [startFilterValue, 'and', endFilterValue];
+            const condition = [startFilterValue, 'and', endFilterValue];
             return condition;
         }
 
@@ -138,11 +138,11 @@ module.exports = (function() {
 
     return {
         defaultCalculateFilterExpression: function(filterValue, selectedFilterOperation, target) {
-            var column = this,
-                selector = getFilterSelector(column, target),
-                isSearchByDisplayValue = column.calculateDisplayValue && target === 'search',
-                dataType = isSearchByDisplayValue && column.lookup && column.lookup.dataType || column.dataType,
-                filter = null;
+            const column = this;
+            const selector = getFilterSelector(column, target);
+            const isSearchByDisplayValue = column.calculateDisplayValue && target === 'search';
+            const dataType = isSearchByDisplayValue && column.lookup && column.lookup.dataType || column.dataType;
+            let filter = null;
 
             if((target === 'headerFilter' || target === 'filterBuilder') && filterValue === null) {
                 filter = [selector, selectedFilterOperation || '=', null];
@@ -165,11 +165,11 @@ module.exports = (function() {
         },
 
         getGroupInterval: function(column) {
-            var index,
-                result = [],
-                dateIntervals = ['year', 'month', 'day', 'hour', 'minute', 'second'],
-                groupInterval = column.headerFilter && column.headerFilter.groupInterval,
-                interval = groupInterval === 'quarter' ? 'month' : groupInterval;
+            let index;
+            let result = [];
+            const dateIntervals = ['year', 'month', 'day', 'hour', 'minute', 'second'];
+            const groupInterval = column.headerFilter && column.headerFilter.groupInterval;
+            const interval = groupInterval === 'quarter' ? 'month' : groupInterval;
 
             if(isDateType(column.dataType) && groupInterval !== null) {
                 result = column.dataType === 'datetime' ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;

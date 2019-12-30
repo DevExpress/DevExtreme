@@ -1,33 +1,33 @@
-var $ = require('../../core/renderer'),
-    caret = require('./utils.caret'),
-    devices = require('../../core/devices'),
-    each = require('../../core/utils/iterator').each,
-    eventUtils = require('../../events/utils'),
-    eventsEngine = require('../../events/core/events_engine'),
-    extend = require('../../core/utils/extend').extend,
-    focused = require('../widget/selectors').focused,
-    isDefined = require('../../core/utils/type').isDefined,
-    messageLocalization = require('../../localization/message'),
-    noop = require('../../core/utils/common').noop,
-    stringUtils = require('../../core/utils/string'),
-    wheelEvent = require('../../events/core/wheel'),
-    MaskRules = require('./ui.text_editor.mask.rule'),
-    TextEditorBase = require('./ui.text_editor.base'),
-    DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default,
-    AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
+const $ = require('../../core/renderer');
+let caret = require('./utils.caret');
+const devices = require('../../core/devices');
+const each = require('../../core/utils/iterator').each;
+const eventUtils = require('../../events/utils');
+const eventsEngine = require('../../events/core/events_engine');
+const extend = require('../../core/utils/extend').extend;
+const focused = require('../widget/selectors').focused;
+const isDefined = require('../../core/utils/type').isDefined;
+const messageLocalization = require('../../localization/message');
+const noop = require('../../core/utils/common').noop;
+const stringUtils = require('../../core/utils/string');
+const wheelEvent = require('../../events/core/wheel');
+const MaskRules = require('./ui.text_editor.mask.rule');
+const TextEditorBase = require('./ui.text_editor.base');
+const DefaultMaskStrategy = require('./ui.text_editor.mask.strategy.default').default;
+const AndroidMaskStrategy = require('./ui.text_editor.mask.strategy.android').default;
 
-var stubCaret = function() {
+const stubCaret = function() {
     return {};
 };
 
-var EMPTY_CHAR = ' ';
-var ESCAPED_CHAR = '\\';
+const EMPTY_CHAR = ' ';
+const ESCAPED_CHAR = '\\';
 
-var TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
-var FORWARD_DIRECTION = 'forward';
-var BACKWARD_DIRECTION = 'backward';
+const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
+const FORWARD_DIRECTION = 'forward';
+const BACKWARD_DIRECTION = 'backward';
 
-var buildInMaskRules = {
+const buildInMaskRules = {
     '0': /[0-9]/,
     '9': /[0-9\s]/,
     '#': /[-+0-9\s]/,
@@ -52,7 +52,7 @@ var isNumericChar = function(char) {
 };
 
 var isLiteralChar = function(char) {
-    var code = char.charCodeAt();
+    const code = char.charCodeAt();
     return (64 < code && code < 91 || 96 < code && code < 123 || code > 127);
 };
 
@@ -60,7 +60,7 @@ var isSpaceChar = function(char) {
     return char === ' ';
 };
 
-var TextEditorMask = TextEditorBase.inherit({
+const TextEditorMask = TextEditorBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -79,17 +79,17 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _supportedKeys: function() {
-        var that = this;
+        const that = this;
 
-        var keyHandlerMap = {
+        const keyHandlerMap = {
             backspace: that._maskStrategy.getHandler('backspace'),
             del: that._maskStrategy.getHandler('del'),
             enter: that._changeHandler
         };
 
-        var result = that.callBase();
+        const result = that.callBase();
         each(keyHandlerMap, function(key, callback) {
-            var parentHandler = result[key];
+            const parentHandler = result[key];
             result[key] = function(e) {
                 that.option('mask') && callback.call(that, e);
                 parentHandler && parentHandler(e);
@@ -110,7 +110,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _initMaskStrategy: function() {
-        var device = devices.real();
+        const device = devices.real();
         this._maskStrategy = device.android && device.version[0] > 4 ?
             new AndroidMaskStrategy(this) :
             new DefaultMaskStrategy(this);
@@ -122,17 +122,17 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _attachMouseWheelEventHandlers: function() {
-        var hasMouseWheelHandler = this._onMouseWheel !== noop;
+        const hasMouseWheelHandler = this._onMouseWheel !== noop;
 
         if(!hasMouseWheelHandler) {
             return;
         }
 
-        var input = this._input();
-        var eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
-        var mouseWheelAction = this._createAction((function(e) {
+        const input = this._input();
+        const eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
+        const mouseWheelAction = this._createAction((function(e) {
             if(focused(input)) {
-                var dxEvent = e.event;
+                const dxEvent = e.event;
 
                 this._onMouseWheel(dxEvent);
                 dxEvent.preventDefault();
@@ -184,7 +184,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _suppressCaretChanging: function(callback, args) {
-        var originalCaret = caret;
+        const originalCaret = caret;
         caret = stubCaret;
         try {
             callback.apply(this, args);
@@ -194,15 +194,15 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _changeHandler: function(e) {
-        var $input = this._input(),
-            inputValue = $input.val();
+        const $input = this._input();
+        const inputValue = $input.val();
 
         if(inputValue === this._changedValue) {
             return;
         }
 
         this._changedValue = inputValue;
-        var changeEvent = eventUtils.createEvent(e, { type: 'change' });
+        const changeEvent = eventUtils.createEvent(e, { type: 'change' });
         eventsEngine.trigger($input, changeEvent);
     },
 
@@ -212,14 +212,14 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _parseMaskRule: function(index) {
-        var mask = this.option('mask');
+        const mask = this.option('mask');
         if(index >= mask.length) {
             return new MaskRules.EmptyMaskRule();
         }
 
-        var currentMaskChar = mask[index];
-        var isEscapedChar = currentMaskChar === ESCAPED_CHAR;
-        var result = isEscapedChar
+        const currentMaskChar = mask[index];
+        const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
+        const result = isEscapedChar
             ? new MaskRules.StubMaskRule({ maskChar: mask[index + 1] })
             : this._getMaskRule(currentMaskChar);
 
@@ -228,7 +228,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _getMaskRule: function(pattern) {
-        var ruleConfig;
+        let ruleConfig;
 
         each(this._maskRules, function(rulePattern, allowedChars) {
             if(rulePattern === pattern) {
@@ -250,10 +250,10 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        var value = this.option('value') || '';
+        const value = this.option('value') || '';
         this._maskRulesChain.clear(this._normalizeChainArguments());
 
-        var chainArgs = { length: value.length };
+        const chainArgs = { length: value.length };
         chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
 
         this._handleChain(chainArgs);
@@ -265,9 +265,9 @@ var TextEditorMask = TextEditorBase.inherit({
             return text;
         }
 
-        var textBefore = text.slice(0, selection.start),
-            textAfter = text.slice(selection.end),
-            edited = textBefore + char + textAfter;
+        const textBefore = text.slice(0, selection.start);
+        const textAfter = text.slice(selection.end);
+        const edited = textBefore + char + textAfter;
 
         return edited;
     },
@@ -287,7 +287,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _shouldShowMask: function() {
-        var showMaskMode = this.option('showMaskMode');
+        const showMaskMode = this.option('showMaskMode');
 
         if(showMaskMode === 'onFocus') {
             return focused(this._input()) || !this._isValueEmpty();
@@ -298,7 +298,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _showMaskPlaceholder: function() {
         if(this._shouldShowMask()) {
-            var text = this._maskRulesChain.text();
+            const text = this._maskRulesChain.text();
             this.option('text', text);
             if(this.option('showMaskMode') === 'onFocus') {
                 this._renderDisplayText(text);
@@ -308,13 +308,13 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _renderValue: function() {
         if(this._maskRulesChain) {
-            var text = this._maskRulesChain.text();
+            const text = this._maskRulesChain.text();
 
             this._showMaskPlaceholder();
 
             if(this._$hiddenElement) {
-                var value = this._maskRulesChain.value(),
-                    hiddenElementValue = this._isMaskedValueMode() ? text : value;
+                const value = this._maskRulesChain.value();
+                const hiddenElementValue = this._isMaskedValueMode() ? text : value;
 
                 this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : '');
             }
@@ -339,7 +339,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _handleChain: function(args) {
-        var handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
+        const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
         this._value = this._maskRulesChain.value();
         this._textValue = this._maskRulesChain.text();
         return handledCount;
@@ -410,37 +410,37 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        var caret = this._caret();
-        var emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
+        const caret = this._caret();
+        const emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
         this._handleKeyChain(emptyChars);
     },
 
     _handleKeyChain: function(chars) {
-        var caret = this._caret();
-        var start = this.isForwardDirection() ? caret.start : caret.start - 1;
-        var end = this.isForwardDirection() ? caret.end : caret.end - 1;
-        var length = start === end ? 1 : end - start;
+        const caret = this._caret();
+        const start = this.isForwardDirection() ? caret.start : caret.start - 1;
+        const end = this.isForwardDirection() ? caret.end : caret.end - 1;
+        const length = start === end ? 1 : end - start;
 
         this._handleChain({ text: chars, start: start, length: length });
     },
 
     _tryMoveCaretBackward: function() {
         this.setBackwardDirection();
-        var currentCaret = this._caret().start;
+        const currentCaret = this._caret().start;
         this._adjustCaret();
         return !currentCaret || currentCaret !== this._caret().start;
     },
 
     _adjustCaret: function(char) {
-        var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
+        const caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
         this._caret({ start: caret, end: caret });
     },
 
     _moveCaret: function() {
-        var currentCaret = this._caret().start;
-        var maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
+        const currentCaret = this._caret().start;
+        const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
-        var caret = this._maskRulesChain.isAccepted(maskRuleIndex)
+        const caret = this._maskRulesChain.isAccepted(maskRuleIndex)
             ? currentCaret + (this.isForwardDirection() ? 1 : -1)
             : currentCaret;
 
@@ -448,7 +448,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _caret: function(position) {
-        var $input = this._input();
+        const $input = this._input();
 
         if(!$input.length) {
             return;
@@ -461,7 +461,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _hasSelection: function() {
-        var caret = this._caret();
+        const caret = this._caret();
         return caret.start !== caret.end;
     },
 
@@ -494,7 +494,7 @@ var TextEditorMask = TextEditorBase.inherit({
         if(!this._maskRulesChain) {
             return;
         }
-        var isValid = stringUtils.isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+        const isValid = stringUtils.isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,
@@ -522,7 +522,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _processEmptyMask: function(mask) {
         if(mask) return;
 
-        var value = this.option('value');
+        const value = this.option('value');
         this.option({
             text: value,
             isValid: true

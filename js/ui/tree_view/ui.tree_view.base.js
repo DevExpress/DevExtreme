@@ -58,8 +58,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             e.currentTarget = $itemElement;
             this._itemClickHandler(e, $itemElement.children('.' + ITEM_CLASS));
 
-            const expandEventName = this._getEventNameByOption(this.option('expandEvent')),
-                expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+            const expandEventName = this._getEventNameByOption(this.option('expandEvent'));
+            const expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
 
             if(expandByClick) {
                 this._expandEventHandler(e);
@@ -97,8 +97,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckBoxState: function($element) {
-        const checkboxInstance = this._getCheckBoxInstance($element),
-            currentState = checkboxInstance.option('value');
+        const checkboxInstance = this._getCheckBoxInstance($element);
+        const currentState = checkboxInstance.option('value');
         if(!checkboxInstance.option('disabled')) {
             this._updateItemSelection(!currentState, $element.find('.' + ITEM_CLASS).get(0), true, $element);
         }
@@ -110,8 +110,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         for(let i = 0, len = items.length; i < len; i++) {
-            const item = items[i],
-                node = this._dataAdapter.getNodeByItem(item);
+            const item = items[i];
+            const node = this._dataAdapter.getNodeByItem(item);
 
             this._toggleExpandedState(node, state);
             this._toggleExpandedNestedItems(item.items, state);
@@ -526,7 +526,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getAccessors: function() {
-        let accessors = this.callBase();
+        const accessors = this.callBase();
 
         accessors.push('hasItems');
 
@@ -579,8 +579,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireContentReadyAction: function() {
-        var dataSource = this.getDataSource();
-        var skipContentReadyAction = dataSource && !dataSource.isLoaded();
+        const dataSource = this.getDataSource();
+        const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
         if(!skipContentReadyAction) {
             this.callBase();
@@ -811,7 +811,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._hasChildren(node)) {
-            var $node = this._getNodeElement(node);
+            const $node = this._getNodeElement(node);
 
             if($node.find(`.${NODE_LOAD_INDICATOR_CLASS}:not(.${INVISIBLE_STATE_CLASS})`).length) {
                 return;
@@ -1157,8 +1157,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(!value && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
-                const $node = this._getNodeElement(node),
-                    checkbox = this._getCheckBoxInstance($node);
+                const $node = this._getNodeElement(node);
+                const checkbox = this._getCheckBoxInstance($node);
 
                 checkbox && checkbox.option('value', true);
             }
@@ -1175,8 +1175,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
 
-        const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
-            handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
+        const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item);
+        const handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
 
         handler.call(this, initiator, 'onItemSelectionChanged', {
             node: this._dataAdapter.getPublicNode(node),
@@ -1194,8 +1194,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const cache = {};
 
         each(this._dataAdapter.getData(), (_, node) => {
-            const $node = this._getNodeElement(node, cache),
-                nodeSelection = node.internalFields.selected;
+            const $node = this._getNodeElement(node, cache);
+            const nodeSelection = node.internalFields.selected;
 
             if(!$node.length) {
                 return;

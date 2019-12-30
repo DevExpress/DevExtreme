@@ -137,6 +137,7 @@
         "dxDataGrid-columnFixingRightPosition": "Till höger",
         "dxDataGrid-exportTo": "Exportera",
         "dxDataGrid-exportToExcel": "Exportera till Excel fil",
+        "dxDataGrid-exporting": "Exportera...",
         "dxDataGrid-excelFormat": "Excel fil",
         "dxDataGrid-selectedRows": "Valda rader",
         "dxDataGrid-exportSelectedRows": "Exportera valda rader",

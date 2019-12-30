@@ -1,9 +1,9 @@
-var noop = require('../../core/utils/common').noop,
-    Class = require('../../core/class'),
-    abstract = Class.abstract,
-    animationFrame = require('../../animation/frame');
+const noop = require('../../core/utils/common').noop;
+const Class = require('../../core/class');
+const abstract = Class.abstract;
+const animationFrame = require('../../animation/frame');
 
-var Animator = Class.inherit({
+const Animator = Class.inherit({
 
     ctor: function() {
         this._finished = true;

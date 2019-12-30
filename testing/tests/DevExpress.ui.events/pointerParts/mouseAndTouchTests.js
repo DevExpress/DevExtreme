@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    MouseAndTouchStrategy = require('events/pointer/mouse_and_touch'),
-    registerEvent = require('events/core/event_registrator'),
-    nativePointerMock = require('../../../helpers/nativePointerMock.js'),
-    special = require('../../../helpers/eventHelper.js').special;
+const $ = require('jquery');
+const MouseAndTouchStrategy = require('events/pointer/mouse_and_touch');
+const registerEvent = require('events/core/event_registrator');
+const nativePointerMock = require('../../../helpers/nativePointerMock.js');
+const special = require('../../../helpers/eventHelper.js').special;
 
 QUnit.module('mouse and touch events', {
     beforeEach: function() {
@@ -25,13 +25,13 @@ QUnit.module('mouse and touch events', {
 });
 
 QUnit.test('pointer event should not trigger twice on real devices', function(assert) {
-    var handlerTriggerCount = 0;
+    let handlerTriggerCount = 0;
 
-    var $container = $('#container').on('dxpointerdown', function() {
+    const $container = $('#container').on('dxpointerdown', function() {
         handlerTriggerCount++;
     });
 
-    var $element = this.$element.on('dxpointerdown', function() {
+    const $element = this.$element.on('dxpointerdown', function() {
         handlerTriggerCount++;
     });
 
@@ -51,7 +51,7 @@ QUnit.test('pointer event should not trigger twice on real devices', function(as
 QUnit.test('one pointer event should not unsubscribe another events', function(assert) {
     assert.expect(1);
 
-    var $element = this.$element;
+    const $element = this.$element;
 
     $element
         .on('dxpointerdown dxpointerup', function(e) {
@@ -64,13 +64,13 @@ QUnit.test('one pointer event should not unsubscribe another events', function(a
 });
 
 QUnit.test('dxpointerup triggers twice on real devices', function(assert) {
-    var triggered = 0;
+    let triggered = 0;
 
     this.$element.on('dxpointerup', function() {
         triggered++;
     });
 
-    var pointer = nativePointerMock(this.$element)
+    const pointer = nativePointerMock(this.$element)
         .start()
         .touchStart()
         .touchEnd();
@@ -121,16 +121,16 @@ $.each({
     });
 });
 
-var simulateMouseEvent = function($element, type, options) {
+const simulateMouseEvent = function($element, type, options) {
     options = $.extend({
         canBubble: true,
         cancelable: true,
         type: type
     }, options);
 
-    var event = document.createEvent('MouseEvents');
+    const event = document.createEvent('MouseEvents');
 
-    var args = [];
+    const args = [];
     $.each(['type', 'canBubble', 'cancelable', 'view', 'detail', 'screenX', 'screenY', 'clientX', 'clientY', 'ctrlKey', 'altKey',
         'shiftKey', 'metaKey', 'button', 'relatedTarget'], function(i, name) {
         if(name in options) {
@@ -146,25 +146,25 @@ var simulateMouseEvent = function($element, type, options) {
 
 QUnit.test('dxpointer events should have correct pointers', function(assert) {
     this.$element.one('dxpointerdown', function(e) {
-        var pointers = e.pointers;
+        const pointers = e.pointers;
         assert.equal(pointers.length, 1);
     });
     simulateMouseEvent(this.$element, 'mousedown');
 
     this.$element.one('dxpointermove', function(e) {
-        var pointers = e.pointers;
+        const pointers = e.pointers;
         assert.equal(pointers.length, 1);
     });
     simulateMouseEvent(this.$element, 'mousemove');
 
     this.$element.one('dxpointerup', function(e) {
-        var pointers = e.pointers;
+        const pointers = e.pointers;
         assert.equal(pointers.length, 0);
     });
     simulateMouseEvent(this.$element, 'mouseup');
 
     this.$element.one('dxpointermove', function(e) {
-        var pointers = e.pointers;
+        const pointers = e.pointers;
         assert.equal(pointers.length, 0);
     });
     simulateMouseEvent(this.$element, 'mousemove');
@@ -174,7 +174,7 @@ QUnit.test('pointers in dxpointer events should be updated on mouse move', funct
     simulateMouseEvent(this.$element, 'mousedown', { clientX: 0 });
 
     this.$element.one('dxpointermove', function(e) {
-        var pointers = e.pointers;
+        const pointers = e.pointers;
 
         assert.equal(pointers[0].pageX || pointers[0].clientX, 50);
     });
@@ -227,7 +227,7 @@ $.each({
         this.$element.on(eventName, function(e) {
             if(eventName !== 'dxpointerup') {
                 assert.equal(e.pointers.length, 1, 'pointer was added');
-                var pointer = e.pointers[0];
+                const pointer = e.pointers[0];
 
                 $.each(['pageX', 'pageY'], function() {
                     assert.ok(this in pointer, 'event has \'' + this + '\' property');

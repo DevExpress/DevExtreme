@@ -8,7 +8,7 @@ class MetadataLoader {
 
     load(theme, colorScheme) {
         return new Promise((resolve) => {
-            let metadata = this.fullMetadata[theme + '_' + colorScheme.replace(/-/g, '_') + '_metadata'];
+            const metadata = this.fullMetadata[theme + '_' + colorScheme.replace(/-/g, '_') + '_metadata'];
 
             if(semver.gte(this.version(), '18.2.8') && this.migrationMetadata[theme]) {
                 this.migrationMetadata[theme].forEach(value => {

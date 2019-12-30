@@ -1,143 +1,143 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    translator = require('../../animation/translator'),
-    extend = require('../../core/utils/extend').extend,
-    Color = require('../../color'),
-    messageLocalization = require('../../localization/message'),
-    devices = require('../../core/devices'),
-    registerComponent = require('../../core/component_registrator'),
-    Editor = require('../editor/editor'),
-    NumberBox = require('../number_box'),
-    TextBox = require('../text_box'),
-    Draggable = require('../draggable'),
-    clickEvent = require('../../events/click');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const translator = require('../../animation/translator');
+const extend = require('../../core/utils/extend').extend;
+const Color = require('../../color');
+const messageLocalization = require('../../localization/message');
+const devices = require('../../core/devices');
+const registerComponent = require('../../core/component_registrator');
+const Editor = require('../editor/editor');
+const NumberBox = require('../number_box');
+const TextBox = require('../text_box');
+const Draggable = require('../draggable');
+const clickEvent = require('../../events/click');
 
-var COLOR_VIEW_CLASS = 'dx-colorview',
-    COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container',
+const COLOR_VIEW_CLASS = 'dx-colorview';
+const COLOR_VIEW_CONTAINER_CLASS = 'dx-colorview-container';
 
-    COLOR_VIEW_ROW_CLASS = 'dx-colorview-container-row',
-    COLOR_VIEW_CELL_CLASS = 'dx-colorview-container-cell',
+const COLOR_VIEW_ROW_CLASS = 'dx-colorview-container-row';
+const COLOR_VIEW_CELL_CLASS = 'dx-colorview-container-cell';
 
-    COLOR_VIEW_PALETTE_CLASS = 'dx-colorview-palette',
-    COLOR_VIEW_PALETTE_CELL_CLASS = 'dx-colorview-palette-cell',
-    COLOR_VIEW_PALETTE_HANDLE_CLASS = 'dx-colorview-palette-handle',
-    COLOR_VIEW_PALETTE_GRADIENT_CLASS = 'dx-colorview-palette-gradient',
-    COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS = 'dx-colorview-palette-gradient-white',
-    COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS = 'dx-colorview-palette-gradient-black',
+const COLOR_VIEW_PALETTE_CLASS = 'dx-colorview-palette';
+const COLOR_VIEW_PALETTE_CELL_CLASS = 'dx-colorview-palette-cell';
+const COLOR_VIEW_PALETTE_HANDLE_CLASS = 'dx-colorview-palette-handle';
+const COLOR_VIEW_PALETTE_GRADIENT_CLASS = 'dx-colorview-palette-gradient';
+const COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS = 'dx-colorview-palette-gradient-white';
+const COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS = 'dx-colorview-palette-gradient-black';
 
-    COLOR_VIEW_HUE_SCALE_CLASS = 'dx-colorview-hue-scale',
-    COLOR_VIEW_HUE_SCALE_CELL_CLASS = 'dx-colorview-hue-scale-cell',
-    COLOR_VIEW_HUE_SCALE_HANDLE_CLASS = 'dx-colorview-hue-scale-handle',
-    COLOR_VIEW_HUE_SCALE_WRAPPER_CLASS = 'dx-colorview-hue-scale-wrapper',
+const COLOR_VIEW_HUE_SCALE_CLASS = 'dx-colorview-hue-scale';
+const COLOR_VIEW_HUE_SCALE_CELL_CLASS = 'dx-colorview-hue-scale-cell';
+const COLOR_VIEW_HUE_SCALE_HANDLE_CLASS = 'dx-colorview-hue-scale-handle';
+const COLOR_VIEW_HUE_SCALE_WRAPPER_CLASS = 'dx-colorview-hue-scale-wrapper';
 
-    COLOR_VIEW_CONTROLS_CONTAINER_CLASS = 'dx-colorview-controls-container',
+const COLOR_VIEW_CONTROLS_CONTAINER_CLASS = 'dx-colorview-controls-container';
 
-    COLOR_VIEW_RED_LABEL_CLASS = 'dx-colorview-label-red',
-    COLOR_VIEW_GREEN_LABEL_CLASS = 'dx-colorview-label-green',
-    COLOR_VIEW_BLUE_LABEL_CLASS = 'dx-colorview-label-blue',
-    COLOR_VIEW_HEX_LABEL_CLASS = 'dx-colorview-label-hex',
+const COLOR_VIEW_RED_LABEL_CLASS = 'dx-colorview-label-red';
+const COLOR_VIEW_GREEN_LABEL_CLASS = 'dx-colorview-label-green';
+const COLOR_VIEW_BLUE_LABEL_CLASS = 'dx-colorview-label-blue';
+const COLOR_VIEW_HEX_LABEL_CLASS = 'dx-colorview-label-hex';
 
-    COLOR_VIEW_ALPHA_CHANNEL_SCALE_CLASS = 'dx-colorview-alpha-channel-scale',
-    COLOR_VIEW_APLHA_CHANNEL_ROW_CLASS = 'dx-colorview-alpha-channel-row',
-    COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS = 'dx-colorview-alpha-channel-wrapper',
-    COLOR_VIEW_ALPHA_CHANNEL_LABEL_CLASS = 'dx-colorview-alpha-channel-label',
-    COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS = 'dx-colorview-alpha-channel-handle',
-    COLOR_VIEW_ALPHA_CHANNEL_CELL_CLASS = 'dx-colorview-alpha-channel-cell',
-    COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS = 'dx-colorview-alpha-channel-border',
+const COLOR_VIEW_ALPHA_CHANNEL_SCALE_CLASS = 'dx-colorview-alpha-channel-scale';
+const COLOR_VIEW_APLHA_CHANNEL_ROW_CLASS = 'dx-colorview-alpha-channel-row';
+const COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS = 'dx-colorview-alpha-channel-wrapper';
+const COLOR_VIEW_ALPHA_CHANNEL_LABEL_CLASS = 'dx-colorview-alpha-channel-label';
+const COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS = 'dx-colorview-alpha-channel-handle';
+const COLOR_VIEW_ALPHA_CHANNEL_CELL_CLASS = 'dx-colorview-alpha-channel-cell';
+const COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS = 'dx-colorview-alpha-channel-border';
 
-    COLOR_VIEW_COLOR_PREVIEW = 'dx-colorview-color-preview',
-    COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS = 'dx-colorview-color-preview-container',
-    COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS = 'dx-colorview-color-preview-container-inner',
-    COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT = 'dx-colorview-color-preview-color-current',
-    COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new';
+const COLOR_VIEW_COLOR_PREVIEW = 'dx-colorview-color-preview';
+const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS = 'dx-colorview-color-preview-container';
+const COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS = 'dx-colorview-color-preview-container-inner';
+const COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT = 'dx-colorview-color-preview-color-current';
+const COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW = 'dx-colorview-color-preview-color-new';
 
-var ColorView = Editor.inherit({
+const ColorView = Editor.inherit({
 
     _supportedKeys: function() {
-        var isRTL = this.option('rtlEnabled');
+        const isRTL = this.option('rtlEnabled');
 
-        var that = this,
-            getHorizontalPaletteStep = function(e) {
-                var step = 100 / that._paletteWidth;
-                if(e.shiftKey) {
-                    step = step * that.option('keyStep');
-                }
+        const that = this;
+        const getHorizontalPaletteStep = function(e) {
+            let step = 100 / that._paletteWidth;
+            if(e.shiftKey) {
+                step = step * that.option('keyStep');
+            }
 
-                step = step > 1 ? step : 1;
-                return Math.round(step);
-            },
-            updateHorizontalPaletteValue = function(step) {
-                var value = that._currentColor.hsv.s + step;
+            step = step > 1 ? step : 1;
+            return Math.round(step);
+        };
+        const updateHorizontalPaletteValue = function(step) {
+            let value = that._currentColor.hsv.s + step;
 
-                if(value > 100) {
-                    value = 100;
-                } else if(value < 0) {
-                    value = 0;
-                }
+            if(value > 100) {
+                value = 100;
+            } else if(value < 0) {
+                value = 0;
+            }
 
-                that._currentColor.hsv.s = value;
-                updatePaletteValue();
-            },
-            getVerticalPaletteStep = function(e) {
-                var step = 100 / that._paletteHeight;
-                if(e.shiftKey) {
-                    step = step * that.option('keyStep');
-                }
+            that._currentColor.hsv.s = value;
+            updatePaletteValue();
+        };
+        const getVerticalPaletteStep = function(e) {
+            let step = 100 / that._paletteHeight;
+            if(e.shiftKey) {
+                step = step * that.option('keyStep');
+            }
 
-                step = step > 1 ? step : 1;
-                return Math.round(step);
-            },
-            updateVerticalPaletteValue = function(step) {
-                var value = that._currentColor.hsv.v + step;
+            step = step > 1 ? step : 1;
+            return Math.round(step);
+        };
+        const updateVerticalPaletteValue = function(step) {
+            let value = that._currentColor.hsv.v + step;
 
-                if(value > 100) {
-                    value = 100;
-                } else if(value < 0) {
-                    value = 0;
-                }
+            if(value > 100) {
+                value = 100;
+            } else if(value < 0) {
+                value = 0;
+            }
 
-                that._currentColor.hsv.v = value;
-                updatePaletteValue();
-            },
-            updatePaletteValue = function() {
-                that._placePaletteHandle();
-                that._updateColorFromHsv(
-                    that._currentColor.hsv.h,
-                    that._currentColor.hsv.s,
-                    that._currentColor.hsv.v
-                );
-            },
-            getHueScaleStep = function(e) {
-                var step = 360 / (that._hueScaleWrapperHeight - that._hueScaleHandleHeight);
-                if(e.shiftKey) {
-                    step = step * that.option('keyStep');
-                }
+            that._currentColor.hsv.v = value;
+            updatePaletteValue();
+        };
+        var updatePaletteValue = function() {
+            that._placePaletteHandle();
+            that._updateColorFromHsv(
+                that._currentColor.hsv.h,
+                that._currentColor.hsv.s,
+                that._currentColor.hsv.v
+            );
+        };
+        const getHueScaleStep = function(e) {
+            let step = 360 / (that._hueScaleWrapperHeight - that._hueScaleHandleHeight);
+            if(e.shiftKey) {
+                step = step * that.option('keyStep');
+            }
 
-                step = step > 1 ? step : 1;
-                return step;
-            },
-            updateHueScaleValue = function(step) {
-                that._currentColor.hsv.h += step;
-                that._placeHueScaleHandle();
-                var handleLocation = translator.locate(that._$hueScaleHandle);
-                that._updateColorHue(handleLocation.top + that._hueScaleHandleHeight / 2);
-            },
-            getAlphaScaleStep = function(e) {
-                var step = 1 / (that._alphaChannelScaleWorkWidth);
-                if(e.shiftKey) {
-                    step = step * that.option('keyStep');
-                }
+            step = step > 1 ? step : 1;
+            return step;
+        };
+        const updateHueScaleValue = function(step) {
+            that._currentColor.hsv.h += step;
+            that._placeHueScaleHandle();
+            const handleLocation = translator.locate(that._$hueScaleHandle);
+            that._updateColorHue(handleLocation.top + that._hueScaleHandleHeight / 2);
+        };
+        const getAlphaScaleStep = function(e) {
+            let step = 1 / (that._alphaChannelScaleWorkWidth);
+            if(e.shiftKey) {
+                step = step * that.option('keyStep');
+            }
 
-                step = step > 0.01 ? step : 0.01;
-                step = isRTL ? -step : step;
-                return step;
-            },
-            updateAlphaScaleValue = function(step) {
-                that._currentColor.a += step;
-                that._placeAlphaChannelHandle();
-                var handleLocation = translator.locate(that._$alphaChannelHandle);
-                that._calculateColorTransparencyByScaleWidth(handleLocation.left + that._alphaChannelHandleWidth / 2);
-            };
+            step = step > 0.01 ? step : 0.01;
+            step = isRTL ? -step : step;
+            return step;
+        };
+        const updateAlphaScaleValue = function(step) {
+            that._currentColor.a += step;
+            that._placeAlphaChannelHandle();
+            const handleLocation = translator.locate(that._$alphaChannelHandle);
+            that._calculateColorTransparencyByScaleWidth(handleLocation.left + that._alphaChannelHandleWidth / 2);
+        };
 
         return extend(this.callBase(), {
             upArrow: function(e) {
@@ -241,7 +241,7 @@ var ColorView = Editor.inherit({
 
     _setCurrentColor: function(value) {
         value = value || '#000000';
-        var newColor = new Color(value);
+        const newColor = new Color(value);
         if(!newColor.colorIsInvalid) {
             if(!this._currentColor || this._makeRgba(this._currentColor) !== this._makeRgba(newColor)) {
                 this._currentColor = newColor;
@@ -255,11 +255,11 @@ var ColorView = Editor.inherit({
     },
 
     _setBaseColor: function(value) {
-        var color = value || '#000000';
-        var newColor = new Color(color);
+        const color = value || '#000000';
+        const newColor = new Color(color);
 
         if(!newColor.colorIsInvalid) {
-            var isBaseColorChanged = this._makeRgba(this.option('matchValue') !== this._makeRgba(newColor));
+            const isBaseColorChanged = this._makeRgba(this.option('matchValue') !== this._makeRgba(newColor));
             if(isBaseColorChanged) {
                 if(this._$baseColor) {
                     this._makeTransparentBackground(this._$baseColor, newColor);
@@ -305,7 +305,7 @@ var ColorView = Editor.inherit({
     },
 
     _renderColorPickerContainer: function() {
-        var $parent = this.$element();
+        const $parent = this.$element();
         this._$colorPickerContainer = $('<div>').addClass(COLOR_VIEW_CONTAINER_CLASS)
             .appendTo($parent);
 
@@ -313,18 +313,18 @@ var ColorView = Editor.inherit({
     },
 
     _renderHtmlRows: function(updatedOption) {
-        var $renderedRows = this._$colorPickerContainer.find('.' + COLOR_VIEW_ROW_CLASS),
-            renderedRowsCount = $renderedRows.length,
-            rowCount = this.option('editAlphaChannel') ? 2 : 1,
-            delta = renderedRowsCount - rowCount;
+        const $renderedRows = this._$colorPickerContainer.find('.' + COLOR_VIEW_ROW_CLASS);
+        const renderedRowsCount = $renderedRows.length;
+        const rowCount = this.option('editAlphaChannel') ? 2 : 1;
+        let delta = renderedRowsCount - rowCount;
 
         if(delta > 0) {
             $renderedRows.eq(-1).remove();
         }
         if(delta < 0) {
             delta = Math.abs(delta);
-            var rows = [],
-                i;
+            const rows = [];
+            let i;
             for(i = 0; i < delta; i++) {
                 rows.push($('<div>').addClass(COLOR_VIEW_ROW_CLASS));
             }
@@ -347,9 +347,9 @@ var ColorView = Editor.inherit({
     },
 
     _renderPalette: function() {
-        var $paletteCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_PALETTE_CELL_CLASS),
-            $paletteGradientWhite = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS].join(' ')),
-            $paletteGradientBlack = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS].join(' '));
+        const $paletteCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_PALETTE_CELL_CLASS);
+        const $paletteGradientWhite = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS].join(' '));
+        const $paletteGradientBlack = $('<div>').addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS].join(' '));
 
         this._$palette = $('<div>')
             .addClass(COLOR_VIEW_PALETTE_CLASS)
@@ -375,7 +375,7 @@ var ColorView = Editor.inherit({
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
             onDragMove: (function() {
-                var paletteHandlePosition = translator.locate(this._$paletteHandle);
+                const paletteHandlePosition = translator.locate(this._$paletteHandle);
                 this._updateByDrag = true;
                 this._updateColorFromHsv(
                     this._currentColor.hsv.h,
@@ -399,17 +399,17 @@ var ColorView = Editor.inherit({
     },
 
     _calculateColorValue: function(paletteHandlePosition) {
-        var value = Math.floor(paletteHandlePosition.top + this._paletteHandleHeight / 2);
+        const value = Math.floor(paletteHandlePosition.top + this._paletteHandleHeight / 2);
         return 100 - Math.round(value * 100 / this._paletteHeight);
     },
 
     _calculateColorSaturation: function(paletteHandlePosition) {
-        var saturation = Math.floor(paletteHandlePosition.left + this._paletteHandleWidth / 2);
+        const saturation = Math.floor(paletteHandlePosition.left + this._paletteHandleWidth / 2);
         return Math.round(saturation * 100 / this._paletteWidth);
     },
 
     _updateColorFromHsv: function(hue, saturation, value) {
-        var a = this._currentColor.a;
+        const a = this._currentColor.a;
         this._currentColor = new Color('hsv(' + [hue, saturation, value].join(',') + ')');
         this._currentColor.a = a;
         this._updateColorParamsAndColorPreview();
@@ -417,7 +417,7 @@ var ColorView = Editor.inherit({
     },
 
     _renderHueScale: function() {
-        var $hueScaleCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_HUE_SCALE_CELL_CLASS);
+        const $hueScaleCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_HUE_SCALE_CELL_CLASS);
 
         this._$hueScaleWrapper = $('<div>')
             .addClass(COLOR_VIEW_HUE_SCALE_WRAPPER_CLASS)
@@ -454,9 +454,9 @@ var ColorView = Editor.inherit({
     },
 
     _placeHueScaleHandle: function() {
-        var hueScaleHeight = this._hueScaleWrapperHeight,
-            handleHeight = this._hueScaleHandleHeight,
-            top = (hueScaleHeight - handleHeight) * (360 - this._currentColor.hsv.h) / 360;
+        const hueScaleHeight = this._hueScaleWrapperHeight;
+        const handleHeight = this._hueScaleHandleHeight;
+        let top = (hueScaleHeight - handleHeight) * (360 - this._currentColor.hsv.h) / 360;
 
         if(hueScaleHeight < top + handleHeight) {
             top = hueScaleHeight - handleHeight;
@@ -469,9 +469,9 @@ var ColorView = Editor.inherit({
     },
 
     _updateColorHue: function(handlePosition) {
-        var hue = 360 - Math.round((handlePosition - this._hueScaleHandleHeight / 2) * 360 / (this._hueScaleWrapperHeight - this._hueScaleHandleHeight)),
-            saturation = this._currentColor.hsv.s,
-            value = this._currentColor.hsv.v;
+        let hue = 360 - Math.round((handlePosition - this._hueScaleHandleHeight / 2) * 360 / (this._hueScaleWrapperHeight - this._hueScaleHandleHeight));
+        const saturation = this._currentColor.hsv.s;
+        const value = this._currentColor.hsv.v;
 
         this._isTopColorHue = false;
 
@@ -487,7 +487,7 @@ var ColorView = Editor.inherit({
     },
 
     _renderControlsContainer: function() {
-        var $controlsContainerCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer);
+        const $controlsContainerCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer);
         this._$controlsContainer = $('<div>')
             .addClass(COLOR_VIEW_CONTROLS_CONTAINER_CLASS)
             .appendTo($controlsContainerCell);
@@ -500,11 +500,11 @@ var ColorView = Editor.inherit({
     },
 
     _renderColorsPreview: function() {
-        var $colorsPreviewContainer = $('<div>')
+        const $colorsPreviewContainer = $('<div>')
             .addClass(COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS)
             .appendTo(this._$controlsContainer);
 
-        var $colorsPreviewContainerInner = $('<div>')
+        const $colorsPreviewContainerInner = $('<div>')
             .addClass(COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS)
             .appendTo($colorsPreviewContainer);
 
@@ -567,8 +567,8 @@ var ColorView = Editor.inherit({
     },
 
     _renderEditorWithLabel: function(options) {
-        var $editor = $('<div>');
-        var $label = $('<label>')
+        const $editor = $('<div>');
+        const $label = $('<label>')
             .addClass(options.labelClass)
             .text(options.labelText + ':')
             .append($editor);
@@ -578,9 +578,9 @@ var ColorView = Editor.inherit({
             e.preventDefault();
         });
 
-        var editorType = options.editorType;
+        const editorType = options.editorType;
 
-        var editorOptions = extend({
+        const editorOptions = extend({
             value: options.value,
             onValueChanged: options.onValueChanged
         }, {
@@ -593,7 +593,7 @@ var ColorView = Editor.inherit({
             editorOptions.step = options.step || 1;
         }
 
-        var editor = new editorType($editor, editorOptions);
+        const editor = new editorType($editor, editorOptions);
 
         this._attachKeyboardProcessorToEditor(editor);
 
@@ -607,7 +607,7 @@ var ColorView = Editor.inherit({
     },
 
     _attachKeyboardProcessorToEditor: function(editor) {
-        var keyboardProcessor = editor._keyboardProcessor;
+        const keyboardProcessor = editor._keyboardProcessor;
 
         if(keyboardProcessor) {
             keyboardProcessor
@@ -636,13 +636,13 @@ var ColorView = Editor.inherit({
     },
 
     _renderAlphaChannelScale: function() {
-        var $alphaChannelScaleCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer, COLOR_VIEW_ALPHA_CHANNEL_CELL_CLASS),
-            $alphaChannelBorder = $('<div>')
-                .addClass(COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS)
-                .appendTo($alphaChannelScaleCell),
-            $alphaChannelScaleWrapper = $('<div>')
-                .addClass(COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS)
-                .appendTo($alphaChannelBorder);
+        const $alphaChannelScaleCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer, COLOR_VIEW_ALPHA_CHANNEL_CELL_CLASS);
+        const $alphaChannelBorder = $('<div>')
+            .addClass(COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS)
+            .appendTo($alphaChannelScaleCell);
+        const $alphaChannelScaleWrapper = $('<div>')
+            .addClass(COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS)
+            .appendTo($alphaChannelBorder);
 
         this._$alphaChannelScale = $('<div>').addClass(COLOR_VIEW_ALPHA_CHANNEL_SCALE_CLASS)
             .appendTo($alphaChannelScaleWrapper);
@@ -653,16 +653,16 @@ var ColorView = Editor.inherit({
     },
 
     _makeCSSLinearGradient: function($el) {
-        var color = this._currentColor,
-            colorAsRgb = [color.r, color.g, color.b].join(','),
-            colorAsHex = color.toHex().replace('#', '');
+        const color = this._currentColor;
+        const colorAsRgb = [color.r, color.g, color.b].join(',');
+        const colorAsHex = color.toHex().replace('#', '');
 
-        var combineGradientString = function(colorAsRgb, colorAsHex) {
-            var rtlEnabled = this.option('rtlEnabled'),
-                startColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '1' : '0') + ')',
-                finishColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '0' : '1') + ')',
-                startColorIE = '\'#' + (rtlEnabled ? '00' : '') + colorAsHex + '\'',
-                finishColorIE = '\'#' + (rtlEnabled ? '' : '00') + colorAsHex + '\'';
+        const combineGradientString = function(colorAsRgb, colorAsHex) {
+            const rtlEnabled = this.option('rtlEnabled');
+            const startColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '1' : '0') + ')';
+            const finishColor = 'rgba(' + colorAsRgb + ', ' + (rtlEnabled ? '0' : '1') + ')';
+            const startColorIE = '\'#' + (rtlEnabled ? '00' : '') + colorAsHex + '\'';
+            const finishColorIE = '\'#' + (rtlEnabled ? '' : '00') + colorAsHex + '\'';
 
             return [
                 'background-image: -webkit-linear-gradient(180deg, ' + startColor + ', ' + finishColor + ')',
@@ -677,8 +677,8 @@ var ColorView = Editor.inherit({
     },
 
     _renderAlphaChannelInput: function() {
-        var that = this,
-            $alphaChannelInputCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer);
+        const that = this;
+        const $alphaChannelInputCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer);
 
         that._alphaChannelInput = this._renderEditorWithLabel({
             editorType: NumberBox,
@@ -686,7 +686,7 @@ var ColorView = Editor.inherit({
             max: 1,
             step: 0.1,
             onValueChanged: function(e) {
-                var value = e.value;
+                let value = e.value;
                 value = that._currentColor.isValidAlpha(value) ? value : that._currentColor.a;
                 that._updateColorTransparency(value);
                 that._placeAlphaChannelHandle();
@@ -716,8 +716,8 @@ var ColorView = Editor.inherit({
             dragDirection: 'horizontal',
             onDragMove: (function() {
                 this._updateByDrag = true;
-                var $alphaChannelHandle = this._$alphaChannelHandle,
-                    alphaChannelHandlePosition = translator.locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
+                const $alphaChannelHandle = this._$alphaChannelHandle;
+                const alphaChannelHandlePosition = translator.locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
 
                 this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             }).bind(this)
@@ -731,8 +731,8 @@ var ColorView = Editor.inherit({
     },
 
     _calculateColorTransparencyByScaleWidth: function(handlePosition) {
-        var transparency = (handlePosition - this._alphaChannelHandleWidth / 2) / (this._alphaChannelScaleWorkWidth),
-            rtlEnabled = this.option('rtlEnabled');
+        let transparency = (handlePosition - this._alphaChannelHandleWidth / 2) / (this._alphaChannelScaleWorkWidth);
+        const rtlEnabled = this.option('rtlEnabled');
 
         transparency = rtlEnabled ? transparency : 1 - transparency;
 
@@ -748,7 +748,7 @@ var ColorView = Editor.inherit({
     },
 
     _placeAlphaChannelHandle: function() {
-        var left = (this._alphaChannelScaleWorkWidth) * (1 - this._currentColor.a);
+        let left = (this._alphaChannelScaleWorkWidth) * (1 - this._currentColor.a);
 
         if(left < 0) {
             left = 0;
@@ -763,7 +763,7 @@ var ColorView = Editor.inherit({
     },
 
     applyColor: function() {
-        var colorValue = this.option('editAlphaChannel') ? this._makeRgba(this._currentColor) : this._currentColor.toHex();
+        const colorValue = this.option('editAlphaChannel') ? this._makeRgba(this._currentColor) : this._currentColor.toHex();
         this._makeTransparentBackground(this._$currentColor, this._currentColor);
 
         this.option('value', colorValue);
@@ -775,7 +775,7 @@ var ColorView = Editor.inherit({
     },
 
     _updateColor: function(isHex, e) {
-        var rgba, newColor;
+        let rgba; let newColor;
 
         if(isHex) {
             newColor = this._validateHex('#' + this._hexInput.option('value'));
@@ -801,9 +801,9 @@ var ColorView = Editor.inherit({
     },
 
     _validateRgb: function() {
-        var r = this._rgbInputs[0].option('value'),
-            g = this._rgbInputs[1].option('value'),
-            b = this._rgbInputs[2].option('value');
+        let r = this._rgbInputs[0].option('value');
+        let g = this._rgbInputs[1].option('value');
+        let b = this._rgbInputs[2].option('value');
 
         if(!this._currentColor.isValidRGB(r, g, b)) {
             r = this._currentColor.r;
@@ -840,7 +840,7 @@ var ColorView = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
+        const value = args.value;
 
         switch(args.name) {
             case 'value':

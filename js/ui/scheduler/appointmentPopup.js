@@ -170,9 +170,9 @@ export default class AppointmentPopup {
     }
 
     _updateForm(appointmentData, isProcessTimeZone) {
-        let allDay = this.scheduler.fire('getField', 'allDay', appointmentData),
-            startDate = this.scheduler.fire('getField', 'startDate', appointmentData),
-            endDate = this.scheduler.fire('getField', 'endDate', appointmentData);
+        const allDay = this.scheduler.fire('getField', 'allDay', appointmentData);
+        let startDate = this.scheduler.fire('getField', 'startDate', appointmentData);
+        let endDate = this.scheduler.fire('getField', 'endDate', appointmentData);
 
         const formData = this._createAppointmentFormData(appointmentData);
 
@@ -194,8 +194,8 @@ export default class AppointmentPopup {
             this.scheduler.fire('setField', 'endDate', formData, endDate);
         }
 
-        var startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr,
-            endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
+        const startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr;
+        const endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
 
         formData.recurrenceRule = formData.recurrenceRule || ''; // TODO: plug for recurrent editor
 
@@ -204,8 +204,8 @@ export default class AppointmentPopup {
 
         AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
 
-        const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr,
-            recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
+        const recurrenceRuleExpr = this.scheduler._dataAccessors.expr.recurrenceRuleExpr;
+        const recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
 
         if(recurrentEditorItem) {
             const options = recurrentEditorItem.editorOptions || {};
@@ -272,9 +272,9 @@ export default class AppointmentPopup {
                 return;
             }
 
-            const formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true),
-                oldData = this.scheduler._editAppointmentData,
-                recData = this.scheduler._updatedRecAppointment;
+            const formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true);
+            const oldData = this.scheduler._editAppointmentData;
+            const recData = this.scheduler._updatedRecAppointment;
 
             if(state.isEmptyText && formData.text === '') {
                 delete formData.text;
@@ -316,9 +316,9 @@ export default class AppointmentPopup {
     }
 
     _getFormData() {
-        const formData = this._appointmentForm.option('formData'),
-            startDate = this.scheduler.fire('getField', 'startDate', formData),
-            endDate = this.scheduler.fire('getField', 'endDate', formData);
+        const formData = this._appointmentForm.option('formData');
+        const startDate = this.scheduler.fire('getField', 'startDate', formData);
+        const endDate = this.scheduler.fire('getField', 'endDate', formData);
 
         this.scheduler.fire('setField', 'startDate', formData, startDate);
         this.scheduler.fire('setField', 'endDate', formData, endDate);

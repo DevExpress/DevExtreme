@@ -1,18 +1,18 @@
-var $ = require('jquery'),
-    ContextMenu = require('ui/context_menu');
+const $ = require('jquery');
+const ContextMenu = require('ui/context_menu');
 
 require('common.css!');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="simpleMenu"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
+const DX_HAS_CONTEXT_MENU_CLASS = 'dx-has-context-menu';
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         this.$element = $('#simpleMenu');
     }

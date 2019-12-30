@@ -3,7 +3,7 @@ import helper from '../../helpers/dataGridExportTestsHelper.js';
 import { isDefined } from '../../../js/core/utils/type.js';
 
 QUnit.testStart(function() {
-    var markup = '<div id="dataGrid"></div>';
+    const markup = '<div id="dataGrid"></div>';
     $('#qunit-fixture').html(markup);
 });
 
@@ -849,8 +849,8 @@ QUnit.test('Check default number format for [Number|Number|Date] columns', funct
     }
 ].forEach(config => {
     QUnit.test(`Check arguments for data cells - ${config.dataType}`, function(assert) {
-        const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
-            ds = config.gridCellValues.map(item => { return { f1: item }; });
+        const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup };
+        const ds = config.gridCellValues.map(item => { return { f1: item }; });
 
         helper.runGeneralTest(assert,
             {

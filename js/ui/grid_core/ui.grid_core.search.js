@@ -7,10 +7,10 @@ import { combineFilters, getFormatOptionsByColumn, formatValue } from './ui.grid
 import messageLocalization from '../../localization/message';
 import dataQuery from '../../data/query';
 
-var SEARCH_PANEL_CLASS = 'search-panel',
-    SEARCH_TEXT_CLASS = 'search-text',
-    HEADER_PANEL_CLASS = 'header-panel',
-    FILTERING_TIMEOUT = 700;
+const SEARCH_PANEL_CLASS = 'search-panel';
+const SEARCH_TEXT_CLASS = 'search-text';
+const HEADER_PANEL_CLASS = 'header-panel';
+const FILTERING_TIMEOUT = 700;
 
 
 function allowSearch(column) {
@@ -18,7 +18,7 @@ function allowSearch(column) {
 }
 
 function parseValue(column, text) {
-    var lookup = column.lookup;
+    const lookup = column.lookup;
 
     if(!column.parseValue) {
         return text;
@@ -85,21 +85,21 @@ module.exports = {
     extenders: {
         controllers: {
             data: (function() {
-                var calculateSearchFilter = function(that, text) {
-                    var i,
-                        column,
-                        columns = that._columnsController.getColumns(),
-                        searchVisibleColumnsOnly = that.option('searchPanel.searchVisibleColumnsOnly'),
-                        filterValue,
-                        lookup,
-                        filters = [];
+                const calculateSearchFilter = function(that, text) {
+                    let i;
+                    let column;
+                    const columns = that._columnsController.getColumns();
+                    const searchVisibleColumnsOnly = that.option('searchPanel.searchVisibleColumnsOnly');
+                    let filterValue;
+                    let lookup;
+                    const filters = [];
 
                     if(!text) return null;
 
                     function onQueryDone(items) {
-                        var i,
-                            valueGetter = compileGetter(lookup.valueExpr),
-                            value;
+                        let i;
+                        const valueGetter = compileGetter(lookup.valueExpr);
+                        let value;
 
                         for(i = 0; i < items.length; i++) {
                             value = valueGetter(items[i]);
@@ -133,9 +133,9 @@ module.exports = {
                         return this.callBase().concat(['searchByText']);
                     },
                     _calculateAdditionalFilter: function() {
-                        var that = this,
-                            filter = that.callBase(),
-                            searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
+                        const that = this;
+                        const filter = that.callBase();
+                        const searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
 
                         return combineFilters([filter, searchFilter]);
                     },
@@ -145,7 +145,7 @@ module.exports = {
                     },
 
                     optionChanged: function(args) {
-                        var that = this;
+                        const that = this;
 
                         switch(args.fullName) {
                             case 'searchPanel.text':
@@ -162,26 +162,26 @@ module.exports = {
         },
         views: {
             headerPanel: (function() {
-                var getSearchPanelOptions = function(that) {
+                const getSearchPanelOptions = function(that) {
                     return that.option('searchPanel');
                 };
 
                 return {
                     _getToolbarItems: function() {
-                        var items = this.callBase();
+                        const items = this.callBase();
 
                         return this._prepareSearchItem(items);
                     },
 
                     _prepareSearchItem: function(items) {
-                        var that = this,
-                            dataController = that.getController('data'),
-                            searchPanelOptions = getSearchPanelOptions(that);
+                        const that = this;
+                        const dataController = that.getController('data');
+                        const searchPanelOptions = getSearchPanelOptions(that);
 
                         if(searchPanelOptions && searchPanelOptions.visible) {
-                            var toolbarItem = {
+                            const toolbarItem = {
                                 template: function(data, index, container) {
-                                    var $search = $('<div>')
+                                    const $search = $('<div>')
                                         .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
                                         .appendTo(container);
 
@@ -216,11 +216,11 @@ module.exports = {
                     },
 
                     getSearchTextEditor: function() {
-                        var that = this,
-                            $element = that.element(),
-                            $searchPanel = $element.find('.' + that.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
-                                return $(this).closest('.' + that.addWidgetPrefix(HEADER_PANEL_CLASS)).is($element);
-                            });
+                        const that = this;
+                        const $element = that.element();
+                        const $searchPanel = $element.find('.' + that.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
+                            return $(this).closest('.' + that.addWidgetPrefix(HEADER_PANEL_CLASS)).is($element);
+                        });
 
                         if($searchPanel.length) {
                             return $searchPanel.dxTextBox('instance');
@@ -229,7 +229,7 @@ module.exports = {
                     },
 
                     isVisible: function() {
-                        var searchPanelOptions = getSearchPanelOptions(this);
+                        const searchPanelOptions = getSearchPanelOptions(this);
                         return this.callBase() || (searchPanelOptions && searchPanelOptions.visible);
 
                     },
@@ -238,7 +238,7 @@ module.exports = {
                         if(args.name === 'searchPanel') {
 
                             if(args.fullName === 'searchPanel.text') {
-                                var editor = this.getSearchTextEditor();
+                                const editor = this.getSearchTextEditor();
                                 if(editor) {
                                     editor.option('value', args.value);
                                 }
@@ -260,25 +260,25 @@ module.exports = {
                 },
 
                 _getFormattedSearchText: function(column, searchText) {
-                    var value = parseValue(column, searchText),
-                        formatOptions = getFormatOptionsByColumn(column, 'search');
+                    const value = parseValue(column, searchText);
+                    const formatOptions = getFormatOptionsByColumn(column, 'search');
                     return formatValue(value, formatOptions);
                 },
 
                 _getStringNormalizer: function() {
-                    var isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
+                    const isCaseSensitive = this.option('searchPanel.highlightCaseSensitive');
                     return function(str) {
                         return isCaseSensitive ? str : str.toLowerCase();
                     };
                 },
 
                 _findHighlightingTextNodes: function(column, cellElement, searchText) {
-                    var that = this,
-                        $parent = cellElement.parent(),
-                        $items,
-                        columnIndex,
-                        stringNormalizer = this._getStringNormalizer(),
-                        normalizedSearchText = stringNormalizer(searchText);
+                    const that = this;
+                    let $parent = cellElement.parent();
+                    let $items;
+                    let columnIndex;
+                    const stringNormalizer = this._getStringNormalizer();
+                    const normalizedSearchText = stringNormalizer(searchText);
 
                     if(!$parent.length) {
                         $parent = $('<div>').append(cellElement);
@@ -293,9 +293,9 @@ module.exports = {
                     $items = $items && $items.length ? $items : $parent.find('*');
 
                     $items = $items.filter(function(_, element) {
-                        var $contents = $(element).contents();
-                        for(var i = 0; i < $contents.length; i++) {
-                            var node = $contents.get(i);
+                        const $contents = $(element).contents();
+                        for(let i = 0; i < $contents.length; i++) {
+                            const node = $contents.get(i);
                             if(node.nodeType === 3) {
                                 return stringNormalizer(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
                             }
@@ -307,12 +307,12 @@ module.exports = {
                 },
 
                 _highlightSearchTextCore: function($textNode, searchText) {
-                    var that = this,
-                        $searchTextSpan = $('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
-                        text = $textNode.text(),
-                        firstContentElement = $textNode[0],
-                        stringNormalizer = this._getStringNormalizer(),
-                        index = stringNormalizer(text).indexOf(stringNormalizer(searchText));
+                    const that = this;
+                    const $searchTextSpan = $('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS));
+                    const text = $textNode.text();
+                    const firstContentElement = $textNode[0];
+                    const stringNormalizer = this._getStringNormalizer();
+                    const index = stringNormalizer(text).indexOf(stringNormalizer(searchText));
 
                     if(index >= 0) {
                         if(firstContentElement.textContent) {
@@ -329,16 +329,16 @@ module.exports = {
                 },
 
                 _highlightSearchText: function(cellElement, isEquals, column) {
-                    var that = this,
-                        stringNormalizer = this._getStringNormalizer(),
-                        searchText = that.option('searchPanel.text');
+                    const that = this;
+                    const stringNormalizer = this._getStringNormalizer();
+                    let searchText = that.option('searchPanel.text');
 
                     if(isEquals && column) {
                         searchText = searchText && that._getFormattedSearchText(column, searchText);
                     }
 
                     if(searchText && that.option('searchPanel.highlightSearchText')) {
-                        var textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
+                        const textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
                         each(textNodes, function(_, element) {
                             each($(element).contents(), function(_, textNode) {
                                 if(isEquals) {
@@ -371,9 +371,9 @@ module.exports = {
                 },
 
                 _updateCell: function($cell, parameters) {
-                    var column = parameters.column,
-                        dataType = column.lookup && column.lookup.dataType || column.dataType,
-                        isEquals = dataType !== 'string';
+                    const column = parameters.column;
+                    const dataType = column.lookup && column.lookup.dataType || column.dataType;
+                    const isEquals = dataType !== 'string';
 
                     if(allowSearch(column)) {
                         if(this.option('templatesRenderAsynchronously')) {

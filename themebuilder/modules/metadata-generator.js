@@ -58,7 +58,7 @@ const parseImports = (less) => {
 };
 
 const resolveDependencies = (dependencies) => {
-    for(var widget in dependencies) {
+    for(const widget in dependencies) {
         if(Object.prototype.hasOwnProperty.call(dependencies, widget)) {
             const widgetDependencies = dependencies[widget];
 
@@ -86,7 +86,7 @@ const resolveDependencies = (dependencies) => {
 };
 
 const removeInternalDependencies = (dependencies) => {
-    for(var widget in dependencies) {
+    for(const widget in dependencies) {
         if(Object.prototype.hasOwnProperty.call(dependencies, widget)) {
             if(publicWidgets.includes(widget.toLowerCase())) {
                 dependencies[widget] = dependencies[widget].filter(w => publicWidgets.includes(w.toLowerCase()));

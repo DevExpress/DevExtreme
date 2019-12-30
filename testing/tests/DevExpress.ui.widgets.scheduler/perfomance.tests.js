@@ -355,8 +355,8 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         this.createInstance('week', data);
         let appointmentFirst = this.scheduler.appointments.getAppointment(0);
         appointmentFirst.css('backgroundColor', '#00ff00');
-        let appointmentSecond = this.scheduler.appointments.getAppointment(1);
-        let pointer = pointerMock(appointmentSecond).start();
+        const appointmentSecond = this.scheduler.appointments.getAppointment(1);
+        const pointer = pointerMock(appointmentSecond).start();
         pointer.dragStart().drag(-200, -30).dragEnd();
         appointmentFirst = this.scheduler.appointments.getAppointment(0);
         assert.equal(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is not changed after another appointment drag');
@@ -369,7 +369,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
     });
 
     QUnit.test('Scheduler must re-render appointments if resource color has been changed (T751129)', function(assert) {
-        let resourcesData = [{
+        const resourcesData = [{
             id: 1,
             color: '#48392c',
             text: 'One',
@@ -402,7 +402,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         let appointmentFirst = this.scheduler.appointments.getAppointment(0);
         assert.notEqual(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is not changed');
 
-        let resources = this.instance.option('resources');
+        const resources = this.instance.option('resources');
         resources[0].dataSource[0].color = '#00ff00';
         this.instance.option('resources', resources);
 

@@ -1,82 +1,82 @@
-var $ = require('../../core/renderer'),
-    domAdapter = require('../../core/dom_adapter'),
-    windowUtils = require('../../core/utils/window'),
-    ready = require('../../core/utils/ready_callbacks').add,
-    window = windowUtils.getWindow(),
-    navigator = windowUtils.getNavigator(),
-    eventsEngine = require('../../events/core/events_engine'),
-    fx = require('../../animation/fx'),
-    translator = require('../../animation/translator'),
-    compareVersions = require('../../core/utils/version').compare,
-    viewPortUtils = require('../../core/utils/view_port'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    getPublicElement = require('../../core/utils/dom').getPublicElement,
-    viewPortChanged = viewPortUtils.changeCallback,
-    hideTopOverlayCallback = require('../../mobile/hide_top_overlay').hideCallback,
-    positionUtils = require('../../animation/position'),
-    fitIntoRange = require('../../core/utils/math').fitIntoRange,
-    domUtils = require('../../core/utils/dom'),
-    noop = require('../../core/utils/common').noop,
-    typeUtils = require('../../core/utils/type'),
-    each = require('../../core/utils/iterator').each,
-    devices = require('../../core/devices'),
-    browser = require('../../core/utils/browser'),
-    registerComponent = require('../../core/component_registrator'),
-    Widget = require('../widget/ui.widget'),
-    KeyboardProcessor = require('../widget/ui.keyboard_processor'),
-    selectors = require('../widget/selectors'),
-    dragEvents = require('../../events/drag'),
-    eventUtils = require('../../events/utils'),
-    pointerEvents = require('../../events/pointer'),
-    Resizable = require('../resizable'),
-    EmptyTemplate = require('../../core/templates/empty_template').EmptyTemplate,
-    Deferred = require('../../core/utils/deferred').Deferred,
-    zIndexPool = require('./z_index'),
-    swatch = require('../widget/swatch_container');
+const $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const windowUtils = require('../../core/utils/window');
+const ready = require('../../core/utils/ready_callbacks').add;
+const window = windowUtils.getWindow();
+const navigator = windowUtils.getNavigator();
+const eventsEngine = require('../../events/core/events_engine');
+const fx = require('../../animation/fx');
+const translator = require('../../animation/translator');
+const compareVersions = require('../../core/utils/version').compare;
+const viewPortUtils = require('../../core/utils/view_port');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const getPublicElement = require('../../core/utils/dom').getPublicElement;
+const viewPortChanged = viewPortUtils.changeCallback;
+const hideTopOverlayCallback = require('../../mobile/hide_top_overlay').hideCallback;
+const positionUtils = require('../../animation/position');
+const fitIntoRange = require('../../core/utils/math').fitIntoRange;
+const domUtils = require('../../core/utils/dom');
+const noop = require('../../core/utils/common').noop;
+const typeUtils = require('../../core/utils/type');
+const each = require('../../core/utils/iterator').each;
+const devices = require('../../core/devices');
+const browser = require('../../core/utils/browser');
+const registerComponent = require('../../core/component_registrator');
+const Widget = require('../widget/ui.widget');
+const KeyboardProcessor = require('../widget/ui.keyboard_processor');
+const selectors = require('../widget/selectors');
+const dragEvents = require('../../events/drag');
+const eventUtils = require('../../events/utils');
+const pointerEvents = require('../../events/pointer');
+const Resizable = require('../resizable');
+const EmptyTemplate = require('../../core/templates/empty_template').EmptyTemplate;
+const Deferred = require('../../core/utils/deferred').Deferred;
+const zIndexPool = require('./z_index');
+const swatch = require('../widget/swatch_container');
 
-var OVERLAY_CLASS = 'dx-overlay',
-    OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper',
-    OVERLAY_CONTENT_CLASS = 'dx-overlay-content',
-    OVERLAY_SHADER_CLASS = 'dx-overlay-shader',
-    OVERLAY_MODAL_CLASS = 'dx-overlay-modal',
-    INNER_OVERLAY_CLASS = 'dx-inner-overlay',
-    INVISIBLE_STATE_CLASS = 'dx-state-invisible',
+const OVERLAY_CLASS = 'dx-overlay';
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
+const OVERLAY_MODAL_CLASS = 'dx-overlay-modal';
+const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-    ANONYMOUS_TEMPLATE_NAME = 'content',
+const ANONYMOUS_TEMPLATE_NAME = 'content';
 
-    RTL_DIRECTION_CLASS = 'dx-rtl',
+const RTL_DIRECTION_CLASS = 'dx-rtl';
 
-    ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioning', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'],
+const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioning', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd'];
 
-    OVERLAY_STACK = [],
+const OVERLAY_STACK = [];
 
-    DISABLED_STATE_CLASS = 'dx-state-disabled',
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-    PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling',
+const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-    TAB_KEY = 'tab',
+const TAB_KEY = 'tab';
 
-    POSITION_ALIASES = {
-        'top': { my: 'top center', at: 'top center' },
-        'bottom': { my: 'bottom center', at: 'bottom center' },
-        'right': { my: 'right center', at: 'right center' },
-        'left': { my: 'left center', at: 'left center' },
-        'center': { my: 'center', at: 'center' },
-        'right bottom': { my: 'right bottom', at: 'right bottom' },
-        'right top': { my: 'right top', at: 'right top' },
-        'left bottom': { my: 'left bottom', at: 'left bottom' },
-        'left top': { my: 'left top', at: 'left top' }
-    };
+const POSITION_ALIASES = {
+    'top': { my: 'top center', at: 'top center' },
+    'bottom': { my: 'bottom center', at: 'bottom center' },
+    'right': { my: 'right center', at: 'right center' },
+    'left': { my: 'left center', at: 'left center' },
+    'center': { my: 'center', at: 'center' },
+    'right bottom': { my: 'right bottom', at: 'right bottom' },
+    'right top': { my: 'right top', at: 'right top' },
+    'left bottom': { my: 'left bottom', at: 'left bottom' },
+    'left top': { my: 'left top', at: 'left top' }
+};
 
-var realDevice = devices.real(),
-    realVersion = realDevice.version,
-    firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop',
-    iOS = realDevice.platform === 'ios',
-    hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop',
-    android4_0nativeBrowser = realDevice.platform === 'android' && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf('Chrome') === -1;
+const realDevice = devices.real();
+const realVersion = realDevice.version;
+const firefoxDesktop = browser.mozilla && realDevice.deviceType === 'desktop';
+const iOS = realDevice.platform === 'ios';
+const hasSafariAddressBar = browser.safari && realDevice.deviceType !== 'desktop';
+const android4_0nativeBrowser = realDevice.platform === 'android' && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf('Chrome') === -1;
 
-var forceRepaint = function($element) {
+const forceRepaint = function($element) {
     // NOTE: force layout recalculation on FF desktop (T581681)
     if(firefoxDesktop) {
         $element.width();
@@ -84,8 +84,8 @@ var forceRepaint = function($element) {
 
     // NOTE: force rendering on buggy android (T112083)
     if(android4_0nativeBrowser) {
-        var $parents = $element.parents(),
-            inScrollView = $parents.is('.dx-scrollable-native');
+        const $parents = $element.parents();
+        const inScrollView = $parents.is('.dx-scrollable-native');
 
         if(!inScrollView) {
             $parents.css('backfaceVisibility', 'hidden');
@@ -96,13 +96,13 @@ var forceRepaint = function($element) {
 };
 
 
-var getElement = function(value) {
+const getElement = function(value) {
     return value && $(value.target || value);
 };
 
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
-        for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
+        for(let i = OVERLAY_STACK.length - 1; i >= 0; i--) {
             if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
                 return;
             }
@@ -113,22 +113,22 @@ ready(function() {
 var Overlay = Widget.inherit({
 
     _supportedKeys: function() {
-        var offsetSize = 5,
-            move = function(top, left, e) {
-                if(!this.option('dragEnabled')) {
-                    return;
-                }
+        const offsetSize = 5;
+        const move = function(top, left, e) {
+            if(!this.option('dragEnabled')) {
+                return;
+            }
 
-                e.preventDefault();
-                e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
 
-                var allowedOffsets = this._allowedOffsets();
-                var offset = {
-                    top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
-                    left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
-                };
-                this._changePosition(offset);
+            const allowedOffsets = this._allowedOffsets();
+            const offset = {
+                top: fitIntoRange(top, -allowedOffsets.top, allowedOffsets.bottom),
+                left: fitIntoRange(left, -allowedOffsets.left, allowedOffsets.right)
             };
+            this._changePosition(offset);
+        };
         return extend(this.callBase(), {
             escape: function() {
                 this.hide();
@@ -235,9 +235,9 @@ var Overlay = Widget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([{
             device: function() {
-                var realDevice = devices.real(),
-                    realPlatform = realDevice.platform,
-                    realVersion = realDevice.version;
+                const realDevice = devices.real();
+                const realPlatform = realDevice.platform;
+                const realVersion = realDevice.version;
 
                 return realPlatform === 'android' && compareVersions(realVersion, [4, 2]) < 0;
             },
@@ -307,7 +307,7 @@ var Overlay = Widget.inherit({
         this._$content = $('<div>').addClass(OVERLAY_CONTENT_CLASS);
         this._initInnerOverlayClass();
 
-        var $element = this.$element();
+        const $element = this.$element();
         this._$wrapper.addClass($element.attr('class'));
         $element.addClass(OVERLAY_CLASS);
 
@@ -323,7 +323,7 @@ var Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._initTarget(options.target);
-        var container = options.container === undefined ? this.option('container') : options.container;
+        const container = options.container === undefined ? this.option('container') : options.container;
         this._initContainer(container);
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
@@ -339,7 +339,7 @@ var Overlay = Widget.inherit({
             return;
         }
 
-        var options = this.option();
+        const options = this.option();
         each([
             'position.of',
             'animation.show.from.position.of',
@@ -347,9 +347,9 @@ var Overlay = Widget.inherit({
             'animation.hide.from.position.of',
             'animation.hide.to.position.of'
         ], function(_, path) {
-            var pathParts = path.split('.');
+            const pathParts = path.split('.');
 
-            var option = options;
+            let option = options;
             while(option) {
                 if(pathParts.length === 1) {
                     if(typeUtils.isPlainObject(option)) {
@@ -366,8 +366,8 @@ var Overlay = Widget.inherit({
     _initContainer: function(container) {
         container = container === undefined ? viewPortUtils.value() : container;
 
-        var $element = this.$element();
-        var $container = $element.closest(container);
+        const $element = this.$element();
+        let $container = $element.closest(container);
 
         if(!$container.length) {
             $container = $(container).first();
@@ -395,7 +395,7 @@ var Overlay = Widget.inherit({
     },
 
     _initCloseOnOutsideClickHandler: function() {
-        var that = this;
+        const that = this;
         this._proxiedDocumentDownHandler = function() {
             return that._documentDownHandler.apply(that, arguments);
         };
@@ -406,16 +406,16 @@ var Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        var closeOnOutsideClick = this.option('closeOnOutsideClick');
+        let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
         if(typeUtils.isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
-        var $container = this._$content,
-            isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
-            isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length,
-            outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+        const $container = this._$content;
+        const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
+        const isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length;
+        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             if(this.option('shading')) {
@@ -439,10 +439,10 @@ var Overlay = Widget.inherit({
     },
 
     _isTopOverlay: function() {
-        var overlayStack = this._overlayStack();
+        const overlayStack = this._overlayStack();
 
-        for(var i = overlayStack.length - 1; i >= 0; i--) {
-            var tabbableElements = overlayStack[i]._findTabbableBounds();
+        for(let i = overlayStack.length - 1; i >= 0; i--) {
+            const tabbableElements = overlayStack[i]._findTabbableBounds();
 
             if(tabbableElements.first || tabbableElements.last) {
                 return overlayStack[i] === this;
@@ -481,19 +481,19 @@ var Overlay = Widget.inherit({
     },
 
     _normalizePosition: function() {
-        var position = this.option('position');
+        const position = this.option('position');
         this._position = typeof position === 'function' ? position() : position;
     },
 
     _getAnimationConfig: function() {
-        var animation = this.option('animation');
+        let animation = this.option('animation');
         if(typeUtils.isFunction(animation)) animation = animation.call(this);
         return animation;
     },
 
     _show: function() {
-        var that = this,
-            deferred = new Deferred();
+        const that = this;
+        const deferred = new Deferred();
 
         this._parentHidden = this._isParentHidden();
         deferred.done(function() {
@@ -513,16 +513,16 @@ var Overlay = Widget.inherit({
 
         this._normalizePosition();
 
-        var animation = that._getAnimationConfig() || {},
-            showAnimation = this._normalizeAnimation(animation.show, 'to'),
-            startShowAnimation = (showAnimation && showAnimation.start) || noop,
-            completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
+        const animation = that._getAnimationConfig() || {};
+        const showAnimation = this._normalizeAnimation(animation.show, 'to');
+        const startShowAnimation = (showAnimation && showAnimation.start) || noop;
+        const completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
             deferred.resolve();
         } else {
-            var show = function() {
+            const show = function() {
                 this._renderVisibility(true);
 
                 if(this._isShowingActionCanceled) {
@@ -581,13 +581,13 @@ var Overlay = Widget.inherit({
         }
         this._currentVisible = false;
 
-        var that = this,
-            deferred = new Deferred(),
-            animation = that._getAnimationConfig() || {},
-            hideAnimation = this._normalizeAnimation(animation.hide, 'from'),
-            startHideAnimation = (hideAnimation && hideAnimation.start) || noop,
-            completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop,
-            hidingArgs = { cancel: false };
+        const that = this;
+        const deferred = new Deferred();
+        const animation = that._getAnimationConfig() || {};
+        const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
+        const startHideAnimation = (hideAnimation && hideAnimation.start) || noop;
+        const completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop;
+        const hidingArgs = { cancel: false };
 
         if(this._isShowingActionCanceled) {
             deferred.resolve();
@@ -628,8 +628,8 @@ var Overlay = Widget.inherit({
     },
 
     _forceFocusLost: function() {
-        var activeElement = domAdapter.getActiveElement();
-        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+        const activeElement = domAdapter.getActiveElement();
+        const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
         if(shouldResetActiveElement) {
             domUtils.resetActiveElement();
@@ -700,8 +700,8 @@ var Overlay = Widget.inherit({
     },
 
     _updateZIndexStackPosition: function(pushToStack) {
-        var overlayStack = this._overlayStack(),
-            index = inArray(this, overlayStack);
+        const overlayStack = this._overlayStack();
+        const index = inArray(this, overlayStack);
 
         if(pushToStack) {
             if(index === -1) {
@@ -728,14 +728,14 @@ var Overlay = Widget.inherit({
     },
 
     _initTabTerminatorHandler: function() {
-        var that = this;
+        const that = this;
         this._proxiedTabTerminatorHandler = function() {
             that._tabKeyHandler.apply(that, arguments);
         };
     },
 
     _toggleTabTerminator: function(enabled) {
-        var eventName = eventUtils.addNamespace('keydown', this.NAME);
+        const eventName = eventUtils.addNamespace('keydown', this.NAME);
         if(enabled) {
             eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
         } else {
@@ -744,11 +744,11 @@ var Overlay = Widget.inherit({
     },
 
     _findTabbableBounds: function() {
-        var $elements = this._$wrapper.find('*');
-        var elementsCount = $elements.length - 1;
-        var result = { first: null, last: null };
+        const $elements = this._$wrapper.find('*');
+        const elementsCount = $elements.length - 1;
+        const result = { first: null, last: null };
 
-        for(var i = 0; i <= elementsCount; i++) {
+        for(let i = 0; i <= elementsCount; i++) {
             if(!result.first && $elements.eq(i).is(selectors.tabbable)) {
                 result.first = $elements.eq(i);
             }
@@ -770,22 +770,22 @@ var Overlay = Widget.inherit({
             return;
         }
 
-        var tabbableElements = this._findTabbableBounds(),
+        const tabbableElements = this._findTabbableBounds();
 
-            $firstTabbable = tabbableElements.first,
-            $lastTabbable = tabbableElements.last,
+        const $firstTabbable = tabbableElements.first;
+        const $lastTabbable = tabbableElements.last;
 
-            isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0),
-            isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0),
-            isEmptyTabList = tabbableElements.length === 0,
-            isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
+        const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
+        const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
+        const isEmptyTabList = tabbableElements.length === 0;
+        const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {
 
             e.preventDefault();
 
-            var $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
+            const $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
 
             eventsEngine.trigger($focusElement, 'focusin');
             eventsEngine.trigger($focusElement, 'focus');
@@ -816,10 +816,10 @@ var Overlay = Widget.inherit({
             return;
         }
 
-        var target = this._position.of || $(),
-            closeOnScroll = this.option('closeOnTargetScroll'),
-            $parents = getElement(target).parents(),
-            scrollEvent = eventUtils.addNamespace('scroll', this.NAME);
+        const target = this._position.of || $();
+        const closeOnScroll = this.option('closeOnTargetScroll');
+        let $parents = getElement(target).parents();
+        const scrollEvent = eventUtils.addNamespace('scroll', this.NAME);
 
         if(devices.real().deviceType === 'desktop') {
             $parents = $parents.add(window);
@@ -837,8 +837,8 @@ var Overlay = Widget.inherit({
     },
 
     _targetParentsScrollHandler: function(e) {
-        var closeHandled = false,
-            closeOnScroll = this.option('closeOnTargetScroll');
+        let closeHandled = false;
+        const closeOnScroll = this.option('closeOnTargetScroll');
         if(typeUtils.isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
@@ -862,8 +862,8 @@ var Overlay = Widget.inherit({
     },
 
     _renderContent: function() {
-        var shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
-        var isParentHidden = this.option('visible') && this._isParentHidden();
+        const shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
+        const isParentHidden = this.option('visible') && this._isParentHidden();
 
         if(isParentHidden) {
             this._isHidden = true;
@@ -889,15 +889,15 @@ var Overlay = Widget.inherit({
             return this._parentHidden;
         }
 
-        var $parent = this.$element().parent();
+        const $parent = this.$element().parent();
 
         if($parent.is(':visible')) {
             return false;
         }
 
-        var isHidden = false;
+        let isHidden = false;
         $parent.add($parent.parents()).each(function() {
-            var $element = $(this);
+            const $element = $(this);
             if($element.css('display') === 'none') {
                 isHidden = true;
                 return false;
@@ -910,9 +910,9 @@ var Overlay = Widget.inherit({
     _renderContentImpl: function() {
         const whenContentRendered = new Deferred();
 
-        const contentTemplateOption = this.option('contentTemplate'),
-            contentTemplate = this._getTemplate(contentTemplateOption),
-            transclude = this._getAnonymousTemplateName() === contentTemplateOption;
+        const contentTemplateOption = this.option('contentTemplate');
+        const contentTemplate = this._getTemplate(contentTemplateOption);
+        const transclude = this._getAnonymousTemplateName() === contentTemplateOption;
         contentTemplate && contentTemplate.render({
             container: getPublicElement(this.$content()),
             noModel: true,
@@ -936,14 +936,14 @@ var Overlay = Widget.inherit({
     },
 
     _renderDrag: function() {
-        var $dragTarget = this._getDragTarget();
+        const $dragTarget = this._getDragTarget();
 
         if(!$dragTarget) {
             return;
         }
 
-        var startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME),
-            updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME);
+        const updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
         eventsEngine.off($dragTarget, startEventName);
         eventsEngine.off($dragTarget, updateEventName);
@@ -971,8 +971,8 @@ var Overlay = Widget.inherit({
     _resizeEndHandler: function() {
         this._positionChangeHandled = true;
 
-        var width = this._resizable.option('width'),
-            height = this._resizable.option('height');
+        const width = this._resizable.option('width');
+        const height = this._resizable.option('height');
 
         width && this.option('width', width);
         height && this.option('height', height);
@@ -981,8 +981,8 @@ var Overlay = Widget.inherit({
     },
 
     _renderScrollTerminator: function() {
-        var $scrollTerminator = this._wrapper();
-        var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
+        const $scrollTerminator = this._wrapper();
+        const terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
@@ -1000,7 +1000,7 @@ var Overlay = Widget.inherit({
             _clearSelection: noop,
             isNative: true
         }, function(e) {
-            var originalEvent = e.originalEvent.originalEvent;
+            const originalEvent = e.originalEvent.originalEvent;
             e._cancelPreventDefault = true;
 
             if(originalEvent && originalEvent.type !== 'mousemove') {
@@ -1018,7 +1018,7 @@ var Overlay = Widget.inherit({
 
         this._prevOffset = { x: 0, y: 0 };
 
-        var allowedOffsets = this._allowedOffsets();
+        const allowedOffsets = this._allowedOffsets();
         e.maxTopOffset = allowedOffsets.top;
         e.maxBottomOffset = allowedOffsets.bottom;
         e.maxLeftOffset = allowedOffsets.left;
@@ -1026,25 +1026,25 @@ var Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
-        var isContainerDefined = viewPortUtils.originalViewPort().get(0) || this.option('container'),
-            $container = !isContainerDefined ? $(window) : this._$container;
+        const isContainerDefined = viewPortUtils.originalViewPort().get(0) || this.option('container');
+        const $container = !isContainerDefined ? $(window) : this._$container;
 
         return $container;
     },
 
     _deltaSize: function() {
-        var $content = this._$content,
-            $container = this._getDragResizeContainer();
+        const $content = this._$content;
+        const $container = this._getDragResizeContainer();
 
-        var contentWidth = $content.outerWidth(),
-            contentHeight = $content.outerHeight(),
-            containerWidth = $container.outerWidth(),
-            containerHeight = $container.outerHeight();
+        const contentWidth = $content.outerWidth();
+        const contentHeight = $content.outerHeight();
+        let containerWidth = $container.outerWidth();
+        let containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var document = domAdapter.getDocument(),
-                fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+            const document = domAdapter.getDocument();
+            const fullPageHeight = Math.max($(document).outerHeight(), containerHeight);
+            const fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
@@ -1057,12 +1057,12 @@ var Overlay = Widget.inherit({
     },
 
     _dragUpdateHandler: function(e) {
-        var offset = e.offset,
-            prevOffset = this._prevOffset,
-            targetOffset = {
-                top: offset.y - prevOffset.y,
-                left: offset.x - prevOffset.x
-            };
+        const offset = e.offset;
+        const prevOffset = this._prevOffset;
+        const targetOffset = {
+            top: offset.y - prevOffset.y,
+            left: offset.x - prevOffset.x
+        };
 
         this._changePosition(targetOffset);
 
@@ -1070,7 +1070,7 @@ var Overlay = Widget.inherit({
     },
 
     _changePosition: function(offset) {
-        var position = translator.locate(this._$content);
+        const position = translator.locate(this._$content);
 
         translator.move(this._$content, {
             left: position.left + offset.left,
@@ -1081,11 +1081,11 @@ var Overlay = Widget.inherit({
     },
 
     _allowedOffsets: function() {
-        var position = translator.locate(this._$content),
-            deltaSize = this._deltaSize(),
-            isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
-            shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
-            boundaryOffset = this.option('boundaryOffset');
+        const position = translator.locate(this._$content);
+        const deltaSize = this._deltaSize();
+        const isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0;
+        const shaderOffset = this.option('shading') && !this.option('container') && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 };
+        const boundaryOffset = this.option('boundaryOffset');
 
         return {
             top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
@@ -1112,9 +1112,9 @@ var Overlay = Widget.inherit({
     },
 
     _attachWrapperToContainer: function() {
-        var $element = this.$element();
-        var containerDefined = this.option('container') !== undefined;
-        var renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
+        const $element = this.$element();
+        const containerDefined = this.option('container') !== undefined;
+        let renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
 
         if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;
@@ -1141,7 +1141,7 @@ var Overlay = Widget.inherit({
         this._renderWrapper();
         this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
-        var resultPosition = this._renderPosition();
+        const resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
     },
@@ -1151,13 +1151,13 @@ var Overlay = Widget.inherit({
     },
 
     _useFixedPosition: function() {
-        var $container = this._getContainer();
+        const $container = this._getContainer();
         return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
         if(iOS && this._useFixedPosition()) {
-            var body = domAdapter.getBody();
+            const body = domAdapter.getBody();
             if(scrollingEnabled) {
                 $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
                 window.scrollTo(0, this._bodyScrollTop);
@@ -1176,13 +1176,13 @@ var Overlay = Widget.inherit({
     },
 
     _renderWrapperDimensions: function() {
-        var wrapperWidth, wrapperHeight;
-        var $container = this._getContainer();
+        let wrapperWidth; let wrapperHeight;
+        const $container = this._getContainer();
         if(!$container) {
             return;
         }
 
-        var isWindow = this._isWindow($container);
+        const isWindow = this._isWindow($container);
 
         wrapperWidth = isWindow ? null : $container.outerWidth(),
         wrapperHeight = isWindow ? null : $container.outerHeight();
@@ -1206,12 +1206,12 @@ var Overlay = Widget.inherit({
     },
 
     _getContainer: function() {
-        var position = this._position,
-            container = this.option('container'),
-            positionOf = null;
+        const position = this._position;
+        const container = this.option('container');
+        let positionOf = null;
 
         if(!container && position) {
-            var isEvent = !!(position.of && position.of.preventDefault);
+            const isEvent = !!(position.of && position.of.preventDefault);
             positionOf = isEvent ? window : (position.of || window);
         }
 
@@ -1219,7 +1219,7 @@ var Overlay = Widget.inherit({
     },
 
     _renderDimensions: function() {
-        var content = this._$content.get(0);
+        const content = this._$content.get(0);
 
         this._$content.css({
             minWidth: this._getOptionValue('minWidth', content),
@@ -1233,7 +1233,7 @@ var Overlay = Widget.inherit({
 
     _renderPosition: function() {
         if(this._positionChangeHandled) {
-            var allowedOffsets = this._allowedOffsets();
+            const allowedOffsets = this._allowedOffsets();
 
             this._changePosition({
                 top: fitIntoRange(0, -allowedOffsets.top, allowedOffsets.bottom),
@@ -1244,8 +1244,8 @@ var Overlay = Widget.inherit({
 
             translator.resetPosition(this._$content);
 
-            var position = this._transformStringPosition(this._position, POSITION_ALIASES),
-                resultPosition = positionUtils.setup(this._$content, position);
+            const position = this._transformStringPosition(this._position, POSITION_ALIASES);
+            const resultPosition = positionUtils.setup(this._$content, position);
 
             forceRepaint(this._$content);
 
@@ -1265,7 +1265,7 @@ var Overlay = Widget.inherit({
     },
 
     _renderOverlayBoundaryOffset: function() {
-        var boundaryOffset = this.option('boundaryOffset');
+        const boundaryOffset = this.option('boundaryOffset');
 
         this._$content.css('margin', boundaryOffset.v + 'px ' + boundaryOffset.h + 'px');
     },
@@ -1283,8 +1283,8 @@ var Overlay = Widget.inherit({
     },
 
     _keyboardHandler: function(options) {
-        var e = options.originalEvent,
-            $target = $(e.target);
+        const e = options.originalEvent;
+        const $target = $(e.target);
 
         if($target.is(this._$content) || !this.option('ignoreChildEvents')) {
             this.callBase.apply(this, arguments);
@@ -1357,7 +1357,7 @@ var Overlay = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
+        const value = args.value;
 
         if(inArray(args.name, ACTIONS) > -1) {
             this._initActions();
@@ -1437,13 +1437,13 @@ var Overlay = Widget.inherit({
 
     toggle: function(showing) {
         showing = showing === undefined ? !this.option('visible') : showing;
-        var result = new Deferred();
+        const result = new Deferred();
 
         if(showing === this.option('visible')) {
             return result.resolveWith(this, [showing]).promise();
         }
 
-        var animateDeferred = new Deferred();
+        const animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
         this.option('visible', showing);
 

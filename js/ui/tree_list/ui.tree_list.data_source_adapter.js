@@ -12,16 +12,16 @@ import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
 import { Deferred, when } from '../../core/utils/deferred';
 import { queryByOptions } from '../../data/store_helper';
 
-var DEFAULT_KEY_EXPRESSION = 'id';
+const DEFAULT_KEY_EXPRESSION = 'id';
 
-var isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
+const isFullBranchFilterMode = (that) => that.option('filterMode') === 'fullBranch';
 
-var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
-    var getChildKeys = function(that, keys) {
-        var childKeys = [];
+let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
+    const getChildKeys = function(that, keys) {
+        const childKeys = [];
 
         keys.forEach(function(key) {
-            var node = that.getNodeByKey(key);
+            const node = that.getNodeByKey(key);
 
             node && node.children.forEach(function(child) {
                 childKeys.push(child.key);
@@ -33,13 +33,13 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
     return {
         _createKeyGetter: function() {
-            var keyExpr = this.getKeyExpr();
+            const keyExpr = this.getKeyExpr();
 
             return dataCoreUtils.compileGetter(keyExpr);
         },
 
         _createKeySetter: function() {
-            var keyExpr = this.getKeyExpr();
+            const keyExpr = this.getKeyExpr();
 
             if(typeUtils.isFunction(keyExpr)) {
                 return keyExpr;
@@ -53,7 +53,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         createParentIdSetter: function() {
-            var parentIdExpr = this.option('parentIdExpr');
+            const parentIdExpr = this.option('parentIdExpr');
 
             if(typeUtils.isFunction(parentIdExpr)) {
                 return parentIdExpr;
@@ -67,13 +67,13 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _createHasItemsGetter: function() {
-            var hasItemsExpr = this.option('hasItemsExpr');
+            const hasItemsExpr = this.option('hasItemsExpr');
 
             return hasItemsExpr && dataCoreUtils.compileGetter(hasItemsExpr);
         },
 
         _createHasItemsSetter: function() {
-            var hasItemsExpr = this.option('hasItemsExpr');
+            const hasItemsExpr = this.option('hasItemsExpr');
 
             if(typeUtils.isFunction(hasItemsExpr)) {
                 return hasItemsExpr;
@@ -83,7 +83,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _updateIndexByKeyObject: function(items) {
-            var that = this;
+            const that = this;
 
             that._indexByKey = {};
 
@@ -93,10 +93,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _calculateHasItems: function(node, options) {
-            var that = this,
-                parentIds = options.storeLoadOptions.parentIds,
-                hasItems,
-                isFullBranch = isFullBranchFilterMode(that);
+            const that = this;
+            const parentIds = options.storeLoadOptions.parentIds;
+            let hasItems;
+            const isFullBranch = isFullBranchFilterMode(that);
 
             if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter || isFullBranch)) {
                 hasItems = that._hasItemsGetter(node.data);
@@ -115,10 +115,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _createVisibleItemsByNodes: function(nodes, options) {
-            var that = this,
-                result = [];
+            const that = this;
+            let result = [];
 
-            for(var i = 0; i < nodes.length; i++) {
+            for(let i = 0; i < nodes.length; i++) {
                 if(nodes[i].visible) {
                     result.push(nodes[i]);
                 }
@@ -132,10 +132,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _convertItemToNode: function(item, rootValue, nodeByKey) {
-            var key = this._keyGetter(item),
-                parentId = this._parentIdGetter(item),
-                parentNode,
-                node;
+            const key = this._keyGetter(item);
+            let parentId = this._parentIdGetter(item);
+            let parentNode;
+            let node;
 
             parentId = typeUtils.isDefined(parentId) ? parentId : rootValue;
             parentNode = nodeByKey[parentId] = nodeByKey[parentId] || { key: parentId, children: [] };
@@ -148,11 +148,11 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _createNodesByItems: function(items, visibleItems) {
-            var that = this,
-                rootValue = that.option('rootValue'),
-                visibleByKey = {},
-                nodeByKey = that._nodeByKey = {},
-                i;
+            const that = this;
+            const rootValue = that.option('rootValue');
+            const visibleByKey = {};
+            const nodeByKey = that._nodeByKey = {};
+            let i;
 
             if(visibleItems) {
                 for(i = 0; i < visibleItems.length; i++) {
@@ -161,7 +161,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             for(i = 0; i < items.length; i++) {
-                var node = that._convertItemToNode(items[i], rootValue, nodeByKey);
+                const node = that._convertItemToNode(items[i], rootValue, nodeByKey);
 
                 if(node.key === undefined) {
                     return;
@@ -173,7 +173,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 }
             }
 
-            var rootNode = nodeByKey[rootValue] || { key: rootValue, children: [] };
+            const rootNode = nodeByKey[rootValue] || { key: rootValue, children: [] };
 
             rootNode.level = -1;
 
@@ -181,15 +181,15 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _convertDataToPlainStructure: function(data, parentId, result) {
-            var key,
-                item,
-                itemsExpr,
-                childItems;
+            let key;
+            let item;
+            let itemsExpr;
+            let childItems;
 
             if(this._itemsGetter && !data.isConverted) {
                 result = result || [];
 
-                for(var i = 0; i < data.length; i++) {
+                for(let i = 0; i < data.length; i++) {
                     item = gridCoreUtils.createObjectWithChanges(data[i]);
 
                     key = this._keyGetter(item);
@@ -222,9 +222,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _createIdFilter: function(field, keys) {
-            var parentIdFilters = [];
+            const parentIdFilters = [];
 
-            for(var i = 0; i < keys.length; i++) {
+            for(let i = 0; i < keys.length; i++) {
                 parentIdFilters.push([field, '=', keys[i]]);
             }
             return gridCoreUtils.combineFilters(parentIdFilters, 'or');
@@ -235,7 +235,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             options.remoteOperations.paging = false;
 
-            var expandVisibleNodes = false;
+            let expandVisibleNodes = false;
 
             if(this.option('autoExpandAll')) {
                 options.remoteOperations.sorting = false;
@@ -269,10 +269,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _getParentIdsToLoad: function(parentIds) {
-            var parentIdsToLoad = [];
+            const parentIdsToLoad = [];
 
-            for(var i = 0; i < parentIds.length; i++) {
-                var node = this.getNodeByKey(parentIds[i]);
+            for(let i = 0; i < parentIds.length; i++) {
+                const node = this.getNodeByKey(parentIds[i]);
 
                 if(!node || node.hasChildren && !node.children.length) {
                     parentIdsToLoad.push(parentIds[i]);
@@ -283,11 +283,11 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoading: function(options) {
-            var parentIdsToLoad,
-                expandedRowKeys,
-                rootValue = this.option('rootValue'),
-                parentIdExpr = this.option('parentIdExpr'),
-                parentIds = options.storeLoadOptions.parentIds;
+            let parentIdsToLoad;
+            let expandedRowKeys;
+            const rootValue = this.option('rootValue');
+            const parentIdExpr = this.option('parentIdExpr');
+            let parentIds = options.storeLoadOptions.parentIds;
 
             if(parentIds) {
                 options.isCustomLoading = false;
@@ -314,14 +314,14 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _generateInfoToLoad: function(data, needChildren) {
-            var that = this,
-                key,
-                keyMap = {},
-                resultKeyMap = {},
-                resultKeys = [],
-                needToLoad,
-                rootValue = that.option('rootValue'),
-                i;
+            const that = this;
+            let key;
+            const keyMap = {};
+            const resultKeyMap = {};
+            const resultKeys = [];
+            let needToLoad;
+            const rootValue = that.option('rootValue');
+            let i;
 
             for(i = 0; i < data.length; i++) {
                 key = needChildren ? that._parentIdGetter(data[i]) : that._keyGetter(data[i]);
@@ -345,17 +345,17 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _loadParentsOrChildren: function(data, options, needChildren) {
-            var that = this,
-                store,
-                filter,
-                keyExpr,
-                filterLength,
-                needLocalFiltering,
-                { keys, keyMap } = that._generateInfoToLoad(data, needChildren),
-                d = new Deferred(),
-                isRemoteFiltering = options.remoteOperations.filtering,
-                maxFilterLengthInRequest = that.option('maxFilterLengthInRequest'),
-                loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
+            const that = this;
+            let store;
+            let filter;
+            let keyExpr;
+            let filterLength;
+            let needLocalFiltering;
+            const { keys, keyMap } = that._generateInfoToLoad(data, needChildren);
+            const d = new Deferred();
+            const isRemoteFiltering = options.remoteOperations.filtering;
+            const maxFilterLengthInRequest = that.option('maxFilterLengthInRequest');
+            let loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
 
             function concatLoadedData(loadedData) {
                 if(isRemoteFiltering) {
@@ -368,7 +368,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
-            var cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
+            let cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
 
             if(cachedNodes.length === keys.length) {
                 if(needChildren) {
@@ -427,10 +427,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _updateHasItemsMap: function(options) {
-            var parentIds = options.storeLoadOptions.parentIds;
+            const parentIds = options.storeLoadOptions.parentIds;
 
             if(parentIds) {
-                for(var i = 0; i < parentIds.length; i++) {
+                for(let i = 0; i < parentIds.length; i++) {
                     this._isChildrenLoaded[parentIds[i]] = true;
                 }
             }
@@ -444,7 +444,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _applyBatch: function(changes) {
-            var baseChanges = [];
+            let baseChanges = [];
 
             changes.forEach(change => {
                 if(change.type === 'insert') {
@@ -460,7 +460,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _setHasItems: function(node, value) {
-            var hasItemsSetter = this._hasItemsSetter;
+            const hasItemsSetter = this._hasItemsSetter;
             node.hasChildren = value;
             if(hasItemsSetter && node.data) {
                 hasItemsSetter(node.data, value);
@@ -468,14 +468,14 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _applyInsert: function(change) {
-            var that = this,
-                baseChanges = [],
-                parentId = that.parentKeyOf(change.data),
-                parentNode = that.getNodeByKey(parentId);
+            const that = this;
+            const baseChanges = [];
+            const parentId = that.parentKeyOf(change.data);
+            const parentNode = that.getNodeByKey(parentId);
 
             if(parentNode) {
-                var rootValue = that.option('rootValue'),
-                    node = that._convertItemToNode(change.data, rootValue, that._nodeByKey);
+                const rootValue = that.option('rootValue');
+                const node = that._convertItemToNode(change.data, rootValue, that._nodeByKey);
 
                 node.hasChildren = false;
                 node.level = parentNode.level + 1;
@@ -488,7 +488,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 that._setHasItems(parentNode, true);
 
                 if((!parentNode.parent || that.isRowExpanded(parentNode.key)) && change.index !== undefined) {
-                    var index = that.items().indexOf(parentNode) + 1;
+                    let index = that.items().indexOf(parentNode) + 1;
 
                     index += change.index >= 0 ? Math.min(change.index, parentNode.children.length) : parentNode.children.length;
 
@@ -500,12 +500,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _applyRemove: function(change) {
-            var baseChanges = [];
-            var node = this.getNodeByKey(change.key);
-            var parentNode = node && node.parent;
+            let baseChanges = [];
+            const node = this.getNodeByKey(change.key);
+            const parentNode = node && node.parent;
 
             if(parentNode) {
-                var index = parentNode.children.indexOf(node);
+                const index = parentNode.children.indexOf(node);
                 if(index >= 0) {
                     parentNode.children.splice(index, 1);
 
@@ -524,7 +524,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoaded: function(options) {
-            var data = options.data = this._convertDataToPlainStructure(options.data);
+            const data = options.data = this._convertDataToPlainStructure(options.data);
             if(!options.remoteOperations.filtering && options.loadOptions.filter) {
                 options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
             }
@@ -537,12 +537,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _fillNodes: function(nodes, options, expandedRowKeys, level) {
-            var isFullBranch = isFullBranchFilterMode(this);
+            const isFullBranch = isFullBranchFilterMode(this);
 
             level = level || 0;
-            for(var i = 0; i < nodes.length; i++) {
-                var node = nodes[i],
-                    needToExpand = false;
+            for(let i = 0; i < nodes.length; i++) {
+                const node = nodes[i];
+                let needToExpand = false;
 
                 // node.hasChildren = false;
                 this._fillNodes(nodes[i].children, options, expandedRowKeys, level + 1);
@@ -574,9 +574,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _processTreeStructure: function(options, visibleItems) {
-            var data = options.data,
-                parentIds = options.storeLoadOptions.parentIds,
-                expandedRowKeys = [];
+            let data = options.data;
+            const parentIds = options.storeLoadOptions.parentIds;
+            const expandedRowKeys = [];
 
             if(parentIds && parentIds.length || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
@@ -607,18 +607,18 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoadedCore: function(options) {
-            var that = this,
-                data = options.data,
-                callBase = that.callBase,
-                filter = options.storeLoadOptions.filter || options.loadOptions.filter,
-                filterMode = that.option('filterMode'),
-                visibleItems,
-                parentIds = options.storeLoadOptions.parentIds,
-                needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== 'standard';
+            const that = this;
+            const data = options.data;
+            const callBase = that.callBase;
+            const filter = options.storeLoadOptions.filter || options.loadOptions.filter;
+            const filterMode = that.option('filterMode');
+            let visibleItems;
+            const parentIds = options.storeLoadOptions.parentIds;
+            const needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== 'standard';
 
             if(!options.isCustomLoading) {
                 if(needLoadParents) {
-                    var d = options.data = new Deferred();
+                    const d = options.data = new Deferred();
 
                     if(filterMode === 'matchOnly') {
                         visibleItems = data;
@@ -640,8 +640,8 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handlePush: function(changes) {
-            let reshapeOnPush = this._dataSource._reshapeOnPush,
-                isNeedReshape = reshapeOnPush && !!changes.length;
+            const reshapeOnPush = this._dataSource._reshapeOnPush;
+            const isNeedReshape = reshapeOnPush && !!changes.length;
 
             if(isNeedReshape) {
                 this._isReload = true;
@@ -653,7 +653,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         init: function(dataSource, remoteOperations) {
             this.callBase.apply(this, arguments);
 
-            var dataStructure = this.option('dataStructure');
+            const dataStructure = this.option('dataStructure');
 
             this._keyGetter = this._createKeyGetter();
             this._parentIdGetter = this._createParentIdGetter();
@@ -673,9 +673,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         getKeyExpr: function() {
-            var store = this.store(),
-                key = store && store.key(),
-                keyExpr = this.option('keyExpr');
+            const store = this.store();
+            const key = store && store.key();
+            const keyExpr = this.option('keyExpr');
 
             if(typeUtils.isDefined(key) && typeUtils.isDefined(keyExpr)) {
                 if(!equalByValue(key, keyExpr)) {
@@ -704,7 +704,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
         isRowExpanded: function(key, cache) {
             if(cache) {
-                var isExpandedByKey = cache.isExpandedByKey;
+                let isExpandedByKey = cache.isExpandedByKey;
                 if(!isExpandedByKey) {
                     isExpandedByKey = cache.isExpandedByKey = {};
                     this.option('expandedRowKeys').forEach(function(key) {
@@ -714,14 +714,14 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return !!isExpandedByKey[key];
             }
 
-            var indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, this.option('expandedRowKeys'), null);
+            const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, this.option('expandedRowKeys'), null);
 
             return indexExpandedNodeKey >= 0;
         },
 
         _changeRowExpandCore: function(key) {
-            var expandedRowKeys = this.option('expandedRowKeys'),
-                indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
+            const expandedRowKeys = this.option('expandedRowKeys');
+            const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
             if(indexExpandedNodeKey < 0) {
                 expandedRowKeys.push(key);
@@ -744,10 +744,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         getNodeLeafKeys: function() {
-            var that = this,
-                node,
-                result = [],
-                keys = that._rootNode ? [that._rootNode.key] : [];
+            const that = this;
+            let node;
+            const result = [];
+            const keys = that._rootNode ? [that._rootNode.key] : [];
 
             keys.forEach(function(key) {
                 node = that.getNodeByKey(key);
@@ -761,8 +761,8 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         getChildNodeKeys: function(parentKey) {
-            var node = this.getNodeByKey(parentKey),
-                childrenKeys = [];
+            const node = this.getNodeByKey(parentKey);
+            const childrenKeys = [];
 
             node && treeListCore.foreachNodes(node.children, function(childNode) {
                 childrenKeys.push(childNode.key);
@@ -772,10 +772,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         loadDescendants: function(keys, childrenOnly) {
-            var that = this,
-                loadOptions,
-                d = new Deferred(),
-                remoteOperations = that.remoteOperations();
+            const that = this;
+            let loadOptions;
+            const d = new Deferred();
+            const remoteOperations = that.remoteOperations();
 
             if(typeUtils.isDefined(keys)) {
                 keys = Array.isArray(keys) ? keys : [keys];
@@ -793,7 +793,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             that.load(loadOptions)
                 .done(function() {
                     if(!childrenOnly) {
-                        var childKeys = getChildKeys(that, keys);
+                        const childKeys = getChildKeys(that, keys);
 
                         if(childKeys.length) {
                             that.loadDescendants(childKeys, childrenOnly).done(d.resolve).fail(d.reject);
@@ -808,9 +808,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         forEachNode: function() {
-            var nodes = [],
-                callback,
-                rootNode;
+            let nodes = [];
+            let callback;
+            let rootNode;
 
             if(arguments.length === 1) {
                 callback = arguments[0];

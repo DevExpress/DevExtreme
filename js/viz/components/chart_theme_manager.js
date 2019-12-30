@@ -1,18 +1,18 @@
-var noop = require('../../core/utils/common').noop,
-    typeUtils = require('../../core/utils/type'),
-    extend = require('../../core/utils/extend').extend,
-    BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager,
-    _isString = typeUtils.isString,
-    _isDefined = typeUtils.isDefined,
-    _normalizeEnum = require('../core/utils').normalizeEnum;
+const noop = require('../../core/utils/common').noop;
+const typeUtils = require('../../core/utils/type');
+const extend = require('../../core/utils/extend').extend;
+const BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager;
+const _isString = typeUtils.isString;
+const _isDefined = typeUtils.isDefined;
+const _normalizeEnum = require('../core/utils').normalizeEnum;
 
-var ThemeManager = BaseThemeManager.inherit((function() {
-    var ctor = function(params) {
-        var that = this;
+const ThemeManager = BaseThemeManager.inherit((function() {
+    const ctor = function(params) {
+        const that = this;
 
         that.callBase.apply(that, arguments);
 
-        var options = params.options || {};
+        const options = params.options || {};
         that._userOptions = options;
         that._mergeAxisTitleOptions = [];
         that._multiPieColors = {};
@@ -22,23 +22,23 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         that._callback = noop;
     };
 
-    var dispose = function() {
-        var that = this;
+    const dispose = function() {
+        const that = this;
         that.palette && that.palette.dispose();
         that.palette = that._userOptions = that._mergedSettings = that._multiPieColors = null;
         return that.callBase.apply(that, arguments);
     };
 
-    var resetPalette = function() {
+    const resetPalette = function() {
         this.palette.reset();
         this._multiPieColors = {};
     };
 
-    var processTitleOptions = function(options) {
+    const processTitleOptions = function(options) {
         return _isString(options) ? { text: options } : options;
     };
 
-    var processAxisOptions = function(axisOptions) {
+    const processAxisOptions = function(axisOptions) {
         if(!axisOptions) {
             return {};
         }
@@ -57,22 +57,22 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         return axisOptions;
     };
 
-    var applyParticularAxisOptions = function(name, userOptions, rotated) {
-        var theme = this._theme,
-            position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis',
-            processedUserOptions = processAxisOptions(userOptions, name),
-            commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings'], name),
-            mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
+    const applyParticularAxisOptions = function(name, userOptions, rotated) {
+        const theme = this._theme;
+        const position = !(rotated ^ (name === 'valueAxis')) ? 'horizontalAxis' : 'verticalAxis';
+        const processedUserOptions = processAxisOptions(userOptions, name);
+        const commonAxisSettings = processAxisOptions(this._userOptions['commonAxisSettings'], name);
+        const mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
 
         mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
         mergeOptions.forceUserTickInterval |= _isDefined(processedUserOptions.tickInterval) && !_isDefined(processedUserOptions.axisDivisionFactor);
         return mergeOptions;
     };
 
-    var mergeOptions = function(name, userOptions) {
+    const mergeOptions = function(name, userOptions) {
         userOptions = userOptions || this._userOptions[name];
-        var theme = this._theme[name],
-            result = this._mergedSettings[name];
+        const theme = this._theme[name];
+        let result = this._mergedSettings[name];
         if(result) { return result; }
         if(typeUtils.isPlainObject(theme) && typeUtils.isPlainObject(userOptions)) {
             result = extend(true, {}, theme, userOptions);
@@ -92,23 +92,23 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         },
         valueAxis: applyParticularAxisOptions,
         series: function(name, userOptions, seriesCount) {
-            var that = this,
-                theme = that._theme,
-                userCommonSettings = that._userOptions.commonSeriesSettings || {},
-                themeCommonSettings = theme.commonSeriesSettings,
-                widgetType = that._themeSection.split('.').slice(-1)[0],
-                type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)), // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
-                settings,
-                palette = that.palette,
-                isBar = ~type.indexOf('bar'),
-                isLine = ~type.indexOf('line'),
-                isArea = ~type.indexOf('area'),
-                isBubble = type === 'bubble',
-                mainSeriesColor,
-                resolveLabelsOverlapping = that.getOptions('resolveLabelsOverlapping'),
-                containerBackgroundColor = that.getOptions('containerBackgroundColor'),
-                seriesTemplate = applyParticularTheme.seriesTemplate.call(this),
-                seriesVisibility;
+            const that = this;
+            const theme = that._theme;
+            let userCommonSettings = that._userOptions.commonSeriesSettings || {};
+            const themeCommonSettings = theme.commonSeriesSettings;
+            const widgetType = that._themeSection.split('.').slice(-1)[0];
+            const type = _normalizeEnum(userOptions.type || userCommonSettings.type || themeCommonSettings.type || (widgetType === 'pie' && theme.type)); // userCommonSettings.type && themeCommonSettings.type deprecated in 15.2 in pie
+            let settings;
+            const palette = that.palette;
+            const isBar = ~type.indexOf('bar');
+            const isLine = ~type.indexOf('line');
+            const isArea = ~type.indexOf('area');
+            const isBubble = type === 'bubble';
+            let mainSeriesColor;
+            const resolveLabelsOverlapping = that.getOptions('resolveLabelsOverlapping');
+            const containerBackgroundColor = that.getOptions('containerBackgroundColor');
+            const seriesTemplate = applyParticularTheme.seriesTemplate.call(this);
+            let seriesVisibility;
 
             if(isBar || isBubble) {
                 userOptions = extend(true, {}, userCommonSettings, userCommonSettings[type], userOptions);
@@ -152,7 +152,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             return settings;
         },
         animation: function(name) {
-            var userOptions = this._userOptions[name];
+            let userOptions = this._userOptions[name];
             userOptions = typeUtils.isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
             return mergeOptions.call(this, name, userOptions);
         },
@@ -166,8 +166,8 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         zoomAndPan() {
             function parseOption(option) {
                 option = _normalizeEnum(option);
-                const pan = option === 'pan' || option === 'both',
-                    zoom = option === 'zoom' || option === 'both';
+                const pan = option === 'pan' || option === 'both';
+                const zoom = option === 'zoom' || option === 'both';
 
                 return {
                     pan: pan,
@@ -191,7 +191,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 };
             }
 
-            let options = mergeOptions.call(this, 'zoomAndPan', userOptions);
+            const options = mergeOptions.call(this, 'zoomAndPan', userOptions);
 
             return {
                 valueAxis: parseOption(options.valueAxis),
@@ -226,7 +226,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             return this.callBase.apply(this, arguments);
         },
         _initializeTheme: function() {
-            var that = this;
+            const that = this;
             that.callBase.apply(that, arguments);
             that.updatePalette();
         },
@@ -237,7 +237,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             this._userOptions = options;
         },
         updatePalette: function() {
-            var that = this;
+            const that = this;
             that.palette = that.createPalette(that.getOptions('palette'), {
                 useHighlight: true,
                 extensionMode: that.getOptions('paletteExtensionMode')

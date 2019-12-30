@@ -1,12 +1,12 @@
-var themeModule = require('../../themes'),
-    registerTheme = themeModule.registerTheme,
-    registerThemeAlias = themeModule.registerThemeAlias,
-    ACCENT_COLOR = '#3cbab2',
-    BACKGROUND_COLOR = '#f5f5f5',
-    TITLE_COLOR = '#28484f',
-    SUBTITLE_COLOR = '#7eb2be',
-    TEXT_COLOR = '#657c80',
-    BORDER_COLOR = '#dedede';
+const themeModule = require('../../themes');
+const registerTheme = themeModule.registerTheme;
+const registerThemeAlias = themeModule.registerThemeAlias;
+const ACCENT_COLOR = '#3cbab2';
+const BACKGROUND_COLOR = '#f5f5f5';
+const TITLE_COLOR = '#28484f';
+const SUBTITLE_COLOR = '#7eb2be';
+const TEXT_COLOR = '#657c80';
+const BORDER_COLOR = '#dedede';
 
 registerTheme({
     name: 'generic.greenmist',

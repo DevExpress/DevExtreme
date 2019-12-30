@@ -120,7 +120,7 @@ QUnit.module('rendering', {
 
     // T803640
     QUnit.test('content should be rendered if create widget inside deferUpdate (React)', function(assert) {
-        var $tabPanel;
+        let $tabPanel;
 
         deferUpdate(function() {
             $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
@@ -540,7 +540,7 @@ QUnit.module('keyboard navigation', {
 
     if(devices.current().deviceType === 'desktop') {
         const createWidget = ($element) => {
-            let widget = $element.dxTabPanel({
+            const widget = $element.dxTabPanel({
                 focusStateEnabled: true,
                 items: [{ text: 'text' }]
             }).dxTabPanel('instance');

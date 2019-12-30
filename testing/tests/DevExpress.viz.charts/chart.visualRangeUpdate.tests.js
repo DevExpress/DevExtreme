@@ -888,7 +888,7 @@ QUnit.test('No data -> set Data(one point)', function(assert) {
         { arg: 5, val: 50 }
     ];
 
-    let [chart, onOptionChanged] = this.createChart({
+    const [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: { visualRange: { length: 2 } }
     });
@@ -3773,7 +3773,7 @@ QUnit.test('Data -> update data and visualRange, argument reset mode - take give
     ];
 
     // Case 1
-    let [chart, onOptionChanged] = this.createChart({
+    const [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: { visualRange: [1, 5] },
         valueAxis: { visualRange: [10, 30] }
@@ -4354,7 +4354,7 @@ QUnit.test('Value Axis without visualRange. Hide and show series - update visual
         { arg: 5, val: 50, val1: 150 }
     ];
 
-    let [chart] = this.createChart({
+    const [chart] = this.createChart({
         dataSource
     });
     chart.option({ series: [{}, { valueField: 'val1' }] });
@@ -4381,7 +4381,7 @@ QUnit.test('Value Axis with visualRange. Hide and show series - do not update vi
         { arg: 5, val: 50, val1: 150 }
     ];
 
-    let [chart] = this.createChart({
+    const [chart] = this.createChart({
         dataSource
     });
     chart.option({ series: [{}, { valueField: 'val1' }] });

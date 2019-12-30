@@ -122,6 +122,7 @@
         "dxDataGrid-columnFixingRightPosition": "Sağa",
         "dxDataGrid-exportTo": "Dışa aktar",
         "dxDataGrid-exportToExcel": "Excel dosyasına aktar",
+        "dxDataGrid-exporting": "Dışa Aktar...",
         "dxDataGrid-excelFormat": "Excel dosyası",
         "dxDataGrid-selectedRows": "Seçili satırlar",
         "dxDataGrid-exportSelectedRows": "Seçili satırları aktar",

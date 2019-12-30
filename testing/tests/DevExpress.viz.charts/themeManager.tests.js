@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    themeManagerModule = require('viz/components/chart_theme_manager'),
-    backgroundColor = '#ffffff',
-    defaultColor = '#1db2f5',
-    paletteModule = require('viz/palette'),
-    themeModule = require('viz/themes');
+const $ = require('jquery');
+const themeManagerModule = require('viz/components/chart_theme_manager');
+const backgroundColor = '#ffffff';
+const defaultColor = '#1db2f5';
+const paletteModule = require('viz/palette');
+const themeModule = require('viz/themes');
 
 function createThemeManager(options, themeGroupName) {
     return new themeManagerModule.ThemeManager({
@@ -24,8 +24,8 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Adding and removing', function(assert) {
-        var item = this.create(),
-            k;
+        const item = this.create();
+        let k;
         $.each(this.cache, function(i) {
             k = i;
             return false;
@@ -43,10 +43,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme - default', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
+        const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'unknown'
         });
         // assert series theme
@@ -138,10 +138,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme - area', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
+        const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'area'
         });
         // assert series theme
@@ -230,7 +230,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Pass series count to palette', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             palette: ['red', 'green']
         });
         themeManager.setTheme({});
@@ -243,7 +243,7 @@ function createThemeManager(options, themeGroupName) {
             type: 'line'
         }, 3);
 
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'line'
         }, 3);
 
@@ -252,7 +252,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Pass paletteExtensionMode to palette params', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             palette: ['red', 'green'],
             paletteExtensionMode: 'alternate'
         });
@@ -266,7 +266,7 @@ function createThemeManager(options, themeGroupName) {
             type: 'line'
         }, 3);
 
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'line'
         }, 3);
 
@@ -275,10 +275,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme', function(assert) {
         // arrange
-        var themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
+        const themeManager = createThemeManager({ fontFields: ['commonSeriesSettings.label.font'] });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
         // assert series theme
         assert.equal(theme.containerBackgroundColor, backgroundColor);
         assert.equal(theme.color, undefined);
@@ -368,14 +368,14 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Change theme palette from user options', function(assert) {
         // arrange
-        var palette = 'Soft Pastel',
-            themeManager = createThemeManager({
-                palette: palette
-            });
+        const palette = 'Soft Pastel';
+        const themeManager = createThemeManager({
+            palette: palette
+        });
         themeManager.setTheme({});
 
         // act
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
         // assert series theme
         assert.ok(theme);
         assert.equal(theme.mainSeriesColor, '#60a69f');
@@ -392,11 +392,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Change theme palette dynamically', function(assert) {
         // arrange
-        var palette = 'Soft Pastel',
-            options = {
-                palette: palette
-            },
-            themeManager = createThemeManager(options);
+        const palette = 'Soft Pastel';
+        const options = {
+            palette: palette
+        };
+        const themeManager = createThemeManager(options);
 
         themeManager.setTheme({});
 
@@ -405,7 +405,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.resetOptions('palette');
         themeManager.updatePalette();
         // assert series theme
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
         assert.ok(theme);
         assert.ok(theme.hoverStyle);
         assert.ok(theme.point);
@@ -421,13 +421,13 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Wrong palette fall back to default', function(assert) {
         // arrange
-        var palette = 'nonexisting',
-            themeManager = createThemeManager({
-                palette: palette
-            });
+        const palette = 'nonexisting';
+        const themeManager = createThemeManager({
+            palette: palette
+        });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
         });
         // assert series theme
 
@@ -453,13 +453,13 @@ function createThemeManager(options, themeGroupName) {
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
         // act
-        var options = {
+        const options = {
             theme: 'Super Theme',
             palette: 'Custom Palette'
         };
-        var themeManager = createThemeManager(options);
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.equal(theme.mainSeriesColor, '#0f0f0f');
@@ -472,12 +472,12 @@ function createThemeManager(options, themeGroupName) {
         themeModule.registerTheme({ name: 'Super Theme', defaultPalette: 'Default Palette' });
 
         // act
-        var options = {
+        const options = {
             theme: 'Super Theme'
         };
-        var themeManager = createThemeManager(options);
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.equal(theme.mainSeriesColor, '#f0f0f0');
@@ -489,12 +489,12 @@ function createThemeManager(options, themeGroupName) {
         themeModule.registerTheme({ name: 'Super Theme', }, 'default');
         paletteModule.currentPalette('Current Palette');
         // act
-        var options = {
+        const options = {
             theme: 'Super Theme'
         };
-        var themeManager = createThemeManager(options);
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         // assert series theme
         assert.ok(theme);
@@ -514,14 +514,14 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Set theme palette from user options', function(assert) {
         // arrange
-        var palette = ['red', 'blue', 'green'],
-            themeManager = createThemeManager({
-                palette: palette
-            });
+        const palette = ['red', 'blue', 'green'];
+        const themeManager = createThemeManager({
+            palette: palette
+        });
         themeManager.setTheme({});
 
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
         });
         // assert series theme
         assert.ok(theme);
@@ -541,11 +541,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Modify custom color', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}),
-            customColor = '#777777';
+        const themeManager = createThemeManager({});
+        const customColor = '#777777';
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             color: customColor
         });
         // assert series theme
@@ -565,7 +565,7 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.point.selectionStyle.color, undefined);
     });
 
-    var commonSeriesThemeTemplate = {
+    const commonSeriesThemeTemplate = {
         customTheme: true,
         border: {},
         hoverStyle: {
@@ -587,12 +587,12 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply default series theme from parameters', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate)
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', { color: 'customColor' });
+        const theme = themeManager.getOptions('series', { color: 'customColor' });
         // assert series theme
 
         assert.ok(theme);
@@ -601,7 +601,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply type-specific default series theme from parameters', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {
                 area: {
                     point: {
@@ -612,7 +612,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'area',
             color: 'customColor'
         });
@@ -624,7 +624,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply type-specific default series theme from parameters (case-insensitive)', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: $.extend(true, {
                 area: {
                     point: {
@@ -635,7 +635,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'AREa',
             color: 'customColor'
         });
@@ -647,7 +647,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply user commonSeriesSetting with more priority then theme commonSeriesSetting.line', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 width: 10
             }
@@ -662,7 +662,7 @@ function createThemeManager(options, themeGroupName) {
             }, commonSeriesThemeTemplate)
         };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'line'
         });
         // assert series theme
@@ -672,24 +672,24 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply user commonSeriesSetting with more priority then theme commonSeriesSetting.line', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
-                commonSeriesSettings: {
-                    width: 10,
-                    line: {
-                        width: 12
-                    }
-                }
-            }),
-            mergedCommonSeriesSettings = $.extend(true, {
-                width: 6,
+        const themeManager = createThemeManager({
+            commonSeriesSettings: {
+                width: 10,
                 line: {
-                    width: 4
+                    width: 12
                 }
-            }, commonSeriesThemeTemplate);
+            }
+        });
+        const mergedCommonSeriesSettings = $.extend(true, {
+            width: 6,
+            line: {
+                width: 4
+            }
+        }, commonSeriesThemeTemplate);
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: mergedCommonSeriesSettings };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'line'
         });
         // assert series theme
@@ -700,7 +700,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply user commonSeriesSetting color', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 border: { color: '#000001' },
                 hoverStyle: { color: '#111112', border: { color: '#111113' } },
@@ -716,7 +716,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
         // assert series theme
 
         assert.ok(theme);
@@ -737,7 +737,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply user series point color', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             containerBackgroundColor: '#111116',
             commonSeriesSettings: {
                 border: { color: '#000001' },
@@ -752,7 +752,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
         // act
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
         // assert series theme
 
         assert.ok(theme);
@@ -772,71 +772,71 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('resolveLabelsOverlapping pass to series', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             resolveLabelsOverlapping: true
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         assert.ok(theme);
         assert.equal(theme.resolveLabelsOverlapping, true);
     });
 
     QUnit.test('Merge useAggregation with series.aggregation.enabled (undefined)', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             useAggregation: true
         }, 'chart');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, true);
     });
 
     QUnit.test('Merge useAggregation with series.aggregation.enabled (defined)', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             useAggregation: false
         }, 'chart');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
+        const theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, true);
     });
 
     QUnit.test('Merge series.aggregation.enabled whith chart type (pie)', function(assert) {
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
+        const theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, false);
     });
 
     QUnit.test('Merge series.aggregation.enabled whith chart type (polar)', function(assert) {
-        var themeManager = createThemeManager({}, 'polar');
+        const themeManager = createThemeManager({}, 'polar');
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
+        const theme = themeManager.getOptions('series', { aggregation: { enabled: true } });
 
         assert.ok(theme);
         assert.equal(theme.aggregation.enabled, false);
     });
 
     QUnit.test('Get seriesTemplate. Option is not set', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('seriesTemplate');
+        const theme = themeManager.getOptions('seriesTemplate');
 
         assert.ok(!theme);
     });
 
     QUnit.test('Get seriesTemplate. Option is set', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             seriesTemplate: {}
         });
         themeManager.setTheme({});
-        var value = themeManager.getOptions('seriesTemplate');
+        const value = themeManager.getOptions('seriesTemplate');
 
         assert.deepEqual(value, {
             nameField: 'series'
@@ -844,13 +844,13 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Get seriesTemplate. Option with custom nameField', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             seriesTemplate: {
                 nameField: 'custom'
             }
         });
         themeManager.setTheme({});
-        var value = themeManager.getOptions('seriesTemplate');
+        const value = themeManager.getOptions('seriesTemplate');
 
         assert.deepEqual(value, {
             nameField: 'custom'
@@ -858,29 +858,29 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Do not pass name field to series config if series template is not used', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         assert.ok(!theme.nameField);
     });
 
     QUnit.test('Pass name field to series config if series template is used', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             seriesTemplate: {
                 nameField: 'name'
             }
         });
         themeManager.setTheme({});
-        var theme = themeManager.getOptions('series', {});
+        const theme = themeManager.getOptions('series', {});
 
         assert.equal(theme.nameField, 'name');
     });
 
     QUnit.test('Apply next series theme chart is bar. Point options are in series options field', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#000000',
                 border: { color: '#000001' },
@@ -900,7 +900,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
         // act
-        var theme = themeManager.getOptions('series', { type: 'bar' });
+        const theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -922,13 +922,13 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply next series theme when there is bar point options', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'bar',
             color: '#000000',
             border: {
@@ -996,13 +996,13 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply next series theme when there is bubble point options', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'bubble',
             color: '#000000',
             border: {
@@ -1070,7 +1070,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings field', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#000000',
                 border: { color: '#000001' },
@@ -1087,7 +1087,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', { type: 'bar' });
+        const theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1107,7 +1107,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings point field', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 point: {
                     color: '#000000',
@@ -1120,7 +1120,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', { type: 'bar' });
+        const theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1134,7 +1134,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Apply next series theme chart is bar. Point options are in common series settings series and point field', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 color: '#111110',
                 border: { color: '#111111' },
@@ -1151,7 +1151,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', { type: 'bar' });
+        const theme = themeManager.getOptions('series', { type: 'bar' });
         // assert series theme
 
         assert.ok(theme);
@@ -1164,17 +1164,17 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('T243104. Inside label position.', function(assert) {
-        var themeManager = createThemeManager({});
+        const themeManager = createThemeManager({});
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
 
-        var lineTheme = themeManager.getOptions('series', { type: 'line', label: { position: 'inside' } }),
-            splineTheme = themeManager.getOptions('series', { type: 'spline', label: { position: 'inside' } }),
-            stepLineTheme = themeManager.getOptions('series', { type: 'stepline', label: { position: 'inside' } }),
-            scatterTheme = themeManager.getOptions('series', { type: 'scatter', label: { position: 'inside' } }),
-            stackedAreaTheme = themeManager.getOptions('series', { type: 'stackedarea', label: { position: 'inside' } }),
-            barTheme = themeManager.getOptions('series', { type: 'bar', label: { position: 'inside' } }),
-            rangeAreaTheme = themeManager.getOptions('series', { type: 'rangearea', label: { position: 'inside' } });
+        const lineTheme = themeManager.getOptions('series', { type: 'line', label: { position: 'inside' } });
+        const splineTheme = themeManager.getOptions('series', { type: 'spline', label: { position: 'inside' } });
+        const stepLineTheme = themeManager.getOptions('series', { type: 'stepline', label: { position: 'inside' } });
+        const scatterTheme = themeManager.getOptions('series', { type: 'scatter', label: { position: 'inside' } });
+        const stackedAreaTheme = themeManager.getOptions('series', { type: 'stackedarea', label: { position: 'inside' } });
+        const barTheme = themeManager.getOptions('series', { type: 'bar', label: { position: 'inside' } });
+        const rangeAreaTheme = themeManager.getOptions('series', { type: 'rangearea', label: { position: 'inside' } });
 
         assert.equal(lineTheme.label.position, 'outside');
         assert.equal(splineTheme.label.position, 'outside');
@@ -1187,13 +1187,13 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Check visible option for scatter. Series visible = true', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: true,
             point: {
@@ -1209,13 +1209,13 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Check visible option for scatter. Series visible = false', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {}
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
         // act
-        var theme = themeManager.getOptions('series', {
+        const theme = themeManager.getOptions('series', {
             type: 'scatter',
             visible: false,
             point: {
@@ -1240,12 +1240,12 @@ function createThemeManager(options, themeGroupName) {
             }
         }, 'default');
         // act
-        var options = {
+        const options = {
             theme: 'RangeSelectorChartTheme'
         };
-        var themeManager = createThemeManager(options, 'rangeSelector.chart');
+        const themeManager = createThemeManager(options, 'rangeSelector.chart');
         themeManager.setTheme(options.theme);
-        var theme = themeManager.theme();
+        const theme = themeManager.theme();
         // assert
         assert.ok(theme.test);
     });
@@ -1258,7 +1258,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme with userOptions & commonSettings & commonUserSettings. B237181', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 pie: {
                     border: {
@@ -1289,7 +1289,7 @@ function createThemeManager(options, themeGroupName) {
             }
         };
         // act
-        var theme = themeManager.getOptions('series',
+        const theme = themeManager.getOptions('series',
             {
                 type: 'pie',
                 border: {
@@ -1310,10 +1310,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, type - donut', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', { type: 'donut' }, true);
+        const theme = themeManager.getOptions('series', { type: 'donut' }, true);
         // assert pie theme
         assert.ok(theme);
         assert.ok(!theme.border.visible);
@@ -1331,10 +1331,10 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, type - doughnut', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var theme = themeManager.getOptions('series', { type: 'doughnut' }, true);
+        const theme = themeManager.getOptions('series', { type: 'doughnut' }, true);
         // assert pie theme
         assert.ok(theme);
         assert.ok(!theme.border.visible);
@@ -1352,11 +1352,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, donut theme equal doughnut theme', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({});
         // act
-        var doughnutTheme = themeManager.getOptions('series', { type: 'doughnut' }, true);
-        var donutTheme = themeManager.getOptions('series', { type: 'donut' }, true);
+        const doughnutTheme = themeManager.getOptions('series', { type: 'doughnut' }, true);
+        const donutTheme = themeManager.getOptions('series', { type: 'donut' }, true);
 
         // types have differences
         doughnutTheme.type = null;
@@ -1375,7 +1375,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('applyPieSeriesTheme, type in root', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             commonSeriesSettings: {
                 pie: {
                     border: {
@@ -1407,7 +1407,7 @@ function createThemeManager(options, themeGroupName) {
             }
         };
         // act
-        var theme = themeManager.getOptions('series',
+        const theme = themeManager.getOptions('series',
             {
                 border: {
                     color: '#ffffff'
@@ -1449,11 +1449,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('series options for pie. mainSeriesColor. resetPalette', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
             palette: 'office'
         });
-        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
+        const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
@@ -1467,11 +1467,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('series options for pie. mainSeriesColor', function(assert) {
         // arrange
-        var themeManager = createThemeManager({}, 'pie');
+        const themeManager = createThemeManager({}, 'pie');
         themeManager.setTheme({
             palette: 'office'
         });
-        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
+        const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1), '#5f8b95');
@@ -1483,11 +1483,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             palette: ['red', 'green'],
         }, 'pie');
         themeManager.setTheme({});
-        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
+        const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor('a', 1, 3), 'red');
@@ -1497,11 +1497,11 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor. numeric argument', function(assert) {
         // arrange
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             palette: ['red', 'green'],
         }, 'pie');
         themeManager.setTheme({});
-        var seriesSettings = themeManager.getOptions('series', { type: 'pie' });
+        const seriesSettings = themeManager.getOptions('series', { type: 'pie' });
 
         // assert pie theme
         assert.strictEqual(seriesSettings.mainSeriesColor(0, 1, 3), 'red');
@@ -1511,8 +1511,8 @@ function createThemeManager(options, themeGroupName) {
     QUnit.module('Theme Manager - life cycle');
 
     QUnit.test('Disposing', function(assert) {
-        var paletteDisposed,
-            themeManager = createThemeManager({});
+        let paletteDisposed;
+        const themeManager = createThemeManager({});
         themeManager.setTheme({});
 
         themeManager.palette.dispose = function() { paletteDisposed = true; };
@@ -1551,8 +1551,8 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Do not patch theme', function(assert) {
         // act
-        var options = { theme: 'rtlTheme' },
-            themeManager = createThemeManager(options);
+        const options = { theme: 'rtlTheme' };
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
 
         // assert
@@ -1561,8 +1561,8 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Patch theme based on user options', function(assert) {
         // act
-        var options = { theme: 'rtlTheme', rtlEnabled: true },
-            themeManager = createThemeManager(options);
+        const options = { theme: 'rtlTheme', rtlEnabled: true };
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme, true);
 
         // assert
@@ -1586,8 +1586,8 @@ function createThemeManager(options, themeGroupName) {
         }, 'generic');
 
         // act
-        var options = { theme: 'rtlTheme1' },
-            themeManager = createThemeManager(options);
+        const options = { theme: 'rtlTheme1' };
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme);
 
         // assert
@@ -1611,8 +1611,8 @@ function createThemeManager(options, themeGroupName) {
         }, 'generic');
 
         // act
-        var options = { theme: 'rtlTheme1', rtlEnabled: false },
-            themeManager = createThemeManager(options);
+        const options = { theme: 'rtlTheme1', rtlEnabled: false };
+        const themeManager = createThemeManager(options);
         themeManager.setTheme(options.theme, false);
 
         // assert
@@ -1635,7 +1635,7 @@ function createThemeManager(options, themeGroupName) {
             }
         }, 'generic');
 
-        var themeManager = createThemeManager({ theme: 'rtlTheme' });
+        const themeManager = createThemeManager({ theme: 'rtlTheme' });
         themeManager.setTheme('rtlTheme1');
         // act
         themeManager.setTheme('rtlTheme1');
@@ -1698,7 +1698,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('getOptions', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             firstLevelOption2: 'from user',
             firstLevelObject: {
                 value1: 'from user',
@@ -1717,7 +1717,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('getOptions. false', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             firstLevelOption2: false,
         }));
         themeManager.setTheme('getOptionsTheme');
@@ -1726,7 +1726,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('setTheme after getOptions', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             firstLevelOption2: 'from user',
             firstLevelObject: {
                 value1: 'from user',
@@ -1742,17 +1742,17 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Save getOptions result', function(assert) {
-        var options = this.getOptions({
-                firstLevelOption2: 'from user',
-                firstLevelObject: {
-                    value1: 'from user',
-                    value3: 'from user3'
-                }
-            }),
-            themeManager = createThemeManager(options);
+        const options = this.getOptions({
+            firstLevelOption2: 'from user',
+            firstLevelObject: {
+                value1: 'from user',
+                value3: 'from user3'
+            }
+        });
+        const themeManager = createThemeManager(options);
         themeManager.setTheme('getOptionsTheme');
-        var result1 = themeManager.getOptions('firstLevelOption1'),
-            result2 = themeManager.getOptions('firstLevelObject');
+        const result1 = themeManager.getOptions('firstLevelOption1');
+        const result2 = themeManager.getOptions('firstLevelObject');
 
         themeManager.update({});
 
@@ -1761,17 +1761,17 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Reset saved getOptions result', function(assert) {
-        var options = this.getOptions({
-                firstLevelOption2: 'from user',
-                firstLevelObject: {
-                    value1: 'from user',
-                    value3: 'from user3'
-                }
-            }),
-            themeManager = createThemeManager(options);
+        const options = this.getOptions({
+            firstLevelOption2: 'from user',
+            firstLevelObject: {
+                value1: 'from user',
+                value3: 'from user3'
+            }
+        });
+        const themeManager = createThemeManager(options);
         themeManager.setTheme('getOptionsTheme');
-        var result1 = themeManager.getOptions('firstLevelOption2'),
-            result2 = themeManager.getOptions('firstLevelObject');
+        const result1 = themeManager.getOptions('firstLevelOption2');
+        const result2 = themeManager.getOptions('firstLevelObject');
         options.firstLevelOption2 = 'new value';
         themeManager.update(options);
 
@@ -1784,7 +1784,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('calculate series type from theme', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({}));
+        const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
 
         assert.strictEqual(themeManager.getOptions('series', {}).type, 'themetype');
@@ -1793,7 +1793,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('calculate series type from commonSeriesSettings', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonSeriesSettings: {
                 type: 'commonType'
             }
@@ -1806,7 +1806,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Process crosshair label font options', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({ crosshair: {}, fontFields: ['crosshair.label.font'] }));
+        const themeManager = createThemeManager(this.getOptions({ crosshair: {}, fontFields: ['crosshair.label.font'] }));
         themeManager.setTheme('getOptionsTheme');
 
         assert.deepEqual(themeManager.getOptions('crosshair').label.font, {
@@ -1819,7 +1819,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Value Axis', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
                 myOptions: false
@@ -1842,7 +1842,7 @@ function createThemeManager(options, themeGroupName) {
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('valueAxis', { myOptions: true });
+        const result = themeManager.getOptions('valueAxis', { myOptions: true });
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1858,7 +1858,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Value Axis.Rotated', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
                 myOptions: false
@@ -1881,7 +1881,7 @@ function createThemeManager(options, themeGroupName) {
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('valueAxis', { myOptions: true }, true);
+        const result = themeManager.getOptions('valueAxis', { myOptions: true }, true);
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1896,7 +1896,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Argument Axis', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
                 myOptions: false
@@ -1919,7 +1919,7 @@ function createThemeManager(options, themeGroupName) {
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('argumentAxis', { myOptions: true });
+        const result = themeManager.getOptions('argumentAxis', { myOptions: true });
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1933,7 +1933,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Argument Axis.Rotated', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 userCommonAxisSettings: true,
                 myOptions: false
@@ -1957,7 +1957,7 @@ function createThemeManager(options, themeGroupName) {
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('argumentAxis', { myOptions: true }, true);
+        const result = themeManager.getOptions('argumentAxis', { myOptions: true }, true);
 
         assert.ok(result.myOptions);
         assert.ok(result.userCommonAxisSettings);
@@ -1971,30 +1971,30 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Process string', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({}));
+        const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('argumentAxis', { title: 'axis' });
+        const result = themeManager.getOptions('argumentAxis', { title: 'axis' });
 
         assert.strictEqual(result.title.text, 'axis');
     });
 
     QUnit.test('Axis options. Process string. commonAxisSettings', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 title: 'axis'
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('argumentAxis', {});
+        const result = themeManager.getOptions('argumentAxis', {});
 
         assert.strictEqual(result.title.text, 'axis');
     });
 
     QUnit.test('Invalid logarithmic type', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({}));
+        const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
 
-        var doAssert = function(options, type, base, error, entity) {
+        const doAssert = function(options, type, base, error, entity) {
             assert.equal(options.type, type, 'type of ' + entity);
             assert.equal(options.logarithmBase, base, 'logarithmicBase of ' + entity);
             assert.equal(options.logarithmBaseError, error, 'error flag incorrect ' + entity);
@@ -2027,7 +2027,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Axis options. Argument Axis. workWeek option', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 workWeek: [0]
             },
@@ -2043,25 +2043,25 @@ function createThemeManager(options, themeGroupName) {
         }));
         themeManager.setTheme('getOptionsTheme');
 
-        var result = themeManager.getOptions('argumentAxis', { workWeek: [1, 2] });
+        const result = themeManager.getOptions('argumentAxis', { workWeek: [1, 2] });
 
         assert.deepEqual(result.workWeek, [1, 2]);
     });
 
     QUnit.test('Axis options. Get axis options without passing user options', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 common: true
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var result = themeManager.getOptions('argumentAxis');
+        const result = themeManager.getOptions('argumentAxis');
 
         assert.ok(result.common);
     });
 
     QUnit.test('set label alignment in commonAxisSettings ', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
                 label: {
                     rotationAngle: -90,
@@ -2072,7 +2072,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme('getOptionsTheme');
 
         // act
-        var result = themeManager.getOptions('valueAxis', {});
+        const result = themeManager.getOptions('valueAxis', {});
 
         // assert
         assert.ok(result.label, 'Axis have option label');
@@ -2082,10 +2082,10 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('set label alignment in axisSettings ', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({}));
+        const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
         // act
-        var result = themeManager.getOptions('valueAxis', {
+        const result = themeManager.getOptions('valueAxis', {
             label: {
                 rotationAngle: -90,
                 alignment: 'right'
@@ -2099,7 +2099,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Animation. boolean true', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             animation: true
         }));
         themeManager.setTheme('getOptionsTheme');
@@ -2113,7 +2113,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Animation. boolean false', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             animation: false
         }));
         themeManager.setTheme('getOptionsTheme');
@@ -2127,7 +2127,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Animation. undefined', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
         }));
         themeManager.setTheme('getOptionsTheme');
         assert.deepEqual(themeManager.getOptions('animation'), {
@@ -2140,7 +2140,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('Animation. object', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             animation: {
                 duration: 2000,
                 easing: 'myeasing',
@@ -2159,10 +2159,10 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('get valueAxis for rangeSelector', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({}));
+        const themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme('getOptionsTheme');
 
-        var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
+        const valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
         assert.equal(valueOptions.endOnTick, undefined);
         assert.deepEqual(valueOptions.grid, {
@@ -2172,14 +2172,14 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('get valueAxis for rangeSelector with preset values', function(assert) {
-        var themeManager = createThemeManager(this.getOptions({
+        const themeManager = createThemeManager(this.getOptions({
             valueAxis: {
                 logarithmBase: 2,
                 someField: 'someValue'
             }
         }));
         themeManager.setTheme('getOptionsTheme');
-        var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
+        const valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
         assert.equal(valueOptions.endOnTick, undefined);
         assert.deepEqual(valueOptions.grid, {
@@ -2195,7 +2195,7 @@ function createThemeManager(options, themeGroupName) {
     QUnit.module('Get options - zoomAndPan');
 
     QUnit.test('Ignore deprecated options if new options are used', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             zoomAndPan: {
                 argumentAxis: 'none',
                 valueAxis: 'none'
@@ -2217,7 +2217,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2236,7 +2236,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. scrollingMode=all allows argument axis panning by mouse and touch', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             scrollingMode: 'all'
         });
         themeManager.setTheme({
@@ -2252,7 +2252,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2271,7 +2271,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. scrollingMode=mouse allows argument axis panning by mouse only', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             scrollingMode: 'mouse'
         });
         themeManager.setTheme({
@@ -2287,7 +2287,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2306,7 +2306,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. scrollingMode=touch allows argument axis panning by mouse and touch', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             scrollingMode: 'touch'
         });
         themeManager.setTheme({
@@ -2322,7 +2322,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2341,7 +2341,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. zoomingMode=all allows argument axis zooming by mousewheel and touch', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             zoomingMode: 'all'
         });
         themeManager.setTheme({
@@ -2357,7 +2357,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2376,7 +2376,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. zoomingMode=mouse allows argument axis zooming by mousewheel only', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             zoomingMode: 'mouse'
         });
         themeManager.setTheme({
@@ -2392,7 +2392,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {
@@ -2411,7 +2411,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test('No user options. zoomingMode=touch allows argument axis zooming by touch only', function(assert) {
-        var themeManager = createThemeManager({
+        const themeManager = createThemeManager({
             zoomingMode: 'touch'
         });
         themeManager.setTheme({
@@ -2427,7 +2427,7 @@ function createThemeManager(options, themeGroupName) {
         });
 
         // act
-        var theme = themeManager.getOptions('zoomAndPan');
+        const theme = themeManager.getOptions('zoomAndPan');
 
         // assert
         assert.deepEqual(theme, {

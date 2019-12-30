@@ -24,7 +24,7 @@ const environment = {
         this.point.hasValue.returns(true);
     },
     createLabel: function() {
-        var label = new labelModule.Label({ renderer: this.renderer, point: this.point, labelsGroup: this.group });
+        const label = new labelModule.Label({ renderer: this.renderer, point: this.point, labelsGroup: this.group });
         label.setOptions(this.options);
         label.setData(this.data.formatObject);
         return label;
@@ -36,7 +36,7 @@ const environment = {
         return this.renderer.path.returnValues[0];
     },
     createLabelWithBBox: function(BBox, figure) {
-        var label = this.createLabel();
+        const label = this.createLabel();
 
         if(this.options.background.fill && this.options.background.fill !== 'none') {
             this.renderer.bBoxTemplate = {
@@ -71,13 +71,13 @@ QUnit.test('Custom label format', function(assert) {
 });
 
 QUnit.test('Label format object', function(assert) {
-    var data = {};
+    const data = {};
     data.argument = 0.12;
     data.value = 5;
     data.originalValue = '5';
     data.originalArgument = '0.12';
     data.seriesName = 'series';
-    var options = { format: 'currency', argumentFormat: 'percent' };
+    const options = { format: 'currency', argumentFormat: 'percent' };
 
     this.format(data, options);
 
@@ -95,14 +95,14 @@ QUnit.test('Label format object', function(assert) {
 });
 
 QUnit.test('Label format object, financial series', function(assert) {
-    var data = {};
+    const data = {};
     data.argument = 0.12;
     data.closeValue = 5;
     data.openValue = 2;
     data.lowValue = 1;
     data.highValue = 10;
     data.reductionValue = 2;
-    var options = { format: 'currency', argumentFormat: 'percent' };
+    const options = { format: 'currency', argumentFormat: 'percent' };
 
     this.format(data, options);
 
@@ -152,7 +152,7 @@ QUnit.module('Draw Label', $.extend({}, environment, {
 }));
 
 QUnit.test('Show', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.show();
 
     assert.equal(label._group.stub('attr').callCount, 1);
@@ -162,7 +162,7 @@ QUnit.test('Show', function(assert) {
 });
 
 QUnit.test('Hide', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
     label._group.stub('attr').reset();
@@ -175,7 +175,7 @@ QUnit.test('Hide', function(assert) {
 });
 
 QUnit.test('T561563. Show already shown label - do not correct label position', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.show();
     label.hide();
     label._point.correctLabelPosition.reset();
@@ -187,7 +187,7 @@ QUnit.test('T561563. Show already shown label - do not correct label position', 
 });
 
 QUnit.test('Draw(true) -> draw(false) -> show - correct label position (container resize problem)', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.draw(true);
     label.draw(false);
     label._point.correctLabelPosition.reset();
@@ -200,7 +200,7 @@ QUnit.test('Draw(true) -> draw(false) -> show - correct label position (containe
 
 QUnit.test('Draw(true) - draw label', function(assert) {
     this.options.cssClass = 'label_class';
-    var label = this.createLabel().draw(true);
+    const label = this.createLabel().draw(true);
 
     assert.ok(label._group);
     assert.ok(label._insideGroup);
@@ -220,7 +220,7 @@ QUnit.test('Draw(true) - draw label', function(assert) {
 
 QUnit.test('Rotation angle can be reseted', function(assert) {
     this.options.rotationAngle = 30;
-    var label = this.createLabel().draw(true);
+    const label = this.createLabel().draw(true);
 
     this.options.rotationAngle = 0;
 
@@ -233,7 +233,7 @@ QUnit.test('Rotation angle can be reseted', function(assert) {
 });
 
 QUnit.test('Draw() - hide label', function(assert) {
-    var label = this.createLabel().draw(true);
+    const label = this.createLabel().draw(true);
     label._point.correctLabelPosition.reset();
 
     label.draw();
@@ -243,7 +243,7 @@ QUnit.test('Draw() - hide label', function(assert) {
 });
 
 QUnit.test('Draw(true) after hide() - draw label', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     // act
     label.hide();
@@ -253,7 +253,7 @@ QUnit.test('Draw(true) after hide() - draw label', function(assert) {
 });
 
 QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     // act
     label.hide(true);
@@ -263,7 +263,7 @@ QUnit.test('Draw(true) after hide(true) - keep hidden state', function(assert) {
 });
 
 QUnit.test('Draw() after show() - hide label', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     // act
     label.show();
@@ -273,7 +273,7 @@ QUnit.test('Draw() after show() - hide label', function(assert) {
 });
 
 QUnit.test('Draw() after show(true) - keep visible state', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     // act
     label.show(true);
@@ -283,7 +283,7 @@ QUnit.test('Draw() after show(true) - keep visible state', function(assert) {
 });
 
 QUnit.test('Draw label with zero point size', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     assert.ok(label._group);
     assert.ok(label._insideGroup);
@@ -303,7 +303,7 @@ QUnit.test('Draw label with zero point size', function(assert) {
 
 QUnit.test('Draw label with null value', function(assert) {
     this.data.formatObject = { value: null };
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     assert.ok(!label._group);
     assert.ok(!label._insideGroup);
@@ -326,7 +326,7 @@ QUnit.test('Draw label with custom format', function(assert) {
 });
 
 QUnit.test('Pass point to label customizeText', function(assert) {
-    var passedPoint;
+    let passedPoint;
 
     this.options.customizeText = function() {
         passedPoint = this.point;
@@ -343,7 +343,7 @@ QUnit.test('Pass point to label customizeText', function(assert) {
 
 QUnit.test('Draw label with empty custom format', function(assert) {
     this.options.customizeText = function() { };
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     assert.ok(!label._group);
     assert.ok(!label._insideGroup);
@@ -354,7 +354,7 @@ QUnit.test('Draw label with empty custom format', function(assert) {
 
 QUnit.test('Draw label with empty custom string', function(assert) {
     this.options.customizeText = function() { return ''; };
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     assert.ok(!label._group);
     assert.ok(!label._insideGroup);
@@ -365,7 +365,7 @@ QUnit.test('Draw label with empty custom string', function(assert) {
 
 QUnit.test('Draw label with null custom string', function(assert) {
     this.options.customizeText = function() { return null; };
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -378,7 +378,7 @@ QUnit.test('Draw label with null custom string', function(assert) {
 
 QUnit.test('Draw label with undefined custom string', function(assert) {
     this.options.customizeText = function() { return undefined; };
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -393,7 +393,7 @@ QUnit.test('Draw labelBackground (fill is specified)', function(assert) {
     this.options.background.fill = 'red';
     this.renderer.bBoxTemplate = { x: 10, y: 40, height: 10, width: 20 };
 
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     assert.equal(this.renderer.stub('rect').callCount, 1);
     assert.equal(this.renderer.stub('rect').firstCall.returnValue, label._background);
@@ -407,7 +407,7 @@ QUnit.test('Draw labelBackground (fill is specified) with reduction color', func
     this.options.background.fill = 'red';
     this.renderer.bBoxTemplate = { x: 10, y: 40, height: 10, width: 20 };
 
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.setColor('blue');
     label.show();
@@ -423,7 +423,7 @@ QUnit.test('Draw labelBackground (fill is specified) with reduction color', func
 
 QUnit.test('Draw labelBackground (stroke is specified, strokeWidth is not specified)', function(assert) {
     this.options.background.stroke = 'red';
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -432,7 +432,7 @@ QUnit.test('Draw labelBackground (stroke is specified, strokeWidth is not specif
 
 QUnit.test('Draw labelBackground (stroke is not specified, strokeWidth is specified)', function(assert) {
     this.options.background['stroke-width'] = 1;
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -442,7 +442,7 @@ QUnit.test('Draw labelBackground (stroke is not specified, strokeWidth is specif
 QUnit.test('Draw labelBackground (stroke and strokeWidth specified)', function(assert) {
     this.options.background.stroke = 'red';
     this.options.background['stroke-width'] = 1;
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -466,7 +466,7 @@ QUnit.test('Draw connector without reduction style', function(assert) {
 
 QUnit.test('Draw connector with reduction style', function(assert) {
     this.options.connector.stroke = 'red';
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setColor('blue');
 
@@ -478,8 +478,8 @@ QUnit.test('Draw connector with reduction style', function(assert) {
 
 QUnit.test('To right', function(assert) {
     this.options.background.fill = 'none';
-    var label = this.createAndDrawLabel(),
-        connector = this.getConnectorElement();
+    const label = this.createAndDrawLabel();
+    const connector = this.getConnectorElement();
 
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(200, 100);
@@ -490,7 +490,7 @@ QUnit.test('To right', function(assert) {
 
 QUnit.test('To left', function(assert) {
     this.options.background.fill = 'none';
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(50, 100);
 
@@ -499,7 +499,7 @@ QUnit.test('To left', function(assert) {
 
 QUnit.test('To top', function(assert) {
     this.options.background.fill = 'none';
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(100, 50);
@@ -509,7 +509,7 @@ QUnit.test('To top', function(assert) {
 
 QUnit.test('To bottom', function(assert) {
     this.options.background.fill = 'none';
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(100, 200);
@@ -519,7 +519,7 @@ QUnit.test('To bottom', function(assert) {
 
 QUnit.test('with backgroundColor', function(assert) {
     this.options.background = { fill: 'red' };
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(100, 200);
@@ -529,8 +529,8 @@ QUnit.test('with backgroundColor', function(assert) {
 
 QUnit.test('bar with odd width. Vertical connector', function(assert) {
     this.options.background.fill = 'none';
-    var label = this.createAndDrawLabel(),
-        connector = this.getConnectorElement();
+    const label = this.createAndDrawLabel();
+    const connector = this.getConnectorElement();
 
     label.setFigureToDrawConnector({ x: 300, y: 400, width: 1255, height: 14 });
     label.shift(916, 366);
@@ -540,7 +540,7 @@ QUnit.test('bar with odd width. Vertical connector', function(assert) {
 });
 
 QUnit.test('bar with odd height. Horizontal connector', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 59, y: 296, width: 92, height: 97 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 59, y: 296, width: 92, height: 97 });
 
     label.shift(161, 343);
 
@@ -548,7 +548,7 @@ QUnit.test('bar with odd height. Horizontal connector', function(assert) {
 });
 
 QUnit.test('bar. Horizontal connector. Central point. Connector to the left side', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 59, y: 306, width: 92, height: 97 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 59, y: 306, width: 92, height: 97 });
 
     label.shift(161, 343);
 
@@ -556,7 +556,7 @@ QUnit.test('bar. Horizontal connector. Central point. Connector to the left side
 });
 
 QUnit.test('bar. Horizontal connector. Central point. Connector to the right side', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: -141, y: 306, width: 92, height: 97 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: -141, y: 306, width: 92, height: 97 });
 
     label.shift(-161, 343);
 
@@ -564,7 +564,7 @@ QUnit.test('bar. Horizontal connector. Central point. Connector to the right sid
 });
 
 QUnit.test('Inside', function(assert) {
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setFigureToDrawConnector({ x: 0, y: 0, width: 100, height: 100 });
     label.shift(80, 80);
@@ -574,7 +574,7 @@ QUnit.test('Inside', function(assert) {
 
 QUnit.test('Rotated label. RotatedAngle = 35', function(assert) {
     this.options.rotationAngle = 35;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
 
     label.shift(390, 341);
 
@@ -583,7 +583,7 @@ QUnit.test('Rotated label. RotatedAngle = 35', function(assert) {
 
 QUnit.test('Rotated label. RotatedAngle = 90', function(assert) {
     this.options.rotationAngle = 90;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
 
     label.shift(390, 341);
 
@@ -592,7 +592,7 @@ QUnit.test('Rotated label. RotatedAngle = 90', function(assert) {
 
 QUnit.test('Rotated label. RotatedAngle = 180', function(assert) {
     this.options.rotationAngle = 180;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
 
     label.shift(390, 341);
 
@@ -601,7 +601,7 @@ QUnit.test('Rotated label. RotatedAngle = 180', function(assert) {
 
 QUnit.test('Rotated label. RotatedAngle = 270', function(assert) {
     this.options.rotationAngle = 270;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, width: 30, height: 20 });
 
     label.shift(390, 341);
 
@@ -610,14 +610,14 @@ QUnit.test('Rotated label. RotatedAngle = 270', function(assert) {
 
 // T520777
 QUnit.test('Drawn connector to label with odd side', function(assert) {
-    var label = this.createLabelWithBBox({ x: 181, y: 36, height: 24, width: 75 }, { x: 218, y: 70, width: 0, height: 0 });
+    const label = this.createLabelWithBBox({ x: 181, y: 36, height: 24, width: 75 }, { x: 218, y: 70, width: 0, height: 0 });
     label.shift(181, 15);
 
     assert.deepEqual(label._connector._stored_settings.points, [218, 70, 218, 38]);
 });
 
 QUnit.test('connector point with rectangle. label to bottom', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 10, width: 20, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 10, width: 20, height: 20 });
 
     label.shift(90, 40);
 
@@ -625,7 +625,7 @@ QUnit.test('connector point with rectangle. label to bottom', function(assert) {
 });
 
 QUnit.test('connector point with rectangle. label to top', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 40, width: 20, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 40, width: 20, height: 20 });
 
     label.shift(90, 10);
 
@@ -633,7 +633,7 @@ QUnit.test('connector point with rectangle. label to top', function(assert) {
 });
 
 QUnit.test('connector point with rectangle. label to left', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 40, width: 20, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 40, width: 20, height: 20 });
 
     label.shift(10, 40);
 
@@ -641,7 +641,7 @@ QUnit.test('connector point with rectangle. label to left', function(assert) {
 });
 
 QUnit.test('connector point with rectangle. label to right', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 10, y: 40, width: 20, height: 20 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 10, y: 40, width: 20, height: 20 });
 
     label.shift(90, 40);
 
@@ -649,7 +649,7 @@ QUnit.test('connector point with rectangle. label to right', function(assert) {
 });
 
 QUnit.test('Shift label. save only first point', function(assert) {
-    var label = this.createLabelWithBBox({ x: 100, y: 200, height: 10, width: 20 }, { x: 100, y: 100, width: 20, height: 10 });
+    const label = this.createLabelWithBBox({ x: 100, y: 200, height: 10, width: 20 }, { x: 100, y: 100, width: 20, height: 10 });
 
     label.shift(100, 200);
     label.shift(100, 300);
@@ -659,7 +659,7 @@ QUnit.test('Shift label. save only first point', function(assert) {
 });
 
 QUnit.test('point. Horizontal connector. Central point. Connector to the left side', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 145, y: 353, r: 6 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 145, y: 353, r: 6 });
 
     label.shift(161, 343);
 
@@ -667,7 +667,7 @@ QUnit.test('point. Horizontal connector. Central point. Connector to the left si
 });
 
 QUnit.test('point. Horizontal connector. Central point. Connector to the right side', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 187, y: 353, r: 6 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 187, y: 353, r: 6 });
 
     label.shift(161, 343);
 
@@ -677,7 +677,7 @@ QUnit.test('point. Horizontal connector. Central point. Connector to the right s
 QUnit.test('Use external connector strategy', function(assert) {
     this.options.background.fill = 'none';
 
-    var label = new labelModule.Label({
+    const label = new labelModule.Label({
         renderer: this.renderer,
         point: this.point,
         labelsGroup: this.group,
@@ -715,7 +715,7 @@ QUnit.test('Use external connector strategy', function(assert) {
 });
 
 QUnit.test('Label and point not on one line. Label on top', function(assert) {
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
 
     label.shift(20, 20);
 
@@ -723,7 +723,7 @@ QUnit.test('Label and point not on one line. Label on top', function(assert) {
 });
 
 QUnit.test('Label and point not on one line. Label on bottom', function(assert) {
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
 
     label.shift(20, 20);
 
@@ -731,7 +731,7 @@ QUnit.test('Label and point not on one line. Label on bottom', function(assert) 
 });
 
 QUnit.test('Label and point not on one line. Label on left', function(assert) {
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
 
     label.shift(20, 20);
 
@@ -739,7 +739,7 @@ QUnit.test('Label and point not on one line. Label on left', function(assert) {
 });
 
 QUnit.test('Label and point not on one line. Label on right', function(assert) {
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
 
     label.shift(20, 20);
 
@@ -748,7 +748,7 @@ QUnit.test('Label and point not on one line. Label on right', function(assert) {
 
 QUnit.test('Label and point not on one line. Rotated. Label on top', function(assert) {
     this.options.rotationAngle = 45;
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
 
     label.shift(20, 20);
 
@@ -757,7 +757,7 @@ QUnit.test('Label and point not on one line. Rotated. Label on top', function(as
 
 QUnit.test('Label and point not on one line. Rotated. Label on bottom', function(assert) {
     this.options.rotationAngle = 45;
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
 
     label.shift(20, 20);
 
@@ -766,7 +766,7 @@ QUnit.test('Label and point not on one line. Rotated. Label on bottom', function
 
 QUnit.test('Label and point not on one line. Rotated. Label on left', function(assert) {
     this.options.rotationAngle = 45;
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
 
     label.shift(20, 20);
 
@@ -775,7 +775,7 @@ QUnit.test('Label and point not on one line. Rotated. Label on left', function(a
 
 QUnit.test('Label and point not on one line. Rotated. Label on right', function(assert) {
     this.options.rotationAngle = 45;
-    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
+    const label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
 
     label.shift(20, 20);
 
@@ -790,7 +790,7 @@ QUnit.module('Connector. Pie strategy', $.extend({}, environment, {
 }));
 
 QUnit.test('Angle point can be calculated (obtuse angle) - take it', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 80, y: 10, angle: -30 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 80, y: 10, angle: -30 });
 
     label.shift(120, 15);
 
@@ -798,7 +798,7 @@ QUnit.test('Angle point can be calculated (obtuse angle) - take it', function(as
 });
 
 QUnit.test('Angle point can be calculated (obtuse angle). Positive angle. III part', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 220, y: 310, angle: 182 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 220, y: 310, angle: 182 });
 
     label.shift(180, 320);
 
@@ -806,7 +806,7 @@ QUnit.test('Angle point can be calculated (obtuse angle). Positive angle. III pa
 });
 
 QUnit.test('Angle point can be calculated (obtuse angle). Obtuse angle. Positive angle. IV part', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, angle: 292 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, angle: 292 });
 
     label.shift(390, 341);
 
@@ -814,7 +814,7 @@ QUnit.test('Angle point can be calculated (obtuse angle). Obtuse angle. Positive
 });
 
 QUnit.test('Angle point cannot be calculated (acute angle) - take label point', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 70, y: 10, angle: -30 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 70, y: 10, angle: -30 });
 
     label.shift(100, 15);
 
@@ -823,7 +823,7 @@ QUnit.test('Angle point cannot be calculated (acute angle) - take label point', 
 
 QUnit.test('Rotated label - take point on horizontal intersection with label\'s edge', function(assert) {
     this.options.rotationAngle = 35;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, angle: 292 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 344, y: 322, angle: 292 });
 
     label.shift(390, 341);
 
@@ -831,7 +831,7 @@ QUnit.test('Rotated label - take point on horizontal intersection with label\'s 
 });
 
 QUnit.test('Connector with angle could not be built between label and point. Label on the right', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 10, angle: -30 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 90, y: 10, angle: -30 });
 
     label.shift(100, 15);
 
@@ -839,7 +839,7 @@ QUnit.test('Connector with angle could not be built between label and point. Lab
 });
 
 QUnit.test('Connector with angle could not be built between label and point. Label on the left', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 10, angle: -150 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 10, angle: -150 });
 
     label.shift(70, 15);
 
@@ -847,7 +847,7 @@ QUnit.test('Connector with angle could not be built between label and point. Lab
 });
 
 QUnit.test('Label on top - build straight connector to the bottom center of label', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 80 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 80 });
 
     label.shift(85, 20);
 
@@ -855,7 +855,7 @@ QUnit.test('Label on top - build straight connector to the bottom center of labe
 });
 
 QUnit.test('Label on bottom - build straight connector to the top center of label', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 280 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 63 }, { x: 100, y: 50, angle: 280 });
 
     label.shift(85, 70);
 
@@ -864,7 +864,7 @@ QUnit.test('Label on bottom - build straight connector to the top center of labe
 
 QUnit.test('Rotated label on top - take point on vertical intersection with label\'s edge', function(assert) {
     this.options.rotationAngle = 35;
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
 
     label.shift(85, 20);
 
@@ -872,7 +872,7 @@ QUnit.test('Rotated label on top - take point on vertical intersection with labe
 });
 
 QUnit.test('Label on top - build straight connector to the bottom center of label', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 100, y: 50, angle: 80 });
 
     label.shift(85, 20);
 
@@ -881,7 +881,7 @@ QUnit.test('Label on top - build straight connector to the bottom center of labe
 
 // T175028
 QUnit.test('zero angle - build correct connector', function(assert) {
-    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 80, y: 10, angle: 0 });
+    const label = this.createLabelWithBBox({ x: 0, y: 0, height: 10, width: 20 }, { x: 80, y: 10, angle: 0 });
 
     label.shift(100, 15);
 
@@ -923,7 +923,7 @@ QUnit.module('Set options', $.extend({}, environment, {
 }));
 
 QUnit.test('Set options to existing elements', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -945,7 +945,7 @@ QUnit.test('Set options to existing elements', function(assert) {
 QUnit.test('Set options to unexisting elements', function(assert) {
     this.options.background.fill = 'none';
     this.options.connector['stroke-width'] = 0;
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
     this.options.background.fill = 'yellow';
@@ -964,7 +964,7 @@ QUnit.test('Set options to unexisting elements', function(assert) {
 });
 
 QUnit.test('Set options on empty text', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -981,7 +981,7 @@ QUnit.test('Set options on empty text', function(assert) {
 });
 
 QUnit.test('getBoundingRect on empty text', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -997,7 +997,7 @@ QUnit.test('getBoundingRect on empty text', function(assert) {
 QUnit.test('Set tracker data', function(assert) {
     this.options.background.fill = 'red';
     this.renderer.bBoxTemplate = { x: 10, y: 40, height: 10, width: 20 };
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.setTrackerData('trackerData');
 
@@ -1039,10 +1039,10 @@ QUnit.module('Dispose', $.extend({}, environment, {
 }));
 
 QUnit.test('Simple label', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.show();
 
-    var _group = label._group;
+    const _group = label._group;
 
     label.dispose();
 
@@ -1059,10 +1059,10 @@ QUnit.test('Simple label', function(assert) {
 });
 
 QUnit.test('Pie label', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.show();
 
-    var _group = label._group;
+    const _group = label._group;
 
     label.dispose();
 
@@ -1108,7 +1108,7 @@ QUnit.module('getBoundingRect', $.extend({}, environment, {
 }));
 
 QUnit.test('get bounding rect', function(assert) {
-    var label = this.createLabel();
+    const label = this.createLabel();
     label.show();
     label.shift(40, 40);
 
@@ -1151,8 +1151,8 @@ QUnit.module('Layouted label', $.extend({}, environment, {
 }));
 
 QUnit.test('simple shift', function(assert) {
-    var label = this.createLabel(),
-        innerGroup;
+    const label = this.createLabel();
+    let innerGroup;
     label.show();
 
     label.shift(10, 10);
@@ -1167,7 +1167,7 @@ QUnit.test('simple shift', function(assert) {
 QUnit.test('disposing elements. not crash', function(assert) {
     assert.expect(0);
 
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
     label.dispose();
@@ -1175,8 +1175,8 @@ QUnit.test('disposing elements. not crash', function(assert) {
 });
 
 QUnit.test('Cache boundingRect', function(assert) {
-    var label = this.createAndDrawLabel(),
-        BBox;
+    const label = this.createAndDrawLabel();
+    let BBox;
 
     label.shift(1, 2);
     label.getBoundingRect();
@@ -1193,8 +1193,8 @@ QUnit.test('Cache boundingRect', function(assert) {
 
 QUnit.test('getBoundingRect. After redraw', function(assert) {
     this.options.connector = null;
-    var label = this.createLabel(),
-        BBox;
+    const label = this.createLabel();
+    let BBox;
 
     label.show();
     label.shift(1, 2);
@@ -1216,9 +1216,9 @@ QUnit.test('getBoundingRect. After redraw', function(assert) {
 });
 
 QUnit.test('getBoundingRect after shift', function(assert) {
-    var label = this.createLabel(),
-        innerGroup,
-        BBox;
+    const label = this.createLabel();
+    let innerGroup;
+    let BBox;
 
     label.show();
 
@@ -1239,9 +1239,9 @@ QUnit.test('getBoundingRect after shift', function(assert) {
 });
 
 QUnit.test('getBoundingRect after double shift', function(assert) {
-    var label = this.createLabel(),
-        innerGroup,
-        BBox;
+    const label = this.createLabel();
+    let innerGroup;
+    let BBox;
 
     label.show();
 
@@ -1263,8 +1263,8 @@ QUnit.test('getBoundingRect after double shift', function(assert) {
 });
 
 QUnit.test('getLayoutOptions', function(assert) {
-    var label = this.createLabel(this.options),
-        options = label.getLayoutOptions();
+    const label = this.createLabel(this.options);
+    const options = label.getLayoutOptions();
 
     assert.deepEqual(options, {
         alignment: '[DIRECTION]',
@@ -1281,8 +1281,8 @@ QUnit.test('getLayoutOptions without background', function(assert) {
     this.options.background = {
         visible: false
     };
-    var label = this.createLabel(this.options),
-        options = label.getLayoutOptions();
+    const label = this.createLabel(this.options);
+    const options = label.getLayoutOptions();
 
     assert.equal(options.background, false);
     assert.equal(options.connectorOffset, 0);
@@ -1293,8 +1293,8 @@ QUnit.test('getLayoutOptions when connector visible', function(assert) {
         'stroke-width': 1,
         stroke: 'red'
     };
-    var label = this.createLabel(this.options),
-        options = label.getLayoutOptions();
+    const label = this.createLabel(this.options);
+    const options = label.getLayoutOptions();
 
     assert.equal(options.connectorOffset, 20);
 });
@@ -1302,12 +1302,12 @@ QUnit.test('getLayoutOptions when connector visible', function(assert) {
 QUnit.test('fit without background', function(assert) {
     this.options.background = { fill: 'none' };
 
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.shift(-7, -2);
     label.fit(15);
 
-    var text = this.renderer.text.getCall(0).returnValue;
+    const text = this.renderer.text.getCall(0).returnValue;
 
     assert.equal(text.setMaxSize.args[0][0], 15, 'Max width param');
 });
@@ -1315,13 +1315,13 @@ QUnit.test('fit without background', function(assert) {
 QUnit.test('fit with background', function(assert) {
     this.options.background = { fill: 'red' };
 
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.shift(-7, -2);
     label.fit(31);
 
-    var text = this.renderer.text.getCall(0).returnValue,
-        background = this.renderer.rect.getCall(0).returnValue;
+    const text = this.renderer.text.getCall(0).returnValue;
+    const background = this.renderer.rect.getCall(0).returnValue;
 
     assert.equal(text.setMaxSize.args[0][0], 15, 'Max width param');
     assert.strictEqual(background.attr.called, true, 'New background rect');
@@ -1379,13 +1379,13 @@ QUnit.test('Hide background when text is empty', function(assert) {
 QUnit.test('resetEllipsis', function(assert) {
     this.options.background = { fill: 'red' };
 
-    var label = this.createAndDrawLabel();
+    const label = this.createAndDrawLabel();
 
     label.shift(-7, -2);
     label.resetEllipsis(15);
 
-    var text = this.renderer.text.getCall(0).returnValue,
-        background = this.renderer.rect.getCall(0).returnValue;
+    const text = this.renderer.text.getCall(0).returnValue;
+    const background = this.renderer.rect.getCall(0).returnValue;
 
     assert.strictEqual(text.restoreText.called, true, 'text is restored');
     assert.strictEqual(background.attr.called, true, 'New background rect');
@@ -1427,11 +1427,11 @@ QUnit.module('Format label', $.extend({}, environment, {
 }));
 
 QUnit.test('Fixed point', function(assert) {
-    var customizeTextSpy = sinon.spy();
+    const customizeTextSpy = sinon.spy();
     this.options.format = { type: 'fixedPoint', precision: 2 };
     this.options.argumentFormat = { type: 'fixedPoint', precision: 2 };
     this.options.customizeText = customizeTextSpy;
-    var label = this.createLabel();
+    const label = this.createLabel();
 
     label.show();
 
@@ -1468,8 +1468,8 @@ QUnit.module('hideInsideLabel', environment);
 
 QUnit.test('Called \'hideInsideLabel\' method', function(assert) {
     this.point.hideInsideLabel = sinon.stub().returns(true);
-    var label = this.createLabel(),
-        coords = { x: 2, y: 3 };
+    const label = this.createLabel();
+    const coords = { x: 2, y: 3 };
 
     assert.ok(label.hideInsideLabel(coords));
     assert.equal(this.point.hideInsideLabel.lastCall.args[0], label);

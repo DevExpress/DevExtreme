@@ -1,24 +1,24 @@
-var $ = require('../core/renderer'),
-    devices = require('../core/devices'),
-    registerComponent = require('../core/component_registrator'),
-    inflector = require('../core/utils/inflector'),
-    iteratorUtils = require('../core/utils/iterator'),
-    isDefined = require('../core/utils/type').isDefined,
-    extend = require('../core/utils/extend').extend,
-    windowUtils = require('../core/utils/window'),
-    getPublicElement = require('../core/utils/dom').getPublicElement,
-    deferRender = require('../core/utils/common').deferRender,
-    ScrollView = require('./scroll_view'),
-    CollectionWidget = require('./collection/ui.collection_widget.edit');
+const $ = require('../core/renderer');
+const devices = require('../core/devices');
+const registerComponent = require('../core/component_registrator');
+const inflector = require('../core/utils/inflector');
+const iteratorUtils = require('../core/utils/iterator');
+const isDefined = require('../core/utils/type').isDefined;
+const extend = require('../core/utils/extend').extend;
+const windowUtils = require('../core/utils/window');
+const getPublicElement = require('../core/utils/dom').getPublicElement;
+const deferRender = require('../core/utils/common').deferRender;
+const ScrollView = require('./scroll_view');
+const CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var TILEVIEW_CLASS = 'dx-tileview',
-    TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper',
-    TILEVIEW_ITEM_CLASS = 'dx-tile',
-    TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS,
+const TILEVIEW_CLASS = 'dx-tileview';
+const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
+const TILEVIEW_ITEM_CLASS = 'dx-tile';
+const TILEVIEW_ITEM_SELECTOR = '.' + TILEVIEW_ITEM_CLASS;
 
-    TILEVIEW_ITEM_DATA_KEY = 'dxTileData';
+const TILEVIEW_ITEM_DATA_KEY = 'dxTileData';
 
-var CONFIGS = {
+const CONFIGS = {
     'horizontal': {
         itemMainRatio: 'widthRatio',
         itemCrossRatio: 'heightRatio',
@@ -41,7 +41,7 @@ var CONFIGS = {
     }
 };
 
-var TileView = CollectionWidget.inherit({
+const TileView = CollectionWidget.inherit({
 
     _activeStateUnit: TILEVIEW_ITEM_SELECTOR,
 
@@ -141,7 +141,7 @@ var TileView = CollectionWidget.inherit({
     },
 
     _dataSourceLoadingChangedHandler: function(isLoading) {
-        var scrollView = this._scrollView;
+        const scrollView = this._scrollView;
 
         if(!scrollView || !scrollView.startLoading) {
             return;
@@ -201,14 +201,14 @@ var TileView = CollectionWidget.inherit({
     _renderGeometry: function() {
         this._config = CONFIGS[this.option('direction')];
 
-        var items = this.option('items') || [],
-            config = this._config,
-            itemMargin = this.option('itemMargin'),
-            maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
-                return Math.round(item[config.itemCrossRatio] || 1);
-            }));
+        const items = this.option('items') || [];
+        const config = this._config;
+        const itemMargin = this.option('itemMargin');
+        const maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
+            return Math.round(item[config.itemCrossRatio] || 1);
+        }));
 
-        var crossDimensionValue = windowUtils.hasWindow() ?
+        const crossDimensionValue = windowUtils.hasWindow() ?
             this.$element()[config.crossDimension]() : parseInt(this.$element().get(0).style[config.crossDimension]);
 
         this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
@@ -223,15 +223,15 @@ var TileView = CollectionWidget.inherit({
     },
 
     _arrangeItems: function(items) {
-        var config = this._config,
-            itemMainRatio = config.itemMainRatio,
-            itemCrossRatio = config.itemCrossRatio,
-            mainPosition = config.mainPosition;
+        const config = this._config;
+        const itemMainRatio = config.itemMainRatio;
+        const itemCrossRatio = config.itemCrossRatio;
+        const mainPosition = config.mainPosition;
 
         this._itemsPositions = [];
 
         iteratorUtils.each(items, (function(index, item) {
-            var currentItem = {};
+            const currentItem = {};
             currentItem[itemMainRatio] = item[itemMainRatio] || 1;
             currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;
             currentItem.index = index;
@@ -239,7 +239,7 @@ var TileView = CollectionWidget.inherit({
             currentItem[itemMainRatio] = (currentItem[itemMainRatio] <= 0) ? 0 : Math.round(currentItem[config.itemMainRatio]);
             currentItem[itemCrossRatio] = (currentItem[itemCrossRatio] <= 0) ? 0 : Math.round(currentItem[config.itemCrossRatio]);
 
-            var itemPosition = this._getItemPosition(currentItem);
+            const itemPosition = this._getItemPosition(currentItem);
 
             if(itemPosition[mainPosition] === -1) {
                 itemPosition[mainPosition] = this._cells.push(new Array(this._cellsPerDimension)) - 1;
@@ -254,16 +254,16 @@ var TileView = CollectionWidget.inherit({
     },
 
     _getItemPosition: function(item) {
-        var config = this._config,
-            mainPosition = config.mainPosition,
-            crossPosition = config.crossPosition;
+        const config = this._config;
+        const mainPosition = config.mainPosition;
+        const crossPosition = config.crossPosition;
 
-        var position = {};
+        const position = {};
         position[mainPosition] = -1;
         position[crossPosition] = 0;
 
-        for(var main = 0; main < this._cells.length; main++) {
-            for(var cross = 0; cross < this._cellsPerDimension; cross++) {
+        for(let main = 0; main < this._cells.length; main++) {
+            for(let cross = 0; cross < this._cellsPerDimension; cross++) {
                 if(this._itemFit(main, cross, item)) {
                     position[mainPosition] = main;
                     position[crossPosition] = cross;
@@ -280,18 +280,18 @@ var TileView = CollectionWidget.inherit({
     },
 
     _itemFit: function(mainPosition, crossPosition, item) {
-        var result = true,
+        let result = true;
 
-            config = this._config,
-            itemRatioMain = item[config.itemMainRatio],
-            itemRatioCross = item[config.itemCrossRatio];
+        const config = this._config;
+        const itemRatioMain = item[config.itemMainRatio];
+        const itemRatioCross = item[config.itemCrossRatio];
 
         if(crossPosition + itemRatioCross > this._cellsPerDimension) {
             return false;
         }
 
-        for(var main = mainPosition; main < mainPosition + itemRatioMain; main++) {
-            for(var cross = crossPosition; cross < crossPosition + itemRatioCross; cross++) {
+        for(let main = mainPosition; main < mainPosition + itemRatioMain; main++) {
+            for(let cross = crossPosition; cross < crossPosition + itemRatioCross; cross++) {
                 if(this._cells.length - 1 < main) {
                     this._cells.push(new Array(this._cellsPerDimension));
                 } else if(this._cells[main][cross] !== undefined) {
@@ -305,46 +305,46 @@ var TileView = CollectionWidget.inherit({
     },
 
     _occupyCells: function(item, itemPosition) {
-        var config = this._config,
-            itemPositionMain = itemPosition[config.mainPosition],
-            itemPositionCross = itemPosition[config.crossPosition],
-            itemRatioMain = item[config.itemMainRatio],
-            itemRatioCross = item[config.itemCrossRatio];
+        const config = this._config;
+        const itemPositionMain = itemPosition[config.mainPosition];
+        const itemPositionCross = itemPosition[config.crossPosition];
+        const itemRatioMain = item[config.itemMainRatio];
+        const itemRatioCross = item[config.itemCrossRatio];
 
-        for(var main = itemPositionMain; main < itemPositionMain + itemRatioMain; main++) {
-            for(var cross = itemPositionCross; cross < itemPositionCross + itemRatioCross; cross++) {
+        for(let main = itemPositionMain; main < itemPositionMain + itemRatioMain; main++) {
+            for(let cross = itemPositionCross; cross < itemPositionCross + itemRatioCross; cross++) {
                 this._cells[main][cross] = item.index;
             }
         }
     },
 
     _arrangeItem: function(item, itemPosition) {
-        var config = this._config,
-            itemPositionMain = itemPosition[config.mainPosition],
-            itemPositionCross = itemPosition[config.crossPosition],
-            itemRatioMain = item[config.itemMainRatio],
-            itemRatioCross = item[config.itemCrossRatio],
-            baseItemCross = this.option(config.baseItemCrossDimension),
-            baseItemMain = this.option(config.baseItemMainDimension),
-            itemMargin = this.option('itemMargin');
+        const config = this._config;
+        const itemPositionMain = itemPosition[config.mainPosition];
+        const itemPositionCross = itemPosition[config.crossPosition];
+        const itemRatioMain = item[config.itemMainRatio];
+        const itemRatioCross = item[config.itemCrossRatio];
+        const baseItemCross = this.option(config.baseItemCrossDimension);
+        const baseItemMain = this.option(config.baseItemMainDimension);
+        const itemMargin = this.option('itemMargin');
 
 
-        var cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? 'none' : '' },
-            mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin,
-            crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
+        const cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? 'none' : '' };
+        const mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin;
+        const crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
         cssProps[config.mainDimension] = mainDimension < 0 ? 0 : mainDimension;
         cssProps[config.crossDimension] = crossDimension < 0 ? 0 : crossDimension;
         cssProps[config.mainPosition] = itemPositionMain * baseItemMain + (itemPositionMain + 1) * itemMargin;
         cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 
         if(this.option('rtlEnabled')) {
-            var offsetCorrection = this._$container.width(),
-                baseItemWidth = this.option('baseItemWidth'),
-                itemPositionX = itemPosition.left,
-                offsetPosition = itemPositionX * baseItemWidth,
-                itemBaseOffset = baseItemWidth + itemMargin,
-                itemWidth = itemBaseOffset * item.widthRatio,
-                subItemMargins = itemPositionX * itemMargin;
+            const offsetCorrection = this._$container.width();
+            const baseItemWidth = this.option('baseItemWidth');
+            const itemPositionX = itemPosition.left;
+            const offsetPosition = itemPositionX * baseItemWidth;
+            const itemBaseOffset = baseItemWidth + itemMargin;
+            const itemWidth = itemBaseOffset * item.widthRatio;
+            const subItemMargins = itemPositionX * itemMargin;
 
             cssProps.left = offsetCorrection - (offsetPosition + itemWidth + subItemMargins);
         }
@@ -353,22 +353,22 @@ var TileView = CollectionWidget.inherit({
     },
 
     _moveFocus: function(location) {
-        var FOCUS_UP = 'up',
-            FOCUS_DOWN = 'down',
-            FOCUS_LEFT = this.option('rtlEnabled') ? 'right' : 'left',
-            FOCUS_RIGHT = this.option('rtlEnabled') ? 'left' : 'right',
-            FOCUS_PAGE_UP = 'pageup',
-            FOCUS_PAGE_DOWN = 'pagedown';
+        const FOCUS_UP = 'up';
+        const FOCUS_DOWN = 'down';
+        const FOCUS_LEFT = this.option('rtlEnabled') ? 'right' : 'left';
+        const FOCUS_RIGHT = this.option('rtlEnabled') ? 'left' : 'right';
+        const FOCUS_PAGE_UP = 'pageup';
+        const FOCUS_PAGE_DOWN = 'pagedown';
 
-        var horizontalDirection = this.option('direction') === 'horizontal',
-            cells = this._cells,
-            index = $(this.option('focusedElement')).index(),
-            targetCol = this._itemsPositions[index].left,
-            targetRow = this._itemsPositions[index].top;
+        const horizontalDirection = this.option('direction') === 'horizontal';
+        const cells = this._cells;
+        const index = $(this.option('focusedElement')).index();
+        let targetCol = this._itemsPositions[index].left;
+        let targetRow = this._itemsPositions[index].top;
 
-        var colCount = (horizontalDirection ? cells : cells[0]).length;
-        var rowCount = (horizontalDirection ? cells[0] : cells).length;
-        var getCell = function(col, row) {
+        const colCount = (horizontalDirection ? cells : cells[0]).length;
+        const rowCount = (horizontalDirection ? cells[0] : cells).length;
+        const getCell = function(col, row) {
             if(horizontalDirection) {
                 return cells[col][row];
             }
@@ -419,12 +419,12 @@ var TileView = CollectionWidget.inherit({
                 return;
         }
 
-        var newTargetIndex = getCell(targetCol, targetRow);
+        const newTargetIndex = getCell(targetCol, targetRow);
         if(!isDefined(newTargetIndex)) {
             return;
         }
 
-        var $newTarget = this._itemElements().eq(newTargetIndex);
+        const $newTarget = this._itemElements().eq(newTargetIndex);
         this.option('focusedElement', getPublicElement($newTarget));
         this._scrollToItem($newTarget);
     },
@@ -434,14 +434,14 @@ var TileView = CollectionWidget.inherit({
             return;
         }
 
-        var config = this._config,
-            outerMainProp = 'outer' + inflector.captionize(config.mainDimension),
-            itemMargin = this.option('itemMargin'),
-            itemPosition = $itemElement.position()[config.mainPosition],
-            itemDimension = $itemElement[outerMainProp](),
-            itemTail = itemPosition + itemDimension,
-            scrollPosition = this.scrollPosition(),
-            clientWidth = this.$element()[outerMainProp]();
+        const config = this._config;
+        const outerMainProp = 'outer' + inflector.captionize(config.mainDimension);
+        const itemMargin = this.option('itemMargin');
+        const itemPosition = $itemElement.position()[config.mainPosition];
+        const itemDimension = $itemElement[outerMainProp]();
+        const itemTail = itemPosition + itemDimension;
+        const scrollPosition = this.scrollPosition();
+        const clientWidth = this.$element()[outerMainProp]();
 
         if(scrollPosition <= itemPosition && itemTail <= scrollPosition + clientWidth) {
             return;

@@ -18,11 +18,11 @@ QUnit.module('Rendering', {
 });
 
 QUnit.test('Scrollable container should be updated after collapse/expand treeView item', function(assert) {
-    var $treeView = initTree({
-            items: $.extend(true, [], DATA[1]),
-            keyExpr: 'key'
-        }),
-        treeView = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        items: $.extend(true, [], DATA[1]),
+        keyExpr: 'key'
+    });
+    const treeView = $treeView.dxTreeView('instance');
 
     treeView._scrollableContainer.update = sinon.spy(commonUtils.noop);
 
@@ -34,24 +34,24 @@ QUnit.test('Scrollable container should be updated after collapse/expand treeVie
 });
 
 QUnit.test('updateDimensions method should update scrollable container', function(assert) {
-    var $treeView = initTree({
-            items: $.extend(true, [], DATA[1]),
-            keyExpr: 'key'
-        }),
-        treeView = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        items: $.extend(true, [], DATA[1]),
+        keyExpr: 'key'
+    });
+    const treeView = $treeView.dxTreeView('instance');
 
     treeView._scrollableContainer.update = sinon.spy(function() {
         return $.Deferred().resolve();
     });
 
     assert.ok(isFunction(treeView.updateDimensions));
-    var result = treeView.updateDimensions();
+    const result = treeView.updateDimensions();
     assert.ok(treeView._scrollableContainer.update.calledOnce);
     assert.ok(result.promise);
 });
 
 QUnit.test('Scrollable container should be updated if height of widget content is less than height of scrollable content', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[1].expanded = true;
 
     initTree({
@@ -66,23 +66,23 @@ QUnit.test('Scrollable container should be updated if height of widget content i
 });
 
 QUnit.test('Toggle visibility action', function(assert) {
-    var $treeView = initTree({
-            items: $.extend(true, [], DATA[5])
-        }),
-        treeView = $treeView.dxTreeView('instance'),
-        items = treeView.option('items');
+    const $treeView = initTree({
+        items: $.extend(true, [], DATA[5])
+    });
+    const treeView = $treeView.dxTreeView('instance');
+    const items = treeView.option('items');
 
 
-    var $toggleVisibilityIcon = $treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    const $toggleVisibilityIcon = $treeView.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
     $toggleVisibilityIcon.trigger('dxclick');
 
-    var $nestedNode = $treeView.find('.' + internals.NODE_CONTAINER_CLASS + ':last-child');
+    const $nestedNode = $treeView.find('.' + internals.NODE_CONTAINER_CLASS + ':last-child');
     assert.ok($nestedNode.hasClass(internals.OPENED_NODE_CONTAINER_CLASS));
     assert.ok($toggleVisibilityIcon.hasClass(internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS));
     assert.ok(items[0].expanded);
 
-    var nodes = treeView.getNodes();
+    let nodes = treeView.getNodes();
     assert.ok(nodes[0].expanded);
 
     $toggleVisibilityIcon.trigger('dxclick');
@@ -95,7 +95,7 @@ QUnit.test('Toggle visibility action', function(assert) {
 });
 
 QUnit.test('\'getNodes\' method', function(assert) {
-    var treeView = initTree({
+    const treeView = initTree({
         items: [
             { id: 1, text: 'Item 1' },
             {
@@ -108,7 +108,7 @@ QUnit.test('\'getNodes\' method', function(assert) {
         ]
     }).dxTreeView('instance');
 
-    var nodes = treeView.getNodes();
+    const nodes = treeView.getNodes();
 
     assert.equal(nodes[0].itemData.id, 1);
     assert.equal(nodes[0].itemData.text, 'Item 1');
@@ -129,7 +129,7 @@ QUnit.test('\'getNodes\' method', function(assert) {
 });
 
 QUnit.test('\'getNodes\' method with selectedItems', function(assert) {
-    var treeView = initTree({
+    const treeView = initTree({
         items: [
             { id: 1, text: 'Item 1' },
             {
@@ -143,7 +143,7 @@ QUnit.test('\'getNodes\' method with selectedItems', function(assert) {
         showCheckBoxesMode: 'normal'
     }).dxTreeView('instance');
 
-    var nodes = treeView.getNodes();
+    const nodes = treeView.getNodes();
 
     assert.equal(nodes[0].itemData.id, 1);
     assert.equal(nodes[0].itemData.text, 'Item 1');
@@ -168,7 +168,7 @@ QUnit.test('\'getNodes\' method with selectedItems', function(assert) {
 });
 
 QUnit.test('\'getNodes\' method should return right result when some item was selected', function(assert) {
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: [
             { id: 1, text: 'Item 1' },
             {
@@ -182,12 +182,12 @@ QUnit.test('\'getNodes\' method should return right result when some item was se
         showCheckBoxesMode: 'normal'
     });
 
-    var treeView = $treeView.dxTreeView('instance'),
-        $checkbox = $treeView.find('.dx-checkbox').eq(2);
+    const treeView = $treeView.dxTreeView('instance');
+    const $checkbox = $treeView.find('.dx-checkbox').eq(2);
 
     $checkbox.trigger('dxclick');
 
-    var nodes = treeView.getNodes();
+    const nodes = treeView.getNodes();
 
     assert.equal(nodes[0].itemData.id, 1);
     assert.equal(nodes[0].itemData.text, 'Item 1');
@@ -212,7 +212,7 @@ QUnit.test('\'getNodes\' method should return right result when some item was se
 });
 
 QUnit.test('\'getNodes\' method should return right result when selectAll was changed', function(assert) {
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: [
             { id: 1, text: 'Item 1' },
             {
@@ -231,9 +231,9 @@ QUnit.test('\'getNodes\' method should return right result when selectAll was ch
         showCheckBoxesMode: 'selectAll'
     });
 
-    var $selectAllItem = $treeView.find('.dx-treeview-select-all-item'),
-        treeView = $treeView.dxTreeView('instance'),
-        nodes;
+    const $selectAllItem = $treeView.find('.dx-treeview-select-all-item');
+    const treeView = $treeView.dxTreeView('instance');
+    let nodes;
 
     $selectAllItem.trigger('dxclick');
     nodes = treeView.getNodes();
@@ -255,7 +255,7 @@ QUnit.test('\'getNodes\' method should return right result when selectAll was ch
 });
 
 QUnit.test('\'getNodes\' method should return hierarchical structure if widget was initialized with plain data', function(assert) {
-    var treeView = initTree({
+    const treeView = initTree({
         items: [
             { id: 1, text: 'Item 1', parentId: 0 },
             { id: 2, text: 'Item 2', parentId: 0 },
@@ -265,7 +265,7 @@ QUnit.test('\'getNodes\' method should return hierarchical structure if widget w
         dataStructure: 'plain'
     }).dxTreeView('instance');
 
-    var nodes = treeView.getNodes();
+    const nodes = treeView.getNodes();
 
     assert.equal(nodes.length, 2);
 
@@ -283,10 +283,10 @@ QUnit.test('\'getNodes\' method should return hierarchical structure if widget w
 });
 
 QUnit.test('Render checkbox before itemRendered is fired', function(assert) {
-    var i = 0,
-        data = $.extend(true, [], DATA[5]);
+    let i = 0;
+    const data = $.extend(true, [], DATA[5]);
     data[0].items[0].expanded = true;
-    var $treeView = initTree({
+    const $treeView = initTree({
         items: data,
         showCheckBoxesMode: 'normal',
         onItemRendered: function(e) {
@@ -302,7 +302,7 @@ QUnit.test('Render checkbox before itemRendered is fired', function(assert) {
 });
 
 QUnit.test('onItemRendered should have correct node if key is string', function(assert) {
-    var itemRenderedHandler = sinon.spy();
+    const itemRenderedHandler = sinon.spy();
 
     initTree({
         items: [{ id: '1_0', text: 'String id' }],
@@ -313,18 +313,18 @@ QUnit.test('onItemRendered should have correct node if key is string', function(
 });
 
 QUnit.test('Items change correct on option change', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].expanded = true;
-    var $treeView = initTree({
-            items: [{
-                text: 'item1',
-                selected: true,
-                expanded: true,
-                items: [ { text: 'item1-1' } ]
-            }],
-            showCheckBoxesMode: 'normal'
-        }),
-        treeView = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        items: [{
+            text: 'item1',
+            selected: true,
+            expanded: true,
+            items: [ { text: 'item1-1' } ]
+        }],
+        showCheckBoxesMode: 'normal'
+    });
+    const treeView = $treeView.dxTreeView('instance');
 
     assert.ok(treeView.option('items')[0].selected);
     assert.ok(treeView.option('items')[0].expanded);
@@ -336,18 +336,18 @@ QUnit.test('Items change correct on option change', function(assert) {
 });
 
 QUnit.test('DataSource change correct on option change', function(assert) {
-    var data = $.extend(true, [], DATA[5]);
+    const data = $.extend(true, [], DATA[5]);
     data[0].expanded = true;
-    var $treeView = initTree({
-            dataSource: [{
-                text: 'item1',
-                selected: true,
-                expanded: true,
-                items: [{ text: 'item1-1' }]
-            }],
-            showCheckBoxesMode: 'normal'
-        }),
-        treeView = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        dataSource: [{
+            text: 'item1',
+            selected: true,
+            expanded: true,
+            items: [{ text: 'item1-1' }]
+        }],
+        showCheckBoxesMode: 'normal'
+    });
+    const treeView = $treeView.dxTreeView('instance');
 
     assert.ok(treeView.option('items')[0].selected);
     assert.ok(treeView.option('items')[0].expanded);
@@ -359,10 +359,10 @@ QUnit.test('DataSource change correct on option change', function(assert) {
 });
 
 QUnit.test('showCheckBoxesMode option', function(assert) {
-    var $treeView = initTree({
-            items: [{ id: 1, html: '<b>Hello</b>' }]
-        }),
-        instance = $treeView.dxTreeView('instance');
+    const $treeView = initTree({
+        items: [{ id: 1, html: '<b>Hello</b>' }]
+    });
+    const instance = $treeView.dxTreeView('instance');
 
     assert.notOk($treeView.find('.dx-checkbox').length, 'there are no checkboxes');
 
@@ -376,7 +376,7 @@ QUnit.test('showCheckBoxesMode option', function(assert) {
 });
 
 QUnit.test('Repaint treeView on every dataSource modified - insert', function(assert) {
-    var store = new ArrayStore({
+    const store = new ArrayStore({
         key: 'id',
         data: [{
             id: 1,
@@ -400,7 +400,7 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
             parentId: 1
         }]
     });
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: new CustomStore({
             load: function(options) {
                 return store.load(options);
@@ -411,12 +411,12 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
         })
     });
 
-    var treeView = initTree({
-            dataSource: dataSource,
-            dataStructure: 'plain'
-        }).dxTreeView('instance'),
-        toggleIcon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
-        items;
+    const treeView = initTree({
+        dataSource: dataSource,
+        dataStructure: 'plain'
+    }).dxTreeView('instance');
+    const toggleIcon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1);
+    let items;
 
     dataSource.store().insert({
         id: 7,
@@ -452,7 +452,7 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
 });
 
 QUnit.test('Repaint treeView on every dataSource modified - remove', function(assert) {
-    var store = new ArrayStore({
+    const store = new ArrayStore({
         key: 'id',
         data: [{
             id: 1,
@@ -480,7 +480,7 @@ QUnit.test('Repaint treeView on every dataSource modified - remove', function(as
             parentId: 3
         }]
     });
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: new CustomStore({
             load: function(options) {
                 return store.load(options);
@@ -491,12 +491,12 @@ QUnit.test('Repaint treeView on every dataSource modified - remove', function(as
         })
     });
 
-    var treeView = initTree({
-            dataSource: dataSource,
-            dataStructure: 'plain'
-        }).dxTreeView('instance'),
-        toggleIcon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
-        items;
+    const treeView = initTree({
+        dataSource: dataSource,
+        dataStructure: 'plain'
+    }).dxTreeView('instance');
+    let toggleIcon = $(treeView.$element()).find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    let items;
 
     toggleIcon.eq(0).trigger('dxclick');
 
@@ -521,12 +521,12 @@ QUnit.test('Repaint treeView on every dataSource modified - remove', function(as
 });
 
 QUnit.test('Dynamic dataSource filter should work correctly', function(assert) {
-    var data = $.extend(true, [], DATA[4]),
-        dataSource = new DataSource({
-            store: data
-        });
+    const data = $.extend(true, [], DATA[4]);
+    const dataSource = new DataSource({
+        store: data
+    });
 
-    var $treeView = initTree({
+    const $treeView = initTree({
         dataStructure: 'plain',
         keyExpr: 'Id',
         displayExpr: 'Name',
@@ -546,7 +546,7 @@ QUnit.test('Dynamic dataSource filter should work correctly', function(assert) {
 });
 
 QUnit.test('existed items didn\'t append twice', function(assert) {
-    var dataSource = new DataSource({
+    const dataSource = new DataSource({
         store: new CustomStore({
             load: function(options) {
                 return $.extend(true, [], DATA[4]);
@@ -554,7 +554,7 @@ QUnit.test('existed items didn\'t append twice', function(assert) {
         })
     });
 
-    var treeView = initTree({
+    const treeView = initTree({
         dataStructure: 'plain',
         keyExpr: 'Id',
         displayExpr: 'Name',
@@ -568,13 +568,13 @@ QUnit.test('existed items didn\'t append twice', function(assert) {
 });
 
 QUnit.test('TreeView with empty dataSource should updates after item inserted in the Store', function(assert) {
-    var dataSource = new DataSource({
-            store: new ArrayStore([])
-        }),
-        treeView = initTree({
-            dataStructure: 'plain',
-            dataSource: dataSource
-        }).dxTreeView('instance');
+    const dataSource = new DataSource({
+        store: new ArrayStore([])
+    });
+    const treeView = initTree({
+        dataStructure: 'plain',
+        dataSource: dataSource
+    }).dxTreeView('instance');
 
     dataSource.store().insert({
         id: 1,
@@ -588,12 +588,12 @@ QUnit.test('TreeView with empty dataSource should updates after item inserted in
 
 
 QUnit.test('Render Search editor with default options', function(assert) {
-    var searchEditorInstance,
-        treeViewInstance = initTree({
-            items: $.extend(true, [], DATA[1]),
-            keyExpr: 'key',
-            searchEnabled: true
-        }).dxTreeView('instance');
+    let searchEditorInstance;
+    const treeViewInstance = initTree({
+        items: $.extend(true, [], DATA[1]),
+        keyExpr: 'key',
+        searchEnabled: true
+    }).dxTreeView('instance');
 
     searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox('instance');
     assert.equal(searchEditorInstance.option('placeholder'), 'Search');
@@ -604,10 +604,10 @@ QUnit.test('Render Search editor with default options', function(assert) {
 });
 
 QUnit.test('Render nodata message if filter has no matches', function(assert) {
-    var treeViewInstance = initTree({
-            items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }]
-        }).dxTreeView('instance'),
-        noData;
+    const treeViewInstance = initTree({
+        items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }]
+    }).dxTreeView('instance');
+    let noData;
 
     treeViewInstance.option('searchValue', '2');
     noData = treeViewInstance.$element().find('.dx-empty-message');
@@ -617,11 +617,11 @@ QUnit.test('Render nodata message if filter has no matches', function(assert) {
 });
 
 QUnit.test('Remove nodata message after clear searchValue', function(assert) {
-    var treeViewInstance = initTree({
-            items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }],
-            searchValue: '2'
-        }).dxTreeView('instance'),
-        noData;
+    const treeViewInstance = initTree({
+        items: [{ id: 1, text: '1' }, { id: 2, text: '1' }, { id: 3, text: '1' }],
+        searchValue: '2'
+    }).dxTreeView('instance');
+    let noData;
 
     treeViewInstance.option('searchValue', '');
     noData = treeViewInstance.$element().find('.dx-empty-message');
@@ -630,7 +630,7 @@ QUnit.test('Remove nodata message after clear searchValue', function(assert) {
 });
 
 QUnit.test('searchMode equals', function(assert) {
-    var $treeView = initTree({
+    const $treeView = initTree({
         searchValue: '1',
         searchMode: 'equals',
         items: [{ id: 1, text: '1' }, { id: 2, text: '11' }, { id: 3, text: '111' }]

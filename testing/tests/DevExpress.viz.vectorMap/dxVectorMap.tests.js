@@ -1,21 +1,21 @@
-var $ = require('jquery'),
-    commons = require('./vectorMapParts/commons.js'),
-    rendererModule = require('viz/core/renderers/renderer'),
-    projectionModule = require('viz/vector_map/projection.main'),
-    controlBarModule = require('viz/vector_map/control_bar'),
-    gestureHandlerModule = require('viz/vector_map/gesture_handler'),
-    trackerModule = require('viz/vector_map/tracker'),
-    dataExchangerModule = require('viz/vector_map/data_exchanger'),
-    legendModule = require('viz/vector_map/legend'),
-    layoutModule = require('viz/vector_map/layout'),
-    mapLayerModule = require('viz/vector_map/map_layer'),
-    tooltipViewerModule = require('viz/vector_map/tooltip_viewer'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    typeUtils = require('core/utils/type');
+const $ = require('jquery');
+const commons = require('./vectorMapParts/commons.js');
+const rendererModule = require('viz/core/renderers/renderer');
+const projectionModule = require('viz/vector_map/projection.main');
+const controlBarModule = require('viz/vector_map/control_bar');
+const gestureHandlerModule = require('viz/vector_map/gesture_handler');
+const trackerModule = require('viz/vector_map/tracker');
+const dataExchangerModule = require('viz/vector_map/data_exchanger');
+const legendModule = require('viz/vector_map/legend');
+const layoutModule = require('viz/vector_map/layout');
+const mapLayerModule = require('viz/vector_map/map_layer');
+const tooltipViewerModule = require('viz/vector_map/tooltip_viewer');
+const vizMocks = require('../../helpers/vizMocks.js');
+const typeUtils = require('core/utils/type');
 
 require('viz/vector_map/vector_map');
 
-var stubLayersEnvironment = $.extend({}, commons.environment, {
+const stubLayersEnvironment = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
@@ -25,7 +25,7 @@ var stubLayersEnvironment = $.extend({}, commons.environment, {
 QUnit.module('Map - elements', stubLayersEnvironment);
 
 QUnit.test('Renderer', function(assert) {
-    var spy = sinon.spy(rendererModule, 'Renderer');
+    const spy = sinon.spy(rendererModule, 'Renderer');
 
     this.createMap({ pathModified: 'path-modified' });
 
@@ -52,7 +52,7 @@ QUnit.test('Background', function(assert) {
 });
 
 QUnit.test('Layer collection', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
 
     this.createMap({
         layers: [{ tag: 'layer-1', dataSource: 'data-1' }, { tag: 'layer-2', dataSource: 'data-2' }]
@@ -60,7 +60,7 @@ QUnit.test('Layer collection', function(assert) {
     vizMocks.forceThemeOptions(this.themeManager);
 
     assert.strictEqual(spy.lastCall.args.length, 1, 'parameters count');
-    var arg = spy.lastCall.args[0];
+    const arg = spy.lastCall.args[0];
     assert.strictEqual(arg.renderer, this.renderer, 'parameter - renderer');
     assert.strictEqual(arg.projection, this.projection, 'parameter - projection');
     assert.strictEqual(arg.themeManager, this.themeManager, 'parameter - theme manager');
@@ -79,8 +79,8 @@ QUnit.test('Layer collection', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. Without bounds in options', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [{
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
@@ -102,8 +102,8 @@ QUnit.test('Set bounds when data ready called. Without bounds in options', funct
 });
 
 QUnit.test('Projection by data. Default bounds are include common bounds', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [{
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
@@ -123,8 +123,8 @@ QUnit.test('Projection by data. Default bounds are include common bounds', funct
 });
 
 QUnit.test('Projection by data. Without projection in options', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [{
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
@@ -146,8 +146,8 @@ QUnit.test('Projection by data. Without projection in options', function(assert)
 });
 
 QUnit.test('Projection by data. Projection in options', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [{
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() { return { count: function() { return 0; } }; }
     }, {
@@ -167,8 +167,8 @@ QUnit.test('Projection by data. Projection in options', function(assert) {
 });
 
 QUnit.test('Bounds by data. Empty bbox', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [];
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [];
 
     this.layerCollection.stub('items').returns(layers);
 
@@ -184,8 +184,8 @@ QUnit.test('Bounds by data. Empty bbox', function(assert) {
 });
 
 QUnit.test('Set bounds when data ready called. With bounds in options', function(assert) {
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-    var layers = [{
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const layers = [{
         proxy: { tag: 'p1', getBounds: function() { return [0, 0, 10, 10]; } },
         getData: function() {
             return { count: function() { return 0; } };
@@ -221,7 +221,7 @@ QUnit.test('Layer collection - object option', function(assert) {
 });
 
 QUnit.test('Projection', function(assert) {
-    var spy = sinon.spy(projectionModule, 'Projection');
+    const spy = sinon.spy(projectionModule, 'Projection');
 
     this.createMap({
         projection: 'projection',
@@ -245,7 +245,7 @@ QUnit.test('Projection', function(assert) {
 });
 
 QUnit.test('DataExchanger', function(assert) {
-    var spy = sinon.spy(dataExchangerModule, 'DataExchanger');
+    const spy = sinon.spy(dataExchangerModule, 'DataExchanger');
 
     this.createMap();
 
@@ -253,7 +253,7 @@ QUnit.test('DataExchanger', function(assert) {
 });
 
 QUnit.test('GestureHandler', function(assert) {
-    var spy = sinon.spy(gestureHandlerModule, 'GestureHandler');
+    const spy = sinon.spy(gestureHandlerModule, 'GestureHandler');
 
     this.createMap({
         panningEnabled: 1,
@@ -271,7 +271,7 @@ QUnit.test('GestureHandler', function(assert) {
 });
 
 QUnit.test('LayoutControl', function(assert) {
-    var spy = sinon.spy(layoutModule, 'LayoutControl');
+    const spy = sinon.spy(layoutModule, 'LayoutControl');
 
     this.createMap({ layers: {} });
 
@@ -286,7 +286,7 @@ QUnit.test('LayoutControl', function(assert) {
 });
 
 QUnit.test('Tracker', function(assert) {
-    var spy = sinon.spy(trackerModule, 'Tracker');
+    const spy = sinon.spy(trackerModule, 'Tracker');
 
     this.createMap({
         touchEnabled: 0,
@@ -304,7 +304,7 @@ QUnit.test('Tracker', function(assert) {
 });
 
 QUnit.test('Control bar', function(assert) {
-    var spy = sinon.spy(controlBarModule, 'ControlBar');
+    const spy = sinon.spy(controlBarModule, 'ControlBar');
     this.themeManager.theme.withArgs('controlBar').returns({ theme: 'control-bar' });
 
     this.createMap({
@@ -328,9 +328,9 @@ QUnit.test('Control bar', function(assert) {
 });
 
 QUnit.test('Legends', function(assert) {
-    var spy = sinon.spy(legendModule, 'LegendsControl');
+    const spy = sinon.spy(legendModule, 'LegendsControl');
 
-    var map = this.createMap({
+    const map = this.createMap({
         legends: {
             option: 'option'
         }
@@ -351,7 +351,7 @@ QUnit.test('Legends', function(assert) {
 });
 
 QUnit.test('TooltipViewer', function(assert) {
-    var spy = sinon.spy(tooltipViewerModule, 'TooltipViewer');
+    const spy = sinon.spy(tooltipViewerModule, 'TooltipViewer');
 
     this.createMap();
 
@@ -386,7 +386,7 @@ QUnit.test('Disposing - elements cleaning order', function(assert) {
 
     this.$container.remove(); // Force disposing
 
-    var methods = $.map([this.tracker, this.layerCollection, this.controlBar, this.legendsControl], function(obj) {
+    const methods = $.map([this.tracker, this.layerCollection, this.controlBar, this.legendsControl], function(obj) {
         return obj.stub('clean');
     });
     try {
@@ -403,7 +403,7 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
 
     this.$container.remove(); // Force disposing
 
-    var methods = $.map([this.controlBar, this.gestureHandler, this.tracker, this.legendsControl, this.layerCollection, this.layoutControl, this.tooltipViewer, this.dataExchanger, this.projection], function(obj) {
+    const methods = $.map([this.controlBar, this.gestureHandler, this.tracker, this.legendsControl, this.layerCollection, this.layoutControl, this.tooltipViewer, this.dataExchanger, this.projection], function(obj) {
         return obj.stub('dispose');
     });
     try {
@@ -417,7 +417,7 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
 QUnit.module('Map - API', stubLayersEnvironment);
 
 QUnit.test('Applying bounds by data', function(assert) {
-    var layers = [{
+    const layers = [{
         proxy: {
             tag: 'p1',
             getBounds: function() {
@@ -440,7 +440,7 @@ QUnit.test('Applying bounds by data', function(assert) {
             };
         }
     }];
-    var spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
     this.createMap({
         getBoundsFromData: true
     });
@@ -452,7 +452,7 @@ QUnit.test('Applying bounds by data', function(assert) {
 });
 
 QUnit.test('getLayers', function(assert) {
-    var layers = [{ proxy: { tag: 'p1' } }, { proxy: { tag: 'p2' } }, { proxy: { tag: 'p3' } }];
+    const layers = [{ proxy: { tag: 'p1' } }, { proxy: { tag: 'p2' } }, { proxy: { tag: 'p3' } }];
     this.createMap();
     this.layerCollection.stub('items').returns(layers);
 
@@ -477,10 +477,10 @@ QUnit.test('getLayerByName', function(assert) {
 });
 
 QUnit.test('clearSelection', function(assert) {
-    var arg = { tag: 'arg' },
-        spy1 = sinon.spy(),
-        spy2 = sinon.spy(),
-        spy3 = sinon.spy();
+    const arg = { tag: 'arg' };
+    const spy1 = sinon.spy();
+    const spy2 = sinon.spy();
+    const spy3 = sinon.spy();
     this.createMap();
     this.layerCollection.stub('items').returns([{ clearSelection: spy1 }, { clearSelection: spy2 }, { clearSelection: spy3 }]);
 
@@ -537,7 +537,7 @@ QUnit.test('viewport - setter', function(assert) {
 });
 
 QUnit.test('convertCoordinates / array arguments', function(assert) {
-    var coords = { tag: 'coords' };
+    const coords = { tag: 'coords' };
     this.createMap();
     this.projection.stub('fromScreenPoint').returns(coords);
 
@@ -546,7 +546,7 @@ QUnit.test('convertCoordinates / array arguments', function(assert) {
 });
 
 QUnit.test('convertCoordinates / scalar arguments', function(assert) {
-    var coords = { tag: 'coords' };
+    const coords = { tag: 'coords' };
     this.createMap();
     this.projection.stub('fromScreenPoint').returns(coords);
 
@@ -555,7 +555,7 @@ QUnit.test('convertCoordinates / scalar arguments', function(assert) {
 });
 
 QUnit.test('convertToGeo', function(assert) {
-    var coords = { tag: 'coords' };
+    const coords = { tag: 'coords' };
     this.createMap();
     this.projection.stub('fromScreenPoint').returns(coords);
 
@@ -564,7 +564,7 @@ QUnit.test('convertToGeo', function(assert) {
 });
 
 QUnit.test('convertToXY', function(assert) {
-    var coords = { tag: 'coords' };
+    const coords = { tag: 'coords' };
     this.createMap();
     this.projection.stub('toScreenPoint').returns(coords);
 
@@ -598,7 +598,7 @@ QUnit.test('"zoomFactor" option', function(assert) {
 });
 
 QUnit.test('\'layers\' option', function(assert) {
-    var layers = { tag: 'layers' };
+    const layers = { tag: 'layers' };
     this.createMap();
 
     this.map.option('layers', layers);
@@ -824,7 +824,7 @@ QUnit.test('\'layer\' array option - same instance', function(assert) {
         }]
     });
 
-    var layers = this.map.option('layers');
+    const layers = this.map.option('layers');
     layers[1].b = 'layer-2-2';
     layers[1].dataSource = { tag2: 'data-2-2' };
     this.map.option('layers', layers);
@@ -846,7 +846,7 @@ QUnit.test('\'layers\' object option - same instance', function(assert) {
         }
     });
 
-    var layers = this.map.option('layers');
+    const layers = this.map.option('layers');
     layers.b = 'layer-2-2';
     layers.dataSource = { tag2: 'data-2-2' };
     this.map.option('layers', layers);
@@ -868,7 +868,7 @@ QUnit.test('\'layers[i]\' option - same instance', function(assert) {
         }]
     });
 
-    var layer = this.map.option('layers[1]');
+    const layer = this.map.option('layers[1]');
     layer.b = 'layer-2-2';
     layer.dataSource = { tag2: 'data-2-2' };
     this.map.option('layers[1]', layer);
@@ -918,10 +918,10 @@ QUnit.test('Immediate option changing when render is async', function(assert) {
 QUnit.module('drawn', stubLayersEnvironment);
 
 QUnit.test('call drawn after layer collection ready', function(assert) {
-    var onDrawn = sinon.spy(),
-        spy = sinon.spy(mapLayerModule, 'MapLayerCollection'),
-        notifyDirty,
-        notifyReady;
+    const onDrawn = sinon.spy();
+    const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
+    let notifyDirty;
+    let notifyReady;
     this.createMap({
         onDrawn: onDrawn
     });

@@ -1,14 +1,14 @@
-var $ = require('../../../core/renderer'),
-    registerComponent = require('../../../core/component_registrator'),
-    dateUtils = require('../../../core/utils/date'),
-    dateLocalization = require('../../../localization/date'),
-    each = require('../../../core/utils/iterator').each,
-    SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
+const $ = require('../../../core/renderer');
+const registerComponent = require('../../../core/component_registrator');
+const dateUtils = require('../../../core/utils/date');
+const dateLocalization = require('../../../localization/date');
+const each = require('../../../core/utils/iterator').each;
+const SchedulerWorkSpace = require('./ui.scheduler.work_space.indicator');
 
-var WEEK_CLASS = 'dx-scheduler-work-space-week';
+const WEEK_CLASS = 'dx-scheduler-work-space-week';
 
-var toMs = dateUtils.dateToMilliseconds;
-var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
+const toMs = dateUtils.dateToMilliseconds;
+const SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
         return WEEK_CLASS;
     },
@@ -22,7 +22,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getDateByIndex: function(headerIndex) {
-        var resultDate = new Date(this._firstViewDate);
+        const resultDate = new Date(this._firstViewDate);
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
         return resultDate;
     },
@@ -44,31 +44,31 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             return this.callBase($first, $last);
         }
 
-        var $cells = this._getCells(),
-            firstColumn = $first.index(),
-            firstRow = $first.parent().index(),
-            lastColumn = $last.index(),
-            lastRow = $last.parent().index(),
-            groupCount = this._getGroupCount(),
-            cellCount = groupCount > 0 ? this._getTotalCellCount(groupCount) : this._getCellCount(),
-            rowCount = this._getTotalRowCount(groupCount),
-            result = [];
+        let $cells = this._getCells();
+        const firstColumn = $first.index();
+        const firstRow = $first.parent().index();
+        const lastColumn = $last.index();
+        const lastRow = $last.parent().index();
+        const groupCount = this._getGroupCount();
+        const cellCount = groupCount > 0 ? this._getTotalCellCount(groupCount) : this._getCellCount();
+        const rowCount = this._getTotalRowCount(groupCount);
+        const result = [];
 
-        for(var i = 0; i < cellCount; i++) {
-            for(var j = 0; j < rowCount; j++) {
-                var cell = $cells.get(cellCount * j + i);
+        for(let i = 0; i < cellCount; i++) {
+            for(let j = 0; j < rowCount; j++) {
+                const cell = $cells.get(cellCount * j + i);
                 result.push(cell);
             }
         }
 
-        var lastCellGroup = this.getCellData($last).groups,
-            indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
+        const lastCellGroup = this.getCellData($last).groups;
+        const indexesDifference = this.option('showAllDayPanel') && this._isVerticalGroupedWorkSpace() ? this._getGroupIndexByResourceId(lastCellGroup) + 1 : 0;
 
-        var newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference,
-            newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
+        let newFirstIndex = rowCount * firstColumn + firstRow - indexesDifference;
+        let newLastIndex = rowCount * lastColumn + lastRow - indexesDifference;
 
         if(newFirstIndex > newLastIndex) {
-            var buffer = newFirstIndex;
+            const buffer = newFirstIndex;
             newFirstIndex = newLastIndex;
             newLastIndex = buffer;
         }
@@ -76,10 +76,10 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         $cells = $(result).slice(newFirstIndex, newLastIndex + 1);
 
         if(this._getGroupCount()) {
-            var arr = [],
-                focusedGroupIndex = this._getGroupIndexByCell($first);
+            const arr = [];
+            const focusedGroupIndex = this._getGroupIndexByCell($first);
             each($cells, (function(_, cell) {
-                var groupIndex = this._getGroupIndexByCell($(cell));
+                const groupIndex = this._getGroupIndexByCell($(cell));
                 if(focusedGroupIndex === groupIndex) {
                     arr.push(cell);
                 }
@@ -93,12 +93,12 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         if(!isMultiSelection) {
             return this.callBase(isMultiSelection);
         }
-        var $rightCell,
-            $focusedCell = this._$focusedCell,
-            groupCount = this._getGroupCount(),
-            rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount),
-            edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1,
-            direction = this._isRTL() ? 'prev' : 'next';
+        let $rightCell;
+        const $focusedCell = this._$focusedCell;
+        const groupCount = this._getGroupCount();
+        const rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount);
+        const edgeCellIndex = this._isRTL() ? 0 : rowCellCount - 1;
+        const direction = this._isRTL() ? 'prev' : 'next';
 
         if($focusedCell.index() === edgeCellIndex || this._isGroupEndCell($focusedCell)) {
             $rightCell = $focusedCell;
@@ -113,12 +113,12 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         if(!isMultiSelection) {
             return this.callBase(isMultiSelection);
         }
-        var $leftCell,
-            $focusedCell = this._$focusedCell,
-            groupCount = this._getGroupCount(),
-            rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount),
-            edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0,
-            direction = this._isRTL() ? 'next' : 'prev';
+        let $leftCell;
+        const $focusedCell = this._$focusedCell;
+        const groupCount = this._getGroupCount();
+        const rowCellCount = isMultiSelection ? this._getCellCount() : this._getTotalCellCount(groupCount);
+        const edgeCellIndex = this._isRTL() ? rowCellCount - 1 : 0;
+        const direction = this._isRTL() ? 'next' : 'prev';
 
         if($focusedCell.index() === edgeCellIndex || this._isGroupStartCell($focusedCell)) {
             $leftCell = $focusedCell;

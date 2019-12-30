@@ -1,8 +1,8 @@
-var extend = require('../../core/utils/extend').extend,
-    BaseStrategy = require('./base'),
-    Observer = require('./observer');
+const extend = require('../../core/utils/extend').extend;
+const BaseStrategy = require('./base');
+const Observer = require('./observer');
 
-var eventMap = {
+const eventMap = {
     'dxpointerdown': 'mousedown',
     'dxpointermove': 'mousemove',
     'dxpointerup': 'mouseup',
@@ -13,7 +13,7 @@ var eventMap = {
     'dxpointerleave': 'mouseleave'
 };
 
-var normalizeMouseEvent = function(e) {
+const normalizeMouseEvent = function(e) {
     e.pointerId = 1;
 
     return {
@@ -23,9 +23,9 @@ var normalizeMouseEvent = function(e) {
 };
 
 
-var observer;
-var activated = false;
-var activateStrategy = function() {
+let observer;
+let activated = false;
+const activateStrategy = function() {
     if(activated) {
         return;
     }
@@ -37,7 +37,7 @@ var activateStrategy = function() {
     activated = true;
 };
 
-var MouseStrategy = BaseStrategy.inherit({
+const MouseStrategy = BaseStrategy.inherit({
 
     ctor: function() {
         this.callBase.apply(this, arguments);

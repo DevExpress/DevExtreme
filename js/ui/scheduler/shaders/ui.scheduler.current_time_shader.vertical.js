@@ -1,15 +1,15 @@
-var $ = require('../../../core/renderer'),
-    Shader = require('./ui.scheduler.current_time_shader');
+const $ = require('../../../core/renderer');
+const Shader = require('./ui.scheduler.current_time_shader');
 
-var DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day',
-    DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top',
-    DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
+const DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
+const DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
+const DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
 
-var VerticalCurrentTimeShader = Shader.inherit({
+const VerticalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
-        var shaderHeight = this._getShaderHeight(),
-            maxHeight = this._getShaderMaxHeight(),
-            renderSolidShader = false;
+        let shaderHeight = this._getShaderHeight();
+        const maxHeight = this._getShaderMaxHeight();
+        let renderSolidShader = false;
 
         if(shaderHeight > maxHeight) {
             shaderHeight = maxHeight;
@@ -19,14 +19,14 @@ var VerticalCurrentTimeShader = Shader.inherit({
         if(shaderHeight >= 0) {
             this._$shader.height(shaderHeight);
 
-            var groupCount = this._workspace._getGroupCount() || 1;
+            const groupCount = this._workspace._getGroupCount() || 1;
 
             if(renderSolidShader) {
                 this._renderTopShader(this._$shader, shaderHeight, this._$container.get(0).getBoundingClientRect().width, 0);
                 this._renderAllDayShader(this._$container.get(0).getBoundingClientRect().width, 0);
             } else {
-                for(var i = 0; i < groupCount; i++) {
-                    var shaderWidth = this._getShaderWidth(i);
+                for(let i = 0; i < groupCount; i++) {
+                    const shaderWidth = this._getShaderWidth(i);
                     this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
                     this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);

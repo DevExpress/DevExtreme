@@ -4,7 +4,7 @@ import $ from 'jquery';
 QUnit.module('Initialization');
 
 QUnit.test('Init tree view', function(assert) {
-    var $treeView = initTree();
+    const $treeView = initTree();
     assert.ok($treeView);
 });
 
@@ -23,7 +23,7 @@ QUnit.test('Init tree view', function(assert) {
                 ];
 
                 configs.forEach((config) => {
-                    let options = createOptions({
+                    const options = createOptions({
                         dataSourceOption,
                         virtualModeEnabled,
                         testRootItemIndex: config.rootItemIndex,
@@ -36,7 +36,7 @@ QUnit.test('Init tree view', function(assert) {
                     const wrapper = new TreeViewTestWrapper(options);
 
                     assert.notEqual(wrapper.instance, undefined);
-                    let $rootNode = wrapper.getElement().find('[aria-level="1"]');
+                    const $rootNode = wrapper.getElement().find('[aria-level="1"]');
                     if(config.expectedItemId !== undefined) {
                         assert.equal($rootNode.attr('data-item-id'), config.expectedItemId);
                     } else {

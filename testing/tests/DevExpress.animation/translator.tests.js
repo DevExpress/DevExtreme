@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    translator = require('animation/translator'),
-    styleUtils = require('core/utils/style'),
-    transformStyle = styleUtils.styleProp('transform');
+const $ = require('jquery');
+const translator = require('animation/translator');
+const styleUtils = require('core/utils/style');
+const transformStyle = styleUtils.styleProp('transform');
 
 QUnit.module('translator', {
     beforeEach: function() {
@@ -14,7 +14,7 @@ QUnit.module('translator', {
 });
 
 QUnit.test('translator.getTranslateCss', function(assert) {
-    var translateCss = translator.getTranslateCss({ x: 100, y: -100 });
+    let translateCss = translator.getTranslateCss({ x: 100, y: -100 });
     assert.equal(translateCss, 'translate(100px, -100px)');
 
     translateCss = translator.getTranslateCss({ x: 100 });
@@ -64,7 +64,7 @@ QUnit.test('translator.move', function(assert) {
 QUnit.test('translator.locate', function(assert) {
     translator.move(this.$element, { left: 100, top: -100 });
 
-    var position = translator.locate(this.$element);
+    const position = translator.locate(this.$element);
     assert.deepEqual(position, {
         left: 100,
         top: -100
@@ -74,7 +74,7 @@ QUnit.test('translator.locate', function(assert) {
 QUnit.test('set up position in percent', function(assert) {
     translator.move(this.$element, { left: '100%', top: '-100%' });
 
-    var position = translator.locate(this.$element);
+    const position = translator.locate(this.$element);
     assert.deepEqual(position, {
         left: this.$element.width(),
         top: -this.$element.height()

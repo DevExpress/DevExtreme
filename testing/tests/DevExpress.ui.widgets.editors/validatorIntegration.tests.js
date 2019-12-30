@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    Class = require('core/class'),
-    ValidationEngine = require('ui/validation_engine'),
-    Validator = require('ui/validator'),
-    keyboardMock = require('../../helpers/keyboardMock.js');
+const $ = require('jquery');
+const Class = require('core/class');
+const ValidationEngine = require('ui/validation_engine');
+const Validator = require('ui/validator');
+const keyboardMock = require('../../helpers/keyboardMock.js');
 
 require('common.css!');
 require('generic_light.css!');
@@ -23,9 +23,9 @@ require('ui/slider');
 require('ui/range_slider');
 require('ui/switch');
 
-var Fixture = Class.inherit({
+const Fixture = Class.inherit({
     createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
-        var $element = $('<div/>')[editor](editorOptions).dxValidator(validatorOptions);
+        const $element = $('<div/>')[editor](editorOptions).dxValidator(validatorOptions);
         this.$element = $element;
 
         this.$input = $element.find('.dx-texteditor-input');
@@ -41,7 +41,7 @@ var Fixture = Class.inherit({
 
     createTextBoxWithValidator: function(validatorOptions) {
         this.$element = $('<div/>');
-        var validator = this.$element.dxTextBox().dxValidator(validatorOptions).dxValidator('instance');
+        const validator = this.$element.dxTextBox().dxValidator(validatorOptions).dxValidator('instance');
         return validator;
     },
 
@@ -66,7 +66,7 @@ QUnit.module('Regression', {
         this.fixture.$input.trigger('change');
 
         assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because incorrect date was typed');
-        var editorValidationError = this.fixture.editor.option('validationError');
+        const editorValidationError = this.fixture.editor.option('validationError');
         assert.ok(editorValidationError, 'Editor should have specific validation error');
         assert.ok(editorValidationError.editorSpecific, 'editorSpecific flag');
     });
@@ -81,7 +81,7 @@ QUnit.module('Regression', {
         this.fixture.validator.validate();
 
         assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because incorrect date was typed');
-        var editorValidationError = this.fixture.editor.option('validationError');
+        const editorValidationError = this.fixture.editor.option('validationError');
         assert.ok(editorValidationError, 'Editor should have specific validation error');
         assert.ok(editorValidationError.editorSpecific, 'editorSpecific flag');
     });
@@ -99,7 +99,7 @@ QUnit.module('Regression', {
         this.fixture.$input.trigger('change');
 
         assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because incorrect date was typed');
-        var editorValidationError = this.fixture.editor.option('validationError');
+        const editorValidationError = this.fixture.editor.option('validationError');
         assert.ok(editorValidationError, 'Editor should have specific validation error');
         assert.strictEqual(editorValidationError.editorSpecific, undefined, 'editorSpecific flag should not be set');
         assert.strictEqual(editorValidationError.message, 'Required', 'Message should came from dxValidator');
@@ -114,7 +114,7 @@ QUnit.module('Regression', {
         this.fixture.$input.trigger('focusout');
 
         assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because value is less then min');
-        var editorValidationError = this.fixture.editor.option('validationError');
+        const editorValidationError = this.fixture.editor.option('validationError');
         assert.ok(editorValidationError, 'Editor should have specific validation error');
         assert.strictEqual(editorValidationError.message, 'Value is out of range', 'Message should came from dxValidator');
     });
@@ -122,14 +122,14 @@ QUnit.module('Regression', {
     QUnit.test('T260652: disabled widgets should not be validated', function(assert) {
         this.fixture.createInstance('dxTextBox', { value: '', disabled: true }, { validationRules: [{ type: 'required' }] });
 
-        var result = this.fixture.validator.validate();
+        const result = this.fixture.validator.validate();
 
         assert.strictEqual(result.isValid, true, 'Disabled widget should bypass validation');
     });
 
     QUnit.test('T426721: dxValidator text jumps during validation', function(assert) {
-        var validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] });
-        var textBox = this.fixture.$element.dxTextBox('instance');
+        const validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] });
+        const textBox = this.fixture.$element.dxTextBox('instance');
 
         try {
             this.fixture.$element.appendTo('#qunit-fixture');
@@ -138,7 +138,7 @@ QUnit.module('Regression', {
 
             validator.validate();
 
-            var $overlayWrapper = validator.$element().find('.dx-overlay-wrapper');
+            const $overlayWrapper = validator.$element().find('.dx-overlay-wrapper');
 
             assert.equal($overlayWrapper.length, 1, 'validation message not blinking on render');
         } finally {
@@ -147,19 +147,19 @@ QUnit.module('Regression', {
     });
 
     QUnit.test('Validator message does not detached when parent scrolled', function(assert) {
-        var validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] }),
-            topDiff = 22;
+        const validator = this.fixture.createTextBoxWithValidator({ validationRules: [{ type: 'required' }] });
+        const topDiff = 22;
 
         $('<div style=\'height: 100px\'/>').insertAfter(
             this.fixture.$element.wrap('<div id=\'bingo\' style=\'overflow-y: scroll; height: 100px\' />')
         );
-        var $scrollableWrapper = validator.$element().parent().appendTo('body');
+        const $scrollableWrapper = validator.$element().parent().appendTo('body');
 
         validator.validate();
 
-        var top1 = validator.$element().find('.dx-overlay').offset().top;
+        const top1 = validator.$element().find('.dx-overlay').offset().top;
         $scrollableWrapper.scrollTop(topDiff);
-        var top2 = validator.$element().find('.dx-overlay').offset().top;
+        const top2 = validator.$element().find('.dx-overlay').offset().top;
 
         assert.roughEqual(top1 - top2 - topDiff, 0, 0.01, 'message overlay was not detached from input');
     });
@@ -171,7 +171,7 @@ QUnit.module('Regression', {
 
         assert.strictEqual(this.fixture.editor.option('isValid'), false, 'Editor should be invalid because of empty value');
 
-        var editorValidationError = this.fixture.editor.option('validationError');
+        const editorValidationError = this.fixture.editor.option('validationError');
         assert.ok(editorValidationError, 'Editor should have specific validation error');
         assert.ok(editorValidationError.editorSpecific, 'editorSpecific flag');
     });

@@ -1,9 +1,9 @@
-var $ = require('../../../core/renderer'),
-    Class = require('../../../core/class');
+const $ = require('../../../core/renderer');
+const Class = require('../../../core/class');
 
-var DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
+const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
-var currentTimeShader = Class.inherit({
+const currentTimeShader = Class.inherit({
     render: function(workspace) {
         this._workspace = workspace;
         this._$container = workspace._dateTableScrollable.$content();
