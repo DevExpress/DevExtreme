@@ -424,7 +424,7 @@ var SelectBox = DropDownList.inherit({
 
         this.callBase(isUnknownItem ? null : item);
 
-        if(!isUnknownItem && (!this._isEditable() || (this._isEditable() && this._isCustomItemSelected()))) {
+        if(!isUnknownItem && (!this._isEditable() || this._isCustomItemSelected())) {
             this._setListOption('selectedItem', this.option('selectedItem'));
         }
     },
