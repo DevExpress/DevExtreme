@@ -22,7 +22,7 @@ const setupModule = {
             useMaskBehavior: true,
             mode: 'text',
             displayFormat: 'MMMM d yyyy',
-            pickerType: 'calenar'
+            pickerType: 'calendar'
         });
 
         this.instance = this.$element.dxDateBox('instance');
@@ -608,11 +608,12 @@ module('Keyboard navigation', setupModule, () => {
         assert.strictEqual(this.instance.option('value'), null, 'value has been cleared');
     });
 
-    test('focusout should clear search value', function(assert) {
+    QUnit.testInActiveWindow('focusout should clear search value', function(assert) {
         this.keyboard.type('1');
         assert.strictEqual(this.instance.option('text'), 'January 10 2012', 'text has been changed');
 
-        this.instance.blur();
+        this.$input.focusout();
+
         this.keyboard.type('2');
         assert.strictEqual(this.instance.option('text'), 'February 10 2012', 'search value and position was cleared');
         assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, 'first group has been filled again');
@@ -897,7 +898,7 @@ module('Empty dateBox', {
         assert.strictEqual(this.$input.val(), 'January 14 2015', 'first part was changed, other parts is from the current date');
     });
 
-    test('Bluring the input after first input should update the value', function(assert) {
+    QUnit.testInActiveWindow('Bluring the input after first input should update the value', function(assert) {
         this.keyboard.type('1');
         this.instance.blur();
 
@@ -1056,23 +1057,23 @@ module('Options changed', setupModule, () => {
     });
 
     test('Internal _maskValue and public value should be different objects', function(assert) {
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different on init');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different on init');
 
         this.instance.option('value', new Date(2012, 1, 2));
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different when setting by value');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different when setting by value');
 
         this.keyboard.press('up').press('esc');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after revert changes');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after revert changes');
 
         this.keyboard.press('5').press('enter');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after enter');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after enter');
 
         this.keyboard.press('4');
         this.$input.trigger('focusout');
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after focusout');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after focusout');
 
         this.keyboard.press('7').change();
-        assert.ok(this.instance._maskValue !== this.instance.option('value'), 'objects are different after change event');
+        assert.notStrictEqual(this.instance._maskValue, this.instance.option('value'), 'objects are different after change event');
     });
 
     test('performance - value change should not lead to recreate regexp and format pattern', function(assert) {
