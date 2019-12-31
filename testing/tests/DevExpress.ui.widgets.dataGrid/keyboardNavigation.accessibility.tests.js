@@ -12,6 +12,7 @@ import $ from 'jquery';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
+import * as eventUtils from 'events/utils';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,
@@ -646,7 +647,6 @@ QUnit.module('Keyboard navigation accessibility', {
         this.gridView.render($('#container'));
 
         // act
-        fireKeyDown($('body'), 'Tab');
         headersWrapper.getHeaderItem(0, 1).focus();
 
         // assert
@@ -666,13 +666,12 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     testInDesktop('Rows view focus state', function(assert) {
-        let $rowsView;
-
         // arrange
         this.setupModule();
         this.gridView.render($('#container'));
         this.focusCell(1, 1);
-        $rowsView = this.keyboardNavigationController._focusedView.element();
+
+        const $rowsView = this.keyboardNavigationController._focusedView.element();
 
         // assert
         assert.notOk($rowsView.hasClass('dx-state-focused'), 'RowsView focus state');
@@ -881,5 +880,30 @@ QUnit.module('Keyboard navigation accessibility', {
         // act, assert
         this.ctrlUp();
         assert.ok(dataGridWrapper.filterRow.getTextEditorInput(0).is(':focus'), 'focused filterRow editor');
+    });
+
+    testInDesktop('Focusing should be hidden if document.visibilityState changed to visible', function(assert) {
+        // arrange
+        this.options = {
+            columns: [
+                { dataField: 'name', allowSorting: true },
+                { dataField: 'phone', dataType: 'number' }
+            ]
+        };
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        // act
+        $(document).trigger(eventUtils.createEvent('visibilitychange', { visibilityState: 'visible' }));
+
+        const $headersElement = dataGridWrapper.headers.getElement();
+        const $headerItem = dataGridWrapper.headers.getHeaderItem(0, 0);
+        $headerItem.trigger('focusin');
+
+        // assert
+        assert.ok($headerItem.is(':focus'), 'Header cell has focus');
+        assert.notOk($headersElement.hasClass('dx-state-focused'), 'Headers main element has no dx-state-focused class');
     });
 });
