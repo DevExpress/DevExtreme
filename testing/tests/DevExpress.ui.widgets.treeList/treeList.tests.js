@@ -963,16 +963,16 @@ QUnit.test('Change searchPanel.text', function(assert) {
 ['standard', 'virual'].forEach((rowRenderingMode) => {
     QUnit.test(`Modified expand state should be displayed correctly when repaintChangesOnly is true and scrolling.rowRenderingMode is ${rowRenderingMode}`, function(assert) {
         // arrange
-        let data = generateData(2),
-            treeList = createTreeList({
-                dataSource: data,
-                autoExpandAll: true,
-                repaintChangesOnly: true,
-                scrolling: {
-                    rowRenderingMode: rowRenderingMode
-                },
-                columns: ['id']
-            });
+        let data = generateData(2);
+        let treeList = createTreeList({
+            dataSource: data,
+            autoExpandAll: true,
+            repaintChangesOnly: true,
+            scrolling: {
+                rowRenderingMode: rowRenderingMode
+            },
+            columns: ['id']
+        });
 
         this.clock.tick(30);
 
@@ -996,16 +996,16 @@ QUnit.test('Change searchPanel.text', function(assert) {
 
 QUnit.test('The select checkbox should be displayed after changing expand state when repaintChangesOnly is true', function(assert) {
     // arrange
-    let data = generateData(2),
-        treeList = createTreeList({
-            dataSource: data,
-            autoExpandAll: true,
-            repaintChangesOnly: true,
-            selection: {
-                mode: 'multiple'
-            },
-            columns: ['id']
-        });
+    let data = generateData(2);
+    let treeList = createTreeList({
+        dataSource: data,
+        autoExpandAll: true,
+        repaintChangesOnly: true,
+        selection: {
+            mode: 'multiple'
+        },
+        columns: ['id']
+    });
 
     this.clock.tick(30);
 
