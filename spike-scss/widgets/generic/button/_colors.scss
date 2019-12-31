@@ -1,0 +1,11 @@
+@use "sass:map";
+$color-scheme: null !default;
+
+$button-bg:null !default;
+
+@if $color-scheme == "light" {
+    $button-bg: #fff;
+}
+@else if $color-scheme == "dark" {
+    $button-bg: #000;
+}

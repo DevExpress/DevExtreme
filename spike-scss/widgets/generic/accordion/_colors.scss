@@ -1,0 +1,41 @@
+@use "sass:color";
+$color-scheme: null !default;
+
+@use '../component' with ($color-scheme: $color-scheme);
+@debug $color-scheme;
+
+
+// Accordion
+$accordion-color: component.$base-text-color;
+
+/**
+* $name 10. Item title text color
+* $type color
+*/
+$accordion-title-color: $accordion-color;
+
+/**
+* $name 20. Active item title background color
+* $type color
+*/
+$accordion-item-title-opened-bg: transparent;
+
+/**
+* $name 30. Item border color
+* $type color
+*/
+$accordion-item-border-color: component.$base-border-color;
+$accordion-item-focused-border-color: component.$base-focus-bg;
+$accordion-background-color: component.$base-bg;
+
+$accordion-title-active-color: $accordion-color;
+
+
+$accordion-title-active-bg: null !default;
+
+@if $color-scheme == "light" {
+    $accordion-title-active-bg: color.adjust($accordion-background-color, $lightness: 40%, $alpha: -0.8);
+}
+@else if $color-scheme == "dark" {
+    $accordion-title-active-bg: color.adjust($accordion-background-color, $lightness: -40%, $alpha: -0.8);;
+}

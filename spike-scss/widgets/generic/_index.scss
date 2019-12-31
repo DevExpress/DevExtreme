@@ -1,0 +1,6 @@
+$color-scheme: null !default;
+$size: null !default;
+
+// generic widgets - the same file will be created for material (yes we have double code)
+@use 'accordion' with ($color-scheme: $color-scheme, $size: $size);
+@use 'button' with ($color-scheme: $color-scheme, $size: $size);

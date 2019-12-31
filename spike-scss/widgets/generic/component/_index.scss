@@ -1,0 +1,22 @@
+$color-scheme: null !default;
+$size: null !default;
+
+$base-border-color: red;
+
+$base-text-color: null;
+$base-focus-bg: null;
+$base-bg: null;
+$focused-border-color: null;
+
+@if $color-scheme == "light" {
+    $base-text-color: black;
+    $base-focus-bg: #ff0;
+    $base-bg: #fff;
+    $focused-border-color: lighten($base-border-color, 20%);
+}
+@else if $color-scheme == "dark" {
+    $base-text-color: black;
+    $base-focus-bg: #ff0;
+    $base-bg: #fff;
+    $focused-border-color: lighten($base-border-color, 20%);
+}

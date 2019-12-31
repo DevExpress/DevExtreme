@@ -1,0 +1,18 @@
+$color-scheme: null !default;
+$size: null !default;
+
+@use "colors" with ($color-scheme: $color-scheme);
+@use "sizes" with ($size: $size);
+
+
+$GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
+
+.dx-accordion {
+    background-color: colors.$accordion-background-color;
+    color: colors.$accordion-color;
+    opacity: $GENERIC_ACCORDION_DISABLED_OPACITY;
+    padding: sizes.$GENERIC_ACCORDION_TITLE_PADDING;
+    .title {
+        color: colors.$accordion-title-active-bg;
+    }
+}

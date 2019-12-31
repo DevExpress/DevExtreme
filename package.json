@@ -63,6 +63,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.2.0",
     "gulp-concat": "^2.6.0",
+    "gulp-dart-sass": "^0.9.1",
     "gulp-eol": "^0.1.2",
     "gulp-eslint": "^6.0.0",
     "gulp-file": "^0.4.0",
@@ -78,6 +79,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-replace-async": "0.0.1",
+    "gulp-sass-lint": "^1.4.0",
     "gulp-tap": "^1.0.1",
     "gulp-template": "^4.0.0",
     "gulp-typescript": "^5.0.0",
@@ -141,7 +143,8 @@
     "update-ts": "dx-tools update-ts-bundle",
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools declaration-validator",
-    "test-functional": "node ./testing/functional/runner"
+    "test-functional": "node ./testing/functional/runner",
+    "convert-scss": "less2sass ./styles && gulp fix-scss"
   },
   "browserslist": [
     "last 2 versions",
