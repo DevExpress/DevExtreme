@@ -1,26 +1,22 @@
-const isDefined = require('../../core/utils/type').isDefined;
-const config = require('../../core/config');
-const odataUtils = require('./utils');
-const proxyUrlFormatter = require('../proxy_url_formatter');
-const errors = require('../errors').errors;
-const query = require('../query');
-const Store = require('../abstract_store');
-const mixins = require('./mixins');
-const deferredUtils = require('../../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
+import { isDefined } from '../../core/utils/type';
+import config from '../../core/config';
+import { generateExpand, generateSelect, serializeKey, convertPrimitiveValue } from './utils';
+import proxyUrlFormatter from '../proxy_url_formatter';
+import { errors } from '../errors';
+import query from '../query';
+import Store from '../abstract_store';
+import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParams } from './mixins';
+import { when, Deferred } from '../../core/utils/deferred';
 
-require('./query_adapter');
+import './query_adapter';
 
 const ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
 
-function expandKeyType(key, keyType) {
-    const result = {};
-    result[key] = keyType;
-    return result;
-}
+const expandKeyType = (key, keyType) => {
+    return { [key]: keyType };
+};
 
-function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
+const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     const result = {};
 
     for(const field in fieldTypes) {
@@ -38,7 +34,7 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
     }
 
     return result;
-}
+};
 
 /**
 * @name ODataStore
@@ -49,7 +45,7 @@ function mergeFieldTypesWithKeyType(fieldTypes, keyType) {
 */
 const ODataStore = Store.inherit({
 
-    ctor: function(options) {
+    ctor(options) {
         this.callBase(options);
 
         /**
@@ -145,7 +141,7 @@ const ODataStore = Store.inherit({
         }
     },
 
-    _customLoadOptions: function() {
+    _customLoadOptions() {
         return ['expand', 'customQueryParams'];
     },
 
@@ -158,12 +154,12 @@ const ODataStore = Store.inherit({
     * @param2_field2 select:string|Array<string>
     * @return Promise<any>
     */
-    _byKeyImpl: function(key, extraOptions) {
+    _byKeyImpl(key, extraOptions) {
         const params = {};
 
         if(extraOptions) {
-            params['$expand'] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
-            params['$select'] = odataUtils.generateSelect(this._version, extraOptions.select) || undefined;
+            params['$expand'] = generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
+            params['$select'] = generateSelect(this._version, extraOptions.select) || undefined;
         }
 
         return this._sendRequest(this._byKeyUrl(key), 'GET', params);
@@ -175,12 +171,11 @@ const ODataStore = Store.inherit({
     * @param1 loadOptions:object
     * @return object
     */
-    createQuery: function(loadOptions) {
-        let url;
-        let queryOptions;
-
+    createQuery(loadOptions) {
         loadOptions = loadOptions || {};
-        queryOptions = {
+
+        let url;
+        const queryOptions = {
             adapter: 'odata',
 
             beforeSend: this._beforeSend,
@@ -195,21 +190,17 @@ const ODataStore = Store.inherit({
         };
 
         // NOTE: For AppBuilder, do not remove
-        if(isDefined(loadOptions.urlOverride)) {
-            url = loadOptions.urlOverride;
-        } else {
-            url = this._url;
-        }
+        url = loadOptions.urlOverride ?? this._url;
 
         if(isDefined(this._filterToLower)) {
             queryOptions.filterToLower = this._filterToLower;
         }
 
         if(loadOptions.customQueryParams) {
-            const params = mixins.escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
+            const params = escapeServiceOperationParams(loadOptions.customQueryParams, this.version());
 
             if(this.version() === 4) {
-                url = mixins.formatFunctionInvocationUrl(url, params);
+                url = formatFunctionInvocationUrl(url, params);
             } else {
                 queryOptions.params = params;
             }
@@ -218,14 +209,14 @@ const ODataStore = Store.inherit({
         return query(url, queryOptions);
     },
 
-    _insertImpl: function(values) {
+    _insertImpl(values) {
         this._requireKey();
 
         const that = this;
         const d = new Deferred();
 
         when(this._sendRequest(this._url, 'POST', null, values))
-            .done(function(serverResponse) {
+            .done((serverResponse) => {
                 d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
             })
             .fail(d.reject);
@@ -233,13 +224,13 @@ const ODataStore = Store.inherit({
         return d.promise();
     },
 
-    _updateImpl: function(key, values) {
+    _updateImpl(key, values) {
         const d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
         ).done(
-            function(serverResponse) {
+            (serverResponse) => {
                 if(config().useLegacyStoreResult) {
                     d.resolve(key, values);
                 } else {
@@ -251,13 +242,13 @@ const ODataStore = Store.inherit({
         return d.promise();
     },
 
-    _removeImpl: function(key) {
+    _removeImpl(key) {
         const d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), 'DELETE')
         ).done(
-            function() {
+            () => {
                 d.resolve(key);
             }
         ).fail(d.reject);
@@ -265,7 +256,7 @@ const ODataStore = Store.inherit({
         return d.promise();
     },
 
-    _convertKey: function(value) {
+    _convertKey(value) {
         let result = value;
         const fieldTypes = this._fieldTypes;
         const key = this.key() || this._legacyAnonymousKey;
@@ -274,25 +265,27 @@ const ODataStore = Store.inherit({
             result = {};
             for(let i = 0; i < key.length; i++) {
                 const keyName = key[i];
-                result[keyName] = odataUtils.convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
+                result[keyName] = convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
             }
         } else if(fieldTypes[key]) {
-            result = odataUtils.convertPrimitiveValue(fieldTypes[key], value);
+            result = convertPrimitiveValue(fieldTypes[key], value);
         }
 
         return result;
     },
 
-    _byKeyUrl: function(value, useOriginalHost) {
+    _byKeyUrl(value, useOriginalHost) {
         const baseUrl = useOriginalHost
             ? proxyUrlFormatter.formatLocalUrl(this._url)
             : this._url;
 
         const convertedKey = this._convertKey(value);
 
-        return baseUrl + '(' + encodeURIComponent(odataUtils.serializeKey(convertedKey, this._version)) + ')';
+        return `${baseUrl}(${encodeURIComponent(serializeKey(convertedKey, this._version))})`;
     }
 
-}, 'odata').include(mixins.SharedMethods);
+}, 'odata').include(SharedMethods);
 
+
+// TODO: replace by "export default" after "odata/context" refactor
 module.exports = ODataStore;
