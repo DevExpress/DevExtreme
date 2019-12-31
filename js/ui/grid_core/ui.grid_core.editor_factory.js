@@ -123,7 +123,7 @@ const EditorFactory = modules.ViewController.inherit({
 
             clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
-                let rowsView = that.getView('rowsView');
+                const rowsView = that.getView('rowsView');
 
                 delete that._focusTimeoutID;
 
