@@ -441,9 +441,9 @@ class Button extends Widget {
         const { useSubmitBehavior } = this.option();
         const $submitInput = this._$submitInput();
 
-        if(!useSubmitBehavior && this._$submitInput) {
+        if(!useSubmitBehavior && $submitInput) {
             $submitInput.remove();
-        } else if(useSubmitBehavior && !this._$submitInput) {
+        } else if(useSubmitBehavior && $submitInput) {
             this._renderSubmitInput();
         }
     }
