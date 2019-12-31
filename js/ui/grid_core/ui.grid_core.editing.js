@@ -2662,12 +2662,21 @@ module.exports = {
                     const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
 
                     if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
-                        editingController.showHighlighting($cell);
+                        editingController.showHighlighting({
+                            $cell,
+                            columnIndex: parameters.column.index,
+                            keyValue: parameters.key
+                        });
                         $cell.addClass(CELL_MODIFIED);
                     } else if(isEditableCell) {
                         const skipValidation = parameters.row.isNewRow;
 
-                        editingController.showHighlighting($cell, skipValidation);
+                        editingController.showHighlighting({
+                            $cell,
+                            skipValidation,
+                            columnIndex: parameters.column.index,
+                            keyValue: parameters.key
+                        });
                     }
 
                     this.callBase.apply(this, arguments);
