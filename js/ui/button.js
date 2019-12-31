@@ -443,7 +443,7 @@ class Button extends Widget {
 
         if(!useSubmitBehavior && $submitInput) {
             $submitInput.remove();
-        } else if(useSubmitBehavior && $submitInput) {
+        } else if(useSubmitBehavior && !($submitInput && $submitInput.length)) {
             this._renderSubmitInput();
         }
     }

@@ -320,7 +320,7 @@ QUnit.module('submit behavior', {
     });
 
     QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {
-        assert.strictEqual(this.$element.find('.' + BUTTON_SUBMIT_INPUT_CLASS).length, 1);
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
     QUnit.test('button click call click() on submit input', function(assert) {
@@ -340,11 +340,11 @@ QUnit.module('submit behavior', {
 
         instance.option('useSubmitBehavior', false);
         assert.strictEqual(this.$element.find('input[type=submit]').length, 0, 'no submit input if useSubmitBehavior is false');
-        assert.strictEqual(this.$element.find('.' + BUTTON_SUBMIT_INPUT_CLASS).length, 0, 'no submit class if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 0, 'no submit class if useSubmitBehavior is false');
 
         instance.option('useSubmitBehavior', true);
         assert.strictEqual(this.$element.find('input[type=submit]').length, 1, 'has submit input if useSubmitBehavior is false');
-        assert.strictEqual(this.$element.find('.' + BUTTON_SUBMIT_INPUT_CLASS).length, 1, 'has submit class if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
 
     QUnit.test('preventDefault is called to dismiss submit of form if validation failed', function(assert) {
