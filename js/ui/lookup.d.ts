@@ -6,9 +6,7 @@ import {
     positionConfig
 } from '../animation/position';
 
-import {
-    JQueryEventObject
-} from '../common';
+import '../jquery_augmentation';
 
 import {
     dxElement
