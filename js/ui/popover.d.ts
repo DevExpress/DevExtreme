@@ -6,9 +6,7 @@ import {
     positionConfig
 } from '../animation/position';
 
-import {
-    JQueryPromise
-} from '../common';
+import '../jquery_augmentation';
 
 import {
     event
