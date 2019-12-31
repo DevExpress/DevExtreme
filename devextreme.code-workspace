@@ -5,10 +5,6 @@
       "name": "DevExtreme"
     },
     {
-      "path": "build/style-compiler",
-      "name": "Style Compiler"
-    },
-    {
       "path": "testing/runner",
       "name": "Test Runner"
     }
