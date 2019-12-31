@@ -72,11 +72,11 @@ const moduleConfig = {
 // 3. Select a file in the shown 'SaveAs' dialog and open the saved file in Excel
 
 QUnit.module('API', moduleConfig, () => {
-    [undefined, { row: 1, column: 1 }, { row: 2, column: 3 }].forEach((topLeftCell) => {
+    [{ row: 2, column: 3 }].forEach((topLeftCell) => {
         let topLeft = (topLeftCell ? topLeftCell : { row: 1, column: 1 });
         let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
-        [true, false, undefined].forEach((autoFilterEnabled) => {
+        [true, false].forEach((autoFilterEnabled) => {
             let testCaption = topLeftCellOption + `, autoFilterEnabled: ${autoFilterEnabled}`;
             const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
                 let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
