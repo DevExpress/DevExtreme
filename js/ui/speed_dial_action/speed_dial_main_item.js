@@ -286,7 +286,7 @@ class SpeedDialMainItem extends SpeedDialItem {
 
 exports.initAction = function(newAction) {
     // TODO: workaround for Angular/React/Vue
-    delete newAction._options.onInitializing;
+    newAction._options.silent('onInitializing', null);
 
     let isActionExist = false;
     if(!speedDialMainItem) {
