@@ -4,7 +4,7 @@ import {
 
 import {
     JQueryPromise
-} from '../common';
+} from '../jquery_augmentation';
 
 import {
     dxElement

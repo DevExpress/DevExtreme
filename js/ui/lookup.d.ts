@@ -8,7 +8,7 @@ import {
 
 import {
     JQueryEventObject
-} from '../common';
+} from '../jquery_augmentation';
 
 import {
     dxElement

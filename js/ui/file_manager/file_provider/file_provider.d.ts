@@ -1,6 +1,6 @@
 import {
     JQueryPromise
-} from '../../../common';
+} from '../../../jquery_augmentation';
 
 export interface FileProviderOptions<T = FileProvider> {
     /**
