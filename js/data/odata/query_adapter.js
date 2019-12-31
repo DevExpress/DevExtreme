@@ -1,33 +1,31 @@
-const typeUtils = require('../../core/utils/type');
-const iteratorUtils = require('../../core/utils/iterator');
-const config = require('../../core/config');
-const extend = require('../../core/utils/extend').extend;
-const queryAdapters = require('../query_adapters');
-const odataUtils = require('./utils');
-const serializePropName = odataUtils.serializePropName;
-const errors = require('../errors').errors;
-const dataUtils = require('../utils');
-const isFunction = typeUtils.isFunction;
+import { isFunction } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import config from '../../core/config';
+import { extend } from '../../core/utils/extend';
+import queryAdapters from '../query_adapters';
+import { sendRequest, generateSelect, generateExpand, serializeValue, convertPrimitiveValue, serializePropName } from './utils';
+import { errors } from '../errors';
+import { isUnaryOperation, isConjunctiveOperator, normalizeBinaryCriterion } from '../utils';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 
-const compileCriteria = (function() {
+const compileCriteria = (() => {
     let protocolVersion;
     let forceLowerCase;
     let fieldTypes;
 
-    const createBinaryOperationFormatter = function(op) {
-        return function(prop, val) {
-            return prop + ' ' + op + ' ' + val;
+    const createBinaryOperationFormatter = (op) => {
+        return (prop, val) => {
+            return `${prop} ${op} ${val}`;
         };
     };
 
-    const createStringFuncFormatter = function(op, reverse) {
-        return function(prop, val) {
+    const createStringFuncFormatter = (op, reverse) => {
+        return (prop, val) => {
             const bag = [op, '('];
 
             if(forceLowerCase) {
-                prop = prop.indexOf('tolower(') === -1 ? 'tolower(' + prop + ')' : prop;
+                prop = prop.indexOf('tolower(') === -1 ? `tolower(${prop})` : prop;
                 val = val.toLowerCase();
             }
 
@@ -63,8 +61,8 @@ const compileCriteria = (function() {
         'notcontains': createStringFuncFormatter('not contains')
     });
 
-    const compileBinary = function(criteria) {
-        criteria = dataUtils.normalizeBinaryCriterion(criteria);
+    const compileBinary = (criteria) => {
+        criteria = normalizeBinaryCriterion(criteria);
 
         const op = criteria[1];
         const formatters = protocolVersion === 4
@@ -79,74 +77,74 @@ const compileCriteria = (function() {
         const fieldName = criteria[0];
         let value = criteria[2];
 
-        if(fieldTypes && fieldTypes[fieldName]) {
-            value = odataUtils.convertPrimitiveValue(fieldTypes[fieldName], value);
+        if(fieldTypes?.[fieldName]) {
+            value = convertPrimitiveValue(fieldTypes[fieldName], value);
         }
 
         return formatter(
             serializePropName(fieldName),
-            odataUtils.serializeValue(value, protocolVersion)
+            serializeValue(value, protocolVersion)
         );
     };
 
 
-    const compileUnary = function(criteria) {
+    const compileUnary = (criteria) => {
         const op = criteria[0];
         const crit = compileCore(criteria[1]);
 
         if(op === '!') {
-            return 'not (' + crit + ')';
+            return `not (${crit})`;
         }
 
         throw errors.Error('E4003', op);
     };
 
-    const compileGroup = function(criteria) {
+    const compileGroup = (criteria) => {
         const bag = [];
         let groupOperator;
         let nextGroupOperator;
 
-        iteratorUtils.each(criteria, function(index, criterion) {
+        each(criteria, function(index, criterion) {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
                     throw new errors.Error('E4019');
                 }
 
-                bag.push('(' + compileCore(criterion) + ')');
+                bag.push(`(${compileCore(criterion)})`);
 
                 groupOperator = nextGroupOperator;
                 nextGroupOperator = 'and';
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? 'and' : 'or';
+                nextGroupOperator = isConjunctiveOperator(this) ? 'and' : 'or';
             }
         });
 
         return bag.join(' ' + groupOperator + ' ');
     };
 
-    function compileCore(criteria) {
+    const compileCore = (criteria) => {
         if(Array.isArray(criteria[0])) {
             return compileGroup(criteria);
         }
 
-        if(dataUtils.isUnaryOperation(criteria)) {
+        if(isUnaryOperation(criteria)) {
             return compileUnary(criteria);
         }
 
         return compileBinary(criteria);
-    }
+    };
 
-    return function(criteria, version, types, filterToLower) {
+    return (criteria, version, types, filterToLower) => {
         fieldTypes = types;
-        forceLowerCase = typeUtils.isDefined(filterToLower) ? filterToLower : config().oDataFilterToLower;
+        forceLowerCase = filterToLower ?? config().oDataFilterToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
     };
 })();
 
-const createODataQueryAdapter = function(queryOptions) {
+const createODataQueryAdapter = (queryOptions) => {
     let _sorting = [];
     const _criteria = [];
     const _expand = queryOptions.expand;
@@ -157,11 +155,11 @@ const createODataQueryAdapter = function(queryOptions) {
 
     const _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
 
-    const hasSlice = function() {
+    const hasSlice = () => {
         return _skip || _take !== undefined;
     };
 
-    const hasFunction = function(criterion) {
+    const hasFunction = (criterion) => {
         for(let i = 0; i < criterion.length; i++) {
             if(isFunction(criterion[i])) {
                 return true;
@@ -174,7 +172,7 @@ const createODataQueryAdapter = function(queryOptions) {
         return false;
     };
 
-    const requestData = function() {
+    const requestData = () => {
         const result = {};
 
         if(!_countQuery) {
@@ -188,14 +186,14 @@ const createODataQueryAdapter = function(queryOptions) {
                 result['$top'] = _take;
             }
 
-            result['$select'] = odataUtils.generateSelect(_oDataVersion, _select) || undefined;
-            result['$expand'] = odataUtils.generateExpand(_oDataVersion, _expand, _select) || undefined;
+            result['$select'] = generateSelect(_oDataVersion, _select) || undefined;
+            result['$expand'] = generateExpand(_oDataVersion, _expand, _select) || undefined;
         }
 
         if(_criteria.length) {
             const criteria = _criteria.length < 2 ? _criteria[0] : _criteria;
-            const fieldTypes = queryOptions && queryOptions.fieldTypes;
-            const filterToLower = queryOptions && queryOptions.filterToLower;
+            const fieldTypes = queryOptions?.fieldTypes;
+            const filterToLower = queryOptions?.filterToLower;
 
             result['$filter'] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
@@ -216,7 +214,7 @@ const createODataQueryAdapter = function(queryOptions) {
         return result;
     };
 
-    function tryLiftSelect(tasks) {
+    const tryLiftSelect = (tasks) => {
         let selectIndex = -1;
         for(let i = 0; i < tasks.length; i++) {
             if(tasks[i].name === 'select') {
@@ -232,19 +230,19 @@ const createODataQueryAdapter = function(queryOptions) {
 
         tasks[1 + selectIndex] = tasks[selectIndex];
         tasks[selectIndex] = nextTask;
-    }
+    };
 
     return {
 
-        optimize: function(tasks) {
+        optimize(tasks) {
             tryLiftSelect(tasks);
         },
 
-        exec: function(url) {
-            return odataUtils.sendRequest(_oDataVersion,
+        exec(url) {
+            return sendRequest(_oDataVersion,
                 {
                     url: url,
-                    params: extend(requestData(), queryOptions && queryOptions.params)
+                    params: extend(requestData(), queryOptions?.params)
                 },
                 {
                     beforeSend: queryOptions.beforeSend,
@@ -258,7 +256,7 @@ const createODataQueryAdapter = function(queryOptions) {
             );
         },
 
-        multiSort: function(args) {
+        multiSort(args) {
             let rules;
 
             if(hasSlice()) {
@@ -286,7 +284,7 @@ const createODataQueryAdapter = function(queryOptions) {
             _sorting = rules;
         },
 
-        slice: function(skipCount, takeCount) {
+        slice(skipCount, takeCount) {
             if(hasSlice()) {
                 return false;
             }
@@ -295,7 +293,7 @@ const createODataQueryAdapter = function(queryOptions) {
             _take = takeCount;
         },
 
-        filter: function(criterion) {
+        filter(criterion) {
             if(hasSlice()) {
                 return false;
             }
@@ -315,7 +313,7 @@ const createODataQueryAdapter = function(queryOptions) {
             _criteria.push(criterion);
         },
 
-        select: function(expr) {
+        select(expr) {
             if(_select || isFunction(expr)) {
                 return false;
             }
@@ -327,7 +325,7 @@ const createODataQueryAdapter = function(queryOptions) {
             _select = expr;
         },
 
-        count: function() {
+        count() {
             _countQuery = true;
         }
     };
@@ -335,4 +333,4 @@ const createODataQueryAdapter = function(queryOptions) {
 
 queryAdapters.odata = createODataQueryAdapter;
 
-exports.odata = createODataQueryAdapter;
+export const odata = createODataQueryAdapter;
