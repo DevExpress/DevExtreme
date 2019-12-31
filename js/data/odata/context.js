@@ -6,7 +6,6 @@ import errorsModule from '../errors';
 import ODataStore from './store';
 import { SharedMethods, formatFunctionInvocationUrl, escapeServiceOperationParams } from './mixins';
 import { when, Deferred } from '../../core/utils/deferred';
-
 import './query_adapter';
 
 /**
@@ -107,9 +106,8 @@ const ODataContext = Class.inherit({
      * @param3 httpMethod:object
      * @return Promise<void>
      */
-    invoke(operationName, params, httpMethod) {
-        params = params || {};
-        httpMethod = (httpMethod || 'POST').toLowerCase();
+    invoke(operationName, params = {}, httpMethod = 'POST') {
+        httpMethod = httpMethod.toLowerCase();
 
         const d = new Deferred();
         let url = this._url + '/' + encodeURIComponent(operationName);
