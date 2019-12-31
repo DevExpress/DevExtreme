@@ -129,6 +129,11 @@ const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4023: 'Could not parse the following XML: {0}',
 
     /**
+    * @name ErrorsData.E4024
+    */
+    E4024: 'OData does not support string functions when searching or filtering an Int32 field',
+
+    /**
     * @name ErrorsData.W4000
     */
     W4000: 'Data returned from the server has an incorrect structure',

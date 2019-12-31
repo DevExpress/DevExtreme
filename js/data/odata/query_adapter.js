@@ -10,6 +10,7 @@ const dataUtils = require('../utils');
 const isFunction = typeUtils.isFunction;
 
 const DEFAULT_PROTOCOL_VERSION = 2;
+const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
 
 const compileCriteria = (function() {
     let protocolVersion;
@@ -42,6 +43,10 @@ const compileCriteria = (function() {
         };
     };
 
+    const isStringFunction = function(name) {
+        return STRING_FUNCTIONS.some((funcName) => funcName === name);
+    };
+
     const formatters = {
         '=': createBinaryOperationFormatter('eq'),
         '<>': createBinaryOperationFormatter('ne'),
@@ -65,6 +70,10 @@ const compileCriteria = (function() {
 
     const compileBinary = function(criteria) {
         criteria = dataUtils.normalizeBinaryCriterion(criteria);
+
+        if(!typeUtils.isEmptyObject(fieldTypes) && isStringFunction(criteria[1]) && fieldTypes[criteria[0]] !== 'String') {
+            throw new errors.Error('E4024');
+        }
 
         const op = criteria[1];
         const formatters = protocolVersion === 4

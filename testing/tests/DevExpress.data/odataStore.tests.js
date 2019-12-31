@@ -821,6 +821,59 @@ QUnit.test('key type conversions by keyType option', function(assert) {
         .always(done);
 });
 
+QUnit.test('Should show E4024 error when searching or filtering an Int32 field (T848126)', function(assert) {
+    const done = assert.async();
+
+    ajaxMock.setup({
+        url: 'odata.org'
+    });
+
+    const store = new ODataStore({
+        url: 'odata.org',
+        key: ['id1'],
+        keyType: { id: 'Int32' }
+    });
+
+    function assertFunc(message) {
+        assert.equal(message.replace(/\d+_\d+/, '[VERSION]'),
+            'E4024 - OData does not support string functions when searching or filtering an Int32 field. See:\nhttp://js.devexpress.com/error/[VERSION]/E4024');
+    }
+
+    const promises = [
+        store
+            .load({
+                filter: ['id', 'contains', '123']
+            })
+            .fail(function(error) {
+                assertFunc(error.message);
+            }),
+        store
+            .load({
+                filter: ['id', 'startswith', '123']
+            })
+            .fail(function(error) {
+                assertFunc(error.message);
+            }),
+        store
+            .load({
+                filter: ['id', 'endswith', '123']
+            })
+            .fail(function(error) {
+                assertFunc(error.message);
+            }),
+        store
+            .load({
+                filter: ['id', 'notcontains', '123']
+            })
+            .fail(function(error) {
+                assertFunc(error.message);
+            }),
+    ];
+
+    $.when.apply($, promises)
+        .always(done);
+});
+
 QUnit.test('no double conversion for Int64', function(assert) {
     assert.expect(2);
 
