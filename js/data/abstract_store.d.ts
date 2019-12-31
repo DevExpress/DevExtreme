@@ -1,6 +1,4 @@
-import {
-    JQueryPromise
-} from '../jquery_augmentation';
+import '../jquery_augmentation';
 
 import {
     LoadOptions

@@ -2,9 +2,7 @@ import {
     animationConfig
 } from '../animation/fx';
 
-import {
-    JQueryPromise
-} from '../jquery_augmentation';
+import '../jquery_augmentation';
 
 import {
     dxElement

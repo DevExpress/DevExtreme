@@ -1,7 +1,4 @@
-import {
-    JQueryCallback,
-    JQueryPromise
-} from '../jquery_augmentation';
+import '../jquery_augmentation';
 
 import DOMComponent, {
     DOMComponentOptions
