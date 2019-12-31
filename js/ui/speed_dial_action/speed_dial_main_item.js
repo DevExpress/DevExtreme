@@ -14,6 +14,13 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 let speedDialMainItem = null;
 
+const modifyActionOptions = (action) => {
+    return extend({}, action._options.silent(), {
+        onInitialized: null,
+        onDisposing: null
+    });
+};
+
 class SpeedDialMainItem extends SpeedDialItem {
     _getDefaultOptions() {
         const defaultOptions = {
@@ -169,11 +176,7 @@ class SpeedDialMainItem extends SpeedDialItem {
             action._options.silent('parentPosition', this._getPosition());
             action._options.silent('actionVisible', action._options.silent('visible'));
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options.silent(), {
-                visible: false,
-                onInitialized: null,
-                onDisposing: null
-            })));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, modifyActionOptions(action), { visible: false })));
         }
     }
 
@@ -294,10 +297,8 @@ exports.initAction = function(newAction) {
             .appendTo(getSwatchContainer(newAction.$element()));
 
         speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
-            extend({}, newAction._options.silent(), {
-                actions: [ newAction ],
-                onInitialized: null,
-                onDisposing: null
+            extend({}, modifyActionOptions(newAction), {
+                actions: [ newAction ]
             })
         );
     } else {
@@ -325,11 +326,9 @@ exports.initAction = function(newAction) {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
+            speedDialMainItem.option(extend({}, modifyActionOptions(savedActions[0]), {
                 actions: savedActions,
-                position: speedDialMainItem._getPosition(),
-                onInitialized: null,
-                onDisposing: null
+                position: speedDialMainItem._getPosition()
             }));
         } else {
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
@@ -357,10 +356,8 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.$element().remove();
         speedDialMainItem = null;
     } else if(savedActions.length === 1) {
-        speedDialMainItem.option(extend({}, savedActions[0]._options.silent(), {
-            actions: savedActions,
-            onInitialized: null,
-            onDisposing: null
+        speedDialMainItem.option(extend({}, modifyActionOptions(savedActions[0]), {
+            actions: savedActions
         }));
     } else {
         speedDialMainItem.option({
