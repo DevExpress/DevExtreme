@@ -2460,7 +2460,7 @@ const Scheduler = Widget.inherit({
 
                     if(itemData && !itemData.data.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.settings);
 
                         dragBehavior.initialPosition = translator.locate($(dragElement));
                         translator.resetPosition($(dragElement));
@@ -2482,23 +2482,23 @@ const Scheduler = Widget.inherit({
         const appointments = this.getAppointmentsInstance();
         const appointmentIndex = appointments.option('items').length;
 
-        settings[0].isCompact = false;
-        settings[0].virtual = false;
+        settings.isCompact = false;
+        settings.virtual = false;
 
         appointments._currentAppointmentSettings = settings;
         appointments._renderItem(appointmentIndex, {
             itemData: itemData,
-            settings: settings
+            settings: [settings]
         });
 
         const appointmentList = appointments._findItemElementByItem(itemData);
-        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
+        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings.startDate) : appointmentList[0];
     },
 
     _getRecurrencePart(appointments, startDate) {
-        return appointments.some(appointment => {
+        return appointments.filter(appointment => {
             return appointment.data('dxAppointmentStartDate').getTime() === startDate.getTime();
-        });
+        })[0];
     },
 
     setTargetedAppointmentResources: function(targetedAppointment, appointmentElement, appointmentIndex) {
