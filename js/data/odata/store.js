@@ -12,9 +12,7 @@ import './query_adapter';
 
 const ANONYMOUS_KEY_NAME = '5d46402c-7899-4ea9-bd81-8b73c47c7683';
 
-const expandKeyType = (key, keyType) => {
-    return { [key]: keyType };
-};
+const expandKeyType = (key, keyType) => ({ [key]: keyType });
 
 const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     const result = {};
@@ -171,9 +169,7 @@ const ODataStore = Store.inherit({
     * @param1 loadOptions:object
     * @return object
     */
-    createQuery(loadOptions) {
-        loadOptions = loadOptions || {};
-
+    createQuery(loadOptions = {}) {
         let url;
         const queryOptions = {
             adapter: 'odata',
@@ -212,13 +208,15 @@ const ODataStore = Store.inherit({
     _insertImpl(values) {
         this._requireKey();
 
-        const that = this;
         const d = new Deferred();
 
         when(this._sendRequest(this._url, 'POST', null, values))
-            .done((serverResponse) => {
-                d.resolve(config().useLegacyStoreResult ? values : (serverResponse || values), that.keyOf(serverResponse));
-            })
+            .done(serverResponse =>
+                d.resolve(
+                    config().useLegacyStoreResult ? values : serverResponse || values,
+                    this.keyOf(serverResponse)
+                )
+            )
             .fail(d.reject);
 
         return d.promise();
@@ -227,17 +225,13 @@ const ODataStore = Store.inherit({
     _updateImpl(key, values) {
         const d = new Deferred();
 
-        when(
-            this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
-        ).done(
-            (serverResponse) => {
-                if(config().useLegacyStoreResult) {
-                    d.resolve(key, values);
-                } else {
-                    d.resolve(serverResponse || values, key);
-                }
-            }
-        ).fail(d.reject);
+        when(this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values))
+            .done(serverResponse =>
+                config().useLegacyStoreResult
+                    ? d.resolve(key, values)
+                    : d.resolve(serverResponse || values, key)
+            )
+            .fail(d.reject);
 
         return d.promise();
     },
@@ -245,13 +239,9 @@ const ODataStore = Store.inherit({
     _removeImpl(key) {
         const d = new Deferred();
 
-        when(
-            this._sendRequest(this._byKeyUrl(key), 'DELETE')
-        ).done(
-            () => {
-                d.resolve(key);
-            }
-        ).fail(d.reject);
+        when(this._sendRequest(this._byKeyUrl(key), 'DELETE'))
+            .done(() => d.resolve(key))
+            .fail(d.reject);
 
         return d.promise();
     },
