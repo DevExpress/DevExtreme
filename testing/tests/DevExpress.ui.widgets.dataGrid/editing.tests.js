@@ -3200,6 +3200,26 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
 });
 
+QUnit.test('AddRow method should return Deferred', function(assert) {
+    // arrange
+    this.options.editing = {
+        mode: 'batch',
+        allowAdding: true
+    };
+
+    this.rowsView.render($('#container'));
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 7, '7 visible rows');
+
+    // act
+    this.addRow().done(() => {
+        // assert
+        assert.ok(true, 'addRow returns Deferred');
+        assert.equal(this.getVisibleRows().length, 8, 'one more row is added');
+    });
+});
+
 QUnit.test('Edit row when set onEditingStart', function(assert) {
     const that = this;
     const rowsView = this.rowsView;
@@ -4930,17 +4950,19 @@ QUnit.test('addRow should not work if updating is started with validation error'
     // act
     that.editCell(0, 0);
     that.cellValue(0, 0, 'Test');
-    that.addRow();
+    const rejectDeferred = that.addRow();
 
     // assert
     assert.equal(testElement.find('.dx-data-row').length, 7, 'row is not added');
+    assert.equal(rejectDeferred.state(), 'rejected', 'deferred is rejected');
 
     // act
     that.cancelEditData();
-    that.addRow();
+    const resolveDeferred = that.addRow();
 
     // assert
     assert.equal(testElement.find('.dx-data-row').length, 8, 'row is added');
+    assert.equal(resolveDeferred.state(), 'resolved', 'deferred is resolved');
 });
 
 // T100624
@@ -15962,9 +15984,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and batch mode', functi
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -15984,6 +16006,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and batch mode', functi
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
     assert.deepEqual(visibleRows[8].data, { room: 9 }, ' row #8 data');
     assert.deepEqual(visibleRows[9].data, { room: 10 }, 'last row\'s data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'resolved', 'second deferred is resolved');
+    assert.equal(thirdDeferred.state(), 'resolved', 'third deferred is resolved');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', function(assert) {
@@ -16013,9 +16039,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', functio
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -16033,6 +16059,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and cell mode', functio
     // assert
     assert.equal(visibleRows.length, 8, 'one row was added');
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'rejected', 'second deferred is rejected');
+    assert.equal(thirdDeferred.state(), 'rejected', 'third deferred is rejected');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function(assert) {
@@ -16062,9 +16092,9 @@ QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function
     that.columnsController.init();
 
     // act
-    that.addRow();
-    that.addRow();
-    that.addRow();
+    const firstDeferred = that.addRow();
+    const secondDeferred = that.addRow();
+    const thirdDeferred = that.addRow();
 
     visibleRows = that.getVisibleRows();
 
@@ -16082,6 +16112,10 @@ QUnit.test('Adding multiple rows with async onInitNewRow and row mode', function
     // assert
     assert.equal(visibleRows.length, 8, 'one row was added');
     assert.deepEqual(visibleRows[7].data, { room: 8 }, 'row #7 data');
+
+    assert.equal(firstDeferred.state(), 'resolved', 'first deferred is resolved');
+    assert.equal(secondDeferred.state(), 'rejected', 'second deferred is rejected');
+    assert.equal(thirdDeferred.state(), 'rejected', 'third deferred is rejected');
 });
 
 QUnit.test('Adding multiple rows with async onInitNewRow (mixed failures and success) and batch mode', function(assert) {

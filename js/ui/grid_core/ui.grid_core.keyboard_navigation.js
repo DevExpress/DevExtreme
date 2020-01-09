@@ -2010,7 +2010,7 @@ module.exports = {
                 addRow: function(parentKey) {
                     this.getController('keyboardNavigation').setupFocusedView();
 
-                    this.callBase.apply(this, arguments);
+                    return this.callBase.apply(this, arguments);
                 },
                 getFocusedCellInRow: function(rowIndex) {
                     const keyboardNavigationController = this.getController('keyboardNavigation');

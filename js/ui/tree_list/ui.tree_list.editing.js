@@ -100,21 +100,20 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             const dataController = that.getController('data');
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
-                const d = new Deferred();
+                const deferred = new Deferred();
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
-                        callBase.call(that, key);
-                        d.resolve();
+                        callBase.call(that, key).done(deferred.resolve).fail(deferred.reject);
                     });
-                }).fail(d.reject);
-                return d;
+                }).fail(deferred.reject);
+                return deferred.promise();
             }
 
             if(key === undefined) {
                 key = that.option('rootValue');
             }
 
-            callBase.call(that, key);
+            return callBase.call(that, key);
         },
 
         _initNewRow: function(options, parentKey) {
