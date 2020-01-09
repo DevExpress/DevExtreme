@@ -560,9 +560,10 @@ const Calendar = Editor.inherit({
 
         const lastDay = dateUtils.getLastMonthDate(date).getDate();
 
-        if(this.option('navigationMode') === 'strict') {
+        const navigationMode = this.option('navigationMode');
+        if(navigationMode === 'strict') {
             date.setDate(currentDay > lastDay ? lastDay : currentDay);
-        } else {
+        } else if(navigationMode === 'closest') {
             offset === -1 && date.setDate(lastDay);
         }
 
