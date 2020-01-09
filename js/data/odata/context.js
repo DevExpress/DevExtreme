@@ -17,8 +17,6 @@ import './query_adapter';
 const ODataContext = Class.inherit({
 
     ctor(options) {
-        const that = this;
-
         /**
          * @name ODataContextOptions.url
          * @type string
@@ -59,7 +57,7 @@ const ODataContext = Class.inherit({
          * @name ODataContextOptions.deserializeDates
          * @type boolean
          */
-        that._extractServiceOptions(options);
+        this._extractServiceOptions(options);
 
         /**
          * @name ODataContextOptions.errorHandler
@@ -69,18 +67,18 @@ const ODataContext = Class.inherit({
          * @type_function_param1_field2 errorDetails:object
          * @type_function_param1_field3 requestOptions:object
          */
-        that._errorHandler = options.errorHandler;
+        this._errorHandler = options.errorHandler;
 
         /**
          * @name ODataContextOptions.entities
          * @type object
          */
         each(options.entities || [], (entityAlias, entityOptions) => {
-            that[entityAlias] = new ODataStore(extend(
+            this[entityAlias] = new ODataStore(extend(
                 {},
                 options,
                 {
-                    url: that._url + '/' + encodeURIComponent(entityOptions.name || entityAlias)
+                    url: `${this._url}/${encodeURIComponent(entityOptions.name || entityAlias)}`
                 },
                 entityOptions
             ));
@@ -110,7 +108,7 @@ const ODataContext = Class.inherit({
         httpMethod = httpMethod.toLowerCase();
 
         const d = new Deferred();
-        let url = this._url + '/' + encodeURIComponent(operationName);
+        let url = `${this._url}/${encodeURIComponent(operationName)}`;
         let payload;
 
         if(this.version() === 4) {
