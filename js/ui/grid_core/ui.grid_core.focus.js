@@ -657,7 +657,6 @@ module.exports = {
                         sort.slice().reverse().forEach(function(sortInfo) {
                             const selector = sortInfo.selector;
                             let getter;
-                            let value;
 
                             if(typeof selector === 'function') {
                                 getter = selector;
@@ -665,7 +664,7 @@ module.exports = {
                                 getter = that._columnsController.columnOption(selector, 'selector');
                             }
 
-                            value = getter ? getter(rowData) : rowData[selector];
+                            const value = getter ? getter(rowData) : rowData[selector];
                             filter = [[selector, '=', value], 'and', filter];
 
                             if(value === null || isBoolean(value)) {
