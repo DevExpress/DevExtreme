@@ -900,7 +900,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         const $headersElement = dataGridWrapper.headers.getElement();
         const $headerItem = dataGridWrapper.headers.getHeaderItem(0, 0);
-        $headerItem.trigger('focusin');
+        $headerItem.trigger('focus');
 
         // assert
         assert.ok($headerItem.is(':focus'), 'Header cell has focus');
