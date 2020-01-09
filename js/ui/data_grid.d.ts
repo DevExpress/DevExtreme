@@ -2506,10 +2506,11 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid dxDataGridMethods.addRow
      * @publicName addRow()
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): void;
+    addRow(): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxDataGridMethods.clearGrouping
      * @publicName clearGrouping()
