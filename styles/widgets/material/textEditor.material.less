@@ -21,7 +21,7 @@
 @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 0;
 @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE - 2px;
 @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + 2 * @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
-@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 5px;
+@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 4px;
 
 
 .dx-texteditor-icon() {
@@ -404,6 +404,11 @@
             > .dx-dropdowneditor-button:last-child {
                 margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
+
+            > .dx-clear-button-area:last-child,
+            > .dx-numberbox-spin-container:last-child {
+                margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+            }
         }
 
         .dx-rtl& {
@@ -441,6 +446,12 @@
 
                 > .dx-dropdowneditor-button:last-child {
                     margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
+                }
+
+                > .dx-clear-button-area:last-child,
+                > .dx-numberbox-spin-container:last-child {
+                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
                     margin-right: 0;
                 }
             }
