@@ -1276,6 +1276,27 @@ QUnit.test('Text', function(assert) {
     });
 });
 
+// T849504
+QUnit.test('Text with zero opacity in parent group', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g opacity="0"><text x="20" y="30">Test</text></g>' + testingMarkupEnd;
+    const imageBlob = getData(markup);
+
+    $.when(imageBlob).done(function() {
+        try {
+            assert.equal(that.drawnElements.length, 2, 'Canvas elements count');
+
+            const textElem = that.drawnElements[1];
+
+            assert.roughEqual(textElem.style.globalAlpha, 0, 0.1, 'Style opacity');
+            assert.equal(textElem.args[0], 'Test', 'Text');
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test('Text offset position calculation with start alignment', function(assert) {
     const that = this;
     const done = assert.async();
