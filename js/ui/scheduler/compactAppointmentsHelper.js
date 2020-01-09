@@ -46,7 +46,8 @@ export class CompactAppointmentsHelper {
         return items.data.map((item, index) => {
             return {
                 data: item,
-                color: items.colors[index]
+                color: items.colors[index],
+                settings: items.settings[index],
             };
         });
     }

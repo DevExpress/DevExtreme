@@ -755,13 +755,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
                     top: virtualAppointment.top,
                     left: virtualAppointment.left
                 },
-                items: { data: [], colors: [] },
+                items: { data: [], colors: [], settings: [] },
                 isAllDay: virtualAppointment.isAllDay ? true : false,
                 buttonColor: color
             };
         }
 
-        appointmentData.settings = [appointmentSetting];
+        this._virtualAppointments[virtualGroupIndex].items.settings.push(appointmentSetting);
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 
