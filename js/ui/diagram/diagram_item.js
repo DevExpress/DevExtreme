@@ -1,11 +1,15 @@
 /**
     * @name dxDiagramItem
     * @type object
-*/
+    */
 /**
     * @name dxDiagramItem.id
     * @type String
-*/
+    */
+/**
+    * @name dxDiagramItem.dataItem
+    * @type object
+    */
 
 
 /**
