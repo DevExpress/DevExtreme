@@ -42,9 +42,9 @@ QUnit.test('Header should be initialized with correct views and currentView opti
         views: ['day', 'week'],
         currentView: 'week'
     });
-    const $element = this.instance.$element();
-    assert.deepEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
-    assert.equal($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('currentView'), 'week', 'Scheduler header has a correct current view');
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
+    assert.deepEqual(header.option('views'), ['day', 'week'], 'Scheduler header has a correct views option');
+    assert.equal(header.option('currentView'), 'week', 'Scheduler header has a correct current view');
 });
 
 QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of \'dx-scheduler-date-table-row\'', function(assert) {
@@ -67,20 +67,12 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
             text: 'John Heart',
             id: 2,
             color: '#32c9ed'
-        }, {
-            text: 'Todd Hoffman',
-            id: 3,
-            color: '#2a7ee4'
-        }, {
-            text: 'Sandra Johnson',
-            id: 4,
-            color: '#7b49d3'
         }];
 
     const data = [
         {
             text: 'Website Re-Design Plan',
-            ownerId: 4, roomId: 1, priorityId: 2,
+            ownerId: 1, roomId: 1, priorityId: 2,
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
         }, {
@@ -89,21 +81,6 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
             startDate: new Date(2017, 4, 22, 12, 0),
             endDate: new Date(2017, 4, 22, 13, 0),
             allDay: true
-        }, {
-            text: 'Install New Router in Dev Room',
-            ownerId: 1, roomId: 1, priorityId: 2,
-            startDate: new Date(2017, 4, 22, 14, 30),
-            endDate: new Date(2017, 4, 22, 15, 30)
-        }, {
-            text: 'Approve Personal Computer Upgrade Plan',
-            ownerId: 3, roomId: 2, priorityId: 2,
-            startDate: new Date(2017, 4, 23, 10, 0),
-            endDate: new Date(2017, 4, 23, 11, 0)
-        }, {
-            text: 'Final Budget Review',
-            ownerId: 1, roomId: 1, priorityId: 1,
-            startDate: new Date(2017, 4, 23, 12, 0),
-            endDate: new Date(2017, 4, 23, 13, 35)
         }];
 
     this.createInstance({
@@ -137,15 +114,21 @@ QUnit.test('Header should be initialized with correct \'width\' option', functio
         currentView: 'week',
         width: 700
     });
-    const $element = this.instance.$element();
-    const header = $element.find('.dx-scheduler-header').dxSchedulerHeader('instance');
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
     assert.equal(header.option('width'), 700, 'Header has a right width');
+});
 
+QUnit.test('Header should be updated with correct \'width\' option', function(assert) {
+    this.createInstance({
+        views: ['day', 'week'],
+        currentView: 'week',
+        width: 700
+    });
     this.instance.option('width', 800);
+    const header = this.instance.$element().find('.dx-scheduler-header').dxSchedulerHeader('instance');
 
     assert.equal(header.option('width'), 800, 'Header has a right width');
-
 });
 
 QUnit.test('Header should be initialized with correct useDropDownViewSwitcher option', function(assert) {
@@ -154,9 +137,14 @@ QUnit.test('Header should be initialized with correct useDropDownViewSwitcher op
     });
     const $element = this.instance.$element();
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), true, 'Scheduler header has a correct useDropDownViewSwitcher option');
+});
 
+QUnit.test('Header should be updated with correct useDropDownViewSwitcher option', function(assert) {
+    this.createInstance({
+        useDropDownViewSwitcher: true
+    });
     this.instance.option('useDropDownViewSwitcher', false);
-
+    const $element = this.instance.$element();
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), false, 'Scheduler header has a correct useDropDownViewSwitcher option');
 });
 
