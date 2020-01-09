@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import Color from '../color';
-import { isFunction, isPromise } from '../core/utils/type';
+import { isFunction, isPromise, isDefined } from '../core/utils/type';
 import svgUtils from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -234,7 +234,7 @@ function parseStyles(element, options, rootAppended) {
     }
 
     options.textDecoration = options.textDecoration || options.textDecorationLine;
-    options.globalAlpha = options.opacity || options.globalAlpha;
+    options.globalAlpha = isDefined(options.opacity) ? options.opacity : options.globalAlpha;
 }
 
 function parseUrl(urlString) {
