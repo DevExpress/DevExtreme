@@ -3,6 +3,7 @@ import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 
@@ -35,6 +36,7 @@ const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
 const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
+const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('options changed callbacks', {
     beforeEach: function() {
@@ -239,6 +241,37 @@ QUnit.module('inkRipple', {}, () => {
         });
         $('#inkButton').trigger('dxclick');
     });
+
+    QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $inkButton = $('#inkButton').dxButton({
+            text: 'test',
+            useInkRipple: true
+        });
+        const inkButton = $inkButton.dxButton('instance');
+        const pointer = pointerMock($inkButton);
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        inkButton.option('useInkRipple', false);
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
+
+        inkButton.option('useInkRipple', true);
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        clock.restore();
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
@@ -335,11 +368,11 @@ QUnit.module('submit behavior', {
     }
 }, () => {
     QUnit.test('render input with submit type', function(assert) {
-        assert.ok(this.$element.find('input[type=submit]').length, 1);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 1);
     });
 
     QUnit.test('submit input has .dx-button-submit-input CSS class', function(assert) {
-        assert.ok(this.$element.find('.' + BUTTON_SUBMIT_INPUT_CLASS).length, 1);
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1);
     });
 
     QUnit.test('button click call click() on submit input', function(assert) {
@@ -352,6 +385,18 @@ QUnit.module('submit behavior', {
         this.clickButton();
 
         assert.ok(clickHandlerSpy.calledOnce);
+    });
+
+    QUnit.test('widget should work correctly if useSubmitBehavior was changed runtime', function(assert) {
+        const instance = this.$element.dxButton('instance');
+
+        instance.option('useSubmitBehavior', false);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 0, 'no submit input if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 0, 'no submit class if useSubmitBehavior is false');
+
+        instance.option('useSubmitBehavior', true);
+        assert.strictEqual(this.$element.find('input[type=submit]').length, 1, 'has submit input if useSubmitBehavior is false');
+        assert.strictEqual(this.$element.find(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 1, 'has submit class if useSubmitBehavior is false');
     });
 
     QUnit.test('preventDefault is called to dismiss submit of form if validation failed', function(assert) {

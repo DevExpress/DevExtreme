@@ -29,36 +29,37 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         return $iconElement;
     };
 
-    const renderIcons = function($container, row) {
-        const level = row.level;
-
-        for(let i = 0; i <= level; i++) {
-            $container.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
-        }
-    };
-
     return {
-        _renderExpandIcon: function($container, options) {
+        _renderIconContainer: function($container, options) {
             const $iconContainer = $('<div>')
                 .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                 .appendTo($container);
 
-            renderIcons($iconContainer, options.row);
-
             options.watch && options.watch(function() {
                 return [options.row.level, options.row.isExpanded, options.row.node.hasChildren];
-            }, function() {
+            }, () => {
                 $iconContainer.empty();
-                renderIcons($iconContainer, options.row);
+                this._renderIcons($iconContainer, options);
             });
 
             $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
+
+            return this._renderIcons($iconContainer, options);
+        },
+
+        _renderIcons: function($iconContainer, options) {
+            const row = options.row;
+            const level = row.level;
+
+            for(let i = 0; i <= level; i++) {
+                $iconContainer.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
+            }
 
             return $iconContainer;
         },
 
         _renderCellCommandContent: function(container, model) {
-            this._renderExpandIcon(container, model);
+            this._renderIconContainer(container, model);
             return true;
         },
 
