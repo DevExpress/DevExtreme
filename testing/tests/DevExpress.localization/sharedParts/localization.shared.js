@@ -772,14 +772,14 @@ module.exports = function() {
         assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 1 }), '4.6');
         assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 0 }), '5');
         assert.equal(localization.formatNumber(4.64, { type: 'fixedPoint', precision: 2 }), '4.64');
-        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 2 }), '-4.64', '8');
-        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 1 }), '-4.6', '9');
-        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 0 }), '-5', '10');
-        assert.equal(localization.formatNumber(-4.64, { type: 'fixedPoint', precision: 2 }), '-4.64', '11');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 2 }), '-4.64');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 1 }), '-4.6');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 0 }), '-5');
+        assert.equal(localization.formatNumber(-4.64, { type: 'fixedPoint', precision: 2 }), '-4.64');
 
-        assert.equal(localization.formatNumber(35.855, { type: 'fixedPoint', precision: 5 }), '35.85500', '7');
-        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 2 }), '-35.85', '12');
-        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 5 }), '-35.85500', '13');
+        assert.equal(localization.formatNumber(35.855, { type: 'fixedPoint', precision: 5 }), '35.85500');
+        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 2 }), '-35.85');
+        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 5 }), '-35.85500');
 
         assert.equal(localization.formatNumber(1.296249, { type: 'fixedPoint', precision: 4 }), '1.2962', 'T848392');
         assert.equal(localization.formatNumber(-1.296249, { type: 'fixedPoint', precision: 4 }), '-1.2962', 'T848392');
