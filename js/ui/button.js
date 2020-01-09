@@ -13,6 +13,7 @@ import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/utils/dom';
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
+const INK_RIPPLE_NAMESPACE = 'inkRipple';
 
 /**
 * @name dxButton
@@ -38,10 +39,10 @@ class Button extends Widget {
 
     _attachActiveEvents(active, inactive) {
         const $el = this._eventBindingTarget();
-        const namespace = 'inkRipple';
+        const namespace = INK_RIPPLE_NAMESPACE;
         const selector = this._activeStateUnit;
 
-        activeEvents.off($el, { namespace, selector });
+        this._detachActiveEvents($el);
         activeEvents.on($el,
             new Action(active),
             new Action(inactive, { excludeValidators: ['disabled', 'readOnly'] }), {
@@ -51,6 +52,10 @@ class Button extends Widget {
                 namespace
             }
         );
+    }
+
+    _detachActiveEvents($el) {
+        activeEvents.off($el || this._eventBindingTarget(), { namespace: INK_RIPPLE_NAMESPACE, selector: this._activeStateUnit });
     }
 
     _defaultOptionsRules() {
@@ -332,6 +337,8 @@ class Button extends Widget {
                 ({ event }) => changeWaveVisibility(event, true),
                 ({ event }) => changeWaveVisibility(event)
             );
+        } else {
+            this._detachActiveEvents();
         }
     }
 
