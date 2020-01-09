@@ -169,6 +169,13 @@ const Calendar = Editor.inherit({
              */
             disabledDates: null,
 
+            /**
+             * @name dxCalendarOptions.navigationMode
+             * @type string
+             * @default "strict"
+             */
+            navigationMode: 'strict',
+
             onCellClick: null,
             onContouredChanged: null,
             hasFocus: function(element) {
@@ -552,21 +559,12 @@ const Calendar = Editor.inherit({
         date.setMonth(date.getMonth() + difference);
 
         const lastDay = dateUtils.getLastMonthDate(date).getDate();
-        date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
-        return date;
-    },
-
-    _getDateAfterMonthShift: function(offset, date) {
-        date = new Date(date || this.option('currentDate'));
-
-        const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
-
-        date.setDate(1);
-        date.setMonth(date.getMonth() + difference);
-
-        const lastDay = dateUtils.getLastMonthDate(date).getDate();
-        offset === -1 && date.setDate(lastDay);
+        if(this.option('navigationMode') === 'strict') {
+            date.setDate(currentDay > lastDay ? lastDay : currentDay);
+        } else {
+            offset === -1 && date.setDate(lastDay);
+        }
 
         return date;
     },
@@ -794,7 +792,7 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorClickHandler: function(e) {
-        const currentDate = this._getDateAfterMonthShift(e.direction, this.option('currentDate'));
+        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
 
         this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
@@ -1241,6 +1239,7 @@ const Calendar = Editor.inherit({
             case 'dateSerializationFormat':
             case 'cellTemplate':
             case 'showTodayButton':
+            case 'navigationMode':
                 this._invalidate();
                 break;
             case 'hasFocus':
