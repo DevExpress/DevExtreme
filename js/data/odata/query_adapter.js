@@ -14,30 +14,24 @@ const compileCriteria = (() => {
     let forceLowerCase;
     let fieldTypes;
 
-    const createBinaryOperationFormatter = (op) => {
-        return (prop, val) => {
-            return `${prop} ${op} ${val}`;
-        };
-    };
+    const createBinaryOperationFormatter = (op) => (prop, val) => `${prop} ${op} ${val}`;
 
-    const createStringFuncFormatter = (op, reverse) => {
-        return (prop, val) => {
-            const bag = [op, '('];
+    const createStringFuncFormatter = (op, reverse) => (prop, val) => {
+        const bag = [op, '('];
 
-            if(forceLowerCase) {
-                prop = prop.indexOf('tolower(') === -1 ? `tolower(${prop})` : prop;
-                val = val.toLowerCase();
-            }
+        if(forceLowerCase) {
+            prop = prop.indexOf('tolower(') === -1 ? `tolower(${prop})` : prop;
+            val = val.toLowerCase();
+        }
 
-            if(reverse) {
-                bag.push(val, ',', prop);
-            } else {
-                bag.push(prop, ',', val);
-            }
+        if(reverse) {
+            bag.push(val, ',', prop);
+        } else {
+            bag.push(prop, ',', val);
+        }
 
-            bag.push(')');
-            return bag.join('');
-        };
+        bag.push(')');
+        return bag.join('');
     };
 
     const formatters = {
@@ -120,7 +114,7 @@ const compileCriteria = (() => {
             }
         });
 
-        return bag.join(' ' + groupOperator + ' ');
+        return bag.join(` ${groupOperator} `);
     };
 
     const compileCore = (criteria) => {
@@ -234,14 +228,12 @@ const createODataQueryAdapter = (queryOptions) => {
 
     return {
 
-        optimize(tasks) {
-            tryLiftSelect(tasks);
-        },
+        optimize: tryLiftSelect,
 
         exec(url) {
             return sendRequest(_oDataVersion,
                 {
-                    url: url,
+                    url,
                     params: extend(requestData(), queryOptions?.params)
                 },
                 {
@@ -325,9 +317,7 @@ const createODataQueryAdapter = (queryOptions) => {
             _select = expr;
         },
 
-        count() {
-            _countQuery = true;
-        }
+        count: () => _countQuery = true
     };
 };
 
