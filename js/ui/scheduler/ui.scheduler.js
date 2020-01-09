@@ -1197,6 +1197,8 @@ const Scheduler = Widget.inherit({
                 break;
             case 'currentView':
                 this._processCurrentView();
+                this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
+
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
@@ -1205,7 +1207,6 @@ const Scheduler = Widget.inherit({
                 });
 
                 this._postponeResourceLoading().done((resources) => {
-                    this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
                     this._updateHeader();
                     this._filterAppointmentsByDate();
