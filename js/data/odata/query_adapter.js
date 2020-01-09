@@ -149,9 +149,7 @@ const createODataQueryAdapter = (queryOptions) => {
 
     const _oDataVersion = queryOptions.version || DEFAULT_PROTOCOL_VERSION;
 
-    const hasSlice = () => {
-        return _skip || _take !== undefined;
-    };
+    const hasSlice = () => _skip || _take !== undefined;
 
     const hasFunction = (criterion) => {
         for(let i = 0; i < criterion.length; i++) {
