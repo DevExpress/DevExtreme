@@ -567,16 +567,15 @@ QUnit.module('events subscriptions', () => {
     QUnit.test('contentReady', function(assert) {
         assert.expect(3);
 
-        const eventHandler = (e) => {
-            assert.ok(e.component, 'Component info should be passed');
-            assert.ok(e.element, 'Element info should be passed');
-            assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
-        };
         const button = $('#button').dxButton({
             text: 'test',
         }).dxButton('instance');
 
-        button.on('contentReady', eventHandler);
+        button.on('contentReady', (e) => {
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+            assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+        });
         button.repaint();
     });
 });
