@@ -2995,7 +2995,6 @@ QUnit.testStart(function() {
             }
         ];
 
-
         this.createInstance({
             dataSource: [
                 {
