@@ -3200,10 +3200,8 @@ QUnit.test('Remove the inserted row with edit mode batch and hidden column', fun
     assert.ok(!testElement.find('tbody > tr').first().hasClass('dx-row-inserted'), 'not has row inserted');
 });
 
-QUnit.test('AddRow method should return Deferred (T844118)', function(assert) {
+QUnit.test('AddRow method should return Deferred', function(assert) {
     // arrange
-    const done = assert.async();
-
     this.options.editing = {
         mode: 'batch',
         allowAdding: true
@@ -3215,57 +3213,11 @@ QUnit.test('AddRow method should return Deferred (T844118)', function(assert) {
     assert.equal(this.getVisibleRows().length, 7, '7 visible rows');
 
     // act
-    const deferred = this.addRow();
-    deferred.done(() => {
+    this.addRow().done(() => {
         // assert
-        assert.ok(true, 'result is Deferred');
+        assert.ok(true, 'addRow returns Deferred');
         assert.equal(this.getVisibleRows().length, 8, 'one more row is added');
-
-        done();
     });
-});
-
-QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
-    // arrange
-    const that = this;
-    const done = assert.async();
-    let initNewRowCallCount = 0;
-
-    that.options.editing = {
-        mode: 'cell',
-        allowAdding: true
-    };
-
-    that.options.onInitNewRow = (e) => {
-        const deferred = $.Deferred();
-        e.promise = deferred.done(function() {
-            initNewRowCallCount++;
-        });
-        deferred.resolve();
-    };
-
-    that.rowsView.render($('#container'));
-    that.editingController.optionChanged({ name: 'onInitNewRow' });
-
-    // assert
-    assert.equal(that.getVisibleRows().length, 7, '7 visible rows');
-
-    // act
-    const rowCount = 5;
-    const addRowDeferred = function(rowIndex) {
-        if(rowIndex <= rowCount) {
-            return that.addRow().done(addRowDeferred.bind(null, rowIndex + 1));
-        }
-
-        // assert
-        assert.equal(that.getVisibleRows().length, 12, 'added new 5 rows');
-        assert.equal(initNewRowCallCount, 5, 'onInitNewRow called 5 times');
-        done();
-
-        return $.Deferred().resolve();
-    };
-
-    addRowDeferred(1);
 });
 
 QUnit.test('Edit row when set onEditingStart', function(assert) {

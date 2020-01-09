@@ -285,37 +285,29 @@ QUnit.test('AddRow method should expand row and add item after parent', function
     assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
 });
 
-QUnit.test('AddRow method should return Deferred with collapsed parent (T844118)', function(assert) {
+QUnit.test('AddRow method should return Deferred with collapsed parent', function(assert) {
     // arrange
-    const $testElement = $('#treeList');
-    const done = assert.async();
-
     this.options.editing.allowAdding = true;
 
     this.setupTreeList();
-    this.rowsView.render($testElement);
-
+    this.rowsView.render($('#treeList'));
     this.clock.tick();
-    this.clock.restore();
 
     // assert
-    assert.equal(this.getVisibleRows().length, 1, '1 visible row');
+    assert.equal(this.getVisibleRows().length, 1, 'one visible row');
 
     // act
-    const deferred = this.addRow(1);
-    deferred.done && deferred.done(() => {
+    this.addRow(1).done(() => {
         // assert
-        assert.ok(true, 'result is Deferred');
+        assert.ok(true, 'addRow returns Deferred');
         assert.equal(this.getVisibleRows().length, 3, 'parent is expanded and one more row is added');
-
-        done();
     });
+
+    this.clock.tick();
 });
 
 QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
     // arrange
-    const $testElement = $('#treeList');
-    const done = assert.async();
     const initNewRowCalls = [];
 
     this.options.editing.allowAdding = true;
@@ -324,31 +316,29 @@ QUnit.test('Sequential adding of a row after adding the previous using Deferred 
     };
 
     this.setupTreeList();
-    this.rowsView.render($testElement);
-
+    this.rowsView.render($('#treeList'));
     this.clock.tick();
-    this.clock.restore();
 
     // assert
     assert.equal(this.getVisibleRows().length, 1, '1 visible row');
 
     // act
-    const parentIds = [1, 2];
-    const addRowDeferred = (index) => {
-        let parentId = parentIds[index];
+    const addRowAfterDeferredResolve = (sequence, index) => {
+        let parentId = sequence[index];
 
         if(parentId !== undefined) {
-            return this.addRow(parentId).done(addRowDeferred.bind(null, index + 1));
+            return this.addRow(parentId).done(addRowAfterDeferredResolve.bind(null, sequence, index + 1));
         }
 
         // assert
-        assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequential calls onInitNewRow');
-        done();
+        assert.deepEqual(sequence, initNewRowCalls, 'for every added row sequential calls onInitNewRow');
 
         return $.Deferred().resolve();
     };
 
-    addRowDeferred(0);
+    addRowAfterDeferredResolve([1, 2], 0);
+
+    this.clock.tick();
 });
 
 // T553905
