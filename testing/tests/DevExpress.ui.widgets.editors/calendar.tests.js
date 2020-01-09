@@ -2217,15 +2217,29 @@ QUnit.module('Current date', {
         });
     });
 
-    QUnit.test('correct change contouredDate after view change if this cell is not present on new view', function(assert) {
+    QUnit.test('correct change contouredDate after view change (T849382)', function(assert) {
         const calendar = this.$element.dxCalendar({
-            value: new Date(2015, 0, 31),
+            value: new Date(2015, 0, 15),
             zoomLevel: 'month',
             focusStateEnabled: true
         }).dxCalendar('instance');
 
         $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 28));
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1));
+
+        $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31));
+    });
+
+    QUnit.test('correct change contouredDate after view change if this cell is not present on new view', function(assert) {
+        const calendar = this.$element.dxCalendar({
+            value: new Date(2019, 11, 31),
+            zoomLevel: 'month',
+            focusStateEnabled: true
+        }).dxCalendar('instance');
+
+        $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))).trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2019, 10, 30));
     });
 
     QUnit.test('current date is correct when trying to navigate out of available range', function(assert) {

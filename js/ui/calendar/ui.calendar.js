@@ -557,6 +557,20 @@ const Calendar = Editor.inherit({
         return date;
     },
 
+    _getDateAfterMonthShift: function(offset, date) {
+        date = new Date(date || this.option('currentDate'));
+
+        const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
+
+        date.setDate(1);
+        date.setMonth(date.getMonth() + difference);
+
+        const lastDay = dateUtils.getLastMonthDate(date).getDate();
+        offset === -1 && date.setDate(lastDay);
+
+        return date;
+    },
+
     _focusTarget: function() {
         return this.$element();
     },
@@ -780,7 +794,7 @@ const Calendar = Editor.inherit({
     },
 
     _navigatorClickHandler: function(e) {
-        const currentDate = this._getDateByOffset(e.direction, this.option('currentDate'));
+        const currentDate = this._getDateAfterMonthShift(e.direction, this.option('currentDate'));
 
         this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
