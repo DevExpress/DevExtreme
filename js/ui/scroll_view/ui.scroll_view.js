@@ -17,6 +17,8 @@ const LoadPanel = require('../load_panel');
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
 const SCROLLVIEW_TOP_POCKET_CLASS = SCROLLVIEW_CLASS + '-top-pocket';
+const SCROLLVIEW_TOP_POCKET_CLASS_NATIVE_SCROLL = SCROLLVIEW_TOP_POCKET_CLASS + '-native';
+const SCROLLVIEW_TOP_POCKET_CLASS_SIMULATED_SCROLL = SCROLLVIEW_TOP_POCKET_CLASS_NATIVE_SCROLL + '-simulated';
 const SCROLLVIEW_BOTTOM_POCKET_CLASS = SCROLLVIEW_CLASS + '-bottom-pocket';
 const SCROLLVIEW_PULLDOWN_CLASS = SCROLLVIEW_CLASS + '-pull-down';
 
@@ -164,7 +166,11 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     _initTopPocket: function() {
-        const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS);
+        const scrollClass = this.option('useNative')
+            ? SCROLLVIEW_TOP_POCKET_CLASS_NATIVE_SCROLL
+            : SCROLLVIEW_TOP_POCKET_CLASS_SIMULATED_SCROLL;
+
+        const $topPocket = this._$topPocket = $('<div>').addClass(SCROLLVIEW_TOP_POCKET_CLASS).addClass(scrollClass);
         const $pullDown = this._$pullDown = $('<div>').addClass(SCROLLVIEW_PULLDOWN_CLASS);
         $topPocket.append($pullDown);
         this._$content.prepend($topPocket);
