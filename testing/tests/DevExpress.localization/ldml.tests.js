@@ -139,6 +139,10 @@ QUnit.test('float with precision formatting', function(assert) {
     assert.strictEqual(formatter(123.573), '123.57', 'rounding float back');
     assert.strictEqual(formatter(-123.57), '-123.57', 'format negative float');
     assert.strictEqual(formatter(4.645), '4.65', 'format float with rounding issue');
+
+    const toPrecision4 = getNumberFormatter('#.0000');
+    assert.strictEqual(toPrecision4(1.296249, 4), '1.2962', 'T848392');
+    assert.strictEqual(toPrecision4(-1.296249, 4), '-1.2962', 'T848392');
 });
 
 QUnit.test('extra large float part formatting', function(assert) {
