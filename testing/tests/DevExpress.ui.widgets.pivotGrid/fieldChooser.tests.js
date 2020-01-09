@@ -2317,10 +2317,35 @@ QUnit.test('cancelChanges', function(assert) {
         targetGroup: 'row'
     }));
 
-    this.fieldChooser.cancelChanges();
+    const isCanceled = this.fieldChooser.cancelChanges();
     this.clock.tick(1000);
 
     assert.strictEqual(this.fieldChooser.option('state').fields[0].area, 'column', 'changes are canceled');
+    assert.strictEqual(isCanceled, true, 'cancelChanges return true');
+});
+
+// T848232
+QUnit.test('cancelChanges should not work during loading', function(assert) {
+    this.setup({
+        store: [],
+        fields: [{
+            dataField: 'field1',
+            area: 'column'
+        }]
+    });
+
+    this.fieldChooser.getDataSource().field(0, {
+        area: 'row'
+    });
+
+    this.fieldChooser.getDataSource().load();
+
+    // act
+    const isCanceled = this.fieldChooser.cancelChanges();
+
+    // assert
+    assert.strictEqual(isCanceled, false, 'cancelChanges return false');
+    assert.strictEqual(this.fieldChooser.option('state'), null, 'state is empty');
 });
 
 QUnit.test('cancel changes on field chooser repaint', function(assert) {
