@@ -10,6 +10,10 @@
     * @name dxDiagramItem.dataItem
     * @type object
     */
+/**
+    * @name dxDiagramItem.itemType
+    * @type Enums.DiagramItemType
+    */
 
 
 /**
