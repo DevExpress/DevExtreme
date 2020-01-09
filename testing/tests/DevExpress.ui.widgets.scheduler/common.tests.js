@@ -3030,7 +3030,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option('currentView', 'agenda');
-        assert.ok(true, 'currentView was changed on agenda correctly');
+        assert.ok(true, 'currentView was changed to agenda correctly');
     });
 
     QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', function(assert) {
