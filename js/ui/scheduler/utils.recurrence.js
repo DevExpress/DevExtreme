@@ -23,6 +23,8 @@ const intervalMap = {
     yearly: 'years'
 };
 
+const resultUtils = {};
+
 const dateSetterMap = {
     'bysecond': function(date, value) {
         date.setSeconds(value);
@@ -567,7 +569,7 @@ function getDateByAsciiString(string, initialDate) {
     }
 
     const isUTC = arrayDate[8] !== undefined;
-    let currentOffset = initialDate ? initialDate.getTimezoneOffset() : getTimeZoneOffset();
+    let currentOffset = initialDate ? initialDate.getTimezoneOffset() : resultUtils.getTimeZoneOffset();
     let date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
 
     currentOffset = currentOffset * 60000;
@@ -611,7 +613,7 @@ function daysFromByDayRule(rule) {
 }
 
 function getAsciiStringByDate(date) {
-    const currentOffset = getTimeZoneOffset() * 60000;
+    const currentOffset = resultUtils.getTimeZoneOffset() * 60000;
 
     date = new Date(date.getTime() + currentOffset);
     return date.getFullYear() + ('0' + (date.getMonth() + 1)).slice(-2) + ('0' + date.getDate()).slice(-2) +
@@ -811,7 +813,7 @@ const getRecurrenceString = function(object) {
     return result.toUpperCase();
 };
 
-const resultUtils = {
+extend(resultUtils, {
     getRecurrenceString: getRecurrenceString,
     getRecurrenceRule: getRecurrenceRule,
     getAsciiStringByDate: getAsciiStringByDate,
@@ -820,6 +822,6 @@ const resultUtils = {
     getDateByAsciiString: getDateByAsciiString,
     daysFromByDayRule: daysFromByDayRule,
     getTimeZoneOffset: getTimeZoneOffset
-};
+});
 
 module.exports = resultUtils;

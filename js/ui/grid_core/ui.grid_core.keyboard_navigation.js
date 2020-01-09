@@ -142,17 +142,21 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
-            let isGridEmpty = !that._dataController.getVisibleRows().length;
-            if(isGridEmpty) {
-                let tabIndex = that.option('tabindex') || 0;
-                $rowsView.attr('tabindex', tabIndex);
-            }
+            that._setRowsViewAttributes($rowsView);
 
             if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
                 needUpdateFocus && that._updateFocus(true);
             }
         });
+    },
+
+    _setRowsViewAttributes: function($rowsView) {
+        const isGridEmpty = !this._dataController.getVisibleRows().length;
+        if(isGridEmpty) {
+            const tabIndex = this.option('tabindex') || 0;
+            $rowsView.attr('tabindex', tabIndex);
+        }
     },
 
     _initKeyDownHandler: function(element, handler) {

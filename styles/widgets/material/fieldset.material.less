@@ -58,6 +58,13 @@
     }
 }
 
+.dx-field-value-widget-position(@name, @size) {
+    &.@{name},
+    &:not(.dx-widget) > .@{name} {
+        margin: (@MATERIAL_FIELD_MIN_HEIGHT - @size)/2 0;
+    }
+}
+
 // TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
 .dx-fieldset-sizing-base() {
     .dx-field {
@@ -84,12 +91,6 @@
             }
         }
 
-        .dx-field-value-widget-position(@name, @size) {
-            &.@{name},
-            &:not(.dx-widget) > .@{name} {
-                margin: (@MATERIAL_FIELD_MIN_HEIGHT - @size)/2 0;
-            }
-        }
         .dx-field-value-widget-position(dx-checkbox, @MATERIAL_CHECKBOX_SIZE);
         .dx-field-value-widget-position(dx-switch, @MATERIAL_SWITCH_HEIGHT);
         .dx-field-value-widget-position(dx-slider, @MATERIAL_SLIDER_HEIGHT);
