@@ -14,6 +14,13 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 let speedDialMainItem = null;
 
+const modifyActionOptions = (action) => {
+    return extend({}, action._options, {
+        onInitialized: null,
+        onDisposing: null
+    });
+};
+
 class SpeedDialMainItem extends SpeedDialItem {
     _getDefaultOptions() {
         const defaultOptions = {
@@ -169,7 +176,7 @@ class SpeedDialMainItem extends SpeedDialItem {
             action._options.parentPosition = this._getPosition();
             action._options.actionVisible = action._options.visible;
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, modifyActionOptions(action), { visible: false })));
         }
     }
 
@@ -290,7 +297,7 @@ exports.initAction = function(newAction) {
             .appendTo(getSwatchContainer(newAction.$element()));
 
         speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
-            extend({}, newAction._options, {
+            extend({}, modifyActionOptions(newAction), {
                 actions: [ newAction ]
             })
         );
@@ -319,7 +326,7 @@ exports.initAction = function(newAction) {
                 actions: savedActions
             }));
         } else if(savedActions.length === 1) {
-            speedDialMainItem.option(extend({}, savedActions[0]._options, {
+            speedDialMainItem.option(extend({}, modifyActionOptions(savedActions[0]), {
                 actions: savedActions,
                 position: speedDialMainItem._getPosition()
             }));
@@ -349,7 +356,7 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.$element().remove();
         speedDialMainItem = null;
     } else if(savedActions.length === 1) {
-        speedDialMainItem.option(extend({}, savedActions[0]._options, {
+        speedDialMainItem.option(extend({}, modifyActionOptions(savedActions[0]), {
             actions: savedActions
         }));
     } else {
