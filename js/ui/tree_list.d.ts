@@ -582,18 +582,20 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid dxTreeListMethods.addRow
      * @publicName addRow()
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(): void;
+    addRow(): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeListMethods.addRow
      * @publicName addRow(parentId)
      * @param1 parentId:any
+     * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    addRow(parentId: any): void;
+    addRow(parentId: any): Promise<void> & JQueryPromise<void>;
     /**
      * @docid dxTreeListMethods.collapseRow
      * @publicName collapseRow(key)

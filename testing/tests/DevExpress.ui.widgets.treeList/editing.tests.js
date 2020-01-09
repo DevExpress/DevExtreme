@@ -286,6 +286,62 @@ QUnit.test('AddRow method should expand row and add item after parent', function
     assert.strictEqual(rows[2].node.parent.key, 1, 'row 2 node parent');
 });
 
+QUnit.test('AddRow method should return Deferred with collapsed parent', function(assert) {
+    // arrange
+    this.options.editing.allowAdding = true;
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, 'one visible row');
+
+    // act
+    this.addRow(1).done(() => {
+        // assert
+        assert.ok(true, 'addRow returns Deferred');
+        assert.equal(this.getVisibleRows().length, 3, 'parent is expanded and one more row is added');
+    });
+
+    this.clock.tick();
+});
+
+QUnit.test('Sequential adding of a row after adding the previous using Deferred (T844118)', function(assert) {
+    // arrange
+    const initNewRowCalls = [];
+
+    this.options.editing.allowAdding = true;
+    this.options.onInitNewRow = (e) => {
+        initNewRowCalls.push(e.data.parentId);
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($('#treeList'));
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 1, '1 visible row');
+
+    // act
+    const addRowAfterDeferredResolve = (sequence, index) => {
+        const parentId = sequence[index];
+
+        if(parentId !== undefined) {
+            return this.addRow(parentId).done(addRowAfterDeferredResolve.bind(null, sequence, index + 1));
+        }
+
+        // assert
+        assert.deepEqual(sequence, initNewRowCalls, 'for every added row sequential calls onInitNewRow');
+
+        return $.Deferred().resolve();
+    };
+
+    addRowAfterDeferredResolve([1, 2], 0);
+
+    this.clock.tick();
+});
+
 // T553905
 QUnit.test('Add item in node without children (Angular)', function(assert) {
     // arrange
@@ -717,11 +773,12 @@ QUnit.test('TreeList should show error message on adding row if dataSource is no
     };
 
     // act
-    this.addRow();
+    const deferred = this.addRow();
 
     // assert
     assert.equal(errorCode, 'E1052', 'error code');
     assert.equal(widgetName, 'dxTreeList', 'widget name');
+    assert.equal(deferred.state(), 'rejected', 'deferred is rejected');
 });
 
 QUnit.test('Set add button for a specific row', function(assert) {
