@@ -3979,10 +3979,10 @@ QUnit.module('Appointments', () => {
         dataSource.load();
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered after call load method of dataSource');
 
-        scheduler.viewTabs.change('Work Week');
+        scheduler.instance.option('currentView', 'workWeek');
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Work Week"');
 
-        scheduler.viewTabs.change('Month');
+        scheduler.instance.option('currentView', 'month');
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
     });
 });
