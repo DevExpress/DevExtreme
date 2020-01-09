@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const SelectBox = require('ui/select_box');
-const DataSource = require('data/data_source/data_source').DataSource;
-const CustomStore = require('data/custom_store');
-const fx = require('animation/fx');
-const hasWindow = require('core/utils/window').hasWindow;
+import $ from 'jquery';
+import SelectBox from 'ui/select_box';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import fx from 'animation/fx';
+import { hasWindow } from 'core/utils/window';
 
-require('common.css!');
-require('generic_light.css!');
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     const markup =

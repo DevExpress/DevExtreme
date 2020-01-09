@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const fx = require('animation/fx');
-const positionUtils = require('animation/position');
-const holdEvent = require('events/hold');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import positionUtils from 'animation/position';
+import holdEvent from 'events/hold';
+import pointerMock from '../../helpers/pointerMock.js';
 
-require('common.css!');
-require('ui/action_sheet');
+import 'common.css!';
+import 'ui/action_sheet';
 
 QUnit.testStart(function() {
     const markup =

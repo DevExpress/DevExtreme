@@ -1,6 +1,6 @@
-const browser = require('core/utils/browser');
-const devices = require('core/devices');
-const caret = require('ui/text_box/utils.caret');
+import browser from 'core/utils/browser';
+import devices from 'core/devices';
+import caret from 'ui/text_box/utils.caret';
 
 module.exports = function($input) {
     // NOTE: We decided to return to this problem when next Edge is released

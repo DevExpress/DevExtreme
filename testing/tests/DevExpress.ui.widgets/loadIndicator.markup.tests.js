@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const support = require('core/utils/support');
+import $ from 'jquery';
+import support from 'core/utils/support';
 
-require('common.css!');
-require('ui/load_indicator');
+import 'common.css!';
+import 'ui/load_indicator';
 
 QUnit.testStart(function() {
     const markup =

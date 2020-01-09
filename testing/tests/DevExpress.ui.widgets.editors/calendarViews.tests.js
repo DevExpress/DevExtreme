@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const dateUtils = require('core/utils/date');
-const BaseView = require('ui/calendar/ui.calendar.base_view');
-const Views = require('ui/calendar/ui.calendar.views');
-const pointerMock = require('../../helpers/pointerMock.js');
-const fx = require('animation/fx');
-const dateSerialization = require('core/utils/date_serialization');
-const dateLocalization = require('localization/date');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import dateUtils from 'core/utils/date';
+import BaseView from 'ui/calendar/ui.calendar.base_view';
+import Views from 'ui/calendar/ui.calendar.views';
+import pointerMock from '../../helpers/pointerMock.js';
+import fx from 'animation/fx';
+import dateSerialization from 'core/utils/date_serialization';
+import dateLocalization from 'localization/date';
 
 require('common.css!');
 require('ui/calendar');

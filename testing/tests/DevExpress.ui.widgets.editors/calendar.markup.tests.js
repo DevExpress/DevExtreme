@@ -1,13 +1,13 @@
-const $ = require('jquery');
-const dateSerialization = require('core/utils/date_serialization');
-const isDefined = require('core/utils/type').isDefined;
-const config = require('core/config');
-const isRenderer = require('core/utils/type').isRenderer;
-const hasWindow = require('core/utils/window').hasWindow;
+import $ from 'jquery';
+import dateSerialization from 'core/utils/date_serialization';
+import { isDefined } from 'core/utils/type';
+import config from 'core/config';
+import { isRenderer } from 'core/utils/type';
+import { hasWindow } from 'core/utils/window';
 
-require('common.css!');
-require('generic_light.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/calendar';
 
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
