@@ -104,7 +104,19 @@ function fireKeyDownEvent(instance, event, executeAction) {
     return args.handled;
 }
 
+function onDocumentVisibilityChange() {
+    isHiddenFocusing = document.visibilityState === 'visible';
+}
+
 module.exports = {
+    init: function() {
+        eventsEngine.on(document, 'visibilitychange', onDocumentVisibilityChange);
+    },
+
+    dispose: function() {
+        eventsEngine.off(document, 'visibilitychange', onDocumentVisibilityChange);
+    },
+
     hiddenFocus: function(element) {
         isHiddenFocusing = true;
         element.focus();
@@ -122,9 +134,6 @@ module.exports = {
         eventsEngine.on($element, 'mousedown', selector, () => {
             isMouseDown = true;
             $mainElement.removeClass(FOCUS_STATE_CLASS);
-        });
-        eventsEngine.on(document, 'visibilitychange', () => {
-            isHiddenFocusing = document.visibilityState === 'visible';
         });
 
         eventsEngine.on($element, 'focusin', selector, () => {
