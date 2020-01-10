@@ -14002,6 +14002,47 @@ QUnit.test('LoadAll with data parameter and modified values', function(assert) {
     assert.deepEqual(allItems[1].values, [1, 2, 4], 'item 1 values');
 });
 
+QUnit.module('Sorting', { beforeEach: setupModule, afterEach: teardownModule }, function() {
+    // T848348
+    QUnit.test('Sorting should work when columns have a calculateSortValue with the same instance', function(assert) {
+        // arrange
+        const dataSource = createDataSource([
+            { name: 'Alex', age: 19 },
+            { name: 'Dan', age: 15 }
+        ]);
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        const calculateSortValue = function(data) { return data[this.dataField]; };
+
+        this.applyOptions({
+            columns: [
+                { dataField: 'name', calculateSortValue: calculateSortValue },
+                { dataField: 'age', calculateSortValue: calculateSortValue }
+            ],
+            commonColumnSettings: { allowSorting: true },
+            sorting: { mode: 'single' }
+        });
+
+        // act
+        this.columnsController.changeSortOrder(0, 'asc');
+
+        // assert
+        let rows = this.getVisibleRows();
+        assert.deepEqual(rows[0].data, { name: 'Alex', age: 19 }, 'first row');
+        assert.deepEqual(rows[1].data, { name: 'Dan', age: 15 }, 'second row');
+
+        // act
+        this.columnsController.changeSortOrder(1, 'asc');
+
+        // assert
+        rows = this.getVisibleRows();
+        assert.deepEqual(rows[0].data, { name: 'Dan', age: 15 }, 'first row');
+        assert.deepEqual(rows[1].data, { name: 'Alex', age: 19 }, 'second row');
+    });
+});
+
 QUnit.module('onOptionChanged', {
     beforeEach: function() {
         this.array = [

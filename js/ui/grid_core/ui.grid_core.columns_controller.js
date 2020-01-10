@@ -1830,7 +1830,7 @@ module.exports = {
                     });
                     return when.apply($, deferreds).done(resetColumnsCache.bind(null, this));
                 },
-                _updateColumnOptions: function(column) {
+                _updateColumnOptions: function(column, columnIndex) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
 
                     iteratorUtils.each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
@@ -1838,6 +1838,7 @@ module.exports = {
                         if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
                             column[calculateCallbackName].originalCallback = calculateCallback;
+                            column[calculateCallbackName].columnIndex = columnIndex;
                         }
                     });
 
@@ -1937,7 +1938,7 @@ module.exports = {
                             }
                         }
 
-                        that._updateColumnOptions(column);
+                        that._updateColumnOptions(column, index);
                     });
 
                     return isColumnDataTypesUpdated;
