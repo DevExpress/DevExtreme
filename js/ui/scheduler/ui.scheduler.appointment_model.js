@@ -400,7 +400,7 @@ class AppointmentModel {
             }
         }
 
-        for(var i = 0; i < filter.length; i++) {
+        for(let i = 0; i < filter.length; i++) {
             filter[i] = this._serializeRemoteFilter(filter[i], dateSerializationFormat);
         }
 
