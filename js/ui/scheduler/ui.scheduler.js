@@ -2337,7 +2337,7 @@ const Scheduler = Widget.inherit({
     _getEndDate: function(appointment, skipNormalize) {
         let endDate = new Date(this.fire('getField', 'endDate', appointment));
         const startDate = new Date(this.fire('getField', 'startDate', appointment));
-        const sameDate = dateUtils.sameDate(startDate, endDate);
+        const isSameDate = dateUtils.sameDate(startDate, endDate);
 
         if(endDate) {
 
@@ -2349,7 +2349,7 @@ const Scheduler = Widget.inherit({
 
             !skipNormalize && this.fire('updateAppointmentEndDate', {
                 endDate: endDate,
-                sameDate: sameDate,
+                isSameDate: isSameDate,
                 callback: function(result) {
                     endDate = result;
                 }
