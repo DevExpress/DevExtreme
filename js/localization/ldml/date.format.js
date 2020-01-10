@@ -1,6 +1,7 @@
 const ARABIC_COMMA = '\u060C';
 const FORMAT_SEPARATORS = ' .,:;/\\<>()-[]' + ARABIC_COMMA;
 const ARABIC_ZERO_CODE = 1632;
+const AM_PM_PATTERN = '. m.';
 
 const checkDigit = function(char) {
     const code = char && char.charCodeAt(0);
@@ -10,11 +11,10 @@ const checkDigit = function(char) {
 
 const checkPatternContinue = function(text, index, isDigit) {
     const char = text[index];
-    const prevChar = text[index - 1];
     const nextChar = text[index + 1];
 
     if(!isDigit) {
-        if(char === '.' || (char === ' ' && prevChar === '.')) {
+        if(char === '.' || (char === ' ' && text.slice(index - 1, index + 3) === AM_PM_PATTERN)) {
             return true;
         }
         if(char === '-' && !checkDigit(nextChar)) {
