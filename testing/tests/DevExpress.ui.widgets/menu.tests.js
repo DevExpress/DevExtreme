@@ -13,7 +13,7 @@ import CustomStore from 'data/custom_store';
 import ArrayStore from 'data/array_store';
 import eventsEngine from 'events/core/events_engine';
 import { DataSource } from 'data/data_source/data_source';
-import checkStyleHelper from '../../helpers/checkStyleHelper.js';
+import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'common.css!';
 import 'generic_light.css!';

@@ -3,7 +3,7 @@ import dateSerialization from 'core/utils/date_serialization';
 import { isDefined } from 'core/utils/type';
 import config from 'core/config';
 import { isRenderer } from 'core/utils/type';
-import { hasWindow } from 'core/utils/window';
+import windowUtils from 'core/utils/window';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -43,7 +43,7 @@ QUnit.module('Calendar markup', {
     });
 
     QUnit.test('views are rendered', function(assert) {
-        if(hasWindow()) {
+        if(windowUtils.hasWindow()) {
             assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 3, 'all views are rendered');
         } else {
             assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 1, 'only one view is rendered');

@@ -8,8 +8,8 @@ import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 import dateLocalization from 'localization/date';
 
-require('common.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'ui/calendar';
 
 const CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -98,6 +98,7 @@ QUnit.module('Basics', () => {
         });
 
         assert.notOk(spy.called, 'firstDayOfWeekIndex wasn\'t called');
+        $element.remove();
     });
 });
 
