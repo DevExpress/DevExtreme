@@ -592,9 +592,7 @@ function createGridView(options, userOptions) {
                 ],
                 totalItem: {
                     summaryCells: [
-                        { summaryType: 'count', value: 100 },
-                        { summaryType: 'min', value: 0 },
-                        { summaryType: 'max', value: 120001 }
+                        { summaryType: 'count', value: 100 }
                     ]
                 }
             })
@@ -607,14 +605,7 @@ function createGridView(options, userOptions) {
             scrolling: {
                 useNative: true
             },
-            showColumnHeaders: true,
-            groupPanel: {
-                visible: false
-            },
-            searchPanel: {
-                visible: false
-            },
-            disabled: false
+            showColumnHeaders: true
         }));
 
         gridView.update();
@@ -624,6 +615,7 @@ function createGridView(options, userOptions) {
         const footerTable = $container.find('.dx-datagrid-content-fixed').eq(0);
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
 
+        assert.ok(this.isScrollbarVisible(), 'vertical scrollbar is visible');
         assert.equal(parseFloat(footerTable.css('paddingRight')), scrollerWidth, 'footer has padding');
     });
 
