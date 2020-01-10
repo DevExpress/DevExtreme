@@ -148,6 +148,10 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateFieldValue: function(dataField, value) {
+        if(this._isFieldValueLocked) {
+            return;
+        }
+
         const layoutData = this.option('layoutData');
         let newValue = value;
 
@@ -1102,8 +1106,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _resetWidget(instance) {
-        const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionSilent('value', defaultOptions.value);
+        this._isFieldValueLocked = true;
+        instance.reset();
+        this._isFieldValueLocked = false;
         instance.option('isValid', true);
     },
 
