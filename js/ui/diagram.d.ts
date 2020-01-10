@@ -291,6 +291,20 @@ export interface dxDiagramItem {
      * @public
      */
     id?: string;
+    /**
+     * @docid dxDiagramItem.dataItem
+     * @type object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dataItem?: object;
+    /**
+     * @docid dxDiagramItem.itemType
+     * @type Enums.DiagramItemType
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    itemType?: 'connector' | 'shape';
 }
 
 export interface dxDiagramShape extends dxDiagramItem {
