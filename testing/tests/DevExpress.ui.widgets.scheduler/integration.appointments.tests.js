@@ -4598,7 +4598,7 @@ QUnit.test('Remote filter should apply after change view type', function(assert)
         currentDate: new Date(2017, 4, 23),
         maxAppointmentsPerCell: 'unlimited',
         height: 600,
-    });
+    }).dxScheduler("instance");
     const scheduler = new SchedulerTestWrapper(instance);
 
     assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equal ${model.length} items`);
