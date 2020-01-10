@@ -262,7 +262,7 @@ function isLazyDataSourceMode(wrapper) {
 }
 
 function isSelectByKeysFunction(func) {
-    return func.toString().indexOf('setSelectedNodesKeys') > 0;
+    return func.toString().indexOf('selectNodesByKeys') > 0;
 }
 
 const configs = [];
@@ -291,7 +291,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([]);
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1])].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.selectNodesByKeys([0, 1])].forEach(selectFunc => {
             QUnit.test('all.selected: false -> selectAll -> expandAll', function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -301,7 +301,7 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                const actualSelectedKeys = selectFunc(wrapper.instance);
+                selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1];
                 let expectedNodes = [0, 1];
@@ -322,9 +322,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(selectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -350,12 +347,12 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.selectItem(0), treeView => treeView.setSelectedNodesKeys([0])].forEach(selectItemFunc => {
+        [treeView => treeView.selectItem(0), treeView => treeView.selectNodesByKeys([0])].forEach(selectItemFunc => {
             QUnit.test('all.selected: false -> selectItem(0) -> expandAll', function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                const actualSelectedKeys = selectItemFunc(wrapper.instance);
+                selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [0];
                 let expectedNodes = [0];
@@ -373,9 +370,7 @@ configs.forEach(config => {
                     // unexpected result
                     expectedNodes = [0];
                 }
-                if(isSelectByKeysFunction(selectItemFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
+
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after select');
@@ -400,12 +395,12 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.selectItem(1), treeView => treeView.setSelectedNodesKeys([1])].forEach(selectItemFunc => {
+        [treeView => treeView.selectItem(1), treeView => treeView.selectNodesByKeys([1])].forEach(selectItemFunc => {
             QUnit.test('all.selected: false -> selectItem(1) -> expandAll', function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                const actualSelectedKeys = selectItemFunc(wrapper.instance);
+                selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [1];
                 let expectedNodes = [1];
@@ -429,9 +424,7 @@ configs.forEach(config => {
                     expectedEventLog = [];
                     expectedNodes = [];
                 }
-                if(isSelectByKeysFunction(selectItemFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
+
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -496,7 +489,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.unselectAll(), treeView => treeView.setSelectedNodesKeys([])].forEach(unselectFunc => {
+        [treeView => treeView.unselectAll(), treeView => treeView.selectNodesByKeys([])].forEach(unselectFunc => {
             QUnit.test('all.selected: true -> unselectAll -> expandAll', function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -507,7 +500,7 @@ configs.forEach(config => {
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded }]);
 
-                const actualSelectedKeys = unselectFunc(wrapper.instance);
+                unselectFunc(wrapper.instance);
 
                 let expectedKeys = [];
                 let expectedNodes = [];
@@ -519,9 +512,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(unselectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
                 wrapper.checkSelectedNodes(expectedNodes, 'after unselect');
                 wrapper.checkEventLog(expectedEventLog, 'after unselect');
@@ -676,7 +666,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.selectNodesByKeys([0, 1, 2])].forEach(selectFunc => {
             QUnit.test('item1.selected: true -> selectAll -> expandAll', function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -688,7 +678,7 @@ configs.forEach(config => {
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-                const actualSelectedKeys = selectFunc(wrapper.instance);
+                selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 let expectedNodes = [0, 1, 2];
@@ -709,9 +699,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(selectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -737,23 +724,20 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.unselectAll(), treeView => treeView.setSelectedNodesKeys([])].forEach(unselectFunc => {
+        [treeView => treeView.unselectAll(), treeView => treeView.selectNodesByKeys([])].forEach(unselectFunc => {
             QUnit.test('item1.selected: true -> unselectAll -> expandAll', function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: true, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-                const actualSelectedKeys = unselectFunc(wrapper.instance);
+                unselectFunc(wrapper.instance);
 
                 let expectedEventLog = ['selectionChanged'];
                 if(isSelectByKeysFunction(unselectFunc)) {
                     expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                 }
 
-                if(isSelectByKeysFunction(unselectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, []);
-                }
                 wrapper.checkSelectedKeys([], 'after unselect');
                 wrapper.checkSelectedNodes([], 'after unselect');
                 wrapper.checkEventLog(expectedEventLog, 'after unselect');
@@ -817,7 +801,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.selectNodesByKeys([0, 1, 2])].forEach(selectFunc => {
             QUnit.test('item1_1.selected: true -> selectAll -> expandAll', function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -828,7 +812,7 @@ configs.forEach(config => {
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
-                const actualSelectedKeys = selectFunc(wrapper.instance);
+                selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -848,9 +832,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(selectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -868,14 +849,14 @@ configs.forEach(config => {
             });
         });
 
-        [treeView => treeView.unselectAll(), treeView => treeView.setSelectedNodesKeys([])].forEach(unselectFunc => {
+        [treeView => treeView.unselectAll(), treeView => treeView.selectNodesByKeys([])].forEach(unselectFunc => {
             QUnit.test('item1_1.selected: true -> unselectAll -> expandAll', function(assert) {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-                const actualSelectedKeys = unselectFunc(wrapper.instance);
+                unselectFunc(wrapper.instance);
 
                 let expectedKeys = [];
                 let expectedEventLog = ['selectionChanged'];
@@ -888,9 +869,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(unselectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after unselect');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
                 wrapper.checkEventLog(expectedEventLog, 'after unselect');
@@ -955,7 +933,7 @@ configs.forEach(config => {
             wrapper.checkEventLog([], 'after expand');
         });
 
-        [treeView => treeView.selectAll(), treeView => treeView.setSelectedNodesKeys([0, 1, 2])].forEach(selectFunc => {
+        [treeView => treeView.selectAll(), treeView => treeView.selectNodesByKeys([0, 1, 2])].forEach(selectFunc => {
             QUnit.test('item1_1_1.selected: true -> selectAll -> expandAll', function(assert) {
                 if(config.selectionMode === 'single') {
                     assert.ok('skip for single');
@@ -966,7 +944,7 @@ configs.forEach(config => {
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
 
-                const actualSelectedKeys = selectFunc(wrapper.instance);
+                selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 let expectedEventLog = ['selectionChanged'];
@@ -985,9 +963,6 @@ configs.forEach(config => {
                     }
                 }
 
-                if(isSelectByKeysFunction(selectFunc)) {
-                    assert.deepEqual(actualSelectedKeys, expectedKeys);
-                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 // TODO: bug. internal data source items and UI are out of sync - wrapper.checkSelectedNodes(expectedNodes);
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -1023,7 +998,7 @@ configs.forEach(config => {
                     }
 
                     const wrapper = createWrapper(config, {}, items);
-                    const actualSelectedKeys = wrapper.instance.setSelectedNodesKeys(selectedKeys);
+                    wrapper.instance.selectNodesByKeys(selectedKeys);
 
                     const itemSelectionChangedEventCallCount = selected
                         ? itemsCount - selectedKeys.length
@@ -1037,7 +1012,6 @@ configs.forEach(config => {
                         expectedEventLog.push('selectionChanged');
                     }
 
-                    assert.deepEqual(actualSelectedKeys, selectedKeys);
                     wrapper.checkSelectedKeys(selectedKeys);
                     wrapper.checkSelectedNodes(selectedKeys);
                     wrapper.checkEventLog(expectedEventLog);
@@ -1045,7 +1019,7 @@ configs.forEach(config => {
             });
         });
 
-        QUnit.test('item1.selected: true, item2.selected:true -> setSelectedNodesKeys([key for item1_1]) -> expandAll', function(assert) {
+        QUnit.test('item1.selected: true, item2.selected:true -> selectNodesByKeys([key for item1_1]) -> expandAll', function(assert) {
             if(config.selectionMode === 'single') {
                 assert.ok('skip for single');
                 return;
@@ -1058,7 +1032,7 @@ configs.forEach(config => {
                 { id: 3, text: 'item2', parentId: ROOT_ID, selected: true, expanded: config.expanded }
             ]);
 
-            const actualSelectedKeys = wrapper.instance.setSelectedNodesKeys([1]);
+            wrapper.instance.selectNodesByKeys([1]);
 
             let expectedKeys = [0, 1, 2];
             let expectedNodes = [0, 1, 2];
@@ -1083,7 +1057,6 @@ configs.forEach(config => {
                 }
             }
 
-            assert.deepEqual(expectedKeys, actualSelectedKeys);
             wrapper.checkSelectedKeys(expectedKeys, 'after select');
             wrapper.checkSelectedNodes(expectedNodes, 'after select');
             wrapper.checkEventLog(expectedEventLog, 'after select');

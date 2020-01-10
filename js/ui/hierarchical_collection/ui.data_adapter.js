@@ -443,10 +443,7 @@ const DataAdapter = Class.inherit({
         let node = this.getNodeByKey(key);
         while(node != null) {
             node = this.getNodeByKey(node.internalFields.parentKey);
-            if(node == null) {
-                return false;
-            }
-            if(parentKeys.indexOf(node.internalFields.key) !== -1) {
+            if(node && parentKeys.indexOf(node.internalFields.key) !== -1) {
                 return true;
             }
         }

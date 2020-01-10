@@ -1939,12 +1939,11 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
-     * @name dxTreeViewMethods.setSelectedNodesKeys
-     * @publicName setSelectedNodesKeys(keys)
+     * @name dxTreeViewMethods.selectNodesByKeys
+     * @publicName selectNodesByKeys(keys)
      * @param1 keys:Array<any>
-     * @return Array<any>
      */
-    setSelectedNodesKeys: function(keys) {
+    selectNodesByKeys: function(keys) {
         const oldSelectedKeys = this.getSelectedNodesKeys();
         const diff = this._getSelectedKeysDiff(oldSelectedKeys, keys);
 
@@ -1958,7 +1957,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         if(oldSelectedKeys !== this.getSelectedNodesKeys()) {
             this._fireSelectionChanged();
         }
-        return this._dataAdapter.getSelectedNodesKeys();
     },
 
     /**
