@@ -76,7 +76,7 @@ export default class AppointmentDragBehavior {
     }
 
     getItemSettings(appointment) {
-        let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
         return itemData && itemData.settings || [];
     }
 
