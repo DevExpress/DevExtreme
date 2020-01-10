@@ -1261,7 +1261,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const oldEditRowIndex = that._getVisibleEditRowIndex();
             const item = dataController.items()[rowIndex];
             const key = item && item.key;
-            const allowDeleting = isBatchMode || !this.isEditing(); // T741746
+            const allowDeleting = isBatchMode || !this.isEditing() || item.isEditing; // T741746, T850905
 
             if(item && allowDeleting) {
                 removeByKey = function(key) {
