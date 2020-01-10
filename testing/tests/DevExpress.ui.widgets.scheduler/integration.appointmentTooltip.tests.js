@@ -468,10 +468,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const $appointment = scheduler.appointments.getAppointment();
         scheduler.instance.showAppointmentTooltip(appointment, $appointment);
 
-        const expectedStartDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-        const expectedEndDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const expectedDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
-        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + ' - ' + expectedEndDate, 'dates and time were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
 
     test('Scheduler appointment tooltip dates should be correct, when appointment timeZone and scheduler timeZone was set', function(assert) {
@@ -493,10 +492,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const $appointment = scheduler.appointments.getAppointment();
         scheduler.instance.showAppointmentTooltip(appointment, $appointment);
 
-        const expectedStartDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
-        const expectedEndDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(2).text();
+        const expectedDate = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
 
-        assert.equal(scheduler.tooltip.getDateText(), expectedStartDate + ' - ' + expectedEndDate, 'dates and time were displayed correctly');
+        assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
 
     test('Scheduler appointment tooltip dates are displayed with right format, month view', function(assert) {

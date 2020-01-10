@@ -1537,6 +1537,5 @@ QUnit.test('Recurrence appointment occurences should have correct text (T818393)
 
     const $thirdAppointment = this.scheduler.appointments.getAppointment(2);
 
-    assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM', 'Appointment third occurrences has correct start date text');
-    assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '5:00 AM', 'Appointment third occurrences has correct end date text');
+    assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
 });

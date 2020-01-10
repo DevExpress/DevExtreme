@@ -8,9 +8,9 @@ import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import dateLocalization from '../../localization/date';
 import SchedulerTimezones from './timezones/ui.scheduler.timezones';
 import { Deferred } from '../../core/utils/deferred';
+import dateLocalization from '../../localization/date';
 
 const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
@@ -243,6 +243,69 @@ const subscribes = {
         this._workSpace.restoreScrollTop();
     },
 
+    getTextAndFormatDate(data, currentData, format) {
+        const isAllDay = data.allDay;
+        const startDateTimeZone = data.startDateTimeZone;
+        const endDateTimeZone = data.endDateTimeZone;
+        const startDate = this.fire('convertDateByTimezone', currentData.startDate, startDateTimeZone);
+        const endDate = this.fire('convertDateByTimezone', currentData.endDate, endDateTimeZone);
+        return {
+            text: this.fire('createAppointmentTitle', data),
+            formatDate: this.fire('_formatDates', startDate, endDate, isAllDay, format)
+        };
+    },
+
+    createAppointmentTitle: function(data) {
+        if(typeUtils.isPlainObject(data)) {
+            return data.text;
+        }
+
+        return String(data);
+    },
+
+    _formatDates(startDate, endDate, isAllDay, format) {
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, isAllDay);
+
+        const formatTypes = {
+            'DATETIME': function() {
+                const dateTimeFormat = 'mediumdatemediumtime';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
+
+                const endDateString = (startDate.getDate() === endDate.getDate()) ?
+                    dateLocalization.format(endDate, 'shorttime') :
+                    dateLocalization.format(endDate, dateTimeFormat);
+
+                return startDateString + endDateString;
+            },
+            'TIME': function() {
+                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
+            },
+            'DATE': function() {
+                const dateTimeFormat = 'monthAndDay';
+                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
+                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
+
+                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
+                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
+                    '';
+
+                return startDateString + endDateString;
+            }
+        };
+
+        return formatTypes[formatType]();
+    },
+
+    _getTypeFormat(startDate, endDate, isAllDay) {
+        if(isAllDay) {
+            return 'DATE';
+        }
+        if(this.option('currentView') !== 'month' && dateUtils.sameDate(startDate, endDate)) {
+            return 'TIME';
+        }
+        return 'DATETIME';
+    },
+
     getResizableAppointmentArea: function(options) {
         let area;
         const allDay = options.allDay;
@@ -349,41 +412,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    formatDates: function(options) {
-        const startDate = options.startDate;
-        const endDate = options.endDate;
-        const formatType = options.formatType;
-
-        const formatTypes = {
-            'DATETIME': function() {
-                const dateTimeFormat = 'mediumdatemediumtime';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat) + ' - ';
-
-                const endDateString = (startDate.getDate() === endDate.getDate()) ?
-                    dateLocalization.format(endDate, 'shorttime') :
-                    dateLocalization.format(endDate, dateTimeFormat);
-
-                return startDateString + endDateString;
-            },
-            'TIME': function() {
-                return dateLocalization.format(startDate, 'shorttime') + ' - ' + dateLocalization.format(endDate, 'shorttime');
-            },
-            'DATE': function() {
-                const dateTimeFormat = 'monthAndDay';
-                const startDateString = dateLocalization.format(startDate, dateTimeFormat);
-                const isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > toMs('day');
-
-                const endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
-                    ' - ' + dateLocalization.format(endDate, dateTimeFormat) :
-                    '';
-
-                return startDateString + endDateString;
-            }
-        };
-
-        options.callback(formatTypes[formatType]());
-    },
-
     getFullWeekAppointmentWidth: function(options) {
         const groupIndex = options.groupIndex;
         const groupWidth = this._workSpace.getGroupWidth(groupIndex);
@@ -453,16 +481,11 @@ const subscribes = {
     },
 
     mapAppointmentFields: function(config) {
-        const result = {
+        return {
             appointmentData: config.itemData,
-            appointmentElement: config.itemElement
+            appointmentElement: config.itemElement,
+            targetedAppointmentData: this.fire('getTargetedAppointmentData', config.itemData, config.itemElement),
         };
-
-        if(config.itemData) {
-            result.targetedAppointmentData = this.fire('getTargetedAppointmentData', config.itemData, config.itemElement);
-        }
-
-        return result;
     },
 
     getOffsetByAllDayPanel: function(groupIndex) {
