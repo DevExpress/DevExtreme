@@ -1798,7 +1798,7 @@ const PivotGrid = Widget.inherit({
             if(that._hasHeight) {
                 filterAreaHeight = filterHeaderCell.height();
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
-                groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                groupHeight = that.$element().height() - filterAreaHeight - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1875,7 +1875,7 @@ const PivotGrid = Widget.inherit({
                     columnsArea.groupWidth(groupWidth - diff);
                 }
 
-                if(that._hasHeight && that._filterFields.isVisible() && that._filterFields.isVisible() &&
+                if(that._hasHeight && that._filterFields.isVisible() &&
                     filterHeaderCell.height() !== filterAreaHeight) {
                     const diff = filterHeaderCell.height() - filterAreaHeight;
                     groupHeight -= diff;
