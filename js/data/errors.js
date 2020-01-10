@@ -131,7 +131,7 @@ const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     /**
     * @name ErrorsData.E4024
     */
-    E4024: 'OData does not support string functions when searching or filtering an Int32 field',
+    E4024: 'String function {0} cannot be used with the data field {1} of type {2}.',
 
     /**
     * @name ErrorsData.W4000

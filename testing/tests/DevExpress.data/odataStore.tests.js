@@ -834,9 +834,9 @@ QUnit.test('Should show E4024 error when searching or filtering an Int32 field (
         keyType: { id: 'Int32' }
     });
 
-    function assertFunc(message) {
+    function assertFunc(message, operation) {
         assert.equal(message.replace(/\d+_\d+/, '[VERSION]'),
-            'E4024 - OData does not support string functions when searching or filtering an Int32 field. See:\nhttp://js.devexpress.com/error/[VERSION]/E4024');
+            `E4024 - String function ${operation} cannot be used with the data field id of type Int32. See:\nhttp://js.devexpress.com/error/[VERSION]/E4024`);
     }
 
     const promises = [
@@ -845,28 +845,28 @@ QUnit.test('Should show E4024 error when searching or filtering an Int32 field (
                 filter: ['id', 'contains', '123']
             })
             .fail(function(error) {
-                assertFunc(error.message);
+                assertFunc(error.message, 'contains');
             }),
         store
             .load({
                 filter: ['id', 'startswith', '123']
             })
             .fail(function(error) {
-                assertFunc(error.message);
+                assertFunc(error.message, 'startswith');
             }),
         store
             .load({
                 filter: ['id', 'endswith', '123']
             })
             .fail(function(error) {
-                assertFunc(error.message);
+                assertFunc(error.message, 'endswith');
             }),
         store
             .load({
                 filter: ['id', 'notcontains', '123']
             })
             .fail(function(error) {
-                assertFunc(error.message);
+                assertFunc(error.message, 'notcontains');
             }),
     ];
 
