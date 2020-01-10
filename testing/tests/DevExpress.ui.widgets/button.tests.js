@@ -3,6 +3,7 @@ import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 import DefaultAdapter from 'ui/validation/default_adapter';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 
@@ -32,6 +33,7 @@ const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_BACK_CLASS = 'dx-button-back';
 const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
+const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('options changed callbacks', {
     beforeEach: () => {
@@ -219,6 +221,37 @@ QUnit.module('inkRipple', {}, () => {
             }
         });
         $('#inkButton').trigger('dxclick');
+    });
+
+    QUnit.test('widget should works correctly when the useInkRipple option is changed at runtime', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $inkButton = $('#inkButton').dxButton({
+            text: 'test',
+            useInkRipple: true
+        });
+        const inkButton = $inkButton.dxButton('instance');
+        const pointer = pointerMock($inkButton);
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        inkButton.option('useInkRipple', false);
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed');
+
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 0, 'inkRipple element was removed is still removed after click');
+
+        inkButton.option('useInkRipple', true);
+        pointer.start('touch').down();
+        clock.tick();
+        pointer.start('touch').up();
+        assert.strictEqual($inkButton.find(`.${INK_RIPPLE_CLASS}`).length, 1, 'inkRipple element was rendered');
+
+        clock.restore();
     });
 });
 
