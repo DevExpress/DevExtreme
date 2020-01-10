@@ -1,6 +1,7 @@
 const ARABIC_COMMA = '\u060C';
 const FORMAT_SEPARATORS = ' .,:;/\\<>()-[]' + ARABIC_COMMA;
 const ARABIC_ZERO_CODE = 1632;
+const AM_PM_PATTERN = '. m.';
 
 const checkDigit = function(char) {
     const code = char && char.charCodeAt(0);
@@ -10,11 +11,10 @@ const checkDigit = function(char) {
 
 const checkPatternContinue = function(text, index, isDigit) {
     const char = text[index];
-    const prevChar = text[index - 1];
     const nextChar = text[index + 1];
 
     if(!isDigit) {
-        if(char === '.' || (char === ' ' && prevChar === '.')) {
+        if(char === '.' || (char === ' ' && text.slice(index - 1, index + 3) === AM_PM_PATTERN)) {
             return true;
         }
         if(char === '-' && !checkDigit(nextChar)) {
@@ -67,7 +67,6 @@ const getDifference = function(defaultPattern, patterns, processedIndexes, isDig
     if(result.length === 1 && (defaultPattern[processedIndexes[0] - 1] === '0' || defaultPattern[processedIndexes[0] - 1] === '٠')) {
         processedIndexes.unshift(processedIndexes[0] - 1);
     }
-
     return result;
 };
 
@@ -165,6 +164,7 @@ const escapeChars = function(pattern, defaultPattern, processedIndexes, patternP
 };
 
 const getFormat = function(formatter) {
+    // debugger
     const processedIndexes = [];
     const defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter);
     const patternPositions = defaultPattern.split('').map(function(_, index) { return index; });
@@ -187,7 +187,6 @@ const getFormat = function(formatter) {
     datePatterns.forEach(function(test) {
         const diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
         const pattern = test.pattern === 'M' && !replacedPatterns['d'] ? 'L' : test.pattern;
-
         result = replaceChars(result, diff, pattern, patternPositions);
         replacedPatterns[pattern] = diff.length;
     });
