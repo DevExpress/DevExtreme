@@ -894,6 +894,48 @@ QUnit.module('Keyboard navigation', {
         });
     });
 
+    [true, false].forEach(navigateToSameDate => {
+        QUnit.test(`pressing ctrl+arrows or pageup/pagedown keys must change view correctly navigateToSameDate=${navigateToSameDate}`, function(assert) {
+            const $element = this.$element;
+            const calendar = this.calendar;
+            calendar.option('navigateToSameDate', navigateToSameDate);
+
+            const expectedDates = [{
+                'month': [new Date(2013, 8, 30), new Date(2013, 9, 1)],
+                'year': [new Date(2012, 9, 31), new Date(2013, 9, 1)],
+                'decade': [new Date(2003, 9, 31), new Date(2013, 9, 1)],
+                'century': [new Date(1913, 9, 31), new Date(2013, 9, 1)]
+            }, {
+                'month': [new Date(2013, 8, 13), new Date(2013, 9, 13)],
+                'year': [new Date(2012, 9, 13), new Date(2013, 9, 13)],
+                'decade': [new Date(2003, 9, 13), new Date(2013, 9, 13)],
+                'century': [new Date(1913, 9, 13), new Date(2013, 9, 13)]
+            }];
+
+            const clock = this.clock;
+
+            iterateViews((_, type) => {
+                calendar.option('zoomLevel', type);
+
+                clock.tick();
+                triggerKeydown($element, LEFT_ARROW_KEY_CODE, true);
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDate][type][0], 'ctrl+left arrow navigates correctly');
+
+                clock.tick();
+                triggerKeydown($element, RIGHT_ARROW_KEY_CODE, true);
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDate][type][1], 'ctrl+right arrow navigates correctly');
+
+                clock.tick();
+                triggerKeydown($element, PAGE_UP_KEY_CODE);
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDate][type][0], 'pageup navigates correctly');
+
+                clock.tick();
+                triggerKeydown($element, PAGE_DOWN_KEY_CODE);
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDate][type][1], 'pagedown navigates correctly');
+            });
+        });
+    });
+
     QUnit.test('pressing ctrl+arrows must navigate in inverse direction in RTL mode', function(assert) {
         this.reinit({
             value: this.value,
