@@ -1283,6 +1283,39 @@ QUnit.module("Real dataGrid", {
         assert.deepEqual(dataGrid.option("filterValue"), [["field", ">", 2], "and", ["field2", "noneof", [2, 3]]]);
     });
 
+    // T814522
+    QUnit.test("Load filterValues from columns when filterSyncEnabled is true and state is empty", function(assert) {
+        // arrange, act
+        var dataGrid = this.initDataGrid({
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "field",
+                dataType: "number",
+                filterValue: 2,
+                selectedFilterOperation: ">"
+            }, {
+                dataField: "field2",
+                dataType: "number"
+            }],
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {};
+                },
+                customSave: function() {
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.columnOption("field", "filterValue"), 2);
+        assert.strictEqual(dataGrid.columnOption("field", "selectedFilterOperation"), ">");
+        assert.deepEqual(dataGrid.option("filterValue"), ["field", ">", 2]);
+    });
+
     QUnit.test("Load filterValues of columns from state when filterSyncEnabled = false & filterValue is undefined", function(assert) {
         // arrange, act
         var dataGrid = this.initDataGrid({

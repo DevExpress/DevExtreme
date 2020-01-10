@@ -28,6 +28,8 @@ var MIME_TYPES = exports.MIME_TYPES = {
     PDF: "application/pdf"
 };
 
+// Use github.com/eligrey/FileSaver.js library instead this method
+
 exports.fileSaver = {
     _revokeObjectURLTimeout: 30000,
 
@@ -48,7 +50,8 @@ exports.fileSaver = {
         var exportLinkElement = domAdapter.createElement('a'),
             attributes = {
                 "download": fileName,
-                "href": href
+                "href": href,
+                "target": "_blank"
             };
 
         eventsEngine.on($(exportLinkElement), "click", function() {
