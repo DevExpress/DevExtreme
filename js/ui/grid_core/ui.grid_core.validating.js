@@ -248,15 +248,18 @@ const ValidatingController = modules.Controller.inherit((function() {
                     options.brokenRule.columnIndex = column.index;
                     options.brokenRule.column = column;
                 }
-
+                // test
+                options.status === VALIDATION_STATUS.pending && editingController.showHighlighting({
+                    $cell: $container,
+                    skipValidation: true
+                });
+                // endTest
                 if($container && !this.getDisableApplyValidationResults()) {
                     if(!options.isValid) {
                         const $focus = $container.find(':focus');
                         editingController.showHighlighting({
                             $cell: $container,
-                            skipValidation: true,
-                            columnIndex: column.index,
-                            keyValue: parameters.key
+                            skipValidation: true
                         });
                         if(!focused($focus)) {
                             eventsEngine.trigger($focus, 'focus');
@@ -279,13 +282,15 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             // test
             const validationStatusChanged = (info) => {
-                if(info.validator._valueUpdated) {
-                    this.updateCellValidationInfo({
-                        keyValue: parameters.key,
-                        columnIndex: column.index,
-                        result: info
-                    });
-                }
+                this.updateCellValidationInfo(info);
+            };
+            const onValidatorInitialized = (arg) => {
+                arg.component.on('validating', validationStatusChanged);
+                arg.component.on('validated', validationStatusChanged);
+            };
+            const onValidatorDisposing = (arg) => {
+                arg.component.off('validating', validationStatusChanged);
+                arg.component.off('validated', validationStatusChanged);
             };
             // endTest
 
@@ -311,7 +316,6 @@ const ValidatingController = modules.Controller.inherit((function() {
 
                 const useDefaultValidator = $container && $container.hasClass('dx-widget');
                 $container && $container.addClass(this.addWidgetPrefix(VALIDATOR_CLASS));
-
                 const validator = new Validator($container || $('<div>'), {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),
@@ -326,14 +330,12 @@ const ValidatingController = modules.Controller.inherit((function() {
                             column
                         };
                     },
-                    onInitialized: function(arg) {
-                        arg.component.on('validating', validationStatusChanged);
-                        arg.component.on('validated', validationStatusChanged);
-                    },
-                    onDisposing: function(arg) {
-                        arg.component.off('validating', validationStatusChanged);
-                        arg.component.off('validated', validationStatusChanged);
-                    }
+                    onInitialized: onValidatorInitialized,
+                    onDisposing: onValidatorDisposing,
+                    cellKey: this.getCellValidationInfoKey({
+                        keyValue: parameters.key,
+                        columnIndex: column.index
+                    })
                 });
                 if(useDefaultValidator) {
                     const adapter = validator.option('adapter');
@@ -355,11 +357,8 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         // test
-        validateCell: function({ validator, keyValue, columnIndex }) {
-            let validationResult = this.getController('validating').getCellValidationInfo({
-                keyValue,
-                columnIndex
-            });
+        validateCell: function(validator) {
+            let validationResult = this.getCellValidationInfo(validator);
             let stateRestored = false;
             if(validationResult) {
                 stateRestored = true;
@@ -375,13 +374,15 @@ const ValidatingController = modules.Controller.inherit((function() {
             return deferred.promise();
         },
 
-        updateCellValidationInfo: function({ keyValue, columnIndex, result }) {
-            const key = this.getCellValidationInfoKey({ keyValue, columnIndex });
+        updateCellValidationInfo: function(result) {
+            const key = result.validator.option('cellKey');
             this._cellValidationInfo[key] = {
+                cellKey: key,
                 status: result.status,
                 isValid: result.isValid,
                 complete: result.complete,
-                brokenRules: result.brokenRules
+                brokenRules: result.brokenRules,
+                valueUpdated: result.validator._valueUpdated
             };
         },
 
@@ -400,13 +401,12 @@ const ValidatingController = modules.Controller.inherit((function() {
             return `${JSON.stringify(keyValue)}_${columnIndex}`;
         },
 
-        getCellValidationInfo: function({ keyValue, columnIndex }) {
-            const key = this.getCellValidationInfoKey({ keyValue, columnIndex });
+        getCellValidationInfo: function(validator) {
+            const key = validator.option('cellKey');
             return this._cellValidationInfo[key];
         },
 
-        removeCellValidationInfo: function({ keyValue, columnIndex }) {
-            const key = `${JSON.stringify(keyValue)}_${columnIndex}`;
+        removeCellValidationInfo: function(key) {
             delete this._cellValidationInfo[key];
         }
         // endTest
@@ -640,36 +640,29 @@ module.exports = {
                     const result = this.callBase(rowIndex, columnIndex, item);
                     const $cell = this._rowsView._getCellElement(rowIndex, columnIndex);
                     const validator = $cell && $cell.data('dxValidator');
-                    const value = validator && validator.option('adapter').getValue();
+                    // const value = validator && validator.option('adapter').getValue();
 
                     // if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
                     //     return result;
                     // }
                     // test
-                    if(this.getEditMode(this) === EDIT_MODE_CELL) {
+                    if(this.getEditMode() === EDIT_MODE_CELL) {
                         const validatingController = this.getController('validating');
                         const pendingInfo = validatingController.getPendingCellValidationInfo();
                         const deferred = new Deferred();
-                        if(pendingInfo) {
-                            when(pendingInfo.complete, result).done((validationResult, result) => {
-                                deferred.resolve(validationResult.status === VALIDATION_STATUS.valid ? result : true);
-                            });
-                        } else {
-                            if(!validator) {
-                                deferred.resolve(result);
-                            }
-                            if(value !== undefined) {
-                                when(validatingController.validateCell({
-                                    validator,
-                                    keyValue: item.key,
-                                    columnIndex
-                                }), result).done((validationResult, result) => {
-                                    deferred.resolve(validationResult.status === VALIDATION_STATUS.valid ? result : true);
-                                });
-                            } else {
-                                deferred.resolve(result);
-                            }
-                        }
+                        let validationPromise;
+                        let shouldCancelOnInvalid = false;
+                        if(pendingInfo && (!validator || validator.option('cellKey') !== pendingInfo.cellKey) && pendingInfo.valueUpdated) {
+                            shouldCancelOnInvalid = true;
+                            validationPromise = pendingInfo.complete;
+                        }/* else if(value !== undefined) {
+                            validationPromise = validatingController.validateCell(validator);
+                        }*/
+                        when(validationPromise, result).done((validationResult, result) => {
+                            const resolveResult = !validationResult || validationResult && validationResult.status === VALIDATION_STATUS.valid ? result :
+                                shouldCancelOnInvalid || result;
+                            deferred.resolve(resolveResult);
+                        });
                         return deferred.promise();
                     }
                     // endTest
@@ -687,10 +680,10 @@ module.exports = {
                         // test
                         if(editData.isValid) {
                             for(let colIndex = 0; colIndex < colCount; colIndex++) {
-                                validatingController.removeCellValidationInfo({
+                                validatingController.removeCellValidationInfo(validatingController.getCellValidationInfoKey({
                                     keyValue: editData.key,
                                     columnIndex: colIndex
-                                });
+                                }));
                             }
                         }
                         // endTest
@@ -730,32 +723,28 @@ module.exports = {
                     // }
                 },
 
-                // showHighlighting: function({ $cell, skipValidation, columnIndex, keyValue }) {
-                //     let isValid = true;
-                //     const callBase = this.callBase;
-                //     let validator;
+                showHighlighting: function({ $cell, skipValidation }) {
+                    let isValid = true;
+                    const callBase = this.callBase;
+                    let validator;
 
-                //     if(!skipValidation) {
-                //         validator = $cell.data('dxValidator');
-                //         if(validator) {
-                //             when(this.getController('validating').validateCell({
-                //                 validator,
-                //                 keyValue,
-                //                 columnIndex
-                //             })).done((validationResult) => {
-                //                 isValid = validationResult.isValid;
-                //                 if(isValid) {
-                //                     callBase.apply(this, arguments);
-                //                 }
-                //             });
-                //             return;
-                //         }
-                //     }
+                    if(!skipValidation) {
+                        validator = $cell.data('dxValidator');
+                        if(validator) {
+                            when(this.getController('validating').validateCell(validator)).done((validationResult) => {
+                                isValid = validationResult.isValid;
+                                if(isValid) {
+                                    callBase.apply(this, arguments);
+                                }
+                            });
+                            return;
+                        }
+                    }
 
-                //     if(isValid) {
-                //         callBase.apply(this, arguments);
-                //     }
-                // },
+                    if(isValid) {
+                        callBase.apply(this, arguments);
+                    }
+                },
                 getEditDataByKey: function(key) {
                     return this._editData[getIndexByKey(key, this._editData)];
                 }
@@ -882,7 +871,7 @@ module.exports = {
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                             .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
-                            .text(message)
+                            .html(message)
                             .appendTo($cell);
 
                         const overlayOptions = {
@@ -1007,7 +996,11 @@ module.exports = {
                             }
 
                             if(showValidationMessage && $cell && column && validationResult && validationResult.brokenRules) {
-                                this._showValidationMessage($focus, validationResult.brokenRules[0].message, column.alignment || 'left', revertTooltip);
+                                let errorMessage = '';
+                                validationResult.brokenRules.forEach(function(rule) {
+                                    errorMessage += (errorMessage.length ? '<br/>' : '') + rule.message;
+                                });
+                                this._showValidationMessage($focus, errorMessage, column.alignment || 'left', revertTooltip);
                             }
 
                             !hideBorder && this._rowsView.element() && this._rowsView.updateFreeSpaceRowHeight();
@@ -1015,15 +1008,19 @@ module.exports = {
 
                         if(validator) {
                             const validatingController = this.getController('validating');
+                            const pendingInfo = validatingController.getPendingCellValidationInfo();
+                            if(this.getController('editing').getEditMode() === EDIT_MODE_CELL && pendingInfo && pendingInfo.valueUpdated && pendingInfo.cellKey !== validator.option('cellKey')) {
+                                return;
+                            }
                             validatingController.setValidator(validator);
 
                             if(validator.option('adapter').getValue() !== undefined) {
                                 // test
-                                when(this.getController('validating').validateCell({
-                                    validator,
-                                    keyValue: rowOptions.key,
-                                    columnIndex: column.index
-                                })).done((validationResult) => {
+                                when(validatingController.validateCell(validator)).done((validationResult) => {
+                                    const currentValidator = validatingController.getValidator();
+                                    if(!currentValidator || currentValidator.option('cellKey') !== validator.option('cellKey')) {
+                                        return;
+                                    }
                                     if(!validationResult.isValid) {
                                         hideBorder = true;
                                         showValidationMessage = true;
