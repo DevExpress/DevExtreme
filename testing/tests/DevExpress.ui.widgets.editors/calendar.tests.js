@@ -860,40 +860,6 @@ QUnit.module('Keyboard navigation', {
         assert.ok(params.element, 'Element should be passed');
     });
 
-    QUnit.test('pressing ctrl+arrows or pageup/pagedown keys must change view correctly', function(assert) {
-        const $element = this.$element;
-        const calendar = this.calendar;
-
-        const expectedDates = {
-            'month': [new Date(2013, 8, 13), new Date(2013, 9, 13)],
-            'year': [new Date(2012, 9, 13), new Date(2013, 9, 13)],
-            'decade': [new Date(2003, 9, 13), new Date(2013, 9, 13)],
-            'century': [new Date(1913, 9, 13), new Date(2013, 9, 13)]
-        };
-
-        const clock = this.clock;
-
-        iterateViews((_, type) => {
-            calendar.option('zoomLevel', type);
-
-            clock.tick();
-            triggerKeydown($element, LEFT_ARROW_KEY_CODE, true);
-            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'ctrl+left arrow navigates correctly');
-
-            clock.tick();
-            triggerKeydown($element, RIGHT_ARROW_KEY_CODE, true);
-            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'ctrl+right arrow navigates correctly');
-
-            clock.tick();
-            triggerKeydown($element, PAGE_UP_KEY_CODE);
-            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][0], 'pageup navigates correctly');
-
-            clock.tick();
-            triggerKeydown($element, PAGE_DOWN_KEY_CODE);
-            assert.deepEqual(calendar.option('currentDate'), expectedDates[type][1], 'pagedown navigates correctly');
-        });
-    });
-
     [true, false].forEach(navigateToSameDate => {
         QUnit.test(`pressing ctrl+arrows or pageup/pagedown keys must change view correctly navigateToSameDate=${navigateToSameDate}`, function(assert) {
             const $element = this.$element;
