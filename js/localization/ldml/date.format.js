@@ -67,6 +67,7 @@ const getDifference = function(defaultPattern, patterns, processedIndexes, isDig
     if(result.length === 1 && (defaultPattern[processedIndexes[0] - 1] === '0' || defaultPattern[processedIndexes[0] - 1] === '٠')) {
         processedIndexes.unshift(processedIndexes[0] - 1);
     }
+
     return result;
 };
 
@@ -164,7 +165,6 @@ const escapeChars = function(pattern, defaultPattern, processedIndexes, patternP
 };
 
 const getFormat = function(formatter) {
-    // debugger
     const processedIndexes = [];
     const defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter);
     const patternPositions = defaultPattern.split('').map(function(_, index) { return index; });
@@ -187,6 +187,7 @@ const getFormat = function(formatter) {
     datePatterns.forEach(function(test) {
         const diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
         const pattern = test.pattern === 'M' && !replacedPatterns['d'] ? 'L' : test.pattern;
+
         result = replaceChars(result, diff, pattern, patternPositions);
         replacedPatterns[pattern] = diff.length;
     });
