@@ -358,7 +358,9 @@ var AppointmentModel = Class.inherit({
             this._filterMaker.make("date", [trimmedDates.min, trimmedDates.max]);
 
             if(this._dataSource.filter() && this._dataSource.filter().length > 1) {
-                this._filterMaker.make("user", [this._dataSource.filter()[1]]);
+                // TODO: serialize user filter value only necessary for case T838165(details in note)
+                const userFilter = this._serializeRemoteFilter([this._dataSource.filter()[1]], dateSerializationFormat);
+                this._filterMaker.make('user', userFilter);
             }
             if(remoteFiltering) {
                 this._dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
@@ -372,25 +374,26 @@ var AppointmentModel = Class.inherit({
     },
 
     _serializeRemoteFilter: function(filter, dateSerializationFormat) {
-        var that = this;
-
-        if(!Array.isArray(filter)) return filter;
+        if(!Array.isArray(filter)) {
+            return filter;
+        }
 
         filter = extend([], filter);
 
-        var startDate = that._dataAccessors.expr.startDateExpr,
-            endDate = that._dataAccessors.expr.endDateExpr;
+        var startDate = this._dataAccessors.expr.startDateExpr;
+        var endDate = this._dataAccessors.expr.endDateExpr;
 
         if(typeUtils.isString(filter[0])) {
             if(config().forceIsoDateParsing && filter.length > 1) {
                 if(filter[0] === startDate || filter[0] === endDate) {
-                    filter[filter.length - 1] = dateSerialization.serializeDate(filter[filter.length - 1], dateSerializationFormat);
+                    // TODO: wrap filter value to new Date only necessary for case T838165(details in note)
+                    filter[filter.length - 1] = dateSerialization.serializeDate(new Date(filter[filter.length - 1]), dateSerializationFormat);
                 }
             }
         }
 
         for(var i = 0; i < filter.length; i++) {
-            filter[i] = that._serializeRemoteFilter(filter[i], dateSerializationFormat);
+            filter[i] = this._serializeRemoteFilter(filter[i], dateSerializationFormat);
         }
 
         return filter;

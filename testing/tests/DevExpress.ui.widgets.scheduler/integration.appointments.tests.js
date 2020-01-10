@@ -1,4 +1,27 @@
-var $ = require("jquery");
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import errors from 'ui/widget/ui.errors';
+import translator from 'animation/translator';
+import dateLocalization from 'localization/date';
+import messageLocalization from 'localization/message';
+import dblclickEvent from 'events/dblclick';
+import fx from 'animation/fx';
+import pointerMock from '../../helpers/pointerMock.js';
+import Color from 'color';
+import tooltip from 'ui/tooltip/ui.tooltip';
+import devices from 'core/devices';
+import config from 'core/config';
+import dragEvents from 'events/drag';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import dataUtils from 'core/element_data';
+import dateSerialization from 'core/utils/date_serialization';
+import { SchedulerTestWrapper } from './helpers.js';
+
+import 'ui/scheduler/ui.scheduler';
+import 'ui/switch';
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -6,31 +29,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var noop = require("core/utils/common").noop,
-    errors = require("ui/widget/ui.errors"),
-    translator = require("animation/translator"),
-    dateLocalization = require("localization/date"),
-    messageLocalization = require("localization/message"),
-    dblclickEvent = require("events/dblclick"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    Color = require("color"),
-    tooltip = require("ui/tooltip/ui.tooltip"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    dataUtils = require("core/element_data"),
-    dateSerialization = require("core/utils/date_serialization");
-
-require("ui/scheduler/ui.scheduler");
-require("ui/switch");
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     APPOINTMENT_CLASS = "dx-scheduler-appointment";
@@ -4531,4 +4529,94 @@ QUnit.test("Multi-day appointment is hidden in compact collectors according to h
 
     assert.strictEqual(tailCoords.top, 0, "Appointment top is correct");
     assert.roughEqual(tailCoords.left, 240, 2, "Appointment left is correct");
+});
+
+QUnit.test('Remote filter should apply after change view type', function(assert) {
+    const model = [{
+        text: 'New Brochures',
+        startDate: '2017-05-23T14:30:00',
+        endDate: '2017-05-23T15:45:00'
+    }, {
+        text: 'Install New Database',
+        startDate: '2017-05-24T09:45:00',
+        endDate: '2017-05-24T11:15:00'
+    }, {
+        text: 'Approve New Online Marketing Strategy',
+        startDate: '2017-05-24T12:00:00',
+        endDate: '2017-05-24T14:00:00'
+    }, {
+        text: 'Upgrade Personal Computers',
+        startDate: '2017-05-24T15:15:00',
+        endDate: '2017-05-24T16:30:00'
+    }, {
+        text: 'Customer Workshop',
+        startDate: '2017-05-25T11:00:00',
+        endDate: '2017-05-25T12:00:00',
+        allDay: true
+    }, {
+        text: 'Prepare 2015 Marketing Plan',
+        startDate: '2017-05-25T11:00:00',
+        endDate: '2017-05-25T13:30:00'
+    }, {
+        text: 'Brochure Design Review',
+        startDate: '2017-05-25T14:00:00',
+        endDate: '2017-05-25T15:30:00'
+    }, {
+        text: 'Create Icons for Website',
+        startDate: '2017-05-26T10:00:00',
+        endDate: '2017-05-26T11:30:00'
+    }, {
+        text: 'Upgrade Server Hardware',
+        startDate: '2017-05-26T14:30:00',
+        endDate: '2017-05-26T16:00:00'
+    }];
+
+    const dataSource = new DataSource({
+        store: model
+    });
+
+    this.createInstance = (view, dataSource, options) => {
+        this.instance = $("#scheduler").dxScheduler($.extend(options, {
+            views: ["week", "month", "agenda"],
+            currentView: view,
+            dataSource: dataSource,
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            height: 600,
+            width: 1300,
+            editing: true,
+        })).dxScheduler("instance");
+        this.scheduler = new SchedulerTestWrapper(this.instance);
+    };
+
+    const instance = $("#scheduler").dxScheduler({
+        dataSource: dataSource,
+        dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ss',
+        remoteFiltering: true,
+        views: ['workWeek', 'month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 4, 23),
+        maxAppointmentsPerCell: 'unlimited',
+        height: 600,
+    }).dxScheduler("instance");
+    const scheduler = new SchedulerTestWrapper(instance);
+
+    assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equal ${model.length} items`);
+
+    const filter = dataSource.filter();
+    filter.push([
+        ['startDate', '>', '2017-05-25T21:00:00'],
+        'and',
+        ['endDate', '<', '2017-05-26T21:00:00']
+    ]);
+
+    dataSource.filter(filter);
+    dataSource.load();
+    assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered after call load method of dataSource');
+
+    scheduler.instance.option('currentView', 'workWeek');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Work Week"');
+
+    scheduler.instance.option('currentView', 'month');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
 });
