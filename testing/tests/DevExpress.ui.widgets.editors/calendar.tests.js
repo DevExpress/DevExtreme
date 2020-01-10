@@ -611,7 +611,7 @@ QUnit.module('Views integration', {
         $($currentView.find('td[data-value=\'2015/11/06\']')).trigger('dxclick');
 
         const currentViewAfterClick = getCurrentViewInstance(calendar);
-        assert.ok(afterViewBeforeClick === currentViewAfterClick, 'after view should become a current view after click on other month date cell');
+        assert.strictEqual(afterViewBeforeClick, currentViewAfterClick, 'after view should become a current view after click on other month date cell');
     });
 
     QUnit.test('selected value should be rendered correctly on views with different maxZoomLevel', function(assert) {
@@ -1599,7 +1599,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
 
             $($element.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).eq(3)).trigger('dxclick');
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -1615,7 +1615,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
             $($element).trigger('focusin');
             triggerKeydown($element, ENTER_KEY_CODE);
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -1630,7 +1630,7 @@ QUnit.module('ZoomLevel option', {
             calendar.option('zoomLevel', type);
 
             $($element.find(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first()).trigger('dxclick');
-            assert.ok(calendar.option('zoomLevel') !== type, 'zoomLevel option view is changed');
+            assert.notStrictEqual(calendar.option('zoomLevel'), type, 'zoomLevel option view is changed');
         });
     });
 
@@ -2221,7 +2221,8 @@ QUnit.module('Current date', {
         const calendar = this.$element.dxCalendar({
             value: new Date(2015, 0, 15),
             zoomLevel: 'month',
-            focusStateEnabled: true
+            focusStateEnabled: true,
+            navigateToSameDate: false
         }).dxCalendar('instance');
 
         $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS))).trigger('dxclick');
