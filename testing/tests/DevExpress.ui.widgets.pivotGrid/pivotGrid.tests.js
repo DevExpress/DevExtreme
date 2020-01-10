@@ -4260,7 +4260,7 @@ QUnit.test('PivotGrid should have correct height if filter fields take several l
     }), assert);
     const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
     // assert
-    assert.equal(container.height(), 300, 'height');
+    assert.roughEqual(container.height(), 300, 1, 'height');
 });
 
 QUnit.test('Data and column headers not visible', function(assert) {
