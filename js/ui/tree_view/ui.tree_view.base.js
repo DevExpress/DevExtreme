@@ -587,24 +587,26 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         let toDeselect = [];
         const isRecursiveSelection = this._isRecursiveSelection();
 
-        newSelectedKeys.forEach((newKey) => {
-            if(oldSelectedKeys.indexOf(newKey) !== -1) {
+        const oldKeys = oldSelectedKeys || [];
+        const newKeys = newSelectedKeys || [];
+        newKeys.forEach((newKey) => {
+            if(oldKeys.indexOf(newKey) !== -1) {
                 return;
             }
             toSelect.push(newKey);
         });
 
-        oldSelectedKeys.forEach((oldKey) => {
-            if(newSelectedKeys.indexOf(oldKey) !== -1) {
+        oldKeys.forEach((oldKey) => {
+            if(newKeys.indexOf(oldKey) !== -1) {
                 return;
             }
 
             let isFind = false;
             if(isRecursiveSelection) {
-                if(this._dataAdapter.isChildKey(oldKey, newSelectedKeys)) {
+                if(this._dataAdapter.isChildKey(oldKey, newKeys)) {
                     return;
                 }
-                isFind = newSelectedKeys.some((newKey) => this._dataAdapter.isChildKey(newKey, [oldKey]));
+                isFind = newKeys.some((newKey) => this._dataAdapter.isChildKey(newKey, [oldKey]));
             }
 
             if(!isFind) {
