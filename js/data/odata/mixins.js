@@ -1,21 +1,19 @@
-const stringUtils = require('../../core/utils/string');
-const iteratorUtils = require('../../core/utils/iterator');
-const odataUtils = require('./utils');
+import { format } from '../../core/utils/string';
+import { each, map } from '../../core/utils/iterator';
+import { serializeValue, sendRequest } from './utils';
 
-require('./query_adapter');
+import './query_adapter';
 
 const DEFAULT_PROTOCOL_VERSION = 2;
 
-const formatFunctionInvocationUrl = function(baseUrl, args) {
-    return stringUtils.format('{0}({1})',
+export const formatFunctionInvocationUrl = (baseUrl, args) =>
+    format(
+        '{0}({1})',
         baseUrl,
-        iteratorUtils.map(args || {}, function(value, key) {
-            return stringUtils.format('{0}={1}', key, value);
-        }).join(',')
+        map(args || {}, (value, key) => format('{0}={1}', key, value)).join(',')
     );
-};
 
-const escapeServiceOperationParams = function(params, version) {
+export const escapeServiceOperationParams = (params, version) => {
     if(!params) {
         return params;
     }
@@ -24,13 +22,14 @@ const escapeServiceOperationParams = function(params, version) {
     // The type of each parameter must be a primitive type.
     // Any data of a non-primitive type must be serialized and passed into a string parameter
     const result = {};
-    iteratorUtils.each(params, function(k, v) {
-        result[k] = odataUtils.serializeValue(v, version);
+    each(params, (k, v) => {
+        result[k] = serializeValue(v, version);
     });
     return result;
 };
 
-const SharedMethods = {
+// TODO: remake this mixin into component
+export const SharedMethods = {
 
     _extractServiceOptions: function(options) {
         options = options || {};
@@ -45,12 +44,12 @@ const SharedMethods = {
     },
 
     _sendRequest: function(url, method, params, payload) {
-        return odataUtils.sendRequest(this.version(),
+        return sendRequest(this.version(),
             {
-                url: url,
-                method: method,
+                url,
+                method,
                 params: params || {},
-                payload: payload
+                payload
             },
             {
                 beforeSend: this._beforeSend,
@@ -65,7 +64,3 @@ const SharedMethods = {
         return this._version;
     }
 };
-
-exports.SharedMethods = SharedMethods;
-exports.escapeServiceOperationParams = escapeServiceOperationParams;
-exports.formatFunctionInvocationUrl = formatFunctionInvocationUrl;
