@@ -1846,7 +1846,7 @@ class Diagram extends Widget {
     _nativeShapeToDiagramShape(nativeShape) {
         return {
             dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key),
-            itemType: "shape",
+            itemType: 'shape',
             text: nativeShape.text,
             type: nativeShape.type
         };
@@ -1854,7 +1854,7 @@ class Diagram extends Widget {
     _nativeConnectorToDiagramConnector(nativeConnector) {
         return {
             dataItem: this._edgesOption && this._edgesOption.findItem(nativeConnector.key),
-            itemType: "connector",
+            itemType: 'connector',
             texts: nativeConnector.texts,
             fromKey: nativeConnector.fromKey,
             toKey: nativeConnector.toKey
