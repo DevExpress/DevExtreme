@@ -2225,14 +2225,7 @@ QUnit.module('Current date', {
         });
     });
 
-    QUnit.test('navigateToSameDate option (T849382)', function(assert) {
-        const getArrows = () => {
-            return [
-                $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS))),
-                $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)))
-            ];
-        };
-
+    QUnit.test('navigateToSameDate option', function(assert) {
         const calendar = this.$element.dxCalendar({
             value: new Date(2015, 0, 15),
             zoomLevel: 'month',
@@ -2240,24 +2233,15 @@ QUnit.module('Current date', {
             navigateToSameDate: false
         }).dxCalendar('instance');
 
-        let arrows = getArrows();
+        const $prevArrow = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)));
+        const $nextArrow = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)));
 
-        arrows[1].trigger('dxclick');
+        $nextArrow.trigger('dxclick');
         assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1));
 
-        arrows[0].trigger('dxclick');
+        $prevArrow.trigger('dxclick');
         assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31));
-
-        calendar.option('navigateToSameDate', true);
-        calendar.option('currentDate', new Date(2015, 0, 15));
-
-        arrows = getArrows();
-
-        arrows[1].trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 15));
-
-        arrows[0].trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 15));
+        $prevArrow.trigger('dxclick');
     });
 
     QUnit.test('correct change contouredDate after view change if this cell is not present on new view', function(assert) {
