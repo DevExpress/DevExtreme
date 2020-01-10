@@ -51,8 +51,7 @@ test(`Drag recurrent appointment occurrence from collector (T832887)`, async t =
         .expect(appointmentTooltipItem.element.exists).notOk()
         .click(popup.appointment)
         .expect(appointment.element.exists).ok()
-        .expect(appointment.date.startTime).eql("5:00 AM")
-        .expect(appointment.date.endTime).eql("7:00 AM")
+        .expect(appointment.date.time).eql("5:00 AM - 7:00 AM")
         .expect(collector.element.exists).notOk();
 
 }).before(() => createScheduler({
