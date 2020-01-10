@@ -404,6 +404,11 @@
             > .dx-dropdowneditor-button:last-child {
                 margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
+
+            > .dx-clear-button-area:last-child,
+            > .dx-numberbox-spin-container:last-child {
+                margin-right: 8px;
+            }
         }
 
         .dx-rtl& {
@@ -441,6 +446,12 @@
 
                 > .dx-dropdowneditor-button:last-child {
                     margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
+                }
+
+                > .dx-clear-button-area:last-child,
+                > .dx-numberbox-spin-container:last-child {
+                    margin-left: 8px;
                     margin-right: 0;
                 }
             }
