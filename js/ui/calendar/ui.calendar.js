@@ -170,11 +170,11 @@ const Calendar = Editor.inherit({
             disabledDates: null,
 
             /**
-             * @name dxCalendarOptions.navigationMode
-             * @type string
-             * @default "strict"
+             * @name dxCalendarOptions.navigateToSameDate
+             * @type boolean
+             * @default true
              */
-            navigationMode: 'strict',
+            navigateToSameDate: true,
 
             onCellClick: null,
             onContouredChanged: null,
@@ -560,10 +560,9 @@ const Calendar = Editor.inherit({
 
         const lastDay = dateUtils.getLastMonthDate(date).getDate();
 
-        const navigationMode = this.option('navigationMode');
-        if(navigationMode === 'strict') {
+        if(this.option('navigateToSameDate')) {
             date.setDate(currentDay > lastDay ? lastDay : currentDay);
-        } else if(navigationMode === 'closest') {
+        } else {
             offset === -1 && date.setDate(lastDay);
         }
 
@@ -1240,7 +1239,7 @@ const Calendar = Editor.inherit({
             case 'dateSerializationFormat':
             case 'cellTemplate':
             case 'showTodayButton':
-            case 'navigationMode':
+            case 'navigateToSameDate':
                 this._invalidate();
                 break;
             case 'hasFocus':
