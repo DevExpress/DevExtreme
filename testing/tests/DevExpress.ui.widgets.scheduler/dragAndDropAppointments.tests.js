@@ -436,9 +436,7 @@ module('Drag and drop appointments', moduleConfig, () => {
                 .dragStart();
 
             const phantomAppointment = scheduler.appointments.getAppointment();
-
-            assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM', 'Appointment start is correct');
-            assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), '2:00 AM', 'Appointment edn is correct');
+            assert.equal(phantomAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '1:00 AM - 2:00 AM', 'Appointment date is correct');
 
             pointer.dragEnd();
         });
