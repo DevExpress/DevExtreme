@@ -148,7 +148,7 @@ export class TooltipStrategyBase {
         const editing = this._extraOptions.editing;
         const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
-        $itemElement.append(this._createItemListInfo(this._options.getText(data, currentData)));
+        $itemElement.append(this._createItemListInfo(this._options.getTextAndFormatDate(data, currentData)));
 
         if(!data.disabled && (editing && editing.allowDeleting === true || editing === true)) {
             $itemElement.append(this._createDeleteButton(data, currentData));
