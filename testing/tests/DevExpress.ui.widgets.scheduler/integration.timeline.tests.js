@@ -407,10 +407,11 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
         currentDate: new Date(2014, 6, 14),
         crossScrollingEnabled: true,
         width: 1500,
+        timeZone: 'Etc/UTC'
     });
 
     assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
 
     const appointment = scheduler.appointments.getAppointment();
-    assert.roughEqual(appointment.outerWidth(), 97, 1, 'Appointment width is OK');
+    assert.roughEqual(appointment.outerWidth(), 175, 1, 'Appointment width is OK');
 });
