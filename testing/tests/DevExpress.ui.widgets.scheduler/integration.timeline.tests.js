@@ -392,10 +392,6 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
         startDate: new Date('2014-07-14T09:00:00.000Z'),
         endDate: new Date('2014-07-14T23:01:00.000Z'),
         text: 'blah',
-    }, {
-        startDate: new Date('2014-07-17T00:00:00.000Z'),
-        endDate: new Date('2014-07-18T00:00:00.000Z'),
-        text: 'blah',
     }];
 
     const scheduler = createInstance({
@@ -413,5 +409,8 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
         width: 1500,
     });
 
-    assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
+    assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
+
+    const appointment = scheduler.appointments.getAppointment();
+    assert.roughEqual(appointment.outerWidth(), 97, 1, 'Appointment width is OK');
 });
