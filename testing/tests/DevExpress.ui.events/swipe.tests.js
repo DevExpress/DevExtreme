@@ -1,12 +1,12 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const swipeEvents = require('events/swipe');
-const mathUtils = require('core/utils/math');
-const domUtils = require('core/utils/dom');
-const Action = require('core/action');
-const devices = require('core/devices');
-const GestureEmitter = require('events/gesture/emitter.gesture');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import swipeEvents from 'events/swipe';
+import mathUtils from 'core/utils/math';
+import domUtils from 'core/utils/dom';
+import Action from 'core/action';
+import devices from 'core/devices';
+import GestureEmitter from 'events/gesture/emitter.gesture';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
     const markup =

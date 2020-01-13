@@ -1,9 +1,9 @@
-const $ = require('../core/renderer');
-const Action = require('../core/action');
-const viewPortUtils = require('../core/utils/view_port');
-const extend = require('../core/utils/extend').extend;
-const isPlainObject = require('../core/utils/type').isPlainObject;
-const Toast = require('./toast');
+import $ from '../core/renderer';
+import Action from '../core/action';
+import viewPortUtils from '../core/utils/view_port';
+import { extend } from '../core/utils/extend';
+import { isPlainObject } from '../core/utils/type';
+import Toast from './toast';
 
 
 let $notify = null;
