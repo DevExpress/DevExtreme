@@ -49,7 +49,8 @@ export class CompactAppointmentsHelper {
         return items.data.map((item, index) => {
             return {
                 data: item,
-                color: items.colors[index]
+                color: items.colors[index],
+                settings: items.settings[index],
             };
         });
     }
@@ -111,7 +112,7 @@ export class CompactAppointmentsHelper {
 
                     if(itemData && !itemData.data.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.settings);
 
                         dragBehavior.onDragStart(event.data);
                         translator.resetPosition($(dragElement));
@@ -131,12 +132,12 @@ export class CompactAppointmentsHelper {
         const appointments = this.instance.getAppointmentsInstance();
         const appointmentIndex = appointments.option('items').length;
 
-        settings[0].isCompact = false;
-        settings[0].virtual = false;
+        settings.isCompact = false;
+        settings.virtual = false;
 
         appointments._renderItem(appointmentIndex, {
             itemData: itemData,
-            settings: settings
+            settings: [settings]
         });
 
         return appointments._findItemElementByItem(itemData)[0];
