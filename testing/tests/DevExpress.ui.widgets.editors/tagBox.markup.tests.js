@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const TagBox = require('ui/tag_box');
-const fx = require('animation/fx');
-const isRenderer = require('core/utils/type').isRenderer;
-const config = require('core/config');
+import $ from 'jquery';
+import TagBox from 'ui/tag_box';
+import fx from 'animation/fx';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 
 QUnit.testStart(function() {
     const markup =

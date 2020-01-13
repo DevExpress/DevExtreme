@@ -1,15 +1,15 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const Color = require('color');
-const Browser = require('core/utils/browser');
-const pointerMock = require('../../helpers/pointerMock.js');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import Color from 'color';
+import Browser from 'core/utils/browser';
+import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import fx from 'animation/fx';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
-require('common.css!');
-require('ui/color_box/color_view');
+import 'common.css!';
+import 'ui/color_box/color_view';
 
 QUnit.testStart(function() {
     const markup =
