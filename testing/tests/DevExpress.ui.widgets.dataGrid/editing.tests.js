@@ -7817,6 +7817,7 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
 });
 
+// T848242
 QUnit.test('The command column should not have ellipsis', function(assert) {
     // arrange
     const that = this;
