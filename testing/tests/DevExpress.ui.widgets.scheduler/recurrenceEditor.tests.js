@@ -786,5 +786,5 @@ QUnit.test('Repeat-on-week editor should process values from checkboxes correctl
 
     checkbox.option('value', true);
 
-    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,SA', 'Value was processed correctly');
+    assert.equal(this.instance.option('value'), 'FREQ=WEEKLY;BYDAY=SA,TU', 'Value was processed correctly');
 });
