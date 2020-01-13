@@ -1,4 +1,4 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
 
 QUnit.testStart(function() {
@@ -8,8 +8,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('common.css!');
-require('ui/file_uploader');
+import 'common.css!';
+import 'ui/file_uploader';
 
 var FILEUPLOADER_CLASS = 'dx-fileuploader',
 

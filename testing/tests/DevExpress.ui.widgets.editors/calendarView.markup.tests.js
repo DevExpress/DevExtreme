@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    dateUtils = require('core/utils/date'),
-    BaseView = require('ui/calendar/ui.calendar.base_view'),
-    Views = require('ui/calendar/ui.calendar.views'),
-    fx = require('animation/fx'),
-    dateSerialization = require('core/utils/date_serialization');
+import $ from 'jquery';
+import dateUtils from 'core/utils/date';
+import BaseView from 'ui/calendar/ui.calendar.base_view';
+import Views from 'ui/calendar/ui.calendar.views';
+import fx from 'animation/fx';
+import dateSerialization from 'core/utils/date_serialization';
 
-require('common.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'ui/calendar';
 
 var CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell',
     CALENDAR_TODAY_CLASS = 'dx-calendar-today',

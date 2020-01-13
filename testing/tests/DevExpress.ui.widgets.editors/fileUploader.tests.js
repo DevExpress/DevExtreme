@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    FileUploader = require('ui/file_uploader'),
-    devices = require('core/devices'),
-    keyboardMock = require('../../helpers/keyboardMock.js'),
-    createBlobFile = require('../../helpers/fileHelper.js').createBlobFile;
+import $ from 'jquery';
+import FileUploader from 'ui/file_uploader';
+import devices from 'core/devices';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import { createBlobFile } from '../../helpers/fileHelper.js';
 
-require('../../helpers/xmlHttpRequestMock.js');
+import '../../helpers/xmlHttpRequestMock.js';
 
 QUnit.testStart(function() {
     var markup =
@@ -13,7 +13,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('common.css!');
+import 'common.css!';
 
 var internals = FileUploader.__internals;
 

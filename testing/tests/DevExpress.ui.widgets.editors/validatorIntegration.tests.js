@@ -1,28 +1,27 @@
-var $ = require('jquery'),
-    Class = require('core/class'),
-    ValidationEngine = require('ui/validation_engine'),
-    Validator = require('ui/validator'),
-    keyboardMock = require('../../helpers/keyboardMock.js');
+import $ from 'jquery';
+import Class from 'core/class';
+import ValidationEngine from 'ui/validation_engine';
+import Validator from 'ui/validator';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
-require('common.css!');
-require('generic_light.css!');
-
-require('ui/text_box');
-require('ui/date_box');
-require('ui/number_box');
-require('ui/autocomplete');
-require('ui/calendar');
-require('ui/check_box');
-require('ui/drop_down_box');
-require('ui/html_editor');
-require('ui/lookup');
-require('ui/radio_group');
-require('ui/select_box');
-require('ui/tag_box');
-require('ui/text_area');
-require('ui/slider');
-require('ui/range_slider');
-require('ui/switch');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/text_box';
+import 'ui/date_box';
+import 'ui/number_box';
+import 'ui/autocomplete';
+import 'ui/calendar';
+import 'ui/check_box';
+import 'ui/drop_down_box';
+import 'ui/html_editor';
+import 'ui/lookup';
+import 'ui/radio_group';
+import 'ui/select_box';
+import 'ui/tag_box';
+import 'ui/text_area';
+import 'ui/slider';
+import 'ui/range_slider';
+import 'ui/switch';
 
 
 var Fixture = Class.inherit({

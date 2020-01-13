@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    Tabs = require('ui/tabs');
+import $ from 'jquery';
+import Tabs from 'ui/tabs';
 
 QUnit.module('badge builtin', () => {
     var TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge',

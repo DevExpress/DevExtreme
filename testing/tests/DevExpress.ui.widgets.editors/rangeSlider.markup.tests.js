@@ -1,7 +1,8 @@
-var $ = require('jquery'),
-    config = require('core/config');
+import $ from 'jquery';
+import config from 'core/config';
 
-require('ui/range_slider');
+import 'ui/range_slider';
+import 'common.css!';
 
 QUnit.testStart(function() {
     var markup =
@@ -10,13 +11,10 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('common.css!');
-
-var SLIDER_CLASS = 'dx-slider',
-
-    RANGE_SLIDER_CLASS = 'dx-rangeslider',
-    RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle',
-    RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';
+const SLIDER_CLASS = 'dx-slider';
+const RANGE_SLIDER_CLASS = 'dx-rangeslider';
+const RANGE_SLIDER_START_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-start-handle';
+const RANGE_SLIDER_END_HANDLE_CLASS = RANGE_SLIDER_CLASS + '-end-handle';
 
 QUnit.module('rangeSlider markup', () => {
     QUnit.test('default', function(assert) {

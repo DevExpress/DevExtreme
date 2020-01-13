@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    Class = require('core/class'),
-    DefaultAdapter = require('ui/validation/default_adapter'),
-    ValidationEngine = require('ui/validation_engine');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import Class from 'core/class';
+import DefaultAdapter from 'ui/validation/default_adapter';
+import ValidationEngine from 'ui/validation_engine';
 
-require('ui/validator');
+import 'ui/validator';
 
 var Fixture = Class.inherit({
     createValidator: function(options, element) {

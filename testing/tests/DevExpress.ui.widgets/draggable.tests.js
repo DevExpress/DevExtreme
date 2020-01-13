@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    dragEvents = require('events/drag'),
-    pointerMock = require('../../helpers/pointerMock.js'),
-    GestureEmitter = require('events/gesture/emitter.gesture.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import dragEvents from 'events/drag';
+import pointerMock from '../../helpers/pointerMock.js';
+import GestureEmitter from 'events/gesture/emitter.gesture.js';
 
-require('common.css!');
-require('ui/draggable');
+import 'common.css!';
+import 'ui/draggable';
 
 QUnit.testStart(function() {
     var markup =

@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    Class = require('core/class'),
-    domUtils = require('core/utils/dom'),
-    DefaultAdapter = require('ui/validation/default_adapter'),
-    ValidationEngine = require('ui/validation_engine');
+import $ from 'jquery';
+import Class from 'core/class';
+import domUtils from 'core/utils/dom';
+import DefaultAdapter from 'ui/validation/default_adapter';
+import ValidationEngine from 'ui/validation_engine';
 
-require('ui/validation_group');
+import 'ui/validation_group';
 
 var Fixture = Class.inherit({
 

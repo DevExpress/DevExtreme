@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    dateUtils = require('core/utils/date'),
-    BaseView = require('ui/calendar/ui.calendar.base_view'),
-    Views = require('ui/calendar/ui.calendar.views'),
-    pointerMock = require('../../helpers/pointerMock.js'),
-    fx = require('animation/fx'),
-    dateSerialization = require('core/utils/date_serialization'),
-    dateLocalization = require('localization/date');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import dateUtils from 'core/utils/date';
+import BaseView from 'ui/calendar/ui.calendar.base_view';
+import Views from 'ui/calendar/ui.calendar.views';
+import pointerMock from '../../helpers/pointerMock.js';
+import fx from 'animation/fx';
+import dateSerialization from 'core/utils/date_serialization';
+import dateLocalization from 'localization/date';
 
-require('common.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'ui/calendar';
 
 var CALENDAR_EMPTY_CELL_CLASS = 'dx-calendar-empty-cell',
     CALENDAR_CELL_CLASS = 'dx-calendar-cell',
@@ -99,6 +99,7 @@ QUnit.module('Basics', () => {
         });
 
         assert.notOk(spy.called, 'firstDayOfWeekIndex wasn\'t called');
+        $element.remove();
     });
 });
 

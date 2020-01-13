@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    TransitionExecutorModule = require('animation/transition_executor/transition_executor'),
-    dataUtils = require('core/element_data');
+import $ from 'jquery';
+import TransitionExecutorModule from 'animation/transition_executor/transition_executor';
+import dataUtils from 'core/element_data';
 
-require('common.css!');
-require('ui/defer_rendering');
+import 'common.css!';
+import 'ui/defer_rendering';
 
 QUnit.testStart(function() {
     var markup =

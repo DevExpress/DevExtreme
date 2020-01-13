@@ -1,5 +1,5 @@
-var Class = require('core/class'),
-    ValidationEngine = require('ui/validation_engine');
+import Class from 'core/class';
+import ValidationEngine from 'ui/validation_engine';
 
 var Validator = Class.inherit({
     validate: function() { }

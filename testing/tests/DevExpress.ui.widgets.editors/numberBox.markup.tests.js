@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    NumberBox = require('ui/number_box');
+import $ from 'jquery';
+import NumberBox from 'ui/number_box';
 
-require('common.css!');
+import 'common.css!';
 
 QUnit.testStart(function() {
     var markup =

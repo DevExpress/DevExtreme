@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    isRenderer = require('core/utils/type').isRenderer,
-    config = require('core/config');
+import $ from 'jquery';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 
-require('ui/button');
-require('common.css!');
+import 'ui/button';
+import 'common.css!';
 
 QUnit.testStart(function() {
     var markup =

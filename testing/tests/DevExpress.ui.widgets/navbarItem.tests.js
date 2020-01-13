@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    NavBar = require('ui/nav_bar');
+import $ from 'jquery';
+import NavBar from 'ui/nav_bar';
 
 QUnit.module('badge builtin', () => {
     var TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge',

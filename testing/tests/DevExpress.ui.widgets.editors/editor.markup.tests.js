@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    Editor = require('ui/editor/editor'),
-    Class = require('core/class');
+import $ from 'jquery';
+import Editor from 'ui/editor/editor';
+import Class from 'core/class';
 
-require('common.css!');
+import 'common.css!';
 
 var READONLY_STATE_CLASS = 'dx-state-readonly';
 

@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    SelectBox = require('ui/select_box'),
-    DataSource = require('data/data_source/data_source').DataSource,
-    CustomStore = require('data/custom_store'),
-    fx = require('animation/fx'),
-    hasWindow = require('core/utils/window').hasWindow;
+import $ from 'jquery';
+import SelectBox from 'ui/select_box';
+import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
+import fx from 'animation/fx';
+import windowUtils from 'core/utils/window';
 
-require('common.css!');
-require('generic_light.css!');
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     var markup =
@@ -60,9 +60,9 @@ QUnit.module('rendering', moduleSetup, () => {
 
         assert.ok($element.hasClass(WIDGET_CLASS));
 
-        if(hasWindow()) {
-            var $list = $element.find('.dx-list'),
-                $popup = $(instance._popup.$element());
+        if(windowUtils.hasWindow()) {
+            const $list = $element.find('.dx-list');
+            const $popup = $(instance._popup.$element());
 
             assert.ok($popup.hasClass(POPUP_CLASS));
             assert.ok($list.is(':hidden'), 'when start list is hidden');
@@ -80,8 +80,8 @@ QUnit.module('rendering', moduleSetup, () => {
 
         assert.equal($element.find('.' + TEXTEDITOR_INPUT_CLASS).val(), 'second', 'SelectBox has the correct value');
 
-        if(hasWindow()) {
-            var $list = $element.find('.dx-list');
+        if(windowUtils.hasWindow()) {
+            const $list = $element.find('.dx-list');
             assert.ok($list.find('.' + LIST_ITEM_CLASS).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'SelectBox has selected class, when value was set');
         }
     });

@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    Class = require('core/class'),
-    DefaultAdapter = require('ui/validation/default_adapter'),
-    ValidationEngine = require('ui/validation_engine'),
-    Validator = require('ui/validator');
+import $ from 'jquery';
+import Class from 'core/class';
+import DefaultAdapter from 'ui/validation/default_adapter';
+import ValidationEngine from 'ui/validation_engine';
+import Validator from 'ui/validator';
 
-require('ui/validation_summary');
+import 'ui/validation_summary';
 
 var Fixture = Class.inherit({
     createSummary: function(container, options) {
