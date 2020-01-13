@@ -1983,6 +1983,7 @@ const moduleConfig = {
             { format: 'longDate', expectedFormat: '[$-9]dddd, MMMM d, yyyy' },
             { format: 'longTime', expectedFormat: '[$-9]H:mm:ss AM/PM' },
             { format: 'dayOfWeek', expectedFormat: '[$-9]dddd' },
+            { format: 'yyyy-MM-dd', expectedFormat: '[$-9]yyyy-MM-dd' }
         ].forEach((format)=> {
             const dateTimeValue = new Date(2019, 9, 9, 9, 9, 9, 9);
             const dateValue = new Date(2019, 9, 9);
@@ -3012,6 +3013,46 @@ const moduleConfig = {
                 helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                 helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                 done();
+            });
+        });
+
+        [true, false].forEach((remoteOperations) => {
+            [new Date(1996, 6, 4), '1996/7/4', '1996-07-04T00:00:00', new Date(1996, 6, 4).getTime()].forEach((dateValue) => {
+                QUnit.test(`Grouping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', cell.value: ${JSON.stringify(dateValue.value)}, remoteOperations: ${remoteOperations}`, function(assert) {
+                    const done = assert.async();
+                    const ds = [{ f1: dateValue, f2: 'f1_1' }];
+                    const dataGrid = $('#dataGrid').dxDataGrid({
+                        dataSource: ds,
+                        columns: [
+                            { caption: 'f1', dataField: 'f1', dataType: 'date', format: 'yyyy-MM-dd', groupIndex: 0 },
+                            { caption: 'f2', dataField: 'f2', dataType: 'string' }
+                        ],
+                        remoteOperations: remoteOperations,
+                        loadingTimeout: undefined
+                    }).dxDataGrid('instance');
+
+                    const expectedCells = [[
+                        { excelCell: { value: 'f2', alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } }
+                    ], [
+                        { excelCell: { value: 'f1: 1996-07-04', alignment: alignLeftNoWrap, font: { bold: true } }, gridCell: { value: remoteOperations ? ds[0].f1 : new Date(ds[0].f1), rowType: 'group', groupIndex: 0, column: dataGrid.columnOption(0) } }
+                    ], [
+                        { excelCell: { value: 'f1_1', alignment: alignLeftNoWrap }, gridCell: { rowType: 'data', data: ds[0], column: dataGrid.columnOption(1) } }
+                    ]];
+
+                    helper._extendExpectedCells(expectedCells, topLeft);
+
+                    exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellsRange) => {
+                        helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                        helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row });
+                        helper.checkFont(expectedCells);
+                        helper.checkAlignment(expectedCells);
+                        helper.checkValues(expectedCells);
+                        helper.checkMergeCells(expectedCells, topLeft);
+                        helper.checkOutlineLevel([0, 0, 1], topLeft.row);
+                        helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                        done();
+                    });
+                });
             });
         });
 
