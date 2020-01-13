@@ -3075,8 +3075,6 @@ declare module DevExpress.ui {
         /** @deprecated */
         /** @name dxDateBox.Options.minZoomLevel */
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
-        /** @name dxDateBox.Options.navigateToSameDay */
-        navigateToSameDay?: boolean;
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /** @name dxDateBox.Options.placeholder */
