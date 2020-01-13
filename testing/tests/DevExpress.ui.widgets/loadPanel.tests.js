@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import fx from 'animation/fx';
 
-require('common.css!');
-require('ui/load_panel');
+import 'common.css!';
+import 'ui/load_panel';
 
 QUnit.testStart(function() {
     const markup =
