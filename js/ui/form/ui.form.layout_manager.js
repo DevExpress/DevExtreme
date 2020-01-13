@@ -148,10 +148,6 @@ const LayoutManager = Widget.inherit({
     },
 
     _updateFieldValue: function(dataField, value) {
-        if(this._isFieldValueLocked) {
-            return;
-        }
-
         const layoutData = this.option('layoutData');
         let newValue = value;
 
@@ -1106,9 +1102,9 @@ const LayoutManager = Widget.inherit({
     },
 
     _resetWidget(instance) {
-        this._isFieldValueLocked = true;
+        this._disableEditorValueChangedHandler = true;
         instance.reset();
-        this._isFieldValueLocked = false;
+        this._disableEditorValueChangedHandler = false;
         instance.option('isValid', true);
     },
 
@@ -1202,7 +1198,7 @@ const LayoutManager = Widget.inherit({
             }
         });
         editorInstance.on('valueChanged', args => {
-            if(!(isObject(args.value) && args.value === args.previousValue)) {
+            if(!this._disableEditorValueChangedHandler && !(isObject(args.value) && args.value === args.previousValue)) {
                 this._updateFieldValue(dataField, args.value);
             }
         });
