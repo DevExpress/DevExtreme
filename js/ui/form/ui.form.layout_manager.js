@@ -417,6 +417,7 @@ const LayoutManager = Widget.inherit({
                 });
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
+
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
                 }
