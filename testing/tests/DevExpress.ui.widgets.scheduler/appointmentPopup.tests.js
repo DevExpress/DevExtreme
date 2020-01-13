@@ -1322,10 +1322,12 @@ QUnit.test('Popup should not be closed until the valid value is typed', function
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
 });
 
-QUnit.test('Recurrence editor Repeat count NumberBox has correct value after opening AppointmentForm', function(assert) {
+QUnit.test('Recurrence editor Repeat count NumberBox has correct value after opening AppointmentForm second time', function(assert) {
     const scheduler = createInstance({
         currentDate: new Date(2015, 1, 1),
         currentView: 'month',
+        views: ['month'],
+        firstDayOfWeek: 1,
         dataSource: [{
             text: 'appt',
             startDate: new Date(2015, 1, 1, 8, 0),
@@ -1335,9 +1337,12 @@ QUnit.test('Recurrence editor Repeat count NumberBox has correct value after ope
     });
 
     scheduler.appointments.dblclick();
-
     scheduler.appointmentForm.clickFormDialogButton(0);
+    scheduler.appointmentPopup.clickCancelButton();
 
+    scheduler.appointments.dblclick();
+    scheduler.appointmentForm.clickFormDialogButton(0);
     const repeatCount = scheduler.appointmentForm.getEditor('recurrenceRule')._$repeatCountEditor.dxNumberBox('instance').option('value');
+
     assert.strictEqual(repeatCount, 3, 'Repeat count NumberBox has correct value');
 });
