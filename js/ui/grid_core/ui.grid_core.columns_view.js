@@ -1088,7 +1088,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         const $element = that.element();
         const rtlEnabled = that.option('rtlEnabled');
 
-        $element && $element.css(rtlEnabled ? { paddingLeft: width } : { paddingRight: width });
+        $element && $element.css({
+            paddingLeft: rtlEnabled ? width : '',
+            paddingRight: !rtlEnabled ? width : ''
+        });
     },
 
     isScrollbarVisible: function(isHorizontal) {
