@@ -83,7 +83,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const that = this;
 
         if(that.isKeyboardEnabled()) {
-            accessibility.init();
+            accessibility.subscribeVisibilityChange();
             that._dataController = that.getController('data');
             that._selectionController = that.getController('selection');
             that._editingController = that.getController('editing');
@@ -143,9 +143,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
 
             that._initKeyDownHandler($rowsView, e => that._keyDownHandler(e));
 
-            let isGridEmpty = !that._dataController.getVisibleRows().length;
+            const isGridEmpty = !that._dataController.getVisibleRows().length;
             if(isGridEmpty) {
-                let tabIndex = that.option('tabindex') || 0;
+                const tabIndex = that.option('tabindex') || 0;
                 $rowsView.attr('tabindex', tabIndex);
             }
 
@@ -166,7 +166,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         keyboard.off(this._keyDownListener);
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, 'dxDataGridKeyboardNavigation'), this._documentClickHandler);
-        accessibility.dispose();
+        accessibility.unsubscribeVisibilityChange();
     },
     // #endregion Initialization
 

@@ -109,11 +109,11 @@ function onDocumentVisibilityChange() {
 }
 
 module.exports = {
-    init: function() {
+    subscribeVisibilityChange: function() {
         eventsEngine.on(document, 'visibilitychange', onDocumentVisibilityChange);
     },
 
-    dispose: function() {
+    unsubscribeVisibilityChange: function() {
         eventsEngine.off(document, 'visibilitychange', onDocumentVisibilityChange);
     },
 
