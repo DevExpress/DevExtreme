@@ -22,6 +22,7 @@ export const State = () => propertyDecorator;
 export const InternalState = () => propertyDecorator;
 export const Listen = (eventName?: string, parameters?: { target?: Document | Window | string }) => propertyDecorator;
 export const Ref = () => propertyDecorator;
+export const Effect = () => propertyDecorator;
 
 export declare namespace JSX {
     interface Element { }
