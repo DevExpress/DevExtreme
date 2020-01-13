@@ -50,7 +50,7 @@ define(function(require, exports, module) {
 
     const sharedTests = require('./sharedParts/localization.shared.js');
 
-    const ROUNDING_BUG_NUMBERS = [-4.645, -35.855];
+    const NEGATIVE_NUMBERS = [-4.645, -35.855];
     const ROUNDING_CORRECTION = {
         '-4.64': '-4.65',
         '-35.85': '-35.86'
@@ -59,9 +59,12 @@ define(function(require, exports, module) {
         before: function() {
             numberLocalization.inject({
                 format: function(value, format) {
-                    // NOTE: Globalizejs rounding bug. https://github.com/globalizejs/globalize/issues/884
+                    // NOTE: Globalizejs implementation of negative number rounding differs from Intl.
+                    // https://github.com/globalizejs/globalize/issues/884
+                    // If the fractional portion is exactly 0.5 and the argument is negative,
+                    // the argument is rounded to the next integer in the positive direction
                     let result = this.callBase.apply(this, arguments);
-                    if(ROUNDING_BUG_NUMBERS.indexOf(value) !== -1 && format.type === 'fixedPoint' && format.precision === 2 && !!ROUNDING_CORRECTION[result]) {
+                    if(NEGATIVE_NUMBERS.indexOf(value) !== -1 && format.type === 'fixedPoint' && format.precision === 2 && !!ROUNDING_CORRECTION[result]) {
                         result = ROUNDING_CORRECTION[result];
                     }
                     return result;
