@@ -148,13 +148,6 @@ const DateBox = DropDownEditor.inherit({
             disabledDates: null,
 
             /**
-             * @name dxDateBoxOptions.navigateToSameDay
-             * @type boolean
-             * @default true
-             */
-            navigateToSameDay: true,
-
-            /**
              * @name dxDateBoxOptions.maxZoomLevel
              * @type Enums.CalendarZoomLevel
              * @default 'month'
@@ -796,7 +789,6 @@ const DateBox = DropDownEditor.inherit({
             case 'dateSerializationFormat':
             case 'interval':
             case 'disabledDates':
-            case 'navigateToSameDay':
             case 'calendarOptions':
             case 'minZoomLevel':
             case 'maxZoomLevel':
