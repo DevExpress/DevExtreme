@@ -1,7 +1,7 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
-require('ui/text_area');
+import 'common.css!';
+import 'ui/text_area';
 
 QUnit.testStart(function() {
     var markup =

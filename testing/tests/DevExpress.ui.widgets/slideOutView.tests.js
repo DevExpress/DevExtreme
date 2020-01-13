@@ -1,15 +1,15 @@
-var $ = require('jquery'),
-    fx = require('animation/fx'),
-    translator = require('animation/translator'),
-    hideTopOverlayCallback = require('mobile/hide_top_overlay').hideCallback,
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    config = require('core/config'),
-    typeUtils = require('core/utils/type'),
-    animation = require('ui/slide_out_view').animation,
-    pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import fx from 'animation/fx';
+import translator from 'animation/translator';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import config from 'core/config';
+import typeUtils from 'core/utils/type';
+import { animation } from 'ui/slide_out_view';
+import pointerMock from '../../helpers/pointerMock.js';
 
-require('common.css!');
-require('ui/slide_out_view');
+import 'common.css!';
+import 'ui/slide_out_view';
 
 var SLIDEOUTVIEW_CLASS = 'dx-slideoutview',
     SLIDEOUTVIEW_MENU_CONTENT_CLASS = 'dx-slideoutview-menu-content',

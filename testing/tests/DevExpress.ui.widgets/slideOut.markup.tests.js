@@ -1,7 +1,7 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/slide_out');
-require('common.css!');
+import 'ui/slide_out';
+import 'common.css!';
 
 var SLIDEOUT_CLASS = 'dx-slideout',
     SLIDEOUT_ITEM_CONTAINER_CLASS = 'dx-slideout-item-container',

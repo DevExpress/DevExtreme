@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    testing = require('./utils.js'),
-    Map = require('ui/map'),
-    GoogleStaticProvider = require('ui/map/provider.google_static'),
-    ajaxMock = require('../../../helpers/ajaxMock.js');
+import $ from 'jquery';
+import testing from './utils.js';
+import Map from 'ui/map';
+import GoogleStaticProvider from 'ui/map/provider.google_static';
+import ajaxMock from '../../../helpers/ajaxMock.js';
 
 var MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;

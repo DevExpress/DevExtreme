@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    ContextMenu = require('ui/context_menu');
+import $ from 'jquery';
+import ContextMenu from 'ui/context_menu';
 
-require('common.css!');
+import 'common.css!';
 
 QUnit.testStart(function() {
     var markup =

@@ -1,5 +1,5 @@
-var $ = require('jquery'),
-    List = require('ui/list');
+import $ from 'jquery';
+import List from 'ui/list';
 
 var LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container',
     LIST_ITEM_ICON_CLASS = 'dx-list-item-icon',

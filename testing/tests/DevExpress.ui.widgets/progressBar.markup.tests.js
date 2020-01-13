@@ -1,7 +1,7 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-require('ui/progress_bar');
-require('common.css!');
+import 'ui/progress_bar';
+import 'common.css!';
 
 QUnit.testStart(function() {
     var markup =

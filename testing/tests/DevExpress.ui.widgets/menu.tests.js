@@ -1,22 +1,22 @@
-var $ = require('jquery'),
-    devices = require('core/devices'),
-    fx = require('animation/fx'),
-    renderer = require('core/renderer'),
-    isRenderer = require('core/utils/type').isRenderer,
-    config = require('core/config'),
-    Submenu = require('ui/menu/ui.submenu'),
-    resizeCallbacks = require('core/utils/resize_callbacks'),
-    Menu = require('ui/menu/ui.menu'),
-    keyboardMock = require('../../helpers/keyboardMock.js'),
-    fixtures = require('../../helpers/positionFixtures.js'),
-    CustomStore = require('data/custom_store'),
-    ArrayStore = require('data/array_store'),
-    eventsEngine = require('events/core/events_engine'),
-    DataSource = require('data/data_source/data_source').DataSource,
-    checkStyleHelper = require('../../helpers/checkStyleHelper.js');
+import $ from 'jquery';
+import devices from 'core/devices';
+import fx from 'animation/fx';
+import renderer from 'core/renderer';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
+import Submenu from 'ui/menu/ui.submenu';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import Menu from 'ui/menu/ui.menu';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import fixtures from '../../helpers/positionFixtures.js';
+import CustomStore from 'data/custom_store';
+import ArrayStore from 'data/array_store';
+import eventsEngine from 'events/core/events_engine';
+import { DataSource } from 'data/data_source/data_source';
+import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
-require('common.css!');
-require('generic_light.css!');
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     var markup =

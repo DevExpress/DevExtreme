@@ -1,5 +1,5 @@
-var Animator = require('ui/scroll_view/animator'),
-    animationFrame = require('animation/frame');
+import Animator from 'ui/scroll_view/animator';
+import animationFrame from 'animation/frame';
 
 var REQEST_ANIMATION_FRAME_TIMEOUT = 10;
 

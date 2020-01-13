@@ -1,13 +1,12 @@
 /* global Microsoft */
 
-var $ = require('jquery'),
-    testing = require('./utils.js'),
-    BingProvider = require('ui/map/provider.dynamic.bing'),
-    ajaxMock = require('../../../helpers/ajaxMock.js'),
-    errors = require('ui/widget/ui.errors');
+import $ from 'jquery';
+import testing from './utils.js';
+import BingProvider from 'ui/map/provider.dynamic.bing';
+import ajaxMock from '../../../helpers/ajaxMock.js';
+import errors from 'ui/widget/ui.errors';
 
-
-require('ui/map');
+import 'ui/map';
 
 var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,

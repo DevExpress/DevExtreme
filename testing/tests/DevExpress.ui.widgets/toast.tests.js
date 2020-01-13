@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    pointerMock = require('../../helpers/pointerMock.js'),
-    fx = require('animation/fx'),
-    setViewPort = require('core/utils/view_port').value,
-    Toast = require('ui/toast');
+import $ from 'jquery';
+import pointerMock from '../../helpers/pointerMock.js';
+import fx from 'animation/fx';
+import { value as setViewPort } from 'core/utils/view_port';
+import Toast from 'ui/toast';
 
-require('common.css!');
+import 'common.css!';
 
 var TOAST_CLASS = 'dx-toast',
     TOAST_CLASS_PREFIX = TOAST_CLASS + '-',

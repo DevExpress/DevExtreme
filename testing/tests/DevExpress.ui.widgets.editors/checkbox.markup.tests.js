@@ -1,7 +1,7 @@
-var $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
-require('ui/check_box');
+import 'common.css!';
+import 'ui/check_box';
 
 QUnit.testStart(function() {
     var markup =

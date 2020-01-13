@@ -1,8 +1,8 @@
-var $ = require('jquery'),
-    support = require('core/utils/support'),
-    uiDateUtils = require('ui/date_box/ui.date_utils'),
-    DateBox = require('ui/date_box'),
-    dateLocalization = require('localization/date');
+import $ from 'jquery';
+import support from 'core/utils/support';
+import uiDateUtils from 'ui/date_box/ui.date_utils';
+import DateBox from 'ui/date_box';
+import dateLocalization from 'localization/date';
 
 QUnit.testStart(function() {
     var markup =
@@ -12,8 +12,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-require('common.css!');
-require('generic_light.css!');
+import 'common.css!';
+import 'generic_light.css!';
 
 var TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input',
     DATEBOX_CLASS = 'dx-datebox',

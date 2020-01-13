@@ -1,9 +1,10 @@
-var $ = require('jquery'),
-    devices = require('core/devices'),
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = 'dx-filterbuilder-group-content',
-    fields = require('../../../helpers/filterBuilderTestData.js');
+import $ from 'jquery';
+import devices from 'core/devices';
+import fields from '../../../helpers/filterBuilderTestData.js';
 
-require('ui/filter_builder');
+import 'ui/filter_builder';
+
+const FILTER_BUILDER_GROUP_CONTENT_CLASS = 'dx-filterbuilder-group-content';
 
 QUnit.test('markup init', function(assert) {
     if(devices.real().deviceType !== 'desktop') {

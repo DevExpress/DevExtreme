@@ -1,13 +1,13 @@
-var $ = require('jquery'),
-    dateSerialization = require('core/utils/date_serialization'),
-    isDefined = require('core/utils/type').isDefined,
-    config = require('core/config'),
-    isRenderer = require('core/utils/type').isRenderer,
-    hasWindow = require('core/utils/window').hasWindow;
+import $ from 'jquery';
+import dateSerialization from 'core/utils/date_serialization';
+import { isDefined } from 'core/utils/type';
+import config from 'core/config';
+import { isRenderer } from 'core/utils/type';
+import windowUtils from 'core/utils/window';
 
-require('common.css!');
-require('generic_light.css!');
-require('ui/calendar');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/calendar';
 
 var CALENDAR_CLASS = 'dx-calendar',
     CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator',
@@ -43,7 +43,7 @@ QUnit.module('Calendar markup', {
     });
 
     QUnit.test('views are rendered', function(assert) {
-        if(hasWindow()) {
+        if(windowUtils.hasWindow()) {
             assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 3, 'all views are rendered');
         } else {
             assert.equal(this.$element.find(toSelector(CALENDAR_VIEWS_WRAPPER_CLASS) + ' .dx-widget').length, 1, 'only one view is rendered');
