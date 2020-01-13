@@ -1131,6 +1131,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramItemType
+ * @enum {'shape'|'connector'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramExportFormat
  * @enum {'svg'|'png'|'jpg'}
  */
