@@ -69,7 +69,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
             disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
-            navigateToSameDate: this.dateBox.option('navigateToSameDate'),
+            focusSameDay: this.dateBox.option('focusSameDay'),
             onContouredChanged: this._refreshActiveDescendant.bind(this),
             hasFocus: function() { return true; }
         });
