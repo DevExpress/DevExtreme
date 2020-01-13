@@ -97,12 +97,9 @@ const subscribes = {
     },
 
     showAppointmentTooltip: function(options) {
-        options.skipDateCalculation = true;
-        options.$appointment = $(options.target);
         const appointmentData = options.data;
-        const singleAppointmentData = this._getSingleAppointmentData(appointmentData, options);
-
-        this.showAppointmentTooltip(appointmentData, options.target, singleAppointmentData);
+        const targetData = this.fire('getTargetedAppointmentData', appointmentData, $(options.target));
+        this.showAppointmentTooltip(appointmentData, options.target, targetData);
     },
 
     hideAppointmentTooltip: function() {
