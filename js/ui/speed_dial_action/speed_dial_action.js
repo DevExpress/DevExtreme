@@ -100,6 +100,7 @@ class SpeedDialAction extends Widget {
         switch(args.name) {
             case 'onClick':
             case 'icon':
+            case 'onInitializing':
                 initAction(this);
                 break;
             case 'animation':
