@@ -4263,6 +4263,46 @@ QUnit.test('PivotGrid should have correct height if filter fields take several l
     assert.roughEqual(container.height(), 300, 1, 'height');
 });
 
+QUnit.test('PivotGrid should have correct height if filter fields take several lines and pivot has not scroll', function(assert) {
+    const pivotGrid = createPivotGrid($.extend(true, this.testOptions, {
+        fieldPanel: {
+            showFilterFields: true,
+            showRowFields: false,
+            showColumnFields: false,
+            showDataFields: false
+        },
+        fieldChooser: {
+            enabled: true
+        },
+        'export': {
+            enabled: true
+        },
+        showBorders: true,
+        wordWrapEnabled: true,
+        dataSource: {
+            fields: [
+                { area: 'row', areaIndex: 0, caption: 'Row Field 1' },
+                { area: 'row', areaIndex: 1, caption: 'Row' },
+                { format: 'decimal', area: 'column', areaIndex: 0, caption: 'Column1' },
+                { area: 'filter', areaIndex: 0, caption: 'Filter 1' },
+                { area: 'filter', areaIndex: 1, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 2, caption: 'Filter 2' },
+                { area: 'filter', areaIndex: 3, caption: 'Filter 3' },
+                { area: 'filter', areaIndex: 4, caption: 'Filter 4' },
+                { format: { format: 'quarter', dateType: 'full' }, area: 'column', areaIndex: 1, caption: 'Column1' },
+                { caption: 'Sum1', format: 'currency', area: 'data', areaIndex: 0 },
+                { caption: 'Sum2', format: 'percent', area: 'data', areaIndex: 1 }
+            ]
+        },
+        width: 400,
+        height: 600
+    }), assert);
+    const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
+    // assert
+    assert.ok(container.height() < 600, 'height');
+    assert.ok(!pivotGrid.hasScroll('row'), 'rows area has not scroll');
+});
+
 QUnit.test('Data and column headers not visible', function(assert) {
     const pivotGrid = createPivotGrid($.extend(true, this.testOptions, {
         fieldPanel: {

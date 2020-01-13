@@ -1795,10 +1795,11 @@ const PivotGrid = Widget.inherit({
             rowsAreaColumnWidths = rowsArea.getColumnsWidth();
 
             let filterAreaHeight = 0;
+            let dataAreaHeight = 0;
             if(that._hasHeight) {
                 filterAreaHeight = filterHeaderCell.height();
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
-                groupHeight = that.$element().height() - filterAreaHeight - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                dataAreaHeight = groupHeight = that.$element().height() - filterAreaHeight - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1878,9 +1879,18 @@ const PivotGrid = Widget.inherit({
                 if(that._hasHeight && that._filterFields.isVisible() &&
                     filterHeaderCell.height() !== filterAreaHeight) {
                     const diff = filterHeaderCell.height() - filterAreaHeight;
-                    groupHeight -= diff;
-                    dataArea.groupHeight(groupHeight);
-                    rowsArea.groupHeight(groupHeight);
+                    if(diff > 0) {
+                        dataAreaHeight -= diff;
+                        hasRowsScroll = totalHeight - dataAreaHeight >= 1;
+                        if(!hasRowsScroll) {
+                            groupHeight = totalHeight + (hasColumnsScroll ? scrollBarWidth : 0);
+                        } else {
+                            groupHeight = dataAreaHeight;
+                        }
+
+                        dataArea.groupHeight(groupHeight);
+                        rowsArea.groupHeight(groupHeight);
+                    }
                 }
 
                 if(scrollingOptions.mode === 'virtual') {
