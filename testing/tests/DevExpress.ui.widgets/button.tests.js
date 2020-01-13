@@ -33,6 +33,9 @@ const BUTTON_HAS_TEXT_CLASS = 'dx-button-has-text';
 const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
 const BUTTON_BACK_CLASS = 'dx-button-back';
 const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
+const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
+const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
+const BUTTON_OUTLINED_STYLE_CLASS = 'dx-button-mode-outlined';
 const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 QUnit.module('options changed callbacks', {
@@ -113,6 +116,22 @@ QUnit.module('options changed callbacks', {
         this.instance.repaint();
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
+    });
+
+    QUnit.test('stylingMode', (assert) => {
+        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'text');
+        assert.ok(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'outlined');
+        assert.ok(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_TEXT_STYLE_CLASS));
+
+        this.instance.option('stylingMode', 'contained');
+        assert.ok(this.element.hasClass(BUTTON_CONTAINED_STYLE_CLASS));
+        assert.notOk(this.element.hasClass(BUTTON_OUTLINED_STYLE_CLASS));
     });
 
     QUnit.test('readOnly validator should be excluded for the click action', (assert) => {
@@ -569,5 +588,40 @@ QUnit.module('templates', () => {
         assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), 'visible', 'overflowX');
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'normal', 'whiteSpace');
+    });
+});
+
+QUnit.module('events subscriptions', () => {
+    QUnit.test('click', (assert) => {
+        const clickHandler = sinon.spy();
+        const $button = $('#button').dxButton({
+            text: 'test'
+        });
+        const button = $button.dxButton('instance');
+
+        button.on('click', clickHandler);
+
+        $button.trigger('dxclick');
+
+        assert.ok(clickHandler.calledOnce, 'Handler should be called');
+        const params = clickHandler.getCall(0).args[0];
+        assert.ok(params, 'Event params should be passed');
+        assert.ok(params.event, 'Event should be passed');
+        assert.ok(params.validationGroup, 'validationGroup should be passed');
+    });
+
+    QUnit.test('contentReady', (assert) => {
+        assert.expect(3);
+
+        const button = $('#button').dxButton({
+            text: 'test'
+        }).dxButton('instance');
+
+        button.on('contentReady', (e) => {
+            assert.ok(e.component, 'Component info should be passed');
+            assert.ok(e.element, 'Element info should be passed');
+            assert.strictEqual($(e.element).text(), 'test', 'Text is rendered to the element');
+        });
+        button.repaint();
     });
 });
