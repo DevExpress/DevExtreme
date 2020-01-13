@@ -700,7 +700,7 @@ module.exports = {
                             }
                         }
                         const pendingInfo = validatingController.getPendingCellValidationInfo();
-                        if(pendingInfo && (!validator || validator.option('cellKey') !== pendingInfo.cellKey) && pendingInfo.valueUpdated) {
+                        if(pendingInfo && pendingInfo.valueUpdated) {
                             const deferred = new Deferred();
                             when(pendingInfo.complete).done((validationResult) => {
                                 deferred.resolve(validationResult.status === VALIDATION_STATUS.invalid);
