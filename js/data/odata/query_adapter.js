@@ -10,6 +10,7 @@ const dataUtils = require('../utils');
 const isFunction = typeUtils.isFunction;
 
 const DEFAULT_PROTOCOL_VERSION = 2;
+const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
 
 const compileCriteria = (function() {
     let protocolVersion;
@@ -42,6 +43,10 @@ const compileCriteria = (function() {
         };
     };
 
+    const isStringFunction = function(name) {
+        return STRING_FUNCTIONS.some((funcName) => funcName === name);
+    };
+
     const formatters = {
         '=': createBinaryOperationFormatter('eq'),
         '<>': createBinaryOperationFormatter('ne'),
@@ -67,6 +72,13 @@ const compileCriteria = (function() {
         criteria = dataUtils.normalizeBinaryCriterion(criteria);
 
         const op = criteria[1];
+        const fieldName = criteria[0];
+        const fieldType = fieldTypes && fieldTypes[fieldName];
+
+        if(fieldType && isStringFunction(op) && fieldType !== 'String') {
+            throw new errors.Error('E4024', op, fieldName, fieldType);
+        }
+
         const formatters = protocolVersion === 4
             ? formattersV4
             : formattersV2;
@@ -76,7 +88,6 @@ const compileCriteria = (function() {
             throw errors.Error('E4003', op);
         }
 
-        const fieldName = criteria[0];
         let value = criteria[2];
 
         if(fieldTypes && fieldTypes[fieldName]) {

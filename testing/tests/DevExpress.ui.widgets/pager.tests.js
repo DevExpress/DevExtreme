@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const commonUtils = require('core/utils/common');
-const typeUtils = require('core/utils/type');
+import $ from 'jquery';
+import commonUtils from 'core/utils/common';
+import typeUtils from 'core/utils/type';
 
-require('common.css!');
-require('generic_light.css!');
-require('ui/pager');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/pager';
 
 const PAGER_LIGHT_MODE_WIDTH = 200;
 

@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const Swipeable = require('events/gesture/swipeable');
-const swipeEvents = require('events/swipe');
-const pointerMock = require('../../helpers/pointerMock.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import Swipeable from 'events/gesture/swipeable';
+import swipeEvents from 'events/swipe';
+import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.module('swipeable', {
     beforeEach: function() {

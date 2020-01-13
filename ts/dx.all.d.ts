@@ -3194,8 +3194,12 @@ declare module DevExpress.ui {
     }
     /** @name dxDiagramItem */
     export interface dxDiagramItem {
+        /** @name dxDiagramItem.dataItem */
+        dataItem?: any;
         /** @name dxDiagramItem.id */
         id?: string;
+        /** @name dxDiagramItem.itemType */
+        itemType?: 'shape' | 'connector';
     }
     /** @name dxDiagramShape */
     export interface dxDiagramShape extends dxDiagramItem {

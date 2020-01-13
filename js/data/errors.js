@@ -129,6 +129,11 @@ const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4023: 'Could not parse the following XML: {0}',
 
     /**
+    * @name ErrorsData.E4024
+    */
+    E4024: 'String function {0} cannot be used with the data field {1} of type {2}.',
+
+    /**
     * @name ErrorsData.W4000
     */
     W4000: 'Data returned from the server has an incorrect structure',

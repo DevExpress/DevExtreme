@@ -2508,10 +2508,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on init', 
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'abc', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.notOk($appointment.find('.dx-scheduler-appointment-recurrence-icon').length, 'Repeat icon isn\'t rendered');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Repeat icon is rendered');
 });
@@ -2537,11 +2537,11 @@ QUnit.test('Appointment should be rendered correctly with recurrenceRule express
     });
 
     const $recAppointment = this.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($recAppointment.find('.dx-scheduler-appointment-content div').eq(0).text(), 'def', 'Text is correct on init');
 
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($recAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
     assert.equal($recAppointment.find('.dx-scheduler-appointment-recurrence-icon').length, 1, 'Recurrence icon is rendered');
 });
 
@@ -2577,10 +2577,10 @@ QUnit.test('Appointment should be rendered correctly with expressions on optionC
     });
 
     const $appointment = $(this.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
+    const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
 
     assert.equal($appointment.find('.dx-scheduler-appointment-content .dx-scheduler-appointment-title').eq(0).text(), 'xyz', 'Text is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), dateLocalization.format(startDate, 'shorttime'), 'Start Date is correct on init');
-    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(2).text(), dateLocalization.format(endDate, 'shorttime'), 'End Date is correct on init');
+    assert.equal($appointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), resultDate, 'Date is correct on init');
 });
 
 QUnit.test('Appointment should be rendered correctly with expressions on custom template', function(assert) {
@@ -3909,5 +3909,80 @@ QUnit.module('Appointments', () => {
 
             assert.ok(eventCallCount === 5, 'appointmentTooltipTemplate should be raised');
         });
+    });
+
+    QUnit.test('Remote filter should apply after change view type', function(assert) {
+        const model = [{
+            text: 'New Brochures',
+            startDate: '2017-05-23T14:30:00',
+            endDate: '2017-05-23T15:45:00'
+        }, {
+            text: 'Install New Database',
+            startDate: '2017-05-24T09:45:00',
+            endDate: '2017-05-24T11:15:00'
+        }, {
+            text: 'Approve New Online Marketing Strategy',
+            startDate: '2017-05-24T12:00:00',
+            endDate: '2017-05-24T14:00:00'
+        }, {
+            text: 'Upgrade Personal Computers',
+            startDate: '2017-05-24T15:15:00',
+            endDate: '2017-05-24T16:30:00'
+        }, {
+            text: 'Customer Workshop',
+            startDate: '2017-05-25T11:00:00',
+            endDate: '2017-05-25T12:00:00',
+            allDay: true
+        }, {
+            text: 'Prepare 2015 Marketing Plan',
+            startDate: '2017-05-25T11:00:00',
+            endDate: '2017-05-25T13:30:00'
+        }, {
+            text: 'Brochure Design Review',
+            startDate: '2017-05-25T14:00:00',
+            endDate: '2017-05-25T15:30:00'
+        }, {
+            text: 'Create Icons for Website',
+            startDate: '2017-05-26T10:00:00',
+            endDate: '2017-05-26T11:30:00'
+        }, {
+            text: 'Upgrade Server Hardware',
+            startDate: '2017-05-26T14:30:00',
+            endDate: '2017-05-26T16:00:00'
+        }];
+
+        const dataSource = new DataSource({
+            store: model
+        });
+
+        const scheduler = createWrapper({
+            dataSource: dataSource,
+            dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ss',
+            remoteFiltering: true,
+            views: ['workWeek', 'month'],
+            currentView: 'month',
+            currentDate: new Date(2017, 4, 23),
+            maxAppointmentsPerCell: 'unlimited',
+            height: 600,
+        });
+
+        assert.equal(scheduler.appointments.getAppointmentCount(), 9, `Appointment count should be equal ${model.length} items`);
+
+        const filter = dataSource.filter();
+        filter.push([
+            ['startDate', '>', '2017-05-25T21:00:00'],
+            'and',
+            ['endDate', '<', '2017-05-26T21:00:00']
+        ]);
+
+        dataSource.filter(filter);
+        dataSource.load();
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered after call load method of dataSource');
+
+        scheduler.instance.option('currentView', 'workWeek');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Work Week"');
+
+        scheduler.instance.option('currentView', 'month');
+        assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
     });
 });
