@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const MenuBase = require('ui/context_menu/ui.menu_base');
+import $ from 'jquery';
+import MenuBase from 'ui/context_menu/ui.menu_base';
 
-require('common.css!');
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

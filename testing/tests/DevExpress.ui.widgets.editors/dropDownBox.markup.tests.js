@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const CustomStore = require('data/custom_store');
-const DropDownBox = require('ui/drop_down_box');
-const isRenderer = require('core/utils/type').isRenderer;
-const config = require('core/config');
+import $ from 'jquery';
+import CustomStore from 'data/custom_store';
+import DropDownBox from 'ui/drop_down_box';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 
-require('common.css!');
+import 'common.css!';
 
 QUnit.testStart(function() {
     const markup =

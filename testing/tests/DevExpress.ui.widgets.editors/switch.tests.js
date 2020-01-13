@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const pointerMock = require('../../helpers/pointerMock.js');
-const keyboardMock = require('../../helpers/keyboardMock.js');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import fx from 'animation/fx';
 
-require('common.css!');
-require('generic_light.css!');
-require('ui/switch');
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/switch';
 
 QUnit.testStart(function() {
     const markup =
