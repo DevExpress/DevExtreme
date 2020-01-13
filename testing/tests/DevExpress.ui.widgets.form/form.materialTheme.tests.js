@@ -27,42 +27,36 @@ QUnit.test('Form have correct padding (T849353)', function(assert) {
             itemType: 'group',
             caption: 'System Information',
             items: [
-                'input1', 'input2', {
+                'input1', {
+                    itemType: 'group',
+                    colCount: 4,
+                    items: [{
+                        itemType: 'group',
+                        colSpan: 3,
+                        items:
+                            ['input2']
+                    }, 'input3']
+                }, {
                     itemType: 'group',
                     colCount: 2,
-                    visible: true,
-                    items: ['input3', 'input4', {
+                    items: ['input4', 'input5', {
                         itemType: 'group',
                         colCount: 1,
                         colSpan: 2,
-                        visible: true,
-                        items: ['input5']
-                    },
-                    {
-                        itemType: 'group',
-                        colCount: 1,
-                        colSpan: 2,
-                        visible: true,
-                        items: [ 'input6' ]
-                    },
-                    {
+                        items: ['input6']
+                    }, {
                         itemType: 'group',
                         colCount: 2,
-                        visible: true,
-                        items: [ 'input6', {
+                        items: [ 'input7', {
                             itemType: 'group',
                             colCount: 2,
-                            visible: true,
                             items: ['input8', 'input9']
                         } ]
-                    },
-                    {
+                    }, {
                         itemType: 'group',
                         colCount: 2,
-                        visible: true,
                         items: [ 'input10', 'input11' ]
-                    }
-                    ] },
+                    }] },
                 'input12']
         }]
     });
