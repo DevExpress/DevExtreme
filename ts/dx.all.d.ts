@@ -2736,8 +2736,8 @@ declare module DevExpress.ui {
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxCalendar.Options.name */
         name?: string;
-        /** @name dxCalendar.Options.focusSameDay */
-        focusSameDay?: boolean;
+        /** @name dxCalendar.Options.navigateToSameDay */
+        navigateToSameDay?: boolean;
         /** @name dxCalendar.Options.showTodayButton */
         showTodayButton?: boolean;
         /** @name dxCalendar.Options.value */
@@ -3075,8 +3075,8 @@ declare module DevExpress.ui {
         /** @deprecated */
         /** @name dxDateBox.Options.minZoomLevel */
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
-        /** @name dxDateBox.Options.focusSameDay */
-        focusSameDay?: boolean;
+        /** @name dxDateBox.Options.navigateToSameDay */
+        navigateToSameDay?: boolean;
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /** @name dxDateBox.Options.placeholder */

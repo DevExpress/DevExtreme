@@ -860,11 +860,11 @@ QUnit.module('Keyboard navigation', {
         assert.ok(params.element, 'Element should be passed');
     });
 
-    [true, false].forEach(focusSameDay => {
-        QUnit.test(`pressing ctrl+arrows or pageup/pagedown keys must change view correctly focusSameDay=${focusSameDay}`, function(assert) {
+    [true, false].forEach(navigateToSameDay => {
+        QUnit.test(`pressing ctrl+arrows or pageup/pagedown keys must change view correctly navigateToSameDay=${navigateToSameDay}`, function(assert) {
             const $element = this.$element;
             const calendar = this.calendar;
-            calendar.option('focusSameDay', focusSameDay);
+            calendar.option('navigateToSameDay', navigateToSameDay);
 
             const expectedDates = [{
                 'month': [new Date(2013, 8, 30), new Date(2013, 9, 1)],
@@ -885,19 +885,19 @@ QUnit.module('Keyboard navigation', {
 
                 clock.tick();
                 triggerKeydown($element, LEFT_ARROW_KEY_CODE, true);
-                assert.deepEqual(calendar.option('currentDate'), expectedDates[+focusSameDay][type][0], 'ctrl+left arrow navigates correctly');
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDay][type][0], 'ctrl+left arrow navigates correctly');
 
                 clock.tick();
                 triggerKeydown($element, RIGHT_ARROW_KEY_CODE, true);
-                assert.deepEqual(calendar.option('currentDate'), expectedDates[+focusSameDay][type][1], 'ctrl+right arrow navigates correctly');
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDay][type][1], 'ctrl+right arrow navigates correctly');
 
                 clock.tick();
                 triggerKeydown($element, PAGE_UP_KEY_CODE);
-                assert.deepEqual(calendar.option('currentDate'), expectedDates[+focusSameDay][type][0], 'pageup navigates correctly');
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDay][type][0], 'pageup navigates correctly');
 
                 clock.tick();
                 triggerKeydown($element, PAGE_DOWN_KEY_CODE);
-                assert.deepEqual(calendar.option('currentDate'), expectedDates[+focusSameDay][type][1], 'pagedown navigates correctly');
+                assert.deepEqual(calendar.option('currentDate'), expectedDates[+navigateToSameDay][type][1], 'pagedown navigates correctly');
             });
         });
     });
@@ -2225,12 +2225,12 @@ QUnit.module('Current date', {
         });
     });
 
-    QUnit.test('focusSameDay option', function(assert) {
+    QUnit.test('navigateToSameDay option', function(assert) {
         const calendar = this.$element.dxCalendar({
             value: new Date(2015, 0, 15),
             zoomLevel: 'month',
             focusStateEnabled: true,
-            focusSameDay: false
+            navigateToSameDay: false
         }).dxCalendar('instance');
 
         const $prevArrow = () => {
@@ -2241,18 +2241,18 @@ QUnit.module('Current date', {
         };
 
         $nextArrow().trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1), 'currentDate is correct after navigation to the next month (focusSameDay=false)');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1), 'currentDate is correct after navigation to the next month (navigateToSameDay=false)');
 
         $prevArrow().trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31), 'currentDate is correct after navigation to the previous month (focusSameDay=false)');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31), 'currentDate is correct after navigation to the previous month (navigateToSameDay=false)');
 
-        calendar.option('focusSameDay', true);
+        calendar.option('navigateToSameDay', true);
 
         $nextArrow().trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 28), 'currentDate is correct after navigation to the next month (focusSameDay=true)');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 28), 'currentDate is correct after navigation to the next month (navigateToSameDay=true)');
 
         $prevArrow().trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 28), 'currentDate is correct after navigation to the previous month (focusSameDay=true)');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 28), 'currentDate is correct after navigation to the previous month (navigateToSameDay=true)');
     });
 
     QUnit.test('correct change contouredDate after view change if this cell is not present on new view', function(assert) {
