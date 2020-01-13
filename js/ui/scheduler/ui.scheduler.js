@@ -2124,7 +2124,7 @@ const Scheduler = Widget.inherit({
     },
 
     _needUpdateAppointmentData: function($appointment) {
-        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence');
+        return $appointment.hasClass('dx-scheduler-appointment-compact') || $appointment.hasClass('dx-scheduler-appointment-recurrence') || $appointment.hasClass('dx-scheduler-appointment-collector');
     },
 
     subscribe: function(subject, action) {
