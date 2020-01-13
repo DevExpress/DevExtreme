@@ -75,9 +75,15 @@ export default class AppointmentDragBehavior {
         return itemData && itemData.data || this.appointments._getItemData(appointment);
     }
 
+    getItemSettings(appointment) {
+        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        return itemData && itemData.settings || [];
+    }
+
     createDragStartHandler(options, appointmentDragging) {
         return (e) => {
             e.itemData = this.getItemData(e.itemElement);
+            e.itemSettings = this.getItemSettings(e.itemElement);
 
             appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
 
