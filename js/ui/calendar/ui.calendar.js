@@ -1239,7 +1239,6 @@ const Calendar = Editor.inherit({
             case 'dateSerializationFormat':
             case 'cellTemplate':
             case 'showTodayButton':
-            case 'navigateToSameDay':
                 this._invalidate();
                 break;
             case 'hasFocus':
