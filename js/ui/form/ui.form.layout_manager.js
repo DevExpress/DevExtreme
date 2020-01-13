@@ -53,6 +53,7 @@ const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
@@ -416,7 +417,6 @@ const LayoutManager = Widget.inherit({
                 });
 
                 $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
-
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
                 }
@@ -425,6 +425,10 @@ const LayoutManager = Widget.inherit({
                 }
                 if((e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount)) {
                     $fieldItem.addClass(LAYOUT_MANAGER_LAST_COL_CLASS);
+                }
+                const rowsCount = Math.floor(that._items.length / colCount);
+                if(e.location.row === rowsCount - 1) {
+                    $fieldItem.addClass(LAYOUT_MANAGER_LAST_ROW_CLASS);
                 }
             },
             cols: that._generateRatio(colCount),
