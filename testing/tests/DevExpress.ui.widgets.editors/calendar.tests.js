@@ -2233,15 +2233,26 @@ QUnit.module('Current date', {
             navigateToSameDate: false
         }).dxCalendar('instance');
 
-        const $prevArrow = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)));
-        const $nextArrow = $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)));
+        const $prevArrow = () => {
+            return $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)));
+        };
+        const $nextArrow = () => {
+            return $(this.$element.find(toSelector(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)));
+        };
 
-        $nextArrow.trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1));
+        $nextArrow().trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 1), 'currentDate is correct after navigation to the next month (navigateToSameDate=false)');
 
-        $prevArrow.trigger('dxclick');
-        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31));
-        $prevArrow.trigger('dxclick');
+        $prevArrow().trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 31), 'currentDate is correct after navigation to the previous month (navigateToSameDate=false)');
+
+        calendar.option('navigateToSameDate', true);
+
+        $nextArrow().trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 1, 28), 'currentDate is correct after navigation to the next month (navigateToSameDate=true)');
+
+        $prevArrow().trigger('dxclick');
+        assert.deepEqual(calendar.option('currentDate'), new Date(2015, 0, 28), 'currentDate is correct after navigation to the previous month (navigateToSameDate=true)');
     });
 
     QUnit.test('correct change contouredDate after view change if this cell is not present on new view', function(assert) {
