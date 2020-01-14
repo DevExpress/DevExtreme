@@ -4899,6 +4899,70 @@ QUnit.test('deleteRow should not work if adding is started', function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, 'row is removed');
 });
 
+// T850905
+QUnit.test('deleteRow should works if updating is started', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.editCell(0, 0);
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
+// T850905
+QUnit.test('deleteRow should works if cell value is changed', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = this.rowsView;
+    const testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    that.cellValue(0, 0, 'test');
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 7, 'row count');
+    assert.strictEqual(testElement.find('input').length, 1, 'editor is rendered');
+
+    // act
+    that.deleteRow(1);
+    that.clock.tick();
+
+    // assert
+    assert.strictEqual(testElement.find('.dx-data-row').length, 6, 'row is removed');
+    assert.strictEqual(testElement.find('input').length, 0, 'no editors');
+});
+
 // T804894
 QUnit.test('addRow should not work if updating is started with validation error', function(assert) {
     // arrange

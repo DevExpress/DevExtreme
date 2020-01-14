@@ -1249,56 +1249,65 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         deleteRow: function(rowIndex) {
+            if(this.option('editing.mode') === 'cell' && this.isEditing()) {
+                // T850905
+                this.closeEditCell().always(() => {
+                    this._checkAndDeleteRow(rowIndex);
+                });
+            } else {
+                this._checkAndDeleteRow(rowIndex);
+            }
+        },
+        _checkAndDeleteRow: function(rowIndex) {
             const that = this;
             const editingOptions = that.option('editing');
             const editingTexts = editingOptions && editingOptions.texts;
-            const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
             const isBatchMode = editingOptions && editingOptions.mode === EDIT_MODE_BATCH;
             const confirmDeleteMessage = editingTexts && editingTexts.confirmDeleteMessage;
-            const dataController = that._dataController;
-            let removeByKey;
-            let showDialogTitle;
-            const oldEditRowIndex = that._getVisibleEditRowIndex();
-            const item = dataController.items()[rowIndex];
-            const key = item && item.key;
-            const allowDeleting = isBatchMode || !this.isEditing(); // T741746
+            const item = that._dataController.items()[rowIndex];
+            const allowDeleting = isBatchMode || !that.isEditing(); // T741746
 
             if(item && allowDeleting) {
-                removeByKey = function(key) {
-                    that.refresh();
-
-                    const editIndex = getIndexByKey(key, that._editData);
-
-                    if(editIndex >= 0) {
-                        if(that._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
-                            that._removeEditDataItem(editIndex);
-                        } else {
-                            that._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
-                        }
-                    } else {
-                        that._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
-                    }
-
-                    if(isBatchMode) {
-                        dataController.updateItems({
-                            changeType: 'update',
-                            rowIndices: [oldEditRowIndex, rowIndex]
-                        });
-                    } else {
-                        that.saveEditData();
-                    }
-                };
-
                 if(isBatchMode || !confirmDeleteMessage) {
-                    removeByKey(key);
+                    that._deleteRowCore(rowIndex);
                 } else {
-                    showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
+                    const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
+                    const showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
                     dialog.confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
                         if(confirmResult) {
-                            removeByKey(key);
+                            that._deleteRowCore(rowIndex);
                         }
                     });
                 }
+            }
+        },
+        _deleteRowCore: function(rowIndex) {
+            const dataController = this._dataController;
+            const item = dataController.items()[rowIndex];
+            const key = item && item.key;
+            const editIndex = getIndexByKey(key, this._editData);
+            const oldEditRowIndex = this._getVisibleEditRowIndex();
+            const isBatchMode = this.option('editing.mode') === EDIT_MODE_BATCH;
+
+            this.refresh();
+
+            if(editIndex >= 0) {
+                if(this._editData[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
+                    this._removeEditDataItem(editIndex);
+                } else {
+                    this._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
+                }
+            } else {
+                this._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
+            }
+
+            if(isBatchMode) {
+                dataController.updateItems({
+                    changeType: 'update',
+                    rowIndices: [oldEditRowIndex, rowIndex]
+                });
+            } else {
+                this.saveEditData();
             }
         },
         undeleteRow: function(rowIndex) {
