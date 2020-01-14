@@ -1,13 +1,5 @@
 import $ from 'jquery';
-import 'ui/text_area';
-import 'ui/autocomplete';
-import 'ui/calendar';
-import 'ui/date_box';
-import 'ui/drop_down_box';
-import 'ui/html_editor';
-import 'ui/lookup';
-import 'ui/radio_group';
-import 'ui/tag_box';
+import 'ui/form/ui.form';
 
 import 'common.css!';
 import 'material_blue_light.css!';
@@ -18,76 +10,296 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-QUnit.module('Form -> material theme');
-
 ['xs', 'sm', 'md', 'lg'].forEach(screenSize => {
-    QUnit.test(`Form have correct padding (T849353) -> ScreenSize: '${screenSize}'`, function(assert) {
+    const DEFAULT_PADDING_X = 40;
+    const DEFAULT_PADDING_Y = 86;
+    QUnit.module(`Form have correct padding (T849353), screen size: ${screenSize}`);
+
+    function getPadding($items, itemIndex1, itemIndex2) {
+        const item1Rect = $items.get(itemIndex1).getBoundingClientRect();
+        const item2Rect = $items.get(itemIndex2).getBoundingClientRect();
+
+        const paddingY = item2Rect.top - item1Rect.top;
+        const paddingLeft = item2Rect.left - item1Rect.left;
+        const paddingRight = item2Rect.left - item1Rect.right;
+
+        return { paddingY, paddingLeft, paddingRight };
+    }
+
+    QUnit.test('1 column -> 2 items without groups', function(assert) {
         const $form = $('#form').dxForm({
-            colCount: 1,
             screenByWidth: () => { return screenSize; },
-            items: [ {
-                itemType: 'group',
-                caption: 'System Information',
-                items: [
-                    'dataField1', {
-                        itemType: 'group',
-                        colCount: 4,
-                        items: [{
-                            itemType: 'group',
-                            colSpan: 3,
-                            items:
-                                ['dataField2']
-                        }, 'dataField3']
-                    }, {
-                        itemType: 'group',
-                        colCount: 2,
-                        items: ['dataField4', 'dataField5', {
-                            itemType: 'group',
-                            colCount: 1,
-                            colSpan: 2,
-                            items: ['dataField6']
-                        }, {
-                            itemType: 'group',
-                            colCount: 2,
-                            items: [ 'dataField7', {
-                                itemType: 'group',
-                                colCount: 2,
-                                items: ['dataField8', 'dataField9']
-                            } ]
-                        }, {
-                            itemType: 'group',
-                            colCount: 2,
-                            items: [ 'dataField10', 'dataField11' ]
-                        }] },
-                    'dataField12']
+            colCount: 1,
+            items: ['dataField1', 'dataField2']
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        assert.equal(actualPadding.paddingLeft, 0);
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('1 column -> 1 item and 1 group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 1,
+            items: ['dataField1', { itemType: 'group',
+                items: ['dataField2' ]
             }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        assert.equal(actualPadding.paddingLeft, 0);
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('1 column -> 1 item and 1 group with nested group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 1,
+            items: ['dataField1', { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        assert.equal(actualPadding.paddingLeft, 0);
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('1 column -> 2 item and 1 group with nested group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 1,
+            items: ['dataField1', { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }, 'dataField3' ]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
+
+        assert.equal(actualPadding.paddingLeft, 0);
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('1 column -> 2 item and 1 group with sub-nested group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 1,
+            items: ['dataField1', { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: [{ itemType: 'group',
+                        items: ['dataField2' ]
+                    } ]
+                } ]
+            }, 'dataField3' ]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
+
+        assert.equal(actualPadding.paddingLeft, 0);
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('2 columns -> 2 items without groups', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: ['dataField1', 'dataField2']
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        if(screenSize === 'xs') {
+            assert.equal(actualPadding.paddingLeft, 0);
+            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        } else {
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
+            assert.equal(actualPadding.paddingY, 0);
+        }
+    });
+
+    QUnit.test('2 columns -> 1 item and 1 group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: ['dataField1', { itemType: 'group',
+                items: ['dataField2' ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        if(screenSize === 'xs') {
+            assert.equal(actualPadding.paddingLeft, 0);
+            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        } else {
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
+            assert.equal(actualPadding.paddingY, 0);
+        }
+    });
+
+    QUnit.test('2 columns -> 1 item and 1 group with nested group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: ['dataField1', { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        if(screenSize === 'xs') {
+            assert.equal(actualPadding.paddingLeft, 0);
+            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        } else {
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
+            assert.equal(actualPadding.paddingY, 0);
+        }
+    });
+
+
+    QUnit.test('2 columns -> 2 groups', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: [{ itemType: 'group',
+                items: ['dataField1' ]
+            }, { itemType: 'group',
+                items: ['dataField2' ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        if(screenSize === 'xs') {
+            assert.equal(actualPadding.paddingLeft, 0);
+            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        } else {
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
+            assert.equal(actualPadding.paddingY, 0);
+        }
+    });
+
+    QUnit.test('2 columns -> 2 groups with nested groups', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: [{ itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField1' ]
+                } ]
+            }, { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 0, 1);
+
+        if(screenSize === 'xs') {
+            assert.equal(actualPadding.paddingLeft, 0);
+            assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+        } else {
+            assert.equal(actualPadding.paddingRight, DEFAULT_PADDING_X);
+            assert.equal(actualPadding.paddingY, 0);
+        }
+    });
+
+    QUnit.test('2 columns -> 2 item and 1 group with nested group', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: ['dataField1', { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }, 'dataField3']
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
+
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('2 columns -> 2 groups with nested groups and 1 item', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: [{ itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField1' ]
+                } ]
+            }, { itemType: 'group',
+                items: [ { itemType: 'group',
+                    items: ['dataField2' ]
+                } ]
+            }, {
+                itemType: 'group',
+                colCount: 1,
+                items: ['dataField3' ]
+            } ]
         });
 
         const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
 
-        function getPadding(itemIndex1, itemIndex2) {
-            const item1Rect = $items.get(itemIndex1).getBoundingClientRect();
-            const item2Rect = $items.get(itemIndex2).getBoundingClientRect();
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
 
-            const paddingY = item1Rect.top - item2Rect.top;
-            const paddingX = item1Rect.left - item2Rect.right;
 
-            return { paddingX, paddingY, isSameRow: item1Rect.top === item2Rect.top };
-        }
-
-        const expectedPaddingY = getPadding(1, 0).paddingY;
-        const expectedPaddingX = getPadding(4, 3).paddingX;
-
-        $items.each(function(index, item) {
-            if(index !== 0) {
-                const padding = getPadding(index, index - 1);
-                if(padding.isSameRow) {
-                    assert.equal(padding.paddingX, expectedPaddingX, `paddingX between ${index - 1} and ${index} elements`);
-                } else {
-                    assert.equal(padding.paddingY, expectedPaddingY, `paddingY between ${index - 1} and ${index} elements`);
-                }
-            }
+    QUnit.test('form -> 2 columns and 3 groups', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 2,
+            items: [{ itemType: 'group',
+                colSpan: 1,
+                items: ['dataField1' ]
+            }, { itemType: 'group',
+                colSpan: 1,
+                items: ['dataField2' ]
+            }, {
+                itemType: 'group',
+                colSpan: 2,
+                items: ['dataField3' ]
+            }]
         });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
+
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
+    });
+
+    QUnit.test('form -> 4 columns and 3 groups with colspan', function(assert) {
+        const $form = $('#form').dxForm({
+            screenByWidth: () => { return screenSize; },
+            colCount: 4,
+            items: [{ itemType: 'group',
+                colSpan: 3,
+                items: ['dataField1' ]
+            }, { itemType: 'group',
+                colSpan: 1,
+                items: ['dataField2' ]
+            }, {
+                itemType: 'group',
+                colSpan: 4,
+                items: ['dataField3' ]
+            }]
+        });
+        const $items = $form.find('input');
+        const actualPadding = getPadding($items, 1, 2);
+
+        assert.equal(actualPadding.paddingY, DEFAULT_PADDING_Y);
     });
 });
 
