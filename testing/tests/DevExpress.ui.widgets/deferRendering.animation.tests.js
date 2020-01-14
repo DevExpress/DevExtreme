@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const TransitionExecutorModule = require('animation/transition_executor/transition_executor');
+import $ from 'jquery';
+import TransitionExecutorModule from 'animation/transition_executor/transition_executor';
 
-require('common.css!');
-require('ui/defer_rendering');
+import 'common.css!';
+import 'ui/defer_rendering';
 
 QUnit.testStart(function() {
     const markup =

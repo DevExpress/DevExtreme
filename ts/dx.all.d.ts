@@ -3194,8 +3194,12 @@ declare module DevExpress.ui {
     }
     /** @name dxDiagramItem */
     export interface dxDiagramItem {
+        /** @name dxDiagramItem.dataItem */
+        dataItem?: any;
         /** @name dxDiagramItem.id */
         id?: string;
+        /** @name dxDiagramItem.itemType */
+        itemType?: 'shape' | 'connector';
     }
     /** @name dxDiagramShape */
     export interface dxDiagramShape extends dxDiagramItem {
@@ -3526,6 +3530,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+        /** @name dxFileManagerContextMenuItem.items */
+        items?: Array<dxFileManagerContextMenuItem>;
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */

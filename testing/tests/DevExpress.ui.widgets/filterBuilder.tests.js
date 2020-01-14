@@ -1,14 +1,14 @@
-const $ = require('jquery');
+import $ from 'jquery';
 
-require('common.css!');
-require('generic_light.css!');
+import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="container"></div>');
 });
 
-require('./filterBuilderParts/commonTests.js');
-require('./filterBuilderParts/utilsTests.js');
-require('./filterBuilderParts/eventsTests.js');
-require('./filterBuilderParts/keyboardNavigation.js');
-require('./filterBuilderParts/markupTests.js');
+import './filterBuilderParts/commonTests.js';
+import './filterBuilderParts/utilsTests.js';
+import './filterBuilderParts/eventsTests.js';
+import './filterBuilderParts/keyboardNavigation.js';
+import './filterBuilderParts/markupTests.js';

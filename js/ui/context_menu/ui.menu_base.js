@@ -493,7 +493,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _hasSubmenu(node) {
-        return node.internalFields.childrenKeys.length;
+        return node && node.internalFields.childrenKeys.length;
     }
 
     _renderContentImpl() {
