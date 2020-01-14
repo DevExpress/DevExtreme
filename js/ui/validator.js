@@ -179,7 +179,7 @@ const Validator = DOMComponent.inherit({
     },
 
     _toggleRTLDirection(isRtl) {
-        const { rtlEnabled } = this.option('adapter')?.editor?.option?.() || { rtlEnabled: isRtl };
+        const rtlEnabled = this.option('adapter')?.editor?.option('rtlEnabled') ?? isRtl;
 
         this.callBase(rtlEnabled);
     },
