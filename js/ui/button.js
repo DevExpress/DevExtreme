@@ -332,8 +332,6 @@ class Button extends Widget {
                 ({ event }) => changeWaveVisibility(event, true),
                 ({ event }) => changeWaveVisibility(event)
             );
-        } else {
-            this._detachActiveEvents();
         }
     }
 
