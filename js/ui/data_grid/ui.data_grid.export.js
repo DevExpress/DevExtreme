@@ -29,11 +29,13 @@ var DATAGRID_EXPORT_MENU_CLASS = 'dx-datagrid-export-menu',
 
 exports.DataProvider = Class.inherit({
     _getGroupValue: function(item) {
-        var groupColumn = this._options.groupColumns[item.groupIndex],
-            value = dataGridCore.getDisplayValue(groupColumn, item.key[item.groupIndex], item.data, item.rowType),
-            result = groupColumn.caption + ': ' + dataGridCore.formatValue(value, groupColumn);
+        const { key, data, rowType, groupIndex, summaryCells } = item;
+        const groupColumn = this._options.groupColumns[groupIndex];
 
-        var summaryCells = item.summaryCells;
+        const value = dataGridCore.getDisplayValue(groupColumn, groupColumn.deserializeValue ? groupColumn.deserializeValue(key[groupIndex]) : key[groupIndex], data, rowType);
+
+        let result = groupColumn.caption + ': ' + dataGridCore.formatValue(value, groupColumn);
+
         if(summaryCells && summaryCells[0] && summaryCells[0].length) {
             result += ' ' + dataGridCore.getGroupRowSummaryText(summaryCells[0], this._options.summaryTexts);
         }
