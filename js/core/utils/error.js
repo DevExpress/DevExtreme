@@ -1,13 +1,13 @@
-var extend = require('./extend').extend,
-    consoleUtils = require('./console'),
-    stringUtils = require('./string'),
-    version = require('../version');
+const extend = require('./extend').extend;
+const consoleUtils = require('./console');
+const stringUtils = require('./string');
+const version = require('../version');
 
-var ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
+const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
 
 module.exports = function(baseErrors, errors) {
 
-    var exports = {
+    const exports = {
 
         ERROR_MESSAGES: extend(errors, baseErrors),
 
@@ -16,7 +16,7 @@ module.exports = function(baseErrors, errors) {
         },
 
         log: function(id) {
-            var method = 'log';
+            let method = 'log';
 
             if(/^E\d+$/.test(id)) {
                 method = 'error';
@@ -29,7 +29,7 @@ module.exports = function(baseErrors, errors) {
     };
 
     var combineMessage = function(args) {
-        var id = args[0];
+        const id = args[0];
         args = args.slice(1);
         return formatMessage(id, formatDetails(id, args));
     };
@@ -44,7 +44,7 @@ module.exports = function(baseErrors, errors) {
     };
 
     var makeError = function(args) {
-        var id, details, message, url;
+        let id; let details; let message; let url;
 
         id = args[0];
         args = args.slice(1);

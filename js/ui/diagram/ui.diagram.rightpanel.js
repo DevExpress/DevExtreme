@@ -93,9 +93,9 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _setItemSubItems(key, items) {
         this._updateLocked = true;
-        var editorInstance = this._formInstance.getEditor(key.toString());
+        const editorInstance = this._formInstance.getEditor(key.toString());
         editorInstance.option('items', items.map(item => {
-            var value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
+            const value = (typeof item.value === 'object') ? JSON.stringify(item.value) : item.value;
             return {
                 'value': value,
                 'title': item.text

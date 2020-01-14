@@ -1,15 +1,15 @@
-var registerComponent = require('../core/component_registrator'),
-    eventsEngine = require('../events/core/events_engine'),
-    grep = require('../core/utils/common').grep,
-    extend = require('../core/utils/extend').extend,
-    iteratorUtils = require('../core/utils/iterator'),
-    ValidationMixin = require('./validation/validation_mixin'),
-    ValidationEngine = require('./validation_engine'),
-    CollectionWidget = require('./collection/ui.collection_widget.edit');
+const registerComponent = require('../core/component_registrator');
+const eventsEngine = require('../events/core/events_engine');
+const grep = require('../core/utils/common').grep;
+const extend = require('../core/utils/extend').extend;
+const iteratorUtils = require('../core/utils/iterator');
+const ValidationMixin = require('./validation/validation_mixin');
+const ValidationEngine = require('./validation_engine');
+const CollectionWidget = require('./collection/ui.collection_widget.edit');
 
-var VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
-    ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item',
-    ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
+const VALIDATION_SUMMARY_CLASS = 'dx-validationsummary';
+const ITEM_CLASS = VALIDATION_SUMMARY_CLASS + '-item';
+const ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + '-item-data';
 
 /**
 * @name dxValidationSummary
@@ -17,7 +17,7 @@ var VALIDATION_SUMMARY_CLASS = 'dx-validationsummary',
 * @module ui/validation_summary
 * @export default
 */
-var ValidationSummary = CollectionWidget.inherit({
+const ValidationSummary = CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -157,8 +157,8 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _initGroupRegistration: function() {
-        var group = this._findGroup(),
-            groupConfig = ValidationEngine.addGroup(group);
+        const group = this._findGroup();
+        const groupConfig = ValidationEngine.addGroup(group);
 
         this._unsubscribeGroup();
 
@@ -170,15 +170,15 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _unsubscribeGroup: function() {
-        var groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
+        const groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
         groupConfig && groupConfig.off('validated', this.groupSubscription);
     },
 
     _getOrderedItems: function(validators, items) {
-        var orderedItems = [];
+        const orderedItems = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            var firstItem = grep(items, function(item) {
+            const firstItem = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
                 }
@@ -193,24 +193,24 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _groupValidationHandler: function(params) {
-        var that = this,
-            items = that._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
-                return {
-                    text: rule.message,
-                    validator: rule.validator
-                };
-            }));
+        const that = this;
+        const items = that._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
+            return {
+                text: rule.message,
+                validator: rule.validator
+            };
+        }));
 
         that.validators = params.validators;
 
         iteratorUtils.each(that.validators, function(_, validator) {
             if(validator._validationSummary !== this) {
-                var handler = that._itemValidationHandler.bind(that),
-                    disposingHandler = function() {
-                        validator.off('validated', handler);
-                        validator._validationSummary = null;
-                        handler = null;
-                    };
+                let handler = that._itemValidationHandler.bind(that);
+                const disposingHandler = function() {
+                    validator.off('validated', handler);
+                    validator._validationSummary = null;
+                    handler = null;
+                };
                 validator.on('validated', handler);
                 validator.on('disposing', disposingHandler);
                 validator._validationSummary = this;
@@ -221,12 +221,12 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _itemValidationHandler: function(itemValidationResult) {
-        var items = this.option('items'),
-            isValid = itemValidationResult.isValid,
-            elementIndex,
-            replacementFound = false,
-            newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message,
-            validator = itemValidationResult.validator;
+        let items = this.option('items');
+        const isValid = itemValidationResult.isValid;
+        let elementIndex;
+        let replacementFound = false;
+        const newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message;
+        const validator = itemValidationResult.validator;
 
         iteratorUtils.each(items, function(index, item) {
             if(item.validator === validator) {

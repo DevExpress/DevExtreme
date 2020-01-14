@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    SchedulerResourcesManager = require('ui/scheduler/ui.scheduler.resource_manager'),
-    resizeCallbacks = require('core/utils/resize_callbacks');
+const $ = require('jquery');
+const SchedulerResourcesManager = require('ui/scheduler/ui.scheduler.resource_manager');
+const resizeCallbacks = require('core/utils/resize_callbacks');
 
-var SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader',
-    SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day',
-    SCHEDULER_DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top',
-    SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom',
-    SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
+const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
+const SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
+const SCHEDULER_DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
+const SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = 'dx-scheduler-date-time-shader-bottom';
+const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 
 require('common.css!');
 require('generic_light.css!');
@@ -21,15 +21,15 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });
 
-var stubInvokeMethod = function(instance, options) {
+const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
-        var subscribe = arguments[0];
+        const subscribe = arguments[0];
         if(subscribe === 'createResourcesTree') {
             return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
         }
         if(subscribe === 'getResourceTreeLeaves') {
-            var resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
+            const resources = instance.resources || [{ field: 'one', dataSource: [{ id: 1 }, { id: 2 }] }];
             return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
         }
     });
@@ -57,7 +57,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, 'Indicator is rendered correctly');
 
@@ -71,19 +71,19 @@ var stubInvokeMethod = function(instance, options) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.ok($element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS).parent().hasClass('dx-scrollable-content'), 'Scrollable contains time indicator');
     });
 
     QUnit.test('Indication should be updated by some timer', function(assert) {
-        var renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
 
         this.instance.option({
             indicatorUpdateInterval: 20
         });
 
-        var timer = setTimeout(function() {
+        const timer = setTimeout(function() {
             assert.ok(renderIndicatorStub.calledTwice, 'Indicator was updated');
         }, 40);
 
@@ -92,13 +92,13 @@ var stubInvokeMethod = function(instance, options) {
     });
 
     QUnit.test('Indication should not be updated by some timer if indicatorUpdateInterval = 0', function(assert) {
-        var renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
 
         this.instance.option({
             indicatorUpdateInterval: 0
         });
 
-        var timer = setTimeout(function() {
+        const timer = setTimeout(function() {
             assert.equal(renderIndicatorStub.callCount, 0, 'Indicator wasn\'t updated');
         }, 40);
 
@@ -107,7 +107,7 @@ var stubInvokeMethod = function(instance, options) {
     });
 
     QUnit.test('Indication should be updated on dimensionChanged', function(assert) {
-        var renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(this.instance, '_renderDateTimeIndication');
 
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)
@@ -124,7 +124,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true
         });
 
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, 'Indicator is rendered');
 
         this.instance.option('currentDate', new Date(2017, 8, 6));
@@ -139,7 +139,7 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, 'Indicator wasn\'t rendered');
 
         this.instance.option('startDayHour', 8);
@@ -153,9 +153,9 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
@@ -171,9 +171,9 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
 
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 0);
@@ -188,7 +188,7 @@ var stubInvokeMethod = function(instance, options) {
             shadeUntilCurrentTime: false
         });
 
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS).length, 0, 'Shader wasn\'t rendered');
 
@@ -204,7 +204,7 @@ var stubInvokeMethod = function(instance, options) {
             shadeUntilCurrentTime: true
         });
 
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS).css('pointerEvents'), 'none', 'Shader has correct pointer-events');
     });
 
@@ -213,7 +213,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: false
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).length, 0, 'Shader wasn\'t rendered');
 
@@ -227,7 +227,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.ok($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).parent().hasClass('dx-scheduler-all-day-panel'), 'AllDay panel contains time indicator');
     });
@@ -238,7 +238,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true,
             allDayExpanded: false
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 25, 1, 'Indicator has correct height');
 
@@ -252,9 +252,9 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $indicator = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicator = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
 
         assert.roughEqual($indicator.outerHeight(), 9.5 * cellHeight, 1, 'Indicator has correct height');
     });
@@ -265,9 +265,9 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        let $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
 
         assert.roughEqual($shader.outerHeight(), 20 * cellHeight, 1.5, 'Indicator has correct height');
 
@@ -283,13 +283,13 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.get(0).getBoundingClientRect().height,
-            cellWidth = $cell.outerWidth();
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, 'Shader has correct height');
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, 'Top shader has correct height');
@@ -306,13 +306,13 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.get(0).getBoundingClientRect().height,
-            cellWidth = $cell.outerWidth();
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, 'Indicator has correct height');
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, 'Top shader has correct height');
@@ -330,12 +330,12 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.$element(),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.get(0).getBoundingClientRect().height,
-            cellWidth = $cell.outerWidth();
+        const $element = this.instance.$element();
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($topShader.outerHeight(), 0, 1.5, 'Top shader has correct height');
         assert.roughEqual($bottomShader.outerHeight(), 24 * cellHeight, 1.5, 'Bottom shader has correct height');
@@ -350,19 +350,19 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.get(0).getBoundingClientRect().height,
-            cellWidth = this.instance.getRoundedCellWidth(1);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = this.instance.getRoundedCellWidth(1);
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, 'Shader has correct height');
         assert.roughEqual($shader.outerWidth(), 9 * cellWidth, 5, 'Shader has correct width');
 
-        for(var i = 0; i <= 2; i++) {
-            var $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i),
-                $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i),
-                $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(i);
+        for(let i = 0; i <= 2; i++) {
+            const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i);
+            const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i);
+            const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(i);
 
             assert.roughEqual($topShader.position().top, i > 0 ? this.instance._dateTableScrollable.$content().outerHeight() : 0, 2.5, 'Shader has correct position');
 
@@ -380,9 +380,9 @@ var stubInvokeMethod = function(instance, options) {
             crossScrollingEnabled: true
         });
 
-        var $element = this.instance.$element(),
-            $indicator = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            containerHeight = $indicator.parent().outerHeight();
+        const $element = this.instance.$element();
+        const $indicator = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const containerHeight = $indicator.parent().outerHeight();
 
         assert.roughEqual($indicator.outerHeight(), containerHeight, 1, 'Shader has correct height');
         assert.roughEqual(parseInt($indicator.css('marginTop')), -containerHeight, 1.5, 'Shader has correct margin');
@@ -393,8 +393,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
+        const $element = this.instance.$element();
+        const $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
 
         assert.ok($cell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
     });
@@ -405,8 +405,8 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.$element(),
-            $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
+        const $element = this.instance.$element();
+        const $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
 
         assert.ok($cell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
     });
@@ -439,9 +439,9 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
@@ -450,7 +450,7 @@ var stubInvokeMethod = function(instance, options) {
     });
 
     QUnit.test('DateTimeIndicator should have correct positions, Day view with groups and allDay customization, verticalGrouping (T737095)', function(assert) {
-        let $style = $('<style>').text('.dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row { height: 150px } .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title { height: 150px !important } ');
+        const $style = $('<style>').text('.dx-scheduler-work-space-vertical-grouped .dx-scheduler-all-day-table-row { height: 150px } .dx-scheduler-work-space-vertical-grouped.dx-scheduler-work-space-day .dx-scheduler-all-day-title { height: 150px !important } ');
 
         try {
             $style.appendTo('head');
@@ -462,9 +462,9 @@ var stubInvokeMethod = function(instance, options) {
 
             this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-            var $element = this.instance.$element(),
-                $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-                cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+            const $element = this.instance.$element();
+            const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+            const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
 
             assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight + 150, 'Indicator top is 9.5 cells + allDay panel height');
 
@@ -483,9 +483,9 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
@@ -501,9 +501,9 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const cellHeight = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0).get(0).getBoundingClientRect().height;
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 100);
         assert.equal($indicators.eq(0).position().top, 10.5 * cellHeight);
@@ -516,7 +516,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.ok($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).parent().hasClass('dx-scheduler-all-day-panel'), 'AllDay panel contains shader');
     });
@@ -529,18 +529,18 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.outerHeight(),
-            cellWidth = this.instance.getRoundedCellWidth(0);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.outerHeight();
+        const cellWidth = this.instance.getRoundedCellWidth(0);
 
         assert.roughEqual($shader.outerHeight(), 10.5 * cellHeight, 1, 'Shader has correct height');
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth + 100, 5, 'Shader has correct width');
 
-        for(var i = 0; i <= 2; i++) {
-            var $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i),
-                $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i);
+        for(let i = 0; i <= 2; i++) {
+            const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS).eq(i);
+            const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS).eq(i);
 
             assert.roughEqual($topShader.position().top, i * 13 * cellHeight, 2, 'Shader has correct position');
 
@@ -556,8 +556,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $cell = $element.find('.dx-scheduler-time-panel-current-time-cell');
+        const $element = this.instance.$element();
+        const $cell = $element.find('.dx-scheduler-time-panel-current-time-cell');
 
         assert.equal($cell.length, 2, 'Cells has specific class');
     });
@@ -580,7 +580,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(),
             startDayHour: 0
         });
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, 'Indicator is rendered correctly');
 
@@ -596,7 +596,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true
         });
 
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, 'Indicator is rendered');
 
         this.instance.option('currentDate', new Date(2017, 8, 15));
@@ -613,7 +613,7 @@ var stubInvokeMethod = function(instance, options) {
 
         resizeCallbacks.fire();
 
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
         assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).position().top, 475, 2, 'Indicator has correct position');
     });
 
@@ -623,7 +623,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true,
             allDayExpanded: false
         });
-        var $element = this.instance.$element();
+        const $element = this.instance.$element();
 
         assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 24, 1.5, 'Indicator has correct height');
         assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).outerWidth(), 640, 1.5, 'Indicator has correct height');
@@ -638,13 +638,13 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 6, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
-            $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0),
-            cellHeight = $cell.get(0).getBoundingClientRect().height,
-            cellWidth = $cell.outerWidth();
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $cell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0);
+        const cellHeight = $cell.get(0).getBoundingClientRect().height;
+        const cellWidth = $cell.outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, 'Indicator has correct height');
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, 'Top indicator has correct height');
@@ -661,8 +661,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, 'Shader has correct height');
     });
@@ -674,11 +674,11 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
-            $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $allDayShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, 'Shader has correct height');
         assert.roughEqual($topShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, 'TopShader has correct width');
@@ -694,10 +694,10 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 6, 12, 30)
         });
 
-        var $element = this.instance.$element(),
-            $firstCell = $element.find('.dx-scheduler-time-panel-cell').eq(8),
-            $secondCell = $element.find('.dx-scheduler-time-panel-cell').eq(9),
-            $thirdCell = $element.find('.dx-scheduler-time-panel-cell').eq(10);
+        const $element = this.instance.$element();
+        const $firstCell = $element.find('.dx-scheduler-time-panel-cell').eq(8);
+        const $secondCell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
+        const $thirdCell = $element.find('.dx-scheduler-time-panel-cell').eq(10);
 
         assert.ok($firstCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
         assert.ok($secondCell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
@@ -709,14 +709,14 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 7, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $cell = $element.find('.dx-scheduler-header-panel-cell').eq(4);
+        const $element = this.instance.$element();
+        const $cell = $element.find('.dx-scheduler-header-panel-cell').eq(4);
 
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });
 
     QUnit.test('DateTimeIndicator and shader should have correct positions, Day view with intervalCount, rtl mode', function(assert) {
-        var workspace = $('#scheduler-work-space-rtl').dxSchedulerWorkSpaceWeek({
+        const workspace = $('#scheduler-work-space-rtl').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
@@ -725,10 +725,10 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 2
         }).dxSchedulerWorkSpaceWeek('instance');
 
-        var $element = workspace.$element(),
-            $indicator = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-            $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+        const $element = workspace.$element();
+        const $indicator = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
+        const $bottomShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
 
         assert.equal($indicator.length, 1, 'Indicator count is correct');
         assert.roughEqual($indicator.eq(0).position().left, 706, 1.5, 'Indicator left is OK');
@@ -754,7 +754,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(),
             startDayHour: 0
         });
-        var $element = this.instance.$element();
+        let $element = this.instance.$element();
 
         assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, 'Indicator is rendered correctly');
 
@@ -769,9 +769,9 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
 
@@ -784,8 +784,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
         assert.roughEqual($shader.outerWidth(), 4000, 1, 'Shader has correct width');
     });
@@ -796,8 +796,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
         assert.roughEqual($shader.outerWidth(), 6400, 1, 'Shader has correct width');
     });
@@ -807,8 +807,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $cell = $element.find('.dx-scheduler-header-panel-cell').eq(9);
+        const $element = this.instance.$element();
+        const $cell = $element.find('.dx-scheduler-header-panel-cell').eq(9);
 
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });
@@ -837,8 +837,8 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
 
-        var $element = this.instance.$element(),
-            $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        const $element = this.instance.$element();
+        const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
 
         assert.equal($indicators.length, 2, 'Indicator count is correct');
         assert.equal($indicators.eq(0).position().left, 950);
@@ -854,8 +854,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const $element = this.instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
         assert.equal($shader.length, 2, 'Shaders count is correct');
 
@@ -875,7 +875,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.module('DateTime indicator on other timelines');
 
     QUnit.test('Shader should have correct height & width, TimelineWeek view', function(assert) {
-        var instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
+        const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
@@ -884,9 +884,9 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineWeek('instance');
 
-        var $element = instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const $element = instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 160, 1, 'Shader has correct height');
 
@@ -894,7 +894,7 @@ var stubInvokeMethod = function(instance, options) {
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineWeek view', function(assert) {
-        var instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
+        const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
@@ -903,14 +903,14 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineWeek('instance');
 
-        var $element = instance.$element(),
-            $cell = $element.find('.dx-scheduler-header-panel-cell').eq(43);
+        const $element = instance.$element();
+        const $cell = $element.find('.dx-scheduler-header-panel-cell').eq(43);
 
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });
 
     QUnit.test('Shader should have correct height & width, TimelineMonth view', function(assert) {
-        var instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
+        const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
@@ -919,9 +919,9 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineMonth('instance');
 
-        var $element = instance.$element(),
-            $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS),
-            cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+        const $element = instance.$element();
+        const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+        const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
         assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
 
@@ -929,7 +929,7 @@ var stubInvokeMethod = function(instance, options) {
     });
 
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineMonth view', function(assert) {
-        var instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
+        const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
@@ -937,8 +937,8 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 15, 12, 30)
         }).dxSchedulerTimelineMonth('instance');
 
-        var $element = instance.$element(),
-            $cell = $element.find('.dx-scheduler-header-panel-cell').eq(14);
+        const $element = instance.$element();
+        const $cell = $element.find('.dx-scheduler-header-panel-cell').eq(14);
 
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });

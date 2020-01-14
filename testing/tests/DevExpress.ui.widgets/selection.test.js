@@ -32,16 +32,16 @@ QUnit.module('Selection',
     });
 
 QUnit.test('Select all by one page', function(assert) {
-    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
-    var expectedData = [];
-    for(var i = 0; i < 3; i++) {
+    const expectedData = [];
+    for(let i = 0; i < 3; i++) {
         expectedData.push(this.data[i]);
     }
 
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
 
-    var selectionChangedHandler = function(args) {
+    const selectionChangedHandler = function(args) {
         selectionChangedCallCount++;
         assert.deepEqual(args.selectedItems, expectedData, 'selectedItems is right');
         assert.deepEqual(args.selectedItemKeys, expectedData, 'selectedItemsKeys is right');
@@ -49,13 +49,13 @@ QUnit.test('Select all by one page', function(assert) {
         assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -76,15 +76,15 @@ QUnit.test('Select all by one page', function(assert) {
 
 // T532618
 QUnit.test('Select all by one page should skip non-selectable items', function(assert) {
-    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         isSelectableItem: function(data) {
@@ -106,26 +106,26 @@ QUnit.test('Select all by one page should skip non-selectable items', function(a
 });
 
 QUnit.test('Select all by one page and changeItemSelection', function(assert) {
-    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
-    var expectedData = [];
-    for(var i = 0; i < 3; i++) {
+    const expectedData = [];
+    for(let i = 0; i < 3; i++) {
         expectedData.push(this.data[i]);
     }
 
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
 
-    var selectionChangedHandler = function() {
+    const selectionChangedHandler = function() {
         selectionChangedCallCount++;
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -146,26 +146,26 @@ QUnit.test('Select all by one page and changeItemSelection', function(assert) {
 });
 
 QUnit.test('Select all by one page', function(assert) {
-    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
-    var expectedData = [];
-    for(var i = 3; i < this.data.length; i++) {
+    const expectedData = [];
+    for(let i = 3; i < this.data.length; i++) {
         expectedData.push(this.data[i]);
     }
 
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
 
-    var selectionChangedHandler = function() {
+    const selectionChangedHandler = function() {
         selectionChangedCallCount++;
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -191,21 +191,21 @@ QUnit.test('Select all by one page', function(assert) {
 });
 
 QUnit.test('Select all by one page when key is defined', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
 
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
 
-    var selectionChangedHandler = function() {
+    const selectionChangedHandler = function() {
         selectionChangedCallCount++;
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -231,21 +231,21 @@ QUnit.test('Select all by one page when key is defined', function(assert) {
 });
 
 QUnit.test('Deselect all for all pages when key is defined', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
 
-    var selectionChangedCallCount = 0;
+    let selectionChangedCallCount = 0;
 
-    var selectionChangedHandler = function() {
+    const selectionChangedHandler = function() {
         selectionChangedCallCount++;
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -274,17 +274,17 @@ QUnit.test('Deselect all for all pages when key is defined', function(assert) {
 
 // T450615
 QUnit.test('clearSelection should work if it call after select', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
+    const dataSource = createDataSource(this.data, { key: 'id' }, { paginate: true, pageSize: 3 });
 
-    var selectionChangedHandler = sinon.spy();
+    const selectionChangedHandler = sinon.spy();
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -294,7 +294,7 @@ QUnit.test('clearSelection should work if it call after select', function(assert
             return dataSource.items();
         },
         load: function(options) {
-            var d = $.Deferred();
+            const d = $.Deferred();
             setTimeout(function() {
                 dataSource.store().load(options).done(d.resolve).fail(d.reject);
             });
@@ -318,25 +318,25 @@ QUnit.test('clearSelection should work if it call after select', function(assert
 });
 
 QUnit.test('Equal by reference', function(assert) {
-    var dataSource = createDataSource(this.data, {}, {});
+    const dataSource = createDataSource(this.data, {}, {});
 
-    var expectedData = [];
+    const expectedData = [];
     expectedData.push(this.data[0]);
 
-    var selectionChangedHandler = function(args) {
+    const selectionChangedHandler = function(args) {
         assert.equal(args.selectedItems[0], expectedData[0], 'selectedItems is right');
         assert.equal(args.selectedItemKeys[0], expectedData[0], 'selectedItemsKeys is right');
         assert.deepEqual(args.addedItemKeys, expectedData, 'addedItemKeys is right');
         assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         dataFields: function() {
@@ -354,11 +354,11 @@ QUnit.test('Equal by reference', function(assert) {
 });
 
 QUnit.test('Equal by object', function(assert) {
-    var dataSource,
-        expectedData = [],
-        countCallErrorLog = 0,
-        originalLog = errors.log,
-        selectionChangedHandler;
+    let dataSource;
+    const expectedData = [];
+    let countCallErrorLog = 0;
+    const originalLog = errors.log;
+    let selectionChangedHandler;
 
     errors.log = function() {
         countCallErrorLog++;
@@ -372,13 +372,13 @@ QUnit.test('Equal by object', function(assert) {
             assert.deepEqual(args.addedItemKeys, expectedData, 'addedItemKeys is right');
             assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
         };
-        var selection = new Selection({
+        const selection = new Selection({
             key: function() {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.key();
             },
             keyOf: function(item) {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.keyOf(item);
             },
             dataFields: function() {
@@ -398,25 +398,25 @@ QUnit.test('Equal by object', function(assert) {
 });
 
 QUnit.test('Equal by reference with equalByReference', function(assert) {
-    var dataSource = createDataSource(this.data, {}, {});
+    const dataSource = createDataSource(this.data, {}, {});
 
-    var expectedData = [];
+    const expectedData = [];
     expectedData.push(this.data[0]);
 
-    var selectionChangedHandler = function(args) {
+    const selectionChangedHandler = function(args) {
         assert.equal(args.selectedItems[0], expectedData[0], 'selectedItems is right');
         assert.equal(args.selectedItemKeys[0], expectedData[0], 'selectedItemsKeys is right');
         assert.equal(args.addedItemKeys[0], expectedData[0], 'addedItemKeys is right');
         assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
     };
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         plainItems: function() {
@@ -435,19 +435,19 @@ QUnit.test('Equal by reference with equalByReference', function(assert) {
 });
 
 QUnit.test('Equal by object with equalByReference', function(assert) {
-    var dataSource = createDataSource(this.data, {}, {});
+    const dataSource = createDataSource(this.data, {}, {});
 
     dataSource.load();
 
-    var selectionChangedHandler = sinon.stub();
+    const selectionChangedHandler = sinon.stub();
 
-    var selection = new Selection({
+    const selection = new Selection({
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -473,28 +473,28 @@ QUnit.test('Equal by object with equalByReference', function(assert) {
 
 QUnit.test('items should be selected when keyType is Guid', function(assert) {
 
-    var items = [{ id: new Guid() }, { id: new Guid() }, { id: new Guid() }],
-        storeOptions = {
-            key: 'id',
-            keyType: 'Guid',
-            data: items
-        },
-        dataSource = createDataSource(this.data, storeOptions, {});
+    const items = [{ id: new Guid() }, { id: new Guid() }, { id: new Guid() }];
+    const storeOptions = {
+        key: 'id',
+        keyType: 'Guid',
+        data: items
+    };
+    const dataSource = createDataSource(this.data, storeOptions, {});
 
     dataSource.load();
 
-    var selectionChangedHandler = sinon.spy();
+    const selectionChangedHandler = sinon.spy();
 
-    var selection = new Selection({
+    const selection = new Selection({
         load: function(options) {
             return dataSource && dataSource.store().load(options);
         },
         key: function() {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         plainItems: function() {
@@ -514,11 +514,11 @@ QUnit.test('items should be selected when keyType is Guid', function(assert) {
 
 QUnit.test('Show warning (W1002) when select item that does not exist', function(assert) {
     // arrange
-    var log,
-        selection,
-        dataSource,
-        countCallErrorLog = 0,
-        originalLog = errors.log;
+    let log;
+    let selection;
+    let dataSource;
+    let countCallErrorLog = 0;
+    const originalLog = errors.log;
     errors.log = function() {
         countCallErrorLog++;
         log = $.makeArray(arguments);
@@ -527,11 +527,11 @@ QUnit.test('Show warning (W1002) when select item that does not exist', function
         dataSource = createDataSource(this.data, { key: 'id' }, {});
         selection = new Selection({
             key: function() {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.key();
             },
             keyOf: function(item) {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.keyOf(item);
             },
             dataFields: function() {
@@ -558,11 +558,11 @@ QUnit.test('Show warning (W1002) when select item that does not exist', function
 
 QUnit.test('Show warning (W1002) when select items that don\'t exist', function(assert) {
     // arrange
-    var log = [],
-        selection,
-        dataSource,
-        countCallErrorLog = 0,
-        originalLog = errors.log;
+    const log = [];
+    let selection;
+    let dataSource;
+    let countCallErrorLog = 0;
+    const originalLog = errors.log;
     errors.log = function() {
         countCallErrorLog++;
         log.push($.makeArray(arguments));
@@ -571,11 +571,11 @@ QUnit.test('Show warning (W1002) when select items that don\'t exist', function(
         dataSource = createDataSource(this.data, { key: 'id' }, {});
         selection = new Selection({
             key: function() {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.key();
             },
             keyOf: function(item) {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.keyOf(item);
             },
             load: function(options) {
@@ -603,24 +603,24 @@ QUnit.test('Show warning (W1002) when select items that don\'t exist', function(
 });
 
 QUnit.test('selection should work with custom store without filter implementation', function(assert) {
-    var clock = sinon.useFakeTimers();
+    const clock = sinon.useFakeTimers();
 
     try {
-        var selectionChangedHandler = function(args) {
+        const selectionChangedHandler = function(args) {
             assert.deepEqual(args.selectedItems, [{ id: 2, text: 'Item 2' }], 'selectedItems is right');
             assert.deepEqual(args.selectedItemKeys, [2], 'selectedItemsKeys is right');
             assert.deepEqual(args.addedItemKeys, [2], 'addedItemKeys is right');
             assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
         };
 
-        var dataSource = new DataSource({
+        const dataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
-                    var d = $.Deferred(),
-                        items = [
-                            { id: 1, text: 'Item 1' },
-                            { id: 2, text: 'Item 2' }
-                        ];
+                    const d = $.Deferred();
+                    const items = [
+                        { id: 1, text: 'Item 1' },
+                        { id: 2, text: 'Item 2' }
+                    ];
 
                     setTimeout(function() {
                         d.resolve(items);
@@ -632,14 +632,14 @@ QUnit.test('selection should work with custom store without filter implementatio
             })
         });
 
-        var selection = new Selection({
+        const selection = new Selection({
             onSelectionChanged: selectionChangedHandler,
             key: function() {
-                var store = dataSource && dataSource.store();
+                const store = dataSource && dataSource.store();
                 return store && store.key();
             },
             keyOf: function(item) {
-                var store = dataSource.store();
+                const store = dataSource.store();
                 return store && store.keyOf(item);
             },
             load: function(options) {
@@ -665,9 +665,9 @@ QUnit.test('selection should work with custom store without filter implementatio
 });
 
 QUnit.test('selection should works with case-sensitive keys if select item is on current page', function(assert) {
-    var loadingArgs = [];
-    var selectionChangedCallCount = 0;
-    var dataSource = new DataSource({
+    let loadingArgs = [];
+    let selectionChangedCallCount = 0;
+    const dataSource = new DataSource({
         pageSize: 2,
         store: {
             type: 'array',
@@ -684,7 +684,7 @@ QUnit.test('selection should works with case-sensitive keys if select item is on
         }
     });
 
-    var selection = new Selection({
+    const selection = new Selection({
         onSelectionChanged: function(args) {
             selectionChangedCallCount++;
             assert.deepEqual(args.selectedItems, [{ id: 'A', text: 'Item 2' }], 'selectedItems is right');
@@ -693,11 +693,11 @@ QUnit.test('selection should works with case-sensitive keys if select item is on
             assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
         },
         key: function() {
-            var store = dataSource && dataSource.store();
+            const store = dataSource && dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -726,9 +726,9 @@ QUnit.test('selection should works with case-sensitive keys if select item is on
 });
 
 QUnit.test('selection should works with case-sensitive keys if select item is not on current page', function(assert) {
-    var loadingArgs = [];
-    var selectionChangedCallCount = 0;
-    var dataSource = new DataSource({
+    let loadingArgs = [];
+    let selectionChangedCallCount = 0;
+    const dataSource = new DataSource({
         pageSize: 2,
         store: {
             type: 'array',
@@ -745,7 +745,7 @@ QUnit.test('selection should works with case-sensitive keys if select item is no
         }
     });
 
-    var selection = new Selection({
+    const selection = new Selection({
         onSelectionChanged: function(args) {
             selectionChangedCallCount++;
             assert.deepEqual(args.selectedItems, [{ id: 'b', text: 'Item 3' }], 'selectedItems is right');
@@ -754,11 +754,11 @@ QUnit.test('selection should works with case-sensitive keys if select item is no
             assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
         },
         key: function() {
-            var store = dataSource && dataSource.store();
+            const store = dataSource && dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -788,8 +788,8 @@ QUnit.test('selection should works with case-sensitive keys if select item is no
 });
 
 QUnit.test('selection should works with complex key', function(assert) {
-    var selectionChangedArgs = [];
-    var dataSource = new DataSource({
+    const selectionChangedArgs = [];
+    const dataSource = new DataSource({
         pageSize: 2,
         store: {
             type: 'array',
@@ -802,16 +802,16 @@ QUnit.test('selection should works with complex key', function(assert) {
         }
     });
 
-    var selection = new Selection({
+    const selection = new Selection({
         onSelectionChanged: function(args) {
             selectionChangedArgs.push(args);
         },
         key: function() {
-            var store = dataSource && dataSource.store();
+            const store = dataSource && dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -841,8 +841,8 @@ QUnit.test('selection should works with complex key', function(assert) {
 
 // T696853
 QUnit.test('selection should works with complex key if key with another item order', function(assert) {
-    var selectionChangedArgs = [];
-    var dataSource = new DataSource({
+    const selectionChangedArgs = [];
+    const dataSource = new DataSource({
         pageSize: 2,
         store: {
             type: 'array',
@@ -855,16 +855,16 @@ QUnit.test('selection should works with complex key if key with another item ord
         }
     });
 
-    var selection = new Selection({
+    const selection = new Selection({
         onSelectionChanged: function(args) {
             selectionChangedArgs.push(args);
         },
         key: function() {
-            var store = dataSource && dataSource.store();
+            const store = dataSource && dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -893,9 +893,9 @@ QUnit.test('selection should works with complex key if key with another item ord
 });
 
 QUnit.test('selection module should support object returned by load method', function(assert) {
-    var selectionChangedHandler = sinon.spy();
+    const selectionChangedHandler = sinon.spy();
 
-    var selection = new Selection({
+    const selection = new Selection({
         load: function(options) {
             return $.Deferred().resolve({ data: [{ key: '1' }], totalCount: 1 });
         },
@@ -917,26 +917,26 @@ QUnit.test('selection module should support object returned by load method', fun
 
 // T547950
 QUnit.test('focusedItemIndex should be reset to -1 after select all', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' }),
-        selection = new Selection({
-            key: function() {
-                var store = dataSource.store();
-                return store.key();
-            },
-            keyOf: function(item) {
-                var store = dataSource.store();
-                return store.keyOf(item);
-            },
-            dataFields: function() {
-                return dataSource.select();
-            },
-            plainItems: function() {
-                return dataSource.items();
-            },
-            load: function(options) {
-                return dataSource.store().load(options);
-            }
-        });
+    const dataSource = createDataSource(this.data, { key: 'id' });
+    const selection = new Selection({
+        key: function() {
+            const store = dataSource.store();
+            return store.key();
+        },
+        keyOf: function(item) {
+            const store = dataSource.store();
+            return store.keyOf(item);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        load: function(options) {
+            return dataSource.store().load(options);
+        }
+    });
 
     selection.changeItemSelection(1);
 
@@ -949,26 +949,26 @@ QUnit.test('focusedItemIndex should be reset to -1 after select all', function(a
 
 // T547950
 QUnit.test('focusedItemIndex should be reset to -1 after deselect all', function(assert) {
-    var dataSource = createDataSource(this.data, { key: 'id' }),
-        selection = new Selection({
-            key: function() {
-                var store = dataSource.store();
-                return store.key();
-            },
-            keyOf: function(item) {
-                var store = dataSource.store();
-                return store.keyOf(item);
-            },
-            dataFields: function() {
-                return dataSource.select();
-            },
-            plainItems: function() {
-                return dataSource.items();
-            },
-            load: function(options) {
-                return dataSource.store().load(options);
-            }
-        });
+    const dataSource = createDataSource(this.data, { key: 'id' });
+    const selection = new Selection({
+        key: function() {
+            const store = dataSource.store();
+            return store.key();
+        },
+        keyOf: function(item) {
+            const store = dataSource.store();
+            return store.keyOf(item);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        load: function(options) {
+            return dataSource.store().load(options);
+        }
+    });
 
     selection.changeItemSelection(1);
 
@@ -980,15 +980,15 @@ QUnit.test('focusedItemIndex should be reset to -1 after deselect all', function
 });
 
 
-var createDeferredSelection = function(data, options, dataSource) {
+const createDeferredSelection = function(data, options, dataSource) {
     return new Selection($.extend({
         deferred: true,
         key: function() {
-            var store = dataSource && dataSource.store();
+            const store = dataSource && dataSource.store();
             return store && store.key();
         },
         keyOf: function(item) {
-            var store = dataSource.store();
+            const store = dataSource.store();
             return store && store.keyOf(item);
         },
         load: function(options) {
@@ -1030,7 +1030,7 @@ QUnit.module('Deferred mode', {
 
 QUnit.test('Key is required', function(assert) {
     assert.throws(function() {
-        var selection = createDeferredSelection(this.data, {}, createDataSource(this.data, { }, { }));
+        const selection = createDeferredSelection(this.data, {}, createDataSource(this.data, { }, { }));
         selection.selectedItemKeys();
     }, function(ex) {
         assert.ok(ex.message.indexOf('E1042') === 0);
@@ -1040,7 +1040,7 @@ QUnit.test('Key is required', function(assert) {
 
 QUnit.test('Key is not required if dataSource not provided yet', function(assert) {
 
-    var selection = createDeferredSelection(this.data, {}, null);
+    const selection = createDeferredSelection(this.data, {}, null);
     selection.selectAll();
 
     assert.ok(selection);
@@ -1048,7 +1048,7 @@ QUnit.test('Key is not required if dataSource not provided yet', function(assert
 
 QUnit.test('Default selectionFilter', function(assert) {
     // act
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // assert
     assert.deepEqual(selection.selectionFilter(), [], 'selectionFilter default value');
@@ -1057,9 +1057,9 @@ QUnit.test('Default selectionFilter', function(assert) {
 });
 
 QUnit.test('Initialize selectionFilter from options', function(assert) {
-    var selectionFilter = ['id', '=', 1];
+    const selectionFilter = ['id', '=', 1];
     // act
-    var selection = this.createDeferredSelection(this.data, {
+    const selection = this.createDeferredSelection(this.data, {
         selectionFilter: selectionFilter
     });
 
@@ -1069,13 +1069,13 @@ QUnit.test('Initialize selectionFilter from options', function(assert) {
 });
 
 QUnit.test('Change selectionFilter via API', function(assert) {
-    var onChanged = sinon.stub(),
-        selection = this.createDeferredSelection(this.data, {
-            selectionFilter: ['id', '=', 1],
-            onSelectionChanged: onChanged
-        });
+    const onChanged = sinon.stub();
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: ['id', '=', 1],
+        onSelectionChanged: onChanged
+    });
     // act
-    var selectionFilter = ['id', '=', 2];
+    const selectionFilter = ['id', '=', 2];
     selection.selectionFilter(selectionFilter);
 
     // assert
@@ -1084,11 +1084,11 @@ QUnit.test('Change selectionFilter via API', function(assert) {
 });
 
 QUnit.test('No fire onChanged if filter passed to selection filter equal current selection filter', function(assert) {
-    var onChanged = sinon.stub(),
-        selection = this.createDeferredSelection(this.data, {
-            selectionFilter: ['id', '=', 1],
-            onSelectionChanged: onChanged
-        });
+    const onChanged = sinon.stub();
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: ['id', '=', 1],
+        onSelectionChanged: onChanged
+    });
     // act
     selection.selectionFilter(['id', '=', 1]);
 
@@ -1097,7 +1097,7 @@ QUnit.test('No fire onChanged if filter passed to selection filter equal current
 });
 
 QUnit.test('changeItemSelection should set selectionFilter to expression with key field', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(2);
@@ -1108,7 +1108,7 @@ QUnit.test('changeItemSelection should set selectionFilter to expression with ke
 });
 
 QUnit.test('changeItemSelection for several items with control key should add several expressions with key field', function(assert) {
-    var selection = this.createDeferredSelection(this.data, {
+    const selection = this.createDeferredSelection(this.data, {
         selectionFilter: ['id', '=', 1]
     });
 
@@ -1121,7 +1121,7 @@ QUnit.test('changeItemSelection for several items with control key should add se
 });
 
 QUnit.test('changeItemSelection twice for one item with control key should not change selectionFilter', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(2, { control: true });
@@ -1132,7 +1132,7 @@ QUnit.test('changeItemSelection twice for one item with control key should not c
 });
 
 QUnit.test('changeItemSelection with shift key should add several expressions with key field', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(1);
@@ -1144,7 +1144,7 @@ QUnit.test('changeItemSelection with shift key should add several expressions wi
 
 // T655219
 QUnit.test('changeItemSelection with shift key two times', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(1);
@@ -1158,7 +1158,7 @@ QUnit.test('changeItemSelection with shift key two times', function(assert) {
 });
 
 QUnit.test('selectAll when filter is empty', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.selectAll();
@@ -1171,7 +1171,7 @@ QUnit.test('selectAll when filter is empty', function(assert) {
 });
 
 QUnit.test('deselectAll when filter is empty', function(assert) {
-    var selection = this.createDeferredSelection(this.data, { selectionFilter: ['id', '=', 1] });
+    const selection = this.createDeferredSelection(this.data, { selectionFilter: ['id', '=', 1] });
 
     // act
     selection.deselectAll();
@@ -1184,7 +1184,7 @@ QUnit.test('deselectAll when filter is empty', function(assert) {
 });
 
 QUnit.test('isSelectAll when dataSource is filtered', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1194,7 +1194,7 @@ QUnit.test('isSelectAll when dataSource is filtered', function(assert) {
 });
 
 QUnit.test('selectAll when filter is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1207,7 +1207,7 @@ QUnit.test('selectAll when filter is defined', function(assert) {
 });
 
 QUnit.test('changeItemSelection after selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.selectAll();
@@ -1218,7 +1218,7 @@ QUnit.test('changeItemSelection after selectAll', function(assert) {
 });
 
 QUnit.test('changeItemSelection after selectAll when filter is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1231,7 +1231,7 @@ QUnit.test('changeItemSelection after selectAll when filter is defined', functio
 });
 
 QUnit.test('selectAll several times for different filters', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1245,7 +1245,7 @@ QUnit.test('selectAll several times for different filters', function(assert) {
 });
 
 QUnit.test('deselectAll when filter is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1258,7 +1258,7 @@ QUnit.test('deselectAll when filter is defined', function(assert) {
 });
 
 QUnit.test('deselectAll several times when filter is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1273,7 +1273,7 @@ QUnit.test('deselectAll several times when filter is defined', function(assert) 
 });
 
 QUnit.test('deselectAll when filter is defined after selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1287,7 +1287,7 @@ QUnit.test('deselectAll when filter is defined after selectAll', function(assert
 });
 
 QUnit.test('deselectAll when filter is defined after selectAll immediately with same filter', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(0);
@@ -1302,7 +1302,7 @@ QUnit.test('deselectAll when filter is defined after selectAll immediately with 
 });
 
 QUnit.test('deselectAll when filter is defined after selectAll not immediately with same filter', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
 
@@ -1318,7 +1318,7 @@ QUnit.test('deselectAll when filter is defined after selectAll not immediately w
 });
 
 QUnit.test('selectAll when filter is defined after deselectAll with same filter', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(0);
@@ -1333,7 +1333,7 @@ QUnit.test('selectAll when filter is defined after deselectAll with same filter'
 });
 
 QUnit.test('selectAll several times with same filter', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1346,7 +1346,7 @@ QUnit.test('selectAll several times with same filter', function(assert) {
 });
 
 QUnit.test('deselectAll when filter is defined after several selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '<', 18]);
@@ -1361,15 +1361,15 @@ QUnit.test('deselectAll when filter is defined after several selectAll', functio
     // assert
     assert.deepEqual(selection.selectionFilter(), [[['age', '<', 18], 'or', ['age', '>', 20]], 'and', ['!', ['age', '>', 21]]], 'selection filter');
 
-    for(var i = 0; i < this.data.length; i++) {
-        var itemData = this.data[i];
-        var selected = itemData.age < 18 || itemData.age === 21;
+    for(let i = 0; i < this.data.length; i++) {
+        const itemData = this.data[i];
+        const selected = itemData.age < 18 || itemData.age === 21;
         assert.equal(selection.isItemSelected(itemData), selected, 'item with age ' + itemData.age + ' is ' + (selected ? 'selected' : 'unselected'));
     }
 });
 
 QUnit.test('changeItemSelection before selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     selection.changeItemSelection(0);
@@ -1383,7 +1383,7 @@ QUnit.test('changeItemSelection before selectAll', function(assert) {
 });
 
 QUnit.test('changeItemSelection after selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1397,7 +1397,7 @@ QUnit.test('changeItemSelection after selectAll', function(assert) {
 });
 
 QUnit.test('selectAll when filter with \'or\' operation is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter([['age', '=', 15], 'or', ['age', '=', 20]]);
@@ -1410,7 +1410,7 @@ QUnit.test('selectAll when filter with \'or\' operation is defined', function(as
 
 // T754974
 QUnit.test('selectAll after deselect one item', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1425,7 +1425,7 @@ QUnit.test('selectAll after deselect one item', function(assert) {
 
 // T754974
 QUnit.test('selectAll after deselecting two items', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 15]);
@@ -1441,8 +1441,8 @@ QUnit.test('selectAll after deselecting two items', function(assert) {
 
 // T754974
 QUnit.test('selectAll -> deselect items -> select item -> deselect item -> select All', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 15]);
@@ -1464,8 +1464,8 @@ QUnit.test('selectAll -> deselect items -> select item -> deselect item -> selec
 
 // T754974
 QUnit.test('selectAll -> deselect items -> select/deselect item -> select All', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 15]);
@@ -1486,7 +1486,7 @@ QUnit.test('selectAll -> deselect items -> select/deselect item -> select All', 
 });
 
 QUnit.test('Deselect one item after selectAll', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 18]);
@@ -1501,7 +1501,7 @@ QUnit.test('Deselect one item after selectAll', function(assert) {
 });
 
 QUnit.test('Deselect one item after selectAll when filter contains \'or\' operation', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter([['age', '=', 15], 'or', ['age', '=', 20]]);
@@ -1516,7 +1516,7 @@ QUnit.test('Deselect one item after selectAll when filter contains \'or\' operat
 });
 
 QUnit.test('select and deselect several items', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter(['age', '>', 0]);
@@ -1533,7 +1533,7 @@ QUnit.test('select and deselect several items', function(assert) {
 });
 
 QUnit.test('deselectAll after selectAll when filter by key values is defined', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     // act
     this.dataSource.filter([['id', '=', 1], 'or', ['id', '=', 2]]);
@@ -1543,7 +1543,7 @@ QUnit.test('deselectAll after selectAll when filter by key values is defined', f
     // assert
     assert.deepEqual(selection.selectionFilter(), [], 'selection filter');
     assert.strictEqual(selection.getSelectAllState(), false, 'select all is false');
-    var selectedItems;
+    let selectedItems;
     selection.getSelectedItems().done(function(items) {
         selectedItems = items;
     });
@@ -1551,10 +1551,10 @@ QUnit.test('deselectAll after selectAll when filter by key values is defined', f
 });
 
 QUnit.test('getSelectedItems returns deferred', function(assert) {
-    var selectedItems,
-        selection = this.createDeferredSelection(this.data, {
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedItems;
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItems().done(function(items) {
@@ -1566,10 +1566,10 @@ QUnit.test('getSelectedItems returns deferred', function(assert) {
 });
 
 QUnit.test('getSelectedItemKeys returns deferred', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItemKeys().done(function(keys) {
@@ -1581,8 +1581,8 @@ QUnit.test('getSelectedItemKeys returns deferred', function(assert) {
 });
 
 QUnit.test('selectAll, select 2 items, deselect 2 items', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.selectAll();
 
@@ -1602,8 +1602,8 @@ QUnit.test('selectAll, select 2 items, deselect 2 items', function(assert) {
 });
 
 QUnit.test('selectAll, deselect 3 items, select 3 items', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.selectAll();
 
@@ -1625,8 +1625,8 @@ QUnit.test('selectAll, deselect 3 items, select 3 items', function(assert) {
 });
 
 QUnit.test('select 3 items, deselect 3 items', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0, { control: true });
     selection.changeItemSelection(1, { control: true });
@@ -1646,8 +1646,8 @@ QUnit.test('select 3 items, deselect 3 items', function(assert) {
 });
 
 QUnit.test('select 2 items, deselect item', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0, { control: true });
     selection.changeItemSelection(1, { control: true });
@@ -1664,8 +1664,8 @@ QUnit.test('select 2 items, deselect item', function(assert) {
 });
 
 QUnit.test('select 2 items, deselect and select 1 item', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0, { control: true });
     selection.changeItemSelection(1, { control: true });
@@ -1683,8 +1683,8 @@ QUnit.test('select 2 items, deselect and select 1 item', function(assert) {
 });
 
 QUnit.test('select 3 items, deselect 2 items, select 1 item, deselect 2 items', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data);
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0, { control: true });
     selection.changeItemSelection(1, { control: true });
@@ -1705,7 +1705,7 @@ QUnit.test('select 3 items, deselect 2 items, select 1 item, deselect 2 items', 
 });
 
 QUnit.test('selectedItemKeys', function(assert) {
-    var selection = this.createDeferredSelection(this.data, {});
+    const selection = this.createDeferredSelection(this.data, {});
 
     // act
     selection.selectedItemKeys([1]);
@@ -1721,7 +1721,7 @@ QUnit.test('selectedItemKeys', function(assert) {
 });
 
 QUnit.test('selectedItemKeys with preserve', function(assert) {
-    var selection = this.createDeferredSelection(this.data, {
+    const selection = this.createDeferredSelection(this.data, {
     });
 
     // act
@@ -1735,7 +1735,7 @@ QUnit.test('selectedItemKeys with preserve', function(assert) {
 });
 
 QUnit.test('selectedItemKeys deselect item', function(assert) {
-    var selection = this.createDeferredSelection(this.data, {
+    const selection = this.createDeferredSelection(this.data, {
     });
 
     // act
@@ -1749,12 +1749,12 @@ QUnit.test('selectedItemKeys deselect item', function(assert) {
 });
 
 QUnit.test('selectedItemKeys deselect item', function(assert) {
-    var selectionChangedIsCalled = false,
-        selection = this.createDeferredSelection(this.data, {
-            onSelectionChanged: function() {
-                selectionChangedIsCalled = true;
-            }
-        });
+    let selectionChangedIsCalled = false;
+    const selection = this.createDeferredSelection(this.data, {
+        onSelectionChanged: function() {
+            selectionChangedIsCalled = true;
+        }
+    });
 
     // act
     selection.selectedItemKeys([1, 2]);
@@ -1790,7 +1790,7 @@ QUnit.module('Deferred mode. Complex key', {
 });
 
 QUnit.test('Select item', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0);
     // assert
@@ -1798,7 +1798,7 @@ QUnit.test('Select item', function(assert) {
 });
 
 QUnit.test('Deselect item', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     selection.selectAll();
 
@@ -1809,7 +1809,7 @@ QUnit.test('Deselect item', function(assert) {
 });
 
 QUnit.test('Select and deselect item', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     selection.changeItemSelection(0);
     selection.changeItemSelection(0, { control: true });
@@ -1820,7 +1820,7 @@ QUnit.test('Select and deselect item', function(assert) {
 
 // T470886
 QUnit.test('Deselect and select item when selected all', function(assert) {
-    var selection = this.createDeferredSelection(this.data);
+    const selection = this.createDeferredSelection(this.data);
 
     selection.selectAll();
 
@@ -1833,7 +1833,7 @@ QUnit.test('Deselect and select item when selected all', function(assert) {
 
 QUnit.module('filter length restriction', {
     beforeEach: function() {
-        var data = this.data = [
+        const data = this.data = [
             { id: 1, name: 'Alex', age: 15 },
             { id: 2, name: 'Dan', age: 20 },
             { id: 3, name: 'Vadim', age: 17 },
@@ -1865,11 +1865,11 @@ QUnit.module('filter length restriction', {
 });
 
 QUnit.test('Pass filter to load when selection filter', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            filterLengthRestriction: 70,
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        filterLengthRestriction: 70,
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItemKeys().done(function(keys) {
@@ -1882,11 +1882,11 @@ QUnit.test('Pass filter to load when selection filter', function(assert) {
 });
 
 QUnit.test('not pass filter to loadOptions', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            maxFilterLengthInRequest: 65,
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        maxFilterLengthInRequest: 65,
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItemKeys().done(function(keys) {
@@ -1899,11 +1899,11 @@ QUnit.test('not pass filter to loadOptions', function(assert) {
 });
 
 QUnit.test('not pass filter to loadOptions. getSelectedItems', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            maxFilterLengthInRequest: 65,
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        maxFilterLengthInRequest: 65,
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItems().done(function(keys) {
@@ -1916,10 +1916,10 @@ QUnit.test('not pass filter to loadOptions. getSelectedItems', function(assert) 
 });
 
 QUnit.test('filterLengthRestriction is undefined', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItemKeys().done(function(keys) {
@@ -1932,11 +1932,11 @@ QUnit.test('filterLengthRestriction is undefined', function(assert) {
 });
 
 QUnit.test('filterLengthRestriction is 0', function(assert) {
-    var selectedKeys,
-        selection = this.createDeferredSelection(this.data, {
-            maxFilterLengthInRequest: 0,
-            selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
-        });
+    let selectedKeys;
+    const selection = this.createDeferredSelection(this.data, {
+        maxFilterLengthInRequest: 0,
+        selectionFilter: [['id', '=', 1], 'or', ['age', '>', 18]]
+    });
 
     // act
     selection.getSelectedItemKeys().done(function(keys) {

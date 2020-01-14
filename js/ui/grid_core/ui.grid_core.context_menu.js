@@ -5,17 +5,17 @@ import { each } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
 import ContextMenu from '../context_menu';
 
-var CONTEXT_MENU = 'dx-context-menu',
+const CONTEXT_MENU = 'dx-context-menu';
 
-    viewName = {
-        'columnHeadersView': 'header',
-        'rowsView': 'content',
-        'footerView': 'footer',
-        'headerPanel': 'headerPanel'
-    },
-    VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'];
+const viewName = {
+    'columnHeadersView': 'header',
+    'rowsView': 'content',
+    'footerView': 'footer',
+    'headerPanel': 'headerPanel'
+};
+const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'];
 
-var ContextMenuController = modules.ViewController.inherit({
+const ContextMenuController = modules.ViewController.inherit({
     init: function() {
         this.createAction('onContextMenuPreparing');
     },
@@ -25,17 +25,17 @@ var ContextMenuController = modules.ViewController.inherit({
             return false;
         }
 
-        var that = this,
-            $targetElement = $(dxEvent.target),
-            view,
-            options,
-            rowIndex,
-            columnIndex,
-            rowOptions,
-            $element,
-            $targetRowElement,
-            $targetCellElement,
-            menuItems;
+        const that = this;
+        const $targetElement = $(dxEvent.target);
+        let view;
+        let options;
+        let rowIndex;
+        let columnIndex;
+        let rowOptions;
+        let $element;
+        let $targetRowElement;
+        let $targetCellElement;
+        let menuItems;
 
         each(VIEW_NAMES, function() {
             view = that.getView(this);
@@ -74,19 +74,19 @@ var ContextMenuController = modules.ViewController.inherit({
     _contextMenuPrepared: noop
 });
 
-var ContextMenuView = modules.View.inherit({
+const ContextMenuView = modules.View.inherit({
     _renderCore: function() {
-        var that = this,
-            $element = that.element().addClass(CONTEXT_MENU);
+        const that = this;
+        const $element = that.element().addClass(CONTEXT_MENU);
 
         this.setAria('role', 'presentation', $element);
 
         this._createComponent($element,
             ContextMenu, {
                 onPositioning: function(actionArgs) {
-                    var event = actionArgs.event,
-                        contextMenuInstance = actionArgs.component,
-                        items = that.getController('contextMenu').getContextMenuItems(event);
+                    const event = actionArgs.event;
+                    const contextMenuInstance = actionArgs.component;
+                    const items = that.getController('contextMenu').getContextMenuItems(event);
 
                     if(items) {
                         contextMenuInstance.option('items', items);

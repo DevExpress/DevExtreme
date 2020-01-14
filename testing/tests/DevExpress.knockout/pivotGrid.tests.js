@@ -1,11 +1,11 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('ui/pivot_grid/ui.pivot_grid');
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="view">\
             <div id="pivotGridContainer" data-bind="dxPivotGrid: pivotOptions"></div>\
         </div>';
@@ -27,7 +27,7 @@ QUnit.module('dxPivotGrid', {
 });
 
 QUnit.test('T244054. DataSource option changing', function(assert) {
-    var dataSource = ko.observable({
+    const dataSource = ko.observable({
         store: [
             { key: 1, title: 'Item1' },
             { key: 2, title: 'Item2' }],
@@ -46,7 +46,7 @@ QUnit.test('T244054. DataSource option changing', function(assert) {
     this.clock.tick();
     // Assert
     assert.ok($('#pivotGridContainer').dxPivotGrid('instance'));
-    var $rowAreaCells = $('#pivotGridContainer .dx-pivotgrid-vertical-headers td');
+    const $rowAreaCells = $('#pivotGridContainer .dx-pivotgrid-vertical-headers td');
     assert.strictEqual($rowAreaCells.eq(0).text(), '10');
     assert.strictEqual($rowAreaCells.eq(1).text(), '20');
 });

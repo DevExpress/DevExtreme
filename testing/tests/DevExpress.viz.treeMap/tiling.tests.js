@@ -1,29 +1,29 @@
-var common = require('./commonParts/common.js'),
-    $ = require('jquery'),
-    environment = {
-        beforeEach: common.environment.beforeEach,
+const common = require('./commonParts/common.js');
+const $ = require('jquery');
+const environment = {
+    beforeEach: common.environment.beforeEach,
 
-        create: function(options) {
-            return common.createWidget($.extend(true, {
-                tile: {
-                    border: {
-                        width: 0
-                    }
-                },
-                group: {
-                    padding: 0,
-                    border: { width: 0 }
+    create: function(options) {
+        return common.createWidget($.extend(true, {
+            tile: {
+                border: {
+                    width: 0
                 }
-            }, options));
-        },
+            },
+            group: {
+                padding: 0,
+                border: { width: 0 }
+            }
+        }, options));
+    },
 
-        checkLayout: function(assert, expected) {
-            var tiles = this.renderer.simpleRect.returnValues;
-            $.each(expected, function(i, data) {
-                assert.checkTile(tiles[i].attr.lastCall.args[0], data, 'tile ' + i);
-            });
-        }
-    };
+    checkLayout: function(assert, expected) {
+        const tiles = this.renderer.simpleRect.returnValues;
+        $.each(expected, function(i, data) {
+            assert.checkTile(tiles[i].attr.lastCall.args[0], data, 'tile ' + i);
+        });
+    }
+};
 
 require('viz/tree_map/tiling.squarified');
 require('viz/tree_map/tiling.strip');
@@ -153,10 +153,10 @@ QUnit.test('Strip / some values are zeros', function(assert) {
 QUnit.test('Custom', function(assert) {
     this.create({
         layoutAlgorithm: function(data) {
-            var y1 = data.rect[1] + 100,
-                y2 = data.rect[3] - 100,
-                x = data.rect[0],
-                delta = data.rect[2] - data.rect[0];
+            const y1 = data.rect[1] + 100;
+            const y2 = data.rect[3] - 100;
+            let x = data.rect[0];
+            const delta = data.rect[2] - data.rect[0];
             $.each(data.items, function(_, item) {
                 item.rect = [x, y1, x += delta * item.value / data.sum, y2];
             });

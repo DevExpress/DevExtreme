@@ -1,16 +1,16 @@
-var $ = require('../../../core/renderer'),
-    registerComponent = require('../../../core/component_registrator'),
-    extend = require('../../../core/utils/extend').extend,
-    publisherMixin = require('../ui.scheduler.publisher_mixin'),
-    messageLocalization = require('../../../localization/message'),
-    Editor = require('../../editor/editor'),
-    SelectBox = require('../../select_box');
+const $ = require('../../../core/renderer');
+const registerComponent = require('../../../core/component_registrator');
+const extend = require('../../../core/utils/extend').extend;
+const publisherMixin = require('../ui.scheduler.publisher_mixin');
+const messageLocalization = require('../../../localization/message');
+const Editor = require('../../editor/editor');
+const SelectBox = require('../../select_box');
 
-var TIMEZONE_EDITOR_CLASS = 'dx-timezone-editor',
-    TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = 'dx-timezone-display-name',
-    TIMEZONE_IANA_ID_SELECTBOX_CLASS = 'dx-timezone-iana-id';
+const TIMEZONE_EDITOR_CLASS = 'dx-timezone-editor';
+const TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = 'dx-timezone-display-name';
+const TIMEZONE_IANA_ID_SELECTBOX_CLASS = 'dx-timezone-iana-id';
 
-var SchedulerTimezoneEditor = Editor.inherit({
+const SchedulerTimezoneEditor = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             value: null
@@ -37,8 +37,8 @@ var SchedulerTimezoneEditor = Editor.inherit({
     },
 
     _renderDisplayNameEditor: function() {
-        var noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle'),
-            value = this.invoke('getTimezoneDisplayNameById', this.option('value')) || noTzTitle;
+        const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
+        const value = this.invoke('getTimezoneDisplayNameById', this.option('value')) || noTzTitle;
 
         this._displayNameEditor = this._renderSelectBox(TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS, {
             items: [noTzTitle].concat(this.invoke('getTimezonesDisplayName')),
@@ -68,8 +68,8 @@ var SchedulerTimezoneEditor = Editor.inherit({
 
     _renderSelectBox: function(cssClass, options) {
         options = options || {};
-        var $element = $('<div>').addClass(cssClass),
-            selectBox = this._createComponent($element, SelectBox, options);
+        const $element = $('<div>').addClass(cssClass);
+        const selectBox = this._createComponent($element, SelectBox, options);
 
         this.$element().append($element);
 
@@ -85,8 +85,8 @@ var SchedulerTimezoneEditor = Editor.inherit({
     },
 
     _processDisplayNameChanging: function(displayName) {
-        var tzIds = this.invoke('getTimezonesIdsByDisplayName', displayName),
-            tzId = tzIds.length ? tzIds[0].id : null;
+        const tzIds = this.invoke('getTimezonesIdsByDisplayName', displayName);
+        const tzId = tzIds.length ? tzIds[0].id : null;
 
         this.option('value', tzId);
 
@@ -98,7 +98,7 @@ var SchedulerTimezoneEditor = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        var value = args.value;
+        const value = args.value;
         switch(args.name) {
             case 'value':
                 this._ianaIdEditor.option({

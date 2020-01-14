@@ -2,11 +2,11 @@ import Guid from 'core/guid';
 import dataUtils from 'data/utils';
 import odataUtils from 'data/odata/utils';
 
-const keysEqual = dataUtils.keysEqual,
-    processRequestResultLock = dataUtils.processRequestResultLock,
-    b64 = dataUtils.base64_encode,
-    throttleChanges = dataUtils.throttleChanges,
-    isGroupCriterion = dataUtils.isGroupCriterion;
+const keysEqual = dataUtils.keysEqual;
+const processRequestResultLock = dataUtils.processRequestResultLock;
+const b64 = dataUtils.base64_encode;
+const throttleChanges = dataUtils.throttleChanges;
+const isGroupCriterion = dataUtils.isGroupCriterion;
 
 QUnit.module('keysEqual');
 
@@ -17,8 +17,8 @@ QUnit.test('non-strict comparison is used', function(assert) {
 });
 
 QUnit.test('toComparable is used for compound keys', function(assert) {
-    var guid1 = new Guid(),
-        guid2 = new Guid(guid1);
+    const guid1 = new Guid();
+    const guid2 = new Guid(guid1);
 
     assert.ok(guid1 !== guid2);
 
@@ -32,9 +32,9 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
 // T364210
 QUnit.test('toComparable is used for EdmLiteral', function(assert) {
 
-    var EdmLiteral = odataUtils.EdmLiteral,
-        edm1 = new EdmLiteral('50m'),
-        edm2 = new EdmLiteral('50m');
+    const EdmLiteral = odataUtils.EdmLiteral;
+    const edm1 = new EdmLiteral('50m');
+    const edm2 = new EdmLiteral('50m');
 
     assert.ok(edm1 !== edm2);
 
@@ -50,7 +50,7 @@ QUnit.test('it works', function(assert) {
     assert.equal(processRequestResultLock.promise().state(), 'pending', 'pending when locked');
 
     processRequestResultLock.obtain();
-    var promise = processRequestResultLock.promise();
+    const promise = processRequestResultLock.promise();
     assert.equal(promise.state(), 'pending', 'pending when locked twice');
 
     processRequestResultLock.release();
@@ -63,7 +63,7 @@ QUnit.test('it works', function(assert) {
 QUnit.test('reset', function(assert) {
     processRequestResultLock.obtain();
 
-    var promise = processRequestResultLock.promise();
+    let promise = processRequestResultLock.promise();
     assert.equal(promise.state(), 'pending', 'pending when locked');
 
     processRequestResultLock.reset();
@@ -74,8 +74,8 @@ QUnit.test('reset', function(assert) {
 });
 
 QUnit.test('nested tasks are executed immediately if no lock', function(assert) {
-    var executed1 = false,
-        executed2 = false;
+    let executed1 = false;
+    let executed2 = false;
 
     processRequestResultLock
         .promise()
@@ -116,9 +116,9 @@ QUnit.module('Throttling', {
     }
 }, function() {
     QUnit.test('push with timeout', function(assert) {
-        var spy = sinon.spy(),
-            throttle = throttleChanges(spy, 100);
-        for(var i = 0; i < 10; i++) {
+        const spy = sinon.spy();
+        const throttle = throttleChanges(spy, 100);
+        for(let i = 0; i < 10; i++) {
             throttle([i]);
         }
         assert.equal(spy.callCount, 0);
@@ -128,10 +128,10 @@ QUnit.module('Throttling', {
     });
 
     QUnit.test('dispose', function(assert) {
-        var spy = sinon.spy(),
-            throttle = throttleChanges(spy, 100),
-            timeoutId;
-        for(var i = 0; i < 10; i++) {
+        const spy = sinon.spy();
+        const throttle = throttleChanges(spy, 100);
+        let timeoutId;
+        for(let i = 0; i < 10; i++) {
             timeoutId = throttle([i]);
         }
         assert.equal(spy.callCount, 0);

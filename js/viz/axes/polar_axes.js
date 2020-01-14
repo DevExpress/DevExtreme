@@ -1,26 +1,26 @@
-var vizUtils = require('../core/utils'),
-    isDefined = require('../../core/utils/type').isDefined,
-    extend = require('../../core/utils/extend').extend,
-    constants = require('./axes_constants'),
-    circularAxes,
-    xyAxesLinear = require('./xy_axes').linear,
-    tick = require('./tick').tick,
-    polarAxes,
-    _map = vizUtils.map,
-    baseAxisModule = require('./base_axis'),
+const vizUtils = require('../core/utils');
+const isDefined = require('../../core/utils/type').isDefined;
+const extend = require('../../core/utils/extend').extend;
+const constants = require('./axes_constants');
+let circularAxes;
+const xyAxesLinear = require('./xy_axes').linear;
+const tick = require('./tick').tick;
+let polarAxes;
+const _map = vizUtils.map;
+const baseAxisModule = require('./base_axis');
 
-    _math = Math,
-    _abs = _math.abs,
-    _round = _math.round,
-    convertPolarToXY = vizUtils.convertPolarToXY,
+const _math = Math;
+const _abs = _math.abs;
+const _round = _math.round;
+const convertPolarToXY = vizUtils.convertPolarToXY;
 
-    _extend = extend,
-    _noop = require('../../core/utils/common').noop,
+const _extend = extend;
+const _noop = require('../../core/utils/common').noop;
 
-    HALF_PI_ANGLE = 90;
+const HALF_PI_ANGLE = 90;
 
 function getPolarQuarter(angle) {
-    var quarter;
+    let quarter;
 
     angle = vizUtils.normalizeAngle(angle);
 
@@ -79,12 +79,12 @@ circularAxes = polarAxes.circular = {
     },
 
     getAngles: function() {
-        var options = this._options;
+        const options = this._options;
         return [options.startAngle, options.endAngle];
     },
 
     _updateRadius: function(canvas) {
-        var rad = Math.min((canvas.width - canvas.left - canvas.right), (canvas.height - canvas.top - canvas.bottom)) / 2;
+        const rad = Math.min((canvas.width - canvas.left - canvas.right), (canvas.height - canvas.top - canvas.bottom)) / 2;
         this._radius = rad < 0 ? 0 : rad;
     },
 
@@ -107,7 +107,7 @@ circularAxes = polarAxes.circular = {
     },
 
     _updateAxisElementPosition: function() {
-        var center = this.getCenter();
+        const center = this.getCenter();
         this._axisElement.attr({ cx: center.x, cy: center.y, r: this.getRadius() });
     },
 
@@ -193,9 +193,9 @@ circularAxes = polarAxes.circular = {
     },
 
     _getStripGraphicAttributes: function(fromAngle, toAngle) {
-        var center = this.getCenter(),
-            angle = this.getAngles()[0],
-            r = this.getRadius();
+        const center = this.getCenter();
+        const angle = this.getAngles()[0];
+        const r = this.getRadius();
 
         return {
             x: center.x,
@@ -212,21 +212,21 @@ circularAxes = polarAxes.circular = {
     },
 
     _getStripLabelCoords: function(from, to) {
-        var that = this,
-            coords = that._getStripGraphicAttributes(from, to),
-            angle = coords.startAngle + (coords.endAngle - coords.startAngle) / 2,
-            cosSin = vizUtils.getCosAndSin(angle),
-            halfRad = that.getRadius() / 2,
-            center = that.getCenter(),
-            x = _round(center.x + halfRad * cosSin.cos),
-            y = _round(center.y - halfRad * cosSin.sin);
+        const that = this;
+        const coords = that._getStripGraphicAttributes(from, to);
+        const angle = coords.startAngle + (coords.endAngle - coords.startAngle) / 2;
+        const cosSin = vizUtils.getCosAndSin(angle);
+        const halfRad = that.getRadius() / 2;
+        const center = that.getCenter();
+        const x = _round(center.x + halfRad * cosSin.cos);
+        const y = _round(center.y - halfRad * cosSin.sin);
 
         return { x: x, y: y, align: constants.center };
     },
 
     _getConstantLineGraphicAttributes: function(value) {
-        var center = this.getCenter(),
-            r = this.getRadius();
+        const center = this.getCenter();
+        const r = this.getRadius();
 
         return {
             points: [center.x, center.y, center.x + r, center.y]
@@ -243,12 +243,12 @@ circularAxes = polarAxes.circular = {
     },
 
     _getConstantLineLabelsCoords: function(value) {
-        var that = this,
-            cosSin = vizUtils.getCosAndSin(-value - that.getAngles()[0]),
-            halfRad = that.getRadius() / 2,
-            center = that.getCenter(),
-            x = _round(center.x + halfRad * cosSin.cos),
-            y = _round(center.y - halfRad * cosSin.sin);
+        const that = this;
+        const cosSin = vizUtils.getCosAndSin(-value - that.getAngles()[0]);
+        const halfRad = that.getRadius() / 2;
+        const center = that.getCenter();
+        const x = _round(center.x + halfRad * cosSin.cos);
+        const y = _round(center.y - halfRad * cosSin.sin);
 
         return { x: x, y: y };
     },
@@ -265,13 +265,13 @@ circularAxes = polarAxes.circular = {
     },
 
     _getTickMarkPoints: function(coords, length, { shift = 0 }) {
-        var center = this.getCenter(),
-            corrections = {
-                inside: -1,
-                center: -0.5,
-                outside: 0
-            },
-            radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || 'center'];
+        const center = this.getCenter();
+        const corrections = {
+            inside: -1,
+            center: -0.5,
+            outside: 0
+        };
+        const radiusWithTicks = this.getRadius() + length * corrections[this._options.tickOrientation || 'center'];
         return [
             center.x + radiusWithTicks + shift,
             center.y,
@@ -281,19 +281,19 @@ circularAxes = polarAxes.circular = {
     },
 
     _getLabelAdjustedCoord: function(tick, _offset, _maxWidth, checkCanvas) {
-        var that = this,
-            labelCoords = tick.labelCoords,
-            labelY = labelCoords.y,
-            labelAngle = labelCoords.angle,
-            cosSin = vizUtils.getCosAndSin(labelAngle),
-            cos = cosSin.cos,
-            sin = cosSin.sin,
-            box = tick.labelBBox,
-            halfWidth = box.width / 2,
-            halfHeight = box.height / 2,
-            indentFromAxis = that._options.label.indentFromAxis || 0,
-            x = labelCoords.x + indentFromAxis * cos,
-            y = labelY + (labelY - box.y - halfHeight) + indentFromAxis * sin;
+        const that = this;
+        const labelCoords = tick.labelCoords;
+        const labelY = labelCoords.y;
+        const labelAngle = labelCoords.angle;
+        const cosSin = vizUtils.getCosAndSin(labelAngle);
+        const cos = cosSin.cos;
+        const sin = cosSin.sin;
+        const box = tick.labelBBox;
+        const halfWidth = box.width / 2;
+        const halfHeight = box.height / 2;
+        const indentFromAxis = that._options.label.indentFromAxis || 0;
+        const x = labelCoords.x + indentFromAxis * cos;
+        const y = labelY + (labelY - box.y - halfHeight) + indentFromAxis * sin;
 
         let shiftX = 0;
         let shiftY = 0;
@@ -346,10 +346,10 @@ circularAxes = polarAxes.circular = {
     },
 
     _getGridLineDrawer: function() {
-        var that = this;
+        const that = this;
 
         return function(tick, gridStyle) {
-            var center = that.getCenter();
+            const center = that.getCenter();
 
             return that._createPathElement(that._getGridPoints().points, gridStyle)
                 .rotate(tick.coords.angle, center.x, center.y);
@@ -357,8 +357,8 @@ circularAxes = polarAxes.circular = {
     },
 
     _getGridPoints: function() {
-        var r = this.getRadius(),
-            center = this.getCenter();
+        const r = this.getRadius();
+        const center = this.getCenter();
 
         return {
             points: [center.x, center.y, center.x + r, center.y]
@@ -366,15 +366,15 @@ circularAxes = polarAxes.circular = {
     },
 
     _getTranslatedValue: function(value, offset) {
-        var startAngle = this.getAngles()[0],
-            angle = this._translator.translate(value, -offset),
-            coords = convertPolarToXY(this.getCenter(), startAngle, angle, this.getRadius());
+        const startAngle = this.getAngles()[0];
+        const angle = this._translator.translate(value, -offset);
+        const coords = convertPolarToXY(this.getCenter(), startAngle, angle, this.getRadius());
 
         return { x: coords.x, y: coords.y, angle: angle + startAngle - HALF_PI_ANGLE };
     },
 
     _getAdjustedStripLabelCoords: function(strip) {
-        var box = strip.labelBBox;
+        const box = strip.labelBBox;
 
         return {
             translateY: strip.label.attr('y') - box.y - box.height / 2
@@ -386,7 +386,7 @@ circularAxes = polarAxes.circular = {
     },
 
     _rotateTick: function(element, coords) {
-        var center = this.getCenter();
+        const center = this.getCenter();
         element.rotate(coords.angle, center.x, center.y);
     },
 
@@ -399,20 +399,20 @@ circularAxes = polarAxes.circular = {
     },
 
     _getStep: function(boxes) {
-        var that = this,
-            radius = that.getRadius() + (that._options.label.indentFromAxis || 0),
-            maxLabelBox = boxes.reduce(function(prevValue, box) {
-                var curValue = prevValue;
-                if(prevValue.width < box.width) {
-                    curValue.width = box.width;
-                }
-                if(prevValue.height < box.height) {
-                    curValue.height = box.height;
-                }
-                return curValue;
-            }, { width: 0, height: 0 }),
-            angle1 = _abs(2 * (_math.atan(maxLabelBox.height / (2 * radius - maxLabelBox.width))) * 180 / _math.PI),
-            angle2 = _abs(2 * (_math.atan(maxLabelBox.width / (2 * radius - maxLabelBox.height))) * 180 / _math.PI);
+        const that = this;
+        const radius = that.getRadius() + (that._options.label.indentFromAxis || 0);
+        const maxLabelBox = boxes.reduce(function(prevValue, box) {
+            const curValue = prevValue;
+            if(prevValue.width < box.width) {
+                curValue.width = box.width;
+            }
+            if(prevValue.height < box.height) {
+                curValue.height = box.height;
+            }
+            return curValue;
+        }, { width: 0, height: 0 });
+        const angle1 = _abs(2 * (_math.atan(maxLabelBox.height / (2 * radius - maxLabelBox.width))) * 180 / _math.PI);
+        const angle2 = _abs(2 * (_math.atan(maxLabelBox.width / (2 * radius - maxLabelBox.height))) * 180 / _math.PI);
 
         return constants.getTicksCountInRange(that._majorTicks, 'angle', _math.max(angle1, angle2));
     },
@@ -461,8 +461,8 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
     },
 
     getSpiderTicks: function() {
-        var that = this,
-            ticks = that.getFullTicks();
+        const that = this;
+        const ticks = that.getFullTicks();
         that._spiderTicks = ticks.map(tick(
             that,
             that.renderer,
@@ -478,15 +478,15 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
     },
 
     _getStripGraphicAttributes: function(fromAngle, toAngle) {
-        var center = this.getCenter(),
-            spiderTicks = this.getSpiderTicks(),
-            firstTick,
-            lastTick,
-            nextTick,
-            tick,
-            points = [],
-            i = 0,
-            len = spiderTicks.length;
+        const center = this.getCenter();
+        const spiderTicks = this.getSpiderTicks();
+        let firstTick;
+        let lastTick;
+        let nextTick;
+        let tick;
+        const points = [];
+        let i = 0;
+        const len = spiderTicks.length;
 
         while(i < len) {
             tick = spiderTicks[i].coords;
@@ -555,7 +555,7 @@ polarAxes.linear = {
     _createAxisElement: xyAxesLinear._createAxisElement,
 
     _updateAxisElementPosition: function() {
-        var centerCoord = this.getCenter();
+        const centerCoord = this.getCenter();
 
         this._axisElement.attr({
             points: [centerCoord.x, centerCoord.y, centerCoord.x + this.getRadius(), centerCoord.y]
@@ -576,14 +576,14 @@ polarAxes.linear = {
     },
 
     _getLabelAdjustedCoord: function(tick) {
-        var that = this,
-            labelCoords = tick.labelCoords,
-            labelY = labelCoords.y,
-            cosSin = vizUtils.getCosAndSin(labelCoords.angle),
-            indentFromAxis = that._options.label.indentFromAxis || 0,
-            box = tick.labelBBox,
-            x,
-            y;
+        const that = this;
+        const labelCoords = tick.labelCoords;
+        const labelY = labelCoords.y;
+        const cosSin = vizUtils.getCosAndSin(labelCoords.angle);
+        const indentFromAxis = that._options.label.indentFromAxis || 0;
+        const box = tick.labelBBox;
+        let x;
+        let y;
 
         x = labelCoords.x - _abs(indentFromAxis * cosSin.sin) + _abs(box.width / 2 * cosSin.cos) - box.width / 2;
         y = labelY + (labelY - box.y) - _abs(box.height / 2 * cosSin.sin) + _abs(indentFromAxis * cosSin.cos);
@@ -592,10 +592,10 @@ polarAxes.linear = {
     },
 
     _getGridLineDrawer: function() {
-        var that = this;
+        const that = this;
 
         return function(tick, gridStyle) {
-            var grid = that._getGridPoints(tick.coords);
+            const grid = that._getGridPoints(tick.coords);
 
             return that._renderer.circle(grid.cx, grid.cy, grid.r)
                 .attr(gridStyle)
@@ -604,7 +604,7 @@ polarAxes.linear = {
     },
 
     _getGridPoints: function(coords) {
-        var pos = this.getCenter();
+        const pos = this.getCenter();
         const radius = vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y);
         if(radius > this.getRadius()) {
             return { cx: null, cy: null, r: null };
@@ -618,8 +618,8 @@ polarAxes.linear = {
     },
 
     _getTranslatedValue: function(value, offset) {
-        var startAngle = this.getAngles()[0],
-            xy = convertPolarToXY(this.getCenter(), startAngle, 0, this._translator.translate(value, offset));
+        const startAngle = this.getAngles()[0];
+        const xy = convertPolarToXY(this.getCenter(), startAngle, 0, this._translator.translate(value, offset));
         return { x: xy.x, y: xy.y, angle: startAngle - HALF_PI_ANGLE };
     },
 
@@ -635,7 +635,7 @@ polarAxes.linear = {
     },
 
     _getStripGraphicAttributes: function(fromPoint, toPoint) {
-        var center = this.getCenter();
+        const center = this.getCenter();
 
         return {
             x: center.x,
@@ -652,16 +652,16 @@ polarAxes.linear = {
     _getAdjustedStripLabelCoords: circularAxes._getAdjustedStripLabelCoords,
 
     _getStripLabelCoords: function(from, to) {
-        var that = this,
-            labelPos = from + (to - from) / 2,
-            center = that.getCenter(),
-            y = _round(center.y - labelPos);
+        const that = this;
+        const labelPos = from + (to - from) / 2;
+        const center = that.getCenter();
+        const y = _round(center.y - labelPos);
 
         return { x: center.x, y: y, align: constants.center };
     },
 
     _getConstantLineGraphicAttributes: function(value) {
-        var center = this.getCenter();
+        const center = this.getCenter();
 
         return {
             cx: center.x,
@@ -671,15 +671,15 @@ polarAxes.linear = {
     },
 
     _createConstantLine: function(value, attr) {
-        var attrs = this._getConstantLineGraphicAttributes(value);
+        const attrs = this._getConstantLineGraphicAttributes(value);
 
         return this._renderer.circle(attrs.cx, attrs.cy, attrs.r).attr(attr).sharp();
     },
 
     _getConstantLineLabelsCoords: function(value) {
-        var that = this,
-            center = that.getCenter(),
-            y = _round(center.y - value);
+        const that = this;
+        const center = that.getCenter();
+        const y = _round(center.y - value);
 
         return { x: center.x, y: y };
     },
@@ -695,12 +695,12 @@ polarAxes.linear = {
     _validateDisplayMode: circularAxes._validateDisplayMode,
 
     _getStep: function(boxes) {
-        var quarter = getPolarQuarter(this.getAngles()[0]),
-            spacing = this._options.label.minSpacing,
-            func = (quarter === 2 || quarter === 4) ? function(box) { return box.width + spacing; } : function(box) { return box.height; },
-            maxLabelLength = boxes.reduce(function(prevValue, box) {
-                return _math.max(prevValue, func(box));
-            }, 0);
+        const quarter = getPolarQuarter(this.getAngles()[0]);
+        const spacing = this._options.label.minSpacing;
+        const func = (quarter === 2 || quarter === 4) ? function(box) { return box.width + spacing; } : function(box) { return box.height; };
+        const maxLabelLength = boxes.reduce(function(prevValue, box) {
+            return _math.max(prevValue, func(box));
+        }, 0);
 
         return constants.getTicksCountInRange(this._majorTicks, (quarter === 2 || quarter === 4) ? 'x' : 'y', maxLabelLength);
     }
@@ -716,7 +716,7 @@ polarAxes.linearSpider = _extend({}, polarAxes.linear, {
     },
 
     _getGridLineDrawer: function() {
-        var that = this;
+        const that = this;
 
         return function(tick, gridStyle, element) {
             return that._createPathElement(that._getGridPoints(tick.coords).points, gridStyle);
@@ -724,29 +724,29 @@ polarAxes.linearSpider = _extend({}, polarAxes.linear, {
     },
 
     _getGridPoints: function(coords) {
-        var pos = this.getCenter(),
-            radius = vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y);
+        const pos = this.getCenter();
+        const radius = vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y);
 
         return this._getGridPointsByRadius(radius);
     },
 
     _getGridPointsByRadius: function(radius) {
-        var pos = this.getCenter();
+        const pos = this.getCenter();
         if(radius > this.getRadius()) {
             return { points: null };
         }
 
         return {
             points: _map(this._spiderTicks, function(tick) {
-                var cosSin = vizUtils.getCosAndSin(tick.coords.angle);
+                const cosSin = vizUtils.getCosAndSin(tick.coords.angle);
                 return { x: _round(pos.x + radius * cosSin.cos), y: _round(pos.y + radius * cosSin.sin) };
             })
         };
     },
 
     _getStripGraphicAttributes: function(fromPoint, toPoint) {
-        var innerPoints = this._getGridPointsByRadius(toPoint).points,
-            outerPoints = this._getGridPointsByRadius(fromPoint).points;
+        const innerPoints = this._getGridPointsByRadius(toPoint).points;
+        const outerPoints = this._getGridPointsByRadius(fromPoint).points;
 
         return {
             points: [outerPoints, innerPoints.reverse()]

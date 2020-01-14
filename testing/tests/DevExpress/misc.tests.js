@@ -1,14 +1,14 @@
 define(function(require) {
-    var noop = require('core/utils/common').noop;
+    const noop = require('core/utils/common').noop;
 
     if(!('chrome' in window)) {
         return;
     }
 
     QUnit.test('sinon is patched to return negative descending identifiers', function(assert) {
-        var clock = sinon.useFakeTimers(),
-            id = setTimeout(noop, 1),
-            id2 = setTimeout(noop, 2);
+        const clock = sinon.useFakeTimers();
+        const id = setTimeout(noop, 1);
+        const id2 = setTimeout(noop, 2);
 
         assert.ok(id === -1000 && id2 === -1001, 'sinon.js must be patched. See diff in the source of this test');
 

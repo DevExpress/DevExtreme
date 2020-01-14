@@ -1,4 +1,4 @@
-var EditDecoratorMenuHelperMixin = {
+const EditDecoratorMenuHelperMixin = {
 
     _menuEnabled: function() {
         return !!this._menuItems().length;

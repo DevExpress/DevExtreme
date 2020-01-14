@@ -1,15 +1,15 @@
-var each = require('../core/utils/iterator').each,
-    domAdapter = require('../core/dom_adapter'),
-    window = require('../core/utils/window').getWindow(),
-    callOnce = require('../core/utils/call_once'),
-    DXPROXY_HOST = 'dxproxy.devexpress.com:8000',
-    urlMapping = {};
+const each = require('../core/utils/iterator').each;
+const domAdapter = require('../core/dom_adapter');
+const window = require('../core/utils/window').getWindow();
+const callOnce = require('../core/utils/call_once');
+const DXPROXY_HOST = 'dxproxy.devexpress.com:8000';
+const urlMapping = {};
 
-var getUrlParser = callOnce(function() {
-    var a = domAdapter.createElement('a'),
-        props = ['protocol', 'hostname', 'port', 'pathname', 'search', 'hash'];
+const getUrlParser = callOnce(function() {
+    const a = domAdapter.createElement('a');
+    const props = ['protocol', 'hostname', 'port', 'pathname', 'search', 'hash'];
 
-    var normalizePath = function(value) {
+    const normalizePath = function(value) {
         // occurs at least in IE
         if(value.charAt(0) !== '/') {
             value = '/' + value;
@@ -19,7 +19,7 @@ var getUrlParser = callOnce(function() {
 
     return function(url) {
         a.href = url;
-        var result = {};
+        const result = {};
         each(props, function() {
             result[this] = a[this];
         });
@@ -28,12 +28,12 @@ var getUrlParser = callOnce(function() {
     };
 });
 
-var parseUrl = function(url) {
-    var urlParser = getUrlParser();
+const parseUrl = function(url) {
+    const urlParser = getUrlParser();
     return urlParser(url);
 };
 
-var extractProxyAppId = function() {
+const extractProxyAppId = function() {
     return window.location.pathname.split('/')[1];
 };
 
@@ -45,15 +45,15 @@ module.exports = {
     },
 
     formatProxyUrl: function(localUrl) {
-        var urlData = parseUrl(localUrl);
+        const urlData = parseUrl(localUrl);
         if(!/^(localhost$|127\.)/i.test(urlData.hostname)) {
             return localUrl;
         }
 
-        var proxyUrlPart = DXPROXY_HOST + '/' + extractProxyAppId() + '_' + urlData.port;
+        const proxyUrlPart = DXPROXY_HOST + '/' + extractProxyAppId() + '_' + urlData.port;
         urlMapping[proxyUrlPart] = urlData.hostname + ':' + urlData.port;
 
-        var resultUrl = 'http://' + proxyUrlPart + urlData.pathname + urlData.search;
+        const resultUrl = 'http://' + proxyUrlPart + urlData.pathname + urlData.search;
         return resultUrl;
     },
 
@@ -62,8 +62,8 @@ module.exports = {
             return proxyUrl;
         }
 
-        var resultUrl = proxyUrl;
-        for(var proxyUrlPart in urlMapping) {
+        let resultUrl = proxyUrl;
+        for(const proxyUrlPart in urlMapping) {
             if(Object.prototype.hasOwnProperty.call(urlMapping, proxyUrlPart)) {
                 if(proxyUrl.indexOf(proxyUrlPart) >= 0) {
                     resultUrl = proxyUrl.replace(proxyUrlPart, urlMapping[proxyUrlPart]);

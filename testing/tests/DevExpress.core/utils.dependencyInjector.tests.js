@@ -1,9 +1,9 @@
-var dependencyInjector = require('core/utils/dependency_injector');
+const dependencyInjector = require('core/utils/dependency_injector');
 
 QUnit.module('dependencyInjector');
 
 QUnit.test('inject and resetInjection methods', function(assert) {
-    var base = {
+    const base = {
         func: function(value) {
             return value + 1;
         },
@@ -12,7 +12,7 @@ QUnit.test('inject and resetInjection methods', function(assert) {
             a: 1
         }
     };
-    var wrapped = dependencyInjector(base);
+    const wrapped = dependencyInjector(base);
 
     wrapped.inject({
         func: function(value) {

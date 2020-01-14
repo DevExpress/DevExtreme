@@ -1,7 +1,7 @@
-const { unique, getAddFunction } = require('../../core/utils'),
-    _isDefined = require('../../../core/utils/type').isDefined,
-    noop = require('../../../core/utils/common').noop,
-    DISCRETE = 'discrete';
+const { unique, getAddFunction } = require('../../core/utils');
+const _isDefined = require('../../../core/utils/type').isDefined;
+const noop = require('../../../core/utils/common').noop;
+const DISCRETE = 'discrete';
 
 function continuousRangeCalculator(range, minValue, maxValue) {
     range.min = range.min < minValue ? range.min : minValue;
@@ -19,8 +19,8 @@ function getRangeCalculator(axisType, axis) {
     }
     if(axis) {
         return function(range, value) {
-            var interval = axis.calculateInterval(value, range.prevValue),
-                minInterval = range.interval;
+            const interval = axis.calculateInterval(value, range.prevValue);
+            const minInterval = range.interval;
 
             range.interval = (minInterval < interval ? minInterval : interval) || minInterval;
             range.prevValue = value;
@@ -31,7 +31,7 @@ function getRangeCalculator(axisType, axis) {
 }
 
 function getInitialRange(axisType, dataType, firstValue) {
-    var range = {
+    const range = {
         axisType: axisType,
         dataType: dataType
     };
@@ -53,10 +53,10 @@ function processCategories(range) {
 
 function getValueForArgument(point, extraPoint, x, range) {
     if(extraPoint && _isDefined(extraPoint.value)) {
-        var y1 = point.value,
-            y2 = extraPoint.value,
-            x1 = point.argument,
-            x2 = extraPoint.argument;
+        const y1 = point.value;
+        const y2 = extraPoint.value;
+        const x1 = point.argument;
+        const x2 = extraPoint.argument;
 
         const r = ((x - x1) * (y2 - y1)) / (x2 - x1) + y1.valueOf();
         return range.dataType === 'datetime' ? new Date(r) : r;
@@ -66,7 +66,7 @@ function getValueForArgument(point, extraPoint, x, range) {
 }
 
 function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, bound) {
-    var value = getValueForArgument(point, prevPoint, bound, range);
+    const value = getValueForArgument(point, prevPoint, bound, range);
     rangeCalculator(range, value, value);
 }
 
@@ -75,11 +75,11 @@ function isLineSeries(series) {
 }
 
 function getViewportReducer(series) {
-    var rangeCalculator = getRangeCalculator(series.valueAxisType),
-        axis = series.getArgumentAxis(),
-        viewport = axis && series.getArgumentAxis().visualRange() || {},
-        viewportFilter,
-        calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
+    const rangeCalculator = getRangeCalculator(series.valueAxisType);
+    const axis = series.getArgumentAxis();
+    const viewport = axis && series.getArgumentAxis().visualRange() || {};
+    let viewportFilter;
+    const calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
 
     if(axis && axis.getMarginOptions().checkInterval) {
         const range = series.getArgumentAxis().getTranslator().getBusinessRange();
@@ -95,7 +95,7 @@ function getViewportReducer(series) {
     viewportFilter = getViewPortFilter(viewport);
 
     return function(range, point, index, points) {
-        var argument = point.argument;
+        const argument = point.argument;
 
         if(!point.hasValue()) {
             return range;
@@ -143,8 +143,8 @@ module.exports = {
     getViewPortFilter,
 
     getArgumentRange: function(series) {
-        var data = series._data || [],
-            range = {};
+        const data = series._data || [];
+        let range = {};
         if(data.length) {
             if(series.argumentAxisType === DISCRETE) {
                 range = {
@@ -168,24 +168,24 @@ module.exports = {
     },
 
     getRangeData: function(series) {
-        var points = series.getPoints(),
-            useAggregation = series.useAggregation(),
-            argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()),
-            valueRangeCalculator = getRangeCalculator(series.valueAxisType),
-            viewportReducer = getViewportReducer(series),
-            range = points.reduce(function(range, point, index, points) {
-                var argument = point.argument;
-                argumentCalculator(range.arg, argument, argument);
-                if(point.hasValue()) {
-                    valueRangeCalculator(range.val, point.getMinValue(), point.getMaxValue());
-                    viewportReducer(range.viewport, point, index, points);
-                }
-                return range;
-            }, {
-                arg: getInitialRange(series.argumentAxisType, series.argumentType, points.length ? points[0].argument : undefined),
-                val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
-                viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
-            });
+        const points = series.getPoints();
+        const useAggregation = series.useAggregation();
+        const argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis());
+        const valueRangeCalculator = getRangeCalculator(series.valueAxisType);
+        const viewportReducer = getViewportReducer(series);
+        const range = points.reduce(function(range, point, index, points) {
+            const argument = point.argument;
+            argumentCalculator(range.arg, argument, argument);
+            if(point.hasValue()) {
+                valueRangeCalculator(range.val, point.getMinValue(), point.getMaxValue());
+                viewportReducer(range.viewport, point, index, points);
+            }
+            return range;
+        }, {
+            arg: getInitialRange(series.argumentAxisType, series.argumentType, points.length ? points[0].argument : undefined),
+            val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
+            viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
+        });
 
         if(useAggregation) {
             const argumentRange = this.getArgumentRange(series);
@@ -209,9 +209,9 @@ module.exports = {
     },
 
     getViewport: function(series) {
-        var points = series.getPoints(),
-            range = {},
-            reducer;
+        const points = series.getPoints();
+        let range = {};
+        let reducer;
 
         reducer = getViewportReducer(series);
         range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
@@ -224,51 +224,51 @@ module.exports = {
     },
 
     getPointsInViewPort: function(series) {
-        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || {}),
-            valueViewPort = series.getValueAxis().visualRange() || {},
-            valueViewPortFilter = getViewPortFilter(valueViewPort),
-            points = series.getPoints(),
-            addValue = function(values, point, isEdge) {
-                var minValue = point.getMinValue(),
-                    maxValue = point.getMaxValue(),
-                    isMinValueInViewPort = valueViewPortFilter(minValue),
-                    isMaxValueInViewPort = valueViewPortFilter(maxValue);
+        const argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || {});
+        const valueViewPort = series.getValueAxis().visualRange() || {};
+        const valueViewPortFilter = getViewPortFilter(valueViewPort);
+        const points = series.getPoints();
+        const addValue = function(values, point, isEdge) {
+            const minValue = point.getMinValue();
+            const maxValue = point.getMaxValue();
+            const isMinValueInViewPort = valueViewPortFilter(minValue);
+            const isMaxValueInViewPort = valueViewPortFilter(maxValue);
 
-                if(isMinValueInViewPort) {
-                    values.push(minValue);
-                }
-                if(maxValue !== minValue && isMaxValueInViewPort) {
-                    values.push(maxValue);
-                }
-                if(isEdge && !isMinValueInViewPort && !isMaxValueInViewPort) {
-                    if(!values.length) {
-                        values.push(valueViewPort.startValue);
-                    } else {
-                        values.push(valueViewPort.endValue);
-                    }
-                }
-            },
-            addEdgePoints = isLineSeries(series) ? function(result, points, index) {
-                var point = points[index],
-                    prevPoint = points[index - 1],
-                    nextPoint = points[index + 1];
-
-                if(nextPoint && argumentViewPortFilter(nextPoint.argument)) {
-                    addValue(result[1], point, true);
-                }
-
-                if(prevPoint && argumentViewPortFilter(prevPoint.argument)) {
-                    addValue(result[1], point, true);
-                }
-            } : noop,
-            checkPointInViewport = function(result, point, index) {
-                if(argumentViewPortFilter(point.argument)) {
-                    addValue(result[0], point);
+            if(isMinValueInViewPort) {
+                values.push(minValue);
+            }
+            if(maxValue !== minValue && isMaxValueInViewPort) {
+                values.push(maxValue);
+            }
+            if(isEdge && !isMinValueInViewPort && !isMaxValueInViewPort) {
+                if(!values.length) {
+                    values.push(valueViewPort.startValue);
                 } else {
-                    addEdgePoints(result, points, index);
+                    values.push(valueViewPort.endValue);
                 }
-                return result;
-            };
+            }
+        };
+        const addEdgePoints = isLineSeries(series) ? function(result, points, index) {
+            const point = points[index];
+            const prevPoint = points[index - 1];
+            const nextPoint = points[index + 1];
+
+            if(nextPoint && argumentViewPortFilter(nextPoint.argument)) {
+                addValue(result[1], point, true);
+            }
+
+            if(prevPoint && argumentViewPortFilter(prevPoint.argument)) {
+                addValue(result[1], point, true);
+            }
+        } : noop;
+        const checkPointInViewport = function(result, point, index) {
+            if(argumentViewPortFilter(point.argument)) {
+                addValue(result[0], point);
+            } else {
+                addEdgePoints(result, points, index);
+            }
+            return result;
+        };
 
         return points.reduce(checkPointInViewport, [[], []]);
     }

@@ -1,21 +1,21 @@
-var $ = require('../../core/renderer'),
-    readyCallbacks = require('../../core/utils/ready_callbacks'),
-    domAdapter = require('../../core/dom_adapter'),
-    eventsEngine = require('../../events/core/events_engine'),
-    dataUtils = require('../../core/element_data'),
-    Class = require('../../core/class'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    each = require('../../core/utils/iterator').each,
-    registerEvent = require('./event_registrator'),
-    eventUtils = require('../utils'),
-    pointerEvents = require('../pointer'),
-    wheelEvent = require('./wheel');
+const $ = require('../../core/renderer');
+const readyCallbacks = require('../../core/utils/ready_callbacks');
+const domAdapter = require('../../core/dom_adapter');
+const eventsEngine = require('../../events/core/events_engine');
+const dataUtils = require('../../core/element_data');
+const Class = require('../../core/class');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const each = require('../../core/utils/iterator').each;
+const registerEvent = require('./event_registrator');
+const eventUtils = require('../utils');
+const pointerEvents = require('../pointer');
+const wheelEvent = require('./wheel');
 
-var MANAGER_EVENT = 'dxEventManager',
-    EMITTER_DATA = 'dxEmitter';
+const MANAGER_EVENT = 'dxEventManager';
+const EMITTER_DATA = 'dxEmitter';
 
-var EventManager = Class.inherit({
+const EventManager = Class.inherit({
 
     ctor: function() {
         this._attachHandlers();
@@ -27,7 +27,7 @@ var EventManager = Class.inherit({
 
     _attachHandlers: function() {
         readyCallbacks.add(function() {
-            var document = domAdapter.getDocument();
+            const document = domAdapter.getDocument();
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(' '), MANAGER_EVENT), this._pointerUpHandler.bind(this));
@@ -36,11 +36,11 @@ var EventManager = Class.inherit({
     },
 
     _eachEmitter: function(callback) {
-        var activeEmitters = this._activeEmitters || [];
-        var i = 0;
+        const activeEmitters = this._activeEmitters || [];
+        let i = 0;
 
         while(activeEmitters.length > i) {
-            var emitter = activeEmitters[i];
+            const emitter = activeEmitters[i];
             if(callback(emitter) === false) {
                 break;
             }
@@ -84,10 +84,10 @@ var EventManager = Class.inherit({
     },
 
     _isSetChanged: function(e) {
-        var currentSet = this._closestEmitter(e);
-        var previousSet = this._emittersSet || [];
+        const currentSet = this._closestEmitter(e);
+        const previousSet = this._emittersSet || [];
 
-        var setChanged = currentSet.length !== previousSet.length;
+        let setChanged = currentSet.length !== previousSet.length;
 
         each(currentSet, function(index, emitter) {
             setChanged = setChanged || previousSet[index] !== emitter;
@@ -100,10 +100,10 @@ var EventManager = Class.inherit({
     },
 
     _closestEmitter: function(e) {
-        var that = this,
+        const that = this;
 
-            result = [],
-            $element = $(e.target);
+        const result = [];
+        let $element = $(e.target);
 
         function handleEmitter(_, emitter) {
             if(!!emitter && emitter.validatePointers(e) && emitter.validate(e)) {
@@ -114,7 +114,7 @@ var EventManager = Class.inherit({
         }
 
         while($element.length) {
-            var emitters = dataUtils.data($element.get(0), EMITTER_DATA) || [];
+            const emitters = dataUtils.data($element.get(0), EMITTER_DATA) || [];
             each(emitters, handleEmitter);
             $element = $element.parent();
         }
@@ -123,7 +123,7 @@ var EventManager = Class.inherit({
     },
 
     _acceptHandler: function(acceptedEmitter, e) {
-        var that = this;
+        const that = this;
 
         this._eachEmitter(function(emitter) {
             if(emitter !== acceptedEmitter) {
@@ -137,7 +137,7 @@ var EventManager = Class.inherit({
     },
 
     _cancelEmitter: function(emitter, e) {
-        var activeEmitters = this._activeEmitters;
+        const activeEmitters = this._activeEmitters;
 
         if(e) {
             emitter.cancel(e);
@@ -148,7 +148,7 @@ var EventManager = Class.inherit({
         emitter.removeCancelCallback();
         emitter.removeAcceptCallback();
 
-        var emitterIndex = inArray(emitter, activeEmitters);
+        const emitterIndex = inArray(emitter, activeEmitters);
         if(emitterIndex > -1) {
             activeEmitters.splice(emitterIndex, 1);
         }
@@ -188,7 +188,7 @@ var EventManager = Class.inherit({
     },
 
     _allowInterruptionByMouseWheel: function() {
-        var allowInterruption = true;
+        let allowInterruption = true;
         this._eachEmitter(function(emitter) {
             allowInterruption = emitter.allowInterruptionByMouseWheel() && allowInterruption;
             return allowInterruption;
@@ -197,14 +197,14 @@ var EventManager = Class.inherit({
     },
 
     _adjustWheelEvent: function(e) {
-        var closestGestureEmitter = null;
+        let closestGestureEmitter = null;
 
         this._eachEmitter(function(emitter) {
             if(!(emitter.gesture)) {
                 return;
             }
 
-            var direction = emitter.getDirection(e);
+            const direction = emitter.getDirection(e);
             if(direction !== 'horizontal' && !e.shiftKey || direction !== 'vertical' && e.shiftKey) {
                 closestGestureEmitter = emitter;
                 return false;
@@ -215,15 +215,15 @@ var EventManager = Class.inherit({
             return;
         }
 
-        var direction = closestGestureEmitter.getDirection(e),
-            verticalGestureDirection = direction === 'both' && !e.shiftKey || direction === 'vertical',
-            prop = verticalGestureDirection ? 'pageY' : 'pageX';
+        const direction = closestGestureEmitter.getDirection(e);
+        const verticalGestureDirection = direction === 'both' && !e.shiftKey || direction === 'vertical';
+        const prop = verticalGestureDirection ? 'pageY' : 'pageX';
 
         e[prop] += e.delta;
     },
 
     isActive: function(element) {
-        var result = false;
+        let result = false;
         this._eachEmitter(function(emitter) {
             result = result || emitter.getElement().is(element);
         });
@@ -231,14 +231,14 @@ var EventManager = Class.inherit({
     }
 });
 
-var eventManager = new EventManager();
+const eventManager = new EventManager();
 
-var EMITTER_SUBSCRIPTION_DATA = 'dxEmitterSubscription';
+const EMITTER_SUBSCRIPTION_DATA = 'dxEmitterSubscription';
 
-var registerEmitter = function(emitterConfig) {
-    var emitterClass = emitterConfig.emitter,
-        emitterName = emitterConfig.events[0],
-        emitterEvents = emitterConfig.events;
+const registerEmitter = function(emitterConfig) {
+    const emitterClass = emitterConfig.emitter;
+    const emitterName = emitterConfig.events[0];
+    const emitterEvents = emitterConfig.events;
 
     each(emitterEvents, function(_, eventName) {
         registerEvent(eventName, {
@@ -246,10 +246,10 @@ var registerEmitter = function(emitterConfig) {
             noBubble: !emitterConfig.bubble,
 
             setup: function(element) {
-                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA) || {},
+                const subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA) || {};
 
-                    emitters = dataUtils.data(element, EMITTER_DATA) || {},
-                    emitter = emitters[emitterName] || new emitterClass(element);
+                const emitters = dataUtils.data(element, EMITTER_DATA) || {};
+                const emitter = emitters[emitterName] || new emitterClass(element);
 
                 subscriptions[eventName] = true;
                 emitters[emitterName] = emitter;
@@ -259,8 +259,8 @@ var registerEmitter = function(emitterConfig) {
             },
 
             add: function(element, handleObj) {
-                var emitters = dataUtils.data(element, EMITTER_DATA),
-                    emitter = emitters[emitterName];
+                const emitters = dataUtils.data(element, EMITTER_DATA);
+                const emitter = emitters[emitterName];
 
                 emitter.configure(extend({
                     delegateSelector: handleObj.selector
@@ -268,14 +268,14 @@ var registerEmitter = function(emitterConfig) {
             },
 
             teardown: function(element) {
-                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA),
+                const subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA);
 
-                    emitters = dataUtils.data(element, EMITTER_DATA),
-                    emitter = emitters[emitterName];
+                const emitters = dataUtils.data(element, EMITTER_DATA);
+                const emitter = emitters[emitterName];
 
                 delete subscriptions[eventName];
 
-                var disposeEmitter = true;
+                let disposeEmitter = true;
                 each(emitterEvents, function(_, eventName) {
                     disposeEmitter = disposeEmitter && !subscriptions[eventName];
                     return disposeEmitter;

@@ -1,13 +1,13 @@
-var commonUtils = require('../../core/utils/common'),
-    typeUtils = require('../../core/utils/type'),
-    getKeyHash = commonUtils.getKeyHash,
-    dataQuery = require('../../data/query'),
-    deferredUtils = require('../../core/utils/deferred'),
-    SelectionFilterCreator = require('../../core/utils/selection_filter').SelectionFilterCreator,
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    errors = require('../widget/ui.errors'),
-    SelectionStrategy = require('./selection.strategy');
+const commonUtils = require('../../core/utils/common');
+const typeUtils = require('../../core/utils/type');
+const getKeyHash = commonUtils.getKeyHash;
+const dataQuery = require('../../data/query');
+const deferredUtils = require('../../core/utils/deferred');
+const SelectionFilterCreator = require('../../core/utils/selection_filter').SelectionFilterCreator;
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
+const errors = require('../widget/ui.errors');
+const SelectionStrategy = require('./selection.strategy');
 
 module.exports = SelectionStrategy.inherit({
     ctor: function(options) {
@@ -28,22 +28,22 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _preserveSelectionUpdate: function(items, isDeselect) {
-        var keyOf = this.options.keyOf,
-            keyIndicesToRemoveMap,
-            keyIndex,
-            i;
+        const keyOf = this.options.keyOf;
+        let keyIndicesToRemoveMap;
+        let keyIndex;
+        let i;
 
         if(!keyOf) return;
 
-        var isBatchDeselect = isDeselect && items.length > 1 && !this.options.equalByReference;
+        const isBatchDeselect = isDeselect && items.length > 1 && !this.options.equalByReference;
 
         if(isBatchDeselect) {
             keyIndicesToRemoveMap = {};
         }
 
         for(i = 0; i < items.length; i++) {
-            var item = items[i],
-                key = keyOf(item);
+            const item = items[i];
+            const key = keyOf(item);
             if(isDeselect) {
                 keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap);
                 if(keyIndicesToRemoveMap && keyIndex >= 0) {
@@ -60,13 +60,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _batchRemoveSelectedItems: function(keyIndicesToRemoveMap) {
-        var selectedItemKeys = this.options.selectedItemKeys.slice(0);
-        var selectedItems = this.options.selectedItems.slice(0);
+        const selectedItemKeys = this.options.selectedItemKeys.slice(0);
+        const selectedItems = this.options.selectedItems.slice(0);
 
         this.options.selectedItemKeys.length = 0;
         this.options.selectedItems.length = 0;
 
-        for(var i = 0; i < selectedItemKeys.length; i++) {
+        for(let i = 0; i < selectedItemKeys.length; i++) {
             if(!keyIndicesToRemoveMap[i]) {
                 this.options.selectedItemKeys.push(selectedItemKeys[i]);
                 this.options.selectedItems.push(selectedItems[i]);
@@ -78,31 +78,31 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll) {
-        var deferred = new Deferred(),
-            key = this.options.key();
+        let deferred = new Deferred();
+        const key = this.options.key();
 
         if(!keys.length && !isSelectAll) {
             deferred.resolve([]);
             return deferred;
         }
 
-        var filter = this.options.filter();
+        const filter = this.options.filter();
         if(isSelectAll && isDeselect && !filter) {
             deferred.resolve(this.getSelectedItems());
             return deferred;
         }
 
-        var selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll),
-            combinedFilter = selectionFilterCreator.getCombinedFilter(key, filter);
+        const selectionFilterCreator = new SelectionFilterCreator(keys, isSelectAll);
+        const combinedFilter = selectionFilterCreator.getCombinedFilter(key, filter);
 
-        var deselectedItems = [];
+        let deselectedItems = [];
         if(isDeselect) {
             deselectedItems = combinedFilter ? dataQuery(this.options.selectedItems).filter(combinedFilter).toArray() : this.options.selectedItems.slice(0);
         }
 
-        var filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems(true).filter(this.options.isSelectableItem).map(this.options.getItemData);
+        let filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems(true).filter(this.options.isSelectableItem).map(this.options.getItemData);
 
-        var localFilter = selectionFilterCreator.getLocalFilter(this.options.keyOf, this.equalKeys.bind(this), this.options.equalByReference, key);
+        const localFilter = selectionFilterCreator.getLocalFilter(this.options.keyOf, this.equalKeys.bind(this), this.options.equalByReference, key);
 
         filteredItems = filteredItems.filter(localFilter);
 
@@ -116,14 +116,14 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _replaceSelectionUpdate: function(items) {
-        var internalKeys = [],
-            keyOf = this.options.keyOf;
+        const internalKeys = [];
+        const keyOf = this.options.keyOf;
 
         if(!keyOf) return;
 
-        for(var i = 0; i < items.length; i++) {
-            var item = items[i],
-                key = keyOf(item);
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const key = keyOf(item);
 
             internalKeys.push(key);
         }
@@ -132,10 +132,10 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _warnOnIncorrectKeys: function(keys) {
-        var allowNullValue = this.options.allowNullValue;
+        const allowNullValue = this.options.allowNullValue;
 
-        for(var i = 0; i < keys.length; i++) {
-            var key = keys[i];
+        for(let i = 0; i < keys.length; i++) {
+            const key = keys[i];
 
             if((!allowNullValue || key !== null) && !this.isItemKeySelected(key)) {
                 errors.log('W1002', key);
@@ -144,8 +144,8 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
-        var that = this,
-            deferred = new Deferred();
+        const that = this;
+        const deferred = new Deferred();
 
         when(that._lastLoadDeferred).always(function() {
             that._loadSelectedItemsCore(keys, isDeselect, isSelectAll)
@@ -159,8 +159,8 @@ module.exports = SelectionStrategy.inherit({
     },
 
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
-        var that = this,
-            deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll);
+        const that = this;
+        const deferred = that._loadSelectedItems(keys, isDeselect, isSelectAll);
 
         deferred.done(function(items) {
             if(preserve) {
@@ -180,7 +180,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
-        var keyHash = this._getKeyHash(key);
+        const keyHash = this._getKeyHash(key);
 
         if(this._indexOfSelectedItemKey(keyHash) === -1) {
             if(!typeUtils.isObject(keyHash) && this.options.keyHashIndices) {
@@ -195,9 +195,9 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _getSelectedIndexByKey: function(key, ignoreIndicesMap) {
-        var selectedItemKeys = this.options.selectedItemKeys;
+        const selectedItemKeys = this.options.selectedItemKeys;
 
-        for(var index = 0; index < selectedItemKeys.length; index++) {
+        for(let index = 0; index < selectedItemKeys.length; index++) {
             if((!ignoreIndicesMap || !ignoreIndicesMap[index]) && this.equalKeys(selectedItemKeys[index], key)) {
                 return index;
             }
@@ -206,7 +206,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _getSelectedIndexByHash: function(key, ignoreIndicesMap) {
-        var indices = this.options.keyHashIndices[key];
+        let indices = this.options.keyHashIndices[key];
 
         if(indices && indices.length > 1 && ignoreIndicesMap) {
             indices = indices.filter(function(index) {
@@ -218,7 +218,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _indexOfSelectedItemKey: function(key, ignoreIndicesMap) {
-        var selectedIndex;
+        let selectedIndex;
 
         if(this.options.equalByReference) {
             selectedIndex = this.options.selectedItemKeys.indexOf(key);
@@ -232,14 +232,14 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _shiftSelectedKeyIndices: function(keyIndex) {
-        for(var currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex++) {
-            var currentKey = this.options.selectedItemKeys[currentKeyIndex],
-                currentKeyHash = getKeyHash(currentKey),
-                currentKeyIndices = this.options.keyHashIndices[currentKeyHash];
+        for(let currentKeyIndex = keyIndex; currentKeyIndex < this.options.selectedItemKeys.length; currentKeyIndex++) {
+            const currentKey = this.options.selectedItemKeys[currentKeyIndex];
+            const currentKeyHash = getKeyHash(currentKey);
+            const currentKeyIndices = this.options.keyHashIndices[currentKeyHash];
 
             if(!currentKeyIndices) continue;
 
-            for(var i = 0; i < currentKeyIndices.length; i++) {
+            for(let i = 0; i < currentKeyIndices.length; i++) {
                 if(currentKeyIndices[i] > keyIndex) {
                     currentKeyIndices[i]--;
                 }
@@ -248,9 +248,9 @@ module.exports = SelectionStrategy.inherit({
     },
 
     removeSelectedItem: function(key, keyIndicesToRemoveMap) {
-        var keyHash = this._getKeyHash(key),
-            isBatchDeselect = !!keyIndicesToRemoveMap,
-            keyIndex = this._indexOfSelectedItemKey(keyHash, keyIndicesToRemoveMap);
+        const keyHash = this._getKeyHash(key);
+        const isBatchDeselect = !!keyIndicesToRemoveMap;
+        const keyIndex = this._indexOfSelectedItemKey(keyHash, keyIndicesToRemoveMap);
 
         if(keyIndex < 0) {
             return keyIndex;
@@ -270,7 +270,7 @@ module.exports = SelectionStrategy.inherit({
             return keyIndex;
         }
 
-        var keyIndices = this.options.keyHashIndices[keyHash];
+        const keyIndices = this.options.keyHashIndices[keyHash];
 
         if(!keyIndices) {
             return keyIndex;
@@ -288,7 +288,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _updateAddedItemKeys: function(keys, items) {
-        for(var i = 0; i < keys.length; i++) {
+        for(let i = 0; i < keys.length; i++) {
             if(!this.isItemKeySelected(keys[i])) {
                 this.options.addedItemKeys.push(keys[i]);
                 this.options.addedItems.push(items[i]);
@@ -297,7 +297,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _updateRemovedItemKeys: function(keys, oldSelectedKeys, oldSelectedItems) {
-        for(var i = 0; i < oldSelectedKeys.length; i++) {
+        for(let i = 0; i < oldSelectedKeys.length; i++) {
             if(!this.isItemKeySelected(oldSelectedKeys[i])) {
                 this.options.removedItemKeys.push(oldSelectedKeys[i]);
                 this.options.removedItems.push(oldSelectedItems[i]);
@@ -312,8 +312,8 @@ module.exports = SelectionStrategy.inherit({
     setSelectedItems: function(keys, items) {
         this._updateAddedItemKeys(keys, items);
 
-        var oldSelectedKeys = this.options.selectedItemKeys,
-            oldSelectedItems = this.options.selectedItems;
+        const oldSelectedKeys = this.options.selectedItemKeys;
+        const oldSelectedItems = this.options.selectedItems;
 
         if(!this.options.equalByReference) {
             this._initSelectedItemKeyHash();
@@ -327,13 +327,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     isItemDataSelected: function(itemData) {
-        var key = this.options.keyOf(itemData);
+        const key = this.options.keyOf(itemData);
         return this.isItemKeySelected(key);
     },
 
     isItemKeySelected: function(key) {
-        var keyHash = this._getKeyHash(key);
-        var index = this._indexOfSelectedItemKey(keyHash);
+        const keyHash = this._getKeyHash(key);
+        const index = this._indexOfSelectedItemKey(keyHash);
 
         return index !== -1;
     },

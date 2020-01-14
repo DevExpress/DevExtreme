@@ -1,39 +1,39 @@
-var windowUtils = require('../../core/utils/window'),
-    window = windowUtils.getWindow(),
-    registerComponent = require('../../core/component_registrator'),
-    typeUtils = require('../../core/utils/type'),
-    dom = require('../../core/utils/dom'),
-    each = require('../../core/utils/iterator').each,
-    compareVersions = require('../../core/utils/version').compare,
-    extend = require('../../core/utils/extend').extend,
-    support = require('../../core/utils/support'),
-    devices = require('../../core/devices'),
-    config = require('../../core/config'),
-    dateUtils = require('../../core/utils/date'),
-    uiDateUtils = require('./ui.date_utils'),
-    dateSerialization = require('../../core/utils/date_serialization'),
-    DropDownEditor = require('../drop_down_editor/ui.drop_down_editor'),
-    dateLocalization = require('../../localization/date'),
-    messageLocalization = require('../../localization/message'),
+const windowUtils = require('../../core/utils/window');
+const window = windowUtils.getWindow();
+const registerComponent = require('../../core/component_registrator');
+const typeUtils = require('../../core/utils/type');
+const dom = require('../../core/utils/dom');
+const each = require('../../core/utils/iterator').each;
+const compareVersions = require('../../core/utils/version').compare;
+const extend = require('../../core/utils/extend').extend;
+const support = require('../../core/utils/support');
+const devices = require('../../core/devices');
+const config = require('../../core/config');
+const dateUtils = require('../../core/utils/date');
+const uiDateUtils = require('./ui.date_utils');
+const dateSerialization = require('../../core/utils/date_serialization');
+const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
+const dateLocalization = require('../../localization/date');
+const messageLocalization = require('../../localization/message');
 
-    DATEBOX_CLASS = 'dx-datebox',
-    DX_AUTO_WIDTH_CLASS = 'dx-auto-width',
-    DATEBOX_WRAPPER_CLASS = 'dx-datebox-wrapper';
+const DATEBOX_CLASS = 'dx-datebox';
+const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
+const DATEBOX_WRAPPER_CLASS = 'dx-datebox-wrapper';
 
-var PICKER_TYPE = {
+const PICKER_TYPE = {
     calendar: 'calendar',
     rollers: 'rollers',
     list: 'list',
     native: 'native'
 };
 
-var TYPE = {
+const TYPE = {
     date: 'date',
     datetime: 'datetime',
     time: 'time'
 };
 
-var STRATEGY_NAME = {
+const STRATEGY_NAME = {
     calendar: 'Calendar',
     dateView: 'DateView',
     native: 'Native',
@@ -41,7 +41,7 @@ var STRATEGY_NAME = {
     list: 'List'
 };
 
-var STRATEGY_CLASSES = {
+const STRATEGY_CLASSES = {
     Calendar: require('./ui.date_box.strategy.calendar'),
     DateView: require('./ui.date_box.strategy.date_view'),
     Native: require('./ui.date_box.strategy.native'),
@@ -49,8 +49,8 @@ var STRATEGY_CLASSES = {
     List: require('./ui.date_box.strategy.list')
 };
 
-var isRealWidthSet = function($element) {
-    var explicitWidth = $element[0].style.width;
+const isRealWidthSet = function($element) {
+    const explicitWidth = $element[0].style.width;
 
     if(explicitWidth && explicitWidth !== 'auto' && explicitWidth !== 'inherit') {
         return true;
@@ -59,7 +59,7 @@ var isRealWidthSet = function($element) {
     return false;
 };
 
-var DateBox = DropDownEditor.inherit({
+const DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), this._strategy.supportedKeys());
@@ -249,8 +249,8 @@ var DateBox = DropDownEditor.inherit({
             },
             {
                 device: function() {
-                    var realDevice = devices.real(),
-                        platform = realDevice.platform;
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
                     return platform === 'ios' || platform === 'android';
                 },
                 options: {
@@ -280,10 +280,10 @@ var DateBox = DropDownEditor.inherit({
             },
             {
                 device: function(currentDevice) {
-                    var realDevice = devices.real(),
-                        platform = realDevice.platform,
-                        version = realDevice.version,
-                        isPhone = realDevice.phone;
+                    const realDevice = devices.real();
+                    const platform = realDevice.platform;
+                    const version = realDevice.version;
+                    const isPhone = realDevice.phone;
                     return platform === 'generic' && currentDevice.deviceType !== 'desktop' || platform === 'win' && isPhone || (platform === 'android' && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
@@ -314,8 +314,8 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _updatePickerOptions: function() {
-        var pickerType = this.option('pickerType');
-        var type = this.option('type');
+        let pickerType = this.option('pickerType');
+        const type = this.option('type');
 
         if(pickerType === PICKER_TYPE.list && (type === TYPE.datetime || type === TYPE.date)) {
             pickerType = PICKER_TYPE.calendar;
@@ -342,8 +342,8 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _initStrategy: function() {
-        var strategyName = this._getStrategyName(this._getFormatType()),
-            strategy = STRATEGY_CLASSES[strategyName];
+        const strategyName = this._getStrategyName(this._getFormatType());
+        const strategy = STRATEGY_CLASSES[strategyName];
 
         if(!(this._strategy && this._strategy.NAME === strategyName)) {
             this._strategy = new strategy(this);
@@ -351,10 +351,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getFormatType: function() {
-        var currentType = this.option('type');
-        var isTime = /h|m|s/g.test(currentType),
-            isDate = /d|M|Y/g.test(currentType);
-        var type = '';
+        const currentType = this.option('type');
+        const isTime = /h|m|s/g.test(currentType);
+        const isDate = /d|M|Y/g.test(currentType);
+        let type = '';
 
         if(isDate) {
             type += TYPE.date;
@@ -368,7 +368,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getStrategyName: function(type) {
-        var pickerType = this._pickerType;
+        const pickerType = this._pickerType;
 
         if(pickerType === PICKER_TYPE.rollers) {
             return STRATEGY_NAME.dateView;
@@ -410,7 +410,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _refreshFormatClass: function() {
-        var $element = this.$element();
+        const $element = this.$element();
 
         each(TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + '-' + item);
@@ -420,7 +420,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _refreshPickerTypeClass: function() {
-        var $element = this.$element();
+        const $element = this.$element();
 
         each(PICKER_TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + '-' + item);
@@ -430,38 +430,38 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _updateSize: function() {
-        var $element = this.$element(),
-            widthOption = this.option('width'),
-            isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
-            pickerType = this._pickerType,
-            // NOTE: no calculateWidth if type is rollers, why?
-            shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === 'generic';
+        const $element = this.$element();
+        const widthOption = this.option('width');
+        const isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable);
+        const pickerType = this._pickerType;
+        // NOTE: no calculateWidth if type is rollers, why?
+        const shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === 'generic';
 
         if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(':visible'))) {
             return;
         }
 
-        var format = this._strategy.getDisplayFormat(this.option('displayFormat')),
-            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
+        const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
+        const longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
 
         $element.width(this._calculateWidth(longestValue));
         this._isSizeUpdatable = true;
     },
 
     _calculateWidth: function(value) {
-        var IE_ROUNDING_ERROR = 10;
-        var NATIVE_BUTTONS_WIDTH = 48;
-        var $input = this._input();
-        var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
+        const IE_ROUNDING_ERROR = 10;
+        const NATIVE_BUTTONS_WIDTH = 48;
+        const $input = this._input();
+        const $longestValueElement = dom.createTextElementHiddenCopy($input, value);
 
         $longestValueElement.appendTo(this.$element());
-        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
-            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
-            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
-            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
-            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+        const elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
+        const rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight);
+        const leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft);
+        const beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0;
+        const afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
 
-        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop('type') !== 'text' ? NATIVE_BUTTONS_WIDTH : 0);
+        const width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop('type') !== 'text' ? NATIVE_BUTTONS_WIDTH : 0);
         $longestValueElement.remove();
 
         return width;
@@ -478,7 +478,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _popupConfig: function() {
-        var popupConfig = this.callBase();
+        const popupConfig = this.callBase();
         return extend(this._strategy.popupConfig(popupConfig), {
             title: this._getPopupTitle(),
             dragEnabled: false
@@ -490,8 +490,8 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        var $element = this.$element();
-        var classPostfixes = extend({}, TYPE, PICKER_TYPE);
+        const $element = this.$element();
+        const classPostfixes = extend({}, TYPE, PICKER_TYPE);
 
         each(classPostfixes, (function(_, item) {
             $element.removeClass(DATEBOX_WRAPPER_CLASS + '-' + item);
@@ -541,8 +541,8 @@ var DateBox = DropDownEditor.inherit({
             return true;
         }
 
-        var platform = devices.real().platform,
-            isCustomValueDisabled = this._isNativeType() && (platform === 'ios' || platform === 'android');
+        const platform = devices.real().platform;
+        const isCustomValueDisabled = this._isNativeType() && (platform === 'ios' || platform === 'android');
 
         if(isCustomValueDisabled) {
             return this.option('readOnly');
@@ -556,7 +556,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption('value');
+        const value = this.dateOption('value');
 
         this.option('text', this._getDisplayedText(value));
         this._strategy.renderValue();
@@ -565,23 +565,23 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _setSubmitValue: function() {
-        var value = this.dateOption('value');
-        var dateSerializationFormat = this.option('dateSerializationFormat');
-        var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option('type')];
-        var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
+        const value = this.dateOption('value');
+        const dateSerializationFormat = this.option('dateSerializationFormat');
+        const submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option('type')];
+        const submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
         this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {
-        var mode = this.option('mode'),
-            displayedText;
+        const mode = this.option('mode');
+        let displayedText;
 
         if(mode === 'text') {
-            var displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
+            const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
             displayedText = dateLocalization.format(value, displayFormat);
         } else {
-            var format = this._getFormatByMode(mode);
+            const format = this._getFormatByMode(mode);
 
             if(format) {
                 displayedText = dateLocalization.format(value, format);
@@ -598,22 +598,22 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var text = this.option('text'),
-            currentValue = this.dateOption('value');
+        const text = this.option('text');
+        const currentValue = this.dateOption('value');
 
         if(text === this._getDisplayedText(currentValue)) {
             this._validateValue(currentValue);
             return;
         }
 
-        var parsedDate = this._getParsedDate(text),
-            value = currentValue || this._getDateByDefault(),
-            type = this.option('type'),
-            newValue = uiDateUtils.mergeDates(value, parsedDate, type),
-            date = parsedDate && type === 'time' ? newValue : parsedDate;
+        const parsedDate = this._getParsedDate(text);
+        const value = currentValue || this._getDateByDefault();
+        const type = this.option('type');
+        const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
+        const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
         if(this._applyInternalValidation(date)) {
-            var displayedText = this._getDisplayedText(newValue);
+            const displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
                 this._renderValue();
@@ -630,26 +630,26 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getParsedDate: function(text) {
-        var displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
-        var parsedText = this._strategy.getParsedText(text, displayFormat);
+        const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
+        const parsedText = this._strategy.getParsedText(text, displayFormat);
 
         return typeUtils.isDefined(parsedText) ? parsedText : undefined;
     },
 
     _validateValue: function(value) {
-        const internalResult = this._applyInternalValidation(value),
-            customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
+        const internalResult = this._applyInternalValidation(value);
+        const customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
         this._skipCustomValidation = false;
         return internalResult && customResult;
     },
 
     _applyInternalValidation(value) {
-        var text = this.option('text'),
-            hasText = !!text && value !== null,
-            isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
-            isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type')),
-            isValid = !hasText && !value || isDateInRange,
-            validationMessage = '';
+        const text = this.option('text');
+        const hasText = !!text && value !== null;
+        const isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime());
+        const isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type'));
+        const isValid = !hasText && !value || isDateInRange;
+        let validationMessage = '';
 
         if(!isDate) {
             validationMessage = this.option('invalidDateMessage');
@@ -678,16 +678,16 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _isValueChanged: function(newValue) {
-        var oldValue = this.dateOption('value'),
-            oldTime = oldValue && oldValue.getTime(),
-            newTime = newValue && newValue.getTime();
+        const oldValue = this.dateOption('value');
+        const oldTime = oldValue && oldValue.getTime();
+        const newTime = newValue && newValue.getTime();
 
         return oldTime !== newTime;
     },
 
     _isTextChanged: function(newValue) {
-        var oldText = this.option('text'),
-            newText = newValue && this._getDisplayedText(newValue) || '';
+        const oldText = this.option('text');
+        const newText = newValue && this._getDisplayedText(newValue) || '';
 
         return oldText !== newText;
     },
@@ -710,13 +710,13 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getPopupTitle: function() {
-        var placeholder = this.option('placeholder');
+        const placeholder = this.option('placeholder');
 
         if(placeholder) {
             return placeholder;
         }
 
-        var type = this.option('type');
+        const type = this.option('type');
 
         if(type === TYPE.time) {
             return messageLocalization.format('dxDateBox-simulatedDataPickerTitleTime');
@@ -742,7 +742,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _applyButtonHandler: function(e) {
-        var value = this._strategy.getValue();
+        const value = this._strategy.getValue();
         if(this._applyInternalValidation(value)) {
             this.dateValue(value, e.event);
         }
@@ -840,7 +840,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getSerializationFormat: function() {
-        var value = this.option('value');
+        const value = this.option('value');
 
         if(this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
             return this.option('dateSerializationFormat');
@@ -881,7 +881,7 @@ var DateBox = DropDownEditor.inherit({
             return dateSerialization.deserializeDate(this.option(optionName));
         }
 
-        var serializationFormat = this._getSerializationFormat();
+        const serializationFormat = this._getSerializationFormat();
         this.option(optionName, dateSerialization.serializeDate(value, serializationFormat));
     },
 

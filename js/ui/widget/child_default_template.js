@@ -1,4 +1,4 @@
-var TemplateBase = require('./ui.template_base');
+const TemplateBase = require('./ui.template_base');
 
 module.exports = TemplateBase.inherit({
 

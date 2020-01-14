@@ -6,7 +6,7 @@ module.exports = {
             return;
         }
 
-        var executeKeyDown = args => {
+        const executeKeyDown = args => {
             instance.executeAction('onKeyDown', args);
         };
 

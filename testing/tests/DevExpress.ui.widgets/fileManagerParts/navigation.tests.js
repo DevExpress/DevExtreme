@@ -61,7 +61,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
         assert.equal(this.wrapper.getBreadcrumbsPath(), 'Files', 'breadcrumbs refrers to the root');
 
-        let $folderNode = this.wrapper.getFolderNode(2);
+        const $folderNode = this.wrapper.getFolderNode(2);
         $folderNode.trigger('dxclick');
 
         assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.1', 'descendant folder selected');

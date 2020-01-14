@@ -1,7 +1,7 @@
-var ValidationMixin = {
+const ValidationMixin = {
     _findGroup: function() {
-        var group = this.option('validationGroup'),
-            $dxGroup;
+        let group = this.option('validationGroup');
+        let $dxGroup;
 
         if(!group) {
             // try to find out if this control is child of validation group

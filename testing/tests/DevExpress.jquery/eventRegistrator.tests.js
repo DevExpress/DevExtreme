@@ -1,7 +1,7 @@
 define(function(require) {
-    var $ = require('jquery'),
-        registerEvent = require('events/core/event_registrator'),
-        Class = require('core/class');
+    const $ = require('jquery');
+    const registerEvent = require('events/core/event_registrator');
+    const Class = require('core/class');
 
     require('integration/jquery');
 
@@ -10,7 +10,7 @@ define(function(require) {
     }
 
     QUnit.testStart(function() {
-        var markup =
+        const markup =
             '<div id="container">\
 				<div id="element"></div>\
 			</div>';
@@ -20,9 +20,9 @@ define(function(require) {
 
     QUnit.module('event registration', {
         beforeEach: function() {
-            var impl = Class.inherit({
+            const impl = Class.inherit({
                 ctor: function() {
-                    var impl = this;
+                    const impl = this;
 
                     impl.LOG = {};
 
@@ -75,10 +75,10 @@ define(function(require) {
     });
 
     QUnit.test('\'setup\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        let LOG;
 
         this.element.on('dxtestevent.test1.test2', data, handler);
 
@@ -92,10 +92,10 @@ define(function(require) {
     });
 
     QUnit.test('\'teardown\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)
@@ -111,10 +111,10 @@ define(function(require) {
     });
 
     QUnit.test('\'add\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', '.some', data, handler);
@@ -133,10 +133,10 @@ define(function(require) {
     });
 
     QUnit.test('\'remove\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', '.some', data, handler)
@@ -156,11 +156,11 @@ define(function(require) {
     });
 
     QUnit.test('\'trigger\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            event = $.Event('dxtestevent'),
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        const event = $.Event('dxtestevent');
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', handler)
@@ -175,11 +175,11 @@ define(function(require) {
     });
 
     QUnit.test('\'_default\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            event = $.Event('dxtestevent'),
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        const event = $.Event('dxtestevent');
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)
@@ -193,11 +193,11 @@ define(function(require) {
     });
 
     QUnit.test('\'handle\' method', function(assert) {
-        var data = {},
-            handler = function() {
-            },
-            event = $.Event('dxtestevent'),
-            LOG;
+        const data = {};
+        const handler = function() {
+        };
+        const event = $.Event('dxtestevent');
+        let LOG;
 
         this.element
             .on('dxtestevent.test1.test2', data, handler)

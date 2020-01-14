@@ -1,19 +1,19 @@
-var $ = require('jquery'),
-    commons = require('./rangeSelectorParts/commons.js'),
-    seriesDataSourceModule = require('viz/range_selector/series_data_source'),
-    dataSourceModule = require('data/data_source/data_source'),
-    _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
-    dateUtils = require('core/utils/date'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    dataSource = vizMocks.stubClass(dataSourceModule.DataSource),
-    axisModule = require('viz/axes/base_axis');
+const $ = require('jquery');
+const commons = require('./rangeSelectorParts/commons.js');
+const seriesDataSourceModule = require('viz/range_selector/series_data_source');
+const dataSourceModule = require('data/data_source/data_source');
+const _SeriesDataSource = seriesDataSourceModule.SeriesDataSource;
+const dateUtils = require('core/utils/date');
+const vizMocks = require('../../helpers/vizMocks.js');
+const dataSource = vizMocks.stubClass(dataSourceModule.DataSource);
+const axisModule = require('viz/axes/base_axis');
 
 QUnit.module('LoadingIndicator', commons.environment);
 
 QUnit.test('Not hide on refresh - when dataSource is not loaded', function(assert) {
-    var ds = new dataSource(),
-        widget = this.createWidget({ dataSource: ds }),
-        spy = sinon.spy(widget, '_fulfillLoadingIndicatorHiding');
+    const ds = new dataSource();
+    const widget = this.createWidget({ dataSource: ds });
+    const spy = sinon.spy(widget, '_fulfillLoadingIndicatorHiding');
     ds.isLoaded = sinon.stub().returns(false);
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
@@ -27,9 +27,9 @@ QUnit.test('Not hide on refresh - when dataSource is not loaded', function(asser
 });
 
 QUnit.test('Hide on refresh - when dataSource is loaded', function(assert) {
-    var ds = new dataSource(),
-        widget = this.createWidget({ dataSource: ds }),
-        spy = sinon.spy(widget, '_fulfillLoadingIndicatorHiding');
+    const ds = new dataSource();
+    const widget = this.createWidget({ dataSource: ds });
+    const spy = sinon.spy(widget, '_fulfillLoadingIndicatorHiding');
     ds.isLoaded = sinon.stub().returns(true);
     this.seriesDataSource.stub('isShowChart').returns(true);
     this.seriesDataSource.stub('getBoundRange').returns({
@@ -42,10 +42,10 @@ QUnit.test('Hide on refresh - when dataSource is loaded', function(assert) {
     assert.deepEqual(spy.lastCall.args, []);
 });
 
-var environmentWithDataSource = $.extend({}, commons.environment, {
+const environmentWithDataSource = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
-        var test = this;
+        const test = this;
         seriesDataSourceModule.SeriesDataSource = function(params) {
             test.seriesDataSource = new _SeriesDataSource(params);
             return test.seriesDataSource;
@@ -65,7 +65,7 @@ QUnit.module('Initialization from dataSource', $.extend({}, environmentWithDataS
 
 QUnit.test('Pass axes to seriesDataSource', function(assert) {
     axisModule.Axis.onSecondCall().returns(new this.StubAxis());
-    var rangeSelector = this.createWidget({
+    const rangeSelector = this.createWidget({
         dataSource: [
             { x: 10, y1: 0 }
         ],
@@ -79,8 +79,8 @@ QUnit.test('Pass axes to seriesDataSource', function(assert) {
             }
         }
     });
-    var series = this.seriesDataSource.getSeries()[0],
-        valueAxis = series.getValueAxis();
+    const series = this.seriesDataSource.getSeries()[0];
+    const valueAxis = series.getValueAxis();
 
     assert.strictEqual(series.getArgumentAxis(), rangeSelector._axis, 'argument axis passed to series');
     assert.deepEqual(valueAxis.updateOptions.lastCall.args[0], {
@@ -106,8 +106,8 @@ QUnit.test('range min/max from dataSource. ticks inside data source range - take
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 10, 'startValue');
     assert.strictEqual(options.endValue, 190, 'endValue');
     assert.strictEqual(range.min, 10);
@@ -130,8 +130,8 @@ QUnit.test('range min/max from dataSource. ticks out of data source range - take
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 0, 'startValue');
     assert.strictEqual(options.endValue, 200, 'endValue');
     assert.strictEqual(range.min, 0);
@@ -160,9 +160,9 @@ QUnit.test('range min/max from series', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        argRange = this.getArgRange(),
-        valRange = this.getValRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const argRange = this.getArgRange();
+    const valRange = this.getValRange();
     assert.strictEqual(options.startValue, 10, 'startValue');
     assert.strictEqual(options.endValue, 180, 'endValue');
     assert.strictEqual(argRange.min, 10);
@@ -198,9 +198,9 @@ QUnit.test('range max from series', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        argRange = this.getArgRange(),
-        valRange = this.getValRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const argRange = this.getArgRange();
+    const valRange = this.getValRange();
     assert.strictEqual(options.startValue, 0, 'startValue');
     assert.strictEqual(options.endValue, 180, 'endValue');
     assert.strictEqual(argRange.min, 0);
@@ -232,9 +232,9 @@ QUnit.test('range min from series', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        argRange = this.getArgRange(),
-        valRange = this.getValRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const argRange = this.getArgRange();
+    const valRange = this.getValRange();
     assert.strictEqual(options.startValue, -20, 'startValue');
     assert.strictEqual(options.endValue, 0, 'endValue');
     assert.strictEqual(argRange.min, -20);
@@ -264,9 +264,9 @@ QUnit.test('range min/max from several series', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        argRange = this.getArgRange(),
-        valRange = this.getValRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const argRange = this.getArgRange();
+    const valRange = this.getValRange();
     assert.strictEqual(options.startValue, 20, 'startValue');
     assert.strictEqual(options.endValue, 250, 'endValue');
     assert.strictEqual(argRange.min, 20);
@@ -300,9 +300,9 @@ QUnit.test('range min/max from several series. startValue>min & endValue<max', f
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        argRange = this.getArgRange(),
-        valRange = this.getValRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const argRange = this.getArgRange();
+    const valRange = this.getValRange();
     assert.strictEqual(options.startValue, 50, 'startValue');
     assert.strictEqual(options.endValue, 100, 'endValue');
     assert.strictEqual(argRange.min, 20);
@@ -466,8 +466,8 @@ QUnit.test('range, logarithmic scale', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 0.01);
     assert.strictEqual(options.endValue, 10000);
     assert.strictEqual(range.min, 0.01);
@@ -501,8 +501,8 @@ QUnit.test('range, not logarithmic scale', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 0.01);
     assert.strictEqual(options.endValue, 10000);
     assert.strictEqual(range.min, 0.01);
@@ -529,8 +529,8 @@ QUnit.test('range, discrete scale', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a1');
     assert.strictEqual(options.endValue, 'a4');
     assert.strictEqual(range.axisType, 'discrete');
@@ -558,8 +558,8 @@ QUnit.test('range, discrete scale with start/end values', function(assert) {
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a2');
     assert.strictEqual(options.endValue, 'a4');
     assert.strictEqual(range.axisType, 'discrete');
@@ -577,8 +577,8 @@ QUnit.test('range, discrete scale with start/end values without dataSource', fun
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a1');
     assert.strictEqual(options.endValue, 'a2');
     assert.strictEqual(range.axisType, 'discrete');
@@ -596,8 +596,8 @@ QUnit.test('range, discrete scale with categories in scale options', function(as
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a2');
     assert.strictEqual(options.endValue, 'a4');
     assert.strictEqual(range.axisType, 'discrete');
@@ -613,8 +613,8 @@ QUnit.test('categories axis. range with startValue, without endValue', function(
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, undefined, 'start value');
     assert.strictEqual(options.endValue, undefined, 'end value');
     assert.strictEqual(range.axisType, 'discrete');
@@ -630,8 +630,8 @@ QUnit.test('categories axis. range with endValue, without startValue', function(
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, undefined, 'start value');
     assert.strictEqual(options.endValue, undefined, 'end value');
     assert.strictEqual(range.axisType, 'discrete');
@@ -648,8 +648,8 @@ QUnit.test('categories axis. range with startValue, without endValue (with categ
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a1', 'start value');
     assert.strictEqual(options.endValue, 'a3', 'end value');
     assert.strictEqual(range.axisType, 'discrete');
@@ -666,8 +666,8 @@ QUnit.test('categories axis. range with endValue, without startValue (with categ
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a0', 'start value');
     assert.strictEqual(options.endValue, 'a2', 'end value');
     assert.strictEqual(range.axisType, 'discrete');
@@ -692,8 +692,8 @@ QUnit.test('range, discrete scale with categories in scale options with dataSour
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a2');
     assert.strictEqual(options.endValue, 'a5');
     assert.strictEqual(range.axisType, 'discrete');
@@ -725,8 +725,8 @@ QUnit.test('range, discrete scale with categories in scale options with dataSour
         }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.getArgRange();
+    const options = this.axis.updateOptions.lastCall.args[0];
+    const range = this.getArgRange();
     assert.strictEqual(options.startValue, 'a3');
     assert.strictEqual(options.endValue, 'a5');
     assert.strictEqual(range.axisType, 'discrete');
@@ -743,7 +743,7 @@ QUnit.test('range, discrete argument with dataSource', function(assert) {
         }
     });
 
-    var range = this.getArgRange();
+    const range = this.getArgRange();
     assert.deepEqual(range.categories, ['a1', 'a2', 'a3']);
 });
 
@@ -771,23 +771,23 @@ QUnit.module('Options changing', $.extend({}, environmentWithDataSource, {
 QUnit.test('range without dataSource', function(assert) {
     this.createWidget();
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
 });
 
 QUnit.test('range when dataSource is changed', function(assert) {
-    var range = this.createWidget();
+    const range = this.createWidget();
 
     range.option({ dataSource: [{ arg: 20, val: 0 }, { arg: 30, val: 4 }, { arg: 180, val: 8 }] });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 20);
     assert.strictEqual(options.endValue, 180);
 });
 
 QUnit.test('range when scale is changed', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         scale: {
             startValue: 1,
             endValue: 5
@@ -796,13 +796,13 @@ QUnit.test('range when scale is changed', function(assert) {
 
     range.option('scale', { endValue: 10 });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 1);
     assert.strictEqual(options.endValue, 10);
 });
 
 QUnit.test('range when background is changed', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         background: {
             image: {
                 url: 'test1.png'
@@ -813,12 +813,12 @@ QUnit.test('range when background is changed', function(assert) {
     range.option('background', { image: { url: 'test2.png' } });
 
     // assert
-    var options = this.rangeView.update.lastCall.args[0];
+    const options = this.rangeView.update.lastCall.args[0];
     assert.strictEqual(options.image.url, 'test2.png');
 });
 
 QUnit.test('range when several options are changed', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         scale: {
             startValue: 1,
             endValue: 5
@@ -833,7 +833,7 @@ QUnit.test('range when several options are changed', function(assert) {
         sliderMarker: { visible: false }
     });
 
-    var options = this.axis.updateOptions.lastCall.args[0];
+    const options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, 2);
     assert.strictEqual(options.endValue, 5);
     assert.strictEqual(this.slidersController.update.lastCall.args[4].visible, false);
@@ -841,7 +841,7 @@ QUnit.test('range when several options are changed', function(assert) {
 
 // T319043
 QUnit.test('T319043. range updating indent', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         indent: {
             left: 100
         }
@@ -853,7 +853,7 @@ QUnit.test('T319043. range updating indent', function(assert) {
 });
 
 QUnit.test('containerBackgroundColor updating', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         containerBackgroundColor: 'red'
     });
 
@@ -863,7 +863,7 @@ QUnit.test('containerBackgroundColor updating', function(assert) {
 });
 
 QUnit.test('containerBackgroundColor updating. shutter color was set', function(assert) {
-    var range = this.createWidget({
+    const range = this.createWidget({
         containerBackgroundColor: 'red',
         shutter: {
             color: 'white'
@@ -876,8 +876,8 @@ QUnit.test('containerBackgroundColor updating. shutter color was set', function(
 });
 
 QUnit.test('title updating', function(assert) {
-    var title = new vizMocks.Title(),
-        titleModule = require('viz/core/title');
+    const title = new vizMocks.Title();
+    const titleModule = require('viz/core/title');
     title.layoutOptions = function() {
         return { horizontalAlignment: 'center', verticalAlignment: 'top' };
     };
@@ -886,7 +886,7 @@ QUnit.test('title updating', function(assert) {
     };
     sinon.stub(titleModule, 'Title', commons.returnValue(title));
     try {
-        var range = this.createWidget({
+        const range = this.createWidget({
             title: 'title'
         });
         title.stub('update').returns(true);

@@ -1,13 +1,13 @@
-var dataUtils = require('core/element_data');
+const dataUtils = require('core/element_data');
 
 QUnit.module('Data');
 
 QUnit.test('Get and set data', function(assert) {
-    var element = document.createElement('div');
-    var testData = 'testData';
+    const element = document.createElement('div');
+    const testData = 'testData';
 
     dataUtils.data(element, 'testKey1', testData);
-    var data = dataUtils.data(element, 'testKey1');
+    let data = dataUtils.data(element, 'testKey1');
 
     assert.equal(data, testData);
 
@@ -19,14 +19,14 @@ QUnit.test('Get and set data', function(assert) {
 });
 
 QUnit.test('removeData', function(assert) {
-    var element = document.createElement('div');
-    var testData = 'testData';
-    var key = 'testKey';
+    const element = document.createElement('div');
+    const testData = 'testData';
+    const key = 'testKey';
 
     dataUtils.data(element, key, testData);
     dataUtils.removeData(element, key);
 
-    var data = dataUtils.data(element, key);
+    let data = dataUtils.data(element, key);
     assert.equal(data, undefined);
 
     data = dataUtils.data(element);
@@ -38,14 +38,14 @@ QUnit.test('removeData', function(assert) {
 });
 
 QUnit.test('cleanData', function(assert) {
-    var element = document.createElement('div');
-    var testData = 'testData';
-    var key = 'testKey';
+    const element = document.createElement('div');
+    const testData = 'testData';
+    const key = 'testKey';
 
     dataUtils.data(element, key, testData);
     dataUtils.cleanData([element]);
 
-    var data = dataUtils.data(element, key);
+    let data = dataUtils.data(element, key);
     assert.equal(data, undefined);
 
     data = dataUtils.data(element);

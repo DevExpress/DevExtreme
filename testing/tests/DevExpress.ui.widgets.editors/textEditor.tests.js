@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'common.css!';
 
 QUnit.testStart(function() {
-    var markup = '<div id="texteditor"></div>';
+    const markup = '<div id="texteditor"></div>';
 
     $('#qunit-fixture').html(markup);
 });

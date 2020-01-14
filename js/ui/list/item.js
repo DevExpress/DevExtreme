@@ -1,14 +1,14 @@
-var $ = require('../../core/renderer'),
-    CollectionWidgetItem = require('../collection/item');
+const $ = require('../../core/renderer');
+const CollectionWidgetItem = require('../collection/item');
 
-var LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container',
-    LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge',
-    BADGE_CLASS = 'dx-badge',
+const LIST_ITEM_BADGE_CONTAINER_CLASS = 'dx-list-item-badge-container';
+const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
+const BADGE_CLASS = 'dx-badge';
 
-    LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container',
-    LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
+const LIST_ITEM_CHEVRON_CONTAINER_CLASS = 'dx-list-item-chevron-container';
+const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 
-var ListItem = CollectionWidgetItem.inherit({
+const ListItem = CollectionWidgetItem.inherit({
 
     _renderWatchers: function() {
         this.callBase();
@@ -24,7 +24,7 @@ var ListItem = CollectionWidgetItem.inherit({
             return;
         }
 
-        var $badge = $('<div>')
+        const $badge = $('<div>')
             .addClass(LIST_ITEM_BADGE_CONTAINER_CLASS)
             .append($('<div>')
                 .addClass(LIST_ITEM_BADGE_CLASS)
@@ -32,7 +32,7 @@ var ListItem = CollectionWidgetItem.inherit({
                 .text(badge)
             );
 
-        var $chevron = this._$element.children('.' + LIST_ITEM_CHEVRON_CONTAINER_CLASS).first();
+        const $chevron = this._$element.children('.' + LIST_ITEM_CHEVRON_CONTAINER_CLASS).first();
         $chevron.length > 0 ? $badge.insertBefore($chevron) : $badge.appendTo(this._$element);
     },
 
@@ -43,8 +43,8 @@ var ListItem = CollectionWidgetItem.inherit({
             return;
         }
 
-        var $chevronContainer = $('<div>').addClass(LIST_ITEM_CHEVRON_CONTAINER_CLASS),
-            $chevron = $('<div>').addClass(LIST_ITEM_CHEVRON_CLASS);
+        const $chevronContainer = $('<div>').addClass(LIST_ITEM_CHEVRON_CONTAINER_CLASS);
+        const $chevron = $('<div>').addClass(LIST_ITEM_CHEVRON_CLASS);
 
         $chevronContainer.append($chevron).appendTo(this._$element);
     }

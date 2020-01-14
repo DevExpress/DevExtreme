@@ -1,12 +1,12 @@
-var $ = require('jquery'),
-    SelectBox = require('ui/select_box'),
-    fx = require('animation/fx'),
-    ko = require('knockout');
+const $ = require('jquery');
+const SelectBox = require('ui/select_box');
+const fx = require('animation/fx');
+const ko = require('knockout');
 
 require('integration/knockout');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="selectBoxWithFieldTemplate" data-bind="dxSelectBox: { dataSource: dataSource, fieldTemplate: \'field\', valueExpr: \'key\', value: value }">\
             <div data-options="dxTemplate: {name: \'field\'}">\
                 <div data-bind="dxTextBox: {}"></div>\
@@ -31,7 +31,7 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var moduleSetup = {
+const moduleSetup = {
     beforeEach: function() {
         SelectBox.defaultOptions({ options: { deferRendering: false } });
         fx.off = true;
@@ -46,7 +46,7 @@ var moduleSetup = {
 QUnit.module('widget options', moduleSetup);
 
 QUnit.test('fieldTemplate is bound to selected item', function(assert) {
-    var viewModel = {
+    const viewModel = {
         dataSource: [
             { key: 1, name: 'one' },
             { key: 2, name: 'two' }
@@ -54,7 +54,7 @@ QUnit.test('fieldTemplate is bound to selected item', function(assert) {
         value: 1
     };
 
-    var $selectBox = $('#selectBoxWithFieldTemplate');
+    const $selectBox = $('#selectBoxWithFieldTemplate');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
@@ -62,23 +62,23 @@ QUnit.test('fieldTemplate is bound to selected item', function(assert) {
 });
 
 QUnit.test('T221863: null value as template data', function(assert) {
-    var viewModel = {
+    const viewModel = {
         dataSource: [1, 2, 3],
         selectedItem: null
     };
 
-    var $selectBox = $('#selectBoxWithFieldTemplate2');
+    const $selectBox = $('#selectBoxWithFieldTemplate2');
 
     ko.applyBindings(viewModel, $selectBox.get(0));
 
-    var input = $('#templateTextBox').find('.dx-textbox-input');
+    const input = $('#templateTextBox').find('.dx-textbox-input');
 
     assert.equal(input.text(), '', 'textBox is empty when selected item is null');
 });
 
 QUnit.test('dropDownButton should be rendered when fieldTemplate is specified', function(assert) {
-    var $selectBox = $('#selectBoxFieldTemplateWithDropDownButton');
-    var vm = {
+    const $selectBox = $('#selectBoxFieldTemplateWithDropDownButton');
+    const vm = {
         items: [1, 2, 3]
     };
 
@@ -91,37 +91,37 @@ QUnit.test('dropDownButton should be rendered when fieldTemplate is specified', 
 });
 
 QUnit.testInActiveWindow('select box should correctly update computed value', function(assert) {
-    var clock = sinon.useFakeTimers(),
-        $selectBox = $('#selectBoxWithCustomConfig'),
-        getVM = function() {
-            var that = this;
-            that.disabled = ko.observable(false);
-            that._value = ko.observable('');
+    const clock = sinon.useFakeTimers();
+    const $selectBox = $('#selectBoxWithCustomConfig');
+    const getVM = function() {
+        const that = this;
+        that.disabled = ko.observable(false);
+        that._value = ko.observable('');
 
-            that.customConfig = {
-                dataSource: [
-                    { value: 1, displayValue: 1 },
-                    { value: 2, displayValue: 2 }
-                ],
-                valueExpr: 'value',
-                displayExpr: 'displayValue',
-                disabled: that.disabled,
-                value: ko.computed({
-                    read: function() { return that._value(); },
-                    write: function(newVal) {
-                        that._value(newVal);
-                        that.disabled(true);
-                        setTimeout(function() {
-                            that.disabled(false);
-                        }, 200);
-                    }
-                })
-            };
+        that.customConfig = {
+            dataSource: [
+                { value: 1, displayValue: 1 },
+                { value: 2, displayValue: 2 }
+            ],
+            valueExpr: 'value',
+            displayExpr: 'displayValue',
+            disabled: that.disabled,
+            value: ko.computed({
+                read: function() { return that._value(); },
+                write: function(newVal) {
+                    that._value(newVal);
+                    that.disabled(true);
+                    setTimeout(function() {
+                        that.disabled(false);
+                    }, 200);
+                }
+            })
         };
+    };
 
     ko.applyBindings(new getVM(), $selectBox.get(0));
 
-    var selectBox = $selectBox.dxSelectBox('instance');
+    const selectBox = $selectBox.dxSelectBox('instance');
 
     selectBox.focus();
     selectBox.open();

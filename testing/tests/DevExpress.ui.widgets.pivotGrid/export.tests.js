@@ -7,15 +7,15 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import 'ui/pivot_grid/ui.pivot_grid';
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container"></div>';
 
     $('#qunit-fixture').html(markup);
 });
 
-var createPivotGrid = function(options) {
-    var pivotGrid,
-        pivotGridElement = $('#container').dxPivotGrid(options);
+const createPivotGrid = function(options) {
+    let pivotGrid;
+    const pivotGridElement = $('#container').dxPivotGrid(options);
 
     pivotGrid = pivotGridElement.dxPivotGrid('instance');
     return pivotGrid;
@@ -135,9 +135,9 @@ QUnit.module('dxPivotGrid', {
         };
 
         this.pivotGrid = createPivotGrid(this.testOptions);
-        var columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true)),
-            rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true)),
-            cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+        const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
+        const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
+        const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
 
         this.dataProvider = this.pivotGrid.getDataProvider();
         this.items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
@@ -184,7 +184,7 @@ QUnit.test('getCellData', function(assert) {
 
 QUnit.test('exportToExcel', function(assert) {
     // arrange
-    var pivotGrid = this.pivotGrid;
+    const pivotGrid = this.pivotGrid;
 
     sinon.stub(pivotGrid, 'getDataProvider');
     sinon.stub(clientExporter, 'export');
@@ -263,11 +263,11 @@ QUnit.test('getAllItems', function(assert) {
 
 
 QUnit.test('Loading indicator showing', function(assert) {
-    var pivotGrid = createPivotGrid(this.testOptions),
-        spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading'),
-        spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading'),
-        dataProvider = this.pivotGrid.getDataProvider(),
-        showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
+    const pivotGrid = createPivotGrid(this.testOptions);
+    const spyBegin = sinon.spy(pivotGrid._dataController, 'beginLoading');
+    const spyEnd = sinon.spy(pivotGrid._dataController, 'endLoading');
+    const dataProvider = this.pivotGrid.getDataProvider();
+    const showingBeforeReady = spyEnd.callCount === 0 && spyBegin.callCount === 1;
 
     dataProvider.ready();
     this.clock.tick();
@@ -279,11 +279,11 @@ QUnit.test('Loading indicator showing', function(assert) {
 
 QUnit.test('Export with empty cellsInfo', function(assert) {
     // arrange
-    var columnsInfo,
-        rowsInfo,
-        cellsInfo,
-        _getCellsInfo = this.pivotGrid._dataController.getCellsInfo,
-        dataProvider = this.pivotGrid.getDataProvider();
+    let columnsInfo;
+    let rowsInfo;
+    let cellsInfo;
+    const _getCellsInfo = this.pivotGrid._dataController.getCellsInfo;
+    const dataProvider = this.pivotGrid.getDataProvider();
 
     this.pivotGrid._dataController.getCellsInfo = function() {
         return [];
@@ -312,7 +312,7 @@ QUnit.test('Export with empty cellsInfo', function(assert) {
 
 QUnit.test('Context menu with export', function(assert) {
     // act
-    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
@@ -326,7 +326,7 @@ QUnit.test('Hide export from the context menu when the export.enabled option is 
     // act
     this.pivotGrid.option('export.enabled', false);
 
-    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
+    const $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
@@ -339,12 +339,12 @@ QUnit.test('Hide export from the context menu when the export.enabled option is 
 // T311313:
 QUnit.test('Row column alignment', function(assert) {
     // act
-    var columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true)),
-        rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true)),
-        cellsInfo = this.pivotGrid._dataController.getCellsInfo(true),
-        dataProvider = this.pivotGrid.getDataProvider();
+    const columnsInfo = $.extend(true, [], this.pivotGrid._dataController.getColumnsInfo(true));
+    const rowsInfo = $.extend(true, [], this.pivotGrid._dataController.getRowsInfo(true));
+    const cellsInfo = this.pivotGrid._dataController.getCellsInfo(true);
+    const dataProvider = this.pivotGrid.getDataProvider();
 
-    var items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
+    let items = this.pivotGrid._getAllItems(columnsInfo, rowsInfo, cellsInfo);
     // act
     dataProvider.ready();
     // assert
@@ -362,14 +362,14 @@ QUnit.test('Row column alignment', function(assert) {
 QUnit.module('Data Provider');
 
 QUnit.test('Initialization. Get styles', function(assert) {
-    var dataProvider = new DataProvider();
+    const dataProvider = new DataProvider();
 
     assert.ok(dataProvider.getStyles() instanceof Array);
     assert.deepEqual(dataProvider.getStyles(), []);
 });
 
 QUnit.test('getCellType. fields dataType is not defined', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}, {}, {}, {}, {}],
             [{ text: 'row1' },
@@ -401,7 +401,7 @@ QUnit.test('getCellType. fields dataType is not defined', function(assert) {
 });
 
 QUnit.test('getCellType. Data fields have customizeText', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
             [{ text: 'row1' },
@@ -435,7 +435,7 @@ QUnit.test('getCellType. Data fields have customizeText', function(assert) {
 });
 
 QUnit.test('getCellType for headers', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 2, colspan: 2 }, { text: 'a1', value: 1, format: 'fixedPoint' }, { text: 'a2', value: 2 }],
             [{ text: 'b1', value: 1, format: 'fixedPoint' }, { text: 'b2', value: 2 }],
@@ -464,7 +464,7 @@ QUnit.test('getCellType for headers', function(assert) {
 });
 
 QUnit.test('getCellMerging', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 3, colspan: 2 }, { rowspan: 1, colspan: 1 }, {}],
             [{}, {}, {}],
@@ -484,7 +484,7 @@ QUnit.test('getCellMerging', function(assert) {
 });
 
 QUnit.test('Get columns', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1 }, {}],
             [{ text: 'row1' }, {}]
@@ -494,7 +494,7 @@ QUnit.test('Get columns', function(assert) {
 
     dataProvider.ready();
 
-    var columns = dataProvider.getColumns();
+    const columns = dataProvider.getColumns();
 
     assert.strictEqual(columns.length, 2);
 
@@ -510,7 +510,7 @@ QUnit.test('Get columns', function(assert) {
 });
 
 QUnit.test('Data alignment', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, {}, {}]
@@ -520,7 +520,7 @@ QUnit.test('Data alignment', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
@@ -529,7 +529,7 @@ QUnit.test('Data alignment', function(assert) {
 });
 
 QUnit.test('Data alignment without data fields', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, { }, { }]
@@ -539,7 +539,7 @@ QUnit.test('Data alignment without data fields', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, 'center', 'description cell alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
@@ -548,7 +548,7 @@ QUnit.test('Data alignment without data fields', function(assert) {
 });
 
 QUnit.test('Data alignment. RTL', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, {}, {}]
@@ -559,7 +559,7 @@ QUnit.test('Data alignment. RTL', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, 'center', 'column header alignment');
     assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, 'right', 'row header alignment');
@@ -567,7 +567,7 @@ QUnit.test('Data alignment. RTL', function(assert) {
 });
 
 QUnit.test('Data format', function(assert) {
-    var dataProvider = new DataProvider({
+    const dataProvider = new DataProvider({
         items: [
             [{ rowspan: 1, colspan: 1 }, {}, {}],
             [{ text: 'row1' }, { dataIndex: 0 }, { dataIndex: 1 }]
@@ -580,7 +580,7 @@ QUnit.test('Data format', function(assert) {
 
     dataProvider.ready();
 
-    var styles = dataProvider.getStyles();
+    const styles = dataProvider.getStyles();
 
     assert.deepEqual(styles[dataProvider.getStyleId(1, 1)].format, { type: 'fixedPoint', precision: 0 });
     assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].dataType, 'number');

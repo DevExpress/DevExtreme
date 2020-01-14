@@ -1,10 +1,10 @@
-var domAdapter = require('../../core/dom_adapter'),
-    window = require('./window').getWindow(),
-    $ = require('../../core/renderer');
+const domAdapter = require('../../core/dom_adapter');
+const window = require('./window').getWindow();
+const $ = require('../../core/renderer');
 
 function getMarkup(element, backgroundColor) {
-    var temp = domAdapter.createElement('div');
-    var clone = element.cloneNode(true);
+    const temp = domAdapter.createElement('div');
+    const clone = element.cloneNode(true);
     if(backgroundColor) {
         $(clone).css('backgroundColor', backgroundColor);
     }
@@ -13,7 +13,7 @@ function getMarkup(element, backgroundColor) {
 }
 
 function fixNamespaces(markup) {
-    var first = true;
+    let first = true;
 
     if(markup.indexOf('xmlns:xlink') === -1) {
         markup = markup.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');

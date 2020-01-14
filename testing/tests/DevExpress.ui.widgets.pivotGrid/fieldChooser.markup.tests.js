@@ -5,16 +5,16 @@ import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
 import $ from 'jquery';
 
 QUnit.testStart(function() {
-    var markup = '<div id="container"></div>';
+    const markup = '<div id="container"></div>';
     $('#qunit-fixture').html(markup);
 });
 
-var createMockDataSource = function(options) {
+const createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
         field.index = index;
     });
 
-    var stubDataSource = {
+    const stubDataSource = {
         getAreaFields: function(area) {
             return options[area + 'Fields'] || [];
         },
@@ -62,9 +62,9 @@ QUnit.test('Init markup without DataSource', function(assert) {
     // act
     this.setupFieldChooser();
 
-    var $cols = this.$element.find('.dx-col'),
-        $areas = $cols.find('.dx-area'),
-        $headers = $areas.children('.dx-area-fields-header');
+    const $cols = this.$element.find('.dx-col');
+    const $areas = $cols.find('.dx-area');
+    const $headers = $areas.children('.dx-area-fields-header');
 
     // assert
     assert.ok(this.fieldChooser);
@@ -81,13 +81,13 @@ QUnit.test('Init markup without DataSource', function(assert) {
 });
 
 QUnit.test('Empty DataSource', function(assert) {
-    var dataSourceOptions = {};
+    const dataSourceOptions = {};
     // act
     this.setupFieldChooser(dataSourceOptions);
 
-    var $cols = this.$element.find('.dx-col'),
-        $areas = $cols.find('.dx-area'),
-        $headers = $areas.children('.dx-area-fields-header');
+    const $cols = this.$element.find('.dx-col');
+    const $areas = $cols.find('.dx-area');
+    const $headers = $areas.children('.dx-area-fields-header');
 
     // assert
     assert.ok(this.fieldChooser);

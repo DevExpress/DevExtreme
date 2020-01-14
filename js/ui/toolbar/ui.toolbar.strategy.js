@@ -1,16 +1,16 @@
-var $ = require('../../core/renderer'),
-    noop = require('../../core/utils/common').noop,
-    each = require('../../core/utils/iterator').each,
-    errors = require('../../core/errors'),
-    compileGetter = require('../../core/utils/data').compileGetter,
-    Class = require('../../core/class'),
-    Button = require('../button'),
-    abstract = Class.abstract;
+const $ = require('../../core/renderer');
+const noop = require('../../core/utils/common').noop;
+const each = require('../../core/utils/iterator').each;
+const errors = require('../../core/errors');
+const compileGetter = require('../../core/utils/data').compileGetter;
+const Class = require('../../core/class');
+const Button = require('../button');
+const abstract = Class.abstract;
 
-var TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container',
-    TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
+const TOOLBAR_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
+const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 
-var ToolbarStrategy = Class.inherit({
+const ToolbarStrategy = Class.inherit({
 
     ctor: function(toolbar) {
         this._toolbar = toolbar;
@@ -22,7 +22,7 @@ var ToolbarStrategy = Class.inherit({
     },
 
     _widgetOptions: function() {
-        var itemClickAction = this._toolbar._createActionByOption('onItemClick');
+        const itemClickAction = this._toolbar._createActionByOption('onItemClick');
 
         return {
             itemTemplate: this._getMenuItemTemplate.bind(this),
@@ -38,7 +38,7 @@ var ToolbarStrategy = Class.inherit({
     },
 
     _renderWidget: function() {
-        var $menu = $('<div>').appendTo(this._menuContainer());
+        const $menu = $('<div>').appendTo(this._menuContainer());
 
         this._menu = this._toolbar._createComponent($menu, this._menuWidgetClass(), this._widgetOptions());
         this.renderMenuItems();
@@ -49,16 +49,16 @@ var ToolbarStrategy = Class.inherit({
     _menuWidgetClass: abstract,
 
     _hasVisibleMenuItems: function(items) {
-        var menuItems = items || this._toolbar.option('items'),
-            result = false;
+        const menuItems = items || this._toolbar.option('items');
+        let result = false;
 
-        var optionGetter = compileGetter('visible'),
-            overflowGetter = compileGetter('locateInMenu');
+        const optionGetter = compileGetter('visible');
+        const overflowGetter = compileGetter('locateInMenu');
 
-        var menuLocation = false;
+        let menuLocation = false;
         each(menuItems, function(index, item) {
-            var itemVisible = optionGetter(item, { functionsAsIs: true }),
-                itemOverflow = overflowGetter(item, { functionsAsIs: true });
+            const itemVisible = optionGetter(item, { functionsAsIs: true });
+            const itemOverflow = overflowGetter(item, { functionsAsIs: true });
 
             if(item.location === 'menu') {
                 menuLocation = true;
@@ -83,7 +83,7 @@ var ToolbarStrategy = Class.inherit({
     _updateMenuVisibility: noop,
 
     _renderMenuButton: function() {
-        var buttonOptions = this._menuButtonOptions();
+        const buttonOptions = this._menuButtonOptions();
 
         this._renderMenuButtonContainer();
         this._$button = $('<div>').appendTo(this._$menuButtonContainer)
@@ -102,7 +102,7 @@ var ToolbarStrategy = Class.inherit({
     },
 
     _renderMenuButtonContainer: function() {
-        var $afterSection = this._toolbar._$afterSection;
+        const $afterSection = this._toolbar._$afterSection;
 
         this._$menuButtonContainer = $('<div>').appendTo($afterSection)
             .addClass(this._toolbar._buttonClass())

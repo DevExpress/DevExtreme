@@ -6,7 +6,7 @@ import ValidationEngine from 'ui/validation_engine';
 
 import 'ui/validation_group';
 
-var Fixture = Class.inherit({
+const Fixture = Class.inherit({
 
     ctor: function() {
         ValidationEngine.initGroups();
@@ -21,7 +21,7 @@ var Fixture = Class.inherit({
 
     createGroup: function(container) {
         this.createValidationGroupContainer(container);
-        var group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
+        const group = this.$groupContainer.dxValidationGroup().dxValidationGroup('instance');
 
         return group;
     }
@@ -39,12 +39,12 @@ QUnit.module('General', {
     }
 }, () => {
     QUnit.test('validator should find group after dxshown event is triggered', function(assert) {
-        var $container = $('#dxValidationGroup');
-        var group = this.fixture.createGroup($container);
-        var $validator = $('<div>').dxValidator({
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const $validator = $('<div>').dxValidator({
             adapter: sinon.createStubInstance(DefaultAdapter)
         });
-        var validator = $validator.dxValidator('instance');
+        const validator = $validator.dxValidator('instance');
         validator.validate = sinon.spy(validator.validate);
 
         // act

@@ -1,5 +1,5 @@
 QUnit.testStart(function() {
-    var markup =
+    const markup =
 '<div>\
     <div id="container"></div>\
 </div>';
@@ -18,10 +18,10 @@ import { setupDataGridModules, generateItems } from '../../helpers/dataGridMocks
 import ArrayStore from 'data/array_store';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
-var CLICK_EVENT = eventUtils.addNamespace('dxpointerdown', 'dxDataGridKeyboardNavigation'),
-    dataGridWrapper = new DataGridWrapper('#container');
+const CLICK_EVENT = eventUtils.addNamespace('dxpointerdown', 'dxDataGridKeyboardNavigation');
+const dataGridWrapper = new DataGridWrapper('#container');
 
-var addOptionChangedHandlers = function(that) {
+const addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
         if(optionName === 'focusedRowIndex' ||
            optionName === 'focusedRowKey' ||
@@ -32,7 +32,7 @@ var addOptionChangedHandlers = function(that) {
     });
 };
 
-var KEYS = {
+const KEYS = {
     'tab': 'Tab',
     'enter': 'Enter',
     'escape': 'Escape',
@@ -52,7 +52,7 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
         preventDefault: false,
         stopPropagation: false
     };
-    var alt = false;
+    let alt = false;
     if(typeof ctrl === 'object') {
         alt = ctrl.alt;
         shift = ctrl.shift;
@@ -118,7 +118,7 @@ QUnit.module('FocusedRow with real dataController and columnsController', {
 });
 
 QUnit.testInActiveWindow('FocusedRow should present if set focusedRowIndex', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -147,7 +147,7 @@ QUnit.testInActiveWindow('FocusedRow should present if set focusedRowIndex', fun
 });
 
 QUnit.testInActiveWindow('TabIndex should set for the [focusedRowIndex; focusedColumnIndex] cell', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -173,8 +173,8 @@ QUnit.testInActiveWindow('TabIndex should set for the [focusedRowIndex; focusedC
 });
 
 QUnit.testInActiveWindow('Arrow Up key should decrease focusedRowIndex', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -203,8 +203,8 @@ QUnit.testInActiveWindow('Arrow Up key should decrease focusedRowIndex', functio
 });
 
 QUnit.testInActiveWindow('Arrow keys should move focused row if columnHidingEnabled is true', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -240,8 +240,8 @@ QUnit.testInActiveWindow('Arrow keys should move focused row if columnHidingEnab
 });
 
 QUnit.testInActiveWindow('Handle arrow keys without focused cell if focusedRowIndex and columnHidingEnabled is true', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -277,8 +277,8 @@ QUnit.testInActiveWindow('Handle arrow keys without focused cell if focusedRowIn
 });
 
 QUnit.testInActiveWindow('Arrow Down key should increase focusedRowIndex', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -305,8 +305,8 @@ QUnit.testInActiveWindow('Arrow Down key should increase focusedRowIndex', funct
 });
 
 QUnit.testInActiveWindow('Click by cell should focus the row', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -358,7 +358,7 @@ QUnit.testInActiveWindow('Click by cell should focus the row', function(assert) 
 });
 
 QUnit.testInActiveWindow('Tab key should focus the cell', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -397,8 +397,8 @@ QUnit.testInActiveWindow('Tab key should focus the cell', function(assert) {
 });
 
 QUnit.testInActiveWindow('Tab key before grid should focus the first row (legacyKbn)', function(assert) {
-    var that = this,
-        rowsView;
+    const that = this;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -434,7 +434,7 @@ QUnit.testInActiveWindow('Tab key before grid should focus the first row (legacy
 });
 
 QUnit.testInActiveWindow('onSelectionChanged event should fire if focusedRowEnabled (T729611)', function(assert) {
-    var selectionChangedFiresCount = 0;
+    let selectionChangedFiresCount = 0;
 
     // arrange
     this.$element = function() {
@@ -485,15 +485,15 @@ QUnit.testInActiveWindow('Tab key press should work correctly on new row if focu
     this.triggerKeyDown('tab', false, false, $(this.getCellElement(0, 0)));
 
     // assert
-    var keyboardController = this.getController('keyboardNavigation');
+    const keyboardController = this.getController('keyboardNavigation');
     assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
     assert.equal(keyboardController.getVisibleRowIndex(), 0, 'Focused row index');
     assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'Focused column index');
 });
 
 QUnit.testInActiveWindow('Tab key before rows view should focus the first row', function(assert) {
-    var that = this,
-        rowsView;
+    const that = this;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -528,7 +528,7 @@ QUnit.testInActiveWindow('Tab key before rows view should focus the first row', 
 });
 
 QUnit.testInActiveWindow('LeftArrow key should focus the cell', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -567,7 +567,7 @@ QUnit.testInActiveWindow('LeftArrow key should focus the cell', function(assert)
 });
 
 QUnit.testInActiveWindow('RightArrow key should focus the cell', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -606,7 +606,7 @@ QUnit.testInActiveWindow('RightArrow key should focus the cell', function(assert
 });
 
 QUnit.testInActiveWindow('ArrowUp / ArrowDown should not change focus type', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -653,7 +653,7 @@ QUnit.testInActiveWindow('ArrowUp / ArrowDown should not change focus type', fun
 });
 
 QUnit.testInActiveWindow('Focus row by click if virtual scrolling mode', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -701,7 +701,7 @@ QUnit.testInActiveWindow('Focus row by click if virtual scrolling mode', functio
 });
 
 QUnit.testInActiveWindow('Focus row if virtual scrolling mode', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -745,7 +745,7 @@ QUnit.testInActiveWindow('Focus row if virtual scrolling mode', function(assert)
 });
 
 QUnit.testInActiveWindow('Focus row if virtual scrolling and index is on the not loaded page', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -793,7 +793,7 @@ QUnit.testInActiveWindow('Focus row if virtual scrolling and index is on the not
 });
 
 QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     // arrange
     this.$element = function() {
@@ -833,7 +833,7 @@ QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is absent 
 });
 
 QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is missing and focusedRowEnabled', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     // arrange
     this.$element = function() {
@@ -876,7 +876,7 @@ QUnit.testInActiveWindow('DataGrid should show error E1042 if keyExpr is missing
 });
 
 QUnit.testInActiveWindow('DataGrid should not show error E1042 if keyExpr is missing and focusedRowEnabled is false', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     // arrange
     this.$element = function() {
@@ -918,7 +918,7 @@ QUnit.testInActiveWindow('DataGrid should not show error E1042 if keyExpr is mis
 });
 
 QUnit.testInActiveWindow('DataGrid should not show error E4024 if keyExpr and store are absent', function(assert) {
-    var dataErrors = [];
+    const dataErrors = [];
 
     // arrange
     this.$element = function() {
@@ -951,7 +951,7 @@ QUnit.testInActiveWindow('DataGrid should not show error E4024 if keyExpr and st
 });
 
 QUnit.testInActiveWindow('Focus row if grouping and virtual scrolling mode', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1005,7 +1005,7 @@ QUnit.testInActiveWindow('Focus row if grouping and virtual scrolling mode', fun
 });
 
 QUnit.test('Focus next row if grouping and virtual scrolling mode', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1069,9 +1069,9 @@ QUnit.test('Focus next row if grouping and virtual scrolling mode', function(ass
 });
 
 QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data was filtered', function(assert) {
-    var rowsView,
-        visibleRows,
-        keyboardController;
+    let rowsView;
+    let visibleRows;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -1119,8 +1119,8 @@ QUnit.testInActiveWindow('DataGrid should focus row by focusedRowIndex if data w
 });
 
 QUnit.testInActiveWindow('DataGrid should focus the row by focusedRowKey if row key present in data after filter', function(assert) {
-    var rowsView,
-        visibleRows;
+    let rowsView;
+    let visibleRows;
 
     // arrange
     this.$element = function() {
@@ -1169,8 +1169,8 @@ QUnit.testInActiveWindow('DataGrid should focus the row by focusedRowKey if row 
 });
 
 QUnit.testInActiveWindow('DataGrid should restore focused row when data without focused row was filtered', function(assert) {
-    var rowsView,
-        visibleRows;
+    let rowsView;
+    let visibleRows;
 
     // arrange
     this.$element = function() {
@@ -1216,8 +1216,8 @@ QUnit.testInActiveWindow('DataGrid should restore focused row when data without 
 });
 
 QUnit.testInActiveWindow('DataGrid should restore focused row when focused row data was filtered', function(assert) {
-    var rowsView,
-        visibleRows;
+    let rowsView;
+    let visibleRows;
 
     // arrange
     this.$element = function() {
@@ -1262,7 +1262,7 @@ QUnit.testInActiveWindow('DataGrid should restore focused row when focused row d
 });
 
 QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if group collapsed and inner data row was focused', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1314,7 +1314,7 @@ QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if g
 });
 
 QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if group collapsed and inner data row was focused if calculateGroupValue is used', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1366,7 +1366,7 @@ QUnit.testInActiveWindow('DataGrid should focus the corresponding group row if g
 });
 
 QUnit.testInActiveWindow('Tab index should not exist for the previous focused row', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1405,7 +1405,7 @@ QUnit.testInActiveWindow('Tab index should not exist for the previous focused ro
 });
 
 QUnit.testInActiveWindow('Set focusedRowIndex, focusedColumnIndex should focus the cell', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1467,7 +1467,7 @@ QUnit.test('Focus types test', function(assert) {
 });
 
 QUnit.testInActiveWindow('Escape should change focus type from cell to row if focusedRowEnabled', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1501,7 +1501,7 @@ QUnit.testInActiveWindow('Escape should change focus type from cell to row if fo
 });
 
 QUnit.testInActiveWindow('Escape should not change focus type from cell to row if not focusedRowEnabled', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -1599,7 +1599,7 @@ QUnit.testInActiveWindow('Focused row index should preserve after paging operati
 });
 
 QUnit.testInActiveWindow('Page with focused row should loads after sorting', function(assert) {
-    var $rowsView;
+    let $rowsView;
 
     // arrange
     this.$element = function() {
@@ -1652,7 +1652,7 @@ QUnit.testInActiveWindow('Page with focused row should loads after sorting', fun
     this.clock.tick();
     // assert
     $rowsView = $(this.gridView.getView('rowsView').element());
-    var focusedRowIndex = this.option('focusedRowIndex');
+    const focusedRowIndex = this.option('focusedRowIndex');
     assert.equal(this.pageIndex(), 2, 'PageIndex');
     assert.strictEqual(this.dataController.getVisibleRows()[focusedRowIndex].data, this.data[1], 'Focused row data is on the page');
     assert.equal($rowsView.find('.dx-row-focused > td:nth-child(1)').text(), 'Dan', 'Focused row key column text');
@@ -1661,7 +1661,7 @@ QUnit.testInActiveWindow('Page with focused row should loads after sorting', fun
 // T755462
 QUnit.testInActiveWindow('The page with focused row should load without errors after sorting the boolean column', function(assert) {
     // arrange
-    var focusedRowIndex;
+    let focusedRowIndex;
 
     this.$element = function() {
         return $('#container');
@@ -1676,8 +1676,8 @@ QUnit.testInActiveWindow('The page with focused row should load without errors a
         { name: 'Zeb', phone: '6666666', isRoom: false }
     ];
 
-    var store = new ArrayStore(this.data),
-        loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+    const store = new ArrayStore(this.data);
+    const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
 
     this.options = {
         focusedRowEnabled: true,
@@ -1773,8 +1773,8 @@ QUnit.testInActiveWindow('DataGrid - Should paginate to the defined focusedRowKe
 });
 
 QUnit.testInActiveWindow('Highlight cell on focus()', function(assert) {
-    var focusedCellChangingCount = 0,
-        keyboardController;
+    let focusedCellChangingCount = 0;
+    let keyboardController;
     // arrange
     this.$element = function() {
         return $('#container');
@@ -1805,8 +1805,8 @@ QUnit.testInActiveWindow('Highlight cell on focus()', function(assert) {
 });
 
 QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowIndex, focusedColumnIndex are not set', function(assert) {
-    var focusedCellChangingCount = 0,
-        keyboardController;
+    let focusedCellChangingCount = 0;
+    let keyboardController;
     // arrange
     this.$element = function() {
         return $('#container');
@@ -1833,8 +1833,8 @@ QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowIndex, focusedC
 });
 
 QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set', function(assert) {
-    var focusedCellChangingCount = 0,
-        keyboardController;
+    let focusedCellChangingCount = 0;
+    let keyboardController;
     // arrange
     this.$element = function() {
         return $('#container');
@@ -1866,8 +1866,8 @@ QUnit.testInActiveWindow('Highlight cell on focus() if focusedRowEnabled is true
 });
 
 QUnit.testInActiveWindow('Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set', function(assert) {
-    var focusedCellChangingCount = 0,
-        keyboardController;
+    let focusedCellChangingCount = 0;
+    let keyboardController;
     // arrange
     this.$element = function() {
         return $('#container');
@@ -1895,8 +1895,8 @@ QUnit.testInActiveWindow('Not highlight cell on focus() if focusedRowEnabled is 
 });
 
 QUnit.testInActiveWindow('Group row should focused on focus()', function(assert) {
-    var keyboardController,
-        focusedCellChangingCount = 0;
+    let keyboardController;
+    let focusedCellChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -1939,8 +1939,8 @@ QUnit.testInActiveWindow('Group row should focused on focus()', function(assert)
 });
 
 QUnit.testInActiveWindow('Highlight group row on focus()', function(assert) {
-    var keyboardController,
-        focusedCellChangingCount = 0;
+    let keyboardController;
+    let focusedCellChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -1985,7 +1985,7 @@ QUnit.testInActiveWindow('Highlight group row on focus()', function(assert) {
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by click', function(assert) {
     // arrange
-    var focusedRowChangingCount = 0;
+    let focusedRowChangingCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -2031,9 +2031,9 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by click', function(assert) 
 });
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key', function(assert) {
-    var rowsView,
-        focusedRowChangingCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedRowChangingCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2084,9 +2084,9 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key', function(as
 });
 
 QUnit.testInActiveWindow('DataGrid - should restore previos row index after the focus losing (T804103)', function(assert) {
-    var rowsView,
-        focusedRowChangingCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedRowChangingCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2134,11 +2134,11 @@ QUnit.testInActiveWindow('DataGrid - should restore previos row index after the 
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key when virtual scrolling is enabled', function(assert) {
     // arrange
-    var rowsView,
-        scrollable,
-        $scrollContainer,
-        focusedRowChangingCount = 0,
-        keyboardController;
+    let rowsView;
+    let scrollable;
+    let $scrollContainer;
+    let focusedRowChangingCount = 0;
+    let keyboardController;
 
     this.$element = function() {
         return $('#container');
@@ -2194,9 +2194,9 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by UpArrow key when virtual 
 });
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by DownArrow key', function(assert) {
-    var rowsView,
-        focusedRowChangingCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedRowChangingCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2247,9 +2247,9 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by DownArrow key', function(
 });
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedRowChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedRowChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -2317,9 +2317,9 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key', function(assert
 });
 
 QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key in back order (shift presset)', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedRowChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedRowChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -2387,8 +2387,8 @@ QUnit.testInActiveWindow('Fire onFocusedRowChanging by Tab key in back order (sh
 });
 
 QUnit.testInActiveWindow('Setting cancel in onFocusedRowChanging event args should prevent change focused row', function(assert) {
-    var focusedRowChangingCount = 0,
-        focusedRowChangedCount = 0;
+    let focusedRowChangingCount = 0;
+    let focusedRowChangedCount = 0;
     // arrange
     this.$element = function() {
         return $('#container');
@@ -2435,9 +2435,9 @@ QUnit.testInActiveWindow('Setting cancel in onFocusedRowChanging event args shou
 
 QUnit.test('Prevent default in onFocusedRowChanging event if cancel is set', function(assert) {
     // arrange
-    var focusedRowChangingFiresCount = 0,
-        focusedRowChangedFiresCount = 0,
-        event;
+    let focusedRowChangingFiresCount = 0;
+    let focusedRowChangedFiresCount = 0;
+    let event;
 
     this.$element = () => $('#container');
 
@@ -2479,18 +2479,18 @@ QUnit.test('Prevent default in onFocusedRowChanging event if cancel is set', fun
 });
 
 QUnit.testInActiveWindow('Focused row events should not fire if dataGrid is in loading phase', function(assert) {
-    var focusedRowChangingCount = 0,
-        focusedRowChangedCount = 0,
-        dataController,
-        keyboardController,
-        items = [
-            { name: 'Alex', phone: '111111', room: 6 },
-            { name: 'Dan', phone: '2222222', room: 5 },
-            { name: 'Ben', phone: '333333', room: 4 },
-            { name: 'Sean', phone: '4545454', room: 3 },
-            { name: 'Smith', phone: '555555', room: 2 },
-            { name: 'Zeb', phone: '6666666', room: 1 }
-        ];
+    let focusedRowChangingCount = 0;
+    let focusedRowChangedCount = 0;
+    let dataController;
+    let keyboardController;
+    const items = [
+        { name: 'Alex', phone: '111111', room: 6 },
+        { name: 'Dan', phone: '2222222', room: 5 },
+        { name: 'Ben', phone: '333333', room: 4 },
+        { name: 'Sean', phone: '4545454', room: 3 },
+        { name: 'Smith', phone: '555555', room: 2 },
+        { name: 'Zeb', phone: '6666666', room: 1 }
+    ];
 
     // arrange
     this.$element = function() {
@@ -2499,7 +2499,7 @@ QUnit.testInActiveWindow('Focused row events should not fire if dataGrid is in l
 
     this.data = {
         load: function(options) {
-            var d = $.Deferred();
+            const d = $.Deferred();
             setTimeout(function() {
                 d.resolve({
                     data: items.slice(options.skip, options.skip + options.take),
@@ -2555,7 +2555,7 @@ QUnit.testInActiveWindow('Focused row events should not fire if dataGrid is in l
 
 QUnit.testInActiveWindow('onFocusedRowChanged event', function(assert) {
     // arrange
-    var focusedRowChangedCount = 0;
+    let focusedRowChangedCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -2597,7 +2597,7 @@ QUnit.testInActiveWindow('onFocusedRowChanged event', function(assert) {
 
 QUnit.testInActiveWindow('onFocusedRowChanged event should fire if \'focusedRowKey\' is null', function(assert) {
     // arrange, act
-    var focusedRowChangedCount = 0;
+    let focusedRowChangedCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -2629,7 +2629,7 @@ QUnit.testInActiveWindow('onFocusedRowChanged event should fire if \'focusedRowK
 
 QUnit.testInActiveWindow('onFocusedRowChanged event should fire only once if row focused and fixed columns enabled (T729593)', function(assert) {
     // arrange, act
-    var focusedRowChangedCount = 0;
+    let focusedRowChangedCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -2671,9 +2671,9 @@ QUnit.testInActiveWindow('onFocusedRowChanged event should fire only once if row
 // T818734
 QUnit.testInActiveWindow('onFocusedRowChanged and onFocusedRowChanging events should fire after enabling focusedRow if it was disabled on init', function(assert) {
     // arrange
-    var focusedRowChangedCount = 0,
-        focusedRowChangingCount = 0,
-        rowsView;
+    let focusedRowChangedCount = 0;
+    let focusedRowChangingCount = 0;
+    let rowsView;
 
     this.$element = function() {
         return $('#container');
@@ -2717,8 +2717,8 @@ QUnit.testInActiveWindow('onFocusedRowChanged and onFocusedRowChanging events sh
 });
 
 QUnit.testInActiveWindow('onFocusedCellChanged event', function(assert) {
-    var rowsView,
-        focusedCellChangedCount = 0;
+    let rowsView;
+    let focusedCellChangedCount = 0;
 
     // arrange
     this.$element = function() {
@@ -2763,9 +2763,9 @@ QUnit.testInActiveWindow('onFocusedCellChanged event', function(assert) {
 });
 
 QUnit.testInActiveWindow('onFocusedCellChanged event should fire if row index changed', function(assert) {
-    var rowsView,
-        focusedCellChangedCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedCellChangedCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2817,9 +2817,9 @@ QUnit.testInActiveWindow('onFocusedCellChanged event should fire if row index ch
 });
 
 QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position not changed', function(assert) {
-    var rowsView,
-        focusedCellChangedCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedCellChangedCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2870,9 +2870,9 @@ QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell pos
 });
 
 QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell position updates for not cell element', function(assert) {
-    var rowsView,
-        focusedCellChangedCount = 0,
-        keyboardController;
+    let rowsView;
+    let focusedCellChangedCount = 0;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -2906,7 +2906,7 @@ QUnit.testInActiveWindow('onFocusedCellChanged event should not fire if cell pos
 });
 
 QUnit.testInActiveWindow('onFocusedCellChanged event the inserted row (T743086)', function(assert) {
-    var focusedCellChangedCount = 0;
+    let focusedCellChangedCount = 0;
 
     // arrange
     this.$element = function() {
@@ -2949,10 +2949,10 @@ QUnit.testInActiveWindow('onFocusedCellChanged event the inserted row (T743086)'
 });
 
 QUnit.test('onFocusedCellChanged event should contains correct row object if scrolling mode is virtual', function(assert) {
-    var that = this,
-        focusedCellChangedCount = 0,
-        rowsView,
-        scrollable;
+    const that = this;
+    let focusedCellChangedCount = 0;
+    let rowsView;
+    let scrollable;
 
     // arrange
     that.$element = function() {
@@ -3004,10 +3004,10 @@ QUnit.test('onFocusedCellChanged event should contains correct row object if scr
 });
 
 QUnit.test('onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual', function(assert) {
-    var that = this,
-        focusedCellChangedCount = 0,
-        rowsView,
-        scrollable;
+    const that = this;
+    let focusedCellChangedCount = 0;
+    let rowsView;
+    let scrollable;
 
     // arrange
     that.$element = function() {
@@ -3060,9 +3060,9 @@ QUnit.test('onFocusedCellChanged event should contains correct row object if scr
 });
 
 QUnit.testInActiveWindow('Setting cancel in onFocusedCellChanging event should prevent focusing next cell', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3122,9 +3122,9 @@ QUnit.testInActiveWindow('Setting cancel in onFocusedCellChanging event should p
 });
 
 QUnit.testInActiveWindow('DataGrid should fire onFocusedCellChanging event if next focused cell is not valid', function(assert) {
-    var rowsView,
-        keyboardController,
-        onFocusedCellCount = 0;
+    let rowsView;
+    let keyboardController;
+    let onFocusedCellCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3179,9 +3179,9 @@ QUnit.testInActiveWindow('DataGrid should fire onFocusedCellChanging event if ne
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by click', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3228,9 +3228,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by click', function(assert)
 });
 
 QUnit.testInActiveWindow('Highlight cell by isHighlighted arg in the onFocusedCellChanging event by click event', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3273,10 +3273,10 @@ QUnit.testInActiveWindow('Highlight cell by isHighlighted arg in the onFocusedCe
 });
 
 QUnit.testInActiveWindow('isHighlighted in the onFocusedCellChanged event', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0,
-        focusedColumnChangedCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
+    let focusedColumnChangedCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3345,9 +3345,9 @@ QUnit.testInActiveWindow('Should not render overlay on focused row with tabindex
 });
 
 QUnit.testInActiveWindow('Not highlight cell by isHighlighted arg in the onFocusedCellChanging event by LeftArrow key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3396,9 +3396,9 @@ QUnit.testInActiveWindow('Not highlight cell by isHighlighted arg in the onFocus
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by LeftArrow key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3454,9 +3454,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by LeftArrow key', function
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3511,9 +3511,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key', functio
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key and change newRowIndex, newColumnIndex', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3568,10 +3568,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by RightArrow key and chang
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging, onFocusedRowChanging by DownArrow key and change newRowIndex, newColumnIndex', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0,
-        focusedRowChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
+    let focusedRowChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3630,9 +3630,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging, onFocusedRowChanging by Do
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpArrow key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3693,9 +3693,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpArrow key', function(a
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by DownArrow key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedColumnChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3756,9 +3756,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by DownArrow key', function
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpDownArrow keys may prevent change focused row', function(assert) {
-    var keyboardController,
-        focusedColumnChangingCount = 0,
-        focusedRowChangingCount = 0;
+    let keyboardController;
+    let focusedColumnChangingCount = 0;
+    let focusedRowChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -3813,10 +3813,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by UpDownArrow keys may pre
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -3880,9 +3880,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key', function(asser
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key in back order (shift presset)', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -3905,7 +3905,7 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key in back order (s
         },
         onFocusedCellChanging: function(e) {
             if(++focusedCellChangingCounter > 2) {
-                var columnIndex = 3 - focusedCellChangingCounter;
+                const columnIndex = 3 - focusedCellChangingCounter;
                 assert.equal(e.cancel, false, 'Not canceled');
                 assert.equal(e.cellElement.text(), $(rowsView.getRow(1).find('td').eq(columnIndex)).text(), 'Cell element');
                 assert.equal(e.newColumnIndex, columnIndex);
@@ -3946,9 +3946,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key in back order (s
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key if cell is being edited', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -4008,10 +4008,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Tab key if cell is being
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -4079,10 +4079,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyD
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -4155,10 +4155,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyD
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -4223,10 +4223,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyD
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -4299,10 +4299,10 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyD
 });
 
 QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyDirection\' is \'column\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0,
-        columnIndex;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
+    let columnIndex;
 
     // arrange
     this.$element = function() {
@@ -4367,9 +4367,9 @@ QUnit.testInActiveWindow('Fire onFocusedCellChanging by Enter key if \'enterKeyD
 });
 
 QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -4429,9 +4429,9 @@ QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterK
 });
 
 QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -4499,9 +4499,9 @@ QUnit.testInActiveWindow('Changing row index by Enter key navigation if \'enterK
 });
 
 QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'startEdit\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -4566,9 +4566,9 @@ QUnit.testInActiveWindow('Enter key navigation from the last cell should navigat
 });
 
 QUnit.testInActiveWindow('Enter key navigation from the last cell should navigate to the new row and first column if \'enterKeyDirection\' is \'row\', \'enterKeyAction\' is \'moveFocus\'', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCounter = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCounter = 0;
 
     // arrange
     this.$element = function() {
@@ -4625,7 +4625,7 @@ QUnit.testInActiveWindow('Enter key navigation from the last cell should navigat
 });
 
 QUnit.testInActiveWindow('Test navigateToRow method if paging', function(assert) {
-    var keyboardController;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -4669,7 +4669,7 @@ QUnit.testInActiveWindow('Test navigateToRow method if paging', function(assert)
 });
 
 QUnit.testInActiveWindow('Test navigateToRow method if virtualScrolling', function(assert) {
-    var keyboardController;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -4718,8 +4718,8 @@ QUnit.testInActiveWindow('Test navigateToRow method if virtualScrolling', functi
 
 QUnit.testInActiveWindow('Focused row should be visible if set focusedRowKey', function(assert) {
     // arrange
-    var rowsView,
-        counter = 0;
+    let rowsView;
+    let counter = 0;
 
     this.$element = function() {
         return $('#container');
@@ -4760,7 +4760,7 @@ QUnit.testInActiveWindow('Focused row should be visible if set focusedRowKey', f
 
 QUnit.testInActiveWindow('Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded', function(assert) {
     // arrange
-    var rowsView;
+    let rowsView;
 
     this.$element = function() {
         return $('#container');
@@ -4808,7 +4808,7 @@ QUnit.testInActiveWindow('Focused row should preserve on navigation to the other
 
 QUnit.test('Focused row should preserve on navigation to the other row in infinite scrolling mode if page not loaded', function(assert) {
     // arrange
-    var rowsView;
+    let rowsView;
 
     this.$element = function() {
         return $('#container');
@@ -4855,9 +4855,9 @@ QUnit.test('Focused row should preserve on navigation to the other row in infini
 });
 
 QUnit.testInActiveWindow('Keyboard navigation controller should find next cell if column index is wrong when jump from the group row', function(assert) {
-    var rowsView,
-        keyboardController,
-        $cell;
+    let rowsView;
+    let keyboardController;
+    let $cell;
 
     // arrange
     this.$element = function() {
@@ -4910,8 +4910,8 @@ QUnit.testInActiveWindow('Keyboard navigation controller should find next cell i
 });
 
 QUnit.testInActiveWindow('DataGrid should focus the row bellow by arrowDown key if grid focused and if selection multiple', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     // arrange
     this.$element = function() {
@@ -4960,9 +4960,9 @@ QUnit.testInActiveWindow('DataGrid should focus the row bellow by arrowDown key 
 });
 
 QUnit.testInActiveWindow('DataGrid should focus the row below by arrowDown key if grid focused and grouping enabled', function(assert) {
-    var rowsView,
-        keyboardController,
-        $cell;
+    let rowsView;
+    let keyboardController;
+    let $cell;
 
     // arrange
     this.$element = function() {
@@ -5011,7 +5011,7 @@ QUnit.testInActiveWindow('DataGrid should focus the row below by arrowDown key i
 });
 
 QUnit.testInActiveWindow('If editing in row edit mode and focusedRowEnabled - focusOverlay should render for the editing row', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -5051,7 +5051,7 @@ QUnit.testInActiveWindow('If editing in row edit mode and focusedRowEnabled - fo
 });
 
 QUnit.testInActiveWindow('If editing in cell edit mode and focusedRowEnabled - focusOverlay should render for the editing row', function(assert) {
-    var rowsView;
+    let rowsView;
 
     // arrange
     this.$element = function() {
@@ -5148,8 +5148,8 @@ QUnit.test('DataGrid should not operate with focused row if dataSource is missin
 });
 
 QUnit.testInActiveWindow('DataGrid should not focus inserted but not saved rows (T727182)', function(assert) {
-    var rowsView,
-        keyboardController;
+    let rowsView;
+    let keyboardController;
 
     this.$element = function() {
         return $('#container');
@@ -5191,9 +5191,9 @@ QUnit.testInActiveWindow('DataGrid should not focus inserted but not saved rows 
 
 QUnit.testInActiveWindow('DataGrid should not focus adaptive rows', function(assert) {
     // arrange
-    var rowsView,
-        focusedRowChangingCount = 0,
-        focusedRowChangedCount = 0;
+    let rowsView;
+    let focusedRowChangingCount = 0;
+    let focusedRowChangedCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -5230,8 +5230,8 @@ QUnit.testInActiveWindow('DataGrid should not focus adaptive rows', function(ass
 
 QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is set to undefined', function(assert) {
     // arrange
-    var rowsView,
-        focusedRowChangedCallsCount = 0;
+    let rowsView;
+    let focusedRowChangedCallsCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -5288,7 +5288,7 @@ QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is 
 
 QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowIndex is set to < 0', function(assert) {
     // arrange
-    var rowsView;
+    let rowsView;
 
     this.$element = function() {
         return $('#container');
@@ -5320,8 +5320,8 @@ QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowIndex i
 
 QUnit.testInActiveWindow('DataGrid should reset focused row if \'e.newRowIndex\' is set to < 0 value in the onFocusedRowChanging event (T745451)', function(assert) {
     // arrange
-    var focusedRowChangingCount = 0,
-        rowsView;
+    let focusedRowChangingCount = 0;
+    let rowsView;
 
     this.$element = function() {
         return $('#container');
@@ -5493,7 +5493,7 @@ QUnit.testInActiveWindow('DataGrid should normalize the focused row index on pag
 
 QUnit.testInActiveWindow('Highlight cell on click when startEditAction is \'dblClick\'', function(assert) {
     // arrange
-    var focusedCellChangingCount = 0;
+    let focusedCellChangingCount = 0;
 
     this.$element = function() {
         return $('#container');
@@ -5525,9 +5525,9 @@ QUnit.testInActiveWindow('Highlight cell on click when startEditAction is \'dblC
 });
 
 QUnit.testInActiveWindow('DataGrid - onFocusedCellChanging event should execute on cell click in batch edit mode (T743530)', function(assert) {
-    var rowsView,
-        keyboardController,
-        focusedCellChangingCount = 0;
+    let rowsView;
+    let keyboardController;
+    let focusedCellChangingCount = 0;
 
     // arrange
     this.$element = function() {
@@ -5563,10 +5563,10 @@ QUnit.testInActiveWindow('DataGrid - onFocusedCellChanging event should execute 
 });
 
 QUnit.testInActiveWindow('DataGrid - click by cell should not generate exception if rowTemplate is used (T800604)', function(assert) {
-    var d = $.Deferred(),
-        rowsView,
-        keyboardController,
-        items = generateItems(1);
+    let d = $.Deferred();
+    let rowsView;
+    let keyboardController;
+    const items = generateItems(1);
 
     // arrange
     this.$element = function() {

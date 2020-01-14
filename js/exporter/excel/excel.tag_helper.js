@@ -2,7 +2,7 @@ import { isDefined } from '../../core/utils/type';
 
 const tagHelper = {
     toXml: function(tagName, attributes, content) {
-        var result = ['<', tagName];
+        const result = ['<', tagName];
 
         for(const attributeName in attributes) {
             const attributeValue = attributes[attributeName];

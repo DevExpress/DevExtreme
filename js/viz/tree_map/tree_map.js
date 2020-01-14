@@ -1,4 +1,4 @@
-var dxTreeMap = module.exports = require('./tree_map.base');
+const dxTreeMap = module.exports = require('./tree_map.base');
 
 require('./tiling.squarified');
 require('./tiling.strip');

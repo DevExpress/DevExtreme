@@ -21,7 +21,7 @@ function hideElement($element) {
 }
 
 function getSpecialFormatOptions(options, specialFormat) {
-    var result = options;
+    let result = options;
     switch(specialFormat) {
         case 'argument':
             result = { format: options.argumentFormat };
@@ -34,9 +34,9 @@ function getSpecialFormatOptions(options, specialFormat) {
 }
 
 function Tooltip(params) {
-    var that = this,
-        renderer,
-        root;
+    const that = this;
+    let renderer;
+    let root;
 
     that._eventTrigger = params.eventTrigger;
     that._widgetRoot = params.widgetRoot;
@@ -67,8 +67,8 @@ Tooltip.prototype = {
     },
 
     _getContainer: function() {
-        var options = this._options,
-            container = $(this._widgetRoot).closest(options.container);
+        const options = this._options;
+        let container = $(this._widgetRoot).closest(options.container);
         if(container.length === 0) {
             container = $(options.container);
         }
@@ -78,7 +78,7 @@ Tooltip.prototype = {
     setOptions: function(options) {
         options = options || {};
 
-        var that = this;
+        const that = this;
 
         that._options = options;
         that._textFontStyles = vizUtils.patchFontOptions(options.font);
@@ -151,14 +151,14 @@ Tooltip.prototype = {
     },
 
     render: function() {
-        var that = this;
+        const that = this;
 
         // The following is because after update (on widget refresh) tooltip must be hidden
         hideElement(that._wrapper);
 
         // text area
-        var normalizedCSS = {};
-        for(var name in that._textFontStyles) {
+        const normalizedCSS = {};
+        for(const name in that._textFontStyles) {
             normalizedCSS[inflector.camelize(name)] = that._textFontStyles[name];
         }
         that._textGroupHtml.css(normalizedCSS);
@@ -197,8 +197,8 @@ Tooltip.prototype = {
     },
 
     show: function(formatObject, params, eventData, customizeTooltip) {
-        var that = this,
-            state = {};
+        const that = this;
+        const state = {};
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
@@ -233,7 +233,7 @@ Tooltip.prototype = {
     },
 
     hide: function() {
-        var that = this;
+        const that = this;
         hideElement(that._wrapper);
         // trigger event
         that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
@@ -247,7 +247,7 @@ Tooltip.prototype = {
     },
 
     moveWrapper: function() {
-        var that = this;
+        const that = this;
 
         const plaqueBBox = this.plaque.getBBox();
         that._renderer.resize(plaqueBBox.width, plaqueBBox.height);
@@ -272,7 +272,7 @@ Tooltip.prototype = {
     },
 
     formatValue: function(value, _specialFormat) {
-        var options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
+        const options = _specialFormat ? getSpecialFormatOptions(this._options, _specialFormat) : this._options;
         return format(value, options.format);
     },
 
@@ -366,7 +366,7 @@ exports.plugin = {
         }
     },
     customize: function(constructor) {
-        var proto = constructor.prototype;
+        const proto = constructor.prototype;
 
         proto._eventsMap.onTooltipShown = { name: 'tooltipShown' };
         proto._eventsMap.onTooltipHidden = { name: 'tooltipHidden' };

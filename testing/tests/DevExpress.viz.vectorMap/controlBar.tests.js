@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    controlBarModule = require('viz/vector_map/control_bar');
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const vizMocks = require('../../helpers/vizMocks.js');
+const controlBarModule = require('viz/vector_map/control_bar');
 
 function returnValue(value) {
     return function() {
@@ -9,7 +9,7 @@ function returnValue(value) {
     };
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.projection = {
@@ -49,11 +49,11 @@ QUnit.test('Elements are created in constructor', function(assert) {
     assert.deepEqual(this.root.linkOn.lastCall.args, [this.container, 'control-bar'], 'root is linked to container');
     assert.deepEqual(this.root.attr.lastCall.args, [{ 'class': 'dxm-control-bar' }], 'root settings');
     assert.deepEqual(this.layoutControl.addItem.lastCall.args, [this.controlBar], 'added to layout');
-    var projectionHandlers = this.projection.on.lastCall.args[0];
+    const projectionHandlers = this.projection.on.lastCall.args[0];
     assert.strictEqual(typeof projectionHandlers['engine'], 'function', 'subscribed to projection.engine');
     assert.strictEqual(typeof projectionHandlers['zoom'], 'function', 'subscribed to projection.zoom');
     assert.strictEqual(typeof projectionHandlers['max-zoom'], 'function', 'subscribed to projection.max-zoom');
-    var trackerHandlers = this.tracker.on.lastCall.args[0];
+    const trackerHandlers = this.tracker.on.lastCall.args[0];
     assert.strictEqual(typeof trackerHandlers['start'], 'function', 'subscribed to tracker.start');
     assert.strictEqual(typeof trackerHandlers['move'], 'function', 'subscribed to tracker.move');
     assert.strictEqual(typeof trackerHandlers['end'], 'function', 'subscribed to tracker.end');
@@ -89,7 +89,7 @@ QUnit.test('Set options', function(assert) {
 });
 
 QUnit.test('Elements settings', function(assert) {
-    var elements = this.renderer.g.firstCall.returnValue.children[0].children;
+    const elements = this.renderer.g.firstCall.returnValue.children[0].children;
     assert.deepEqual(elements[0]._stored_settings, { cx: 0, cy: 0, r: 29 }, 'big circle');
     assert.deepEqual(elements[1]._stored_settings, { cx: 0, cy: 0, r: 5, fill: 'none' }, 'reset button');
     assert.deepEqual(elements[2]._stored_settings, { points: [-5, -15, 0, -20, 5, -15], type: 'line', 'stroke-linecap': 'square', fill: 'none' }, 'move N button');
@@ -105,7 +105,7 @@ QUnit.test('Elements settings', function(assert) {
 });
 
 QUnit.test('Trackers settings', function(assert) {
-    var trackers = this.renderer.g.firstCall.returnValue.children[1].children;
+    const trackers = this.renderer.g.firstCall.returnValue.children[1].children;
     assert.deepEqual(trackers[0]._stored_settings, { x: -8, y: -8, width: 16, height: 16 }, 'reset button');
     assert.deepEqual(trackers[1]._stored_settings, { x: -8, y: -28, width: 16, height: 16 }, 'move N button');
     assert.deepEqual(trackers[2]._stored_settings, { x: 12, y: -8, width: 16, height: 16 }, 'move E button');
@@ -119,9 +119,9 @@ QUnit.test('Trackers settings', function(assert) {
 });
 
 QUnit.test('Root appending and removing on set options', function(assert) {
-    var updateLayout = this.updateLayout,
-        linkAppend = this.root.stub('linkAppend'),
-        linkRemove = this.root.stub('linkRemove');
+    const updateLayout = this.updateLayout;
+    const linkAppend = this.root.stub('linkAppend');
+    const linkRemove = this.root.stub('linkRemove');
     this.controlBar.setInteraction({});
 
     reset();
@@ -147,9 +147,9 @@ QUnit.test('Root appending and removing on set options', function(assert) {
 });
 
 QUnit.test('Root appending and removing on set interaction', function(assert) {
-    var updateLayout = this.updateLayout,
-        linkAppend = this.root.stub('linkAppend'),
-        linkRemove = this.root.stub('linkRemove');
+    const updateLayout = this.updateLayout;
+    const linkAppend = this.root.stub('linkAppend');
+    const linkRemove = this.root.stub('linkRemove');
     this.controlBar.setOptions({});
 
     reset();
@@ -180,9 +180,9 @@ QUnit.test('Root appending and removing on set interaction', function(assert) {
 });
 
 QUnit.test('Root appending and removing on projection event', function(assert) {
-    var updateLayout = this.updateLayout,
-        linkAppend = this.root.stub('linkAppend'),
-        linkRemove = this.root.stub('linkRemove');
+    const updateLayout = this.updateLayout;
+    const linkAppend = this.root.stub('linkAppend');
+    const linkRemove = this.root.stub('linkRemove');
     this.controlBar.setOptions({});
     this.controlBar.setInteraction({});
 
@@ -373,7 +373,7 @@ QUnit.module('Commands - general', {
         environment.beforeEach.apply(this, arguments);
         this.controlBar.setInteraction({});
         this.controlBar.setOptions({});
-        var test = this;
+        const test = this;
         this.commandType = function() {
             test.command = this;
             this.args = $.makeArray(arguments);
@@ -397,7 +397,7 @@ QUnit.module('Commands - general', {
 });
 
 QUnit.test('Command is created on processStart', function(assert) {
-    var arg = { data: { name: 'control-bar', index: 'test-command', tag: 'tag' } };
+    const arg = { data: { name: 'control-bar', index: 'test-command', tag: 'tag' } };
 
     this.triggerTrackerEvent('start', arg);
 
@@ -427,7 +427,7 @@ QUnit.test('Command is not created if data.name does not match', function(assert
 });
 
 QUnit.test('Command is updated on processMove', function(assert) {
-    var arg = { data: { name: 'some-name', index: 'some-command', tag: 'tag' } };
+    const arg = { data: { name: 'some-name', index: 'some-command', tag: 'tag' } };
     this.triggerTrackerEvent('start', { data: { name: 'control-bar', index: 'test-command', tag: 'tag' } });
 
     this.triggerTrackerEvent('move', arg);
@@ -459,12 +459,12 @@ QUnit.test('Command is finished on setInteraction', function(assert) {
     assert.deepEqual(this.command.finish.lastCall.args, []);
 });
 
-var commandsEnvironment = {
+const commandsEnvironment = {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         this.controlBar.setInteraction({});
         this.controlBar.setOptions({});
-        var projection = this.projection;
+        const projection = this.projection;
         projection.getZoomScalePartition = returnValue(10);
         projection.getScaledZoom = returnValue(4);
         $.each(this.projectionMethods, function(_, name) {

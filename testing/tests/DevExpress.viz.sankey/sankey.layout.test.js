@@ -1,17 +1,17 @@
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    common = require('./commonParts/common.js'),
-    environment = common.environment,
-    createSankey = common.createSankey,
-    titleModule = require('viz/core/title'),
-    exportModule = require('viz/core/export'),
-    dxSankey = require('viz/sankey/sankey');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const common = require('./commonParts/common.js');
+const environment = common.environment;
+const createSankey = common.createSankey;
+const titleModule = require('viz/core/title');
+const exportModule = require('viz/core/export');
+const dxSankey = require('viz/sankey/sankey');
 
 dxSankey.addPlugin(titleModule.plugin);
 dxSankey.addPlugin(exportModule.plugin);
 
 function stubTitle() {
-    var that = this;
+    const that = this;
     that.title = new vizMocks.Title();
     that.title.stub('measure').returns([200, 50]);
     sinon.stub(titleModule, 'Title', function() {
@@ -20,7 +20,7 @@ function stubTitle() {
 }
 
 function stubExport() {
-    var that = this;
+    const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([50, 50]);
     sinon.stub(exportModule, 'ExportMenu', function() {

@@ -1,18 +1,18 @@
-var $ = require('jquery'),
-    common = require('./commonParts/common.js'),
-    createFunnel = common.createFunnel,
-    environment = common.environment,
-    vizMocks = require('../../helpers/vizMocks.js'),
-    tooltipModule = require('viz/core/tooltip'),
-    funnelTooltip = require('viz/funnel/tooltip'),
-    dxFunnel = require('viz/funnel/funnel');
+const $ = require('jquery');
+const common = require('./commonParts/common.js');
+const createFunnel = common.createFunnel;
+const environment = common.environment;
+const vizMocks = require('../../helpers/vizMocks.js');
+const tooltipModule = require('viz/core/tooltip');
+const funnelTooltip = require('viz/funnel/tooltip');
+const dxFunnel = require('viz/funnel/funnel');
 
 dxFunnel.addPlugin(funnelTooltip.plugin);
 
 
-var tooltipEnvironment = $.extend({}, environment, {
+const tooltipEnvironment = $.extend({}, environment, {
     beforeEach: function() {
-        var that = this;
+        const that = this;
 
         environment.beforeEach.apply(this, arguments);
 
@@ -42,11 +42,11 @@ var tooltipEnvironment = $.extend({}, environment, {
 QUnit.module('Tooltip', tooltipEnvironment);
 
 QUnit.test('Show tooltip', function(assert) {
-    var widget = createFunnel({
-            algorithm: 'stub',
-            dataSource: [{ value: 1 }]
-        }),
-        testItem = widget.getAllItems()[0];
+    const widget = createFunnel({
+        algorithm: 'stub',
+        dataSource: [{ value: 1 }]
+    });
+    const testItem = widget.getAllItems()[0];
 
     this.tooltip.stub('formatValue').withArgs(0.2, 'percent').returns('percent-formatted');
 
@@ -65,7 +65,7 @@ QUnit.test('Show tooltip', function(assert) {
 });
 
 QUnit.test('Show tooltip with passed coords', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
@@ -76,7 +76,7 @@ QUnit.test('Show tooltip with passed coords', function(assert) {
 });
 
 QUnit.test('Only move tooltip if it shown on item', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
@@ -93,11 +93,11 @@ QUnit.test('Only move tooltip if it shown on item', function(assert) {
 
 QUnit.test('Show tooltip on different items', function(assert) {
     common.stubAlgorithm.getFigures.returns([[1], [1]]);
-    var widget = createFunnel({
-            algorithm: 'stub',
-            dataSource: [{ value: 1 }, { value: 2 }]
-        }),
-        testItem = widget.getAllItems()[1];
+    const widget = createFunnel({
+        algorithm: 'stub',
+        dataSource: [{ value: 1 }, { value: 2 }]
+    });
+    const testItem = widget.getAllItems()[1];
 
     widget.getAllItems()[0].showTooltip();
 
@@ -119,7 +119,7 @@ QUnit.test('Show tooltip on different items', function(assert) {
 });
 
 QUnit.test('Hide tooltip', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
@@ -132,7 +132,7 @@ QUnit.test('Hide tooltip', function(assert) {
 });
 
 QUnit.test('Tooltip is hidden when data source is updated', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
@@ -147,7 +147,7 @@ QUnit.test('Tooltip is hidden when data source is updated', function(assert) {
 });
 
 QUnit.test('Recalculate coords on resize', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });
@@ -166,7 +166,7 @@ QUnit.test('Recalculate coords on resize', function(assert) {
 });
 
 QUnit.test('Customize tooltip', function(assert) {
-    var widget = createFunnel({
+    const widget = createFunnel({
         algorithm: 'stub',
         dataSource: [{ value: 1 }]
     });

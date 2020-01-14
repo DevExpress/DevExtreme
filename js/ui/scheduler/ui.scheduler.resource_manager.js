@@ -1,26 +1,26 @@
-var Class = require('../../core/class'),
-    arrayUtils = require('../../core/utils/array'),
-    grep = require('../../core/utils/common').grep,
-    isDefined = require('../../core/utils/type').isDefined,
-    objectUtils = require('../../core/utils/object'),
-    iteratorUtils = require('../../core/utils/iterator'),
-    extend = require('../../core/utils/extend').extend,
-    inArray = require('../../core/utils/array').inArray,
-    query = require('../../data/query'),
-    dataCoreUtils = require('../../core/utils/data'),
-    DataSourceModule = require('../../data/data_source/data_source'),
-    deferredUtils = require('../../core/utils/deferred'),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+const Class = require('../../core/class');
+const arrayUtils = require('../../core/utils/array');
+const grep = require('../../core/utils/common').grep;
+const isDefined = require('../../core/utils/type').isDefined;
+const objectUtils = require('../../core/utils/object');
+const iteratorUtils = require('../../core/utils/iterator');
+const extend = require('../../core/utils/extend').extend;
+const inArray = require('../../core/utils/array').inArray;
+const query = require('../../data/query');
+const dataCoreUtils = require('../../core/utils/data');
+const DataSourceModule = require('../../data/data_source/data_source');
+const deferredUtils = require('../../core/utils/deferred');
+const when = deferredUtils.when;
+const Deferred = deferredUtils.Deferred;
 
-var getValueExpr = function(resource) {
-        return resource.valueExpr || 'id';
-    },
-    getDisplayExpr = function(resource) {
-        return resource.displayExpr || 'text';
-    };
+const getValueExpr = function(resource) {
+    return resource.valueExpr || 'id';
+};
+const getDisplayExpr = function(resource) {
+    return resource.displayExpr || 'text';
+};
 
-var ResourceManager = Class.inherit({
+const ResourceManager = Class.inherit({
 
     _wrapDataSource: function(dataSource) {
         if(dataSource instanceof DataSourceModule.DataSource) {
@@ -34,11 +34,11 @@ var ResourceManager = Class.inherit({
     },
 
     _mapResourceData: function(resource, data) {
-        var valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource)),
-            displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
+        const valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource));
+        const displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
 
         return iteratorUtils.map(data, function(item) {
-            var result = {
+            const result = {
                 id: valueGetter(item),
                 text: displayGetter(item)
             };
@@ -52,10 +52,10 @@ var ResourceManager = Class.inherit({
     },
 
     _isMultipleResource: function(resourceField) {
-        var result = false;
+        let result = false;
 
         iteratorUtils.each(this.getResources(), (function(_, resource) {
-            var field = this.getField(resource);
+            const field = this.getField(resource);
             if(field === resourceField) {
                 result = resource.allowMultiple;
                 return false;
@@ -70,7 +70,7 @@ var ResourceManager = Class.inherit({
     },
 
     getDataAccessors: function(field, type) {
-        var result = null;
+        let result = null;
         iteratorUtils.each(this._dataAccessors[type], function(accessorName, accessors) {
             if(field === accessorName) {
                 result = accessors;
@@ -93,7 +93,7 @@ var ResourceManager = Class.inherit({
         };
 
         this._resourceFields = iteratorUtils.map(resources || [], (function(resource) {
-            var field = this.getField(resource);
+            const field = this.getField(resource);
 
             this._dataAccessors.getter[field] = dataCoreUtils.compileGetter(field);
             this._dataAccessors.setter[field] = dataCoreUtils.compileSetter(field);
@@ -111,12 +111,12 @@ var ResourceManager = Class.inherit({
     },
 
     getEditors: function() {
-        var result = [],
-            that = this;
+        const result = [];
+        const that = this;
 
         iteratorUtils.each(this.getResources(), function(i, resource) {
-            var field = that.getField(resource),
-                currentResourceItems = that._getResourceDataByField(field);
+            const field = that.getField(resource);
+            const currentResourceItems = that._getResourceDataByField(field);
 
             result.push({
                 editorOptions: {
@@ -136,14 +136,14 @@ var ResourceManager = Class.inherit({
     _resourceLoader: {},
 
     getResourceDataByValue: function(field, value) {
-        var that = this,
-            result = new Deferred();
+        const that = this;
+        const result = new Deferred();
 
         iteratorUtils.each(this.getResources(), function(_, resource) {
-            var resourceField = that.getField(resource);
+            const resourceField = that.getField(resource);
             if(resourceField === field) {
-                var dataSource = that._wrapDataSource(resource.dataSource),
-                    valueExpr = getValueExpr(resource);
+                const dataSource = that._wrapDataSource(resource.dataSource);
+                const valueExpr = getValueExpr(resource);
 
                 if(!that._resourceLoader[field]) {
                     that._resourceLoader[field] = dataSource.load();
@@ -151,7 +151,7 @@ var ResourceManager = Class.inherit({
 
                 that._resourceLoader[field]
                     .done(function(data) {
-                        var filteredData = query(data)
+                        const filteredData = query(data)
                             .filter(valueExpr, value)
                             .toArray();
 
@@ -170,19 +170,19 @@ var ResourceManager = Class.inherit({
     },
 
     setResourcesToItem: function(itemData, resources) {
-        var resourcesSetter = this._dataAccessors.setter;
+        const resourcesSetter = this._dataAccessors.setter;
 
-        for(var name in resources) {
+        for(const name in resources) {
             if(Object.prototype.hasOwnProperty.call(resources, name)) {
-                var resourceData = resources[name];
+                const resourceData = resources[name];
                 resourcesSetter[name](itemData, this._isMultipleResource(name) ? arrayUtils.wrapToArray(resourceData) : resourceData);
             }
         }
     },
 
     getResourcesFromItem: function(itemData, wrapOnlyMultipleResources) {
-        var that = this,
-            result = null;
+        const that = this;
+        let result = null;
 
         if(!isDefined(wrapOnlyMultipleResources)) {
             wrapOnlyMultipleResources = false;
@@ -190,9 +190,9 @@ var ResourceManager = Class.inherit({
 
         iteratorUtils.each(that._resourceFields, function(index, field) {
             iteratorUtils.each(itemData, function(fieldName, fieldValue) {
-                var tmp = {};
+                const tmp = {};
                 tmp[fieldName] = fieldValue;
-                var resourceData = that.getDataAccessors(field, 'getter')(tmp);
+                let resourceData = that.getDataAccessors(field, 'getter')(tmp);
                 if(isDefined(resourceData)) {
                     if(!result) {
                         result = {};
@@ -217,13 +217,13 @@ var ResourceManager = Class.inherit({
     },
 
     loadResources: function(groups) {
-        var result = new Deferred(),
-            that = this,
-            deferreds = [];
+        const result = new Deferred();
+        const that = this;
+        const deferreds = [];
 
         iteratorUtils.each(this.getResourcesByFields(groups), function(i, resource) {
-            var deferred = new Deferred(),
-                field = that.getField(resource);
+            const deferred = new Deferred();
+            const field = that.getField(resource);
             deferreds.push(deferred);
 
             that._wrapDataSource(resource.dataSource)
@@ -246,10 +246,10 @@ var ResourceManager = Class.inherit({
         }
 
         when.apply(null, deferreds).done(function() {
-            var data = Array.prototype.slice.call(arguments),
-                mapFunction = function(obj) {
-                    return { name: obj.name, items: obj.items, data: obj.data };
-                };
+            const data = Array.prototype.slice.call(arguments);
+            const mapFunction = function(obj) {
+                return { name: obj.name, items: obj.items, data: obj.data };
+            };
 
             that._resourcesData = data;
             result.resolve(data.map(mapFunction));
@@ -262,7 +262,7 @@ var ResourceManager = Class.inherit({
 
     getResourcesByFields: function(fields) {
         return grep(this.getResources(), (function(resource) {
-            var field = this.getField(resource);
+            const field = this.getField(resource);
             return inArray(field, fields) > -1;
         }).bind(this));
     },
@@ -272,19 +272,19 @@ var ResourceManager = Class.inherit({
     },
 
     getResourceColor: function(field, value) {
-        var valueExpr = this.getResourceByField(field).valueExpr || 'id',
-            valueGetter = dataCoreUtils.compileGetter(valueExpr),
-            colorExpr = this.getResourceByField(field).colorExpr || 'color',
-            colorGetter = dataCoreUtils.compileGetter(colorExpr);
+        const valueExpr = this.getResourceByField(field).valueExpr || 'id';
+        const valueGetter = dataCoreUtils.compileGetter(valueExpr);
+        const colorExpr = this.getResourceByField(field).colorExpr || 'color';
+        const colorGetter = dataCoreUtils.compileGetter(colorExpr);
 
-        var result = new Deferred(),
-            resourceData = this._getResourceDataByField(field),
-            resourceDataLength = resourceData.length,
-            color;
+        const result = new Deferred();
+        const resourceData = this._getResourceDataByField(field);
+        const resourceDataLength = resourceData.length;
+        let color;
 
 
         if(resourceDataLength) {
-            for(var i = 0; i < resourceDataLength; i++) {
+            for(let i = 0; i < resourceDataLength; i++) {
                 if(valueGetter(resourceData[i]) === value) {
                     color = colorGetter(resourceData[i]);
                     break;
@@ -309,8 +309,8 @@ var ResourceManager = Class.inherit({
     },
 
     getResourceForPainting: function(groups) {
-        var resources = this.getResources(),
-            result;
+        let resources = this.getResources();
+        let result;
 
         iteratorUtils.each(resources, function(index, resource) {
             if(resource.useColorAsDefault) {
@@ -330,15 +330,15 @@ var ResourceManager = Class.inherit({
     },
 
     createResourcesTree: function(groups) {
-        var leafIndex = 0,
-            groupIndex = groupIndex || 0;
+        let leafIndex = 0;
+        var groupIndex = groupIndex || 0;
 
         function make(group, groupIndex, result, parent) {
             result = result || [];
 
-            for(var i = 0; i < group.items.length; i++) {
-                var currentGroupItem = group.items[i];
-                var resultItem = {
+            for(let i = 0; i < group.items.length; i++) {
+                const currentGroupItem = group.items[i];
+                const resultItem = {
                     name: group.name,
                     value: currentGroupItem.id,
                     title: currentGroupItem.text,
@@ -347,7 +347,7 @@ var ResourceManager = Class.inherit({
                     parent: parent ? parent : null
                 };
                 result.push(resultItem);
-                var nextGroupIndex = groupIndex + 1;
+                const nextGroupIndex = groupIndex + 1;
 
                 if(groups[nextGroupIndex]) {
                     make.call(this,
@@ -366,7 +366,7 @@ var ResourceManager = Class.inherit({
     },
 
     _hasGroupItem: function(appointmentResources, groupName, itemValue) {
-        var group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
+        const group = this.getDataAccessors(groupName, 'getter')(appointmentResources);
 
         if(group) {
             if(inArray(itemValue, group) > -1) {
@@ -377,10 +377,10 @@ var ResourceManager = Class.inherit({
     },
 
     _getResourceDataByField: function(fieldName) {
-        var loadedResources = this.getResourcesData(),
-            currentResourceData = [];
+        const loadedResources = this.getResourcesData();
+        let currentResourceData = [];
 
-        for(var i = 0, resourceCount = loadedResources.length; i < resourceCount; i++) {
+        for(let i = 0, resourceCount = loadedResources.length; i < resourceCount; i++) {
             if(loadedResources[i].name === fieldName) {
                 currentResourceData = loadedResources[i].data;
                 break;
@@ -393,7 +393,7 @@ var ResourceManager = Class.inherit({
     getResourceTreeLeaves: function(tree, appointmentResources, result) {
         result = result || [];
 
-        for(var i = 0; i < tree.length; i++) {
+        for(let i = 0; i < tree.length; i++) {
 
             if(!this._hasGroupItem(appointmentResources, tree[i].name, tree[i].value)) {
                 continue;
@@ -413,14 +413,14 @@ var ResourceManager = Class.inherit({
     },
 
     groupAppointmentsByResources: function(appointments, resources) {
-        var tree = this.createResourcesTree(resources),
-            result = {};
+        const tree = this.createResourcesTree(resources);
+        const result = {};
 
         iteratorUtils.each(appointments, (function(_, appointment) {
-            var appointmentResources = this.getResourcesFromItem(appointment),
-                treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
+            const appointmentResources = this.getResourcesFromItem(appointment);
+            const treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
 
-            for(var i = 0; i < treeLeaves.length; i++) {
+            for(let i = 0; i < treeLeaves.length; i++) {
                 if(!result[treeLeaves[i]]) {
                     result[treeLeaves[i]] = [];
                 }
@@ -436,19 +436,19 @@ var ResourceManager = Class.inherit({
     reduceResourcesTree: function(tree, existingAppointments, _result) {
         _result = _result ? _result.children : [];
 
-        var that = this;
+        const that = this;
 
         tree.forEach(function(node, index) {
-            var ok = false,
-                resourceName = node.name,
-                resourceValue = node.value,
-                resourceTitle = node.title,
-                resourceData = node.data,
-                resourceGetter = that.getDataAccessors(resourceName, 'getter');
+            let ok = false;
+            const resourceName = node.name;
+            const resourceValue = node.value;
+            const resourceTitle = node.title;
+            const resourceData = node.data;
+            const resourceGetter = that.getDataAccessors(resourceName, 'getter');
 
             existingAppointments.forEach(function(appointment) {
                 if(!ok) {
-                    var resourceFromAppointment = resourceGetter(appointment);
+                    const resourceFromAppointment = resourceGetter(appointment);
 
                     if(Array.isArray(resourceFromAppointment)) {
                         if(resourceFromAppointment.indexOf(resourceValue) > -1) {

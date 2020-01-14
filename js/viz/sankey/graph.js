@@ -2,9 +2,9 @@ const WHITE = 'white';
 const GRAY = 'gray';
 const BLACK = 'black';
 
-let routines = {
+const routines = {
     maxOfArray: function(arr, callback) {
-        let m = 0, callback_function = (v) => { return v; };
+        let m = 0; let callback_function = (v) => { return v; };
         if(callback) {
             callback_function = callback;
         }
@@ -13,8 +13,8 @@ let routines = {
     }
 };
 
-let getVertices = function(links) {
-    let vert = [];
+const getVertices = function(links) {
+    const vert = [];
 
     links.forEach(link => {
         if(vert.indexOf(link[0]) === -1) {
@@ -29,8 +29,8 @@ let getVertices = function(links) {
     return vert;
 };
 
-let getAdjacentVertices = function(links, vertex) {
-    let avert = [];
+const getAdjacentVertices = function(links, vertex) {
+    const avert = [];
 
     links.forEach(link => {
         if(link[0] === vertex && avert.indexOf(link[1]) === -1) {
@@ -41,8 +41,8 @@ let getAdjacentVertices = function(links, vertex) {
     return avert;
 };
 
-let getReverseAdjacentVertices = function(links, vertex) {
-    let avert = [];
+const getReverseAdjacentVertices = function(links, vertex) {
+    const avert = [];
 
     links.forEach(link => {
         if(link[1] === vertex && avert.indexOf(link[0]) === -1) {
@@ -53,7 +53,7 @@ let getReverseAdjacentVertices = function(links, vertex) {
     return avert;
 };
 
-let struct = {
+const struct = {
     _hasCycle: false,
     _sortedList: [],
 
@@ -62,7 +62,7 @@ let struct = {
         // sorts the vertices (modifies the _sortedList variable)
         this._hasCycle = false;
         this._sortedList = [];
-        let vertices = {}, allVertices = getVertices(links);
+        const vertices = {}; const allVertices = getVertices(links);
         allVertices.forEach((vertex) => {
             vertices[vertex] = {
                 color: WHITE
@@ -79,7 +79,7 @@ let struct = {
 
     _depthFirstSearch: function(links, vertices, vertex) {
         vertices[vertex].color = GRAY;
-        let averts = getAdjacentVertices(links, vertex);
+        const averts = getAdjacentVertices(links, vertex);
         for(let a = 0; a < averts.length; a++) {
             if(vertices[averts[a]].color === WHITE) {
                 this._depthFirstSearch(links, vertices, averts[a]);
@@ -99,13 +99,13 @@ let struct = {
     computeLongestPaths(links) {
         // calculates longets paths for all vertices
         // method expects sorted vertices array to be in this._sortedList
-        let sortedVertices = this._sortedList;
+        const sortedVertices = this._sortedList;
         sortedVertices.forEach(vertex => {
-            let averts = getReverseAdjacentVertices(links, vertex.name); // neigbours who INCOME to the vertex
+            const averts = getReverseAdjacentVertices(links, vertex.name); // neigbours who INCOME to the vertex
             if(averts.length === 0) {
                 vertex.lp = 0; // 'lp' means 'Longest Path'
             } else {
-                let maxLP = [];
+                const maxLP = [];
                 // get max through avertex.lp and add 1 to it
                 averts.forEach(adjacentVertex => {
                     maxLP.push(sortedVertices.filter(sv => sv.name === adjacentVertex)[0].lp);

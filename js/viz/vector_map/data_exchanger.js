@@ -1,4 +1,4 @@
-var Callbacks = require('../../core/utils/callbacks');
+const Callbacks = require('../../core/utils/callbacks');
 
 function DataExchanger() {
     this._store = {};
@@ -13,26 +13,26 @@ DataExchanger.prototype = {
     },
 
     _get: function(category, name) {
-        var store = this._store[category] || (this._store[category] = {});
+        const store = this._store[category] || (this._store[category] = {});
         return store[name] || (store[name] = { callbacks: Callbacks() });
     },
 
     set: function(category, name, data) {
-        var item = this._get(category, name);
+        const item = this._get(category, name);
         item.data = data;
         item.callbacks.fire(data);
         return this;
     },
 
     bind: function(category, name, callback) {
-        var item = this._get(category, name);
+        const item = this._get(category, name);
         item.callbacks.add(callback);
         item.data && callback(item.data);
         return this;
     },
 
     unbind: function(category, name, callback) {
-        var item = this._get(category, name);
+        const item = this._get(category, name);
         item.callbacks.remove(callback);
         return this;
     }

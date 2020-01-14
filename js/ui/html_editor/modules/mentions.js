@@ -324,7 +324,7 @@ class MentionModule extends PopupModule {
             return;
         }
 
-        var searchTimeout = this._activeMentionConfig.searchTimeout;
+        const searchTimeout = this._activeMentionConfig.searchTimeout;
 
         if(searchTimeout) {
             clearTimeout(this._searchTimer);

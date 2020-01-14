@@ -1,7 +1,7 @@
 import 'common.css!';
 
 QUnit.testStart(() => {
-    let element = document.createElement('div');
+    const element = document.createElement('div');
     element.setAttribute('id', 'htmlEditor');
 
     document.getElementById('qunit-fixture').appendChild(element);

@@ -1,14 +1,14 @@
 require('viz/tree_map/tree_map');
 
-var $ = require('jquery'),
-    vizMocks = require('../../helpers/vizMocks.js'),
-    module = require('viz/core/title');
+const $ = require('jquery');
+const vizMocks = require('../../helpers/vizMocks.js');
+const module = require('viz/core/title');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
 QUnit.module('Title', {
     beforeEach: function() {
-        var title = this.title = new vizMocks.Title();
+        const title = this.title = new vizMocks.Title();
         module.Title = sinon.spy(function() { return title; });
         this.$container = $('#test-container');
     },
@@ -21,7 +21,7 @@ QUnit.module('Title', {
 QUnit.test('Creation', function(assert) {
     this.createWidget();
 
-    var params = module.Title.lastCall.args[0];
+    const params = module.Title.lastCall.args[0];
     assert.ok(params.renderer, 'param - renderer');
     assert.ok(typeof params.incidentOccurred === 'function', 'param - incident occurred');
     assert.strictEqual(params.cssClass, 'dxtm-title', 'param - css class');
@@ -38,7 +38,7 @@ QUnit.test('Destruction', function(assert) {
 QUnit.test('Options and canvas', function(assert) {
     this.title.stub('layoutOptions').returns({ horizontalAlignment: 'left', verticalAlignment: 'top' });
     this.title.stub('measure').returns([100, 80]);
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         title: 'Hello'
     });
 
@@ -48,7 +48,7 @@ QUnit.test('Options and canvas', function(assert) {
 });
 
 QUnit.test('Depends on theme', function(assert) {
-    var widget = this.createWidget();
+    const widget = this.createWidget();
     this.title.update.reset();
 
     widget.option('theme', 'test-theme');
@@ -59,7 +59,7 @@ QUnit.test('Depends on theme', function(assert) {
 QUnit.test('title / size is changed', function(assert) {
     this.title.stub('layoutOptions').returns({ horizontalAlignment: 'left', verticalAlignment: 'top' });
     this.title.stub('measure').returns([100, 80]);
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         title: 'title-options'
     });
     this.title.stub('update').returns(true);
@@ -74,7 +74,7 @@ QUnit.test('title / size is changed', function(assert) {
 QUnit.test('title / size is not changed', function(assert) {
     this.title.stub('layoutOptions').returns({ horizontalAlignment: 'left', verticalAlignment: 'top' });
     this.title.stub('measure').returns([100, 80]);
-    var widget = this.createWidget({
+    const widget = this.createWidget({
         title: 'title-options'
     });
     this.title.stub('update').returns(false);

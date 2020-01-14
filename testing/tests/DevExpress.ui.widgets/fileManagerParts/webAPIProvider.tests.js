@@ -9,7 +9,7 @@ import { deserializeDate } from 'core/utils/date_serialization';
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, dataObj) => {
-    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+    const item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
     item.dateModified = deserializeDate(dataObj.dateModified);
     item.size = dataObj.size;
     item.dataItem = dataObj;

@@ -1,12 +1,12 @@
-var ko = require('knockout'),
-    variableWrapper = require('core/utils/variable_wrapper'),
-    objectUtils = require('core/utils/object');
+const ko = require('knockout');
+const variableWrapper = require('core/utils/variable_wrapper');
+const objectUtils = require('core/utils/object');
 
 require('integration/knockout');
 
 QUnit.test('deepExtendArraySafe works correctly with array contain observables', function(assert) {
-    var testObj = { id: 4, name: ko.observable('John') },
-        resultObj;
+    const testObj = { id: 4, name: ko.observable('John') };
+    let resultObj;
 
     resultObj = objectUtils.deepExtendArraySafe(testObj, { name: 'Sue' });
 

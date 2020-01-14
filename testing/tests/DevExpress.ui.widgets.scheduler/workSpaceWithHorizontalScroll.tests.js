@@ -1,7 +1,7 @@
-var $ = require('jquery'),
-    domUtils = require('core/utils/dom'),
-    devices = require('core/devices'),
-    SchedulerResourcesManager = require('ui/scheduler/ui.scheduler.resource_manager');
+const $ = require('jquery');
+const domUtils = require('core/utils/dom');
+const devices = require('core/devices');
+const SchedulerResourcesManager = require('ui/scheduler/ui.scheduler.resource_manager');
 
 require('common.css!');
 require('generic_light.css!');
@@ -22,8 +22,8 @@ QUnit.module('Vertical Workspace with horizontal scrollbar', {
 
 QUnit.test('Header scrollable should contain header panel, all-day container and all-day panel', function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
-    var headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        scrollableContent = headerScrollable.$content();
+    const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const scrollableContent = headerScrollable.$content();
 
     assert.equal(scrollableContent.find('.dx-scheduler-header-panel').length, 1, 'Header panel exists');
     assert.equal(scrollableContent.find('.dx-scheduler-all-day-appointments').length, 1, 'All-day container exists');
@@ -32,16 +32,16 @@ QUnit.test('Header scrollable should contain header panel, all-day container and
 
 QUnit.test('Date table scrollable should contain date table', function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
-    var dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
-        scrollableContent = dateTableScrollable.$content();
+    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const scrollableContent = dateTableScrollable.$content();
 
     assert.equal(scrollableContent.find('.dx-scheduler-date-table').length, 1, 'Date table exists');
 });
 
 QUnit.test('Date table scrollable should have right config', function(assert) {
-    var dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
-        device = devices.current(),
-        expectedShowScrollbarOption = 'onHover';
+    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const device = devices.current();
+    let expectedShowScrollbarOption = 'onHover';
 
     if(device.phone || device.tablet) {
         expectedShowScrollbarOption = 'onScroll';
@@ -54,15 +54,15 @@ QUnit.test('Date table scrollable should have right config', function(assert) {
 });
 
 QUnit.test('Header scrollable should update position if date scrollable position is changed', function(assert) {
-    var $element = this.instance.$element(),
-        $cells = $element.find('.dx-scheduler-date-table-cell');
+    const $element = this.instance.$element();
+    const $cells = $element.find('.dx-scheduler-date-table-cell');
 
     $cells.get(0).style.width = '100px';
 
     this.instance.option('width', 500);
 
-    var headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -73,9 +73,9 @@ QUnit.test('Header scrollable should update position if date scrollable position
 });
 
 QUnit.test('Time panel scrollable should update position if date scrollable position is changed', function(assert) {
-    var $element = this.instance.$element(),
-        timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -86,9 +86,9 @@ QUnit.test('Time panel scrollable should update position if date scrollable posi
 });
 
 QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
-    var $element = this.instance.$element(),
-        timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const $element = this.instance.$element();
+    const timePanelScrollable = $element.find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -99,15 +99,15 @@ QUnit.test('Date table scrollable should update position if time panel position 
 });
 
 QUnit.test('Date table scrollable should update position if header scrollable position is changed', function(assert) {
-    var $element = this.instance.$element(),
-        $cells = $element.find('.dx-scheduler-date-table-cell');
+    const $element = this.instance.$element();
+    const $cells = $element.find('.dx-scheduler-date-table-cell');
 
     $cells.get(0).style.width = '100px';
 
     this.instance.option('width', 500);
 
-    var headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const headerScrollable = $element.find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const dateTableScrollable = $element.find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
@@ -120,12 +120,12 @@ QUnit.test('Date table scrollable should update position if header scrollable po
 QUnit.test('the \'getCellIndexByCoordinates\' method should return a right result', function(assert) {
     this.instance.option('width', 500);
 
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
+    const index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
 
     assert.equal(index, 8, 'Index is OK');
 });
@@ -133,13 +133,13 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return a right resul
 QUnit.test('Header panel, all-day panel, date table should have a correct width', function(assert) {
     this.instance.option('width', 400);
 
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(),
-        allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth(),
-        dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
+    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
 
     assert.equal(headerPanelWidth, 525, 'Width is OK');
     assert.equal(allDayTableWidth, 525, 'Width is OK');
@@ -147,17 +147,17 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width'
 });
 
 QUnit.test('Header panel, all-day panel, date table should have a correct width if cell is larger than 75px', function(assert) {
-    var $element = this.instance.$element(),
-        $cells = $element.find('.dx-scheduler-date-table-cell');
+    const $element = this.instance.$element();
+    const $cells = $element.find('.dx-scheduler-date-table-cell');
 
     $cells.get(0).style.width = '300px';
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(),
-        allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth(),
-        dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
+    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
 
     assert.equal(headerPanelWidth, 2100, 'Width is OK');
     assert.equal(allDayTableWidth, 2100, 'Width is OK');
@@ -165,16 +165,16 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width 
 });
 
 QUnit.test('Header panel, all-day panel, date table should always take all work space width', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     this.instance.option('width', 1000);
     this.instance.option('width', 600);
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(),
-        allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth(),
-        dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
+    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
 
     assert.roughEqual(headerPanelWidth, 896, 5, 'Width of the header panel is OK');
     assert.roughEqual(allDayTableWidth, 896, 5, 'Width of the allDay table is OK');
@@ -182,7 +182,7 @@ QUnit.test('Header panel, all-day panel, date table should always take all work 
 });
 
 QUnit.test('Workspace tables width should not be less than element width', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
     $element.css('width', 1000);
 
     sinon.stub(this.instance, '_getWorkSpaceWidth').returns(50);
@@ -190,10 +190,10 @@ QUnit.test('Workspace tables width should not be less than element width', funct
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(),
-        allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth(),
-        dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(),
-        expectedWidth = 1000 - this.instance.getTimePanelWidth();
+    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth();
+    const allDayTableWidth = $element.find('.dx-scheduler-all-day-table').outerWidth();
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth();
+    const expectedWidth = 1000 - this.instance.getTimePanelWidth();
 
     assert.equal(headerPanelWidth, expectedWidth, 'Width is OK');
     assert.equal(allDayTableWidth, expectedWidth, 'Width is OK');
@@ -201,7 +201,7 @@ QUnit.test('Workspace tables width should not be less than element width', funct
 });
 
 
-var stubInvokeMethod = function(instance, options) {
+const stubInvokeMethod = function(instance, options) {
     options = options || {};
     sinon.stub(instance, 'invoke', function() {
         const subscribe = arguments[0];
@@ -224,8 +224,8 @@ var stubInvokeMethod = function(instance, options) {
             const tz = options.tz;
 
             if(tz) {
-                const tzOffset = new Date().getTimezoneOffset() * 60000,
-                    dateInUTC = date.getTime() + tzOffset;
+                const tzOffset = new Date().getTimezoneOffset() * 60000;
+                const dateInUTC = date.getTime() + tzOffset;
 
                 date = new Date(dateInUTC + (tz * 3600000));
             }
@@ -252,16 +252,16 @@ QUnit.module('Vertical Workspace with horizontal scrollbar, groupOrientation = v
 
 QUnit.test('Header scrollable should contain header panel, groupOrientation = vertical', function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
-    var headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance'),
-        scrollableContent = headerScrollable.$content();
+    const headerScrollable = this.instance.$element().find('.dx-scheduler-header-scrollable').dxScrollable('instance');
+    const scrollableContent = headerScrollable.$content();
 
     assert.equal(scrollableContent.find('.dx-scheduler-header-panel').length, 1, 'Header panel exists');
 });
 
 QUnit.test('Date table scrollable should contain date table, all-day container and all-day tables, groupOrientation = vertical', function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
-    var dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance'),
-        scrollableContent = dateTableScrollable.$content();
+    const dateTableScrollable = this.instance.$element().find('.dx-scheduler-date-table-scrollable').dxScrollable('instance');
+    const scrollableContent = dateTableScrollable.$content();
 
     assert.equal(scrollableContent.find('.dx-scheduler-date-table').length, 1, 'Date table exists');
     assert.equal(scrollableContent.find('.dx-scheduler-all-day-appointments').length, 1, 'All-day container exists');
@@ -270,31 +270,31 @@ QUnit.test('Date table scrollable should contain date table, all-day container a
 
 QUnit.test('SideBar scrollable should contain timePanel and groupTable, groupOrientation = vertical', function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
-    var sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance'),
-        scrollableContent = sidebarScrollable.$content();
+    const sidebarScrollable = this.instance.$element().find('.dx-scheduler-sidebar-scrollable').dxScrollable('instance');
+    const scrollableContent = sidebarScrollable.$content();
 
     assert.equal(scrollableContent.find('.dx-scheduler-time-panel').length, 1, 'Time panel exists');
     assert.equal(scrollableContent.find('.dx-scheduler-work-space-vertical-group-table').length, 1, 'Group table exists');
 });
 
 QUnit.test('the \'getCellIndexByCoordinates\' method should return a right result, groupOrientation = vertical', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
 
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
+    const index = this.instance.getCellIndexByCoordinates({ left: 85, top: 55 });
 
     assert.equal(index, 7, 'Index is OK');
 });
 
 QUnit.test('Header panel and date table should have a correct width, groupOrientation = vertical', function(assert) {
-    var $element = this.instance.$element();
+    const $element = this.instance.$element();
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
-    var headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(true),
-        dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(true);
+    const headerPanelWidth = $element.find('.dx-scheduler-header-panel').outerWidth(true);
+    const dateTableWidth = $element.find('.dx-scheduler-date-table').outerWidth(true);
 
     assert.equal(headerPanelWidth, 797, 'Width is OK');
     assert.equal(dateTableWidth, 797, 'Width is OK');

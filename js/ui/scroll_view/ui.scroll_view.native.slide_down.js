@@ -1,15 +1,15 @@
-var Callbacks = require('../../core/utils/callbacks'),
-    NativeStrategy = require('./ui.scrollable.native'),
-    Deferred = require('../../core/utils/deferred').Deferred;
+const Callbacks = require('../../core/utils/callbacks');
+const NativeStrategy = require('./ui.scrollable.native');
+const Deferred = require('../../core/utils/deferred').Deferred;
 
-var STATE_RELEASED = 0,
-    STATE_READY = 1,
-    STATE_LOADING = 2,
+const STATE_RELEASED = 0;
+const STATE_READY = 1;
+const STATE_LOADING = 2;
 
-    LOADING_HEIGHT = 80;
+const LOADING_HEIGHT = 80;
 
 
-var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
+const SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _init: function(scrollView) {
         this.callBase(scrollView);
@@ -96,7 +96,7 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         this._state = STATE_RELEASED;
         this.releaseCallbacks.fire();

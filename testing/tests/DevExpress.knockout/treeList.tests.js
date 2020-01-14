@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    ko = require('knockout');
+const $ = require('jquery');
+const ko = require('knockout');
 
 require('ui/tree_list');
 require('integration/knockout');
 
-var testArray = [
+const testArray = [
     { Id: 1, Head_ID: 0, Name: 'Name1' },
     { Id: 2, Head_ID: 1, Name: 'Name2' },
     { Id: 3, Head_ID: 1, Name: 'Name3' },
@@ -15,7 +15,7 @@ var testArray = [
 ];
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="testContainer">\
             <div id=treeList data-bind="dxTreeList: treeListOptions"></div>\
             <div id="testElement" data-bind="foreach: keys"><div data-bind="text: $data"></div></div>\
@@ -25,19 +25,19 @@ QUnit.testStart(function() {
 });
 
 QUnit.test('Two-way binding works well with the \'expandedRowKeys\' option', function(assert) {
-    var $testContainer = $('#testContainer'),
-        keys = ko.observableArray([1]),
-        clock = sinon.useFakeTimers(),
-        viewModel = {
-            treeListOptions: {
-                dataSource: testArray,
-                columns: ['Name'],
-                keyExpr: 'Id',
-                parentIdExpr: 'Head_ID',
-                expandedRowKeys: keys
-            },
-            keys: keys
-        };
+    const $testContainer = $('#testContainer');
+    const keys = ko.observableArray([1]);
+    const clock = sinon.useFakeTimers();
+    const viewModel = {
+        treeListOptions: {
+            dataSource: testArray,
+            columns: ['Name'],
+            keyExpr: 'Id',
+            parentIdExpr: 'Head_ID',
+            expandedRowKeys: keys
+        },
+        keys: keys
+    };
 
     ko.applyBindings(viewModel, $testContainer.get(0));
 
@@ -55,20 +55,20 @@ QUnit.test('Two-way binding works well with the \'expandedRowKeys\' option', fun
 });
 
 QUnit.test('Two-way binding works well with the \'expandedRowKeys\' and \'autoExpandAll\' options', function(assert) {
-    var $testContainer = $('#testContainer'),
-        keys = ko.observableArray([]),
-        clock = sinon.useFakeTimers(),
-        viewModel = {
-            treeListOptions: {
-                dataSource: testArray,
-                autoExpandAll: true,
-                columns: ['Name'],
-                keyExpr: 'Id',
-                parentIdExpr: 'Head_ID',
-                expandedRowKeys: keys
-            },
-            keys: keys
-        };
+    const $testContainer = $('#testContainer');
+    const keys = ko.observableArray([]);
+    const clock = sinon.useFakeTimers();
+    const viewModel = {
+        treeListOptions: {
+            dataSource: testArray,
+            autoExpandAll: true,
+            columns: ['Name'],
+            keyExpr: 'Id',
+            parentIdExpr: 'Head_ID',
+            expandedRowKeys: keys
+        },
+        keys: keys
+    };
 
     ko.applyBindings(viewModel, $testContainer.get(0));
 

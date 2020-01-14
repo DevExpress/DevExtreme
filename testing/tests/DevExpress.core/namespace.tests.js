@@ -1,5 +1,5 @@
-var testGlobalExports = require('../../helpers/publicModulesHelper.js'),
-    version = require('core/version');
+const testGlobalExports = require('../../helpers/publicModulesHelper.js');
+const version = require('core/version');
 
 require('bundles/modules/core');
 

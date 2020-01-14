@@ -1,36 +1,36 @@
-var $ = require('../../core/renderer'),
-    eventsEngine = require('../../events/core/events_engine'),
-    noop = require('../../core/utils/common').noop,
-    clickEvent = require('../../events/click'),
-    messageLocalization = require('../../localization/message'),
-    translator = require('../../animation/translator'),
-    eventUtils = require('../../events/utils'),
-    feedbackEvents = require('../../events/core/emitter.feedback'),
-    EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper'),
-    registerDecorator = require('./ui.list.edit.decorator_registry').register,
-    SwitchableEditDecorator = require('./ui.list.edit.decorator.switchable'),
-    fx = require('../../animation/fx'),
-    themes = require('../themes'),
-    ActionSheet = require('../action_sheet');
+const $ = require('../../core/renderer');
+const eventsEngine = require('../../events/core/events_engine');
+const noop = require('../../core/utils/common').noop;
+const clickEvent = require('../../events/click');
+const messageLocalization = require('../../localization/message');
+const translator = require('../../animation/translator');
+const eventUtils = require('../../events/utils');
+const feedbackEvents = require('../../events/core/emitter.feedback');
+const EditDecoratorMenuHelperMixin = require('./ui.list.edit.decorator_menu_helper');
+const registerDecorator = require('./ui.list.edit.decorator_registry').register;
+const SwitchableEditDecorator = require('./ui.list.edit.decorator.switchable');
+const fx = require('../../animation/fx');
+const themes = require('../themes');
+const ActionSheet = require('../action_sheet');
 
-var LIST_EDIT_DECORATOR = 'dxListEditDecorator',
-    CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, LIST_EDIT_DECORATOR),
-    ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR),
+const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
+const CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, LIST_EDIT_DECORATOR);
+const ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR);
 
-    SLIDE_MENU_CLASS = 'dx-list-slide-menu',
-    SLIDE_MENU_WRAPPER_CLASS = 'dx-list-slide-menu-wrapper',
+const SLIDE_MENU_CLASS = 'dx-list-slide-menu';
+const SLIDE_MENU_WRAPPER_CLASS = 'dx-list-slide-menu-wrapper';
 
-    SLIDE_MENU_CONTENT_CLASS = 'dx-list-slide-menu-content',
-    SLIDE_MENU_BUTTONS_CONTAINER_CLASS = 'dx-list-slide-menu-buttons-container',
+const SLIDE_MENU_CONTENT_CLASS = 'dx-list-slide-menu-content';
+const SLIDE_MENU_BUTTONS_CONTAINER_CLASS = 'dx-list-slide-menu-buttons-container';
 
-    SLIDE_MENU_BUTTONS_CLASS = 'dx-list-slide-menu-buttons',
-    SLIDE_MENU_BUTTON_CLASS = 'dx-list-slide-menu-button',
+const SLIDE_MENU_BUTTONS_CLASS = 'dx-list-slide-menu-buttons';
+const SLIDE_MENU_BUTTON_CLASS = 'dx-list-slide-menu-button';
 
-    SLIDE_MENU_BUTTON_MENU_CLASS = 'dx-list-slide-menu-button-menu',
-    SLIDE_MENU_BUTTON_DELETE_CLASS = 'dx-list-slide-menu-button-delete',
+const SLIDE_MENU_BUTTON_MENU_CLASS = 'dx-list-slide-menu-button-menu';
+const SLIDE_MENU_BUTTON_DELETE_CLASS = 'dx-list-slide-menu-button-delete';
 
-    SLIDE_MENU_ANIMATION_DURATION = 400,
-    SLIDE_MENU_ANIMATION_EASING = 'cubic-bezier(0.075, 0.82, 0.165, 1)';
+const SLIDE_MENU_ANIMATION_DURATION = 400;
+const SLIDE_MENU_ANIMATION_EASING = 'cubic-bezier(0.075, 0.82, 0.165, 1)';
 
 
 registerDecorator(
@@ -59,17 +59,17 @@ registerDecorator(
                 return;
             }
 
-            var menuItems = this._menuItems();
+            const menuItems = this._menuItems();
 
             if(menuItems.length === 1) {
-                var menuItem = menuItems[0];
+                const menuItem = menuItems[0];
 
                 this._renderMenuButton(menuItem.text, (function(e) {
                     e.stopPropagation();
                     this._fireAction(menuItem);
                 }).bind(this));
             } else {
-                var $menu = $('<div>').addClass(SLIDE_MENU_CLASS);
+                const $menu = $('<div>').addClass(SLIDE_MENU_CLASS);
                 this._menu = this._list._createComponent($menu, ActionSheet, {
                     showTitle: false,
                     items: menuItems,
@@ -80,7 +80,7 @@ registerDecorator(
                 });
                 $menu.appendTo(this._list.$element());
 
-                var $menuButton = this._renderMenuButton(messageLocalization.format('dxListEditDecorator-more'), (function(e) {
+                const $menuButton = this._renderMenuButton(messageLocalization.format('dxListEditDecorator-more'), (function(e) {
                     e.stopPropagation();
                     this._menu.show();
                 }).bind(this));
@@ -89,7 +89,7 @@ registerDecorator(
         },
 
         _renderMenuButton: function(text, action) {
-            var $menuButton = $('<div>')
+            const $menuButton = $('<div>')
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_MENU_CLASS)
                 .text(text);
@@ -105,7 +105,7 @@ registerDecorator(
                 return;
             }
 
-            var $deleteButton = $('<div>')
+            const $deleteButton = $('<div>')
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
                 .text(themes.isMaterial()
@@ -128,12 +128,12 @@ registerDecorator(
         modifyElement: function(config) {
             this.callBase.apply(this, arguments);
 
-            var $itemElement = config.$itemElement;
+            const $itemElement = config.$itemElement;
 
             $itemElement
                 .addClass(SLIDE_MENU_WRAPPER_CLASS);
 
-            var $slideMenuContent = $('<div>')
+            const $slideMenuContent = $('<div>')
                 .addClass(SLIDE_MENU_CONTENT_CLASS);
 
             $itemElement.wrapInner($slideMenuContent);
@@ -157,28 +157,28 @@ registerDecorator(
         },
 
         _swipeUpdateHandler: function($itemElement, args) {
-            var rtl = this._isRtlEnabled(),
-                signCorrection = rtl ? -1 : 1,
-                isItemReadyToDelete = this._isReadyToDelete($itemElement),
-                moveJustStarted = this._getCurrentPositions().content === this._getStartPositions().content;
+            const rtl = this._isRtlEnabled();
+            const signCorrection = rtl ? -1 : 1;
+            const isItemReadyToDelete = this._isReadyToDelete($itemElement);
+            const moveJustStarted = this._getCurrentPositions().content === this._getStartPositions().content;
 
             if(moveJustStarted && !isItemReadyToDelete && args.offset * signCorrection > 0) {
                 args.cancel = true;
                 return;
             }
 
-            var offset = this._cachedItemWidth * args.offset,
-                startOffset = isItemReadyToDelete ? -this._cachedButtonWidth * signCorrection : 0,
-                correctedOffset = (offset + startOffset) * signCorrection,
-                percent = correctedOffset < 0 ? Math.abs((offset + startOffset) / this._cachedButtonWidth) : 0;
+            const offset = this._cachedItemWidth * args.offset;
+            const startOffset = isItemReadyToDelete ? -this._cachedButtonWidth * signCorrection : 0;
+            const correctedOffset = (offset + startOffset) * signCorrection;
+            const percent = correctedOffset < 0 ? Math.abs((offset + startOffset) / this._cachedButtonWidth) : 0;
 
             this._setPositions(this._getPositions(percent));
             return true;
         },
 
         _getStartPositions: function() {
-            var rtl = this._isRtlEnabled(),
-                signCorrection = rtl ? -1 : 1;
+            const rtl = this._isRtlEnabled();
+            const signCorrection = rtl ? -1 : 1;
 
             return {
                 content: 0,
@@ -188,9 +188,9 @@ registerDecorator(
         },
 
         _getPositions: function(percent) {
-            var rtl = this._isRtlEnabled(),
-                signCorrection = rtl ? -1 : 1,
-                startPositions = this._getStartPositions();
+            const rtl = this._isRtlEnabled();
+            const signCorrection = rtl ? -1 : 1;
+            const startPositions = this._getStartPositions();
 
             return {
                 content: startPositions.content - percent * this._cachedButtonWidth * signCorrection,
@@ -235,10 +235,10 @@ registerDecorator(
         _swipeEndHandler: function($itemElement, args) {
             this._cacheItemData($itemElement);
 
-            var signCorrection = this._isRtlEnabled() ? 1 : -1,
-                offset = this._cachedItemWidth * args.offset,
-                endedAtReadyToDelete = !this._isReadyToDelete($itemElement) && (offset * signCorrection > this._cachedButtonWidth * 0.2),
-                readyToDelete = args.targetOffset === signCorrection && endedAtReadyToDelete;
+            const signCorrection = this._isRtlEnabled() ? 1 : -1;
+            const offset = this._cachedItemWidth * args.offset;
+            const endedAtReadyToDelete = !this._isReadyToDelete($itemElement) && (offset * signCorrection > this._cachedButtonWidth * 0.2);
+            const readyToDelete = args.targetOffset === signCorrection && endedAtReadyToDelete;
 
             this._toggleDeleteReady($itemElement, readyToDelete);
             return true;
@@ -269,10 +269,10 @@ registerDecorator(
         },
 
         _animateToPositions: function(positions) {
-            var that = this,
+            const that = this;
 
-                currentPosition = this._getCurrentPositions(),
-                durationTimePart = Math.min(Math.abs(currentPosition.content - positions.content) / this._cachedButtonWidth, 1);
+            const currentPosition = this._getCurrentPositions();
+            const durationTimePart = Math.min(Math.abs(currentPosition.content - positions.content) / this._cachedButtonWidth, 1);
 
             return fx.animate(this._$cachedContent, {
                 from: currentPosition,

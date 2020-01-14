@@ -18,7 +18,7 @@ function getIndent(node) {
 }
 
 function removeNewLineChar(operations) {
-    let newLineOperation = operations[operations.length - 1];
+    const newLineOperation = operations[operations.length - 1];
     newLineOperation.insert = newLineOperation.insert.trim();
 }
 
@@ -26,9 +26,9 @@ const getMatcher = (quill) => {
     const Delta = quill.import('delta');
 
     return (node, delta) => {
-        let ops = delta.ops.slice();
+        const ops = delta.ops.slice();
 
-        let insertOperation = ops[0];
+        const insertOperation = ops[0];
         insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
         const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
         const indent = listDecoratorMatches && getIndent(node);

@@ -1,4 +1,4 @@
-var displayNames = [
+const displayNames = [
     '(UTC) Monrovia, Reykjavik',
     '(UTC+03:00) Nairobi',
     '(UTC+02:00) Harare, Pretoria',
@@ -92,7 +92,7 @@ var displayNames = [
     '(UTC+8:45) Eucla',
     '(UTC+10:30) Lord Howe Island'
 ];
-var timezones = [{
+const timezones = [{
     'id': 'Africa/Bamako',
     'title': 'Bamako',
     'winIndex': 0,

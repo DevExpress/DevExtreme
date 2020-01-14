@@ -14,7 +14,7 @@ getQuill()
 
 class VariableModule extends PopupModule {
     _getDefaultOptions() {
-        let baseConfig = super._getDefaultOptions();
+        const baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
             escapeChar: ''

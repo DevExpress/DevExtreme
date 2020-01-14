@@ -1,10 +1,10 @@
-var $ = require('jquery'),
-    noop = require('core/utils/common').noop,
-    eventEmitterModule = require('viz/vector_map/event_emitter'),
-    projectionModule = require('viz/vector_map/projection.main'),
-    Projection = projectionModule.Projection,
-    projectionEnginesModule = require('viz/vector_map/projection'),
-    projection = projectionEnginesModule.projection;
+const $ = require('jquery');
+const noop = require('core/utils/common').noop;
+const eventEmitterModule = require('viz/vector_map/event_emitter');
+const projectionModule = require('viz/vector_map/projection.main');
+const Projection = projectionModule.Projection;
+const projectionEnginesModule = require('viz/vector_map/projection');
+const projection = projectionEnginesModule.projection;
 
 function returnValue(value) {
     return function() {
@@ -12,7 +12,7 @@ function returnValue(value) {
     };
 }
 
-var environment = {
+const environment = {
     beforeEach: function() {
         this.centerChanged = sinon.spy();
         this.zoomChanged = sinon.spy();
@@ -36,24 +36,24 @@ var environment = {
 QUnit.module('General', environment);
 
 QUnit.test('setEngine / center is changed', function(assert) {
-    var onEngine = sinon.spy(),
-        onScreen = sinon.spy(),
-        onCenter = sinon.spy(),
-        onZoom = sinon.spy(),
-        engine = projection({
-            to: function(coords) {
-                return [
-                    (coords[0] + 60) / 20,
-                    (coords[1] - 40) / 10
-                ];
-            },
-            from: function(coords) {
-                return [
-                    (coords[0] - 3) * 20,
-                    (coords[1] + 4) * 10
-                ];
-            }
-        });
+    const onEngine = sinon.spy();
+    const onScreen = sinon.spy();
+    const onCenter = sinon.spy();
+    const onZoom = sinon.spy();
+    const engine = projection({
+        to: function(coords) {
+            return [
+                (coords[0] + 60) / 20,
+                (coords[1] - 40) / 10
+            ];
+        },
+        from: function(coords) {
+            return [
+                (coords[0] - 3) * 20,
+                (coords[1] + 4) * 10
+            ];
+        }
+    });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
@@ -71,24 +71,24 @@ QUnit.test('setEngine / center is changed', function(assert) {
 });
 
 QUnit.test('setEngine / center is not changed', function(assert) {
-    var onEngine = sinon.spy(),
-        onScreen = sinon.spy(),
-        onCenter = sinon.spy(),
-        onZoom = sinon.spy(),
-        engine = projection({
-            to: function(coords) {
-                return [
-                    (coords[0] - 40) / 40,
-                    (coords[1] + 20) / 10
-                ];
-            },
-            from: function(coords) {
-                return [
-                    (coords[0] + 1) * 40,
-                    (coords[1] - 2) * 10
-                ];
-            }
-        });
+    const onEngine = sinon.spy();
+    const onScreen = sinon.spy();
+    const onCenter = sinon.spy();
+    const onZoom = sinon.spy();
+    const engine = projection({
+        to: function(coords) {
+            return [
+                (coords[0] - 40) / 40,
+                (coords[1] + 20) / 10
+            ];
+        },
+        from: function(coords) {
+            return [
+                (coords[0] + 1) * 40,
+                (coords[1] - 2) * 10
+            ];
+        }
+    });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setCenter(engine.center());
     this.projection.setZoom(1);
@@ -110,10 +110,10 @@ QUnit.test('setEngine / center is not changed', function(assert) {
 });
 
 QUnit.test('setEngine / not changed', function(assert) {
-    var onEngine = sinon.spy(),
-        onScreen = sinon.spy(),
-        onCenter = sinon.spy(),
-        onZoom = sinon.spy();
+    const onEngine = sinon.spy();
+    const onScreen = sinon.spy();
+    const onCenter = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
@@ -130,10 +130,10 @@ QUnit.test('setEngine / not changed', function(assert) {
 });
 
 QUnit.test('setEngine / non invertible', function(assert) {
-    var onEngine = sinon.spy(),
-        onScreen = sinon.spy(),
-        onCenter = sinon.spy(),
-        onZoom = sinon.spy();
+    const onEngine = sinon.spy();
+    const onScreen = sinon.spy();
+    const onCenter = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
@@ -152,14 +152,14 @@ QUnit.test('setEngine / non invertible', function(assert) {
 });
 
 QUnit.test('Event emitter methods are injected', function(assert) {
-    var projection = this.projection;
+    const projection = this.projection;
     $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(projection[name], method, name);
     });
 });
 
 QUnit.test('setSize', function(assert) {
-    var onScreen = sinon.spy();
+    const onScreen = sinon.spy();
     this.projection.on({ screen: onScreen });
 
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
@@ -180,8 +180,8 @@ QUnit.test('isInvertible', function(assert) {
 });
 
 QUnit.test('setBounds', function(assert) {
-    var engine1 = { tag: 'engine-1' },
-        engine2 = { tag: 'engine-2' };
+    const engine1 = { tag: 'engine-1' };
+    const engine2 = { tag: 'engine-2' };
     this.projection.setEngine = sinon.spy();
     this.engine.original = sinon.stub().returns(engine1);
     engine1.bounds = sinon.stub().returns(engine2);
@@ -245,7 +245,7 @@ QUnit.test('getCenter', function(assert) {
 });
 
 QUnit.test('setCenter', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
@@ -258,7 +258,7 @@ QUnit.test('setCenter', function(assert) {
 });
 
 QUnit.test('setCenter / not changed', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
@@ -271,7 +271,7 @@ QUnit.test('setCenter / not changed', function(assert) {
 });
 
 QUnit.test('setCenter / out of bounds', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
@@ -284,7 +284,7 @@ QUnit.test('setCenter / out of bounds', function(assert) {
 });
 
 QUnit.test('setCenter / not valid', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
 
@@ -297,7 +297,7 @@ QUnit.test('setCenter / not valid', function(assert) {
 });
 
 QUnit.test('setCenter / engine is not invertible', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.on({ center: onCenter });
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
@@ -320,7 +320,7 @@ QUnit.test('setCenterByPoint', function(assert) {
 });
 
 QUnit.test('moveCenter', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ center: onCenter });
 
@@ -351,7 +351,7 @@ QUnit.test('moveCenter', function(assert) {
 });
 
 QUnit.test('moveCenter / without begin and end', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ center: onCenter });
 
@@ -364,7 +364,7 @@ QUnit.test('moveCenter / without begin and end', function(assert) {
 });
 
 QUnit.test('moveCenter / non invertible', function(assert) {
-    var onCenter = sinon.spy();
+    const onCenter = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ center: onCenter });
@@ -384,7 +384,7 @@ QUnit.test('getZoom', function(assert) {
 });
 
 QUnit.test('setZoom', function(assert) {
-    var onZoom = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ zoom: onZoom });
 
@@ -397,7 +397,7 @@ QUnit.test('setZoom', function(assert) {
 });
 
 QUnit.test('setZoom / not changed', function(assert) {
-    var onZoom = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
     this.zoomChanged.reset();
@@ -412,7 +412,7 @@ QUnit.test('setZoom / not changed', function(assert) {
 });
 
 QUnit.test('setZoom / out of bounds', function(assert) {
-    var onZoom = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setMaxZoom(5);
     this.zoomChanged.reset();
@@ -427,7 +427,7 @@ QUnit.test('setZoom / out of bounds', function(assert) {
 });
 
 QUnit.test('setZoom / not valid', function(assert) {
-    var onZoom = sinon.spy();
+    const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
     this.zoomChanged.reset();
@@ -442,7 +442,7 @@ QUnit.test('setZoom / not valid', function(assert) {
 });
 
 QUnit.test('setZoom / engine is not invertible', function(assert) {
-    var onZoom = sinon.spy();
+    const onZoom = sinon.spy();
     this.engine.isInvertible = returnValue(false);
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.on({ zoom: onZoom });
@@ -474,7 +474,7 @@ QUnit.test('getScaledZoom', function(assert) {
 });
 
 QUnit.test('setScaledZoom', function(assert) {
-    var setZoom = sinon.spy(this.projection, 'setZoom');
+    const setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setMaxZoom(10);
     this.projection.setScaledZoom(0);
@@ -498,7 +498,7 @@ QUnit.test('setScaledZoom', function(assert) {
 });
 
 QUnit.test('changeScaledZoom', function(assert) {
-    var setZoom = sinon.spy(this.projection, 'setZoom');
+    const setZoom = sinon.spy(this.projection, 'setZoom');
     this.projection.setMaxZoom(10);
 
     this.projection.changeScaledZoom(-1);
@@ -533,7 +533,7 @@ QUnit.test('getZoomScalePartition', function(assert) {
 });
 
 QUnit.test('setMaxZoom', function(assert) {
-    var onMaxZoom = sinon.spy();
+    const onMaxZoom = sinon.spy();
 
     sinon.spy(this.projection, 'setZoom');
     this.projection.on({ 'max-zoom': onMaxZoom });
@@ -546,7 +546,7 @@ QUnit.test('setMaxZoom', function(assert) {
 
 QUnit.test('setMaxZoom / less than current zoom', function(assert) {
     this.projection.setZoom(10);
-    var onMaxZoom = sinon.spy();
+    const onMaxZoom = sinon.spy();
 
     sinon.spy(this.projection, 'setZoom');
     this.projection.on({ 'max-zoom': onMaxZoom });
@@ -558,7 +558,7 @@ QUnit.test('setMaxZoom / less than current zoom', function(assert) {
 });
 
 QUnit.test('setMaxZoom / not valid', function(assert) {
-    var onMaxZoom = sinon.spy();
+    const onMaxZoom = sinon.spy();
 
     sinon.spy(this.projection, 'setZoom');
     this.projection.on({ 'max-zoom': onMaxZoom });
@@ -574,8 +574,8 @@ QUnit.test('getViewport', function(assert) {
 });
 
 QUnit.test('setViewport', function(assert) {
-    var setCenter = sinon.spy(this.projection, 'setCenter'),
-        setZoom = sinon.spy(this.projection, 'setZoom');
+    const setCenter = sinon.spy(this.projection, 'setCenter');
+    const setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setViewport([-10, 20, 20, -5]);
 
@@ -584,8 +584,8 @@ QUnit.test('setViewport', function(assert) {
 });
 
 QUnit.test('setViewport / not valid', function(assert) {
-    var setCenter = sinon.spy(this.projection, 'setCenter'),
-        setZoom = sinon.spy(this.projection, 'setZoom');
+    const setCenter = sinon.spy(this.projection, 'setCenter');
+    const setZoom = sinon.spy(this.projection, 'setZoom');
 
     this.projection.setViewport(null);
 
@@ -607,7 +607,7 @@ QUnit.module('Viewport', {
     },
 
     _create: function() {
-        var projection = new Projection({ centerChanged: noop, zoomChanged: noop });
+        const projection = new Projection({ centerChanged: noop, zoomChanged: noop });
         projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
         return projection;
     },
@@ -626,7 +626,7 @@ QUnit.module('Viewport', {
 });
 
 $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [-180, 90, 50, -90]], function(_, bounds) {
-    var namePart = bounds ? '[' + bounds.join(', ') + ']' : 'null';
+    let namePart = bounds ? '[' + bounds.join(', ') + ']' : 'null';
     namePart = ' / ' + namePart;
 
     QUnit.test('Common - to viewport' + namePart, function(assert) {
@@ -809,7 +809,7 @@ QUnit.module('Mercator - project', {
     },
 
     doTest: function(assert, arg, expected) {
-        var actual = this.engine.project(arg);
+        const actual = this.engine.project(arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
 
     },
@@ -866,7 +866,7 @@ QUnit.module('Mercator - unproject', {
     },
 
     doTest: function(assert, arg, expected) {
-        var actual = this.engine.unproject(arg);
+        const actual = this.engine.unproject(arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
     },
 
@@ -1106,15 +1106,15 @@ QUnit.test('creation / validation', function(assert) {
 });
 
 QUnit.test('creation', function(assert) {
-    var to = sinon.stub().returns([1000, 2000]),
-        from = sinon.stub().returns([3000, 4000]);
+    const to = sinon.stub().returns([1000, 2000]);
+    const from = sinon.stub().returns([3000, 4000]);
     from.withArgs([0, 0]).returns([300, 400]);
     from.withArgs([-1, 0]).returns([10, 20]);
     from.withArgs([0, +1]).returns([30, 40]);
     from.withArgs([+1, 0]).returns([50, 60]);
     from.withArgs([0, -1]).returns([70, 80]);
 
-    var proj = projection({
+    const proj = projection({
         aspectRatio: 3,
         to: to,
         from: from
@@ -1142,9 +1142,9 @@ QUnit.test('creation', function(assert) {
 });
 
 QUnit.test('creation / non invertible', function(assert) {
-    var to = sinon.stub().returns([1000, 2000]);
+    const to = sinon.stub().returns([1000, 2000]);
 
-    var proj = projection({ to: to });
+    const proj = projection({ to: to });
 
     assert.ok(proj instanceof projectionModule._TESTS_Engine, 'instance type');
 
@@ -1165,7 +1165,7 @@ QUnit.test('creation / non invertible', function(assert) {
 });
 
 QUnit.test('bounds', function(assert) {
-    var proj = projection({
+    const proj = projection({
         aspectRatio: 3,
         to: function(arg) {
             return [arg[0] * 2, arg[1] * 3];
@@ -1175,7 +1175,7 @@ QUnit.test('bounds', function(assert) {
         }
     });
 
-    var newProj = proj.bounds([10, 20, 30, 40]);
+    const newProj = proj.bounds([10, 20, 30, 40]);
 
     assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
     assert.ok(newProj !== proj, 'not same instance');
@@ -1184,7 +1184,7 @@ QUnit.test('bounds', function(assert) {
 });
 
 QUnit.test('aspectRatio', function(assert) {
-    var proj = projection({
+    const proj = projection({
         aspectRatio: 3,
         to: function(arg) {
             return [arg[0] * 2, arg[1] * 3];
@@ -1194,7 +1194,7 @@ QUnit.test('aspectRatio', function(assert) {
         }
     });
 
-    var newProj = proj.aspectRatio(4);
+    const newProj = proj.aspectRatio(4);
 
     assert.ok(newProj instanceof projectionModule._TESTS_Engine, 'instance type');
     assert.ok(newProj !== proj, 'not same instance');
@@ -1212,7 +1212,7 @@ $.each([
     { bounds: [-1.5, -0.5, 0.5, -0.5], center: [-0.5, -0.5], min: [-1.5, -0.5], max: [0.5, -0.5], project: [-1, 1], unproject: [-0.5, -0.75], message: 'y is zero' }
 ], function(_, data) {
     QUnit.test('bounds / ' + data.message, function(assert) {
-        var proj = projection({
+        const proj = projection({
             to: function(arg) {
                 return [arg[0] / 2, arg[1] / 4];
             },
@@ -1230,7 +1230,7 @@ $.each([
 });
 
 QUnit.test('add/get methods', function(assert) {
-    var proj = createStubEngine();
+    const proj = createStubEngine();
 
     projection.add('tester-1', proj);
 
@@ -1244,7 +1244,7 @@ QUnit.test('add/get methods / not valid', function(assert) {
 });
 
 QUnit.test('add/get methods / duplication', function(assert) {
-    var proj = createStubEngine();
+    const proj = createStubEngine();
 
     projection.add('tester-3', proj).add('tester-3', createStubEngine());
 
@@ -1253,8 +1253,8 @@ QUnit.test('add/get methods / duplication', function(assert) {
 
 QUnit.module('Engines', {
     check: function(assert, data) {
-        var project = projection.get(QUnit.config.current.testName).project,
-            unproject = projection.get(QUnit.config.current.testName).unproject;
+        const project = projection.get(QUnit.config.current.testName).project;
+        const unproject = projection.get(QUnit.config.current.testName).unproject;
         $.each(data, function(_, item) {
             assert.arraysEqual(project(item.project), item.unproject, 'project: ' + item.project.join(' '));
             assert.arraysEqual(unproject(item.unproject), item.project, 'unproject: ' + item.unproject.join(' '), 1E-2);
@@ -1263,7 +1263,7 @@ QUnit.module('Engines', {
 });
 
 QUnit.test('mercator', function(assert) {
-    var X = 85.0511;
+    const X = 85.0511;
     this.check(assert, [
         { project: [-180, -X], unproject: [-1, +1] },
         { project: [-180, +X], unproject: [-1, -1] },
@@ -1324,15 +1324,15 @@ function createStubEngine() {
 
 function createInternalMethodTester(methodName) {
     return function(assert, arg, expected) {
-        var actual = this.projection[methodName](arg);
+        const actual = this.projection[methodName](arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
     };
 }
 
 QUnit.assert.arraysEqual = function(actual, expected, message, epsilon) {
-    var i = 0,
-        ii = expected.length,
-        equal = true;
+    let i = 0;
+    const ii = expected.length;
+    let equal = true;
     epsilon = epsilon || 1E-4;
     for(; i < ii; ++i) {
         equal = Math.abs(actual[i] - expected[i]) <= epsilon;

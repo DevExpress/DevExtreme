@@ -1,9 +1,9 @@
-var $ = require('jquery'),
-    devices = require('core/devices'),
-    hoverEvents = require('events/hover');
+const $ = require('jquery');
+const devices = require('core/devices');
+const hoverEvents = require('events/hover');
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container" class="container">\
             <div id="element" class="element"></div>\
             <div id="second-element"></div>\
@@ -15,8 +15,8 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-var POINTER_ENTER = 'dxpointerenter',
-    POINTER_LEAVE = 'dxpointerleave';
+const POINTER_ENTER = 'dxpointerenter';
+const POINTER_LEAVE = 'dxpointerleave';
 
 QUnit.module('hover', {
     beforeEach: function() {
@@ -25,8 +25,8 @@ QUnit.module('hover', {
 });
 
 QUnit.test('hover start', function(assert) {
-    var hoverStartFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -39,8 +39,8 @@ QUnit.test('hover start', function(assert) {
 });
 
 QUnit.test('hover end', function(assert) {
-    var hoverEndFired = 0,
-        $element = this.$element;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.end, function() {
@@ -53,9 +53,9 @@ QUnit.test('hover end', function(assert) {
 });
 
 QUnit.test('hover start/end', function(assert) {
-    var hoverStartFired = 0,
-        hoverEndFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -75,11 +75,11 @@ QUnit.test('hover start/end', function(assert) {
 });
 
 QUnit.test('hover event with two delegated subscriptions on the same element (T430275)', function(assert) {
-    var firstSubscription = 0,
-        secondSubscription = 0,
-        $element = this.$element,
-        $secondElement = $('#second-element'),
-        $container = $('#container');
+    let firstSubscription = 0;
+    let secondSubscription = 0;
+    const $element = this.$element;
+    const $secondElement = $('#second-element');
+    const $container = $('#container');
 
     $container
         .on(hoverEvents.start, '#element', function() {
@@ -97,14 +97,14 @@ QUnit.test('hover event with two delegated subscriptions on the same element (T4
 });
 
 QUnit.test('hover event with two delegated subscriptions on the same element fire after remove one of them', function(assert) {
-    var subscription = 0,
-        removedSubscription = 0,
-        $element = this.$element,
-        $secondElement = $('#second-element'),
-        $container = $('#container'),
-        subscriptionToRemove = function() {
-            removedSubscription++;
-        };
+    let subscription = 0;
+    let removedSubscription = 0;
+    const $element = this.$element;
+    const $secondElement = $('#second-element');
+    const $container = $('#container');
+    const subscriptionToRemove = function() {
+        removedSubscription++;
+    };
 
     $container
         .on(hoverEvents.start, '#element', subscriptionToRemove)
@@ -121,12 +121,12 @@ QUnit.test('hover event with two delegated subscriptions on the same element fir
 });
 
 QUnit.test('hover event fires twice after updating delegated subscription', function(assert) {
-    var hoverEventFired = 0,
-        $element = this.$element,
-        $container = $('#container'),
-        subscriptionToRemove = function() {
-            hoverEventFired++;
-        };
+    let hoverEventFired = 0;
+    const $element = this.$element;
+    const $container = $('#container');
+    const subscriptionToRemove = function() {
+        hoverEventFired++;
+    };
 
     $container
         .on(hoverEvents.start, '#element', subscriptionToRemove)
@@ -139,9 +139,9 @@ QUnit.test('hover event fires twice after updating delegated subscription', func
 });
 
 QUnit.test('hover start/end teardown', function(assert) {
-    var hoverStartFired = 0,
-        hoverEndFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -160,9 +160,9 @@ QUnit.test('hover start/end teardown', function(assert) {
 });
 
 QUnit.test('hover start/end refresh', function(assert) {
-    var hoverStartFired = 0,
-        hoverEndFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -187,9 +187,9 @@ QUnit.test('hover start/end refresh', function(assert) {
 });
 
 QUnit.test('hover end fired after teardown start', function(assert) {
-    var hoverStartFired = 0,
-        hoverEndFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -207,10 +207,10 @@ QUnit.test('hover end fired after teardown start', function(assert) {
 });
 
 QUnit.test('hover events does not fire unexpectedly after update multiple subscriptions on multiple elements (T450286)', function(assert) {
-    var hoverFired = 0,
-        $container = $('.container'),
-        selector = '.element',
-        subscription = hoverEvents.start + ' ' + hoverEvents.end;
+    let hoverFired = 0;
+    const $container = $('.container');
+    const selector = '.element';
+    const subscription = hoverEvents.start + ' ' + hoverEvents.end;
 
     $container
         .on(subscription, selector, function() {
@@ -221,10 +221,10 @@ QUnit.test('hover events does not fire unexpectedly after update multiple subscr
             hoverFired++;
         });
 
-    var $firstContainer = $container.eq(0);
-    var $secondContainer = $container.eq(1);
-    var firstElement = $firstContainer.find(selector)[0];
-    var secondElement = $secondContainer.find(selector)[0];
+    const $firstContainer = $container.eq(0);
+    const $secondContainer = $container.eq(1);
+    const firstElement = $firstContainer.find(selector)[0];
+    const secondElement = $secondContainer.find(selector)[0];
 
 
     $firstContainer.trigger($.Event(POINTER_ENTER, { which: 1, pointers: [], target: firstElement }));
@@ -236,18 +236,18 @@ QUnit.test('hover events does not fire unexpectedly after update multiple subscr
 });
 
 QUnit.test('add and remove several hover delegated subscriptions from one element work correct', function(assert) {
-    var hoverFired = 0,
-        handlerToRemove1 = function() {
-            hoverFired++;
-        },
-        handlerToRemove2 = function() {
-            hoverFired++;
-        },
-        handlerToProcess = function() {
-            hoverFired++;
-        },
-        $container = $('#container'),
-        selector = '#element';
+    let hoverFired = 0;
+    const handlerToRemove1 = function() {
+        hoverFired++;
+    };
+    const handlerToRemove2 = function() {
+        hoverFired++;
+    };
+    const handlerToProcess = function() {
+        hoverFired++;
+    };
+    const $container = $('#container');
+    const selector = '#element';
 
     $container
         .on(hoverEvents.start, selector, handlerToRemove1)
@@ -262,9 +262,9 @@ QUnit.test('add and remove several hover delegated subscriptions from one elemen
 });
 
 QUnit.test('prevent hover on touch device', function(assert) {
-    var hoverStartFired = 0,
-        hoverEndFired = 0,
-        $element = this.$element;
+    let hoverStartFired = 0;
+    let hoverEndFired = 0;
+    const $element = this.$element;
 
     $element
         .on(hoverEvents.start, function() {
@@ -287,9 +287,9 @@ QUnit.test('hover should be prevented in simulator', function(assert) {
     sinon.stub(devices, 'isSimulator', function() { return true; });
 
     try {
-        var hoverStartFired = 0,
-            hoverEndFired = 0,
-            $element = this.$element;
+        let hoverStartFired = 0;
+        let hoverEndFired = 0;
+        const $element = this.$element;
 
         $element
             .on(hoverEvents.start, function() {

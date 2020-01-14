@@ -1,9 +1,9 @@
-var fitIntoRange = require('../../core/utils/math').fitIntoRange;
-var toFixed = require('../utils').toFixed;
+const fitIntoRange = require('../../core/utils/math').fitIntoRange;
+const toFixed = require('../utils').toFixed;
 
-var DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' },
-    ESCAPING_CHAR = '\'',
-    MAXIMUM_NUMBER_LENGTH = 15;
+const DEFAULT_CONFIG = { thousandsSeparator: ',', decimalSeparator: '.' };
+const ESCAPING_CHAR = '\'';
+const MAXIMUM_NUMBER_LENGTH = 15;
 
 function getGroupSizes(formatString) {
     return formatString.split(',').slice(1).map(function(str) {
@@ -14,7 +14,7 @@ function getGroupSizes(formatString) {
 }
 
 function getSignParts(format) {
-    var signParts = format.split(';');
+    const signParts = format.split(';');
 
     if(signParts.length === 1) {
         signParts.push('-' + signParts[0]);
@@ -62,11 +62,11 @@ function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
 function applyGroups(valueString, groupSizes, thousandsSeparator) {
     if(!groupSizes.length) return valueString;
 
-    var groups = [],
-        index = 0;
+    const groups = [];
+    let index = 0;
 
     while(valueString) {
-        var groupSize = groupSizes[index];
+        const groupSize = groupSizes[index];
         groups.push(valueString.slice(0, groupSize));
         valueString = valueString.slice(groupSize);
         if(index < groupSizes.length - 1) {
@@ -78,7 +78,7 @@ function applyGroups(valueString, groupSizes, thousandsSeparator) {
 
 function formatNumberPart(format, valueString) {
     return format.split(ESCAPING_CHAR).map(function(formatPart, escapeIndex) {
-        var isEscape = escapeIndex % 2;
+        const isEscape = escapeIndex % 2;
         if(!formatPart && isEscape) {
             return ESCAPING_CHAR;
         }
@@ -87,9 +87,9 @@ function formatNumberPart(format, valueString) {
 }
 
 function getFloatPointIndex(format) {
-    var isEscape = false;
+    let isEscape = false;
 
-    for(var index = 0; index < format.length; index++) {
+    for(let index = 0; index < format.length; index++) {
         if(format[index] === '\'') {
             isEscape = !isEscape;
         }
@@ -107,10 +107,10 @@ function getFormatter(format, config) {
     return function(value) {
         if(typeof value !== 'number' || isNaN(value)) return '';
 
-        var signFormatParts = getSignParts(format),
-            isPositiveZero = 1 / value === Infinity,
-            isPositive = value > 0 || isPositiveZero,
-            numberFormat = signFormatParts[isPositive ? 0 : 1];
+        const signFormatParts = getSignParts(format);
+        const isPositiveZero = 1 / value === Infinity;
+        const isPositive = value > 0 || isPositiveZero;
+        const numberFormat = signFormatParts[isPositive ? 0 : 1];
 
         if(isPercentFormat(numberFormat)) {
             value = value * 100;
@@ -120,43 +120,43 @@ function getFormatter(format, config) {
             value = -value;
         }
 
-        var floatPointIndex = getFloatPointIndex(numberFormat),
-            floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)],
-            minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]),
-            maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
-            minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
-            maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision,
-            integerLength = Math.floor(value).toString().length,
-            floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength),
-            groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
+        const floatPointIndex = getFloatPointIndex(numberFormat);
+        const floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)];
+        const minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]);
+        const maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]);
+        const minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]);
+        const maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision;
+        const integerLength = Math.floor(value).toString().length;
+        const floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength);
+        const groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
-        var valueParts = toFixed(value, floatPrecision < 0 ? 0 : floatPrecision).split('.');
+        const valueParts = toFixed(value, floatPrecision < 0 ? 0 : floatPrecision).split('.');
 
-        var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
-            valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
+        let valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision);
+        const valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
 
         valueIntegerPart = applyGroups(valueIntegerPart, groupSizes, config.thousandsSeparator);
 
-        var integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), valueIntegerPart)),
-            floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : '';
+        const integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), valueIntegerPart));
+        const floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : '';
 
-        var result = integerString + (floatString.match(/\d/) ? config.decimalSeparator : '') + floatString;
+        const result = integerString + (floatString.match(/\d/) ? config.decimalSeparator : '') + floatString;
 
         return result;
     };
 }
 
 function parseValue(text, isPercent, isNegative) {
-    var value = (isPercent ? 0.01 : 1) * parseFloat(text) || 0;
+    const value = (isPercent ? 0.01 : 1) * parseFloat(text) || 0;
 
     return isNegative ? -value : value;
 }
 
 function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
-    var nextValueText = valueText,
-        char,
-        text,
-        nextText;
+    let nextValueText = valueText;
+    let char;
+    let text;
+    let nextText;
 
     do {
         if(nextText) {
@@ -169,7 +169,7 @@ function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
     } while(text !== nextText && (isIntegerPart ? text.length === nextText.length : text.length <= nextText.length));
 
     if(isIntegerPart && nextText.length > text.length) {
-        var hasGroups = formatter(12345).indexOf('12345') === -1;
+        const hasGroups = formatter(12345).indexOf('12345') === -1;
         do {
             valueText = '1' + valueText;
         } while(hasGroups && parseValue(valueText, isPercent) < 100000);
@@ -179,11 +179,11 @@ function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
 }
 
 function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
-    var format = formatter(parseValue(valueText, isPercent, isNegative)),
-        valueTextParts = valueText.split('.'),
-        valueTextWithModifiedFloat = valueTextParts[0] + '.3' + valueTextParts[1].slice(1),
-        valueWithModifiedFloat = parseValue(valueTextWithModifiedFloat, isPercent, isNegative),
-        decimalSeparatorIndex = formatter(valueWithModifiedFloat).indexOf('3') - 1;
+    let format = formatter(parseValue(valueText, isPercent, isNegative));
+    const valueTextParts = valueText.split('.');
+    const valueTextWithModifiedFloat = valueTextParts[0] + '.3' + valueTextParts[1].slice(1);
+    const valueWithModifiedFloat = parseValue(valueTextWithModifiedFloat, isPercent, isNegative);
+    const decimalSeparatorIndex = formatter(valueWithModifiedFloat).indexOf('3') - 1;
 
     format = format.replace(/(\d)\D(\d)/g, '$1,$2');
 
@@ -201,14 +201,14 @@ function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
 }
 
 function getFormat(formatter) {
-    var valueText = '.',
-        isPercent = formatter(1).indexOf('100') >= 0;
+    let valueText = '.';
+    const isPercent = formatter(1).indexOf('100') >= 0;
 
     valueText = prepareValueText(valueText, formatter, isPercent, true);
     valueText = prepareValueText(valueText, formatter, isPercent, false);
 
-    var positiveFormat = getFormatByValueText(valueText, formatter, isPercent, false);
-    var negativeFormat = getFormatByValueText(valueText, formatter, isPercent, true);
+    const positiveFormat = getFormatByValueText(valueText, formatter, isPercent, false);
+    const negativeFormat = getFormatByValueText(valueText, formatter, isPercent, true);
 
     return negativeFormat === '-' + positiveFormat ? positiveFormat : positiveFormat + ';' + negativeFormat;
 }

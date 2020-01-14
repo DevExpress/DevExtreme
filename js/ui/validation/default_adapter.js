@@ -1,15 +1,15 @@
-var Callbacks = require('../../core/utils/callbacks'),
-    Class = require('../../core/class');
+const Callbacks = require('../../core/utils/callbacks');
+const Class = require('../../core/class');
 
-var DefaultAdapter = Class.inherit({
+const DefaultAdapter = Class.inherit({
     ctor: function(editor, validator) {
-        var that = this;
+        const that = this;
         that.editor = editor;
         that.validator = validator;
 
         that.validationRequestsCallbacks = Callbacks();
 
-        var handler = function(args) {
+        const handler = function(args) {
             that.validationRequestsCallbacks.fire(args);
         };
 
