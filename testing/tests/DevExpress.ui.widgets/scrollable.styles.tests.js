@@ -15,28 +15,28 @@ QUnit.testStart(function() {
 });
 
 // T851522
-QUnit.module('Paddings', () => {
-    function checkPaddings(assert, $scrollable, { top, right, bottom, left }) {
+QUnit.module('Paddings: simulated strategy', () => {
+    function checkPaddings(assert, $scrollable, { top = '0px', right = '0px', bottom = '0px', left = '0px' }) {
         const $scrollableContent = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-        assert.strictEqual($scrollableContent.css('paddingTop'), `${top}px`, 'padding top');
-        assert.strictEqual($scrollableContent.css('paddingRight'), `${right}px`, 'padding right');
-        assert.strictEqual($scrollableContent.css('paddingBottom'), `${bottom}px`, 'padding bottom');
-        assert.strictEqual($scrollableContent.css('paddingLeft'), `${left}px`, 'padding left');
+        assert.strictEqual($scrollableContent.css('paddingTop'), top, 'padding top');
+        assert.strictEqual($scrollableContent.css('paddingRight'), right, 'padding right');
+        assert.strictEqual($scrollableContent.css('paddingBottom'), bottom, 'padding bottom');
+        assert.strictEqual($scrollableContent.css('paddingLeft'), left, 'padding left');
     }
 
     [false, true].forEach((rtlEnabled) => {
         ['always', 'never', 'onHover', 'onScroll'].forEach((showScrollbar) => {
-            QUnit.test(`Outer scrollable.showScrollbar: 'always', innerScrollable.showScrollbar: '${showScrollbar}'`, function(assert) {
-                const $outerScrollable = $('#outerScrollable').dxScrollable({ showScrollbar: 'always', rtlEnabled: rtlEnabled });
-                const $innerScrollable = $('#innerScrollable').dxScrollable({ showScrollbar: showScrollbar });
+            QUnit.test(`Outer scrollable.showScrollbar: 'always', innerScrollable.showScrollbar: '${showScrollbar}', rtlEnabled: ${rtlEnabled}`, function(assert) {
+                const $outerScrollable = $('#outerScrollable').dxScrollable({ showScrollbar: 'always', useNative: false, rtlEnabled: rtlEnabled });
+                const $innerScrollable = $('#innerScrollable').dxScrollable({ showScrollbar: showScrollbar, useNative: false });
 
                 if(rtlEnabled) {
-                    checkPaddings(assert, $outerScrollable, { top: 0, right: 0, bottom: 0, left: 8 });
-                    checkPaddings(assert, $innerScrollable, { top: 0, right: 0, bottom: 0, left: showScrollbar === 'always' ? 8 : 0 });
+                    checkPaddings(assert, $outerScrollable, { left: '8px' });
+                    checkPaddings(assert, $innerScrollable, { left: showScrollbar === 'always' ? '8px' : '0px' });
                 } else {
-                    checkPaddings(assert, $outerScrollable, { top: 0, right: 8, bottom: 0, left: 0 });
-                    checkPaddings(assert, $innerScrollable, { top: 0, right: showScrollbar === 'always' ? 8 : 0, bottom: 0, left: 0 });
+                    checkPaddings(assert, $outerScrollable, { right: '8px' });
+                    checkPaddings(assert, $innerScrollable, { right: showScrollbar === 'always' ? '8px' : '0px' });
                 }
             });
         });
