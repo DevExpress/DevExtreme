@@ -7881,6 +7881,32 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
 });
 
+// T848242
+QUnit.test('The command column should not have ellipsis', function(assert) {
+    // arrange
+    const that = this;
+    const rowsView = that.rowsView;
+    const $testElement = $('#container');
+
+    that.options.editing = {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: 'buttons'
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    const $commandCellElement = $(rowsView.getRowElement(0)).children('.dx-command-edit');
+    assert.equal($commandCellElement.length, 1, 'command column is rendered');
+    assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+});
+
 // T741679
 QUnit.test('A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode', function(assert) {
     // arrange
