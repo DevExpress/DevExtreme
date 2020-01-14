@@ -2315,6 +2315,48 @@ QUnit.test('Groupping - 1 level', function(assert) {
     );
 });
 
+[true, false].forEach((remoteOperations) => {
+    QUnit.test(`Groupping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', remoteOperations: ${remoteOperations}`, function(assert) {
+        const styles = helper.STYLESHEET_HEADER_XML +
+            helper.BASE_STYLE_XML +
+            '<cellXfs count="5">' +
+            helper.STYLESHEET_STANDARDSTYLES +
+            '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+            '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+            '</cellXfs>' +
+            helper.STYLESHEET_FOOTER_XML;
+        const worksheet = helper.WORKSHEET_HEADER_XML +
+            '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+            '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+            '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.25"/>' +
+            '<cols><col width="13.57" min="1" max="1" /></cols>' +
+            '<sheetData>' +
+            '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+            '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="4" t="s"><v>1</v></c></row>' +
+            '<row r="3" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>2</v></c></row>' +
+            '</sheetData>' +
+            '</worksheet>';
+        const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
+            '<si><t>f2</t></si>' +
+            '<si><t>f1: 1996-07-04</t></si>' +
+            '<si><t>f1_1</t></si>' +
+            '</sst>';
+
+        helper.runGeneralTest(
+            assert,
+            {
+                columns: [
+                    { caption: 'f1', dataField: 'f1', dataType: 'date', format: 'yyyy-MM-dd', groupIndex: 0 },
+                    { caption: 'f2', dataField: 'f2', dataType: 'string' }
+                ],
+                remoteOperations: remoteOperations,
+                dataSource: [{ f1: '1996-07-04T00:00:00', f2: 'f1_1' }]
+            },
+            { styles, worksheet, sharedStrings }
+        );
+    });
+});
+
 QUnit.test('Groupping - 1 level, selectedRowIndexes: []', function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
