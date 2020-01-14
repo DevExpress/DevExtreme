@@ -16,7 +16,7 @@ module.exports = {
         path.join(path.resolve('.'), './testing/renovation/setup-enzyme.js'),
     ],
     testMatch: [
-        '**/renovation/**/*.tests.[jt]s?(x)'
+        'testing/renovation/**/*.tests.[jt]s?(x)'
     ],
     transform: {
         '.(js|jsx|ts|tsx)': resolve.sync('ts-jest')

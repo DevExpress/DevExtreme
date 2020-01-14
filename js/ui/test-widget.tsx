@@ -1,7 +1,9 @@
-import { Component, Prop, Event, InternalState, Listen, React } from "../component_declaration/common";
+import { Component, Prop, Event, InternalState, Listen, React, Slot } from "../component_declaration/common";
 import config from '../core/config';
+import { getDocument } from '../core/dom_adapter';
 import { hasWindow } from '../core/utils/window';
 import { extend } from '../core/utils/extend';
+const document = getDocument();
 
 const getStyles = ({ width, height }: any) => {
     return {
@@ -112,7 +114,7 @@ export const viewFunction = (viewModel: any) => {
             onPointerDown={viewModel.onPointerDown}
             onClick={viewModel.onClickHandler}
         >
-            {viewModel.children}
+            {viewModel.default}
         </div>
     );
 };
@@ -135,6 +137,7 @@ export default class Widget {
     @Prop() clickArgs?: any = {};
 
     // == Widget ==
+    @Slot() default: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
 
