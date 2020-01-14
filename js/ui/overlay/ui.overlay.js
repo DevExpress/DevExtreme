@@ -977,9 +977,15 @@ const Overlay = Widget.inherit({
             closeHandled = closeOnScroll(e);
         }
 
-        if(!closeHandled && !this._showAnimationProcessing) {
+        if(!closeHandled && !this._showAnimationProcessing && !this._scrolledByIOSKeyboard()) {
             this.hide();
         }
+    },
+
+    _scrolledByIOSKeyboard: function() {
+        const isInputFocused = !!this.$content().find('input:focus').length;
+
+        return realDevice.mac && isInputFocused;
     },
 
     _render: function() {
