@@ -80,10 +80,11 @@ QUnit.test('Form have correct padding (T849353)', function(assert) {
         if(index !== 0) {
             const padding = getPadding(index, index - 1);
             if(padding.paddingY !== 0) {
-                assert.equal(padding.paddingY, expectedPaddingY, 'paddingY');
+                assert.equal(padding.paddingY, expectedPaddingY, `paddingY between ${index - 1} and ${index} elements`);
             } else {
-                assert.equal(padding.paddingX, expectedPaddingX, 'paddingX');
+                assert.equal(padding.paddingX, expectedPaddingX, `paddingX between ${index - 1} and ${index} elements`);
             }
         }
     });
 });
+
