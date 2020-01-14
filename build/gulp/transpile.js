@@ -28,7 +28,7 @@ gulp.task('version-replace', gulp.series('transpile', function() {
         .pipe(gulp.dest('./'));
 }));
 
-gulp.task('transpile-watch', gulp.series('version-replace', 'generate-components-watch', function() {
+gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)
         .pipe(plumber({
             errorHandler: notify.onError('Error: <%= error.message %>')

@@ -28,6 +28,7 @@ function watchForTests() {
 
     require('../gulpfile');
     gulp.parallel(
+		'generate-components-watch',
         'transpile-watch',
         'style-compiler-themes-dev'
     )();
