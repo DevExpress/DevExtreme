@@ -1,4 +1,4 @@
-import { normalizeDataSourceOptions } from '../../data/data_source/data_source';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import Store from '../../data/abstract_store';
 import { executeAsync } from '../../core/utils/common';
 import { isFunction, isNumeric, isDefined, isString, isPlainObject } from '../../core/utils/type';

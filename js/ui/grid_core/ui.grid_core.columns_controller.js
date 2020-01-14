@@ -21,7 +21,8 @@ import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
 import { when, Deferred } from '../../core/utils/deferred';
 import Store from '../../data/abstract_store';
-import { DataSource, normalizeDataSourceOptions } from '../../data/data_source/data_source';
+import { DataSource } from '../../data/data_source/data_source';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import filterUtils from '../shared/filtering';
 
 const USER_STATE_FIELD_NAMES_15_1 = ['filterValues', 'filterType', 'fixed', 'fixedPosition'];

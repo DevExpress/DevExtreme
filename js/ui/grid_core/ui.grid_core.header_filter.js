@@ -10,7 +10,7 @@ import { each } from '../../core/utils/iterator';
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
-import { normalizeDataSourceOptions } from '../../data/data_source/data_source';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import dateLocalization from '../../localization/date';
 import { isWrapped } from '../../core/utils/variable_wrapper';
 import { Deferred } from '../../core/utils/deferred';

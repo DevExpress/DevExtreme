@@ -1,6 +1,6 @@
 const DataSource = require('./data/data_source/data_source').DataSource;
 const extend = require('./core/utils/extend').extend;
-const normalizeDataSourceOptions = require('./data/data_source/data_source').normalizeDataSourceOptions;
+const normalizeDataSourceOptions = require('./data/data_source/utils').normalizeDataSourceOptions;
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';

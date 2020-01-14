@@ -8,7 +8,8 @@ import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import PlainEditStrategy from './ui.collection_widget.edit.strategy.plain';
 import { compileGetter } from '../../core/utils/data';
-import { DataSource, normalizeLoadResult } from '../../data/data_source/data_source';
+import { DataSource } from '../../data/data_source/data_source';
+import { normalizeLoadResult } from '../../data/data_source/utils';
 import Selection from '../selection/selection';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 
