@@ -301,7 +301,7 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                selectFunc(wrapper.instance);
+                const actualSelectedKeys = selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1];
                 let expectedNodes = [0, 1];
@@ -320,6 +320,7 @@ configs.forEach(config => {
                     if(config.selectNodesRecursive || (!config.expanded && isLazyDataSourceMode(wrapper))) {
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
                 }
 
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
@@ -352,7 +353,7 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                selectItemFunc(wrapper.instance);
+                const actualSelectedKeys = selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [0];
                 let expectedNodes = [0];
@@ -371,6 +372,9 @@ configs.forEach(config => {
                     expectedNodes = [0];
                 }
 
+                if(isSelectByKeysFunction(selectItemFunc)) {
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
+                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(['itemSelectionChanged', 'selectionChanged'], 'after select');
@@ -400,7 +404,7 @@ configs.forEach(config => {
                 const wrapper = createWrapper(config, {}, [
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded }]);
-                selectItemFunc(wrapper.instance);
+                const actualSelectedKeys = selectItemFunc(wrapper.instance);
 
                 let expectedKeys = [1];
                 let expectedNodes = [1];
@@ -425,6 +429,9 @@ configs.forEach(config => {
                     expectedNodes = [];
                 }
 
+                if(isSelectByKeysFunction(selectItemFunc)) {
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
+                }
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
                 wrapper.checkSelectedNodes(expectedNodes, 'after select');
                 wrapper.checkEventLog(expectedEventLog, 'after select');
@@ -670,7 +677,7 @@ configs.forEach(config => {
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
 
-                selectFunc(wrapper.instance);
+                const actualSelectedKeys = selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 let expectedNodes = [0, 1, 2];
@@ -689,6 +696,7 @@ configs.forEach(config => {
                         // unexpected result
                         expectedEventLog = [];
                     }
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
                 }
 
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
@@ -798,7 +806,7 @@ configs.forEach(config => {
                     { id: 0, text: 'item1', parentId: ROOT_ID, selected: false, expanded: config.expanded },
                     { id: 1, text: 'item1_1', parentId: 0, selected: true, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: false, expanded: config.expanded }]);
-                selectFunc(wrapper.instance);
+                const actualSelectedKeys = selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 if(!config.expanded && isLazyDataSourceMode(wrapper)) {
@@ -816,6 +824,7 @@ configs.forEach(config => {
                         // unexpected result;
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
                 }
 
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
@@ -920,7 +929,7 @@ configs.forEach(config => {
                     { id: 1, text: 'item1_1', parentId: 0, selected: false, expanded: config.expanded },
                     { id: 2, text: 'item1_1_1', parentId: 1, selected: true, expanded: config.expanded }]);
 
-                selectFunc(wrapper.instance);
+                const actualSelectedKeys = selectFunc(wrapper.instance);
 
                 let expectedKeys = [0, 1, 2];
                 let expectedEventLog = ['selectionChanged'];
@@ -937,6 +946,8 @@ configs.forEach(config => {
                         // unexpected result;
                         expectedEventLog = ['itemSelectionChanged', 'selectionChanged'];
                     }
+
+                    assert.deepEqual(actualSelectedKeys, expectedKeys);
                 }
 
                 wrapper.checkSelectedKeys(expectedKeys, 'after select');
