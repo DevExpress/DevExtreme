@@ -759,7 +759,6 @@ module.exports = function() {
     QUnit.test('format fixedPoint with precision', function(assert) {
         assert.equal(localization.formatNumber(1, { type: 'fixedPoint', precision: 2 }), '1.00');
         assert.equal(localization.formatNumber(1.1, { type: 'fixedPoint', precision: 2 }), '1.10');
-        assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 2 }), '4.65');
         assert.equal(localization.formatNumber(1.1, { type: 'fixedPoint' }), '1');
         assert.equal(localization.formatNumber(1, { type: 'fixedPoint', precision: null }), '1');
         assert.equal(localization.formatNumber(1.2, { type: 'fixedPoint', precision: null }), '1.2');
@@ -768,6 +767,23 @@ module.exports = function() {
         assert.equal(localization.formatNumber(1.2222, { type: 'fixedPoint', precision: null }), '1.2222');
         assert.equal(localization.formatNumber(1.2225, { type: 'fixedPoint', precision: null }), '1.2225');
         assert.equal(localization.formatNumber(1.22222228, { type: 'fixedPoint', precision: null }), '1.22222228');
+
+        assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 2 }), '4.65');
+        assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 1 }), '4.6');
+        assert.equal(localization.formatNumber(4.645, { type: 'fixedPoint', precision: 0 }), '5');
+        assert.equal(localization.formatNumber(4.64, { type: 'fixedPoint', precision: 2 }), '4.64');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 2 }), '-4.65');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 1 }), '-4.6');
+        assert.equal(localization.formatNumber(-4.645, { type: 'fixedPoint', precision: 0 }), '-5');
+        assert.equal(localization.formatNumber(-4.64, { type: 'fixedPoint', precision: 2 }), '-4.64');
+
+        assert.equal(localization.formatNumber(35.855, { type: 'fixedPoint', precision: 2 }), '35.86');
+        assert.equal(localization.formatNumber(35.855, { type: 'fixedPoint', precision: 5 }), '35.85500');
+        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 2 }), '-35.86');
+        assert.equal(localization.formatNumber(-35.855, { type: 'fixedPoint', precision: 5 }), '-35.85500');
+
+        assert.equal(localization.formatNumber(1.296249, { type: 'fixedPoint', precision: 4 }), '1.2962', 'T848392');
+        assert.equal(localization.formatNumber(-1.296249, { type: 'fixedPoint', precision: 4 }), '-1.2962', 'T848392');
     });
 
     QUnit.test('large number format powers', function(assert) {
