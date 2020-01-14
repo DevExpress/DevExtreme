@@ -2,14 +2,14 @@ require('viz/tree_map/tree_map');
 
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
-const module = require('viz/core/tooltip');
+const tooltipModule = require('viz/core/tooltip');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
 QUnit.module('Tooltip', {
     beforeEach: function() {
         const tooltip = this.tooltip = new vizMocks.Tooltip();
-        module.Tooltip = sinon.spy(function() { return tooltip; });
+        tooltipModule.Tooltip = sinon.spy(function() { return tooltip; });
         this.$container = $('#test-container');
     },
 
@@ -24,7 +24,7 @@ QUnit.test('Creation', function(assert) {
         pathModified: 'pathModified-option'
     });
 
-    const params = module.Tooltip.lastCall.args[0];
+    const params = tooltipModule.Tooltip.lastCall.args[0];
     assert.strictEqual(params.cssClass, 'dxtm-tooltip', 'param - css class');
     assert.strictEqual(params.pathModified, 'pathModified-option', 'param - path modified');
     assert.ok(typeof params.eventTrigger === 'function', 'param - event trigger');
