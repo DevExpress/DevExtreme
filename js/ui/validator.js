@@ -178,6 +178,8 @@ const Validator = DOMComponent.inherit({
         }
     },
 
+    _toggleRTLDirection() {},
+
     _initMarkup() {
         this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
