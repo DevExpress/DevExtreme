@@ -64,11 +64,11 @@ QUnit.test('Form have correct padding (T849353)', function(assert) {
     const $items = $form.find('input');
 
     function getPadding(itemIndex1, itemIndex2) {
-        const item1 = $items.get(itemIndex1);
-        const item2 = $items.get(itemIndex2);
+        const item1Rect = $items.get(itemIndex1).getBoundingClientRect();
+        const item2Rect = $items.get(itemIndex2).getBoundingClientRect();
 
-        const paddingY = item1.getBoundingClientRect().top - item2.getBoundingClientRect().top;
-        const paddingX = item1.getBoundingClientRect().left - (item2.getBoundingClientRect().left + item2.getBoundingClientRect().width);
+        const paddingY = item1Rect.top - (item2Rect.top);
+        const paddingX = item1Rect.left - (item2Rect.left + item2Rect.width);
 
         return { paddingX, paddingY };
     }
