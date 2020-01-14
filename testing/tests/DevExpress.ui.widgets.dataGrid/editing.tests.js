@@ -7823,8 +7823,7 @@ QUnit.test('The command column caption should be applied', function(assert) {
     assert.strictEqual($commandCellElement.css('textAlign'), 'right', 'alignment');
 });
 
-// T848242
-QUnit.test('The command column should not have ellipsis', function(assert) {
+QUnit.test('The command column buttons should not be trimmed', function(assert) {
     // arrange
     const that = this;
     const rowsView = that.rowsView;
@@ -7836,7 +7835,10 @@ QUnit.test('The command column should not have ellipsis', function(assert) {
         allowDeleting: true
     };
     that.options.columns.push({
-        type: 'buttons'
+        type: 'buttons',
+        buttons: ['edit', {
+            icon: 'clone'
+        }]
     });
     that.columnsController.reset();
 
@@ -7846,7 +7848,14 @@ QUnit.test('The command column should not have ellipsis', function(assert) {
     // assert
     const $commandCellElement = $(rowsView.getRowElement(0)).children('.dx-command-edit');
     assert.equal($commandCellElement.length, 1, 'command column is rendered');
+    // T848242
     assert.equal($commandCellElement.css('text-overflow'), 'clip', 'text-overflow is clip instead of ellipsis');
+
+    const $links = $commandCellElement.children('.dx-link');
+    assert.equal($links.length, 2, 'link count');
+    assert.equal($links.eq(0).css('display'), 'inline', 'text link display style');
+    // T848364
+    assert.equal($links.eq(1).css('display'), 'inline-block', 'icon link display style');
 });
 
 // T741679
