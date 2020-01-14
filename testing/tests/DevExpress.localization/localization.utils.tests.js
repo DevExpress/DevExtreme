@@ -18,6 +18,8 @@ testModule('Localization utils', () => {
         assert.strictEqual(toFixed(-4.64, 2), '-4.64');
         assert.strictEqual(toFixed(-35.855, 2), '-35.86');
         assert.strictEqual(toFixed(-35.855, 5), '-35.85500');
+        assert.strictEqual(toFixed(1.296249, 4), '1.2962', 'T848392');
+        assert.strictEqual(toFixed(-1.296249, 4), '-1.2962', 'T848392');
         assert.strictEqual(toFixed(4.465), '4', 'precision omitted -> precision is 0');
     });
 });
