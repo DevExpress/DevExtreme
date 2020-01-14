@@ -132,6 +132,18 @@
             .dx-rtl & {
                 padding-right: 0;
                 padding-left: @SCROLLBAR_SIZE_THIN;
+
+                .dx-scrollable-simulated:not(.dx-scrollable-scrollbars-alwaysvisible) {
+                    .dx-scrollable-content {
+                        padding-left: 0;
+                    }
+                }
+            }
+
+            .dx-scrollable-simulated:not(.dx-scrollable-scrollbars-alwaysvisible) {
+                .dx-scrollable-content {
+                    padding-right: 0;
+                }
             }
         }
     }
