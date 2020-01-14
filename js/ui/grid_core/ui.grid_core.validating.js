@@ -714,7 +714,7 @@ module.exports = {
 
                 _afterSaveEditData: function() {
                     let $firstErrorRow;
-
+                    const validatingController = this.getController('validating');
                     each(this._editData, (_, editData) => {
                         const $errorRow = this._showErrorRow(editData);
                         $firstErrorRow = $firstErrorRow || $errorRow;
@@ -722,7 +722,7 @@ module.exports = {
                         // test
                         if(editData.isValid) {
                             const columns = this.getController('columns').getColumns();
-                            const validatingController = this.getController('validating');
+
                             columns.forEach(col => validatingController.removeCellValidationInfo(validatingController.getCellValidationInfoKey({
                                 keyValue: editData.key,
                                 columnIndex: col.index
@@ -730,6 +730,9 @@ module.exports = {
                         }
                         // endTest
                     });
+                    if(!this._editData || !this._editData.length) {
+                        validatingController.resetCellValidationInfo();
+                    }
                     if($firstErrorRow) {
                         const scrollable = this._rowsView.getScrollable();
                         if(scrollable) {
@@ -789,6 +792,9 @@ module.exports = {
                 },
                 getEditDataByKey: function(key) {
                     return this._editData[getIndexByKey(key, this._editData)];
+                },
+                _beforeCancelEditData: function() {
+                    this.getController('validating').resetCellValidationInfo();
                 }
             },
             editorFactory: (function() {
@@ -823,7 +829,9 @@ module.exports = {
                             return;
                         }
 
-                        const $tooltipElement = $('<div>')
+                        let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        $tooltipElement && $tooltipElement.remove();
+                        $tooltipElement = $('<div>')
                             .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container);
 
@@ -841,7 +849,6 @@ module.exports = {
                                     hint: this.option('editing.texts.validationCancelChanges'),
                                     onClick: () => {
                                         this._editingController.cancelEditData();
-                                        this.getController('validating').resetCellValidationInfo();
                                     }
                                 };
                                 return (new Button($buttonElement, buttonOptions)).$element();
