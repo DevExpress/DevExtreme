@@ -178,7 +178,11 @@ const Validator = DOMComponent.inherit({
         }
     },
 
-    _toggleRTLDirection() {},
+    _toggleRTLDirection(isRtl) {
+        const { rtlEnabled } = this.option('adapter')?.editor?.option?.() || { rtlEnabled: isRtl };
+
+        this.callBase(rtlEnabled);
+    },
 
     _initMarkup() {
         this.$element().addClass(VALIDATOR_CLASS);
