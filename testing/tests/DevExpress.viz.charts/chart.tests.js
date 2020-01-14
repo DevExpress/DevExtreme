@@ -14,8 +14,8 @@ const Legend = vizMocks.Legend;
 const ChartTitle = vizMocks.Title;
 const Axis = vizMocks.stubClass(axisModule.Axis);
 const Range = vizMocks.stubClass(rangeModule.Range);
-const dataSourceModule = require('data/data_source/data_source');
-const DataSource = vizMocks.stubClass(dataSourceModule.DataSource);
+const DataSourceBase = require('data/data_source/data_source').DataSource;
+const DataSource = vizMocks.stubClass(DataSourceBase);
 
 require('viz/chart');
 
@@ -184,7 +184,7 @@ QUnit.test('Creation dataSource', function(assert) {
     this.options = { dataSource: [{}], series: [{}] };
     const chart = this.createChart();
 
-    assert.ok(chart.getDataSource() instanceof dataSourceModule.DataSource, 'dataSource created');
+    assert.ok(chart.getDataSource() instanceof DataSourceBase, 'dataSource created');
 });
 
 QUnit.test('Loading dataSource', function(assert) {
