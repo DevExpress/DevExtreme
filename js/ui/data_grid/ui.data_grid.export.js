@@ -29,11 +29,13 @@ const DATA_STYLE_OFFSET = 3;
 
 exports.DataProvider = Class.inherit({
     _getGroupValue: function(item) {
-        const groupColumn = this._options.groupColumns[item.groupIndex];
-        const value = dataGridCore.getDisplayValue(groupColumn, item.key[item.groupIndex], item.data, item.rowType);
+        const { key, data, rowType, groupIndex, summaryCells } = item;
+        const groupColumn = this._options.groupColumns[groupIndex];
+
+        const value = dataGridCore.getDisplayValue(groupColumn, groupColumn.deserializeValue ? groupColumn.deserializeValue(key[groupIndex]) : key[groupIndex], data, rowType);
+
         let result = groupColumn.caption + ': ' + dataGridCore.formatValue(value, groupColumn);
 
-        const summaryCells = item.summaryCells;
         if(summaryCells && summaryCells[0] && summaryCells[0].length) {
             result += ' ' + dataGridCore.getGroupRowSummaryText(summaryCells[0], this._options.summaryTexts);
         }
