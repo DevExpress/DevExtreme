@@ -234,7 +234,7 @@ const EditorFactoryMixin = (function() {
                 $editorElement.dxTextBox('instance').registerKeyHandler('enter', noop);
             }
 
-            if(options.editorName === 'dxDateBox') {
+            if(options.editorName === 'dxDateBox' && options.editorOptions.useMaskBehavior) {
                 $editorElement.dxDateBox('instance').registerKeyHandler('enter', noop);
             }
 
