@@ -31,10 +31,10 @@ const getCssClasses = (model: any) => {
     if (model.focused) {
         className.push('dx-state-focused');
     }
-    if (model.active) {
+    if (model._active) {
         className.push('dx-state-active');
     }
-    if (model.hover) {
+    if (model._hovered) {
         className.push('dx-state-hover');
     }
 
@@ -70,17 +70,19 @@ export const viewModelFunction = ({
     width,
     height,
     focused,
-    active,
-    hover,
+    _active,
+    _hovered,
     rtlEnabled,
     visibilityChanged,
     elementAttr,
+    default: children,
 }: any) => {
     const style = getStyles({ width, height });
-    const className = getCssClasses({ disabled, visible, focused, active, hover, rtlEnabled, visibilityChanged, elementAttr });
+    const className = getCssClasses({ disabled, visible, focused, _active, _hovered, rtlEnabled, visibilityChanged, elementAttr });
     const attrsWithoutClass = getAttributes({ elementAttr });
 
     return {
+        children,
         style,
         attrsWithoutClass,
         hoveredElement,
@@ -114,7 +116,7 @@ export const viewFunction = (viewModel: any) => {
             onPointerDown={viewModel.onPointerDown}
             onClick={viewModel.onClickHandler}
         >
-            {viewModel.default}
+            {viewModel.children}
         </div>
     );
 };
@@ -137,6 +139,8 @@ export default class Widget {
     @Prop() clickArgs?: any = {};
 
     // == Widget ==
+    @Prop() visible?: boolean = true;
+
     @Slot() default: any;
 
     @Event() onClick?: (e: any) => void = (() => { });
