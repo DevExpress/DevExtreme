@@ -449,7 +449,7 @@ class FileManager extends Widget {
             */
             /**
             * @name dxFileManagerContextMenuItem.items
-            * @type Array<dxFileManagerContextMenuItem>
+            * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
             */
 
             contextMenu: {
